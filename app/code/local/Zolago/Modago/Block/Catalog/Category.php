@@ -14,6 +14,7 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMainCategories()
     {
+		Varien_Profiler::start("todo: Load main categories");
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
         $catTree = array();
@@ -27,6 +28,7 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
                                    'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml()
                                );
         }
+		Varien_Profiler::stop("todo: Load main categories");
         return $catTree;
     }
 

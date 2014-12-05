@@ -45,6 +45,7 @@
 			<catalog>
 				<rewrite>
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
+                    <category>Zolago_Catalog_Model_Category</category>
                     <product>Zolago_Catalog_Model_Product</product>
                 </rewrite>
 			</catalog>

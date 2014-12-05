@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Zolago_Pdf>
+			<version>0.0.1</version>
+		</Zolago_Pdf>
+	</modules>
+	<global>
+		<models>
+			<zolagopdf>
+				<class>Zolago_Pdf_Model</class>
+			</zolagopdf>
+		</models>
+	</global>
+</config>

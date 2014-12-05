@@ -10,6 +10,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories, $level = 1, $span = false)
     {
+		Varien_Profiler::start("todo: Zolago_Modago_Helper_Data::getCategoriesTree");
         $tree = array();
         foreach ($categories as $category) {
             $cat = Mage::getModel('catalog/category')->load($category->getId());
@@ -36,7 +37,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 				$tree[$category->getId()]['has_dropdown']  = false;
 			}
         }
-
+		Varien_Profiler::start("todo: Zolago_Modago_Helper_Data::getCategoriesTree");
         return $tree;
     }
 

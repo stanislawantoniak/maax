@@ -259,7 +259,9 @@
 				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
 			</block>
 		</reference>
-
+		<!-- remove cart link - better performance-->
+		<remove name="checkout_cart_link"/>
+		<!-- remove rest stuff -->
 		<remove name="right.poll"/>
 		<remove name="right.permanent.callout"/>
 		<remove name="left.permanent.callout"/>
