@@ -171,9 +171,11 @@ $producer = ($this->getVendor()->getVendorId() == $this->getBrandshopVendor()->g
         function setSellerInfoBlockWidth(windowWidth){
 //            console.log(windowWidth,windowWidth <= 754);
             if(windowWidth <= 754){
-                $("#seller-box-bundle .seller").css({"width": "60%", "float": "right"});
+                $("#seller-box-bundle .seller").css({"width": "50%", "float": "right","margin-right": "5px"});
+                $("#seller-box-bundle figure").css({"margin-top": "15px"});
             } else {
                 $("#seller-box-bundle .seller").css({"width": "100%", "float": "none"});
+                $("#seller-box-bundle figure").css({"margin-top": "0px"});
             }
         }
     })
