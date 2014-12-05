@@ -33,7 +33,7 @@ $producer = ($this->getVendor()->getVendorId() == $this->getBrandshopVendor()->g
                             <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?>
                         </a>
 
-                        <span><?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?></span>
+                        <span><?php echo $this->escapeHtml($this->getVendor()->getBrandshopInfo()); ?></span>
 
                     </div>
 
