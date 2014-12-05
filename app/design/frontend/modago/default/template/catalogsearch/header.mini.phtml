@@ -3,7 +3,9 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 02.05.14
  */
-$options = Mage::helper('zolagosolrsearch')->getContextSelectorArray();
+/** @var Zolago_Solrsearch_Helper_Data $helperZSS */
+$helperZSS = Mage::helper('zolagosolrsearch');
+$options = $helperZSS->getContextSelectorArray();
 ?>
 
 <div class="block_search search hidden-sm hidden-xs">
@@ -25,3 +27,6 @@ $options = Mage::helper('zolagosolrsearch')->getContextSelectorArray();
 <div id="toggleSearch" class="block_search_m visible-sm visible-xs">
     <a class="dropdown-toggle" data-dropdown="#dropdown-search"><i class="ico_search_mobile"></i></a>
 </div>
+<script>
+    jQuery('div.block_search select').selectbox();
+</script>

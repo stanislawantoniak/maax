@@ -40,7 +40,15 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
             );
         }
         else {
-            $parentCategoryUrl = $this->getFacesUrl(array('scat' => $category->getId()));
+            $id = $category->getId();
+            $_solrDataArray = $this->getSolrData();
+            $q = "&q=" . Mage::helper('catalogsearch')->getQueryText();
+
+            if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
+                $q = "&q=" . $_solrDataArray['responseHeader']['params']['q'];
+            }
+
+            $parentCategoryUrl = Mage::getUrl("search/index/index") . "?scat={$id}{$q}";
         }
 
         return $parentCategoryUrl;
@@ -53,7 +61,40 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
      */
     public function getParentCategoryLabel()
     {
-        return $this->getCurrentCategory()->getParentCategory()->getName();
+        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+            return $this->getCurrentCategory()->getParentCategory()->getName();
+        } else {
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+            if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
+                $helperZSS = Mage::helper('zolagosolrsearch');
+                return $helperZSS->__("All categories");
+            } else {
+                return $this->getCurrentCategory()->getParentCategory()->getName();
+            }
+        }
+    }
+
+    public function getIsSearch(){
+
+        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * use only for search page
+     * @return bool
+     */
+    public function getIsParentRootCategory() {
+
+        $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+        if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 } 

@@ -1,4 +1,7 @@
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var $this Zolago_Solrsearch_Block_Faces_Enum */
+$key = $this->getFacetKey();
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -19,7 +22,7 @@
                     }
                     ?>
                     <div class="form-group form-checkbox">
-                        <?php /** @var $this Zolago_Solrsearch_Block_Faces_Enum */ ?>
+
                         <input data-url="<?php echo $this->getItemUrl($item) ?>"
 							   data-params='<?php echo $this->getItemJson($item);?>' 
 							   type="checkbox" 
