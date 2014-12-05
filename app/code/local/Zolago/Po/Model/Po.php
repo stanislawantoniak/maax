@@ -80,9 +80,9 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$templateParams['order'] = $this->getOrder();
 		$templateParams['vendor'] = $this->getVendor();
 		$templateParams['carrier'] = $this->getCarrier();
-		
-        $mailer = Mage::getModel('core/email_template_mailer');
-        /* @var $mailer Mage_Core_Model_Email_Template_Mailer */
+
+        $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 		$emailInfo = Mage::getModel('core/email_info');
         $emailInfo->addTo($email, $name);
         $mailer->addEmailInfo($emailInfo);

@@ -15,7 +15,11 @@ if($_item->getProduct()){
 ?>
 <tr>
 	<td>
-		<img src="<?php echo $this->getProductThumbnail()->resize(53, 69) ?>"
+		<?php /* <img src="<?php echo $this->getProductThumbnail()->resize(53, 69) ?>"
+			 alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" 
+			 width="53" height="69"/> */ ?>
+		<?php /* Images as cid:<itemId>.jpg @see Zolago_Po_Helper_Data::getPoImagesAsAttachments(); */ ?>
+		<img src="cid:<?php echo $_item->getId() ?>.jpg"
 			 alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" 
 			 width="53" height="69"/>
 	</td>
