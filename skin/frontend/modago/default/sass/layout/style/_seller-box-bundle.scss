@@ -71,6 +71,19 @@
 			}
 	}
 }
+
+#seller-box-bundle {
+  .seller {
+    @media (max-width: $screen-xs-max) {
+      float:right;
+      width: 55%;
+      clear: left;
+      margin-left:13px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+  }
+}
 .descripionProduct-box-bundle {
 	.descripionProduct-label {
 		margin-top: 3px;
