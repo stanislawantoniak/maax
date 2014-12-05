@@ -56,6 +56,32 @@
 		                <fieldset>vendor_preferences</fieldset>
 		                <type>text</type>
 		            </contact_telephone>
+                    <rma_email>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA contact data: Email</label>
+                        <type>text</type>
+                    </rma_email>
+                    <rma_telephone>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA contact data: Phone</label>
+                        <type>text</type>
+                    </rma_telephone>
+                    <rma_executive_telephone>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA executive: Phone</label>
+                        <type>text</type>
+                    </rma_executive_telephone>
+                    <rma_executive_telephone>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA executive: Mobile</label>
+                        <type>text</type>
+                    </rma_executive_telephone>
+                    <rma_executive_email>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA executive: Email</label>
+                        <type>text</type>
+                    </rma_executive_email>
+
                     <executive_firstname>
                         <fieldset>vendor_preferences</fieldset>  
                         <label>Executive firstname</label>

@@ -286,12 +286,18 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 
 			$imageName = $images['name'];
 
+			$error_filetype = json_encode(array("error"=>"filetype"));
+
 			if (!empty($imageName)) {
 				try {
 					$is_image = getimagesize($tmpName);
+					if(!$is_image) {
+						echo $error_filetype;
+						return;
+					}
 				} catch (Exception $e) {
 					Mage::logException($e);
-					echo json_encode(array("error"=>"filetype"));
+					echo $error_filetype;
 					return;
 				}
 				$uniqueName = uniqid() . "_" . $imageName;
