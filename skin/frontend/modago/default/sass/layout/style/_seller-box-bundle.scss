@@ -21,7 +21,8 @@
 		}
 	}
 	figure {
-		margin-bottom:10px;
+        margin-top: 0;
+		margin-bottom: 10px;
 		@media (max-width: $screen-xs-max) {
 			position:absolute;
 			right:35px;
@@ -29,6 +30,7 @@
 		}
 	}
 	.seller {
+        margin-top: 0;
 		margin-bottom: 15px;
 		a {
 			@extend .seller;
