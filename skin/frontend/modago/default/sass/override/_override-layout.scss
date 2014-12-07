@@ -336,7 +336,7 @@
 
 #seller-box-bundle .seller.producer {
   @media (max-width: $screen-xs-max) {
-    display: flex;
+    transform: translateY(25%);
   }
 }
 #product-shop {
