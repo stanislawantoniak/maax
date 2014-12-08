@@ -32,8 +32,8 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return string
 	 */
 	public function getRelativePath($url, $storeId= Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
-		$unsecure = strstr("http://", $url)==0;
-		$secure = strstr("https://", $url)==0;
+        $unsecure = strpos($url,"http://")===0;      
+        $secure = strpos($url,"https://")===0; 
 		if($unsecure || $secure){
 			$storeUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, $secure);
 			$url = str_replace($storeUrl, "", $url);
