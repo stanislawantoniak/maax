@@ -15,6 +15,15 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
     const DEFAULT_LOAD_MORE_OFFSET = 100;
     const DEFAULT_PIXELS_BEFORE_APPEND = 2500;
 	
+	/**
+	 * @return string
+	 */
+	public function getCurrentUrlPath() {
+		if($this->isSearchMode()){
+			return "search/index/index";
+		}
+		return "catalog/category/view";
+	}
 	
 	/**
 	 * @return int
