@@ -1,0 +1,66 @@
+.account-create  {
+	.button-primary {
+		min-width: 150px !important;
+	}
+	section {
+		header {
+			margin-left: -15px;
+			margin-bottom:30px;
+		}
+	}
+	form {
+		.form-group {
+			margin-bottom: 10px;
+			@media(max-width:$screen-sm-max) {
+				margin-bottom: 15px;
+			}
+			&.border-top {
+				border-top: 1px solid #eeedf0;
+				padding-top: 15px;
+				margin-top: 5px;
+				@media(max-width:$screen-xs-max) {
+					margin-top: 20px;
+					padding-top: 10px;
+				}
+			}
+		}
+		.form-checkbox {
+			margin-bottom: 15px !important;
+			margin-left: 0;
+
+			label {
+				height:auto;
+				margin-right: 40px;
+			}
+			&:first-child {
+				margin-top: 30px;
+			}
+		}
+		input[type="email"],
+		input[type="password"] {
+			height:29px;
+			padding:0 15px 0 15px;
+			width: 100%;
+			max-width: 100% !important;
+			@media(max-width:$screen-xs-max) {
+				width: 90%;
+				max-width: 90% !important;
+			}
+		}
+		.action {
+			a {
+				position:relative;
+			}
+			button {
+				min-width: 120px;
+			}
+		}
+		#back {
+			position:relative;
+			top:12px;
+		}
+	}
+	.tooltip .tooltip-inner {
+		white-space: nowrap;
+	}
+}

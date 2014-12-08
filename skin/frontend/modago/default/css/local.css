@@ -29,7 +29,7 @@
 @media  (max-width: 768px) {
     .customer-account-index ul.messages {
         margin-top: -21px;
-        margin-bottom: 38px;
+        margin-bottom: 0px;
     }
 }
 

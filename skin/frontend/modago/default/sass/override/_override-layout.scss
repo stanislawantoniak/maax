@@ -334,8 +334,11 @@
   }
 }
 
-
-
+#seller-box-bundle .seller.producer {
+  @media (max-width: $screen-xs-max) {
+    transform: translateY(25%);
+  }
+}
 #product-shop {
   h1 {
     font-family:$fontLight;

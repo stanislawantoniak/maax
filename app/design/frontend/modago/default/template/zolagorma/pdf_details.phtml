@@ -85,6 +85,14 @@
 					<?php echo $_rma->getIncrementId(); ?>
 				</div>
 			</div>
+			<div id="rmaOrderNumber" class="rmaRow">
+				<div class="rmaTitle">
+					<?php echo $_helper->__("RMA order number"); ?>:
+				</div>
+				<div class="rmaContent">
+					<?php echo $_rma->getPo()->getIncrementId(); ?>
+				</div>
+			</div>
 			<div id="rmaDate" class="rmaRow">
 				<div class="rmaTitle">
 					<?php echo $_helper->__("RMA creation date"); ?>:
