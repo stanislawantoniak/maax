@@ -1,0 +1,52 @@
+<?php /* @var $this Zolago_Modago_Block_Po_Email_Summary */ ?>
+<?php $_helper = Mage::helper("zolagomodago");?>
+<?php $_po = $this->getPo();?>
+
+<?php if($this->getItems()): ?>
+<table>
+	<thead>
+		<tr>
+			<th style="text-align: left;"><?php echo $_helper->__("Img.");?></th>
+			<th style="text-align: left; padding: 5px;"><?php echo $_helper->__("Product name");?></th>
+			<th style="text-align: right; padding: 5px;"><?php echo $_helper->__("Price");?></th>
+			<th style="text-align: right; padding: 5px;"><?php echo $_helper->__("Qty");?></th>
+			<th style="text-align: right; padding: 5px;"><?php echo $_helper->__("Value");?></th>
+		</tr>
+	</thead>
+	<tbody>
+		
+		<?php foreach($this->getItems() as $_item):?>
+			<?php echo $this->renderItem($_item);?>
+		<?php endforeach;?>
+
+		<?php $_shippingCost = (float)$_po->getShippingAmountIncl();?>
+		<?php $_discount = (float)$_po->getSubtotalDiscount();?>
+		<tr>
+			<td colspan="4" style="text-align: right; padding: 2px 5px;"><?php echo $_helper->__("Shipping cost");?>:</td>
+			<td style="text-align: right; padding: 2px 5px;">
+				<strong>
+					<?php echo Mage::helper("core")->formatPrice($_shippingCost, false);?>
+				</strong>
+			</td>
+		</tr>
+		<?php if($_discount>0):?>
+		<tr>
+			<td colspan="4" style="text-align: right; padding: 2px 5px;"><?php echo $_helper->__("Discount");?>:</td>
+			<td style="text-align: right; padding: 2px 5px;">
+				<strong>
+					<?php echo Mage::helper("core")->formatPrice($_discount * -1, false);?>
+				</strong>
+			</td>
+		</tr>
+		<?php endif;?>
+		<tr>
+			<td colspan="4" style="text-align: right; padding: 2px 5px;"><?php echo $_helper->__("Total");?>:</td>
+			<td style="text-align: right; padding: 2px 5px;">
+				<strong>
+					<?php echo Mage::helper("core")->formatPrice($_po->getGrandTotalInclTax(), false);?>
+				</strong>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<?php endif;?>

@@ -12,7 +12,19 @@ class Zolago_Catalog_Block_Product_Vendor_Abstract
 		}
 		return $this->getData('vendor');
 	}
-	
+
+    /**
+     * @return Zolago_Dropship_Model_Vendor
+     */
+    public function getBrandshopVendor()
+    {
+        if (!$this->getData('brandshop_vendor')) {
+            $vendor = Mage::helper('udropship')->getVendor($this->getProduct()->getData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_BRANDSHOP_CODE));
+            $this->setData('brandshop_vendor', $vendor);
+        }
+        return $this->getData('brandshop_vendor');
+    }
+
 	/**
 	 * @return Zolago_Catalog_Model_Product
 	 */

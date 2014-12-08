@@ -676,7 +676,7 @@ jQuery(function ($) {
 
         var priority = nameSpace.index() +1;
 
-        var vendorName = '<?php echo $vendorName; ?>';
+        var vendorName = '<?php echo addslashes($vendorName); ?>';
 
         var previewImage = nameSpace.find('.banner-preview-image').attr("src");
 

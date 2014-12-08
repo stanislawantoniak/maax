@@ -4,7 +4,25 @@
  */
 class Zolago_Modago_Block_Sales_Order_Item_Renderer_Default extends Mage_Sales_Block_Order_Item_Renderer_Default {
 
-    
+	/**
+	 * 
+	 * @param string $imageUrl
+	 * @return string
+	 */
+	public function getBase64Content($imageUrl) {
+		$ret = Mage::helper("zolagocommon")->getFileBase64ByUrl(
+			$imageUrl, 
+			$this->getItem()->getPo()->getStoreId()
+		);
+		
+		if($ret!=""){
+			$ret = "data:image/jpeg;base64,".$ret;
+		}else{
+			$ret = $imageUrl;
+		}
+		
+		return $ret;
+	}
     //{{{ 
     /**
      * product
