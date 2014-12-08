@@ -17,7 +17,7 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
-<div class="order-view order-view-multi">
+<div class="order-view order-view-multi <?php if($customerAccountPage): ?> hidden-sm hidden-xs <?php endif; ?>">
 	<div class="section " id="content-main">
 	<?php if($_orders->getSize()): ?>
 		<?php foreach($_orders as $_order):?>

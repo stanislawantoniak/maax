@@ -6,4 +6,11 @@
  * Time: 13:56
  */
 
-echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+/** @var $this Mage_Core_Block_Template */
+
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+if ($vendor && $vendor->getId()) {
+    //when vendor then don't show navigation
+} else {
+    echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+}
