@@ -84,12 +84,12 @@ $_billingAddress = $_quote->getBillingAddress();
 			<div class="row hide-success-vaild ">
 				<div class="form-group form-checkbox small text-align-left">
 					<input type="checkbox" id="agreement_2" class="css-checkbox invoice_vat" name="agreement[2]" required="true" style="opacity: 0; visibility: visible;">
-					<label for="agreement_2" class="css-label"><?php echo $this->__("Agreement for marketing works"); ?></label>
+					<label for="agreement_2" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
 				</div>
 
 				<div class="form-group form-checkbox small text-align-left">
 					<input type="checkbox" id="agreement_1" class="css-checkbox invoice_vat" name="agreement[1]" required="true"  style="opacity: 0; visibility: visible;">
-					<label for="agreement_1" class="css-label"><?php echo $this->__("TOS Agreement"); ?></label>
+					<label for="agreement_1" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
 				</div>
 			</div>
 			<div class="row action">

@@ -2,7 +2,9 @@
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 19.05.14
-
+ */
+$options = Mage::helper('zolagosolrsearch')->getContextSelectorArray();
+?>
 
 <div id="dropdown-search" class="dropdown hidden-md hidden-lg">
     <div class="dropdown-panel">
@@ -16,7 +18,7 @@
                     <div class="form-group styledSelected">
                         <select name="<?php echo $options['select_name']; ?>" class="form-control  select-styled">
                             <?php foreach($options['select_options'] as $opt) : ?>
-                            <option value="<?php echo $opt['value']; ?>" <?php if($opt['selected']) : ?>selected="selected"<?php endif; ?>><?php echo $opt['text']; ?></option>
+                                <option value="<?php echo $opt['value']; ?>" <?php if($opt['selected']) : ?>selected="selected"<?php endif; ?>><?php echo $opt['text']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -29,5 +31,3 @@
         </div>
     </div>
 </div>
- *  */
-?>

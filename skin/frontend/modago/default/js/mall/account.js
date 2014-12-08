@@ -13,6 +13,7 @@ Mall.account = {
         this.attachResetPasswordValidation();
 	    this.attachEditCustomerValidation();
 	    this.attachEditPasswordValidation();
+	    this.attachCreateAccountValidation();
 	    this.attachTooltips();
 
         //rma
@@ -92,7 +93,6 @@ Mall.account = {
 		var editCustomerForm = jQuery("#editCustomer-form");
 
 		if(editCustomerForm.length) {
-			addAccountEditTranslations();
 			editCustomerForm.validate(this.getValidate().getOptions({
 				rules: {
 					email: {
@@ -173,7 +173,7 @@ Mall.account = {
 			placement: function(a, element) {
 				var viewport = window.innerWidth;
 				var placement = "right";
-				if (viewport < 600) {
+				if (viewport < 768) {
 					placement = "bottom";
 				}
 				return placement;
@@ -188,10 +188,51 @@ Mall.account = {
 				});
 			}
 			var nextbottom = jQuery(this).next('div.tooltip.bottom');
-			if(typeof nextbottom !== 'undefined' && nextbottom.offset().left <= 5) {
+			if(typeof nextbottom.offset() !== 'undefined' && nextbottom.offset().left <= 5) {
 				nextbottom.animate({left: "+=13"}, 100);
 			}
 		});
+	},
+	attachCreateAccountValidation: function() {
+		"use strict";
+
+		var form = jQuery("#createAccountForm");
+
+		if(form.length) {
+			form.validate(this.getValidate().getOptions({
+				rules: {
+					email: {
+						required: true,
+						email: true
+					},
+					password: {
+						required: true,
+						minlength: 6
+					},
+					agreement: {
+						required: true
+					}
+				},
+				messages: {
+					password: {
+						required: Mall.translate.__("Please enter password."),
+						minlength: Mall.translate.__("Password needs to have at least 6 characters")
+					},
+					email: {
+						required: Mall.translate.__("Please enter email."),
+						email: Mall.translate.__("Please enter correct email.")
+					},
+					agreement: {
+						required: Mall.translate.__("You must agree to our Terms of Service")
+					}
+				}
+			}));
+			form.submit(function() {
+				return
+			});
+		}
+
+		return this;
 	},
 
     /**
