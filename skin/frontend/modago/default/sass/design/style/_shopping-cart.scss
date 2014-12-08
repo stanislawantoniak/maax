@@ -136,7 +136,7 @@
 						&.cell-01 {
 							p {
 								font-size: 14px;
-								white-space: nowrap;
+								word-wrap: break-word;
 								@media (max-width: $screen-xs-max) {
 									font-size: 11px;
 								}

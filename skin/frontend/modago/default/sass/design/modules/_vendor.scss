@@ -1,0 +1,9 @@
+body[class*=vendor] {
+  #header {
+    min-height: 57px;
+    @media (max-width: $screen-sm-max) {
+      min-height: 41px;
+    }
+  }
+
+}

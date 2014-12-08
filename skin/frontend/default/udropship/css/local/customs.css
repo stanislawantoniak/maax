@@ -73,7 +73,7 @@ select.form-control {
 }
 .btn-xs,
 .btn-group-xs > .btn {
-  font-size: 11.049999999999999px !important;
+  font-size: 11.05px !important;
 }
 .table dl {
   margin: 0;
@@ -330,10 +330,33 @@ table.foot-empty-cells tfoot td:empty {
     margin-left: 110px;
   }
 }
-
-
 /*POIG*/
-.udropship-vendor-login #poig  {
-    float: right;
-    margin: 380px -5px 50px -5px;
+.udropship-vendor-login #poig {
+  float: right;
+  margin: 380px -5px 50px -5px;
+}
+/*Register*/
+.umicrosite-vendor-register .messages {
+  margin: 0;
+  padding-top: 0;
+}
+.umicrosite-vendor-register .page-title {
+  float: none;
+  text-align: center;
+  padding-bottom: 0;
+}
+.umicrosite-vendor-register .widget.box .widget-header h4 {
+  margin: 10px 0;
+}
+.umicrosite-vendor-register #registration-form {
+  margin-bottom: 50px;
+}
+.udropship-vendor_settings-info .widget.box .widget-header h4 {
+  margin: 10px 0;
+}
+.udropship-vendor_settings-shipping .widget.box .widget-header h4 {
+  margin: 10px 0;
+}
+.udropship-vendor_settings-rma .widget.box .widget-header h4 {
+  margin: 10px 0;
 }

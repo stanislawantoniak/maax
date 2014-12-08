@@ -64,22 +64,17 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
             try {
                 $v = $session->getVendor();
 
-                $vendorId = $v->getVendorId();
-
-                $vendorPreferences = Mage::getModel('zolagodropship/preferences');
-                $vendorPreferences->load($vendorId, 'vendor_id');
-
-                $data = array('vendor_id' => $vendorId);
-                $data = array_merge($data, $p);
-                $vendorPreferences->addData($data);
-                $vendorPreferences->save();
-
                 foreach (
                     array(
+                        'company_name','tax_no',
+                        'www','contact_email','contact_telephone',
+                        'executive_firstname','executive_lastname','executive_telephone','executive_telephone_mobile',
+
                         'email', 'password',
                         'billing_email', 'billing_street',
                         'billing_city',
-                        'billing_zip'
+                        'billing_zip',
+                        'administrator_firstname','administrator_lastname','administrator_telephone','administrator_telephone_mobile'
                     ) as $f) {
                     if (array_key_exists($f, $p)) {
                         $v->setData($f, $p[$f]);
@@ -148,26 +143,18 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
         if ($r->isPost()) {
             $p = $r->getPost();
 
-
             try {
                 $v = $session->getVendor();
 
-                $vendorId = $v->getVendorId();
-
-                $vendorPreferences = Mage::getModel('zolagodropship/preferences');
-                $vendorPreferences->load($vendorId, 'vendor_id');
-
-                $data = array('vendor_id' => $vendorId);
-                $data = array_merge($data, $p);
-                $vendorPreferences->addData($data);
-                $vendorPreferences->save();
-
                 foreach (
                     array(
+                        'company_name',
                         'dhl_rma', 'dhl_rma_account', 'dhl_rma_login', 'dhl_rma_password',
                         'orbaups_rma', 'orbaups_rma_account', 'orbaups_rma_login', 'orbaups_rma_password',
                         'vendor_attn',
-                        'street', 'city', 'zip'
+                        'street', 'city', 'zip',
+                        'rma_email','rma_telephone','rma_executive_telephone',
+                        'rma_executive_telephone_mobile','rma_executive_email'
                     ) as $f) {
                     if (array_key_exists($f, $p)) {
                         $v->setData($f, $p[$f]);
