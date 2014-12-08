@@ -32,9 +32,9 @@ $_helperZSS = Mage::helper('zolagosolrsearch');
 
                     <?php if($_helperZSS->getIsNoResult()): ?>
                         <p>
-                            <?php echo $this->__("Found: %s products", $_helperZSS->getNumFound()); ?>
+                            <?php echo $this->__("Found: %s products", $_helperZSS->getNumFound()); ?><span id="found-dot">.</span>
                             <?php if($_helperZSS->getSolrRealQ() != $this->getQueryString()): ?>
-                                <?php echo $this->__("for &quot;%s&quot;", $_helperZSS->getSolrRealQ()); ?>.
+                                <?php echo $this->__("for &quot;%s&quot;", $_helperZSS->getSolrRealQ()); ?>
                             <?php endif; ?>
                             <span id="category-cnt-wrapper"> <?php echo $this->__("in"); ?> <span id="category-cnt"></span> <?php echo $this->__("categories"); ?>.</span>
                         </p>
@@ -56,6 +56,7 @@ $_helperZSS = Mage::helper('zolagosolrsearch');
         if(cnt >= 2) {
             jQuery('#category-cnt').html(cnt);
             jQuery('#category-cnt-wrapper').show();
+            jQuery('#found-dot').hide();
         } else {
             jQuery('#category-cnt-wrapper').hide();
         }
