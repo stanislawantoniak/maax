@@ -364,11 +364,12 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		}
 
 		$customer = $this->_getCustomer();
-
+		$data = $this->getRequest()->getPost();
 		try {
 			$errors = $this->_getCustomerErrors($this->getRequest()->getPost());
-
 			if (empty($errors)) {
+				unset($data['agreement']);
+				$customer->setData($data);
 				$customer->save();
 				$this->_dispatchRegisterSuccess($customer);
 				$this->_successProcessRegistration($customer);
@@ -380,7 +381,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$session->setCustomerFormData($this->getRequest()->getPost());
 			if ($e->getCode() === Mage_Customer_Model_Customer::EXCEPTION_EMAIL_EXISTS) {
 				$url = $this->_getUrl('customer/account/forgotpassword');
-				$message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
+				$message = $this->__("There is already an account with this email address. If you are sure that it is your email address, <a href='%s'>click here</a> to get your password and access your account.", $url);
 				$session->setEscapeMessages(false);
 			} else {
 				$message = $e->getMessage();
@@ -410,6 +411,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		$required = array(
 			"email"         => "1",
 			"password"      => "6",
+			"agreement"     => "1",
 			"is_subscribed" => "0"
 		);
 		$errors = array();
@@ -420,8 +422,8 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 				return $errors;
 			} else {
 				if(strlen($value) < $required[$field]) {
-					$errors[] = $this->__("%s is not correct",$field);
-				} elseif($field == 'email' && !Zend_Validate::is($field, 'EmailAddress')) {
+					$errors[] = $this->__(ucfirst($field)." is not correct");
+				} elseif($field == 'email' && !Zend_Validate::is($value, 'EmailAddress')) {
 					$errors[] = $this->__("Provided email is not correct");
 				}
 			}

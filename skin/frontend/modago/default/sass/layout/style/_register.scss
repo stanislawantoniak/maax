@@ -1,4 +1,7 @@
 .account-create  {
+	.button-primary {
+		min-width: 150px !important;
+	}
 	section {
 		header {
 			margin-left: -15px;
@@ -15,7 +18,7 @@
 				border-top: 1px solid #eeedf0;
 				padding-top: 15px;
 				margin-top: 5px;
-				@media(max-width:$screen-sm-max) {
+				@media(max-width:$screen-xs-max) {
 					margin-top: 20px;
 					padding-top: 10px;
 				}
@@ -27,17 +30,22 @@
 
 			label {
 				height:auto;
+				margin-right: 40px;
 			}
 			&:first-child {
 				margin-top: 30px;
 			}
 		}
-		input[type="text"],
 		input[type="email"],
-		input[type="password"],
-		input[type="tel"] {
+		input[type="password"] {
 			height:29px;
 			padding:0 15px 0 15px;
+			width: 100%;
+			max-width: 100% !important;
+			@media(max-width:$screen-xs-max) {
+				width: 90%;
+				max-width: 90% !important;
+			}
 		}
 		.action {
 			a {
@@ -51,5 +59,8 @@
 			position:relative;
 			top:12px;
 		}
+	}
+	.tooltip .tooltip-inner {
+		white-space: nowrap;
 	}
 }
