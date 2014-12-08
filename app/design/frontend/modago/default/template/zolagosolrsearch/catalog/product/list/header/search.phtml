@@ -15,7 +15,11 @@ $_helperZSS = Mage::helper('zolagosolrsearch');
                 <div class="current-search">
 
                     <h1>
-                        <?php echo $this->__("Search result for: "); ?>
+                        <?php if($_helperZSS->getSolrRealQ() != $this->getQueryString()): ?>
+                            <?php echo $this->__("You're looking for: "); ?>
+                        <?php else: ?>
+                            <?php echo $this->__("Search result for: "); ?>
+                        <?php endif; ?>
                         <strong>
                             <?php echo $this->getQueryString(); ?>
                         </strong>
@@ -28,10 +32,11 @@ $_helperZSS = Mage::helper('zolagosolrsearch');
 
                     <?php if($_helperZSS->getIsNoResult()): ?>
                         <p>
-                            <?php echo $this->__("Found: %s products", $_helperZSS->getNumFound()); ?>
+                            <?php echo $this->__("Found: %s products", $_helperZSS->getNumFound()); ?><span id="found-dot">.</span>
                             <?php if($_helperZSS->getSolrRealQ() != $this->getQueryString()): ?>
-                                <?php echo $this->__("for &quot;%s&quot;", $_helperZSS->getSolrRealQ()); ?>.
+                                <?php echo $this->__("for &quot;%s&quot;", $_helperZSS->getSolrRealQ()); ?>
                             <?php endif; ?>
+                            <span id="category-cnt-wrapper"> <?php echo $this->__("in"); ?> <span id="category-cnt"></span> <?php echo $this->__("categories"); ?>.</span>
                         </p>
                     <?php else: ?>
                         <span class="no-result" style="padding-bottom: 10px;"><?php echo $this->__("No results"); ?></span>
@@ -45,3 +50,15 @@ $_helperZSS = Mage::helper('zolagosolrsearch');
         </div>
     </div>
 </div>
+<script>
+    jQuery(document).ready(function(){
+        var cnt = jQuery('#filter_category dl dd').length;
+        if(cnt >= 2) {
+            jQuery('#category-cnt').html(cnt);
+            jQuery('#category-cnt-wrapper').show();
+            jQuery('#found-dot').hide();
+        } else {
+            jQuery('#category-cnt-wrapper').hide();
+        }
+    });
+</script>

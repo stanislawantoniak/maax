@@ -1,59 +1,20 @@
 <?php
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
-
-
-    protected $_preferences;
-
-
-    protected function _getPreferences()
-    {
-        if (is_null($this->_preferences)) {
-            $vendorPreferences = Mage::getModel('zolagodropship/preferences');
-            $vendorPreferences->load($this->getVendorId(), 'vendor_id');
-
-            $this->_preferences = $vendorPreferences;
-        }
-
-        return $this->_preferences;
-    }
-
-    public function getData($key = '', $index = null)
-    {
-        if (in_array($key, array(
-                //contact
-                'company_name', 'tax_no', 'www',
-                'contact_email', 'contact_telephone', 'executive_firstname', 'executive_lastname', 'executive_telephone', 'executive_telephone_mobile',
-                //
-                'administrator_firstname', 'administrator_lastname', 'administrator_telephone', 'administrator_telephone_mobile',
-                //rma
-                'rma_email', 'rma_telephone', 'rma_executive_telephone', 'rma_executive_telephone_mobile', 'rma_executive_email'
-            )
-        )
-        ) {
-
-            $preferences = $this->_getPreferences();
-	        if(!is_null($preferences)) {
-		        $this->addData($preferences->getData());
-	        }
-        }
-        return parent::getData($key, $index);
-    }
-
 	/**
 	 * Sets root category to registry and then return
 	 */
 	public function rootCategory($websiteId = NULL){
-		
+
 		if($category = Mage::registry('vendor_current_category')){
-			return $category;
+            return $category;
 		}
 		
 		$websiteId		= ($websiteId) ? $websiteId : Mage::app()->getWebsite()->getId();
 		$rootCategoryId = Mage::helper('zolagodropshipmicrosite')
 				->getVendorRootCategory($this, $websiteId);
-	
-		$category = Mage::getModel("catalog/category")->load($rootCategoryId);
+
+        $category = Mage::getModel("catalog/category")->load($rootCategoryId);
 		
 		if(!$category->getId()){
 			$category->load(Mage::app()->getStore()->getRootCategoryId());
@@ -136,5 +97,29 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		}
 		
 		return parent::_beforeSave();
+	}
+
+	public function getFormatedAddress($type='text')
+	{
+		switch ($type) {
+			case 'text':
+				return $this->getStreet(-1)."\n".$this->getCity().', '.$this->getRegionCode().' '.$this->getZip();
+		}
+		$format = Mage::getSingleton('customer/address_config')->getFormatByCode($type);
+		if (!$format) {
+			return null;
+		}
+		$renderer = $format->getRenderer();
+		//die(var_dump($renderer));
+		if (!$renderer) {
+			return null;
+		}
+		$address = $this->getAddressObj();
+		$address->unsVendorAttn();
+		$address->unsFirstname();
+		$address->unsLastname();
+		$address->setCompany($this->getCompanyName());
+
+		return $renderer->render($address);
 	}
 }

@@ -6,6 +6,21 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 {
 	protected $_wasLogged;
 
+
+    public function indexAction()
+    {
+        $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
+        $this->_initLayoutMessages('catalog/session');
+        $this->_initLayoutMessages(array('catalog/session', 'udqa/session'));
+
+        $this->getLayout()->getBlock('content')->append(
+            $this->getLayout()->createBlock('customer/account_dashboard')
+        );
+        $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
+        $this->renderLayout();
+    }
+
 	/**
 	 * Override mesagge
 	 */
@@ -328,6 +343,92 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		$this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
 		$this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
 		$this->renderLayout();
+	}
+
+	/**
+	 * Create customer account action
+	 */
+	public function createPostAction()
+	{
+		/** @var $session Mage_Customer_Model_Session */
+		$session = $this->_getSession();
+		if ($session->isLoggedIn()) {
+			$this->_redirect('*/*/');
+			return;
+		}
+		$session->setEscapeMessages(true); // prevent XSS injection in user input
+		if (!$this->getRequest()->isPost()) {
+			$errUrl = $this->_getUrl('*/*/create', array('_secure' => true));
+			$this->_redirectError($errUrl);
+			return;
+		}
+
+		$customer = $this->_getCustomer();
+		$data = $this->getRequest()->getPost();
+		try {
+			$errors = $this->_getCustomerErrors($this->getRequest()->getPost());
+			if (empty($errors)) {
+				unset($data['agreement']);
+				$customer->setData($data);
+				$customer->save();
+				$this->_dispatchRegisterSuccess($customer);
+				$this->_successProcessRegistration($customer);
+				return;
+			} else {
+				$this->_addSessionError($errors);
+			}
+		} catch (Mage_Core_Exception $e) {
+			$session->setCustomerFormData($this->getRequest()->getPost());
+			if ($e->getCode() === Mage_Customer_Model_Customer::EXCEPTION_EMAIL_EXISTS) {
+				$url = $this->_getUrl('customer/account/forgotpassword');
+				$message = $this->__("There is already an account with this email address. If you are sure that it is your email address, <a href='%s'>click here</a> to get your password and access your account.", $url);
+				$session->setEscapeMessages(false);
+			} else {
+				$message = $e->getMessage();
+			}
+			$session->addError($message);
+		} catch (Exception $e) {
+			$session->setCustomerFormData($this->getRequest()->getPost())
+				->addException($e, $this->__('Cannot save the customer.'));
+		}
+		$errUrl = $this->_getUrl('*/*/create', array('_secure' => true));
+		$this->_redirectError($errUrl);
+	}
+
+	/**
+	 * Validate customer data and return errors if they are
+	 *
+	 * @param array $customer
+	 * @return array|string
+	 */
+	protected function _getCustomerErrors($customer)
+	{
+		/**
+		 * $required
+		 *      key - field name
+		 *      value - field length (0 means not needed)
+		 */
+		$required = array(
+			"email"         => "1",
+			"password"      => "6",
+			"agreement"     => "1",
+			"is_subscribed" => "0"
+		);
+		$errors = array();
+		foreach($customer as $field => $value) {
+			if(!isset($required[$field])) {
+				$errors = array();
+				$errors[] = $this->__("Some error occured");
+				return $errors;
+			} else {
+				if(strlen($value) < $required[$field]) {
+					$errors[] = $this->__(ucfirst($field)." is not correct");
+				} elseif($field == 'email' && !Zend_Validate::is($value, 'EmailAddress')) {
+					$errors[] = $this->__("Provided email is not correct");
+				}
+			}
+		}
+		return $errors;
 	}
 
 }
