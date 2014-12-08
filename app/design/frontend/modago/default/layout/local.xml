@@ -1169,6 +1169,7 @@
 				<script>js/mall/account.js</script>
 			</action>
 		</reference>
+		<remove name="captcha" />
 	</zolago_modago_customer_handle>
 
 	<customer_account_edit>
@@ -1224,6 +1225,10 @@
 	<customer_account_resetpassword>
 		<update handle="zolago_modago_customer_handle" />
 	</customer_account_resetpassword>
+
+	<customer_account_create>
+		<update handle="zolago_modago_customer_handle" />
+	</customer_account_create>
 	
 	
 	<!-- ################################################################### -->

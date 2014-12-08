@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<sections>
+		<customer>
+			<groups>
+				<agreements translate="label">
+					<label>Customer agreements</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1000</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<policy translate="label">
+							<label>Policy</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</policy>
+						<tos translate="label">
+							<label>Terms of service</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</tos>
+						<newsletter translate="label">
+							<label>Newsletter</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</newsletter>
+						<sms translate="label">
+							<label>SMS</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sms>
+					</fields>
+				</agreements>
+			</groups>
+		</customer>
+	</sections>
+</config>
