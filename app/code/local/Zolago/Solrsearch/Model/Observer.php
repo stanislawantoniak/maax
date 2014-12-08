@@ -44,6 +44,26 @@ class Zolago_Solrsearch_Model_Observer {
 	
 	
 	/**
+	 * Process converter stock save
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function zolagoCatalogConverterStockSaveBefore(
+			Varien_Event_Observer $observer) {
+		
+		$this->collectProduct($observer->getEvent()->getProductId());
+	}
+	
+	/**
+	 * After all stock changed - process collected products
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function zolagoCatalogConverterStockComplete(
+			Varien_Event_Observer $observer) {
+		
+		$this->processCollectedProducts();
+	}
+	
+	/**
 	 * Add product to queue.
 	 * @param Mage_Core_Model_Observer $observer
 	 * @return type
@@ -299,13 +319,29 @@ class Zolago_Solrsearch_Model_Observer {
 			$this->processCollectedProducts();
 		}
 	}
-	
+
+	/**
+	 * Process prices after catalog update via converter
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function catalogConverterPriceUpdateAfter(Varien_Event_Observer $observer) {
+		$productIds = $observer->getEvent()->getProductIds();
+
+		foreach ($productIds as $productId) {
+			$this->collectProduct($productId);
+		}
+
+		$this->processCollectedProducts();
+	}
+
 	
 	/**
 	 * @param int|Mage_Catalog_Model_Product $product
 	 * @param type $storeId
 	 */
-	public function collectProduct($product, $storeId=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, $checkParents=false) {
+	public function collectProduct($product, 
+		$storeId=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, 
+		$checkParents=false) {
 		
 		if($product instanceof Mage_Catalog_Model_Product){
 			$productId = $product->getId();

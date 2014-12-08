@@ -10,7 +10,7 @@ jQuery.noConflict();
             'hide.bs.modal', 
             'hide.bs.tooltip',
             'hide.bs.popover'], function(index, eventName) {
-            all.on(eventName, function( event ) {
+            all.on(eventName, function() {
                 isBootstrapEvent = true;
             });
         });
@@ -41,7 +41,7 @@ Zolago.formIntegrator = function(form){
 	form.find(".required-entry").attr("required", "required");
 	form.find(".validate-email ").addClass("email");
 	form.find(".validate-digits ").addClass("number");
-}
+};
 /**
  * Grid integrator
  */
@@ -63,7 +63,7 @@ Zolago.gridIntegrator = function(gridObj){
 		}else{
 			el.removeClassName("row-selected");
 		}
-	}
+	};
 		
 	varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
 		var el = $(event.currentTarget);
@@ -124,7 +124,7 @@ Zolago.gridIntegrator = function(gridObj){
 			_el.parent().css({
 				display: "inline-block",
 				width: "49%",
-				marginBottom: "0px",
+				marginBottom: "0px"
 			});
 			_el.attr("placeholder", Translator.translate(!(i%2)? "From" : "To"));
 
@@ -152,7 +152,7 @@ Zolago.gridIntegrator = function(gridObj){
 	if(mass){
 		mass.checkCheckboxes();
 	}
-}
+};
 
 Zolago.price = function(v){
 	
@@ -165,7 +165,7 @@ Zolago.price = function(v){
             p[1] += "0";
         }
         return p.join(",");
-}
+};
 
 Zolago.round = function(v, pow){
 	
@@ -174,11 +174,11 @@ Zolago.round = function(v, pow){
 		}
 		
         return Math.round(v * Math.pow(10, pow)) / Math.pow(10, pow) + "";
-}
+};
 
-Zolago.currency = function(v){
+Zolago.currency = function(){
 	return this.price(price) + " " + global.i18n.currency;
-}
+};
 
 Zolago.replace = function(markup, data) {
 	jQuery.each(data, function(key) {

@@ -10,7 +10,7 @@
 
     <div class="section clearfix">
 
-        <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content filter-size"  id="filter_<?php echo $key ?>">
     <?php foreach ($this->getItems() as $item => $count): ?>
         <?php if ($this->getCanShowItem($item, $count)): ?>
@@ -19,15 +19,39 @@
                 $isOptionSelected = true;
             }
             ?>
-            <label for="<?php echo $key ?>_<?php echo $item; ?>">
-                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>"  type="checkbox" id="<?php echo $key ?>_<?php echo $item; ?>" name="<?php echo $key ?>_<?php echo $item; ?>" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> /><span><?php echo $item ?></span>
+            <label for="<?php echo $this->getItemId($item)?>">
+                <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+					   data-params='<?php echo $this->getItemJson($item);?>'  
+					   type="checkbox"
+					   name="<?php echo $this->getItemName($item);?>"
+					   value="<?php echo $this->getItemValue($item)?>"
+					   id="<?php echo $this->getItemId($item)?>"
+						<?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> />
+				<span>
+					<a href="<?php echo $this->getItemUrl($item); ?>"
+					   class="listing-link">
+						<?php echo $item; ?>
+					</a>
+				</span>
             </label>
         <?php endif; ?>
     <?php endforeach; ?>
     <?php if ($this->getCanShowHidden()): ?>
         <?php foreach ($this->getHiddenItems() as $item => $count): ?>
-            <label for="<?php echo $key ?>_<?php echo $item; ?>s">
-                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>"  type="checkbox" id="<?php echo $key ?>_<?php echo $item; ?>" name="<?php echo $key ?>_<?php echo $item; ?>" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> /><span><?php echo $item ?></span>
+            <label for="<?php echo $this->getItemId($item)?>">
+                <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+					   data-params='<?php echo $this->getItemJson($item);?>'  
+					   type="checkbox" 
+					   name="<?php echo $this->getItemName($item);?>"
+					   value="<?php echo $this->getItemValue($item)?>"
+					   id="<?php echo $this->getItemId($item)?>"
+					   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> />
+					<span>
+						<a href="<?php echo $this->getItemUrl($item); ?>"
+						   class="listing-link">
+							<?php echo $item; ?>
+						</a>
+					</span>
             </label>
         <?php endforeach; ?>
             <div class="action clearfix">
@@ -35,7 +59,8 @@
             </div>
     <?php endif; ?>
             <div class="action clear <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?> clearfix">
-                <a href="#" class="btn clear" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" ><?php echo $this->__("Clear"); ?></a>
+	            <?php $pureKey = implode("_", $key_withoutFacet); ?>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" class="btn clear" data-filter-type="<?php echo $pureKey; ?>" ><?php echo $this->__("Clear"); ?></a>
             </div>
 
         </div>

@@ -223,7 +223,7 @@ jQuery(document).ready(function() {
 							<?php $_name = $_c->getAuthorName();?>
 							<?php $type = $_c->getAuthorTypeText(); ?>
 							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?><?php echo $_name ? " " . $_name : "";?>]
-							<?php echo nl2br($this->htmlEscape($_c->getComment()));?>
+							<?php echo $_helper->formatComment($_c);?>
 						</dd>
 						
 						<?php endforeach ?>
@@ -258,7 +258,7 @@ jQuery(document).ready(function() {
 						</div>
 						<div class="form-group">
 							<div class="col-md-12">
-								<textarea <?php if(!$_statusModel->isVendorCommentAvailable($_rma)):?>disabled="disabled"<?php endif;?> class="form-control" name="comment" rows="8"></textarea>
+								<textarea <?php if(!$_statusModel->isVendorCommentAvailable($_rma)):?>disabled="disabled"<?php endif;?> class="form-control commentRequired" name="comment" rows="8"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -267,7 +267,7 @@ jQuery(document).ready(function() {
 							</label>
 							<div class="col-md-9">
 								<label class="checkbox"> 
-									<input type="hidden" name="notify_customer" value=""> 
+									<input type="hidden" name="notify_customer" id="rma-notify-customer-hidden" value=""> 
 									<input type="checkbox" id="rma-notify-customer" name="notify_customer" value="1"> 
 								</label>
 							</div>
@@ -354,42 +354,65 @@ jQuery(document).ready(function() {
 </div> */ ?>
 
 <script type="text/javascript">
-jQuery(function($){
-	var status = $("#rma-status");
-	var notify = $("#rma-notify-customer");
-	
-	status.change(function(){
-		var el = $(this),
-			// Isnt't currentylu selected & force notify
-			doNotify = !!parseInt(el.children(":selected").attr('data-notify-customer')) 
-					&& el.children("[selected]").attr('value') != el.val();
-		notify.prop("checked", doNotify);
-		notify.prop("disabled", doNotify);
-	});
-	
-	$(".download-letter").click(function(){
-		var el = $(this);
-		el.button("loading");
-		$.post(el.attr("href"), function(response){
-			if(response.status){
-				//console.log(response.url);
-				document.location.replace(response.url);
-			}else{
-				noty({
-					text: response.message,
-					type: 'error',
-					timeout: 2000
-				});
-			}
-		}).fail(function(){
-			noty({
-				text: Translator.translate("Other error contact admin"),
-				type: 'error'
-			});
-		}).always(function(){
-			el.button('reset')
-		});
-		return false;
-	});
+jQuery(function($) {
+    var status = $("#rma-status");
+    var notify = $("#rma-notify-customer");
+
+    status.change(function () {
+        var el = $(this),
+            hidden = $("#rma-notify-customer-hidden"),
+        // Isnt't currentylu selected & force notify
+            doNotify = !!parseInt(el.children(":selected").attr('data-notify-customer'))
+                && el.children("[selected]").attr('value') != el.val();
+        notify.prop("checked", doNotify);
+        notify.prop("disabled", doNotify);
+        hidden.val(doNotify ? "1" : "0");
+    });
+
+    $(".download-letter").click(function () {
+        var el = $(this);
+        el.button("loading");
+        $.post(el.attr("href"), function (response) {
+            if (response.status) {
+                //console.log(response.url);
+                document.location.replace(response.url);
+            } else {
+                noty({
+                    text: response.message,
+                    type: 'error',
+                    timeout: 2000
+                });
+            }
+        }).fail(function () {
+            noty({
+                text: Translator.translate("Other error contact admin"),
+                type: 'error'
+            });
+        }).always(function () {
+            el.button('reset')
+        });
+        return false;
+    });
+
+    //init validations for this form
+    $("form:has('#rma-notify-customer')").validate({});
+
+    var commentRecuired = function(value, elem, params){
+        if($("#rma-notify-customer").is(':checked')) {
+            if (value.trim().replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/gm," ").split(' ').length >= 5) { //if there is 5 words in comment ( explain )
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    };
+
+    jQuery.validator.addMethod('commentRequired', function () {
+        return commentRecuired.apply(this, arguments);
+    }, "<?php echo $_helper->__("You must enter a comment containing at least 5 words"); ?>" );
+
 });
 </script>

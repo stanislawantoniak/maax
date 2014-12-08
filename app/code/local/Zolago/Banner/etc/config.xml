@@ -60,11 +60,11 @@
         </layout>
         <translate>
             <modules>
-                <zolagobanner>
+                <Zolago_Banner>
                     <files>
                         <default>Zolago_Banner.csv</default>
                     </files>
-                </zolagobanner>
+                </Zolago_Banner>
             </modules>
         </translate>
     </frontend>

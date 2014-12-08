@@ -55,6 +55,31 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	protected $_availableStoreIds;
 	
 	/**
+	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
+	 * @return array
+	 */
+	public function prepareAjaxProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel) {
+		// Create product list 
+		$products = array();
+		
+		foreach ($listModel->getCollection() as $product){
+			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
+			$_product = $product->getData();
+			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
+			$_product['listing_resized_image_info'] = $product->getListingResizedImageInfo();
+			$_product['udropship_vendor_logo_url'] = (string)$product->getUdropshipVendorLogoUrl();
+			$_product['manufacturer_logo_url'] = (string)$product->getManufacturerLogoUrl();
+			$_product['is_discounted'] = (int)$product->isDiscounted();
+			$_product['price'] = (float)$product->getPrice();
+		    $_product['final_price'] = (float)$product->getFinalPrice();
+			$_product['currency'] = (string)$product->getCurrency();
+			$products[] = $_product;
+		}
+		
+		return $products;
+	}
+	
+	/**
 	 * @param array $params
 	 * @return array
 	 */
@@ -69,6 +94,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				$params['page'] = null;
 			
 		}
+		
+		$params["_"] = null;
 		
 		return $params;
 	}
@@ -423,4 +450,80 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getSolrDocFileds() {
 		return array_keys($this->_solrToMageMap);
 	}
+
+    /**
+     * @param Mage_Catalog_Model_Product $model
+     * @return string | empty_string
+     */
+    public function getListingResizedImageUrl(Mage_Catalog_Model_Product $model) {
+
+        if(!$model->hasData("listing_resized_image_url")){
+
+            $return = null;
+            try{
+                $return = Mage::helper('catalog/image')->
+                init($model, 'image')->
+                keepAspectRatio(true)->
+                constrainOnly(true)->
+                keepFrame(false)->
+                resize(300,null);
+            } catch (Exception $ex) {
+                Mage::logException($ex);
+            }
+
+            $model->setData("listing_resized_image_url", $return . ""); // Cast to string
+        }
+
+        return $model->getData("listing_resized_image_url");
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getNumFound() {
+
+        $num = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCollection()->getSolrData("response", "numFound");
+        if(is_numeric($num)){
+            return $num;
+        }
+        return 0;
+    }
+
+    public function getSolrRealQ() {
+        /** @var Zolago_Solrsearch_Model_Solr $model */
+//        $model = Mage::getModel('zolagosolrsearch/solr');
+//        $data = Mage::registry($model::REGISTER_KEY);
+//        if(empty($data)) {
+//            return '';
+//        } else {
+//            return $data['responseHeader']['params']['q'];
+//        }
+//        var_dump(Mage::helper('solrsearch')->getParam('q'));
+
+//        return Mage::helper('solrsearch')->getParam('q');
+
+        /** @var Zolago_Solrsearch_Model_Solr $model */
+        $model = Mage::getModel('zolagosolrsearch/solr');
+        $data = Mage::registry($model::REGISTER_KEY . "_search_real_q");
+        if(empty($data)) {
+            return '';
+        } else {
+            return $data;
+        }
+    }
+
+    /**
+     * @return boolean|null
+     */
+    public function getIsNoResult() {
+        /** @var Zolago_Solrsearch_Model_Solr $model */
+        $model = Mage::getModel('zolagosolrsearch/solr');
+        $data = Mage::registry($model::REGISTER_KEY . "_search_is_no_result");
+        if(empty($data)) {
+            return false;
+        } else {
+            return $data;
+        }
+    }
 }

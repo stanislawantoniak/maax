@@ -36,7 +36,7 @@ var Mall = {
         return p.join(",");
     },
     currency: function(price){
-        return this.price(price) + " " + global.i18n.currency;
+        return this.price(price) + " " + this.getCurrencyBasedOnCode();
     },
     // Registry object
     reg: {
@@ -203,7 +203,55 @@ var Mall = {
     setUserBlockData : function(content) {
         var userBlock = jQuery("#header_top_block_right");
         // set customer account url
-        jQuery("#link_your_account>a").attr("href", content.user_account_url);
+
+        var desktopW = 992;
+        var windowW = jQuery(window).width();
+        if(content.logged_in){
+            //on load
+
+            if(windowW < desktopW){
+                //Tablet
+                jQuery("#link_your_account>a, a#link_your_account_br").attr("href", content.user_account_url);
+            } else {
+                //Desktop
+                jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+            }
+            //on window resize
+            jQuery( window ).resize(function() {
+                var windowWidth = jQuery(this).width();
+                if(windowWidth < desktopW){
+                    //Tablet
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+                } else {
+                    //Desktop
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+                }
+            });
+        } else {
+            jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+
+
+            if(windowW < desktopW){
+                //Tablet
+                jQuery("[name=mobile_device_type]").val(1);
+            } else {
+                //Desktop
+                jQuery("[name=mobile_device_type]").val(0);
+            }
+            //on window resize
+            jQuery( window ).resize(function() {
+                var windowWidth = jQuery(this).width();
+                if(windowWidth < desktopW){
+                    //Tablet
+                    jQuery("[name=mobile_device_type]").val(1);
+                } else {
+                    //Desktop
+                    jQuery("[name=mobile_device_type]").val(0);
+                }
+            });
+        }
+
+
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
@@ -351,9 +399,23 @@ var Mall = {
         }
 
         return "";
+    },
+
+    //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
+    //to our format: 99-999
+    postcodeTransform: function(str) {
+        var strTrans = str.replace(/\D/g,"");//remove spaces
+        strTrans = strTrans.match(/.*?([0-9]{2}).?([0-9]{3}).*?/i);
+        if (strTrans == null) {
+            return str;
+        } else {
+            if (strTrans.length >= 1) {
+                return strTrans[1] + "-" + strTrans[2];
+            } else {
+                return str;
+            }
+        }
     }
-
-
 
 }
 
@@ -390,7 +452,7 @@ jQuery.extend(Mall.translate, Mall.i18nValidation);
 Mall.translate.ext = {
     __: function (key) {
         "use strict";
-
+		
         if (this._translate_messages[key] === undefined) {
             return key;
         }
@@ -503,9 +565,7 @@ Mall.product = {
     },
 
     createOptionGroup: function(group, useSizeboxList) {
-
         if(!useSizeboxList) {
-
             // insert option group
             var groupElement = jQuery("<div/>", {
                 "class": "size"
@@ -548,15 +608,15 @@ Mall.product = {
             //create select part
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
-                class: "form-control select-styled"
+                class: "form-control select-styled",
             }).appendTo(formGroupElement);
-
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
             });
-
-            this.applyAdditionalRules(group, jQuery('div.size-box div.size'));
-
+			
+            this.applyAdditionalRules(group,formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
+			jQuery('div.size-box div.size a').css('position','relative');
+			jQuery('div.size-box div.size a').css('top','5px');
         }
 
 
@@ -738,7 +798,7 @@ function basket_dropdown() {
             jQuery("#dropdown-basket").show();
         }
     },function() {
-        if (!jQuery(".basket-dropdown").is(":hover")) {
+        if (!jQuery(".basket-dropdown").is(":hover") || !jQuery("#link_basket").is(":hover") || !jQuery("#dropdown_basket").is(":hover")) {
             jQuery("#link_basket").removeClass('open');
             jQuery("#dropdown-basket").hide();
         }
@@ -769,8 +829,20 @@ jQuery(document).ready(function() {
 
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
-        jQuery(this).parents("li").first().hide();
+        var curentUL = jQuery(this).closest('ul');
+        jQuery(this).parents("li").first().remove();
+
+        if (jQuery(curentUL).find('li').length === 0) {
+            jQuery(curentUL).parent().remove();
+        }
+
+        if(jQuery('.messages li').length === 0) {
+            jQuery('#content').css('margin-top', '');
+        }
     });
+    if (jQuery('.messages i').length) {
+        jQuery('#content').css('margin-top', '0px');
+    }
 
     jQuery("#add-to-cart").tooltip({
         template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
@@ -805,7 +877,9 @@ jQuery(document).ready(function() {
             location.href = value;
         }
     });
-
+    //#######################
+    //## SIZE-BOX -> SELECTBOX
+    //#######################
     jQuery(".size-box select").selectbox({
         onOpen: function (inst) {
             var uid = jQuery(this).attr('sb');
@@ -816,12 +890,17 @@ jQuery(document).ready(function() {
             var n = jQuery(".size-box li").length;
             if( n < 4 ) {
                 height = n * height;
+                if (isNaN(height)) {
+                    height = 29;//px
+                }
                 jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
+                jQuery('.size-box .mCSB_container').css("margin-right", "0px");
             } else {
                 height = 4 * height;
             }
 
-            jQuery('#sbOptionsWrapper_' + uid).css('max-height', height);
+            jQuery('.size-box #sbOptionsWrapper_' + uid).css('max-height', height);
+            jQuery('.size-box #sbOptionsWrapper_' + uid).css('width', jQuery('.size-box .sbHolder').outerWidth());
 
         },
 
@@ -829,13 +908,26 @@ jQuery(document).ready(function() {
             Mall.setSuperAttribute(jQuery("#size_" + value));
         }
     });
-    if(jQuery(".size-box li").length) {
+    if(jQuery(".size-box option").length == 1) {
         Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
     }
-
+    if (jQuery('.size-box option').length >= 2) {
+        jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
+    }
+    //#######################
+    //## END SIZE-BOX -> SELECTBOX
+    //#######################
 
     Mall.product.setDiagonalsOnSizeSquare();
 
     basket_dropdown();
     sales_order_details_top_resize();
+
+	jQuery(document)
+		.on('show.bs.modal', '.modal', function () {
+			jQuery('html,body').addClass('modal-open');
+		})
+		.on('hidden.bs.modal', '.modal', function () {
+			jQuery('html,body').removeClass('modal-open');
+		});
 });

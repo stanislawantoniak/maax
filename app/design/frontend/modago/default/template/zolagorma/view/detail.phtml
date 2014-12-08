@@ -1,0 +1,43 @@
+<?php
+$_helper = Mage::helper("zolagorma");
+$_rma = $this->getRma();
+
+$vendors = $_rma->getVendor()->getId();
+
+$customerSession = Mage::getSingleton('customer/session');
+
+
+?>
+<form id="rma-connect-vendor-form" class="form clearfix" novalidate="novalidate" method="post" action="<?php echo $this->getFormAction(); ?>">
+
+    <input type="hidden" name="customer_id" value="<?php echo $customerSession->getId(); ?>" />
+    <input type="hidden" name="rma_id" value="<?php echo $_rma->getId(); ?>" />
+
+    <div class="form-group">
+        <label class="control-label" for="rma-connect-vendor-message">
+            <?php echo $_helper->__("Compose message"); ?>
+        </label>
+
+        <input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>"/>
+
+        <textarea class="form-control required-entry textarea"
+                  id="question_text"
+                  name="question_text"
+                  title="<?php echo $_helper->__("Compose message"); ?>"
+                  data-original-title="<?php echo $_helper->__("Compose message"); ?>"
+                  required="required"></textarea>
+    </div>
+
+
+    <div class="form-group text-right">
+        <button class="button button-primary rma-connect-vendor-form-send"
+                type="submit"
+                title="<?php echo $_helper->__("Send"); ?>">
+            <span><span><?php echo $_helper->__("Send"); ?></span></span>
+        </button>
+    </div>
+
+</form>
+<script type="text/javascript">
+	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
+</script>

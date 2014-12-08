@@ -48,7 +48,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
      */
     public static function getAvailableStock($dataStock, $merchant)
     {
-        $batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_STOCK_UPDATE_LOG;
+        //$batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_STOCK_UPDATE_LOG;
 
         if (empty($dataStock)) {
             return array();
@@ -87,7 +87,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                             $data[$sku][$stockId] = ($posStockConverter > $minimalStockPOS)
                                 ? ($posStockConverter - $minimalStockPOS - $openOrderQty) : 0;
 
-                            Mage::log(microtime() . "{$sku}: {$stockId} - POS stock from converter {$posStockConverter}, minimal stock from POS {$minimalStockPOS}, Open orders stock {$openOrderQty} ", 0, $batchFile);
+                            //Mage::log(microtime() . "{$sku}: {$stockId} - POS stock from converter {$posStockConverter}, minimal stock from POS {$minimalStockPOS}, Open orders stock {$openOrderQty} ", 0, $batchFile);
                         //}
 
                     }
@@ -105,7 +105,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             if (isset($skuIdAssoc[$sku])) {
                 $qty = array_sum((array)$_);
                 $dataSum[$skuIdAssoc[$sku]] = $qty;
-                Mage::log(microtime() . " {$sku} Stock qty sum {$qty}", 0, $batchFile);
+                //Mage::log(microtime() . " {$sku} Stock qty sum {$qty}", 0, $batchFile);
             }
         }
         unset($_);

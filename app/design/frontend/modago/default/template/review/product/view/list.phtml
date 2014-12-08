@@ -109,7 +109,7 @@ switch($_reviewsCount) {
                                 <h3 class="title_comment"><?php echo $this->escapeHtml($review->getTitle()); ?></h3>
                             </div>
                             <div class="meta">
-                                <span class="meta-label"><?php echo $this->__("Review written by"); ?></span><span class="date"> <?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user"><?php echo $review->getNickname(); ?></span>
+                                <span class="meta-label"><?php echo Mage::helper('zolagomodago')->__("Review written"); ?></span><span class="date"> <?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user"><?php echo $review->getNickname(); ?></span>
                             </div>
 
                         </div>

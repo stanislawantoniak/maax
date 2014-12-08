@@ -53,33 +53,9 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <ul>
-                                <li>
-                                    <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
-                                </li>
-                            </ul>
-                            <div class="logo_salles">
-                                <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
-                                <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store button button-secondary link"><?php echo $this->__("Go to vendor's store"); ?> <span class="glyphicon glyphicon-chevron-right"></span></a>
-                            </div>
                             <dl>
                                 <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
                             </dl>
-                            <dl>
-                                <dt><?php echo $this->__("RMA rules"); ?>:</dt>
-                                <?php echo $this->getVendorDeliveryHtml(); ?>
-                            </dl>
-
-                            <dl>
-                                <dt><?php echo $this->__("Shop details"); ?>:</dt>
-                                <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->percentToNumber($this->getAvarangeRating()); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
-                                <dd><?php echo $this->getAvarangeRating(); ?>% <?php echo $this->__("avarage rating"); ?></dd>
-                                <dd class="separator"></dd>
-                                <?php foreach($this->getRatingsSummary() as $rating) : ?>
-                                <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $this->percentToNumber($rating['vote_percent']); ?></dd>
-                                <?php endforeach; ?>
-                            </dl>
-                            <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store hidden-xs"><?php echo $this->__("Go to vendor's store"); ?></a>
                         </div>
                     </div>
                 </div>

@@ -55,6 +55,17 @@ $avg = $_reviewBlock->getAvarageRating();
         $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
     }
 ?>
+<?php
+    $_helperSizetable = Mage::helper('zolagosizetable');
+    /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
+    $vendor_id = $_product->getData('udropship_vendor');
+    $storeId = Mage::app()->getStore()->getStoreId();
+    $attributeSetId = $_product->getData('attribute_set_id');
+    $brandId = $_product->getData( 'manufacturer');
+
+    $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+
+?>
 
 <div id="content" class="container-fluid">
 <div class="row">
@@ -74,7 +85,7 @@ $avg = $_reviewBlock->getAvarageRating();
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
 <!-- PRODUCT SHOP -->
-<div id="product-shop" class="col-lg-8 col-md-12 clearfix overflow-x-fix">
+<div id="product-shop" class="col-lg-8 col-md-12 clearfix">
 
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php echo $this->getBlockHtml('formkey') ?>
@@ -103,7 +114,9 @@ $avg = $_reviewBlock->getAvarageRating();
                 </ul>
             </div>
         <?php endif; ?>
+<!--        catalog.product.related-->
         <?php echo $this->getChildHtml('catalog.product.related'); ?>
+<!--        catalog.product.related end-->
 
         <div class="size-box-bundle" id="product-options">
             <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
@@ -117,8 +130,9 @@ $avg = $_reviewBlock->getAvarageRating();
                                     <div class="form-group form-radio">
 
                                         <br />
+                                        
                                         <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
-                                           data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
+                                           data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?> <?php endif; ?></a>                                        
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +217,7 @@ $avg = $_reviewBlock->getAvarageRating();
     <header>
         <h2 class="title_section">Opis produktu <i class="bullet-strzalka-down visible-xs"></i></h2>
     </header>
-    <?php $attributesData = $this->getAdditionalDataDetailed(true); ?>
+    <?php $attributesData = $this->getAdditionalDataDetailed(true,false); ?>
     <div class="main">
         <ul class="list">
             <li>
@@ -262,12 +276,12 @@ $avg = $_reviewBlock->getAvarageRating();
 <div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"></button>
-                <h4 class="title_section"><?php echo $this->__("Size table"); ?></h4>
-            </div>
+            <button type="button" class="close" data-dismiss="modal"></button>
+
             <div class="modal-body">
-                <?php echo $this->getChildHtml("product.vendor.sizecomments"); ?>
+                <?php
+                    echo $sizeTableValue;
+                ?>
             </div>
         </div>
     </div>
@@ -373,4 +387,5 @@ $avg = $_reviewBlock->getAvarageRating();
     Mall.translate.add("people likes", "<?php echo $this->__("people likes"); ?>");
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
+    Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
 </script>

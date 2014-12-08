@@ -247,14 +247,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
             $status = array();
             //status
+            $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
+            $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
+            $now = Mage::getModel('core/date')->timestamp(time());
             if (!empty($dateTo) && !empty($dateFrom)) {
-                $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
-
-                $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
                 //Zend_Debug::dump($statuses);
                 //1.Expired
-                $now = Mage::getModel('core/date')->timestamp(time());
-
                 if (strtotime($dateFrom) < $now && $now < strtotime($dateTo)) {
                     $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
                 }
@@ -270,7 +268,29 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 if (strtotime($dateTo) < $now) {
                     $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
                 }
+            } elseif (empty($dateTo) && !empty($dateFrom)) {
+                if (strtotime($dateFrom) < $now) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
+                }
+                if ($now < strtotime($dateFrom)) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
+                }
+            } elseif (!empty($dateTo) && empty($dateFrom)) {
+                if ($now < strtotime($dateTo)) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
+                }
+
+                $h = !empty($bannersConfiguration->campaign_expires) ? $bannersConfiguration->campaign_expires : 48;
+
+                if (strtotime($dateTo) >= $now && strtotime($dateTo) < ($now + $h * 3600)) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
+                }
+
+                if (strtotime($dateTo) < $now) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
+                }
             }
+
             $campaignData['status'] = $status;
         }
         echo Mage::helper('core')->jsonEncode($campaignData);

@@ -79,11 +79,11 @@
     <adminhtml>
     	<translate>
             <modules>
-                <zolagoholidays>
+                <Zolago_Holidays>
                     <files>
                         <default>Zolago_Holidays.csv</default>
                     </files>
-                </zolagoholidays>
+                </Zolago_Holidays>
             </modules>
         </translate>
     	<layout>

@@ -224,4 +224,50 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	public function isGoogleBot() {
 		return Mage::helper("zolagocommon")->isGoogleBot();
 	}
+	
+	/**
+	 * get current url path placed in 
+	 * @return string
+	 */
+	public function getUrlRoute() {
+		if(!$this->hasData("url_route")){
+			if($this->isCategoryMode()){
+				$path = "catalog/category/view";
+			}else{
+				$path = "search/index/index";
+			}
+			$this->setData("url_route", $path);
+		}
+		return $this->getData("url_route");
+	}
+	
+	/**
+	 * get current url path placed in 
+	 * @return string
+	 */
+	public function getUrlPathForCategory() {
+		if(!$this->hasData("url_path_for_category")){
+			if($this->isCategoryMode()){
+				$path = $this->getCurrentCategory()->getUrlPath();
+			}else{
+				$path = false;
+			}
+			$this->setData("url_path_for_category", $path);
+		}
+		return $this->getData("url_path_for_category");
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isCategoryMode() {
+		return $this->getMode() == self::MODE_CATEGORY;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isSearchMode() {
+		return $this->getMode() == self::MODE_SEARCH;
+	}
 }

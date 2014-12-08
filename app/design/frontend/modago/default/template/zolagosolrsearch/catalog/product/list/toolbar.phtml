@@ -1,0 +1,36 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar */ ?>
+<?php $_total = $this->getNumFound();?>
+
+<aside id="sort-criteria" class="container-fluid">
+    <div class="col-sm-12">
+        <ul class="sort clearfix">
+            <li id="number_products" class=""><span class="label"><?php echo $this->__("Total products count:"); ?> </span> <span class="value"> <?php echo $_total; ?></span></li>
+            <li>
+	            <label for="sort-by">
+		            <?php echo $this->__("Sort by:"); ?>
+	            </label>
+	            <div class="sort-by-container">
+		            <input type="hidden" id="sort-dir" value="<?php echo $this->getCurrentDir() ?>" />
+		            <input type="hidden" id="sort-val" value="<?php echo $this->getCurrentOrder() ?>" />
+		            <select id="sort-by" class="form-control">
+			            <?php foreach($this->getSortOptions() as $option): ?>
+				            <option value="<?php echo $option['value'].'||'.$option['dir']; ?>"
+				                    data-sort="<?php echo $option['value']; ?>"
+				                    data-dir="<?php echo $option['dir']; ?>"
+				                    data-url="<?php echo $this->getSortUrl($option); ?>"
+				                    <?php if ($option['value'] === $this->getCurrentOrder() && $option['dir'] == $this->getCurrentDir()): ?>
+					                selected
+					                <?php endif; ?>>
+					            <?php echo str_replace(" ", "&nbsp;", $this->__($this->escapeHtml($option['label'])));?>
+		                    </option>
+			            <?php endforeach;?>
+		            </select>
+	            </div>
+            </li>
+        </ul>
+    </div>
+</aside>
+
+<script type="text/javascript">
+	Mall.listing.setTotal(<?php echo $_total; ?>);
+</script>

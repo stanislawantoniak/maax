@@ -6,7 +6,7 @@
 		float:right;
 		@media (max-width: $screen-xs-max) {
 			float:right;
-			margin-right: -41px;
+			margin-right: -31px;
 		}
 		li {
 			display:inline-block;
@@ -31,55 +31,17 @@
 			}
 		}
 	}
-	.select-group {
+	.sbOptionsWrapper{
+		max-height: 200px!important;
+		box-sizing: content-box;
 		ul {
-			float:none;
+			float: none;
 			li {
-				margin-left: 0;
-				float:none;
-				display:block;
-			}
-		}
-		&.small {
-			width: 180px;
-			@media (min-width: $screen-sm-min) {
-				width: 128px;
-			}
-			@media (min-width: $screen-md-min) {
-				width: 128px;
-			}
-			@media (min-width: $screen-lg-min) {
-				width: 128px;
-			}
-			.mCSB_inside {
-				> .mCSB_container {
-				margin-right: 19px;
-				}
-			}
-			.mCSB_scrollTools {
-				right:1px;
-			}
-			.button-select {
-				width:125px;
-				max-width: inherit;
-				min-width: inherit;
-				&+ .dropdown-select {
-				top: 23px;
-				width:125px;
-				}
+				line-height: 20px;
 			}
 		}
 	}
-	.styledSelected {
-	label[for^=sort-by] {
-		float:left;
-		line-height: 27px;
+	.sbSelector {
+		line-height: 28px;
 	}
-	.sbHolder {
-			margin-left: 60px;
-			width:167px;
-		}
 }
-}
-
-

@@ -1,0 +1,20 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Attributesetswitcher */?>
+<div class="main-actions align-right col-xs-4 " style="padding-right: 0;">
+	<form>
+		<select name="attribute_set_id" id="attribute_set_id" class="form-control" data-base="<?php echo $this->getUrl("*/*/*");?>">
+			<option value="" ><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+			<?php foreach($this->getAttributeSets() as $value=>$label):?>
+				<option value="<?php echo $value;?>" <?php if($this->getAttributeSetId()==$value):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($label);?></option>
+			<?php endforeach;?>
+		</select>
+	</form>
+</div>
+<script type="text/javascript">
+	jQuery(function($){
+		$("#attribute_set_id").change(function(){
+			var target = $(this),
+				url = target.data("base") + "attribute_set_id/" + target.val();
+			document.location.href= url;
+		});
+	});
+</script>

@@ -70,11 +70,11 @@
 		</routers>
         <translate>
             <modules>
-                <zolagodropshipmicrosite>
+                <Zolago_DropshipMicrosite>
                     <files>
                         <default>Zolago_DropshipMicrosite.csv</default>
                     </files>
-                </zolagodropshipmicrosite>
+                </Zolago_DropshipMicrosite>
             </modules>
         </translate>
 	</frontend>

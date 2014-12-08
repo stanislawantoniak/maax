@@ -79,22 +79,22 @@
 		</layout>
 		<translate>
 			<modules>
-				<Zolago_Pos.csv>
+				<Zolago_Pos>
 					<files>
 						<default>Zolago_Pos.csv</default>
 					</files>
-				</Zolago_Pos.csv>
+				</Zolago_Pos>
 			</modules>
 		</translate>
 	</frontend>
 	<adminhtml>
 		<translate>
 			<modules>
-				<Zolago_Pos.csv>
+				<Zolago_Pos>
 					<files>
 						<default>Zolago_Pos.csv</default>
 					</files>
-				</Zolago_Pos.csv>
+				</Zolago_Pos>
 			</modules>
 		</translate>
 		<layout>

@@ -36,4 +36,20 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
     {
         return $this->getResource()->getConverterPriceType($skus);
     }
+
+    /**
+     * Get product final price
+     *
+     * @param double $qty
+     * @return double
+     */
+    public function getFinalPrice($qty=null) {
+
+        $price = $this->getCalculatedFinalPrice();
+
+        if ($price !== null) {
+            return $price;
+        }
+        return parent::getFinalPrice($qty, $this);
+    }
 }

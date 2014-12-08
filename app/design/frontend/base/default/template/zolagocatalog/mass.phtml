@@ -211,7 +211,7 @@ table.table{
             $("body").css("overflow", "hidden")
                      .css('height', 'auto');
 
-            interval = setInterval(loadMoreRows, 2000);
+            interval = setInterval(loadMoreRows, 4000);
 
             //Resize columns
             calculateLeftColumnWidth();
@@ -912,7 +912,8 @@ table.table{
 
                 var url = getUrl(),
                     $leftColumns,
-                    $bodyColumns;
+                    $bodyColumns,
+                    gridIdsStr;
 
                 filterAjaxFired = true;
 
@@ -935,6 +936,10 @@ table.table{
                     //Recalculate total loaded
                     totalRecords = $(data).find('#total-records').val();
                     $('.total-records-count').text(totalRecords);
+
+                    //Reinitialize gridIds
+                    gridIdsStr = $(data).find('#grid-ids').val();
+                    gridIds = gridIdsStr.split(",");
 
                     calculateViewportHeight();
 

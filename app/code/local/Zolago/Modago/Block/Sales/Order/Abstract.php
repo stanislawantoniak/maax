@@ -7,19 +7,21 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 
 	/**
 	 * @param Mage_Sales_Model_Order $order
+	 * @param bool $canceled canceled PO included
 	 * @return bool
 	 */
-	public function hasPo(Mage_Sales_Model_Order $order) {
-		return $this->getPoCollection($order)->getSize()>0;
+	public function hasPo(Mage_Sales_Model_Order $order,$canceled = false) {
+		return $this->getPoCollection($order,$canceled)->getSize()>0;
 	}
 	
 	/**
 	 * @param Mage_Sales_Model_Order $order
+	 * @param bool $canceled canceled PO included
 	 * @return float
 	 */
-	public function getTotal(Mage_Sales_Model_Order $order) {
+	public function getTotal(Mage_Sales_Model_Order $order,$canceled = false) {
 		$price = 0;
-		foreach($this->getPoCollection($order) as $po){
+		foreach($this->getPoCollection($order,$canceled) as $po){
 			/* @var $po Zolago_Po_Model_Po */
 			$price += $po->getSubtotalInclTax() + $po->getShippingAmountIncl();
 		}
@@ -29,11 +31,12 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 
 	/**
 	 * @param Mage_Sales_Model_Order $order
+	 * @param bool $canceled canceled PO included
 	 * @return array - vendor names sorretd vendro objects
 	 */
-	public function getVendors(Mage_Sales_Model_Order $order) {
+	public function getVendors(Mage_Sales_Model_Order $order,$canceled = false) {
 		$vendors = array();
-		foreach($this->getPoCollection($order) as $po){
+		foreach($this->getPoCollection($order,$canceled) as $po){
 			/* @var $po Zolago_Po_Model_Po */
 			if(!isset($vendors[$po->getUdropshipVendor()] )){
 				$vendors[$po->getUdropshipVendor()] = Mage::helper("udropship")->getVendor($po->getUdropshipVendor());
@@ -45,12 +48,13 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 	
 	/**
 	 * @param Mage_Sales_Model_Order $order
+	 * @param int $canceled canceled PO included
 	 * @return array
 	 */
-	public function getSortedPoItemsByOrder(Mage_Sales_Model_Order $order) {
+	public function getSortedPoItemsByOrder(Mage_Sales_Model_Order $order,$canceled = false) {
 
 		$items = array();		
-		foreach($this->getPoCollection($order) as $po){
+		foreach($this->getPoCollection($order,$canceled) as $po){
 			/* @var $po Zolago_Po_Model_Po */	
 			foreach($po->getAllItems() as $item){
 				if($item->getParentItemId()===null){
@@ -97,19 +101,22 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 	
 	/**
 	 * @param Mage_Sales_Model_Order $order
+	 * @param bool $canceled canceled po included
 	 * @return Unirgy_DropshipPo_Model_Mysql4_Po_Collection
 	 */
-	public function getPoCollection(Mage_Sales_Model_Order $order) {
-		if(!isset($this->_cache[$order->getId()])){
+	public function getPoCollection(Mage_Sales_Model_Order $order,$canceled = false) {
+		if(!isset($this->_cache[$order->getId()][$canceled])){
 			$collection = Mage::getResourceModel("udpo/po_collection");
 			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
 			$collection->addFieldToFilter("order_id", $order->getId());
-			$collection->addFieldToFilter("udropship_status", 
+			if (!$canceled) {
+    			$collection->addFieldToFilter("udropship_status", 
 					array("nin"=>Zolago_Po_Model_Po_Status::STATUS_CANCELED)
-			);
-			$this->_cache[$order->getId()] =  $collection;
+	    		);
+            }
+			$this->_cache[$order->getId()][$canceled] =  $collection;
 		}
-		return $this->_cache[$order->getId()];
+		return $this->_cache[$order->getId()][$canceled];
 	}
 	
 	/**

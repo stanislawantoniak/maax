@@ -5,7 +5,23 @@ class Zolago_Solrsearch_Block_Catalog_Product_List extends Mage_Catalog_Block_Pr
 	 * @return Zolago_Solrsearch_Model_Catalog_Product_Collection
 	 */
 	public function getCollection() {
-		return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCollection();
+		return $this->getListModel()->getCollection();
+	}
+	
+	/**
+	 * @return Zolago_Solrsearch_Model_Catalog_Product_List
+	 */
+	public function getListModel() {
+		return Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getJsonProducts() {
+		return Mage::helper("core")->jsonEncode(
+			Mage::helper("zolagosolrsearch")->prepareAjaxProducts($this->getListModel())
+		);
 	}
 
     /**

@@ -24,34 +24,34 @@ $_billingAddress = $_quote->getBillingAddress();
 
 				<div class="form-group clearfix">
 					<div class="row">
-						<label class="col-sm-3" for="account_firstname"><?php echo $this->__("First name"); ?></label>
-						<div class="col-sm-5">
-							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerFirstname()); ?>" class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" data-original-title="<?php echo $this->__("Enter your name."); ?>">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_firstname"><?php echo $this->__("First name"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerFirstname()); ?>" class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" data-original-title="<?php echo $this->__("Enter name."); ?>">
 						</div>
 					</div>
 
 				</div>
 				<div class="form-group clearfix border-top">
 					<div class="row">
-						<label class="col-sm-3" for="account_lastname"><?php echo $this->__("Last name"); ?></label>
-						<div class="col-sm-5">
-							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerLastname()); ?>" class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" data-original-title="<?php echo $this->__("Enter your lastname."); ?>">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_lastname"><?php echo $this->__("Last name"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerLastname()); ?>" class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" data-original-title="<?php echo $this->__("Enter last name."); ?>">
 						</div>
 					</div>
 				</div>
 				<div class="form-group clearfix border-top">
 					<div class="row">
-						<label class="col-sm-3" for="account_email"><?php echo $this->__("Email"); ?></label>
-						<div class="col-sm-5">
-							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_email"><?php echo $this->__("Email"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" data-original-title="<?php echo $this->__("Enter email address."); ?>">
 						</div>
 					</div>
 				</div>
 				<div class="form-group clearfix border-top">
 					<div class="row">
-						<label class="col-sm-3" for="account_telephone"><?php echo $this->__("Telephone number"); ?></label>
-						<div class="col-sm-5">
-							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_telephone"><?php echo $this->__("Telephone number"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>">
 						</div>
 					</div>
 				</div>
@@ -73,7 +73,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					</div>
 				</div> 
 				<div class="row">
-					<div id="add_pass" class="col-sm-6">
+					<div id="add_pass" class="col-sm-12">
 
                         <?php echo $this->getChildHtml("password"); ?>
 
@@ -109,13 +109,21 @@ $_billingAddress = $_quote->getBillingAddress();
 </div>
 
 <script type="text/javascript">
-    Mall.translate.add("not-correct-postcode", "<?php echo $this->__("Post code is not correct"); ?>");
-    Mall.translate.add("passwordbackend-need-to-have-x-letters", "<?php echo $this->__("Password need to have 5 letters"); ?>");
-    Mall.translate.add("telephone-need-to-have-9-digit", "<?php echo $this->__("telephone-number-need-to-have-9-digit"); ?>");
-    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("Typed address email exists on the site. Want to login?"); ?>");
-    Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("Typed address email exists on the site. Please log in to proceed."); ?>");
+    Mall.translate.add("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.", "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>");
+    Mall.translate.add("Telephone numer is too short. Number must contain 9 digits, without spacing.", "<?php echo $this->__("Telephone numer is too short. Number must contain 9 digits, without spacing."); ?>");
+    Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account."); ?>");
     Mall.translate.add("email", "<?php echo $this->__('Valid email is required.') ?>");
     Mall.translate.add("Password needs to have at least %s characters", "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>");
+    Mall.translate.add("Zip code should be entered in the format xx-xxx.", "<?php echo $this->__("Zip code should be entered in the format xx-xxx."); ?>");
+
+    Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
+    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("We already have an account with this address. Please log in to your account."); ?>");
+   
+	Mall.translate.add("Pho.", "<?php echo $this->__('Pho.') ?>");
+    Mall.translate.add("Invoice", "<?php echo $this->__('Invoice') ?>");
+    Mall.translate.add("VAT Id", "<?php echo $this->__('VAT Id') ?>");
+    Mall.translate.add("Delivery address", "<?php echo $this->__('Delivery address') ?>");
 
     Mall.validate.validators.config.passwordMinLength = <?php echo Mage::helper("zolagocustomer")->getPasswordMinLength(); ?>;
 

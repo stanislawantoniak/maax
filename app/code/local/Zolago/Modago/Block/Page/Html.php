@@ -19,4 +19,9 @@ class Zolago_Modago_Block_Page_Html extends Mage_Page_Block_Html
         $this->setBodyClass($this->getBodyClass() . ' ' . $className);
         return $this;
     }
+/*
+	public function getUrl($path) {
+		$ref = explode("/",Mage::app()->getRequest()->getServer('HTTP_REFERER'));
+		return $ref[0]."//".$ref[2]."/".$path;
+	}*/
 } 

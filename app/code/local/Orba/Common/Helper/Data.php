@@ -37,4 +37,23 @@ class Orba_Common_Helper_Data extends Mage_Core_Helper_Abstract {
         return $base . '?' . $hash;
     }
     
+    //{{{ 
+    /**
+     * formatting text (polska odmiana)
+     * @param $int count
+     * @return string
+     */
+    public function formatOrdersText($counter) {
+        $suffix = $this->__('zamówień');
+        if ($counter == 1) {
+            $suffix = $this->__('zamówienie');
+        } else if (!in_array($counter,array(11,12,13))) {
+            if (in_array($counter % 10,array(2,3,4))) {
+                $suffix = $this->__('zamówienia');
+            }
+        }
+        return $counter.' '.$suffix;
+    }
+    //}}}
+    
 }

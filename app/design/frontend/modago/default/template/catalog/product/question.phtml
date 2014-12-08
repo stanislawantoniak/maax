@@ -1,24 +1,54 @@
 <?php
-$vendors = $this->getVendors();
-$visibility = Mage::getSingleton('udqa/source')->setPath('visibility')->toOptionHash();
+if(!$this->isGallery()) {
+	$product = $this->getProduct();
+	$vendors = $product ? $product->getUdropshipVendor() : $this->getVendorsList();
+} else {
+	$vendors = $this->getLocalVendorId();
+}
+
 $session = Mage::getSingleton('customer/session');
-/* @var $session Mage_Customer_Model_Session */
+
+    $dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
+
+    $visibility = isset($dataPopulate['visibility']) ? $dataPopulate['visibility'] : false ;
+    $vendor_id = isset($dataPopulate['vendor_id']) ? $dataPopulate['vendor_id'] : false;
+    $customer_name = isset($dataPopulate['customer_name']) ? $dataPopulate['customer_name'] : false;
+    $customer_email = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
+    $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question_text'] : false;
+
+
 ?>
-<?php if($this->getProduct()->getUdropshipVendor()):?>
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
-    <input type="hidden" name="question[product_id]" value="<?php echo $this->getProduct()->getId()?>" />
-    <input type="hidden" name="question[vendor_id]" value="<?php echo $this->getProduct()->getUdropshipVendor()?>" />
+	<?php if(isset($product)): ?>
+	    <input type="hidden" name="question[product_id]" value="<?php echo $product->getId()?>" />
+	<?php endif; ?>
+
     <input type="hidden" name="question[visibility]" value="0" />
 
     <div class="row">
         <fieldset class="fieldset col-xs-11">
             <ul class="form-list">
+				<?php if(!is_array($vendors)): ?>
+					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
+				<?php else: ?>
+					<li class="wide">
+						<div class="form-group select-container">
+							<select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
+									<option value=""><?php echo $this->__("Choose shop"); ?></option>
+								<?php foreach($vendors as $id=>$name): ?>
+									<option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</li>
+				<?php endif; ?>
                 <?php if(!$session->isLoggedIn()):?>
                 <li class="wide">
                     <div class="form-group">
                         <label for="customer_name" class="required" aria-required="true"><?php echo $this->__('Your Name') ?> <em>*</em></label>
                         <div class="input-box">
-                            <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint" required />
+                            <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint" required
+                                value="<?php echo $customer_name; ?>"/>
                         </div>
                     </div>
                 </li>
@@ -26,7 +56,8 @@ $session = Mage::getSingleton('customer/session');
                     <div class="form-group">
                         <label for="customer_email" class="required" aria-required="true"><?php echo $this->__('Email') ?> <em>*</em></label>
                         <div class="input-box">
-                            <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint" required data-rule-email="true" />
+                            <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint" required data-rule-email="true"
+                                value="<?php echo $customer_email; ?>"/>
                         </div>
                     </div>
                 </li>
@@ -38,7 +69,9 @@ $session = Mage::getSingleton('customer/session');
                     <div class="form-group">
                         <label for="question_text" class="required" aria-required="true"><?php echo $this->__('Question Text') ?> <em>*</em></label>
                         <div class="input-box">
-                            <textarea name="question[question_text]" id="question_text" title="" class="required-entry input-text form-control" cols="5" rows="3" data-original-title="<?php echo $this->__('Question Text') ?>" required></textarea>
+                            <textarea name="question[question_text]" id="question_text" title="" class="required-entry input-text form-control"
+                                      cols="5" rows="3" data-original-title="<?php echo $this->__('Question Text') ?>"
+                                      required><?php echo $question_text; ?></textarea>
                         </div>
                     </div>
                 </li>
@@ -54,8 +87,7 @@ $session = Mage::getSingleton('customer/session');
         </div>
     </div>
 </form>
-    <script type="text/javascript">
-        Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
-        Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
-    </script>
-<?php endif;?>
+<script type="text/javascript">
+	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
+	Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+</script>

@@ -4,7 +4,10 @@
 
 (function () {
     "use strict";
+	
+	
     Mall.Checkout.steps = {
+		
 		////////////////////////////////////////////////////////////////////////
 		// Addressbook
 		////////////////////////////////////////////////////////////////////////
@@ -25,6 +28,7 @@
 			getAddressBook: function(){
 				return this._addressBook;
 			},
+			
 			renderSelectedAddress: function(type){
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
@@ -56,6 +60,7 @@
 					target.html(Mall.translate.__("no-addresses"));
 				}	
 			},
+			
 			renderAddressList: function(type){
 				var template = this.getNormalTemplate(),
 					addressBook = this.getAddressBook(),
@@ -89,7 +94,7 @@
                 addNewButton.show();
                 target.append(addNewButton);
             },
-
+			
             getAddNewButton: function (type) {
                 var templateHandle = jQuery("#addressbook-add-new-template")
                         .clone()
@@ -102,12 +107,73 @@
 
                 return templateHandle;
             },
-
+			
             attachNewAddressInputsMask: function (modal, type) {
-                modal.find("#" + type + "_postcode").mask("99-999");
-                modal.find("#" + type + "_vat_id").mask("999-999-99-99");
             },
+			
+            attachNewAddressBootstrapTooltip: function(modal, type) {
 
+                jQuery('#modal-body form').attr('autocomplete', "off");//no autocomplete
+
+                //hint data
+                //shoping and billing
+                jQuery('#shipping_firstname, #billing_firstname').attr('data-original-title', Mall.translate.__("Enter name."));
+                jQuery('#shipping_lastname, #billing_lastname').attr('data-original-title', Mall.translate.__("Enter last name."));
+                jQuery('#shipping_company, #billing_company').attr('data-original-title', Mall.translate.__("Enter company name."));
+                jQuery('#shipping_street_1, #billing_street_1').attr('data-original-title', Mall.translate.__("Enter street and number."));
+                jQuery('#shipping_postcode, #billing_postcode').attr('data-original-title', Mall.translate.__("Zip-code should be entered in the format xx-xxx."));
+                jQuery('#shipping_city, #billing_city').attr('data-original-title', Mall.translate.__("Enter city name."));
+                jQuery('#shipping_telephone, #billing_telephone').attr('data-original-title', Mall.translate.__("Phone number we need only to contact concerning orders for example courier delivering the shipment."));
+                //end hint data
+
+                //visual fix for hints
+                jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
+                    placement: function(a, element) {
+                        var viewport = window.innerWidth;
+                        var placement = "right";
+                        if (viewport < 991) {
+                            placement = "top";
+                        }
+                        if (viewport < 768) {
+                            placement = "right";
+                        }
+                        if (viewport < 600) {
+                            placement = "top";
+                        }
+                        return placement;
+                    },
+                    trigger: "focus"
+                });
+                jQuery('.phone, .zipcode, .nip').tooltip({
+                    placement: "right",
+                    trigger: "focus"
+                });
+
+                jQuery('input[type=text],input[type=email],input[type=password],textarea ').off('shown.bs.tooltip').on('shown.bs.tooltip', function () {
+                    if(jQuery(this).parent(':has(i)').length && jQuery(this).parent().find('i').is(":visible")) {
+                        jQuery(this).next('div.tooltip.right').animate({left: "+=25"}, 100, function () {
+                        });
+                    }
+                });
+                //end visual fix for hints
+
+                //validate
+                Mall.validate.init();
+                jQuery('#modal-body form').validate(Mall.validate._default_validation_options);
+
+                jQuery("div.form-group:has('#shipping_company'), div.form-group:has('#billing_company')").addClass('hide-success-vaild');
+
+                jQuery('#billing_vat_id, #shipping_vat_id').on('change fucus click keydown keyup', function() {
+                    if (jQuery(this).val().length) {
+                        jQuery(this).parents('.form-group').removeClass('hide-success-vaild');
+                    } else {
+                        jQuery(this).parents('.form-group').addClass('hide-success-vaild');
+                    }
+                });
+
+                //end validate
+            },
+			
             showAddNewModal: function (modal, type, edit) {
                 edit = edit === undefined ? false : edit;
 
@@ -118,8 +184,9 @@
                 modal.find("#modal-title").html(edit ? 
 					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
                 this.attachNewAddressInputsMask(modal, type);
+                this.attachNewAddressBootstrapTooltip(modal, type);
             },
-
+			
             getSelectButton: function () {
                 var buttonWrapper = jQuery("<div/>", {
                     "class": "form-group clearfix"
@@ -132,11 +199,11 @@
 
                 return buttonWrapper;
             },
-
+			
             toggleOpenAddressList: function (type) {
                 jQuery(".panel-footer").find("." + type).click();
             },
-
+			
             getAddNewForm: function (type) {
                 var form = this.getNewAddressForm(),
                     panelBody = form.find(".panel-body"),
@@ -150,7 +217,7 @@
                     , "text"
                     , Mall.translate.__("firstname")
                     , "col-sm-3"
-                    , "form-control firstName hint"
+                    , "form-control firstName required hint"
                     , "");
 
                 formGroup = this.getFormGroup(true);
@@ -176,6 +243,16 @@
 
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
+                    if (!jQuery(this).parents('form').valid()) {
+                        //visual validation fix
+                        if (jQuery('#billing_vat_id, #shipping_vat_id').first().val().length) {
+                            jQuery('#billing_vat_id, #shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+                        } else {
+                            jQuery('#billing_vat_id, #shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+                        }
+                        //end fix
+                        return;
+                    }
                     var data = self.getModalData();
 
                     self.lockButton(this);
@@ -247,7 +324,15 @@
                         type:       "text",
                         label:      Mall.translate.__("lastname"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control lastName hint"
+                        inputClass: "form-control lastName required hint"
+                    },
+                    {
+                        name:       "telephone",
+                        id:         type + "_telephone",
+                        type:       "text",
+                        label:      Mall.translate.__("phone"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control telephone phone required validate-telephone hint"
                     },
                     {
                         name:       "company",
@@ -265,7 +350,7 @@
                         label:      Mall.translate.__("nip") + 
 							"<br>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
-                        inputClass: "form-control vat_id city hint"
+                        inputClass: "form-control vat_id nip validate-nip hint"
                     },
                     {
                         name:       "street",
@@ -273,7 +358,7 @@
                         type:       "text",
                         label:      Mall.translate.__("street-and-number"),
                         labelClass: "col-sm-3 ",
-                        inputClass: "form-control street hint"
+                        inputClass: "form-control street hint required"
                     },
                     {
                         name:       "postcode",
@@ -281,7 +366,7 @@
                         type:       "text",
                         label:      Mall.translate.__("postcode"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control postcode zipcode hint"
+                        inputClass: "form-control postcode zipcode hint validate-postcodeWithReplace required"
                     },
                     {
                         name:       "city",
@@ -289,16 +374,9 @@
                         type:       "text",
                         label:      Mall.translate.__("city"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control city hint"
-                    },
-                    {
-                        name:       "telephone",
-                        id:         type + "_telephone",
-                        type:       "text",
-                        label:      Mall.translate.__("phone"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control telephone city hint"
+                        inputClass: "form-control city hint required"
                     }
+
                 ];
             },
 
@@ -316,7 +394,7 @@
                 });
 
                 inputWrapper = jQuery("<div/>", {
-                    "class": "col-sm-9"
+                    "class": "col-lg-9 col-md-9 col-sm-9 col-xs-11"
                 });
 
                 jQuery("<input/>", {
@@ -544,6 +622,7 @@
 
 				return false;
 			},
+			
 			editAddress: function(event){
                 event.preventDefault();
                 var step = event.data.step,
@@ -561,11 +640,6 @@
 				return false;
 			},
 
-			/**
-			 * S
-			 * @param {type} event
-			 * @returns {Boolean}et address as default
-			 */
 			setDefaultAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
@@ -591,11 +665,6 @@
 				return false;
 			},
 			
-			/**
-			 * Make choose of adderss. Save need invoice if needed.
-			 * @param {type} object
-			 * @returns {Boolean}
-			 */
 			chooseAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
@@ -671,12 +740,15 @@
 				}
 				return addressData;
 			},
+			
 			formatStreet: function(streetArray){
 				return streetArray.length ? streetArray[0] : "";
 			},
+			
 			getFormKey: function(){
 				return this.content.find("input[name='form_key']").val();
 			},
+			
 			collect: function(){
 				
 				var adressBook = this.getAddressBook(),
@@ -717,6 +789,7 @@
 				
 				return data;
 			},
+			
 			onPrepare: function(){
 				var self = this;
 				this.content.find("form").submit(function(){
@@ -754,6 +827,7 @@
 			},
 			
 		},
+		
 		////////////////////////////////////////////////////////////////////////
 		// Address step for all cases
 		////////////////////////////////////////////////////////////////////////
@@ -809,7 +883,7 @@
 				this.attachCompanyTriggers();
                 // add validation to form
                 this.validate.init();
-                this.enableBillingPostcodeMask();
+
 			},
 			
 			onDisable: function(){
@@ -838,11 +912,7 @@
 					
 			},
 
-            enableBillingPostcodeMask: function () {
-                jQuery("#billing_postcode").mask("99-999");
 
-                return this;
-            },
 
             /**
              * Toggle visibility state of invoice data form.
@@ -1037,6 +1107,7 @@
 					return false;
 				});
 			},
+			
 
 			isPasswordNotEmpty: function(){
 				if(this.content.find("[name='account[password]']").length){
@@ -1048,17 +1119,25 @@
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
-					selector;
+					selector,
+                    value;
 				jQuery.each(this._billing_names, function (idx, item) {
 					selector = item.replace("billing", "shipping");
+                    value = jQuery("[name='"+ selector +"']").val();
+                    if (item == "billing[postcode]") {
+                        value = Mall.postcodeTransform(value);
+                    }
 					billingData.push({
 						name: item,
-						value: jQuery("[name='"+ selector +"']").val()
+						value: value
 					});
+
 				});
 
 				return billingData;
 			},
+
+
 
 			collect: function () {
 				var form = jQuery("#co-address"),
@@ -1121,6 +1200,27 @@
 
 				return stepData;
 			},
+			
+			_extractAddressObject: function(type){
+				var obj = {},
+					reg = new RegExp("^" + type + "\\[([a-z_]+)\\]"),
+					res;
+				jQuery.each(this.collect(), function(){
+					res = reg.exec(this.name);
+					if(res){
+						obj[res[1]] = this.value;
+					}
+				});
+				return obj;
+			},
+			
+			getBillingAddress: function(){
+				return this._extractAddressObject("billing");
+			},
+			
+			getShippingAddress: function(){
+				return this._extractAddressObject("shipping");
+			},
 
             mergeArraysOfObjects: function (arr1, arr2) {
                 var self = this,
@@ -1172,7 +1272,7 @@
                                 .showErrors({
                                     "account[email]":
                                         Mall.translate.__("emailbackend-exits-log-in"
-                                            , "Typed address email exists on the site. Please log in to proceed.")
+                                            , "We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account.")
                                 });
 
                             self.validate._checkout.getActiveStep().disable();
@@ -1229,11 +1329,11 @@
             code: "shippingpayment",
             doSave: true,
             _self_form_id: "co-shippingpayment",
-            init: function () {
-                this.validate.init();
-            },
+			_sidebarAddressesTemplate: "",
+			
 			onPrepare: function(checkoutObject){
-                this.init();
+                this.validate.init();
+				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				var self = this;
 
 				this.content.find("form").submit(function(){
@@ -1242,17 +1342,28 @@
                     }
 					return false;
                 });
-				this.content.find("#step-1-prev,#step-1-prev-right").click(function(){
+				
+				this.content.find("#step-1-prev").click(function(){
 					checkoutObject.prev();
 					return false;
 				});
 			},
+			
+			onEnter: function(checkout){
+				var addresses = checkout.getBillingAndShipping();
+				checkout.prepareAddressSidebar(
+					addresses.billing, 
+					addresses.shipping, 
+					this.getSidebarAddresses(), 
+					this.getSidebarAddressesTemplate()
+				);
+			},
 
             collect: function () {
-                var shipping = this.content.find("form input[name=shipping]:checked").val();
+                var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
-                    jQuery.each(vendors, function (i, vendor) {
+                    jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     })
                     this.content.find("form .shipping-collect").html(inputs);
@@ -1262,17 +1373,85 @@
                 return false;
 
             },
+			getVendors: function(){
+				return Mall.reg.get("vendors");
+			},
+			getVendorCosts: function(){
+				return Mall.reg.get("vendor_costs");
+			},
+			getSidebarAddresses: function(){
+				return this.content.find(".sidebar-addresses");
+			},
+			
+			getSidebarAddressesTemplate: function(){
+				return this._sidebarAddressesTemplate;
+			},
+			
+			getSelectedShipping: function(){
+				return this.content.find(".shipping-method:radio:checked");
+			},
+			
+			getSelectedPayment: function(){
+				return this.content.find(".payment-method:radio:checked");
+			},
+			
+			getSelectedBank: function(){
+				return this.content.find("#payment_form_zolagopayment :radio:checked");
+			},
+			
+			getCarrierName: function(){
+				return this.getSelectedShipping().data("carrierName");
+			},
+			
+			getCarrierMethod: function(){
+				return this.getSelectedShipping().data("carrierMethod");
+			},
+			
+			getMethodCode: function(){
+				return this.getSelectedShipping().val();
+			},
+			getMethodCost: function(){
+				return this.getSelectedShipping().data("methodCost");
+			},
+			
+			getPaymentMethod: function(){
+				return this.getSelectedPayment().data("paymentMethod");
+			},
+			
+			getCostForVendor: function(vendorId, methodCode){
+				var costs = this.getVendorCosts();
+				if(typeof costs == "object" && 
+					typeof costs[vendorId] == "object" && 
+					typeof costs[vendorId][methodCode] != "undefined"){
+					return costs[vendorId][methodCode];
+				}
+				return null;
+			},
+			
+			getOnlineData: function(){
+				if(this.isOnlinePayment()){
+					var bank = this.getSelectedBank();
+					if(bank.length){
+						return bank.data("bankName");
+					}
+				}
+				return null;
+			},
+			
+			isOnlinePayment: function(){
+				return this.getSelectedPayment().data('online')=="1";
+			},
+			
 
             validate: {
                 init: function () {
-
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
                             //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
-                                shipping: {
+                                _shipping_method: {
                                     required: true
                                 },
                                 'payment[additional_information][provider]' : {
@@ -1287,7 +1466,7 @@
                                 }
                             },
                             messages: {
-                                shipping: {
+                                _shipping_method: {
                                     required: Mall.translate.__("Please select shipping")
                                 },
                                 "payment[method]": {
@@ -1318,15 +1497,18 @@
 
         },
 
-		
 		////////////////////////////////////////////////////////////////////////
 		// review step
 		////////////////////////////////////////////////////////////////////////
 		review: {
 			id: "step-2",
 			code: "review",
+			_sidebarAddressesTemplate: "",
+			_sidebarDeliverypaymentTemplate: "",
+			
 			onPrepare: function(checkoutObject){
-				var self = this;
+				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
+				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
@@ -1334,7 +1516,77 @@
 				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
 				});
-			}
+			},
+			
+			onEnter: function(checkout){
+				// Prepare address sidebar
+				var addresses = checkout.getBillingAndShipping();
+				checkout.prepareAddressSidebar(
+					addresses.billing, 
+					addresses.shipping, 
+					this.getSidebarAddresses(), 
+					this.getSidebarAddressesTemplate()
+				);
+		
+				// Prepare delivery payment sidebar
+				var deliverypayment = checkout.getDeliveryAndPayment();
+				checkout.prepareDeliverypaymentSidebar(
+					deliverypayment,
+					this.getSidebarDeliverypayment(), 
+					this.getSidebarDeliverypaymentTemplate()
+				);
+				
+				this._prepareTotals(checkout);
+			},
+			
+			_prepareTotals: function(checkout){
+				var subTotal = 0,
+					shippingTotal = 0,
+					discountTotal = 0,
+					deliverypayment = checkout.getStepByCode("shippingpayment"),
+					selectedMethod = deliverypayment.getMethodCode(),
+					discountObject = this.content.find(".total_discount");
+			
+				discountTotal = discountObject.length ? 
+					parseFloat(discountObject.data('price')) * -1 : 0;
+			
+				// Prepare costs for vendors and totals
+				this.content.find(".panel-vendor.panel-footer").each(function(){
+					var el = jQuery(this);
+					var vendorId = el.data("vendorId");
+					var vendorSubtotal = parseFloat(el.find(".vendor_subtotal").data("price"));
+					var vendorShipping = deliverypayment.getCostForVendor(vendorId, selectedMethod);
+				
+					if(vendorShipping!==null){
+						shippingTotal += vendorShipping;
+					}
+					subTotal += vendorSubtotal;
+					
+					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
+					
+				});
+				
+				this.content.find(".total_shipping").html(Mall.currency(shippingTotal));
+				this.content.find(".total_value").html(
+						Mall.currency(shippingTotal + subTotal + discountTotal)
+				);
+			},
+			
+			getSidebarAddresses: function(){
+				return this.content.find(".sidebar-addresses");
+			},
+			
+			getSidebarAddressesTemplate: function(){
+				return this._sidebarAddressesTemplate;
+			},
+			
+			getSidebarDeliverypayment: function(){
+				return this.content.find(".sidebar-deliverypayment");
+			},
+			
+			getSidebarDeliverypaymentTemplate: function(){
+				return this._sidebarDeliverypaymentTemplate;
+			},
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {
@@ -1360,6 +1612,8 @@
 
             return index;
         }
+		
+		
     };
 })();
 

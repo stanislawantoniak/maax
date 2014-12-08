@@ -119,11 +119,11 @@
 		</layout>
 		<translate>
 			<modules>
-				<zolagomapper>
+				<Zolago_Mapper>
 					<files>
 						<default>Zolago_Mapper.csv</default>
 					</files>
-				</zolagomapper>
+				</Zolago_Mapper>
 			</modules>
 		</translate>
 	</adminhtml>

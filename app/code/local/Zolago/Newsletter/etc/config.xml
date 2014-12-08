@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<modules>
+		<Zolago_Newsletter>
+			<version>0.0.1</version>
+		</Zolago_Newsletter>
+	</modules>
+	<frontend>
+		<routers>
+			<newsletter>
+				<args>
+					<modules>
+						<Zolago_Newsletter before="Mage_Newsletter">Zolago_Newsletter</Zolago_Newsletter>
+					</modules>
+				</args>
+			</newsletter>
+		</routers>
+	</frontend>
+</config> 

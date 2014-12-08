@@ -5,9 +5,10 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
     public function getFormAction()
     {
         return $this->getUrl('udqa/customer/post');
-
     }
-    public function getVendors()
+
+/*	todo: check if it's needed
+ *     public function getVendors()
     {
         $product = $this->getProduct();
         $simpleProducts = array();
@@ -37,4 +38,21 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
         }
         return $this;
     }
+*/
+
+	public function getVendorsList() {
+		$vendors = Mage::getSingleton('udropship/source')->getVendors();
+		$local = $this->getLocalVendorId();
+		unset($vendors[$local]);
+		return $vendors;
+	}
+
+	public function getLocalVendorId() {
+		return Mage::helper('udropship/data')->getLocalVendorId();
+	}
+
+	public function isGallery()
+	{
+		return in_array('help_contact_gallery', $this->getLayout()->getUpdate()->getHandles());
+	}
 }

@@ -64,7 +64,11 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         return $this->getData('cms_block_html');
 
     }
-
+    public function getSidebarWrapper() {
+        $category_id = $this->getCurrentCategory()->getId();
+        $name = 'sidebar-c'.$category_id.'-wrapper';
+        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml(); 
+    }
     public function getProductListHtml()
     {
         return $this->getChildHtml('zolagocatalog_breadcrumbs'). $this->getChildHtml('solrsearch_product_list');

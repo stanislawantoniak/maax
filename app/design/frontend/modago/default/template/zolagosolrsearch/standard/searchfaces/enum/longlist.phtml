@@ -6,18 +6,19 @@
     $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
+	$pureKey = implode("_", $key_withoutFacet);
     ?>
     <div class="section clearfix">
-        <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
-        <div class="content filter-enum"  id="filter_manufacturer">
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div class="content filter-longlist"  id="filter_<?php echo $pureKey;?>">
             <div class="form-group clearfix ">
-                <input type="text" name="filter_manufacturer" id="filter_manufacturer_search" class="filter_manufacturer_search" />
+                <input type="text" name="filter_<?php echo $pureKey;?>" id="filter_<?php echo $pureKey;?>_search" class="longListSearch filter_<?php echo $pureKey;?>_search" />
                 <input type="image" src="<?php echo $this->getSkinUrl('images/btn-search-filter.png'); ?>" alt="<?php echo $this->__("Search"); ?>">
             </div>
-            <div class="wrapper-filter_manufacturerScrollbar">
-                <div class="manufacturerListChecked"></div>
-                <div class="filter_manufacturerScrollbar">
-                    <ul class="manufacturerList">
+			<ul class="longListChecked list-unstyled"></ul>
+            <div class="longListWrapper">
+                <div class="scrollable">
+                    <ul class="longListItems">
                         <?php foreach ($this->getItems() as $item => $count): ?>
                             <?php if ($this->getCanShowItem($item, $count)): ?>
                                 <?php
@@ -27,8 +28,25 @@
                                 ?>
                                 <li>
                                     <div class="form-group form-checkbox">
-                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+											   data-params='<?php echo $this->getItemJson($item);?>' 
+											   name="<?php echo $this->getItemName($item);?>"
+											   value="<?php echo $this->getItemValue($item)?>"
+											   id="<?php echo $this->getItemId($item)?>"
+											   type="checkbox" 
+											   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+					                        <span>
+						                        <a href="<?php echo $this->getItemUrl($item); ?>"
+						                           class="listing-link">
+							                        <?php echo $item; ?>
+						                        </a>
+					                        </span>
+		                                    &nbsp;
+					                        <span class="suffix">
+						                        (<?php echo $count; ?>)
+					                        </span>
+	                                    </label>
                                     </div>
                                 </li>
 
@@ -37,13 +55,48 @@
                         <?php if ($this->getCanShowHidden()): ?>
                             <?php foreach ($this->getHiddenItems() as $item => $count): ?>
                                 <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
-                                    <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                    <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                                    <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+										   data-params='<?php echo $this->getItemJson($item);?>' 
+										   type="checkbox" 
+										   name="<?php echo $this->getItemName($item);?>"
+										   value="<?php echo $this->getItemValue($item)?>"
+										   id="check_<?php echo $this->getItemId($item)?>" 
+										   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+                                    <label for="check_<?php echo $item; ?>" class="css-label">
+	                                    <span>
+					                        <a href="<?php echo $this->getItemUrl($item); ?>"
+					                           class="listing-link">
+						                        <?php echo $item; ?>
+					                        </a>
+	                                    </span>
+	                                    &nbsp;
+	                                    <span class="suffix">
+		                                    (<?php echo $count ?>)
+	                                    </span>
+                                    </label>
                                 </div>
                                 <li data-state="hidden" style="display: none;">
                                     <div class="form-group form-checkbox">
-                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+											   data-params='<?php echo $this->getItemJson($item);?>' 
+											   type="checkbox" 
+											   name="<?php echo $this->getItemName($item);?>"
+											   value="<?php echo $this->getItemValue($item)?>"
+											   id="<?php echo $this->getItemId($item)?>"
+											   class="css-checkbox" 
+											   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+					                        <span>
+						                        <a href="<?php echo $this->getItemUrl($item); ?>"
+						                           class="listing-link">
+							                        <?php echo $item; ?>
+						                        </a>
+					                        </span>
+		                                    &nbsp;
+					                        <span class="suffix">
+						                        (<?php echo $count; ?>)
+					                        </span>
+	                                    </label>
                                     </div>
                                 </li>
                             <?php endforeach; ?>
@@ -53,9 +106,10 @@
                         <?php endif; ?>
                     </ul>
                 </div>
+				<div class="hidden no-result"><span><?php echo $this->__("No items found"); ?></span></div>
             </div>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
 

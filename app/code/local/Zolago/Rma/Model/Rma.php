@@ -12,6 +12,22 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	const FLOW_ACKNOWLEDGED = 2;
 	
 	/**
+	 * @return boolean
+	 * @todo implement
+	 */
+	public function getIsClaim(){
+		return false;
+	}
+	
+	/**
+	 * @return boolean
+	 * @todo implement
+	 */
+	public function getIsReturn(){
+		return true;
+	}
+	
+	/**
 	 * @return string
 	 */
 	public function getRmaStatusName() {
@@ -242,4 +258,21 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	   }
 	   return parent::_beforeSave();
    }
+    /**
+     * generated pdf for customer
+     * @return string
+     */
+     public function getRmaPdf() {
+         $pdf = Mage::getModel('zolagorma/pdf');
+         return $pdf->getPdfFile($this->getId());
+     }
+
+    /**
+     * static pdf for customer
+     * @return string
+     */
+     public function getCustomerPdf() {
+         $helper = Mage::helper('zolagorma');
+         return $helper->getStaticCustomerPdf();
+     }
 }

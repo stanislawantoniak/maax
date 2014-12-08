@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<udropship_sizetable_index>
+		<update handle="udropship_vendor" />
+		<update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<update handle="forms" />
+		<reference name="content">
+			<block name="sizetable" type="zolagosizetable/dropship_sizetable" template="zolagosizetable/dropship/sizetable.phtml">
+				<block type="zolagosizetable/dropship_sizetable_list" name="sizetable_list" template="zolagosizetable/dropship/sizetable/list.phtml" />
+				<block type="zolagosizetable/dropship_sizetable_assign" name="sizetable_assign" template="zolagosizetable/dropship/sizetable/assign.phtml">
+
+				</block>
+			</block>
+		</reference>
+	</udropship_sizetable_index>
+	<udropship_sizetable_edit>
+		<update handle="udropship_vendor" />
+		<update handle="bootstrap"/>
+		<update handle="forms" />
+		<reference name="content">
+			<block name="sizetable_edit" type="zolagosizetable/dropship_sizetable_edit" template="zolagosizetable/dropship/sizetable/edit.phtml">
+				<block type="core/template" name="sizetable_edit_header_new" template="zolagosizetable/dropship/sizetable/edit/header/new.phtml" />
+				<block type="core/template" name="sizetable_edit_header_edit" template="zolagosizetable/dropship/sizetable/edit/header/edit.phtml" />
+			</block>
+		</reference>
+	</udropship_sizetable_edit>
+</layout>

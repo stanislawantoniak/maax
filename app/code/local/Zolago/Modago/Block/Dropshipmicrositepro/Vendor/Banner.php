@@ -215,13 +215,22 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
     public function scaleBannerImage($imagePath, $imageResizePath, $width, $height)
     {
-        $image = new Varien_Image($imagePath);
+        try
+        {
+            $image = new Varien_Image($imagePath);
+            $image->constrainOnly(false);
+            $image->keepFrame(true);
+            $image->backgroundColor(array(255, 255, 255));
+            $image->keepAspectRatio(true);
+            $image->resize($width, $height);
+            $image->save($imageResizePath);
+        }
+        catch(Exception $e)
+        {
+            Mage::log('No banner image', Zend_Log::ALERT);
 
-        $image->constrainOnly(false);
-        $image->keepFrame(true);
-        $image->backgroundColor(array(255, 255, 255));
-        $image->keepAspectRatio(true);
-        $image->resize($width, $height);
-        $image->save($imageResizePath);
+        }
+
+
     }
 } 

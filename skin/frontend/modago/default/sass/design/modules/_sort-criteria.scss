@@ -12,25 +12,14 @@
 				font-weight: normal;
 				color:#000;
 			}
-		}
-	}
-	.select-group {
-		&.small {
-			width: 180px;
-			.button-select {
-				font-size: 12px;
+			.sort-by-container {
+				width: 150px;
+				display: inline-block;
+				vertical-align: middle;
+				margin-left: 5px;
 			}
 		}
 	}
-	.styledSelected {
-	label[for^=sort-by] {
-		line-height: 27px;
-		font-size: 12px;
-	}
-	.sbHolder {
-			font-size: 12px;
-		}
-}
 }
 
 

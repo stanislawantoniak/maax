@@ -1,7 +1,28 @@
 <?php
 class Zolago_Rma_Helper_Tracking extends Orba_Shipping_Helper_Carrier_Tracking {
 
-
+	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @param Mage_Customer_Model_Customer $customer
+	 * @return Zolago_Rma_Model_Rma_Track
+	 */
+	public function getRmaTrackingForCustomer(Zolago_Rma_Model_Rma $rma, 
+			Mage_Customer_Model_Customer $customer) {
+		
+		// No customer-owned RMA
+		if($rma->getCustomerId()!=$customer->getId()){
+			return false;
+		}
+		
+		$collection = Mage::getResourceModel("urma/rma_track_collection");
+		/* @var $collection Zolago_Rma_Model_Resource_Rma_Track_Collection */
+		$collection->addCustomerFilter();
+		$collection->addFieldToFilter('parent_id', $rma->getId());
+		$collection->setOrder("created_at", "desc");
+		
+		return $collection->getFirstItem();
+	}
+	
     /**
      * @param Zolago_Rma_Model_Rma_Track $track
      * @param string $shipmentIdMessage
@@ -80,12 +101,11 @@ class Zolago_Rma_Helper_Tracking extends Orba_Shipping_Helper_Carrier_Tracking {
                     if ($rma->getRmaStatus() == Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP && $track) {
                         $rma->setRmaStatus(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_DELIVERY);
                         Mage::dispatchEvent("zolagorma_rma_track_status_change", array(
-                                            "track"      => $track,
-                                            "rma"        => $rma,
-                                            "new_status" => $helper->__($helper->getRmaStatusName(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_DELIVERY)),
-                                            "old_status" => $helper->__($helper->getRmaStatusName(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP)),
-                                        ));
-
+							"track"      => $track,
+							"rma"        => $rma,
+							"new_status" => $helper->__($helper->getRmaStatusName(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_DELIVERY)),
+							"old_status" => $helper->__($helper->getRmaStatusName(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP)),
+						));
                         $rma->save();
                     }
                 }

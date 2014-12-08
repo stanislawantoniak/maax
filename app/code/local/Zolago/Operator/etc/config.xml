@@ -67,11 +67,11 @@
 		</layout>
 		<translate>
 			<modules>
-				<Zolago_Operator.csv>
+				<Zolago_Operator>
 					<files>
 						<default>Zolago_Operator.csv</default>
 					</files>
-				</Zolago_Operator.csv>
+				</Zolago_Operator>
 			</modules>
 		</translate>
 		<events>

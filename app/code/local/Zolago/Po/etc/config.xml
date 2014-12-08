@@ -259,4 +259,17 @@
 			</modules>
 		</translate>		
     </adminhtml>
+    <crontab>
+        <jobs>
+            <zolagorma_process_collect_tracking>
+                <schedule>
+                    <!-- Run at midnight -->
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagopo/observer::cronCancelOrders</model>
+                </run>
+            </zolagorma_process_collect_tracking>
+        </jobs>
+    </crontab>
 </config>

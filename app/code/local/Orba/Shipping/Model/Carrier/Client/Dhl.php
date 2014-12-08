@@ -96,7 +96,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
      */
     protected function _sendMessage($method, $message = null)
     {
-        try {
+	    try {
             $wsdl = Mage::getStoreConfig('carriers/orbadhl/gateway');
             $soap = new SoapClient($wsdl, array('trace'=>1));
             $result = $soap->$method($message);
@@ -105,6 +105,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
                 'error' => $xt->getMessage()
             );
         }
+
         return $result;
     }
     /**

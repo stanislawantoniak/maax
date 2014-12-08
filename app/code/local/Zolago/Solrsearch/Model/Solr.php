@@ -147,7 +147,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         $filterQueryArray = array();
 		$extendedFilterQueryArray = array();
         $rangeFields = $this->rangeFields;
-
         foreach($filterQuery as $key=>$filterItem){
             //Ignore cateory facet - using category instead
             if ($key == 'category_facet') {
@@ -163,7 +162,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
                     }else if($key == 'price'){
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
-					}
+					} else if ($key == 'filter_slider_facet') {
+                        $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
+                    }
 					/*else if(in_array($key, $this->_specialKeys, true)) {
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
 					}*/
@@ -173,6 +174,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					else{
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
+							$value = $this->_paresPriceValue($value);
                             $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
                         }
                         else if(array_key_exists($face_key, $rangeFields))
@@ -199,7 +201,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 				}				
             }
         }
-
 		//Add Vendor Facet to Filter Microsite Products - Start
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		if ($_vendor && $_vendor->getId()) {
@@ -226,6 +227,16 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 
         $this->filterQuery = $filterQueryString;
     }
+	
+	protected function _paresPriceValue($value) {
+		$value = trim($value);
+		if(preg_match("/^TO/", $value)){
+			$value = "0 " . $value;
+		}elseif(preg_match("/TO$/", $value)){
+			$value = $value . " " . "2147483647"; // Max integer on 32bit
+		}
+		return $value;
+	}
 	
     /**
      * Prepare solr filter query paprams

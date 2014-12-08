@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.3.4</version>
+            <version>0.4.7</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
@@ -24,6 +24,7 @@
             <page>
                 <rewrite>
                     <html>Zolago_Modago_Block_Page_Html</html>
+                    <html_breadcrumbs>Zolago_Modago_Block_Page_Html_Breadcrumbs</html_breadcrumbs>
                 </rewrite>
             </page>
         </blocks>

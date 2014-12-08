@@ -95,6 +95,7 @@ $bodyColumns = $columns;
         </div>
 
         <input id="total-records" type="hidden" value="<?php echo $this->getCollection()->getSize(); ?>" />
+        <input id="grid-ids" type="hidden" value="<?php echo $this->getCollectionIdsString(); ?>" />
     </div>
 
 <?php endif ?>

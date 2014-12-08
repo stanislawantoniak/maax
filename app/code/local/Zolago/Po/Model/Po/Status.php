@@ -323,6 +323,10 @@ class Zolago_Po_Model_Po_Status
 	 * @return boolean
 	 */
 	public function isDirectRealisationAvailable($po) {
+	    $order = $po->getOrder();
+	    if ($order->getState() == Mage_Sales_Model_Order::STATE_CANCELED) {
+	        return false;
+	    }
 		switch ($this->_getStatus($po)) {
 			case self::STATUS_CANCELED:
 			case self::STATUS_ONHOLD:

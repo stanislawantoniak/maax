@@ -2,11 +2,11 @@
 <config>
     <translate>
         <modules>
-            <zolagopos>
+            <Zolago_Pos>
                 <files>
                     <default>Zolago_Pos.csv</default>
                 </files>
-            </zolagopos>
+            </Zolago_Pos>
         </modules>
     </translate>
     <menu>

@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.12</version>
+			<version>0.0.21</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -188,6 +188,11 @@
 				</Zolago_Rma>
 			</modules>
 		</translate>
+		<files>
+		    <pdf>
+		        <customer>doc/customer.pdf</customer>
+            </pdf>
+		</files>
 	</frontend>
 	<admin>
         <routers>
@@ -203,11 +208,11 @@
     <adminhtml>
     	<translate>
             <modules>
-                <zolagorma>
+                <Zolago_Rma>
                     <files>
                         <default>Zolago_Rma.csv</default>
                     </files>
-                </zolagorma>
+                </Zolago_Rma>
             </modules>
         </translate>
         <layout>

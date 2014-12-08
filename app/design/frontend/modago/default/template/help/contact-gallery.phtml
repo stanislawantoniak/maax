@@ -1,0 +1,11 @@
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-page-mobile-menu')->toHtml(); ?>
+
+<div class="container-fluid" id="help-contact-msg-fix">
+    <div class="row">
+        <div class="col-sm-12 visible-xs">
+            <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-contact-gallery')->toHtml(); ?>

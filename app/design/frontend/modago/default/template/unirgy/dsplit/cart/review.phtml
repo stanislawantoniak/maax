@@ -4,85 +4,54 @@ $_v = $this->getVendor();
 
 <?php switch ($this->getPart()): case 'header': ?>
 
-<div class="panel panel-default">
+<!-- Start vendor panel  vendor panel -->
+<div class="panel panel-custom panel-vendor">
     <?php if ($_v->getId()): ?>
     <div class="panel-heading"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
     <?php else: ?>
     <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?></div>
     <?php endif ?>
+	
+	<!-- End head Thead -->
+	
     <div class="panel-body">
-
-
-        <div class="tableWrapper table-cart">
-            <!-- Thead -->
-
+		<div class="table-summary-product">
+			<!-- Statr prodcurts  -->
 
 <?php break; case 'footer': ?>
-    <!-- TFoot -->
-    <div class="table-footer-group hidden-xs">
-        <div class="table-row clearfix">
-            <div class="table-cell cell-01 td">
-				<div id="shipping_method_name_<?php echo $_v->getVendorId();?>"></div>
-				<div>Darmowy zwrot do 30 dni [dev]</div>
-            </div>
-
-            <div class="table-cell cell-03 label_value td">
-                <div class="value_quality_price"><?php echo $this->__('Sum:')?></div>
-                <div class="value_quality_delivery">
-                    <?php echo $this->__("Shipping cost"); ?>:
-
-                </div>
-            </div>
-            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
-			<div class="quality_delivery" id="shipping_method_price_<?php echo $_v->getVendorId();?>"></div></div>
-            <div class="table-cell cell-05 td"></div>
-        </div>
-
+			<!-- End prodcurts  -->
+		</div>
+	</div>
+	
+	<!-- Start footer -->
+	<div class="panel-footer clearfix panel-vendor" data-vendor-id="<?php echo $_v->getVendorId();?>">
+		<div class="info_delivery col-xs-6">
+			<div class="row">
+				<dl>
+					<dd>Darmowy zwrot do 30 dni [dev]</dd>
+				</dl>
+			</div>
+		</div>
+		<div id="sumary_single_shop" class="col-xs-6">
+			<div class="row">
+				<dl>
+					<dd>
+						<span class="lb"><?php echo $this->__('Total')?>:</span> 
+						<span class="vendor_subtotal" data-price="<?php echo $this->getSubtotal();?>">
+							<?php echo Mage::helper('core')->formatPrice($this->getSubtotal(), true, false) ?>
+						</span>
+					</dd>
+					<dd>
+						<span class="lb"><?php echo $this->__("Shipping cost"); ?>:</span>
+						<span class="vendor_delivery" id="shipping_method_price_<?php echo $_v->getVendorId();?>"></span>
+					</dd>
+				</dl>
+			</div>
+		</div>
     </div>
-    <!-- TFoot mobile-->
-    <div class="table-footer-group visible-xs">
-        <div class="table-row clearfix">
-            <div class="table-cell cell-03 label_value td">
-                <div class="value_quality_price"><?php echo $this->__("Product total"); ?>:</div>
-                <div class="value_quality_delivery"><?php echo $this->__("Minimal shipping cost"); ?>:</div>
-            </div>
-            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery">[dev]<?php echo Mage::helper('core')->formatPrice(9.99) ?></div></div>
-        </div>
-        <div class="table-row clearfix">
-
-            <?php if($this->isHintAvailable()):?>
-                <div class="bubble visible-lg">
-                    <div>
-                        <p><?php echo $this->__("Free shippign from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
-                    </div>
-                </div>
-                <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px; display: none;">
-
-                </div>
-            <?php endif;?>
-        </div>
-        <div class="table-row clearfix">
-            <div class="table-cell cell-01 td  no-border">
-                <?php if($_v->getStoreDeliveryHeadline() || $_v->getStoreReturnHeadline()): ?>
-                    <p><?php echo $_v->getStoreDeliveryHeadline(); ?><br><?php echo $_v->getStoreReturnHeadline(); ?></p>
-                <?php endif; ?>
-                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
-
-            </div>
-        </div>
-        <div class="conditions_shipping panel panel-default">
-            <div class="panel-heading"><h2><?php echo $this->__("Shipping rules and cost"); ?>: <?php echo $_v->getVendorName() ?></h2></div>
-            <div class="panel-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-            </div>
-        </div>
-    </div>
-
+   
 </div>
-</div>
-</div>
-
+<!-- End vendor panel -->
 
 
 
