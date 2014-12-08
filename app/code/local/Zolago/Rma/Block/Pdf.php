@@ -30,6 +30,14 @@ class Zolago_Rma_Block_Pdf extends Zolago_Rma_Block_Abstract {
 	}
 
 	public function getVendorAddress() {
-		return $this->getVendor()->getFormatedAddress('html');
+		$address = trim($this->getVendor()->getFormatedAddress('html'));
+		$br_array = ["<br/>","<br>","<br />"];
+		for($i = 4; $i <=6; $i++) {
+			$substr = substr($address,0,$i);
+			if(in_array($substr,$br_array)) {
+				return substr($address,$i);
+			}
+		}
+		return $address;
 	}
 }

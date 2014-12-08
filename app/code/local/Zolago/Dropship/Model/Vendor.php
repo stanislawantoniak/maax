@@ -98,4 +98,28 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		
 		return parent::_beforeSave();
 	}
+
+	public function getFormatedAddress($type='text')
+	{
+		switch ($type) {
+			case 'text':
+				return $this->getStreet(-1)."\n".$this->getCity().', '.$this->getRegionCode().' '.$this->getZip();
+		}
+		$format = Mage::getSingleton('customer/address_config')->getFormatByCode($type);
+		if (!$format) {
+			return null;
+		}
+		$renderer = $format->getRenderer();
+		//die(var_dump($renderer));
+		if (!$renderer) {
+			return null;
+		}
+		$address = $this->getAddressObj();
+		$address->unsVendorAttn();
+		$address->unsFirstname();
+		$address->unsLastname();
+		$address->setCompany($this->getCompanyName());
+
+		return $renderer->render($address);
+	}
 }

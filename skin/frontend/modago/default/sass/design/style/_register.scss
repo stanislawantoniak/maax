@@ -3,6 +3,11 @@
 		header {
 			h2 {
 				font-family: "latoblack" !important;
+				line-height: normal !important;
+				margin-top: -2px !important;
+				&:before {
+					top: 2px !important;
+				}
 				@media (max-width:359px) {
 					font-size: 16px;
 				}
@@ -13,7 +18,7 @@
 		label {
 			font-size: 12px;
 			line-height: 29px;
-			padding-right: 10px;
+			padding-right: 20px;
 			text-align: right;
 			font-weight: normal;
 			@media (max-width: 767px) {
