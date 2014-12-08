@@ -278,24 +278,28 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getContextSelectorArray()
     {
+        /** @var $this Zolago_Solrsearch_Helper_Data */
+        /** @var Zolago_Dropship_Model_Vendor $_vendor */
+        /** @var Zolago_Solrsearch_Helper_Data $helper */
+
         $array = array();
 		
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
 
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-		
-		$helper = Mage::helper('catalog');
-		
+
         $selectedContext = 0;
         if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
             $selectedContext = $filterQuery['category_id'][0];
         }
-		
-        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-		
-		$currentCategory = Mage::registry('current_category');
-		
-		$queryText = Mage::helper('solrsearch')->getParam('q');
+
+        $helper = Mage::helper("zolagosolrsearch");
+		$currentCategory = $helper->getCurrentCategory();
+        if($_vendor) {
+            $currentCategory = $_vendor->rootCategory();
+        }
+
+        $queryText = Mage::helper('solrsearch')->getParam('q');
 		
 		$array['url'] = Mage::getUrl("search/index/index");
 		$array['method'] = "get";
@@ -308,12 +312,12 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		
 		$array['select_options'][0] = array(
 			'value' => 0,
-			'text' => $helper->__('Everywhere'),
+			'text' => $this->__('Everywhere'),
 			'selected' => true
 		);
 		
-		$array['input_empty_text'] = $helper->__('Search entire store here...');
-		
+		$array['input_empty_text'] = $this->__('Search entire store here...');
+
 		// This vendor
 		if ($_vendor && $_vendor->getId()) {
 			$array['select_options'][] = array(
@@ -322,7 +326,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				'selected' => true,
 			);
 			
-			$array['input_empty_text'] = $helper->__('Search in ') . $_vendor->getVendorName() . '...';
+			$array['input_empty_text'] = $this->__('Search in ') . $_vendor->getVendorName() . '...';
 			
 			// Make "Everywhere" unselected
 			$array['select_options'][0]['selected'] = false;
@@ -356,22 +360,24 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		
         if ($currentCategory) {
 			
-			$vendor_root_category = NULL;
+			$vendor_root_category_id = NULL;
 			if ($_vendor && $_vendor->getId()) {
-				$vendor_root_category = $_vendor->rootCategory();
+				$vendor_root_category_id = $_vendor->rootCategory()->getId();
 			}
-			
-			if($currentCategory->getId() != $vendor_root_category){
+
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+
+            if($currentCategory->getId() != $vendor_root_category_id && $rootCategory != $currentCategory->getId()){
 				
 				$selected = true;
 				
 				$array['select_options'][] = array(
-					'text' => Mage::helper('catalog')->__('This category'),
+					'text' => $this->__('This category'),
 					'value' => $currentCategory->getId(),
 					'selected' => $selected
 				);
 				
-				$array['input_empty_text'] = $helper->__('Search in ') . $currentCategory->getName() . "...";
+				$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";
 				
 				// Make "Everywhere" unselected
 				$array['select_options'][0]['selected'] = false;
@@ -526,4 +532,19 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             return $data;
         }
     }
+
+    /**
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getCurrentCategory() {
+        if(Mage::registry('current_category')){
+            if(Mage::registry('vendor_current_category')) {
+                return Mage::registry('vendor_current_category');
+            } else {
+                return Mage::registry('current_category');
+            }
+        }
+        return  Mage::registry('vendor_current_category');
+    }
+
 }
