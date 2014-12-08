@@ -27,6 +27,14 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         if ($rootCategory == $this->getCurrentCategory()->getId()) {
             return null;
         }
+
+        /** @var Zolago_Dropship_Model_Vendor $_vendor */
+        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if ($_vendor && $_vendor->getId()) {
+            if($_vendor->rootCategory()->getId() == $this->getCurrentCategory()->getId()) {
+                return null;
+            }
+        }
         $category = $this->getCurrentCategory()->getParentCategory();
         
         $params = $this->getRequest()->getParams();
@@ -64,14 +72,26 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
             return $this->getCurrentCategory()->getParentCategory()->getName();
         } else {
+            $label = '';
+            $helperZSS = Mage::helper('zolagosolrsearch');
+
             $rootCategory = Mage::app()->getStore()->getRootCategoryId();
             if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
-                $helperZSS = Mage::helper('zolagosolrsearch');
-                return $helperZSS->__("All categories");
+                $label = $helperZSS->__("All categories");
             } else {
-                return $this->getCurrentCategory()->getParentCategory()->getName();
+                $label = $this->getCurrentCategory()->getParentCategory()->getName();
+            }
+
+            /** @var Zolago_Dropship_Model_Vendor $_vendor */
+            $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            if ($_vendor && $_vendor->getId()) {
+                if($_vendor->rootCategory()->getId() == $this->getCurrentCategory()->getParentCategory()->getId()) {
+                    $label = $helperZSS->__("All categories");
+                }
             }
         }
+
+        return $label;
     }
 
     public function getIsSearch(){
@@ -88,13 +108,24 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
      * @return bool
      */
     public function getIsParentRootCategory() {
+        $result = false;
 
         $rootCategory = Mage::app()->getStore()->getRootCategoryId();
         if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
-            return true;
+            $result = true;
         } else {
-            return false;
+            $result = false;
         }
+
+        /** @var Zolago_Dropship_Model_Vendor $_vendor */
+        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if ($_vendor && $_vendor->getId()) {
+            if($_vendor->rootCategory()->getId() == $this->getCurrentCategory()->getParentCategory()->getId()) {
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 
 } 
