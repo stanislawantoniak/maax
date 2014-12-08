@@ -49,7 +49,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                             <?php $titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); ?>
 
 
-                            <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span> </div> </div>
+                            <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
                         </div>
                         <div class="widget-content banner-type" style="display: block;">
 
@@ -116,7 +116,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                             <div class="row">
                                                             <div class="col-md-12 dates">
                                                                 <?php $iconClass = ''; ?>
-                                                                <?php if (!empty($placement['status']) && isset($placement['status'])):
+                                                                <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])):
                                                                     $iconClass = $placement['status']['icon'];
                                                                     ?>
                                                                 <?php endif; ?>
@@ -141,11 +141,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                         <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 </span>
-
                                                                 <span data-edit-source="campaign_date_from">
-                                                                    <?php if (empty($placement['campaign_date_to']) && !empty($placement['campaign_date_from'])):?>
-                                                                        <?php echo $this->__('From'); ?>
-                                                                    <?php endif; ?>
                                                                     <?php echo $placement['campaign_date_from']; ?>
                                                                 </span>
                                                                 <input type="hidden" name="show_edit_link" value="<?php echo (int)$placement['show_edit_link']; ?>" />
@@ -153,9 +149,6 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                     <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>-<?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_to">
-                                                                    <?php if (empty($placement['campaign_date_from'])&& !empty($placement['campaign_date_to'])):?>
-                                                                        <?php echo $this->__('To'); ?>
-                                                                    <?php endif; ?>
                                                                     <?php echo $placement['campaign_date_to']; ?>
                                                                 </span>
                                                             </div>
@@ -347,7 +340,6 @@ jQuery(function ($) {
     var vendorId = '<?php echo $vendor->getId(); ?>';
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
-        $('#basicModal').find('[data-banner="preview"]').html("");
         var campaign = $(this).val();
         var type= $(this).closest('#basicModal').find('[name="creation_type"]').val();
 
@@ -603,18 +595,11 @@ jQuery(function ($) {
 
         //set data
         if (parseInt(banner) > 0) {
-            var dates = ' ';
+            var dates = '';
             if (dateFrom.length > 0 && dateTo.length > 0) {
-                dates = '<span data-edit-source="campaign_date_from"> ' + dateFrom
-                    + '</span>';
-                dates += '<span data-edit-source="campaign_date_dash"> - </span>';
-                dates += '<span data-edit-source="campaign_date_to">' + dateTo + '</span>';
-            } else if (dateFrom.length <= 0 && dateTo.length > 0) {
-                var to = '<?php echo $this->__("To"); ?>';
-                dates += '<span data-edit-source="campaign_date_to">' + to + " " + dateTo + '</span>';
-            } else if (dateFrom.length > 0 && dateTo.length <= 0) {
-                var from = '<?php echo $this->__("From"); ?>';
-                dates += '<span data-edit-source="campaign_date_from">' + from + " " + dateFrom + '</span>';
+                dates = '<span data-edit-source="campaign_date_from">'+dateFrom
+                    + '</span><span data-edit-source="campaign_date_dash"> - </span>'
+                    + '<span data-edit-source="campaign_date_to">'+dateTo+'</span>';
             }
             var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' ;
             if($.type(previewImage) !== "undefined"){
@@ -676,7 +661,7 @@ jQuery(function ($) {
 
         var priority = nameSpace.index() +1;
 
-        var vendorName = '<?php echo $vendorName; ?>';
+        var vendorName = '<?php echo addslashes($vendorName); ?>';
 
         var previewImage = nameSpace.find('.banner-preview-image').attr("src");
 
@@ -702,6 +687,13 @@ jQuery(function ($) {
         modal.find('[data-edit-val="campaign_status"]').html(status);
 
         modal.find('[name=priority]').val(priority);
+
+//        if(campaignShowEditLink == 0){
+//            modal.find('[data-edit-val="link-delete"]').hide();
+//        }
+//        if(campaignShowEditLink == 1){
+//            modal.find('[data-edit-val="link-delete"]').show();
+//        }
 
         modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
