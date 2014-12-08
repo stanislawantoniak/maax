@@ -360,12 +360,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		
         if ($currentCategory) {
 			
-			$vendor_root_category = NULL;
+			$vendor_root_category_id = NULL;
 			if ($_vendor && $_vendor->getId()) {
-				$vendor_root_category = $_vendor->rootCategory()->getId();
+				$vendor_root_category_id = $_vendor->rootCategory()->getId();
 			}
-			
-			if($currentCategory->getId() != $vendor_root_category){
+
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+
+            if($currentCategory->getId() != $vendor_root_category_id && $rootCategory != $currentCategory->getId()){
 				
 				$selected = true;
 				
