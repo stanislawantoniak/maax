@@ -8,7 +8,7 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 * @return null | array
 	 */
 	public function getListingResizedImageInfo() {
-        /** @var $_helper Zolago_Solrsearch_Helper_Data*/
+        /** @var $_helper Zolago_Catalog_Helper_Product */
         $_helper = Mage::helper("zolagocatalog/product");
         return $_helper->getResizedImageInfo($this);
 	}

@@ -1,14 +1,12 @@
 <?php
-
-
 /**
  * Compilation includes configuration file
  */
-
 !defined('MAGENTO_ROOT') 
     && define('MAGENTO_ROOT', getenv('MAGENTO_ROOT')? getenv('MAGENTO_ROOT'):getcwd().'/..');
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
+
 
 function no_coverage() {
     return true;
@@ -66,6 +64,7 @@ class ZolagoDb_TestCase extends Zolago_TestCase{
 	}
 	
 }
+
 class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     public function __construct() {
         Mage::app('default');

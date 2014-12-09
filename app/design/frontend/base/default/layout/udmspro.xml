@@ -4,6 +4,8 @@
         <update handle="udropship_vendor" />
         <update handle="bootstrap" />
         <update handle="forms"/>
+        <update handle="noty"/>
+
         <remove name="sidebar"/>
         <reference name="root">
             <action method="setTemplate">

@@ -19,13 +19,21 @@ $_v = $this->getVendor();
 
 <?php break; case 'footer': ?>
 
-
+	<?php $_slogans = array();?>
+	<?php if($_v->getCartSloganOne()):?>
+		<?php $_slogans[] = $this->escapeHtml($_v->getCartSloganOne());?>
+	<?php endif;?>
+	<?php if($_v->getCartSloganTwo()):?>
+		<?php $_slogans[] = $this->escapeHtml($_v->getCartSloganTwo());?>
+	<?php endif;?>
+			
     <!-- TFoot -->
     <div class="table-footer-group hidden-xs">
         <div class="table-row clearfix">
             <div class="table-cell cell-01 td">
-                <?php if($_v->getStoreDeliveryHeadline() || $_v->getStoreReturnHeadline()): ?>
-                <p><?php echo $_v->getStoreDeliveryHeadline(); ?><br><?php echo $_v->getStoreReturnHeadline(); ?></p>
+				
+                <?php if($_slogans): ?>
+					<p><?php echo implode("<br/>", $_slogans);?></p>
                 <?php endif; ?>
                 <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
 
@@ -78,8 +86,8 @@ $_v = $this->getVendor();
         </div>
         <div class="table-row clearfix">
             <div class="table-cell cell-01 td  no-border">
-                <?php if($_v->getStoreDeliveryHeadline() || $_v->getStoreReturnHeadline()): ?>
-                    <p><?php echo $_v->getStoreDeliveryHeadline(); ?><br><?php echo $_v->getStoreReturnHeadline(); ?></p>
+				<?php if($_slogans): ?>
+					<p><?php echo implode("<br/>", $_slogans);?></p>
                 <?php endif; ?>
                 <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
 

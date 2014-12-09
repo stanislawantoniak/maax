@@ -7,4 +7,8 @@ class Zolago_Common_TestController extends Mage_Core_Controller_Front_Action{
         $helper->rmaTracking();
 		echo "TAK";
 	}
+	public function testAction() {
+		$this->loadLayout();
+		$this->renderLayout();
+	}
 }

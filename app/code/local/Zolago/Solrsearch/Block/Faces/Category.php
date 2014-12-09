@@ -102,6 +102,15 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
             // if($this->isItemActive($item)){
             // $facetUrl = $this->getRemoveFacesUrl("category", array($last['name']));
             // }
+
+
+
+//            if(isset($params['id'])) unset($params['id']);
+//            $tmp = array(
+//                '_direct' => 'search/index/index/',
+//                '_query' => $this->processFinalParams($params)
+//            );
+//            $facetUrl = Mage::getUrl('',$tmp);
         }
 
         return $facetUrl;

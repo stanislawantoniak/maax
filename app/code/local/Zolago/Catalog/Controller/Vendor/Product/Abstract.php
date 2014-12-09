@@ -317,6 +317,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		$store = $this->_getStore();
 		$helper = Mage::helper("zolagocatalog");
 		$attributesObjects = array();
+		$vendorStoreId = $this->getVendor()->getLabelStore();
 		
 		// Optional add/sub form multiselects
 		$attributesMode = isset($data['attribute_mode']) ?
@@ -360,10 +361,10 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			$attributesObjects[$attributeCode] = $attribute;
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
-				$notAllowed[] = $attribute->getStoreLabel($storeId);
+				$notAllowed[] = $attribute->getStoreLabel($vendorStoreId);
 			}
 			if($checkRequired && $attribute->getIsRequired() && trim($value)==""){
-				$missings[] = $attribute->getStoreLabel($storeId);
+				$missings[] = $attribute->getStoreLabel($vendorStoreId);
 			}
 		}
 		// Validate grid permissions

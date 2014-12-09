@@ -29,6 +29,11 @@
                 <class>Zolago_Common_Helper</class>
             </zolagocommon>
         </helpers>
+        <models>
+            <zolagocommon>
+                <class>Zolago_Common_Model</class>
+            </zolagocommon>
+        </models>
         <resources>
             <zolagocommon_setup>
                 <setup>

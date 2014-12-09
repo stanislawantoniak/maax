@@ -25,11 +25,23 @@ $_v = $this->getVendor();
 	
 	<!-- Start footer -->
 	<div class="panel-footer clearfix panel-vendor" data-vendor-id="<?php echo $_v->getVendorId();?>">
-		<div class="info_delivery col-xs-6">
+		<div class="info_delivery col-xs-6" style="word-break: break-all;">
 			<div class="row">
+				<?php $_slogans = array();?>
+				<?php if($_v->getCartSloganOne()):?>
+					<?php $_slogans[] = $this->escapeHtml($_v->getCartSloganOne());?>
+				<?php endif;?>
+				<?php if($_v->getCartSloganTwo()):?>
+					<?php $_slogans[] = $this->escapeHtml($_v->getCartSloganTwo());?>
+				<?php endif;?>
+                <?php if($_slogans): ?>
 				<dl>
-					<dd>Darmowy zwrot do 30 dni [dev]</dd>
+					<?php foreach($_slogans as $_slogan):?>
+					<dd><?php echo $_slogan;?></dd>
+					<?php endforeach;?>
 				</dl>
+                <?php endif; ?>
+				
 			</div>
 		</div>
 		<div id="sumary_single_shop" class="col-xs-6">
