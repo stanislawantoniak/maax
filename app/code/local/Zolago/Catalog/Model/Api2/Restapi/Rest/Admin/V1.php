@@ -232,7 +232,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $priceTypeByStore = array();
 
-        $priceType = $model->getConverterPriceType($skuS);
+        $priceType = $model->getConverterPriceTypeConfigurable($skuS);
         //reformat by store id
         if (!empty($priceType)) {
             foreach ($priceType as $priceTypeData) {
@@ -243,7 +243,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $marginByStore = array();
 
-        $priceMarginValues = $model->getPriceMarginValues($skuS);
+        $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
         //reformat margin
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
