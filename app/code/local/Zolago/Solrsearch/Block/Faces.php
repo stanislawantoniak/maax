@@ -282,7 +282,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			$finalParams['parent_cat_id'] = $paramss['parent_cat_id'];
 		}
 		
-        $urlParams = array();
+		// add scat
+		if (isset($paramss['scat'])) {
+            $finalParams['scat'] = $paramss['scat'];
+        }
+        
+		$urlParams = array();
         //$urlParams['_current']  = true;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
@@ -375,9 +380,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             }
         }
 		
-
         $urlParams = array();
-        $urlParams['_current']  = true;
+        $urlParams['_current']  = false;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
 		
@@ -437,9 +441,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}
 		}
-
+		
 		$urlParams = array();
-		$urlParams['_current']  = true;
+		$urlParams['_current']  = false;
 		$urlParams['_escape']   = true;
 		$urlParams['_use_rewrite']   = true;
 
@@ -1230,9 +1234,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if($this->getListModel()->isCategoryMode()){
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 		}
-        if($this->getListModel()->isSearchMode()){
-            $urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
-        }
+		
 		
 		
         return $urlParams;
