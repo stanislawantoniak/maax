@@ -202,8 +202,8 @@
 #grid-holder  .column-long {
 	width: 150px;
 }
-#grid-holder  .field-name {
-	width: 250px;
+#grid-holder  .field-skuv {
+	width: 120px;
 }
 
 #grid-holder .dgrid-no-data span,

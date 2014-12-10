@@ -171,6 +171,18 @@ define([
 					}
 				]
 			},
+			skuv: {
+				label: Translator.translate("SKU"),
+				field: "skuv",			
+				children: [
+					{
+						renderHeaderCell: filterRendererFacory("text", "skuv"),
+						sortable: false, 
+						field: "skuv",
+						className: "filterable",
+					}
+				]
+			},
 			price: {
 				label: Translator.translate("Price"),
 				field: "display_price",
