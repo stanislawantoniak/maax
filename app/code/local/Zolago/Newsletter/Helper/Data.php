@@ -79,7 +79,7 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 	protected function getInvitationEmailVars() {
 		return array(
 			'store_name' => Mage::app()->getStore()->getName(),
-			'confirmation_url' => $this->getUrl("newsletter/subscriber/confirm",array("id"=>$this->subscriberId,"code"=>$this->code))
+			'confirmation_url' => Mage::helper('core/url')->getUrl("newsletter/subscriber/confirm",array("id"=>$this->subscriberId,"code"=>$this->code))
 		);
 	}
 
