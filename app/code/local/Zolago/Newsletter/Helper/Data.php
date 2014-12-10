@@ -120,7 +120,7 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 				->setWebsiteId($this->getWebsiteId())
 				->loadByEmail($email);
 			//if customer with this email exists then save it to subscribers as user, otherwise as guest
-			$type = $customer->getId() ? 2 : 1;
+			$customerId = $customer->getId();
 
 			/** @var Mage_Newsletter_Model_Subscriber $subscriber */
 			$subscriber = Mage::getModel('newsletter/subscriber');
@@ -129,7 +129,13 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 				->setEmail($email)
 				->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_NOT_ACTIVE)
 				->setSubscriberConfirmCode($this->key);
-				//->setType($type);
+			if ($customerId) {
+				$subscriber->setStoreId($customer->getStoreId());
+				$subscriber->setCustomerId($customerId);
+			} else {
+				$subscriber->setStoreId(Mage::app()->getStore()->getId());
+				$subscriber->setCustomerId(0);
+			}
 			$subscriber->save();
 			$this->setSubscriberId($subscriber->getId());
 			return true;
