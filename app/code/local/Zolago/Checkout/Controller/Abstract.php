@@ -96,7 +96,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 		 account[phone]:abc
 		 account[password]:abc
 		 account[password_confirmation]:abc
-		 account[is_subscribed]:bool
 		 */
 		$accountData = $request->getParam("account");
 		if(is_array($accountData)){

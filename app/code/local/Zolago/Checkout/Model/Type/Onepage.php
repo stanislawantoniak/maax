@@ -23,7 +23,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 				$this->getQuote()->getCustomerId()){
 				
 				$this->getQuote()->getCustomer()->save();
+
 			}
+			//newsletter HERE todo: HERE KURWA!!!!!!
 			
 		} catch (Exception $ex) {
 			throw $ex;

@@ -116,7 +116,9 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 	protected function addInactiveSubscriber($email) {
 		if($this->validateEmail($email)) {
 			/** @var Mage_Customer_Model_Customer $customer */
-			$customer = Mage::getModel("customer/customer")->loadByEmail($email);
+			$customer = Mage::getModel("customer/customer")
+				->setWebsiteId($this->getWebsiteId())
+				->loadByEmail($email);
 			//if customer with this email exists then save it to subscribers as user, otherwise as guest
 			$type = $customer->getId() ? 2 : 1;
 
@@ -126,8 +128,8 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 			$subscriber
 				->setEmail($email)
 				->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_NOT_ACTIVE)
-				->setSubscriberConfirmCode($this->key)
-				->setType($type);
+				->setSubscriberConfirmCode($this->key);
+				//->setType($type);
 			$subscriber->save();
 			$this->setSubscriberId($subscriber->getId());
 			return true;
@@ -153,5 +155,9 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 
 	protected function setSubscriberId($sid) {
 		$this->subscriberId = $sid;
+	}
+
+	protected function getWebsiteId() {
+		return Mage::app()->getStore()->getWebsiteId();
 	}
 }
