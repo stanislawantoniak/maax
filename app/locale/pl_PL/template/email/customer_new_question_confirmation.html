@@ -1,0 +1,28 @@
+<!--@subject {{var store.getFrontendName()}} – Potwierdzenie wyslania wiadomości do {{if local_vendor}}galerii {{var store.getFrontendName()}}{{else}}sklepu {{var vendor.getVendorName()}}{{/if}} @-->
+<body style="font-family: sans-serif;">
+	<div>
+		<a href="{{store url=""}}"><img src="cid:logo.png" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a>
+	</div>
+	<p>
+		{{if local_vendor}}
+			Dziękujemy za zadanie pytania Galerii {{var store.getFrontendName()}}.
+		{{else}}
+			Dziękujemy za zadanie pytania sprzedawcy {{var vendor.getVendorName()}}.
+		{{/if}}
+	</p>
+	<p>
+		<strong>Twoja wiadomość:</strong><br/>
+		{{htmlescape var=$question.getQuestionText();}}
+	</p>
+	<p>
+		{{if local_vendor}}
+			Galeria {{var store.getFrontendName()}} odpowie na Twoje pytanie jak tylko to możliwe.
+		{{else}}
+			{{var vendor.getVendorName()}} odpowie na Twoje pytanie jak tylko to możliwe.
+		{{/if}}
+	</p>
+	<p>
+		Dziękujemy i zapraszamy ponownie!<br/>
+		Zespól <a href="{{store url=""}}">{{var store.getFrontendName()}}</a>
+	</p>
+</body>
