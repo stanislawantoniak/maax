@@ -4,237 +4,240 @@ $_hlp = Mage::helper('udropship');
 $_sHlp = Mage::helper('udmspro');
 $_session = Mage::getSingleton('udropship/session');
 ?>
-<div class="row row-centered" id="vendor-register-row">
-	<div class="col-md-10 col-lg-8 col-sm-12 col-xs-12 col-centered">
-		<div class="widget box">
-			<div class="widget-header">
-				<h4><i class="icon-reorder"></i> <?php echo $_sHlp->__('Become a Vendor') ?></h4>
-			</div>
-			<div class="widget-content">
-				<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-				<form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost') ?>"
-				      enctype="multipart/form-data"
-				      method="post" class="form-horizontal row-border"
-				      id="registration-form" autocomplete="off">
-					<?php
-					foreach ($this->getForm()->getElements() as $element):
-						echo $element->toHtml();
-					endforeach; ?>
-					<div class="form-group" style="padding-bottom: 0;">
-						<label class="col-md-12"><span
-								class="required"><?php echo $this->__('* Indicated Required Fields') ?></span></label>
-					</div>
-					<div class="form-actions">
-						<button type="submit"
-						       class="btn btn-primary btn-lg btn-block"><?php echo $this->__('Register as a vendor') ?>&nbsp;&nbsp;&nbsp;<i class="icon-pencil"></i></button>
-						<a href="<?php echo $this->getUrl('udropship/vendor') ?>" class="btn btn-xs" style="margin-top: 10px">
-							<i class="icon-angle-left"></i>&nbsp;&nbsp;<?php echo $this->__('Return to log in') ?>
-						</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+<div class="container">
+    <div class="row" id="vendor-register-row">
+        <div class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h3><?php echo $_sHlp->__('Become a Vendor') ?></h3>
+                    </div>
+                </div>
+                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                <form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost') ?>"
+                      enctype="multipart/form-data"
+                      method="post" class="form-horizontal"
+                      id="registration-form" autocomplete="off">
+                    <?php
+                    foreach ($this->getForm()->getElements() as $element):
+
+                        echo $element->toHtml();
+                    endforeach; ?>
+                    <input type="hidden" value="0" name="billing_use_shipping" />
+                    <div class="">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            <?php echo $this->__('Register as a vendor') ?>
+                        </button>
+                        <a href="<?php echo $this->getUrl('udropship/vendor') ?>" class="btn btn-xs"
+                           style="margin-top: 10px">
+                            <i class="icon-angle-left"></i>&nbsp;&nbsp;<?php echo $this->__('Return to log in') ?>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 <script type="text/javascript">
-	var udNumberValidate = function (cmp, v, elm) {
-		var checkVal, val = parseNumber(v);
-		var checkElId = elm.id + '-' + cmp;
-		if ($(checkElId)) {
-			checkVal = parseNumber($(checkElId).innerHTML);
-		}
-		return (!isNaN(val) && !isNaN(checkVal) && udNumberCompare(cmp, val, checkVal))
-		|| !isNaN(val) && isNaN(checkVal) || v == '';
-	};
-	var udNumberCompare = function (cmp, a, b) {
-		if (cmp == 'lte') {
-			return a <= b;
-		} else if (cmp == 'lt') {
-			return a < b;
-		} else if (cmp == 'gte') {
-			return a >= b;
-		} else if (cmp == 'gt') {
-			return a > b;
-		} else {
-			return true;
-		}
-	};
-	var udLengthValidate = function (sym, cmp, v) {
-		var checkVal, val = '' + v;
-		if (sym) {
-			val = val.gsub(/\s+/, '');
-		} else {
-			val = val.strip();
-		}
-		var checkElId = elm.id + '-' + cmp;
-		if ($(checkElId)) {
-			checkVal = parseNumber($(checkElId).innerHTML);
-		}
-		var res = (!isNaN(checkVal) && udLengthCompare(cmp, val, checkVal))
-			|| isNaN(checkVal);
-		return res;
-	};
-	var udLengthCompare = function (cmp, str, len) {
-		if (cmp == 'lte') {
-			return ('' + str).length <= len;
-		} else if (cmp == 'lt') {
-			return ('' + str).length < len;
-		} else if (cmp == 'gte') {
-			return ('' + str).length >= len;
-		} else if (cmp == 'gt') {
-			return ('' + str).length > len;
-		} else {
-			return true;
-		}
-	};
-	var udCheckEmailExist = function (v) {
-		var result = true;
-		if (!v) return true;
-		new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkEmailUnique')?>', {
-			asynchronous: false,
-			method: 'get',
-			parameters: {
-				email: v
-			},
-			onFailure: function () {
-				alert('Error during email check');
-			},
-			onSuccess: function (transport) {
-				var responseText = transport.responseText;
-				if (responseText.isJSON()) {
-					var response = transport.responseText.evalJSON();
-					if (response.error) {
-						result = false;
-					} else if (response.success) {
-						result = true;
-					}
-					if (response.ajaxExpired && response.ajaxRedirect) {
-						setLocation(response.ajaxRedirect);
-					}
-				} else {
-					result = false;
-					alert('Error during email check');
-				}
-			}
-		});
-		return result;
-	};
-	var udCheckVendorNameExist = function (v) {
-		var result = true;
-		if (!v) return true;
-		new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkVendorNameUnique')?>', {
-			asynchronous: false,
-			method: 'get',
-			parameters: {
-				vendor_name: v
-			},
-			onFailure: function () {
-				alert('Error during shop name check');
-			},
-			onSuccess: function (transport) {
-				var responseText = transport.responseText;
-				if (responseText.isJSON()) {
-					var response = transport.responseText.evalJSON();
-					if (response.error) {
-						result = false;
-					} else if (response.success) {
-						result = true;
-					}
-					if (response.ajaxExpired && response.ajaxRedirect) {
-						setLocation(response.ajaxRedirect);
-					}
-				} else {
-					result = false;
-					alert('Error during shop name check');
-				}
-			}
-		});
-		return result;
-	};
+    var udNumberValidate = function (cmp, v, elm) {
+        var checkVal, val = parseNumber(v);
+        var checkElId = elm.id + '-' + cmp;
+        if ($(checkElId)) {
+            checkVal = parseNumber($(checkElId).innerHTML);
+        }
+        return (!isNaN(val) && !isNaN(checkVal) && udNumberCompare(cmp, val, checkVal))
+        || !isNaN(val) && isNaN(checkVal) || v == '';
+    };
+    var udNumberCompare = function (cmp, a, b) {
+        if (cmp == 'lte') {
+            return a <= b;
+        } else if (cmp == 'lt') {
+            return a < b;
+        } else if (cmp == 'gte') {
+            return a >= b;
+        } else if (cmp == 'gt') {
+            return a > b;
+        } else {
+            return true;
+        }
+    };
+    var udLengthValidate = function (sym, cmp, v) {
+        var checkVal, val = '' + v;
+        if (sym) {
+            val = val.gsub(/\s+/, '');
+        } else {
+            val = val.strip();
+        }
+        var checkElId = elm.id + '-' + cmp;
+        if ($(checkElId)) {
+            checkVal = parseNumber($(checkElId).innerHTML);
+        }
+        var res = (!isNaN(checkVal) && udLengthCompare(cmp, val, checkVal))
+            || isNaN(checkVal);
+        return res;
+    };
+    var udLengthCompare = function (cmp, str, len) {
+        if (cmp == 'lte') {
+            return ('' + str).length <= len;
+        } else if (cmp == 'lt') {
+            return ('' + str).length < len;
+        } else if (cmp == 'gte') {
+            return ('' + str).length >= len;
+        } else if (cmp == 'gt') {
+            return ('' + str).length > len;
+        } else {
+            return true;
+        }
+    };
+    var udCheckEmailExist = function (v) {
+        var result = true;
+        if (!v) return true;
+        new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkEmailUnique')?>', {
+            asynchronous: false,
+            method: 'get',
+            parameters: {
+                email: v
+            },
+            onFailure: function () {
+                alert('Error during email check');
+            },
+            onSuccess: function (transport) {
+                var responseText = transport.responseText;
+                if (responseText.isJSON()) {
+                    var response = transport.responseText.evalJSON();
+                    if (response.error) {
+                        result = false;
+                    } else if (response.success) {
+                        result = true;
+                    }
+                    if (response.ajaxExpired && response.ajaxRedirect) {
+                        setLocation(response.ajaxRedirect);
+                    }
+                } else {
+                    result = false;
+                    alert('Error during email check');
+                }
+            }
+        });
+        return result;
+    };
+    var udCheckVendorNameExist = function (v) {
+        var result = true;
+        if (!v) return true;
+        new Ajax.Request('<?php echo $this->getUrl('udmspro/vendor/checkVendorNameUnique')?>', {
+            asynchronous: false,
+            method: 'get',
+            parameters: {
+                vendor_name: v
+            },
+            onFailure: function () {
+                alert('Error during shop name check');
+            },
+            onSuccess: function (transport) {
+                var responseText = transport.responseText;
+                if (responseText.isJSON()) {
+                    var response = transport.responseText.evalJSON();
+                    if (response.error) {
+                        result = false;
+                    } else if (response.success) {
+                        result = true;
+                    }
+                    if (response.ajaxExpired && response.ajaxRedirect) {
+                        setLocation(response.ajaxRedirect);
+                    }
+                } else {
+                    result = false;
+                    alert('Error during shop name check');
+                }
+            }
+        });
+        return result;
+    };
 
-	Translator.add('Please enter valid email address', '<?php echo $this->__('Please enter valid email address'); ?>');
+    Translator.add('Please enter valid email address', '<?php echo $this->__('Please enter valid email address'); ?>');
 
-	Validation.addAllThese([
-		['validate-urlkey', 'Please use only letters (a-z) or numbers (0-9) in this field, first character should be a letter.', function (v) {
-			if (!v) return true;
-			return Validation.get('IsEmpty').test(v) || /^[a-z]+[a-z0-9]+$/.test(v)
-		}],
-		['validate-email', Translator.translate('Please enter valid email address'), function (v) {
-			return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
-		}],
-		['udvendor_name-unique', 'This vendor name is already used.', udCheckVendorNameExist],
-		['udemail-unique', 'This email is already used.', udCheckEmailExist],
-		['udvalidate-lte', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lte')],
-		['udvalidate-lt', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lt')],
-		['udvalidate-gte', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gte')],
-		['udvalidate-gt', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gt')],
-		['udvalidate-length-lte', 'Length exceed maximum.', udLengthValidate.curry(false, 'lte')],
-		['udvalidate-length-lt', 'Length exceed maximum.', udLengthValidate.curry(false, 'lt')],
-		['udvalidate-length-gte', 'Length lesser minimum.', udLengthValidate.curry(false, 'gte')],
-		['udvalidate-length-gt', 'Length lesser minimum.', udLengthValidate.curry(false, 'gt')],
-		['udvalidate-symlength-lte', 'Length exceed maximum.', udLengthValidate.curry(true, 'lte')],
-		['udvalidate-symlength-lt', 'Length exceed maximum.', udLengthValidate.curry(true, 'lt')],
-		['udvalidate-symlength-gte', 'Length lesser minimum.', udLengthValidate.curry(true, 'gte')],
-		['udvalidate-symlength-gt', 'Length lesser minimum.', udLengthValidate.curry(true, 'gt')],
-		['udvalidate-nospecial', 'Please use only letters (a-z or A-Z) or numbers (0-9) or spaces only in this field. No other characters are allowed.', function (v) {
-			return Validation.get('IsEmpty').test(v) || /^[ \ta-zA-Z0-9]+$/.test(v);
-		}]
-	]);
-	var udRegForm = new VarienForm('registration-form', true);
-	if ($('country_id')) {
-		new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
+    Validation.addAllThese([
+        ['validate-urlkey', 'Please use only letters (a-z) or numbers (0-9) in this field, first character should be a letter.', function (v) {
+            if (!v) return true;
+            return Validation.get('IsEmpty').test(v) || /^[a-z]+[a-z0-9]+$/.test(v)
+        }],
+        ['validate-email', Translator.translate('Please enter valid email address'), function (v) {
+            return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
+        }],
+        ['udvendor_name-unique', 'This vendor name is already used.', udCheckVendorNameExist],
+        ['udemail-unique', 'This email is already used.', udCheckEmailExist],
+        ['udvalidate-lte', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lte')],
+        ['udvalidate-lt', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lt')],
+        ['udvalidate-gte', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gte')],
+        ['udvalidate-gt', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gt')],
+        ['udvalidate-length-lte', 'Length exceed maximum.', udLengthValidate.curry(false, 'lte')],
+        ['udvalidate-length-lt', 'Length exceed maximum.', udLengthValidate.curry(false, 'lt')],
+        ['udvalidate-length-gte', 'Length lesser minimum.', udLengthValidate.curry(false, 'gte')],
+        ['udvalidate-length-gt', 'Length lesser minimum.', udLengthValidate.curry(false, 'gt')],
+        ['udvalidate-symlength-lte', 'Length exceed maximum.', udLengthValidate.curry(true, 'lte')],
+        ['udvalidate-symlength-lt', 'Length exceed maximum.', udLengthValidate.curry(true, 'lt')],
+        ['udvalidate-symlength-gte', 'Length lesser minimum.', udLengthValidate.curry(true, 'gte')],
+        ['udvalidate-symlength-gt', 'Length lesser minimum.', udLengthValidate.curry(true, 'gt')],
+        ['udvalidate-nospecial', 'Please use only letters (a-z or A-Z) or numbers (0-9) or spaces only in this field. No other characters are allowed.', function (v) {
+            return Validation.get('IsEmpty').test(v) || /^[ \ta-zA-Z0-9]+$/.test(v);
+        }]
+    ]);
+    var udRegForm = new VarienForm('registration-form', true);
+    if ($('country_id')) {
+        new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
 
-	}
+    }
 
-	Event.observe(window, 'load', function () {
-		var payout_selector = $('payout_method');
-		if (!payout_selector) {
-			return;
-		}
+    Event.observe(window, 'load', function () {
+        var payout_selector = $('payout_method');
+        if (!payout_selector) {
+            return;
+        }
 
-		var name = $('vendor_attn');
-		if (!name) {
-			return;
-		}
+        var name = $('vendor_attn');
+        if (!name) {
+            return;
+        }
 
-		function toggleNameRequired() {
-			var val = payout_selector.value;
-			if (val == 'paypal') {
-				toggleElementRequired(name, true);
-			} else {
-				toggleElementRequired(name, false);
-			}
-		}
+        function toggleNameRequired() {
+            var val = payout_selector.value;
+            if (val == 'paypal') {
+                toggleElementRequired(name, true);
+            } else {
+                toggleElementRequired(name, false);
+            }
+        }
 
 
-		function toggleElementRequired(el, req) {
-			el = $(el);
-			var lbl = el.previous('label[for="' + el.identify() + '"]');
+        function toggleElementRequired(el, req) {
+            el = $(el);
+            var lbl = el.previous('label[for="' + el.identify() + '"]');
 
-			var spanRequired = jQuery(lbl).find('span.required').length;
+            var spanRequired = jQuery(lbl).find('span.required').length;
 
-			if (req) {
-				el.addClassName('required-entry');
-				if (lbl) {
-					if (spanRequired == 0) {
-						lbl.insert('<span class="required">*</span>');
-					}
+            if (req) {
+                el.addClassName('required-entry');
+                if (lbl) {
+                    if (spanRequired == 0) {
+                        lbl.insert('<span class="required">*</span>');
+                    }
 
-				}
-			} else {
-				el.removeClassName('required-entry');
-				if (lbl) {
-					var req_span = lbl.down('span.required');
-					if (req_span) {
-						Element.remove(req_span);
-					}
-				}
-			}
-		}
+                }
+            } else {
+                el.removeClassName('required-entry');
+                if (lbl) {
+                    var req_span = lbl.down('span.required');
+                    if (req_span) {
+                        Element.remove(req_span);
+                    }
+                }
+            }
+        }
 
-		payout_selector.observe('change', toggleNameRequired);
-		toggleNameRequired();
-	});
+        payout_selector.observe('change', toggleNameRequired);
+        toggleNameRequired();
+    });
 </script>
+
+
+

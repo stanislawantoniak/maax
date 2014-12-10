@@ -201,6 +201,4 @@
 "PO status changed from '%s' to '%s'","Zmieniono status zamówienia z '%s' na '%s'"
 "Name","Nazwa"
 "Order %s has invaild status","Zamówienie nr %s ma nieprawidłowy status"
-
-
-
+"PO Status changed to shipped", "Zamiana statusu na wysłane"

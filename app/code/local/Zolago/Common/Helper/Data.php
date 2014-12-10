@@ -2,6 +2,63 @@
 class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	/**
+	 * @param string $filename
+	 * @param Mage_Core_Model_Store | int | string $store
+	 * @param string $type
+	 * @return string
+	 */
+	public function getDesignFileByStore($filename, $store, $type='skin') {
+		if(!($store instanceof Mage_Core_Model_Store)){
+			$store = Mage::app()->getStore($store);
+		}
+		$oldPack = Mage::getDesign()->getPackageName();
+		$oldTheme = Mage::getDesign()->getTheme($type);
+		
+		Mage::getDesign()->
+			setPackageName($store->getConfig("design/package/name"))->
+			setTheme($store->getConfig("design/theme/" . $type));
+		
+		$return = Mage::getDesign()->getFilename($filename, array("_type"=>$type));
+		
+		Mage::getDesign()->
+			setPackageName($oldPack)->
+			setTheme($type, $oldTheme);
+		
+		return $return;
+	}
+	/**
+	 * @param string $imageUrl
+	 * @param Mage_Core_Model_Store | int $storeId
+	 * @return string
+	 */
+	public function getRelativePath($url, $storeId= Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
+        $unsecure = strpos($url,"http://")===0;      
+        $secure = strpos($url,"https://")===0; 
+		if($unsecure || $secure){
+			$storeUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, $secure);
+			$url = str_replace($storeUrl, "", $url);
+		}
+		return $url;
+	}
+	
+	/**
+	 * @param string $imageUrl
+	 * @param Mage_Core_Model_Store | int $storeId
+	 */
+	public function getFileBase64ByUrl($imageUrl, $storeId= Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
+		$imageUrl = $this->getRelativePath($imageUrl);
+		try{
+			if(file_exists($imageUrl) && is_readable($imageUrl)){
+				return base64_encode(file_get_contents($imageUrl));
+			}
+		}  catch (Exception $e){
+		
+		}
+		
+		return '';
+	}
+	
+	/**
 	 * @return boolean
 	 */
 	public function isGoogleBot(){

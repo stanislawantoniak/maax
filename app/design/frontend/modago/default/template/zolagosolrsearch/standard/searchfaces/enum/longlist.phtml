@@ -25,10 +25,11 @@
                                 if(!$isOptionSelected && $this->isItemActive($item)) {
                                     $isOptionSelected = true;
                                 }
+								$_url = $this->getItemUrl($item);;
                                 ?>
                                 <li>
                                     <div class="form-group form-checkbox">
-                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+                                        <input data-url="<?php echo $_url ?>" 
 											   data-params='<?php echo $this->getItemJson($item);?>' 
 											   name="<?php echo $this->getItemName($item);?>"
 											   value="<?php echo $this->getItemValue($item)?>"
@@ -37,7 +38,7 @@
 											   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
 	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
 					                        <span>
-						                        <a href="<?php echo $this->getItemUrl($item); ?>"
+						                        <a href="<?php echo $_url ?>"
 						                           class="listing-link">
 							                        <?php echo $item; ?>
 						                        </a>

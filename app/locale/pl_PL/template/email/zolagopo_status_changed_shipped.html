@@ -1,0 +1,62 @@
+<!--@subject {{var store.getFrontendName()}} – Przesyłka ze sklepu {{var vendor.getVendorName()}} została wysłana (Zamówienie nr {{var po.getIncrementId()}})! @-->
+
+<body style="font-family: sans-serif;">
+	<div>
+		<a href="{{store url=""}}"><img src="cid:logo.png" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a>
+	</div>
+	<p>
+		Właśnie została do Ciebie wysłana przesyłka ze sklepu {{var vendor.getVendorName()}} 
+		(zamówienie nr {{var po.getIncrementId()}}).
+	</p>
+	
+	{{depend po.isCod()}} 
+	<p>Za zamówienie zapłacisz kurierowi przy odbiorze. Pamiętaj aby przygotować do zapłaty: 
+		<strong>{{var po.getFormattedGrandTotalInclTax()}}</strong>
+	</p>
+	{{/depend}}
+	
+	<p>
+		Przesyłka zostanie doręczona przez firmę kurierską 
+		{{var carrier.getConfigData('title')}} w ciągu 1-2 dni roboczych.
+	</p>
+	
+	{{depend tracking}} 
+	<p>
+		<strong>
+			Numer listu przewozowego do śledzenia przesyłki: 
+			{{if track_url}} 
+				<a href="{{var track_url}}">{{var tracking.getTrackNumber()}}</a>
+			{{else}}
+				{{var tracking.getTrackNumber()}}
+			{{/if}}
+		</strong>
+	</p>
+	{{/depend}}
+	
+	{{depend track_url}} 
+	<p>
+		Przesyłkę możesz śledzić <a href="{{var track_url}}">na stronie przewoźnika</a>. 
+		Link do śledzenia będzie aktywny dzień po nadaniu paczki. 
+	</p>
+	{{/depend}}
+	
+	<p>
+		<strong>Adres dostawy</strong><br/>
+		{{var po.getShippingAddress().format('html')}}
+	</p>
+	
+	<p>
+		<strong>Zawartość przesyłki od sklepu {{var vendor.getVendorName()}}:</strong>
+	</p>
+	
+	{{block type='zolagomodago/po_email_summary' template='zolagopo/email/summary.phtml'}}
+	
+	<p>
+		Jeśli masz jakieś pytania, <a href="{{var contact_url}}">skontaktuj się ze sklepem</a>.
+	</p>
+	
+	<p>
+		Dziękujemy za zakupy i zapraszamy ponownie!<br/>
+		Zespól <a href="{{store url=""}}">{{var store.getFrontendName()}}</a>
+	</p>
+</body>

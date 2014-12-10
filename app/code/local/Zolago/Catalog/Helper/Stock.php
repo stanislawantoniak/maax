@@ -63,13 +63,14 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
          * 3 stock = available stock - stock on open orders
 
          */
+        $skuS = array_keys($dataStock);
         //1. get min POS stock (calculate available stock)
         $posResourceModel = Mage::getResourceModel('zolagopos/pos');
         $minPOSValues = $posResourceModel->getMinPOSStock();
 
         //2. calculate stock on open orders
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
-        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant);
+        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
 
         //-------Prepare data
 
@@ -97,8 +98,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             unset($dataStockItem);
         //}
 
-        $skus = array_keys($data);
-        $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skus);
+        $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
 
         $dataSum = array();
         foreach ($data as $sku => $_) {

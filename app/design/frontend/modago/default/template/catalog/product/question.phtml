@@ -15,6 +15,11 @@ $session = Mage::getSingleton('customer/session');
     $customer_name = isset($dataPopulate['customer_name']) ? $dataPopulate['customer_name'] : false;
     $customer_email = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
     $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question_text'] : false;
+	
+	// if no data to populate fill with query vendor param
+	if($vendor_id===false){
+		$vendor_id = (int)$this->getRequest()->getParam("vendor");
+	}
 
 
 ?>

@@ -75,7 +75,8 @@ if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
 	#ini_set('display_errors', 1);
 }
 
-
+// Enable profiler
+Varien_Profiler::enable();
 
 umask(0);
 

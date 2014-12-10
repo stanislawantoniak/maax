@@ -21,11 +21,17 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 			$categoryId = null;
 			if($vendor && $vendor->getId()){
 				Mage::helper('udropship')->loadCustomData($vendor);
-				$categoryId = $vendor->getRootCategory();
+				$rootCats = $vendor->getRootCategory();
+				$websiteId = Mage::app()->getWebsite()->getId();
+				if(isset($rootCats[$websiteId])){
+					$categoryId = $rootCats[$websiteId]; 
+				}
 			}
+			
 			if(!$categoryId){
 				$categoryId = Mage::app()->getStore()->getRootCategoryId();
 			}
+			
 			$this->_rootCategory = Mage::getModel("catalog/category")->load($categoryId);
 		}
 		return $this->_rootCategory;
@@ -88,13 +94,16 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
      * @return int $rootCategoryConfigId     
      */
     public function getVendorRootCategoryConfigId($vendor,$websiteId) {
-		$rootCategoryId = 0;
+        $rootCategoryId = 0;
 		Mage::helper('udropship')->loadCustomData($vendor);
-		$rootCategories = $vendor->getRootCategory();
-		if (array_key_exists($websiteId, $rootCategories)) {
+        $rootCategories = $vendor->getRootCategory();
+        if (!is_array($rootCategories)) {
+            return $rootCategoryId;
+        }
+        if (array_key_exists($websiteId,$rootCategories)) {
 			$rootCategoryId = $rootCategories[$websiteId];
 		}
-		return $rootCategoryId;    	
+		return $rootCategoryId;
     }
     
     /**
