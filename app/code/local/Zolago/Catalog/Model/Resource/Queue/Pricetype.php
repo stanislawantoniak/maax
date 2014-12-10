@@ -83,7 +83,9 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
         $key = $this->_buildIndexKey($productId);
         $this->_dataToSave[$key] = array(
             "insert_date" => Varien_Date::now(),
-            "product_id" => $productId
+            "product_id" => $productId,
+            "process_date" => null,
+            "status" => 0,
         );
     }
 
