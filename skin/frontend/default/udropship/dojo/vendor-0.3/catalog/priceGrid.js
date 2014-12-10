@@ -174,12 +174,13 @@ define([
 			skuv: {
 				label: Translator.translate("SKU"),
 				field: "skuv",			
+				className: "column-medium",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("text", "skuv"),
 						sortable: false, 
 						field: "skuv",
-						className: "filterable",
+						className: "filterable column-medium",
 					}
 				]
 			},
