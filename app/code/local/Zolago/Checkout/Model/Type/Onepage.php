@@ -2,11 +2,18 @@
 class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepage
 {
 	protected $_customerForm;
+
+	/**
+	 * Error message of "customer already exists"
+	 * @var string
+	 */
+	private $_customerEmailExistsMessage = '';
 	
     /**
      * Create order based on checkout type. Create customer if necessary.
      *
      * @return Zolago_Checkout_Model_Type_Onepage
+     * @throws Exception
      */
 	public function saveOrder() {
 		try{
@@ -389,6 +396,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	 * Save account data and transfer same to quote
 	 * @param array $accountData
 	 * @return Zolago_Checkout_Model_Type_Onepage
+	 * @throws Mage_Core_Exception
 	 */
 	public function saveAccountData(array $accountData) {
 		$quote = $this->getQuote();
@@ -419,9 +427,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $request = $form->prepareRequest($accountData);
         $data    = $form->extractData($request);
 
-        $form->restoreData($data);		
+        $form->restoreData($data);
         $data = array();
-		
 		
 		// Add all form attributes - There is no password
         foreach ($form->getAttributes() as $attribute) {
