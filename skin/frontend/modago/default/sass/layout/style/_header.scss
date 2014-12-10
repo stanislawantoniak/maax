@@ -89,4 +89,39 @@
             }
         }
     }
+
+
+  .vendor-top-bottom-header {
+    min-height: 70px;
+    .vendor-top-bottom-header-label {
+      display: table-cell;
+      padding: 20px 10px 0 0;
+      vertical-align: middle;
+    }
+    .vendor-top-bottom-header-logo {
+      display: table-cell;
+      img {
+        max-height: 70px;
+        max-width: 130px;
+      }
+    }
+    .vendor-top-bottom-header-links {
+      display: table-cell;
+      height: 58px;
+      position: absolute;
+      right: 0;
+      top: 15px;
+      li {
+        display: block;
+        float: left;
+        padding: 20px 0 0 25px;
+        a {
+          color: #000000;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
 }
