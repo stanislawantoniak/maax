@@ -114,6 +114,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"is_bestseller", 
 			"status",
 			"converter_price_type",
+			"converter_msrp_type",
 			"price_margin"
 		);
 	}
