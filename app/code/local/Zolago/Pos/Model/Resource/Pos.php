@@ -181,10 +181,9 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function calculateStockOpenOrders($merchant, $skus)
     {
-        if(empty($skus)){
+        if (empty($skus)) {
             return array();
         }
-
 
         $po_open_order = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
         $adapter = $this->getReadConnection();
@@ -193,8 +192,8 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             ->from(
                 'udropship_po_item AS po_item',
                 array(
-                     'sku' => 'po_item.sku',
-                     'qty' => 'SUM(po_item.qty)'
+                    'sku' => 'po_item.sku',
+                    'qty' => 'SUM(po_item.qty)'
                 )
             )
             ->join(
@@ -207,9 +206,9 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
                 'po.entity_id=po_item.parent_id',
                 array()
             )
-            ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
             ->where("po.udropship_vendor=?", (int)$merchant)
-             ->where("products.sku IN(?)",$skus)
+            ->where("po_item.parent_item_id IS NULL")
+            ->where("po_item.sku IN(?)", $skus)
             ->where("po.udropship_status IN ({$po_open_order})")
             ->group('po_item.sku');
 
