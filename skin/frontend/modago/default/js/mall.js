@@ -161,7 +161,6 @@ var Mall = {
                 }
             });
         }
-
         // replace favorites url
         jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
     },
@@ -203,7 +202,7 @@ var Mall = {
     setUserBlockData : function(content) {
         var userBlock = jQuery("#header_top_block_right");
         // set customer account url
-
+		
         var desktopW = 992;
         var windowW = jQuery(window).width();
         if(content.logged_in){

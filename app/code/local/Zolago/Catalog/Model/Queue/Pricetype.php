@@ -36,14 +36,13 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         unset($productId);
 
         $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
-        $skuvs = $queueModel->getVendorSkuAssoc($ids);
+        $skuvs = $queueModel->getVendorSkuAssoc($ids);        
 
         $priceTypeValues = $queueModel->getPriceTypeValues($ids);
-
         //reformat
         $priceTypeValueByStore =array();
-        if(!empty($priceTypeValues)){
-            foreach($priceTypeValues as $priceTypeValue){
+        if(!empty($priceTypeValues)) {
+            foreach($priceTypeValues as $priceTypeValue) {
                 $priceTypeValueByStore[$priceTypeValue['store']][$priceTypeValue['product_id']] = $priceTypeValue['converter_price_type_label'];
             }
             unset($priceTypeValue);
@@ -53,8 +52,8 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
 
         //reformat
         $priceMarginValuesByStore = array();
-        if(!empty($priceMarginValues)){
-            foreach($priceMarginValues as $priceMarginValue){
+        if(!empty($priceMarginValues)) {
+            foreach($priceMarginValues as $priceMarginValue) {
                 $priceMarginValuesByStore[$priceMarginValue['store']][$priceMarginValue['product_id']] = $priceMarginValue['price_margin'];
             }
             unset($priceMarginValue);
@@ -68,10 +67,19 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             //Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
             return;
         }
+        $registry = array();
         $productAction = Mage::getSingleton('catalog/product_action');
         if (!empty($skuvs)) {
 
-            foreach ($skuvs as $productId => $productData) {
+            $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $allStores = Mage::app()->getStores();
+            foreach ($allStores as $_eachStoreId => $val) {
+                $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+                $stores[] = $_storeId;
+            }
+            foreach ($skuvs as $productData) {
+                $productId = $productData['product_id'];
+                $parentId = $productData['parent'];
                 $vendorSku = $productData['skuv'];
                 $sku = $productData['sku'];
 
@@ -81,36 +89,33 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                     return;
                 }
 
-
                 //Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
-                $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-                $allStores = Mage::app()->getStores();
-                foreach ($allStores as $_eachStoreId => $val) {
-                    $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-                    $stores[] = $_storeId;
-                }
-                foreach($stores as $store){
-                    $priceType = (isset($priceTypeValueByStore[$store]) && isset($priceTypeValueByStore[$store][$productId])) ? $priceTypeValueByStore[$store][$productId] : 0;
+                foreach($stores as $store) {
+                    $priceType = (isset($priceTypeValueByStore[$store]) && isset($priceTypeValueByStore[$store][$parentId])) ? $priceTypeValueByStore[$store][$parentId] : 0;
                     if ($store <> Mage_Core_Model_App::ADMIN_STORE_ID
-                        && !isset($priceTypeValueByStore[$store][$productId])
-                        && isset($priceTypeValueByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId])
-                    ) {
+                            && !isset($priceTypeValueByStore[$store][$parentId])
+                            && isset($priceTypeValueByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId])
+                       ) {
                         //Use Default Value
-                        $priceType = $priceTypeValueByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId];
+                        $priceType = $priceTypeValueByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId];
                     }
-                    $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
-
+                    if (!isset($registry[$vendorExternalId][$vendorSku][$priceType])) {
+                        $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
+                        $registry[$vendorExternalId][$vendorSku][$priceType] = $newPrice;
+                    } else {
+                        $newPrice = $registry[$vendorExternalId][$vendorSku][$priceType];
+                    }
 
                     if (!empty($newPrice)) {
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
-                        $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$productId])) ? $priceMarginValuesByStore[$store][$productId] : 0;
+                        $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$parentId])) ? $priceMarginValuesByStore[$store][$parentId] : 0;
                         if ($store <> Mage_Core_Model_App::ADMIN_STORE_ID
-                            && !isset($priceMarginValuesByStore[$store][$productId])
-                            && isset($priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId])
-                        ) {
+                                && !isset($priceMarginValuesByStore[$store][$parentId])
+                                && isset($priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId])
+                           ) {
                             //Use Default Value
-                            $margin = $priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId];
+                            $margin = $priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId];
                         }
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
 
@@ -126,42 +131,14 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             }
         }
 
-        //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Reindex");
-
         Mage::getResourceSingleton('catalog/product_indexer_price')
-            ->reindexProductIds(array_keys($ids));
+        ->reindexProductIds(array_keys($recalculateConfigurableIds));
 
-        $indexers = array(
-            'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
-            'decimal' => Mage::getResourceModel('catalog/product_indexer_eav_decimal'),
-        );
-        foreach ($indexers as $indexer) {
-            /** @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract */
-            $indexer->reindexEntities($ids);
-        }
-        if (Mage::helper('catalog/category_flat')->isEnabled()) {
-            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
-            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
-            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
-            foreach ($stores as $storesId) {
-                $fI->updateAttribute($attribute, $storesId, $ids);
-            }
-        }
 
-        //zolago_catalog_after_update_price_type
-        Mage::dispatchEvent(
-            "zolago_catalog_after_update_price_type",
-            array(
-                 "product_ids" => array_keys($recalculateConfigurableIds)
-            )
-        );
-
-        if(!empty($recalculateConfigurableIds)){
+        if(!empty($recalculateConfigurableIds)) {
             //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Add to configurable recalculation queue");
             Zolago_Catalog_Helper_Configurable::queue(array_keys($recalculateConfigurableIds));
         }
-
-        //Mage::helper('zolagocatalog/pricetype')->_logQueue( "End");
 
 
     }

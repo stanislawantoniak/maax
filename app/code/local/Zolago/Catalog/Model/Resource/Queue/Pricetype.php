@@ -83,7 +83,9 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
         $key = $this->_buildIndexKey($productId);
         $this->_dataToSave[$key] = array(
             "insert_date" => Varien_Date::now(),
-            "product_id" => $productId
+            "product_id" => $productId,
+            "process_date" => null,
+            "status" => 0,
         );
     }
 
@@ -174,7 +176,16 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
 
         if (!empty($ids)) {
             $readConnection = $this->_getReadAdapter();
+			$attribute = Mage::getSingleton('eav/config')->getAttribute(
+					Mage_Catalog_Model_Product::ENTITY, 
+					Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')
+			);
+			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+			$tVarchar = $attribute->getBackendTable();
+			
+			
             $tVarchar = $readConnection->getTableName('catalog_product_entity_varchar');
+            // not simple products
             $select = $readConnection->select();
             $select->from(
                 array("product_varchar" => $tVarchar),
@@ -182,26 +193,67 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
                      "product_id" => "product_varchar.entity_id",
                      "skuv"       => "product_varchar.value",
                      "store"      => "product_varchar.store_id",
-                     "sku" => "product.sku"
+                     "sku" 		  => "product.sku",
+                     "type"       => "product.type_id",
+                     "parent"	  => "product_relation.parent_id",
                 )
             );
+//            $select->join(
+//                array("attribute" => $this->getTable("eav/attribute")),
+//                "attribute.attribute_id = product_varchar.attribute_id",
+//                array()
+//            );
             $select->join(
+                array("product" => $this->getTable("catalog/product")),
+                "product.entity_id = product_varchar.entity_id",
+                array()
+            );
+            $select->join(
+                array("product_relation" => $this->getTable("catalog/product_relation")),
+                "product.entity_id = product_relation.child_id",
+                array()
+            );
+/*
+            $select->join(
+                array("parent_product" => $this->getTable("catalog/product")),
+                "parent_product.entity_id = product_relation.parent_id",
+                array("type" => "parent_product.type_id")
+            );
+*/
+            //$select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            $select->where("product_varchar.attribute_id=?",$attribute->getId());
+            $select->where("product_relation.parent_id IN(?)", $ids);
+
+            // simple products
+
+            $select2 = $readConnection->select();
+            $select2->from(
+                array("product_varchar" => $tVarchar),
+                array(
+                     "product_id" => "product_varchar.entity_id",
+                     "skuv"       => "product_varchar.value",
+                     "store"      => "product_varchar.store_id",
+                     "sku" => "product.sku",
+                     "parent" => "product_varchar.entity_id",   // parent same as product
+                )
+            );
+            $select2->join(
                 array("attribute" => $this->getTable("eav/attribute")),
                 "attribute.attribute_id = product_varchar.attribute_id",
                 array()
             );
-            $select->join(
+            $select2->join(
                 array("product" => $this->getTable("catalog/product")),
                 "product.entity_id = product_varchar.entity_id",
                 array("type" => "product.type_id")
             );
-            $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
-            $select->where("product_varchar.entity_id IN(?)", $ids);
-            //TODO need to know what to do for configurable
-            $select->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-
+            $select2->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            $select2->where("product_varchar.entity_id IN(?)", $ids);
+            $select2->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
             try {
-                $assoc = $readConnection->fetchAssoc($select);
+                $assoc1 = $readConnection->fetchAll($select);
+                $assoc2 = $readConnection->fetchAll($select2);
+                $assoc = array_merge($assoc1,$assoc2);
             } catch (Exception $e) {
                 Mage::throwException("Error skuv");
             }
