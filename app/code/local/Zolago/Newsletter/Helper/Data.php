@@ -9,7 +9,7 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 	const INVITATION_EMAIL_SENDER_XML_PATH = "newsletter/subscription/invitation_email_identity";
 	const INVITATION_XML_PATH = "newsletter/subscription/invitation";
 	const INVITATION_REPEAT_XML_PATH = "newsletter/subscription/invitation_repeat";
-	protected $key;
+	protected $code;
 	protected $subscriberId;
 
 	/**
@@ -79,7 +79,7 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 	protected function getInvitationEmailVars() {
 		return array(
 			'store_name' => Mage::app()->getStore()->getName(),
-			'confirmation_url' => Mage::helper('core/url')->getUrl("newsletter/subscriber/confirm",array("id"=>$this->subscriberId,"code"=>$this->code))
+			'confirmation_url' => $this->getInvitationUrl()
 		);
 	}
 
@@ -119,7 +119,6 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 			$customer = Mage::getModel("customer/customer")
 				->setWebsiteId($this->getWebsiteId())
 				->loadByEmail($email);
-			//if customer with this email exists then save it to subscribers as user, otherwise as guest
 			$customerId = $customer->getId();
 
 			/** @var Mage_Newsletter_Model_Subscriber $subscriber */
@@ -129,6 +128,8 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 				->setEmail($email)
 				->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_NOT_ACTIVE)
 				->setSubscriberConfirmCode($this->key);
+
+			//if customer with this email exists then save it to subscribers as user, otherwise as guest
 			if ($customerId) {
 				$subscriber->setStoreId($customer->getStoreId());
 				$subscriber->setCustomerId($customerId);
@@ -136,6 +137,7 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 				$subscriber->setStoreId(Mage::app()->getStore()->getId());
 				$subscriber->setCustomerId(0);
 			}
+
 			$subscriber->save();
 			$this->setSubscriberId($subscriber->getId());
 			return true;
@@ -155,15 +157,59 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
 		return Zend_Validate::is($email, 'EmailAddress');
 	}
 
+	/**
+	 * sets confirmation code in local variable
+	 * @return bool
+	 */
 	protected function setCode() {
-		$this->key = Mage::getModel('newsletter/subscriber')->randomSequence();
+		/** @var Mage_Newsletter_Model_Subscriber $model */
+		$model = Mage::getModel('newsletter/subscriber');
+		return $this->code = $model->randomSequence() ? true : false;
 	}
 
+	/**
+	 * gets confirmation code from local variable
+	 * @return int
+	 */
+	protected function getCode() {
+		if(is_null($this->code)) {
+			$this->setCode();
+		}
+		return $this->code ? $this->code : false;
+	}
+
+	/**
+	 * sets subscriber id in local variable
+	 * @param $sid
+	 * @return bool
+	 */
 	protected function setSubscriberId($sid) {
-		$this->subscriberId = $sid;
+		return $this->subscriberId = $sid ? true : false;
 	}
 
+	/**
+	 * gets subscriber id from local variable
+	 * @return int|bool
+	 */
+	protected function getSubscriberId() {
+		return !is_null($this->subscriberId) ? $this->subscriberId : false;
+	}
+
+	/**
+	 * gets current store website id
+	 * @return int|null|string
+	 */
 	protected function getWebsiteId() {
 		return Mage::app()->getStore()->getWebsiteId();
+	}
+
+	protected function getInvitationUrl() {
+		$sid = $this->getSubscriberId();
+		$code = $this->getCode();
+		if($sid && $code) {
+			return Mage::getUrl("newsletter/subscriber/invitation",array("id"=>$sid,"code"=>$code));
+		} else {
+			return false;
+		}
 	}
 }
