@@ -77,16 +77,15 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                 $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
                 $stores[] = $_storeId;
             }
-            foreach ($skuvs as $productData) {
+            $skuvs_count = count($skuvs);
+            foreach ($skuvs as $count => $productData) {
                 $productId = $productData['product_id'];
                 $parentId = $productData['parent'];
                 $vendorSku = $productData['skuv'];
-                $sku = $productData['sku'];
 
-                $res = explode('-', $sku);
-                $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
+                $vendorExternalId = $productData['vendor'];
                 if (!$vendorExternalId) {
-                    return;
+                    continue;
                 }
 
                 //Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
@@ -97,12 +96,14 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                     }
                     if (!isset($registry[$vendorExternalId][$vendorSku][$priceType])) {
                         $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
-                        Mage::log($vendorExternalId.' '.$vendorSku.' '.$priceType.' '.$newPrice);
                         $registry[$vendorExternalId][$vendorSku][$priceType] = (empty($newPrice)? '0':$newPrice);
                     } else {
                         $newPrice = $registry[$vendorExternalId][$vendorSku][$priceType];
                     }
-                    Mage::log($productId.' '.$newPrice);
+                    // logs 
+                    if (!($count % 100)) {
+                        Mage::log('Pricetype '.(round(($count/$skuvs_count)*100)).' %');
+                    }
                     if (!empty($newPrice)) {
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
@@ -120,10 +121,8 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                 }
             }
         }
-
         Mage::getResourceSingleton('catalog/product_indexer_price')
-        ->reindexProductIds(array_keys($recalculateConfigurableIds));
-
+            ->reindexProductIds(array_keys($recalculateConfigurableIds));
 
         if(!empty($recalculateConfigurableIds)) {
             //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Add to configurable recalculation queue");
