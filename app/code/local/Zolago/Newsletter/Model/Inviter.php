@@ -103,7 +103,13 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 			} else {
 				if($this->canRepeatInvitation()) {
 					$this->setSubscriberId($sid);
-					$this->setInvitationCode($subscription->getSubscriberConfirmCode());
+					$confirm_code = $subscription->getSubscriberConfirmCode();
+					if(!$confirm_code) {
+						$subscription->setSubscriberConfirmCode($this->getInvitationCode());
+						$subscription->save();
+					} else {
+						$this->setInvitationCode($subscription->getSubscriberConfirmCode());
+					}
 					return true;
 				} else {
 					return false;
@@ -165,14 +171,10 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 	}
 
 	/**
-	 * sets confirmation code in local variable
-	 * @return bool
+	 * @param string|null $code
 	 */
-	/**
-	 * @return string
-	 */
-	protected function setInvitationCode() {
-		$this->_invitationCode = $this->randomSequence();
+	protected function setInvitationCode($code=null) {
+		$this->_invitationCode = $code ? $code : $this->randomSequence();
 	}
 
 	/**
