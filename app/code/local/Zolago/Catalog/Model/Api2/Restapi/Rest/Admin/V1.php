@@ -272,6 +272,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $marginByStore = array();
 
         $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
+
+        $priceMSRPSource = $model->getMSRPSourceValuesConfigurable($skuS);
         //reformat margin
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
@@ -313,7 +315,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
                         if ($priceToInsert) {
-
                             //margin
                             $marginSelected = 0;
 
