@@ -164,12 +164,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $stockId = 1;
         $availableStockByMerchant = array();
-        Mage::log(print_r($stockBatch, 0), 0, "updateStockConverter.log");
+        Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant);
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-
+        Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
         /*Prepare data to insert*/
         if (empty($availableStockByMerchant)) {
             return;
