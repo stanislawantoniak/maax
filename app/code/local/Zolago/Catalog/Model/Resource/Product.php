@@ -191,6 +191,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->where(
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
         );
+        $select->where("msrp_source.value=?", 0);
         $select->where("products.sku IN(?)", $skuS);
 
         try {
