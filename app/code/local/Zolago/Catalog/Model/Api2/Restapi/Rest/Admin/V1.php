@@ -178,13 +178,15 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //2. calculate stock on open orders
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
+        Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
+
 
         $availableStockByMerchantOnOpenOrders = array();
         foreach ($availableStockByMerchant as $sku => $availableStockByMerchantQty) {
             //$productIdsSkuAssoc[$sku] product_id
             //$openOrdersQty[$sku] products qty on open orders
             if (isset($productIdsSkuAssoc[$sku])) {
-                $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku] : 0;
+                $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku]['qty'] : 0;
                 $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = $availableStockByMerchantQty - $qtyOnOpenOrders;
             }
         }
