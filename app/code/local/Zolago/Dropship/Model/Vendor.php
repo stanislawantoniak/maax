@@ -5,6 +5,22 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     const VENDOR_TYPE_BRANDSHOP = 2;
     const VENDOR_TYPE_STANDARD = 1;
 	/**
+	 * @todo add params
+	 * @param array $params
+	 * @return string
+	 */
+	public function getVendorUrl($params=array()) {
+		return Mage::helper("zolagodropshipmicrosite")->getVendorUrl($this);
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isBrandshop() {
+		return $this->getVendorType()==Zolago_Dropship_Model_Source::VENDOR_TYPE_BRANDSHOP;
+	}
+	
+	/**
 	 * Sets root category to registry and then return
 	 */
 	public function rootCategory($websiteId = NULL){

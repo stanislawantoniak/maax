@@ -163,24 +163,51 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $stockId = 1;
-
-        $cataloginventoryStockItem = array();
-
         $availableStockByMerchant = array();
+        //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant);
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-
-        /*Prepare data to insert*/
+        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
         if (empty($availableStockByMerchant)) {
             return;
         }
 
-        if (!empty($availableStockByMerchant)) {
-            foreach ($availableStockByMerchant as $id => $qty) {
+        $productIdsSkuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+        //2. calculate stock on open orders
+        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
+        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
+        //Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
+
+
+        $availableStockByMerchantOnOpenOrders = array();
+        foreach ($availableStockByMerchant as $sku => $availableStockByMerchantQty) {
+            //$productIdsSkuAssoc[$sku] product_id
+            //$openOrdersQty[$sku] products qty on open orders
+            if (isset($productIdsSkuAssoc[$sku])) {
+                $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku]['qty'] : 0;
+                $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = (($availableStockByMerchantQty - $qtyOnOpenOrders) > 0 ) ? ($availableStockByMerchantQty - $qtyOnOpenOrders) : 0;
+            }
+        }
+        unset($qtyOnOpenOrders);
+        unset($availableStockByMerchantQty);
+        //Mage::log(print_r($availableStockByMerchantOnOpenOrders, true), 0, "availableStockByMerchantOnOpenOrders.log");
+
+        /*Prepare data to insert*/
+        if (empty($availableStockByMerchantOnOpenOrders)) {
+            return;
+        }
+
+        $productsIds = array();
+
+        $cataloginventoryStockItem = array();
+        if (!empty($availableStockByMerchantOnOpenOrders)) {
+            foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
                 $is_in_stock = ($qty > 0) ? 1 : 0;
                 $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
+
+                $productsIds[$id] = $id;
 
                 Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
                     "product_id" => $id,
@@ -190,19 +217,20 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 ));
             }
         }
+        if (empty($cataloginventoryStockItem)) {
+            return;
+        }
 
         $insert = implode(',', $cataloginventoryStockItem);
 
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
         $zcSDItemModel->saveCatalogInventoryStockItem($insert);
 
-        $productsIds = Mage::getResourceModel("catalog/product_collection")
-            ->addAttributeToFilter('sku', array('in' => $skuS))
-            ->getAllIds();
-
+        //reindex
         Mage::getResourceModel('cataloginventory/indexer_stock')
             ->reindexProducts($productsIds);
 
+        //send to solr queue
         Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
     }
 
@@ -232,7 +260,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $priceTypeByStore = array();
 
-        $priceType = $model->getConverterPriceType($skuS);
+        $priceType = $model->getConverterPriceTypeConfigurable($skuS);
         //reformat by store id
         if (!empty($priceType)) {
             foreach ($priceType as $priceTypeData) {
@@ -243,7 +271,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $marginByStore = array();
 
-        $priceMarginValues = $model->getPriceMarginValues($skuS);
+        $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
         //reformat margin
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
@@ -256,7 +284,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $insert = array();
         $ids = array();
 
-        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+//        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+        $stores = array();
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {
             $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
@@ -269,19 +298,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
-
                 foreach ($stores as $storeId) {
-
-                    //price type
+                    //price type default
                     $priceTypeSelected = "A";
                     if (isset($priceTypeByStore[$sku][$storeId])) {
                         $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
-                    } else {
-                        $priceTypeDefault = isset($priceTypeByStore[$sku][Mage_Core_Model_App::ADMIN_STORE_ID])
-                            ? $priceTypeByStore[$sku][Mage_Core_Model_App::ADMIN_STORE_ID] : $priceTypeSelected;
-                        $priceTypeSelected = $priceTypeDefault;
                     }
-
 
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
@@ -290,17 +312,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             ? $pricesConverter[$priceTypeSelected] : false;
 
 
-                        if($priceToInsert){
+                        if ($priceToInsert) {
 
                             //margin
                             $marginSelected = 0;
 
                             if (isset($marginByStore[$productId][$storeId])) {
-                                $marginSelected = (float) str_replace(",", ".", $marginByStore[$productId][$storeId]);
-                            } else {
-                                $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
-                                    ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
-                                $marginSelected = (float) str_replace(",", ".", $marginDefault);
+                                $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
                             }
 
                             $insert[] = array(
@@ -308,21 +326,16 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 'attribute_id' => $priceAttributeId,
                                 'store_id' => $storeId,
                                 'entity_id' => $productId,
-                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
+                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100))
                             );
 
                             $ids[] = $productId;
                         }
                     }
-
-
-
                 }
-
 
             }
         }
-
 
         if (!empty($insert)) {
             $model->savePriceValues($insert, $ids);

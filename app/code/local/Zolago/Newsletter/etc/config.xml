@@ -16,4 +16,35 @@
 			</newsletter>
 		</routers>
 	</frontend>
+	<global>
+		<models>
+			<zolagonewsletter>
+				<class>Zolago_Newsletter_Model</class>
+			</zolagonewsletter>
+		</models>
+		<helpers>
+			<zolagonewsletter>
+				<class>Zolago_Newsletter_Helper</class>
+			</zolagonewsletter>
+		</helpers>
+		<template>
+			<email>
+				<newsletter_subscription_invitation_email_template module="zolagonewsletter">
+					<label>Newsletter invitation</label>
+					<file>newsletter_invitation.html</file>
+					<type>html</type>
+				</newsletter_subscription_invitation_email_template>
+			</email>
+		</template>
+	</global>
+	<default>
+		<newsletter>
+			<subscription>
+				<invitation>1</invitation>
+				<invitation_email_identity>support</invitation_email_identity>
+				<invitation_email_template>newsletter_subscription_invitation_email_template</invitation_email_template>
+				<invitation_repeat>0</invitation_repeat>
+			</subscription>
+		</newsletter>
+	</default>
 </config> 

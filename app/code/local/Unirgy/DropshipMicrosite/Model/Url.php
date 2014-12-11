@@ -4,31 +4,28 @@ class Unirgy_DropshipMicrosite_Model_Url extends Mage_Core_Model_Url
 {
     public function getUrl($routePath = null, $routeParams = null)
     {
-	    $forceVendorUrl = null;
-		$_vendor = isset($routeParams['_vendor']);
-
-	    if ($_vendor) {
-		    if ($routeParams['_vendor']) {
-			    $forceVendorUrl = true;
-		    } else {
-			    $forceVendorUrl = $routeParams['_vendor'] === null ? null : false;
-		    }
-		    unset($routeParams['_vendor']);
-	    } else {
-		    $forceVendorUrl = !empty($routeParams['_current']);
-	    }
-
-	    if ($_vendor) {
-		    Mage::app()->getStore()->useVendorUrl($forceVendorUrl);
-        } elseif($forceVendorUrl) {
-		    Mage::app()->getStore()->useVendorUrl(true);
-	    }
-
-        $url = parent::getUrl($routePath, $routeParams);
-
-	    if($_vendor || $forceVendorUrl) {
-			Mage::app()->getStore()->resetUseVendorUrl();
+		// Forcing no vendor
+		$noVendor = false;
+		if(isset($routeParams['_no_vendor'])){
+			unset($routeParams['_no_vendor']);
+			$noVendor = true;
 		}
-	    return $url;
+		
+		$forceVendorUrl = !empty($routeParams['_current']);
+        if ($forceVendorUrl) {
+            Mage::app()->getStore()->useVendorUrl(true);
+        }
+        $url = parent::getUrl($routePath, $routeParams);
+        if ($forceVendorUrl) {
+            Mage::app()->getStore()->resetUseVendorUrl();
+        }
+		
+		
+		// Recaculate url if need to remove vendor
+		if($noVendor){
+			$url = Mage::helper("zolagodropshipmicrosite")->convertToNonVendorContext($url);
+		}
+		
+        return $url;
 	}
 }
