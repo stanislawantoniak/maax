@@ -8,11 +8,4 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Header_Search
 	protected function _construct(){
 		$this->setTemplate('zolagosolrsearch/catalog/product/list/header/search.phtml');
 	}
-
-    /**
-     * @return string
-     */
-	public function getQueryString() {
-		return $this->getListModel()->getQueryText();
-	}
 }

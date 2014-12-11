@@ -536,6 +536,7 @@
                 <block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">
                     <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
                     <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+                    <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
                 </block>
 
 
