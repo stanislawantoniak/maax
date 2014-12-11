@@ -101,6 +101,21 @@ abstract class Zolago_Checkout_Controller_Abstract
 		if(is_array($accountData)){
 			$onepage->saveAccountData($accountData);
 		}
+
+		/*
+		 * Newsletter save action
+		 */
+		$newsletter = $request->getParam("newsletter");
+		if(isset($newsletter) && !is_null($newsletter)) {
+			/** @var Zolago_Newsletter_Helper_Data $newsletter_helper */
+			$newsletter_helper = Mage::helper('zolagonewsletter');
+			if($newsletter === 1) {
+				//todo: save to newsletter
+			} else {
+				$newsletter_helper->sendInvitationEmail($accountData['email']);
+			}
+		}
+
 		
 		/**
 		billing_address_id:1

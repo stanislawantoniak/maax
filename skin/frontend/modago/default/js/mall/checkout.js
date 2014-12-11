@@ -3,12 +3,14 @@
 	Mall.Checkout = function(){
 		this.METHOD_GUEST    = 'guest';
 		this.METHOD_REGISTER = 'register';
-		this.METHOD_CUSTOMER = 'customer'
+		this.METHOD_CUSTOMER = 'customer';
 
 		this._steps = [];
 		this._activeIndex = 0;
 		this._progressObject = null;
 		this._config = {};
+
+		this._newsletterAgreement = 0;
 		
 		this._addressTemplate = '<dl>\
 			  <dd class="shipping">{{firstname}} {{lastname}}</dd>\
@@ -24,8 +26,8 @@
 	
 	
 	/**
-	 * @param string 
-	 * @param mixed 
+	 * @param string
+	 * @param mixed
 	 * @returns Mall.Chceckout
 	 */
 	Mall.Checkout.prototype.set = function(key, value){
@@ -34,7 +36,7 @@
 	}
 	
 	/**
-	 * @param string 
+	 * @param string
 	 * @returns mixed
 	 */
 	Mall.Checkout.prototype.get = function(key){
@@ -90,6 +92,9 @@
 		var self = this;
 		jQuery.each(this.getSteps(), function(i){
 			if(i==step){
+				if(i == 2) {
+					self._setNewsletterAgreement();
+				}
 				self.setActive(i);
 			}
 		});
@@ -141,8 +146,7 @@
 			this.active = 0;
 			this.content.addClass("hidden");
 		});
-		
-	
+
 		currentStep.onEnter.apply(currentStep, [self]);
 		currentStep.content.removeClass("hidden");
 		currentStep.active = 1;
@@ -280,16 +284,16 @@
 	 * 
 	 */
 	Mall.Checkout.prototype.beforePlaceOrder = function(xhr){
-		console.log("Before data send");
+		//console.log("Before data send");
 	}
 	
 	/**
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.successPlaceOrder = function(response){
-		console.log("Sucess data send", response);
+		//console.log("Sucess data send", response);
 		if(response.status==1){
-			console.log(response.content)
+			//console.log(response.content)
 			if(response.content.redirect){
 				window.location.replace(response.content.redirect);
 			}
@@ -302,14 +306,14 @@
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.errorPlaceOrder = function(response){
-		console.log("Error data send");
+		//console.log("Error data send");
 	}
 	
 	/**
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.completePlaceOrder = function(xhr){
-		console.log("After data send");
+		//console.log("After data send");
 	}
 	
 
@@ -320,9 +324,14 @@
 	Mall.Checkout.prototype._savePlaceOrder = function(){
 		var self = this;
 		var url = this.get("placeUrl");
+		var data = this.collect();
+		data.push({
+			name: 'newsletter',
+			value: self._newsletterAgreement
+		});
 		return jQuery.ajax(url, {
 			method:		"post",
-			data:		this.collect(),
+			data:		data,
 			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)}, 
 			success:	function(){self.successPlaceOrder.apply(self, arguments)}, 
 			error:		function(){self.errorPlaceOrder.apply(self, arguments)}, 
@@ -598,6 +607,16 @@
 		return address.get(0).outerHTML;
 	};
 	
-	
-
+	Mall.Checkout.prototype._setNewsletterAgreement = function() {
+		data = this.collect();
+		for(var i = 0; i < data.length; i++) {
+			if(data[i].name == 'agreement[2]') {
+				if(data[i].value == 'on') {
+					this._newsletterAgreement = 1;
+				} else {
+					break;
+				}
+			}
+		}
+	}
 })();
