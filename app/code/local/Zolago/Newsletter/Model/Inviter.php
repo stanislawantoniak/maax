@@ -98,7 +98,7 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 		$sid = $subscription->getId();
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
-			if ($status === self::STATUS_SUBSCRIBED) {
+			if ($status == self::STATUS_SUBSCRIBED) {
 				return false;
 			} else {
 				if($this->canRepeatInvitation()) {
