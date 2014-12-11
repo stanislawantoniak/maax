@@ -100,10 +100,6 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                     } else {
                         $newPrice = $registry[$vendorExternalId][$vendorSku][$priceType];
                     }
-                    // logs 
-                    if (!($count % 100)) {
-                        Mage::log('Pricetype '.(round(($count/$skuvs_count)*100)).' %');
-                    }
                     if (!empty($newPrice)) {
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
