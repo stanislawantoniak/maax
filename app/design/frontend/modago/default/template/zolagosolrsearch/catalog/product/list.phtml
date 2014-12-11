@@ -13,6 +13,14 @@ $_collection = $this->getCollection();
 
 ?>
 
+<section id="main" class="">
+<div id="content" class="container-fluid">
+<div class="row">
+<div class="col-sm-12">
+<div id="sidebar" class="hidden-xs">
+    <?php echo $this->getChildHtml('searchfaces'); ?>
+</div>
+<div id="content-main">
 <div class="container-fluid" id="items-product">
     <div class="row">
         <div class="col-xs-12 col-sm-12">
@@ -104,7 +112,7 @@ $_collection = $this->getCollection();
         </div>
     </div>
 </div>
-<div id="listing-loading" style="text-align: center;">
+<div id="listing-loading">
     <img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
 </div>
 <?php $noAjaxLink = $this->getNoAjaxLink(); ?>
@@ -114,7 +122,6 @@ $_collection = $this->getCollection();
 <div class="addNewPositionListProductWrapper">
     <a href="#" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
 </div>
-<!--<div id="listing-load-toplayer"><img src="--><?php //echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?><!--"</div>-->
 
 <script type="text/javascript">
     Mall.listing.initImagesHeight();
@@ -189,24 +196,8 @@ $_collection = $this->getCollection();
     });
 </script>
 
-<style type="text/css">
-    #listing-load-toplayer {
-        position:absolute;
-        z-index: 10000;
-    }
-    #listing-load-toplayer > img {
-        position: relative;
-        margin: 0 auto;
-        top: 50px;
-        left: 50%;
-    }
-
-    #listing-loading {
-        width: 100%;
-        text-align: center !important;
-    }
-    #listing-loading > img {
-        display: block;
-        margin: 0 auto;
-    }
-</style>
+</div>
+</div>
+</div>
+</div>
+</section>

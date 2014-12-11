@@ -71,6 +71,6 @@
     }
     public function getProductListHtml()
     {
-        return $this->getChildHtml('solrsearch_product_list');
+        return $this->getChildHtml('searchfaces') . $this->getChildHtml('solrsearch_product_list');
     }
 }
