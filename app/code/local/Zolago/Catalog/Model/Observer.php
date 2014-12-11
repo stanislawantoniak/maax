@@ -45,7 +45,7 @@ class Zolago_Catalog_Model_Observer
         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Clear queue");
         Mage::getResourceModel('zolagocatalog/queue_pricetype')->clearQueue();
         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Start process");
-        $process = Mage::getModel('zolagocatalog/queue_pricetype')->process(10);
+        $process = Mage::getModel('zolagocatalog/queue_pricetype')->process(2000);
         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Products processed {$process}");
     }
 
