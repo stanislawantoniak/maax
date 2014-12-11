@@ -11,7 +11,8 @@
 		margin:20px 0px;
 	}
 }
-ol.breadcrumb {
+ol.breadcrumb,
+.brandshop-breadcrumps{
 	padding:0px 0px 0px;
 	margin:20px 0;
 	li {
@@ -20,5 +21,12 @@ ol.breadcrumb {
 			display: inline-block;
 			margin-right: 5px;
 		}
+	}
+}
+.brandshop-breadcrumps{
+	a::before{
+		display: inline-block;
+		margin-right: 5px;
+		margin-left: 5px;
 	}
 }

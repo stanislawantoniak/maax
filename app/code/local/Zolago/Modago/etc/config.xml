@@ -15,6 +15,15 @@
                 </args>
             </zolagomodago>
 		</routers>
+		<translate>
+			<modules>
+				<Zolago_Modago>
+					<files>
+						<default>Zolago_Modago.csv</default>
+					</files>
+				</Zolago_Modago>
+			</modules>
+		</translate>	
 	</frontend>
     <global>
         <blocks>
