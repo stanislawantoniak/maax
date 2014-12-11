@@ -92,31 +92,21 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                 //Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
                 foreach($stores as $store) {
                     $priceType = (isset($priceTypeValueByStore[$store]) && isset($priceTypeValueByStore[$store][$parentId])) ? $priceTypeValueByStore[$store][$parentId] : 0;
-                    if ($store <> Mage_Core_Model_App::ADMIN_STORE_ID
-                            && !isset($priceTypeValueByStore[$store][$parentId])
-                            && isset($priceTypeValueByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId])
-                       ) {
-                        //Use Default Value
-                        $priceType = $priceTypeValueByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId];
+                    if ($priceType == '0') {
+                        continue;
                     }
                     if (!isset($registry[$vendorExternalId][$vendorSku][$priceType])) {
                         $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
-                        $registry[$vendorExternalId][$vendorSku][$priceType] = $newPrice;
+                        Mage::log($vendorExternalId.' '.$vendorSku.' '.$priceType.' '.$newPrice);
+                        $registry[$vendorExternalId][$vendorSku][$priceType] = (empty($newPrice)? '0':$newPrice);
                     } else {
                         $newPrice = $registry[$vendorExternalId][$vendorSku][$priceType];
                     }
-
+                    Mage::log($productId.' '.$newPrice);
                     if (!empty($newPrice)) {
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
                         $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$parentId])) ? $priceMarginValuesByStore[$store][$parentId] : 0;
-                        if ($store <> Mage_Core_Model_App::ADMIN_STORE_ID
-                                && !isset($priceMarginValuesByStore[$store][$parentId])
-                                && isset($priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId])
-                           ) {
-                            //Use Default Value
-                            $margin = $priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$parentId];
-                        }
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
 
                         $newPriceWithMargin = $newPrice + $newPrice * ((int)$margin / 100);
