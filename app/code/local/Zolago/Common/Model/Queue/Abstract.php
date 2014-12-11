@@ -22,9 +22,10 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
           $limit = $this->_limit;
           $model = $this->_getItem();
           $collection = $model->getCollection();
-          $collection->setPageSize($limit);
-          $collection->addFilter('status','0');
-          $collection->setOrder('insert_date');
+          $select = $collection->getSelect();
+          $select->limit($limit);
+          $select->where('status = ?',0);
+          $select->order('insert_date');
           $this->_collection = $collection;
     }
     
