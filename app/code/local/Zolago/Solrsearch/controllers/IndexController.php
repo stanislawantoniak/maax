@@ -118,8 +118,6 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
         if( isset($solrData['responseHeader']['params']['q']) && !empty($solrData['responseHeader']['params']['q']) ) {
 
             Mage::register($solrModel::REGISTER_KEY . "_search_real_q", $solrData['responseHeader']['params']['q']);
-            $isNoResult = empty($solrData['response']['numFound']) ? false : true;
-            Mage::register($solrModel::REGISTER_KEY . "_search_is_no_result", $isNoResult);
 
             if ($queryText != $solrData['responseHeader']['params']['q']) {
                 $queryText = $solrData['responseHeader']['params']['q']; //poniewaz moze byc ulepszone np: baleron zamieni na baleriny

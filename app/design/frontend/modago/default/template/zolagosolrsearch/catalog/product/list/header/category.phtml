@@ -20,7 +20,9 @@ $isBrandshop = $vendor ? $vendor->isBrandshopType() : null;
                         <h1><?php echo $this->getCategory()->getName(); ?></h1>
                         <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
                     </div>
-                    <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                    <div id="active-filters-wrapper">
+                        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                    </div>
                 <?php else: ?>
                     <div id="category-header-left">
                         <div id="category-header-vendor-box">

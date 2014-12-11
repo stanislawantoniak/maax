@@ -513,20 +513,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @return boolean|null
-     */
-    public function getIsNoResult() {
-        /** @var Zolago_Solrsearch_Model_Solr $model */
-        $model = Mage::getModel('zolagosolrsearch/solr');
-        $data = Mage::registry($model::REGISTER_KEY . "_search_is_no_result");
-        if(empty($data)) {
-            return false;
-        } else {
-            return $data;
-        }
-    }
-
-    /**
      * @return Mage_Catalog_Model_Category
      */
     public function getCurrentCategory() {
