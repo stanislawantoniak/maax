@@ -9,9 +9,6 @@
 		this._activeIndex = 0;
 		this._progressObject = null;
 		this._config = {};
-
-		this._newsletterAgreement = 0;
-		
 		this._addressTemplate = '<dl>\
 			  <dd class="shipping">{{firstname}} {{lastname}}</dd>\
 			  <dd class="company">{{company}}</dd>\
@@ -92,9 +89,6 @@
 		var self = this;
 		jQuery.each(this.getSteps(), function(i){
 			if(i==step){
-				if(i == 2) {
-					self._setNewsletterAgreement();
-				}
 				self.setActive(i);
 			}
 		});
@@ -324,14 +318,9 @@
 	Mall.Checkout.prototype._savePlaceOrder = function(){
 		var self = this;
 		var url = this.get("placeUrl");
-		var data = this.collect();
-		data.push({
-			name: 'newsletter',
-			value: self._newsletterAgreement
-		});
 		return jQuery.ajax(url, {
 			method:		"post",
-			data:		data,
+			data:		this.collect(),
 			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)}, 
 			success:	function(){self.successPlaceOrder.apply(self, arguments)}, 
 			error:		function(){self.errorPlaceOrder.apply(self, arguments)}, 
@@ -606,17 +595,4 @@
 		
 		return address.get(0).outerHTML;
 	};
-	
-	Mall.Checkout.prototype._setNewsletterAgreement = function() {
-		data = this.collect();
-		for(var i = 0; i < data.length; i++) {
-			if(data[i].name == 'agreement[2]') {
-				if(data[i].value == 'on') {
-					this._newsletterAgreement = 1;
-				} else {
-					break;
-				}
-			}
-		}
-	}
 })();

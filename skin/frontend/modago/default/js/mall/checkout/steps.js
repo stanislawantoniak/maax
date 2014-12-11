@@ -1116,6 +1116,14 @@
 				return false;
 			},
 
+			isNewsletterAgreementChecked: function() {
+				if(this.content.find("[name='agreement[2]']").length) {
+					return this.content.find("[name='agreement[2]']").is(":checked");
+				} else {
+					return null;
+				}
+			},
+
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
@@ -1194,7 +1202,22 @@
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
-				
+
+				// Add newsletter agreement
+				var newsletterAgreement = this.isNewsletterAgreementChecked();
+				var newsletterValue = false;
+				if(newsletterAgreement === true) {
+					newsletterValue = 1;
+				} else if(newsletterAgreement === false) {
+					newsletterValue = 0;
+				}
+				if(newsletterValue !== false) {
+					stepData.push({
+						name: "newsletter",
+						value: newsletterValue
+					})
+				}
+
 				// Push method
 				stepData.push({name: "method", value: this.checkout.getMethod()});
 
