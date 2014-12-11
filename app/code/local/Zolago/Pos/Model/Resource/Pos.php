@@ -211,7 +211,7 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             ->where("po_item.sku IN(?)", $skus)
             ->where("po.udropship_status IN ({$po_open_order})")
             ->group('po_item.sku');
-        Mage::log($select, 0, "calculateStockOpenOrders.log");
+        Mage::log($select->__toString(), 0, "calculateStockOpenOrders.log");
         $result = $adapter->fetchAssoc($select);
 
         return $result;
