@@ -500,18 +500,21 @@ Mall.listing = {
 	 * @todo add cache
 	 */
 	loadToQueue: function () {
-		var forceObject = {
-			start: this.getLoadNextStart(),
-			rows: this.getLoadNextOffset()
-		}
 
-		this.setQueueLoadLock();
+        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+            var forceObject = {
+                start: this.getLoadNextStart(),
+                rows: this.getLoadNextOffset()
+            }
 
-		// Ajax load
-		OrbaLib.Listing.getProducts(
-			this.getQueryParamsAsArray(forceObject),
-			Mall.listing.appendToQueueCallback
-		);
+            this.setQueueLoadLock();
+
+            // Ajax load
+            OrbaLib.Listing.getProducts(
+                this.getQueryParamsAsArray(forceObject),
+                Mall.listing.appendToQueueCallback
+            );
+        }
 	},
 
 	/**
