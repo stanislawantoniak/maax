@@ -52,7 +52,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
 
         $json = json_encode($data);
-
+        Mage::log($json, 0, 'json.log');
         if (!empty($data)) {
             foreach ($data as $cmd => $batch) {
                 switch ($cmd) {
@@ -300,7 +300,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             foreach ($skeleton as $sku => $productId) {
                 foreach ($stores as $storeId) {
                     //price type default
-                    $priceTypeSelected = "A";
+                    $priceTypeSelected = "";
                     if (isset($priceTypeByStore[$sku][$storeId])) {
                         $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
                     }
