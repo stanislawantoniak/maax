@@ -28,7 +28,14 @@ class Zolago_Common_Model_Resource_Queue_Collection_Abstract
      */
      
     public function setLockRecords() {
-        $this->_lockedRecords = $this->getAllIds();
+        $records = $this->toArray(array('queue_id'));            
+        $out = array();
+        if (!empty($records['items'])) {
+            foreach ($records['items'] as $val) {
+                $out[$val['queue_id']] = $val['queue_id'];
+            }
+        }
+        $this->_lockedRecords = $out;
         $bind = array (
             'status' => -1
         );
