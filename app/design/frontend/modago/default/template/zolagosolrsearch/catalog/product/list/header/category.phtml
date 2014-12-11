@@ -1,18 +1,53 @@
-<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category */?>
-<?php $_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');?>
+<?php
+/* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category */
+$_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 
-<!-- <section id="main" class="<?php echo $this->getElementClass(); ?>"> -->
-    <header id="header-main">
-        <div class="wrapp-section bg-w">
-            <div class="container-fluid">
-                <div class="row ">
-                    <div id="view-current-filter" class="col-sm-12 ">
+?>
+
+<header id="header-main">
+    <div class="wrapp-section bg-w">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 ">
+                <?php if(!$vendor): ?>
+                    <div id="breadcrumbs-header">
+                        <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                    </div>
+                    <div id="view-current-filter" >
                         <h1><?php echo $this->getCategory()->getName(); ?></h1>
                         <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
-						
-
                     </div>
+                    <div id="active-filters-wrapper">
+                        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                    </div>
+                <?php else: ?>
+                    <div id="category-header-left">
+                        <div id="category-header-vendor-box">
+                            <span class="vendor-type"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?>&nbsp;</span>
+                            <span><img class="vendor-logo" src="<?php echo $vendor->getVendorLogoUrl(); ?>"/></span>
+                        </div>
+                    </div>
+                    <div style="clear:both" class="visible-xs"></div>
+                    <div id="category-header-right">
+                        <div class="right-wrapper">
+                            <div id="breadcrumbs-header">
+                                <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                            </div>
+                            <div id="view-current-filter">
+                                <h1><?php echo $this->getCategory()->getName(); ?></h1>
+                                <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
+                            </div>
+                            <div id="active-filters-wrapper">
+                                <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
