@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <solrbridge_solrsearch_category_view> 
-		<remove name="mana.catalog.leftnav" />
-		<remove name="solrsearch_category_view"/>
-        <reference name="content">
-            <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title"/>
-            <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
-            <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar"/>
-            <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
-                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs" as="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list"/>
-            </block>
-        </reference>
-    </solrbridge_solrsearch_category_view>
+    <!--<solrbridge_solrsearch_category_view> -->
+		<!--<remove name="mana.catalog.leftnav" />-->
+		<!--<remove name="solrsearch_category_view"/>-->
+        <!--<reference name="content">-->
+            <!--<block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title"/>-->
+            <!--<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>-->
+            <!--<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar"/>-->
+            <!--<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">-->
+                <!--<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs" as="zolagocatalog_breadcrumbs"/>-->
+                <!--<block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list"/>-->
+            <!--</block>-->
+        <!--</reference>-->
+    <!--</solrbridge_solrsearch_category_view>-->
 	
 	<solrsearch_index_index>
 		<remove name="searchresult"/>

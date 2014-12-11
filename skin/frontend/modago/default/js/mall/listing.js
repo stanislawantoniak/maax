@@ -1346,7 +1346,9 @@ Mall.listing = {
 		this.getToolbar().replaceWith(toolbar);
 		this.initSortEvents(toolbar);
 
+        var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
 		this.getHeader().replaceWith(jQuery(content.header));
+        this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
 		this.getActive().replaceWith(jQuery(content.active));
 
 		// Finally product
@@ -1472,6 +1474,9 @@ Mall.listing = {
 
 	getActive: function(scope){
 		scope = scope || Mall.listing.getActiveId();
+        if(!jQuery(scope).length) {
+            scope = '#active-filters-wrapper';
+        }
 		return jQuery(scope);
 	},
 
