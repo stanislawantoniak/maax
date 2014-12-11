@@ -3,7 +3,7 @@
 $_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-$isBrandshop = $vendor ? $vendor->isBrandshopType() : null;
+$isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 
 ?>
 

@@ -141,15 +141,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
 		return $renderer->render($address);
 	}
-
-    public function getVendorType() {
-        return $this->getData('vendor_type');
-    }
-
-    public function isBrandshopType() {
-        return $this->getVendorType() == self::VENDOR_TYPE_BRANDSHOP;
-    }
-
+    
     public function getLogo() {
         return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
     }
