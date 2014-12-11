@@ -141,8 +141,8 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
 		return $renderer->render($address);
 	}
-    
-    public function getLogo() {
+
+    public function getVendorLogoUrl() {
         return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
     }
 }
