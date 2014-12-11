@@ -187,7 +187,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             //$openOrdersQty[$sku] products qty on open orders
             if (isset($productIdsSkuAssoc[$sku])) {
                 $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku]['qty'] : 0;
-                $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = $availableStockByMerchantQty - $qtyOnOpenOrders;
+                $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = (($availableStockByMerchantQty - $qtyOnOpenOrders) > 0 ) ? ($availableStockByMerchantQty - $qtyOnOpenOrders) : 0;
             }
         }
         unset($qtyOnOpenOrders);
