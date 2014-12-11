@@ -21,7 +21,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
             <?php if (!$producer && !empty($brandShopId)): ?>
                 <figure>
                     <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
-                        <img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
+                        <img src="<?php echo $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
                     </a>
                 </figure>
                 <div class="seller">
