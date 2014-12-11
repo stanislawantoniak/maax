@@ -24,5 +24,8 @@
         <?php endforeach; ?>
     </ol>
 	<?php endif;?>
-	<div class="clearfix"></div>
+
+	<?php if($this->getCanShowBrandshop()):?>
+		<div class="clearfix"></div>
+	<?php endif;?>
 <?php endif; ?>

@@ -16,7 +16,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 		}
 		
 		if (!($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs'))){
-			$this->getLayout()->createBlock('page/html_breadcrumbs', 'breadcrumbs');
+			$breadcrumbsBlock = $this->getLayout()->createBlock('page/html_breadcrumbs', 'breadcrumbs');
 		}
        
 		// Add vendor

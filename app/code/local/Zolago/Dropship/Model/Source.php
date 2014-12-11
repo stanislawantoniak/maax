@@ -36,7 +36,7 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
     protected function _getVendorsType() {
         $helper = Mage::helper('zolagodropship');
         $out = array (
-            self::VENDOR_TYPE_STANDARD => $helper->__('Standard'),
+            self::VENDOR_TYPE_STANDARD => $helper->__('Regular vendor'),
             self::VENDOR_TYPE_BRANDSHOP => $helper->__('Brandshop'),
         );
         return $out;

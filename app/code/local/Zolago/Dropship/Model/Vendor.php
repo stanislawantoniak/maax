@@ -1,6 +1,9 @@
 <?php
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
+
+    const VENDOR_TYPE_BRANDSHOP = 2;
+    const VENDOR_TYPE_STANDARD = 1;
 	/**
 	 * @todo add params
 	 * @param array $params
@@ -138,4 +141,8 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
 		return $renderer->render($address);
 	}
+
+    public function getVendorLogoUrl() {
+        return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
+    }
 }

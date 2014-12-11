@@ -7,10 +7,10 @@
  */
 
 /** @var $this Mage_Core_Block_Template */
-
+/** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-if ($vendor && $vendor->getId()) {
-    //when vendor then don't show navigation
+if ($vendor && $vendor->isBrandshop()) {
+    //when vendor(brandshop) then don't show navigation
 } else {
     echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
 }
