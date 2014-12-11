@@ -166,20 +166,46 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $availableStockByMerchant = array();
         Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant);
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
         Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
-        /*Prepare data to insert*/
         if (empty($availableStockByMerchant)) {
             return;
         }
 
+        $productIdsSkuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+        //2. calculate stock on open orders
+        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
+        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
+
+        $availableStockByMerchantOnOpenOrders = array();
+        foreach ($availableStockByMerchant as $sku => $availableStockByMerchantQty) {
+            //$productIdsSkuAssoc[$sku] product_id
+            //$openOrdersQty[$sku] products qty on open orders
+            if (isset($productIdsSkuAssoc[$sku])) {
+                $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku] : 0;
+                $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = $availableStockByMerchantQty - $qtyOnOpenOrders;
+            }
+        }
+        unset($qtyOnOpenOrders);
+        unset($availableStockByMerchantQty);
+        Mage::log(print_r($availableStockByMerchantOnOpenOrders, true), 0, "availableStockByMerchantOnOpenOrders.log");
+
+        /*Prepare data to insert*/
+        if (empty($availableStockByMerchantOnOpenOrders)) {
+            return;
+        }
+
+        $productsIds = array();
+
         $cataloginventoryStockItem = array();
-        if (!empty($availableStockByMerchant)) {
-            foreach ($availableStockByMerchant as $id => $qty) {
+        if (!empty($availableStockByMerchantOnOpenOrders)) {
+            foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
                 $is_in_stock = ($qty > 0) ? 1 : 0;
                 $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
+
+                $productsIds[$id] = $id;
 
                 Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
                     "product_id" => $id,
@@ -197,10 +223,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
         $zcSDItemModel->saveCatalogInventoryStockItem($insert);
-
-        $productsIds = Mage::getResourceModel("catalog/product_collection")
-            ->addAttributeToFilter('sku', array('in' => $skuS))
-            ->getAllIds();
 
         //reindex
         Mage::getResourceModel('cataloginventory/indexer_stock')
