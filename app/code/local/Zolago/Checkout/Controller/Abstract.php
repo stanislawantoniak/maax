@@ -102,18 +102,13 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$onepage->saveAccountData($accountData);
 		}
 
-		/*
-		 * Newsletter save action
+		/**
+		 * agreement[newsletter]
+		 * agreement[tos]
 		 */
-		$newsletter = $request->getParam("newsletter");
-		if(isset($newsletter) && !is_null($newsletter)) {
-			/** @var Zolago_Newsletter_Model_Inviter $model */
-			$model = Mage::getModel('zolagonewsletter/inviter');
-			if($newsletter === 1) {
-				//todo: save to newsletter
-			} else {
-				$model->sendInvitationEmail($accountData['email']);
-			}
+		$agreementData = $request->getParam("agreement");
+		if(is_array($agreementData)) {
+			$onepage->saveAgreements($agreementData);
 		}
 
 		
