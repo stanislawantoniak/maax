@@ -28,9 +28,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 				'title'=>Mage::helper('catalog')->__('Go to Home Page'),
 				'link'=>Mage::helper("zolagodropshipmicrosite")->getBaseUrl()
 			));
+			$vendorString = $vendor->isBrandshop() ? "Brandshop %s" : "Vendor %s";
 			$breadcrumbsBlock->addCrumb('vendor', array(
-				'label'=>Mage::helper('catalog')->__($vendor->getVendorName()),
-				'title'=>Mage::helper('catalog')->__('Vendor'),
+				'label'=>Mage::helper('catalog')->__($vendorString, $vendor->getVendorName()),
+				'title'=>Mage::helper('catalog')->__($vendorString, $vendor->getVendorName()),
 				'link'=>Mage::getBaseUrl()
 			));
 		}else{

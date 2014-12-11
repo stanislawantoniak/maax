@@ -75,7 +75,16 @@ $avg = $_reviewBlock->getAvarageRating();
 <section id="product_shop" class="section bg-w clearfix">
 
 <!-- GALLERY PRODUCT -->
+
 <div class="path_back_to_category visible-xs">
+	<?php if($this->getShowBrandshop()):?>
+    <div class="col-xs-12 brandshop">
+		<a href="<?php echo $this->getBrandshopUrl();?>">
+			<?php echo $this->__("Brandshop");?>
+			<img alt="<?php echo $this->escapeHtml($this->getBrandshopName());?>" src="<?php echo $this->getBrandshopLogoUrl();?>">
+		</a>
+	</div>
+	<?php endif;?>
     <div class="col-xs-12">
         <a href="<?php echo $this->getParentCategoryUrl(); ?>"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
     </div>
