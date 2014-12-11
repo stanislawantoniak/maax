@@ -107,12 +107,12 @@ abstract class Zolago_Checkout_Controller_Abstract
 		 */
 		$newsletter = $request->getParam("newsletter");
 		if(isset($newsletter) && !is_null($newsletter)) {
-			/** @var Zolago_Newsletter_Helper_Data $newsletter_helper */
-			$newsletter_helper = Mage::helper('zolagonewsletter');
+			/** @var Zolago_Newsletter_Model_Inviter $model */
+			$model = Mage::getModel('zolagonewsletter/inviter');
 			if($newsletter === 1) {
 				//todo: save to newsletter
 			} else {
-				$newsletter_helper->sendInvitationEmail($accountData['email']);
+				$model->sendInvitationEmail($accountData['email']);
 			}
 		}
 
