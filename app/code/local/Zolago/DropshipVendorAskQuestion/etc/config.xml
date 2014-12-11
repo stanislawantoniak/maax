@@ -50,7 +50,21 @@
             <zolagoudqa>
                 <class>Zolago_DropshipVendorAskQuestion_Helper</class>
             </zolagoudqa>
+			<udqa>
+				<rewrite>
+					<data>Zolago_DropshipVendorAskQuestion_Helper_Data</data>
+				</rewrite>
+			</udqa>
         </helpers>
+		<template>
+            <email>
+			   <udqa_general_customer_new_question_confirmation translate="label" module="zolagoudqa">
+                   <label>Customer new question confirmation</label>
+                   <file>customer_new_question_confirmation.html</file>
+                   <type>html</type>
+               </udqa_general_customer_new_question_confirmation>
+            </email>
+        </template>
 	</global>
     <frontend>
 		<routers>
@@ -69,11 +83,32 @@
                 </zolago_udqa>
             </updates>
         </layout>
+		<translate>
+			<modules>
+				<Zolago_DropshipVendorAskQuestion>
+					<files>
+						<default>Zolago_DropshipVendorAskQuestion.csv</default>
+					</files>
+				</Zolago_DropshipVendorAskQuestion>
+			</modules>
+		</translate>
     </frontend>
+	<adminhtml>
+		<translate>
+			<modules>
+				<Zolago_DropshipVendorAskQuestion>
+					<files>
+						<default>Zolago_DropshipVendorAskQuestion.csv</default>
+					</files>
+				</Zolago_DropshipVendorAskQuestion>
+			</modules>
+		</translate>
+	</adminhtml>
     <default>
         <udqa>
             <general>
                 <send_vendor_agent_notifications>1</send_vendor_agent_notifications>
+				<customer_new_question_confirmation>udqa_general_customer_new_question_confirmation</customer_new_question_confirmation>
             </general>
         </udqa>
     </default>

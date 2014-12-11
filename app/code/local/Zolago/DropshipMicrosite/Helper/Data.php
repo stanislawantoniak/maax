@@ -12,6 +12,55 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 	protected $_rootCategory;
 	
 	/**
+	 * @param string $url
+	 * @return string
+	 */
+	public function convertToNonVendorContext($url, $vendor=null) {
+		
+		if($vendor===null){
+			$vendor	= Mage::helper("umicrosite")->getCurrentVendor();
+		}
+		if(!$vendor instanceof Unirgy_Dropship_Model_Vendor){
+			return $url;
+		}
+		
+		$urlMode		= Mage::getStoreConfig(self::URL_MODE_PATH);
+		$unsecureUrl	= strpos($url, "http://") === 0;
+		$secureUrl		= strpos($url, "https://") === 0;
+		$urlKey			= $vendor->getUrlKey();
+		$urlTmp			= $url;
+		
+		if($unsecureUrl){
+			$urlTmp = str_replace("http://", "", $urlTmp);
+		}elseif($secureUrl){
+			$urlTmp = str_replace("https://", "", $urlTmp);
+		}
+		
+		switch ($urlMode) {
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+				// Remove first subdomain
+				$urlKey = strtolower($urlKey);
+				$urlTmp = preg_replace("/^".$urlKey."\./", "", $urlTmp);
+			case 1:
+				// Remove slash
+				// Possible bug when address is domain.com/vendorKey/vendorKey
+				$urlTmp = preg_replace("/\/".$urlKey."/", "", $urlTmp);
+				
+		}
+
+		if($unsecureUrl){
+			$urlTmp = "http://"  .$urlTmp;
+		}elseif($secureUrl){
+			$urlTmp = "https://"  .$urlTmp;
+		}
+		
+		return $urlTmp;
+	}
+	
+	/**
 	 * Return vendor root category if exists or store root category
 	 * @return Mage_Catalog_Model_Category
 	 */

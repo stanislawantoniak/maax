@@ -176,6 +176,14 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
 
         if (!empty($ids)) {
             $readConnection = $this->_getReadAdapter();
+			$attribute = Mage::getSingleton('eav/config')->getAttribute(
+					Mage_Catalog_Model_Product::ENTITY, 
+					Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')
+			);
+			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+			$tVarchar = $attribute->getBackendTable();
+			
+			
             $tVarchar = $readConnection->getTableName('catalog_product_entity_varchar');
             // not simple products
             $select = $readConnection->select();
@@ -190,11 +198,11 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
                      "parent"	  => "product_relation.parent_id",
                 )
             );
-            $select->join(
-                array("attribute" => $this->getTable("eav/attribute")),
-                "attribute.attribute_id = product_varchar.attribute_id",
-                array()
-            );
+//            $select->join(
+//                array("attribute" => $this->getTable("eav/attribute")),
+//                "attribute.attribute_id = product_varchar.attribute_id",
+//                array()
+//            );
             $select->join(
                 array("product" => $this->getTable("catalog/product")),
                 "product.entity_id = product_varchar.entity_id",
@@ -212,7 +220,8 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
                 array("type" => "parent_product.type_id")
             );
 */
-            $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            //$select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            $select->where("product_varchar.attribute_id=?",$attribute->getId());
             $select->where("product_relation.parent_id IN(?)", $ids);
 
             // simple products

@@ -13,6 +13,19 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
     const ZOLAGO_CATALOG_PRICE_MARGIN_CODE = 'price_margin';
     const ZOLAGO_CATALOG_BRANDSHOP_CODE = 'brandshop';	
 
+	/**
+	 * @return string
+	 */
+	public function getNoVendorContextUrl() {
+		if(!$this->hasData("no_vendor_context_url")){
+			$this->setData(
+				"no_vendor_context_url",
+				Mage::helper("zolagodropshipmicrosite")->convertToNonVendorContext($this->getProductUrl())
+			);
+		}
+		return $this->getData("no_vendor_context_url");
+	}
+	
     /**
      * Get converter price type
      *
