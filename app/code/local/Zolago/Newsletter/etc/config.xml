@@ -17,6 +17,11 @@
 		</routers>
 	</frontend>
 	<global>
+		<models>
+			<zolagonewsletter>
+				<class>Zolago_Newsletter_Model</class>
+			</zolagonewsletter>
+		</models>
 		<helpers>
 			<zolagonewsletter>
 				<class>Zolago_Newsletter_Helper</class>
