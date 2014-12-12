@@ -103,5 +103,11 @@
             }
         }
     }
+
+  .btn-clearall-xs {
+    @media (max-width: $screen-xs-max) {
+      margin-right: -10px;
+    }
+  }
 }
 
