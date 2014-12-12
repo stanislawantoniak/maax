@@ -340,6 +340,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         $priceMSRPToInsert = isset($pricesConverter[$priceMSRPSelected])
                             ? $pricesConverter[$priceMSRPSelected] : false;  //special_price
+                        Mage::log(print_r($priceMSRPToInsert,true), 0, 'priceMSRPToInsert.log');
 
 
                         // 1. update price
