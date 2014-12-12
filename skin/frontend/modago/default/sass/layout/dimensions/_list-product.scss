@@ -48,3 +48,12 @@
 		float:left;
 		}
 }
+
+#listing-loading {
+  width: 100%;
+  text-align: center !important;
+}
+#listing-loading > img {
+  display: block;
+  margin: 0 auto;
+}

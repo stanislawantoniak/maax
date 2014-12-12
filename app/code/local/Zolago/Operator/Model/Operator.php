@@ -161,6 +161,15 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	 * @param string $role
 	 * @return bool
 	 */
+	public function hasRole($role) {
+		return in_array($role, $this->getRoles());
+	}
+	
+
+	/**
+	 * @param string $role
+	 * @return bool
+	 */
 	protected function _isCorrectRole($role) {
 		return $this->getAcl()->hasRole($role);
 	}

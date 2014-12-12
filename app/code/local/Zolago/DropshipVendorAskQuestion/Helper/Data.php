@@ -5,8 +5,47 @@
  * @package    Zolago_DropshipVendorAskQuestion
  */
 
-class Zolago_DropshipVendorAskQuestion_Helper_Data extends Mage_Core_Helper_Abstract
+class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendorAskQuestion_Helper_Data
 {
+	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON = "udqa/general/customer_new_question_confirmation";
+	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY = "udqa/general/vendor_email_identity";
+	
+	/**
+	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
+	 * @return type
+	 */
+	public function notifyCustomer($question)
+    {
+		if($question->isObjectNew()){
+			/**
+			 * @todo add store_id to question
+			 */
+			$storeId = Mage::app()->getStore()->getId();
+			$vendor = Mage::helper("udropship")->getVendor($question->getVendorId());
+			$localVendorId = Mage::helper("udropship")->getLocalVendorId($storeId);
+			// Params 
+			$templateParams = array(
+				"question"			=> $question,
+				"vendor"			=> $vendor,
+				"local_vendor"		=> $localVendorId && $localVendorId==$vendor->getId(),
+				"use_attachments"	=> true
+			);
+			
+			$helper = Mage::helper("zolagocommon");
+			/* @var $helper Zolago_Common_Helper_Data */
+			$helper->sendEmailTemplate(
+				$question->getCustomerEmail(), 
+				$question->getCustomerName(), 
+				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON, $storeId), 
+				$templateParams, 
+				$storeId,
+				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId)
+			);
+			
+			return $this;
+		}
+        return parent::notifyCustomer($question);
+    }
     /**
      * Notify vendor agents
      *

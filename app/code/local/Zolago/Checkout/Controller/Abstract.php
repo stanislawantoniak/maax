@@ -101,6 +101,16 @@ abstract class Zolago_Checkout_Controller_Abstract
 		if(is_array($accountData)){
 			$onepage->saveAccountData($accountData);
 		}
+
+		/**
+		 * agreement[newsletter]
+		 * agreement[tos]
+		 */
+		$agreementData = $request->getParam("agreement");
+		if(is_array($agreementData)) {
+			$onepage->saveAgreements($agreementData);
+		}
+
 		
 		/**
 		billing_address_id:1
@@ -286,9 +296,12 @@ abstract class Zolago_Checkout_Controller_Abstract
         $isExits = $onepage->customerEmailExists($email, Mage::app()->getWebsite()->getId());
         $isExits = $isExits === false ? false : true;
 
+	    $isSubscribed = Mage::getModel("zolagonewsletter/inviter")->isEmailSubscribed($email);
+
         $response = array(
             "status"=>$isExits,
-            "content" => ''
+            "content" => '',
+	        "subscribed" =>$isSubscribed
         );
 
         $this->_prepareJsonResponse($response);

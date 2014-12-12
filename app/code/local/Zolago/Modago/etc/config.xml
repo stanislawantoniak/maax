@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.4.7</version>
+            <version>0.4.8</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
@@ -15,6 +15,15 @@
                 </args>
             </zolagomodago>
 		</routers>
+		<translate>
+			<modules>
+				<Zolago_Modago>
+					<files>
+						<default>Zolago_Modago.csv</default>
+					</files>
+				</Zolago_Modago>
+			</modules>
+		</translate>	
 	</frontend>
     <global>
         <blocks>

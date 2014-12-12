@@ -26,17 +26,17 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		
 		
         $content = array(
-            'user_account_url' => Mage::getUrl('customer/account'),
-            'user_account_url_orders' => Mage::getUrl('sales/order/process'),
+            'user_account_url' => Mage::getUrl('customer/account', array("_no_vendor"=>true)),
+            'user_account_url_orders' => Mage::getUrl('sales/order/process', array("_no_vendor"=>true)),
             'logged_in' => Mage::helper('customer')->isLoggedIn(),
             'favorites_count' => $this->_getFavorites(),
-            'favorites_url' => Mage::getUrl("wishlist"),
+            'favorites_url' => Mage::getUrl("wishlist", array("_no_vendor"=>true)),
             'cart' => array(
                 'all_products_count' => Mage::helper('checkout/cart')->getSummaryCount(),
                 'products' => $this->_getShoppingCartProducts(),
                 'total_amount' => round(isset($totals["subtotal"]) ? $totals["subtotal"]->getValue() : 0, 2),
                 'shipping_cost' => $formattedCost,
-                'show_cart_url' => Mage::getUrl('checkout/cart'),
+                'show_cart_url' => Mage::getUrl('checkout/cart', array("_no_vendor"=>true)),
                 'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
                 'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
             )
@@ -87,7 +87,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 				$array[] = array(
 					'name' => $product->getName(),
-					'url' => $product->getProductUrl(),
+					'url' => $product->getNoVendorContextUrl(),
 					'qty' => $item->getQty(),
 					'unit_price' => round($item->getPriceInclTax(), 2),
 					'image_url' => (string) $image,

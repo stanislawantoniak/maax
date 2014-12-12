@@ -59,7 +59,6 @@ $_billingAddress = $_quote->getBillingAddress();
 
             <?php echo $this->getChildHtml("shipping"); ?>
             <?php echo $this->getChildHtml("billing"); ?>
-
             <?php if (!$this->isCustomerLoggedIn()) : ?>
 			<fieldset id="remember_data">
 				<legend><?php echo $this->__("Remember me(optional):"); ?></legend>
@@ -67,7 +66,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="col-sm-12">
 						<div class="row">
 							<div class="col-sm-6">  
-								<p><?php echo $this->__("Set up your password to track your order and easly buy next time."); ?></p>
+								<p><?php echo $this->__("Set up your password to track your order and easily buy next time."); ?></p>
 							</div>
 						</div> 
 					</div>
@@ -82,14 +81,22 @@ $_billingAddress = $_quote->getBillingAddress();
 			</fieldset>
             <?php endif; ?>
 			<div class="row hide-success-vaild ">
-				<div class="form-group form-checkbox small text-align-left">
-					<input type="checkbox" id="agreement_2" class="css-checkbox invoice_vat" name="agreement[2]" required="true" style="opacity: 0; visibility: visible;">
-					<label for="agreement_2" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
+				<?php if(!$this->isCustomerSubscribed()):?>
+				<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container">
+					<input type="hidden" name="agreement[newsletter]" value="0" />
+					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
+					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
+						   <?php if($this->getAgreements()['agreement_newsletter']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
 				</div>
-
+				<?php endif;?>
 				<div class="form-group form-checkbox small text-align-left">
-					<input type="checkbox" id="agreement_1" class="css-checkbox invoice_vat" name="agreement[1]" required="true"  style="opacity: 0; visibility: visible;">
-					<label for="agreement_1" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
+					<input type="checkbox" id="agreement_tos" class="css-checkbox invoice_vat"
+					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
+					       <?php if($this->getAgreements()['agreement_tos']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
 				</div>
 			</div>
 			<div class="row action">
@@ -100,9 +107,6 @@ $_billingAddress = $_quote->getBillingAddress();
 					<button class="button button-primary large link pull-right" id="step-0-submit"><?php echo $this->__("Next"); ?></button>
 				</div>
 			</div>
-
-
-
 		</form>
 	</section>
 

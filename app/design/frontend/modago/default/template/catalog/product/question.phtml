@@ -96,3 +96,17 @@ $session = Mage::getSingleton('customer/session');
 	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
 	Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
 </script>
+<style>
+    ul{
+        list-style-type: none;
+    }
+    .buttons-set button {
+        margin-bottom: 20px;
+    }
+</style>
+<script>
+    jQuery('#vendor_id').select2({
+        minimumResultsForSearch: -1
+    });
+
+</script>

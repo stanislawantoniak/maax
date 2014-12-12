@@ -2,11 +2,18 @@
 class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepage
 {
 	protected $_customerForm;
+
+	/**
+	 * Error message of "customer already exists"
+	 * @var string
+	 */
+	private $_customerEmailExistsMessage = '';
 	
     /**
      * Create order based on checkout type. Create customer if necessary.
      *
      * @return Zolago_Checkout_Model_Type_Onepage
+     * @throws Exception
      */
 	public function saveOrder() {
 		try{
@@ -14,8 +21,18 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			// Update customer data
 			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
 				$this->getQuote()->getCustomerId()){
-				
 				$this->getQuote()->getCustomer()->save();
+			}
+			$agreements = $this->_checkoutSession->getAgreements(true);
+			if($agreements['agreement_newsletter'] === 1) {
+				//
+				//todo: save to newsletter
+				//
+			} elseif($agreements['agreement_newsletter'] === 0) {
+				// send invitation mail, model takes care of handling everything
+				/** @var Zolago_Newsletter_Model_Inviter $model */
+				$model = Mage::getModel('zolagonewsletter/inviter');
+				$model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
 			}
 			
 		} catch (Exception $ex) {
@@ -97,6 +114,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
         return $this;
     }
+
+	protected function sendNewsletterInvite() {
+
+	}
 	
 	/**
 	 * Is the address filed with some data?
@@ -383,12 +404,22 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
         return array();
     }
+
+	public function saveAgreements(array $agreementsData) {
+		$data = array();
+		foreach ($agreementsData as $attribute=>$value) {
+			$data['agreement_'.$attribute] = $value ? 1 : 0;
+		}
+		$this->_checkoutSession->setAgreements($data);
+		return $this;
+	}
 	
 	
 	/**
 	 * Save account data and transfer same to quote
 	 * @param array $accountData
 	 * @return Zolago_Checkout_Model_Type_Onepage
+	 * @throws Mage_Core_Exception
 	 */
 	public function saveAccountData(array $accountData) {
 		$quote = $this->getQuote();
@@ -419,9 +450,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $request = $form->prepareRequest($accountData);
         $data    = $form->extractData($request);
 
-        $form->restoreData($data);		
+        $form->restoreData($data);
         $data = array();
-		
 		
 		// Add all form attributes - There is no password
         foreach ($form->getAttributes() as $attribute) {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<sections>
+		<newsletter>
+			<groups>
+				<subscription>
+					<fields>
+						<invitation translate="label">
+							<label>Send invitation emails</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</invitation>
+						<invitation_email_identity translate="label">
+							<label>Invitation Email Sender</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_email_identity</source_model>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</invitation_email_identity>
+						<invitation_email_template translate="label">
+							<label>Invitation Email Template</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_email_template</source_model>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</invitation_email_template>
+						<invitation_repeat translate="label">
+							<label>Repeat invitation</label>
+							<comment><![CDATA[Send Invitation Emails to users who already had been invited or are currently unsubscribed/unconfirmed]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</invitation_repeat>
+					</fields>
+				</subscription>
+			</groups>
+		</newsletter>
+	</sections>
+</config>
