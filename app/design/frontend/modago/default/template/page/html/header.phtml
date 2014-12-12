@@ -4,7 +4,7 @@
  * Date: 29.04.14
  */
 $_isCheckout = $this->getLayout()->getBlock("root")->getIsCheckout();
-$_baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
+$_baseUrl = Mage::getUrl("/", array("_no_vendor"=>true));
 /** @var $this Zolago_Modago_Block_Page_Header_Bottommenu */
 ?>
 
