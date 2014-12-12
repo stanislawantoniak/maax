@@ -17,8 +17,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             $this->_getWriteAdapter()->commit();
 
             //2. put simple products to configurable queue
-            //@todo test without configurable processing
-            //Zolago_Catalog_Helper_Configurable::queue($ids);
+            Zolago_Catalog_Helper_Configurable::queue($ids);
 
         } catch (Exception $e) {
             $this->_getWriteAdapter()->rollBack();
