@@ -150,7 +150,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
      * @return array
      * @throws Mage_Core_Exception
      */
-    public function getMSRPSourceValuesUpdateConverterConfigurable($skuS)
+    public function getMSRPSourceValuesManualConverterConfigurable($skuS)
     {
         $msrp = array();
 
@@ -162,25 +162,22 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $readConnection = $this->_getReadAdapter();
         $select = $readConnection->select();
         $select->from(
-            array("product_relation" => $this->getTable("catalog/product_relation")),
+            array("msrp_source" => "catalog_product_entity_int"),
             array(
-                "parent_id" => "product_relation.parent_id",
-                "product_id" => "product_relation.child_id"
+                "store" => "msrp_source.store_id",
+                "msrp_source_type" => "msrp_source.value"
             )
         );
         $select->join(
-            array("products" =>  $this->getTable("catalog/product")),
+            array("product_relation" => "catalog_product_relation"),
+            "product_relation.parent_id=msrp_source.entity_id",
+            array()
+        );
+        $select->join(
+            array("products" => $this->getTable("catalog/product")),
             "products.entity_id=product_relation.child_id",
             array(
                 'products.sku'
-            )
-        );
-        $select->join(
-            array("msrp_source" =>  'catalog_product_entity_int'),
-            'product_relation.parent_id=msrp_source.entity_id',
-            array(
-                'msrp_source_type' => 'msrp_source.value',
-                'store' => 'msrp_source.store_id'
             )
         );
         $select->join(
@@ -194,7 +191,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->where(
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
         );
-        $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO);
+        $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL);
         $select->where("products.sku IN(?)", $skuS);
         Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
         try {

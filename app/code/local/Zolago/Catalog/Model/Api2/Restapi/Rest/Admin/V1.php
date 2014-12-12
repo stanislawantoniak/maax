@@ -261,8 +261,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         //converter_msrp_type from configurable products
         Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
-        $priceMSRPSource = $model->getMSRPSourceValuesUpdateConverterConfigurable($skuS);
-        Mage::log(print_r($priceMSRPSource,true), 0, 'priceMSRPSource.log');
+        $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);
+        Mage::log(print_r($priceMSRPSourceManual,true), 0, 'priceMSRPSource.log');
 
         if (empty($priceType) && empty($priceMarginValues) && empty($priceMSRPSource)) {
             return;
@@ -287,8 +287,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
         //3. reformat by store_id $priceMSRPSource
         $priceMSRPTypeByStore = array();
-        if (!empty($priceMSRPSource)) {
-            foreach ($priceMSRPSource as $priceMSRPSourceData) {
+        if (!empty($priceMSRPSourceManual)) {
+            foreach ($priceMSRPSourceManual as $priceMSRPSourceData) {
                 $priceMSRPTypeByStore[$priceMSRPSourceData['sku']][$priceMSRPSourceData['store']]
                     = $priceMSRPSourceData['msrp_source_type'];
             }
@@ -314,9 +314,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             ->getAttribute('catalog_product', 'price')
             ->getData('attribute_id');
 
-        //special_price attribute code
+        //msrp attribute code
         $specialPriceAttributeId = Mage::getSingleton("eav/config")
-            ->getAttribute('catalog_product', 'special_price')
+            ->getAttribute('catalog_product', 'msrp')
             ->getData('attribute_id');
 
 
@@ -324,11 +324,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             foreach ($stores as $storeId) {
                 //price type default
                 $priceTypeSelected = ""; //Manual price
-                $priceMSRPSelected = ""; //Manual special_price
+                $priceMSRPSelected = ""; //Manual msrp
                 if (isset($priceTypeByStore[$sku][$storeId])) {
                     $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
                 }
-                if (isset($priceMSRPTypeByStore[$sku][$storeId])) {
+                if (!isset($priceMSRPTypeByStore[$sku][$storeId])) {
                     $priceMSRPSelected = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE;
                 }
 
@@ -339,8 +339,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $priceToInsert = isset($pricesConverter[$priceTypeSelected])
                             ? $pricesConverter[$priceTypeSelected] : false;  //price
 
-                        $priceMSRPToInsert = isset($pricesConverter[$priceMSRPSelected])
-                            ? $pricesConverter[$priceMSRPSelected] : false;  //special_price
+                        $priceMSRPToInsert = (!empty($priceMSRPSelected) && isset($pricesConverter[$priceMSRPSelected]))
+                            ? $pricesConverter[$priceMSRPSelected] : false;  //msrp
                         Mage::log(print_r($priceMSRPToInsert,true), 0, 'priceMSRPToInsert.log');
 
 
@@ -363,7 +363,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         }
 
-                        // 2. update special_price
+                        // 2. update msrp
                         if ($priceMSRPToInsert) {
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
