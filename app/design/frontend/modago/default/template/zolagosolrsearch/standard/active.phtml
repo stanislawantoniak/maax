@@ -60,7 +60,7 @@
                             </div>
                         </dd>
                         <?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
-                            <dd class="action visible-xs">
+                            <dd class="action visible-xs btn-clearall-xs">
                                 <a data-params='<?php echo $this->getRemoveAllJson(); ?>'
                                    href="<?php echo $this->getRemoveAllUrl() ?>"
                                    class="active-filters-remove button button-third"><?php echo $this->__('Clear all filters') ?></a>
