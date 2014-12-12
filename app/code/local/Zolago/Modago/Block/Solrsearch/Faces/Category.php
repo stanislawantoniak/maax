@@ -24,6 +24,12 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
     public function getParentCategoryUrl()
     {
         $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+            if ($rootCategory == $this->getCurrentCategory()->getParentCategory()->getId()) {
+                return null;
+            }
+        }
+
         if ($rootCategory == $this->getCurrentCategory()->getId()) {
             return null;
         }
@@ -69,28 +75,22 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
      */
     public function getParentCategoryLabel()
     {
-        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
-            return $this->getCurrentCategory()->getParentCategory()->getName();
+        $helperZSS = Mage::helper('zolagosolrsearch');
+        $label = '';
+        $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+        if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
+            $label = $helperZSS->__("All categories");
         } else {
-            $label = '';
-            $helperZSS = Mage::helper('zolagosolrsearch');
-
-            $rootCategory = Mage::app()->getStore()->getRootCategoryId();
-            if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
-                $label = $helperZSS->__("All categories");
-            } else {
-                $label = $this->getCurrentCategory()->getParentCategory()->getName();
-            }
-
-            /** @var Zolago_Dropship_Model_Vendor $_vendor */
-            $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-            if ($_vendor && $_vendor->getId()) {
-                if($_vendor->rootCategory()->getId() == $this->getCurrentCategory()->getParentCategory()->getId()) {
-                    $label = $helperZSS->__("All categories");
-                }
-            }
+            $label = $this->getCurrentCategory()->getParentCategory()->getName();
         }
 
+        /** @var Zolago_Dropship_Model_Vendor $_vendor */
+        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if ($_vendor && $_vendor->getId()) {
+            if($_vendor->rootCategory()->getId() == $this->getCurrentCategory()->getParentCategory()->getId()) {
+                $label = $helperZSS->__("All categories");
+            }
+        }
         return $label;
     }
 

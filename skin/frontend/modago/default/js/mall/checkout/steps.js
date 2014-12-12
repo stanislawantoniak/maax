@@ -1314,14 +1314,13 @@
                                         .validate().errorList[0].element).offset().top
                                     - Mall.getMallHeaderHeight()
                             }, "slow");
-
-	                        if(data.subscribed) {
-		                        self.hideNewsletterAgreement();
-	                        } else {
-		                        self.showNewsletterAgreement();
-	                        }
-                            return false;
                         }
+                        if(data.subscribed) {
+                            self.hideNewsletterAgreement();
+                        } else {
+                            self.showNewsletterAgreement();
+                        }
+                        return false;
 
                     }
                     self.validate._checkout.getActiveStep().enable();

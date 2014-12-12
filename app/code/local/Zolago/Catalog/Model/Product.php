@@ -11,7 +11,10 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
     const ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE = 'converter_price_type';
     const ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE = 'converter_msrp_type';
     const ZOLAGO_CATALOG_PRICE_MARGIN_CODE = 'price_margin';
-    const ZOLAGO_CATALOG_BRANDSHOP_CODE = 'brandshop';	
+    const ZOLAGO_CATALOG_BRANDSHOP_CODE = 'brandshop';
+
+
+    const ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE = 'salePriceBefore';
 
 	/**
 	 * @return string
