@@ -24,15 +24,17 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 				$this->getQuote()->getCustomer()->save();
 			}
 			$agreements = $this->_checkoutSession->getAgreements(true);
-			if($agreements['agreement_newsletter'] === 1) {
+			if($agreements['agreement_newsletter'] == 1) {
 				//
 				//todo: save to newsletter
 				//
-			} elseif($agreements['agreement_newsletter'] === 0) {
+			} elseif(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 0) {
 				// send invitation mail, model takes care of handling everything
+                Mage::log("trying to send mail to: ".$this->getQuote()->getCustomerEmail());
 				/** @var Zolago_Newsletter_Model_Inviter $model */
 				$model = Mage::getModel('zolagonewsletter/inviter');
-				$model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
+				$result = $model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
+                Mage::log("and result was: ".print_r($result,true));
 			}
 			
 		} catch (Exception $ex) {
