@@ -28,4 +28,16 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Address
     {
         return Mage::getUrl("checkout/cart");
     }
+
+	public function isCustomerSubscribed() {
+		if(Mage::getSingleton('customer/session')->isLoggedIn()){
+			$email = Mage::getSingleton('customer/session')->getCustomer()->getData('email');
+			$subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($email);
+			if($subscriber->getId())
+			{
+				return $subscriber->getData('subscriber_status') == Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED;
+			}
+		}
+		return false;
+	}
 } 

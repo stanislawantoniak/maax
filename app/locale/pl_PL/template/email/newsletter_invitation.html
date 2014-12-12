@@ -1,8 +1,23 @@
 <!--@subject {{var store_name}} – Zaproszenie do newslettera @-->
-<body>
+<body style="font-family: sans-serif;">
 	<div>
-		Zapraszamy do newslettera {{var store_name}} ! szybko!<br />
-
-		<a href="{{var confirmation_url}}">{{var confirmation_url}}</a>
+		<a href="{{store url=""}}"><img src="cid:logo.png" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a>
+	</div>
+	<div>
+		<p>
+			Zapraszamy do newslettera {{var store_name}}!
+		</p>
+	</div>
+	<div>
+		<p>
+			Aby się zapisać <a href="{{var confirmation_url}}" target="_blank">kliknij tutaj</a> lub skopiuj poniższy link do przeglądarki.<br/><br/>
+			<a href="{{var confirmation_url}}">{{var confirmation_url}}</a>
+		</p>
+	</div>
+	<div>
+		<p>
+			Dziękujemy i zapraszamy ponownie!<br/>
+			Zespól <a href="{{store url=""}}">{{var store.getFrontendName()}}</a>
+		</p>
 	</div>
 </body>
