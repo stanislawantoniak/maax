@@ -298,7 +298,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
         $queryText = Mage::helper('solrsearch')->getParam('q');
 
-        $array['url'] = Mage::getUrl("search/index/index");
+        $array['url'] = Mage::getUrl("search/index/index", array("_secure"=>Mage::app()->getStore()->isCurrentlySecure()));
         $array['method'] = "get";
         $array['input_name'] = 'q';
         $array['select_name'] = 'scat';
