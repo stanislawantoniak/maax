@@ -99,42 +99,33 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
         $zolagoCatalogModelProductConfigurableData->removeUpdatedRows($listUpdatedQueue);
         //1. reindex prices
-        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
-
-        //1. reindex products
-        //to avoid long queries make number of queries
-//        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
-        $numberQ = 100;
-        if (count($productsToReindex) > $numberQ) {
-            $productsToReindexC = array_chunk($productsToReindex, $numberQ);
-            foreach ($productsToReindexC as $productsToReindexCItem) {
-                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
-
-            }
-            unset($productsToReindexCItem);
-        } else {
-            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
-
-        }
-
-//        if (Mage::helper('catalog/category_flat')->isEnabled()) {
-//            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
-//            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
-//            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
-//            foreach ($storeId as $storesId) {
-//                $fI->updateAttribute($attribute, $storesId, $productsToReindex);
+//        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
+//
+//        //1. reindex products
+//        //to avoid long queries make number of queries
+////        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+//        $numberQ = 100;
+//        if (count($productsToReindex) > $numberQ) {
+//            $productsToReindexC = array_chunk($productsToReindex, $numberQ);
+//            foreach ($productsToReindexC as $productsToReindexCItem) {
+//                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+//
 //            }
+//            unset($productsToReindexCItem);
+//        } else {
+//            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+//
 //        }
-
-        //2. put products to solr queue
-        //catalog_converter_price_update_after
-        Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
-        Mage::dispatchEvent(
-            "catalog_converter_price_update_after",
-            array(
-                "product_ids" => $productsToReindex
-            )
-        );
+//
+//        //2. put products to solr queue
+//        //catalog_converter_price_update_after
+//        Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
+//        Mage::dispatchEvent(
+//            "catalog_converter_price_update_after",
+//            array(
+//                "product_ids" => $productsToReindex
+//            )
+//        );
 
 
     }
