@@ -196,7 +196,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         );
         $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO);
         $select->where("products.sku IN(?)", $skuS);
-
+        Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
         try {
             $msrp = $readConnection->fetchAll($select);
         } catch (Exception $e) {
