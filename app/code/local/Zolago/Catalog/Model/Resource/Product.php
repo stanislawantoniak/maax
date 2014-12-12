@@ -17,7 +17,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             $this->_getWriteAdapter()->commit();
 
             //2. put simple products to configurable queue
-            Zolago_Catalog_Helper_Configurable::queue($ids);
+            //@todo test without configurable processing
+            //Zolago_Catalog_Helper_Configurable::queue($ids);
 
         } catch (Exception $e) {
             $this->_getWriteAdapter()->rollBack();
@@ -143,11 +144,13 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
     }
 
     /**
+     * Fetch products that should be updated by converter
+     * Converter Msrp Type = From file
      * @param $skuS
-     *
-     * @return array $assoc
+     * @return array
+     * @throws Mage_Core_Exception
      */
-    public function getMSRPSourceValuesConfigurable($skuS)
+    public function getMSRPSourceValuesUpdateConverterConfigurable($skuS)
     {
         $msrp = array();
 
@@ -191,7 +194,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->where(
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
         );
-        $select->where("msrp_source.value=?", 0);
+        $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO);
         $select->where("products.sku IN(?)", $skuS);
 
         try {
