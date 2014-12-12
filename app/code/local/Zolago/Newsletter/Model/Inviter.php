@@ -153,7 +153,8 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 			$model
 				->setEmail($email)
 				->setSubscriberStatus(self::STATUS_NOT_ACTIVE)
-				->setSubscriberConfirmCode($this->getInvitationCode());
+				->setSubscriberConfirmCode($this->getInvitationCode())
+				->setUseAttachments(true);
 
 			//if customer with this email exists then save it to subscribers as user, otherwise as guest
 			if ($customerId) {
