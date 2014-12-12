@@ -70,10 +70,13 @@
 //		width:40%;
 		min-width: 205px;
 		margin-left: -15px;
+        @media (max-width: $screen-xs-max) {
+          min-width: initial;
+        }
 		&.visible-xs {
 			@media (min-width:768px) and (max-width: 768px) {
-				display:block!important;
-			}
+              display: block !important;
+            }
 		}
         .fa {
             color: white;
