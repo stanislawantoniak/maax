@@ -76,7 +76,7 @@
 					</a>
 				</div>
 			</div>
-			<div id="invoice" class="form-group form-checkbox small">
+			<div id="invoice" class="form-group form-checkbox small" style="margin-left: 5px;">
 				<input type="checkbox" name="rodzaj" id="invoice_this" class="css-checkbox need_invoice">
 				<label for="invoice_this" class="css-label invoice_this">Chcę otrzymać fakturę VAT </label>
 			</div>
@@ -102,6 +102,18 @@
 					</div>
 				</div>
 			</div>
+			<?php if(!$this->isCustomerSubscribed()): ?>
+			<div class="row hide-success-vaild ">
+				<div class="form-group form-checkbox small text-align-left">
+					<input type="hidden" name="agreement[newsletter]" value="0" />
+					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
+					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
+					       <?php if($this->getAgreements()['agreement_newsletter']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
+				</div>
+			</div>
+			<?php endif;?>
 			<div class="row">
 				<div class="col-sm-6">
 					<a id="back" href="<?php echo $this->getPreviousStepUrl(); ?>" class="button button-third large pull-left"><?php echo $this->__("Back"); ?></a>

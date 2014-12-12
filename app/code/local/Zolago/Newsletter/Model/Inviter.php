@@ -120,6 +120,20 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 		}
 	}
 
+	public function isEmailSubscribed($email) {
+		/** @var Mage_Newsletter_Model_Subscriber $model */
+		$model = Mage::getModel("newsletter/subscriber");
+		$subscription = $model->loadByEmail($email);
+		$sid = $subscription->getId();
+		if ($sid) {
+			$status = $subscription->getSubscriberStatus();
+			if ($status == self::STATUS_SUBSCRIBED) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * function that adds email to newsletter subscribers list with status set to:
 	 * self::STATUS_NOT_ACTIVE
@@ -139,7 +153,8 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 			$model
 				->setEmail($email)
 				->setSubscriberStatus(self::STATUS_NOT_ACTIVE)
-				->setSubscriberConfirmCode($this->getInvitationCode());
+				->setSubscriberConfirmCode($this->getInvitationCode())
+				->setUseAttachments(true);
 
 			//if customer with this email exists then save it to subscribers as user, otherwise as guest
 			if ($customerId) {
