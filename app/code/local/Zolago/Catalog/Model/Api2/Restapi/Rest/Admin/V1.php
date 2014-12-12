@@ -260,8 +260,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
 
         //converter_msrp_type from configurable products
+        Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
         $priceMSRPSource = $model->getMSRPSourceValuesUpdateConverterConfigurable($skuS);
-
+        Mage::log(print_r($priceMSRPSource,true), 0, 'priceMSRPSource.log');
 
         if (empty($priceType) && empty($priceMarginValues) && empty($priceMSRPSource)) {
             return;
@@ -292,7 +293,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                     = $priceMSRPSourceData['msrp_source_type'];
             }
         }
-
+        Mage::log(print_r($priceMSRPTypeByStore,true), 0, 'priceMSRPTypeByStore.log');
 
         $insert = array();
         $ids = array();
@@ -327,7 +328,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 if (isset($priceTypeByStore[$sku][$storeId])) {
                     $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
                 }
-                if (isset($priceMSRPSourceData[$sku][$storeId])) {
+                if (isset($priceMSRPTypeByStore[$sku][$storeId])) {
                     $priceMSRPSelected = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE;
                 }
 

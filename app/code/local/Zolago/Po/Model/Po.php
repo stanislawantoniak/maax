@@ -17,6 +17,30 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     const XML_PATH_EMAIL_IDENTITY = 'sales_email/order/identity';
 	
 	/**
+	 * @return array
+	 */
+	public function getAllowedOperators() {
+		if(!$this->hasData("allowed_operators")){
+			$opreators = array();
+			// Must have post
+			if($this->getPos() instanceof Zolago_Pos_Model_Pos){
+				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
+				/* @var $collection Zolago_Operator_Model_Resource_Operator_Collection */
+				$collection->addVendorFilter($this->getVendor());
+				$collection->addActiveFilter();
+				$collection->walk("afterLoad");
+				foreach($collection as $operator){
+					if($this->isAllowed(null, $operator)){
+						$opreators[] = $operator;
+					}
+				}
+			}
+			$this->setData("allowed_operators", $opreators);
+		}
+		return $this->getData("allowed_operators");
+	}
+	
+	/**
 	 * @param Unirgy_Dropship_Model_Vendor $venndor
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return boolean
@@ -25,7 +49,8 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		Zolago_Operator_Model_Operator $operator = null) {
 		
 		if($operator instanceof Zolago_Operator_Model_Operator){
-			return in_array($this->getDefaultPosId(), $operator->getAllowedPos());
+			return in_array($this->getDefaultPosId(), $operator->getAllowedPos()) && 
+				$operator->hasRole(Zolago_Operator_Model_Acl::ROLE_ORDER_OPERATOR);
 		}elseif($vendor instanceof Zolago_Dropship_Model_Vendor){
 			return in_array($this->getDefaultPosId(), $vendor->getAllowedPos());
 		}
