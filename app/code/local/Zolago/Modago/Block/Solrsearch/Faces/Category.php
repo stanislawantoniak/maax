@@ -24,6 +24,12 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
     public function getParentCategoryUrl()
     {
         $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+            if ($rootCategory == $this->getCurrentCategory()->getParentCategory()->getId()) {
+                return null;
+            }
+        }
+
         if ($rootCategory == $this->getCurrentCategory()->getId()) {
             return null;
         }
@@ -69,12 +75,6 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
      */
     public function getParentCategoryLabel()
     {
-        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
-            return $this->getCurrentCategory()->getParentCategory()->getName();
-        } else {
-            $label = '';
-            $helperZSS = Mage::helper('zolagosolrsearch');
-
             $rootCategory = Mage::app()->getStore()->getRootCategoryId();
             if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
                 $label = $helperZSS->__("All categories");
@@ -89,8 +89,6 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
                     $label = $helperZSS->__("All categories");
                 }
             }
-        }
-
         return $label;
     }
 
