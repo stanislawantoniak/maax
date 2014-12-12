@@ -37,7 +37,9 @@
 			<div class="action clearfix">
 			<?php if($backUrl != null) : ?>
                 <?php if(!$isSearch): ?>
-                    <?php if(!$isParrentRoot): ?>
+                    <?php if($isParrentRoot): ?>
+                        <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
+                    <?php else: ?>
                         <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
                     <?php endif; ?>
                 <?php else: ?>
