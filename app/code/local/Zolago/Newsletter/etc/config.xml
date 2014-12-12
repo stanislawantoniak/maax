@@ -15,6 +15,15 @@
 				</args>
 			</newsletter>
 		</routers>
+		<translate>
+			<modules>
+				<Your_Extension>
+					<files>
+						<default>Zolago_Newsletter.csv</default>
+					</files>
+				</Your_Extension>
+			</modules>
+		</translate>
 	</frontend>
 	<global>
 		<models>
