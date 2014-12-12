@@ -28,6 +28,14 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Zolago_Catalog_Model_Observer::clearConfigurableQueue();
     }
 
+    public function testAction()
+    {
+        $skuS = array("4-18731-00X-MXR");
+        $model = Mage::getResourceModel('zolagocatalog/product');
+        $priceMSRPSource = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);
+        Zend_debug::dump($priceMSRPSource);
+
+    }
 
 }
 
