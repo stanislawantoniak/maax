@@ -260,9 +260,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
 
         //converter_msrp_type from configurable products
-        Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
+        //Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
         $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);
-        Mage::log(print_r($priceMSRPSourceManual,true), 0, 'priceMSRPSource.log');
+        //Mage::log(print_r($priceMSRPSourceManual,true), 0, 'priceMSRPSource.log');
 
         if (empty($priceType) && empty($priceMarginValues) && empty($priceMSRPSource)) {
             return;
@@ -293,7 +293,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                     = $priceMSRPSourceData['msrp_source_type'];
             }
         }
-        Mage::log(print_r($priceMSRPTypeByStore,true), 0, 'priceMSRPTypeByStore.log');
+        //Mage::log(print_r($priceMSRPTypeByStore,true), 0, 'priceMSRPTypeByStore.log');
 
         $insert = array();
         $ids = array();
@@ -341,7 +341,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         $priceMSRPToInsert = (!empty($priceMSRPSelected) && isset($pricesConverter[$priceMSRPSelected]))
                             ? $pricesConverter[$priceMSRPSelected] : false;  //msrp
-                        Mage::log(print_r($priceMSRPToInsert,true), 0, 'priceMSRPToInsert.log');
+                        //Mage::log(print_r($priceMSRPToInsert,true), 0, 'priceMSRPToInsert.log');
 
 
                         // 1. update price
