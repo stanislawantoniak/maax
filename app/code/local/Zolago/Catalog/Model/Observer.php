@@ -33,7 +33,7 @@ class Zolago_Catalog_Model_Observer
     {
         Mage::log(microtime() . " Starting processConfigurableQueue ", 0, 'configurable_update.log');
         //Mage::getResourceModel('zolagocatalog/queue_configurable')->clearQueue();
-        Mage::getModel('zolagocatalog/queue_configurable')->process(2500);
+        Mage::getModel('zolagocatalog/queue_configurable')->process(5000);
     }
 
 
