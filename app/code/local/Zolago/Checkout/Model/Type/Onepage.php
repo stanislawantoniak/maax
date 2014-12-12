@@ -21,11 +21,19 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			// Update customer data
 			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
 				$this->getQuote()->getCustomerId()){
-				
 				$this->getQuote()->getCustomer()->save();
-
 			}
-			//newsletter HERE todo: HERE KURWA!!!!!!
+			$agreements = $this->_checkoutSession->getAgreements(true);
+			if($agreements['agreement_newsletter'] === 1) {
+				//
+				//todo: save to newsletter
+				//
+			} elseif($agreements['agreement_newsletter'] === 0) {
+				// send invitation mail, model takes care of handling everything
+				/** @var Zolago_Newsletter_Model_Inviter $model */
+				$model = Mage::getModel('zolagonewsletter/inviter');
+				$model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
+			}
 			
 		} catch (Exception $ex) {
 			throw $ex;
@@ -106,6 +114,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
         return $this;
     }
+
+	protected function sendNewsletterInvite() {
+
+	}
 	
 	/**
 	 * Is the address filed with some data?
@@ -392,6 +404,15 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
         return array();
     }
+
+	public function saveAgreements(array $agreementsData) {
+		$data = array();
+		foreach ($agreementsData as $attribute=>$value) {
+			$data['agreement_'.$attribute] = $value ? 1 : 0;
+		}
+		$this->_checkoutSession->setAgreements($data);
+		return $this;
+	}
 	
 	
 	/**

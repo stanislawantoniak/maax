@@ -748,6 +748,13 @@
 			getFormKey: function(){
 				return this.content.find("input[name='form_key']").val();
 			},
+
+			getNewsletterAgreement: function() {
+				if(this.content.find("input[name='agreement[newsletter]']").length) {
+					return this.content.find("input[name='agreement[newsletter]']").is(":checked");
+				}
+				return null;
+			},
 			
 			collect: function(){
 				
@@ -769,6 +776,14 @@
 					{"name": "billing_address_id", "value": billing.getId()},
 					{"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0}
 				];
+
+				var newsletterAgreement = this.getNewsletterAgreement();
+				if(newsletterAgreement !== null) {
+					data.push({
+						name: "agreement[newsletter]",
+						value: newsletterAgreement ? 1 : 0
+					});
+				}
 				
 				// Push billing data
 				jQuery.each(billing.getData(), function(idx){
@@ -1116,14 +1131,6 @@
 				return false;
 			},
 
-			isNewsletterAgreementChecked: function() {
-				if(this.content.find("[name='agreement[2]']").length) {
-					return this.content.find("[name='agreement[2]']").is(":checked");
-				} else {
-					return null;
-				}
-			},
-
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
@@ -1203,21 +1210,6 @@
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
 
-				// Add newsletter agreement
-				var newsletterAgreement = this.isNewsletterAgreementChecked();
-				var newsletterValue = false;
-				if(newsletterAgreement === true) {
-					newsletterValue = 1;
-				} else if(newsletterAgreement === false) {
-					newsletterValue = 0;
-				}
-				if(newsletterValue !== false) {
-					stepData.push({
-						name: "newsletter",
-						value: newsletterValue
-					})
-				}
-
 				// Push method
 				stepData.push({name: "method", value: this.checkout.getMethod()});
 
@@ -1265,6 +1257,22 @@
                 return parseInt(jQuery("#customer_logged_in").val(), 10);
             },
 
+			getNewsletterAgreementContainer: function() {
+				return jQuery("#newsletter_agreement_container");
+			},
+
+			hideNewsletterAgreement: function() {
+				var container = this.getNewsletterAgreementContainer();
+				container.find("[name='agreement[newsletter]']").attr('disabled',true);
+				container.hide();
+			},
+
+			showNewsletterAgreement: function() {
+				var container = this.getNewsletterAgreementContainer();
+				container.find("[name='agreement[newsletter]']").attr('disabled',false);
+				container.show();
+			},
+
             afterEmailValidationAction: function () {
                 if (this.getCustomerIsLoggedIn()) {
                     return true;
@@ -1307,8 +1315,14 @@
                                     - Mall.getMallHeaderHeight()
                             }, "slow");
 
+	                        if(data.subscribed) {
+		                        self.hideNewsletterAgreement();
+	                        } else {
+		                        self.showNewsletterAgreement();
+	                        }
                             return false;
                         }
+
                     }
                     self.validate._checkout.getActiveStep().enable();
 
