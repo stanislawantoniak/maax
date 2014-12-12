@@ -80,9 +80,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         self::updatePricesConverter($priceBatch);
                         break;
                     case 'ProductStockUpdate':
-                        $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
-                        //Mage::log(microtime() . ' Start', 0, $batchFile);
-
                         $stockBatch = array();
 
                         if(!empty($batch)){
@@ -237,49 +234,66 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     /**
      * @param $priceBatch
      */
-    public static function updatePricesConverter($priceBatch){
+    public static function updatePricesConverter($priceBatch)
+    {
         //queue inform_magento
         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
         Mage::log('Got items ' . $itemsToChange, 0, $batchFile);
 
-        //Get price types
-        if(empty($priceBatch)){
+        if (empty($priceBatch)) {
             return;
         }
         $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
 
-        if(empty($skeleton)){
+        if (empty($skeleton)) {
             return;
         }
 
         $model = Mage::getResourceModel('zolagocatalog/product');
 
-        $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
-
-        $priceTypeByStore = array();
-
+        //converter_price_type from configurable products
         $priceType = $model->getConverterPriceTypeConfigurable($skuS);
-        //reformat by store id
+
+        //price_margin from configurable products
+        $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
+
+        //converter_msrp_type from configurable products
+        Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
+        $priceMSRPSource = $model->getMSRPSourceValuesUpdateConverterConfigurable($skuS);
+        Mage::log(print_r($priceMSRPSource,true), 0, 'priceMSRPSource.log');
+
+        if (empty($priceType) && empty($priceMarginValues) && empty($priceMSRPSource)) {
+            return;
+        }
+
+        //reformat $priceType, $priceMarginValues, $priceMSRPSource by store
+        //1. reformat by store_id $priceType
+        $priceTypeByStore = array();
         if (!empty($priceType)) {
             foreach ($priceType as $priceTypeData) {
                 $priceTypeByStore[$priceTypeData['sku']][$priceTypeData['store']]
                     = $priceTypeData['price_type'];
             }
         }
-
+        //2. reformat by store_id $priceMarginValues
         $marginByStore = array();
-
-        $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
-        //reformat margin
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
                 $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
             }
             unset($_);
         }
-
+        //3. reformat by store_id $priceMSRPSource
+        $priceMSRPTypeByStore = array();
+        if (!empty($priceMSRPSource)) {
+            foreach ($priceMSRPSource as $priceMSRPSourceData) {
+                $priceMSRPTypeByStore[$priceMSRPSourceData['sku']][$priceMSRPSourceData['store']]
+                    = $priceMSRPSourceData['msrp_source_type'];
+            }
+        }
+        Mage::log(print_r($priceMSRPTypeByStore,true), 0, 'priceMSRPTypeByStore.log');
 
         $insert = array();
         $ids = array();
@@ -292,31 +306,49 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $stores[] = $_storeId;
         }
 
+        //product entity_type_id
+        $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
+
+        //price attribute code
         $priceAttributeId = Mage::getSingleton("eav/config")
             ->getAttribute('catalog_product', 'price')
             ->getData('attribute_id');
 
-        if (!empty($skeleton)) {
-            foreach ($skeleton as $sku => $productId) {
-                foreach ($stores as $storeId) {
-                    //price type default
-                    $priceTypeSelected = "";
-                    if (isset($priceTypeByStore[$sku][$storeId])) {
-                        $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
-                    }
+        //special_price attribute code
+        $specialPriceAttributeId = Mage::getSingleton("eav/config")
+            ->getAttribute('catalog_product', 'special_price')
+            ->getData('attribute_id');
 
+
+        foreach ($skeleton as $sku => $productId) {
+            foreach ($stores as $storeId) {
+                //price type default
+                $priceTypeSelected = ""; //Manual price
+                $priceMSRPSelected = ""; //Manual special_price
+                if (isset($priceTypeByStore[$sku][$storeId])) {
+                    $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
+                }
+                if (isset($priceMSRPTypeByStore[$sku][$storeId])) {
+                    $priceMSRPSelected = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE;
+                }
+
+                if (!empty($priceTypeSelected) || !empty($priceMSRPSelected)) {
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
                     if ($pricesConverter) {
                         $priceToInsert = isset($pricesConverter[$priceTypeSelected])
-                            ? $pricesConverter[$priceTypeSelected] : false;
+                            ? $pricesConverter[$priceTypeSelected] : false;  //price
+
+                        $priceMSRPToInsert = isset($pricesConverter[$priceMSRPSelected])
+                            ? $pricesConverter[$priceMSRPSelected] : false;  //special_price
+                        Mage::log(print_r($priceMSRPToInsert,true), 0, 'priceMSRPToInsert.log');
 
 
+                        // 1. update price
                         if ($priceToInsert) {
-
                             //margin
                             $marginSelected = 0;
-
+                            //implement margin
                             if (isset($marginByStore[$productId][$storeId])) {
                                 $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
                             }
@@ -329,17 +361,30 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100))
                             );
 
-                            $ids[] = $productId;
                         }
+
+                        // 2. update special_price
+                        if ($priceMSRPToInsert) {
+                            $insert[] = array(
+                                'entity_type_id' => $productEt,
+                                'attribute_id' => $specialPriceAttributeId,
+                                'store_id' => $storeId,
+                                'entity_id' => $productId,
+                                'value' => Mage::app()->getLocale()->getNumber($priceMSRPToInsert)
+                            );
+                        }
+                        $ids[$productId] = $productId;
                     }
                 }
-
             }
         }
-
-        if (!empty($insert)) {
-            $model->savePriceValues($insert, $ids);
+        if (empty($insert)) {
+            //no data to update
+            return;
         }
+
+        //Save price
+        $model->savePriceValues($insert, $ids);
     }
 
 
