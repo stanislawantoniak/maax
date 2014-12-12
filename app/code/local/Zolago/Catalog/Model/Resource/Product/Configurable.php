@@ -478,7 +478,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->where(
             "msrp.store_id=?", $store
         );
-        echo $select;
+
         //Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
         try {
             $msrp = $readConnection->fetchAll($select);
