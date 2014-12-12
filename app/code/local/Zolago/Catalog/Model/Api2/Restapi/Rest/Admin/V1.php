@@ -260,6 +260,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
 
         //converter_msrp_type from configurable products
+        Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
         $priceMSRPSource = $model->getMSRPSourceValuesUpdateConverterConfigurable($skuS);
         Mage::log(print_r($priceMSRPSource,true), 0, 'priceMSRPSource.log');
 
