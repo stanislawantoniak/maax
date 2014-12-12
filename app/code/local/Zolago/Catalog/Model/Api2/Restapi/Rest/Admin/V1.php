@@ -327,7 +327,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 if (isset($priceTypeByStore[$sku][$storeId])) {
                     $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
                 }
-                if (isset($priceMSRPSourceData[$sku][$storeId])) {
+                if (isset($priceMSRPTypeByStore[$sku][$storeId])) {
                     $priceMSRPSelected = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE;
                 }
 
