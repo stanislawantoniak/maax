@@ -84,6 +84,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         if(!empty($batch)){
                             $batch = (array)$batch;
+                            $merchant = 0;
                             foreach($batch as $dataStock){
                                 $merchant = $dataStock['merchant'];
                                 $stock = $dataStock['data'];
@@ -101,7 +102,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             unset($dataStock);
                         }
 
-                        self::updateStockConverter($stockBatch);
+                        self::updateStockConverter($stockBatch, $merchant);
                         break;
                     default:
                         //
@@ -148,7 +149,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      * 3. Move to solr que
      * @param $stockBatch
      */
-    public static function updateStockConverter($stockBatch)
+    public static function updateStockConverter($stockBatch, $vendor)
     {
 
         if (empty($stockBatch)) {
@@ -163,7 +164,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $availableStockByMerchant = array();
         //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData); //return array("sku" => qty, ...)
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $vendor); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
         //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
