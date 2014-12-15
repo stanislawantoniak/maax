@@ -47,7 +47,7 @@ class Zolago_Catalog_Block_Vendor_Price_Stock extends Zolago_Catalog_Block_Vendo
 					$finalStock-=$pos->getMinimalStock();
 				}
 			}
-			$item->setFinalStock($finalStock);
+			$item->setFinalStock(((int)$finalStock>0)? $finalStock:0);
 			$items[] = $item;
 		}
 		return $items;

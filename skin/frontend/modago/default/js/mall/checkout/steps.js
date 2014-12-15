@@ -1296,6 +1296,11 @@
 
                 promise.done(function (data) {
                     if (data !== undefined && data.status !== undefined) {
+                        if(data.subscribed) {
+                            self.hideNewsletterAgreement();
+                        } else {
+                            self.showNewsletterAgreement();
+                        }
                         if (data.status) {
                             // email exists
                             jQuery('#' + Mall.Checkout.steps.address._self_form_id)
@@ -1306,7 +1311,6 @@
                                             , "We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account.")
                                 });
 
-                            self.validate._checkout.getActiveStep().disable();
                             jQuery('html, body').animate({
                                 scrollTop: jQuery(
                                     jQuery('#'
@@ -1314,18 +1318,15 @@
                                         .validate().errorList[0].element).offset().top
                                     - Mall.getMallHeaderHeight()
                             }, "slow");
-                        }
-                        if(data.subscribed) {
-                            self.hideNewsletterAgreement();
+
+                            self.validate._checkout.getActiveStep().disable();
+                            return false;
                         } else {
-                            self.showNewsletterAgreement();
+                            self.validate._checkout.getActiveStep().enable();
+                            return true;
                         }
-                        return false;
-
                     }
-                    self.validate._checkout.getActiveStep().enable();
 
-                    return true;
                 }).fail(function () {
                     /**
                      * @todo implementation. At the moment we do nothing.
