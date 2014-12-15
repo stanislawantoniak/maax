@@ -89,11 +89,10 @@ Mall.account = {
 
 	attachEditCustomerValidation: function() {
 		"use strict";
-		addAccountEditTranslations();
-
 		var editCustomerForm = jQuery("#editCustomer-form");
 
 		if(editCustomerForm.length) {
+			addAccountEditTranslations();
 			editCustomerForm.validate(this.getValidate().getOptions({
 				rules: {
 					email: {
