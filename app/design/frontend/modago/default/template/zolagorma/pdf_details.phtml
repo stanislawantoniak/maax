@@ -142,9 +142,9 @@
 		<tbody>
 		<?php foreach($_rma->getItemsCollection() as $item):?>
 			<tr>
-				<td class="img" rowspan="2">
-					<img src="<?php echo $this->getRmaItemThumb($item);?>" alt=""/>
-				</td>
+				<!--<td class="img" rowspan="2">
+					<img src="<?php /*echo $this->getRmaItemThumb($item);*/?>" alt=""/>
+				</td>-->
 				<td class="desc" style="border-bottom: none;" valign="middle">
 					<span><?php echo $this->escapeHtml($item->getName());?></span>
 					<?php if($_attributes = $this->getConfigurableAttributesByItem($item)):?>
