@@ -74,6 +74,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             $dataStockItems = (array)$dataStockItem;
             if (!empty($dataStockItems)) {
                 foreach ($dataStockItems as $stockId => $posStockConverter) {
+                    Mage::log(print_r($posStockConverter, true), 0, "minimalStockPOS.log");
                     //false if POS is not active
                     Mage::log(in_array($stockId, $availablePos), 0, "minimalStockPOS.log");
                     if (in_array($stockId, $availablePos)) {
