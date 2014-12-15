@@ -279,12 +279,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
         //2. reformat by store_id $priceMarginValues
         $marginByStore = array();
+        //Mage::log(print_r($priceMarginValues,true), 0, 'priceMarginValues.log');
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
                 $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
             }
             unset($_);
         }
+        //Mage::log(print_r($marginByStore,true), 0, 'marginByStore.log');
         //3. reformat by store_id $priceMSRPSource
         $priceMSRPTypeByStore = array();
         if (!empty($priceMSRPSourceManual)) {
@@ -352,6 +354,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             if (isset($marginByStore[$productId][$storeId])) {
                                 $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
                             }
+                            //Mage::log($marginSelected, 0, 'marginSelected.log');
 
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
