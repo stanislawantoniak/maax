@@ -19,6 +19,11 @@ div.noscroll {
 	&.wrapp-section {
 		border-top:none;
 	}
+	&#description_product {
+		@media(max-width: $screen-sm-max) {
+			margin-top: 5px;
+		}
+	}
 }
 .border-gray-1x {
 border: 1px solid #dbdbdb;

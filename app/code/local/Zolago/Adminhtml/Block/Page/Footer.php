@@ -10,7 +10,11 @@ class Zolago_Adminhtml_Block_Page_Footer extends Mage_Adminhtml_Block_Page_Foote
      * @return 
      */
 
-    public function setTemplate($string) {
-        return parent::setTemplate('zolagoadminhtml/page/footer.phtml');
+    public function getTemplate() {
+		if(Mage::getDesign()->getTheme('layout')=="admintheme"){
+			return 'zolagoadminhtml/page/footer.phtml';
+		}
+		return parent::getTemplate();
     }
+
 }
