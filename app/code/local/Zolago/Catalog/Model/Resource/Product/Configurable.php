@@ -262,12 +262,28 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
     public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
     {
+        $msrpPricesSource = array(); $productRelations = array(); $msrpPrices = array();
         foreach ($stores as $store) {
-            $productRelations[$store] = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-            $msrpPricesSource[$store] = $this->getIsMSRPManual($productConfigurableId, $store);
-            $msrpPrices[$store] = $this->getMSRPPrices($productConfigurableId, $store);
+            $priceSizeRelation = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+            if (!empty($priceSizeRelation)) {
+                $productRelations[$store] = $priceSizeRelation;
+            }
+
+            $msrpSource = $this->getIsMSRPManual($productConfigurableId, $store);
+            if (!empty($msrpSource)) {
+                $msrpPricesSource[$store] = $this->getIsMSRPManual($productConfigurableId, $store);
+            }
+
+            $msrpPriceValues = $this->getMSRPPrices($productConfigurableId, $store);
+            if (!empty($msrpPriceValues)) {
+                $msrpPrices[$store] = $msrpPriceValues;
+            }
+
         }
         unset($store);
+        unset($msrpSource);
+        unset($priceSizeRelation);
+        unset($msrpPriceValues);
 //
 //        Zend_Debug::dump($productRelations);
 //        Zend_Debug::dump($msrpPrices);
@@ -306,30 +322,32 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     }
                 }
 
-                if (
-                    (isset($msrpPricesSource[$store]) && isset($msrpPricesSource[$store]['msrp_source_type'])
-                        && $msrpPricesSource[$store]['msrp_source_type'] !== Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL
-                    )
-                    &&
-                    (isset($msrpPrices[$store]) && !empty($msrpPrices[$store]))
-                ) {
 
-                    //3. update msrp
-                    $productMSRPMinPrice = array();
-                    foreach ($msrpPrices[$store] as $i) {
-                        $productMSRPMinPrice[] = $i['msrp_price'];
-                    }
-                    unset($i);
-//                    Zend_Debug::dump($productMSRPMinPrice);
-                    if (!empty($productMSRPMinPrice)) {
-                        $productMSRPMinimalPrice = min($productMSRPMinPrice);
-//                        Zend_Debug::dump($productMSRPMinimalPrice);
-                        Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
-                            array($productConfigurableId), array('msrp' => $productMSRPMinimalPrice), $store
-                        );
-                    }
+                $msrpSource = Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO;
+                if (isset($msrpPricesSource[$store])) {
+                    $msrpPricesSourceValue = array_pop($msrpPricesSource[$store]);
+                    $msrpSource = (int)$msrpPricesSourceValue['msrp_source_type'];
                 }
 
+                //if Converter Msrp Type = From file
+                if ($msrpSource == Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO) {
+                    if (isset($msrpPrices[$store]) && !empty($msrpPrices[$store])) {
+                        //3. update msrp
+                        $productMSRPMinPrice = array();
+                        foreach ($msrpPrices[$store] as $i) {
+                            $productMSRPMinPrice[] = $i['msrp_price'];
+                        }
+                        unset($i);
+
+                        if (!empty($productMSRPMinPrice)) {
+                            $productMSRPMinimalPrice = min($productMSRPMinPrice);
+
+                            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                                array($productConfigurableId), array('msrp' => $productMSRPMinimalPrice), $store
+                            );
+                        }
+                    }
+                }
             }
         }
 
