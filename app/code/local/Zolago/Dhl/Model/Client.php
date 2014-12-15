@@ -458,7 +458,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $data = $vendor->getData();
         $message = new StdClass;
         $address = new StdClass;
-        $address->name = $data['vendor_name'];
+        $address->name = $data['company_name'];
         $address->city = substr($data['city'],0,17);
         $address->postalCode = $this->formatDhlPostCode($data['zip']);
         $address->street = $data['street'];

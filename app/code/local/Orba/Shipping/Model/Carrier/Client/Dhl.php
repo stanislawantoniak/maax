@@ -128,7 +128,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
     protected function _createShipper() {
         $data = $this->_pos->getData();
         $obj = new StdClass();
-        $obj->name = $data['name'];
+        $obj->name = $data['company_name'];
         $obj->postalCode = $this->formatDhlPostCode($data['postcode']);
         $obj->city = $data['city'];
         $obj->street = $data['street'];
@@ -459,7 +459,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         $data = $vendor->getData();
         $message = new StdClass;
         $address = new StdClass;
-        $address->name = $data['vendor_name'];
+        $address->name = $data['company_name'];
         $address->city = substr($data['city'],0,17);
         $address->postalCode = $this->formatDhlPostCode($data['zip']);
         $address->street = $data['street'];
