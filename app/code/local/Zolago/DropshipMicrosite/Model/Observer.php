@@ -5,6 +5,11 @@ class Zolago_DropshipMicrosite_Model_Observer
 	protected $_vendor				= false;
 	static protected $_vendorRootCategoryId = false;
 	protected $_vendorRootCategory = false;
+	
+	
+	
+	
+	
     public function __construct() {
         $this->_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		$this->_websiteId			= Mage::app()->getWebsite()->getId();
@@ -12,11 +17,45 @@ class Zolago_DropshipMicrosite_Model_Observer
 		    $this->_initVendorRootCategory();
 		}
     }	
+	
+	/**
+	 * Replace microsite observer on product page.
+	 * Include brandshop
+	 * @param Mage_Core_Model_Observer $observer
+	 * @return type
+	 */
+	public function catalogControllerProductInit($observer) {
+		if (!($vendor = $this->_getVendor())
+            || Mage::helper('umicrosite')->isCurrentVendorFromProduct()
+        ) {
+            return;
+        }
+        $product = $observer->getEvent()->getProduct();
+        $isMyProduct = in_array(
+				$vendor->getId(), array($product->getUdropshipVendor(), 
+				$product->getBrandshop())
+		);
+        $showAll = Mage::getStoreConfigFlag('udropship/microsite/front_show_all_products');
+        $isUdmulti = Mage::helper('udropship')->isUdmultiActive();
+        $isInUdm = $product->getUdmultiStock($vendor->getId());
+        if (!$isMyProduct && !($showAll && $isUdmulti && $isInUdm)) {
+            Mage::throwException('Product is filtered out by vendor');
+        }
+	}
+	
+	protected function _getVendor()
+    {
+        return Mage::helper('umicrosite')->getCurrentVendor();
+    }
+	
+	
     protected function _initVendorRootCategory() {
 			if ($this->_vendor && $this->_vendor->getId()) {
 				self::$_vendorRootCategoryId = (Mage::helper('zolagodropshipmicrosite')->getVendorRootCategoryConfigId($this->_vendor, $this->_websiteId));			
 			}
     }	
+	
+	
 	public function validateVendorCategory($observer)
 	{
 	    if (self::$_vendorRootCategoryId) {
