@@ -1,5 +1,22 @@
 <?xml version="1.0"?>
 <layout>
+	<adminhtml_index_login>
+		<reference name="content">
+			<action method="setTemplate">
+				<template>zolagoadminhtml/login.phtml</template>			
+			</action>    		
+		</reference>    
+	</adminhtml_index_login>
+	
+	<adminhtml_index_forgotpassword>
+		<reference name="content">
+			<action method="setTemplate">
+				<template>zolagoadminhtml/forgotpassword.phtml</template>			
+			</action>    		
+		</reference>    
+	</adminhtml_index_forgotpassword>
+    	
+		
 	<!-- Replace theme updates-->
 	<default>
 		<reference name="footer">
@@ -19,20 +36,4 @@
 		</reference>
 	</default>
 	
-	<adminhtml_index_login>
-		<reference name="content">
-			<action method="setTemplate">
-				<template>zolagoadminhtml/login.phtml</template>			
-			</action>    		
-		</reference>    
-	</adminhtml_index_login>
-	
-	<adminhtml_index_forgotpassword>
-		<reference name="content">
-			<action method="setTemplate">
-				<template>zolagoadminhtml/forgotpassword.phtml</template>			
-			</action>    		
-		</reference>    
-	</adminhtml_index_forgotpassword>
-    
 </layout>
