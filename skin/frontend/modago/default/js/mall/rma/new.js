@@ -599,7 +599,7 @@ jQuery(function($){
         showInfoAboutNoPickup: function() {
             jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
             jQuery("#pickup-date-form div.panel-body").html(
-                Mall.translate.__("For the given address is not possible to order a courier")
+                Mall.translate.__("For a given zip code can not be ordered a courier. ZIP Code may be wrong.")
             );
             jQuery('#btn-next-step-2').hide();
         },
