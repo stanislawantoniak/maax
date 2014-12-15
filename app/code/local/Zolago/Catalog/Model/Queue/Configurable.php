@@ -53,12 +53,11 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
             $listUpdatedProducts[$productId] = $productId;
             $listUpdatedQueue[$queueId] = $queueId;
-            //Mage::log(print_r($colItem->getData(),true), 0, "configurable_update_collection.log");
         }
         unset($productId);
         unset($queueId);
 
-//        $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+
         $storeId = array();
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {
@@ -117,15 +116,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
 
         }
-
-//        if (Mage::helper('catalog/category_flat')->isEnabled()) {
-//            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
-//            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
-//            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
-//            foreach ($storeId as $storesId) {
-//                $fI->updateAttribute($attribute, $storesId, $productsToReindex);
-//            }
-//        }
 
         //2. put products to solr queue
         //catalog_converter_price_update_after
