@@ -18,56 +18,67 @@ Mall.validate = {
         messages: { },
 
         highlight: function(element, errorClass, validClass) {
-            var we = jQuery(element).actual( 'innerWidth' ) + 25,
-                el = jQuery(element).attr('type');
+            var isSelect2 = jQuery(element).hasClass("select2-offscreen");
+            var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
+                we = elem.actual( 'innerWidth' ) + 25,
+                target = isSelect2 ? elem.parent() : elem.closest("div");
 
-            if (jQuery(element).attr('id') === 'pass') {
+            if (elem.attr('id') === 'pass'
+                || elem.is("textarea")
+                || elem.hasClass("closer-valid-ico")
+                || isSelect2
+            ) {
                 we -= 14;
             }
-            if (jQuery(element).is("textarea")) {
-                we -= 14;
+
+            target
+                .addClass('has-error has-feedback')
+                .removeClass('has-success')
+                .find('.form-ico-times').remove();
+
+            if(elem.attr('name') !== 'payment[method]'
+                && elem.attr('name') !== 'payment[additional_information][provider]')
+            {
+                target
+                    .not( ".form-checkbox" )
+                    .not( ".form-radio" )
+                    .append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
             }
 
-            jQuery(element).closest("div").addClass('has-error has-feedback')
-                .removeClass('has-success');
-            jQuery(element).closest("div").find('.form-ico-times').remove();
-
-
-            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
-                jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" )
-                    .append(
-                        '<i style="left:'+we
-                            +'px; right:auto" class="form-ico-times form-control-feedback "></i>');
-            }
-
-
-            jQuery(element).closest("div").find('.form-ico-checked').remove();
+            target.find('.form-ico-checked').remove();
         },
 
         unhighlight: function(element, errorClass, validClass) {
-            var we = jQuery(element).actual( 'innerWidth' ) + 25;
-            if (jQuery(element).attr('id') === 'pass') {
+            var isSelect2 = jQuery(element).hasClass("select2-offscreen");
+            var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
+                we = elem.innerWidth() + 25,
+                target = isSelect2 ? elem.parent() : elem.closest("div");
+
+            if (elem.attr('id') === 'pass'
+                || elem.is("textarea")
+                || elem.hasClass("closer-valid-ico")
+                || isSelect2
+            ) {
                 we -= 14;
             }
 
-            jQuery(element).closest("div").removeClass('has-error')
-                .addClass('has-success has-feedback');
-            jQuery(element).closest("div").find('.form-ico-checked').remove();
-            jQuery(element).closest("div").find('#pass-error').remove();
-            if (jQuery(element).is("textarea")) {
-                we -= 14;
-            }
-            if (jQuery(element).prop("type") === "checkbox") {
-                we = jQuery(element).closest("div").find("label").actual( 'innerWidth' ) - 10;
-            }
-            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
-                jQuery(element).closest("div").append('<i style="left:'+
-                    we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+            target
+                .addClass('has-success has-feedback')
+                .removeClass('has-error')
+                .find('.form-ico-checked').remove();
+
+            target.find('#pass-error').remove();
+
+            if(elem.attr('name') !== 'payment[method]'
+                && elem.attr('name') !== 'payment[additional_information][provider]')
+            {
+                target
+                    .not( ".form-checkbox" )
+                    .not( ".form-radio" )
+                    .append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
             }
 
-
-
-            jQuery(element).closest("div").find('.form-ico-times').remove();
+            target.find('.form-ico-times').remove();
         },
 
         errorPlacement: function(error, element) {
