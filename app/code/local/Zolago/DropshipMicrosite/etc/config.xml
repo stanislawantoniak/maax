@@ -50,6 +50,26 @@
 					</change_vendor_design>
 				</observers>
 			</controller_action_layout_load_before>
+			
+			<!-- disable 404 on brandshop product -->
+			<catalog_controller_product_init>
+                <observers>
+                    <umicrosite>
+                       <type>disabled</type>
+                    </umicrosite>
+                </observers>
+            </catalog_controller_product_init>
+			
+			<!-- enable own observer -->
+			<catalog_controller_product_init>
+                <observers>
+                    <zolagodropshipmicrosite>
+                        <class>zolagodropshipmicrosite/observer</class>
+                        <method>catalogControllerProductInit</method>
+                    </zolagodropshipmicrosite>
+                </observers>
+            </catalog_controller_product_init>
+			
             <core_locale_set_locale>
                 <observers>
                     <bind_locale>
