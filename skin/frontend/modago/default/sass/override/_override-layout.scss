@@ -1046,3 +1046,15 @@ form {
 
 
 }
+
+#seller-box-bundle .seller {
+  @media(max-width: $screen-xs-max) {
+    width: 50%;
+    float: right;
+    margin-right: 5px;
+  }
+  @media(min-width: $screen-sm-min) {
+    width: 100%;
+    float: none;
+  }
+}

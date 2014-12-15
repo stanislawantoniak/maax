@@ -1,5 +1,4 @@
 <?php
-/** @var $this Zolago_Solrsearch_Block_Search_View */
 /** @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Header_Search */
 
 //$_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
@@ -20,7 +19,7 @@ $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
                             <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                         </div>
 
-                        <?php echo $this->getChildHtml('current-search') ?>
+                        <?php echo $this->getCurrentSearchHtml(); ?>
 
                         <div id="active-filters-wrapper">
                             <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
@@ -39,7 +38,7 @@ $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
                                     <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                                 </div>
 
-                                <?php echo $this->getChildHtml('current-search') ?>
+                                <?php echo $this->getCurrentSearchHtml(); ?>
 
                                 <div id="active-filters-wrapper">
                                     <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
