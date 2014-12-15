@@ -84,6 +84,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         if(!empty($batch)){
                             $batch = (array)$batch;
+                            $merchant = 0;
                             foreach($batch as $dataStock){
                                 $merchant = $dataStock['merchant'];
                                 $stock = $dataStock['data'];
@@ -101,7 +102,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             unset($dataStock);
                         }
 
-                        self::updateStockConverter($stockBatch);
+                        self::updateStockConverter($stockBatch, $merchant);
                         break;
                     default:
                         //
@@ -148,7 +149,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      * 3. Move to solr que
      * @param $stockBatch
      */
-    public static function updateStockConverter($stockBatch)
+    public static function updateStockConverter($stockBatch, $vendor)
     {
 
         if (empty($stockBatch)) {
@@ -161,12 +162,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $stockId = 1;
         $availableStockByMerchant = array();
-        //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
+        Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData); //return array("sku" => qty, ...)
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $vendor); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
+        Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
         if (empty($availableStockByMerchant)) {
             return;
         }
@@ -175,7 +176,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //2. calculate stock on open orders
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
-        //Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
+        Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
 
 
         $availableStockByMerchantOnOpenOrders = array();
@@ -279,12 +280,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
         //2. reformat by store_id $priceMarginValues
         $marginByStore = array();
+        //Mage::log(print_r($priceMarginValues,true), 0, 'priceMarginValues.log');
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
                 $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
             }
             unset($_);
         }
+        //Mage::log(print_r($marginByStore,true), 0, 'marginByStore.log');
         //3. reformat by store_id $priceMSRPSource
         $priceMSRPTypeByStore = array();
         if (!empty($priceMSRPSourceManual)) {
@@ -352,6 +355,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             if (isset($marginByStore[$productId][$storeId])) {
                                 $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
                             }
+                            //Mage::log($marginSelected, 0, 'marginSelected.log');
 
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
