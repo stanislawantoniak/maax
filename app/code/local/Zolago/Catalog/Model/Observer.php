@@ -70,6 +70,9 @@ class Zolago_Catalog_Model_Observer
         if ($product->dataHasChangedFor(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE)) {
             $attributesAffected = true;
         }
+        if ($product->dataHasChangedFor(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE)) {
+            $attributesAffected = true;
+        }
         if ($attributesAffected) {
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queueProduct($productId);
@@ -90,9 +93,9 @@ class Zolago_Catalog_Model_Observer
         $converterPriceType = isset($attributesData['converter_price_type']) ? $attributesData['converter_price_type']
             : 0;
         $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : 0;
-
+        $msrpType = (isset($attributesData['converter_msrp_type']) && $attributesData['converter_msrp_type'] == 0)? 1:0;
         $productIdsLog = implode(",", $productIds);
-        if (!empty($converterPriceType) || !empty($priceMargin)) {
+        if (!empty($converterPriceType) || !empty($priceMargin) || !empty($msrpType)) {
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);
         }
