@@ -103,7 +103,7 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
     /**
      * @return mixed
      */
-    public function getMinPOSStock()
+    public function getMinPOSStock($vendor)
     {
         $readConnection = $this->_getReadAdapter();
 
@@ -112,6 +112,7 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             array("main_table" => $this->getTable("zolagopos/pos")),
             array('external_id', 'minimal_stock')
         );
+        $select->where("vendor_owner_id=?", (int)$vendor);
         $select->where("external_id!=?", "");
         $select->where("is_active=?", 1);
 

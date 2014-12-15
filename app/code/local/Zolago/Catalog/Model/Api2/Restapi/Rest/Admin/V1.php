@@ -84,6 +84,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         if(!empty($batch)){
                             $batch = (array)$batch;
+                            $merchant = 0;
                             foreach($batch as $dataStock){
                                 $merchant = $dataStock['merchant'];
                                 $stock = $dataStock['data'];
@@ -161,12 +162,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $stockId = 1;
         $availableStockByMerchant = array();
-        //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
+        Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData); //return array("sku" => qty, ...)
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
+        Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
         if (empty($availableStockByMerchant)) {
             return;
         }
@@ -175,7 +176,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //2. calculate stock on open orders
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
-        //Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
+        Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
 
 
         $availableStockByMerchantOnOpenOrders = array();
