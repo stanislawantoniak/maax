@@ -68,8 +68,19 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	}
 	
 	public function getCommentAuthor(Zolago_Rma_Model_Rma_Comment $comment) {
-		//return $comment->getAuthorName();
-		return $comment->getAuthorTypeText();
+        //for customer front
+        switch ($comment->getAuthorType()) {
+            case $comment::CUSTOMER:
+                return Mage::helper('zolagorma')->__("Your comment");
+                break;
+            case $comment::VENDOR:
+                return Mage::helper('zolagorma')->__("Vendor comment");
+                break;
+            case $comment::OPERATOR:
+                return Mage::helper('zolagorma')->__("Vendor comment");//operator like vendor
+                break;
+        }
+        return Mage::helper('zolagorma')->__("System");
 	}
 	
 	/**

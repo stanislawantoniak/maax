@@ -112,9 +112,17 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             array("main_table" => $this->getTable("zolagopos/pos")),
             array('external_id', 'minimal_stock')
         );
-        $select->where("vendor_owner_id=?", (int)$vendor);
-        $select->where("external_id!=?", "");
-        $select->where("is_active=?", 1);
+        $select->join(
+            array('pos' => $this->getTable("zolagopos/pos_vendor")),
+            'pos.pos_id=main_table.pos_id',
+            array()
+        );
+        $select->where("pos.vendor_id=?", (int)$vendor);
+        $select->where("main_table.external_id!=?", "");
+        $select->where("main_table.is_active=?", 1);
+
+//        SELECT `main_table`.`external_id`, `main_table`.`minimal_stock` FROM `zolago_pos` AS `main_table`
+//        INNER JOIN `zolago_pos_vendor` AS `pos` ON pos.pos_id=main_table.pos_id WHERE (pos.vendor_id=5) AND (external_id!='') AND (is_active=1)
 
         $minPOSValues = $readConnection->fetchPairs($select);
         return $minPOSValues;
@@ -185,20 +193,25 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
         if (empty($skus)) {
             return array();
         }
-        //Mage::log(print_r($skus, true), 0, "calculateStockOpenOrders.log");
         $po_open_order = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+
+        if (empty($po_open_order)) {
+            return array();
+        }
+        $poOpenOrder = explode(',', $po_open_order);
+
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
         $select
             ->from(
-                'udropship_po_item AS po_item',
+                array('po_item'=>$this->getTable("udpo/po_item")),
                 array(
                     'sku' => 'po_item.sku',
-                    'qty' => 'SUM(po_item.qty)'
+                    'qty' => new Zend_Db_Expr('SUM(po_item.qty)')
                 )
             )
             ->join(
-                array('products' => 'catalog_product_entity'),
+                array('products' => $this->getTable("catalog/product")),
                 'po_item.product_id=products.entity_id',
                 array()
             )
@@ -210,9 +223,9 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             ->where("po.udropship_vendor=?", (int)$merchant)
             ->where("po_item.parent_item_id IS NULL")
             ->where("po_item.sku IN(?)", $skus)
-            ->where("po.udropship_status IN ({$po_open_order})")
+            ->where("po.udropship_status IN (?)",$poOpenOrder)
             ->group('po_item.sku');
-        //Mage::log($select->__toString(), 0, "calculateStockOpenOrders.log");
+        Mage::log($select->__toString(), 0);
         $result = $adapter->fetchAssoc($select);
 
         return $result;

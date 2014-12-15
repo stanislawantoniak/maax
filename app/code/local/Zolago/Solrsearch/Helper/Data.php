@@ -320,7 +320,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         if ($_vendor && $_vendor->getId()) {
             $array['select_options'][] = array(
                                              'value' => self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR,
-                                             'text' => $this->__('This vendor'),
+                                             'text' => $_vendor->isBrandshop() ? $this->__('This brandshop') : $this->__('This vendor'),
                                              'selected' => true,
                                          );
 
