@@ -167,7 +167,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $vendor); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
+        Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
         if (empty($availableStockByMerchant)) {
             return;
         }
@@ -176,7 +176,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //2. calculate stock on open orders
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
-        //Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
+        Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
 
 
         $availableStockByMerchantOnOpenOrders = array();
