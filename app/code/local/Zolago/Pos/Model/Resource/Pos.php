@@ -121,6 +121,9 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
         $select->where("main_table.external_id!=?", "");
         $select->where("main_table.is_active=?", 1);
 
+//        SELECT `main_table`.`external_id`, `main_table`.`minimal_stock` FROM `zolago_pos` AS `main_table`
+//        INNER JOIN `zolago_pos_vendor` AS `pos` ON pos.pos_id=main_table.pos_id WHERE (pos.vendor_id=5) AND (external_id!='') AND (is_active=1)
+
         $minPOSValues = $readConnection->fetchPairs($select);
         return $minPOSValues;
     }
