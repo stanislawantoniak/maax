@@ -75,7 +75,8 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                 foreach ($dataStockItems as $stockId => $posStockConverter) {
                     //false if POS is not active
                     $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
-
+                    Mage::log($stockId, 0, "minimalStockPOS.log");
+                    Mage::log($minimalStockPOS, 0, "minimalStockPOS.log");
                     //available stock = if [POS stock from converter]>[minimal stock from POS] then [POS stock from converter] - [minimal stock from POS] else 0
                     $data[$sku][$stockId] = ($posStockConverter > $minimalStockPOS)
                         ? ($posStockConverter - $minimalStockPOS) : 0;
