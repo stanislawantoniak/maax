@@ -24,7 +24,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
         }
 		
 
-        /** @var $checkoutSession Mage_Checkout_Model_Session */
+        /* @var $checkoutSession Mage_Checkout_Model_Session */
         $checkoutSession = Mage::getSingleton('checkout/session');
         if ($this->_isShoppingCartPersist()) {
 			$customer = $this->_getPersistentCustomer();
