@@ -58,7 +58,14 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             }
             unset($priceMarginValue);
         }
-
+        $msrpValues = $queueModel->getMsrpValues($ids);
+        $msrpValuesByStore = array();
+        if(!empty($msrpValues)) {
+            foreach($msrpValues as $msrpValue) {
+                $msrpValuesByStore[$msrpValue['store']][$msrpValue['product_id']] = $msrpValue['price_msrp'];
+            }
+            unset($msrpValue);
+        }
 
         try {
             $converter = Mage::getModel('zolagoconverter/client');
@@ -67,7 +74,6 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             //Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
             return;
         }
-        $registry = array();
         $productAction = Mage::getSingleton('catalog/product_action');
         if (!empty($skuvs)) {
 
@@ -87,19 +93,21 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                 if (!$vendorExternalId) {
                     continue;
                 }
-
+                
                 //Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
                 foreach($stores as $store) {
+                    // rebuild MSRP 
+                    $msrp = (isset($msrpValuesByStore[$store]) && isset($msrpValuesByStore[$store][$parentId])) ? $msrpValuesByStore[$store][$parentId] : 1;
+                    if (!$msrp) {  // 0 - from file
+                        $newMsrp = $converter->getPrice($vendorExternalId,$vendorSku,Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE);                        
+                        $productAction->updateAttributesNoIndex(array($productId), array(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_MSRP_CODE => $newMsrp), $store);
+                        $recalculateConfigurableIds[$productId] = $productId;
+                    }
                     $priceType = (isset($priceTypeValueByStore[$store]) && isset($priceTypeValueByStore[$store][$parentId])) ? $priceTypeValueByStore[$store][$parentId] : 0;
                     if ($priceType == '0') {
                         continue;
                     }
-                    if (!isset($registry[$vendorExternalId][$vendorSku][$priceType])) {
-                        $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
-                        $registry[$vendorExternalId][$vendorSku][$priceType] = (empty($newPrice)? '0':$newPrice);
-                    } else {
-                        $newPrice = $registry[$vendorExternalId][$vendorSku][$priceType];
-                    }
+                    $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
                     if (!empty($newPrice)) {
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 

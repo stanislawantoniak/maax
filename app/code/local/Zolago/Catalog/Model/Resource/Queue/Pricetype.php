@@ -363,6 +363,44 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
         }
         return $assoc;
     }
+    /**
+     * @param $ids
+     *
+     * @return array $assoc
+     */
+    public function getMsrpValues($ids)
+    {
+        $assoc = array();
+
+        if (!empty($ids)) {
+            $readConnection = $this->_getReadAdapter();
+            $select = $readConnection->select();
+            $select->from(
+                array("product_int" => 'catalog_product_entity_int'),
+                array(
+                    "product_id"   => "product_int.entity_id",
+                    "price_msrp" => "product_int.value",
+                    "store"        => "product_int.store_id"
+                )
+            );
+            $select->join(
+                array("attribute" => $this->getTable("eav/attribute")),
+                "attribute.attribute_id = product_int.attribute_id",
+                array()
+            );
+            $select->where(
+                "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+            );
+            $select->where("product_int.entity_id IN(?)", $ids);
+
+            try {
+                $assoc = $readConnection->fetchAll($select);
+            } catch (Exception $e) {
+                Mage::throwException("Error fetching price_margin values");
+            }
+        }
+        return $assoc;
+    }
 
 }
 
