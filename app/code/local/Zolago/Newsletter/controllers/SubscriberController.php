@@ -6,8 +6,28 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
     public function invitationAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
+        $this->confirm(
+            $_helper->__('Invalid newsletter invitation code.'),
+            $_helper->__('Invalid subscription ID.')
+        );
+    }
+
+    /**
+     * Subscription confirm action
+     */
+    public function confirmAction()
+    {
+        $_helper = Mage::helper("zolagonewsletter");
+        $this->confirm(
+            $this->__('Invalid subscription confirmation code.'),
+            $_helper->__('Invalid subscription ID.')
+        );
+    }
+
+    protected function confirm($error1,$error2) {
         $id    = (int) $this->getRequest()->getParam('id');
         $code  = (string) $this->getRequest()->getParam('code');
+        $errors = true;
 
         if ($id && $code) {
             $subscriber = Mage::getModel('newsletter/subscriber')->load($id);
@@ -15,14 +35,18 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
 
             if($subscriber->getId() && $subscriber->getCode()) {
                 if($subscriber->confirm($code)) {
-                    $session->addSuccess($_helper->__('You have been successfully subscribed to our newsletter.'));
+                    $errors = false;
                 } else {
-                    $session->addError($_helper->__('Invalid newsletter invitation code.'));
+                    $session->addError($error1);
                 }
             } else {
-                $session->addError($_helper->__('Invalid subscription ID.'));
+                $session->addError($error2);
             }
         }
-        $this->_redirectUrl(Mage::getBaseUrl());
+        if(!$errors) {
+            $this->_redirectUrl(Mage::getUrl("newsletter/thankyou"));
+        } else {
+            $this->_redirectUrl(Mage::getBaseUrl());
+        }
     }
 }
