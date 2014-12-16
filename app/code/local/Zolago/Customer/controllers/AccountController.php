@@ -21,6 +21,34 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $this->renderLayout();
     }
 
+    public function privacyAction()
+    {
+        $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
+        $this->_initLayoutMessages('catalog/session');
+
+        $block = $this->getLayout()->getBlock('notification-settings-general-subscription');
+        if ($block) {
+            $block->setRefererUrl($this->_getRefererUrl());
+        }
+
+
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
+        $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
+        $this->renderLayout();
+    }
+
+    public function forgetMeAction()
+    {
+        $persistentHelper = Mage::helper('persistent/session');
+        if ($persistentHelper->isPersistent()) {
+            $persistentHelper->getSession()->removePersistentCookie();
+        }
+        $this->_redirect('customer/account/privacy');
+        return;
+
+    }
+
 	/**
 	 * Override mesagge
 	 */
