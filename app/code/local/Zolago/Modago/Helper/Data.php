@@ -8,7 +8,8 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return array
      */
-    public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories, $level = 1, $span = false)
+    public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories, 
+			$level = 1, $span = false, $allowVendorContext = true)
     {
 		Varien_Profiler::start("todo: Zolago_Modago_Helper_Data::getCategoriesTree");
         $tree = array();
@@ -17,7 +18,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 
             $tree[$category->getId()] = array(
                 'name'           => $category->getName(),
-                'url'            => $cat->getUrl(),
+                'url'            => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
                 'category_id'    => $category->getId(),
                 'level'          => $level,
                 'products_count' => $cat->getProductCount()
@@ -32,7 +33,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
             }
             if ($category->hasChildren()) {
                 $children = Mage::getModel('catalog/category')->getCategories($category->getId());
-                $tree[$category->getId()]['has_dropdown'] = self::getCategoriesTree($children, $level + 1, $span);
+                $tree[$category->getId()]['has_dropdown'] = self::getCategoriesTree($children, $level + 1, $span, $allowVendorContext);
             }else{
 				$tree[$category->getId()]['has_dropdown']  = false;
 			}

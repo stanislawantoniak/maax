@@ -9,7 +9,7 @@
 	<?php echo $this->__("Matched product(s) prices will update after que processed");?>
 </p>
 <div class="row">
-	<div class="col-md-6 form-group">
+	<div class="col-md-4 form-group">
 		<span class="help-block"><?php echo $this->__("Source price");?></span>
 		<select disabled="disabled" id="converter_price_type_2"  name="converter_price_type" type="text" class="form-control converterPriceType">
 			<?php foreach ($this->getPriceSourceOptions() as $option):?>
@@ -22,11 +22,24 @@
 			<?php echo $this->__("Change");?>
 		</label>
 	</div>
-	<div class="col-md-6 form-group">
+	<div class="col-md-4 form-group">
 		<span class="help-block"><?php echo $this->__("Margin");?></span>
 		<input disabled="disabled" id="price_margin_2" name="price_margin" value="" type="text" class="marignPercent form-control"/>
 		<label class="checkbox-inline" for="price_margin_2-1">
 			<input  type="checkbox" class="uniform marignPercentChange" id="price_margin_2-1" name="price_margin_change" value="1"/> 
+			<?php echo $this->__("Change");?>
+		</label>
+	</div>
+	<div class="col-md-4 form-group">
+		<span class="help-block"><?php echo $this->__("MSRP Source");?></span>
+		<select disabled="disabled" id="converter_msrp_type_2"  name="converter_msrp_type" type="text" class="form-control converterMsrpType">
+			<?php foreach ($this->getConverterMsrpTypeOptions() as $option):?>
+			<?php $_label = $option['label'] ? $option['label'] : $this->__("Manual");?>
+			<option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($_label);?></option>
+			<?php endforeach;?>
+		</select>
+		<label class="checkbox-inline" for="converter_msrp_type_2-1">
+			<input type="checkbox" class="uniform converterMsrpTypeChange" id="converter_msrp_type_2-1" name="converter_msrp_type_change" value="1"/> 
 			<?php echo $this->__("Change");?>
 		</label>
 	</div>

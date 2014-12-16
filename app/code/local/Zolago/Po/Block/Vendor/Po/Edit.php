@@ -352,13 +352,21 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		return $this->getUrl("*/*/$action", $params);
 	}
 	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return string
+	 */
 	public function getHelpdeskUrl(Zolago_Po_Model_Po $po) {
 		//filter_customer_name
 		return $this->getUrl("udqa/vendor/index", array(
-			"_query"=>array("filter_customer_name"=>$po->getOrder()->getCustomerName())
-		));
+			"filter"=> Mage::helper("core")->urlEncode("customer_name=" . urlencode($this->getPo()->getOrder()->getCustomerName())))
+		);
 	}
 	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return int
+	 */
 	public function getAllMessagesCount(Zolago_Po_Model_Po $po) {
 		if(!$this->hasData('all_messages_count')){
 			$collection = Mage::getResourceModel('udqa/question_collection');
@@ -371,6 +379,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		return $this->getData("all_messages_count");
 	}
 	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return int
+	 */
 	public function getUnreadMessagesCount(Zolago_Po_Model_Po $po) {
 		if(!$this->hasData('unread_messages_count')){
 			$collection = Mage::getResourceModel('udqa/question_collection');

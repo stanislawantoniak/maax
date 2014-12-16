@@ -1,64 +1,53 @@
 <?php
-/** @var $this Zolago_Solrsearch_Block_Search_View */
 /** @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Header_Search */
 
-$_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
-/** @var Zolago_Solrsearch_Helper_Data $_helperZSS */
-$_helperZSS = Mage::helper('zolagosolrsearch');
+//$_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
 
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 
  ?>
-<div class="wrapp-section bg-w" style="border: none;">
-    <div class="container-fluid">
-        <div id="block-current-search" class="row ">
-            <div id="view-current-search" class="col-sm-12">
-                <div class="current-search">
+<header id="header-main">
+    <div class="wrapp-section bg-w">
+        <div class="container-fluid">
+            <div id="block-current-search" class="row">
+                <div id="view-current-search" class="col-sm-12">
+                    <?php if(!$vendor): ?>
 
-                    <h1>
-                        <?php if($_helperZSS->getSolrRealQ() != $this->getQueryString()): ?>
-                            <?php echo $this->__("You're looking for: "); ?>
-                        <?php else: ?>
-                            <?php echo $this->__("Search result for: "); ?>
-                        <?php endif; ?>
-                        <strong>
-                            <?php echo $this->getQueryString(); ?>
-                        </strong>
-                    </h1>
-                    <?php if($_helperZSS->getSolrRealQ() != $this->getQueryString()): ?>
-                        <?php if($_helperZSS->getIsNoResult()): ?>
-                            <p class="found-product"><?php echo $this->__("Do You mean:");?> <strong><?php echo $_helperZSS->getSolrRealQ(); ?>?</strong></p>
-                        <?php endif; ?>
-                    <?php endif; ?>
+                        <div id="breadcrumbs-header">
+                            <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                        </div>
 
-                    <?php if($_helperZSS->getIsNoResult()): ?>
-                        <p>
-                            <?php echo $this->__("Found: %s products", $_helperZSS->getNumFound()); ?><span id="found-dot">.</span>
-                            <?php if($_helperZSS->getSolrRealQ() != $this->getQueryString()): ?>
-                                <?php echo $this->__("for &quot;%s&quot;", $_helperZSS->getSolrRealQ()); ?>
-                            <?php endif; ?>
-                            <span id="category-cnt-wrapper"> <?php echo $this->__("in"); ?> <span id="category-cnt"></span> <?php echo $this->__("categories"); ?>.</span>
-                        </p>
+                        <?php echo $this->getCurrentSearchHtml(); ?>
+
+                        <div id="active-filters-wrapper">
+                            <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                        </div>
                     <?php else: ?>
-                        <span class="no-result" style="padding-bottom: 10px;"><?php echo $this->__("No results"); ?></span>
-                        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
-                    <?php endif; ?>
+                        <div id="category-header-left">
+                            <div id="category-header-vendor-box">
+                                <span class="vendor-type"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?>&nbsp;</span>
+                                <span><img class="vendor-logo" src="<?php echo $vendor->getVendorLogoUrl(); ?>"/></span>
+                            </div>
+                        </div>
+                        <div style="clear:both" class="visible-xs"></div>
+                        <div id="category-header-right">
+                            <div class="right-wrapper">
+                                <div id="breadcrumbs-header">
+                                    <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                                </div>
 
-<!--                    <a href="--><?php //echo $_categoryBlock->getMoveUpUrl(); ?><!--"-->
-<!--                       class="backToCategory underline visible-xs">--><?php //echo $this->__("Go up"); ?><!--</a>-->
+                                <?php echo $this->getCurrentSearchHtml(); ?>
+
+                                <div id="active-filters-wrapper">
+                                    <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    jQuery(document).ready(function(){
-        var cnt = jQuery('#filter_category dl dd').length;
-        if(cnt >= 2) {
-            jQuery('#category-cnt').html(cnt);
-            jQuery('#category-cnt-wrapper').show();
-            jQuery('#found-dot').hide();
-        } else {
-            jQuery('#category-cnt-wrapper').hide();
-        }
-    });
-</script>
+</header>

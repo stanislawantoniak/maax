@@ -3,13 +3,12 @@
 	Mall.Checkout = function(){
 		this.METHOD_GUEST    = 'guest';
 		this.METHOD_REGISTER = 'register';
-		this.METHOD_CUSTOMER = 'customer'
+		this.METHOD_CUSTOMER = 'customer';
 
 		this._steps = [];
 		this._activeIndex = 0;
 		this._progressObject = null;
 		this._config = {};
-		
 		this._addressTemplate = '<dl>\
 			  <dd class="shipping">{{firstname}} {{lastname}}</dd>\
 			  <dd class="company">{{company}}</dd>\
@@ -24,8 +23,8 @@
 	
 	
 	/**
-	 * @param string 
-	 * @param mixed 
+	 * @param string
+	 * @param mixed
 	 * @returns Mall.Chceckout
 	 */
 	Mall.Checkout.prototype.set = function(key, value){
@@ -34,7 +33,7 @@
 	}
 	
 	/**
-	 * @param string 
+	 * @param string
 	 * @returns mixed
 	 */
 	Mall.Checkout.prototype.get = function(key){
@@ -141,8 +140,7 @@
 			this.active = 0;
 			this.content.addClass("hidden");
 		});
-		
-	
+
 		currentStep.onEnter.apply(currentStep, [self]);
 		currentStep.content.removeClass("hidden");
 		currentStep.active = 1;
@@ -280,16 +278,16 @@
 	 * 
 	 */
 	Mall.Checkout.prototype.beforePlaceOrder = function(xhr){
-		console.log("Before data send");
+		//console.log("Before data send");
 	}
 	
 	/**
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.successPlaceOrder = function(response){
-		console.log("Sucess data send", response);
+		//console.log("Sucess data send", response);
 		if(response.status==1){
-			console.log(response.content)
+			//console.log(response.content)
 			if(response.content.redirect){
 				window.location.replace(response.content.redirect);
 			}
@@ -302,14 +300,14 @@
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.errorPlaceOrder = function(response){
-		console.log("Error data send");
+		//console.log("Error data send");
 	}
 	
 	/**
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.completePlaceOrder = function(xhr){
-		console.log("After data send");
+		//console.log("After data send");
 	}
 	
 
@@ -597,7 +595,4 @@
 		
 		return address.get(0).outerHTML;
 	};
-	
-	
-
 })();

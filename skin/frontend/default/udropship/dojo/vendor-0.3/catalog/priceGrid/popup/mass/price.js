@@ -76,14 +76,16 @@ define([
 
 			var source = jQuery(".converterPriceType", node),
 				margin = jQuery(".marignPercent", node),
+				msrp = jQuery(".converterMsrpType", node),
 				sourceChange = jQuery(".converterPriceTypeChange", node),
 				marginChange = jQuery(".marignPercentChange", node),
+				msrpSourceChange = jQuery(".converterMsrpTypeChange", node),
 				form = node.parents("form"),
 				btn = jQuery(".btn-primary", form),
 				self = this;
 
 		    var refreshSaveBtn = function(){
-				console.log(!jQuery(":checkbox:checked", node).length);
+				//console.log(!jQuery(":checkbox:checked", node).length);
 				btn.prop("disabled", !jQuery(":checkbox:checked", node).length);
 			}
 				
@@ -98,6 +100,11 @@ define([
 				margin.prop("disabled", !this.checked);
 				refreshSaveBtn();
 			})	
+			
+			msrpSourceChange.change(function(){
+				msrp.prop("disabled", !this.checked);
+				refreshSaveBtn();
+			});
 
 			App.applyNumeric(); // Apply numeric plugin
 			App.uniform(); // Apply uniform

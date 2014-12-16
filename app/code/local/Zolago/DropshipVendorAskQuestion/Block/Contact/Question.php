@@ -5,8 +5,11 @@ class Zolago_DropshipVendorAskQuestion_Block_Contact_Question extends Mage_Core_
 	/**
 	 * @return string
 	 */
-	public function getFormUrl() {
-		return $this->getUrl("udqa/customer/post");
+	public function getFormUrl($secure=null) {
+		if(is_null($secure)){
+			$secure = Mage::app()->getStore()->isCurrentlySecure();
+		}
+		return $this->getUrl("udqa/customer/post", array("_secure"=>$secure));
 	}
 	
 	/**

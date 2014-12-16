@@ -137,8 +137,10 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		
 		// Replace vendor email to pos email & send mail & restore origin
 		$vendor->setData($emailField, $newEmail);	
+		$vendor->setData("po", $po);
 		$return = parent::sendNewPoNotificationEmail($po, $comment);
 		$vendor->setData($emailField, $oldEmail);
+		$vendor->setData("po", null);
 		
 		
 		// Porocess queue

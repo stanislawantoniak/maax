@@ -51,4 +51,19 @@
     a {
         font-size: 18px;
     }
+	.brandshop{
+		vertical-align: baseline;
+		border-bottom: 1px #eee solid; 
+		padding: 10px 0 10px 15px; 
+		margin-bottom: 5px;
+		font-size: 12px;
+		a {
+			font-size: 12px;
+			img{
+				vertical-align: baseline;
+				max-height: 40px;
+				margin-left: 5px;
+			}
+		}
+	}
 }

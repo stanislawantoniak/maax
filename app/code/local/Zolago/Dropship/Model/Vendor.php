@@ -1,6 +1,43 @@
 <?php
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
+
+    const VENDOR_TYPE_BRANDSHOP = 2;
+    const VENDOR_TYPE_STANDARD = 1;
+	
+	/**
+	 * Overide fuction to add additional email address bases od vendor operators
+	 * @return array
+	 */
+	public function getNewOrderCcEmails() {
+		$po = $this->getData("po");
+		/* @var $po Zolago_Po_Model_Po */
+		$new = array();
+		if($po && $po->getId()){
+			foreach($po->getAllowedOperators() as $operator){
+				$new[] = $operator->getEmail();
+			}
+		}
+		$old = parent::getNewOrderCcEmails();
+		return array_unique(array_merge(is_array($old) ? $old : array(), $new));
+	}
+	
+	/**
+	 * @todo add params
+	 * @param array $params
+	 * @return string
+	 */
+	public function getVendorUrl($params=array()) {
+		return Mage::helper("zolagodropshipmicrosite")->getVendorUrl($this);
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isBrandshop() {
+		return $this->getVendorType()==Zolago_Dropship_Model_Source::VENDOR_TYPE_BRANDSHOP;
+	}
+	
 	/**
 	 * Sets root category to registry and then return
 	 */
@@ -122,4 +159,8 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
 		return $renderer->render($address);
 	}
+
+    public function getVendorLogoUrl() {
+        return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
+    }
 }

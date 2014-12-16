@@ -38,12 +38,12 @@ $session = Mage::getSingleton('customer/session');
 				<?php else: ?>
 					<li class="wide">
 						<div class="form-group select-container">
-							<select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
-									<option value=""><?php echo $this->__("Choose shop"); ?></option>
-								<?php foreach($vendors as $id=>$name): ?>
-									<option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
-								<?php endforeach; ?>
-							</select>
+                            <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
+                                    <option value=""><?php echo $this->__("Choose shop"); ?></option>
+                                <?php foreach($vendors as $id=>$name): ?>
+                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
 						</div>
 					</li>
 				<?php endif; ?>
@@ -52,7 +52,7 @@ $session = Mage::getSingleton('customer/session');
                     <div class="form-group">
                         <label for="customer_name" class="required" aria-required="true"><?php echo $this->__('Your Name') ?> <em>*</em></label>
                         <div class="input-box">
-                            <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint" required
+                            <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint closer-valid-ico" required
                                 value="<?php echo $customer_name; ?>"/>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ $session = Mage::getSingleton('customer/session');
                     <div class="form-group">
                         <label for="customer_email" class="required" aria-required="true"><?php echo $this->__('Email') ?> <em>*</em></label>
                         <div class="input-box">
-                            <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint" required data-rule-email="true"
+                            <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint closer-valid-ico" required data-rule-email="true"
                                 value="<?php echo $customer_email; ?>"/>
                         </div>
                     </div>
@@ -95,4 +95,23 @@ $session = Mage::getSingleton('customer/session');
 <script type="text/javascript">
 	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
 	Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+</script>
+<script>
+    jQuery(document).ready(function() {
+        var vidselectid = '#vendor_id';
+        var vidselect =  jQuery(vidselectid),
+            questionform =  jQuery("#question-form");
+
+        vidselect.select2({
+            minimumResultsForSearch: -1
+        });
+
+        questionform.validate(Mall.validate.getDefaultValidationOptions());
+
+
+        // this is required to trigger validation on select change
+        vidselect.on("change", function() {
+            questionform.validate().element(vidselectid);
+        });
+    });
 </script>

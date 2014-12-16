@@ -748,6 +748,13 @@
 			getFormKey: function(){
 				return this.content.find("input[name='form_key']").val();
 			},
+
+			getNewsletterAgreement: function() {
+				if(this.content.find("input[name='agreement[newsletter]']").length) {
+					return this.content.find("input[name='agreement[newsletter]']").is(":checked");
+				}
+				return null;
+			},
 			
 			collect: function(){
 				
@@ -769,6 +776,14 @@
 					{"name": "billing_address_id", "value": billing.getId()},
 					{"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0}
 				];
+
+				var newsletterAgreement = this.getNewsletterAgreement();
+				if(newsletterAgreement !== null) {
+					data.push({
+						name: "agreement[newsletter]",
+						value: newsletterAgreement ? 1 : 0
+					});
+				}
 				
 				// Push billing data
 				jQuery.each(billing.getData(), function(idx){
@@ -1194,7 +1209,7 @@
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
-				
+
 				// Push method
 				stepData.push({name: "method", value: this.checkout.getMethod()});
 
@@ -1242,6 +1257,22 @@
                 return parseInt(jQuery("#customer_logged_in").val(), 10);
             },
 
+			getNewsletterAgreementContainer: function() {
+				return jQuery("#newsletter_agreement_container");
+			},
+
+			hideNewsletterAgreement: function() {
+				var container = this.getNewsletterAgreementContainer();
+				container.find("[name='agreement[newsletter]']").attr('disabled',true);
+				container.hide();
+			},
+
+			showNewsletterAgreement: function() {
+				var container = this.getNewsletterAgreementContainer();
+				container.find("[name='agreement[newsletter]']").attr('disabled',false);
+				container.show();
+			},
+
             afterEmailValidationAction: function () {
                 if (this.getCustomerIsLoggedIn()) {
                     return true;
@@ -1265,6 +1296,11 @@
 
                 promise.done(function (data) {
                     if (data !== undefined && data.status !== undefined) {
+                        if(data.subscribed) {
+                            self.hideNewsletterAgreement();
+                        } else {
+                            self.showNewsletterAgreement();
+                        }
                         if (data.status) {
                             // email exists
                             jQuery('#' + Mall.Checkout.steps.address._self_form_id)
@@ -1275,7 +1311,6 @@
                                             , "We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account.")
                                 });
 
-                            self.validate._checkout.getActiveStep().disable();
                             jQuery('html, body').animate({
                                 scrollTop: jQuery(
                                     jQuery('#'
@@ -1284,12 +1319,14 @@
                                     - Mall.getMallHeaderHeight()
                             }, "slow");
 
+                            self.validate._checkout.getActiveStep().disable();
                             return false;
+                        } else {
+                            self.validate._checkout.getActiveStep().enable();
+                            return true;
                         }
                     }
-                    self.validate._checkout.getActiveStep().enable();
 
-                    return true;
                 }).fail(function () {
                     /**
                      * @todo implementation. At the moment we do nothing.

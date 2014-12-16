@@ -29,10 +29,9 @@ class Zolago_Catalog_Model_Observer
             'class' => 'validate-digits',
         ));
     }
+
     static public function processConfigurableQueue()
     {
-        Mage::log(microtime() . " Starting processConfigurableQueue ", 0, 'configurable_update.log');
-        //Mage::getResourceModel('zolagocatalog/queue_configurable')->clearQueue();
         Mage::getModel('zolagocatalog/queue_configurable')->process(2500);
     }
 
@@ -42,11 +41,8 @@ class Zolago_Catalog_Model_Observer
      */
     public static function processPriceTypeQueue()
     {
-        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Clear queue");
         Mage::getResourceModel('zolagocatalog/queue_pricetype')->clearQueue();
-        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Start process");
-        $process = Mage::getModel('zolagocatalog/queue_pricetype')->process(2000);
-        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Products processed {$process}");
+        Mage::getModel('zolagocatalog/queue_pricetype')->process(2000);
     }
 
     static public function clearConfigurableQueue()
@@ -74,8 +70,10 @@ class Zolago_Catalog_Model_Observer
         if ($product->dataHasChangedFor(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE)) {
             $attributesAffected = true;
         }
+        if ($product->dataHasChangedFor(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE)) {
+            $attributesAffected = true;
+        }
         if ($attributesAffected) {
-            //Mage::helper('zolagocatalog/pricetype')->_log("{$productId} Converter price type attributes affected");
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queueProduct($productId);
             //------Add to queue
@@ -94,13 +92,10 @@ class Zolago_Catalog_Model_Observer
 
         $converterPriceType = isset($attributesData['converter_price_type']) ? $attributesData['converter_price_type']
             : 0;
-        $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : 0;
-
+        $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : null;
+        $msrpType = (isset($attributesData['converter_msrp_type']) && $attributesData['converter_msrp_type'] == 0)? 1:0;
         $productIdsLog = implode(",", $productIds);
-        if (!empty($converterPriceType) || !empty($priceMargin)) {
-//            Mage::helper('zolagocatalog/pricetype')->_log(
-//                "{$productIdsLog} Converter price type attributes affected: converterPriceType - {$converterPriceType}, priceMargin: {$priceMargin}"
-//            );
+        if (!empty($converterPriceType) || !is_null($priceMargin) || !empty($msrpType)) {
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);
         }

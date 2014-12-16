@@ -2,6 +2,20 @@
 
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {
+	
+	/**
+	 * @return string
+	 */
+	public function getNoVendorContextUrl() {
+		if(!$this->hasData("no_vendor_context_url")){
+			$this->setData(
+				"no_vendor_context_url",
+				Mage::helper("zolagodropshipmicrosite")->convertToNonVendorContext($this->getUrl())
+			);
+		}
+		return $this->getData("no_vendor_context_url");
+	}
+	
 	/**
 	 * Overload load method - load cached data if possible
 	 * @param int $id
