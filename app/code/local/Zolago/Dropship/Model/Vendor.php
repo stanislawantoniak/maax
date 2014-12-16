@@ -40,6 +40,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 	
 	/**
 	 * Sets root category to registry and then return
+     * [DEPRECATED] ! DO NOT USE !
 	 */
 	public function rootCategory($websiteId = NULL){
 
@@ -163,4 +164,5 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     public function getVendorLogoUrl() {
         return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
     }
+
 }

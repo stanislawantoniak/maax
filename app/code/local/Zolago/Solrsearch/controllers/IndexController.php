@@ -18,6 +18,11 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
         // Set root category if in the vendor context
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+        /** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
+        $helperZDM = Mage::helper("zolagodropshipmicrosite");
+        $vendor_root_category_id = $helperZDM->getVendorRootCategoryObject()->getId();
+
         if ($vendor && $vendor->getId()) {
 
             // If "Everywhere" or specific category are selected
@@ -32,23 +37,22 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
         // Reset sessions
         Mage::getSingleton('core/session')->setSolrFilterQuery(array());
 
-        // When in the search mode
-        // Set current category to param['scat']
-        if (isset($params['scat'])) {
-            // override root category
-            if ($params['scat'] == '0') {
-                $params['scat'] = Mage::app()->getStore()->getRootCategoryId();
-            }
-            if ($params['scat'] != "0" && $params['scat'] != Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR) {
-
-                if (isset($params['is_search'])) {
-                    Mage::register('is_current_category_context', TRUE);
-                }
-                $search_category = Mage::getModel('catalog/category')->load($params['scat']);
-                Mage::register('current_category', $search_category);
-            }
-
+        if(!isset($params['scat'])) {
+            //should always to be
+            //but if not, set to default
+            $params['scat'] = '0';
         }
+
+        // override root category
+        if ($params['scat'] == '0') {
+            $params['scat'] = Mage::app()->getStore()->getRootCategoryId();
+        }
+        else
+        {
+            $search_category = Mage::getModel('catalog/category')->load($params['scat']);
+        }
+        Mage::register('current_category', $search_category);
+
 
         //Redirect to Url set for the search term
         $query = Mage::helper('catalogsearch')->getQuery();
@@ -95,9 +99,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
             // Use current vendor
             if ($vendor && $vendor->getId()) {
                 $filterQuery['udropship_vendor'] = urlencode($vendor->getId());
-                if($params['scat'] == Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR) {
-                    $vendor->rootCategory(); // set root vendor category as current
-                }
+
+                $vendor->rootCategory(); // set root vendor category as current
             }
 
             elseif($params['scat'] == '0') {
