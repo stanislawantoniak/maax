@@ -13,7 +13,7 @@
 		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
-<form method="post" id="new-rma" action="<?php echo $this->getUrl('*/*/saveRma') ?>">
+<form method="post" id="new-rma" action="<?php echo $this->getUrl('*/*/saveRma', array("_secure"=>Mage::app()->getStore()->isCurrentlySecure())) ?>">
 	<input type="hidden" name="po_id" value="<?php echo $this->getPo()->getId(); ?>">
 	<?php echo $this->getChildHtml("zolagorma.new.step1");?>
 	<?php echo $this->getChildHtml("zolagorma.new.step2");?>

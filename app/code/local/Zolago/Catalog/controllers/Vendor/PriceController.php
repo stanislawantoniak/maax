@@ -41,7 +41,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		$query = Mage::helper("core")->jsonDecode(base64_decode($request->getParam("encoded_query")));
 		$attributeData = array();
 		
-		foreach(array("converter_price_type", "price_margin") as $key){
+		foreach(array("converter_price_type", "converter_msrp_type", "price_margin") as $key){
 			$value = $request->getParam($key);
 			if(!is_null($value)){
 				$attributeData[$key] = $value;
@@ -70,7 +70,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 			$allIds = array_map(function($item){return (int)$item;}, $allIds);
 			
 			if($allIds && $attributeData){
-				$this->_processAttributresSave($allIds, $attributeData, $storeId);
+				$this->_processAttributresSave($allIds, $attributeData, $storeId, array());
 			}
 			
 			// Prepare response data

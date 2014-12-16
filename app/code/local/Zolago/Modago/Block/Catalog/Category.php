@@ -22,17 +22,30 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
             $catId = (int)$categoryData->getId();
             $cat = Mage::getModel('catalog/category')->load($catId);
             $catTree[$catId] = array(
-                                   'name' => $categoryData->getName(),
-                                   'url' => rtrim(Mage::getUrl($cat->getUrlPath()), "/"),
-                                   'category_id' => $catId,
-                                   'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml()
-                               );
+				'name' => $categoryData->getName(),
+				'url' => rtrim(Mage::getUrl($cat->getUrlPath()), "/"),
+				'category_id' => $catId,
+				'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml()
+			);
         }
 		Varien_Profiler::stop("todo: Load main categories");
         return $catTree;
     }
 
 
+	/**
+	 * @return type
+	 */
+	public function getMenuMainCategories(){
+		if(!$this->getData("menu_main_categories")){
+			$rootCatId = Mage::app()->getStore()->getRootCategoryId();
+			$categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
+			$this->setData("menu_main_categories", 
+					Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2, false));
+		}
+		return $this->getData("menu_main_categories");
+	}
+	
     /**
      * Returns main categories for mobile navigation menu under black header
      *
@@ -40,9 +53,7 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMainCategoriesMobile()
     {
-        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-        $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
-        return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2);
+        return $this->getMenuMainCategories();
     }
 
     /**
@@ -53,12 +64,7 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     public function getMainCategoriesForSlidingMenu()
     {
 
-        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-        $categories = Mage::getModel('catalog/category')
-                      ->getCategories($rootCatId);
-
-        $tree = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2);
-        return $tree;
+        return $this->getMenuMainCategories();
     }
     /**/
     /**

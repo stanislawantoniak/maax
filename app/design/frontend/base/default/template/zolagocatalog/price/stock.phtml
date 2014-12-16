@@ -25,7 +25,7 @@
 		<?php $_pos = $item->getPos();?>
 		<tr>
 			<td><?php echo $this->escapeHtml($_pos->getName());?></td>
-			<td class="align-right"><?php echo $this->formatNumber($item->getImportedStock());?></td>
+			<td class="align-right"><?php echo $this->formatNumber($item->getConverterStock());?></td>
 			<td class="align-right"><?php echo $this->formatNumber($_pos->getMinimalStock());?></td>
 			<td class="align-right"><?php echo $this->formatNumber($item->getFinalStock());?></td>
 		</tr>

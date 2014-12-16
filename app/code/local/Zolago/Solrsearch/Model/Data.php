@@ -264,10 +264,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$docData['sort_position_decimal'] = 1;
 		}
 
-		// @todo add later
-		//$docData['sort_bestselling_decimal'] = $this->getProductOrderedQty($_product, $this->store);
-
-
+		// Staic data
 		$docData['products_id'] = $item->getId();
 		$docData['product_type_static'] = (string)$item->getOrigData("type_id");
 		$docData['unique_id'] = $store->getId().'P'.$item->getId();
@@ -278,8 +275,16 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$docData['udropship_vendor_id_int'] = $vendor->getId();
 			$docData['udropship_vendor_url_key_varchar'] = $vendor->getUrlKey();
 			$docData['udropship_vendor_logo_varchar'] = $vendor->getLogo();
+			$docData['udropship_brandshop_id_int'] = $vendor->getId();
 		}
 		
+		// Brandshop data
+		if($item->getOrigData('udropship_vendor')!=$item->getOrigData('brandshop')){
+			$brandshop = Mage::helper('udropship')->getVendor($item->getOrigData('brandshop'));
+			if($brandshop && $brandshop->getId()){
+				$docData['udropship_brandshop_id_int'] = $brandshop->getId();
+			}
+		}
 		
 		// Mana manufacturer logo
 		if($this->getBrandAttributeCode() && $item->getOrigData($this->getBrandAttributeCode())){

@@ -67,6 +67,55 @@
     .wrapp-section {
         border: none;
     }
+  #category-header-left {
+    width: 195px;
+    float: left;
+    margin-right: 20px;
+
+    @media (max-width: $screen-xs-max){
+      width: 100%;
+      border-bottom: solid 2px #F2F1F0;
+    }
+  }
+
+  #category-header-right {
+    position: relative;
+
+
+    @media (min-width: $screen-sm-min) {
+      margin-left: 215px;
+      .right-wrapper:before {
+        content: '';
+        position: absolute;
+        height: 70%;
+        top: 15%;
+        border-right: solid 2px #F2F1F0;
+        left: -20px;
+      }
+    }
+  }
+
+  #category-header-vendor-box {
+    min-height: 77px;
+    margin-top: 20px;
+    @media (max-width: $screen-xs-max){
+      min-height: inherit;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+    img {
+      width: 185px;
+    }
+    .vendor-type{
+      display: inline-block;
+      vertical-align: bottom;
+      text-transform: uppercase;
+    }
+  }
+
+  #active-filters {
+    margin-left: -15px;
+  }
 }
 
 .catalog-category-view {

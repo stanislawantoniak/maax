@@ -262,37 +262,92 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
     public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
     {
+        $msrpPricesSource = array(); $productRelations = array(); $msrpPrices = array();
         foreach ($stores as $store) {
-            $productRelations[$store] = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+            $priceSizeRelation = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+            if (!empty($priceSizeRelation)) {
+                $productRelations[$store] = $priceSizeRelation;
+            }
+
+            $msrpSource = $this->getIsMSRPManual($productConfigurableId, $store);
+            if (!empty($msrpSource)) {
+                $msrpPricesSource[$store] = $this->getIsMSRPManual($productConfigurableId, $store);
+            }
+
+            $msrpPriceValues = $this->getMSRPPrices($productConfigurableId, $store);
+            if (!empty($msrpPriceValues)) {
+                $msrpPrices[$store] = $msrpPriceValues;
+            }
+
         }
         unset($store);
+        unset($msrpSource);
+        unset($priceSizeRelation);
+        unset($msrpPriceValues);
+//
+//        Zend_Debug::dump($productRelations);
+//        Zend_Debug::dump($msrpPrices);
+//        Zend_Debug::dump($msrpPricesSource);
 
         $insert = array();
         foreach ($stores as $store) {
-            if (isset($productRelations[$store]) && !empty($productRelations[$store])) {
+            if (
+                (isset($productRelations[$store]) && !empty($productRelations[$store]))
+                ||
+                isset($msrpPrices[$store]) && !empty($msrpPrices[$store])
+            ) {
 
-                $productMinPrice = array();
-                foreach ($productRelations[$store] as $i) {
-                    $productMinPrice[] = $i['child_price'];
+                if (isset($productRelations[$store]) && !empty($productRelations[$store])) {
+                    //1. update price
+                    $productMinPrice = array();
+                    foreach ($productRelations[$store] as $i) {
+                        $productMinPrice[] = $i['child_price'];
+                    }
+                    unset($i);
+                    $productMinimalPrice = min($productMinPrice);
+                    Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                        array($productConfigurableId), array('price' => $productMinimalPrice), $store
+                    );
+
+                    //2. update options
+                    foreach ($productRelations[$store] as $productRelation) {
+                        $size = $productRelation['child_size'];
+                        $price = $productRelation['child_price'];
+                        $website = $productRelation['website'];
+
+
+                        $priceIncrement = (float)$price - $productMinimalPrice;
+
+                        $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
+                    }
                 }
 
-                $productMinimalPrice = min($productMinPrice);
 
-                Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
-                    array($productConfigurableId), array('price' => $productMinimalPrice), $store
-                );
-
-                foreach ($productRelations[$store] as $productRelation) {
-                    $size = $productRelation['child_size'];
-                    $price = $productRelation['child_price'];
-                    $website = $productRelation['website'];
-
-
-                    $priceIncrement = (float)$price - $productMinimalPrice;
-
-                    $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
+                $msrpSource = Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO;
+                if (isset($msrpPricesSource[$store])) {
+                    $msrpPricesSourceValue = array_pop($msrpPricesSource[$store]);
+                    $msrpSource = (int)$msrpPricesSourceValue['msrp_source_type'];
                 }
 
+                //if Converter Msrp Type = From file
+                if ($msrpSource == Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO) {
+                    if (isset($msrpPrices[$store]) && !empty($msrpPrices[$store])) {
+                        //3. update msrp
+                        $productMSRPMinPrice = array();
+                        foreach ($msrpPrices[$store] as $i) {
+                            $productMSRPMinPrice[] = $i['msrp_price'];
+                        }
+                        unset($i);
+
+                        if (!empty($productMSRPMinPrice)) {
+                            $productMSRPMinimalPrice = min($productMSRPMinPrice);
+
+                            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                                array($productConfigurableId), array('msrp' => $productMSRPMinimalPrice), $store
+                            );
+                        }
+                    }
+                }
             }
         }
 
@@ -322,9 +377,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             }
 
         }
-
-
-        //Mage::log($productConfigurableId, null, 'hello.log');
     }
     /**
      * get super attribute ids
@@ -401,6 +453,123 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         return $productRelations;
+    }
+
+
+    public function getMSRPPrices($configurableId,$store)
+    {
+        $msrp = array();
+
+        if (empty($configurableId)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("product_relation" => "catalog_product_relation"),
+            array(
+                "parent_id" => "product_relation.parent_id",
+                "child_id" => "product_relation.child_id"
+            )
+        );
+        $select->join(
+            array("msrp" => "catalog_product_entity_decimal"),
+            "msrp.entity_id=product_relation.child_id",
+            array(
+                "msrp_price" => "msrp.value",
+                "store_id" => "msrp.store_id",
+            )
+        );
+        $select->join(
+            array("products" => $this->getTable("catalog/product")),
+            "products.entity_id=product_relation.child_id",
+            array(
+                'products.sku'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=msrp.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_MSRP_CODE
+        );
+
+        $select->where("product_relation.parent_id=?", $configurableId);
+        $select->where(
+            "msrp.store_id=?", $store
+        );
+
+        //Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
+        try {
+            $msrp = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching msrp values");
+        }
+
+        return $msrp;
+    }
+
+    public function getIsMSRPManual($configurableId, $store)
+    {
+        $msrp = array();
+
+        if (empty($configurableId)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("msrp_source" => "catalog_product_entity_int"),
+            array()
+        );
+        $select->join(
+            array("product_relation" => "catalog_product_relation"),
+            "product_relation.parent_id=msrp_source.entity_id",
+            array(
+                "parent_id" => "DISTINCT(product_relation.parent_id)",
+                "msrp_source_type" => "msrp_source.value",
+                "store" => "msrp_source.store_id"
+            )
+        );
+        $select->join(
+            array("products" => $this->getTable("catalog/product")),
+            "products.entity_id=product_relation.child_id",
+            array()
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=msrp_source.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+        );
+        $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL);
+        $select->where("product_relation.parent_id=?", $configurableId);
+        $select->where(
+            "msrp_source.store_id=?", $store
+        );
+
+        //Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
+        try {
+            $msrp = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching converter_msrp_type values");
+        }
+
+        return $msrp;
     }
 
 }

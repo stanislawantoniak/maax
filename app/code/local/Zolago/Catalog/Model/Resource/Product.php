@@ -141,6 +141,68 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
         return $margins;
     }
+
+    /**
+     * Fetch products that should be updated by converter
+     * Converter Msrp Type = From file
+     * @param $skuS
+     * @return array
+     * @throws Mage_Core_Exception
+     */
+    public function getMSRPSourceValuesManualConverterConfigurable($skuS)
+    {
+        $msrp = array();
+
+        if (empty($skuS)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("msrp_source" => "catalog_product_entity_int"),
+            array(
+                "store" => "msrp_source.store_id",
+                "msrp_source_type" => "msrp_source.value"
+            )
+        );
+        $select->join(
+            array("product_relation" => "catalog_product_relation"),
+            "product_relation.parent_id=msrp_source.entity_id",
+            array()
+        );
+        $select->join(
+            array("products" => $this->getTable("catalog/product")),
+            "products.entity_id=product_relation.child_id",
+            array(
+                'products.sku'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=msrp_source.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+        );
+        $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL);
+        $select->where("products.sku IN(?)", $skuS);
+        //Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
+        try {
+            $msrp = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching converter_msrp_type values");
+        }
+
+        return $msrp;
+    }
+
+
     /**
      * Get converter price type
      * @param $sku
