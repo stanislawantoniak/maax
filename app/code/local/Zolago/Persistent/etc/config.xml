@@ -13,6 +13,11 @@
 				</rewrite>
 			</persistent>
 		</models>
+		<blocks>
+			<zolagopersistent>
+				<class>Zolago_Persistent_Block</class>
+			</zolagopersistent>
+		</blocks>
 		<resources>
             <zolagopersistent_setup>
                 <setup>
