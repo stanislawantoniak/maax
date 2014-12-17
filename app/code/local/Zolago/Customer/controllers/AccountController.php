@@ -299,7 +299,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             "new_email" => $newEmail
         ));
         $model->save();
-        
+
         if(!$model->sendMessage()){
             throw new Exception(Mage::helper("customer")
                 ->__('Cannot send email'));
