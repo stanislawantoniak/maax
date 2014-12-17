@@ -108,8 +108,9 @@ sub vcl_recv {
 
     # We only deal with GET and HEAD by default
     # we test this here instead of inside the url base regex section
-    # so we can disable caching for the entire site if needed
-    if (!{{enable_caching}} || req.http.Authorization ||
+    # so we can disable caching for the entire site if needed	
+	#    if (!{{enable_caching}} || req.http.Authorization ||
+	if (!{{enable_caching}} || 
         req.request !~ "^(GET|HEAD)$" ||
         req.http.Cookie ~ "varnish_bypass={{secret_handshake}}") {
         return (pipe);
