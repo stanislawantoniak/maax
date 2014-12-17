@@ -4,8 +4,7 @@ class Zolago_Persistent_Model_Observer_Session extends Mage_Persistent_Model_Obs
 {
     
     /**
-     * Create/Update and Load session when customer log in
-     *
+     * Override remeber me desicison by customer preference attribute
      * @param Varien_Event_Observer $observer
      */
     public function synchronizePersistentOnLogin(Varien_Event_Observer $observer)
