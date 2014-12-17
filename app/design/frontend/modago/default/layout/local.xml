@@ -529,7 +529,9 @@
         </reference>
 
         <reference name="content">
-
+            <!--removing category listing-->
+            <remove name="solrsearch_product_list_header"/>
+            <remove name="zolagosolrsearch_category_view"/>
 
             <block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
 
@@ -538,7 +540,6 @@
                     <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
                     <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
                 </block>
-
 
                 <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar"/>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
