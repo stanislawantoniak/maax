@@ -10,9 +10,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
 
-    const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = "current_category";
-
-
     /**
      * @var array
      */

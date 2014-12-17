@@ -980,8 +980,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return int
      */
     public function getMode() {
-		$queryText = Mage::helper('solrsearch')->getParam('q');
-        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
+        $queryText = Mage::helper('solrsearch')->getParam('q', null);
+        if($this->getCurrentCategory() && !Mage::registry('current_product') && is_null($queryText)) {
             return self::MODE_CATEGORY;
         }
         return self::MODE_SEARCH;
