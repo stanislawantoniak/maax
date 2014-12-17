@@ -1,0 +1,6 @@
+<h1><?php echo $this->__("Forget settings");?></h1>
+<?php echo $this->getChildHtml("persistent.forget.guest");?>
+<form action="<?php echo $this->getUrl("*/*/forgetSave");?>" method="post">
+	<?php echo $this->getChildHtml("persistent.forget.formkey");?>
+	<button type="submit"><?php echo $this->__("Forget me")?></button>
+</form>

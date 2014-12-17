@@ -1,18 +1,42 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
-        <Zolago_Persistent>
-            <version>0.0.1</version>
-        </Zolago_Persistent>
-    </modules>
-
-    <global>
-        <models>
-            <persistent>
+	<modules>
+		<Zolago_Persistent>
+			<version>0.0.1</version>
+		</Zolago_Persistent>
+	</modules>
+	<global>
+		<models>
+			<persistent>
 				<rewrite>
 					<observer>Zolago_Persistent_Model_Observer</observer>
 				</rewrite>
-            </persistent>
-        </models>
-    </global>
+			</persistent>
+		</models>
+		<resources>
+            <zolagopersistent_setup>
+                <setup>
+                    <module>Zolago_Persistent</module>
+                </setup>
+            </zolagopersistent_setup>
+        </resources>
+	</global>
+	<frontend>
+		<routers>
+			<persistent>
+				<args>
+					<modules>
+						<Zolago_Persistent before="Mage_Persistent">Zolago_Persistent</Zolago_Persistent>
+					</modules>
+				</args>
+			</persistent>
+		</routers>
+		<layout>
+            <updates>
+                <zolagopersistent>
+                    <file>zolagopersistent.xml</file>
+                </zolagopersistent>
+            </updates>
+        </layout>
+	</frontend>
 </config>
