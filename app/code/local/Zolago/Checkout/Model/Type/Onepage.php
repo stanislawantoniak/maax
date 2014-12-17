@@ -24,6 +24,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 				$this->getQuote()->getCustomer()->save();
 			}
 			$agreements = $this->_checkoutSession->getAgreements(true);
+            Mage::log("trying to send");
 			if($agreements['agreement_newsletter'] == 1) {
 				//
 				//todo: save to newsletter

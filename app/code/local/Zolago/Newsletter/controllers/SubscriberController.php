@@ -36,6 +36,10 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
             if($subscriber->getId() && $subscriber->getCode()) {
                 if($subscriber->confirm($code)) {
                     $errors = false;
+
+                    /** @var Zolago_Newsletter_Model_Subscriber $model */
+                    $model = Mage::getModel("zolagonewsletter/subscriber");
+                    $model->sendConfirmationSuccessEmail($id);
                 } else {
                     $session->addError($error1);
                 }
