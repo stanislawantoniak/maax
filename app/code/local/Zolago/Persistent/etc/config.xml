@@ -10,6 +10,7 @@
 			<persistent>
 				<rewrite>
 					<observer>Zolago_Persistent_Model_Observer</observer>
+					<observer_session>Zolago_Persistent_Model_Observer_Session</observer_session>
 				</rewrite>
 			</persistent>
 		</models>
