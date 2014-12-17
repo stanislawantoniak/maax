@@ -147,7 +147,8 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		if($this->validateEmail($email)) {
 			/** @var Mage_Newsletter_Model_Subscriber $model */
 			$model = Mage::getModel("newsletter/subscriber");
-			$subscriberId = $model->loadByEmail($email)->getId();
+			$subscriber = $model->loadByEmail($email);
+			$subscriberId = $subscriber->getId();
 			if(!$subscriberId) {
 				/** @var Mage_Customer_Model_Customer $customer */
 				$customer = Mage::getModel("customer/customer")
@@ -173,6 +174,24 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				$sid = $model->getId();
 				if ($sid) {
 					$this->setSubscriberId($sid);
+					if($status == self::STATUS_UNCONFIRMED) {
+						$this->sendConfirmationRequestEmail($sid);
+					}
+					return true;
+				}
+			} else {
+				$oldStatus = $subscriber->getStatus();
+				if($oldStatus == self::STATUS_UNSUBSCRIBED
+					&& ($status == self::STATUS_UNCONFIRMED || $status == self::STATUS_SUBSCRIBED)) {
+					$subscriber->setStatus(self::STATUS_SUBSCRIBED);
+					$subscriber->save();
+					$this->sendConfirmationSuccessEmail($subscriberId);
+					return true;
+				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
+					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
+					$subscriber->setStatus($status);
+					$subscriber->save();
+					$this->sendConfirmationRequestEmail($subscriberId);
 					return true;
 				}
 			}
