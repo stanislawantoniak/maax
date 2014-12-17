@@ -1222,12 +1222,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $urlParams['_query']    = $this->processFinalParams($finalParams);
         }
 		
-		if($this->getListModel()->isCategoryMode()){
+//		if($this->getListModel()->isCategoryMode()){
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
-		}
-		
-		
-		
+//		}
+
+
+
         return $urlParams;
     }
 	

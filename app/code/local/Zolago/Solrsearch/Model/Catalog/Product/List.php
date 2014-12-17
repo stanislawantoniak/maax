@@ -29,8 +29,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 * @return int
 	 */
     public function getMode() {
-		$queryText = Mage::helper('solrsearch')->getParam('q');
-        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
+		$queryText = Mage::helper('solrsearch')->getParam('q', null);
+        if($this->getCurrentCategory() && !Mage::registry('current_product') && is_null($queryText)) {
             return self::MODE_CATEGORY;
         }
         return self::MODE_SEARCH;
@@ -255,7 +255,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 * @return string
 	 */
 	public function getUrlPathForCategory() {
-		if(!$this->hasData("url_path_for_category")){
+        if(!$this->hasData("url_path_for_category")){
 			if($this->isCategoryMode()){
 				$path = $this->getCurrentCategory()->getUrlPath();
 			}elseif($this->isSearchMode()){

@@ -1,4 +1,9 @@
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var Zolago_Modago_Block_Solrsearch_Faces_Enum_Longlist $this */
+
+$key = $this->getFacetKey();
+
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -25,7 +30,7 @@
                                 if(!$isOptionSelected && $this->isItemActive($item)) {
                                     $isOptionSelected = true;
                                 }
-								$_url = $this->getItemUrl($item);;
+								$_url = $this->getItemUrl($item);
                                 ?>
                                 <li>
                                     <div class="form-group form-checkbox">
