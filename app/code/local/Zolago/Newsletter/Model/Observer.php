@@ -5,7 +5,10 @@ class Zolago_Newsletter_Model_Observer extends Mage_Newsletter_Model_Observer
 	{
 		$customer = $observer->getEvent()->getCustomer();
 		if (($customer instanceof Mage_Customer_Model_Customer)) {
-			Mage::getModel('zolagonewsletter/subscriber')->subscribeCustomer($customer);
+			/** @var Zolago_Newsletter_Model_Subscriber $model */
+			$model = Mage::getModel('zolagonewsletter/subscriber');
+			$model->subscribeCustomer($customer);
+
 		}
 		return $this;
 	}
