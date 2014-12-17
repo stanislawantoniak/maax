@@ -38,16 +38,6 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $this->renderLayout();
     }
 
-    public function forgetMeAction()
-    {
-        $persistentHelper = Mage::helper('persistent/session');
-        if ($persistentHelper->isPersistent()) {
-            $persistentHelper->getSession()->removePersistentCookie();
-        }
-        $this->_redirect('customer/account/privacy');
-        return;
-
-    }
 
 	/**
 	 * Override mesagge
