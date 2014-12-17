@@ -36,6 +36,15 @@
 				</args>
 			</persistent>
 		</routers>
+		<translate>
+			<modules>
+				<Zolago_Persistent>
+					<files>
+						<default>Zolago_Persistent.csv</default>
+					</files>
+				</Zolago_Persistent>
+			</modules>
+		</translate>
 		<layout>
             <updates>
                 <zolagopersistent>
