@@ -3,7 +3,7 @@
 $data = array(
 	'title'         => 'Wiadomość po wylogowaniu',
 	'identifier'    => 'customer-logout-forget',
-	'content'       => 'Zostałeś wylogowany poprawnie. Kliknij <a href="{{store url=\'persistent/index/forget\' _no_vendor=\'1\'}}">tutaj</a> żeby wyczyścić koszyk i ulubione.',
+	'content'       => 'Zostałeś wylogowany poprawnie. {{block type=\'zolagopersistent/forget_logoutlink\' anchor_text=\'Kliknij tutaj by wyczyścić koszyk i ulubione.\'}}',
 	'is_active'     => 1,
 	'stores'        => 0
 );
