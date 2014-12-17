@@ -24,6 +24,24 @@
 				</Your_Extension>
 			</modules>
 		</translate>
+		<events>
+			<customer_save_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>subscribeCustomer</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_save_after>
+			<customer_delete_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>customerDeleted</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_delete_after>
+		</events>
 	</frontend>
 	<global>
 		<models>
@@ -63,4 +81,24 @@
 			</subscription>
 		</newsletter>
 	</default>
+	<adminhtml>
+		<events>
+			<customer_save_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>subscribeCustomer</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_save_after>
+			<customer_delete_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>customerDeleted</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_delete_after>
+		</events>
+	</adminhtml>
 </config> 
