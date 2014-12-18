@@ -75,6 +75,15 @@
                     </zolagocustomer>
                 </observers>
 			</customer_logout>
+            <zolagocustomer_change_email_confirm>
+                <observers>
+                    <zolagocustomer>
+                        <type>singleton</type>
+                        <class>zolagocustomer/observer</class>
+                        <method>customerChangeEmailConfirm</method>
+                    </zolagocustomer>
+                </observers>
+            </zolagocustomer_change_email_confirm>
 		</events>
     </global>
     <frontend>

@@ -200,19 +200,17 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				}
 			} else {
 				$oldStatus = $subscriber->getStatus();
-                Mage::log('addSubscriber');
-                Mage::log($oldStatus);
-                Mage::log($status);
+
 				if($oldStatus == self::STATUS_UNSUBSCRIBED
 					&& ($status == self::STATUS_UNCONFIRMED || $status == self::STATUS_SUBSCRIBED)) {
-                    Mage::log("1111111111111");
+
 					$subscriber->setStatus(self::STATUS_SUBSCRIBED);
 					$subscriber->save();
 					$this->sendConfirmationSuccessEmail($subscriberId);
 					return true;
 				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
 					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
-                    Mage::log("22222222222222222");
+
 					$subscriber->setStatus($status);
 					$subscriber->save();
 					$this->sendConfirmationRequestEmail($subscriberId);

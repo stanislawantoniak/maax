@@ -14,6 +14,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
 		);
 	}
+
     /**
      * Saving customer subscription status
      *
@@ -22,41 +23,6 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
      */
     public function subscribeCustomer($customer)
     {
-        Mage::log("subscribeCustomer was fired");
-        $this->loadByCustomer($customer);
-
-        if ($customer->getImportMode()) {
-            $this->setImportMode(true);
-        }
-
-        if (!$customer->getIsSubscribed() && !$this->getId()) {
-            // If subscription flag not set or customer is not a subscriber
-            // and no subscribe below
-            return $this;
-        }
-
-        if($this->getId()) {
-            //do not replace old email in case when customer change account email
-            //insert another one db row with the new email
-            //on the /customer/account/edit page
-            $m = clone $this;
-            $m->setId(null);
-            $m->setStoreId($customer->getStoreId())
-                ->setEmail($customer->getEmail());
-        } else {
-            $status = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : self::STATUS_NOT_ACTIVE;
-            $this
-                ->setCustomerId($customer->getId())
-                ->setSubscriberConfirmCode($this->randomSequence())
-                ->setEmail($customer->getEmail())
-                ->setStatus($status)
-                ->setId(null);
-            if($status == self::STATUS_UNCONFIRMED) {
-                $this->sendConfirmationRequestEmail();
-            }
-        }
-
-        $this->save();
         return $this;
     }
 

@@ -9,7 +9,19 @@ class Zolago_Customer_Model_Observer {
                 $today->subHour(Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
         );
     }
-	
+
+    public function customerChangeEmailConfirm($observer)
+    {
+        $event = $observer->getEvent();
+        $customer = $event->getCustomer();
+        $customer->setCustomerConfirmedEmail(true);
+
+        //subscribe
+        /* @var $newsletterInviter Zolago_Newsletter_Model_Inviter */
+        Mage::getModel('zolagonewsletter/inviter')
+            ->addSubscriber($customer->getEmail());
+    }
+
 	/**
 	 * Clear quote presonal data when customer logout
 	 * @param type $observer
