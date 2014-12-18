@@ -29,6 +29,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
     public function getVendor()
     {
+        Mage::log(Mage::helper('umicrosite')->getCurrentVendor()->getData('vendor_id'));
         return Mage::helper('umicrosite')->getCurrentVendor();
     }
 
