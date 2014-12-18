@@ -36,6 +36,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
             if(!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
                 $this->setStatus(self::STATUS_UNSUBSCRIBED);
+                $this->sendUnsubscriptionEmail();
             }
             //otherwise check if customer wants to subscribe
             elseif($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
@@ -59,13 +60,16 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
         //and if he wasn't add it as NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-            $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : self::STATUS_NOT_ACTIVE;
+            $storeId = $customer->getStoreId() ? $customer->getStoreId() : Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+            $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
             $this
+                ->setStoreId($storeId)
                 ->setCustomerId($customer->getId())
                 ->setSubscriberConfirmCode($this->randomSequence())
                 ->setEmail($customer->getEmail())
                 ->setStatus($newStatus)
                 ->setId(null);
+
             if($newStatus == self::STATUS_UNCONFIRMED) {
                 $this->sendConfirmationRequestEmail();
             }
