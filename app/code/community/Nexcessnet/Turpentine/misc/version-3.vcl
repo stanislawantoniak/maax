@@ -111,7 +111,7 @@ sub vcl_recv {
     # so we can disable caching for the entire site if needed	
 	#    if (!{{enable_caching}} || req.http.Authorization ||
 	if (!{{enable_caching}} || 
-		req.url !~ "^/(media|js|skin|faq)(.*)$" ||		
+		req.url !~ "^/(media|js|skin)/.*$" ||		
         req.request !~ "^(GET|HEAD)$" ||
         req.http.Cookie ~ "varnish_bypass={{secret_handshake}}") {
         return (pipe);
