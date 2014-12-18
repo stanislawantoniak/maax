@@ -14,6 +14,95 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
 		);
 	}
+    /**
+     * Saving customer subscription status
+     *
+     * @param   Mage_Customer_Model_Customer $customer
+     * @return  Mage_Newsletter_Model_Subscriber
+     */
+    public function subscribeCustomer($customer)
+    {
+        $this->loadByCustomer($customer);
+
+        if ($customer->getImportMode()) {
+            $this->setImportMode(true);
+        }
+
+        if (!$customer->getIsSubscribed() && !$this->getId()) {
+            // If subscription flag not set or customer is not a subscriber
+            // and no subscribe below
+            return $this;
+        }
+
+        if(!$this->getId()) {
+            $this->setSubscriberConfirmCode($this->randomSequence());
+        }
+
+        /*
+         * Logical mismatch between customer registration confirmation code and customer password confirmation
+         */
+        $confirmation = null;
+        if ($customer->isConfirmationRequired() && ($customer->getConfirmation() != $customer->getPassword())) {
+            $confirmation = $customer->getConfirmation();
+        }
+
+        $sendInformationEmail = false;
+        if ($customer->hasIsSubscribed()) {
+            $status = $customer->getIsSubscribed()
+                ? (!is_null($confirmation) ? self::STATUS_UNCONFIRMED : self::STATUS_SUBSCRIBED)
+                : self::STATUS_UNSUBSCRIBED;
+            /**
+             * If subscription status has been changed then send email to the customer
+             */
+            if ($status != self::STATUS_UNCONFIRMED && $status != $this->getStatus()) {
+                $sendInformationEmail = true;
+            }
+        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && (is_null($confirmation))) {
+            $status = self::STATUS_SUBSCRIBED;
+            $sendInformationEmail = true;
+        } else {
+//            $status = ($this->getStatus() == self::STATUS_NOT_ACTIVE ? self::STATUS_UNSUBSCRIBED : $this->getStatus());
+            $status = self::STATUS_NOT_ACTIVE;
+        }
+
+        if($status != $this->getStatus()) {
+            $this->setIsStatusChanged(true);
+        }
+
+        $this->setStatus($status);
+
+        if(!$this->getId()) {
+            $storeId = $customer->getStoreId();
+            if ($customer->getStoreId() == 0) {
+                $storeId = Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+            }
+            $this->setStoreId($storeId)
+                ->setCustomerId($customer->getId())
+                ->setEmail($customer->getEmail());
+
+        } else {
+            //do not replace old email in case when customer change account email
+            //insert another one db row with the new email
+            //on the /customer/account/edit page
+            $m = clone $this;
+            $m->setId(null);
+            $m->setStoreId($customer->getStoreId())
+                ->setEmail($customer->getEmail());
+
+        }
+
+        $this->save();
+        $sendSubscription = $customer->getData('sendSubscription') || $sendInformationEmail;
+        if (is_null($sendSubscription) xor $sendSubscription) {
+            if ($this->getIsStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                $this->sendUnsubscriptionEmail();
+            } elseif ($this->getIsStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
+                $this->sendConfirmationSuccessEmail();
+            }
+        }
+        return $this;
+    }
+
 
 	/**
 	 * @param int|null $sid
