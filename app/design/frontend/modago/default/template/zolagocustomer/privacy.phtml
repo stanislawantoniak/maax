@@ -19,14 +19,15 @@ $zolagoCustomerHelper = Mage::helper("customer");
     </h1>
 </div>
 <div class="background-wrapper box-wrapper container-fluid">
-    <form action="<?php echo $this->getUrl('customer/account/forgetMe') ?>" method="post" id="forgetCustomer-form" autocomplete="off">
+    <form action="<?php echo $this->getUrl('customer/account/privacyPost') ?>" method="post" id="forgetCustomer-form" autocomplete="off">
         <?php echo $this->getBlockHtml('formkey'); ?>
         <div class="fieldset privacy-border">
             <div id="general-subscription" class="row bigger-padding">
                 <div class="col-sm-12">
                     <div class="form-group form-checkbox">
-                        <input type="checkbox" name="is_not_remembered" id="is_not_remembered" value="0" class="css-checkbox"/>
-                        <label for="is_not_remembered"
+                        <input type="hidden" name="forget_me" value="0" />
+                        <input type="checkbox" <?php if($this->isForgetMeChecked()):?>checked="checked"<?php endif;?> name="forget_me" id="forget_me" value="1" class="css-checkbox"/>
+                        <label for="forget_me"
                                class="css-label css-label-bold">
                         </label>
 

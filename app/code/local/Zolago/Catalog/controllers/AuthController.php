@@ -29,13 +29,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     }
 
 
-
-    public function testAction()
-    {
-        $campaign = Mage::getResourceModel("zolagocampaign/campaign");
-        $placements = $campaign->getCategoryPlacements(3, 4);
-    }
-
 }
 
 
