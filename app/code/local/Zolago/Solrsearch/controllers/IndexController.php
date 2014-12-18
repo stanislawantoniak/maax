@@ -10,7 +10,7 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
     public function indexAction()
     {
-        Mage::register('IS_SEARCH_MODE', true);
+        Mage::register('is_search_mode', true);
 
         $params = $this->getRequest()->getParams();
         $params['q'] = strtolower(Mage::helper('solrsearch')->getParam('q'));
@@ -20,6 +20,18 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
         /** @var Zolago_Dropship_Model_Vendor $vendor */
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+        // If "Everywhere" or specific category are selected
+        // redirect to global context from vendor context
+        if ($vendor && $vendor->getId()) {
+            if(isset($params['scat']) && $params['scat'] == '0') {
+
+                $_params['_query'] = $params;
+                $_params["_no_vendor"] = true;
+                $this->_redirect('search/index/index/', $_params);
+                return;
+            }
+        }
 
         // Checking scat
         // Should always to be
@@ -38,25 +50,15 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
             if($vendor && $vendor->getId()){
                 /** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
                 $helperZDM = Mage::helper("zolagodropshipmicrosite");
-                $vendor_root_category_id = $helperZDM->getVendorRootCategoryObject()->getId();
-                $params['scat'] = $vendor_root_category_id;
+                $vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
+                $params['scat'] = $vendorRootCategoryId;
             } else {
                 $params['scat'] = Mage::app()->getStore()->getRootCategoryId();
             }
         }
 
-        $search_category = Mage::getModel('catalog/category')->load($params['scat']);
-        Mage::register('current_category', $search_category);
-
-        // If "Everywhere" or specific category are selected
-        // redirect to global context from vendor context
-        if ($vendor && $vendor->getId()) {
-            if(isset($params['scat']) && $params['scat'] == '0') {
-                $baseUrl = Mage::helper('zolagodropshipmicrosite')->getBaseUrl();
-                $this->_redirectUrl($baseUrl . 'search/index/index/?' . http_build_query($params));
-                return $this;
-            }
-        }
+        $searchCategory = Mage::getModel('catalog/category')->load($params['scat']);
+        Mage::register('current_category', $searchCategory);
 
         // Reset sessions
         Mage::getSingleton('core/session')->setSolrFilterQuery(array());

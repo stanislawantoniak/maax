@@ -26,13 +26,20 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	}
 	
 	/**
-	 * @return int
+	 * @return int corresponding: MODE_CATEGORY, MODE_SEARCH
 	 */
     public function getMode() {
-        if(Mage::registry('IS_SEARCH_MODE')) {
+
+        $q = Mage::app()->getRequest()->getParam('q', '');//queryText
+        if(Mage::registry('is_search_mode')) {
             return self::MODE_SEARCH;
         }
-        return self::MODE_CATEGORY;
+        if(!Mage::registry('current_product') && empty($q)) {
+            return self::MODE_CATEGORY;
+        } else {
+            Mage::register('is_search_mode', true);
+            return self::MODE_SEARCH;
+        }
     }
 	
 	/**

@@ -251,10 +251,12 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
             /** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
             $helperZDM = Mage::helper("zolagodropshipmicrosite");
-            $vendor_root_category_id = $helperZDM->getVendorRootCategoryObject()->getId();
+            $vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
 
             $array['select_options'][] = array(
-                                             'value' => "{$vendor_root_category_id}",
+                                             'value' => "{$vendorRootCategoryId}",
+                                             //like 'everywhere' is root category ( zero ),
+                                             //so when vendor is set the category is his root category
                                              'text' => $_vendor->isBrandshop() ? $this->__('This brandshop') : $this->__('This vendor'),
                                              'selected' => true,
                                          );
