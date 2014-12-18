@@ -76,10 +76,11 @@ $avg = $_reviewBlock->getAvarageRating();
 
 <!-- GALLERY PRODUCT -->
 
+<?php if($this->getIsBrandshop()):?>
 <div class="path_back_to_category visible-xs">
     <div class="col-xs-12 brandshop">
 		<a href="<?php echo $this->getVendorUrl();?>">
-			<?php echo $this->__($this->getIsBrandshop() ? "Brandshop" : "Vendor");?>
+			<?php echo $this->__("Brandshop");?>
 			<img alt="<?php echo $this->escapeHtml($this->getVendorName());?>" src="<?php echo $this->getVendorLogoUrl();?>">
 		</a>
 	</div>
@@ -87,7 +88,9 @@ $avg = $_reviewBlock->getAvarageRating();
         <a href="<?php echo $this->getParentCategoryUrl(); ?>"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
     </div>
 </div>
-    <?php echo $this->getChildHtml('media') ?>
+<?php endif;?>
+
+<?php echo $this->getChildHtml('media') ?>
 <!-- END GALERY PRODUCT -->
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 

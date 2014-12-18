@@ -5,28 +5,38 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	 * @return bool
 	 */
 	public function getIsBrandshop() {
-		return $this->getVendor()->isBrandshop();
+		if($this->getVendorContext()){
+			return $this->getVendorContext()->isBrandshop();
+		}
+		return false;
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getVendorUrl() {
-		return $this->getVendor()->getVendorUrl();
+		return $this->getVendorContext()->getVendorUrl();
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getVendorName() {
-		return $this->getVendor()->getVendorName();
+		return $this->getVendorContext()->getVendorName();
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getVendorLogoUrl() {
-		return Mage::getBaseUrl('media') . $this->getVendor()->getLogo();
+		return Mage::getBaseUrl('media') . $this->getVendorContext()->getLogo();
+	}
+	
+	/**
+	 * @return Zolago_Dropship_Model_Vendor
+	 */
+    public function getVendorContext() {
+		return Mage::helper("umicrosite")->getCurrentVendor();
 	}
 	
 	/**

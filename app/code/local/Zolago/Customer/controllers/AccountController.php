@@ -6,7 +6,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 {
 	protected $_wasLogged;
 
-
+	/**
+	 * Override index
+	 */
     public function indexAction()
     {
         $this->loadLayout();
@@ -20,12 +22,59 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
         $this->renderLayout();
     }
+	
+	/**
+	 * Override logout - add message from cms block
+	 */
+	public function logoutAction() {
+		// Do parent logout
+		parent::logoutAction();
+		
+		// Generate cms block
+		try{
+			$cms = $this->getLayout()->
+				createBlock("cms/block")->
+				setBlockId("customer-logout-forget")->
+				toHtml();
+		}catch(Exception $e){
+			$cms = $this->__("Log out success");
+			Mage::logException($e);
+		}
+		Mage::getSingleton('core/session')->addSuccess($cms);
+		return $this->_redirect("/");
+	}
+
+	/*
+	 * Privacy setting action
+	 */
+    public function privacyAction()
+    {
+        $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
+        $this->_initLayoutMessages('catalog/session');
+
+        $block = $this->getLayout()->getBlock('notification-settings-general-subscription');
+        if ($block) {
+            $block->setRefererUrl($this->_getRefererUrl());
+        }
+
+
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
+        $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
+        $this->renderLayout();
+    }
+
 
 	/**
 	 * Override mesagge
 	 */
 	public function loginPostAction() {
 		
+			$isPersistent = 1;//$this->_getSession()->getCustomer()->getRememeberMe();
+			// Apply setting of persistance
+			//$this->getRequest()->setPost("persistent_remember_me", $isPersistent);
+			//$this->getRequest()->setParam("persistent_remember_me", $isPersistent);
+			
 		if(!$this->getRequest()->isPost()){
             $this->_redirect('*/*/');
 			return;
@@ -41,15 +90,14 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             return;
         }
 		
+			
 		parent::loginPostAction();
 		
-		// Add remeber setIsPersistent state
-		$this->_getSession()->setIsPersistent(
-			$this->getRequest()->getParam("persistent_remember_me", 0)
-		);
+		
 		
 		// Add success if login sucessful (by core session - visable in both customer / checkout)
         if ($this->_getSession()->isLoggedIn()) {
+			
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::helper("zolagocustomer")->__("You have been logged in")
             );
