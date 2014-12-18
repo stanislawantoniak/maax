@@ -1,11 +1,17 @@
-<!--@subject {{var store_name}} – Newsletter subscription success @-->
+<!--@subject {{var store_name}} – Newsletter invitation @-->
 <body style="font-family: sans-serif;">
 <div>
 	<a href="{{store url=""}}"><img src="cid:logo.png" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a>
 </div>
 <div>
 	<p>
-		{{var store_name}} newsletter subscription has been successful!
+		{{var store_name}} newsletter invitation!
+	</p>
+</div>
+<div>
+	<p>
+		If you want to subscribe <a href="{{var confirmation_url}}" target="_blank">click here</a> or copy link below to your browser.<br/><br/>
+		<a href="{{var confirmation_url}}">{{var confirmation_url}}</a>
 	</p>
 </div>
 <div>
