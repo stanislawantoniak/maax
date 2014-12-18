@@ -2,21 +2,18 @@
 /**
  * User: Andrzej Spólnicki
  */
+/* @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Header */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 $messagesBlock = $this->getMessagesBlock()->getGroupedHtml();
 ?>
-<?php
 
-$topBottomHeaderDesktopModel = Mage::getModel('cms/block')->load('top-bottom-header-desktop-v-' . $vendor['vendor_id']);
-$topBottomHeaderMobileModel = Mage::getModel('cms/block')->load('top-bottom-header-mobile-v-' . $vendor['vendor_id']);
-?>
 
-<?php if ($topBottomHeaderDesktopModel->getId() && $topBottomHeaderDesktopModel->getIsActive() == 1): ?>
-    <div class="top_bottom  bg-w clearfix hidden-xs">
-        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-desktop-v-' . $vendor['vendor_id'])->toHtml(); ?>
-    </div>
-<?php endif; ?>
+
+<div class="top_bottom  bg-w clearfix hidden-xs">
+    <?php echo $this->getDesktopVendorHeaderPanel(); ?>
+</div>
+
 
 <?php if(!empty($messagesBlock)): ?>
 <div class="top_bottom clearfix hidden-xs">
@@ -30,12 +27,12 @@ $topBottomHeaderMobileModel = Mage::getModel('cms/block')->load('top-bottom-head
 </div>
 <?php endif; ?>
 
-<?php if ($topBottomHeaderMobileModel->getId() && $topBottomHeaderMobileModel->getIsActive() == 1): ?>
+
 <div class="top_bottom  bg-w visible-xs clearfix">
     <!--mobile part-->
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-' . $vendor['vendor_id'])->toHtml(); ?>
+    <?php echo $this->getMobileVendorHeaderPanel(); ?>
 </div>
-<?php endif; ?>
+
 
 <?php if(!empty($messagesBlock)): ?>
 <div class="top_bottom  visible-xs clearfix">
