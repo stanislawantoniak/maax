@@ -14,6 +14,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$catModel = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
 		}
 		Mage::register("current_category", $catModel);
+
+        $q = $this->getRequest()->getParam('q', '');
+        if (!empty($q)) {
+            Mage::register('IS_SEARCH_MODE', true);
+        }
 	}
 
 	/**

@@ -10,6 +10,7 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
     public function indexAction()
     {
+        Mage::register('IS_SEARCH_MODE', true);
 
         $params = $this->getRequest()->getParams();
         $params['q'] = strtolower(Mage::helper('solrsearch')->getParam('q'));

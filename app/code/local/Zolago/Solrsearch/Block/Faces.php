@@ -717,7 +717,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-//        var_dump($facetFileds['category_facet']);
         if(isset($facetFileds['category_facet'])) {
             $data = $facetFileds['category_facet'];
             $data = $this->_processCategoryData($data,false);
@@ -980,11 +979,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return int
      */
     public function getMode() {
-        $queryText = $this->getRequest()->getParam('q', null);
-        if($this->getCurrentCategory() && !Mage::registry('current_product') && is_null($queryText)) {
-            return self::MODE_CATEGORY;
+        if(Mage::registry('IS_SEARCH_MODE')) {
+            return self::MODE_SEARCH;
         }
-        return self::MODE_SEARCH;
+        return self::MODE_CATEGORY;
     }
 
     /**
