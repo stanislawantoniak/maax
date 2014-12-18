@@ -9,6 +9,7 @@
 class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
+    protected $numFound;
 
     /**
      * @var array
@@ -418,12 +419,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
      * @return int
      */
     public function getNumFound() {
-
-        $num = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCollection()->getSolrData("response", "numFound");
-        if(is_numeric($num)) {
-            return $num;
+        if(is_null($this->numFound)) {
+            $num = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCollection()->getSolrData("response", "numFound");
+            if (is_numeric($num)) {
+                $this->numFound = $num;
+            } else {
+                $this->numFound = 0;
+            }
         }
-        return 0;
+        return $this->numFound;
     }
 
     public function getSolrRealQ() {
