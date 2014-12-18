@@ -44,11 +44,16 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             $m->setStoreId($customer->getStoreId())
                 ->setEmail($customer->getEmail());
         } else {
-            /*
-             *
-             * This should never happen in this function
-             *
-             */
+            $status = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : self::STATUS_NOT_ACTIVE;
+            $this
+                ->setCustomerId($customer->getId())
+                ->setSubscriberConfirmCode($this->randomSequence())
+                ->setEmail($customer->getEmail())
+                ->setStatus($status)
+                ->setId(null);
+            if($status == self::STATUS_UNCONFIRMED) {
+                $this->sendConfirmationRequestEmail();
+            }
         }
 
         $this->save();
