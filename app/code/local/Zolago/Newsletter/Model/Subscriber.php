@@ -14,7 +14,6 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
 		);
 	}
-
     /**
      * Saving customer subscription status
      *
@@ -23,6 +22,60 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
      */
     public function subscribeCustomer($customer)
     {
+        Mage::log("subscribeCustomer was fired");
+        $this->loadByCustomer($customer);
+
+        if ($customer->getImportMode()) {
+            $this->setImportMode(true);
+        }
+
+
+        $status = $this->getStatus();
+        //handle situation when user was in newsletter subscribers list
+        if($this->getId()) {
+            //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
+            if(!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
+                $this->setStatus(self::STATUS_UNSUBSCRIBED);
+                $this->sendUnsubscriptionEmail();
+            }
+            //otherwise check if customer wants to subscribe
+            elseif($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
+                //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
+                if($status == self::STATUS_UNSUBSCRIBED) {
+                    $this->setStatus(self::STATUS_SUBSCRIBED);
+                }
+                //otherwise set his status to unconfirmed and send confirmation request email
+                else {
+                    $this->setStatus(self::STATUS_UNCONFIRMED);
+                    $this->sendConfirmationRequestEmail();
+                }
+            }
+            //do not replace old email in case when customer change account email
+            //insert another one db row with the new email
+            //on the /customer/account/edit page
+            $m = clone $this;
+            $m->setId(null);
+            $m->setStoreId($customer->getStoreId())
+                ->setEmail($customer->getEmail());
+        }
+        //and if he wasn't add it as NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
+        else {
+            $storeId = $customer->getStoreId() ? $customer->getStoreId() : Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+            $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
+            $this
+                ->setStoreId($storeId)
+                ->setCustomerId($customer->getId())
+                ->setSubscriberConfirmCode($this->randomSequence())
+                ->setEmail($customer->getEmail())
+                ->setStatus($newStatus)
+                ->setId(null);
+
+            if($newStatus == self::STATUS_UNCONFIRMED) {
+                $this->sendConfirmationRequestEmail();
+            }
+        }
+
+        $this->save();
         return $this;
     }
 
