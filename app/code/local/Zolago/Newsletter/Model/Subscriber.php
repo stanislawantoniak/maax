@@ -38,7 +38,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                 $this->setStatus(self::STATUS_UNSUBSCRIBED);
             }
             //otherwise check if customer wants to subscribe
-            elseif($customer->getIsSubscribed()) {
+            elseif($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
                 //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
                 if($status == self::STATUS_UNSUBSCRIBED) {
                     $this->setStatus(self::STATUS_SUBSCRIBED);
