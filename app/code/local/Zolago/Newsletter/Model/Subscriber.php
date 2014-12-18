@@ -61,10 +61,8 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             $status = self::STATUS_SUBSCRIBED;
             $sendInformationEmail = true;
         } else {
-            Mage::log('subscribeCustomer');
-
 //            $status = ($this->getStatus() == self::STATUS_NOT_ACTIVE ? self::STATUS_UNSUBSCRIBED : $this->getStatus());
-            $status = ($this->getStatus() == self::STATUS_NOT_ACTIVE ? self::STATUS_NOT_ACTIVE : $this->getStatus());
+            $status = self::STATUS_NOT_ACTIVE;
         }
 
         if($status != $this->getStatus()) {

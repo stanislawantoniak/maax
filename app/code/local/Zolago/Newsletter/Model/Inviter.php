@@ -149,14 +149,14 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
      * all his subscriptions should be set in status STATUS_NOT_ACTIVE
      * @param $customerId
      */
-    public function changeAllCustomerSubscriptionsStatus($customerId, $status)
+    public function changeAllCustomerSubscriptionsStatus($customerId, $status = self::STATUS_NOT_ACTIVE)
     {
         $customerSubscriptions = Mage::getModel('newsletter/subscriber')
             ->getCollection()
             ->addFieldToFilter('customer_id', $customerId);
 
         foreach ($customerSubscriptions as $customerSubscription) {
-            $customerSubscription->setStatus(self::STATUS_NOT_ACTIVE);
+            $customerSubscription->setStatus($status);
             $customerSubscription->save();
         }
 
