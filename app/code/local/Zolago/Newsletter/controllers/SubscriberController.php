@@ -6,10 +6,11 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
     public function invitationAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
-        $this->confirm(
+        $error = $this->confirm(
             $_helper->__('Invalid newsletter invitation code.'),
             $_helper->__('Invalid subscription ID.')
         );
+        $this->redirectByError($error);
     }
 
     /**
@@ -18,28 +19,33 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
     public function confirmAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
-        $this->confirm(
+        $error = $this->confirm(
             $this->__('Invalid subscription confirmation code.'),
             $_helper->__('Invalid subscription ID.')
         );
+        $this->redirectByError($error);
     }
+
 
     protected function confirm($error1,$error2) {
         $id    = (int) $this->getRequest()->getParam('id');
         $code  = (string) $this->getRequest()->getParam('code');
         $errors = true;
-
         if ($id && $code) {
             $subscriber = Mage::getModel('newsletter/subscriber')->load($id);
             $session = Mage::getSingleton('core/session');
-
             if($subscriber->getId() && $subscriber->getCode()) {
                 if($subscriber->confirm($code)) {
                     $errors = false;
-
                     /** @var Zolago_Newsletter_Model_Subscriber $model */
                     $model = Mage::getModel("zolagonewsletter/subscriber");
-                    $model->sendConfirmationSuccessEmail($id);
+                    try {
+                        $model->sendConfirmationSuccessEmail($id);
+                    } catch(Exception $e) {
+                        $errors = true;
+                        $_helper = Mage::helper("zolagonewsletter");
+                        $session->addError($_helper->__("Some newsletter error occurred"));
+                    }
                 } else {
                     $session->addError($error1);
                 }
@@ -47,7 +53,14 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
                 $session->addError($error2);
             }
         }
-        if(!$errors) {
+        return $errors;
+    }
+
+    /**
+     * @param bool $error
+     */
+    protected function redirectByError($error=true) {
+        if(!$error) {
             $this->_redirectUrl(Mage::getUrl("newsletter/thankyou"));
         } else {
             $this->_redirectUrl(Mage::getBaseUrl());
