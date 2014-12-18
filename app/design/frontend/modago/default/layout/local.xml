@@ -954,6 +954,12 @@
                 <path>customer/account/privacy</path>
                 <label>Privacy settings</label>
             </action>
+			<!--logout-->
+			<action method="addLink" translate="label">
+				<name>logout</name>
+				<path>customer/account/logout</path>
+				<label>Log out</label>
+			</action>
 		</reference>
 
 		<reference name="content">
@@ -1147,6 +1153,12 @@
                     <path>customer/account/privacy</path>
                     <label>Privacy settings</label>
                 </action>
+				<!--logout-->
+				<action method="addLink" translate="label">
+					<name>logout</name>
+					<path>customer/account/logout</path>
+					<label>Log out</label>
+				</action>
             </block>
         </reference>
 

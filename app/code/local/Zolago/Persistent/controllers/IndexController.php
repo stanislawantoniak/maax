@@ -49,7 +49,7 @@ class Zolago_Persistent_IndexController extends Mage_Persistent_IndexController
 		// Do remove presisten quote
 		Mage::getSingleton('persistent/observer')->setQuoteGuest();
 
-		$session->addSuccess("Your persistent has been cleared");
+		$session->addSuccess($this->__("Your persistent has been cleared"));
 		$this->_redirect("/");
 	}
 	
