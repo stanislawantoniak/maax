@@ -62,7 +62,10 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
                 }
             }
         }
-        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+
+        /** @var Zolago_Modago_Block_Solrsearch_Faces $parentBlock */
+        $parentBlock = $this->getParentBlock();
+        if($parentBlock->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
             if(isset($params['id'])) unset($params['id']);
             $tmp = array(
                        '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
@@ -70,7 +73,8 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
                    );
             $facetUrl = Mage::getUrl('',$tmp);
         }
-        else {
+        else
+        {
 
             $names = array();
             $ids   = array();
