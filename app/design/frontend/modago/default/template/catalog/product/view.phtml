@@ -12,6 +12,8 @@
  * @see Mage_Catalog_Block_Product_View
  * @see Mage_Review_Block_Product_View
  */
+
+/** @var $this Zolago_Catalog_Block_Product_View */
 ?>
 
 <?php
@@ -75,20 +77,30 @@ $avg = $_reviewBlock->getAvarageRating();
 <section id="product_shop" class="section bg-w clearfix">
 
 <!-- GALLERY PRODUCT -->
+<?php
+/** @var Zolago_Dropship_Model_Vendor $vendorContext */
+$vendorContext = Mage::helper('umicrosite')->getCurrentVendor();
+$isVendorContent = false;
+if($vendorContext && $vendorContext->getId()) {
+    $isVendorContent = true;
+}
+?>
 
-<?php if($this->getIsBrandshop()):?>
+
 <div class="path_back_to_category visible-xs">
-    <div class="col-xs-12 brandshop">
-		<a href="<?php echo $this->getVendorUrl();?>">
-			<?php echo $this->__("Brandshop");?>
-			<img alt="<?php echo $this->escapeHtml($this->getVendorName());?>" src="<?php echo $this->getVendorLogoUrl();?>">
-		</a>
-	</div>
+    <?php if($isVendorContent):?>
+        <div class="col-xs-12 brandshop">
+            <a href="<?php echo $this->getVendorUrl();?>">
+                <?php echo $vendorContext->isBrandshop() ? $this->__("Brandshop") : $this->__("Vendor");?>
+                <img alt="<?php echo $this->escapeHtml($this->getVendorName());?>" src="<?php echo $this->getVendorLogoUrl();?>">
+            </a>
+        </div>
+    <?php endif;?>
     <div class="col-xs-12">
         <a href="<?php echo $this->getParentCategoryUrl(); ?>"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
     </div>
 </div>
-<?php endif;?>
+
 
 <?php echo $this->getChildHtml('media') ?>
 <!-- END GALERY PRODUCT -->

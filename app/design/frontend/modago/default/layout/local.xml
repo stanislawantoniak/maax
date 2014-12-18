@@ -580,6 +580,9 @@
 			<action method="addBodyClass">
 				<value>node-type-view-product</value>
 			</action>
+            <action method="addBodyClass">
+                <value>no-navigation-for-product-page</value>
+            </action>
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
 		</reference>
 

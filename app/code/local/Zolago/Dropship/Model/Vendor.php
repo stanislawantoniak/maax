@@ -37,6 +37,10 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 	public function isBrandshop() {
 		return $this->getVendorType()==Zolago_Dropship_Model_Source::VENDOR_TYPE_BRANDSHOP;
 	}
+
+    public function isStandard() {
+        return $this->getVendorType()==Zolago_Dropship_Model_Source::VENDOR_TYPE_STANDARD;
+    }
 	
 	/**
 	 * Sets root category to registry and then return
