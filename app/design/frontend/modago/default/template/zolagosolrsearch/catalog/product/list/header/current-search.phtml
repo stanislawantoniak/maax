@@ -5,13 +5,15 @@ $helperZSS = Mage::helper('zolagosolrsearch');
 <div class="current-search">
     <h1>
         <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
-            <?php echo $helperZSS->__("You're looking for: "); ?>
+           <?php echo $helperZSS->__("You're looking for: "); ?>
         <?php else: ?>
-            <?php echo $helperZSS->__("Search result for: "); ?>
+            <?php if($helperZSS->getNumFound()): ?>
+                <?php echo $helperZSS->__("Search result for: "); ?>
+            <?php else: ?>
+                <?php echo $helperZSS->__("No search results found for"); ?>
+            <?php endif; ?>
         <?php endif; ?>
-        <strong>
-            <?php echo $helperZSS->getQueryText(); ?>
-        </strong>
+        &bdquo;<?php echo $helperZSS->getQueryText(); ?>&rdquo;
     </h1>
     <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
         <?php if($helperZSS->getNumFound()): ?>
@@ -33,8 +35,9 @@ $helperZSS = Mage::helper('zolagosolrsearch');
             <span id="category-cnt-wrapper"> <?php echo $helperZSS->__("in"); ?> <span id="category-cnt"></span> <?php echo $helperZSS->__("categories"); ?></span>
         </p>
     <?php else: ?>
-        <span class="no-result" style="padding-bottom: 10px;"><?php echo $this->__("No results"); ?></span>
-        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
+        <div id="search-page-empty">
+            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
+        </div>
     <?php endif; ?>
 </div>
 <script>

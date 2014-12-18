@@ -64,7 +64,7 @@ jQuery.noConflict();
             });
             return valid;
         }, "");
-        $("#question-form, #review-form, #question-form-mobile").each(function () {
+        $("#review-form, #question-form-mobile").each(function () {
 
             $(this).validate({
                 success: "valid",

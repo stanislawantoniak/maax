@@ -30,5 +30,22 @@
             </children>
         </vendors>
     </menu>
+    <acl>
+        <resources>
+        	<admin>
+	        	<children>
+	                <vendors>
+	                    <children>
+	                        <zolagocatalog translate="title" module="zolagocatalog">
+	                            <title>Converter update settings</title>
+	                            <sort_order>70</sort_order>
+	                        </zolagocatalog>
+	                    </children>
+	                </vendors>
+	            </children>
+            </admin>
+        </resources>
+    </acl>
+
 </config>
 

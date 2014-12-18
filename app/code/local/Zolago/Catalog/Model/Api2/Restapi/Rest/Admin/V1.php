@@ -52,7 +52,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
 
         $json = json_encode($data);
-        Mage::log($json, 0, 'json.log');
+        Mage::log($json, 0);
         if (!empty($data)) {
             foreach ($data as $cmd => $batch) {
                 switch ($cmd) {
@@ -84,6 +84,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         if(!empty($batch)){
                             $batch = (array)$batch;
+                            $merchant = 0;
                             foreach($batch as $dataStock){
                                 $merchant = $dataStock['merchant'];
                                 $stock = $dataStock['data'];
@@ -163,7 +164,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $availableStockByMerchant = array();
         //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData); //return array("sku" => qty, ...)
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
         //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
@@ -279,12 +280,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
         //2. reformat by store_id $priceMarginValues
         $marginByStore = array();
+        //Mage::log(print_r($priceMarginValues,true), 0, 'priceMarginValues.log');
         if (!empty($priceMarginValues)) {
             foreach ($priceMarginValues as $_) {
                 $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
             }
             unset($_);
         }
+        //Mage::log(print_r($marginByStore,true), 0, 'marginByStore.log');
         //3. reformat by store_id $priceMSRPSource
         $priceMSRPTypeByStore = array();
         if (!empty($priceMSRPSourceManual)) {
@@ -352,6 +355,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             if (isset($marginByStore[$productId][$storeId])) {
                                 $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
                             }
+                            //Mage::log($marginSelected, 0, 'marginSelected.log');
 
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
