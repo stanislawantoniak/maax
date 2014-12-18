@@ -13,6 +13,7 @@ class Zolago_Persistent_Model_Observer_Session extends Mage_Persistent_Model_Obs
         $customer = $observer->getEvent()->getCustomer();
         /* @var $customer Mage_Customer_Model_Customer */
 		
+		// Todo add skiping options if needed
 		if($customer instanceof Mage_Customer_Model_Customer && $customer->getId()){
 			
 			// @todo Add from customer attribute forget_me
