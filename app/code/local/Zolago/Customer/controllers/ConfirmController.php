@@ -34,6 +34,12 @@ class Zolago_Customer_ConfirmController
         $modelUser->load($customerId);
         $modelUser->setEmail($email);        
         $modelUser->save();
+
+        //subscribe
+        /* @var $newsletterInviter Zolago_Newsletter_Model_Inviter */
+        Mage::log($email);
+        Mage::getModel('zolagonewsletter/inviter')
+            ->addSubscriber($email);
         
     }
 

@@ -92,12 +92,21 @@
 
 
   .vendor-top-bottom-header {
-    min-height: 70px;
-    .vendor-top-bottom-header-label {
-      display: table-cell;
-      padding: 20px 10px 0 0;
-      vertical-align: middle;
+    height: 72px;
+    .logo-part {
+      padding-left: 0px;
+
+      .vendor-top-bottom-header-label {
+        display: table-cell;
+        padding: 20px 10px 0 0;
+        vertical-align: middle;
+        a:link, a:visited {
+          text-transform: uppercase;
+        }
+      }
+
     }
+
     .vendor-top-bottom-header-logo {
       display: table-cell;
       img {
