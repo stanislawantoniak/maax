@@ -2,7 +2,7 @@
 
 class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	/**
-	 * Init category an register it
+	 * Init category and register it
 	 */
     protected function _initCategory() {
 		$categoryId = $this->getRequest()->getParam("scat", 0);
@@ -15,11 +15,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		}
 		Mage::register("current_category", $catModel);
 	}
-	
-	public function emptyAction() {
-		echo "Works";
-	}
-	
+
 	/**
 	 * Get list plus blocks
 	 */
