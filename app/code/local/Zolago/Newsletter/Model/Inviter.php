@@ -143,6 +143,25 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		return false;
 	}
 
+    /**
+     * When customer confirm changing email
+     * (on the /customer/account/edit page)
+     * all his subscriptions should be set in status STATUS_NOT_ACTIVE
+     * @param $customerId
+     */
+    public function changeAllCustomerSubscriptionsStatus($customerId, $status)
+    {
+        $customerSubscriptions = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter('customer_id', $customerId);
+
+        foreach ($customerSubscriptions as $customerSubscription) {
+            $customerSubscription->setStatus(self::STATUS_NOT_ACTIVE);
+            $customerSubscription->save();
+        }
+
+    }
+
 	public function addSubscriber($email,$status=self::STATUS_NOT_ACTIVE) {
 		if($this->validateEmail($email)) {
 			/** @var Mage_Newsletter_Model_Subscriber $model */
@@ -181,14 +200,19 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				}
 			} else {
 				$oldStatus = $subscriber->getStatus();
+                Mage::log('addSubscriber');
+                Mage::log($oldStatus);
+                Mage::log($status);
 				if($oldStatus == self::STATUS_UNSUBSCRIBED
 					&& ($status == self::STATUS_UNCONFIRMED || $status == self::STATUS_SUBSCRIBED)) {
+                    Mage::log("1111111111111");
 					$subscriber->setStatus(self::STATUS_SUBSCRIBED);
 					$subscriber->save();
 					$this->sendConfirmationSuccessEmail($subscriberId);
 					return true;
 				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
 					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
+                    Mage::log("22222222222222222");
 					$subscriber->setStatus($status);
 					$subscriber->save();
 					$this->sendConfirmationRequestEmail($subscriberId);
