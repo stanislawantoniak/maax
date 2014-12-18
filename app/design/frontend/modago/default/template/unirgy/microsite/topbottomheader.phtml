@@ -7,19 +7,10 @@ $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 $messagesBlock = $this->getMessagesBlock()->getGroupedHtml();
 ?>
 <?php
-$topVendorBrandshopHeaderModel = Mage::getModel('cms/block')->load('top-vendor-brandshop-header-v-' . $vendor['vendor_id']);
 
 $topBottomHeaderDesktopModel = Mage::getModel('cms/block')->load('top-bottom-header-desktop-v-' . $vendor['vendor_id']);
 $topBottomHeaderMobileModel = Mage::getModel('cms/block')->load('top-bottom-header-mobile-v-' . $vendor['vendor_id']);
 ?>
-
-<?php if ($topVendorBrandshopHeaderModel->getId() && $topVendorBrandshopHeaderModel->getIsActive() == 1): ?>
-<div class="top_bottom  bg-w clearfix">
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-vendor-brandshop-header-v-' . $vendor['vendor_id'])->toHtml(); ?>
-</div>
-<?php endif; ?>
-
-
 
 <?php if ($topBottomHeaderDesktopModel->getId() && $topBottomHeaderDesktopModel->getIsActive() == 1): ?>
     <div class="top_bottom  bg-w clearfix hidden-xs">
