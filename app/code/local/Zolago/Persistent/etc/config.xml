@@ -7,6 +7,9 @@
 	</modules>
 	<global>
 		<models>
+			<zolagopersistent>
+				<class>Zolago_Persistent_Model</class>
+			</zolagopersistent>
 			<persistent>
 				<rewrite>
 					<observer>Zolago_Persistent_Model_Observer</observer>
@@ -28,6 +31,16 @@
         </resources>
 	</global>
 	<frontend>
+		<events>
+			<customer_privacy_changed>
+				<observers>
+					<zolagopersistent>
+						<model>zolagopersistent/observer</model>
+						<method>customerPrivacyChanged</method>
+					</zolagopersistent>
+				</observers>
+			</customer_privacy_changed>
+		</events>
 		<routers>
 			<persistent>
 				<args>

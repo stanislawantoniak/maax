@@ -63,6 +63,40 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
         $this->renderLayout();
     }
+	
+	/**
+	 * Privacy setting action save
+	 */
+    public function privacyPostAction()
+    {
+		if(!$this->getRequest()->isPost() || !$this->_validateFormKey()){
+            $this->_redirect('*/*/');
+			return;
+		}
+		$session = Mage::getSingleton('customer/session');
+		try{
+			$value = (int)$this->getRequest()->getParam("forget_me");
+			$customer = $session->getCustomer();
+			$customer->setForgetMe($value);
+			$resource = $customer->getResource();
+			/* @var $resource Mage_Customer_Model_Resource_Customer */
+			
+			$resource->saveAttribute($customer, "forget_me");
+			
+			Mage::dispatchEvent("customer_privacy_changed", array(
+				"customer"=>$customer
+			));
+		} catch (Mage_Core_Exception $e) {
+			 $session->addError($this->__($e->getMessage()));
+			 return $this->_redirectReferer();
+		} catch (Exception $e) {
+			 $session->addError($this->__("Some error occured!"));
+			 Mage::logException($e);
+			 return $this->_redirectReferer();
+		}
+		$session->addSuccess($this->__("Your privacy has been saved"));
+		return $this->_redirectReferer();
+    }
 
 
 	/**

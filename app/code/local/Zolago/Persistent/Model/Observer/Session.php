@@ -16,7 +16,7 @@ class Zolago_Persistent_Model_Observer_Session extends Mage_Persistent_Model_Obs
 		if($customer instanceof Mage_Customer_Model_Customer && $customer->getId()){
 			
 			// @todo Add from customer attribute forget_me
-			$rememberMeCheckbox = 0; // !(int)$custmer->getForgetMe()
+			$rememberMeCheckbox = !(int)$customer->getForgetMe();
 
 			// Override request param setting saved in session by customer account setting
 			Mage::helper('persistent/session')->setRememberMeChecked((bool)$rememberMeCheckbox);
