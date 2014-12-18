@@ -20,6 +20,18 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		parent::__construct();
 	}
 	
+	/**
+	 * If relevance use solr score
+	 * @param type $attributeCode
+	 * @param type $direction
+	 * @return boolean
+	 */
+	public function getSortFieldByCode($attributeCode, $direction){
+		if($attributeCode=="relevance"){
+			return false;
+		}
+		return parent::getSortFieldByCode($attributeCode, $direction);
+	}
 	
 	public function setSolrData($data) {
         $this->_solrData = $data;
