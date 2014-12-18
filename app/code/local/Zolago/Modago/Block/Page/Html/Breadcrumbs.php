@@ -41,6 +41,9 @@ class Zolago_Modago_Block_Page_Html_Breadcrumbs extends Mage_Page_Block_Html_Bre
 		return $this->getUrl("/");
 	}
 
+    /**
+     * @return string URL
+     */
     public function getStandardVendorUrl() {
         if($this->getStandardVendor()){
             return $this->getStandardVendor()->getVendorUrl();
@@ -77,6 +80,9 @@ class Zolago_Modago_Block_Page_Html_Breadcrumbs extends Mage_Page_Block_Html_Bre
 		return $this->getData("brandshop");
 	}
 
+    /**
+     * @return Zolago_Dropship_Model_Vendor | false
+     */
     public function getStandardVendor() {
         if(!$this->hasData("standard_vendor")){
             $standardVendor = false;
