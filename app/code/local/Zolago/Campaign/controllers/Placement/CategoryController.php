@@ -8,9 +8,30 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
 
     public function indexAction()
     {
+        //restrict category access
+        $noAccess = true;
+        $category = $this->getRequest()->getParam('category', 0);
+
+        $vendorCategories = Mage::helper('zolagocampaign')
+            ->getVendorCategoriesList();
+
+        if (!empty($vendorCategories)) {
+            $vendorCats = array();
+            foreach ($vendorCategories as $vendorCategory) {
+                $vendorCats[$vendorCategory['id']] = $vendorCategory['id'];
+            }
+            if (in_array($category, $vendorCats)) {
+                $noAccess = false;
+            }
+        }
+
+        if ($noAccess) {
+            return $this->_redirect('campaign/placement/index');
+        }
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagocampaign');
     }
+
     public function saveNewAction() {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {

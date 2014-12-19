@@ -529,7 +529,9 @@
         </reference>
 
         <reference name="content">
-
+            <!--removing category listing-->
+            <remove name="solrsearch_product_list_header"/>
+            <remove name="zolagosolrsearch_category_view"/>
 
             <block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
 
@@ -538,7 +540,6 @@
                     <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
                     <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
                 </block>
-
 
                 <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar"/>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
@@ -579,6 +580,9 @@
 			<action method="addBodyClass">
 				<value>node-type-view-product</value>
 			</action>
+            <action method="addBodyClass">
+                <value>no-navigation-for-product-page</value>
+            </action>
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
 		</reference>
 
@@ -948,6 +952,18 @@
 				<path>newsletter/manage/</path>
 				<label>Settings mailing and sms</label>
 			</action>
+            <!--Privacy settings-->
+            <action method="addLink" translate="label">
+                <name>privacy</name>
+                <path>customer/account/privacy</path>
+                <label>Privacy settings</label>
+            </action>
+			<!--logout-->
+			<action method="addLink" translate="label">
+				<name>logout</name>
+				<path>customer/account/logout</path>
+				<label>Log out</label>
+			</action>
 		</reference>
 
 		<reference name="content">
@@ -1135,10 +1151,54 @@
                     <path>newsletter/manage/</path>
                     <label>Settings mailing and sms</label>
                 </action>
+                <!--Privacy settings-->
+                <action method="addLink" translate="label">
+                    <name>privacy</name>
+                    <path>customer/account/privacy</path>
+                    <label>Privacy settings</label>
+                </action>
+				<!--logout-->
+				<action method="addLink" translate="label">
+					<name>logout</name>
+					<path>customer/account/logout</path>
+					<label>Log out</label>
+				</action>
             </block>
         </reference>
 
 	</customer_account_index>
+
+    <customer_account_privacy translate="label">
+        <update handle="customer_account" />
+        <update handle="zolago_modago_customer_handle" />
+        <label>Privacy settings</label>
+        <action method="addBodyClass">
+            <value>customer-account-privacy</value>
+        </action>
+        <!-- Mage_Customer -->
+
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>account</crumbName>
+                <crumbInfo>
+                    <label>Privacy settings</label>
+                    <title>Privacy settings</title>
+                    <link>/customer/account/privacy</link>
+                </crumbInfo>
+            </action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="zolagocustomer/privacy" name="customer_privacy" template="zolagocustomer/privacy.phtml" />
+        </reference>
+    </customer_account_privacy>
 	
 	<zolago_modago_customer_handle>
 		<reference name="head">
