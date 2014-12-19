@@ -146,6 +146,8 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             }
         }
 
+        $this->save();
+
 	    //check if any success msg was set during process and add it to session
 	    if($successMsg) {
 		    $helper = Mage::helper("zolagonewsletter");
