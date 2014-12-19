@@ -35,7 +35,9 @@ class Zolago_Customer_ConfirmController
         $modelUser->setEmail($email);        
         $modelUser->save();
 
-        Mage::dispatchEvent("zolagocustomer_change_email_confirm", array('customer'=> $modelUser));
+        /* @var $newsletterInviter Zolago_Newsletter_Model_Subscriber */
+        Mage::getModel('zolagonewsletter/subscriber')
+            ->subscribeCustomer($modelUser);
         
     }
 
