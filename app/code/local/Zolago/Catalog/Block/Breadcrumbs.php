@@ -104,6 +104,56 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         return $this->_rootId;     
      }
 
+	/**
+	 * 
+	 * @return boolean
+	 */
+	protected function _isSearchContext(){
+		$request = $this->getRequest();
+		return (
+			$request->getModuleName()=="search" && 
+			$request->getControllerName()=="index" && 
+			$request->getActionName()=="index"
+		);
+	}
+	
+	/**
+	 * @return string | null
+	 */
+	protected function _getQuery() {
+		return Mage::helper("solrsearch")->getParam("q");
+	}
+	
+	/**
+	 * @param array $params
+	 * @return string
+	 */
+	public function getSearchLink(array $params = array()) {
+		return $this->getUrl("search/index/index", $params);
+	}
+	
+	/**
+	 * 
+	 * @param type $category
+	 * @param type $parentCategory
+	 * @param type $parentId
+	 * @return string
+	 */
+	protected function _prepareCategoryLink($category, $parentCategory, $parentId) {
+		if($this->_isSearchContext()){
+			return $this->getSearchLink(array(
+				"_query"=>array(
+					"q"=>$this->_getQuery(),
+					"scat"=>$parentId
+				)
+			));
+		}
+		if($category->getId() != $parentId || $this->_getProduct()){
+			return $parentCategory->getUrl();
+		};
+		return '';
+	}
+	 
     /**
      * preparing path
      * @param
@@ -127,7 +177,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
                     array_unshift($path, array(
 						"name" => "category" . $parentCategory->getId(),
 						"label" => $parentCategory->getName(),
-						"link" => (($category->getId() == $parentId) && !$this->_getProduct())? 0:$parentCategory->getUrl()
+						"link" => $this->_prepareCategoryLink($category, $parentCategory, $parentId)
 					));
                 }
             }
@@ -185,6 +235,19 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 				'link'=>Mage::getBaseUrl()
 			));
         }
+		
+		if($this->_isSearchContext()){
+			$breadcrumbsBlock->addCrumb('search', array(
+				'label'=>Mage::helper('catalog')->__('Search: %s', $this->escapeHtml($this->_getQuery())),
+				'title'=>Mage::helper('catalog')->__('Search: %s', $this->escapeHtml($this->_getQuery())),
+				'link'=>$this->getSearchLink(array(
+					"_query"=>array(
+						"q"=>$this->_getQuery(),
+						"scat"=>$this->_getRootCategoryId()
+					)
+				))
+			));
+		}
     }
 
     /**
