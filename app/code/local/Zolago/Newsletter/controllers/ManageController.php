@@ -14,14 +14,10 @@ class Zolago_Newsletter_ManageController extends Mage_Newsletter_ManageControlle
 				->save();
 			if (!$isSubscribed) {
 				$session->addSuccess($this->__('The subscription has been removed.'));
-			} else {
-				//todo: check if customer subscription status is changed if changed then check subscriber status and add correct message
-				//$this->__("Your subscribtion has been saved. To start receiving our newsletter you have to confirm your email by clicking
-				//confirmation link in e-mail that we have just sent to you. Checkbox below will be checked after confirmation.")
-				//Mage::getSingleton('customer/session')->addSuccess($this->__('The subscription has been saved.'));
 			}
 		}
 		catch (Exception $e) {
+			Mage::log($e);
 			$session->addError($this->__('An error occurred while saving your subscription.'));
 		}
 		$this->_redirectReferer();

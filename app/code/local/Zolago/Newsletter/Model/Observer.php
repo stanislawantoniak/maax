@@ -12,6 +12,7 @@ class Zolago_Newsletter_Model_Observer extends Mage_Newsletter_Model_Observer
 				$customer->setIsSubscribedHasChanged(true);
 			}
 
+			Mage::getModel('zolagonewsletter/subscriber')->subscribeCustomer($customer);
 		}
 		return $this;
 	}
