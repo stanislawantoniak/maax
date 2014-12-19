@@ -43,10 +43,12 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		    }
 	    }
 
+	    $successMsg = false;
         $status = $this->getStatus();
         //handle situation when user was in newsletter subscribers list
         if($this->getId()) {
 	        if(!is_null($customer->getIsSubscribedHasChanged())) {
+		        $customer->unsIsSubscribedHasChanged();
 		        //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
 		        if (!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
 			        $this->setStatus(self::STATUS_UNSUBSCRIBED);
@@ -56,10 +58,12 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			        //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
 			        if ($status == self::STATUS_UNSUBSCRIBED) {
 				        $this->setStatus(self::STATUS_SUBSCRIBED);
+				        $successMsg = $this->__("The subscription has been saved.");
 			        } //otherwise set his status to unconfirmed and send confirmation request email
 			        else {
 				        $this->setStatus(self::STATUS_UNCONFIRMED);
 				        $this->sendConfirmationRequestEmail();
+				        $successMsg = $this->__("Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.");
 			        }
 		        }
 	        }
@@ -99,6 +103,12 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
 
         $this->save();
+
+	    //check if any success msg was set during process and add it to session
+	    if($successMsg) {
+		    Mage::getSingleton('customer/session')->addSuccess($successMsg);
+	    }
+
         return $this;
     }
 
