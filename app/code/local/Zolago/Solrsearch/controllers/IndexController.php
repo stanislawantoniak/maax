@@ -109,18 +109,16 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
         Mage::getSingleton('core/session')->setSolrFilterQuery($filterQuery);
 
-        $this->loadLayout();
-
         /** @var Zolago_Solrsearch_Model_Solr $solrModel */
         $solrModel = Mage::getModel('solrsearch/solr');
         $solrData = $solrModel->queryRegister($queryText);
         Mage::register('solrbridge_loaded_solr', $solrModel);
-
+        
+        $solrData = Mage::helper('zolagosolrsearch')->makeFallback($solrData,$queryText);
         if( isset($solrData['responseHeader']['params']['q']) && !empty($solrData['responseHeader']['params']['q']) ) {
 
             if ($queryText != $solrData['responseHeader']['params']['q']) {
                 $queryText = $solrData['responseHeader']['params']['q']; //poniewaz moze byc ulepszone np: baleron zamieni na baleriny
-
                 //Redirect to Url set for the search term
                 /** @var Mage_CatalogSearch_Model_Query $query */
                 $query = Mage::helper('catalogsearch')->getQuery();
@@ -135,6 +133,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
             }
         }
 
+
+        $this->loadLayout();
         if (Mage::helper('solrsearch')->getSetting('allow_multiple_filter') > 0)
         {
             $this->saveLayerData($solrData, $queryText);

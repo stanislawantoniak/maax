@@ -215,6 +215,71 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $uri;
     }
 
+
+    /**
+     * @param array $solrData
+     * @param string $queryText
+     * @param
+     * @return
+     */
+    public function makeFallback($solrData,$queryText) {
+        if (!$this->isFallbackNeeded($solrData,$queryText)) {
+            return $solrData;
+        }
+        $solrModel = Mage::getModel('solrsearch/solr');
+        $currentCategory = $solrModel->getCurrentCategory();
+        $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+        $newCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
+        $solrModel->setCurrentCategory($newCategory);
+        Mage::unregister(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
+        $solrModel->setFallbackCategoryId($currentCategory->getId());
+        $newSolrData = $solrModel->queryRegister($queryText);
+        $numFound = empty($solrData['response']['numFound'])? 0:$solrData['response']['numFound'];
+        $newNumFound = empty($newSolrData['response']['numFound'])? 0:$newSolrData['response']['numFound'];
+        if (!$this->isFallbackNeeded($newSolrData,$queryText) ||
+            (!$numFound && $newNumFound)
+        ) {
+            Mage::unregister('current_category');
+            Mage::register('current_category',$newCategory);
+            return $newSolrData;
+        }
+        // return back solrData
+        Mage::unregister(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
+        Mage::register(Zolago_Solrsearch_Model_Solr::REGISTER_KEY,$solrData);
+        return $solrData;
+    }
+    /**
+     * check if search fallback is needed
+     * @param array $solrData
+     * @param string $queryText
+     * @return
+     */
+    public function isFallbackNeeded($solrData,$queryText) {
+        $realQuery = empty($solrData['responseHeader']['params']['q'])? '':$solrData['responseHeader']['params']['q'];
+        $numFound = empty($solrData['response']['numFound'])? 0:$solrData['response']['numFound'];
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        $in_category = false;
+        if (empty($vendor) || !$vendor->getId()) { // not vendor context
+            $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+            $category = $this->getCurrentCategory();
+            if (!empty($category)
+                    && $category->getId()
+                    && ($rootCatId != $category->getId())) {
+
+                $in_category = true;
+            }
+        }
+        if (!empty($queryText) &&
+                $in_category &&
+                (!$numFound  ||
+                 ($realQuery != $queryText)
+                )
+           ) {
+            //
+            return true;
+        }
+        return false;
+    }
     /**
      * Construct context search selector Array
      * @return array
@@ -455,6 +520,55 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getQueryText() {
         return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText();
+    }
+
+    /**
+     * @return string URL
+     */
+    public function getRemoveQueryTextUrl() {
+        return Mage::getUrl('todo');//@todo
+    }
+
+    /**
+     * @return bool
+     */
+    public function canShowCurrentCategorySearch() {
+        return true; //@todo
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentCategoryString() {
+        return "[dev]Bielizna"; //@todo
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoveCurrentCategoryUrl() {
+        return "[dev]"; //@todo
+    }
+
+    /**
+     * @return bool
+     */
+    public function canShowVendor() {
+        return true; //@todo
+    }
+
+    /**
+     * @return string
+     */
+    public function getVendorString() {
+        return '[dev]Esoriq'; //@todo
+    }
+
+    /**
+     * @return string URL
+     */
+    public function getRemoveVendorUrl() {
+        return 'dev';//@todo
     }
 
 }
