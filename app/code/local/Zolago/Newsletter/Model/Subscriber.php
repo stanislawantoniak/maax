@@ -119,12 +119,14 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                 $customer->unsIsEmailHasChanged();
                 return $this;
             }
+
+	        $this->save();
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
             Mage::log("Customer (not subscribed) confirmed email change: Do something with it!");
             $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
-            if(!is_null($customer->getIsEmailHasChanged())) {
+            if(!is_null($customer->getIsEmailHasChanged()) && is_null($customer->getIsJustRegistered())) {
                 $newStatus = self::STATUS_NOT_ACTIVE;
                 $customer->unsIsEmailHasChanged();
             }
@@ -137,13 +139,12 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                 ->setId(null);
 
 			//if customer agreed to newsletter send him a confirmation email
+	        $this->save();
             if($newStatus == self::STATUS_UNCONFIRMED) {
                 $this->sendConfirmationRequestEmail();
 	            $successMsg = $confirmMsg;
             }
         }
-
-        $this->save();
 
 	    //check if any success msg was set during process and add it to session
 	    if($successMsg) {
