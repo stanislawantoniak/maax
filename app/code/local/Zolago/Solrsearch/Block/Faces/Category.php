@@ -12,8 +12,16 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         return $this->getParentBlock()->parseCategoryPathFacet($this->getAllItems());
     }
 
+    /**
+     * @param null $facetCode
+     * @return string
+     */
     public function getFacetLabel($facetCode=null) {
-        return Mage::helper('catalog')->__("Category");
+        if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() === Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY) {
+            return Mage::helper('catalog')->__('Category');
+        } else {
+            return Mage::helper('catalog')->__('narrow results');//search mode
+        }
     }
     public function getFilterCollection($categoryId) {
         if (!$this->hasData('all_filter_collection')) {
