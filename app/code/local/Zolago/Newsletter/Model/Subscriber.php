@@ -32,14 +32,18 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	    //if load by customer don't return valid object then try to load by it's email
 	    $guestSubscriber = false;
 	    if(!$this->getId()) {
-		    $this->loadByEmail($customer->getEmail());
-		    //Check if customer's email exists in database for his shop
-		    if($this->getId() && $customer->getStore() == $customerStoreId) {
-			    $guestSubscriber = true;
-		    }
-		    // if it exists in database but for other shop then treat it as new one
-		    else {
-			    $this->unsData();
+		    // get all subscribers with this email
+		    $collection = Mage::getModel('newsletter/subscriber')
+			    ->getCollection();
+		    $collection->addFieldToFilter('subscriber_email', array('eq' => $customer->getEmail()));
+
+		    // go through all of them and load one with matching store_id
+		    foreach ($collection as $subscriberM) {
+			    if ($subscriberM->getStoreId() == $customerStoreId) {
+				    $this->load($subscriberM->getId());
+				    $guestSubscriber = true;
+				    break;
+			    }
 		    }
 	    }
 
@@ -78,18 +82,13 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	        }
 
             if (!is_null($customer->getIsEmailHasChanged())) {
-                Mage::log("Customer (already subscribed) confirmed email change: Do something with it!");
-
                 //called on the /zolagocustomer/confirm/confirm/
                 $newCustomerEmail = $customer->getEmail();
 
                 //1. do not replace old email in case when customer change account email
                 //insert another one db row with the new email (for future use: ex. do not send coupon code twice)
                 $m = clone $this;
-                $m->setId(null);
-                $m->setStoreId($customer->getStoreId())
-                    ->setStatus(self::STATUS_NOT_ACTIVE)
-                    ->setEmail($newCustomerEmail);
+                $m->setId(null)->setEmail($newCustomerEmail);
                 $m->save();
 
                 //2. for other emails set customer_id=0
@@ -97,6 +96,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     ->getCollection();
                 $collection->addFieldToFilter('customer_id', array('eq' => $customer->getId()));
                 $collection->addFieldToFilter('subscriber_email', array('neq' => $newCustomerEmail));
+	            $collection->addFieldToFilter('store_id', array('eq' => $customerStoreId));
 
                 foreach ($collection as $subscriberM) {
                     $subscriberM->setCustomerId(0);
@@ -104,17 +104,16 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     $subscriberM->save();
                 }
 
-
                 //remove duplicated email
                 $collectionD = Mage::getModel('newsletter/subscriber')
                     ->getCollection();
                 $collectionD->addFieldToFilter('customer_id', array('eq' => 0));
                 $collectionD->addFieldToFilter('subscriber_email', array('eq' => $newCustomerEmail));
+	            $collectionD->addFieldToFilter('store_id', array('eq' => $customerStoreId));
 
                 foreach ($collectionD as $subscriberDM) {
                     $subscriberDM->delete();
                 }
-
 
                 $customer->unsIsEmailHasChanged();
                 return $this;
@@ -124,7 +123,6 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-            Mage::log("Customer (not subscribed) confirmed email change: Do something with it!");
             $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
             if(!is_null($customer->getIsEmailHasChanged()) && is_null($customer->getIsJustRegistered())) {
                 $newStatus = self::STATUS_NOT_ACTIVE;
