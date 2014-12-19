@@ -109,6 +109,8 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
 				return false;
+			} elseif (is_null($status)) {
+				return true;
 			} else {
 				if($this->canRepeatInvitation()) {
 					$this->setSubscriberId($sid);

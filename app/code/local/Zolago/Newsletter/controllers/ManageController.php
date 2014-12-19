@@ -5,20 +5,19 @@ class Zolago_Newsletter_ManageController extends Mage_Newsletter_ManageControlle
 		if (!$this->_validateFormKey()) {
 			return $this->_redirect('customer/account/');
 		}
-		$session = Mage::getSingleton('customer/session');
 		try {
-			$isSubscribed = (boolean)$this->getRequest()->getParam('is_subscribed', false);
-			$session->getCustomer()
+			$isSubscribed = (boolean)$this->getRequest()->getParam('is_subscribed', false) ? 1 : 0;
+			Mage::getSingleton('customer/session')->getCustomer()
 				->setStoreId(Mage::app()->getStore()->getId())
 				->setIsSubscribed($isSubscribed)
 				->save();
+
 			if (!$isSubscribed) {
-				$session->addSuccess($this->__('The subscription has been removed.'));
+				Mage::getSingleton('customer/session')->addSuccess($this->__('The subscription has been removed.'));
 			}
 		}
 		catch (Exception $e) {
-			Mage::log($e);
-			$session->addError($this->__('An error occurred while saving your subscription.'));
+			Mage::getSingleton('customer/session')->addError($this->__('An error occurred while saving your subscription.'));
 		}
 		$this->_redirectReferer();
 	}
