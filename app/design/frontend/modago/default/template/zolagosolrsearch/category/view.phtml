@@ -1,0 +1,42 @@
+<?php
+/** @var $this Zolago_Solrsearch_Block_Category_View */
+?>
+
+<?php if($this->isContentMode()): ?>
+    <section id="main" class="<?php echo $this->getElementClass(); ?>">
+    <?php //echo $this->getChildHtml('banner_result_title'); ?>
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="sidebar" class="hidden-xs clearfix">
+                    <?php echo $this->getSidebarWrapper(); ?>
+                </div>
+                <div id="content-main">
+                    <?php echo $this->getChildHtml('vendor.banner'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if(strlen($this->getChildHtml('vendor.banner.inspiration')) > 5): ?>
+        <section id="bottom" class="bg-w">
+            <div class="container-fluid">
+                <div class="col-sm-12">
+                    <?php echo $this->getChildHtml('vendor.banner.inspiration'); ?>
+                </div>
+            </div>
+        </section>
+    <?php endif; ?>
+    <script type="text/javascript">
+        jQuery(".wrapp-section").removeClass("bg-w");
+    </script>
+    </section>
+    <?php //echo $this->getCmsBlockHtml() ?>
+
+<?php elseif($this->isMixedMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+    <?php echo $this->getProductListHtml() ?>
+
+<?php else: ?>
+    <?php echo $this->getProductListHtml(); ?>
+<?php endif; ?>
