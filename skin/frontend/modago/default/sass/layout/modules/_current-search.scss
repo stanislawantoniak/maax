@@ -53,6 +53,7 @@
 	.found-product {
 		margin-bottom: 0px;
 	}
+
 }
 .current-search {
 	h1 {
@@ -68,6 +69,21 @@
 				display:block;
 			}
 		}
+	    .query-text-iks {
+			.iks {
+				@media (min-width: $screen-sm-min) {
+			        position: relative;
+					top:-15px;
+					margin-top:15px;
+		    	    padding: 0px 3px 0 3px;
+				}
+				@media (max-width: $screen-xs-max) {
+			        position: relative;
+					top:-4px;
+		    	    padding: 3px 5px;
+				}
+			}
+    	}
 	}
 }
 #view-current-search {

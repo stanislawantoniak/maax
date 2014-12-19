@@ -494,7 +494,35 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $this->numFound;
     }
+    
+    /**
+     * check if misspeling was used
+     * @return bool
+     */
 
+    public function isOriginalQuery() {
+        $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+        $collection = $cpl->getCollection();
+        $query = $collection->getSolrData("responseHeader","params", "q");
+        $originalQuery = $collection->getSolrData("responseHeader","params", "originalq");
+        return (bool)($query == $originalQuery);
+    }
+    
+    /**
+     * get category used in fallback
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getFallbackCategory() {
+        $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+        $collection = $cpl->getCollection();
+        $category = $collection->getSolrData("responseHeader","params", "category");
+        $fallbackCategory = $collection->getSolrData("responseHeader","params", "fallbackCategory");
+        if (is_int($fallbackCategory) && ($category !== $fallbackCategory)) {
+            return Mage::getModel('catalog/category')->load($fallbackCategory);
+        }
+        return null;
+        
+    }
     public function getSolrRealQ() {
         /** @var Zolago_Solrsearch_Model_Catalog_Product_List $clp */
         $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
@@ -523,52 +551,51 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @return string URL
-     */
-    public function getRemoveQueryTextUrl() {
-        return Mage::getUrl('todo');//@todo
-    }
-
-    /**
-     * @return bool
-     */
-    public function canShowCurrentCategorySearch() {
-        return true; //@todo
-    }
-
-    /**
+     * prepare url for filter in header
+     * @param string $query
+     * @param Mage_Catalog_Model_Category $category     
+     * @param Zolago_Dropship_Model_Vendor $vendor
      * @return string
      */
-    public function getCurrentCategoryString() {
-        return "[dev]Bielizna"; //@todo
-    }
 
-    /**
-     * @return string
-     */
-    public function getRemoveCurrentCategoryUrl() {
-        return "[dev]"; //@todo
-    }
+    public function getFilterUrl($query,$category,$vendor) {
+        $final = array();
 
-    /**
-     * @return bool
-     */
-    public function canShowVendor() {
-        return true; //@todo
-    }
-
-    /**
-     * @return string
-     */
-    public function getVendorString() {
-        return '[dev]Esoriq'; //@todo
-    }
-
-    /**
-     * @return string URL
-     */
-    public function getRemoveVendorUrl() {
-        return 'dev';//@todo
+        if (empty($vendor)) {
+            $final['_no_vendor'] = true;
+        }
+        if (!$category || !$category->getId()) {
+             $category = null;
+             if ($vendor) {
+                 $category = $vendor->rootCategory();                                     
+             }
+             if (!$category) {
+                 $categoryId = Mage::app()->getStore()->getRootCategoryId();
+                 $category = Mage::getModel('catalog/category')->load($categoryId);
+             }
+        }        
+        $cat = $category->getId();
+        if ($query) {
+            $final['_query'] = array(
+                                "q"=>$query,
+                                "scat"=>$cat,
+                                );                
+            $url = Mage::getUrl("search/index/index",$final);
+        } else {
+            if ($vendor) {
+                // check if vendor category
+                if ($category->getId() == $vendor->rootCategory()->getId()) {
+                    return $vendor->getVendorUrl();
+                }
+            } else {
+                // check if galery root category
+                if ($category->getId() == Mage::app()->getStore()->getRootCategoryId()) {
+                    return Mage::getUrl('',$final);
+                }
+            }
+            $url = $category->getUrl($final);
+        }
+        return $url;
     }
 
 }
