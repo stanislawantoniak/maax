@@ -8,28 +8,39 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 ?>
 <div class="current-search">
     <h1>
-        <?php if($helperZSS->getSolrRealQ() == $helperZSS->getQueryText()): ?>
+        <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
+            <?php echo $helperZSS->__("Nie znaleziono wyników wyszukiwania dla &bdquo;%s&rdquo;.", $helperZSS->getQueryText()) ?>
+            <?php if($helperZSS->getNumFound()): ?>
+                <br/>
+                <?php echo $helperZSS->__("Czy chodziło Ci o &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
+                <br/>
+                <br/>
+            <?php endif; ?>
+        <?php else: ?>
+            <?php echo $helperZSS->__("Nie znaleziono wyników wyszukiwania dla &bdquo;%s&rdquo;.", $helperZSS->getQueryText()) ?>
+        <?php endif; ?>
+        <?php if($helperZSS->getNumFound()): ?>
             <?php echo $helperZSS->__('Wyniki wyszukiwania dla:');//@todo translate ?>
             <span id="query-text" class="uppercase"><?php echo $helperZSS->getQueryText(); ?></span>
-            <span id="query-text-iks">
-                <a href="<?php echo $helperZSS->getRemoveQueryTextUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
-            </span>
+                <span id="query-text-iks">
+                    <a href="<?php echo $helperZSS->getRemoveQueryTextUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                </span>
             <?php if($helperZSS->canShowCurrentCategorySearch()): ?>
                 <?php echo $helperZSS->__('w kategorii'); //@todo translate ?>
                 <span id="category-text" class="uppercase"><?php echo $helperZSS->getCurrentCategoryString(); ?></span>
                 <span id="category-text-iks">
                     <a href="<?php echo $helperZSS->getRemoveCurrentCategoryUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
                 </span>
+            <?php else: ?>
+                //@todo w całej Galerii Handlowej jeżeli nie znaleziono wyników dla...
             <?php endif; ?>
             <?php if($helperZSS->canShowVendor()): ?>
-                <?php echo $vendor->isBrandshop() ? $helperZSS->__('w sklepie') : $helperZSS->__("dla sprzedawcy"); ?>
+                <?php echo $vendor->isBrandshop() ? $helperZSS->__('w sklepie') : $helperZSS->__("dla sprzedawcy");//@todo translate ?>
                 <span id="vendor-text" class="uppercase"><?php echo $helperZSS->getVendorString(); ?></span>
                 <span id="vendor-text-iks">
-                    <a href="<?php echo $helperZSS->getRemoveVendorUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
-                </span>
+                        <a href="<?php echo $helperZSS->getRemoveVendorUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                    </span>
             <?php endif; ?>
-        <?php else: ?>
-
         <?php endif; ?>
 
     </h1>
