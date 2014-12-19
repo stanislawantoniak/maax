@@ -494,7 +494,35 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $this->numFound;
     }
+    
+    /**
+     * check if misspeling was used
+     * @return bool
+     */
 
+    public function isOriginalQuery() {
+        $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+        $collection = $cpl->getCollection();
+        $query = $collection->getSolrData("responseHeader","params", "q");
+        $originalQuery = $collection->getSolrData("responseHeader","params", "originalq");
+        return (bool)($query == $originalQuery);
+    }
+    
+    /**
+     * get category used in fallback
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getFallbackCategory() {
+        $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+        $collection = $cpl->getCollection();
+        $category = $collection->getSolrData("responseHeader","params", "category");
+        $fallbackCategory = $collection->getSolrData("responseHeader","params", "fallbackCategory");
+        if (is_int($fallbackCategory) && ($category !== $fallbackCategory)) {
+            return Mage::getModel('catalog/category')->load($fallbackCategory);
+        }
+        return null;
+        
+    }
     public function getSolrRealQ() {
         /** @var Zolago_Solrsearch_Model_Catalog_Product_List $clp */
         $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
@@ -522,53 +550,5 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText();
     }
 
-    /**
-     * @return string URL
-     */
-    public function getRemoveQueryTextUrl() {
-        return Mage::getUrl('todo');//@todo
-    }
-
-    /**
-     * @return bool
-     */
-    public function canShowCurrentCategorySearch() {
-        return true; //@todo
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrentCategoryString() {
-        return "[dev]Bielizna"; //@todo
-    }
-
-    /**
-     * @return string
-     */
-    public function getRemoveCurrentCategoryUrl() {
-        return "[dev]"; //@todo
-    }
-
-    /**
-     * @return bool
-     */
-    public function canShowVendor() {
-        return true; //@todo
-    }
-
-    /**
-     * @return string
-     */
-    public function getVendorString() {
-        return '[dev]Esoriq'; //@todo
-    }
-
-    /**
-     * @return string URL
-     */
-    public function getRemoveVendorUrl() {
-        return 'dev';//@todo
-    }
 
 }

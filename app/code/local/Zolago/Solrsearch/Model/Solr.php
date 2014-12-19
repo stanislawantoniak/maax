@@ -12,6 +12,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	
 	protected $_currentCategory;
 	protected $_fallbackCategoryId;
+	protected $_originalQuery;
 	/**
 	 * !!!! Force fix - shame style !!!!
 	 */
@@ -20,6 +21,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		parent::__construct();
 	}
 	
+	public function setOriginalQuery($query) {
+	    $this->_originalQuery = $query;
+	}
 	public function setFallbackCategoryId($id) {
 	    $this->_fallbackCategoryId = $id;
     }
@@ -59,6 +63,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         if ($this->_fallbackCategoryId) {
             $results['responseHeader']['params']['fallbackCategory'] = (int)$this->_fallbackCategoryId;
         }
+        $results['responseHeader']['params']['originalq'] = $this->_originalQuery;
         $this->_solrData = $results;
         return $results;
     }
@@ -69,6 +74,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return array
 	 */
 	public function queryRegister($queryText, $params = array()) {
+	    $this->setOriginalQuery($queryText);
 		$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
 		//$profiler->start();
