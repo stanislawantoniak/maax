@@ -215,12 +215,12 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $uri;
     }
 
-    
+
     /**
      * @param array $solrData
      * @param string $queryText
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     public function makeFallback($solrData,$queryText) {
         if (!$this->isFallbackNeeded($solrData,$queryText)) {
@@ -237,7 +237,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $numFound = empty($solrData['response']['numFound'])? 0:$solrData['response']['numFound'];
         $newNumFound = empty($newSolrData['response']['numFound'])? 0:$newSolrData['response']['numFound'];
         if (!$this->isFallbackNeeded($newSolrData,$queryText) ||
-            (!$numFound && $newNumFound)            
+            (!$numFound && $newNumFound)
         ) {
             Mage::unregister('current_category');
             Mage::register('current_category',$newCategory);
@@ -543,5 +543,32 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return "[dev]Bielizna"; //@todo
     }
 
+    /**
+     * @return string
+     */
+    public function getRemoveCurrentCategoryUrl() {
+        return "[dev]"; //@todo
+    }
+
+    /**
+     * @return bool
+     */
+    public function canShowVendor() {
+        return true; //@todo
+    }
+
+    /**
+     * @return string
+     */
+    public function getVendorString() {
+        return '[dev]Esoriq'; //@todo
+    }
+
+    /**
+     * @return string URL
+     */
+    public function getRemoveVendorUrl() {
+        return 'dev';//@todo
+    }
 
 }

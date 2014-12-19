@@ -1,17 +1,32 @@
 <?php
 /** @var Zolago_Solrsearch_Helper_Data $helperZSS */
 $helperZSS = Mage::helper('zolagosolrsearch');
+
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
 ?>
 <div class="current-search">
     <h1>
         <?php if($helperZSS->getSolrRealQ() == $helperZSS->getQueryText()): ?>
             <?php echo $helperZSS->__('Wyniki wyszukiwania dla:');//@todo translate ?>
             <span id="query-text" class="uppercase"><?php echo $helperZSS->getQueryText(); ?></span>
-            <span id="query-test-iks">
+            <span id="query-text-iks">
                 <a href="<?php echo $helperZSS->getRemoveQueryTextUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
             </span>
             <?php if($helperZSS->canShowCurrentCategorySearch()): ?>
-                <?php echo $helperZSS->__('w kategorii'); //@todo translate ?>&nbsp;<?php echo $helperZSS->getCurrentCategoryString(); ?>
+                <?php echo $helperZSS->__('w kategorii'); //@todo translate ?>
+                <span id="category-text" class="uppercase"><?php echo $helperZSS->getCurrentCategoryString(); ?></span>
+                <span id="category-text-iks">
+                    <a href="<?php echo $helperZSS->getRemoveCurrentCategoryUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                </span>
+            <?php endif; ?>
+            <?php if($helperZSS->canShowVendor()): ?>
+                <?php echo $vendor->isBrandshop() ? $helperZSS->__('w sklepie') : $helperZSS->__("dla sprzedawcy"); ?>
+                <span id="vendor-text" class="uppercase"><?php echo $helperZSS->getVendorString(); ?></span>
+                <span id="vendor-text-iks">
+                    <a href="<?php echo $helperZSS->getRemoveVendorUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                </span>
             <?php endif; ?>
         <?php else: ?>
 
@@ -50,11 +65,11 @@ $helperZSS = Mage::helper('zolagosolrsearch');
     });
 </script>
 <style>
-    #query-text {
+    #query-text, #category-text {
         font-family: latoblack;
     }
 
-    #query-test-iks {
+    #query-text-iks {
         position: relative;
     }
 
