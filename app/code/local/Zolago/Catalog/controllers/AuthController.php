@@ -28,33 +28,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Zolago_Catalog_Model_Observer::clearConfigurableQueue();
     }
 
-
-
-    public function testAction()
-    {
-        $customerId = 7;
-        $newEmail = "victoria.sultanovska@convertica.pl";
-        $collection = Mage::getModel('newsletter/subscriber')
-            ->getCollection();
-        $collection->addFieldToFilter('customer_id', array('eq' => $customerId));
-        $collection->addFieldToFilter('subscriber_email', array('neq' => $newEmail));
-
-        foreach($collection as $subscriberM){
-            $subscriberM->setCustomerId(0);
-            $subscriberM->save();
-            Zend_Debug::dump($subscriberM->getData());
-        }
-
-
-
-
-    }
-
-    public function subscriberNewsletterCallback($subscriberM)
-    {
-        $subscriberM->setCustomerId(0);
-        $subscriberM->save();
-    }
 }
 
 
