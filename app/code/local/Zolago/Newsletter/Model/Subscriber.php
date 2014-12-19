@@ -69,20 +69,31 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		        $this->setCustomerId($customer->getId());
 	        }
 
+            Mage::log((int)$customer->getIsEmailHasChanged());
+            if (!is_null($customer->getIsEmailHasChanged())) {
+                Mage::log("Customer confirmed email change: Do something with it!");
+                //$customer->unsIsEmailHasChanged();
+                //do not replace old email in case when customer change account email
+                //insert another one db row with the new email (for future use: ex. do not send coupon code twice)
+                //called on the /zolagocustomer/confirm/confirm/
+                $m = clone $this;
+                $m->setId(null);
+                $m->setStoreId($customer->getStoreId())
+                    ->setEmail($customer->getEmail());
+                $m->save();
 
-	        if(!is_null($customer->getIsEmailHasChanged())) {
-		        //do not replace old email in case when customer change account email
-		        //insert another one db row with the new email
-		        //on the /customer/account/edit page
-		        $m = clone $this;
-		        $m->setId(null);
-		        $m->setStoreId($customer->getStoreId())
-			        ->setEmail($customer->getEmail());
-	        }
+                //for other emails set customer_id=0
+
+
+                return $this;
+            }
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
             $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
+            if(!is_null($customer->getIsEmailHasChanged())) {
+                $newStatus = self::STATUS_NOT_ACTIVE;
+            }
             $this
                 ->setStoreId($customerStoreId)
                 ->setCustomerId($customer->getId())
