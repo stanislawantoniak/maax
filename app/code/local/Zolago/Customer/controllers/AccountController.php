@@ -452,6 +452,8 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			if (empty($errors)) {
 				unset($data['agreement']);
 				$customer->setData($data);
+				/* needed for proper newsletter handling */
+				$customer->setIsJustRegistered(true);
 				$customer->save();
 				$this->_dispatchRegisterSuccess($customer);
 				$this->_successProcessRegistration($customer);

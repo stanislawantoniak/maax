@@ -1,25 +1,59 @@
 <?php
 /** @var Zolago_Solrsearch_Helper_Data $helperZSS */
 $helperZSS = Mage::helper('zolagosolrsearch');
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCurrentCategory();
 ?>
 <div class="current-search">
     <h1>
-        <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
-           <?php echo $helperZSS->__("You're looking for: "); ?>
-        <?php else: ?>
-            <?php if($helperZSS->getNumFound()): ?>
-                <?php echo $helperZSS->__("Search result for: "); ?>
-            <?php else: ?>
-                <?php echo $helperZSS->__("No search results found for"); ?>
-            <?php endif; ?>
-        <?php endif; ?>
-        &bdquo;<?php echo $helperZSS->getQueryText(); ?>&rdquo;
-    </h1>
-    <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
+		<?php if(!$helperZSS->getNumFound()): ?>			
+            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>	
+		<?php elseif($category = $helperZSS->getFallbackCategory()) : ?>
+			<?php if ($helperZSS->isOriginalQuery()) : ?>
+	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found for category %s", $helperZSS->getQueryText(),$category->getName()) ?>				
+			<?php else : ?>
+	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found in gallery.", $helperZSS->getQueryText()) ?>				
+			<?php endif;?>			
+		<?php elseif (!$helperZSS->isOriginalQuery()) : ?>
+            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>				
+		<?php endif; ?>
+		<?php if (!$helperZSS->isOriginalQuery()) : ?>
+                <br/>
+                <?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
+                <br/>
+                <br/>
+		<?php endif; ?>
+
         <?php if($helperZSS->getNumFound()): ?>
-            <p class="found-product"><?php echo $helperZSS->__("Do You mean:");?> <strong><?php echo $helperZSS->getSolrRealQ(); ?>?</strong></p>
+            <?php echo $helperZSS->__('Search results for:'); ?>
+            <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span><span class="query-text-iks">
+                <a href="<?php echo $helperZSS->getFilterUrl(null,$currentCategory,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
+            </span>
+			<?php if ($vendor) : ?>
+				<?php if ($currentCategory && ($currentCategory->getId() != $vendor->rootCategory()->getId())) : ?>									
+	                <?php echo $helperZSS->__('in category'); ?>					
+	                <span class="query-text uppercase"><?php echo $currentCategory->getName();?></span><span class="query-text-iks">
+        	            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),null,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
+            	    </span>						
+				<?php endif ; ?>
+                <?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
+                <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span><span class="query-text-iks">
+                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),$currentCategory,null); ?>" class="fa fa-times active-filter-label iks"></a>
+                </span>
+			<?php else : ?>
+				<?php if (!$currentCategory || ($currentCategory->getId() == Mage::app()->getStore()->getRootCategoryId())) : ?>					
+					<?php echo $helperZSS->__('in whole Gallery'); ?>
+				<?php else : ?>
+	                <?php echo $helperZSS->__('in category'); ?>
+		           <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span><span class="query-text-iks">
+        	            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),null,null); ?>" class="fa fa-times active-filter-label iks"></a>
+            	    </span>	
+				<?php endif ; ?>
+			<?php endif ; ?>
         <?php endif; ?>
-    <?php endif; ?>
+
+    </h1>
 
     <?php if($helperZSS->getNumFound()): ?>
         <p>
