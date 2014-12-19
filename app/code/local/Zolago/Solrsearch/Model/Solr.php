@@ -11,7 +11,8 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	);
 	
 	protected $_currentCategory;
-	
+	protected $_fallbackCategoryId;
+	protected $_originalQuery;
 	/**
 	 * !!!! Force fix - shame style !!!!
 	 */
@@ -20,6 +21,12 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		parent::__construct();
 	}
 	
+	public function setOriginalQuery($query) {
+	    $this->_originalQuery = $query;
+	}
+	public function setFallbackCategoryId($id) {
+	    $this->_fallbackCategoryId = $id;
+    }
 	/**
 	 * If relevance use solr score
 	 * @param type $attributeCode
@@ -43,6 +50,23 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		$this->facetFields[] = Zolago_Solrsearch_Block_Faces::FLAGS_FACET;
 	}
 
+	
+    /**
+     * add category id to search results
+     */
+    public function query($queryText,$params = array()) {
+        $results = parent::query($queryText,$params);
+        $category = $this->getCurrentCategory();
+        if ($category) {	
+            $results['responseHeader']['params']['category'] = (int)$category->getId();
+        }
+        if ($this->_fallbackCategoryId) {
+            $results['responseHeader']['params']['fallbackCategory'] = (int)$this->_fallbackCategoryId;
+        }
+        $results['responseHeader']['params']['originalq'] = $this->_originalQuery;
+        $this->_solrData = $results;
+        return $results;
+    }
 	/**
 	 * Solr query with register results
 	 * @param array $queryText
@@ -50,6 +74,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return array
 	 */
 	public function queryRegister($queryText, $params = array()) {
+	    $this->setOriginalQuery($queryText);
 		$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
 		//$profiler->start();

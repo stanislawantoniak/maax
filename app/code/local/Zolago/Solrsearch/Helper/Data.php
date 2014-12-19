@@ -215,6 +215,71 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $uri;
     }
 
+
+    /**
+     * @param array $solrData
+     * @param string $queryText
+     * @param
+     * @return
+     */
+    public function makeFallback($solrData,$queryText) {
+        if (!$this->isFallbackNeeded($solrData,$queryText)) {
+            return $solrData;
+        }
+        $solrModel = Mage::getModel('solrsearch/solr');
+        $currentCategory = $solrModel->getCurrentCategory();
+        $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+        $newCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
+        $solrModel->setCurrentCategory($newCategory);
+        Mage::unregister(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
+        $solrModel->setFallbackCategoryId($currentCategory->getId());
+        $newSolrData = $solrModel->queryRegister($queryText);
+        $numFound = empty($solrData['response']['numFound'])? 0:$solrData['response']['numFound'];
+        $newNumFound = empty($newSolrData['response']['numFound'])? 0:$newSolrData['response']['numFound'];
+        if (!$this->isFallbackNeeded($newSolrData,$queryText) ||
+            (!$numFound && $newNumFound)
+        ) {
+            Mage::unregister('current_category');
+            Mage::register('current_category',$newCategory);
+            return $newSolrData;
+        }
+        // return back solrData
+        Mage::unregister(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
+        Mage::register(Zolago_Solrsearch_Model_Solr::REGISTER_KEY,$solrData);
+        return $solrData;
+    }
+    /**
+     * check if search fallback is needed
+     * @param array $solrData
+     * @param string $queryText
+     * @return
+     */
+    public function isFallbackNeeded($solrData,$queryText) {
+        $realQuery = empty($solrData['responseHeader']['params']['q'])? '':$solrData['responseHeader']['params']['q'];
+        $numFound = empty($solrData['response']['numFound'])? 0:$solrData['response']['numFound'];
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        $in_category = false;
+        if (empty($vendor) || !$vendor->getId()) { // not vendor context
+            $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+            $category = $this->getCurrentCategory();
+            if (!empty($category)
+                    && $category->getId()
+                    && ($rootCatId != $category->getId())) {
+
+                $in_category = true;
+            }
+        }
+        if (!empty($queryText) &&
+                $in_category &&
+                (!$numFound  ||
+                 ($realQuery != $queryText)
+                )
+           ) {
+            //
+            return true;
+        }
+        return false;
+    }
     /**
      * Construct context search selector Array
      * @return array
@@ -429,7 +494,35 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $this->numFound;
     }
+    
+    /**
+     * check if misspeling was used
+     * @return bool
+     */
 
+    public function isOriginalQuery() {
+        $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+        $collection = $cpl->getCollection();
+        $query = $collection->getSolrData("responseHeader","params", "q");
+        $originalQuery = $collection->getSolrData("responseHeader","params", "originalq");
+        return (bool)($query == $originalQuery);
+    }
+    
+    /**
+     * get category used in fallback
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getFallbackCategory() {
+        $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+        $collection = $cpl->getCollection();
+        $category = $collection->getSolrData("responseHeader","params", "category");
+        $fallbackCategory = $collection->getSolrData("responseHeader","params", "fallbackCategory");
+        if (is_int($fallbackCategory) && ($category !== $fallbackCategory)) {
+            return Mage::getModel('catalog/category')->load($fallbackCategory);
+        }
+        return null;
+        
+    }
     public function getSolrRealQ() {
         /** @var Zolago_Solrsearch_Model_Catalog_Product_List $clp */
         $cpl = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
@@ -455,6 +548,54 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getQueryText() {
         return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText();
+    }
+
+    /**
+     * prepare url for filter in header
+     * @param string $query
+     * @param Mage_Catalog_Model_Category $category     
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @return string
+     */
+
+    public function getFilterUrl($query,$category,$vendor) {
+        $final = array();
+
+        if (empty($vendor)) {
+            $final['_no_vendor'] = true;
+        }
+        if (!$category || !$category->getId()) {
+             $category = null;
+             if ($vendor) {
+                 $category = $vendor->rootCategory();                                     
+             }
+             if (!$category) {
+                 $categoryId = Mage::app()->getStore()->getRootCategoryId();
+                 $category = Mage::getModel('catalog/category')->load($categoryId);
+             }
+        }        
+        $cat = $category->getId();
+        if ($query) {
+            $final['_query'] = array(
+                                "q"=>$query,
+                                "scat"=>$cat,
+                                );                
+            $url = Mage::getUrl("search/index/index",$final);
+        } else {
+            if ($vendor) {
+                // check if vendor category
+                if ($category->getId() == $vendor->rootCategory()->getId()) {
+                    return $vendor->getVendorUrl();
+                }
+            } else {
+                // check if galery root category
+                if ($category->getId() == Mage::app()->getStore()->getRootCategoryId()) {
+                    return Mage::getUrl('',$final);
+                }
+            }
+            $url = $category->getUrl($final);
+        }
+        return $url;
     }
 
 }

@@ -242,8 +242,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 				'title'=>Mage::helper('catalog')->__('Search: %s', $this->escapeHtml($this->_getQuery())),
 				'link'=>$this->getSearchLink(array(
 					"_query"=>array(
-						"q"=>$this->_getQuery(),
-						"scat"=>$this->_getRootCategoryId()
+						"q"=>$this->_getQuery()
 					)
 				))
 			));
