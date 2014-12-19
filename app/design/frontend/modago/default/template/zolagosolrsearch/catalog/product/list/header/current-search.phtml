@@ -4,22 +4,20 @@ $helperZSS = Mage::helper('zolagosolrsearch');
 ?>
 <div class="current-search">
     <h1>
-        <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
-           <?php echo $helperZSS->__("You're looking for: "); ?>
-        <?php else: ?>
-            <?php if($helperZSS->getNumFound()): ?>
-                <?php echo $helperZSS->__("Search result for: "); ?>
-            <?php else: ?>
-                <?php echo $helperZSS->__("No search results found for"); ?>
+        <?php if($helperZSS->getSolrRealQ() == $helperZSS->getQueryText()): ?>
+            <?php echo $helperZSS->__('Wyniki wyszukiwania dla:');//@todo translate ?>
+            <span id="query-text" class="uppercase"><?php echo $helperZSS->getQueryText(); ?></span>
+            <span id="query-test-iks">
+                <a href="<?php echo $helperZSS->getRemoveQueryTextUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+            </span>
+            <?php if($helperZSS->canShowCurrentCategorySearch()): ?>
+                <?php echo $helperZSS->__('w kategorii'); //@todo translate ?>&nbsp;<?php echo $helperZSS->getCurrentCategoryString(); ?>
             <?php endif; ?>
+        <?php else: ?>
+
         <?php endif; ?>
-        &bdquo;<?php echo $helperZSS->getQueryText(); ?>&rdquo;
+
     </h1>
-    <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
-        <?php if($helperZSS->getNumFound()): ?>
-            <p class="found-product"><?php echo $helperZSS->__("Do You mean:");?> <strong><?php echo $helperZSS->getSolrRealQ(); ?>?</strong></p>
-        <?php endif; ?>
-    <?php endif; ?>
 
     <?php if($helperZSS->getNumFound()): ?>
         <p>
@@ -51,3 +49,29 @@ $helperZSS = Mage::helper('zolagosolrsearch');
         }
     });
 </script>
+<style>
+    #query-text {
+        font-family: latoblack;
+    }
+
+    #query-test-iks {
+        position: relative;
+    }
+
+    .iks {
+        border: 1px solid #ededed;
+        font-weight: normal;
+        color: #949494 !important;
+        font-size: 11px;
+        position: absolute;
+        padding: 0px 3px 0 3px;
+        line-height: 13px;
+        text-decoration: none;
+        font-family: FontAwesome;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+        vertical-align: baseline;
+        border-radius: .25em;
+        text-align: center;
+    }
+</style>

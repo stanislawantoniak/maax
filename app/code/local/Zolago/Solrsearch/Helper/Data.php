@@ -457,4 +457,26 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText();
     }
 
+    /**
+     * @return string URL
+     */
+    public function getRemoveQueryTextUrl() {
+        return Mage::getUrl('todo');//@todo
+    }
+
+    /**
+     * @return bool
+     */
+    public function canShowCurrentCategorySearch() {
+        return true; //@todo
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentCategoryString() {
+        return "[dev]Bielizna"; //@todo
+    }
+
+
 }
