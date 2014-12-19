@@ -99,6 +99,19 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     $subscriberM->setStatus(self::STATUS_NOT_ACTIVE);
                     $subscriberM->save();
                 }
+
+
+                //remove duplicated email
+                $collectionD = Mage::getModel('newsletter/subscriber')
+                    ->getCollection();
+                $collectionD->addFieldToFilter('customer_id', array('eq' => 0));
+                $collectionD->addFieldToFilter('subscriber_email', array('eq' => $newCustomerEmail));
+
+                foreach ($collectionD as $subscriberDM) {
+                    $subscriberDM->delete();
+                }
+
+
                 $customer->unsIsEmailHasChanged();
                 return $this;
             }
