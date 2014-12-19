@@ -28,18 +28,18 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
         <?php if($helperZSS->getNumFound()): ?>
             <?php echo $helperZSS->__('Search results for:'); ?>
             <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span><span class="query-text-iks">
-                <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
+                <a href="<?php echo $helperZSS->getFilterUrl(null,$currentCategory,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
             </span>
 			<?php if ($vendor) : ?>
-				<?php if ($currentCategory && ($currentCategory != $vendor->rootCategory())) : ?>									
+				<?php if ($currentCategory && ($currentCategory->getId() != $vendor->rootCategory()->getId())) : ?>									
 	                <?php echo $helperZSS->__('in category'); ?>					
 	                <span class="query-text uppercase"><?php echo $currentCategory->getName();?></span><span class="query-text-iks">
-        	            <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
+        	            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),null,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
             	    </span>						
 				<?php endif ; ?>
                 <?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
                 <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span><span class="query-text-iks">
-                        <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
+                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),$currentCategory,null); ?>" class="fa fa-times active-filter-label iks"></a>
                 </span>
 			<?php else : ?>
 				<?php if (!$currentCategory || ($currentCategory->getId() == Mage::app()->getStore()->getRootCategoryId())) : ?>					
@@ -47,7 +47,7 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 				<?php else : ?>
 	                <?php echo $helperZSS->__('in category'); ?>
 		           <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span><span class="query-text-iks">
-        	            <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
+        	            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),null,null); ?>" class="fa fa-times active-filter-label iks"></a>
             	    </span>	
 				<?php endif ; ?>
 			<?php endif ; ?>

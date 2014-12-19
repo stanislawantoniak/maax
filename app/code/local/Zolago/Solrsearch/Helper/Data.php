@@ -550,5 +550,52 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText();
     }
 
+    /**
+     * prepare url for filter in header
+     * @param string $query
+     * @param Mage_Catalog_Model_Category $category     
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @return string
+     */
+
+    public function getFilterUrl($query,$category,$vendor) {
+        $final = array();
+
+        if (empty($vendor)) {
+            $final['_no_vendor'] = true;
+        }
+        if (!$category || !$category->getId()) {
+             $category = null;
+             if ($vendor) {
+                 $category = $vendor->rootCategory();                                     
+             }
+             if (!$category) {
+                 $categoryId = Mage::app()->getStore()->getRootCategoryId();
+                 $category = Mage::getModel('catalog/category')->load($categoryId);
+             }
+        }        
+        $cat = $category->getId();
+        if ($query) {
+            $final['_query'] = array(
+                                "q"=>$query,
+                                "scat"=>$cat,
+                                );                
+            $url = Mage::getUrl("search/index/index",$final);
+        } else {
+            if ($vendor) {
+                // check if vendor category
+                if ($category->getId() == $vendor->rootCategory()->getId()) {
+                    return $vendor->getVendorUrl();
+                }
+            } else {
+                // check if galery root category
+                if ($category->getId() == Mage::app()->getStore()->getRootCategoryId()) {
+                    return Mage::getUrl('',$final);
+                }
+            }
+            $url = $category->getUrl($final);
+        }
+        return $url;
+    }
 
 }
