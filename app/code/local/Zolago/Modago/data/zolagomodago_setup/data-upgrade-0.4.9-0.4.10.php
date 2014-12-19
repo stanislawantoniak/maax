@@ -8,7 +8,7 @@ $cmsNavigationBlocks = array(
         'content'       => <<<EOD
 <div class="container-fluid vendor-top-bottom-header action-box-bundle clearfix">
 <div class="col-md-6 col-sm-4 logo-part">
-{{block name="vendor.logo"  vendor_label="Hello" type="zolagoudmspro/vendor_logo" template="unirgy/microsite/vendor.logo.phtml"}}
+{{block name="vendor.logo"  vendor_label="Sklep" type="zolagoudmspro/vendor_logo" template="unirgy/microsite/vendor.logo.phtml"}}
 </div>
 <div class="col-md-6 col-sm-8 hidden-xs text-right">
   <ul class="vendor-top-bottom-header-links">
