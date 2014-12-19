@@ -88,9 +88,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                 //1. do not replace old email in case when customer change account email
                 //insert another one db row with the new email (for future use: ex. do not send coupon code twice)
                 $m = clone $this;
-                $m->setId(null);
-                $m->setStoreId($this->getCustomerStoreId($customer))
-                    ->setEmail($newCustomerEmail);
+                $m->setId(null)->setEmail($newCustomerEmail);
                 $m->save();
 
                 //2. for other emails set customer_id=0
@@ -98,6 +96,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     ->getCollection();
                 $collection->addFieldToFilter('customer_id', array('eq' => $customer->getId()));
                 $collection->addFieldToFilter('subscriber_email', array('neq' => $newCustomerEmail));
+	            $collection->addFieldToFilter('store_id', array('eq' => $customerStoreId));
 
                 foreach ($collection as $subscriberM) {
                     $subscriberM->setCustomerId(0);
@@ -105,17 +104,16 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     $subscriberM->save();
                 }
 
-
                 //remove duplicated email
                 $collectionD = Mage::getModel('newsletter/subscriber')
                     ->getCollection();
                 $collectionD->addFieldToFilter('customer_id', array('eq' => 0));
                 $collectionD->addFieldToFilter('subscriber_email', array('eq' => $newCustomerEmail));
+	            $collectionD->addFieldToFilter('store_id', array('eq' => $customerStoreId));
 
                 foreach ($collectionD as $subscriberDM) {
                     $subscriberDM->delete();
                 }
-
 
                 $customer->unsIsEmailHasChanged();
                 return $this;
