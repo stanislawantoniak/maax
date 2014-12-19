@@ -651,6 +651,9 @@
 			<action method="addBodyClass">
 				<value>node-type-page-shop</value>
 			</action>
+            <action method="addBodyClass">
+                <value>not-menu-mobile</value>
+            </action>
 
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
