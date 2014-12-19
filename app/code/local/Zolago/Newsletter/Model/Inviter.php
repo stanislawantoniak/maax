@@ -3,7 +3,7 @@
 /**
  * Zolago Newsletter Data Helper
  */
-class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
+class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 {
 	const INVITATION_EMAIL_TEMPLATE_XML_PATH = "newsletter/subscription/invitation_email_template";
 	const INVITATION_EMAIL_SENDER_XML_PATH = "newsletter/subscription/invitation_email_identity";
@@ -55,6 +55,14 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 	 * @return bool
 	 */
 	public function sendInvitationEmail($email) {
+		if (
+			$this->getImportMode()
+			|| !$this->getInvitationEmailTemplateId()
+			|| !$this->getInvitationEmailSender()
+		) {
+			return false;
+		}
+
 		if ($this->isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
 			&& $this->isEmailSuitableForInvitation($email)) {
@@ -101,6 +109,8 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
 				return false;
+			} elseif (is_null($status)) {
+				return true;
 			} else {
 				if($this->canRepeatInvitation()) {
 					$this->setSubscriberId($sid);
@@ -135,6 +145,84 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 		return false;
 	}
 
+    /**
+     * When customer confirm changing email
+     * (on the /customer/account/edit page)
+     * all his subscriptions should be set in status STATUS_NOT_ACTIVE
+     * @param $customerId
+     */
+    public function changeAllCustomerSubscriptionsStatus($customerId, $status = self::STATUS_NOT_ACTIVE)
+    {
+        $customerSubscriptions = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter('customer_id', $customerId);
+
+        foreach ($customerSubscriptions as $customerSubscription) {
+            $customerSubscription->setStatus($status);
+            $customerSubscription->save();
+        }
+
+    }
+
+	public function addSubscriber($email,$status=self::STATUS_NOT_ACTIVE) {
+		if($this->validateEmail($email)) {
+			/** @var Mage_Newsletter_Model_Subscriber $model */
+			$model = Mage::getModel("newsletter/subscriber");
+			$subscriber = $model->loadByEmail($email);
+			$subscriberId = $subscriber->getId();
+			if(!$subscriberId) {
+				/** @var Mage_Customer_Model_Customer $customer */
+				$customer = Mage::getModel("customer/customer")
+					->setData('website_id', $this->getWebsiteId())
+					->loadByEmail($email);
+				$customerId = $customer->getId();
+
+				$model
+					->setEmail($email)
+					->setSubscriberStatus($status)
+					->setSubscriberConfirmCode($this->getInvitationCode())
+					->setUseAttachments(true);
+
+				//if customer with this email exists then save it to subscribers as user, otherwise as guest
+				if ($customerId) {
+					$model->setStoreId($customer->getData('store_id'));
+					$model->setCustomerId($customerId);
+				} else {
+					$model->setStoreId(Mage::app()->getStore()->getId());
+					$model->setCustomerId(0);
+				}
+				$model->save();
+				$sid = $model->getId();
+				if ($sid) {
+					$this->setSubscriberId($sid);
+					if($status == self::STATUS_UNCONFIRMED) {
+						$this->sendConfirmationRequestEmail($sid);
+					}
+					return true;
+				}
+			} else {
+				$oldStatus = $subscriber->getStatus();
+
+				if($oldStatus == self::STATUS_UNSUBSCRIBED
+					&& ($status == self::STATUS_UNCONFIRMED || $status == self::STATUS_SUBSCRIBED)) {
+
+					$subscriber->setStatus(self::STATUS_SUBSCRIBED);
+					$subscriber->save();
+					$this->sendConfirmationSuccessEmail($subscriberId);
+					return true;
+				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
+					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
+
+					$subscriber->setStatus($status);
+					$subscriber->save();
+					$this->sendConfirmationRequestEmail($subscriberId);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * function that adds email to newsletter subscribers list with status set to:
 	 * self::STATUS_NOT_ACTIVE
@@ -142,37 +230,7 @@ class Zolago_Newsletter_Model_Inviter extends Mage_Newsletter_Model_Subscriber
 	 * @return bool
 	 */
 	protected function addInactiveSubscriber($email) {
-		if($this->validateEmail($email)) {
-			/** @var Mage_Customer_Model_Customer $customer */
-			$customer = Mage::getModel("customer/customer")
-				->setData('website_id',$this->getWebsiteId())
-				->loadByEmail($email);
-			$customerId = $customer->getId();
-
-			/** @var Mage_Newsletter_Model_Subscriber $model */
-			$model = Mage::getModel("newsletter/subscriber");
-			$model
-				->setEmail($email)
-				->setSubscriberStatus(self::STATUS_NOT_ACTIVE)
-				->setSubscriberConfirmCode($this->getInvitationCode())
-				->setUseAttachments(true);
-
-			//if customer with this email exists then save it to subscribers as user, otherwise as guest
-			if ($customerId) {
-				$model->setStoreId($customer->getData('store_id'));
-				$model->setCustomerId($customerId);
-			} else {
-				$model->setStoreId(Mage::app()->getStore()->getId());
-				$model->setCustomerId(0);
-			}
-			$model->save();
-			$sid = $model->getId();
-			if($sid) {
-				$this->setSubscriberId($sid);
-				return true;
-			}
-		}
-		return false;
+		return $this->addSubscriber($email);
 	}
 
 	/**

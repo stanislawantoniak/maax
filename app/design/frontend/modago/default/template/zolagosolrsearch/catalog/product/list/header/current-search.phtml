@@ -1,23 +1,49 @@
 <?php
 /** @var Zolago_Solrsearch_Helper_Data $helperZSS */
 $helperZSS = Mage::helper('zolagosolrsearch');
+
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
 ?>
 <div class="current-search">
     <h1>
         <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
-            <?php echo $helperZSS->__("You're looking for: "); ?>
+            <?php echo $helperZSS->__("Nie znaleziono wyników wyszukiwania dla &bdquo;%s&rdquo;.", $helperZSS->getQueryText()) ?>
+            <?php if($helperZSS->getNumFound()): ?>
+                <br/>
+                <?php echo $helperZSS->__("Czy chodziło Ci o &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
+                <br/>
+                <br/>
+            <?php endif; ?>
         <?php else: ?>
-            <?php echo $helperZSS->__("Search result for: "); ?>
+            <?php echo $helperZSS->__("Nie znaleziono wyników wyszukiwania dla &bdquo;%s&rdquo;.", $helperZSS->getQueryText()) ?>
         <?php endif; ?>
-        <strong>
-            <?php echo $helperZSS->getQueryText(); ?>
-        </strong>
-    </h1>
-    <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
         <?php if($helperZSS->getNumFound()): ?>
-            <p class="found-product"><?php echo $helperZSS->__("Do You mean:");?> <strong><?php echo $helperZSS->getSolrRealQ(); ?>?</strong></p>
+            <?php echo $helperZSS->__('Wyniki wyszukiwania dla:');//@todo translate ?>
+            <span id="query-text" class="uppercase"><?php echo $helperZSS->getQueryText(); ?></span>
+                <span id="query-text-iks">
+                    <a href="<?php echo $helperZSS->getRemoveQueryTextUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                </span>
+            <?php if($helperZSS->canShowCurrentCategorySearch()): ?>
+                <?php echo $helperZSS->__('w kategorii'); //@todo translate ?>
+                <span id="category-text" class="uppercase"><?php echo $helperZSS->getCurrentCategoryString(); ?></span>
+                <span id="category-text-iks">
+                    <a href="<?php echo $helperZSS->getRemoveCurrentCategoryUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                </span>
+            <?php else: ?>
+                //@todo w całej Galerii Handlowej jeżeli nie znaleziono wyników dla...
+            <?php endif; ?>
+            <?php if($helperZSS->canShowVendor()): ?>
+                <?php echo $vendor->isBrandshop() ? $helperZSS->__('w sklepie') : $helperZSS->__("dla sprzedawcy");//@todo translate ?>
+                <span id="vendor-text" class="uppercase"><?php echo $helperZSS->getVendorString(); ?></span>
+                <span id="vendor-text-iks">
+                        <a href="<?php echo $helperZSS->getRemoveVendorUrl(); ?>" class="fa fa-times active-filter-label iks"></a>
+                    </span>
+            <?php endif; ?>
         <?php endif; ?>
-    <?php endif; ?>
+
+    </h1>
 
     <?php if($helperZSS->getNumFound()): ?>
         <p>
@@ -33,8 +59,9 @@ $helperZSS = Mage::helper('zolagosolrsearch');
             <span id="category-cnt-wrapper"> <?php echo $helperZSS->__("in"); ?> <span id="category-cnt"></span> <?php echo $helperZSS->__("categories"); ?></span>
         </p>
     <?php else: ?>
-        <span class="no-result" style="padding-bottom: 10px;"><?php echo $this->__("No results"); ?></span>
-        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
+        <div id="search-page-empty">
+            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
+        </div>
     <?php endif; ?>
 </div>
 <script>
@@ -48,3 +75,29 @@ $helperZSS = Mage::helper('zolagosolrsearch');
         }
     });
 </script>
+<style>
+    #query-text, #category-text {
+        font-family: latoblack;
+    }
+
+    #query-text-iks {
+        position: relative;
+    }
+
+    .iks {
+        border: 1px solid #ededed;
+        font-weight: normal;
+        color: #949494 !important;
+        font-size: 11px;
+        position: absolute;
+        padding: 0px 3px 0 3px;
+        line-height: 13px;
+        text-decoration: none;
+        font-family: FontAwesome;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+        vertical-align: baseline;
+        border-radius: .25em;
+        text-align: center;
+    }
+</style>

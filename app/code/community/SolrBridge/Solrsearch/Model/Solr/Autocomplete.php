@@ -12,7 +12,6 @@ class SolrBridge_Solrsearch_Model_Solr_Autocomplete extends SolrBridge_Solrsearc
 	public function init($options = array())
 	{
 		parent::init($options);
-
 		return $this;
 	}
 

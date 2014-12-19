@@ -2,7 +2,37 @@
 
 class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 {
+	/**
+	 * @param Varien_Event_Observer $observer
+	 * @return Zolago_Persistent_Model_Observer
+	 */
+	public function customerPrivacyChanged(Varien_Event_Observer $observer) {
+		$customer = $observer->getEvent()->getCustomer();
+		/* @var $customer Mage_Customer_Model_Customer */
+		
+		$currentPersistent = (int)$this->_getPersistentHelper()->isPersistent();
+		$shouldPersistent = !(int)$customer->getForgetMe();
+		
+		// Customer value anf current persistance is the same - N/O
+		if($shouldPersistent==$currentPersistent){
+			return $this;
+		}
+		
+		// synchronizePersistentOnLogin check current value of remember me 
+		// and do right action (remeber/forget)
+		Mage::getSingleton('persistent/observer_session')->
+			synchronizePersistentOnLogin($observer);
+		
+		return $this;
+	}
 	
+	/**
+	 * Emulate quote override to set special flag that tells quote 
+	 * to handle diffrent customer 
+	 * 
+	 * @param Varien_Event_Observer $observer
+	 * @return Zolago_Persistent_Model_Observer
+	 */
 	public function emulateQuote($observer)
     {
         $stopActions = array(
@@ -11,7 +41,8 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
         );
 
         if (!Mage::helper('persistent')->canProcess($observer)
-            || !$this->_getPersistentHelper()->isPersistent() || Mage::getSingleton('customer/session')->isLoggedIn()) {
+            || !$this->_getPersistentHelper()->isPersistent() 
+			|| Mage::getSingleton('customer/session')->isLoggedIn()) {
             return;
         }
 		
