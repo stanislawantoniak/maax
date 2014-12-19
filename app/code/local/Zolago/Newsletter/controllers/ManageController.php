@@ -17,6 +17,7 @@ class Zolago_Newsletter_ManageController extends Mage_Newsletter_ManageControlle
 			}
 		}
 		catch (Exception $e) {
+			Mage::log($e);
 			$session->addError($this->__('An error occurred while saving your subscription.'));
 		}
 		$this->_redirectReferer();

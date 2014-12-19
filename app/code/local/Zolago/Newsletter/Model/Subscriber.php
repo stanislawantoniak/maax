@@ -58,12 +58,12 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			        //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
 			        if ($status == self::STATUS_UNSUBSCRIBED) {
 				        $this->setStatus(self::STATUS_SUBSCRIBED);
-				        $successMsg = $this->__("The subscription has been saved.");
+				        $successMsg = "The subscription has been saved.";
 			        } //otherwise set his status to unconfirmed and send confirmation request email
 			        else {
 				        $this->setStatus(self::STATUS_UNCONFIRMED);
 				        $this->sendConfirmationRequestEmail();
-				        $successMsg = $this->__("Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.");
+				        $successMsg = "Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.";
 			        }
 		        }
 	        }
@@ -106,7 +106,8 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 
 	    //check if any success msg was set during process and add it to session
 	    if($successMsg) {
-		    Mage::getSingleton('customer/session')->addSuccess($successMsg);
+		    $helper = Mage::helper("zolagonewsletter");
+		    Mage::getSingleton('customer/session')->addSuccess($helper->__($successMsg));
 	    }
 
         return $this;
@@ -160,7 +161,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		$translate->setTranslateInline(false);
 
 		/** @var Mage_Customer_Model_Customer $customer */
-		$customer = Mage::getModel("customer")->load($subscriber->getCustomerId());
+		$customer = Mage::getModel("customer/customer")->load($subscriber->getCustomerId());
 
 		/** @var Zolago_Common_Helper_Data $helper */
 		$helper = Mage::helper("zolagocommon");
