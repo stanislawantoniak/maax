@@ -61,10 +61,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         $helper = Mage::helper('catalog');
         switch ($vendorType) {
         case Zolago_Dropship_Model_Vendor::VENDOR_TYPE_STANDARD:
-            $out = $helper->__('Seller').' ';
+            $out = $helper->__('Seller');
             break;
         case Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP:
-            $out = ' '.$helper->__('Shop').' ';
+            $out = ' '.$helper->__('Shop');
             break;
         }
         return $out;
@@ -104,6 +104,56 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         return $this->_rootId;     
      }
 
+	/**
+	 * 
+	 * @return boolean
+	 */
+	protected function _isSearchContext(){
+		$request = $this->getRequest();
+		return (
+			$request->getModuleName()=="search" && 
+			$request->getControllerName()=="index" && 
+			$request->getActionName()=="index"
+		);
+	}
+	
+	/**
+	 * @return string | null
+	 */
+	protected function _getQuery() {
+		return Mage::helper("solrsearch")->getParam("q");
+	}
+	
+	/**
+	 * @param array $params
+	 * @return string
+	 */
+	public function getSearchLink(array $params = array()) {
+		return $this->getUrl("search/index/index", $params);
+	}
+	
+	/**
+	 * 
+	 * @param type $category
+	 * @param type $parentCategory
+	 * @param type $parentId
+	 * @return string
+	 */
+	protected function _prepareCategoryLink($category, $parentCategory, $parentId) {
+		if($this->_isSearchContext()){
+			return $this->getSearchLink(array(
+				"_query"=>array(
+					"q"=>$this->_getQuery(),
+					"scat"=>$parentId
+				)
+			));
+		}
+		if($category->getId() != $parentId || $this->_getProduct()){
+			return $parentCategory->getUrl();
+		};
+		return '';
+	}
+	 
     /**
      * preparing path
      * @param
@@ -125,10 +175,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
                         instanceof Mage_Catalog_Model_Category) {
                     $parentCategory = $parents[$parentId];
                     array_unshift($path, array(
-                                      "name" => "category" . $parentCategory->getId(),
-                                      "label" => $parentCategory->getName(),
-                                      "link" => (($category->getId() == $parentId) && !$this->_getProduct())? 0:$parentCategory->getUrl()
-                                  ));
+						"name" => "category" . $parentCategory->getId(),
+						"label" => $parentCategory->getName(),
+						"link" => $this->_prepareCategoryLink($category, $parentCategory, $parentId)
+					));
                 }
             }
         }
@@ -168,23 +218,36 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         $breadcrumbsBlock = $this->_getBlock();
         if($vendor) {
             $breadcrumbsBlock->addCrumb('home', array(
-                                            'label'=>Mage::helper('catalog')->__('Home'),
-                                            'title'=>Mage::helper('catalog')->__('Go to Home Page'),
-                                            'link'=>Mage::helper("zolagodropshipmicrosite")->getBaseUrl()
-                                        ));
+				'label'=>Mage::helper('catalog')->__('Mall'),
+				'title'=>Mage::helper('catalog')->__('Go to Home Page'),
+				'link'=>Mage::helper("zolagodropshipmicrosite")->getBaseUrl()
+			));
             $type = $this->_getVendorTypeName($vendor->getVendorType());
             $breadcrumbsBlock->addCrumb('vendor', array(
-                                            'label'=>$type.Mage::helper('catalog')->__($vendor->getVendorName()),
-                                            'title'=>Mage::helper('catalog')->__('Vendor'),
-                                            'link'=>Mage::getBaseUrl()
-                                        ));
+				'label'=>$type . ' ' . Mage::helper('catalog')->__($vendor->getVendorName()),
+				'title'=>Mage::helper('catalog')->__('Vendor'),
+				'link'=>Mage::getBaseUrl()
+			));
         } else {
             $breadcrumbsBlock->addCrumb('home', array(
-                                            'label'=>Mage::helper('catalog')->__('Home'),
-                                            'title'=>Mage::helper('catalog')->__('Go to Home Page'),
-                                            'link'=>Mage::getBaseUrl()
-                                        ));
+				'label'=>Mage::helper('catalog')->__('Home'),
+				'title'=>Mage::helper('catalog')->__('Go to Home Page'),
+				'link'=>Mage::getBaseUrl()
+			));
         }
+		
+		if($this->_isSearchContext()){
+			$breadcrumbsBlock->addCrumb('search', array(
+				'label'=>Mage::helper('catalog')->__('Search: %s', $this->escapeHtml($this->_getQuery())),
+				'title'=>Mage::helper('catalog')->__('Search: %s', $this->escapeHtml($this->_getQuery())),
+				'link'=>$this->getSearchLink(array(
+					"_query"=>array(
+						"q"=>$this->_getQuery(),
+						"scat"=>$this->_getRootCategoryId()
+					)
+				))
+			));
+		}
     }
 
     /**
