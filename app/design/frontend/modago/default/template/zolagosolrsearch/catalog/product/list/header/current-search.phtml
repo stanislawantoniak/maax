@@ -27,30 +27,26 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 
         <?php if($helperZSS->getNumFound()): ?>
             <?php echo $helperZSS->__('Search results for:'); ?>
-            <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span>
-            <span class="query-text-iks">
+            <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span><span class="query-text-iks">
                 <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
             </span>
 			<?php if ($vendor) : ?>
 				<?php if ($currentCategory && ($currentCategory != $vendor->rootCategory())) : ?>									
 	                <?php echo $helperZSS->__('in category'); ?>					
-	                <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
-    	            <span class="query-text-iks">
+	                <span class="query-text uppercase"><?php echo $currentCategory->getName();?></span><span class="query-text-iks">
         	            <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
             	    </span>						
 				<?php endif ; ?>
                 <?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
-                <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span>
-                <span class="query-text-iks">
+                <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span><span class="query-text-iks">
                         <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
                 </span>
 			<?php else : ?>
 				<?php if (!$currentCategory || ($currentCategory->getId() == Mage::app()->getStore()->getRootCategoryId())) : ?>					
 					<?php echo $helperZSS->__('in whole Gallery'); ?>
 				<?php else : ?>
-	                <?php echo $helperZSS->__('in category'); ?>					
-	                <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
-    	            <span class="query-text-iks">
+	                <?php echo $helperZSS->__('in category'); ?>
+		           <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span><span class="query-text-iks">
         	            <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
             	    </span>	
 				<?php endif ; ?>
