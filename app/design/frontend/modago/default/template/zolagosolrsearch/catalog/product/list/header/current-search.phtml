@@ -27,21 +27,21 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 
         <?php if($helperZSS->getNumFound()): ?>
             <?php echo $helperZSS->__('Search results for:'); ?>
-            <span id="query-text" class="uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span>
-            <span id="query-text-iks">
+            <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span>
+            <span class="query-text-iks">
                 <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
             </span>
 			<?php if ($vendor) : ?>
 				<?php if ($currentCategory && ($currentCategory != $vendor->rootCategory())) : ?>									
 	                <?php echo $helperZSS->__('in category'); ?>					
-	                <span id="category-text" class="uppercase"><?php echo $currentCategory->getName(); ?></span>
-    	            <span id="category-text-iks">
+	                <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
+    	            <span class="query-text-iks">
         	            <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
             	    </span>						
 				<?php endif ; ?>
                 <?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
-                <span id="vendor-text" class="uppercase"><?php echo $vendor->getVendorName(); ?></span>
-                <span id="vendor-text-iks">
+                <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span>
+                <span class="query-text-iks">
                         <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
                 </span>
 			<?php else : ?>
@@ -49,8 +49,8 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 					<?php echo $helperZSS->__('in whole Gallery'); ?>
 				<?php else : ?>
 	                <?php echo $helperZSS->__('in category'); ?>					
-	                <span id="category-text" class="uppercase"><?php echo $currentCategory->getName(); ?></span>
-    	            <span id="category-text-iks">
+	                <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
+    	            <span class="query-text-iks">
         	            <a href="<?php echo ''; ?>" class="fa fa-times active-filter-label iks"></a>
             	    </span>	
 				<?php endif ; ?>
@@ -89,29 +89,3 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
         }
     });
 </script>
-<style>
-    #query-text, #category-text {
-        font-family: latoblack;
-    }
-
-    #query-text-iks {
-        position: relative;
-    }
-
-    .iks {
-        border: 1px solid #ededed;
-        font-weight: normal;
-        color: #949494 !important;
-        font-size: 11px;
-        position: absolute;
-        padding: 0px 3px 0 3px;
-        line-height: 13px;
-        text-decoration: none;
-        font-family: FontAwesome;
-        font-style: normal;
-        -webkit-font-smoothing: antialiased;
-        vertical-align: baseline;
-        border-radius: .25em;
-        text-align: center;
-    }
-</style>
