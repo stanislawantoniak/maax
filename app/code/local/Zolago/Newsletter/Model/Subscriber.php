@@ -122,9 +122,10 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-            Mage::log("Customer (not subscribed) confirmed email change: Do something with it!");
+
             $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
             if(!is_null($customer->getIsEmailHasChanged())) {
+                Mage::log("Customer (not subscribed) confirmed email change: Do something with it!");
                 $newStatus = self::STATUS_NOT_ACTIVE;
                 $customer->unsIsEmailHasChanged();
             }
