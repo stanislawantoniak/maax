@@ -5,7 +5,9 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
     const MODE_SEARCH = 2;
 	
 	const DEFAULT_DIR = "desc";
+	const DEFAULT_SEARCH_DIR = "desc";
 	const DEFAULT_ORDER = "wishlist_count";
+	const DEFAULT_SEARCH_ORDER = "relevance";
 	const DEFAULT_LIMIT = 24;
 	
 	const DEFAULT_START = 0;
@@ -26,14 +28,20 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	}
 	
 	/**
-	 * @return int
+	 * @return int corresponding: MODE_CATEGORY, MODE_SEARCH
 	 */
     public function getMode() {
-		$queryText = Mage::helper('solrsearch')->getParam('q');
-        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
-            return self::MODE_CATEGORY;
+
+        $q = Mage::app()->getRequest()->getParam('q', '');//queryText
+        if(Mage::registry('is_search_mode')) {
+            return self::MODE_SEARCH;
         }
-        return self::MODE_SEARCH;
+        if(!Mage::registry('current_product') && empty($q)) {
+            return self::MODE_CATEGORY;
+        } else {
+            Mage::register('is_search_mode', true);
+            return self::MODE_SEARCH;
+        }
     }
 	
 	/**
@@ -96,29 +104,31 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 */
 	public function getSortOptions() {
 		$options = array();
-		
-		$options[] = array(
-			'value' => 'wishlist_count',
-			'dir'   => 'desc',
-			'label' =>  Mage::helper("zolagosolrsearch")->__("Most popular first")
-		);
-		
-		$options[] = array(
-			'value' => 'is_new',
-			'dir'   => 'desc',
-			'label' =>  Mage::helper("zolagosolrsearch")->__("New products first")
-		);
-		
-		$options[] = array(
-			'value' => 'price',
-			'dir'   => 'desc',
-			'label' =>  Mage::helper("zolagosolrsearch")->__("Most expensive first")
-		);
+		// Add relavance to search
+		if($this->isSearchMode()){
+			$options[] = array(
+				'value' => 'relevance',
+				'dir'   => 'desc',
+				'label' =>  Mage::helper("zolagosolrsearch")->__("Relevance")
+			);
+		}
 		
 		$options[] = array(
 			'value' => 'price',
 			'dir'   => 'asc',
-			'label' =>  Mage::helper("zolagosolrsearch")->__("Least expensive first")
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Price ascendend")
+		);
+		
+		$options[] = array(
+			'value' => 'price',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Price descendent")
+		);
+		
+		$options[] = array(
+			'value' => 'wishlist_count',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Popularity")
 		);
 		
 		$options[] = array(
@@ -126,6 +136,13 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Best rated")
 		);
+		
+		$options[] = array(
+			'value' => 'is_new',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
+		);
+		
 		return $options;
 	}
 	
@@ -217,6 +234,9 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 * @return string
 	 */
 	public function getDefaultDir() {
+		if($this->isSearchMode()){
+			return self::DEFAULT_SEARCH_DIR;
+		}
 		return self::DEFAULT_DIR;
 	}
 	
@@ -224,6 +244,9 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 * @return string
 	 */
 	public function getDefaultOrder() {
+		if($this->isSearchMode()){
+			return self::DEFAULT_SEARCH_ORDER;
+		}
 		return self::DEFAULT_ORDER;
 	}
 	
