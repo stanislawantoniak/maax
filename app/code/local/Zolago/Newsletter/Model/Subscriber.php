@@ -22,56 +22,79 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
      */
     public function subscribeCustomer($customer)
     {
-        Mage::log("subscribeCustomer was fired");
+	    if ($customer->getImportMode()) {
+		    $this->setImportMode(true);
+	    }
+
+	    $customerStoreId = $this->getCustomerStoreId($customer);
         $this->loadByCustomer($customer);
 
-        if ($customer->getImportMode()) {
-            $this->setImportMode(true);
-        }
-
+	    //if load by customer don't return valid object then try to load by it's email
+	    $guestSubscriber = false;
+	    if(!$this->getId()) {
+		    $this->loadByEmail($customer->getEmail());
+		    //Check if customer's email exists in database for his shop
+		    if($this->getId() && $customer->getStore() == $customerStoreId) {
+			    $guestSubscriber = true;
+		    }
+		    // if it exists in database but for other shop then treat it as new one
+		    else {
+			    $this->unsData();
+		    }
+	    }
 
         $status = $this->getStatus();
         //handle situation when user was in newsletter subscribers list
         if($this->getId()) {
-            //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
-            if(!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
-                $this->setStatus(self::STATUS_UNSUBSCRIBED);
-                $this->sendUnsubscriptionEmail();
-            }
-            //otherwise check if customer wants to subscribe
-            elseif($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
-                //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
-                if($status == self::STATUS_UNSUBSCRIBED) {
-                    $this->setStatus(self::STATUS_SUBSCRIBED);
-                }
-                //otherwise set his status to unconfirmed and send confirmation request email
-                else {
-                    $this->setStatus(self::STATUS_UNCONFIRMED);
-                    $this->sendConfirmationRequestEmail();
-                }
-            }
-            //do not replace old email in case when customer change account email
-            //insert another one db row with the new email
-            //on the /customer/account/edit page
-            $m = clone $this;
-            $m->setId(null);
-            $m->setStoreId($customer->getStoreId())
-                ->setEmail($customer->getEmail());
+	        if(!is_null($customer->getIsSubscribedHasChanged())) {
+		        //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
+		        if (!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
+			        $this->setStatus(self::STATUS_UNSUBSCRIBED);
+			        $this->sendUnsubscriptionEmail();
+		        } //otherwise check if customer wants to subscribe
+		        elseif ($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
+			        //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
+			        if ($status == self::STATUS_UNSUBSCRIBED) {
+				        $this->setStatus(self::STATUS_SUBSCRIBED);
+			        } //otherwise set his status to unconfirmed and send confirmation request email
+			        else {
+				        $this->setStatus(self::STATUS_UNCONFIRMED);
+				        $this->sendConfirmationRequestEmail();
+			        }
+		        }
+	        }
+	        //handle situation when customer's email was in subscribers list as guest
+	        //if it was then just assign customer to this email
+	        if($guestSubscriber) {
+		        $this->setCustomerId($customer->getId());
+	        }
+
+
+	        if(!is_null($customer->getIsEmailHasChanged())) {
+		        //do not replace old email in case when customer change account email
+		        //insert another one db row with the new email
+		        //on the /customer/account/edit page
+		        $m = clone $this;
+		        $m->setId(null);
+		        $m->setStoreId($customer->getStoreId())
+			        ->setEmail($customer->getEmail());
+	        }
         }
-        //and if he wasn't add it as NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
+        //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-            $storeId = $customer->getStoreId() ? $customer->getStoreId() : Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
             $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
             $this
-                ->setStoreId($storeId)
+                ->setStoreId($customerStoreId)
                 ->setCustomerId($customer->getId())
                 ->setSubscriberConfirmCode($this->randomSequence())
                 ->setEmail($customer->getEmail())
                 ->setStatus($newStatus)
                 ->setId(null);
 
+			//if customer agreed to newsletter send him a confirmation email
             if($newStatus == self::STATUS_UNCONFIRMED) {
                 $this->sendConfirmationRequestEmail();
+	            //add msg?
             }
         }
 
@@ -79,6 +102,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         return $this;
     }
 
+	protected function getCustomerStoreId($customer) {
+		return $customer->getStoreId() ? $customer->getStoreId() : Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+	}
 
 	/**
 	 * @param int|null $sid
@@ -123,9 +149,11 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		/* @var $translate Mage_Core_Model_Translate */
 		$translate->setTranslateInline(false);
 
+		/** @var Mage_Customer_Model_Customer $customer */
+		$customer = Mage::getModel("customer")->load($subscriber->getCustomerId());
+
 		/** @var Zolago_Common_Helper_Data $helper */
 		$helper = Mage::helper("zolagocommon");
-
 		$helper->sendEmailTemplate(
 			$subscriber->getEmail(),
 			$subscriber->getName(),
@@ -135,7 +163,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 				'subscriber' => $subscriber,
 				'use_attachments' => true
 			),
-			Mage::app()->getStore(),
+			$this->getCustomerStoreId($customer),
 			$sender
 		);
 
@@ -143,8 +171,4 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 
 		return $subscriber;
 	}
-
-
-
-
 }
