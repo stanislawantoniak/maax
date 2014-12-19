@@ -5,10 +5,11 @@ class Zolago_Newsletter_Model_Observer extends Mage_Newsletter_Model_Observer
 	{
 		$customer = $observer->getEvent()->getCustomer();
 		if (($customer instanceof Mage_Customer_Model_Customer)) {
-			
+
 			if($customer->dataHasChangedFor("email")){
 				$customer->setIsEmailHasChanged(true);
-			}elseif($customer->dataHasChangedFor("is_subscribed")){
+			}elseif(!is_null($customer->getIsSubscribed())
+			        && $customer->getIsSubscribed() != Mage::getModel("zolagonewsletter/subscriber")->getCustomerIsSubscribed($customer)) {
 				$customer->setIsSubscribedHasChanged(true);
 			}
 

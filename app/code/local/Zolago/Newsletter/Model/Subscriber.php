@@ -44,6 +44,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	    }
 
 	    $successMsg = false;
+	    $confirmMsg = "Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.";
+		$savedMsg = "The subscription has been saved.";
+
         $status = $this->getStatus();
         //handle situation when user was in newsletter subscribers list
         if($this->getId()) {
@@ -58,12 +61,13 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			        //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
 			        if ($status == self::STATUS_UNSUBSCRIBED) {
 				        $this->setStatus(self::STATUS_SUBSCRIBED);
-				        $successMsg = "The subscription has been saved.";
+				        $this->sendConfirmationSuccessEmail();
+				        $successMsg = $savedMsg;
 			        } //otherwise set his status to unconfirmed and send confirmation request email
 			        else {
 				        $this->setStatus(self::STATUS_UNCONFIRMED);
 				        $this->sendConfirmationRequestEmail();
-				        $successMsg = "Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.";
+				        $successMsg = $confirmMsg;
 			        }
 		        }
 	        }
@@ -135,7 +139,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			//if customer agreed to newsletter send him a confirmation email
             if($newStatus == self::STATUS_UNCONFIRMED) {
                 $this->sendConfirmationRequestEmail();
-	            //add msg?
+	            $successMsg = $confirmMsg;
             }
         }
 
@@ -151,7 +155,10 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
     }
 
 	protected function getCustomerStoreId($customer) {
-		return $customer->getStoreId() ? $customer->getStoreId() : Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+		return
+			$customer->getStoreId()
+			? $customer->getStoreId()
+			: Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
 	}
 
 	/**
@@ -218,5 +225,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		$translate->setTranslateInline(true);
 
 		return $subscriber;
+	}
+
+	public function getCustomerIsSubscribed($customer) {
+		return  $this->loadByCustomer($customer)->getSubscriberStatus() == 1 ? 1 : 0;
 	}
 }
