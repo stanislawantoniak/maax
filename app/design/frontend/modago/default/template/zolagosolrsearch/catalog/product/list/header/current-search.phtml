@@ -8,23 +8,32 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 <div class="current-search">
     <h1>
 		<?php if(!$helperZSS->getNumFound()): ?>			
-            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>	
+            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>
+            <br/>
 		<?php elseif($category = $helperZSS->getFallbackCategory()) : ?>
 			<?php if ($helperZSS->isOriginalQuery()) : ?>
-	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found for category %s", $helperZSS->getQueryText(),$category->getName()) ?>				
+	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found for category %s", $helperZSS->getQueryText(),$category->getName()) ?>
+                <br/>
 			<?php else : ?>
-	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found in gallery.", $helperZSS->getQueryText()) ?>				
+	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found in gallery.", $helperZSS->getQueryText()) ?>
+                <br/>
 			<?php endif;?>			
 		<?php elseif (!$helperZSS->isOriginalQuery()) : ?>
-            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>				
+            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>
+            <br/>
 		<?php endif; ?>
 		<?php if (!$helperZSS->isOriginalQuery()) : ?>
-            <br/>
             <?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
+            <br/>
 		<?php endif; ?>
-        <br/>
-        <br/>
+
         <?php if($helperZSS->getNumFound()): ?>
+            <?php if($helperZSS->getFallbackCategory()): ?>
+                <br/>
+            <?php endif; ?>
+            <?php if(!$helperZSS->isOriginalQuery()): ?>
+                <br/>
+            <?php endif; ?>
             <?php echo $helperZSS->__('Search results for:'); ?>
             <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span><span class="query-text-iks">
                 <a href="<?php echo $helperZSS->getFilterUrl(null,$currentCategory,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
