@@ -15,6 +15,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $this->getLayout()
                 ->getBlock('root')
                 ->addBodyClass('node-type-main_categories')
+                ->addBodyClass('is-content-mode')
                 ->setTemplate('page/1column.phtml');
 
 
@@ -31,13 +32,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $this->getLayout()
                 ->getBlock('root')
                 ->addBodyClass('vendor-top-bottom-header');
-        }
-
-        //mobile menu must be shown when is content mode
-        if(!$this->isContentMode()){
-            $this->getLayout()
-                ->getBlock('root')
-                ->addBodyClass('not-menu-mobile');
         }
 
 		return parent::_prepareLayout();
@@ -117,5 +111,10 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         } else {
             return '';//no current vendor
         }
+    }
+
+    public function getMobileMenu() {
+
+        return $this->getChildHtml('mobile-menu');
     }
 }
