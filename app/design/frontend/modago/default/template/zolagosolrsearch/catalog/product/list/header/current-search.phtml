@@ -18,11 +18,12 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 		<?php elseif (!$helperZSS->isOriginalQuery()) : ?>
             <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>				
 		<?php endif; ?>
+        <br/>
+        <br/>
 		<?php if (!$helperZSS->isOriginalQuery()) : ?>
-                <br/>
-                <?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
-                <br/>
-                <br/>
+            <?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
+            <br/>
+            <br/>
 		<?php endif; ?>
 
         <?php if($helperZSS->getNumFound()): ?>
