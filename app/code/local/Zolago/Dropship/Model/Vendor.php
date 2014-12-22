@@ -37,10 +37,28 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 	public function isBrandshop() {
 		return $this->getVendorType()==Zolago_Dropship_Model_Source::VENDOR_TYPE_BRANDSHOP;
 	}
-	
-	/**
-	 * Sets root category to registry and then return
-	 */
+
+    public function isStandard() {
+        return $this->getVendorType()==Zolago_Dropship_Model_Source::VENDOR_TYPE_STANDARD;
+    }
+    
+    /**
+     * Sets vendor root category to registry and then return
+     *
+     * @param int|null $websiteId
+     * @return Zolago_Dropship_Model_Vendor | Zolago_Catalog_Model_Category
+     * @throws Mage_Core_Exception
+     *
+     * @deprecated deprecated, used only in very specific situation because sometimes return
+     * Zolago_Dropship_Model_Vendor and sometimes Zolago_Catalog_Model_Category what it's wrong
+     * use instead this:
+     * Zolago_DropshipMicrosite_Helper_Data $helperZDM
+     * $helperZDM->getVendorRootCategoryObject()
+     * code using this functions use also registry('vendor_current_category')
+     * it's deprecated too
+     * use instead this:
+     * registry('current_category')
+     */
 	public function rootCategory($websiteId = NULL){
 
 		if($category = Mage::registry('vendor_current_category')){
@@ -163,4 +181,5 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     public function getVendorLogoUrl() {
         return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
     }
+
 }

@@ -186,13 +186,7 @@ section.bottom {
 			display:none!important;
 		 }
 	}
-	&.node-type-page-shop {
-		#nav_mobile {
-			@media (max-width: $screen-xs-max) { 
-				display:block!important;
-			 }
-		}
-	}
+
 }
 .inspiration-strips {
 	height: 5px;
@@ -422,4 +416,12 @@ section {
 			display:none;
 		}
 	}
+}
+
+.no-navigation-for-product-page {
+  @media (max-width: $screen-xs-max) {
+    #navigation {
+      display: none !important;
+    }
+  }
 }
