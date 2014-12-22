@@ -109,7 +109,7 @@ class Mage_Newsletter_Model_Subscriber extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Alias for _setSubscriberId()
+     * Alias for setSubscriberId()
      *
      * @param int $value
      */
