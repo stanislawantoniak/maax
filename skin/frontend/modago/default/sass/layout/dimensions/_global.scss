@@ -108,7 +108,15 @@ body {
       display: none !important;
     }
   }
+  &.is-content-mode {
+    @media (max-width: $screen-xs-max) {
+      #navCategory, #nav_category_mobile {
+        display: block !important;
+      }
+    }
+  }
 }
+
 
 .node-type-customer-account-login.checkout {
 	#header {
@@ -186,8 +194,15 @@ section.bottom {
 			display:none!important;
 		 }
 	}
-
 }
+.is-content-mode {
+  #header {
+    @media (max-width: $screen-xs-max) {
+      min-height: 41px;
+    }
+  }
+}
+
 .inspiration-strips {
 	height: 5px;
 	position: absolute;

@@ -2,7 +2,6 @@
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $session = Mage::getSingleton('customer/session');
 /* @var $session Mage_Customer_Model_Session */
-
 ?>
 
     <form action="<?php echo $this->getFormAction(); ?>" id="question-form-mobile" method="post">
@@ -85,11 +84,10 @@ $session = Mage::getSingleton('customer/session');
                 },
                 stars: {
                     stars: true
-                }
+                },
             },
 
             messages: {
-
             },
             ignore: "#cart-form",
             ignoreTitle: true,

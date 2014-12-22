@@ -6,6 +6,7 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 
 
 <?php if($this->isContentMode()): ?>
+
     <?php if(!($vendor && $vendor->getId())): ?>
         <div id="breadcrumbs-header" class="container-fluid">
             <div class="row">

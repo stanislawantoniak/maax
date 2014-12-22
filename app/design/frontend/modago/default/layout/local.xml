@@ -434,6 +434,9 @@
 			<action method="addBodyClass">
 				<value>view-menu-category</value>
 			</action>
+			<action method="addBodyClass">
+				<value>not-menu-mobile</value>
+			</action>
 		</reference>
 		<reference name="head">
             <action method="addItem">
