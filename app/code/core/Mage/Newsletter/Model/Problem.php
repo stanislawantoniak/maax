@@ -30,7 +30,7 @@
  * @method Mage_Newsletter_Model_Resource_Problem _getResource()
  * @method Mage_Newsletter_Model_Resource_Problem getResource()
  * @method int getSubscriberId()
- * @method Mage_Newsletter_Model_Problem setSubscriberId(int $value)
+ * @method Mage_Newsletter_Model_Problem _setSubscriberId(int $value)
  * @method int getQueueId()
  * @method Mage_Newsletter_Model_Problem setQueueId(int $value)
  * @method int getProblemErrorCode()
