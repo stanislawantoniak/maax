@@ -39,7 +39,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			    ->addFieldToFilter('store_id', array('eq' => $customerStoreId))
 			    ->getFirstItem();
 
-		    if($subscriber->getId()) {
+		    if(!is_null($subscriber) && $subscriber->hasId() && $subscriber->getId()) {
 			    $this->setData($subscriber->getData());
 			    $guestSubscriber = true;
 		    } else {
