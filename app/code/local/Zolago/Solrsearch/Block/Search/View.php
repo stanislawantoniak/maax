@@ -6,7 +6,7 @@
     }
 
     protected function _prepareLayout() {
-        if($this->isContentMode()){
+/*        if($this->isContentMode()){
             $this->getLayout()->getBlock('content')->
             unsetChild('solrsearch_result_title')->
             unsetChild('solrsearch_product_list_active')->
@@ -23,7 +23,7 @@
                 ->addBodyClass('node-type-list')
                 ->addBodyClass('filter-sidebar');
         }
-
+*/
 
         return parent::_prepareLayout();
     }
