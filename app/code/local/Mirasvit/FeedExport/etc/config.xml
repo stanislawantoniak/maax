@@ -200,6 +200,15 @@
                 </observers>
             </adminhtml_catalog_product_grid_prepare_massaction>
         </events>
+		<translate>
+            <modules>
+                <Mirasvit_FeedExport>
+                    <files>
+                        <default>Mirasvit_FeedExport.csv</default>
+                    </files>
+                </Mirasvit_FeedExport>
+            </modules>
+        </translate>
     </adminhtml>
     <crontab>
         <jobs>

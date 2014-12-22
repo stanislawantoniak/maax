@@ -58,7 +58,7 @@ body {
 	#content-main {
 		margin-left: 205px; 
 		@media (max-width: $screen-sm-min) {
-			margin-left: 0;
+			margin-left: 0 !important;
 		 }
 	}
 }
@@ -67,7 +67,7 @@ body {
 		#content-main {
 			margin-left: 205px; 
 			@media (max-width: $screen-md-min) { 
-				margin-left: 0; 
+				margin-left: 0;
 			 }
 		}
 	}
@@ -186,13 +186,7 @@ section.bottom {
 			display:none!important;
 		 }
 	}
-	&.node-type-page-shop {
-		#nav_mobile {
-			@media (max-width: $screen-xs-max) { 
-				display:block!important;
-			 }
-		}
-	}
+
 }
 .inspiration-strips {
 	height: 5px;
