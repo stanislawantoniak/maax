@@ -57,7 +57,7 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 				<span style="white-space:nowrap">
                     <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span>
 					<span class="query-text-iks">
-                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), $currentCategory, null); ?>"
+                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), null, null); ?>"
                            class="fa fa-times active-filter-label iks"></a>
                     </span>
                 </span>
