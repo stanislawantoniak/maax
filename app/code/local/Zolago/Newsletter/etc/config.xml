@@ -17,11 +17,11 @@
 		</routers>
 		<translate>
 			<modules>
-				<Your_Extension>
+				<Zolago_Newsletter>
 					<files>
 						<default>Zolago_Newsletter.csv</default>
 					</files>
-				</Your_Extension>
+				</Zolago_Newsletter>
 			</modules>
 		</translate>
 		<events>
