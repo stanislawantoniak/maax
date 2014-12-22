@@ -55,7 +55,7 @@ class SalesManago_Tracking_Helper_Data extends Mage_Core_Helper_Abstract{
 			if($r==false || (isset($r['success']) && $r['success']==false)){
 				$data['status'] = 0;
 				$data['action'] = 1; //rejestracja
-				$this->_getHelper()->setSalesmanagoCustomerSyncStatus($data);
+				$this->setSalesmanagoCustomerSyncStatus($data);
 			}
 		}
 		
