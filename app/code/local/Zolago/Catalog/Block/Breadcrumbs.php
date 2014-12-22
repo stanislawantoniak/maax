@@ -219,7 +219,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         if($vendor) {
             $breadcrumbsBlock->addCrumb('home', array(
 				'label'=>Mage::helper('catalog')->__('Mall'),
-				'title'=>Mage::helper('catalog')->__('Go to Home Page'),
+				'title'=>Mage::helper('catalog')->__('Go to Mall'),
 				'link'=>Mage::helper("zolagodropshipmicrosite")->getBaseUrl()
 			));
             $type = $this->_getVendorTypeName($vendor->getVendorType());
