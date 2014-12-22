@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <layout>
+	<default>
+		<reference name="head">
+			<action method="setTitle" translate="title"><title>Administration</title></action>
+		</reference>
+	</default>
 	<adminhtml_index_login>
 		<reference name="content">
 			<action method="setTemplate">

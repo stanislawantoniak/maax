@@ -635,10 +635,6 @@
 
 	<umicrosite_index_landingpage>
 
-		<reference name="header">
-			<remove name="header_menu"/>
-		</reference>
-
 		<reference name="root">
 			<action method="addBodyClass">
 				<value>sidebar-first</value>

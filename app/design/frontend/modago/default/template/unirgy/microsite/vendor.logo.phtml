@@ -6,6 +6,6 @@
 </div>
 <div class="vendor-top-bottom-header-logo">
     <a href="<?php echo $this->getVendorUrl(); ?>">
-        <img src="<?php if(!empty($vendorLogo)) { echo $vendorLogo; } ?>" alt="<?php echo $this->getVendorName(); ?>"/>
+        <img src="<?php if(!empty($vendorLogo)) : echo $vendorLogo; endif; ?>" alt="<?php echo $this->getVendorName(); ?>"/>
     </a>
 </div>
