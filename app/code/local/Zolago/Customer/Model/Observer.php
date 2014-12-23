@@ -9,7 +9,19 @@ class Zolago_Customer_Model_Observer {
                 $today->subHour(Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
         );
     }
-	
+
+    public function customerChangeEmailConfirm($observer)
+    {
+//        $event = $observer->getEvent();
+//        $customer = $event->getCustomer();
+//        $customer->setCustomerConfirmedEmail(true);
+//
+//        //subscribe
+//        /* @var $newsletterInviter Zolago_Newsletter_Model_Subscriber */
+//        Mage::getModel('zolagonewsletter/subscriber')
+//            ->subscribeCustomer($customer);
+    }
+
 	/**
 	 * Clear quote presonal data when customer logout
 	 * @param type $observer
@@ -55,6 +67,7 @@ class Zolago_Customer_Model_Observer {
 	
 	/**
 	 * Save last used payment method and additional data
+	 * @todo handle last choosed via interfaace method, not really saved - its mapped
 	 * @param type $observer
 	 */
 	public function salesOrderPaymentSaveAfter($observer) {

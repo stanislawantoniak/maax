@@ -1,3 +1,5 @@
+<?php /** @var Mage_Customer_Block_Newsletter $this */ ?>
+
 <?php $_helper = Mage::helper("customer"); ?>
 <?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 
@@ -24,9 +26,8 @@
 							<label for="subscription"
 							       class="css-label css-label-bold">
 							</label>
-
 							<div class="pseudo-label label-bold">
-								<?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?>
+								<label for="subscription"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
 							</div>
 						</div>
 					</div>

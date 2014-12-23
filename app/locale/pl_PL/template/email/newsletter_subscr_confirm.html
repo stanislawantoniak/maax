@@ -1,0 +1,32 @@
+<!--@subject {{var store_name}} – Potwierdzenie newslettera @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"var logo_url":"Email Logo Image Url",
+"var logo_alt":"Email Logo Image Alt",
+"htmlescape var=$customer.name":"Customer Name",
+"var subscriber.getConfirmationLink()":"Subscriber Confirmation Url"}
+@-->
+<body style="font-family: sans-serif;">
+<div>
+    <a href="{{store url=""}}"><img src="cid:logo.png" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a>
+</div>
+<div>
+    <p>
+        Dziękujemy za zapisanie się do newslettera {{var store_name}}!
+    </p>
+</div>
+<div>
+    <p>
+        Aby zacząć otrzymywać nasz newsletter musisz najpierw potwierdzić swój adres e-mail. W tym celu
+        <a href="{{var subscriber.getConfirmationLink()}}" target="_blank">kliknij tutaj</a>
+        lub skopiuj poniższy link do przeglądarki.<br/><br/>
+        <a href="{{var subscriber.getConfirmationLink()}}">{{var subscriber.getConfirmationLink()}}</a>
+    </p>
+</div>
+<div>
+    <p>
+        Dziękujemy i zapraszamy ponownie!<br/>
+        Zespół <a href="{{store url=""}}">{{var store_name}}</a>
+    </p>
+</div>
+</body>

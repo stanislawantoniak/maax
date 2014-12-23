@@ -55,35 +55,36 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			$cartItems = array_slice($cartItems, 0, self::MAX_CART_ITEMS_COUNT);	
 		}
 		
-		// Product load 
-		$productsIds = array();
-		foreach ($cartItems as $item){
-            $productsIds[] = $item->getProductId();
-		}
-		
-		$collection = Mage::getResourceModel("catalog/product_collection");
-		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-		
-		$collection->addAttributeToSelect("name");
-		$collection->addAttributeToSelect("image");
-		$collection->addAttributeToSelect("url_path");
-		
-		if($productsIds){
-			$collection->addIdFilter($productsIds);
-		}else{
-			$collection->addIdFilter(-1);
-		}
+//		// Product load 
+//		$productsIds = array();
+//		foreach ($cartItems as $item){
+//            $productsIds[] = $item->getProductId();
+//		}
+//		
+//		$collection = Mage::getResourceModel("catalog/product_collection");
+//		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+//		
+//		$collection->addAttributeToSelect("name");
+//		$collection->addAttributeToSelect("image");
+//		$collection->addAttributeToSelect("url_path");
+//		
+//		if($productsIds){
+//			$collection->addIdFilter($productsIds);
+//		}else{
+//			$collection->addIdFilter(-1);
+//		}
 		
 		$array = array();
         foreach ($cartItems as $item)
         {
-            $productId = $item->getProductId();
-            $product = $collection->getItemById($productId);
+//            $productId = $item->getProductId();
+//            $product = $collection->getItemById($productId);
+            $product = $item->getProduct();
 			/* @var $product Mage_Catalog_Model_Product */
 			
 			if($product && $product->getId()){
 				$options = $this->_getProductOptions($item);
-				$image = Mage::helper('catalog/image')->init($product, 'image')->resize(40, 50);
+				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(40, 50);
 
 				$array[] = array(
 					'name' => $product->getName(),

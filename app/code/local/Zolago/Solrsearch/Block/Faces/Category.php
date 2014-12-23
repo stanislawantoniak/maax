@@ -12,8 +12,16 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         return $this->getParentBlock()->parseCategoryPathFacet($this->getAllItems());
     }
 
+    /**
+     * @param null $facetCode
+     * @return string
+     */
     public function getFacetLabel($facetCode=null) {
-        return Mage::helper('catalog')->__("Category");
+        if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() === Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY) {
+            return Mage::helper('catalog')->__('Category');
+        } else {
+            return Mage::helper('catalog')->__('narrow results');//search mode
+        }
     }
     public function getFilterCollection($categoryId) {
         if (!$this->hasData('all_filter_collection')) {
@@ -62,7 +70,10 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
                 }
             }
         }
-        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+
+        /** @var Zolago_Modago_Block_Solrsearch_Faces $parentBlock */
+        $parentBlock = $this->getParentBlock();
+        if($parentBlock->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
             if(isset($params['id'])) unset($params['id']);
             $tmp = array(
                        '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
@@ -70,7 +81,8 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
                    );
             $facetUrl = Mage::getUrl('',$tmp);
         }
-        else {
+        else
+        {
 
             $names = array();
             $ids   = array();
