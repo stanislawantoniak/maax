@@ -37,4 +37,36 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
 	public function getIsOnline(Mage_Payment_Model_Method_Abstract $method){
 		return $method instanceof Zolago_Payment_Model_Method;
 	}
+
+
+    /**
+     * @param $code
+     * @return array
+     */
+    public function getPaymentMethodIcon($code)
+    {
+        $icon = array();
+        if (empty($code)) {
+            return $icon;
+        }
+        switch ($code) {
+            case 'zolagopayment':
+                $icon = array($this->getSkinUrl('images/payment_methods/payment_methods.png'));
+                break;
+            case 'cashondelivery':
+                $icon = array($this->getSkinUrl('images/payment_methods/payment_methods-03.png'));
+                break;
+            case 'banktransfer':
+                $icon = array($this->getSkinUrl('images/payment_methods/payment_methods-02.png'));
+                break;
+            case 'ccsave':
+                $icon = array(
+                    $this->getSkinUrl('images/payment_methods/payment_methods-05.png'),
+                    $this->getSkinUrl('images/payment_methods/payment_methods-04.png')
+                );
+                break;
+        }
+        return $icon;
+    }
+
 }

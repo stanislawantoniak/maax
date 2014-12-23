@@ -172,7 +172,7 @@
 		input[type="tel"] {
 			line-height: 29px;
 		}
-		#selected_bank {
+		#payment_form_zolagopayment {
 				list-style: none;
 				label {
 					line-height: 15px;
@@ -215,7 +215,7 @@
 		.panel-body {
 			.panel {
 				background:#fff;
-				&.selected {
+				&.payment-selected {
 					border-color :$bc-secondary;
 				}
 			}
