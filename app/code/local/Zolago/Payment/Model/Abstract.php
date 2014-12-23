@@ -1,15 +1,7 @@
 <?php
 
-class Zolago_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract {
+abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_Abstract {
 
-    const PAYMENT_METHOD_CODE = 'zolagopayment';
-
-    /**
-     * Payment method code
-     *
-     * @var string
-     */
-    protected $_code		  = self::PAYMENT_METHOD_CODE;
     protected $_formBlockType = "zolagopayment/form";
     protected $_isGateway     = true;
 	
@@ -32,6 +24,13 @@ class Zolago_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract {
     {
         return trim($this->getConfigData('instructions'));
     }
+	
+	/**
+	 * @return boolean
+	 */
+	public function hasProvider() {
+		return true;
+	}
     
     /**
 	 * 
