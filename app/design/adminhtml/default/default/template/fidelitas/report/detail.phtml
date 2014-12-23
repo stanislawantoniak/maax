@@ -1,0 +1,159 @@
+<?php
+/**
+ * Licentia Fidelitas - Advanced Email and SMS Marketing Automation for E-Goi
+ *
+ * NOTICE OF LICENSE
+ * This source file is subject to the Creative Commons Attribution-NonCommercial 4.0 International  
+ * It is available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * @title      Advanced Email and SMS Marketing Automation
+ * @category   Marketing
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) 2012 Licentia - http://licentia.pt
+ * @license    Creative Commons Attribution-NonCommercial 4.0 International 
+ */
+?>
+
+<?php
+$report = Mage::registry('current_report');
+
+$eng = round($report->getData('unique_views') * 100 / $report->getData('sent'));
+$engT = $this->__('Opens %s', $report->getData('unique_views') . " ($eng %)");
+$engN = 100 - $eng;
+$engNT = $this->__('Unopens %s', ($report->getData('sent') - $report->getData('unique_views')) . " ($engN %)");
+
+
+$bounce = round($report->getData('returned') * 100 / $report->getData('sent')) + 100;
+$bounceT = $this->__('Sent %s', $report->getData('sent') . " ($bounce %)");
+
+$bounceN = $bounce - 100;
+$bounceNT = $this->__('Bounces %s', $report->getData('returned') . " ($bounceN %)");
+?>
+
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data" style="width:49%; float:left">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link last" colspan="2"><span class="nobr"><?php echo $this->__('Metrics') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Messages sent') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('sent') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Delivered messages') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo ($report->getData('sent') - $report->getData('returned')) ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Bounces') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('returned') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Unopens') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('not_opened') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Unique opens') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('unique_views') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Opens') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('views') ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <table cellspacing="0" id="storeGrid_table" class="data" style="margin-left:2%; width:49%; float:left">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link last" colspan="2"><span class="nobr"><?php echo $this->__('Metrics') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Unique clickthroughs') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('unique_clicks') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Clickthroughs') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('clicks_sub') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Clickthroughs Rate') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo round($report->getData('clicks_rate') * 100, 1) ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Complaint Rate') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('complain_rate') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Complaints') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('complain') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Opt-outs') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('total_removes') ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="clear" style="height:10px; clear: both"></div>
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link"><span class="nobr"><?php echo $this->__('Engagement') ?></span></th>
+                <th class=" no-link last"><span class="nobr"><?php echo $this->__('Outgoing') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+            <tr  class="  ">
+                <td class="a-left "><img src="https://chart.googleapis.com/chart?cht=p3&amp;chf=bg,s,ffffff&amp;chs=450x225&amp;chdl=<?php echo $engT ?>|<?php echo $engNT ?>&amp;chd=t:<?php echo $eng ?>,<?php echo $engN ?>" ></td>
+                <td class="a-left last "><img src="https://chart.googleapis.com/chart?cht=p3&amp;chf=bg,s,ffffff&amp;chs=450x225&amp;chdl=<?php echo $bounceT ?>|<?php echo $bounceNT ?>&amp;chd=t:<?php echo $bounce ?>,<?php echo $bounceN ?>" ></td>
+            </tr>
+            <tr  class=" even">
+                <td class="a-left "><?php echo $this->__('Amount of opens compared with unopens. The more opens, the more engaging your campaign and the higher your overall effectiveness will be. This is key to optimize deliverability for your next campaigns.') ?></td>
+                <td class="a-left last"><?php echo $this->__('Amount of <b>delivered</b> messages compared with e-mails which <b>bounced back</b> (eg. invalid address, mailbox full, etc.). If your mailing list is <b>clean</b> and <b>up-to-date</b>, your delivery rate should almost always be 99%-100%.') ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="clear"></div>
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link"><span class="nobr"><?php echo $this->__('Social') ?></span></th>
+                <th class=" no-link last"><span class="nobr"><?php echo $this->__('Views') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Recommendations') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('recomendations') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Recommendations Success') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('recomendations_success') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Facebook') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('facebook_share') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Tweets') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('tweets') ?></td>
+            </tr>
+            <tr  class="even pointer ">
+                <td class="a-left "><?php echo $this->__('Other Social') ?></td>
+                <td class="a-left last " style="width:20%; text-align: center;"><?php echo $report->getData('other_social') ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
