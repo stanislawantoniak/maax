@@ -1,0 +1,126 @@
+<?php
+/**
+ * Licentia Fidelitas - Advanced Email and SMS Marketing Automation for E-Goi
+ *
+ * NOTICE OF LICENSE
+ * This source file is subject to the Creative Commons Attribution-NonCommercial 4.0 International  
+ * It is available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * @title      Advanced Email and SMS Marketing Automation
+ * @category   Marketing
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) 2012 Licentia - http://licentia.pt
+ * @license    Creative Commons Attribution-NonCommercial 4.0 International 
+ */
+?>
+
+<?php
+$report = Mage::registry('current_report');
+
+$country = unserialize($report->getTopCountry());
+$city = unserialize($report->getTopCity());
+
+if ($report->getTotalCountry() == 0) {
+    $totalCountry = 0;
+    foreach ($country as $value) {
+        $totalCountry += $value['count'];
+    }
+}
+
+if ($report->getTotalCity() == 0) {
+    $totalCity = 0;
+    foreach ($city as $value) {
+        $totalCity += $value['count'];
+    }
+}
+$gCountry = array();
+foreach ($country as $value) {
+    $gCountry [$value['name'] . ' (' . $value['count'] . ' - ' . round($value['count'] * 100 / $totalCountry) . '%)'] = $value['count'] * 100 / $totalCountry;
+}
+$gCity = array();
+foreach ($city as $value) {
+    $gCity [$value['name'] . ' (' . $value['count'] . ' - ' . round($value['count'] * 100 / $totalCity) . '%)'] = $value['count'] * 100 / $totalCity;
+}
+?>
+
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link last"><span class="nobr"><?php echo $this->__('Country') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+            <tr>
+                <td class="last"  style="text-align:center">
+                    <img src="https://chart.googleapis.com/chart?cht=p3&amp;chs=800x350&amp;chd=t:<?php echo implode(',', $gCountry) ?>&amp;chdl=<?php echo implode('|', array_keys($gCountry)) ?>&amp;chf=bg,s,ffffff" >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link"><span class="nobr"><?php echo $this->__('Country') ?></span></th>
+                <th class=" no-link last"><span class="nobr"><?php echo $this->__('Views') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+<?php foreach ($country as $value): ?>
+                <tr title="#" class="even pointer">
+                    <td class="a-left "><?php echo $value['name'] ?></td>
+                    <td class="a-left last"><?php echo $value['count'] ?></td>
+                </tr>
+<?php endforeach; ?>
+            <tr title="#" class="even pointer switcher">
+                <td class="a-left switcher"><?php echo $this->__('Total') ?></td>
+                <td class="a-left last switcher" style="width:20%; text-align: center;"><?php echo $report->getTotalCountry() ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link last"><span class="nobr"><?php echo $this->__('City') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+            <tr>
+                <td class="last"  style="text-align:center">
+                    <img src="https://chart.googleapis.com/chart?cht=p3&amp;chs=800x350&amp;chd=t:<?php echo implode(',', $gCity) ?>&amp;chdl=<?php echo implode('|', array_keys($gCity)) ?>&amp;chf=bg,s,ffffff" >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link"><span class="nobr"><?php echo $this->__('City') ?></span></th>
+                <th class=" no-link last"><span class="nobr"><?php echo $this->__('Views') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+<?php foreach ($city as $value): ?>
+                <tr class="even pointer">
+                    <td class="a-left "><?php echo $value['name'] ?></td>
+                    <td class="a-left last"><?php echo $value['count'] ?></td>
+                </tr>
+<?php endforeach; ?>
+            <tr  class="even pointer ">
+                <td class="a-left switcher"><?php echo $this->__('Total City') ?></td>
+                <td class="a-left last switcher" style="width:20%; text-align: center;"><?php echo $report->getTotalCity() ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
