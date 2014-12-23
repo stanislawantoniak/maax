@@ -6,82 +6,82 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCurrentCategory();
 ?>
 <div class="current-search">
-    <h1>
-		<?php if(!$helperZSS->getNumFound()): ?>			
-            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>	
-		<?php elseif($category = $helperZSS->getFallbackCategory()) : ?>
+	<h1>
+		<?php if (!$helperZSS->getNumFound()): ?>
+			<?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>
+			<br/>
+		<?php elseif ($category = $helperZSS->getFallbackCategory()) : ?>
 			<?php if ($helperZSS->isOriginalQuery()) : ?>
-	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found for category %s", $helperZSS->getQueryText(),$category->getName()) ?>				
+				<?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found for category %s", $helperZSS->getQueryText(), $category->getName()) ?>
+				<br/>
 			<?php else : ?>
-	            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found in gallery.", $helperZSS->getQueryText()) ?>				
-			<?php endif;?>			
+				<?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found in gallery.", $helperZSS->getQueryText()) ?>
+				<br/>
+			<?php endif; ?>
 		<?php elseif (!$helperZSS->isOriginalQuery()) : ?>
-            <?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>				
+			<?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>
+			<br/>
 		<?php endif; ?>
 		<?php if (!$helperZSS->isOriginalQuery()) : ?>
-                <br/>
-                <?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
-                <br/>
-                <br/>
+			<?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
+			<br/>
 		<?php endif; ?>
 
-        <?php if($helperZSS->getNumFound()): ?>
-            <?php echo $helperZSS->__('Search results for:'); ?>
-            <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span><span class="query-text-iks">
-                <a href="<?php echo $helperZSS->getFilterUrl(null,$currentCategory,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
+		<?php if ($helperZSS->getNumFound()): ?>
+			<?php if ($helperZSS->getFallbackCategory()): ?>
+				<br/>
+			<?php endif; ?>
+			<?php if (!$helperZSS->isOriginalQuery()): ?>
+				<br/>
+			<?php endif; ?>
+			<?php echo $helperZSS->__('Search results for:'); ?>
+			<span style="white-space:nowrap">
+                <span class="query-text uppercase"><?php echo $helperZSS->getSolrRealQ(); ?></span>
+				<span class="query-text-iks">
+                    <a href="<?php echo $helperZSS->getFilterUrl(null, $currentCategory, $vendor); ?>"
+                       class="fa fa-times active-filter-label iks"></a>
+                </span>
             </span>
 			<?php if ($vendor) : ?>
-				<?php if ($currentCategory && ($currentCategory->getId() != $vendor->rootCategory()->getId())) : ?>									
-	                <?php echo $helperZSS->__('in category'); ?>					
-	                <span class="query-text uppercase"><?php echo $currentCategory->getName();?></span><span class="query-text-iks">
-        	            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),null,$vendor); ?>" class="fa fa-times active-filter-label iks"></a>
-            	    </span>						
-				<?php endif ; ?>
-                <?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
-                <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span><span class="query-text-iks">
-                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),$currentCategory,null); ?>" class="fa fa-times active-filter-label iks"></a>
+				<?php if ($currentCategory && ($currentCategory->getId() != $vendor->rootCategory()->getId())) : ?>
+					<?php echo $helperZSS->__('in category'); ?>
+					<span style="white-space:nowrap">
+		                <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
+						<span class="query-text-iks">
+	                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), null, $vendor); ?>"
+		                       class="fa fa-times active-filter-label iks"></a>
+	                    </span>
+                    </span>
+				<?php endif; ?>
+				<?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
+				<span style="white-space:nowrap">
+                    <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span>
+					<span class="query-text-iks">
+                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), null, null); ?>"
+                           class="fa fa-times active-filter-label iks"></a>
+                    </span>
                 </span>
 			<?php else : ?>
-				<?php if (!$currentCategory || ($currentCategory->getId() == Mage::app()->getStore()->getRootCategoryId())) : ?>					
+				<?php if (!$currentCategory || ($currentCategory->getId() == Mage::app()->getStore()->getRootCategoryId())) : ?>
 					<?php echo $helperZSS->__('in whole Gallery'); ?>
 				<?php else : ?>
-	                <?php echo $helperZSS->__('in category'); ?>
-		           <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span><span class="query-text-iks">
-        	            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(),null,null); ?>" class="fa fa-times active-filter-label iks"></a>
-            	    </span>	
-				<?php endif ; ?>
-			<?php endif ; ?>
-        <?php endif; ?>
+					<?php echo $helperZSS->__('in category'); ?>
+					<span style="white-space:nowrap">
+                        <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
+                        <span class="query-text-iks">
+                            <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), null, null); ?>"
+                               class="fa fa-times active-filter-label iks"></a>
+                        </span>
+                    </span>
+				<?php endif; ?>
+			<?php endif; ?>
+		<?php endif; ?>
 
-    </h1>
+	</h1>
 
-    <?php if($helperZSS->getNumFound()): ?>
-        <p>
-            <?php
-            $str = "Found: %s products";
-            $str = $helperZSS->getNumFound() == 2 ? "Found: 2 products" : $str;
-            $str = $helperZSS->getNumFound() == 1 ? "Found: 1 product" : $str;
-            ?>
-            <?php echo $helperZSS->__($str, $helperZSS->getNumFound()); ?>
-            <?php if($helperZSS->getSolrRealQ() != $helperZSS->getQueryText()): ?>
-                <?php echo $helperZSS->__("for &quot;%s&quot;", $helperZSS->getSolrRealQ()); ?>
-            <?php endif; ?>
-            <span id="category-cnt-wrapper"> <?php echo $helperZSS->__("in"); ?> <span id="category-cnt"></span> <?php echo $helperZSS->__("categories"); ?></span>
-        </p>
-    <?php else: ?>
-        <div id="search-page-empty">
-            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
-        </div>
-    <?php endif; ?>
+	<?php if (!$helperZSS->getNumFound()): ?>
+		<div id="search-page-empty">
+			<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('search-page-empty')->toHtml(); ?>
+		</div>
+	<?php endif; ?>
 </div>
-<script>
-    jQuery(document).ready(function(){
-        var cnt = jQuery('#filter_category dl dd').length;
-        if(cnt >= 2) {
-            jQuery('#category-cnt').html(cnt);
-            jQuery('#category-cnt-wrapper').show();
-        } else {
-            jQuery('#category-cnt-wrapper').hide();
-        }
-    });
-</script>

@@ -15,6 +15,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $this->getLayout()
                 ->getBlock('root')
                 ->addBodyClass('node-type-main_categories')
+                ->addBodyClass('is-content-mode')
                 ->setTemplate('page/1column.phtml');
 
 
@@ -25,6 +26,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->addBodyClass('filter-sidebar');
         }
 
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if($vendor && $vendor->getId()) {
+            $this->getLayout()
+                ->getBlock('root')
+                ->addBodyClass('vendor-top-bottom-header');
+        }
 
 		return parent::_prepareLayout();
 	}
@@ -72,5 +80,41 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     public function getProductListHtml() {
         return  $this->getChildHtml('searchfaces') . $this->getChildHtml('solrsearch_product_list');
+    }
+
+    public function getDesktopVendorHeaderPanel()
+    {
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if($vendor && $vendor->getId()) {
+            return $this
+                ->getLayout()
+                ->createBlock('cms/block')
+                ->setBlockId('top-bottom-header-desktop-v-' . $vendor['vendor_id'])
+                ->toHtml();
+        } else {
+            return '';//no current vendor
+        }
+
+    }
+
+    public function getMobileVendorHeaderPanel()
+    {
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if($vendor && $vendor->getId()) {
+            return $this
+                ->getLayout()
+                ->createBlock('cms/block')
+                ->setBlockId('top-bottom-header-mobile-v-' . $vendor['vendor_id'])
+                ->toHtml();
+        } else {
+            return '';//no current vendor
+        }
+    }
+
+    public function getMobileMenu() {
+
+        return $this->getChildHtml('mobile-menu');
     }
 }

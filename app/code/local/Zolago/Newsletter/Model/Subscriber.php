@@ -8,7 +8,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationSuccessEmail($sid=null)
 	{
-		return $this->sendNewsletterEmail(
+		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE),
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
@@ -26,35 +26,31 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		    $this->setImportMode(true);
 	    }
 
-	    $customerStoreId = $this->getCustomerStoreId($customer);
+	    $customerStoreId = $this->_getCustomerStoreId($customer);
         $this->loadByCustomer($customer);
 
 	    //if load by customer don't return valid object then try to load by it's email
 	    $guestSubscriber = false;
 	    if(!$this->getId()) {
 		    // get all subscribers with this email
-		    $collection = Mage::getModel('newsletter/subscriber')
-			    ->getCollection();
-		    $collection->addFieldToFilter('subscriber_email', array('eq' => $customer->getEmail()));
+		    $subscriber = Mage::getModel('newsletter/subscriber')
+			    ->getCollection()
+			    ->addFieldToFilter('subscriber_email', array('eq' => $customer->getEmail()))
+			    ->addFieldToFilter('store_id', array('eq' => $customerStoreId))
+			    ->getFirstItem();
 
-		    // go through all of them and load one with matching store_id
-		    foreach ($collection as $subscriberM) {
-			    if ($subscriberM->getStoreId() == $customerStoreId) {
-				    $this->load($subscriberM->getId());
-				    $guestSubscriber = true;
-				    break;
-			    }
+		    if(!is_null($subscriber) && $subscriber->hasId() && $subscriber->getId()) {
+			    $this->setData($subscriber->getData());
+			    $guestSubscriber = true;
+		    } else {
+			    $this->unsData();
 		    }
 	    }
-
-	    $successMsg = false;
-	    $confirmMsg = "Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.";
-		$savedMsg = "The subscription has been saved.";
 
         $status = $this->getStatus();
         //handle situation when user was in newsletter subscribers list
         if($this->getId()) {
-	        if(!is_null($customer->getIsSubscribedHasChanged())) {
+	        if($customer->hasIsSubscribedHasChanged()) {
 		        $customer->unsIsSubscribedHasChanged();
 		        //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
 		        if (!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
@@ -66,12 +62,11 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			        if ($status == self::STATUS_UNSUBSCRIBED) {
 				        $this->setStatus(self::STATUS_SUBSCRIBED);
 				        $this->sendConfirmationSuccessEmail();
-				        $successMsg = $savedMsg;
 			        } //otherwise set his status to unconfirmed and send confirmation request email
 			        else {
 				        $this->setStatus(self::STATUS_UNCONFIRMED);
 				        $this->sendConfirmationRequestEmail();
-				        $successMsg = $confirmMsg;
+				        $customer->setConfirmMsg(true);
 			        }
 		        }
 	        }
@@ -81,7 +76,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		        $this->setCustomerId($customer->getId());
 	        }
 
-            if (!is_null($customer->getIsEmailHasChanged())) {
+            if ($customer->hasIsEmailHasChanged()) {
                 //called on the /zolagocustomer/confirm/confirm/
                 $newCustomerEmail = $customer->getEmail();
 
@@ -140,22 +135,14 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	        $this->save();
             if($newStatus == self::STATUS_UNCONFIRMED) {
                 $this->sendConfirmationRequestEmail();
-	            $successMsg = $confirmMsg;
+	            $customer->setConfirmMsg(true);
             }
         }
-
-        $this->save();
-
-	    //check if any success msg was set during process and add it to session
-	    if($successMsg) {
-		    $helper = Mage::helper("zolagonewsletter");
-		    Mage::getSingleton('customer/session')->addSuccess($helper->__($successMsg));
-	    }
 
         return $this;
     }
 
-	protected function getCustomerStoreId($customer) {
+	protected function _getCustomerStoreId($customer) {
 		return
 			$customer->getStoreId()
 			? $customer->getStoreId()
@@ -168,7 +155,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendUnsubscriptionEmail($sid=null)
 	{
-		return $this->sendNewsletterEmail(
+		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE),
 			Mage::getStoreConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY)
@@ -181,7 +168,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationRequestEmail($sid=null)
 	{
-		return $this->sendNewsletterEmail(
+		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE),
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY)
@@ -189,7 +176,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	}
 
 
-	protected function sendNewsletterEmail($sid=null,$template,$sender) {
+	protected function _sendNewsletterEmail($sid=null,$template,$sender) {
 		if ($this->getImportMode() || !$template || !$sender) {
 			return $this;
 		}
@@ -219,7 +206,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 				'subscriber' => $subscriber,
 				'use_attachments' => true
 			),
-			$this->getCustomerStoreId($customer),
+			$this->_getCustomerStoreId($customer),
 			$sender
 		);
 

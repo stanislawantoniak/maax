@@ -63,6 +63,10 @@
 	        }
 }
 
+.solrsearch-index-index #header-main {
+  padding-top: 0px;
+}
+
 #header-main {
     .wrapp-section {
         border: none;
@@ -87,10 +91,11 @@
       .right-wrapper:before {
         content: '';
         position: absolute;
-        height: 70%;
-        top: 15%;
+        height: auto;
+        top: 0;
         border-right: solid 2px #F2F1F0;
         left: -20px;
+        bottom: 15px;
       }
     }
   }

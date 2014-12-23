@@ -1028,10 +1028,17 @@ form {
         }
 
       }}}
-
+	  
 
 }
 
+.customer-account-privacy .form-group.form-checkbox-single{
+	margin-bottom: 10px;
+	label{
+		font-size: 14px !important;
+	}
+}
+   
 #seller-box-bundle .seller {
   @media(max-width: $screen-xs-max) {
     width: 49%;
