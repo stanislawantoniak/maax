@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Customer>
-            <version>0.0.8</version>
+            <version>0.0.12</version>
         </Zolago_Customer>
     </modules>
     <global>
@@ -75,6 +75,15 @@
                     </zolagocustomer>
                 </observers>
 			</customer_logout>
+            <zolagocustomer_change_email_confirm>
+                <observers>
+                    <zolagocustomer>
+                        <type>singleton</type>
+                        <class>zolagocustomer/observer</class>
+                        <method>customerChangeEmailConfirm</method>
+                    </zolagocustomer>
+                </observers>
+            </zolagocustomer_change_email_confirm>
 		</events>
     </global>
     <frontend>

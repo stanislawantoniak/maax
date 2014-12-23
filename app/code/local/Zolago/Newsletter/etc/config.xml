@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Newsletter>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</Zolago_Newsletter>
 	</modules>
 	<frontend>
@@ -17,13 +17,31 @@
 		</routers>
 		<translate>
 			<modules>
-				<Your_Extension>
+				<Zolago_Newsletter>
 					<files>
 						<default>Zolago_Newsletter.csv</default>
 					</files>
-				</Your_Extension>
+				</Zolago_Newsletter>
 			</modules>
 		</translate>
+		<events>
+			<customer_save_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>subscribeCustomer</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_save_after>
+			<customer_delete_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>customerDeleted</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_delete_after>
+		</events>
 	</frontend>
 	<global>
 		<models>
@@ -45,6 +63,13 @@
 				</newsletter_subscription_invitation_email_template>
 			</email>
 		</template>
+		<resources>
+			<zolagonewsletter_setup>
+				<setup>
+					<module>Zolago_Newsletter</module>
+				</setup>
+			</zolagonewsletter_setup>
+		</resources>
 	</global>
 	<default>
 		<newsletter>
@@ -56,4 +81,24 @@
 			</subscription>
 		</newsletter>
 	</default>
+	<adminhtml>
+		<events>
+			<customer_save_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>subscribeCustomer</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_save_after>
+			<customer_delete_after>
+				<observers>
+					<newsletter_subscribe_observer>
+						<class>zolagonewsletter/observer</class>
+						<method>customerDeleted</method>
+					</newsletter_subscribe_observer>
+				</observers>
+			</customer_delete_after>
+		</events>
+	</adminhtml>
 </config> 
