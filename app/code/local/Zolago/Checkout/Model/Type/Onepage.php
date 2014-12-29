@@ -25,8 +25,13 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
 				$methodInstance->setQuote($this->getQuote());
 				if($newData = $methodInstance->getMappedPayment()){
-					//Mage::log($newData);
+					// Instatize new payemnt instance
+					$instance = Mage::helper('payment')->getMethodInstance($newData['method']);
+					$instance->setInfoInstance($payment);
+					$payment->setMethodInstance($instance);
 					$this->savePayment($newData);
+					// Save additional data - import in this model do not save the payment
+					// directly after import
 					if(isset($newData['additional_information'])){
 						$payment->setAdditionalInformation($newData['additional_information']);
 						$payment->save();
@@ -34,7 +39,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 				}
 					
 			}
-			die();
+			
 			// Parent save order
 			$return = parent::saveOrder();
 			
