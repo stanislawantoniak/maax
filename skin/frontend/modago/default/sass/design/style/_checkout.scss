@@ -173,7 +173,8 @@
 		input[type="tel"] {
 			line-height: 29px;
 		}
-		#payment_form_zolagopayment_gateway {
+		#payment_form_zolagopayment_gateway,
+        #payment_form_zolagopayment_cc {
 				list-style: none;
 				label {
 					line-height: 15px;
