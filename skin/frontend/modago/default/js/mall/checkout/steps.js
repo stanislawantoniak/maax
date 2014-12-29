@@ -1374,7 +1374,7 @@
                 var form_group_default_pay = jQuery('.default_pay');
 
                 view_block_default_pay.toggle();
-                var txt = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ? 'zmień sposób płatności-translate' : 'porzuć zmianę-translate';
+                var txt = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ?  'porzuć zmianę' : 'zmień sposób płatności';
 
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
