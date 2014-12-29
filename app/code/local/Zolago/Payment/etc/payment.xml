@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+	<zolagopayment_gateway>
+		<map>
+			<!-- 
+			<providerCode>
+				<websiteCode>
+					<target>targetPaymentCode</target>
+					<additional>
+						<key>someData</key>
+					</additional>
+				</websiteCode>
+			</providerCode>
+			-->
+			<c>
+				<default>
+					<method>dotpay</method>
+					<additional>
+						<type>c</type>
+					</additional>
+				</default>
+			</c>
+		</map>
+	</zolagopayment_gateway>
+</config>

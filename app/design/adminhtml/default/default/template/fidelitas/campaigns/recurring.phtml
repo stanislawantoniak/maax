@@ -1,0 +1,91 @@
+<?php
+/**
+ * Licentia Fidelitas - Advanced Email and SMS Marketing Automation for E-Goi
+ *
+ * NOTICE OF LICENSE
+ * This source file is subject to the Creative Commons Attribution-NonCommercial 4.0 International
+ * It is available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * @title      Advanced Email and SMS Marketing Automation
+ * @category   Marketing
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) 2012 Licentia - http://licentia.pt
+ * @license    Creative Commons Attribution-NonCommercial 4.0 International
+ */
+?>
+
+
+<?php echo $this->getFormHtml() ?>
+<?php echo $this->getBlockHtml('formkey') ?>
+<script type="text/javascript">
+
+    Event.observe(window, 'load', handlecron);
+    Event.observe(window, 'load', handlesegments);
+
+    function handlesegments() {
+        seg = $('segments_origin').value;
+
+        if (seg == "store") {
+            $('egoi_segments').up('tr').hide();
+            $('segments_ids').up('tr').show();
+            $('segments_ids').addClassName('required-entry');
+        } else {
+            $('segments_ids').up('tr').hide();
+            $('egoi_segments').up('tr').show();
+            $('segments_ids').removeClassName('required-entry');
+        }
+    }
+
+    function handlecron() {
+        recur = $('recurring').value;
+
+        all_fields = ['recurring_day', 'run_times', 'run_until', 'recurring_unique', 'recurring_daily', 'recurring_first_run', 'recurring_monthly', 'recurring_month', 'deploy_at'];
+
+        switch (recur)
+        {
+            case '0':
+                fields = ['deploy_at'];
+                break;
+            case 'd':
+                fields = ['recurring_daily', 'recurring_unique', 'run_times', 'run_until', 'recurring_first_run'];
+                break;
+            case 'w':
+                fields = ['recurring_day', 'recurring_unique', 'run_times', 'run_until', 'recurring_first_run'];
+                break;
+            case 'm':
+                fields = ['recurring_monthly', 'recurring_unique', 'run_times', 'run_until', 'recurring_first_run'];
+                break;
+            case 'y':
+                fields = ['recurring_monthly', 'recurring_unique', 'recurring_month', 'run_times', 'run_until', 'recurring_first_run'];
+                break;
+            default:
+
+        }
+
+        for (var i = 0; i < all_fields.length; i++)
+        {
+            $(all_fields[i]).up('tr').hide();
+        }
+
+        for (var i = 0; i < fields.length; i++)
+        {
+            $(fields[i]).up('tr').show();
+        }
+
+        if (recur == '0')
+        {
+            $$('.saveandsendbutton').each(function(element) {
+                $(element).show();
+            });
+        } else {
+
+            $$('.saveandsendbutton').each(function(element) {
+                $(element).hide();
+            });
+        }
+
+    }
+
+</script>
