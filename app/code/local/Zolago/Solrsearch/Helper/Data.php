@@ -547,6 +547,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return string
 	 */
 	public function getFilterUrl($query, $category, $vendor) {
+        /** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
+        $helperZDM = Mage::helper("zolagodropshipmicrosite");
+
 		$final = array();
 
 		if (empty($vendor)) {
@@ -555,7 +558,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		if (!$category || !$category->getId()) {
 			$category = null;
 			if ($vendor) {
-				$category = $vendor->rootCategory();
+				$category = $helperZDM->getVendorRootCategoryObject($vendor);
 			}
 			if (!$category) {
 				$categoryId = Mage::app()->getStore()->getRootCategoryId();
@@ -572,7 +575,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		} else {
 			if ($vendor) {
 				// check if vendor category
-				if ($category->getId() == $vendor->rootCategory()->getId()) {
+				if ($category->getId() == $helperZDM->getVendorRootCategoryObject($vendor)->getId()) {
 					return $vendor->getVendorUrl();
 				}
 			} else {
