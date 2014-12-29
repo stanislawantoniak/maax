@@ -21,11 +21,22 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			/**
 			 * @todo impelment the logic
 			 */
-			$payment = $this->getQuote()->getPayment();
+			$quote = $this->getQuote();
+			$payment = $quote->getPayment();
 			$methodInstance = $payment->getMethodInstance();
 			
 			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
-				Mage::log("Mapping needed " . $methodInstance->getCode());
+				$methodInstance->setQuote($this->getQuote());
+				$newData = $methodInstance->getMappedPayment();
+				if($newData){
+					Mage::log($newData);
+					$this->savePayment($newData);
+					if(isset($newData['additional_information'])){
+						$payment->setAdditionalInformation($newData['additional_information']);
+						$payment->save();
+					}
+				}
+					
 			}else{
 				Mage::log("Mapping not needed " . $methodInstance->getCode());
 			}

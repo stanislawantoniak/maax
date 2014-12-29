@@ -74,8 +74,8 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 		}
 		
 		return array(
-			"method" => "code",
-			"additional_information" => array()
+			"method" => "banktransfer",
+			"additional_information" => array("somekey"=>"value")
 		);
 	}
     
@@ -99,13 +99,22 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 						getAdditionalInformation();
             }
             
-			if($additionalInformation && $additionalInformation['provider_code']){
-				$providerCode = $additionalInformation['provider_code'];
+			if($additionalInformation && isset($additionalInformation['provider'])){
+				$providerCode = $additionalInformation['provider'];
+			}
+			
+			$providerType = "gateway";
+			if($this instanceof Zolago_Payment_Model_Cc){
+				$providerType = "cc";
 			}
 			
             if($providerCode!==null){
-                $model = Mage::getModel("zolagopayment/provider")->load($providerCode, "code");
-                if($model->getId()){
+                $model = Mage::getResourceModel("zolagopayment/provider_collection")
+						->addFieldToFilter("code", $providerCode)
+						->addFieldToFilter("type", $providerType)
+						->getFirstItem();
+						
+                if(is_object($model) && $model->getId()){
                     $this->_provider = $model;
                 }
             }
