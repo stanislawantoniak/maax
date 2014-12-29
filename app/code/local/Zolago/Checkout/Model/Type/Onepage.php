@@ -17,19 +17,15 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
      */
 	public function saveOrder() {
 		try{
-			// Do map payment here...
-			/**
-			 * @todo impelment the logic
-			 */
 			$quote = $this->getQuote();
 			$payment = $quote->getPayment();
 			$methodInstance = $payment->getMethodInstance();
 			
+			// Do map payment here...
 			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
 				$methodInstance->setQuote($this->getQuote());
-				$newData = $methodInstance->getMappedPayment();
-				if($newData){
-					Mage::log($newData);
+				if($newData = $methodInstance->getMappedPayment()){
+					//Mage::log($newData);
 					$this->savePayment($newData);
 					if(isset($newData['additional_information'])){
 						$payment->setAdditionalInformation($newData['additional_information']);
@@ -37,10 +33,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 					}
 				}
 					
-			}else{
-				Mage::log("Mapping not needed " . $methodInstance->getCode());
 			}
-			
+			die();
+			// Parent save order
 			$return = parent::saveOrder();
 			
 			// Update customer data
