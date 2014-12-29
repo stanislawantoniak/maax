@@ -5,23 +5,26 @@
     <!-- PANEL -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="top-panel">
-                <h4><?php echo $_helper->__("Wybierz sposób płatności"); ?></h4>
-                <div class="row">
-                    <div class="form-group form-checkbox small default_pay">
-						<?php if($this->getHasDefaultPayment()):?>
-							<input type="hidden" value="0" name="default_pay">
-							<input type="checkbox" class="css-checkbox " id="default_pay" value="1" name="default_pay">
-							<label class="css-label remember_this" for="default_pay">
-								<?php echo $_helper->__("Set as default payment");?>
-							</label>
-						<?php endif;?>
-                    </div>
-                </div>
-            </div>
+            <!--            <div class="top-panel">-->
+            <!--                <h4>--><?php //echo $_helper->__("Wybierz sposób płatności"); ?><!--</h4>-->
+            <!--                <div class="row">-->
+            <!--                    <div class="form-group form-checkbox small default_pay">-->
+            <!--						--><?php //if($this->getHasDefaultPayment()):?>
+            <!--							<input type="hidden" value="0" name="default_pay">-->
+            <!--							<input type="checkbox" class="css-checkbox " id="default_pay" value="1" name="default_pay">-->
+            <!--							<label class="css-label remember_this" for="default_pay">-->
+            <!--								--><?php //echo $_helper->__("Set as default payment");?>
+            <!--							</label>-->
+            <!--						--><?php //endif;?>
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <?php echo $this->getChildHtml('methods') ?>
+            <!--        </div>-->
         </div>
-    </div>
+        <div class="panel-footer">
+            <a class="underline" id="view_default_pay" href="#">zmień sposób płatności</a>
+        </div>
 </fieldset>
 
 
