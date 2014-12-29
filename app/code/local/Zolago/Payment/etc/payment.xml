@@ -1,25 +1,41 @@
 <?xml version="1.0"?>
 <config>
-	<zolagopayment_gateway>
-		<map>
-			<!-- 
-			<providerCode>
-				<websiteCode>
-					<target>targetPaymentCode</target>
-					<additional>
-						<key>someData</key>
-					</additional>
-				</websiteCode>
-			</providerCode>
-			-->
-			<c>
-				<default>
-					<method>dotpay</method>
-					<additional>
-						<type>c</type>
-					</additional>
-				</default>
-			</c>
-		</map>
-	</zolagopayment_gateway>
+	<global>
+		<zolagopayment>
+			<!-- Gateway payments -->
+			<gateway>
+				<!-- 
+				<providerCode>
+					<websiteCode>
+						<method>targetPaymentCode</method>
+						<additional_information>
+							<key>someData</key>
+						</additional_information>
+					</websiteCode>
+				</providerCode>
+				-->
+				<c>
+					<base>
+						<method>dotpay</method>
+						<additional_information>
+							<channel>47</channel>
+						</additional_information>
+					</base>
+				</c>
+				<m>
+					<base>
+						<method>dotpay</method>
+						<additional_information>
+							<channel>1</channel>
+						</additional_information>
+					</base>
+				</m>
+			</gateway>
+			
+			<!-- Credit cards -->
+			<cc>
+				<!-- Same as gateway -->
+			</cc>
+		</zolagopayment>
+	</global>
 </config>
