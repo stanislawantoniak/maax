@@ -25,7 +25,6 @@
                 <class>Zolago_Payment_Block</class>
             </zolagopayment>
         </blocks>
-       
         <resources>
             <zolagopayment_setup>
                 <setup>
@@ -36,13 +35,28 @@
     </global>
 	<default>
 		<payment>
-            <zolagopayment>
+            <zolagopayment_gateway>
                 <active>1</active>
-                <model>zolagopayment/method</model>
+                <visible>1</visible>
+                <model>zolagopayment/gateway</model>
                 <order_status>pending</order_status>
                 <title>Online Payment</title>
                 <allowspecific>0</allowspecific>
-            </zolagopayment>
+            </zolagopayment_gateway>
+            <zolagopayment_cc>
+                <active>1</active>
+                <visible>1</visible>
+                <model>zolagopayment/cc</model>
+                <order_status>pending</order_status>
+                <title>Credit Card</title>
+                <allowspecific>0</allowspecific>
+            </zolagopayment_cc>
+			<cashondelivery>
+                <visible>1</visible>
+			</cashondelivery>
+			<banktransfer>
+                <visible>1</visible>
+			</banktransfer>
         </payment>
 	</default>
 </config>
