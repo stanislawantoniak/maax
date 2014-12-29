@@ -78,7 +78,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
      * @param $_method
      * @return bool
      */
-    protected function _getIsVisibleInCheckout($_method)
+    protected function _getIsVisibleInCheckout(Mage_Payment_Model_Method_Abstract $_method)
     {
         if ($this->getIsOnline($_method) || $this->getIsCreditCard($_method)) {
             $paymentVisible = Mage::getStoreConfig('payment/' . $_method->getCode() . '/visible');
@@ -86,7 +86,6 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
         }
         return true;
     }
-
 
 
     /**
