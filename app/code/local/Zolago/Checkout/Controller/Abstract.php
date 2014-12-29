@@ -199,6 +199,9 @@ abstract class Zolago_Checkout_Controller_Abstract
 			}else{
 				$this->_getCustomerSession()->setTransferPayment(null);
 			}
+
+			//save selected payment to session in order to retrieve it after page refresh
+			$this->_getCheckoutSession()->setPayment($payment);
 		}
 		
 

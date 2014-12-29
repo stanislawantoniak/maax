@@ -16,18 +16,23 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
      */
     public function getSelectedMethodCode()
     {
-        if ($this->getSession()->isLoggedIn()) {
+        $method = false;
+        $payment = Mage::helper("zolagocheckout")->getPaymentFromSession();
+
+        if(!is_null($payment) && is_array($payment)) {
+            $method = $payment['method'];
+        } elseif ($this->getSession()->isLoggedIn()) {
             $customer = $this->getSession()->getCustomer();
 
             if ($customer instanceof Mage_Customer_Model_Customer) {
                 $info = $customer->getLastUsedPayment();
                 if (is_array($info) && isset($info['method'])) {
                     $method = $info['method'];
-                    return $method;
                 }
             }
         }
-        return false;
+
+        return $method ? $method : false;
     }
 
     /**

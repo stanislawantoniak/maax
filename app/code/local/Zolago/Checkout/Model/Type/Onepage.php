@@ -20,7 +20,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			$quote = $this->getQuote();
 			$payment = $quote->getPayment();
 			$methodInstance = $payment->getMethodInstance();
-			
+
 			// Do map payment here...
 			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
 				$methodInstance->setQuote($this->getQuote());
@@ -32,21 +32,28 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 						$payment->save();
 					}
 				}
-					
 			}
-			die();
+			//die();
 			// Parent save order
 			$return = parent::saveOrder();
 			
 			// Update customer data
-			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
-				$this->getQuote()->getCustomerId()){
-				/**
-				 * @todo add last used payment to customer
-				 */
+            $customerPayment = $this->_checkoutSession->getPayment(true);
+			if(!is_null($customerPayment)
+                && is_array($customerPayment)
+                && Mage::getSingleton('customer/session')->isLoggedIn()
+                && $this->getQuote()->getCustomerId()){
+                Mage::log($customerPayment);
+                if(isset($customerPayment['method'])) {
+                    $this->getQuote()->getCustomer()->setPaymentMethod($customerPayment['method']);
+                }
+                if(isset($customerPayment['additional_information']['provider'])) {
+                    $this->getQuote()->getCustomer()->setPaymentProvider($customerPayment['additional_information']['provider']);
+                }
 				$this->getQuote()->getCustomer()->save();
 			}
 
+            //newsletter actions
 			$agreements = $this->_checkoutSession->getAgreements(true);
             /** @var Zolago_Newsletter_Model_Inviter $model */
             $model = Mage::getModel('zolagonewsletter/inviter');

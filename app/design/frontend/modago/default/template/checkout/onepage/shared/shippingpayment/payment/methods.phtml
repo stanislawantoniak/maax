@@ -1,5 +1,9 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Methods*/  ?>
+<?php /** @var Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Methods $this */ ?>
+
 <?php
+    /** @var Zolago_Checkout_Helper_Data $_helper */
+    $_helper = Mage::helper("zolagocheckout");
+    $selectedPayment = $_helper->getPaymentFromSession();
     $methods = $this->getMethods();
     $oneMethod = count($methods) <= 1;
 ?>
@@ -13,6 +17,7 @@
         <div class="panel panel-default">
         <div class="panel-body">
                 <div class="form-group form-radio">
+                    <div>
                     <?php if(!$oneMethod): ?>
                         <input id="p_method_<?php echo $_code ?>" 
 							   value="<?php echo $_code ?>" 
@@ -23,7 +28,7 @@
 							   data-online="<?php echo $this->getIsOnline($_method) ?>"
 							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?> 
 							   class="css-radio payment-method" 
-							   required="required"  />
+							   required="required" />
                     <?php else: ?>
                         <span class="no-display">
 							<input id="p_method_<?php echo $_code ?>" 
@@ -37,25 +42,21 @@
                         <?php $oneMethod = $_code; ?>
                     <?php endif; ?>
                     <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
-                        <span class="pull-left">
-                            <strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
-                            <br>
+                        <span class="pull-left"><strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
+                            <br />
                             Payment description here
                             <?php echo $this->getMethodLabelAfterHtml($_method) ?>
                         </span>
-                        <?php $paymentIcons = $this->getPaymentMethodIcon($_code); ?>
-                        <?php if (!empty($paymentIcons)): ?>
-                            <?php foreach ($paymentIcons as $paymentIcon): ?>
-                                <img alt="" src="<?php echo $paymentIcon; ?>" class="pull-right flag_pay_method" />
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                        <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" class="pull-right flag_pay_method">
                     </label>
+                        </div>
+
+                    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+                    <div class="selected_bank">
+                        <?php echo $html; ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
-
-            <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
-                <?php echo $html; ?>
-            <?php endif; ?>
-
         </div>
         </div>
 
@@ -65,31 +66,16 @@
 <?php echo $this->getChildChildHtml('additional'); ?>
 <script type="text/javascript">
     //<![CDATA[
-//    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank').show();
-//
-//    jQuery('[name="payment[method]"]').click(function () {
-//        if (jQuery(this).is(':checked')) {
-//            jQuery('.default_pay .form-group .selected_bank').hide();
-//            jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);
-//            jQuery(this).parents('.form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "").prop("disabled",false);
-//            jQuery(this).parents('.form-group').find('.selected_bank').show();
-//
-//        } else {
-//            jQuery(this).parents('.form-group').find('.selected_bank').hide();
-//        }
-//    })
-
-
-    var default_pay_bank = jQuery('.default_pay input[name="payment[method]"]');
-    jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
-
-
-    jQuery(default_pay_bank).on('change', function(){
-        jQuery(default_pay_bank).closest('.panel').removeClass('payment-selected');
-        jQuery(this).closest('.panel').addClass('payment-selected');
-        jQuery('.selected_bank').hide();
-        jQuery(this).closest('.form-group').next('.selected_bank').show();
+    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank ul').show();
+    jQuery('[name="payment[method]"]').click(function () {
+        if (jQuery(this).is(':checked')) {
+            jQuery('.default_pay .form-group .selected_bank ul').hide();
+            jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);
+            jQuery(this).parents('.form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "").prop("disabled",false);
+            jQuery(this).parents('.form-group').find('.selected_bank ul').show();
+        } else {
+            jQuery(this).parents('.form-group').find('.selected_bank ul').hide();
+        }
     });
-
     //]]>
 </script>
