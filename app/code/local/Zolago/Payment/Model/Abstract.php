@@ -72,6 +72,8 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 		if(!$provider instanceof Zolago_Payment_Model_Provider){
 			return false;
 		}
+		$website = $this->getQuote()->getStore()->getWebsite();
+		Mage::getSingleton('zolagopayment/config')->getProviderConfig($website, $provider);
 		
 		return array(
 			"method" => "banktransfer",
