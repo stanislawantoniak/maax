@@ -162,8 +162,9 @@
 		}
 		.form-radio {
 			label {
+              font-size: 14px;
 				text-align: left;
-				line-height: 15px;
+				line-height: 17px;
 			}
 		}	
 		input[type="text"],
@@ -178,20 +179,35 @@
 					line-height: 15px;
 					text-align: center ;
 					cursor:pointer;
+                  .payment-provider-logo-wrapper {
+                    border:1px solid $bc-primary;
+                    background: #fff;
+                    line-height: 67px;
+                    margin-bottom: 5px;
+                    padding: 5px;
+                    display: inline-block;
+                    width:100%;
+                  }
 					img {
-						border:1px solid $bc-primary;
+//						border:1px solid $bc-primary;
 						background: #fff;
 					}
 					&:hover {
-						img {
-							border-color: #9F9F9F;//$bc-secondary;
-						}
+                      .payment-provider-logo-wrapper {
+                        border-color: #9F9F9F;//$bc-secondary;
+                      }
+//						img {
+//							border-color: #9F9F9F;//$bc-secondary;
+//						}
 					}
 				}
 				input[type=radio]:checked + label {
-					img {
-						border-color: #9F9F9F;// $bc-secondary;
-					}
+                  .payment-provider-logo-wrapper {
+                    border-color: #9F9F9F;//$bc-secondary;
+                  }
+//					img {
+//						border-color: #9F9F9F;// $bc-secondary;
+//					}
 					span {
 						text-decoration: underline
 					}
