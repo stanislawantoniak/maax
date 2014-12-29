@@ -550,7 +550,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return bool
     */
    public function isGatewayPayment() {
-	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
+	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE;
    }
 
    /**

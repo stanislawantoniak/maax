@@ -57,7 +57,8 @@
             </email>
         </template>
 		<events>
-			  <sales_order_payment_save_after>
+			<!-- need to be changed to after final payment set -->
+			<sales_order_payment_save_after>
                 <observers>
                     <zolagocustomer>
                         <type>singleton</type>

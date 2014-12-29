@@ -130,6 +130,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
         foreach(func_get_args() as $arg) {
             if(isset($currnetDoc[$arg])) {
                 $currnetDoc = $currnetDoc[$arg];
+            } else {
+                return null;
             }
         }
         return $currnetDoc;
