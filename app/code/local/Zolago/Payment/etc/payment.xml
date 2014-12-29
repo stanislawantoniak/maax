@@ -7,7 +7,7 @@
 				<!-- 
 				<providerCode>
 					<websiteCode>
-						<target>targetPaymentCode</target>
+						<method>targetPaymentCode</method>
 						<additional_information>
 							<key>someData</key>
 						</additional_information>
@@ -31,6 +31,11 @@
 					</base>
 				</m>
 			</gateway>
+			
+			<!-- Credit cards -->
+			<cc>
+				<!-- Same as gateway -->
+			</cc>
 		</zolagopayment>
 	</global>
 </config>
