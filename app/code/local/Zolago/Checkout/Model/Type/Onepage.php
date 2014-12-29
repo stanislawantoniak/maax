@@ -21,11 +21,22 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			/**
 			 * @todo impelment the logic
 			 */
-			$payment = $this->getQuote()->getPayment();
+			$quote = $this->getQuote();
+			$payment = $quote->getPayment();
 			$methodInstance = $payment->getMethodInstance();
 			
 			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
-				Mage::log("Mapping needed " . $methodInstance->getCode());
+				$methodInstance->setQuote($this->getQuote());
+				$newData = $methodInstance->getMappedPayment();
+				if($newData){
+					Mage::log($newData);
+					$this->savePayment($newData);
+					if(isset($newData['additional_information'])){
+						$payment->setAdditionalInformation($newData['additional_information']);
+						$payment->save();
+					}
+				}
+					
 			}else{
 				Mage::log("Mapping not needed " . $methodInstance->getCode());
 			}
@@ -44,7 +55,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			$agreements = $this->_checkoutSession->getAgreements(true);
             /** @var Zolago_Newsletter_Model_Inviter $model */
             $model = Mage::getModel('zolagonewsletter/inviter');
-			if($agreements['agreement_newsletter'] == 1) {
+			if(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 1) {
                 $model->addSubscriber($this->getQuote()->getCustomerEmail(),Zolago_Newsletter_Model_Subscriber::STATUS_UNCONFIRMED);
 			} elseif(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 0) {
 				// send invitation mail, model takes care of handling everything
