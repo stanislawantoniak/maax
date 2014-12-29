@@ -10,7 +10,6 @@
 class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
-
 	protected $numFound;
 
 	/**
@@ -585,5 +584,18 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return $url;
 	}
+	
+    /**
+     * price facet name
+     * @return string
+     */
+     public function getPriceFacet() {
+         $app = Mage::app()->getStore();
+         $code = $app->getCurrentCurrencyCode();
+         $id = Mage::getSingleton('customer/session')->getCustomerGroupId();
+         $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
+         return $prefix.'_price_decimal';
+    } 
+
 
 }

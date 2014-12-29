@@ -4,7 +4,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     const MODE_CATEGORY = 1;
     const MODE_SEARCH = 2;
 	
-	const FLAGS_FACET = "flags_facet";
 	const PRICE_FACET_TRANSLATED = "price_facet";
 
     const DEFAULT_RNDERER = "zolagosolrsearch/faces_enum";
@@ -28,11 +27,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return 
      */
      protected function _getPriceFacet() {
-         $app = Mage::app()->getStore();
-         $code = $app->getCurrentCurrencyCode();
-         $id = Mage::getSingleton('customer/session')->getCustomerGroupId();
-         $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
-         return $prefix.'_price_decimal';
+         return Mage::helper('zolagosolrsearch')->getPriceFacet();
      }
     //}}}
 	
@@ -41,7 +36,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return string
 	 */
 	public function getFacetLabel($facetCode){
-		if($facetCode==self::FLAGS_FACET){
+		if($facetCode==Zolago_Solrsearch_Model_Solr::FLAGS_FACET){
 			return Mage::helper('zolagosolrsearch')->__('Product Flags');
 		}
 		return parent::getFacetLabel($facetCode);
@@ -762,16 +757,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds[self::FLAGS_FACET])) {
-            $data = $facetFileds[self::FLAGS_FACET];
+        if(isset($facetFileds[Zolago_Solrsearch_Model_Solr::FLAGS_FACET])) {
+            $data = $facetFileds[Zolago_Solrsearch_Model_Solr::FLAGS_FACET];
             if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues(self::FLAGS_FACET, $data);
+                $data = $this->_prepareMultiValues(Zolago_Solrsearch_Model_Solr::FLAGS_FACET, $data);
             }
 			ksort($data);
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
-            $block->setFacetKey(self::FLAGS_FACET);
+            $block->setFacetKey(Zolago_Solrsearch_Model_Solr::FLAGS_FACET);
             $block->setAttributeCode("flags");
             return $block;
         }
@@ -786,11 +781,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds['product_rating_facet'])) {
-            $data = $facetFileds['product_rating_facet'];
+        if(isset($facetFileds[Zolago_Solrsearch_Model_Solr::RATING_FACET])) {
+            $data = $facetFileds[Zolago_Solrsearch_Model_Solr::RATING_FACET];
 
             if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues('product_rating_facet', $data);
+                $data = $this->_prepareMultiValues(Zolago_Solrsearch_Model_Solr::RATING_FACET, $data);
             }
             if(isset($data['No rating'])) {
                 unset($data['No rating']);
