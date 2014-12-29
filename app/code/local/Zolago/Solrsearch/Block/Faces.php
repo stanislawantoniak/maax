@@ -221,7 +221,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	}
 	
 	public function getRemoveAllUrl(){
-		return Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
+		return  Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
 	}
 	
 	/**
@@ -243,19 +243,27 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return $this->_mapUrlToJson($this->_parseRemoveAllUrl());
 	}
 	
-	protected function _parseRemoveAllUrl(){
+	
+    /**
+     * overriding q
+     * @param array $paramss
+     * @return array
+     */
+
+	protected function _parseUrlParams(&$paramss) {
+	    
     	$_solrDataArray = $this->getSolrData();
+    	if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
+        	if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
+        		$paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
+        	}
+        }
+	}
+	
+	protected function _parseRemoveAllUrl(){
 
     	$paramss = $this->getRequest()->getParams();
-
-    	if(!isset($paramss['q'])){
-	    	if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
-	        	if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
-	        		$paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
-	        	}
-	        }
-    	}
-
+    	$this->_parseUrlParams($paramss);
         $finalParams = array();
         if(isset($paramss['q'])) {
         	$finalParams['q'] = $paramss['q'];
@@ -328,7 +336,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     public function _parseRemoveFacesUrl($key,$value)
     {
         $paramss = $this->getRequest()->getParams();
-
+        $this->_parseUrlParams($paramss);
         $finalParams = $paramss;
 
         if (!is_array($key)) {
@@ -413,7 +421,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	public function _parseRemoveAllFacesUrl($key)
 	{
 		$paramss = $this->getRequest()->getParams();
-
+		$this->_parseUrlParams($paramss);
 		$finalParams = $paramss;
 
 		if (!is_array($key)) {
