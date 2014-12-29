@@ -109,10 +109,10 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
 				return false;
-			} elseif (is_null($status)) {
-				return true;
 			} else {
-				if($this->_canRepeatInvitation()) {
+				if($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
+                    //status 0 is when user create account (fresh new account)
+                    //in DB status is null but getSubscriberStatus return 0
 					$this->_setSubscriberId($sid);
 					$confirm_code = $subscription->getSubscriberConfirmCode();
 					if(!$confirm_code) {
@@ -197,7 +197,17 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 					$subscriber->save();
 					$this->sendConfirmationRequestEmail($subscriberId);
 					return true;
-				}
+				} else {
+                    $subscriber->setStatus($status);
+                    $subscriber->save();
+                    if($status == self::STATUS_UNCONFIRMED) {
+                        $this->sendConfirmationRequestEmail($subscriberId);
+                    }
+                    if($status == self::STATUS_SUBSCRIBED) {
+                        $this->sendConfirmationSuccessEmail($subscriberId);
+                    }
+                    return true;
+                }
 			}
 		}
 		return false;

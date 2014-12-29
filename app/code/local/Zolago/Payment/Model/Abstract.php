@@ -1,15 +1,7 @@
 <?php
 
-class Zolago_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract {
+abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_Abstract {
 
-    const PAYMENT_METHOD_CODE = 'zolagopayment';
-
-    /**
-     * Payment method code
-     *
-     * @var string
-     */
-    protected $_code		  = self::PAYMENT_METHOD_CODE;
     protected $_formBlockType = "zolagopayment/form";
     protected $_isGateway     = true;
 	
@@ -32,6 +24,13 @@ class Zolago_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract {
     {
         return trim($this->getConfigData('instructions'));
     }
+	
+	/**
+	 * @return boolean
+	 */
+	public function hasProvider() {
+		return true;
+	}
     
     /**
 	 * 
@@ -58,6 +57,27 @@ class Zolago_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract {
         $this->_quote = $quote;
         return $this;
     }
+	
+	/**
+	 * @return false | array(
+	 *  	"method" => "code",
+	 *  	"additional_information" => array()
+	 * )
+	 */
+	public function getMappedPayment(Zolago_Payment_Model_Provider $provider = null) {
+		if(null===$provider){
+			$provider = $this->getProvider();
+		}
+		
+		if(!$provider instanceof Zolago_Payment_Model_Provider){
+			return false;
+		}
+		
+		return array(
+			"method" => "code",
+			"additional_information" => array()
+		);
+	}
     
     /**
      * @return Zolago_Payment_Model_Provider|false

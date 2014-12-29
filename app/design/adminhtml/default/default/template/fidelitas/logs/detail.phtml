@@ -1,0 +1,81 @@
+<?php
+
+function print_ar($array, $count = 0) {
+
+    $out = '';
+
+    $i = 0;
+    $tab = '';
+    $k = 0;
+    while ($i != $count)
+    {
+        $i++;
+        $tab .= "&nbsp;&nbsp;|&nbsp;&nbsp;";
+    }
+    foreach ($array as $key => $value)
+    {
+        if (is_array($value)) {
+            $out.= $tab . "[<strong><u>$key</u></strong>]<br />";
+            $count++;
+            $out.=print_ar($value, $count);
+            $count--;
+        } else {
+            $tab2 = substr($tab, 0, -12);
+            $out.= "$tab2~ $key: <strong>$value</strong><br />";
+        }
+        $k++;
+    }
+    $count--;
+
+    return $out;
+}
+
+$detail = Mage::registry('current_log');
+?>
+<div class="content-header">
+    <h3 class="icon-head head-adminhtml-lists"><?php echo Mage::helper('fidelitas')->__('Log Detail') ?></h3>
+    <p class="form-buttons"><button style="" onclick="setLocation('<?php echo $this->getUrl('*/*/') ?>')" class="scalable back" type="button" id="id_71e88e07e5717176b09a75998f781388"><span>Back</span></button></p>
+</div>
+<div class="grid">
+    <table cellspacing="0" id="storeGrid_table" class="data">
+        <thead>
+            <tr class="headings">
+                <th class=" no-link last" colspan="2"><span class="nobr"><?php echo Mage::helper('fidelitas')->__('Log Details') ?></span></th>
+            </tr>
+        </thead>
+        <tbody id="">
+            <?php
+            $i = 0;
+            foreach ($detail->getData() as $key => $data):
+                ?>
+
+                <?php 
+                if (in_array($key, array('result', 'params'))) { 
+                    $data = unserialize($data); 
+                    if(!is_array($data))
+                        {
+                            $data = array($data);
+                        } 
+                    $data = print_ar($data);
+                }
+                if($key == 'additional_data')
+                {
+                    $tData = unserialize($data);
+                    $data = array();
+                    $data['response'] = highlight_string($tData['response'], true);
+                    $data['request'] = highlight_string($tData['request'], true);
+                    
+                    $data = print_ar($data);
+              
+                }
+            
+                ?>
+                <tr class="<?php echo $i % 2 ? 'even' : '' ?>">
+                    <td style="width:200px;" ><?php echo ucwords(str_replace('_', ' ', $key)); ?></td>
+                    <td class="last" ><?php echo $data; ?></td>
+                </tr>
+                <?php $i++; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

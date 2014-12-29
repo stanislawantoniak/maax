@@ -1,0 +1,128 @@
+<?php
+/**
+ * Licentia Fidelitas - Advanced Email and SMS Marketing Automation for E-Goi
+ *
+ * NOTICE OF LICENSE
+ * This source file is subject to the Creative Commons Attribution-NonCommercial 4.0 International  
+ * It is available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * @title      Advanced Email and SMS Marketing Automation
+ * @category   Marketing
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) 2012 Licentia - http://licentia.pt
+ * @license    Creative Commons Attribution-NonCommercial 4.0 International 
+ */
+?>
+
+<?php
+$report = Mage::registry('current_report');
+
+$apps = unserialize($report->getData('programs_totals'));
+if (count($apps) == 0):
+    ?>
+    <div class="grid">
+        <table cellspacing="0" id="storeGrid_table" class="data">
+            <thead>
+                <tr class="headings">
+                    <th class=" no-link last"><span class="nobr"><?php echo $this->__('Upssss') ?></span></th>
+                </tr>
+            </thead>
+            <tbody id="">
+                <tr title="#" class="even ">
+                    <td class="a-left last "><?php echo $this->__('No data found. Try refreshing the report once again.') ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+<?php else: ?>
+
+
+    <?php
+    $totalViews = array_sum($apps['email_client']) + array_sum($apps['webmail']) + array_sum($apps['mobile']);
+    ?>
+    <div class="grid">
+        <table cellspacing="0" id="storeGrid_table" class="data">
+            <thead>
+                <tr class="headings">
+                    <th class=" no-link last"><span class="nobr"><?php echo $this->__('Email Client') ?></span></th>
+                </tr>
+            </thead>
+            <tbody id="">
+                <tr>
+                    <td class="last"  style="text-align:center">
+                        <img src="https://chart.googleapis.com/chart?cht=p3&amp;chs=800x350&amp;chd=t:<?php echo (int) array_sum($apps['email_client']) ?>,<?php echo (int) array_sum($apps['webmail']) ?>,<?php echo (int) array_sum($apps['mobile']) ?>&amp;chdl=<?php echo Mage::helper('fidelitas')->__('Desktop Client') . ' - ' . round(array_sum($apps['email_client']) * 100 / $totalViews) ?>%|<?php echo Mage::helper('fidelitas')->__('Webmail') . ' - ' . round(array_sum($apps['webmail']) * 100 / $totalViews) ?>% |<?php echo Mage::helper('fidelitas')->__('Mobile') . ' - ' . round(array_sum($apps['mobile']) * 100 / $totalViews) ?>%&amp;chf=bg,s,ffff" >
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="grid">
+        <table cellspacing="0" id="storeGrid_table" class="data">
+            <thead>
+                <tr class="headings">
+                    <th class=" no-link"><span class="nobr"><?php echo $this->__('Email Cliente') ?></span></th>
+                    <th class=" no-link last"style="width:20%; text-align: center;"><span class="nobr"><?php echo $this->__('Views') ?></span></th>
+                </tr>
+            </thead>
+            <tbody id="">
+    <?php if (count($apps['email_client']) == 0): ?>
+                    <tr><td><?php echo $this->__('No data'); ?></td></tr>
+                <?php endif; ?>
+                <?php foreach ($apps['email_client'] as $name => $value): ?>
+                    <tr title="#" class="even pointer">
+                        <td class="a-left "><?php echo $name ?></td>
+                        <td class="a-left last" style="width:20%; text-align: center;"><?php echo $value ?></td>
+                    </tr>
+    <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="clear"></div>
+    <div class="grid">
+        <table cellspacing="0" id="storeGrid_table" class="data">
+            <thead>
+                <tr class="headings">
+                    <th class=" no-link"><span class="nobr"><?php echo $this->__('Webmail') ?></span></th>
+                    <th class=" no-link last"style="width:20%; text-align: center;"><span class="nobr"><?php echo $this->__('Views') ?></span></th>
+                </tr>
+            </thead>
+            <tbody id="">
+    <?php if (count($apps['webmail']) == 0): ?>
+                    <tr><td><?php echo $this->__('No data'); ?></td></tr>
+                <?php endif; ?>
+                <?php foreach ($apps['webmail'] as $name => $value): ?>
+                    <tr title="#" class="even pointer">
+                        <td class="a-left "><?php echo $name ?></td>
+                        <td class="a-left last" style="width:20%; text-align: center;"><?php echo $value ?></td>
+                    </tr>
+    <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="clear"></div>
+    <div class="grid">
+        <table cellspacing="0" id="storeGrid_table" class="data">
+            <thead>
+                <tr class="headings">
+                    <th class=" no-link"><span class="nobr"><?php echo Mage::helper('fidelitas')->__('Mobile') ?></span></th>
+                    <th class=" no-link last"style="width:20%; text-align: center;"><span class="nobr"><?php echo $this->__('Views') ?></span></th>
+                </tr>
+            </thead>
+            <tbody id="">
+    <?php if (count($apps['mobile']) == 0): ?>
+                    <tr><td><?php echo $this->__('No data'); ?></td></tr>
+                <?php endif; ?>
+                <?php foreach ($apps['mobile'] as $name => $value): ?>
+                    <tr title="#" class="even pointer">
+                        <td class="a-left "><?php echo $name ?></td>
+                        <td class="a-left last "  style="width:20%; text-align: center;"><?php echo $value ?></td>
+                    </tr>
+    <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
