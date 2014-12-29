@@ -57,7 +57,7 @@ body {
 .sidebar-first {
 	#content-main {
 		margin-left: 205px; 
-		@media (max-width: $screen-sm-min) {
+		@media (max-width: $screen-xs-max) {
 			margin-left: 0 !important;
 		 }
 	}

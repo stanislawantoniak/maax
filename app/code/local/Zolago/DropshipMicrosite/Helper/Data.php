@@ -62,11 +62,15 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 	
 	/**
 	 * Return vendor root category if exists or store root category
+     * if no vendor specified current vendor by default is taken
+     * @param Zolago_Dropship_Model_Vendor $vendor
 	 * @return Mage_Catalog_Model_Category
 	 */
-	public function getVendorRootCategoryObject() {
+	public function getVendorRootCategoryObject($vendor = null) {
 		if(!$this->_rootCategory){
-			$vendor =  Mage::helper('umicrosite')->getCurrentVendor();
+            if(empty($vendor) || !($vendor instanceof Zolago_Dropship_Model_Vendor)) {
+                $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            }
 			$categoryId = null;
 			if($vendor && $vendor->getId()){
 				Mage::helper('udropship')->loadCustomData($vendor);
