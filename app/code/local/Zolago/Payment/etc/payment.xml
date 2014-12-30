@@ -130,6 +130,7 @@
                         <method>dotpay</method>
                         <additional_information>
                             <channel>18</channel>
+                            <type>4</type>
                         </additional_information>
                     </base>
                 </bph>
