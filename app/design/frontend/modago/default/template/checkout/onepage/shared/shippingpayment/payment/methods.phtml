@@ -86,6 +86,7 @@
     //<![CDATA[
     jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank ul').show();
     jQuery('[name="payment[method]"]').click(function () {
+        console.log("works");
         if (jQuery(this).is(':checked')) {
             jQuery('.default_pay .form-group .selected_bank ul').hide();
             jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);

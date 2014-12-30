@@ -43,12 +43,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
                 && is_array($customerPayment)
                 && Mage::getSingleton('customer/session')->isLoggedIn()
                 && $this->getQuote()->getCustomerId()){
-                Mage::log($customerPayment);
                 if(isset($customerPayment['method'])) {
-                    $this->getQuote()->getCustomer()->setPaymentMethod($customerPayment['method']);
-                }
-                if(isset($customerPayment['additional_information']['provider'])) {
-                    $this->getQuote()->getCustomer()->setPaymentProvider($customerPayment['additional_information']['provider']);
+                    $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
                 }
 				$this->getQuote()->getCustomer()->save();
 			}

@@ -1367,75 +1367,7 @@
             doSave: true,
             _self_form_id: "co-shippingpayment",
 			_sidebarAddressesTemplate: "",
-
-            handleChangePaymentMethodClick: function (e) {
-
-                var view_block_default_pay = jQuery('.default_pay > .panel > .panel-body > .panel');
-                var form_group_default_pay = jQuery('.default_pay');
-
-                view_block_default_pay.toggle();
-                var txt = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
-
-                form_group_default_pay.closest('.row').css({marginBottom: '15px'});
-                jQuery(e.target).text(txt);
-
-                jQuery("html, body").animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, 600, 'swing', function () {
-                });
-            },
-
-            renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
-                var selectedMethodContainer = jQuery(".default_pay .top-panel .row");
-                selectedMethodContainer.find("dl dt").text(paymentMethod);
-                selectedMethodContainer.find("dl dd").text(providerText);
-                var logo = jQuery('<img />');
-                logo.attr('src', imgUrl);
-                selectedMethodContainer.find("figure").html(logo);
-                jQuery(".default_pay .top-panel").show();
-            },
-
-            handleSelectPaymentMethod: function (e) {
-                var self = this;
-
-                if (jQuery(e.target).is(":not(:checked)")) {
-                    return;
-                }
-
-                var paymentMemberName = jQuery(e.target).attr("name");
-                var paymentMethodNameAttr = "payment[method]";
-                var paymentMethodProviderNameAttr = "payment[additional_information][provider]";
-
-                var paymentMethodName;
-
-                if (paymentMemberName === paymentMethodNameAttr) {
-                    paymentMethodName = jQuery(e.target).data("payment-method");
-                    var paymentMethodCode = jQuery(e.target).val();
-
-                    if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
-                        //replace
-                        var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
-                        self.renderPaymentSelected(paymentMethodName,"", methodLogoUrl);
-
-                        //close payment selector widget
-                        jQuery('#view_default_pay').trigger("click");
-                    }
-
-
-                } else if (paymentMemberName === paymentMethodProviderNameAttr) {
-                    paymentMethodName = jQuery(e.target).closest('.panel.payment-selected').find('input[name="payment[method]"]').data("payment-method");
-                    var providerName = jQuery(e.target).data("bank-name");
-                    var bankLogoUrl = jQuery(e.target).closest('li').find('.payment-provider-logo-wrapper img').attr("src");
-
-                    //replace
-                    self.renderPaymentSelected(paymentMethodName,"Bank: " + providerName,bankLogoUrl);
-
-                    //close payment selector widget
-                    jQuery('#view_default_pay').trigger("click");
-
-                }
-
-
-            },
-
+			
 			onPrepare: function(checkoutObject){
                 this.validate.init();
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
@@ -1447,27 +1379,13 @@
                     }
 					return false;
                 });
-
-
-                this.content.find("#view_default_pay").on('click', function (e) {
-                    self.handleChangePaymentMethodClick(e);
-                    return false;
-                });
-
-
-                // Handle payment select
-                var view_block_default_pay = jQuery('.default_pay > .panel > .panel-body > .panel');
-                view_block_default_pay.toggle(); //close panels first time
-                var paymentMethod = this.content.find("input[name='payment[method]'],input[name='payment[additional_information][provider]']");
-                paymentMethod.change(function(e){
-                    self.handleSelectPaymentMethod(e);
-                }).change();
-
+				
 				this.content.find("#step-1-prev").click(function(){
 					checkoutObject.prev();
 					return false;
 				});
 
+                this.addPaymentHandling();
 			},
 			
 			onEnter: function(checkout){
@@ -1493,6 +1411,19 @@
                 }
                 return false;
 
+            },
+            addPaymentHandling: function() {
+                jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank ul').show();
+                jQuery('[name="payment[method]"]').click(function () {
+                    if (jQuery(this).is(':checked')) {
+                        jQuery('.default_pay .form-group .selected_bank ul').hide();
+                        jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);
+                        jQuery(this).parents('.form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "").prop("disabled",false);
+                        jQuery(this).parents('.form-group').find('.selected_bank ul').show();
+                    } else {
+                        jQuery(this).parents('.form-group').find('.selected_bank ul').hide();
+                    }
+                });
             },
 			getVendors: function(){
 				return Mall.reg.get("vendors");

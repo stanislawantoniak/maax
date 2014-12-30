@@ -69,7 +69,6 @@ class Mage_Checkout_Block_Onepage_Payment_Methods extends Mage_Payment_Block_For
      */
     public function getPaymentMethodFormHtml(Mage_Payment_Model_Method_Abstract $method)
     {
-        Mage::log(get_class($this->getChildHtml('payment.method.' . $method->getCode())));
          return $this->getChildHtml('payment.method.' . $method->getCode());
     }
 
