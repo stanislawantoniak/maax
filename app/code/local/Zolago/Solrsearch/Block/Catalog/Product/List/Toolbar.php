@@ -59,7 +59,17 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
         $urlParams['_current']  = true;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
+        // overwrite q
+        $q = $this->getRequest()->getParam('q');
+        if (!empty($q)) {
+            $solr = $this->getListModel()->getSolrData();
+            if (!empty($solr['responseHeader']['params']['q'])) {
+                $params['q'] = $solr['responseHeader']['params']['q'];
+                $urlParams['q'] = $solr['responseHeader']['params']['q'];
+            }
+        }
         $urlParams['_query']    = Mage::helper('zolagosolrsearch')->processFinalParams($params);
-        return $this->getUrl('*/*/*', $urlParams);
+        $url = $this->getUrl('*/*/*', $urlParams);
+        return $url;
     }
 }

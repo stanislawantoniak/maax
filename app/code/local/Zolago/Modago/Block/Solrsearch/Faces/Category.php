@@ -34,27 +34,31 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
             return null;
         }
 
-        /** @var Zolago_Dropship_Model_Vendor $_vendor */
-        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-        if ($_vendor && $_vendor->getId()) {
-            if($_vendor->rootCategory()->getId() == $this->getCurrentCategory()->getId()) {
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        /** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
+        $helperZDM = Mage::helper("zolagodropshipmicrosite");
+        $vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
+        if ($vendor && $vendor->getId()) {
+            if($vendorRootCategoryId == $this->getCurrentCategory()->getId()) {
                 return null;
             }
         }
-        $category = $this->getCurrentCategory()->getParentCategory();
-        
-        $params = $this->getRequest()->getParams();
+        $parentCategory = $this->getCurrentCategory()->getParentCategory();
         $parentCategoryUrl = null;
-        if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+        if($this->getParentBlock()->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
             $parentCategoryUrl = Mage::getUrl('',
                 array(
-                    '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
-// refs #440                    '_query' => $params   
+                    '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $parentCategory->getId())->getRequestPath(),
                 )
             );
+
+            if ($vendor && $vendor->getId() && $parentCategory->getId() == $vendorRootCategoryId) {
+                $parentCategoryUrl = $vendor->getVendorUrl();
+            }
         }
         else {
-            $id = $category->getId();
+            $id = $parentCategory->getId();
             $_solrDataArray = $this->getSolrData();
             $q = "&q=" . Mage::helper('catalogsearch')->getQueryText();
 
