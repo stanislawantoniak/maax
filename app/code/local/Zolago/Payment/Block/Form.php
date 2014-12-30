@@ -38,9 +38,9 @@ class Zolago_Payment_Block_Form extends Mage_Payment_Block_Form
     public function getProviderCollection()
     {
         $method = $this->getMethod();
-        $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
+        $type = Zolago_Payment_Model_Abstract::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
         if ($method instanceof Zolago_Payment_Model_Cc) {
-            $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
+            $type = Zolago_Payment_Model_Abstract::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
         }
         return Mage::getResourceModel("zolagopayment/provider_collection")
             ->addFieldToFilter("type", $type)
