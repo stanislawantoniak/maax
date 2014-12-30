@@ -14,6 +14,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		$this->setTemplate('zolagosolrsearch/standard/searchfaces/enum.phtml');
 	}
 	
+	
 	public function getAllItems() {
 		$data = parent::getAllItems();
 
@@ -311,14 +312,14 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	
 	public function getSolrModel() {
 		if(!$this->_solrModel){
-			$this->_solrModel = parent::getSolrModel();
+			$this->_solrModel = Mage::getModel('solrsearch/solr');
 		}
 		return $this->_solrModel;
 	}
 	
 	public function getSolrData() {
 		if(!$this->_solrData){
-			$this->_solrData = parent::getSolrData();
+			$this->_solrData = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getSolrData();
 		}
 		return $this->_solrData;
 	}

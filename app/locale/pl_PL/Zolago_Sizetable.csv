@@ -1,4 +1,4 @@
-"Size tables","Tabele rozmiarów"
+﻿"Size tables","Tabele rozmiarów"
 "Size table","Tabela rozmiarów"
 "List","Lista"
 "Assign","Przypisz"
@@ -58,3 +58,5 @@
 "Select a file","Wybierz plik"
 "Upload","Wyślij"
 "Cancel","Anuluj"
+"This field is required.","To pole jest wymagane."
+

@@ -125,7 +125,7 @@ $_collection = $this->getCollection();
 
 <script type="text/javascript">
     Mall.listing.initImagesHeight();
-    Mall.listing.setQuery("<?php echo Mage::helper('catalogsearch')->getQueryText(); ?>");
+    Mall.listing.setQuery("<?php echo Mage::helper('zolagosolrsearch')->getSolrRealQ(); ?>");
     Mall.listing.setInitProducts(<?php echo $this->getJsonProducts(); ?>);
     Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
     Mall.listing.setScrollLoadOffset(<?php echo (int) $this->getAppendWhenScroll(); ?>);
