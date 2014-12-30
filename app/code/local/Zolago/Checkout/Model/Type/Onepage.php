@@ -36,20 +36,22 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			//die();
 			// Parent save order
 			$return = parent::saveOrder();
-			
-			// Update customer data
-            $customerPayment = $this->_checkoutSession->getPayment(true);
-			if(!is_null($customerPayment)
-                && is_array($customerPayment)
-                && Mage::getSingleton('customer/session')->isLoggedIn()
-                && $this->getQuote()->getCustomerId()){
-                if(isset($customerPayment['method'])) {
-                    $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
-                }
-			}
 
-            //save customer object
-            $this->getQuote()->getCustomer()->save();
+
+            if(Mage::getSingleton('customer/session')->isLoggedIn()
+                && $this->getQuote()->getCustomerId()) {
+                // Update customer data
+                $customerPayment = $this->_checkoutSession->getPayment(true);
+                if (!is_null($customerPayment)
+                    && is_array($customerPayment)) {
+                    if (isset($customerPayment['method'])) {
+                        $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
+                    }
+                }
+
+                //save customer object
+                $this->getQuote()->getCustomer()->save();
+            }
 
             //newsletter actions
 			$agreements = $this->_checkoutSession->getAgreements(true);
