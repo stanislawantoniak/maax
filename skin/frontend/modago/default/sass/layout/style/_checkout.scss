@@ -418,7 +418,8 @@
 				}
 			}
 		}
-		#selected_bank {
+		#payment_form_zolagopayment_gateway,
+        #payment_form_zolagopayment_cc  {
 				margin:0px;
 				padding:0px;
 				li {
@@ -444,13 +445,17 @@
 						height:110px;
 					}
 					@media (min-width: 768px) and (max-width: 992px){
-						width:17.666%;
+						width:22.666%;
 						height:110px;
 					}
-					@media (min-width: 993px){
-						width:17.666%;
+					@media (min-width: 993px)and (max-width: 1090px){
+						width:30.666%;
 						height:110px;
 					}
+                  @media (min-width: 1091px){
+                    width:22.666%;
+                    height:110px;
+                  }
 					
 					&:nth-child(even) {
 						@media (max-width: 400px){
@@ -467,13 +472,17 @@
 						@media (min-width: 641px) and (max-width: 767px){
 							margin-right: 0px;
 						}
+                      @media (min-width: 768px) and (max-width: 992px){
+                        margin-right: 0px;
+                      }
+                      @media (min-width: 993px)and (max-width: 1090px){
+                        margin-right: 0px;
+                      }
 
 					}
 					&:nth-child(5n) {
-						@media (min-width: 768px) and (max-width: 992px){
-							margin-right: 0px;
-						}
-						@media (min-width: 993px){margin-right: 0px;}
+
+                      @media (min-width: 1091px){margin-right: 0px;}
 
 					}
 				}
@@ -483,15 +492,17 @@
 				label {
 					position:absolute;
 					top:0px;
-					left:0px;
+                  left:-3px;
+//					left:0px;
 					padding-left:0px;
+//                    width:132px;
 					width:auto;
 					min-height:67px;
 					padding-right: 0px;
 					img {
 						margin-bottom: 5px;
 						padding:5px;
-						width: 100%;
+//						width: 100%;
 						height: auto;
 					}
 					span {

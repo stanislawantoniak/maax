@@ -64,30 +64,4 @@ class Zolago_Customer_Model_Observer {
 
 		}
 	}
-	
-	/**
-	 * Save last used payment method and additional data
-	 * @todo handle last choosed via interfaace method, not really saved - its mapped
-	 * @param type $observer
-	 */
-	public function salesOrderPaymentSaveAfter($observer) {
-		$payment = $observer->getEvent()->getDataObject();
-		/* @var $payment Mage_Sales_Model_Order_Payment */
-		if($payment->getId() && $payment->getOrder()){
-			$order = $payment->getOrder();
-			/* @var $order Mage_Sales_Model_Order */
-			$customer = Mage::getModel("customer/customer");
-			if($order->getCustomerId()){
-				$customer->load($order->getCustomerId());
-			}
-			if($customer->getId() && Mage::getSingleton('customer/session')->getTransferPayment(true)){
-				$data = array(
-					"method"			=> $payment->getMethod(),
-					"additional_information"	=> $payment->getAdditionalInformation()
-				);
-				$customer->setLastUsedPayment($data)->save();
-			}
-		}
-	
-	}
 }

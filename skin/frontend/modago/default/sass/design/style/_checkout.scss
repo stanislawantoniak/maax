@@ -162,8 +162,9 @@
 		}
 		.form-radio {
 			label {
+              font-size: 14px;
 				text-align: left;
-				line-height: 15px;
+				line-height: 17px;
 			}
 		}	
 		input[type="text"],
@@ -172,26 +173,45 @@
 		input[type="tel"] {
 			line-height: 29px;
 		}
-		#selected_bank {
+		#payment_form_zolagopayment_gateway,
+        #payment_form_zolagopayment_cc {
 				list-style: none;
 				label {
 					line-height: 15px;
 					text-align: center ;
 					cursor:pointer;
+                  .payment-provider-logo-wrapper {
+                    border:1px solid $bc-primary;
+                    background: #fff;
+                    line-height: 67px;
+                    margin-bottom: 5px;
+                    padding: 5px;
+                    display: inline-block;
+                    width:100%;
+                    img {
+                      max-width: 120px;
+                    }
+                  }
 					img {
-						border:1px solid $bc-primary;
+//						border:1px solid $bc-primary;
 						background: #fff;
 					}
 					&:hover {
-						img {
-							border-color: #9F9F9F;//$bc-secondary;
-						}
+                      .payment-provider-logo-wrapper {
+                        border-color: #9F9F9F;//$bc-secondary;
+                      }
+//						img {
+//							border-color: #9F9F9F;//$bc-secondary;
+//						}
 					}
 				}
 				input[type=radio]:checked + label {
-					img {
-						border-color: #9F9F9F;// $bc-secondary;
-					}
+                  .payment-provider-logo-wrapper {
+                    border-color: #9F9F9F;//$bc-secondary;
+                  }
+//					img {
+//						border-color: #9F9F9F;// $bc-secondary;
+//					}
 					span {
 						text-decoration: underline
 					}
@@ -215,7 +235,7 @@
 		.panel-body {
 			.panel {
 				background:#fff;
-				&.selected {
+				&.payment-selected {
 					border-color :$bc-secondary;
 				}
 			}
@@ -233,21 +253,25 @@
 	}
 }
 
+#checkout {
+  .default_pay {
+    > .panel {
 
-.logged {
-	#checkout {
-		.default_pay {
-		> .panel {
-			
-			> .panel-footer {
-				text-align: right;
-			}
-			> .panel-body {
-				.default_pay_selected_bank {
-					text-align: right;
-				}					
-				} 
-			}
-		}
-	}
+      > .panel-footer {
+        text-align: right;
+      }
+      > .panel-body {
+        .default_pay_selected_bank {
+          text-align: right;
+          figure {
+            height: 67px;
+            img {
+              max-height: 67px;
+            }
+          }
+
+        }
+      }
+    }
+  }
 }

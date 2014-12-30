@@ -74,6 +74,22 @@
                             <show_in_store>0</show_in_store>
                             <can_be_empty>1</can_be_empty>
                         </specificcountry>
+						<p_info translate="label">
+                            <label>Info for gatway</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_info>
+						<p_email translate="label">
+                            <label>Email for gatway</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_email>
                     </fields>
                 </zolagopayment_gateway>
 				<zolagopayment_cc translate="label">
