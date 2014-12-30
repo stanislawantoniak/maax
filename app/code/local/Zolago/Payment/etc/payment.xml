@@ -51,14 +51,14 @@
                     </default>
                 </ipko>
                 <!--Przelew 24 Bank Zachodni WBK-->
-                <bzwbk24>
+                <bzwbk>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>6</channel>
                         </additional_information>
                     </default>
-                </bzwbk24>
+                </bzwbk>
                 <!--ING klienci korporacyjni-->
                 <ingc>
                     <default>
@@ -78,14 +78,14 @@
                     </default>
                 </mbc>
                 <!--KB24-->
-                <kb24>
+                <kb>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>14</channel>
                         </additional_information>
                     </default>
-                </kb24>
+                </kb>
                 <!--PKO bank polski-->
                 <pko>
                     <default>
@@ -105,14 +105,14 @@
                     </default>
                 </ca>
                 <!--Płacę z IPKONET-->
-                <iPkoNet>
+                <ipkonet>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>17</channel>
                         </additional_information>
                     </default>
-                </iPkoNet>
+                </ipkonet>
                 <!--Przelew z Bank BPH-->
                 <bph>
                     <default>
@@ -141,14 +141,14 @@
                     </default>
                 </ukash>
                 <!--mPay-->
-                <mPay>
+                <mpay>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>24</channel>
                         </additional_information>
                     </default>
-                </mPay>
+                </mpay>
                 <!--Plus bank-->
                 <pb>
                     <default>
@@ -267,23 +267,23 @@
                     </default>
                 </rpb>
                 <!--R-Przelew-->
-                <rPrzelew>
+                <r>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>48</channel>
                         </additional_information>
                     </default>
-                </rPrzelew>
+                </r>
                 <!--Meritum bank-->
-                <meritumBank>
+                <m>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>49</channel>
                         </additional_information>
                     </default>
-                </meritumBank>
+                </m>
                 <!--Toyota bank-->
                 <tb>
                     <default>
@@ -312,14 +312,14 @@
                     </default>
                 </sc>
                 <!--Zakupy na raty z dotpay-->
-                <dotpayRaty>
+                <dotpayraty>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>55</channel>
                         </additional_information>
                     </default>
-                </dotpayRaty>
+                </dotpayraty>
                 <!--Eurobank-->
                 <eb>
                     <default>
@@ -384,14 +384,14 @@
                     </default>
                 </iko>
                 <!--PeoPay-->
-                <peoPay>
+                <peopay>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>64</channel>
                         </additional_information>
                     </default>
-                </peoPay>
+                </peopay>
                 <!--Idea-->
                 <idea>
                     <default>
@@ -411,23 +411,23 @@
                     </default>
                 </mbmr>
                 <!--Pocztowy24-->
-                <p24>
+                <p>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>70</channel>
                         </additional_information>
                     </default>
-                </p24>
+                </p>
                 <!--PayPal-->
-                <payPal>
+                <paypal>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>212</channel>
                         </additional_information>
                     </default>
-                </payPal>
+                </paypal>
 			</gateway>
 			
 			<!-- Credit cards -->
@@ -442,14 +442,14 @@
                     </default>
                 </mcm>
                 <!--Visa i MasterCard-->
-                <mc-visa>
+                <visa_mc>
                     <default>
                         <method>dotpay</method>
                         <additional_information>
                             <channel>246</channel>
                         </additional_information>
                     </default>
-                </mc-visa>
+                </visa_mc>
 			</cc>
 		</zolagopayment>
 	</global>
