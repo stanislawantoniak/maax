@@ -121,4 +121,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
         }
         return $this->_provider;
     }
+
+    public function getProviderCollection($type) {
+        return Mage::getResourceModel("zolagopayment/provider_collection")
+            ->addFilterToSelect("type", $type);
+    }
 }
