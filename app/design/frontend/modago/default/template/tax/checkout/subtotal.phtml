@@ -27,6 +27,10 @@
  * @var $this Mage_Tax_Block_Checkout_Subtotal
  * @see Mage_Tax_Block_Checkout_Subtotal
  */
+
+$totals = $this->getQuote()->getTotals();
+$_totalDiscount = isset($totals['discount']) ? $totals['discount'] : null;
+
 ?>
 <?php if ($this->displayBoth()):?>
     <li>
@@ -41,5 +45,12 @@
     <li>
         <span class="val_value_products"><?php echo $this->__("Products worth"); ?>:</span>
         <?php echo $this->helper('checkout')->formatPrice($this->getTotal()->getValue()) ?>
+    </li>
+<?php endif;?>
+
+<?php if($_totalDiscount):?>
+    <li>
+        <span class="val_value_products"><?php echo $_totalDiscount->getTitle(); ?>:</span>
+        <?php echo Mage::helper('core')->formatPrice($_totalDiscount->getValue()); ?></span>
     </li>
 <?php endif;?>
