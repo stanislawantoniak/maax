@@ -23,8 +23,14 @@
             <!--        </div>-->
         </div>
         <div class="panel-footer">
-            <a class="underline" id="view_default_pay" href="#">zmień sposób płatności</a>
+            <a class="underline" id="view_default_pay" href="#">
+                <?php echo $_helper->__('select payment type'); ?>
+            </a>
         </div>
+        <script type="text/javascript">
+            Mall.translate.add("cancel-changes", "<?php echo $this->__("cancel changes"); ?>");
+            Mall.translate.add("select-payment-type", "<?php echo $this->__("select payment type"); ?>");
+        </script>
 </fieldset>
 
 

@@ -1374,12 +1374,13 @@
                 var form_group_default_pay = jQuery('.default_pay');
 
                 view_block_default_pay.toggle();
-                var txt = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ?  'porzuć zmianę' : 'zmień sposób płatności';
+                var txt = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
 
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
-                jQuery("html, body").animate({scrollTop: jQuery('.default_pay .top-panel').offset().top-130 }, 600, 'swing', function() {});
+                jQuery("html, body").animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, 600, 'swing', function () {
+                });
             },
 
             renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
