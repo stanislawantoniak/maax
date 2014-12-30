@@ -451,7 +451,11 @@
 						width:30.666%;
 						height:110px;
 					}
-                  @media (min-width: 1091px){
+                  @media (min-width: 1091px)and (max-width: 1200px){
+                    width:23.666%;
+                    height:110px;
+                  }
+                  @media (min-width: 1201px){
                     width:18.666%;
                     height:110px;
                   }
