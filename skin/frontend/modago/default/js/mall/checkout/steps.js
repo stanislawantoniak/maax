@@ -7,7 +7,7 @@
 	
 	
     Mall.Checkout.steps = {
-		
+
 		////////////////////////////////////////////////////////////////////////
 		// Addressbook
 		////////////////////////////////////////////////////////////////////////
@@ -1407,10 +1407,11 @@
                 var paymentMethodName;
 
                 if (paymentMemberName === paymentMethodNameAttr) {
-                    paymentMethodName = jQuery(e.target).data("payment-method");
                     var paymentMethodCode = jQuery(e.target).val();
 
                     if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
+                        paymentMethodName = jQuery(e.target).data("payment-method");
+
                         //replace
                         var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
                         self.renderPaymentSelected(paymentMethodName,"", methodLogoUrl);
@@ -1426,7 +1427,7 @@
                     var bankLogoUrl = jQuery(e.target).closest('li').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
-                    self.renderPaymentSelected(paymentMethodName,"Bank: " + providerName,bankLogoUrl);
+                    self.renderPaymentSelected(paymentMethodName,Mall.translate.__('bank') + ": " + providerName,bankLogoUrl);
 
                     //close payment selector widget
                     jQuery('#view_default_pay').trigger("click");
@@ -1456,8 +1457,8 @@
 
 
                 // Handle payment select
-                var view_block_default_pay = jQuery('.default_pay > .panel > .panel-body > .panel');
-                view_block_default_pay.toggle(); //close panels first time
+                var view_block_default_payS = jQuery('.checkout-singlepage-index .default_pay > .panel > .panel-body > .panel');
+                view_block_default_payS.toggle(); //close panels first time
                 var paymentMethod = this.content.find("input[name='payment[method]'],input[name='payment[additional_information][provider]']");
                 paymentMethod.change(function(e){
                     self.handleSelectPaymentMethod(e);
