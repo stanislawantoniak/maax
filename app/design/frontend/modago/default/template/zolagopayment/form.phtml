@@ -6,8 +6,7 @@
     <p><?php echo Mage::helper('zolagomodago')->__('Select your bank'); ?>:</p>
     <ul id="payment_form_<?php echo $this->getMethodCode() ?>">
 		<?php foreach($_providers as $_provider):?>
-            <?php $_isValid = $_provider->isValid();?>
-            <?php if(!$_isValid) continue; ?>
+
 		<?php $_code = $_provider->getCode();?>
 
 		<?php $_id = $this->getMethodCode()."_".$_code;?>
