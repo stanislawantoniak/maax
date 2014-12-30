@@ -40,7 +40,7 @@ class Zolago_Payment_Block_Form extends Mage_Payment_Block_Form
 	}
 	
 	public function getProviderLogoUrl(Zolago_Payment_Model_Provider $_provider) {
-		return $this->getSkinUrl("images/zolagopayment/on-" . $_provider->getCode().".gif") ; 
+		return $this->getSkinUrl("images/zolagopayment/on-" . $_provider->getCode().".png") ;
 	}
 
 	public function isChecked(Zolago_Payment_Model_Provider $_provider) {
