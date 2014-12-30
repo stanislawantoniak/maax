@@ -4,6 +4,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 
     protected $_formBlockType = "zolagopayment/form";
     protected $_isGateway     = true;
+
+    const ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY =  "gateway";
+    const ZOLAGOPAYMENT_PROVIDER_TYPE_CC =  "cc";
 	
 	/**
 	 * Zolago_Payment_Model_Provider
@@ -74,9 +77,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 		}
 		$website = $this->getQuote()->getStore()->getWebsite();
 		
-		$type = "gateway";
+		$type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
 		if($this instanceof Zolago_Payment_Model_Cc){
-			$type = "cc";
+			$type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
 		}
 		
 		return $this->getConfig()->getProviderConfig(
@@ -139,9 +142,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 
     public function getProviderCollection() {
 
-        $type = "gateway";
+        $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
         if($this instanceof Zolago_Payment_Model_Cc){
-            $type = "cc";
+            $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
         }
         return Mage::getResourceModel("zolagopayment/provider_collection")
             ->addFilterToSelect("type", $type)

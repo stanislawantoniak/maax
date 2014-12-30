@@ -7,6 +7,7 @@
     <ul id="payment_form_<?php echo $this->getMethodCode() ?>">
 		<?php foreach($_providers as $_provider):?>
 		<?php $_code = $_provider->getCode();?>
+            <?php $_type = $_provider->getType();?>
 		<?php $_id = $this->getMethodCode()."_".$_code;?>
         <li class="logo_01">
             <div class="form-group">
@@ -15,6 +16,7 @@
                        id="<?php echo $_id;?>" name="payment[additional_information][provider]"
                        value="<?php echo $this->escapeHtml($_code);?>"
                        data-bank-name="<?php echo $this->escapeHtml($_provider->getName());?>"
+                       data-type="<?php echo $_type;?>"
                     />
                 <label for="<?php echo $_id; ?>" class="clearfix">
                     <div class="payment-provider-logo-wrapper">
