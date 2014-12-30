@@ -49,7 +49,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
             'orbacommon_ajax_customer_get_account_information'
         );
 
-        if (!in_array($actionName, $goActions) && strpos($actionName,"checkout_") === false) {
+        if (!in_array($actionName, $goActions) && $action->getRequest()->getModuleName()!="checkout") {
             return;
         }
 
