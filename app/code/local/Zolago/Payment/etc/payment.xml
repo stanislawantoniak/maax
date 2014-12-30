@@ -14,27 +14,442 @@
 					</websiteCode>
 				</providerCode>
 				-->
-				<c>
-					<base>
-						<method>dotpay</method>
-						<additional_information>
-							<channel>47</channel>
-						</additional_information>
-					</base>
-				</c>
-				<m>
-					<base>
-						<method>dotpay</method>
-						<additional_information>
-							<channel>1</channel>
-						</additional_information>
-					</base>
-				</m>
+                
+                <!--mTransfer-->
+                <mt>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>1</channel>
+                        </additional_information>
+                    </default>
+                </mt><!--Płacę z Inteligo-->
+                <inteligo>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>2</channel>
+                        </additional_information>
+                    </default>
+                </inteligo>
+                <!--mBank multiTransfer-->
+                <mbmt>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>3</channel>
+                        </additional_information>
+                    </default>
+                </mbmt>
+                <!--Płacę z iPKO-->
+                <ipko>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>4</channel>
+                        </additional_information>
+                    </default>
+                </ipko>
+                <!--Przelew 24 Bank Zachodni WBK-->
+                <bzwbk24>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>6</channel>
+                        </additional_information>
+                    </default>
+                </bzwbk24>
+                <!--ING klienci korporacyjni-->
+                <ingc>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>7</channel>
+                        </additional_information>
+                    </default>
+                </ingc>
+                <!--Millenium bank klienci korporacyjni-->
+                <mbc>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>10</channel>
+                        </additional_information>
+                    </default>
+                </mbc>
+                <!--KB24-->
+                <kb24>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>14</channel>
+                        </additional_information>
+                    </default>
+                </kb24>
+                <!--PKO bank polski-->
+                <pko>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>15</channel>
+                        </additional_information>
+                    </default>
+                </pko>
+                <!--Credit Agricole-->
+                <ca>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>16</channel>
+                        </additional_information>
+                    </default>
+                </ca>
+                <!--Płacę z IPKONET-->
+                <iPkoNet>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>17</channel>
+                        </additional_information>
+                    </default>
+                </iPkoNet>
+                <!--Przelew z Bank BPH-->
+                <bph>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>18</channel>
+                        </additional_information>
+                    </default>
+                </bph>
+                <!--Moje rachunki-->
+                <mr>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>21</channel>
+                        </additional_information>
+                    </default>
+                </mr>
+                <!--Ukash use your cash online-->
+                <ukash>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>22</channel>
+                        </additional_information>
+                    </default>
+                </ukash>
+                <!--mPay-->
+                <mPay>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>24</channel>
+                        </additional_information>
+                    </default>
+                </mPay>
+                <!--Plus bank-->
+                <pb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>25</channel>
+                        </additional_information>
+                    </default>
+                </pb>
+                <!--Bank BGŻ-->
+                <bgz>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>27</channel>
+                        </additional_information>
+                    </default>
+                </bgz>
+                <!--Żabka-->
+                <zabka>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>31</channel>
+                        </additional_information>
+                    </default>
+                </zabka>
+                <!--BNP paribas-->
+                <bnp>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>32</channel>
+                        </additional_information>
+                    </default>
+                </bnp>
+                <!--Volkswagen bank direct-->
+                <v>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>33</channel>
+                        </additional_information>
+                    </default>
+                </v>
+                <!--Kantor Polski SA-->
+                <kp>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>35</channel>
+                        </additional_information>
+                    </default>
+                </kp>
+                <!--Bank Pekao Pekao24Przelew-->
+                <pekao>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>36</channel>
+                        </additional_information>
+                    </default>
+                </pekao>
+                <!--Płać z ING-->
+                <ing>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>38</channel>
+                        </additional_information>
+                    </default>
+                </ing>
+                <!--Bank Spółdzielczy-->
+                <bs>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>43</channel>
+                        </additional_information>
+                    </default>
+                </bs>
+                <!--Millenium bank-->
+                <mb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>44</channel>
+                        </additional_information>
+                    </default>
+                </mb>
+                <!--Alior bank-->
+                <ab>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>45</channel>
+                        </additional_information>
+                    </default>
+                </ab>
+                <!--City handlowy-->
+                <ch>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>46</channel>
+                        </additional_information>
+                    </default>
+                </ch>
+                <!--Raiffeisen polbank-->
+                <rpb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>47</channel>
+                        </additional_information>
+                    </default>
+                </rpb>
+                <!--R-Przelew-->
+                <rPrzelew>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>48</channel>
+                        </additional_information>
+                    </default>
+                </rPrzelew>
+                <!--Meritum bank-->
+                <meritumBank>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>49</channel>
+                        </additional_information>
+                    </default>
+                </meritumBank>
+                <!--Toyota bank-->
+                <tb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>50</channel>
+                        </additional_information>
+                    </default>
+                </tb>
+                <!--BOŚ bank-->
+                <bos>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>51</channel>
+                        </additional_information>
+                    </default>
+                </bos>
+                <!--SkyCash-->
+                <sc>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>52</channel>
+                        </additional_information>
+                    </default>
+                </sc>
+                <!--Zakupy na raty z dotpay-->
+                <dotpayRaty>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>55</channel>
+                        </additional_information>
+                    </default>
+                </dotpayRaty>
+                <!--Eurobank-->
+                <eb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>56</channel>
+                        </additional_information>
+                    </default>
+                </eb>
+                <!--Getinbank-->
+                <gb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>57</channel>
+                        </additional_information>
+                    </default>
+                </gb>
+                <!--Deutsche bank-->
+                <db>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>58</channel>
+                        </additional_information>
+                    </default>
+                </db>
+                <!--T-Mobile bank-->
+                <tmb>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>60</channel>
+                        </additional_information>
+                    </default>
+                </tmb>
+                <!--Bank Pocztowy-->
+                <bp>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>61</channel>
+                        </additional_information>
+                    </default>
+                </bp>
+                <!--Bank DnB NORD-->
+                <bdnbnord>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>62</channel>
+                        </additional_information>
+                    </default>
+                </bdnbnord>
+                <!--Płacę z IKO-->
+                <iko>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>63</channel>
+                        </additional_information>
+                    </default>
+                </iko>
+                <!--PeoPay-->
+                <peoPay>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>64</channel>
+                        </additional_information>
+                    </default>
+                </peoPay>
+                <!--Idea-->
+                <idea>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>65</channel>
+                        </additional_information>
+                    </default>
+                </idea>
+                <!--mBank mRaty-->
+                <mbmr>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>68</channel>
+                        </additional_information>
+                    </default>
+                </mbmr>
+                <!--Pocztowy24-->
+                <p24>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>70</channel>
+                        </additional_information>
+                    </default>
+                </p24>
+                <!--PayPal-->
+                <payPal>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>212</channel>
+                        </additional_information>
+                    </default>
+                </payPal>
 			</gateway>
 			
 			<!-- Credit cards -->
 			<cc>
-				<!-- Same as gateway -->
+                <!--MasterCard Mobile-->
+                <mcm>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>245</channel>
+                        </additional_information>
+                    </default>
+                </mcm>
+                <!--Visa i MasterCard-->
+                <mc-visa>
+                    <default>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>246</channel>
+                        </additional_information>
+                    </default>
+                </mc-visa>
 			</cc>
 		</zolagopayment>
 	</global>
