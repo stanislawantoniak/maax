@@ -263,6 +263,13 @@
       > .panel-body {
         .default_pay_selected_bank {
           text-align: right;
+          figure {
+            height: 67px;
+            img {
+              max-height: 67px;
+            }
+          }
+
         }
       }
     }
