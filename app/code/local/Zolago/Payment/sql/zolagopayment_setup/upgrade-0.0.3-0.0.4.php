@@ -7,7 +7,7 @@ $installer->startSetup();
 
 $table = $installer->getTable('zolagopayment/provider');
 
-
+$installer->getConnection()->truncateTable($table);
 
 $installer->getConnection()->query("
 INSERT INTO `". $table ."` (`provider_id`, `code`, `is_active`, `name`, `created_at`, `updated_at`, `type`) VALUES
