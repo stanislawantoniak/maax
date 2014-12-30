@@ -1457,8 +1457,8 @@
 
 
                 // Handle payment select
-                var view_block_default_pay = jQuery('.default_pay > .panel > .panel-body > .panel');
-                view_block_default_pay.toggle(); //close panels first time
+                var view_block_default_payS = jQuery('.checkout-singlepage-index .default_pay > .panel > .panel-body > .panel');
+                view_block_default_payS.toggle(); //close panels first time
                 var paymentMethod = this.content.find("input[name='payment[method]'],input[name='payment[additional_information][provider]']");
                 paymentMethod.change(function(e){
                     self.handleSelectPaymentMethod(e);
