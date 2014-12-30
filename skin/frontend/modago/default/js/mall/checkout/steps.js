@@ -1426,7 +1426,7 @@
                     var bankLogoUrl = jQuery(e.target).closest('li').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
-                    self.renderPaymentSelected(paymentMethodName,"Bank: " + providerName,bankLogoUrl);
+                    self.renderPaymentSelected(paymentMethodName,Mall.translate.__('bank') + ": " + providerName,bankLogoUrl);
 
                     //close payment selector widget
                     jQuery('#view_default_pay').trigger("click");
