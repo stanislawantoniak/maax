@@ -426,8 +426,7 @@
 					display:inline-block;
 					width:132px;
 					height:100px;
-					margin-right: 10px;
-					margin-bottom: 15px;
+					margin: 2px 2px 15px 2px;
 					@media (max-width: 380px){
 						width:47%;
 						height:89px;
@@ -437,7 +436,7 @@
 						height:100px;
 					}
 					@media (min-width: 401px) and (max-width: 640px){
-						width:30.333%;
+						width:47.333%;
 						height:100px;
 					}
 					@media (min-width: 641px) and (max-width: 767px){
@@ -453,38 +452,38 @@
 						height:110px;
 					}
                   @media (min-width: 1091px){
-                    width:22.666%;
+                    width:18.666%;
                     height:110px;
                   }
 					
-					&:nth-child(even) {
-						@media (max-width: 400px){
-							margin-right: 0px;
-						}
-					}
-					&:nth-child(3n) {
-						@media (min-width: 401px) and (max-width: 640px){
-							margin-right: 0px;
-						}
-
-					}
-					&:nth-child(4n) {
-						@media (min-width: 641px) and (max-width: 767px){
-							margin-right: 0px;
-						}
-                      @media (min-width: 768px) and (max-width: 992px){
-                        margin-right: 0px;
-                      }
-                      @media (min-width: 993px)and (max-width: 1090px){
-                        margin-right: 0px;
-                      }
-
-					}
-					&:nth-child(5n) {
-
-                      @media (min-width: 1091px){margin-right: 0px;}
-
-					}
+//					&:nth-child(even) {
+//						@media (max-width: 400px){
+//							margin-right: 0px;
+//						}
+//					}
+//					&:nth-child(3n) {
+//						@media (min-width: 401px) and (max-width: 640px){
+//							margin-right: 0px;
+//						}
+//
+//					}
+//					&:nth-child(4n) {
+//						@media (min-width: 641px) and (max-width: 767px){
+//							margin-right: 0px;
+//						}
+//                      @media (min-width: 768px) and (max-width: 992px){
+//                        margin-right: 0px;
+//                      }
+//                      @media (min-width: 993px)and (max-width: 1090px){
+//                        margin-right: 0px;
+//                      }
+//
+//					}
+//					&:nth-child(5n) {
+//
+//                      @media (min-width: 1091px){margin-right: 0px;}
+//
+//					}
 				}
 				.form-group {
 					position:relative;

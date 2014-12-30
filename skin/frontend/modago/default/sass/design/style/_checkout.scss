@@ -190,6 +190,15 @@
                     width:100%;
                     img {
                       max-width: 120px;
+                      @media (max-width: 380px){
+                        max-width: 110px;
+                      }
+                      @media (min-width: 401px) and (max-width: 640px){
+                        max-width: 130px;
+                      }
+                      @media (min-width: 641px) and (max-width: 767px){
+                        max-width: 110px;
+                      }
                     }
                   }
 					img {
