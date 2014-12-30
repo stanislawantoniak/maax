@@ -73,12 +73,25 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 			return false;
 		}
 		$website = $this->getQuote()->getStore()->getWebsite();
-		Mage::getSingleton('zolagopayment/config')->getProviderConfig($website, $provider);
 		
-		return array(
-			"method" => "banktransfer",
-			"additional_information" => array("somekey"=>"value")
+		$type = "gateway";
+		if($this instanceof Zolago_Payment_Model_Cc){
+			$type = "cc";
+		}
+		
+		return $this->getConfig()->getProviderConfig(
+			$website, 
+			$provider, 
+			$type
 		);
+	}
+	
+	
+	/**
+	 * @return Zolago_Payment_Model_Config
+	 */
+	public function getConfig() {
+		return Mage::getSingleton('zolagopayment/config');
 	}
     
     /**
