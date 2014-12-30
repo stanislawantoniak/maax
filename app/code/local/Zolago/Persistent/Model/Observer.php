@@ -52,7 +52,6 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
         if (!in_array($actionName, $goActions) && strpos($actionName,"checkout_") === false) {
             return;
         }
-		Mage::log($actionName);
 
         /* @var $checkoutSession Mage_Checkout_Model_Session */
         $checkoutSession = Mage::getSingleton('checkout/session');
