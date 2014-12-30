@@ -16,7 +16,7 @@ class Zolago_Dotpay_Model_PaymentMethod extends Dotpay_Dotpay_Model_PaymentMetho
 			parent::getRedirectionFormData()
 		);
 		
-		Mage::log($data);
+		//Mage::log($data);
 		return $data;
 	}
 	
