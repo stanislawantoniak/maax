@@ -1367,7 +1367,7 @@
             doSave: true,
             _self_form_id: "co-shippingpayment",
 			_sidebarAddressesTemplate: "",
-
+			
             handleChangePaymentMethodClick: function (e) {
 
                 var view_block_default_pay = jQuery('.default_pay > .panel > .panel-body > .panel');
@@ -1447,7 +1447,7 @@
                     }
 					return false;
                 });
-
+				
 
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
