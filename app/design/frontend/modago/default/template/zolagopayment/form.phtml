@@ -7,6 +7,7 @@
     <ul id="payment_form_<?php echo $this->getMethodCode() ?>">
 		<?php foreach($_providers as $_provider):?>
 		<?php $_code = $_provider->getCode();?>
+
 		<?php $_id = $this->getMethodCode()."_".$_code;?>
         <li class="logo_01">
             <div class="form-group">

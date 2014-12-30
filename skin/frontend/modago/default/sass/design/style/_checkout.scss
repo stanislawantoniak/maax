@@ -188,6 +188,9 @@
                     padding: 5px;
                     display: inline-block;
                     width:100%;
+                    img {
+                      max-width: 120px;
+                    }
                   }
 					img {
 //						border:1px solid $bc-primary;
@@ -250,21 +253,25 @@
 	}
 }
 
+#checkout {
+  .default_pay {
+    > .panel {
 
-.logged {
-	#checkout {
-		.default_pay {
-		> .panel {
-			
-			> .panel-footer {
-				text-align: right;
-			}
-			> .panel-body {
-				.default_pay_selected_bank {
-					text-align: right;
-				}					
-				} 
-			}
-		}
-	}
+      > .panel-footer {
+        text-align: right;
+      }
+      > .panel-body {
+        .default_pay_selected_bank {
+          text-align: right;
+          figure {
+            height: 67px;
+            img {
+              max-height: 67px;
+            }
+          }
+
+        }
+      }
+    }
+  }
 }

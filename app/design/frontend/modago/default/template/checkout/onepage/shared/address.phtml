@@ -65,12 +65,12 @@ $_billingAddress = $_quote->getBillingAddress();
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="row">
-							<div class="col-sm-6">  
+							<div class="col-sm-6">
 								<p><?php echo $this->__("Set up your password to track your order and easily buy next time."); ?></p>
 							</div>
-						</div> 
+						</div>
 					</div>
-				</div> 
+				</div>
 				<div class="row">
 					<div id="add_pass" class="col-sm-12">
 
@@ -81,20 +81,22 @@ $_billingAddress = $_quote->getBillingAddress();
 			</fieldset>
             <?php endif; ?>
 			<div class="row hide-success-vaild ">
+                <?php $agreements = $this->getAgreements(); ?>
 				<?php if(!$this->isCustomerSubscribed()):?>
 				<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container">
 					<input type="hidden" name="agreement[newsletter]" value="0" />
 					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
 					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
-						   <?php if($this->getAgreements()['agreement_newsletter']):?>checked="checked"<?php endif;?>
+						   <?php if($agreements['agreement_newsletter']):?>checked="checked"<?php endif;?>
 						>
 					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
 				</div>
 				<?php endif;?>
 				<div class="form-group form-checkbox small text-align-left">
+
 					<input type="checkbox" id="agreement_tos" class="css-checkbox invoice_vat"
 					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
-					       <?php if($this->getAgreements()['agreement_tos']):?>checked="checked"<?php endif;?>
+					       <?php if($agreements['agreement_tos']):?>checked="checked"<?php endif;?>
 						>
 					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
 				</div>
