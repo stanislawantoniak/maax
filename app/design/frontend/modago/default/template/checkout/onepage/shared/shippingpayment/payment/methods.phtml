@@ -39,7 +39,7 @@
 							   title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" 
 							   data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
 							   data-online="<?php echo $this->getIsOnline($_method) ?>"
-							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?> 
+							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?>
 							   class="css-radio payment-method" 
 							   required="required"  />
                     <?php else: ?>
@@ -50,7 +50,7 @@
 								data-online="<?php echo $this->getIsOnline($_method) ?>"
 								type="radio" 
 								name="payment[method]" 
-								checked="checked" 
+								checked="checked"
 								class="radio payment-method" /></span>
                         <?php $oneMethod = $_code; ?>
                     <?php endif; ?>

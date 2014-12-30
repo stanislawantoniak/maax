@@ -1407,10 +1407,11 @@
                 var paymentMethodName;
 
                 if (paymentMemberName === paymentMethodNameAttr) {
-                    paymentMethodName = jQuery(e.target).data("payment-method");
                     var paymentMethodCode = jQuery(e.target).val();
 
                     if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
+                        paymentMethodName = jQuery(e.target).data("payment-method");
+
                         //replace
                         var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
                         self.renderPaymentSelected(paymentMethodName,"", methodLogoUrl);
