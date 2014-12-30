@@ -250,21 +250,18 @@
 	}
 }
 
+#checkout {
+  .default_pay {
+    > .panel {
 
-.logged {
-	#checkout {
-		.default_pay {
-		> .panel {
-			
-			> .panel-footer {
-				text-align: right;
-			}
-			> .panel-body {
-				.default_pay_selected_bank {
-					text-align: right;
-				}					
-				} 
-			}
-		}
-	}
+      > .panel-footer {
+        text-align: right;
+      }
+      > .panel-body {
+        .default_pay_selected_bank {
+          text-align: right;
+        }
+      }
+    }
+  }
 }
