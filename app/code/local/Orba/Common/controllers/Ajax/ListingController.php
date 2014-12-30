@@ -70,7 +70,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	 * @return type
 	 */
 	protected function _getSolrParam(Zolago_Solrsearch_Model_Catalog_Product_List $listModel, $param) {
-		return $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param);
+		if (is_null($out = $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param))) {
+		    $out = $listModel->getCollection()->getSolrData('responseHeader', 'params', $param);
+		}
+		return $out;
 	}
 	
 	/**
@@ -82,9 +85,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		//$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
-		//$profiler->start();
-		
-		
+		//$profiler->start();		
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
 			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
