@@ -46,8 +46,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
                 if(isset($customerPayment['method'])) {
                     $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
                 }
-				$this->getQuote()->getCustomer()->save();
 			}
+
+            //save customer object
+            $this->getQuote()->getCustomer()->save();
 
             //newsletter actions
 			$agreements = $this->_checkoutSession->getAgreements(true);
