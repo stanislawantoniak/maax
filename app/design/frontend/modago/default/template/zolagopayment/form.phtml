@@ -8,9 +8,10 @@
         class="col-xs-12 col-sm-12 col-md-12 col-lg-15 "
         >
         <?php $i=1;?>
-		<?php foreach($_providers as $_provider):?>
+		<?php foreach($_providers as $_provider): ?>
+        <?php if (!$_provider->isValid()): continue; endif; ?>
 
-		<?php $_code = $_provider->getCode();?>
+        <?php $_code = $_provider->getCode(); ?>
 
 		<?php $_id = $this->getMethodCode()."_".$_code;?>
         <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3-pi provider-item" >
