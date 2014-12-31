@@ -121,112 +121,108 @@
 			}
 		}
 	}
-	form {		
-		fieldset {
-			
-			&.no-border {
-				border:none;
-			}
-			legend {
-				font-size: 14px;
-				font-weight: bold;
-				color:#000;
-				border-color:#eeedf0;				
-			}
-		}
+  form {
+    fieldset {
 
-		label {
-			font-size: 12px;
-			line-height: 29px;
-			padding-right: 20px;
-			text-align: right;
-			font-weight: normal;
-			@media (max-width: 767px) {
-				text-align: left;
-			}
-			&.double-line {
-					line-height: 1.2;
-				}
-		}
+      &.no-border {
+        border: none;
+      }
+      legend {
+        font-size: 14px;
+        font-weight: bold;
+        color: #000;
+        border-color: #eeedf0;
+      }
+    }
 
-		.form-checkbox {
-			&.default_pay {
-				@media (max-width: 767px) {
-					text-align: left
-				}
-			}
-			
-			label {
-				line-height: 17px!important;
-			}
-		}
-		.form-radio {
-			label {
-              font-size: 14px;
-				text-align: left;
-				line-height: 17px;
-			}
-		}	
-		input[type="text"],
-		input[type="email"],
-		input[type="password"],
-		input[type="tel"] {
-			line-height: 29px;
-		}
-		#payment_form_zolagopayment_gateway,
-        #payment_form_zolagopayment_cc {
-				list-style: none;
-				label {
-					line-height: 15px;
-					text-align: center ;
-					cursor:pointer;
-                  .payment-provider-logo-wrapper {
-                    border:1px solid $bc-primary;
-                    background: #fff;
-                    line-height: 67px;
-                    margin-bottom: 5px;
-                    padding: 5px;
-                    display: inline-block;
-                    width:100%;
-                    img {
-                      max-width: 120px;
-                      @media (max-width: 380px){
-                        max-width: 110px;
-                      }
-                      @media (min-width: 401px) and (max-width: 640px){
-                        max-width: 130px;
-                      }
-                      @media (min-width: 641px) and (max-width: 767px){
-                        max-width: 110px;
-                      }
-                    }
-                  }
-					img {
-//						border:1px solid $bc-primary;
-						background: #fff;
-					}
-					&:hover {
-                      .payment-provider-logo-wrapper {
-                        border-color: #9F9F9F;//$bc-secondary;
-                      }
-//						img {
-//							border-color: #9F9F9F;//$bc-secondary;
-//						}
-					}
-				}
-				input[type=radio]:checked + label {
-                  .payment-provider-logo-wrapper {
-                    border-color: #9F9F9F;//$bc-secondary;
-                  }
-//					img {
-//						border-color: #9F9F9F;// $bc-secondary;
-//					}
-					span {
-						text-decoration: underline
-					}
-				}
-		}
-	}
+    label {
+      font-size: 12px;
+      line-height: 29px;
+      padding-right: 20px;
+      text-align: right;
+      font-weight: normal;
+      @media (max-width: 767px) {
+        text-align: left;
+      }
+      &.double-line {
+        line-height: 1.2;
+      }
+    }
+
+    .form-checkbox {
+      &.default_pay {
+        @media (max-width: 767px) {
+          text-align: left
+        }
+      }
+
+      label {
+        line-height: 17px !important;
+      }
+    }
+    .form-radio {
+      label {
+        font-size: 14px;
+        text-align: left;
+        line-height: 17px;
+      }
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"] {
+      line-height: 29px;
+    }
+    #payment_form_zolagopayment_gateway,
+    #payment_form_zolagopayment_cc {
+      list-style: none;
+      label {
+        line-height: 15px;
+        text-align: center;
+        cursor: pointer;
+        .payment-provider-logo-wrapper {
+          border: 1px solid $bc-primary;
+          background: #fff;
+          line-height: 100px;
+          margin-bottom: 5px;
+          display: inline-block;
+          width: 100%;
+          img {
+            max-width: 120px;
+            @media (max-width: 425px) {
+              max-width: 93px;
+            }
+            //                      @media (min-width: 401px) and (max-width: 640px){
+            //                        max-width: 130px;
+            //                      }
+            //                      @media (min-width: 641px) and (max-width: 767px){
+            //                        max-width: 110px;
+            //                      }
+          }
+        }
+        img {
+          //						border:1px solid $bc-primary;
+          background: #fff;
+        }
+        &:hover {
+          .payment-provider-logo-wrapper {
+            border-color: #9F9F9F; //$bc-secondary;
+          }
+          //						img {
+          //							border-color: #9F9F9F;//$bc-secondary;
+          //						}
+        }
+      }
+      input[type=radio]:checked + label {
+        .payment-provider-logo-wrapper {
+          border-color: #9F9F9F; //$bc-secondary;
+        }
+        span {
+          text-decoration: underline
+        }
+      }
+    }
+  }
 	.text-align-left {
 		label {
 			text-align: left!important;
@@ -273,7 +269,9 @@
         .default_pay_selected_bank {
           text-align: right;
           figure {
-            height: 67px;
+            height: 40px;
+            display: inline;
+            vertical-align: middle;
             img {
               max-height: 67px;
             }
@@ -282,5 +280,17 @@
         }
       }
     }
+  }
+}
+
+@media (min-width: $screen-lg-min) {
+  .col-lg-3-pi {
+    width: 20%;
+    float: left;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: relative;
+
   }
 }

@@ -4,14 +4,17 @@
 <?php if ($_providers->count()):?>
 <div class="selected_bank">
     <p><?php echo Mage::helper('zolagomodago')->__('Select your bank'); ?>:</p>
-    <ul id="payment_form_<?php echo $this->getMethodCode() ?>">
+    <div id="payment_form_<?php echo $this->getMethodCode() ?>"
+        class="col-xs-12 col-sm-12 col-md-12 col-lg-15 "
+        >
+        <?php $i=1;?>
 		<?php foreach($_providers as $_provider):?>
 
 		<?php $_code = $_provider->getCode();?>
 
 		<?php $_id = $this->getMethodCode()."_".$_code;?>
-        <li class="logo_01">
-            <div class="form-group">
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3-pi provider-item" >
+            <div class="">
                 <input type="radio"
                        <?php if($this->isChecked($_provider)):?>checked="checked" <?php endif;?>
                        id="<?php echo $_id;?>" name="payment[additional_information][provider]"
@@ -20,14 +23,34 @@
                     />
                 <label for="<?php echo $_id; ?>" class="clearfix">
                     <div class="payment-provider-logo-wrapper">
-                        <img class="" src="<?php echo $this->getProviderLogoUrl($_provider); ?>" alt="<?php echo $this->escapeHtml($_provider->getName()); ?>"/>
+                        <img
+                            class="" src="<?php echo $this->getProviderLogoUrl($_provider); ?>"
+                             alt="<?php echo $this->escapeHtml($_provider->getName()); ?>"
+                             style="" />
                     </div>
                     <span class="hidden-xs"><?php echo $this->escapeHtml($_provider->getName());?></span>
                 </label>
             </div>
-        </li>
+        </div>
+            <?php if ($i % 2 == 0): ?>
+                <div class="clearfix visible-xs"></div>
+            <?php endif; ?>
+
+            <?php if ($i % 3 == 0): ?>
+                <div class="clearfix visible-sm"></div>
+            <?php endif; ?>
+
+            <?php if ($i % 4 == 0): ?>
+                <div class="clearfix visible-md"></div>
+            <?php endif; ?>
+
+            <?php if ($i % 5 == 0): ?>
+                <div class="clearfix visible-lg"></div>
+            <?php endif; ?>
+
+            <?php $i++; ?>
 		<?php endforeach;?>
 
-    </ul>
+    </div>
 </div>
 <?php endif; ?>

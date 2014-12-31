@@ -1374,13 +1374,17 @@
                 var form_group_default_pay = jQuery('.default_pay');
 
                 view_block_default_pay.toggle();
-                var txt = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
+                var ifPanelClosed = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible');
+                var txt = ifPanelClosed ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
 
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
-                jQuery("html, body").animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, 600, 'swing', function () {
-                });
+                if (!ifPanelClosed) {
+                    jQuery("html, body").animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, 600, 'swing', function () {
+                    });
+                }
+
             },
 
             renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
@@ -1424,7 +1428,7 @@
                 } else if (paymentMemberName === paymentMethodProviderNameAttr) {
                     paymentMethodName = jQuery(e.target).closest('.panel.payment-selected').find('input[name="payment[method]"]').data("payment-method");
                     var providerName = jQuery(e.target).data("bank-name");
-                    var bankLogoUrl = jQuery(e.target).closest('li').find('.payment-provider-logo-wrapper img').attr("src");
+                    var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
                     self.renderPaymentSelected(paymentMethodName,Mall.translate.__('bank') + ": " + providerName,bankLogoUrl);
