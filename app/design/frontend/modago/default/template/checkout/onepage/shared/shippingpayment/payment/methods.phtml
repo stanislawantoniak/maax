@@ -57,16 +57,16 @@
                         <?php $oneMethod = $_code; ?>
                     <?php endif; ?>
                     <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
-                        <?php $methodCheckoutDescription = $this->getMethodCheckoutDescription($_method); ?>
-                        <?php if (!empty($methodCheckoutDescription)): ?>
+
                             <span class="pull-left">
                             <strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
-                            <div><?php echo $methodCheckoutDescription; ?></div>
-                        </span>
-                        <?php else: ?>
-                            <div class="pull-left">
-                                <strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong></div>
-                        <?php endif; ?>
+                                <?php $methodCheckoutDescription = $this->_getMethodCheckoutDescription($_method); ?>
+                                <?php if (!empty($methodCheckoutDescription)): ?>
+                                <div><?php echo $this->escapeHtml($methodCheckoutDescription); ?></div>
+                                <?php endif; ?>
+                            </span>
+
+
                         <?php $paymentIcons = $this->getPaymentMethodIcon($_code); ?>
                         <?php if (!empty($paymentIcons)): ?>
                             <?php foreach ($paymentIcons as $paymentIcon): ?>
