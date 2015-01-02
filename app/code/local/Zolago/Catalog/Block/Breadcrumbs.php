@@ -286,7 +286,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         if ($headBlock = $this->getLayout()->getBlock('head')) {
             if ($this->_isSearchContext()) {
                 $helperZSS = Mage::helper('zolagosolrsearch');
-                $title = $helperZSS->__('Search results for:').' '.$helperZSS->getSolrRealQ();
+                if ($helperZSS->getNumFound()) {
+                    $query = $helperZSS->getSolrRealQ();  
+                } else {
+                    $query = $helperZSS->getQueryText();  
+                }
+                $title = $helperZSS->__('Search results for:').' '.$query;
             } else {
                 $title = join($this->getTitleSeparator(), array_reverse($title));
             }
