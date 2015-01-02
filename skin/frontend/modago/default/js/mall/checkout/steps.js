@@ -1459,6 +1459,17 @@
                     return false;
                 });
 
+                //////////////////////
+                var default_pay_bank = jQuery('.default_pay input[name="payment[method]"]');
+                jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
+
+                jQuery(default_pay_bank).on('change', function(){
+                    jQuery(default_pay_bank).closest('.panel').removeClass('payment-selected');
+                    jQuery(this).closest('.panel').addClass('payment-selected');
+                    jQuery('.selected_bank').hide();
+                    jQuery(this).closest('.form-group').next('.selected_bank').show();
+                });
+                /////////////////////
 
                 // Handle payment select
                 var view_block_default_payS = jQuery('.checkout-singlepage-index .default_pay > .panel > .panel-body > .panel');
