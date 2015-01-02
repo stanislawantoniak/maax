@@ -121,9 +121,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 				$providerCode = $additionalInformation['provider'];
 			}
 			
-			$providerType = "gateway";
+			$providerType = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
 			if($this instanceof Zolago_Payment_Model_Cc){
-				$providerType = "cc";
+				$providerType = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
 			}
 			
             if($providerCode!==null){
@@ -140,6 +140,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
         return $this->_provider;
     }
 
+	/**
+	 * @return Zolago_Payment_Model_Resource_Provider_Collection
+	 */
     public function getProviderCollection() {
 
         $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;

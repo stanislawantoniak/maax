@@ -521,14 +521,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return Mage_Catalog_Model_Category
 	 */
 	public function getCurrentCategory() {
-		if (Mage::registry('current_category')) {
-			if (Mage::registry('vendor_current_category')) {
-				return Mage::registry('vendor_current_category');
-			} else {
-				return Mage::registry('current_category');
-			}
-		}
-		return Mage::registry('vendor_current_category');
+    	return Mage::registry('current_category');
 	}
 
 	/**

@@ -32,7 +32,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		$design->setPackageName($packageName);
 		$design->setTheme($theme ? $theme : "default");
-		
+        		
 		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 		
 		// Product 
@@ -70,26 +70,28 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	 * @return type
 	 */
 	protected function _getSolrParam(Zolago_Solrsearch_Model_Catalog_Product_List $listModel, $param) {
-		return $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param);
+		if (is_null($out = $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param))) {
+		    $out = $listModel->getCollection()->getSolrData('responseHeader', 'params', $param);
+		}
+		return $out;
 	}
 	
 	/**
 	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
 	 * @return array
+	 * @todo fix q param in getSolrParams (check if empty - **, ,***, ** , etc.))
 	 */
 	protected function _getProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel) {
 		
 		
 		//$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
-		//$profiler->start();
-		
-		
+		//$profiler->start();		
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
 			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
 			"rows"			=> (int)$this->_getSolrParam($listModel, 'rows'),
-			"query"			=> $this->_getSolrParam($listModel, 'q'),
+			"query"			=> '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
 			"products"		=> Mage::helper("zolagosolrsearch")->prepareAjaxProducts($listModel),

@@ -41,15 +41,20 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
             return;
         }
 		
-        /** @var $action Mage_Checkout_OnepageController */
+        /* @var $action Mage_Checkout_OnepageController */
         $action = $observer->getEvent()->getControllerAction();
         $actionName = $action->getFullActionName();
 
         $goActions = array(
             'orbacommon_ajax_customer_get_account_information'
         );
+		
+		$goModules = array(
+			"persistent",
+			"checkout"
+		);
 
-        if (!in_array($actionName, $goActions) && $action->getRequest()->getModuleName()!="checkout") {
+        if (!in_array($actionName, $goActions) && !in_array($action->getRequest()->getModuleName(), $goModules)) {
             return;
         }
 
