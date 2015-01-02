@@ -1410,6 +1410,19 @@
                     selectedMethodContainer.find("dl dd#payment-provider span[target='provider-img']").html("");
                 }
             },
+            setEmulatedValues: function(){
+                var m, p;
+                m = jQuery("input[name='payment[method]']:checked").val();
+
+                p = (typeof(jQuery("input[name='payment[additional_information][provider]']:checked").val()) !== "undefined") ? jQuery("input[name='payment[additional_information][provider]']:checked").val() : "";
+                console.log(m, p);
+                jQuery("input[name='payment_emul']").val(m);
+                jQuery("input[name='payment_provider_emul']").val(p);
+
+                jQuery("input[name='payment[method]']").prop("checked",false);
+                jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+                jQuery('.selected_bank').hide();
+            },
 
             handleSelectPaymentMethod: function (e) {
                 var self = this;
@@ -1436,6 +1449,8 @@
                         self.renderSupportedBySelected("");
 
                         //close payment selector widget
+                        self.setEmulatedValues();
+
                         jQuery('#view_default_pay').trigger("click");
                     }
 
@@ -1454,6 +1469,9 @@
 
 
                     //close payment selector widget
+                    self.setEmulatedValues();
+
+
                     jQuery('#view_default_pay').trigger("click");
 
                 }
@@ -1524,6 +1542,11 @@
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     })
                     this.content.find("form .shipping-collect").html(inputs);
+
+                    var pInputs = '';
+                    pInputs += '<input type="hidden" name="payment[method]" value="' + jQuery("input[name='payment_emul']").val() + '" required="required" />';
+                    pInputs += '<input type="hidden" name="payment[additional_information][provider]" value="' + jQuery("input[name='payment_provider_emul']").val() + '" />';
+                    this.content.find("form .payment-collect").html(pInputs);
 
                     return this.content.find("form").serializeArray();
                 }
@@ -1615,7 +1638,8 @@
                                     required: function(){
                                         var res = false;
                                         if(jQuery("[name='payment[method]']").is(":checked") &&
-                                            jQuery("[name='payment[method]']:checked").val() == "zolagopayment"){
+                                            (jQuery("[name='payment[method]']:checked").val() === "zolagopayment_cc" || jQuery("[name='payment[method]']:checked").val() === "zolagopayment_gateway")
+                                        ){
                                             res = true;
                                         }
                                         return res;
@@ -1624,13 +1648,13 @@
                             },
                             messages: {
                                 _shipping_method: {
-                                    required: Mall.translate.__("Please select shipping")
+                                    required: Mall.translate.__("please-select-shipping")
                                 },
-                                "payment[method]": {
-                                    required: Mall.translate.__("Please select payment")
-                                },
+                                //"payment[method][emul]": {
+                                //    required: Mall.translate.__("Please select payment")
+                                //},
                                 'payment[additional_information][provider]' : {
-                                    required: Mall.translate.__("Please select payment provider")
+                                    required: Mall.translate.__("please-select-bank")
                                 }
                             },
                             invalidHandler: function (form, validator) {
