@@ -1415,7 +1415,7 @@
                 m = jQuery("input[name='payment[method]']:checked").val();
 
                 p = (typeof(jQuery("input[name='payment[additional_information][provider]']:checked").val()) !== "undefined") ? jQuery("input[name='payment[additional_information][provider]']:checked").val() : "";
-                console.log(m, p);
+
                 jQuery("input[name='payment_emul']").val(m);
                 jQuery("input[name='payment_provider_emul']").val(p);
 

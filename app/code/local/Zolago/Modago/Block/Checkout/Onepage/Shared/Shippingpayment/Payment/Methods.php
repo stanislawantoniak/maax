@@ -74,6 +74,15 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
      * @param Mage_Payment_Model_Method_Abstract $method
      * @return bool
      */
+    public function _getMethodCheckoutDescription(Mage_Payment_Model_Method_Abstract $_method)
+    {
+        return (string)$_method->getConfigData("checkout_description");
+    }
+
+    /**
+     * @param Mage_Payment_Model_Method_Abstract $method
+     * @return bool
+     */
     public function getIsCreditCard(Mage_Payment_Model_Method_Abstract $method)
     {
         return $method instanceof Zolago_Payment_Model_Cc;

@@ -37,13 +37,15 @@ Mall.validate = {
                 .find('.form-ico-times').remove();
 
             if(elem.attr('name') !== 'payment[method]'
-                && elem.attr('name') !== 'payment[additional_information][provider]')
+                && elem.attr('name') !== 'payment[additional_information][provider]'
+            && elem.attr('name') !== '_shipping_method')
             {
                 target
                     .not( ".form-checkbox" )
                     .not( ".form-radio" )
                     .append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
             }
+
 
             target.find('.form-ico-checked').remove();
         },
@@ -70,7 +72,8 @@ Mall.validate = {
             target.find('#pass-error').remove();
 
             if(elem.attr('name') !== 'payment[method]'
-                && elem.attr('name') !== 'payment[additional_information][provider]')
+                && elem.attr('name') !== 'payment[additional_information][provider]'
+                && elem.attr('name') !== '_shipping_method')
             {
                 target
                     .not( ".form-checkbox" )
