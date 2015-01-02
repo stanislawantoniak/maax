@@ -284,7 +284,18 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         }
 
         if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
+            if ($this->_isSearchContext()) {
+                $helperZSS = Mage::helper('zolagosolrsearch');
+                if ($helperZSS->getNumFound()) {
+                    $query = $helperZSS->getSolrRealQ();  
+                } else {
+                    $query = $helperZSS->getQueryText();  
+                }
+                $title = $helperZSS->__('Search results for:').' '.$query;
+            } else {
+                $title = join($this->getTitleSeparator(), array_reverse($title));
+            }
+            $headBlock->setTitle($title);
         }
 
         // Do not prapare bc again
