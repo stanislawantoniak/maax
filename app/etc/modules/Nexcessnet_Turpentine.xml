@@ -20,8 +20,7 @@
 <config>
     <modules>
         <Nexcessnet_Turpentine>
-            <!-- active>true</active> -->
-            <active>false</active>
+            <active>true</active>
             <codePool>community</codePool>
         </Nexcessnet_Turpentine>
     </modules>
