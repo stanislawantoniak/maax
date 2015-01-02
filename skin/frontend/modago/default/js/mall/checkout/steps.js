@@ -1572,11 +1572,13 @@
 			},
 			
 			getSelectedPayment: function(){
-				return this.content.find(".payment-method:radio:checked");
+				//return this.content.find(".payment-method:radio:checked");
+                return this.content.find("input[type=hidden][name='payment[method]']").val();
 			},
 			
 			getSelectedBank: function(){
-				return this.content.find("#payment_form_zolagopayment :radio:checked");
+				//return this.content.find("#payment_form_zolagopayment :radio:checked");
+                return this.content.find("input[type=hidden][name='payment[additional_information][provider]']").val();
 			},
 			
 			getCarrierName: function(){
@@ -1595,7 +1597,7 @@
 			},
 			
 			getPaymentMethod: function(){
-				return this.getSelectedPayment().data("paymentMethod");
+				return this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']").data("paymentMethod");
 			},
 			
 			getCostForVendor: function(vendorId, methodCode){
@@ -1611,15 +1613,16 @@
 			getOnlineData: function(){
 				if(this.isOnlinePayment()){
 					var bank = this.getSelectedBank();
+
 					if(bank.length){
-						return bank.data("bankName");
+						return this.content.find("input:radio[name='payment[additional_information][provider]'][value='"+bank+"']").data("bankName");
 					}
 				}
 				return null;
 			},
 			
 			isOnlinePayment: function(){
-				return this.getSelectedPayment().data('online')=="1";
+				return this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']").data('online')=="1";
 			},
 			
 
