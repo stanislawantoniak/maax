@@ -30,7 +30,7 @@ $rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
 			<?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>
 			<br/>
 		<?php endif; ?>
-		<?php if (!$helperZSS->isOriginalQuery()) : ?>
+		<?php if (!$helperZSS->isOriginalQuery() && $helperZSS->getNumFound()) : ?>
 			<?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
 			<br/>
 		<?php endif; ?>
