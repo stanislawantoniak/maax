@@ -12,6 +12,7 @@
         <?php if (!$_provider->isValid()): continue; endif; ?>
 
         <?php $_code = $_provider->getCode(); ?>
+        <?php $_providerServiceLogoUrl = $this->getProviderServiceLogo($_provider); ?>
 
 		<?php $_id = $this->getMethodCode()."_".$_code;?>
         <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3-pi provider-item" >
@@ -21,6 +22,7 @@
                        id="<?php echo $_id;?>" name="payment[additional_information][provider]"
                        value="<?php echo $this->escapeHtml($_code);?>"
                        data-bank-name="<?php echo $this->escapeHtml($_provider->getName());?>"
+                       data-service-provider-icon="<?php echo $_providerServiceLogoUrl; ?>"
                     />
                 <label for="<?php echo $_id; ?>" class="clearfix">
                     <div class="payment-provider-logo-wrapper">

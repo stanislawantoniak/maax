@@ -274,6 +274,12 @@
         text-align: right;
       }
       > .panel-body {
+        #payment-provider {
+          margin-top: 12px;
+          img {
+            width: 50px;
+          }
+        }
         .default_pay_selected_bank {
           text-align: right;
           figure {
