@@ -1461,7 +1461,7 @@
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
-                    self.renderPaymentSelected(paymentMethodName,Mall.translate.__('bank') + ": " + providerName,bankLogoUrl);
+                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
 
 
                     var supportedByLogoUrl = jQuery(e.target).data("service-provider-icon");
@@ -1597,7 +1597,11 @@
 			},
 			
 			getPaymentMethod: function(){
-				return this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']").data("paymentMethod");
+                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
+                if(selectedPaymentSource.length){
+                    return selectedPaymentSource.data("paymentMethod");
+                }
+				return null;
 			},
 			
 			getCostForVendor: function(vendorId, methodCode){
@@ -1615,14 +1619,22 @@
 					var bank = this.getSelectedBank();
 
 					if(bank.length){
-						return this.content.find("input:radio[name='payment[additional_information][provider]'][value='"+bank+"']").data("bankName");
+                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='"+bank+"']");
+                        if(bankDataSource.length){
+                            return bankDataSource.data("bankName");
+                        }
+                        return null;
 					}
 				}
 				return null;
 			},
 			
 			isOnlinePayment: function(){
-				return this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']").data('online')=="1";
+                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
+                if(selectedPaymentSource.length){
+                    return selectedPaymentSource.data('online')=="1";
+                }
+                return null;
 			},
 			
 
