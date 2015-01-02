@@ -8,7 +8,7 @@ class Zolago_Payment_Model_Config extends Varien_Simplexml_Config
     /**
      * Id for config cache
      */
-    const CACHE_ID  = 'config';
+    const CACHE_ID  = 'zolagopayment_config';
 
     /**
      * Tag name for config cache
@@ -24,6 +24,8 @@ class Zolago_Payment_Model_Config extends Varien_Simplexml_Config
      * Constructor
      * Initializes XML for this configuration
      * Local cache configuration
+	 * 
+	 * @todo Add Dotpay and another APIs call to get only active channels
      *
      * @param string|Varien_Simplexml_Element|null $sourceData
      */
