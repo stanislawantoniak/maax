@@ -14,15 +14,18 @@
             <div class="col-xs-6">
                 <dl>
                     <dt></dt>
-                    <dd></dd>
+                    <dd id="bank-name"></dd>
+                    <dd id="payment-provider"><span target="provider-label"></span>&nbsp;&nbsp;<span target="provider-img"></span></dd>
                 </dl>
             </div>
             <div class="col-xs-6 default_pay_selected_bank">
                 <figure></figure>
             </div>
         </div>
+        <div class="payment-collect"></div>
     </div>
     <!--        Selected payment-->
+
     <?php
     foreach ($methods as $_method):
         $_code = $_method->getCode();
@@ -40,8 +43,7 @@
 							   data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
 							   data-online="<?php echo $this->getIsOnline($_method) ?>"
 							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?>
-							   class="css-radio payment-method" 
-							   required="required"  />
+							   class="css-radio payment-method"  />
                     <?php else: ?>
                         <span class="no-display">
 							<input id="p_method_<?php echo $_code ?>" 
@@ -78,36 +80,7 @@
         </div>
 
 <?php endforeach; ?>
-
+    <input type="hidden" name="payment_emul" />
+    <input type="hidden" name="payment_provider_emul" />
 <?php    endif; ?>
 <?php echo $this->getChildChildHtml('additional'); ?>
-<script type="text/javascript">
-    //<![CDATA[
-//    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank').show();
-//
-//    jQuery('[name="payment[method]"]').click(function () {
-//        if (jQuery(this).is(':checked')) {
-//            jQuery('.default_pay .form-group .selected_bank').hide();
-//            jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);
-//            jQuery(this).parents('.form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "").prop("disabled",false);
-//            jQuery(this).parents('.form-group').find('.selected_bank').show();
-//
-//        } else {
-//            jQuery(this).parents('.form-group').find('.selected_bank').hide();
-//        }
-//    })
-
-
-    var default_pay_bank = jQuery('.default_pay input[name="payment[method]"]');
-    jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
-
-
-    jQuery(default_pay_bank).on('change', function(){
-        jQuery(default_pay_bank).closest('.panel').removeClass('payment-selected');
-        jQuery(this).closest('.panel').addClass('payment-selected');
-        jQuery('.selected_bank').hide();
-        jQuery(this).closest('.form-group').next('.selected_bank').show();
-    });
-
-    //]]>
-</script>
