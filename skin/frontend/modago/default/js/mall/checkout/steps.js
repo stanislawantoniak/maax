@@ -1376,7 +1376,11 @@
                 view_block_default_pay.toggle();
                 var ifPanelClosed = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible');
                 var txt = ifPanelClosed ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
-
+//console.log(ifPanelClosed);
+                if(!ifPanelClosed){
+                    jQuery("input[name='payment[method]']").prop("checked",false);
+                    jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+                }
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
@@ -1490,10 +1494,11 @@
                     }
 					return false;
                 });
-				
+
 
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
+
                     return false;
                 });
 

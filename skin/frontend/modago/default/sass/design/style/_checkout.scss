@@ -10,6 +10,20 @@
 			}
 		}
 	}
+  #shipping-methods {
+    .panel-body {
+      dt {
+        font-weight: normal;
+        font-family: latoblack;
+      }
+      dd.separator {
+        strong {
+          font-weight: normal;
+          font-family: latoblack;
+        }
+      }
+    }
+  }
 	.panel {
 		@include border-radius(2px);
 		border-color:$bc-primary;
@@ -274,6 +288,10 @@
         text-align: right;
       }
       > .panel-body {
+        dt {
+          font-weight: normal;
+          font-family: latoblack;
+        }
         #payment-provider {
           margin-top: 12px;
           img {
