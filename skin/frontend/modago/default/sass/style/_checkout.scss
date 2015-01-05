@@ -418,22 +418,22 @@
 
 			}
 		}
-		.form-radio {
-			label {
-				text-align: left;
-				padding-left:30px;
-				line-height: 15px;
-				width:100%;
-				span {
-					position:relative;
-					top:-6px;
-					margin-bottom: -6px;
-					@media (max-width: 360px) {
-						top:-15px;
-					}
-				}
-			}
-		}
+      .form-radio {
+        label {
+          text-align: left;
+          padding-left: 30px;
+          line-height: 15px;
+          width: 100%;
+          span {
+            position: relative;
+            margin-bottom: -6px;
+//            @media (max-width: 360px) {
+//              top: -15px;
+//            }
+          }
+
+        }
+      }
 		#default_pay_selected_bank {
 			@media (max-width: 640px) {
 			margin-bottom: 18px;
