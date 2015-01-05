@@ -136,6 +136,11 @@
 		}
 	}
   form {
+    .form-group.form-radio {
+      @media (max-width: $screen-xs-min) {
+        margin-bottom: 0px;
+      }
+    }
     fieldset {
 
       &.no-border {
@@ -179,6 +184,7 @@
         font-size: 14px;
         text-align: left;
         line-height: 17px;
+        display: block;
       }
     }
     input[type="text"],

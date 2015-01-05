@@ -1392,7 +1392,7 @@
             },
 
             renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
-                var selectedMethodContainer = jQuery(".default_pay .top-panel .row");
+                var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
                 selectedMethodContainer.find("dl dt").text(paymentMethod);
                 selectedMethodContainer.find("dl dd#bank-name").text(providerText);
 
@@ -1403,7 +1403,7 @@
             },
 
             renderSupportedBySelected: function (label, imgUrl) {
-                var selectedMethodContainer = jQuery(".default_pay .top-panel .row");
+                var selectedMethodContainer = jQuery(".default_pay .top-panel .row:nth-child(2)");
                 if (imgUrl) {
                     var logo = jQuery('<img />');
                     logo.attr('src', imgUrl);

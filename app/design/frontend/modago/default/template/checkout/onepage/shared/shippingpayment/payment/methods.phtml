@@ -15,11 +15,17 @@
                 <dl>
                     <dt></dt>
                     <dd id="bank-name"></dd>
-                    <dd id="payment-provider"><span target="provider-label"></span>&nbsp;&nbsp;<span target="provider-img"></span></dd>
                 </dl>
             </div>
             <div class="col-xs-6 default_pay_selected_bank">
                 <figure></figure>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <dl>
+                    <dd id="payment-provider"><span target="provider-label"></span>&nbsp;&nbsp;<span target="provider-img"></span></dd>
+                </dl>
             </div>
         </div>
         <div class="payment-collect"></div>
@@ -76,6 +82,7 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </label>
+                    <div class="clearfix"></div>
                 </div>
 
             <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
