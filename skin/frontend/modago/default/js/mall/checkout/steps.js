@@ -594,7 +594,7 @@
 			},
 
 			removeAddress: function(event){
-				console.log("Remove clicked", event.data);
+
                 var deffered,
                     self = this;
 
