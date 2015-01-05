@@ -1394,13 +1394,20 @@
 
             },
 
-            renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
+            renderPaymentSelected: function (paymentMethod, providerText, imgUrl, imageClass) {
                 var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
-                selectedMethodContainer.find("dl dt").text(paymentMethod);
-                selectedMethodContainer.find("dl dd#bank-name").text(providerText);
+                selectedMethodContainer.find("dl dt").html(paymentMethod);
+                selectedMethodContainer.find("dl dd#bank-name").html(providerText);
 
                 var logo = jQuery('<img />');
                 logo.attr('src', imgUrl);
+
+                console.log(imageClass);
+                if(jQuery.type(imageClass)!=="undefined"){
+                    selectedMethodContainer.find("figure").addClass(imageClass);
+                } else {
+                    selectedMethodContainer.find("figure").removeAttr("class");
+                }
                 selectedMethodContainer.find("figure").html(logo);
                 jQuery(".default_pay .top-panel").show();
             },
@@ -1452,7 +1459,9 @@
 
                         //replace
                         var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
-                        self.renderPaymentSelected(paymentMethodName,"", methodLogoUrl);
+                        var paymentDescription = jQuery(e.target).closest('.form-group').find(".payment-description").html();
+
+                        self.renderPaymentSelected(paymentMethodName,paymentDescription, methodLogoUrl);
                         self.renderSupportedBySelected("");
 
                         //close payment selector widget
@@ -1468,7 +1477,7 @@
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
-                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
+                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl, 'provider-logo');
 
 
                     var supportedByLogoUrl = jQuery(e.target).data("service-provider-icon");

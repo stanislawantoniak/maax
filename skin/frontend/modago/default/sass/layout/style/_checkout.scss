@@ -350,14 +350,13 @@
               span.label-wrapper {
                 padding-left: 0;
                 padding-right: 0;
+                @media (max-width: $screen-xs) {
+                  width: 100%;
+                }
               }
 			}
 		}
-		#default_pay_selected_bank {
-			@media (max-width: 640px) {
-			margin-bottom: 18px;
-			}
-		}
+
 		#pay_01 {
 			.form-radio {
 				label {
@@ -604,9 +603,9 @@
 			display:none;
 		}
 		.flag_pay_method {
-			@media (max-width: $screen-xs-max) {
-						display:none;
-					}
+          @media (max-width: $screen-xs) {
+            display: none;
+          }
 		}
 	}
 

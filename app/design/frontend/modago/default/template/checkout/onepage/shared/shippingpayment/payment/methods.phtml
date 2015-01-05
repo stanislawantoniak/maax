@@ -64,13 +64,16 @@
                     <?php endif; ?>
                     <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
 
-                            <span class="pull-left col-xs-12 col-sm-10 col-md-9 col-lg-10 label-wrapper">
+                            <span class="pull-left col-xs-8 col-sm-10 col-md-9 col-lg-10 label-wrapper">
                             <strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
                                 <?php $methodCheckoutDescription = $this->_getMethodCheckoutDescription($_method); ?>
                                 <?php if (!empty($methodCheckoutDescription)): ?>
-                                <div><?php echo $this->escapeHtml($methodCheckoutDescription); ?></div>
+                                <div class="payment-description"><?php echo $this->escapeHtml($methodCheckoutDescription); ?></div>
                                 <?php endif; ?>
                             </span>
+
+
+                        </span>
 
 
                         <?php $paymentIcons = $this->getPaymentMethodIcon($_code); ?>
