@@ -24,6 +24,7 @@
       }
       .logo-courier .shipment-icon {
         margin-top: 20px;
+        margin-right: 20px;
       }
     }
   }
@@ -313,16 +314,14 @@
             height: 40px;
             display: inline-table;
             vertical-align: middle;
-
+            border: 1px solid #eeedf0;
+            padding: 5px;
+            background-color: white;
             img {
               max-height: 67px;
             }
           }
-          figure.provider-logo {
-            border: 1px solid #eeedf0;
-            padding: 5px;
-            background-color: white;
-          }
+
 
         }
       }
