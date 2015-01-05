@@ -67,7 +67,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
 	 * @return bool
 	 */
 	public function getIsOnline(Mage_Payment_Model_Method_Abstract $method){
-		return $method instanceof Zolago_Payment_Model_Gateway;
+		return $method->isGateway();
 	}
 
     /**
