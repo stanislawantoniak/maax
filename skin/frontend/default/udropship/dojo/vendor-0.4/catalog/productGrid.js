@@ -248,6 +248,7 @@ define([
 			container: "body", 
 			animation: false, 
 			placement: "top",
+			trigger: "hover",
 			delay: {"show": 1000, "hide": 0},
 			title: function(){
 				// Show only if editor closed
@@ -302,6 +303,7 @@ define([
 		
 		jQuery(node).tooltip({
 			container: "body", 
+			trigger: "hover",
 			animation: false, 
 			placement: "top",
 			delay: {"show": 1000, "hide": 0}
