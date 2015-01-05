@@ -307,7 +307,7 @@
 		}
 
 		label {
-			padding-right: 20px;
+			padding-right: 2px;
 		}
 
 		.form-checkbox {
@@ -347,6 +347,10 @@
 						top:-15px;
 					}
 				}
+              span.label-wrapper {
+                padding-left: 0;
+                padding-right: 0;
+              }
 			}
 		}
 		#default_pay_selected_bank {

@@ -13,8 +13,9 @@ class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_ProcessingControl
 	 * Override redirect
 	 */
 	public function cancelAction() {
-		  parent::cancelAction();
-		  $this->_redirect($this->_getRedirectRoute(false));
+//		  parent::cancelAction(); // no cancel order
+          Mage::getSingleton('core/session')->addError(Mage::helper('zolagopayment')->__('Payment failed'));
+		  $this->_redirect($this->_getRedirectRoute(true));
 	}
 
 	/**
