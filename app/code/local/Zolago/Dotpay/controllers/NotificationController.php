@@ -26,8 +26,8 @@ class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_NotificationContr
             $order->addStatusToHistory(
                 Mage_Sales_Model_Order::STATE_CANCELED,
                 Mage::helper('dotpay')->__('The order has been canceled.'));
-*/                
         }
+*/                
 
         $order->save();
 
