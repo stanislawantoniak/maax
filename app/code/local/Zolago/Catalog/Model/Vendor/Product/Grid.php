@@ -392,11 +392,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			);
 
             //$collection->addIsNotUniqueFilter();
-			$collection->addFieldToFilter("grid_permission", array("in"=>array(
-				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY,
-				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
-				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
-			)));
+			$collection->addFieldToFilter("grid_permission", array("in"=>$this->getGridAttributeTypes()));
 
 			// Exclude static columns
 			$static = $this->_getStaticAttributes();
@@ -407,6 +403,17 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$this->setData("grid_visible_attributes", $collection);
 		}
 		return $this->getData("grid_visible_attributes");
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getGridAttributeTypes() {
+		return array(
+			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY,
+			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
+			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
+		);
 	}
 
 	/**
