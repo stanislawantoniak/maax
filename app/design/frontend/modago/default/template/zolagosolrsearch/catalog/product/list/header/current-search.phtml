@@ -4,6 +4,14 @@ $helperZSS = Mage::helper('zolagosolrsearch');
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCurrentCategory();
+
+/** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
+$helperZDM = Mage::helper("zolagodropshipmicrosite");
+$vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
+
+$rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+$rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
+
 ?>
 <div class="current-search">
 	<h1>
@@ -22,7 +30,7 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 			<?php echo $helperZSS->__("Search results for query &bdquo;%s&rdquo; not found.", $helperZSS->getQueryText()) ?>
 			<br/>
 		<?php endif; ?>
-		<?php if (!$helperZSS->isOriginalQuery()) : ?>
+		<?php if (!$helperZSS->isOriginalQuery() && $helperZSS->getNumFound()) : ?>
 			<?php echo $helperZSS->__("Did you mean &bdquo;%s&rdquo; ?", $helperZSS->getSolrRealQ()) ?>
 			<br/>
 		<?php endif; ?>
@@ -43,7 +51,7 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
                 </span>
             </span>
 			<?php if ($vendor) : ?>
-				<?php if ($currentCategory && ($currentCategory->getId() != $vendor->rootCategory()->getId())) : ?>
+				<?php if ($currentCategory && ($currentCategory->getId() != $vendorRootCategoryId)) : ?>
 					<?php echo $helperZSS->__('in category'); ?>
 					<span style="white-space:nowrap">
 		                <span class="query-text uppercase"><?php echo $currentCategory->getName(); ?></span>
@@ -57,7 +65,7 @@ $currentCategory = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->
 				<span style="white-space:nowrap">
                     <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span>
 					<span class="query-text-iks">
-                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), null, null); ?>"
+                        <a href="<?php echo $helperZSS->getFilterUrl($helperZSS->getSolrRealQ(), ($currentCategory->getId() == $vendorRootCategoryId) ? $rootCategory : $currentCategory, null); ?>"
                            class="fa fa-times active-filter-label iks"></a>
                     </span>
                 </span>

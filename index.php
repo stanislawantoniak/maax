@@ -69,11 +69,11 @@ if (file_exists($maintenanceFile)) {
 
 require_once $mageFilename;
 
-if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+//if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
     Mage::setIsDeveloperMode(true);
 	Varien_Profiler::enable();
 	#ini_set('display_errors', 1);
-}
+//}
 
 // Enable profiler
 Varien_Profiler::enable();

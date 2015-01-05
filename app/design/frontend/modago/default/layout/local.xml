@@ -750,6 +750,11 @@
 	
 	<checkout_singlepage_index>
 		<update handle="checkout_updater" />
+        <reference name="root">
+            <action method="addBodyClass">
+                <value>logged</value>
+            </action>
+        </reference>
 		<reference name="head">
 			<action method="addItem">
 				<type>skin_js</type>

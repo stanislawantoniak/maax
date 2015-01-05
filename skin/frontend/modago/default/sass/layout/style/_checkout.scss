@@ -307,7 +307,7 @@
 		}
 
 		label {
-			padding-right: 20px;
+			padding-right: 2px;
 		}
 
 		.form-checkbox {
@@ -335,6 +335,10 @@
 			label {
 				padding-left:30px;
 				width:100%;
+              strong {
+                font-weight: normal;
+                font-family: latoblack;
+              }
 				span {
 					position:relative;
 					top:-6px;
@@ -343,6 +347,10 @@
 						top:-15px;
 					}
 				}
+              span.label-wrapper {
+                padding-left: 0;
+                padding-right: 0;
+              }
 			}
 		}
 		#default_pay_selected_bank {
@@ -418,88 +426,41 @@
 				}
 			}
 		}
-		#selected_bank {
-				margin:0px;
-				padding:0px;
-				li {
-					display:inline-block;
-					width:132px;
-					height:100px;
-					margin-right: 10px;
-					margin-bottom: 15px;
-					@media (max-width: 380px){
-						width:47%;
-						height:89px;
-					}
-					@media (min-width: 380px) and (max-width: 400px){
-						width:47%;
-						height:100px;
-					}
-					@media (min-width: 401px) and (max-width: 640px){
-						width:30.333%;
-						height:100px;
-					}
-					@media (min-width: 641px) and (max-width: 767px){
-						width:23%;
-						height:110px;
-					}
-					@media (min-width: 768px) and (max-width: 992px){
-						width:17.666%;
-						height:110px;
-					}
-					@media (min-width: 993px){
-						width:17.666%;
-						height:110px;
-					}
-					
-					&:nth-child(even) {
-						@media (max-width: 400px){
-							margin-right: 0px;
-						}
-					}
-					&:nth-child(3n) {
-						@media (min-width: 401px) and (max-width: 640px){
-							margin-right: 0px;
-						}
+      #payment_form_zolagopayment_gateway,
+      #payment_form_zolagopayment_cc {
+        margin: 0px;
+        padding: 0px;
+        li {
 
-					}
-					&:nth-child(4n) {
-						@media (min-width: 641px) and (max-width: 767px){
-							margin-right: 0px;
-						}
+        }
+        .form-group {
+          position: relative;
+        }
+        label {
+          position: relative;
+          top: -25px;
+          left: -3px;
+          padding-left: 0px;
 
-					}
-					&:nth-child(5n) {
-						@media (min-width: 768px) and (max-width: 992px){
-							margin-right: 0px;
-						}
-						@media (min-width: 993px){margin-right: 0px;}
+          min-height: 67px;
+          padding-right: 0px;
 
-					}
-				}
-				.form-group {
-					position:relative;
-				}
-				label {
-					position:absolute;
-					top:0px;
-					left:0px;
-					padding-left:0px;
-					width:auto;
-					min-height:67px;
-					padding-right: 0px;
-					img {
-						margin-bottom: 5px;
-						padding:5px;
-						width: 100%;
-						height: auto;
-					}
-					span {
-						position:static;
-						
-					}
-				}			
-		}
+          @media (max-width: $screen-sm-min) {
+            width: 100%;
+          }
+          @media (max-width: $screen-md-min) {
+            display: block;
+          }
+          img {
+//            margin-bottom: 5px;
+            height: auto;
+          }
+          span {
+            position: static;
+
+          }
+        }
+      }
 		.action {
 			a {
 				position:relative;

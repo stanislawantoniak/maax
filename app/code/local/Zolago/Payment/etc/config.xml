@@ -2,10 +2,15 @@
 <config>
     <modules>
         <Zolago_Payment>
-            <version>0.0.2</version>
+            <version>0.0.7</version>
         </Zolago_Payment>
     </modules>
     <global>
+        <helpers>
+            <zolagopayment>
+                <class>Zolago_Payment_Helper</class>
+            </zolagopayment>
+        </helpers>
         <models>
             <zolagopayment>
                 <class>Zolago_Payment_Model</class>
@@ -33,6 +38,17 @@
             </zolagopayment_setup>
         </resources>
     </global>
+    <frontend>
+		<translate>
+			<modules>
+				<Zolago_Payment>
+					<files>
+						<default>Zolago_Payment.csv</default>
+					</files>
+				</Zolago_Payment>
+			</modules>
+		</translate>
+    </frontend>
 	<default>
 		<payment>
             <zolagopayment_gateway>

@@ -382,7 +382,7 @@
 		label {
 			font-size: 12px;
 			line-height: 29px;
-			padding-right: 20px;
+			padding-right: 2px;
 			text-align: right;
 			font-weight: normal;
 			@media (max-width: 767px) {
@@ -508,7 +508,8 @@
 				}
 			}
 		}
-		#selected_bank {
+		#payment_form_zolagopayment_gateway,
+        #payment_form_zolagopayment_cc  {
 				list-style: none;
 				margin:0px;
 				padding:0px;

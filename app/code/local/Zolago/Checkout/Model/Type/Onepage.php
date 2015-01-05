@@ -20,33 +20,44 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			$quote = $this->getQuote();
 			$payment = $quote->getPayment();
 			$methodInstance = $payment->getMethodInstance();
-			
+
 			// Do map payment here...
 			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
 				$methodInstance->setQuote($this->getQuote());
 				if($newData = $methodInstance->getMappedPayment()){
-					//Mage::log($newData);
+					// Instatize new payemnt instance
+					$instance = Mage::helper('payment')->getMethodInstance($newData['method']);
+					$instance->setInfoInstance($payment);
+					$payment->setMethodInstance($instance);
 					$this->savePayment($newData);
+					// Save additional data - import in this model do not save the payment
+					// directly after import
 					if(isset($newData['additional_information'])){
 						$payment->setAdditionalInformation($newData['additional_information']);
 						$payment->save();
 					}
 				}
-					
 			}
-			//die();
 			// Parent save order
 			$return = parent::saveOrder();
-			
-			// Update customer data
-			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
-				$this->getQuote()->getCustomerId()){
-				/**
-				 * @todo add last used payment to customer
-				 */
-				$this->getQuote()->getCustomer()->save();
-			}
 
+
+            if(Mage::getSingleton('customer/session')->isLoggedIn()
+                && $this->getQuote()->getCustomerId()) {
+                // Update customer data
+                $customerPayment = $this->_checkoutSession->getPayment(true);
+                if (!is_null($customerPayment)
+                    && is_array($customerPayment)) {
+                    if (isset($customerPayment['method'])) {
+                        $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
+                    }
+                }
+
+                //save customer object
+                $this->getQuote()->getCustomer()->save();
+            }
+
+            //newsletter actions
 			$agreements = $this->_checkoutSession->getAgreements(true);
             /** @var Zolago_Newsletter_Model_Inviter $model */
             $model = Mage::getModel('zolagonewsletter/inviter');

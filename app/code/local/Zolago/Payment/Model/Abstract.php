@@ -4,6 +4,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 
     protected $_formBlockType = "zolagopayment/form";
     protected $_isGateway     = true;
+
+    const ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY =  "gateway";
+    const ZOLAGOPAYMENT_PROVIDER_TYPE_CC =  "cc";
 	
 	/**
 	 * Zolago_Payment_Model_Provider
@@ -73,12 +76,25 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 			return false;
 		}
 		$website = $this->getQuote()->getStore()->getWebsite();
-		Mage::getSingleton('zolagopayment/config')->getProviderConfig($website, $provider);
 		
-		return array(
-			"method" => "banktransfer",
-			"additional_information" => array("somekey"=>"value")
+		$type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
+		if($this instanceof Zolago_Payment_Model_Cc){
+			$type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
+		}
+		
+		return $this->getConfig()->getProviderConfig(
+			$website, 
+			$provider, 
+			$type
 		);
+	}
+	
+	
+	/**
+	 * @return Zolago_Payment_Model_Config
+	 */
+	public function getConfig() {
+		return Mage::getSingleton('zolagopayment/config');
 	}
     
     /**
@@ -105,9 +121,9 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
 				$providerCode = $additionalInformation['provider'];
 			}
 			
-			$providerType = "gateway";
+			$providerType = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
 			if($this instanceof Zolago_Payment_Model_Cc){
-				$providerType = "cc";
+				$providerType = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
 			}
 			
             if($providerCode!==null){
@@ -122,5 +138,19 @@ abstract class Zolago_Payment_Model_Abstract extends Mage_Payment_Model_Method_A
             }
         }
         return $this->_provider;
+    }
+
+	/**
+	 * @return Zolago_Payment_Model_Resource_Provider_Collection
+	 */
+    public function getProviderCollection() {
+
+        $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY;
+        if($this instanceof Zolago_Payment_Model_Cc){
+            $type = self::ZOLAGOPAYMENT_PROVIDER_TYPE_CC;
+        }
+        return Mage::getResourceModel("zolagopayment/provider_collection")
+            ->addFilterToSelect("type", $type)
+            ->addFilterToSelect("is_active", 1);
     }
 }

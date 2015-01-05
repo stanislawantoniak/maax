@@ -35,25 +35,28 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	 */
 	public function emulateQuote($observer)
     {
-        $stopActions = array(
-            'persistent_index_saveMethod',
-            'customer_account_createpost'
-        );
-
         if (!Mage::helper('persistent')->canProcess($observer)
             || !$this->_getPersistentHelper()->isPersistent() 
 			|| Mage::getSingleton('customer/session')->isLoggedIn()) {
             return;
         }
 		
-        /** @var $action Mage_Checkout_OnepageController */
+        /* @var $action Mage_Checkout_OnepageController */
         $action = $observer->getEvent()->getControllerAction();
         $actionName = $action->getFullActionName();
 
-        if (in_array($actionName, $stopActions)) {
+        $goActions = array(
+            'orbacommon_ajax_customer_get_account_information'
+        );
+		
+		$goModules = array(
+			"persistent",
+			"checkout"
+		);
+
+        if (!in_array($actionName, $goActions) && !in_array($action->getRequest()->getModuleName(), $goModules)) {
             return;
         }
-		
 
         /* @var $checkoutSession Mage_Checkout_Model_Session */
         $checkoutSession = Mage::getSingleton('checkout/session');

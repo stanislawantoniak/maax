@@ -75,7 +75,9 @@ $cost = $items->cost;
                 .prop("checked", true);
         }
     </script>
-
+    <script type="text/javascript">
+        Mall.translate.add("please-select-shipping", "<?php echo $this->__("Please select shipping"); ?>");
+    </script>
 <?php else: ?>
     <div class="panel panel-default panel-color">
         <div class="panel-body">
