@@ -22,6 +22,9 @@
           font-family: latoblack;
         }
       }
+      .logo-courier .shipment-icon {
+        margin-top: 20px;
+      }
     }
   }
 	.panel {
@@ -308,11 +311,17 @@
           text-align: right;
           figure {
             height: 40px;
-            display: inline;
+            display: inline-table;
             vertical-align: middle;
+
             img {
               max-height: 67px;
             }
+          }
+          figure.provider-logo {
+            border: 1px solid #eeedf0;
+            padding: 5px;
+            background-color: white;
           }
 
         }
