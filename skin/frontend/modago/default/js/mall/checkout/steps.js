@@ -1516,13 +1516,16 @@
 
                 //////////////////////
                 var default_pay_bank = jQuery('.default_pay input[name="payment[method]"]');
-                jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
+                //jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
 
                 jQuery(default_pay_bank).on('change', function(){
                     jQuery(default_pay_bank).closest('.panel').removeClass('payment-selected');
                     jQuery(this).closest('.panel').addClass('payment-selected');
                     jQuery('.selected_bank').hide();
-                    jQuery(this).closest('.form-group').next('.selected_bank').show();
+                    if (jQuery(this).is(":checked")) {
+                        jQuery(this).closest('.form-group').next('.selected_bank').show();
+                    }
+
                 });
                 /////////////////////
 
