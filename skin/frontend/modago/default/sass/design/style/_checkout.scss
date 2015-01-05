@@ -22,9 +22,14 @@
           font-family: latoblack;
         }
       }
-      .logo-courier .shipment-icon {
-        margin-top: 20px;
-        margin-right: 20px;
+      .logo-courier {
+        @media (max-width: 480px) {
+          width: auto;
+        }
+        .shipment-icon {
+          margin-top: 20px;
+          margin-right: 20px;
+        }
       }
     }
   }
@@ -322,6 +327,9 @@
               vertical-align: middle;
               img {
                 max-height: 67px;
+                @media (max-width: 380px) {
+                  max-height: 50px;
+                }
               }
             }
           }
