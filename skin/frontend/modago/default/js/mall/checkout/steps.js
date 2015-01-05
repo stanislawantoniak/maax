@@ -594,7 +594,7 @@
 			},
 
 			removeAddress: function(event){
-				console.log("Remove clicked", event.data);
+
                 var deffered,
                     self = this;
 
@@ -1396,12 +1396,13 @@
 
             renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
                 var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
-                selectedMethodContainer.find("dl dt").text(paymentMethod);
-                selectedMethodContainer.find("dl dd#bank-name").text(providerText);
+                selectedMethodContainer.find("dl dt").html(paymentMethod);
+                selectedMethodContainer.find("dl dd#bank-name").html(providerText);
 
                 var logo = jQuery('<img />');
                 logo.attr('src', imgUrl);
-                selectedMethodContainer.find("figure").html(logo);
+
+                selectedMethodContainer.find("figure").find("div").html(logo);
                 jQuery(".default_pay .top-panel").show();
             },
 
@@ -1452,7 +1453,10 @@
 
                         //replace
                         var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
-                        self.renderPaymentSelected(paymentMethodName,"", methodLogoUrl);
+                        var paymentDescription = jQuery(e.target).closest('.form-group').find(".payment-description").html();
+
+
+                        self.renderPaymentSelected(paymentMethodName,paymentDescription, methodLogoUrl);
                         self.renderSupportedBySelected("");
 
                         //close payment selector widget
@@ -1585,7 +1589,6 @@
 			},
 			
 			getSelectedBank: function(){
-				//return this.content.find("#payment_form_zolagopayment :radio:checked");
                 return this.content.find("input[type=hidden][name='payment[additional_information][provider]']").val();
 			},
 			
@@ -1621,26 +1624,27 @@
 				}
 				return null;
 			},
-			
-			getOnlineData: function(){
-				if(this.isOnlinePayment()){
-					var bank = this.getSelectedBank();
 
-					if(bank.length){
-                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='"+bank+"']");
-                        if(bankDataSource.length){
+            getProvidersData: function () {
+                var selectedPayment = this.getSelectedPayment();
+
+                if (selectedPayment === 'zolagopayment_gateway' || selectedPayment === 'zolagopayment_cc') {
+                    var bank = this.getSelectedBank();
+                    if (bank.length) {
+                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='" + bank + "']");
+
+                        if (bankDataSource.length) {
                             return bankDataSource.data("bankName");
                         }
-                        return null;
-					}
-				}
-				return null;
-			},
-			
-			isOnlinePayment: function(){
-                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
-                if(selectedPaymentSource.length){
-                    return selectedPaymentSource.data('online')=="1";
+                    }
+                }
+                return null;
+            },
+
+            hasProviders: function(){
+                var selectedPayment = this.getSelectedPayment();
+                if (selectedPayment === 'zolagopayment_gateway' || selectedPayment === 'zolagopayment_cc') {
+                    return true;
                 }
                 return null;
 			},

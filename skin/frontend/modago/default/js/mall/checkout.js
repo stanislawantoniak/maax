@@ -491,8 +491,8 @@
 			carrier_name: step.getCarrierName(),
 			carrier_method: step.getCarrierMethod(),
 			payment_method: step.getPaymentMethod(),
-			online: step.isOnlinePayment(),
-			online_data: step.getOnlineData(),
+            hasProviders: step.hasProviders(),
+			online_data: step.getProvidersData(),
 		};
 	}
 	
@@ -540,14 +540,14 @@
 			dataObject, sidebar, template){
 
 		var self = this,
-			online = dataObject.online;
+			hasProviders = dataObject.hasProviders;
 			
 		
 		// Fill sidebar with data
 		sidebar.html(Mall.replace(template, dataObject));
 
 		// Show hide bank field
-		sidebar.find(".online-data")[online ? "show" : "hide"]();
+		sidebar.find(".online-data")[hasProviders ? "show" : "hide"]();
 		
 		// Bind click
 		sidebar.find(".prev-button-deliverypaymnet").click(function(){
