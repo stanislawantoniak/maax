@@ -1376,7 +1376,7 @@
                 view_block_default_pay.toggle();
                 var ifPanelClosed = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible');
                 var txt = ifPanelClosed ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
-//console.log(ifPanelClosed);
+
                 jQuery(".default_pay .panel").removeClass("payment-selected");
                 jQuery('.selected_bank').hide();
 
@@ -1397,7 +1397,12 @@
             renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
                 var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
                 selectedMethodContainer.find("dl dt").html(paymentMethod);
-                selectedMethodContainer.find("dl dd#bank-name").html(providerText);
+                if(jQuery.type(providerText) !== 'undefined'){
+                    selectedMethodContainer.find("dl dd#bank-name").html(providerText);
+                } else {
+                    selectedMethodContainer.find("dl dd#bank-name").html("");
+                }
+
 
                 var logo = jQuery('<img />');
                 logo.attr('src', imgUrl);
