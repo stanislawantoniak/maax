@@ -1394,7 +1394,7 @@
 
             },
 
-            renderPaymentSelected: function (paymentMethod, providerText, imgUrl, imageClass) {
+            renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
                 var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
                 selectedMethodContainer.find("dl dt").html(paymentMethod);
                 selectedMethodContainer.find("dl dd#bank-name").html(providerText);
@@ -1402,12 +1402,6 @@
                 var logo = jQuery('<img />');
                 logo.attr('src', imgUrl);
 
-                console.log(imageClass);
-                if(jQuery.type(imageClass)!=="undefined"){
-                    selectedMethodContainer.find("figure").addClass(imageClass);
-                } else {
-                    selectedMethodContainer.find("figure").removeAttr("class");
-                }
                 selectedMethodContainer.find("figure").html(logo);
                 jQuery(".default_pay .top-panel").show();
             },
@@ -1478,7 +1472,7 @@
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
-                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl, 'provider-logo');
+                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
 
 
                     var supportedByLogoUrl = jQuery(e.target).data("service-provider-icon");
