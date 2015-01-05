@@ -10,6 +10,20 @@
 			}
 		}
 	}
+  #shipping-methods {
+    .panel-body {
+      dt {
+        font-weight: normal;
+        font-family: latoblack;
+      }
+      dd.separator {
+        strong {
+          font-weight: normal;
+          font-family: latoblack;
+        }
+      }
+    }
+  }
 	.panel {
 		@include border-radius(2px);
 		border-color:$bc-primary;
@@ -122,6 +136,11 @@
 		}
 	}
   form {
+    .form-group.form-radio {
+      @media (max-width: $screen-xs-min) {
+        margin-bottom: 0px;
+      }
+    }
     fieldset {
 
       &.no-border {
@@ -165,6 +184,7 @@
         font-size: 14px;
         text-align: left;
         line-height: 17px;
+        display: block;
       }
     }
     input[type="text"],
@@ -274,6 +294,10 @@
         text-align: right;
       }
       > .panel-body {
+        dt {
+          font-weight: normal;
+          font-family: latoblack;
+        }
         #payment-provider {
           margin-top: 12px;
           img {

@@ -1376,7 +1376,14 @@
                 view_block_default_pay.toggle();
                 var ifPanelClosed = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible');
                 var txt = ifPanelClosed ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
+//console.log(ifPanelClosed);
+                jQuery(".default_pay .panel").removeClass("payment-selected");
+                jQuery('.selected_bank').hide();
 
+                if(!ifPanelClosed){
+                    jQuery("input[name='payment[method]']").prop("checked",false);
+                    jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+                }
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
@@ -1388,7 +1395,7 @@
             },
 
             renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
-                var selectedMethodContainer = jQuery(".default_pay .top-panel .row");
+                var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
                 selectedMethodContainer.find("dl dt").text(paymentMethod);
                 selectedMethodContainer.find("dl dd#bank-name").text(providerText);
 
@@ -1399,7 +1406,7 @@
             },
 
             renderSupportedBySelected: function (label, imgUrl) {
-                var selectedMethodContainer = jQuery(".default_pay .top-panel .row");
+                var selectedMethodContainer = jQuery(".default_pay .top-panel .row:nth-child(2)");
                 if (imgUrl) {
                     var logo = jQuery('<img />');
                     logo.attr('src', imgUrl);
@@ -1461,7 +1468,7 @@
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
 
                     //replace
-                    self.renderPaymentSelected(paymentMethodName,Mall.translate.__('bank') + ": " + providerName,bankLogoUrl);
+                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
 
 
                     var supportedByLogoUrl = jQuery(e.target).data("service-provider-icon");
@@ -1490,10 +1497,11 @@
                     }
 					return false;
                 });
-				
+
 
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
+
                     return false;
                 });
 
@@ -1572,11 +1580,13 @@
 			},
 			
 			getSelectedPayment: function(){
-				return this.content.find(".payment-method:radio:checked");
+				//return this.content.find(".payment-method:radio:checked");
+                return this.content.find("input[type=hidden][name='payment[method]']").val();
 			},
 			
 			getSelectedBank: function(){
-				return this.content.find("#payment_form_zolagopayment :radio:checked");
+				//return this.content.find("#payment_form_zolagopayment :radio:checked");
+                return this.content.find("input[type=hidden][name='payment[additional_information][provider]']").val();
 			},
 			
 			getCarrierName: function(){
@@ -1595,7 +1605,11 @@
 			},
 			
 			getPaymentMethod: function(){
-				return this.getSelectedPayment().data("paymentMethod");
+                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
+                if(selectedPaymentSource.length){
+                    return selectedPaymentSource.data("paymentMethod");
+                }
+				return null;
 			},
 			
 			getCostForVendor: function(vendorId, methodCode){
@@ -1611,15 +1625,24 @@
 			getOnlineData: function(){
 				if(this.isOnlinePayment()){
 					var bank = this.getSelectedBank();
+
 					if(bank.length){
-						return bank.data("bankName");
+                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='"+bank+"']");
+                        if(bankDataSource.length){
+                            return bankDataSource.data("bankName");
+                        }
+                        return null;
 					}
 				}
 				return null;
 			},
 			
 			isOnlinePayment: function(){
-				return this.getSelectedPayment().data('online')=="1";
+                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
+                if(selectedPaymentSource.length){
+                    return selectedPaymentSource.data('online')=="1";
+                }
+                return null;
 			},
 			
 
