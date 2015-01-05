@@ -331,31 +331,37 @@
 
 			}
 		}
-		.form-radio {
-			label {
-				padding-left:30px;
-				width:100%;
-              strong {
-                font-weight: normal;
-                font-family: latoblack;
-              }
-				span {
-					position:relative;
-					top:-6px;
-					margin-bottom: -6px;
-					@media (max-width: 360px) {
-						top:-15px;
-					}
-				}
-              span.label-wrapper {
-                padding-left: 0;
-                padding-right: 0;
-                @media (max-width: $screen-xs) {
-                  width: 100%;
-                }
-              }
-			}
-		}
+      .form-radio {
+        label {
+          padding-left: 30px;
+          width: 100%;
+          strong {
+            font-weight: normal;
+            font-family: latoblack;
+          }
+          span {
+            position: relative;
+            margin-bottom: -6px;
+            @media (max-width: $screen-xs) {
+              margin-bottom: 12px;
+            }
+          }
+          span.label-wrapper {
+            padding-left: 0;
+            padding-right: 0;
+
+            @media (max-width: $screen-xs) {
+              width: 100%;
+            }
+          }
+          span.payment-with-description {
+            top: -6px;
+            @media (max-width: $screen-xs) {
+              margin-bottom: 0px;
+            }
+          }
+        }
+      }
 
 		#pay_01 {
 			.form-radio {

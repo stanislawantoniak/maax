@@ -1594,7 +1594,6 @@
 			},
 			
 			getSelectedBank: function(){
-				//return this.content.find("#payment_form_zolagopayment :radio:checked");
                 return this.content.find("input[type=hidden][name='payment[additional_information][provider]']").val();
 			},
 			
@@ -1630,26 +1629,27 @@
 				}
 				return null;
 			},
-			
-			getOnlineData: function(){
-				if(this.isOnlinePayment()){
-					var bank = this.getSelectedBank();
 
-					if(bank.length){
-                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='"+bank+"']");
-                        if(bankDataSource.length){
+            getProvidersData: function () {
+                var selectedPayment = this.getSelectedPayment();
+
+                if (selectedPayment === 'zolagopayment_gateway' || selectedPayment === 'zolagopayment_cc') {
+                    var bank = this.getSelectedBank();
+                    if (bank.length) {
+                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='" + bank + "']");
+
+                        if (bankDataSource.length) {
                             return bankDataSource.data("bankName");
                         }
-                        return null;
-					}
-				}
-				return null;
-			},
-			
-			isOnlinePayment: function(){
-                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
-                if(selectedPaymentSource.length){
-                    return selectedPaymentSource.data('online')=="1";
+                    }
+                }
+                return null;
+            },
+
+            hasProviders: function(){
+                var selectedPayment = this.getSelectedPayment();
+                if (selectedPayment === 'zolagopayment_gateway' || selectedPayment === 'zolagopayment_cc') {
+                    return true;
                 }
                 return null;
 			},
