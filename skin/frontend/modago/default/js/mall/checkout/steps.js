@@ -594,7 +594,7 @@
 			},
 
 			removeAddress: function(event){
-				console.log("Remove clicked", event.data);
+
                 var deffered,
                     self = this;
 
@@ -1454,7 +1454,7 @@
                         //replace
                         var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
                         var paymentDescription = jQuery(e.target).closest('.form-group').find(".payment-description").html();
-                        console.log(paymentDescription);
+
 
                         self.renderPaymentSelected(paymentMethodName,paymentDescription, methodLogoUrl);
                         self.renderSupportedBySelected("");
