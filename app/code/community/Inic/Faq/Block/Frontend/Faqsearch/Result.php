@@ -23,7 +23,7 @@ class Inic_Faq_Block_Frontend_Faqsearch_Result extends Mage_Core_Block_Template 
         $search = $this->getSearch();
         $keyword=$this->getRequest()->getParam('keyword');
         if ($search !== false && $head = $this->getLayout()->getBlock('head')) {
-            $head->setTitle('Search Result For : '.$this->htmlEscape($keyword) . ' - ' . $head->getTitle());
+            $head->setTitle($this->__('Search Result For : "%s"',$this->htmlEscape($keyword)) . ' - ' . $head->getTitle());
         }
     }
 	
