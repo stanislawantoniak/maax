@@ -69,7 +69,7 @@
                     <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
                         <?php $methodCheckoutDescription = $this->_getMethodCheckoutDescription($_method); ?>
                         <span
-                            class="pull-left col-xs-9 col-sm-9 col-md-9 col-lg-10 label-wrapper<?php if (!empty($methodCheckoutDescription)): ?> payment-with-description<?php endif; ?>">
+                            class="pull-left col-xs-8 col-sm-9 col-md-9 col-lg-10 label-wrapper<?php if (!empty($methodCheckoutDescription)): ?> payment-with-description<?php endif; ?>">
                             <strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
 
                             <?php if (!empty($methodCheckoutDescription)): ?>
