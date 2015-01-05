@@ -94,7 +94,7 @@
 "Stock excluding minimal", "Stan magzynowy z modyfikatorem"
 "Close", "Zamknij"
 "Stock status is not avaialble", "Stan magazynowy niedostępny"
-"Matched product(s) prices will update after que processed", "Parametry ceny dla zaznaczonych produktów zostały zapisane. Ceny zostaną zmienione za chwilę."
+"Matched product(s) prices will update after que processed", "Ta funkcja spowoduje zapisanie parametrów ceny dla zaznaczonych produktów. Ceny na froncie zostaną zmienione za chwilę, po przetworzeniu kolejki."
 "Manual", "Manualna"
 "From file", "Z pliku"
 "Change", "Zmień"
