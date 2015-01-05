@@ -120,8 +120,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
                 break;
             case 'zolagopayment_cc':
                 $icon = array(
-                    $this->getSkinUrl('images/payment_methods/payment_methods-05.png'),
-                    $this->getSkinUrl('images/payment_methods/payment_methods-04.png')
+                    $this->getSkinUrl('images/payment_methods/payment_methods-06.png')
                 );
                 break;
         }
