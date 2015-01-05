@@ -58,7 +58,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 			$collection = $this->_prepareCollection();
 			if($global && is_array($query)){
 				foreach($this->_getRestQuery($query) as $key=>$value){
-					$collection->addAttributeToFilter($key, $value);
+					Mage::log($key . ": " . var_export($value, 1));
+					$collection->addAttributeToFilter($key, $value, "left");
 				}
 			}elseif($productsIds){
 				$collection->addIdFilter($productsIds);
@@ -67,6 +68,9 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 				$collection->addIdFilter(-1);
 			}
 			$allIds = $collection->getAllIds();
+			Mage::log($collection->getSelect()."");
+			Mage::log($allIds);
+			
 			$allIds = array_map(function($item){return (int)$item;}, $allIds);
 			
 			if($allIds && $attributeData){
