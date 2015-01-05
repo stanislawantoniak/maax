@@ -9,11 +9,6 @@ $table = $installer->getTable('zolagopayment/provider');
 
 $installer->getConnection()->truncateTable($table);
 
-/** poprawki tekstow
- * MC orac VISA teraz oddzielnie kierujace na ten sam channel
- * is_active update
- */
-
 $installer->getConnection()->query("
 INSERT INTO `". $table ."` (`provider_id`, `code`, `is_active`, `name`, `created_at`, `updated_at`, `type`) VALUES
 (1, 'mt', 1, 'mTransfer', '2014-12-28 23:00:00', '2014-12-28 23:00:00', 'gateway'),
@@ -67,5 +62,5 @@ INSERT INTO `". $table ."` (`provider_id`, `code`, `is_active`, `name`, `created
 (50, 'mc', 1, 'MasterCard', '2014-12-28 23:00:00', '2014-12-28 23:00:00', 'cc');
 
 ");
- 
+
 $installer->endSetup();
