@@ -1402,7 +1402,7 @@
                 var logo = jQuery('<img />');
                 logo.attr('src', imgUrl);
 
-                selectedMethodContainer.find("figure").html(logo);
+                selectedMethodContainer.find("figure").find("div").html(logo);
                 jQuery(".default_pay .top-panel").show();
             },
 
