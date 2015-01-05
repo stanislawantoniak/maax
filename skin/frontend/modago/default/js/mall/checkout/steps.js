@@ -1377,6 +1377,9 @@
                 var ifPanelClosed = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible');
                 var txt = ifPanelClosed ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
 //console.log(ifPanelClosed);
+                jQuery(".default_pay .panel").removeClass("payment-selected");
+                jQuery('.selected_bank').hide();
+
                 if(!ifPanelClosed){
                     jQuery("input[name='payment[method]']").prop("checked",false);
                     jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
