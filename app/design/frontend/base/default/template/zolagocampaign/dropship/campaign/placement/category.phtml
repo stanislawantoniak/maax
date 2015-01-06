@@ -5,7 +5,7 @@ $bannerTypes = $bannerHelper->getBannersConfiguration();
 $vendor = Mage::getSingleton('udropship/session')->getVendor();
 $vendorName = $vendor->getVendorName();
 
-$campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
+$campaigns = json_encode($this->getCampaigns(),JSON_HEX_APOS);
 
 $placements = $this->getCategoryPlacements();
 
