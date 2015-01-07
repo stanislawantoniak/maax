@@ -2433,7 +2433,7 @@ jQuery.noConflict();
         function showSubMenuMobile(){
             var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a');
 
-            //dodanie filtra aby w navigation mozna bylo dac klikalnego linka
+            //aby w navigation mozna bylo dac klikalnego linka
             //wystarczy dodac do anchor'a class="clickable"
             mobileMenu = $(mobileMenu).filter(function( index ) {
                 return !$(this ).hasClass('clickable');
@@ -2467,16 +2467,13 @@ jQuery.noConflict();
             if (navSubClone.is(':visible')) {
 
                 navSubClone.on('click', 'a', function(event) {
-                    if($(this).closest('li').hasClass('navigation-main-item')){
+                    //aby w navigation mozna bylo dac klikalnego linka
+                    //wystarczy dodac do anchor'a class="clickable"
+                    if(!$(this).hasClass('clickable')) {
                         event.preventDefault();
                         if ($(this).hasClass('children')) {
                             containerCloneMenu.html('');
-                            $(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300,function(){
-                                var $container = $('.jsMasonry');
-                                $container.masonry({
-                                    itemSelector: '.box'
-                                });
-                            });
+                            $(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300);
                         } else {
                             containerCloneMenu.html('');
                         };
@@ -2496,7 +2493,7 @@ jQuery.noConflict();
 // ZAZNACZENIE AKTYWNEJ POZYCJI MENU
         function activeMenu() {
             $('#nav_desc').on('click', 'a', function(event) {
-                if($(this).closest('li').hasClass('navigation-main-item')){
+                if(!$(this).hasClass('clickable')){
                     event.preventDefault();
                     $(this).closest('#nav_desc').find('.active').removeClass('active');
                     $(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');

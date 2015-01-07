@@ -350,6 +350,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'campaign.price_source_id as price_source',
                 'campaign.percent as price_percent',
                 'campaign.price_srp as price_srp',
+                'campaign.strikeout_type as strikeout_type',
                 'campaign.date_from as date_from',
                 'campaign.date_to as date_to'
             )
