@@ -8,7 +8,7 @@ $categories = $this->getMainCategoriesMobile();
 ?>
 <?php if (count($categories) > 0) : ?>
     <?php foreach ($categories as $cat) : ?>
-        <li>
+        <li class="navigation-main-item">
             <a href="<?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown'])  ? '#' : $cat['url']; ?>">
                 <?php echo $this->escapeHtml($cat['name']); ?>
                 <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '<i class="fa fa-chevron-down"></i>'
