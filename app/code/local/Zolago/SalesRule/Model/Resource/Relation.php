@@ -16,7 +16,7 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 		$relationData = $item->getDiscountInfo();
 		$itemId = $item->getId();
 		
-		if(is_null($relationData)){
+		if(empty($relationData)){
 			return;
 		}
 		
@@ -26,7 +26,7 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 		
 		$this->_getWriteAdapter()->delete(
 			$this->getMainTable(), 
-			array("order_item_id"=>$itemId)
+			$this->_getWriteAdapter()->quoteInto("order_item_id=?", $itemId)
 		);
 		
 		$this->_getWriteAdapter()->insertMultiple(
@@ -34,7 +34,7 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 			$relationData
 		);
 		
-		// Unset discount info to prevent newt steps saving
+		// Unset discount info to prevent next steps saving
 		$item->setDiscountInfo(null);
 		
 		return $this;

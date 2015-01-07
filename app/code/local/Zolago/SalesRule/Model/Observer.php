@@ -59,7 +59,9 @@ class Zolago_SalesRule_Model_Observer {
 	public function salesOrderItemSaveAfter(Varien_Event_Observer $observer) {
 		$item = $observer->getEvent()->getItem();
 		/* @var $item Mage_Sales_Model_Order_Item */
-		Mage::getResourceSingleton('zolagosalesrule/relation')->saveForOrderItem($item);
+		if($item->getDiscountInfo()){
+			Mage::getResourceSingleton('zolagosalesrule/relation')->saveForOrderItem($item);
+		}
 	}
 
 	
