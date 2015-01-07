@@ -58,6 +58,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         if (count($toInsert)) {
             $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $localeTimeF = date("Y-m-d H:i", $localeTime);
+            $model = Mage::getModel("zolagocampaign/campaign");
+            $campaign = $model->load($campaignId);
+
+            $campaign->setData('updated_at', $localeTimeF);
+            $campaign->save();
         }
         return $this;
     }
@@ -369,10 +377,16 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
 
+        //get only campaigns updated not earlier then 2 hours ago
+        //campaign.updated_at IS NOT NULL (just created campaigns do not have products attached)
+        $updateDate = date("Y-m-d H:i", strtotime('-2 hours', $localeTime));
+        $select->where("campaign.updated_at IS NOT NULL AND campaign.updated_at>='{$updateDate}' ");
+
         $select->where("campaign.type IN(?)", $type);
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-//echo $select;
+
+        Mage::log($select->__toString());
 
         return $this->getReadConnection()->fetchAll($select);
     }

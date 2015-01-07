@@ -4,6 +4,7 @@ class Zolago_Campaign_Model_Observer
 {
 
     static function setProductAttributes(){
+        /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
 //        $storesToUpdate = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $storesToUpdate = array();
@@ -20,6 +21,7 @@ class Zolago_Campaign_Model_Observer
 
 
 
+        $productIds = array();
         /* @var $model Zolago_Campaign_Model_Resource_Campaign */
         $model = Mage::getResourceModel('zolagocampaign/campaign');
 
@@ -46,10 +48,12 @@ class Zolago_Campaign_Model_Observer
                         $actionModel
                             ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                     }
+                    $productIds[$productId] = $productId;
                 }
-
             }
+            unset($productId);
         }
+
         unset($dataToUpdate);
         unset($attributesData);
 
@@ -61,7 +65,6 @@ class Zolago_Campaign_Model_Observer
                 Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION
             )
         );
-
 
 
         $dataToUpdate = array();
@@ -79,8 +82,7 @@ class Zolago_Campaign_Model_Observer
                 $attributesData = array(
                     'campaign_regular_id' => $data['campaign_id'],
                     'special_from_date' => !empty($data['date_from']) ? date('Y-m-d', strtotime($data['date_from'])) : '',
-                    'special_to_date' => !empty($data['date_to']) ? date('Y-m-d', strtotime($data['date_to'])) : '',
-//                    'msrp' => $data['price_srp']
+                    'special_to_date' => !empty($data['date_to']) ? date('Y-m-d', strtotime($data['date_to'])) : ''
                 );
                 foreach ($storesToUpdate as $store) {
                     $actionModel
@@ -88,12 +90,11 @@ class Zolago_Campaign_Model_Observer
                 }
                 unset($store);
                 $priceTypeSource[$data['product_id']] = $data['price_source'];
+                $productIds[$productId] = $productId;
             }
+            unset($productId);
         }
         //2. Set special price
-        $productIds = array_keys($dataToUpdate);
-
-
         $skuvS = $model->getVendorSkuAssoc($productIds);
 
         //Ping converter to get special price
@@ -110,6 +111,7 @@ class Zolago_Campaign_Model_Observer
             foreach ($priceTypeSource as $productId => $priceSourceId) {
                 $priceType[$productId] = $attr->getSource()->getOptionText($priceSourceId);
             }
+            unset($productId);
         }
 
         //set Special Price
@@ -133,6 +135,8 @@ class Zolago_Campaign_Model_Observer
 
                             $actionModel
                                 ->updateAttributesNoIndex(array($productId), $attributesData, $store);
+
+                            $productIds[$productId] = $productId;
                         }
                         unset($store);
                     }
@@ -140,9 +144,19 @@ class Zolago_Campaign_Model_Observer
 
             }
         }
+        unset($productId);
 
-        Mage::getSingleton('catalog/product_action')
-            ->reindexAfterMassAttributeChange();
+        //3. reindex
+        $actionModel->reindexAfterMassAttributeChange();
+        Mage::log($productIds);
+
+        //4. push to solr
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productIds
+            )
+        );
     }
     static public function processCampaignAttributes()
     {
