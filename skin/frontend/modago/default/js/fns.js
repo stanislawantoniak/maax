@@ -2467,18 +2467,21 @@ jQuery.noConflict();
             if (navSubClone.is(':visible')) {
 
                 navSubClone.on('click', 'a', function(event) {
-                    event.preventDefault();
-                    if ($(this).hasClass('children')) {
-                        containerCloneMenu.html('');
-                        $(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300,function(){
-                            var $container = $('.jsMasonry');
-                            $container.masonry({
-                                itemSelector: '.box'
+                    if($(this).closest('li').hasClass('navigation-main-item')){
+                        event.preventDefault();
+                        if ($(this).hasClass('children')) {
+                            containerCloneMenu.html('');
+                            $(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300,function(){
+                                var $container = $('.jsMasonry');
+                                $container.masonry({
+                                    itemSelector: '.box'
+                                });
                             });
-                        });
-                    } else {
-                        containerCloneMenu.html('');
-                    };
+                        } else {
+                            containerCloneMenu.html('');
+                        };
+                    }
+
                 });
             };
         };
@@ -2493,11 +2496,14 @@ jQuery.noConflict();
 // ZAZNACZENIE AKTYWNEJ POZYCJI MENU
         function activeMenu() {
             $('#nav_desc').on('click', 'a', function(event) {
-                event.preventDefault();
-                $(this).closest('#nav_desc').find('.active').removeClass('active');
-                $(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
-                $(this).find('i').addClass('fa-caret-up');
-                $(this).addClass('active');
+                if($(this).closest('li').hasClass('navigation-main-item')){
+                    event.preventDefault();
+                    $(this).closest('#nav_desc').find('.active').removeClass('active');
+                    $(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
+                    $(this).find('i').addClass('fa-caret-up');
+                    $(this).addClass('active');
+                }
+
             });
         }
 
