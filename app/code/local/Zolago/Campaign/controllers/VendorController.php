@@ -326,4 +326,15 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         }
         echo $previewImage;
     }
+
+
+
+    public function testAction(){
+        Zolago_Campaign_Model_Observer::setProductAttributes();
+    }
+
+    public function test2Action(){
+        $collection = Mage::getModel('catalog/product');
+
+    }
 }

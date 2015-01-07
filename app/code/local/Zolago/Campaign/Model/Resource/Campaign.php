@@ -334,6 +334,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
+    /**
+     * @param array $type
+     * @return array
+     */
     public function getUpDateCampaigns(array $type)
     {
         $table = $this->getTable("zolagocampaign/campaign");
@@ -341,26 +345,33 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->from(
             array("campaign" => $table),
             array(
-                 "campaign.type as type",
-                  'campaign.campaign_id as campaign_id',
-                  'campaign.price_source_id as price_source',
-                  'campaign.percent as price_percent',
-                  'campaign.price_srp as price_srp'
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.price_source_id as price_source',
+                'campaign.percent as price_percent',
+                'campaign.price_srp as price_srp',
+                'campaign.date_from as date_from',
+                'campaign.date_to as date_to'
             )
         );
         $select->join(
             array('campaign_product' => 'zolago_campaign_product'),
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
-                 'product_id' => 'campaign_product.product_id'
+                'product_id' => 'campaign_product.product_id'
             )
         );
-        $startTime = date("Y-m-d H:i", strtotime('-10 minutes', time()));
-        $endYTime = date("Y-m-d H:i", strtotime('+10 minutes', time()));
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i", $localeTime);
 
-        $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
+
+        $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
+        $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
+
+        $select->where("campaign.type IN(?)", $type);
+
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-
+//echo $select;
         return $this->getReadConnection()->fetchAll($select);
     }
 
@@ -424,6 +435,54 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where('catalog_category.value=?', $path);
 
         return $this->getReadConnection()->fetchAll($select);
+    }
+
+    /**
+     * @param $ids
+     *
+     * @return array $assoc
+     */
+    public function getVendorSkuAssoc($ids)
+    {
+        $assoc = array();
+
+        if (empty($ids)) {
+            return $assoc;
+        }
+        $readConnection = $this->_getReadAdapter();
+        $tVarchar = $readConnection->getTableName('catalog_product_entity_varchar');
+        $select = $readConnection->select();
+        $select->from(
+            array("product_varchar" => $tVarchar),
+            array(
+                "product_id" => "product_varchar.entity_id",
+                "skuv" => "product_varchar.value",
+                "store" => "product_varchar.store_id",
+                "sku" => "product.sku"
+            )
+        );
+        $select->join(
+            array("attribute" => $this->getTable("eav/attribute")),
+            "attribute.attribute_id = product_varchar.attribute_id",
+            array()
+        );
+        $select->join(
+            array("product" => $this->getTable("catalog/product")),
+            "product.entity_id = product_varchar.entity_id",
+            array("type" => "product.type_id")
+        );
+        $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+        $select->where("product_varchar.entity_id IN(?)", $ids);
+        //TODO need to know what to do for configurable
+        //$select->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+
+        try {
+            $assoc = $readConnection->fetchAssoc($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error skuv");
+        }
+
+        return $assoc;
     }
 
 }
