@@ -372,6 +372,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
 //echo $select;
+
         return $this->getReadConnection()->fetchAll($select);
     }
 
