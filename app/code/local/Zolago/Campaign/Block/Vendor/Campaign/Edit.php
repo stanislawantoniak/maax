@@ -125,10 +125,11 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label" => $helper->__('Discount percent')
         ));
 
-        $prices->addField("price_srp", "text", array(
-            "name" => "price_srp",
-            "class" => "form-control numeric",
-            "label" => $helper->__('Price SRP')
+        $prices->addField("strikeout_type", "radios", array(
+            "name" => "strikeout_type",
+            "required" => true,
+            "label" => $helper->__('Strikeout price'),
+            "values" => Mage::getSingleton('zolagocampaign/campaign_strikeout')->toOptionArray(),
         ));
 
         $values = $this->getModel()->getData();
