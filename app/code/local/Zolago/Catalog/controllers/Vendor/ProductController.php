@@ -204,22 +204,37 @@ class Zolago_Catalog_Vendor_ProductController
 	}
 	
 	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return boolean
+	 */
+	protected function _isVisibleInGrid(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
+		return in_array(
+			$attribute->getGridPermission(), 
+			$this->getGridModel()->getGridAttributeTypes()
+		);
+	}
+	
+	/**
 	 * @param type $product
 	 * @param type $storeId
 	 * @return int
 	 */
 	protected function _validateRequiredAttributes($product, $storeId) 
 	{
+		/* @var $product Mage_Catalog_Model_Product */
 		$missingAttributes = array();
 		$attributes = $product->getAttributes();
 		foreach ($attributes as $attribute) {
 			if(in_array($attribute->getFrontendInput(), array("gallery", "weee"))){
 				continue;
 			}
-			if ($attribute->getIsRequired()) {
+			if ($attribute->getIsRequired() && $this->_isVisibleInGrid($attribute)) {
+				/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 				$value = Mage::getResourceModel('catalog/product')->getAttributeRawValue(
 						$product->getId(), $attribute->getAttributeCode(), $storeId);
-				if ($attribute->isValueEmpty($value)) {
+				if ($attribute->isValueEmpty($value) || 
+					(in_array($attribute->getFrontendInput(), array("select", "multiselect")) && $value===false)) {
+					Mage::log($attribute->getAttributeCode() . ": " . var_export($value, 1));
 					$missingAttributes[$attribute->getAttributeCode()] = $attribute->getStoreLabel(
 							$this->_getSession()->getVendor()->getLabelStore());
 				}

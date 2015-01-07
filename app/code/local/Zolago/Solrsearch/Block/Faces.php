@@ -4,7 +4,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     const MODE_CATEGORY = 1;
     const MODE_SEARCH = 2;
 	
-	const FLAGS_FACET = "flags_facet";
 	const PRICE_FACET_TRANSLATED = "price_facet";
 
     const DEFAULT_RNDERER = "zolagosolrsearch/faces_enum";
@@ -28,11 +27,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return 
      */
      protected function _getPriceFacet() {
-         $app = Mage::app()->getStore();
-         $code = $app->getCurrentCurrencyCode();
-         $id = Mage::getSingleton('customer/session')->getCustomerGroupId();
-         $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
-         return $prefix.'_price_decimal';
+         return Mage::helper('zolagosolrsearch')->getPriceFacet();
      }
     //}}}
 	
@@ -41,7 +36,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return string
 	 */
 	public function getFacetLabel($facetCode){
-		if($facetCode==self::FLAGS_FACET){
+		if($facetCode==Zolago_Solrsearch_Model_Solr::FLAGS_FACET){
 			return Mage::helper('zolagosolrsearch')->__('Product Flags');
 		}
 		return parent::getFacetLabel($facetCode);
@@ -226,7 +221,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	}
 	
 	public function getRemoveAllUrl(){
-		return Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
+		return  Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
 	}
 	
 	/**
@@ -248,19 +243,27 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return $this->_mapUrlToJson($this->_parseRemoveAllUrl());
 	}
 	
-	protected function _parseRemoveAllUrl(){
+	
+    /**
+     * overriding q
+     * @param array $paramss
+     * @return array
+     */
+
+	protected function _parseUrlParams(&$paramss) {
+	    
     	$_solrDataArray = $this->getSolrData();
+    	if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
+        	if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
+        		$paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
+        	}
+        }
+	}
+	
+	protected function _parseRemoveAllUrl(){
 
     	$paramss = $this->getRequest()->getParams();
-
-    	if(!isset($paramss['q'])){
-	    	if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
-	        	if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
-	        		$paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
-	        	}
-	        }
-    	}
-
+    	$this->_parseUrlParams($paramss);
         $finalParams = array();
         if(isset($paramss['q'])) {
         	$finalParams['q'] = $paramss['q'];
@@ -333,7 +336,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     public function _parseRemoveFacesUrl($key,$value)
     {
         $paramss = $this->getRequest()->getParams();
-
+        $this->_parseUrlParams($paramss);
         $finalParams = $paramss;
 
         if (!is_array($key)) {
@@ -418,7 +421,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	public function _parseRemoveAllFacesUrl($key)
 	{
 		$paramss = $this->getRequest()->getParams();
-
+		$this->_parseUrlParams($paramss);
 		$finalParams = $paramss;
 
 		if (!is_array($key)) {
@@ -762,16 +765,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds[self::FLAGS_FACET])) {
-            $data = $facetFileds[self::FLAGS_FACET];
+        if(isset($facetFileds[Zolago_Solrsearch_Model_Solr::FLAGS_FACET])) {
+            $data = $facetFileds[Zolago_Solrsearch_Model_Solr::FLAGS_FACET];
             if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues(self::FLAGS_FACET, $data);
+                $data = $this->_prepareMultiValues(Zolago_Solrsearch_Model_Solr::FLAGS_FACET, $data);
             }
 			ksort($data);
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
-            $block->setFacetKey(self::FLAGS_FACET);
+            $block->setFacetKey(Zolago_Solrsearch_Model_Solr::FLAGS_FACET);
             $block->setAttributeCode("flags");
             return $block;
         }
@@ -786,11 +789,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds['product_rating_facet'])) {
-            $data = $facetFileds['product_rating_facet'];
+        if(isset($facetFileds[Zolago_Solrsearch_Model_Solr::RATING_FACET])) {
+            $data = $facetFileds[Zolago_Solrsearch_Model_Solr::RATING_FACET];
 
             if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues('product_rating_facet', $data);
+                $data = $this->_prepareMultiValues(Zolago_Solrsearch_Model_Solr::RATING_FACET, $data);
             }
             if(isset($data['No rating'])) {
                 unset($data['No rating']);

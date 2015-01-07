@@ -17,17 +17,51 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
      */
 	public function saveOrder() {
 		try{
-			$return = parent::saveOrder();
-			// Update customer data
-			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
-				$this->getQuote()->getCustomerId()){
-				$this->getQuote()->getCustomer()->save();
-			}
+			$quote = $this->getQuote();
+			$payment = $quote->getPayment();
+			$methodInstance = $payment->getMethodInstance();
 
+			// Do map payment here...
+			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
+				$methodInstance->setQuote($this->getQuote());
+				if($newData = $methodInstance->getMappedPayment()){
+					// Instatize new payemnt instance
+					$instance = Mage::helper('payment')->getMethodInstance($newData['method']);
+					$instance->setInfoInstance($payment);
+					$payment->setMethodInstance($instance);
+					$this->savePayment($newData);
+					// Save additional data - import in this model do not save the payment
+					// directly after import
+					if(isset($newData['additional_information'])){
+						$payment->setAdditionalInformation($newData['additional_information']);
+						$payment->save();
+					}
+				}
+			}
+			// Parent save order
+			$return = parent::saveOrder();
+
+
+            if(Mage::getSingleton('customer/session')->isLoggedIn()
+                && $this->getQuote()->getCustomerId()) {
+                // Update customer data
+                $customerPayment = $this->_checkoutSession->getPayment(true);
+                if (!is_null($customerPayment)
+                    && is_array($customerPayment)) {
+                    if (isset($customerPayment['method'])) {
+                        $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
+                    }
+                }
+
+                //save customer object
+                $this->getQuote()->getCustomer()->save();
+            }
+
+            //newsletter actions
 			$agreements = $this->_checkoutSession->getAgreements(true);
             /** @var Zolago_Newsletter_Model_Inviter $model */
             $model = Mage::getModel('zolagonewsletter/inviter');
-			if($agreements['agreement_newsletter'] == 1) {
+			if(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 1) {
                 $model->addSubscriber($this->getQuote()->getCustomerEmail(),Zolago_Newsletter_Model_Subscriber::STATUS_UNCONFIRMED);
 			} elseif(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 0) {
 				// send invitation mail, model takes care of handling everything

@@ -308,12 +308,6 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"icon"	 => "icon-list",
 				"url"	 => $this->getUrl('udprod/vendor_product')
 			);
-			$groupOne[] = array(
-				"active" => $this->isActive("udprod_mass"),
-				"label"	 => $this->__('Mass Actions') . " [old]",
-				"icon"	 => "icon-list",
-				"url"	 => $this->getUrl('udprod/vendor_mass')
-			);
 		}
 		
 		// Mass image

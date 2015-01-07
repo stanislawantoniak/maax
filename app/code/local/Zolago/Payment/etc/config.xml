@@ -2,10 +2,15 @@
 <config>
     <modules>
         <Zolago_Payment>
-            <version>0.0.1</version>
+            <version>0.0.8</version>
         </Zolago_Payment>
     </modules>
     <global>
+        <helpers>
+            <zolagopayment>
+                <class>Zolago_Payment_Helper</class>
+            </zolagopayment>
+        </helpers>
         <models>
             <zolagopayment>
                 <class>Zolago_Payment_Model</class>
@@ -25,7 +30,6 @@
                 <class>Zolago_Payment_Block</class>
             </zolagopayment>
         </blocks>
-       
         <resources>
             <zolagopayment_setup>
                 <setup>
@@ -34,15 +38,41 @@
             </zolagopayment_setup>
         </resources>
     </global>
+    <frontend>
+		<translate>
+			<modules>
+				<Zolago_Payment>
+					<files>
+						<default>Zolago_Payment.csv</default>
+					</files>
+				</Zolago_Payment>
+			</modules>
+		</translate>
+    </frontend>
 	<default>
 		<payment>
-            <zolagopayment>
+            <zolagopayment_gateway>
                 <active>1</active>
-                <model>zolagopayment/method</model>
+                <visible>1</visible>
+                <model>zolagopayment/gateway</model>
                 <order_status>pending</order_status>
                 <title>Online Payment</title>
                 <allowspecific>0</allowspecific>
-            </zolagopayment>
+            </zolagopayment_gateway>
+            <zolagopayment_cc>
+                <active>1</active>
+                <visible>1</visible>
+                <model>zolagopayment/cc</model>
+                <order_status>pending</order_status>
+                <title>Credit Card</title>
+                <allowspecific>0</allowspecific>
+            </zolagopayment_cc>
+			<cashondelivery>
+                <visible>1</visible>
+			</cashondelivery>
+			<banktransfer>
+                <visible>1</visible>
+			</banktransfer>
         </payment>
 	</default>
 </config>

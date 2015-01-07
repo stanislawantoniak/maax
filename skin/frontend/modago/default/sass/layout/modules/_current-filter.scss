@@ -48,7 +48,7 @@
 	        &.action {
 	        	position:relative;
 	        	top:-4px;
-    	        @media (max-width: $screen-sm-min) {
+    	        @media (max-width: $screen-xs-max) {
 	    			position: absolute;
 	    			top:1px;
 		        	right: 0px;
