@@ -582,5 +582,13 @@
 				}
 			}
 		});
+		
+		$(".po-item-tooltip").tooltip({
+			title: function(){
+				return $(this).parents("td").find(".po-item-tooltip-content").html();
+			},
+			html: true,
+			placement: "left"
+		});
 	});
 </script>

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_SalesRule>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </Zolago_SalesRule>
     </modules>
     <global>
@@ -49,6 +49,22 @@
 					</zolagosalesrule>
 				</observers>	
 			</sales_order_item_save_after>
+			<udpo_po_item_save_before>
+				<observers>
+					<zolagosalesrule>
+						<model>zolagosalesrule/observer</model>
+						<method>udpoPoItemSaveBefore</method>
+					</zolagosalesrule>
+				</observers>	
+			</udpo_po_item_save_before>
+			<udpo_po_item_save_after>
+				<observers>
+					<zolagosalesrule>
+						<model>zolagosalesrule/observer</model>
+						<method>udpoPoItemSaveAfter</method>
+					</zolagosalesrule>
+				</observers>	
+			</udpo_po_item_save_after>
 		</events>
 		<!-- do copy info array via convert -->
 		<fieldsets>

@@ -34,9 +34,38 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 			$relationData
 		);
 		
-		// Unset discount info to prevent next steps saving
-		$item->setDiscountInfo(null);
 		
+		return $this;
+	}
+	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return Zolago_SalesRule_Model_Resource_Relation
+	 */
+	public function updateForPoItem(Unirgy_DropshipPo_Model_Po_Item $item) {
+		
+		$orderItemId = $item->getOrderItemId();
+		$poItemId = $item->getId();
+		// If obejct just created
+		$this->_getWriteAdapter()->update(
+			$this->getMainTable(), 
+			array("po_item_id"=>$poItemId),
+			$this->_getWriteAdapter()->quoteInto("order_item_id=?", $orderItemId)
+		);
+		return $this;
+	}
+	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return Zolago_SalesRule_Model_Resource_Relation
+	 */
+	public function removeForPoItem(Unirgy_DropshipPo_Model_Po_Item $item) {
+		$poItemId = $item->getId();
+		// If obejct just created
+		$this->_getWriteAdapter()->delete(
+			$this->getMainTable(), 
+			$this->_getWriteAdapter()->quoteInto("po_item_id=?", $poItemId)
+		);
 		return $this;
 	}
 }

@@ -7,6 +7,7 @@
 <?php $_rowPriceInclTax = $_item->getRowTotalInclTax();?>
 <?php $_discountAmount = $_item->getDiscountAmount(); ?>
 <?php $_itemDiscount = $_item->getDiscount(); ?>
+<?php $_discountInfo =$_item->getDiscountInfo();?>
 <?php $_finalItemPrice = $_priceInclTax - $_itemDiscount; ?>
 <?php $_finalRowPrice = $_rowPriceInclTax - $_discountAmount; ?>
 <?php $_sku = $_item->getFinalSku(); ?>
@@ -18,9 +19,37 @@
 	<td><?php echo $this->escapeHtml($_item->getName());?></td>
 	<td class="align-right"><?php echo round($_item->getQty());?></td>
 	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
-	<td class="align-right">
+	<td class="align-right discount">
 		<?php if($_itemDiscount>0):?>
-			<span class="text-success"><?php echo  Mage::helper("core")->currency(-1*$_itemDiscount);?></span>
+			<u  class="po-item-tooltip text-success"><?php echo Mage::helper("core")->currency(-1*$_itemDiscount);?></u>
+			<div class="hidden po-item-tooltip-content">
+				<?php if($_discountInfo):?>
+				<table>
+					<thead>
+						<tr>
+							<th class="align-right"><?php echo $this->__("Id");?></th>
+							<th class="align-left"><?php echo $this->__("Type (algorithm)");?></th>
+							<th class="align-left"><?php echo $this->__("Promotion name");?></th>
+							<th class="align-right"><?php echo $this->__("Discount per item");?></th>
+							<th class="align-left"><?php echo $this->__("Discount sponsored by");?></th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php foreach($_discountInfo as $_relation):?>
+						<tr>
+							<td class="align-right"><?php echo $_relation->getId();?></td>
+							<td class="align-left"><?php echo $this->getAlgorithmName($_relation);?></td>
+							<td class="align-left"><?php echo $this->escapeHtml($_relation->getName());?></td>
+							<td class="align-right"><?php echo Mage::helper("core")->formatPrice($_relation->getDiscountAmount()/$_item->getQty());?></td>
+							<td class="align-left"><?php echo $this->getPayerName($_relation);?></td>
+						</tr>
+					<?php endforeach;?>
+					</tbody>
+				</table>
+				<?php else:?>
+					<?php echo $this->__("Manual discount");?>
+				<?php endif;?>
+			</div>
 		<?php else:?>
 			<?php echo Mage::helper("core")->currency($_itemDiscount);?>
 		<?php endif;?>

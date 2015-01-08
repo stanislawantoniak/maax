@@ -29,6 +29,7 @@ class Zolago_SalesRule_Model_Observer {
 		
 		$rule = $event->getRule();
 		/* @var $rule Mage_SalesRule_Model_Rule */
+		$ruleId = $rule->getId();
 		
 		$discount = $result->getDiscountAmount();
 		
@@ -39,14 +40,15 @@ class Zolago_SalesRule_Model_Observer {
 		}
 		
 		if($discount){
-			$discountInfo[$rule->getId()] = array(
-				"rule_id"			=> $rule->getId(),
+			$discountInfo[$ruleId] = array(
+				"rule_id"			=> $ruleId,
 				"discount_amount"	=> $discount,
 				"name"				=> $rule->getName(),
-				"payer"				=> $rule->getRulePayer()
+				"payer"				=> $rule->getRulePayer(),
+				"simple_action"		=> $rule->getSimpleAction()
 			);
 		}else{
-			unset($discountInfo);
+			unset($discountInfo[$ruleId]);
 		}
 		// Set property of abstract object (property not stored)
 		$item->setDiscountInfo($discountInfo);
@@ -61,10 +63,53 @@ class Zolago_SalesRule_Model_Observer {
 		/* @var $item Mage_Sales_Model_Order_Item */
 		if($item->getDiscountInfo()){
 			Mage::getResourceSingleton('zolagosalesrule/relation')->saveForOrderItem($item);
+			// Unset discount info to prevent next steps saving
+			$item->setDiscountInfo(null);
+		}
+	}
+	
+	/**
+	 * Register beofre save action
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function udpoPoItemSaveBefore(Varien_Event_Observer $observer) {
+		$item = $observer->getEvent()->getPoItem();
+		/* @var $item Unirgy_DropshipPo_Model_Po_Item */
+		if($item->isObjectNew()){
+			$item->setDoUpdateDiscountInfo(true);
+		}elseif($this->_hasDiscountChanged($item)){
+			$item->setDoRemoveDiscountInfo(true);
+		}
+	}
+	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return bool
+	 */
+	protected function _hasDiscountChanged(Unirgy_DropshipPo_Model_Po_Item $item) {
+		return 
+			(round($item->getData("discount_amount"), 4) !== round($item->getOrigData("discount_amount"), 4)) ||
+			(round($item->getData("discount_percent"), 4) !== round($item->getOrigData("discount_percent"), 4));
+	}
+	
+	/**
+	 * Da save relation based on quote item -> convert -> order item -> po item 
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function udpoPoItemSaveAfter(Varien_Event_Observer $observer) {
+		$item = $observer->getEvent()->getPoItem();
+		/* @var $item Unirgy_DropshipPo_Model_Po_Item */
+		if($item->getDoUpdateDiscountInfo()){
+			Mage::getResourceSingleton('zolagosalesrule/relation')->updateForPoItem($item);
+			$item->setDoUpdateDiscountInfo(null);
+		}
+		
+		if($item->getDoRemoveDiscountInfo()){
+			Mage::getResourceSingleton('zolagosalesrule/relation')->removeForPoItem($item);
+			$item->setDoRemoveDiscountInfo(null);
 		}
 	}
 
-	
 	/**
 	 * Add a payer field to form
 	 * @param Varien_Event_Observer $observer

@@ -1,6 +1,18 @@
 <?php
 class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 {
+	/**
+	 * @return array
+	 */
+	public function getDiscountInfo() {
+		if(!$this->hasData("discount_info")){
+			$collection = Mage::getResourceModel('zolagosalesrule/relation_collection');
+			/* @var $collection Zolago_SalesRule_Model_Resource_Relation_Collection */
+			$collection->addFieldToFilter("po_item_id", $this->getId());
+			$this->setData('discount_info', $collection->getItems());
+		}
+		return $this->getData("discount_info");
+	}
 	
 	/**
 	 * @return Mage_Catalog_Model_Product
@@ -108,6 +120,8 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 				}
 			}
 	   }
+	   
+	   
 	   return parent::_beforeSave();
    }
    
