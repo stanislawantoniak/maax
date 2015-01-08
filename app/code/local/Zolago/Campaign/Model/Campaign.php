@@ -173,4 +173,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     }
 
+    public function getExpiredCampaigns()
+    {
+        return $this->getResource()->getExpiredCampaigns();
+    }
 }
