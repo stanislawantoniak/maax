@@ -98,5 +98,43 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         }
         return null;
     }
-    
+
+    /**
+     * Return the strikeout price if exist else return final price
+     *
+     * @param $product
+     * @param null $qty
+     * @return float
+     */
+    public function getStrikeoutPrice($product, $qty=null) {
+
+        $campaignModel = Mage::getModel("zolagocampaign/campaign"); /** @var Zolago_Campaign_Model_Campaign $campaignModel */
+        $id = $product->getData('campaign_regular_id');
+
+        //Strike out price can appear only when product has promo or sale flag
+        //which means when a product is included in campaign.
+        if (empty($id)) {
+            return (float)$product->getFinalPrice($qty);
+        }
+        $productCampaignType = $campaignModel->getCampaignType($id);
+        if (Zolago_Campaign_Model_Campaign_Type::TYPE_INFO == $productCampaignType || is_null($productCampaignType)) {
+            return (float)$product->getFinalPrice($qty);
+        }
+
+        $strikeoutType = $campaignModel->getCampaignStrikeoutType($id);//int or null
+        $price = (float)$product->getPrice();
+        $specialPrice = (float)$product->getSpecialPrice();
+        $finalPrice = (float)$product->getFinalPrice($qty);
+        $msrp = (float)$product->getData('msrp');
+
+        //When previous price is chosen then standard price striked out (if it is bigger than special price)
+        //When MSRP price is chosen - then MSRP field is displayed as striked out (if it is bigger than special price)
+        if (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_PREVIOUS_PRICE == $strikeoutType) {
+            return $price > $specialPrice ? $price : $finalPrice;
+        } elseif (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
+            return $msrp > $specialPrice ? $msrp : $finalPrice;
+        } else {
+            return $finalPrice;
+        }
+    }
 }
