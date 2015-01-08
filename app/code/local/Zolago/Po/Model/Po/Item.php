@@ -127,11 +127,11 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
    
    
 	public function getFinalProductPrice() {
-		return $this->getPriceInclTax()*(1-$this->getDiscountPercent()/100);
+		return $this->getPriceInclTax() + (-1 * $this->getDiscountAmount()/$this->getQty());
 	}
 	
 	public function getProductDiscountPrice() {
-		return $this->getPriceInclTax()*($this->getDiscountPercent()/100);
+		return $this->getPriceInclTax() + (-1 * $this->getDiscountAmount()/$this->getQty());
 	}
 	
 	public function getFinalItemPrice() {

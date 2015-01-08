@@ -83,13 +83,16 @@ class Zolago_SalesRule_Model_Observer {
 	}
 	
 	/**
+	 * Discount can be changed by on of the paramters:
+	 *	- discount_amount
+	 *  - price_incl_tax
 	 * @param Unirgy_DropshipPo_Model_Po_Item $item
 	 * @return bool
 	 */
 	protected function _hasDiscountChanged(Unirgy_DropshipPo_Model_Po_Item $item) {
 		return 
-			(round($item->getData("discount_amount"), 4) !== round($item->getOrigData("discount_amount"), 4)) ||
-			(round($item->getData("discount_percent"), 4) !== round($item->getOrigData("discount_percent"), 4));
+			(round($item->getData("discount_amount"), 2) !== round($item->getOrigData("discount_amount"), 2)) ||
+			(round($item->getData("price_incl_tax"), 2) !== round($item->getOrigData("price_incl_tax"), 2));
 	}
 	
 	/**

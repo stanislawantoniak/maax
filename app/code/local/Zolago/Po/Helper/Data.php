@@ -262,6 +262,12 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		return $dhlSettings;
 	}
 	
+	/**
+	 * @todo handle configurable product
+	 * @param Mage_Sales_Model_Order_Item $item
+	 * @param Zolago_Po_Model_Po_Item $poItem
+	 * @return \Zolago_Po_Helper_Data
+	 */
 	public function prepareOrderItemByPoItem(Mage_Sales_Model_Order_Item $item, 
 		Zolago_Po_Model_Po_Item $poItem) {
 		

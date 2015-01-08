@@ -531,6 +531,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $finalPrice = $price-$discount;
             $baseRowPrice = $price * $qty;
             $finalRowPrice = $finalPrice * $qty;
+			/**
+			 * @todo this is real percent, magento use basic percent sum rule percent 1 + rule prcent 2
+			 * so 10 + 10 = 20; the price is discoutne by price * 10% * 10%, so final  result is not sum!
+			 */
             $discountPrecent = round(($discount/$price)*100, 2);
 
             $discountAmount = $baseRowPrice - $finalRowPrice;
@@ -683,37 +687,40 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $item Zolago_Po_Model_Po_Item */
 
             $itemData = array(
-                            'row_total'				=> $priceExclTax * $qty,
-                            'price'					=> $priceExclTax,
-                            'weight'				=> $product->getWeight(),
-                            'qty'					=> $qty,
-                            'qty_shipped'			=> null,
-                            'product_id'			=> $product->getId(),
-                            'order_item_id'			=> null,
-                            'additional_data'		=> null,
-                            'description'			=> null,
-                            'name'					=> $product->getName(),
-                            'sku'					=> $product->getSku(),
-                            'base_cost'				=> $product->getCost(),
-                            'qty_invoiced'			=> null,
-                            'qty_canceled'			=> null,
-                            'vendor_sku'			=> null, // add by helper
-                            'vendor_simple_sku'		=> null, // add by helper
-                            'is_virtual'			=> $product->isVirtual(),
-                            'commission_percent'	=> null, // ad by helper
-                            'transaction_fee'		=> null, // add by helper
-                            'price_incl_tax'		=> $priceInclTax,
-                            'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
-                            'discount_amount'		=> $discountAmount,
-                            'discount_percent'		=> $discountPrecent,
-                            'row_total_incl_tax'	=> $priceInclTax*$qty,
-                            'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
-                            'parent_item_id'		=> null
-                        );
-
-
+				'row_total'				=> $priceExclTax * $qty,
+				'price'					=> $priceExclTax,
+				'weight'				=> $product->getWeight(),
+				'qty'					=> $qty,
+				'qty_shipped'			=> null,
+				'product_id'			=> $product->getId(),
+				'order_item_id'			=> null,
+				'additional_data'		=> null,
+				'description'			=> null,
+				'name'					=> $product->getName(),
+				'sku'					=> $product->getSku(),
+				'base_cost'				=> $product->getCost(),
+				'qty_invoiced'			=> null,
+				'qty_canceled'			=> null,
+				'vendor_sku'			=> null, // add by helper
+				'vendor_simple_sku'		=> null, // add by helper
+				'is_virtual'			=> $product->isVirtual(),
+				'commission_percent'	=> null, // ad by helper
+				'transaction_fee'		=> null, // add by helper
+				'price_incl_tax'		=> $priceInclTax,
+				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+				'discount_amount'		=> $discountAmount,
+				'discount_percent'		=> $discountPrecent,
+				'row_total_incl_tax'	=> $priceInclTax*$qty,
+				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
+				'parent_item_id'		=> null
+			);
+			
             $item->addData($itemData);
             $po->addItem($item);
+			
+			/**
+			 * @todo add child of configurable item
+			 */
 
             Mage::helper("udropship")->addVendorSkus($po);
             if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
@@ -721,9 +728,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             Mage::dispatchEvent("zolagopo_po_item_add", array(
-                                    "po"		=> $po,
-                                    "item"		=> $item
-                                ));
+				"po"		=> $po,
+				"item"		=> $item
+			));
 
             $po->updateTotals(true);
 
