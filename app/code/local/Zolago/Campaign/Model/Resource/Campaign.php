@@ -401,9 +401,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.type IN(?)", $type);
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        $select->order('campaign.updated_at');
-
-        Mage::log($select->__toString());
+        $select->order('campaign.updated_at DESC');
 
         return $this->getReadConnection()->fetchAll($select);
     }

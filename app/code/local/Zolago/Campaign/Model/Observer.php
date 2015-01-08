@@ -69,10 +69,15 @@ class Zolago_Campaign_Model_Observer
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
             foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
+                if(isset($dataToUpdate[$campaignSalesPromoItem['product_id']])){
+                    //get one last updated campaign
+                    continue;
+                }
                 $dataToUpdate[$campaignSalesPromoItem['product_id']] = $campaignSalesPromoItem;
             }
             unset($campaignSalesPromoItem);
         }
+
 
         $priceTypeSource = array();
         if (!empty($dataToUpdate)) {
