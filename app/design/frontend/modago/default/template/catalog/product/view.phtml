@@ -44,10 +44,13 @@ switch($_reviewsCount) {
 $avg = $_reviewBlock->getAvarageRating();
 ?>
 
-<?php $_helper = $this->helper('catalog/output'); ?>
-<?php /** @var $_product Mage_Catalog_Model_Product */ ?>
-<?php $_product = $this->getProduct();?>
 <?php
+
+    $_helper = $this->helper('catalog/output');
+
+    /** @var $_product Zolago_Catalog_Model_Product*/
+    $_product = $this->getProduct();
+
     // prices
     $price = $_product->getPrice();
     $finalPrice = $_product->getFinalPrice();
@@ -56,8 +59,7 @@ $avg = $_reviewBlock->getAvarageRating();
     if($_product->getTypeId() == 'configurable') {
         $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
     }
-?>
-<?php
+
     $_helperSizetable = Mage::helper('zolagosizetable');
     /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
     $vendor_id = $_product->getData('udropship_vendor');
@@ -126,7 +128,7 @@ if($vendorContext && $vendorContext->getId()) {
                 <div class="price-box">
                     <p class="price">
                         <span class="price-label"><?php echo $this->__("price"); ?>:</span>
-                        <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getPrice() != $_product->getFinalPrice()) : ?><?php echo Mage::helper('core')->currency($_product->getPrice(), true, false); ?><?php endif; ?></span>
+                        <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false); ?><?php endif; ?></span>
                         <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo Mage::helper('core')->currency($_product->getFinalPrice(), true, false); ?><?php endif; ?></span>
                     </p>
                 </div>

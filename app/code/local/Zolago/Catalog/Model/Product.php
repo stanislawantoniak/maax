@@ -29,7 +29,7 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 		}
 		return $this->getData("no_vendor_context_url");
 	}
-	
+
     /**
      * Get converter price type
      *
@@ -68,5 +68,41 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
             return $price;
         }
         return parent::getFinalPrice($qty, $this);
+    }
+
+    /**
+     * Return the strikeout price if exist
+     * else return final price
+     */
+    public function getStrikeoutPrice($qty=null) {
+
+        $campaignModel = Mage::getModel("zolagocampaign/campaign"); /** @var Zolago_Campaign_Model_Campaign $campaignModel */
+        $id = $this->getData('campaign_regular_id');
+
+        //Strike out price can appear only when product has promo or sale flag
+        //which means when a product is included in campaign.
+        if (empty($id)) {
+            return (float)$this->getFinalPrice($qty);
+        }
+        $productCampaignType = $campaignModel->getCampaignType($id);
+        if (Zolago_Campaign_Model_Campaign_Type::TYPE_INFO == $productCampaignType || is_null($productCampaignType)) {
+            return (float)$this->getFinalPrice($qty);
+        }
+
+        $strikeoutType = $campaignModel->getCampaignStrikeoutType($id);//int or null
+        $price = (float)$this->getPrice();
+        $specialPrice = (float)$this->getSpecialPrice();
+        $finalPrice = (float)$this->getFinalPrice($qty);
+        $msrp = (float)$this->getData('msrp');
+
+        //When previous price is chosen then standard price striked out (if it is bigger than special price)
+        //When MSRP price is chosen - then MSRP field is displayed as striked out (if it is bigger than special price)
+        if (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_PREVIOUS_PRICE == $strikeoutType) {
+            return $price > $specialPrice ? $price : $finalPrice;
+        } elseif (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
+            return $msrp > $specialPrice ? $msrp : $finalPrice;
+        } else {
+            return $finalPrice;
+        }
     }
 }
