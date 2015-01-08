@@ -329,4 +329,35 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         }
         echo $previewImage;
     }
+
+
+
+    public function testAction(){
+        Zolago_Campaign_Model_Observer::setProductAttributes();
+    }
+
+    public function test2Action(){
+        Zolago_Campaign_Model_Observer::processCampaignAttributes();
+
+    }
+
+    public function test3Action(){
+        $collection = Mage::getModel("catalog/product")
+            ->getCollection();
+        $collection->addAttributeToSelect(array('campaign_regular_id','campaign_info_id'));
+        $collection->addAttributeToFilter(
+            array(
+                array('attribute'=>'campaign_regular_id','neq' => NULL),
+                array('attribute'=>'campaign_info_id','neq' => NULL)
+            )
+        );
+        echo $collection->getSelect();
+        //$collection->setPageSize(10);
+        foreach($collection as $collectionItem){
+            Zend_Debug::dump($collectionItem->getData('entity_id'));
+            Zend_Debug::dump($collectionItem->getData('campaign_info_id'));
+        }
+
+
+    }
 }

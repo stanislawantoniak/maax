@@ -3,7 +3,8 @@
 class Zolago_Campaign_Model_Observer
 {
 
-    static function setProductAttributes(){
+    static function setProductAttributes()
+    {
         /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
 //        $storesToUpdate = array(Mage_Core_Model_App::ADMIN_STORE_ID);
@@ -18,7 +19,6 @@ class Zolago_Campaign_Model_Observer
             }
             unset($group);
         }
-
 
 
         $productIds = array();
@@ -66,7 +66,6 @@ class Zolago_Campaign_Model_Observer
             )
         );
 
-
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
             foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
@@ -74,7 +73,6 @@ class Zolago_Campaign_Model_Observer
             }
             unset($campaignSalesPromoItem);
         }
-
 
         $priceTypeSource = array();
         if (!empty($dataToUpdate)) {
@@ -84,6 +82,7 @@ class Zolago_Campaign_Model_Observer
                     'special_from_date' => !empty($data['date_from']) ? date('Y-m-d', strtotime($data['date_from'])) : '',
                     'special_to_date' => !empty($data['date_to']) ? date('Y-m-d', strtotime($data['date_to'])) : ''
                 );
+
                 foreach ($storesToUpdate as $store) {
                     $actionModel
                         ->updateAttributesNoIndex(array($productId), $attributesData, $store);
@@ -125,9 +124,10 @@ class Zolago_Campaign_Model_Observer
                 $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
                 if ($vendorExternalId) {
                     foreach ($storesToUpdate as $store) {
-                        $percent = $data['price_percent'];
+                        $percent = isset($data['price_percent']) ? $data['price_percent'] : 0;
 
                         $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType[$productId]);
+
                         if (!empty($newPrice)) {
                             $newPriceWithPercent = $newPrice - $newPrice * ((int)$percent / 100);
 
@@ -148,7 +148,6 @@ class Zolago_Campaign_Model_Observer
 
         //3. reindex
         $actionModel->reindexAfterMassAttributeChange();
-        Mage::log($productIds);
 
         //4. push to solr
         Mage::dispatchEvent(
@@ -158,10 +157,11 @@ class Zolago_Campaign_Model_Observer
             )
         );
     }
+
     static public function processCampaignAttributes()
     {
-        Mage::log(microtime() . " Starting processCampaignAttributes ", 0, 'processCampaignAttributes.log');
-
-        Mage::getModel("zolagocampaign/campaign")->processCampaignAttributes();
+        /* @var $campaignModel Zolago_Campaign_Model_Campaign */
+        $campaignModel = Mage::getModel("zolagocampaign/campaign");
+        $campaignModel->processCampaignAttributes();
     }
 }
