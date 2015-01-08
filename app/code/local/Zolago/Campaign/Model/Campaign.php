@@ -4,6 +4,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
     const ZOLAGO_CAMPAIGN_ID_CODE = "campaign_regular_id";
     const ZOLAGO_CAMPAIGN_INFO_CODE = "campaign_info_id";
+    const ZOLAGO_CAMPAIGN_STRIKEOUT_PRICE_TYPE_CODE = "campaign_strikeout_price_type";
 
     protected function _construct()
     {
@@ -131,7 +132,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 //unset special price
                 //unset special price dates
                 //unset SRP price
-                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'msrp' => '');
+                //unset strikeout_price_type
+                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'msrp' => '', 'campaign_strikeout_price_type' =>'');
                 foreach ($storeId as $store) {
                     $actionModel
                         ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
@@ -148,13 +150,5 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     public function getExpiredCampaigns(){
         return $this->getResource()->getExpiredCampaigns();
-    }
-
-    public function getCampaignStrikeoutType($campaign_regular_id) {
-        return $this->getResource()->getCampaignStrikeoutType($campaign_regular_id);
-    }
-
-    public function getCampaignType($campaign_regular_id) {
-        return $this->getResource()->getCampaignType($campaign_regular_id);
     }
 }

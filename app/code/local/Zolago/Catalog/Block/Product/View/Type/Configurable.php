@@ -11,9 +11,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 	public function getJsonConfig() {
 		$return = Mage::helper("core")->jsonDecode(parent::getJsonConfig());
         $currentProduct = $this->getProduct();
-        $campaignId = $currentProduct->getData('campaign_regular_id');
-        $campaignModel = Mage::getModel("zolagocampaign/campaign"); /** @var Zolago_Campaign_Model_Campaign $campaignModel */
-        $strikeoutType = $campaignModel->getCampaignStrikeoutType($campaignId);//int or null
+        $strikeoutType = $currentProduct->getData('campaign_strikeout_price_type');
 		
 		$attributes = $return['attributes'];
 		
