@@ -343,19 +343,5 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 
 
-    public function testAction()
-    {
-//        Zolago_Campaign_Model_Observer::setProductAttributes();
-        $sku = array('4-32035-20X', '12-X');
-        $collection = Mage::getModel('catalog/product')->getCollection();
-        $collection->addFieldToFilter('sku', array("in" => $sku));
-
-        $assoc = array();
-        foreach ($collection as $collectionI) {
-            $assoc[$collectionI->getSku()] = $collectionI->getId();
-        }
-        krumo($assoc);
-    }
-
 
 }

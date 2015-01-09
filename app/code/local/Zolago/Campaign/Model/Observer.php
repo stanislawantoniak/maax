@@ -71,7 +71,7 @@ class Zolago_Campaign_Model_Observer
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
             foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
-                if(isset($dataToUpdate[$campaignSalesPromoItem['product_id']])){
+                if (isset($dataToUpdate[$campaignSalesPromoItem['product_id']])) {
                     //get one last updated campaign
                     continue;
                 }
@@ -84,7 +84,6 @@ class Zolago_Campaign_Model_Observer
         $priceTypeSource = array();
         if (!empty($dataToUpdate)) {
             foreach ($dataToUpdate as $productId => $data) {
-                krumo($data);
                 $attributesData = array(
                     'campaign_strikeout_price_type' => $data['strikeout_type'],
                     'campaign_regular_id' => $data['campaign_id'],
@@ -103,6 +102,7 @@ class Zolago_Campaign_Model_Observer
                     'price_percent' => $data['price_percent'],
                     'website_id' => $data['website_id']
                 );
+                $productIds[$productId] = $productId;
             }
             unset($productId);
         }
@@ -114,19 +114,17 @@ class Zolago_Campaign_Model_Observer
         foreach ($salesPromoProductsData as $websiteId => $salesPromoProductsDataH) {
             $modelCampaign->setProductOptionsByCampaign($salesPromoProductsDataH, $websiteId);
         }
-
-
 //
 //        //3. reindex
-//        $actionModel->reindexAfterMassAttributeChange();
+        $actionModel->reindexAfterMassAttributeChange();
 //
 //        //4. push to solr
-//        Mage::dispatchEvent(
-//            "catalog_converter_price_update_after",
-//            array(
-//                "product_ids" => $productIds
-//            )
-//        );
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productIds
+            )
+        );
     }
 
     static public function processCampaignAttributes()
