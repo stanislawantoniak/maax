@@ -58,6 +58,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         if (count($toInsert)) {
             $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $localeTimeF = date("Y-m-d H:i", $localeTime);
+            $model = Mage::getModel("zolagocampaign/campaign");
+            $campaign = $model->load($campaignId);
+
+            $campaign->setData('updated_at', $localeTimeF);
+            $campaign->save();
         }
         return $this;
     }
@@ -319,18 +327,32 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
 
-    public function getExpiredCampaigns(){
+    public function getNotValidCampaigns()
+    {
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i", $localeTime);
+
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
-        $select->from(array("campaign" => $table), array("campaign.type as type",'campaign.campaign_id as campaign_id'));
+        $select->from(array("campaign" => $table),
+            array(
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.date_from',
+                'campaign.date_to',
+                'campaign.status'
+            )
+        );
         $select->join(
             array('campaign_product' => 'zolago_campaign_product'),
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
-                'product_id'   => 'campaign_product.product_id'
+                'product_id' => 'campaign_product.product_id'
             )
         );
-        $select->where('campaign.date_to', array('lteq' => date("Y-m-d H:i")));
+        $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
+        $select->where("campaign.date_from>'{$localeTimeF}' OR campaign.date_to<='{$localeTimeF}' OR campaign.status<>{$activeCampaignStatus}");
+
         return $this->getReadConnection()->fetchAll($select);
     }
 
@@ -352,7 +374,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'campaign.price_srp as price_srp',
                 'campaign.strikeout_type as strikeout_type',
                 'campaign.date_from as date_from',
-                'campaign.date_to as date_to'
+                'campaign.date_to as date_to',
+
+                'campaign.updated_at'
             )
         );
         $select->join(
@@ -369,10 +393,16 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
 
+        //get only campaigns updated not earlier then 2 hours ago
+        //campaign.updated_at IS NOT NULL (just created campaigns do not have products attached)
+//        $updateDate = date("Y-m-d H:i", strtotime('-2 hours', $localeTime));
+//        $select->where("campaign.updated_at IS NOT NULL AND campaign.updated_at>='{$updateDate}' ");
+
         $select->where("campaign.type IN(?)", $type);
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-//echo $select;
+        $select->order('campaign.updated_at DESC');
+
         return $this->getReadConnection()->fetchAll($select);
     }
 

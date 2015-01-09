@@ -3,7 +3,9 @@
 class Zolago_Campaign_Model_Observer
 {
 
-    static function setProductAttributes(){
+    static function setProductAttributes()
+    {
+        /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
 //        $storesToUpdate = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $storesToUpdate = array();
@@ -19,7 +21,7 @@ class Zolago_Campaign_Model_Observer
         }
 
 
-
+        $productIds = array();
         /* @var $model Zolago_Campaign_Model_Resource_Campaign */
         $model = Mage::getResourceModel('zolagocampaign/campaign');
 
@@ -46,10 +48,12 @@ class Zolago_Campaign_Model_Observer
                         $actionModel
                             ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                     }
+                    $productIds[$productId] = $productId;
                 }
-
             }
+            unset($productId);
         }
+
         unset($dataToUpdate);
         unset($attributesData);
 
@@ -62,11 +66,13 @@ class Zolago_Campaign_Model_Observer
             )
         );
 
-
-
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
             foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
+                if(isset($dataToUpdate[$campaignSalesPromoItem['product_id']])){
+                    //get one last updated campaign
+                    continue;
+                }
                 $dataToUpdate[$campaignSalesPromoItem['product_id']] = $campaignSalesPromoItem;
             }
             unset($campaignSalesPromoItem);
@@ -80,21 +86,20 @@ class Zolago_Campaign_Model_Observer
                     'campaign_strikeout_price_type' => $data['strikeout_type'],
                     'campaign_regular_id' => $data['campaign_id'],
                     'special_from_date' => !empty($data['date_from']) ? date('Y-m-d', strtotime($data['date_from'])) : '',
-                    'special_to_date' => !empty($data['date_to']) ? date('Y-m-d', strtotime($data['date_to'])) : '',
-//                    'msrp' => $data['price_srp']
+                    'special_to_date' => !empty($data['date_to']) ? date('Y-m-d', strtotime($data['date_to'])) : ''
                 );
+
                 foreach ($storesToUpdate as $store) {
                     $actionModel
                         ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                 }
                 unset($store);
                 $priceTypeSource[$data['product_id']] = $data['price_source'];
+                $productIds[$productId] = $productId;
             }
+            unset($productId);
         }
         //2. Set special price
-        $productIds = array_keys($dataToUpdate);
-
-
         $skuvS = $model->getVendorSkuAssoc($productIds);
 
         //Ping converter to get special price
@@ -111,6 +116,7 @@ class Zolago_Campaign_Model_Observer
             foreach ($priceTypeSource as $productId => $priceSourceId) {
                 $priceType[$productId] = $attr->getSource()->getOptionText($priceSourceId);
             }
+            unset($productId);
         }
 
         //set Special Price
@@ -124,9 +130,10 @@ class Zolago_Campaign_Model_Observer
                 $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
                 if ($vendorExternalId) {
                     foreach ($storesToUpdate as $store) {
-                        $percent = $data['price_percent'];
+                        $percent = isset($data['price_percent']) ? $data['price_percent'] : 0;
 
                         $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType[$productId]);
+
                         if (!empty($newPrice)) {
                             $newPriceWithPercent = $newPrice - $newPrice * ((int)$percent / 100);
 
@@ -134,6 +141,8 @@ class Zolago_Campaign_Model_Observer
 
                             $actionModel
                                 ->updateAttributesNoIndex(array($productId), $attributesData, $store);
+
+                            $productIds[$productId] = $productId;
                         }
                         unset($store);
                     }
@@ -141,14 +150,24 @@ class Zolago_Campaign_Model_Observer
 
             }
         }
+        unset($productId);
 
-        Mage::getSingleton('catalog/product_action')
-            ->reindexAfterMassAttributeChange();
+        //3. reindex
+        $actionModel->reindexAfterMassAttributeChange();
+
+        //4. push to solr
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productIds
+            )
+        );
     }
+
     static public function processCampaignAttributes()
     {
-        Mage::log(microtime() . " Starting processCampaignAttributes ", 0, 'processCampaignAttributes.log');
-
-        Mage::getModel("zolagocampaign/campaign")->processCampaignAttributes();
+        /* @var $campaignModel Zolago_Campaign_Model_Campaign */
+        $campaignModel = Mage::getModel("zolagocampaign/campaign");
+        $campaignModel->processCampaignAttributes();
     }
 }
