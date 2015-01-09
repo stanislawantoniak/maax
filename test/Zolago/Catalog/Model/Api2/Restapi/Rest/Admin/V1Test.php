@@ -1,6 +1,34 @@
 <?php
-class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends ZolagoDb_TestCase {
+class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCase {
 
+    public function testStock() {
+        $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+        $param =array (
+            5 => array (
+                '5-19781-XL' => array (
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => 0,
+                    'k99' => 0   
+                ),
+                '5-19781-M' => array (
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 10,
+                    'MAGAZYN' => 0,
+                    'k99' => 0   
+                ),
+                '5-19781-L' => array (
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => 0,
+                    'k99' => 0   
+                ),
+            ),
+        );
+        $obj::updateStockConverter($param);
+        
+                                                                                                                                                    
+    }
     public function testCreate()
     {
         $array = array_fill(0, 500000, array('banana', 'lemon', 'peach' => array('banana'), 'banana' => array('banana', 'lemon', 'peach')));
