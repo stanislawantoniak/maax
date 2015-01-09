@@ -35,7 +35,13 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 			->load()
 			->getFirstItem();
 
-		return $coupon->getType() == 1 ? $coupon : false;
+		//$coupon type == 1 equals to auto-generated coupons
+		if($coupon->getType() == 1) {
+			return $coupon;
+		} else {
+			Mage::log("All coupon codes for newsletter thank you emails are used or sales rule is misconfigured",null,"newsletter.log");
+			return false;
+		}
 	}
 
 	public function getSalesRuleDesc($ruleId) {

@@ -164,6 +164,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			//if customer agreed to newsletter send him a confirmation email
 	        $this->save();
             if($newStatus == self::STATUS_UNCONFIRMED) {
+	            $this->setImportMode(false);
 	            $this->sendConfirmationRequestEmail();
 	            $customer->setConfirmMsg(true);
             }
@@ -198,7 +199,6 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationRequestEmail($sid=null)
 	{
-		Mage::log("trying to send...");
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE),
@@ -250,7 +250,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 
 		/** @var Zolago_Common_Helper_Data $helper */
 		$helper = Mage::helper("zolagocommon");
-		$emailsent = $helper->sendEmailTemplate(
+		$helper->sendEmailTemplate(
 			$subscriber->getEmail(),
 			$subscriber->getName(),
 			$template,
