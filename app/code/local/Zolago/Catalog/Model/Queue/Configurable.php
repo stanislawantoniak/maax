@@ -83,16 +83,16 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
         //--super attribute ids
 
-        $productConfigurableIdsForCampaignCheck = array();
-        foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
-            $superAttributeId = isset($superAttributes[$productConfigurableId])
-                ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
-            if ($superAttributeId) {
-                $productConfigurableIdsForCampaignCheck[] = $productConfigurableId;
-            }
-        }
+//        $productConfigurableIdsForCampaignCheck = array();
+//        foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
+//            $superAttributeId = isset($superAttributes[$productConfigurableId])
+//                ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
+//            if ($superAttributeId) {
+//                $productConfigurableIdsForCampaignCheck[] = $productConfigurableId;
+//            }
+//        }
         $campaignResModel = Mage::getResourceModel('zolagocampaign/campaign'); /** @var $campaignResModel Zolago_Campaign_Model_Resource_Campaign*/
-        $productConfigurableIdsForCampaignCheck = $campaignResModel->getIsProductsInValidCampaign($productConfigurableIdsForCampaignCheck);
+        $productConfigurableIdsForCampaignCheck = $campaignResModel->getIsProductsInValidCampaign($listUpdatedProducts);
 
 
         $productConfigurableIds = array();
