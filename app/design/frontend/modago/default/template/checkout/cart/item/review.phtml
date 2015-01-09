@@ -10,7 +10,7 @@ $_discountAmount = (float)$_item->getDiscountAmount();
 $_productMsrpPrice = $_itemPriceInclTax;
 
 if($_item->getProduct()){
-	$_productMsrpPrice = $_item->getProduct()->getPrice();
+	$_productMsrpPrice = $_item->getProduct()->getStrikeoutPrice();
 }
 
 $_qty = $this->getQty($_item);
