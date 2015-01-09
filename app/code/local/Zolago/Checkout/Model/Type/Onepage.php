@@ -38,7 +38,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 					}
 				}
 			}
-			
 			// Parent save order
 			$return = parent::saveOrder();
 
