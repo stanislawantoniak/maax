@@ -518,10 +518,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
     public function getIsProductsInValidCampaign($productsIds) {
 
-        Mage::log("START getIsProductsInValidCampaign");
+//        Mage::log("START getIsProductsInValidCampaign");
 
-        Mage::log("productsIds:");
-        Mage::log($productsIds);
+//        Mage::log("productsIds:");
+//        Mage::log($productsIds);
 
         $return = array();
 
@@ -546,7 +546,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
         $select->where("campaign.status = 1");
 
-        Mage::log($select->__toString());
+//        Mage::log($select->__toString());
 
         try {
             $_return = $readConnection->fetchAll($select);
@@ -557,10 +557,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         foreach ($_return as $row) {
             $return[] = $row['product_id'];
         }
-        Mage::log('return:');
-        Mage::log($return);
-
-        Mage::log("END getIsProductsInValidCampaign");
+//        Mage::log('return:');
+//        Mage::log($return);
+//
+//        Mage::log("END getIsProductsInValidCampaign");
 
         return $return;
 
