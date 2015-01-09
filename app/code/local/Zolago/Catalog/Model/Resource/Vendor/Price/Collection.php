@@ -61,29 +61,16 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$this->addExpressionAttributeToSelect('display_price', $priceExpression, array());
 		
 		
-		// Join stock item
-		// @todo if configurable 
-		// If produt has manage stock use item status 
-		// Else use item qty>0 for smiple or item child qty > 0 for colmplex product
-		// Or use stock index
-		$this->joinTable(
-				$stockTable, 
-				'product_id=entity_id',
-				array(),
-				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
-				'left'
-		);
-		
+		// Join stock status from stock index
 		$this->joinTable(
 				$stockStatusTable, 
 				'product_id=entity_id',
-				array('is_in_stock'=>'is_in_stock'), 
+				array('is_in_stock'=>'stock_status'), 
 				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
 				'left'
 		);
 		
-		
-		// Join all childs
+		// Join all childs count
 		$subSelect = $adapter->select();
 		$subSelect->from(array("link_all"=>$linkTabel), array("COUNT(link_all.link_id)"));
 		$subSelect->where("link_all.parent_id=e.entity_id");
@@ -101,19 +88,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$subSelect->where("child_stock_available.is_in_stock=?",1);
 		$this->addExpressionAttributeToSelect('available_child_count', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), null)", array());
-		
-		// Join child qtys
-		$subSelect = $adapter->select();
-		$subSelect->from(array("link_qty"=>$linkTabel), array("IFNULL(SUM(child_qty.qty),0)"));
-		$subSelect->join(
-				array("child_qty"=>$stockTable), 
-				"link_qty.product_id=child_qty.product_id", 
-				array());
-		$subSelect->where("link_qty.parent_id=e.entity_id");
-		$subSelect->where("child_qty.is_in_stock=?",1);
-		// Use subselect only for parent products
-		$this->addExpressionAttributeToSelect('stock_qty', 
-				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), $stockTable.qty)", array());
 		
 		return $this;
 	}
