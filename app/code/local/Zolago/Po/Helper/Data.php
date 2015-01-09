@@ -330,6 +330,11 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		// Stock item 
 		$stockItem = $product->getStockItem();
 		
+		/**
+		* @todo PO item if this has parent PO item use its ORDER item id 
+		* as value of parent_item_id of new ORDER item
+		*/
+		
 		$data = array(			
 			"order_id"						=> $order->getId(),
 			"parent_item_id"				=> null,

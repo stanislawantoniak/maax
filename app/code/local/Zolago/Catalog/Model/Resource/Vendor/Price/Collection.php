@@ -48,6 +48,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		$stockTable = $this->getTable('cataloginventory/stock_item');
+		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
 		
 		// Join price attrib
@@ -61,8 +62,20 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		// Join stock item
+		// @todo if configurable 
+		// If produt has manage stock use item status 
+		// Else use item qty>0 for smiple or item child qty > 0 for colmplex product
+		// Or use stock index
 		$this->joinTable(
 				$stockTable, 
+				'product_id=entity_id',
+				array(),
+				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
+				'left'
+		);
+		
+		$this->joinTable(
+				$stockStatusTable, 
 				'product_id=entity_id',
 				array('is_in_stock'=>'is_in_stock'), 
 				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),

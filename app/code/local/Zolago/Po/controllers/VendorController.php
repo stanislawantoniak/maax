@@ -720,6 +720,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			
 			/**
 			 * @todo add child of configurable item
+			 * clone parentItem, unset order item, change & unset some data
+			 * set new child->setParentItem(parentItem)
 			 */
 
             Mage::helper("udropship")->addVendorSkus($po);
