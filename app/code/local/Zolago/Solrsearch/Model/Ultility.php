@@ -54,7 +54,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		Mage::getSingleton ( 'catalog/product_status' )->addVisibleFilterToCollection ( $collection );
 		Mage::getSingleton ( 'catalog/product_visibility' )->addVisibleInSearchFilterToCollection ( $collection );
 
-		Mage::helper ( 'solrsearch' )->applyInstockCheck ( $collection );
+//		Mage::helper ( 'solrsearch' )->applyInstockCheck ( $collection );
 
 		Mage::app ()->setCurrentStore ( $oldStore );
 
