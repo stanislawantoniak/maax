@@ -4,6 +4,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
     const ZOLAGO_CAMPAIGN_ID_CODE = "campaign_regular_id";
     const ZOLAGO_CAMPAIGN_INFO_CODE = "campaign_info_id";
+    const ZOLAGO_CAMPAIGN_STRIKEOUT_PRICE_TYPE_CODE = "campaign_strikeout_price_type";
 
     protected function _construct()
     {
@@ -78,22 +79,43 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     public function processCampaignAttributes(){
         //Select campaigns with expired date
-        $expiredCampaigns = $this->getResource()->getExpiredCampaigns();
-        Mage::log("ExpiredCampaigns ", 0, 'processCampaignAttributes.log');
-        Mage::log($expiredCampaigns, 0, 'processCampaignAttributes.log');
-        if(empty($expiredCampaigns)){
+        /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+        $resourceModel = $this->getResource();
+        $notValidCampaigns = $resourceModel->getNotValidCampaigns();
+//        Zend_debug::dump($notValidCampaigns);
+
+        if(empty($notValidCampaigns)){
             return;
         }
 
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i", $localeTime);
         $dataToUpdate = array();
-        foreach($expiredCampaigns as $expiredCampaign){
-            $dataToUpdate[$expiredCampaign['type']][$expiredCampaign['campaign_id']][] = $expiredCampaign['product_id'];
+
+        foreach ($notValidCampaigns as $notValidCampaign) {
+            if (!empty($notValidCampaign['date_to'])
+                && $notValidCampaign['date_to'] <= $localeTimeF
+            ) {
+                $archiveCampaigns[$notValidCampaign['campaign_id']] = $notValidCampaign['campaign_id'];
+            }
+            $dataToUpdate[$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
+        }
+
+        //When ending date comes Campaign status goes to archive
+        $collection = Mage::getModel("zolagocampaign/campaign")
+            ->getCollection();
+        $collection->addFieldToFilter('campaign_id', array('in', $archiveCampaigns));
+
+        foreach ($collection as $collectionItem) {
+            $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
+            $collectionItem->save();
         }
 
         if (!empty($dataToUpdate)) {
             $actionModel = Mage::getSingleton('catalog/product_action');
 
-            $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+//            $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $storeId = array();
             $allStores = Mage::app()->getStores();
             foreach ($allStores as $_eachStoreId => $val) {
                 $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
@@ -131,22 +153,29 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 //unset special price
                 //unset special price dates
                 //unset SRP price
-                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'msrp' => '');
+                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' =>'');
                 foreach ($storeId as $store) {
                     $actionModel
                         ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
                 }
-
-
-
-
             }
+
+            //3. reindex
             $actionModel->reindexAfterMassAttributeChange();
+
+            //4. push to solr
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $productIdsToUpdate
+                )
+            );
         }
 
     }
 
-    public function getExpiredCampaigns(){
+    public function getExpiredCampaigns()
+    {
         return $this->getResource()->getExpiredCampaigns();
     }
 }

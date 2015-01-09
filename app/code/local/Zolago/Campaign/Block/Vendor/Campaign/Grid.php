@@ -71,11 +71,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
             "class"		=>  "form-control",
             "header"	=>	$_helper->__("Discount percent"),
         ));
-        $this->addColumn("price_srp", array(
-            "type"		=>	"text",
-            "index"		=>	"price_srp",
+        $this->addColumn("strikeout_type", array(
+            "type"		=>	"options",
+            "options"   =>  Mage::getSingleton('zolagocampaign/campaign_strikeout')->toOptionHash(),
+            "index"		=>	"strikeout_type",
             "class"		=>  "form-control",
-            "header"	=>	$_helper->__("Price SRP"),
+            "header"	=>	$_helper->__('Strikeout price'),
         ));
 
 		$this->addColumn("status", array(
