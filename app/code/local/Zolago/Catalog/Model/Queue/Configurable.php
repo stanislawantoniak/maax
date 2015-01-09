@@ -68,6 +68,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
+        Mage::log("configurableSimpleRelation:");
+        Mage::log($configurableSimpleRelation);
 
 
         if (empty($configurableSimpleRelation)) {
