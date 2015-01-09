@@ -36,6 +36,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"special_price_decimal" => "special_price",
 		"special_from_date_varchar" => "special_from_date",
 		"special_to_date_varchar" => "special_to_date",
+        "campaign_regular_id_int" => "campaign_regular_id",
+        "campaign_strikeout_price_type_int" => "campaign_strikeout_price_type",
 		"udropship_vendor_id_int" => "udropship_vendor",
 		"udropship_vendor_logo_varchar" => "udropship_vendor_logo",
 		"udropship_vendor_url_key_varchar" => "udropship_vendor_url_key",
@@ -70,7 +72,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$_product['udropship_vendor_logo_url'] = (string) $product->getUdropshipVendorLogoUrl();
 			$_product['manufacturer_logo_url'] = (string) $product->getManufacturerLogoUrl();
 			$_product['is_discounted'] = (int) $product->isDiscounted();
-			$_product['price'] = (float) $product->getPrice();
+			$_product['price'] = (float) $product->getStrikeoutPrice();
 			$_product['final_price'] = (float) $product->getFinalPrice();
 			$_product['currency'] = (string) $product->getCurrency();
 			$products[] = $_product;

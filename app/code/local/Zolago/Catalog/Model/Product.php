@@ -29,7 +29,7 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 		}
 		return $this->getData("no_vendor_context_url");
 	}
-	
+
     /**
      * Get converter price type
      *
@@ -68,5 +68,17 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
             return $price;
         }
         return parent::getFinalPrice($qty, $this);
+    }
+
+    /**
+     * Return the strikeout price if exist else return final price
+     *
+     * @param null $qty
+     * @return float
+     */
+    public function getStrikeoutPrice($qty=null) {
+        /** @var $helper Zolago_Catalog_Helper_Product */
+        $helper = Mage::helper("zolagocatalog/product");
+        return $helper->getStrikeoutPrice($this, $qty);
     }
 }
