@@ -8690,6 +8690,9 @@ elFinder.prototype.commands.netmount = function() {
 	}
 
 	this.getstate = function() {
+		if (typeof(this.drivers) == "undefined") {
+			return -1;
+		}
 		return this.drivers.length ? 0 : -1;
 	}
 	

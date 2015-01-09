@@ -1,32 +1,35 @@
+<div style="float:left">
 <div class="widget">
-    <br/>
-    <table id="control-battons">
-    <tr>
-    <td>
-			&nbsp;<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>&nbsp;
-    </td>
-    <td>
-			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>&nbsp;
-    </td>
-    <td>
+    <div id="control-battons">
+    <div>
+    <div>
+			<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>
+    </div>
+    <div>
+			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
+    </div>
+    <div>
 			<a class="btn-notification btn btn-primary" href="#dialog_by_name" data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>" data-placement="top" 
-			    data-layout="top" data-type="confirm" data-modal="true" data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>&nbsp;
-    </td>
-    <td>
-			<a class="btn btn-primary" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>&nbsp;
-			<button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help');?> <i class="icon-question-sign"></i></button>&nbsp;
-    </td>
-    <td>
-        <div class="input-group">
+			    data-layout="top" data-type="confirm" data-modal="true" data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>
+    </div>
+    <div>
+			<a class="btn btn-primary" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>
+	</div>
+    <div>
+			<button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help');?> <i class="icon-question-sign"></i></button>
+    </div>
+    <div>
+        <div class="input-group" style="width:179px">
 			<input type="text" class="form-control input-width-medium" id="input_search"/>
 			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button>
         </div>
-    </td>
-    </tr>
-    </table>
-    <br/>
-<div class="clearb"></div>
+    </div>
+	</div>
+    </div>
+    </div>
+	<div class="clearbr"></div>
 	<div id="uploader_wrapper" class="widget-content"><div id="uploader"></div><div id="elf"></div></div>
+</div>
 <div id="dialog_by_csv" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV">
 <div class="modal-dialog">
     <div class="modal-content">

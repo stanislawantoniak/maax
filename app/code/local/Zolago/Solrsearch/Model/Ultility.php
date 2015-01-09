@@ -54,7 +54,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		Mage::getSingleton ( 'catalog/product_status' )->addVisibleFilterToCollection ( $collection );
 		Mage::getSingleton ( 'catalog/product_visibility' )->addVisibleInSearchFilterToCollection ( $collection );
 
-		Mage::helper ( 'solrsearch' )->applyInstockCheck ( $collection );
+//		Mage::helper ( 'solrsearch' )->applyInstockCheck ( $collection );
 
 		Mage::app ()->setCurrentStore ( $oldStore );
 
@@ -268,7 +268,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			
 			$codes = array("name", "tax_class_id", "status", "visibility", "sku", 
 				'is_new', 'is_bestseller', 'product_flag', "image",
-				"special_price", "special_from_date", "special_to_date", "brandshop");
+				"special_price", "special_from_date", "special_to_date", "brandshop", "campaign_regular_id", "campaign_strikeout_price_type");
 			
 			//display brand suggestion attribute code
 			$brandAttributeCode = $this->getBrandAttributeCode();

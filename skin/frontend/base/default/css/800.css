@@ -9,22 +9,12 @@
 #catalog_image_grid_massaction {
     height: 75px;
 }
-
-.col-md-6:first-child {
-    float: left;
-}
-
-.clearb {
-    float: left;
-}
-
-#control-battons .input-group .form-control {
-    float: left;
-}
 .widget .col-md-8 {
     padding-bottom: 5px;
 }
 
-#control-battons .input-group {
-    margin: 5px 8px;
+.sidebar-fixed,
+  #sidebar {
+#    position: fixed !important;
+#    top: 52px;
 }
