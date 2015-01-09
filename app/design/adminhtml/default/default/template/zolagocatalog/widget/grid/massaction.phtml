@@ -1,9 +1,9 @@
 <div id="<?php echo $this->getHtmlId() ?>" class="massaction">
     <div class="pull-left inline-form-text">
 		<?php if ($this->getUseSelectAll()):?>
-			<a class="select-all-btn" href="#" onclick="return <? echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
+			<a class="select-all-btn" href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
 			<span class="separator">|</span>
-			<a class="unselect-all-btn" href="#" onclick="return <? echo $this->getJsObjectName() ?>.unselectAll()"><?php echo $this->__('Unselect All') ?></a>
+			<a class="unselect-all-btn" href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"><?php echo $this->__('Unselect All') ?></a>
 		<?php endif; ?>
 		<span class="separator">|</span>
 		<strong id="<?php echo $this->getHtmlId() ?>-count" class="items-count">0</strong> <?php echo $this->__('items selected') ?>
