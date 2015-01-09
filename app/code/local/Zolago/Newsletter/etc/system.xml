@@ -42,7 +42,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</invitation_repeat>
-						<thankyou_coupon translate="label">
+						<confirmation_sales_rule translate="label">
 							<label>Coupon in thank you email</label>
 							<comment><![CDATA[Choose sales rule that will be used while sending coupon codes for newly subscribed emails]]></comment>
 							<frontend_type>select</frontend_type>
@@ -51,7 +51,7 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-						</thankyou_coupon>
+						</confirmation_sales_rule>
 					</fields>
 				</subscription>
 			</groups>
