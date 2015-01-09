@@ -29,4 +29,31 @@ class Zolago_Po_Model_Resource_Po_Item_Collection
 	   
 	   return $this;
    }
+   
+   /**
+    * @return Zolago_Po_Model_Resource_Po_Item_Collection
+    */
+   public function addDiscountInfo() {
+	   $this->setFlag("add_discount_info", 1);
+	   return $this;
+   }
+   
+   public function _afterLoad() {
+	   $ret = parent::_afterLoad();
+	   if($this->getFlag('add_discount_info')){
+		   $collection = Mage::getResourceModel('zolagosalesrule/relation_collection');
+		   /* @var $collection Zolago_SalesRule_Model_Resource_Relation_Collection */
+		   $collection->addFieldToFilter("order_po_id", $this->getAllIds());
+		   $grouped = array();
+		   foreach($collection as $relation){
+			   $grouped[$relation->getPoImteId()][] = $relation;
+		   }
+		   foreach($this as $item){
+			   $item->setDiscountInfo(isset($grouped[$item->getId()]) ? $grouped[$item->getId()] : array());
+		   }
+	   }
+	   return $ret;
+   }
+   
+   
 }
