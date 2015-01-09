@@ -37,7 +37,7 @@
 					<?php foreach($_discountInfo as $_relation):?>
 						<tr>
 							<td class="align-right"><?php echo $_relation->getId();?></td>
-							<td class="align-left"><?php echo $this->getAlgorithm($_relation);?></td>
+							<td class="align-left"><?php echo $this->getAlgorithmName($_relation);?></td>
 							<td class="align-left"><?php echo $this->escapeHtml($_relation->getName());?></td>
 							<td class="align-right"><?php echo Mage::helper("core")->formatPrice($_relation->getDiscountAmount()/$_item->getQty());?></td>
 							<td class="align-left"><?php echo $this->getPayerName($_relation);?></td>

@@ -234,7 +234,7 @@ class Zolago_Catalog_Vendor_ProductController
 						$product->getId(), $attribute->getAttributeCode(), $storeId);
 				if ($attribute->isValueEmpty($value) || 
 					(in_array($attribute->getFrontendInput(), array("select", "multiselect")) && $value===false)) {
-					Mage::log($attribute->getAttributeCode() . ": " . var_export($value, 1));
+					//Mage::log($attribute->getAttributeCode() . ": " . var_export($value, 1));
 					$missingAttributes[$attribute->getAttributeCode()] = $attribute->getStoreLabel(
 							$this->_getSession()->getVendor()->getLabelStore());
 				}
