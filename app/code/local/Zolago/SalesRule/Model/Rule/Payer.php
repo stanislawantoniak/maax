@@ -9,7 +9,7 @@ class Zolago_SalesRule_Model_Rule_Payer {
 	 */
 	public function toOptionHash() {
 		return array(
-			self::PAYER_VENDOR => Mage::helper("zolagosalesrule")->__("Vednor"),
+			self::PAYER_VENDOR => Mage::helper("zolagosalesrule")->__("Vendor"),
 			self::PAYER_GALLERY => Mage::helper("zolagosalesrule")->__("Gallery")
 		);
 	}
@@ -21,7 +21,7 @@ class Zolago_SalesRule_Model_Rule_Payer {
 		return array(
 			array(
 				"value" => self::PAYER_VENDOR,
-				"label" => Mage::helper("zolagosalesrule")->__("Vednor")
+				"label" => Mage::helper("zolagosalesrule")->__("Vendor")
 			),
 			array(
 				"value" => self::PAYER_GALLERY,
