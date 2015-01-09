@@ -388,7 +388,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         if(empty($configurableProductsIds)){
             return array();
         }
-        $configurableProducts = implode(',' , $configurableProductsIds);
+
         $readConnection = $this->_getReadAdapter();
         $select = $readConnection->select()
             ->from(
@@ -397,7 +397,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                       'super_attribute'      => 'product_super_attribute_id'
                 )
             );
-        $select->where("catalog_product_super_attribute.product_id IN({$configurableProducts})");
+        $select->where("catalog_product_super_attribute.product_id IN(?)",$configurableProductsIds);
         $superAttributes = $readConnection->fetchAssoc($select);
 
         return $superAttributes;

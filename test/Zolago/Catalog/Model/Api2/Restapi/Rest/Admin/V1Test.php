@@ -29,6 +29,43 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         
                                                                                                                                                     
     }
+
+
+
+    public function testPrice() {
+        /* @var $obj Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 */
+        $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+//        $param = '{"ProductPricesUpdate":[{"merchant":"4","data":{"32035-20X-L":{"A":10,"B":20,"C":30},
+//        "25768-M":{"A":31.9,"B":32.9},
+//      "25768-XL":{"A":31.9,"B":32.9},"25767-XXL":{"A":31.9,"B":32.9},"25767-XL":{"A":31.9,"B":32.9},
+//      "25768-S":{"A":31.9,"B":32.9},"25767-S":{"A":31.9,"B":32.9}}}]} ';
+        $param = array(
+            4 => array(
+                '4-32035-20X-L' => array(
+                    'A' => 5,
+                    'B' => 6,
+                    'C' => 8,
+                    'D' => 10
+                ),
+                '4-32035-20X-M' => array(
+                    'A' => 5,
+                    'B' => 6,
+                    'C' => 8,
+                    'D' => 10
+                ),
+                '4-32035-20X-XL' => array(
+                    'A' => 5,
+                    'B' => 6,
+                    'C' => 8,
+                    'D' => 10
+                ),
+            ),
+        );
+        //$param = json_encode($json);
+        $obj::updatePricesConverter($param);
+
+    }
+
     public function testCreate()
     {
         $array = array_fill(0, 500000, array('banana', 'lemon', 'peach' => array('banana'), 'banana' => array('banana', 'lemon', 'peach')));

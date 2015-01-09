@@ -386,6 +386,24 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'product_id' => 'campaign_product.product_id'
             )
         );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign.campaign_id=campaign_website.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
+
+        $select->join(
+            array('products_visibility' =>'catalog_product_entity_int'),
+            'campaign_product.product_id=products_visibility.entity_id',
+            array('products_visibility.store_id')
+        );
+        $select->join(
+            array('eav_attribute' =>'eav_attribute'),
+            'eav_attribute.attribute_id=products_visibility.attribute_id',
+            array()
+        );
         $localeTime = Mage::getModel('core/date')->timestamp(time());
         $localeTimeF = date("Y-m-d H:i", $localeTime);
 
@@ -401,6 +419,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.type IN(?)", $type);
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $select->where("eav_attribute.attribute_code=?", 'visibility');
+        $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->order('campaign.updated_at DESC');
 
         return $this->getReadConnection()->fetchAll($select);
@@ -504,8 +524,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
         $select->where("product_varchar.entity_id IN(?)", $ids);
-        //TODO need to know what to do for configurable
-        //$select->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+
+        $select->where("product.visibility<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
 
         try {
             $assoc = $readConnection->fetchAssoc($select);
@@ -514,6 +534,32 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
 
         return $assoc;
+    }
+
+    public function insertOptionsBasedOnCampaign($insert)
+    {
+        $insert = array_unique($insert);
+        $lineQuery = implode(",", $insert);
+
+        $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
+
+        $insertQuery = sprintf(
+            "
+                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
+                    VALUES %s
+                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
+                    ", $catalogProductSuperAttributePricingTable, $lineQuery
+        );
+
+
+        try {
+            $this->_getWriteAdapter()->query($insertQuery);
+
+        } catch (Exception $e) {
+            Mage::throwException("Error insertOptionsBasedOnCampaign");
+
+            throw $e;
+        }
     }
 
 }

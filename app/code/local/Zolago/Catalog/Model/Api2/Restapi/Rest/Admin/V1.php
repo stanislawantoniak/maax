@@ -237,6 +237,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     public static function updatePricesConverter($priceBatch)
     {
+        Mage::log($priceBatch);
         //queue inform_magento
         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
         $skuS = array_keys($priceBatch);
@@ -259,7 +260,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         //price_margin from configurable products
         $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
-
+        Mage::log($priceType);
         //converter_msrp_type from configurable products
         //Mage::log(print_r($skuS,true), 0, 'priceMSRPSource.log');
         $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);

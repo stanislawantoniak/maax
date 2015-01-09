@@ -27,6 +27,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public static function getSkuAssoc($skus = array())
     {
+        /* @var $posResourceModel Zolago_Pos_Model_Resource_Pos */
         $posResourceModel = Mage::getResourceModel('zolagopos/pos');
         $skuAssoc = $posResourceModel->getSkuAssoc($skus);
         return $skuAssoc;

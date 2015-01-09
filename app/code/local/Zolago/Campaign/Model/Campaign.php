@@ -81,7 +81,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
         $notValidCampaigns = $resourceModel->getNotValidCampaigns();
-//        Zend_debug::dump($notValidCampaigns);
 
         if(empty($notValidCampaigns)){
             return;
@@ -171,6 +170,208 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             );
         }
 
+    }
+
+
+    /**
+     * $salesPromoProductsData - array('configurable_product_id' => array('price_source' => price_source, 'price_percent' => price_percent))
+     * @param $salesPromoProductsData
+     */
+    public function setProductOptionsByCampaign($salesPromoProductsData, $websiteId)
+    {
+        if (empty($salesPromoProductsData)) {
+            return;
+        }
+        $stores = array();
+        $allStores = Mage::app()->getStores();
+        foreach ($allStores as $_eachStoreId => $val) {
+            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+            $stores[] = $_storeId;
+        }
+        $productsData = array();
+
+        $attributeSize = Mage::getResourceModel('catalog/product')
+            ->getAttribute('size');
+        $attributeSizeId= $attributeSize->getAttributeId();
+
+        $ids = array_keys($salesPromoProductsData);
+        $configurableProductIds = array();
+        //1. get simple products related to configurable
+        $collection = Mage::getModel('catalog/product')->getCollection();
+        $collection->addAttributeToFilter('visibility', array('neq' => 1));
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        $collection->addFieldToFilter('entity_id', array('in' => $ids));
+
+        $skuSizeRelation = array();
+
+        $simpleUsed = array();
+        foreach ($collection as $_product) {
+            $parentId = $_product->getId();
+            $configurableProductIds[$parentId] = $parentId;
+
+            /* @var $configModel  Mage_Catalog_Model_Product_Type_Configurable */
+            $configModel = Mage::getModel('catalog/product_type_configurable');
+            $configurableOptions = $configModel->getConfigurableOptions($_product);
+
+            if(isset($configurableOptions[$attributeSizeId])){
+                $configurableOptionsSize = $configurableOptions[$attributeSizeId];
+                foreach($configurableOptionsSize as $configurableSizeOption){
+                    $skuSizeRelation[$parentId][(string)$configurableSizeOption['option_title']]= array('sku' => $configurableSizeOption['sku'],'size' => $configurableSizeOption['option_title']);
+                }
+            }
+
+            $childProducts = $configModel->getUsedProducts(null, $_product);
+
+            foreach ($childProducts as $_child) {
+                $childId = $_child->getId();
+                $productsData[$parentId][$childId] = array(
+                    'sku' => $_child->getSku(),
+                    'skuv' => $_child->getSkuv(),
+                    'udropship_vendor' => $_child->getUdropshipVendor()
+                );
+                $simpleUsed[(string)$_child->getSku()] = $childId;
+            }
+            unset($child);
+            unset($childId);
+        }
+
+        unset($product);
+        unset($parentId);
+        unset($childProducts);
+
+
+        //2. get prices for simple from converters
+        if(empty($productsData)){
+            return;
+        }
+        //Ping converter to get special price
+        try {
+            /* @var $converter Zolago_Converter_Model_Client */
+            $converter = Mage::getModel('zolagoconverter/client');
+        } catch (Exception $e) {
+            Mage::throwException("Converter is unavailable: check credentials");
+            return;
+        }
+        $priceTypes = $this->getOptionsData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+
+        $actualSpecialPricesForChildren = array();
+        foreach ($productsData as $parentProductId => $simpleProductsData) {
+            $priceType = $priceTypes[$salesPromoProductsData[$parentProductId]['price_source']];
+            $percent = $salesPromoProductsData[$parentProductId]['price_percent'];
+
+            foreach ($simpleProductsData as $childProductId => $childData) {
+                $newPrice = $converter->getPrice($childData['udropship_vendor'], $childData['skuv'], $priceType);
+                if (!empty($newPrice)) {
+                    $newPriceWithPercent = $newPrice - $newPrice * ((int)$percent / 100);
+                    $actualSpecialPricesForChildren[$parentProductId][$childProductId] = $newPriceWithPercent;
+                }
+            }
+
+            unset($childProductId);
+            unset($childData);
+            unset($newPrice);
+            unset($newPriceWithPercent);
+        }
+        unset($simpleProductsData);
+        unset($parentProductId);
+        unset($priceType);
+        unset($percent);
+
+        //3. calculate options to configurable
+        $sizes = $this->getOptionsData('size', true);
+
+
+        /* @var $configResourceModel   Zolago_Catalog_Model_Resource_Product_Configurable    */
+        $configResourceModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+        $superAttributes = $configResourceModel->getSuperAttributes($configurableProductIds);
+
+
+        //4. set options to configurable
+        if(empty($skuSizeRelation)){
+            return;
+        }
+
+
+        $pricesData = array();
+        foreach ($actualSpecialPricesForChildren as $parentProdId => $actualSpecialPrices) {
+            $minPriceForProduct = min(array_values($actualSpecialPrices));
+
+            $pricesData[$parentProdId]['special_price'] = $minPriceForProduct;
+            foreach ($actualSpecialPrices as $childProdId => $childPrice) {
+                $priceIncrement = (float)$childPrice - $minPriceForProduct;
+                $pricesData[$parentProdId][$childProdId]['option_price_increment'] = $priceIncrement;
+
+
+            }
+
+            foreach ($stores as $storeId) {
+                Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                    array($parentProdId), array('special_price' => $minPriceForProduct), $storeId
+                );
+            }
+
+            unset($childProdId);
+            unset($priceIncrement);
+            unset($parentProdId);
+            unset($actualSpecialPrices);
+        }
+        unset($parentProdId);
+        unset($actualSpecialPrices);
+
+
+        $optionsData = array();
+        $optionsArray = array();
+        foreach ($skuSizeRelation as $parentProdId => $skuSizeRelations) {
+            $superAttributeId = $superAttributes[$parentProdId]['super_attribute'];
+            foreach ($skuSizeRelations as $sizeLabel => $sizeLabelData) {
+                $size = $sizes[$sizeLabel];
+                $sizeLabelDataSku = $sizeLabelData['sku'];
+                $childProdId = $simpleUsed[$sizeLabelDataSku];
+
+                $priceIncrement = $pricesData[$parentProdId][$childProdId]['option_price_increment'];
+                $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
+                //product_super_attribute_id,value_index,pricing_value,website_id
+//                $optionsArray[] = array(
+//                    'product_super_attribute_id' => $superAttributeId,
+//                    'value_index' => $size,
+//                    'pricing_value' => $priceIncrement,
+//                    'website_id' => $websiteId
+//                );
+            }
+
+        }
+
+
+        //5. set special price to configurable
+        /* @var $campaignResourceModel   Zolago_Campaign_Model_Resource_Campaign */
+        $campaignResourceModel = Mage::getResourceModel('zolagocampaign/campaign');
+        $campaignResourceModel->insertOptionsBasedOnCampaign($optionsData);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getOptionsData($attributeCode, $byLabel = false)
+    {
+        $attribute = Mage::getResourceModel('catalog/product')
+            ->getAttribute($attributeCode);
+
+        $options = Mage::getResourceModel('eav/entity_attribute_option_collection');
+        $values = $options->setAttributeFilter($attribute->getId())->setStoreFilter(0)->toOptionArray();
+
+        $result = array();
+        if ($byLabel) {
+            foreach ($values as $value) {
+                $result[$value['label']] = $value['value'];
+            }
+        } else {
+            foreach ($values as $value) {
+                $result[$value['value']] = $value['label'];
+            }
+        }
+
+        return $result;
     }
 
     public function getExpiredCampaigns()

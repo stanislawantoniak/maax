@@ -48,7 +48,19 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $campaignId = $this->getRequest()->getParam('id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
         $isAjax = $this->getRequest()->getParam('isAjax',false);
+        $campaign = $this->_initModel();
+        $vendor = $this->_getSession()->getVendor();
 
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("*/*");
+            }
+        } elseif($this->getRequest()->getParam('id',null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("*/*");
+        }
         $skuS = array();
         if (is_string($productsStr)) {
             $skuS = array_map('trim', explode(",", $productsStr));
@@ -171,7 +183,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         return $this->_redirectReferer();
     }
 
-	
+
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');
 		$store = Mage::app()->getStore();
@@ -179,14 +191,14 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		/* @var $collection Mage_Core_Model_Resource_Url_Rewrite_Collection */
 		$collection->addStoreFilter($store);
 		$collection->addFieldToFilter("request_path", $key);
-		
+
 		$response = array("status"=>1, "content"=>$collection->getSize()==0);
-		
+
 		$this->getResponse()->
 				setHeader('Content-type', 'application/json')->
 				setBody(Mage::helper('core')->jsonEncode($response));
 	}
-	
+
 	/**
 	 * @return Zolago_Campaign_Model_Campaign
 	 */
@@ -206,7 +218,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		Mage::register('current_campaign', $model);
 		return $model;
 	}
-	
+
 	/**
 	 * @param Zolago_Campaign_Model_Campaign $model
 	 * @return boolean
@@ -329,5 +341,21 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         }
         echo $previewImage;
     }
+
+
+    public function testAction()
+    {
+//        Zolago_Campaign_Model_Observer::setProductAttributes();
+        $sku = array('4-32035-20X', '12-X');
+        $collection = Mage::getModel('catalog/product')->getCollection();
+        $collection->addFieldToFilter('sku', array("in" => $sku));
+
+        $assoc = array();
+        foreach ($collection as $collectionI) {
+            $assoc[$collectionI->getSku()] = $collectionI->getId();
+        }
+        krumo($assoc);
+    }
+
 
 }
