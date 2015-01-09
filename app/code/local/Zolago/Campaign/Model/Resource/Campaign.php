@@ -524,6 +524,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
         $select->where("product_varchar.entity_id IN(?)", $ids);
+        //TODO need to know what to do for configurable
+        //$select->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
         $select->where("product.visibility<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
 
@@ -562,5 +564,54 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
     }
 
+    public function getIsProductsInValidCampaign($productsIds) {
+
+//        Mage::log("START getIsProductsInValidCampaign");
+
+//        Mage::log("productsIds:");
+//        Mage::log($productsIds);
+
+        $return = array();
+
+        $readConnection = $this->_getReadAdapter();
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $select = $readConnection->select();
+
+        $select->from(array("product" => $table),"product.product_id");
+        $select->where("product.product_id IN(?)", $productsIds);
+
+
+
+        $select->joinLeft(
+            array("campaign" => $this->getTable("zolagocampaign/campaign")),
+            "product.campaign_id = campaign.campaign_id"
+            );
+
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i", $localeTime);
+
+        $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
+        $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
+        $select->where("campaign.status = 1");
+
+//        Mage::log($select->__toString());
+
+        try {
+            $_return = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException($e);
+        }
+
+        foreach ($_return as $row) {
+            $return[] = $row['product_id'];
+        }
+//        Mage::log('return:');
+//        Mage::log($return);
+//
+//        Mage::log("END getIsProductsInValidCampaign");
+
+        return $return;
+
+    }
 }
 

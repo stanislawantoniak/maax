@@ -86,6 +86,7 @@ class Zolago_Campaign_Model_Observer
             foreach ($dataToUpdate as $productId => $data) {
                 krumo($data);
                 $attributesData = array(
+                    'campaign_strikeout_price_type' => $data['strikeout_type'],
                     'campaign_regular_id' => $data['campaign_id'],
                     'special_from_date' => !empty($data['date_from']) ? date('Y-m-d', strtotime($data['date_from'])) : '',
                     'special_to_date' => !empty($data['date_to']) ? date('Y-m-d', strtotime($data['date_to'])) : ''

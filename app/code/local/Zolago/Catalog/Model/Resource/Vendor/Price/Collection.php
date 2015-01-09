@@ -48,6 +48,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		$stockTable = $this->getTable('cataloginventory/stock_item');
+		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
 		
 		// Join price attrib
@@ -60,17 +61,16 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$this->addExpressionAttributeToSelect('display_price', $priceExpression, array());
 		
 		
-		// Join stock item
+		// Join stock item from stock index
 		$this->joinTable(
-				$stockTable, 
+				$stockStatusTable, 
 				'product_id=entity_id',
-				array('is_in_stock'=>'is_in_stock'), 
+				array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)')), 
 				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
 				'left'
 		);
 		
-		
-		// Join all childs
+		// Join all childs count
 		$subSelect = $adapter->select();
 		$subSelect->from(array("link_all"=>$linkTabel), array("COUNT(link_all.link_id)"));
 		$subSelect->where("link_all.parent_id=e.entity_id");
@@ -100,7 +100,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$subSelect->where("child_qty.is_in_stock=?",1);
 		// Use subselect only for parent products
 		$this->addExpressionAttributeToSelect('stock_qty', 
-				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), $stockTable.qty)", array());
+				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), IFNULL($stockStatusTable.qty,0))", array());
+		
 		
 		return $this;
 	}

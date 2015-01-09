@@ -22,4 +22,9 @@ class Zolago_Common_TestController extends Mage_Core_Controller_Front_Action{
 		$this->loadLayout();
 		$this->renderLayout();
 	}
+	
+	public function triggerCampaignAction() {
+		Mage::getSingleton('zolagocampaign/observer')->setProductAttributes();
+		Mage::getSingleton('zolagocampaign/observer')->processCampaignAttributes();
+	}
 }

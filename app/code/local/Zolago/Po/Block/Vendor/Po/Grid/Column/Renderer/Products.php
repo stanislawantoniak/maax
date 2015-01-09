@@ -14,11 +14,23 @@ class Zolago_Po_Block_Vendor_Po_Grid_Column_Renderer_Products
 					$this->escapeHtml($item->getName()) . "<br/>" . 
 					"<small class=\"text-muted\">" . 
 						$this->__("SKU") . ": " . ($item->getFinalSku() ? $item->getFinalSku() : $this->__('N/A')) . ", " . 
-						$this->__("Price") . ": " . Mage::helper('core')->currency($item->getPriceInclTax()*(1-$item->getDiscountPercent()/100), true, false) .
+						$this->__("Price") . ": " . $this->_getFormattedPrice($item) .
 					"</small>" . "<br/>";
 			}
 			$return .= "</ul>";
 		}
 		return $return;
+	}
+	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return string
+	 */
+	protected function _getFormattedPrice(Unirgy_DropshipPo_Model_Po_Item $item) {
+		return Mage::helper('core')->currency(
+			$item->getPriceInclTax() + (-1 * $item->getDiscountAmount() / $item->getQty()), 
+			true, 
+			false
+		);
 	}
 }
