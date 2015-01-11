@@ -85,6 +85,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $resourceModel = $this->getResource();
         $notValidCampaigns = $resourceModel->getNotValidCampaigns();
 
+        $productsIds = array();
+        foreach($notValidCampaigns as $notValidCampaign){
+            $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
+        }
+
+        $isProductsInValidCampaign = $resourceModel->getIsProductsInValidCampaign($productsIds);
+
+
         if(empty($notValidCampaigns)){
             return;
         }
@@ -100,9 +108,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $archiveCampaigns[$notValidCampaign['campaign_id']] = $notValidCampaign['campaign_id'];
             }
             $websiteIdsToUpdate[$notValidCampaign['website_id']] = $notValidCampaign['website_id'];
-            $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
+            if (!in_array($notValidCampaign['product_id'], $isProductsInValidCampaign)) {
+                $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
+            }
+
         }
-//Zend_Debug::dump($dataToUpdate);
+
 
         //When ending date comes Campaign status goes to archive
         $collection = Mage::getModel("zolagocampaign/campaign")
