@@ -150,7 +150,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             return $this->_redirectReferer();
         }
 
-        return $this->_redirect("*/*");
+        return $this->_redirectReferer();
 	}
 
     /**
@@ -162,6 +162,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $productId = $this->getRequest()->getParam("id");
 
         if (!empty($campaignId) && !empty($productId)) {
+            /* @var $model Zolago_Campaign_Model_Resource_Campaign */
             $model = Mage::getResourceModel("zolagocampaign/campaign");
             $model->removeProduct($campaignId, $productId);
         }
@@ -342,6 +343,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         echo $previewImage;
     }
 
-
+    public function testAction()
+    {
+       Zolago_Campaign_Model_Observer::setProductAttributes();
+        //Zolago_Campaign_Model_Observer::unsetCampaignAttributes();
+    }
 
 }

@@ -42,21 +42,41 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         $param = array(
             '4-32035-20X-L' => array(
                 'A' => 5,
-                'B' => 1,
-                'C' => 8,
-                'D' => 10
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
             ),
             '4-32035-20X-M' => array(
                 'A' => 5,
-                'B' => 2,
+                'B' => 7,
                 'C' => 8,
-                'D' => 10
+                'Z' => 7
             ),
             '4-32035-20X-XL' => array(
                 'A' => 5,
+                'B' => 8,
+                'C' => 8,
+                'Z' => 5
+            ),
+
+
+            '4-20735-00X-L' => array(
+                'A' => 5,
+                'B' => 1,
+                'C' => 8,
+                'Z' => 4
+            ),
+            '4-20735-00X-M' => array(
+                'A' => 2,
+                'B' => 22,
+                'C' => 8,
+                'Z' => 3
+            ),
+            '4-20735-00X-S' => array(
+                'A' => 5,
                 'B' => 6,
                 'C' => 8,
-                'D' => 10
+                'Z' => 2
             ),
         );
         //$param = json_encode($json);

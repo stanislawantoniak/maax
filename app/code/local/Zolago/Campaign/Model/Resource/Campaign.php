@@ -25,12 +25,32 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param $campaignId
      * @param $productId
      */
-    public function removeProduct($campaignId,$productId){
+    public function removeProduct($campaignId, $productId)
+    {
         $table = $this->getTable("zolagocampaign/campaign_product");
-
         $where = "campaign_id={$campaignId} AND product_id={$productId}";
-        echo $where;
         $this->_getWriteAdapter()->delete($table, $where);
+
+        $model = Mage::getModel('zolagocampaign/campaign');
+        $campaign = $model->load($campaignId);
+        $campaignId = $campaign->getId();
+
+        $websites = $this->getAllowedWebsites($campaign);
+
+        if (!empty($websites)) {
+            $recoverOptionsProducts = array();
+            foreach ($websites as $websiteId) {
+                $recoverOptionsProducts[$websiteId] = array($productId);
+            }
+            Mage::dispatchEvent(
+                "campaign_product_remove_update_after",
+                array(
+                    'campaign_id' => $campaignId,
+                    "revert_product_options" => $recoverOptionsProducts
+                )
+            );
+        }
+
     }
 
     /**
@@ -44,8 +64,23 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $this->_getWriteAdapter()->delete($table, $where);
     }
 
-    public  function saveProducts($campaignId, array $productIds)
+    public function saveProducts($campaignId, array $productIds)
     {
+        $model = Mage::getModel('zolagocampaign/campaign');
+        $campaign = $model->load($campaignId);
+
+        $campaignProducts = $this->getCampaignProducts($campaign);
+
+        $productIdsOfCampaign = array_keys($campaignProducts);
+        $productsToDelete = array_diff($productIdsOfCampaign, $productIds);
+
+
+        if (!empty($productsToDelete)) {
+            foreach ($productsToDelete as $productsToDeleteId) {
+                $this->removeProduct($campaignId, $productsToDeleteId);
+            }
+        }
+
         $table = $this->getTable("zolagocampaign/campaign_product");
         $where = $this->getReadConnection()
             ->quoteInto("campaign_id=?", $campaignId);
@@ -227,6 +262,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchCol($select);
     }
 
+
     /**
      * @param Mage_Core_Model_Abstract $object
      * @return array
@@ -243,9 +279,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 array('campaign_product' => 'zolago_campaign_product'),
                 'campaign_product.product_id = e.entity_id')
             ->where("campaign_product.campaign_id=?", $object->getId());
+
         $skuvS = array();
         foreach ($collection as $collectionItem) {
-            $skuvS[] = $collectionItem->getSkuv();
+            $skuvS[$collectionItem->getId()] = $collectionItem->getSkuv();
         }
 
         return $skuvS;
@@ -350,6 +387,13 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'product_id' => 'campaign_product.product_id'
             )
         );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign.date_from>'{$localeTimeF}' OR campaign.date_to<='{$localeTimeF}' OR campaign.status<>{$activeCampaignStatus}");
 
@@ -410,11 +454,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
-
-        //get only campaigns updated not earlier then 2 hours ago
-        //campaign.updated_at IS NOT NULL (just created campaigns do not have products attached)
-//        $updateDate = date("Y-m-d H:i", strtotime('-2 hours', $localeTime));
-//        $select->where("campaign.updated_at IS NOT NULL AND campaign.updated_at>='{$updateDate}' ");
 
         $select->where("campaign.type IN(?)", $type);
 
@@ -566,10 +605,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
     public function getIsProductsInValidCampaign($productsIds) {
 
-//        Mage::log("START getIsProductsInValidCampaign");
-
-//        Mage::log("productsIds:");
-//        Mage::log($productsIds);
 
         $return = array();
 
@@ -594,7 +629,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
         $select->where("campaign.status = 1");
 
-//        Mage::log($select->__toString());
 
         try {
             $_return = $readConnection->fetchAll($select);
@@ -605,10 +639,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         foreach ($_return as $row) {
             $return[] = $row['product_id'];
         }
-//        Mage::log('return:');
-//        Mage::log($return);
-//
-//        Mage::log("END getIsProductsInValidCampaign");
+
 
         return $return;
 

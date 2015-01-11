@@ -334,7 +334,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 if (!empty($priceTypeSelected) || !empty($priceMSRPSelected)) {
 
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
-                    Mage::log($pricesConverter);
+
                     if ($pricesConverter) {
                         $priceToInsert = isset($pricesConverter[$priceTypeSelected])
                             ? $pricesConverter[$priceTypeSelected] : false;  //price

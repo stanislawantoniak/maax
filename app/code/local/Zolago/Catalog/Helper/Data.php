@@ -33,4 +33,23 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         return $skuAssoc;
     }
 
+
+    /**
+     * @param $websiteIds
+     * @return array
+     */
+    public function getStoresForWebsites($websiteIds)
+    {
+        $stores = array();
+        $storesCollection = Mage::getModel('core/store')->getCollection();
+        $storesCollection->addFieldToFilter('website_id', array('in', $websiteIds));
+
+        foreach ($storesCollection as $storesCollectionI) {
+            $storeId = $storesCollectionI->getStoreId();
+            $websiteId = $storesCollectionI->getWebsiteId();
+            $stores[$websiteId][$storeId] = $storeId;
+        }
+        return $stores;
+    }
+
 }

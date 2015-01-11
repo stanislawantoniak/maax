@@ -236,7 +236,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 $price = $productRelation['child_price'];
                 $website = $productRelation['website'];
 
-                $priceIncrement = (float)$price - $productMinPrice;
+                $priceIncrement = number_format(Mage::app()->getLocale()->getNumber($price - $productMinPrice), 2);
 
                 $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
             }
@@ -284,10 +284,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         unset($msrpSource);
         unset($priceSizeRelation);
         unset($msrpPriceValues);
-//
-//        Zend_Debug::dump($productRelations);
-//        Zend_Debug::dump($msrpPrices);
-//        Zend_Debug::dump($msrpPricesSource);
+
 
         $insert = array();
         foreach ($stores as $store) {
@@ -353,31 +350,126 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         if (!empty($insert)) {
             $insert = array_unique($insert);
-            $lineQuery = implode(",", $insert);
+            $this->_insertProductOptions($insert);
 
-            $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
+        }
+    }
 
-            $insertQuery = sprintf(
-                "
+
+    public function setProductOptionsBasedOnSimples($recoverOptionsProducts)
+    {
+
+        if (empty($recoverOptionsProducts)) {
+            return;
+        }
+
+        $websiteIdsToUpdate = array_keys($recoverOptionsProducts);
+        /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
+        $zolagocatalogHelper = Mage::helper('zolagocatalog');
+        $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
+
+        foreach ($recoverOptionsProducts as $websiteId => $parentIds) {
+            if (empty($parentIds)) {
+                continue;
+            }
+
+            $superAttributes = $this->getSuperAttributes($parentIds);
+            $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false; //array of stores
+
+            $priceSizeRelation = array();
+            foreach ($storesToUpdate as $store) {
+                $priceSizeRelationByStore = $this->_getProductRelationPricesSizes($parentIds, $store);
+                foreach ($priceSizeRelationByStore as $priceSizeRelationByStoreI) {
+                    $priceSizeRelation[$priceSizeRelationByStoreI['parent']][$store][] = $priceSizeRelationByStoreI;
+                }
+            }
+
+            foreach ($parentIds as $parentId) {
+                $superAttributeId = isset($superAttributes[$parentId]) ? $superAttributes[$parentId]['super_attribute'] : false;
+                $priceSizeRelationForStores = isset($priceSizeRelation[$parentId]) ? $priceSizeRelation[$parentId] : false;
+
+                if ($superAttributeId && $priceSizeRelationForStores) {
+                    $this->setConfigurableProductOptions($parentId, $superAttributeId, $priceSizeRelationForStores, $websiteId, $storesToUpdate);
+                }
+            }
+        }
+        unset($parentIds);
+    }
+
+
+    public function setConfigurableProductOptions($productConfigurableId, $superAttributeId, $priceSizeRelation, $website, $stores)
+    {
+        if (empty($productConfigurableId)) {
+            return;
+        }
+        $insert = array();
+
+        foreach ($stores as $store) {
+            $productRelationsByStore = isset($priceSizeRelation[$store]) ? $priceSizeRelation[$store] : false;
+
+            if (!$productRelationsByStore) {
+                continue;
+            }
+
+            //1. update price
+            $productMinPrice = array();
+            foreach ($productRelationsByStore as $i) {
+                $productMinPrice[] = $i['child_price'];
+            }
+            unset($i);
+            $productMinimalPrice = min($productMinPrice);
+            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                array($productConfigurableId), array('price' => $productMinimalPrice), $store
+            );
+
+            //2. update options
+            foreach ($productRelationsByStore as $productRelation) {
+                $size = $productRelation['child_size'];
+                $price = $productRelation['child_price'];
+                $website = $productRelation['website'];
+
+                $priceIncrement = number_format(Mage::app()->getLocale()->getNumber($price - $productMinimalPrice), 2);
+
+                $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
+            }
+
+        }
+
+
+        if (!empty($insert)) {
+            $insert = array_unique($insert);
+            $this->_insertProductOptions($insert);
+        }
+    }
+
+    public function _insertProductOptions(array$insert)
+    {
+        if (empty($insert)) {
+            return;
+        }
+        $lineQuery = implode(",", $insert);
+
+        $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
+
+        $insertQuery = sprintf(
+            "
                     INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
                     VALUES %s
                     ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
                     ", $catalogProductSuperAttributePricingTable, $lineQuery
-            );
+        );
 
+        try {
+            $this->_getWriteAdapter()->query($insertQuery);
 
-            try {
-                $this->_getWriteAdapter()->query($insertQuery);
+        } catch (Exception $e) {
+            Mage::log($e->getMessage(), 0, 'configurable_update.log');
+            Mage::throwException("Error insertProductSuperAttributePricingApp");
 
-            } catch (Exception $e) {
-                Mage::log($e->getMessage(), 0, 'configurable_update.log');
-                Mage::throwException("Error insertProductSuperAttributePricingApp");
-
-                throw $e;
-            }
-
+            throw $e;
         }
     }
+
     /**
      * get super attribute ids
      *
@@ -385,7 +477,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function getSuperAttributes($configurableProductsIds)
     {
-        if(empty($configurableProductsIds)){
+        if (empty($configurableProductsIds)) {
             return array();
         }
 
@@ -394,12 +486,11 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             ->from(
                 'catalog_product_super_attribute',
                 array('configurable_product' => 'product_id',
-                      'super_attribute'      => 'product_super_attribute_id'
+                    'super_attribute' => 'product_super_attribute_id'
                 )
             );
-        $select->where("catalog_product_super_attribute.product_id IN(?)",$configurableProductsIds);
+        $select->where("catalog_product_super_attribute.product_id IN(?)", $configurableProductsIds);
         $superAttributes = $readConnection->fetchAssoc($select);
-
         return $superAttributes;
     }
 
@@ -433,22 +524,23 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $readConnection = $this->_getReadAdapter();
         $productRelations = array();
 
+        $table = $this->getMainTable();
         $select = $readConnection->select()
-            ->from('vw_product_relation_prices_sizes_relation')
+            ->from($table)
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
                 array('DISTINCT(child)', 'parent', 'child_size', 'child_price', 'website')
-            )
-            ->where('parent=?', $productConfigurableId)
-            ->where('store=?', $store);
-//echo $select;
-
-        try
-        {
-            $productRelations = $readConnection->fetchAll($select);
+            );
+        if (is_array($productConfigurableId)) {
+            $select->where('parent IN(?)', $productConfigurableId);
+        } else {
+            $select->where('parent=?', $productConfigurableId);
         }
-        catch(Exception $e)
-        {
+        $select->where('store=?', $store);
+
+        try {
+            $productRelations = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
             Mage::log($e->getMessage(), Zend_Log::ERR);
         }
 

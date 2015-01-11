@@ -127,10 +127,31 @@ class Zolago_Campaign_Model_Observer
         );
     }
 
-    static public function processCampaignAttributes()
+    static public function unsetCampaignAttributes()
     {
         /* @var $campaignModel Zolago_Campaign_Model_Campaign */
         $campaignModel = Mage::getModel("zolagocampaign/campaign");
-        $campaignModel->processCampaignAttributes();
+        $campaignModel->unsetCampaignAttributes();
+    }
+
+
+    /**
+     * revert product attributes after delete product from campaign
+     * @param $observer
+     */
+    static function productAttributeRevert($observer)
+    {
+//        $revertProductOptions = array(
+//            'website_id' => array(
+//                    'product_id1',
+//                    'product_id1'
+//                )
+//        );
+        $campaignId = $observer->getCampaignId();
+        $revertProductOptions = $observer->getRevertProductOptions();
+
+        /* @var $model Zolago_Campaign_Model_Campaign */
+        $model = Mage::getModel('zolagocampaign/campaign');
+        $model->unsetProductAttributesOnProductRemoveFromCampaign($campaignId,$revertProductOptions);
     }
 }
