@@ -226,12 +226,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if (empty($salesPromoProductsData)) {
             return;
         }
-        $stores = array();
-        $allStores = Mage::app()->getStores();
-        foreach ($allStores as $_eachStoreId => $val) {
-            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-            $stores[] = $_storeId;
-        }
+
         $productsData = array();
 
         $attributeSize = Mage::getResourceModel('catalog/product')
@@ -246,6 +241,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection->addFieldToFilter('entity_id', array('in' => $ids));
 
+
         $skuSizeRelation = array();
 
         $simpleUsed = array();
@@ -259,6 +255,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             if(isset($configurableOptions[$attributeSizeId])){
                 $configurableOptionsSize = $configurableOptions[$attributeSizeId];
+
                 foreach($configurableOptionsSize as $configurableSizeOption){
                     $skuSizeRelation[$parentId][(string)$configurableSizeOption['option_title']]= array('sku' => $configurableSizeOption['sku'],'size' => $configurableSizeOption['option_title']);
                 }
@@ -297,6 +294,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             return;
         }
         $priceTypes = $this->getOptionsData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+
 
         $actualSpecialPricesForChildren = array();
         foreach ($productsData as $parentProductId => $simpleProductsData) {
@@ -348,7 +346,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             unset($childProdId);
             unset($childPrice);
 
-            foreach ($stores as $storeId) {
+            foreach (array(1,2) as $storeId) {
                 Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                     array($parentProdId), array('special_price' => $minPriceForProduct), $storeId
                 );

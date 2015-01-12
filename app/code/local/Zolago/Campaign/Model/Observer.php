@@ -8,17 +8,7 @@ class Zolago_Campaign_Model_Observer
         /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
 
-        $storesToUpdate = array();
-        foreach (Mage::app()->getWebsites() as $website) {
-            foreach ($website->getGroups() as $group) {
-                $stores = $group->getStores();
-                foreach ($stores as $store) {
-                    $storesToUpdate[] = $store->getId();
-                }
-                unset($store);
-            }
-            unset($group);
-        }
+        $storesToUpdate = array(1,2);
 
 
         $productIds = array();
@@ -68,6 +58,7 @@ class Zolago_Campaign_Model_Observer
         );
 
 
+
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
             foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
@@ -106,6 +97,7 @@ class Zolago_Campaign_Model_Observer
             }
             unset($productId);
         }
+
         //2. Set options
 
 
