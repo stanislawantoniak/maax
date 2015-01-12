@@ -65,9 +65,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if (is_string($productsStr)) {
             $skuS = array_map('trim', explode(",", $productsStr));
         }
+
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
             ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->addAttributeToFilter('udropship_vendor', $vendor->getId())
             ->getAllIds();
         $productIds = array();
         if (!empty($collection)) {
@@ -93,6 +95,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $campaign = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
+
 
         // Try save
         $data = $this->getRequest()->getParams();
