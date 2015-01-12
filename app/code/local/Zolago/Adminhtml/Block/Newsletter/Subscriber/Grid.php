@@ -1,43 +1,22 @@
 <?php
 
-class Zolago_Adminhtml_Block_Newsletter_Subscriber_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Zolago_Adminhtml_Block_Newsletter_Subscriber_Grid extends Mage_Adminhtml_Block_Newsletter_Subscriber_Grid
 {
-    /**
-     * Constructor
-     *
-     * Set main configuration of grid
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setId('subscriberGrid');
-        $this->setUseAjax(true);
-        $this->setDefaultSort('subscriber_id', 'desc');
-    }
+    protected $_joined = false;
 
-    /**
-     * Prepare collection for grid
-     *
-     * @return Mage_Adminhtml_Block_Widget_Grid
-     */
-    protected function _prepareCollection()
-    {
-        $collection = Mage::getResourceSingleton('zolagonewsletter/subscriber_collection');
-        /* @var $collection Zolago_Newsletter_Model_Resource_Subscriber_Collection */
-        $collection
-            ->showCustomerInfo(true)
-            ->showCoupons()
-            ->addSubscriberTypeField()
-            ->showStoreInfo();
+    public function getCollection() {
+        $coll = parent::getCollection();
+        /* @var $coll Mage_Newsletter_Model_Resource_Subscriber_Collection */
+        if(!$this->_joined){
 
-        if($this->getRequest()->getParam('queue', false)) {
-            $collection->useQueue(Mage::getModel('newsletter/queue')
-                ->load($this->getRequest()->getParam('queue')));
+            /** @var Zolago_Newsletter_Model_Resource_Subscriber_Collection $zolagoCollection */
+            $zolagoCollection = Mage::getResourceModel("zolagonewsletter/subscriber_collection");
+            $zolagoCollection->addCoupons($coll);
+
+            $this->_joined = true;
         }
 
-        $this->setCollection($collection);
-
-        return parent::_prepareCollection();
+        return $coll;
     }
 
     protected function _prepareColumns()
@@ -118,68 +97,5 @@ class Zolago_Adminhtml_Block_Newsletter_Subscriber_Grid extends Mage_Adminhtml_B
         $this->addExportType('*/*/exportCsv', Mage::helper('customer')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('customer')->__('Excel XML'));
         return parent::_prepareColumns();
-    }
-
-    /**
-     * Convert OptionsValue array to Options array
-     *
-     * @param array $optionsArray
-     * @return array
-     */
-    protected function _getOptions($optionsArray)
-    {
-        $options = array();
-        foreach ($optionsArray as $option) {
-            $options[$option['value']] = $option['label'];
-        }
-        return $options;
-    }
-
-    /**
-     * Retrieve Website Options array
-     *
-     * @return array
-     */
-    protected function _getWebsiteOptions()
-    {
-        return Mage::getModel('adminhtml/system_store')->getWebsiteOptionHash();
-    }
-
-    /**
-     * Retrieve Store Group Options array
-     *
-     * @return array
-     */
-    protected function _getStoreGroupOptions()
-    {
-        return Mage::getModel('adminhtml/system_store')->getStoreGroupOptionHash();
-    }
-
-    /**
-     * Retrieve Store Options array
-     *
-     * @return array
-     */
-    protected function _getStoreOptions()
-    {
-        return Mage::getModel('adminhtml/system_store')->getStoreOptionHash();
-    }
-
-    protected function _prepareMassaction()
-    {
-        $this->setMassactionIdField('subscriber_id');
-        $this->getMassactionBlock()->setFormFieldName('subscriber');
-
-        $this->getMassactionBlock()->addItem('unsubscribe', array(
-            'label'        => Mage::helper('newsletter')->__('Unsubscribe'),
-            'url'          => $this->getUrl('*/*/massUnsubscribe')
-        ));
-
-        $this->getMassactionBlock()->addItem('delete', array(
-            'label'        => Mage::helper('newsletter')->__('Delete'),
-            'url'          => $this->getUrl('*/*/massDelete')
-        ));
-
-        return $this;
     }
 }

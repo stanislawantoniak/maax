@@ -7,11 +7,11 @@
 	<p>
 		{{var store_name}} newsletter subscription has been successful!
 	</p>
-	{{depend coupon}}
+	{{depend use_coupon}}
 	<p>
-		Your coupon code: <strong>{{var coupon}}</strong>
+		Your coupon code: <strong>{{var coupon.getCode}}</strong>
 		<br />
-		{{var coupon_desc}}
+		{{var rule.getDescription}}
 	</p>
 	{{/depend}}
 </div>
