@@ -109,6 +109,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             if ($campaignExpired) {
                 $archiveCampaigns[$notValidCampaign['campaign_id']] = $notValidCampaign['campaign_id'];
             }
+
             $websiteIdsToUpdate[$notValidCampaign['website_id']] = $notValidCampaign['website_id'];
             if (!($notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) && in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
                 $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
@@ -171,7 +172,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                             unset($store);
 
                         } elseif ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-                            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
+                            $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '',self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
                             foreach ($storesOfWebsite as $store) {
                                 $actionModel
                                     ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
@@ -186,12 +187,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     //unset special price
                     //unset special price dates
                     //unset SRP price
-                    $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
-                    foreach ($storesOfWebsite as $store) {
-                        $actionModel
-                            ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
-                    }
-                    unset($store);
+//                    $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
+//                    foreach ($storesOfWebsite as $store) {
+//                        $actionModel
+//                            ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
+//                    }
+//                    unset($store);
                 }
             }
 
