@@ -64,6 +64,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
     public function subscribeCustomer($customer)
     {
 	    $subscriber = $this;
+	    $confirmationNeeded = Mage::getStoreConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1;
 
 	    if ($customer->getImportMode()) {
 		    $subscriber->setImportMode(true);
@@ -102,14 +103,19 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		        } //otherwise check if customer wants to subscribe
 		        elseif ($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
 			        //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
-			        if ($status == self::STATUS_UNSUBSCRIBED) {
+			        if ($status == self::STATUS_UNSUBSCRIBED || ($status == self::STATUS_UNCONFIRMED && !$confirmationNeeded)) {
 				        $subscriber->setStatus(self::STATUS_SUBSCRIBED);
 				        $subscriber->sendConfirmationSuccessEmail();
 			        } //otherwise set his status to unconfirmed and send confirmation request email
 			        else {
-				        $subscriber->setStatus(self::STATUS_UNCONFIRMED);
-				        $subscriber->sendConfirmationRequestEmail();
-				        $customer->setConfirmMsg(true);
+				        $status = $confirmationNeeded ? self::STATUS_UNCONFIRMED : self::STATUS_SUBSCRIBED;
+				        $subscriber->setStatus($status);
+				        if($confirmationNeeded) {
+					        $subscriber->sendConfirmationRequestEmail();
+					        $customer->setConfirmMsg(true);
+				        } else {
+					        $subscriber->sendConfirmationSuccessEmail();
+				        }
 			        }
 		        }
 	        }
@@ -161,7 +167,13 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-            $newStatus = $customer->getIsSubscribed() ? self::STATUS_UNCONFIRMED : null;
+	        if($customer->getIsSubscribed() && $confirmationNeeded) {
+		        $newStatus = self::STATUS_UNCONFIRMED;
+	        } elseif($customer->getIsSubscribed() && !$confirmationNeeded) {
+		        $newStatus = self::STATUS_SUBSCRIBED;
+	        } else {
+		        $newStatus = null;
+	        }
             if(!is_null($customer->getIsEmailHasChanged()) && is_null($customer->getIsJustRegistered())) {
                 $newStatus = self::STATUS_NOT_ACTIVE;
                 $customer->unsIsEmailHasChanged();
@@ -176,10 +188,12 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 
 			//if customer agreed to newsletter send him a confirmation email
 	        $subscriber->save();
+	        $this->setImportMode(false);
             if($newStatus == self::STATUS_UNCONFIRMED) {
-	            $this->setImportMode(false);
 	            $this->sendConfirmationRequestEmail();
 	            $customer->setConfirmMsg(true);
+            } elseif($newStatus == self::STATUS_SUBSCRIBED) {
+	            $this->sendConfirmationSuccessEmail();
             }
         }
 
