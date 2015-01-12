@@ -48,14 +48,29 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $campaignId = $this->getRequest()->getParam('id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
         $isAjax = $this->getRequest()->getParam('isAjax',false);
+        $campaign = $this->_initModel();
+        $vendor = $this->_getSession()->getVendor();
 
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("*/*");
+            }
+        } elseif($this->getRequest()->getParam('id',null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("*/*");
+        }
         $skuS = array();
         if (is_string($productsStr)) {
             $skuS = array_map('trim', explode(",", $productsStr));
         }
+
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
             ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->addAttributeToFilter('udropship_vendor', $vendor->getId())
+            ->addAttributeToFilter('visibility', array('neq' => 1))
             ->getAllIds();
         $productIds = array();
         if (!empty($collection)) {
@@ -78,9 +93,16 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
+        // Form key valid?
+        $formKey = Mage::getSingleton('core/session')->getFormKey();
+        $formKeyPost = $this->getRequest()->getParam('form_key');
+        if ($formKey != $formKeyPost) {
+            return $this->_redirectReferer();
+        }
 
         $campaign = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
+
 
         // Try save
         $data = $this->getRequest()->getParams();
@@ -101,15 +123,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 if ($campaign->getId() == "") {
                     $campaign->setId(null);
                 }
-                $localeTime = Mage::getModel('core/date')->timestamp(time());
-                $localeTimeF = date("Y-m-d H:i", $localeTime);
+
                 // Add stuff for new campaign
                 if (!$campaign->getId()) {
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
-                    $campaign->setData('created_at', $localeTimeF);
-                } else {
-                    $campaign->setData('updated_at', $localeTimeF);
                 }
 
                 if ($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
@@ -150,6 +168,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $productId = $this->getRequest()->getParam("id");
 
         if (!empty($campaignId) && !empty($productId)) {
+            /* @var $model Zolago_Campaign_Model_Resource_Campaign */
             $model = Mage::getResourceModel("zolagocampaign/campaign");
             $model->removeProduct($campaignId, $productId);
         }
@@ -171,7 +190,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         return $this->_redirectReferer();
     }
 
-	
+
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');
 		$store = Mage::app()->getStore();
@@ -179,14 +198,14 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		/* @var $collection Mage_Core_Model_Resource_Url_Rewrite_Collection */
 		$collection->addStoreFilter($store);
 		$collection->addFieldToFilter("request_path", $key);
-		
+
 		$response = array("status"=>1, "content"=>$collection->getSize()==0);
-		
+
 		$this->getResponse()->
 				setHeader('Content-type', 'application/json')->
 				setBody(Mage::helper('core')->jsonEncode($response));
 	}
-	
+
 	/**
 	 * @return Zolago_Campaign_Model_Campaign
 	 */
@@ -206,7 +225,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		Mage::register('current_campaign', $model);
 		return $model;
 	}
-	
+
 	/**
 	 * @param Zolago_Campaign_Model_Campaign $model
 	 * @return boolean
@@ -328,6 +347,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             }
         }
         echo $previewImage;
+    }
+
+    public function testAction()
+    {
+       Zolago_Campaign_Model_Observer::setProductAttributes();
+        //Zolago_Campaign_Model_Observer::unsetCampaignAttributes();
     }
 
 }
