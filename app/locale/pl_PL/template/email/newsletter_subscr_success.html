@@ -7,11 +7,11 @@
 	<p>
 		Pomyślnie zapisano do newslettera {{var store_name}}!
 	</p>
-	{{depend coupon}}
+	{{depend use_coupon}}
 	<p>
-		Twój kod rabatowy: <strong>{{var coupon}}</strong>
+		Twój kod rabatowy: <strong>{{var coupon.getCode}}</strong>
 		<br />
-		{{var coupon_desc}}
+		{{var rule.getDescription}}
 	</p>
 	{{/depend}}
 </div>
