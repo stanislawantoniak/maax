@@ -23,7 +23,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         $collection->addAttributeToSelect($this->getVendorSku()->getAttributeCode());
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('gallery_to_check');
-
+		$collection->setFlag("skip_price_data",true);
         
         $this->setCollection($collection);
 		
@@ -98,12 +98,6 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         return $this;
     }
 	
-	protected function _prepareLayout() {
-		 $ret = parent::_prepareLayout();
-		 $this->unsetChild("reset_filter_button");
-		 $this->unsetChild("search_button");
-		 return $ret;
-	}
 	
 
 	public function getVendor() {

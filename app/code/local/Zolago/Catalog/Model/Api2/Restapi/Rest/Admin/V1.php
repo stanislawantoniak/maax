@@ -201,18 +201,26 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $cataloginventoryStockItem = array();
         if (!empty($availableStockByMerchantOnOpenOrders)) {
+            $collection = Mage::getResourceModel('cataloginventory/stock_item_collection');
+            $productIds = array_keys($availableStockByMerchantOnOpenOrders);
+            $collection->addProductsFilter($productIds);
+            $stocks = array();
+            foreach ($collection as $val) {
+                $stocks[$val->getProductId()] = (int) $val->getIsInStock();
+            }            
             foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
                 $is_in_stock = ($qty > 0) ? 1 : 0;
                 $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
 
                 $productsIds[$id] = $id;
-
-                Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
-                    "product_id" => $id,
-                    "qty" => $qty,
-                    "is_in_stock" => $is_in_stock,
-                    "stock_id" => $stockId
-                ));
+                if ($stocks[$id] != $is_in_stock) {                
+                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                        "product_id" => $id,
+                        "qty" => $qty,
+                        "is_in_stock" => $is_in_stock,
+                        "stock_id" => $stockId
+                    ));
+                };
             }
         }
         if (empty($cataloginventoryStockItem)) {
@@ -220,8 +228,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $insert = implode(',', $cataloginventoryStockItem);
+        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');            
 
-        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
         $zcSDItemModel->saveCatalogInventoryStockItem($insert);
 
         //reindex

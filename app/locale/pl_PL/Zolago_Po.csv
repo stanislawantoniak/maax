@@ -202,3 +202,8 @@
 "Name","Nazwa"
 "Order %s has invaild status","Zamówienie nr %s ma nieprawidłowy status"
 "PO Status changed to shipped", "Zamiana statusu na wysłane"
+"Type (algorithm)", "Typ (algorytm)"
+"Promotion name", "Promocja"
+"Discount per item", "Zniżka jednostkowa"
+"Discount sponsored by", "Rabat finansowany przez"
+"Manual discount", "Rabat ustawiony ręcznie"
