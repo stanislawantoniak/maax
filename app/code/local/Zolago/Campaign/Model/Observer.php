@@ -86,7 +86,7 @@ class Zolago_Campaign_Model_Observer
 
                 foreach ($storesToUpdate as $store) {
                     $actionModel
-                        ->updateAttributesNoIndex(array($productId), $attributesData, $store);
+                        ->updateAttributes(array($productId), $attributesData, $store);
                 }
                 unset($store);
                 $priceTypeSource[$data['product_id']] = $data['price_source'];
@@ -110,7 +110,7 @@ class Zolago_Campaign_Model_Observer
         }
 //
 //        //3. reindex
-        $actionModel->reindexAfterMassAttributeChange();
+
 //
 //        //4. push to solr
         Mage::dispatchEvent(
