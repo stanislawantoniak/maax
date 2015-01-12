@@ -89,6 +89,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$this->addExpressionAttributeToSelect('available_child_count', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), null)", array());
 		
+		// Use subselect only for parent products
+		$this->addExpressionAttributeToSelect('stock_qty', 
+				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), $stockStatusTable.qty)", array());
+		
 		return $this;
 	}
 	
