@@ -325,15 +325,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
                  'campaign_id' => 'campaign.campaign_id',
-                 'campaign_name' => 'campaign.name'
+                 'campaign_name' => 'campaign.name',
+                'campaign_vendor_id' => 'campaign.vendor_id'
             )
         );
 
         $select->where(
             "campaign.type IN (?)",
             array(Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION, Zolago_Campaign_Model_Campaign_Type::TYPE_SALE)
-        )
-        ->distinct(true);
+        );
+        //$select->where( "campaign.vendor_id=(?)",5);
+        $select->distinct(true);
 
         return $this->getReadConnection()->fetchAll($select);
     }
@@ -358,8 +360,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $select->where(
             "campaign.type  IN (?)", array(Zolago_Campaign_Model_Campaign_Type::TYPE_INFO)
-        )
-        ->distinct(true);
+        );
+        //$select->where("campaign.vendor_id=(?)",5);
+        $select->distinct(true);
 
         return $this->getReadConnection()->fetchAll($select);
     }
