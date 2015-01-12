@@ -8,6 +8,29 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $this->_init('zolagocampaign/campaign', "campaign_id");
     }
 
+
+    /**
+     * Set times
+     * @param Mage_Core_Model_Abstract $object
+     * @return type
+     */
+    protected function _prepareDataForSave(Mage_Core_Model_Abstract $object)
+    {
+        // Times
+        $currentTime = Varien_Date::now();
+        if ((!$object->getId() || $object->isObjectNew()) && !$object->getCreatedAt()) {
+
+            $object->setCreatedAt($currentTime);
+        }
+        $object->setUpdatedAt($currentTime);
+
+        if ($object->getVendorId() === "") {
+            $object->setVendorId(null);
+        }
+
+        return parent::_prepareDataForSave($object);
+    }
+
     /**
      * @param Mage_Core_Model_Abstract $param
      * @return Zolago_Operator_Model_Resource_Operator
@@ -461,7 +484,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("eav_attribute.attribute_code=?", 'visibility');
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->order('campaign.date_from DESC');
-
+//Mage::log($select->__toString());
         return $this->getReadConnection()->fetchAll($select);
     }
 
