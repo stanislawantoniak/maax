@@ -70,6 +70,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             ->getCollection()
             ->addAttributeToFilter('skuv', array('in' => $skuS))
             ->addAttributeToFilter('udropship_vendor', $vendor->getId())
+            ->addAttributeToFilter('visibility', array('neq' => 1))
             ->getAllIds();
         $productIds = array();
         if (!empty($collection)) {
@@ -90,6 +91,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 	public function saveAction() {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {
+            return $this->_redirectReferer();
+        }
+        // Form key valid?
+        $formKey = Mage::getSingleton('core/session')->getFormKey();
+        $formKeyPost = $this->getRequest()->getParam('form_key');
+        if ($formKey != $formKeyPost) {
             return $this->_redirectReferer();
         }
 
@@ -116,15 +123,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 if ($campaign->getId() == "") {
                     $campaign->setId(null);
                 }
-                $localeTime = Mage::getModel('core/date')->timestamp(time());
-                $localeTimeF = date("Y-m-d H:i", $localeTime);
+
                 // Add stuff for new campaign
                 if (!$campaign->getId()) {
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
-                    $campaign->setData('created_at', $localeTimeF);
-                } else {
-                    $campaign->setData('updated_at', $localeTimeF);
                 }
 
                 if ($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
@@ -153,7 +156,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             return $this->_redirectReferer();
         }
 
-        return $this->_redirectReferer();
+        return $this->_redirect("*/*");
 	}
 
     /**
