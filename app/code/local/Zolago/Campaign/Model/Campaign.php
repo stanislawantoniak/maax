@@ -102,6 +102,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $dataToUpdate = array();
 
         $websiteIdsToUpdate = array();
+        $archiveCampaigns = array();
         foreach ($notValidCampaigns as $notValidCampaign) {
             $campaignExpired = !empty($notValidCampaign['date_to']) && $notValidCampaign['date_to'] <= $localeTimeF;
             if ($campaignExpired) {
