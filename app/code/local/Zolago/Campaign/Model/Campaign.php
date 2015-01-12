@@ -114,7 +114,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             $websiteIdsToUpdate[$notValidCampaign['website_id']] = $notValidCampaign['website_id'];
 
-            if (($notValidCampaign['type']== 'sale'||$notValidCampaign['type']== 'promotion') && !in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
+            if (($notValidCampaign['type']== Zolago_Campaign_Model_Campaign_Type::TYPE_SALE||$notValidCampaign['type']== Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) && !in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
                 $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
             }
 
