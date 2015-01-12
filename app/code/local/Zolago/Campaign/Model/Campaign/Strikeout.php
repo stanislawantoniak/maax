@@ -1,8 +1,13 @@
 <?php
-class Zolago_Campaign_Model_Campaign_Strikeout {
+class Zolago_Campaign_Model_Campaign_Strikeout extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 
     const STRIKEOUT_TYPE_PREVIOUS_PRICE = 1;
     const STRIKEOUT_TYPE_MSRP_PRICE = 2;
+
+    public function getAllOptions()
+    {
+        return $this->toOptionArray();
+    }
 
 	/**
 	 * @return array
@@ -25,4 +30,5 @@ class Zolago_Campaign_Model_Campaign_Strikeout {
             self::STRIKEOUT_TYPE_MSRP_PRICE => $helper->__('MSRP price')
         );
     }
+
 }
