@@ -23,7 +23,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         $collection->addAttributeToSelect($this->getVendorSku()->getAttributeCode());
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('gallery_to_check');
-
+		$collection->setFlag("skip_price_data",true);
         
         $this->setCollection($collection);
 		
