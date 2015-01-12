@@ -1,6 +1,8 @@
 <?php
 class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscriber
 {
+	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/subscription/confirmation_sales_rule";
+
 	/**
 	 * Sends out confirmation success email by Subscriber ID
 	 * @param int $sid
@@ -8,12 +10,40 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationSuccessEmail($sid=null)
 	{
+		$confirmationSalesRule = $this->getConfirmationSalesRule();
+
+		if($confirmationSalesRule && $this->emailIsSuitableForCoupon($sid)) {
+			/** @var Zolago_SalesRule_Helper_Data $helper */
+			$helper = Mage::helper("zolagosalesrule");
+			$coupon = $helper->getUnusedCouponByRuleId($confirmationSalesRule);
+		} else {
+			$coupon = null;
+		}
+
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE),
-			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
+			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY),
+			$coupon
 		);
 	}
+
+
+	public function getConfirmationSalesRule() {
+		return Mage::getStoreConfig(self::NEWSLETTER_CONFIRMATION_SALES_RULE_PATH);
+	}
+
+	protected function emailIsSuitableForCoupon($sid=null) {
+		if(!is_null($sid)) {
+			$model = Mage::getModel("newsletter/subscriber");
+			$subscriber = $model->load($sid);
+		} else {
+			$subscriber = $this;
+		}
+
+		return !$subscriber->getCouponId() ? true : false;
+	}
+
     /**
      * Saving customer subscription status
      *
@@ -134,7 +164,8 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			//if customer agreed to newsletter send him a confirmation email
 	        $this->save();
             if($newStatus == self::STATUS_UNCONFIRMED) {
-                $this->sendConfirmationRequestEmail();
+	            $this->setImportMode(false);
+	            $this->sendConfirmationRequestEmail();
 	            $customer->setConfirmMsg(true);
             }
         }
@@ -176,7 +207,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	}
 
 
-	protected function _sendNewsletterEmail($sid=null,$template,$sender) {
+	protected function _sendNewsletterEmail($sid=null,$template,$sender,$coupon=null) {
 		if ($this->getImportMode() || !$template || !$sender) {
 			return $this;
 		}
@@ -195,17 +226,35 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		/** @var Mage_Customer_Model_Customer $customer */
 		$customer = Mage::getModel("customer/customer")->load($subscriber->getCustomerId());
 
+		$data = array(
+			'store_name' => Mage::app()->getStore()->getName(),
+			'subscriber' => $subscriber,
+			'use_attachments' => true
+		);
+
+		if($coupon instanceof Mage_SalesRule_Model_Coupon) {
+			$data['coupon'] = $coupon->getCode();
+
+			/** @var Zolago_SalesRule_Helper_Data $helper */
+			$helper = Mage::helper("zolagosalesrule");
+			$data['coupon_desc'] = $helper->getSalesRuleDesc($coupon->getRuleId());
+
+			$coupon->setNewsletterSent(1);
+			$coupon->save();
+
+			$subscriber->setCouponId($coupon->getCouponId());
+			$subscriber->save();
+		} else {
+			$data['coupon'] = false;
+		}
+
 		/** @var Zolago_Common_Helper_Data $helper */
 		$helper = Mage::helper("zolagocommon");
 		$helper->sendEmailTemplate(
 			$subscriber->getEmail(),
 			$subscriber->getName(),
 			$template,
-			array(
-				'store_name' => Mage::app()->getStore()->getName(),
-				'subscriber' => $subscriber,
-				'use_attachments' => true
-			),
+			$data,
 			$this->_getCustomerStoreId($customer),
 			$sender
 		);
