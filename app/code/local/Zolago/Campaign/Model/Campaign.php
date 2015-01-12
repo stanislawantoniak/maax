@@ -92,8 +92,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
         }
 
-        $isProductsInValidCampaign = $resourceModel->getIsProductsInValidCampaign($productsIds);
-
+        $isProductsInSaleOrPromotion = $resourceModel->getIsProductsInSaleOrPromotion($productsIds);
 
         if(empty($notValidCampaigns)){
             return;
@@ -111,7 +110,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $archiveCampaigns[$notValidCampaign['campaign_id']] = $notValidCampaign['campaign_id'];
             }
             $websiteIdsToUpdate[$notValidCampaign['website_id']] = $notValidCampaign['website_id'];
-            if (!in_array($notValidCampaign['product_id'], $isProductsInValidCampaign)) {
+            if (!($notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) && in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
                 $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
             }
 
@@ -345,9 +344,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             foreach ($actualSpecialPrices as $childProdId => $childPrice) {
                 $priceIncrement = (float)$childPrice - $minPriceForProduct;
                 $pricesData[$parentProdId][$childProdId]['option_price_increment'] = $priceIncrement;
-
-
             }
+            unset($childProdId);
+            unset($childPrice);
 
             foreach ($stores as $storeId) {
                 Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
@@ -373,8 +372,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $sizeLabelDataSku = $sizeLabelData['sku'];
                 $childProdId = $simpleUsed[$sizeLabelDataSku];
 
-                $priceIncrement = $pricesData[$parentProdId][$childProdId]['option_price_increment'];
-                $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
+                $priceIncrement = isset($pricesData[$parentProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : false;
+                if($priceIncrement){
+                    $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
+                }
+
                 //product_super_attribute_id,value_index,pricing_value,website_id
 //                $optionsArray[] = array(
 //                    'product_super_attribute_id' => $superAttributeId,
@@ -388,9 +390,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //5. set special price to configurable
-        /* @var $campaignResourceModel   Zolago_Campaign_Model_Resource_Campaign */
-        $campaignResourceModel = Mage::getResourceModel('zolagocampaign/campaign');
-        $campaignResourceModel->insertOptionsBasedOnCampaign($optionsData);
+        if(!empty($optionsData)){
+            /* @var $campaignResourceModel   Zolago_Campaign_Model_Resource_Campaign */
+            $campaignResourceModel = Mage::getResourceModel('zolagocampaign/campaign');
+            $campaignResourceModel->insertOptionsBasedOnCampaign($optionsData);
+        }
+
     }
 
 

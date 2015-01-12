@@ -7,25 +7,31 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
             5 => array (
                 '5-9942-L' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
+                    'SKLEP1' => 3,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-M' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 10,
+                    'SKLEP1' => 3,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-S' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
+                    'SKLEP1' => 3,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-XL' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
+                    'SKLEP1' =>1,
+                    'MAGAZYN' => 0,
+                    'k99' => 0
+                ),
+                '5-9942-XXL' => array (
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 3,
                     'MAGAZYN' => 0,
                     'k99' => 0
                 ),
