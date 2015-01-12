@@ -102,7 +102,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
     /**
      * Return the strikeout price if exist else return final price
      *
-     * @param $product
+     * @param $product Zolago_Catalog_Model_Product
      * @param null $qty
      * @return float
      */
