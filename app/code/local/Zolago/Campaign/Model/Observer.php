@@ -57,8 +57,6 @@ class Zolago_Campaign_Model_Observer
             )
         );
 
-
-
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
             foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
@@ -66,15 +64,19 @@ class Zolago_Campaign_Model_Observer
                     //get one last updated campaign
                     continue;
                 }
+                if ($campaignSalesPromoItem['campaign_id'] == $campaignSalesPromoItem['assigned_campaign']) {
+                    // already assigned
+                    continue;
+                }
                 $dataToUpdate[$campaignSalesPromoItem['product_id']] = $campaignSalesPromoItem;
             }
             unset($campaignSalesPromoItem);
         }
-
         $salesPromoProductsData = array();
         $priceTypeSource = array();
         if (!empty($dataToUpdate)) {
             foreach ($dataToUpdate as $productId => $data) {
+//                if ($data['campaign_id'] == $data['
                 $attributesData = array(
                     'campaign_strikeout_price_type' => $data['strikeout_type'],
                     'campaign_regular_id' => $data['campaign_id'],

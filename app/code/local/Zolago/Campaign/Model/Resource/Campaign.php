@@ -425,6 +425,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         return $this->getReadConnection()->fetchAll($select);
     }
+    protected function _getCampaignsAttributesId() {
+        $table = $this->getTable("eav/attribute");
+        $select = $this->getReadConnection()->select();
+        $select->from(
+            array('eav' => $table),
+            array ('attribute_id',
+                    'attribute_code'
+                )
+        );
+        $select->where('attribute_code in (?)',array ('campaign_regular_id','visibility'));
+        return $this->getReadConnection()->fetchAll($select);
+    }
 
     /**
      * @param array $type
@@ -432,9 +444,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     public function getUpDateCampaigns(array $type)
     {
+        $ids = $this->_getCampaignsAttributesId();
+        $codeToId = array();
+        foreach ($ids as $id) {
+            $codeToId[$id['attribute_code']] = $id['attribute_id'];
+        }
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
-        $select->from(
+        $select->distinct(true)->from(
             array("campaign" => $table),
             array(
                 "campaign.type as type",
@@ -469,10 +486,16 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             'campaign_product.product_id=products_visibility.entity_id',
             array('products_visibility.store_id')
         );
+        /*
         $select->join(
-            array('eav_attribute' =>'eav_attribute'),
-            'eav_attribute.attribute_id=products_visibility.attribute_id',
+            array('eav_attribute_visibility' =>'eav_attribute'),
+            'eav_attribute_visibility.attribute_id=products_visibility.attribute_id',
             array()
+        );*/
+        $select->joinLeft(
+            array('products_campaign' =>'catalog_product_entity_int'),
+            'campaign_product.product_id=products_campaign.entity_id and products_campaign.attribute_id =  '.$codeToId['campaign_regular_id'],
+            array('assigned_campaign' => 'products_campaign.value')
         );
         $localeTime = Mage::getModel('core/date')->timestamp(time());
         $localeTimeF = date("Y-m-d H:i", $localeTime);
@@ -484,7 +507,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.type IN(?)", $type);
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        $select->where("eav_attribute.attribute_code=?", 'visibility');
+        $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign.date_from DESC');
