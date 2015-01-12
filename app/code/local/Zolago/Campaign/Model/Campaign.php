@@ -87,6 +87,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $resourceModel = $this->getResource();
         $notValidCampaigns = $resourceModel->getNotValidCampaigns();
 
+
         $productsIds = array();
         foreach($notValidCampaigns as $notValidCampaign){
             $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
@@ -111,12 +112,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             $websiteIdsToUpdate[$notValidCampaign['website_id']] = $notValidCampaign['website_id'];
-            if (!($notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) && in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
+
+            if (!in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
                 $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
             }
 
         }
-
 
         //When ending date comes Campaign status goes to archive
         if(!empty($archiveCampaigns)){
@@ -172,7 +173,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                             unset($store);
 
                         } elseif ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-                            $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '',self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
+                            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
                             foreach ($storesOfWebsite as $store) {
                                 $actionModel
                                     ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
@@ -187,12 +188,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     //unset special price
                     //unset special price dates
                     //unset SRP price
-//                    $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
-//                    foreach ($storesOfWebsite as $store) {
-//                        $actionModel
-//                            ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
-//                    }
-//                    unset($store);
+                    $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
+                    foreach ($storesOfWebsite as $store) {
+                        $actionModel
+                            ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
+                    }
+                    unset($store);
                 }
             }
 

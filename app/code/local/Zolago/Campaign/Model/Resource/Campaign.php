@@ -702,7 +702,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
         $select->where("campaign.status = 1");
-        //$select->where("campaign.type = '{$sale}' OR campaign.type = '{$promotion}'");
+        $select->where("campaign.type = '{$sale}' OR campaign.type = '{$promotion}'");
 
         try {
             $_return = $readConnection->fetchAll($select);
