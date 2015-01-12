@@ -34,7 +34,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
         //if product is in campaign (promo or sale) and strikeout price type is msrp
         //the old price (strikeout price) need to be msrp, don't need delta's
         if (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
-            $return['oldPrice'] = '' . (float) $currentProduct->getData('msrp');
+            $return['oldPrice'] = '' . (float) $currentProduct->getStrikeoutPrice();
         }
 		return Mage::helper("core")->jsonEncode($return);
 	}
