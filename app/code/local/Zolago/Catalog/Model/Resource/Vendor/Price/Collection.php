@@ -98,10 +98,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				array());
 		$subSelect->where("link_qty.parent_id=e.entity_id");
 		$subSelect->where("child_qty.is_in_stock=?",1);
+		
 		// Use subselect only for parent products
 		$this->addExpressionAttributeToSelect('stock_qty', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), IFNULL($stockStatusTable.qty,0))", array());
-		
 		
 		return $this;
 	}
