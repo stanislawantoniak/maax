@@ -10,6 +10,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationSuccessEmail($sid=null)
 	{
+		$couponData = null;
 		$confirmationSalesRuleId = $this->getConfirmationSalesRule();
 
 		if($confirmationSalesRuleId && $this->emailIsSuitableForCoupon($sid)) {
@@ -27,11 +28,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 					'rule' => $rule,
 					'coupon' => $coupon
 				);
-			} else {
-				$couponData = null;
 			}
-		} else {
-			$couponData = null;
 		}
 
 		return $this->_sendNewsletterEmail(
