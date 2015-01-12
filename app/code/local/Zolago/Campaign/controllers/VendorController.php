@@ -70,6 +70,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             ->getCollection()
             ->addAttributeToFilter('skuv', array('in' => $skuS))
             ->addAttributeToFilter('udropship_vendor', $vendor->getId())
+            ->addAttributeToFilter('visibility', array('neq' => 1))
             ->getAllIds();
         $productIds = array();
         if (!empty($collection)) {
