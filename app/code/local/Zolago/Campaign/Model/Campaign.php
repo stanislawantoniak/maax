@@ -117,14 +117,17 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //When ending date comes Campaign status goes to archive
-        $collection = Mage::getModel("zolagocampaign/campaign")
-            ->getCollection();
-        $collection->addFieldToFilter('campaign_id', array('in', $archiveCampaigns));
+        if(!empty($archiveCampaigns)){
+            $collection = Mage::getModel("zolagocampaign/campaign")
+                ->getCollection();
+            $collection->addFieldToFilter('campaign_id', array('in', $archiveCampaigns));
 
-        foreach ($collection as $collectionItem) {
-            $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
-            $collectionItem->save();
+            foreach ($collection as $collectionItem) {
+                $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
+                $collectionItem->save();
+            }
         }
+
 
         if (!empty($dataToUpdate)) {
             $actionModel = Mage::getSingleton('catalog/product_action');
