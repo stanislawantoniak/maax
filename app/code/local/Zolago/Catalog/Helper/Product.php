@@ -102,7 +102,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
     /**
      * Return the strikeout price if exist else return final price
      *
-     * @param $product
+     * @param $product Zolago_Catalog_Model_Product
      * @param null $qty
      * @return float
      */
@@ -127,7 +127,8 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         if (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_PREVIOUS_PRICE == $strikeoutType) {
             return $price > $specialPrice ? $price : $finalPrice;
         } elseif (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
-            return $msrp > $specialPrice ? $msrp : $finalPrice;
+            $returnPrice = $msrp > $specialPrice ? $msrp : $finalPrice;
+            return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         } else {
             return $finalPrice;
         }

@@ -269,7 +269,7 @@ define([
 						append(jQuery("<td>").text(Translator.translate(campaign.status_text))).
 						append(jQuery("<td>").text(campaign.date_from)).
 						append(jQuery("<td>").text(campaign.date_to)).
-						append(jQuery("<td>").text(campaign.price_source_id)).
+						append(jQuery("<td>").text(campaign.price_source_id_text)).
 						append(jQuery("<td>").text(misc.percent(campaign.price_margin))).
 						append(jQuery("<td>").text(misc.currency(campaign.special_price))).
 						append(jQuery("<td>").text(misc.currency(campaign.msrp))).

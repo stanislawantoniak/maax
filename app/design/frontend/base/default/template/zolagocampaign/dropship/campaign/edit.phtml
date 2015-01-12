@@ -177,6 +177,14 @@
                     },
                     "date_from": {dateBefore: '#date_to'},
                     "date_to": {dateAfter: '#date_from'}
+                },
+                messages: {
+                    date_from: {
+                        dateBefore: '<?php echo $_helper->__('Must be before corresponding end date'); ?>'
+                    },
+                    date_to: {
+                        dateAfter: '<?php echo $_helper->__('Must be after corresponding start date'); ?>'
+                    }
                 }
             });
 
