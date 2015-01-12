@@ -686,8 +686,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->from(array("product" => $table),"product.product_id");
         $select->where("product.product_id IN(?)", $productsIds);
 
-
-
         $select->joinLeft(
             array("campaign" => $this->getTable("zolagocampaign/campaign")),
             "product.campaign_id = campaign.campaign_id"
@@ -706,6 +704,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         try {
             $_return = $readConnection->fetchAll($select);
+
         } catch (Exception $e) {
             Mage::throwException($e);
         }
