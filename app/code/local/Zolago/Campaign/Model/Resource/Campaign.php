@@ -460,7 +460,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
         $select->where("eav_attribute.attribute_code=?", 'visibility');
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
-        $select->order('campaign.updated_at DESC');
+        $select->order('campaign.date_from DESC');
 
         return $this->getReadConnection()->fetchAll($select);
     }
