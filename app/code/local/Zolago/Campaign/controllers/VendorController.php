@@ -61,17 +61,18 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
             return $this->_redirect("*/*");
         }
-        $skuS = array();
+        $skuVS = array();
         if (is_string($productsStr)) {
-            $skuS = array_map('trim', explode(",", $productsStr));
+            $skuVS = array_map('trim', explode(",", $productsStr));
         }
 
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
-            ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->addAttributeToFilter('skuv', array('in' => $skuVS))
             ->addAttributeToFilter('udropship_vendor', $vendor->getId())
-            ->addAttributeToFilter('visibility', array('neq' => 1))
+            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))
             ->getAllIds();
+
         $productIds = array();
         if (!empty($collection)) {
             foreach ($collection as $productId) {
@@ -84,6 +85,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $model->saveProducts($campaignId, $productIds);
 
         $this->renderLayout();
+
         if (!$isAjax) {
             return $this->_redirectReferer();
         }
@@ -155,6 +157,13 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             Mage::logException($e);
             return $this->_redirectReferer();
         }
+
+        Mage::dispatchEvent(
+            "campaign_save_after",
+            array(
+                "campaign" => $campaign
+            )
+        );
 
         return $this->_redirect("*/*");
 	}
@@ -349,5 +358,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         echo $previewImage;
     }
 
+
+    public function testAction(){
+        Zolago_Campaign_Model_Observer::setProductAttributes();
+    }
 
 }
