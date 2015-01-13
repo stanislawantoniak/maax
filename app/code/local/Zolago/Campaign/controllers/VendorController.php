@@ -360,7 +360,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
 
     public function testAction(){
-        Zolago_Campaign_Model_Observer::setProductAttributes();
+        Zolago_Campaign_Model_Observer::unsetCampaignAttributes();
     }
 
 }

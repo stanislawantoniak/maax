@@ -450,7 +450,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'campaign.campaign_id as campaign_id',
                 'campaign.date_from',
                 'campaign.date_to',
-                'campaign.status'
+                'campaign.status',
+                'campaign.vendor_id'
             )
         );
         $select->join(
@@ -876,45 +877,85 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
 
-    public function getIsProductsInSaleOrPromotion($productsIds) {
+    public function getIsProductsInSaleOrPromotion($productsIds, $vendor) {
 
 
-        $return = array();
+        if(empty($vendor)){
+            return;
+        }
+        $ids = $this->_getCampaignsAttributesId();
+        $codeToId = array();
+        foreach ($ids as $id) {
+            $codeToId[$id['attribute_code']] = $id['attribute_id'];
+        }
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->distinct(true)->from(
+            array("campaign" => $table),
+            array(
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.price_source_id as price_source',
+                'campaign.percent as price_percent',
+                'campaign.price_srp as price_srp',
+                'campaign.strikeout_type as strikeout_type',
+                'campaign.date_from as date_from',
+                'campaign.date_to as date_to',
+                'campaign.vendor_id',
 
-        $readConnection = $this->_getReadAdapter();
-        $table = $this->getTable("zolagocampaign/campaign_product");
-        $select = $readConnection->select();
+                'campaign.updated_at'
+            )
+        );
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                'product_id' => 'campaign_product.product_id',
+                'product_assigned_to_campaign' => 'campaign_product.assigned_to_campaign'
+            )
+        );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign.campaign_id=campaign_website.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
 
-        $select->from(array("product" => $table),"product.product_id");
-        $select->where("product.product_id IN(?)", $productsIds);
-
-        $select->joinLeft(
-            array("campaign" => $this->getTable("zolagocampaign/campaign")),
-            "product.campaign_id = campaign.campaign_id"
+        $select->join(
+            array('products_visibility' =>'catalog_product_entity_int'),
+            'campaign_product.product_id=products_visibility.entity_id',
+            array('products_visibility.store_id')
         );
 
         $localeTime = Mage::getModel('core/date')->timestamp(time());
         $localeTimeF = date("Y-m-d H:i", $localeTime);
 
-        $sale = Zolago_Campaign_Model_Campaign_Type::TYPE_SALE;
-        $promotion = Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION;
 
         $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
-        $select->where("campaign.status = 1");
-        $select->where("campaign.type = '{$sale}' OR campaign.type = '{$promotion}'");
 
-        try {
-            $_return = $readConnection->fetchAll($select);
+        $select->where("campaign.type IN(?)", array(
+            Zolago_Campaign_Model_Campaign_Type::TYPE_SALE,
+            Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION
+        ));
 
-        } catch (Exception $e) {
-            Mage::throwException($e);
-        }
+        $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $select->where("vendor_id=?", $vendor);
+        $select->where("campaign_product.product_id IN(?)", $productsIds);
 
+        $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
+        $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
+        $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
+        $select->order('campaign.date_from DESC');
+
+
+        $_return = $this->getReadConnection()->fetchAll($select);
+
+        $return = array();
         foreach ($_return as $row) {
-            $return[] = $row['product_id'];
+            $return[$row['product_id']][] = $row['campaign_id'];
         }
-
 
         return $return;
 

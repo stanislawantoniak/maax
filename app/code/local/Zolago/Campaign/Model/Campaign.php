@@ -91,16 +91,23 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $notValidCampaigns = $resourceModel->getNotValidCampaigns();
 
 
-        $productsIds = array();
-        foreach($notValidCampaigns as $notValidCampaign){
-            $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
-        }
-
-        $isProductsInSaleOrPromotion = $resourceModel->getIsProductsInSaleOrPromotion($productsIds);
-
         if(empty($notValidCampaigns)){
             return;
         }
+        $vendorsInUpdate = array();
+
+        $productsIds = array();
+        foreach($notValidCampaigns as $notValidCampaignData){
+            $productsIds[$notValidCampaignData['product_id']] = $notValidCampaignData['product_id'];
+            $vendorsInUpdate[$notValidCampaignData['vendor_id']] = $notValidCampaignData['vendor_id'];
+        }
+
+
+        $isProductsInSaleOrPromotionByVendor = array();
+        foreach ($vendorsInUpdate as $vendorId) {
+            $isProductsInSaleOrPromotionByVendor[$vendorId] = $resourceModel->getIsProductsInSaleOrPromotion($productsIds, $vendorId);
+        }
+
 
 
         $localeTime = Mage::getModel('core/date')->timestamp(time());
@@ -116,10 +123,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             $websiteIdsToUpdate[$notValidCampaign['website_id']] = $notValidCampaign['website_id'];
+            $productInValidCampaign = (isset($isProductsInSaleOrPromotionByVendor[$notValidCampaign['vendor_id']]) && in_array($notValidCampaign['product_id'], array_keys($isProductsInSaleOrPromotionByVendor[$notValidCampaign['vendor_id']]))) ? true : false;
 
-            if (($notValidCampaign['type']== Zolago_Campaign_Model_Campaign_Type::TYPE_SALE||$notValidCampaign['type']== Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) && !in_array($notValidCampaign['product_id'], $isProductsInSaleOrPromotion)) {
+            if($notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $notValidCampaign['type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
+                if(!$productInValidCampaign){
+                    $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
+                }
+            } else {
                 $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
             }
+
 
         }
 
@@ -207,6 +220,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             //3. unset options
+
             if(!empty($recoverOptionsProducts)){
                 //recover options
                 /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
