@@ -59,12 +59,25 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 	 * @param Unirgy_DropshipPo_Model_Po_Item $item
 	 * @return Zolago_SalesRule_Model_Resource_Relation
 	 */
-	public function removeForPoItem(Unirgy_DropshipPo_Model_Po_Item $item) {
+	public function resetDiscountInfo(Unirgy_DropshipPo_Model_Po_Item $item) {
 		$poItemId = $item->getId();
-		// If obejct just created
+		// Remove all old entries
 		$this->_getWriteAdapter()->delete(
 			$this->getMainTable(), 
 			$this->_getWriteAdapter()->quoteInto("po_item_id=?", $poItemId)
+		);
+		// Set one new entry 
+		$this->_getWriteAdapter()->insert(
+			$this->getMainTable(), 
+			array(
+				"rule_id"			=> null,
+				"order_item_id"		=> $item->getOrderItemId(),
+				"po_item_id"		=> $item->getId(),
+				"payer"				=> Zolago_SalesRule_Model_Rule_Payer::PAYER_VENDOR,
+				"discount_amount"	=> $item->getDiscountAmount(),
+				"name"				=> Mage::helper("zolagosalesrule")->__("Manual discount"),
+				"simple_action"		=> Mage_SalesRule_Model_Rule::BY_FIXED_ACTION
+			)
 		);
 		return $this;
 	}

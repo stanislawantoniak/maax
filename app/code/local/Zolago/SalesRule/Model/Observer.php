@@ -78,7 +78,7 @@ class Zolago_SalesRule_Model_Observer {
 		if($item->isObjectNew()){
 			$item->setDoUpdateDiscountInfo(true);
 		}elseif($this->_hasDiscountChanged($item)){
-			$item->setDoRemoveDiscountInfo(true);
+			$item->setDoResetDiscountInfo(true);
 		}
 	}
 	
@@ -107,9 +107,9 @@ class Zolago_SalesRule_Model_Observer {
 			$item->setDoUpdateDiscountInfo(null);
 		}
 		
-		if($item->getDoRemoveDiscountInfo()){
-			Mage::getResourceSingleton('zolagosalesrule/relation')->removeForPoItem($item);
-			$item->setDoRemoveDiscountInfo(null);
+		if($item->getDoResetDiscountInfo()){
+			Mage::getResourceSingleton('zolagosalesrule/relation')->resetDiscountInfo($item);
+			$item->getDoResetDiscountInfo(null);
 		}
 	}
 
