@@ -458,7 +458,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array('campaign_product' => 'zolago_campaign_product'),
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
-                'product_id' => 'campaign_product.product_id'
+                'product_id' => 'campaign_product.product_id',
+                'campaign_product.assigned_to_campaign'
             )
         );
         $select->join(
@@ -470,7 +471,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign.date_from>'{$localeTimeF}' OR campaign.date_to<='{$localeTimeF}' OR campaign.status<>{$activeCampaignStatus} OR (campaign.date_from IS NULL AND campaign.date_to IS NULL)");
-
+        $select->where("campaign_product.assigned_to_campaign=1");
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {
@@ -518,7 +519,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array('campaign_product' => 'zolago_campaign_product'),
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
-                'product_id' => 'campaign_product.product_id'
+                'product_id' => 'campaign_product.product_id',
+                'campaign_product.assigned_to_campaign'
             )
         );
         $select->join(
@@ -546,6 +548,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.type IN(?)", Zolago_Campaign_Model_Campaign_Type::TYPE_INFO);
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $select->where("campaign_product.assigned_to_campaign=?", 0);
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         //$select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
@@ -687,6 +690,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
         $select->where("vendor_id=?", $vendor);
+        $select->where("campaign_product.assigned_to_campaign=?", 0);
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
@@ -943,7 +947,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
         $select->where("vendor_id=?", $vendor);
         $select->where("campaign_product.product_id IN(?)", $productsIds);
-
+        $select->where("campaign_product.assigned_to_campaign=1");
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");

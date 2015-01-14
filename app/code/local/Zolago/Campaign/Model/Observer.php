@@ -11,7 +11,9 @@ class Zolago_Campaign_Model_Observer
     {
 
         $campaign = $observer->getCampaign();
+        /* @var $campaign Zolago_Campaign_Model_Campaign */
         $campaignId = $campaign->getId();
+
         $campaignPromoSaleType = $campaign->getType();
         if (empty($campaignId)) {
             //not implement to new campaigns
@@ -21,6 +23,7 @@ class Zolago_Campaign_Model_Observer
         $rabatChanged = $campaign->dataHasChangedFor('percent');
         $salePriceTypeChanged = $campaign->dataHasChangedFor('price_source_id');
         $rabatOrPriceTypeChanged = false;
+
 
         if ($rabatChanged) {
             $rabatOrPriceTypeChanged = true;
@@ -40,9 +43,6 @@ class Zolago_Campaign_Model_Observer
 
     static function setProductAttributes()
     {
-        /* @var $actionModel Zolago_Catalog_Model_Product_Action */
-        $actionModel = Mage::getSingleton('catalog/product_action');
-
         $productsIdsPullToSolr = array();
 
         /* @var $modelCampaign Zolago_Campaign_Model_Campaign */
@@ -63,18 +63,23 @@ class Zolago_Campaign_Model_Observer
             unset($campaignInfoItem);
         }
 
-        $websitesToUpdateInfo = array_keys($dataToUpdate);
-        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-        $catalogHelper = Mage::helper('zolagocatalog');
-        $storesToUpdateInfo = $catalogHelper->getStoresForWebsites($websitesToUpdateInfo);
-        foreach($dataToUpdate as $websiteId => $dataToUpdateInfo){
-            $storesI = isset($storesToUpdateInfo[$websiteId]) ? $storesToUpdateInfo[$websiteId] : false;
-            if($storesI){
-                $productIdsInfoUpdated = $modelCampaign->setInfoCampaignsToProduct($dataToUpdateInfo, $storesI);
-                $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$productIdsInfoUpdated);
+        //set attributes
+        if (!empty($dataToUpdate)) {
+            $websitesToUpdateInfo = array_keys($dataToUpdate);
+            /* @var $catalogHelper Zolago_Catalog_Helper_Data */
+            $catalogHelper = Mage::helper('zolagocatalog');
+            $storesToUpdateInfo = $catalogHelper->getStoresForWebsites($websitesToUpdateInfo);
+
+            foreach ($dataToUpdate as $websiteId => $dataToUpdateInfo) {
+                $storesI = isset($storesToUpdateInfo[$websiteId]) ? $storesToUpdateInfo[$websiteId] : false;
+                if ($storesI) {
+                    $productIdsInfoUpdated = $modelCampaign->setInfoCampaignsToProduct($dataToUpdateInfo, $storesI);
+                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsInfoUpdated);
+                }
             }
+            unset($dataToUpdate);
         }
-        unset($dataToUpdate);
+
 
 
         //sales/promo campaign

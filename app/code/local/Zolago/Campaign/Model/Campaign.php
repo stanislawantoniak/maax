@@ -89,7 +89,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
         $notValidCampaigns = $resourceModel->getNotValidCampaigns();
-
+        krumo($notValidCampaigns);
+//        die('test');
 
         if(empty($notValidCampaigns)){
             return;
@@ -107,7 +108,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         foreach ($vendorsInUpdate as $vendorId) {
             $isProductsInSaleOrPromotionByVendor[$vendorId] = $resourceModel->getIsProductsInSaleOrPromotion($productsIds, $vendorId);
         }
-
 
 
         $localeTime = Mage::getModel('core/date')->timestamp(time());
