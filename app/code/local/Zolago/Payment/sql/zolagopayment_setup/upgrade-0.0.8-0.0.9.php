@@ -13,7 +13,8 @@ $allocationTable = $installer->getConnection()
     ->addColumn('allocation_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
         'identity'  => true,
         'nullable'  => false,
-        'primary'   => true
+        'primary'   => true,
+        'unsigned'  => true,
     ))
 
     /* sales_payment_transaction.transaction_id */
@@ -44,7 +45,7 @@ $allocationTable = $installer->getConnection()
 
     /* zolago_operator.operator_id */
     ->addColumn('operator_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 11, array(
-        'nullable'  => false
+        'nullable'  => true
     ))
 
     ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
@@ -85,7 +86,7 @@ $installer->getConnection()->createTable($allocationTable);
  */
 
 $installer->getConnection()
-    ->addColumn($installer->getTable('sales/payment_transaction'), "transaction_amount", array(
+    ->addColumn($installer->getTable('sales/payment_transaction'), "txn_amount", array(
         "type"		=> Varien_Db_Ddl_Table::TYPE_DECIMAL,
         "length"	=> "12,4",
         'nullable'	=> false,
@@ -93,11 +94,17 @@ $installer->getConnection()
     ));
 
 $installer->getConnection()
-    /* zolago_operator.operator_id */
-    ->addColumn($installer->getTable('sales/payment_transaction'), "operator_id", array(
+    ->addColumn($installer->getTable('sales/payment_transaction'), "customer_id", array(
         "type"      => Varien_Db_Ddl_Table::TYPE_INTEGER,
         "length"    => 11,
-        'comment'   => 'Operator ID'
+        'comment'   => 'Customer ID'
+    ));
+
+$installer->getConnection()
+    ->addColumn($installer->getTable('sales/payment_transaction'), "txn_status", array(
+        "type"      => Varien_Db_Ddl_Table::TYPE_SMALLINT,
+        "length"    => 5,
+        'comment'   => 'Transaction status'
     ));
 
 $installer->endSetup();
