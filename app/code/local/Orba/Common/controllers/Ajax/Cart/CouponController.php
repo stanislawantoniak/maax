@@ -15,6 +15,12 @@ class Orba_Common_Ajax_Cart_CouponController extends Orba_Common_Ajax_CartContro
             $request = $this->getRequest();
             $code = $request->getParam('code', null);
             if ($code) {
+                //analyze code
+                $res = Zolago_SalesRule_Helper_Data::analyzeCouponByCustomerRequest($code);
+                if(!empty($res)){
+                    throw Mage::exception('Orba_Common', $res);
+                }
+
                 $quote = Mage::getSingleton('checkout/cart')->getQuote();
                 $oldCoupon = $quote->getCouponCode();
                 $cart = Mage::getSingleton('orbacommon/ajax_cart');
