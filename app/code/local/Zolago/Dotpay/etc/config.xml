@@ -25,4 +25,12 @@
             </dotpay> 
         </routers>
 	</frontend>
+    <crontab>
+        <jobs>
+            <updatetransactions>
+                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
+                <run><model>zolagodotpay/observer::updateTransactions</model></run>
+            </updatetransactions>
+        </jobs>
+    </crontab>
 </config>

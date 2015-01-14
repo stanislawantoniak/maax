@@ -27,11 +27,49 @@ class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_NotificationContr
                 Mage_Sales_Model_Order::STATE_CANCELED,
                 Mage::helper('dotpay')->__('The order has been canceled.'));
         }
-*/                
+*/
+
+        Mage::log($this->getRequest()->getPost(),null,"dotpay.log");
 
         $order->save();
 
         die('OK');
     }
 
+    protected function isDataIntegrity($pin) {
+
+        $sellerAccount = new Dotpay_Model_SellerAccount;
+        $sellerAccount->
+        setId($this->getRequest()->getPost('id'))->
+        setPin($pin);
+
+        $customer = new Dotpay_Model_Customer;
+        $customer->
+        setEmail($this->getRequest()->getPost('email'));
+
+        $transaction = new Dotpay_Model_Transaction;
+        $transaction->
+        setAmount($this->getRequest()->getPost('amount'))->
+        setDescription($this->getRequest()->getPost('description'))->
+        setControl($this->getRequest()->getPost('control'))->
+        setCode($this->getRequest()->getPost('code'))->
+        setSellerAccount($sellerAccount)->
+        setCustomer($customer);
+
+        $transactionConfirmation = new Dotpay_Model_TransactionConfirmation;
+        $transactionConfirmation->
+        setStatus($this->getRequest()->getPost('status'))->
+        setTId($this->getRequest()->getPost('t_id'))->
+        setOriginalAmount($this->getRequest()->getPost('original_amount'))->
+        setTStatus($this->getRequest()->getPost('t_status'))->
+        setService($this->getRequest()->getPost('service'))->
+        setUsername($this->getRequest()->getPost('username'))->
+        setPassword($this->getRequest()->getPost('password'))->
+        setTransaction($transaction);
+
+        if ($this->getRequest()->getPost('md5') == $transactionConfirmation->computeMd5())
+            return TRUE;
+
+        return FALSE;
+    }
 }
