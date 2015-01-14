@@ -212,7 +212,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             //4. reindex
-            $actionModel->reindexAfterMassAttributeChange();
+
 
             //5. push to solr
             Mage::dispatchEvent(
@@ -378,18 +378,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $sizeLabelDataSku = $sizeLabelData['sku'];
                 $childProdId = $simpleUsed[$sizeLabelDataSku];
 
-                $priceIncrement = isset($pricesData[$parentProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : false;
-                if($priceIncrement){
-                    $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
-                }
+                $priceIncrement = isset($pricesData[$parentProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : 0;
 
-                //product_super_attribute_id,value_index,pricing_value,website_id
-//                $optionsArray[] = array(
-//                    'product_super_attribute_id' => $superAttributeId,
-//                    'value_index' => $size,
-//                    'pricing_value' => $priceIncrement,
-//                    'website_id' => $websiteId
-//                );
+                //if($priceIncrement){
+                $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
+                //}
+
             }
 
         }
