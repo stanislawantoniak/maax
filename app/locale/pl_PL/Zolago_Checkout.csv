@@ -1,4 +1,5 @@
 ﻿"begin:::";"b:::"
+"Cart","Koszyk"
 "Delivery and payment", "Dostawa i płatność"
 "Shipping data", "Dane dostawy"
 "Summary", "Podsumowanie"
@@ -49,7 +50,6 @@
 "Paragon", "Paragon"
 "Pho.", "Tel."
 "Change", "Zmień" 
-"Cart","Koszyk" 
 "Delivery type", "Rodzaj dostawy"
 "Payment type", "Rodzaj płatności"
 "Bank", "Bank"
