@@ -15,6 +15,7 @@
 				</rewrite>
 			</turpentine>
 		</models>
+		<!-- 
 		<resources>
 			<zolagoturpentine_setup>
 				<setup>
@@ -22,5 +23,6 @@
 				</setup>
 			</zolagoturpentine_setup>
 		</resources>
+		-->
 	</global>
 </config>
