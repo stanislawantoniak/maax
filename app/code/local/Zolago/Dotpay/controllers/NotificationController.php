@@ -1,7 +1,7 @@
 <?php
 require_once Mage::getConfig()->getModuleDir('controllers', 'Dotpay_Dotpay') . DS . "NotificationController.php";
 
-class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_NotificationController {
+class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationController {
     public function indexAction() {
 
         Mage::log($this->getRequest()->getPost(),null,"dotpay.log");
