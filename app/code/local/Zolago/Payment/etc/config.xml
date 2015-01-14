@@ -46,7 +46,7 @@
                     <zolago_payment_allocation_observer>
                         <type>singleton</type>
                         <class>Zolago_Payment_Model_Allocation_Observer</class>
-                        <method>appendAllocation</method>
+                        <method>allocationTransaction</method>
                     </zolago_payment_allocation_observer>
                 </observer>
             </zolagopayment_append_allocation>
