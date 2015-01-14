@@ -73,7 +73,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
             $couponS->load($salesRuleId);
 
             if ($couponS->getId()) {
-                return Mage::helper('zolagomodago')->__('The coupon does meet conditions: ') . $couponS->getDescription();
+                return Mage::helper('zolagomodago')->__('The coupon does meet conditions') . ': ' . $couponS->getDescription();
             }
         }
 
