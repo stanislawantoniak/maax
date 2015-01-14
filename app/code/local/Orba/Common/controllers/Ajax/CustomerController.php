@@ -24,6 +24,8 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		/* @var $quote Mage_Sales_Model_Quote */
 		$totals = $quote->getTotals();
 		
+		$persistent = Mage::helper('persistent/session')->isPersistent() && 
+			!Mage::getSingleton('customer/session')->isLoggedIn();
 		
         $content = array(
             'user_account_url' => Mage::getUrl('customer/account', array("_no_vendor"=>true)),
@@ -39,7 +41,9 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
                 'show_cart_url' => Mage::getUrl('checkout/cart', array("_no_vendor"=>true)),
                 'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
                 'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
-            )
+            ),
+			'persistent' => $persistent,
+			'persistent_url' => Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true))
         );
 
         $result = $this->_formatSuccessContentForResponse($content);

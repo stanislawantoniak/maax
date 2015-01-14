@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Turpentine>
+            <version>0.0.1</version>
+        </Zolago_Turpentine>
+    </modules>
+	<global>
+		<models>
+			<turpentine>
+				<rewrite>
+					<!-- Swap vcl tempalte file -->
+					<varnish_configurator_version3>Zolago_Turpentine_Model_Varnish_Configurator_Version3</varnish_configurator_version3>
+					<observer_varnish>Zolago_Turpentine_Model_Observer_Varnish</observer_varnish>
+				</rewrite>
+			</turpentine>
+		</models>
+		<resources>
+			<zolagoturpentine_setup>
+				<setup>
+					<module>Zolago_Turpentine</module>
+				</setup>
+			</zolagoturpentine_setup>
+		</resources>
+	</global>
+</config>
