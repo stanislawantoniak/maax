@@ -23,7 +23,6 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 		if (!($order->getOrderCurrencyCode() == $currency && round($order->getGrandTotal(), 2) == $amount)) {
 			die('ERR');
 		}
-
 		if ($data['t_status'] == 2) {
 			$order->addStatusHistoryComment(
 				Mage::helper('dotpay')->__('The payment has been accepted.'),
@@ -40,6 +39,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 		*/
 
 		$order->save();
+
 		//Save transaction
 		/** @var Zolago_Dotpay_Model_Client $client */
 		$client = Mage::getModel("zolagodotpay/client");
@@ -47,9 +47,8 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 			$order,
 			$data['amount'],
 			$data['t_status'],
-			'0', //todo: get provider id
 			$data['t_id'],
-			'order', //todo: get from const
+			Mage_Sales_Model_Order_Payment_Transaction::TYPE_PAYMENT,
 			$data
 		);
 

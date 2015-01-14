@@ -19,29 +19,39 @@ abstract class Zolago_Payment_Model_Client {
 	 * @param array $data
 	 * @return bool|int
 	 */
-	public function saveTransaction($order,$amount,$status,$providerId,$txnId,$txnType,$data=array()) {
-		if(is_object($order) && is_numeric($amount) && $providerId && $txnId && $this->validateTransactionStatus($status)) {
-
-			/** @var Mage_Core_Helper_Data $helper */
-			$helper = Mage::helper("core");
+	public function saveTransaction($order,$amount,$status,$txnId,$txnType,$data=array()) {
+		if($order instanceof Mage_Sales_Model_Order
+			&& is_numeric($amount)
+			&& $txnId
+			&& $this->validateTransactionStatus($status)
+			&& $this->validateTransactionType($txnType)
+		) {
 
 			$is_closed = $status == self::TRANSACTION_STATUS_NEW ? 0 : 1; // transaction is closed when status is other than new
 
 			$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
 
-			$transaction = Mage::getResourceModel("sales/payment_transaction");
+			/** @var Mage_Sales_Model_Order_Payment $payment */
+			$paymentId = $order->getPayment()->getEntityId();
+
+			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+			$transaction = Mage::getModel("sales/order/payment_transaction");
 			$transaction
 				->setOrderId($order->getId())
-				->setPaymentId($providerId)         //payment provider id
-				->setTxnId($txnId)                  //transaction id from payment provider
-				->setTxnType($txnType)              //order or refund
+				->setPaymentId($paymentId)
+				->setTxnId($txnId)
+				->setTxnType($txnType)
 				->setIsClosed($is_closed)
-				->setAdditionalInformation($helper->jsonEncode($data))
 				->setTxnAmount($amount)
 				->setTxnStatus($status)
-				->setCustomerId($customerId);       //0 is guest;
+				->setCustomerId($customerId);
 
+			foreach($data as $key=>$value) {
+				$transaction->setAdditionalInformation($key,$value);
+			}
+			Mage::log("trying to save...");
 			$transaction->save();
+			Mage::log("saved!");
 
 			if($transaction->getId()) {
 				return $transaction->getId();
@@ -63,9 +73,20 @@ abstract class Zolago_Payment_Model_Client {
 			$status == self::TRANSACTION_STATUS_COMPLETED ||
 			$status == self::TRANSACTION_STATUS_REJECTED) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
+	}
+
+	protected function validateTransactionType($type) {
+		if($type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH ||
+			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE ||
+			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER ||
+			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_PAYMENT ||
+			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND ||
+			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_VOID) {
+			return true;
+		}
+		return false;
 	}
 
 }
