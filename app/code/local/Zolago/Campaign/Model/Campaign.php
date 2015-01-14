@@ -430,11 +430,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $sizeLabelDataSku = $sizeLabelData['sku'];
                 $childProdId = $simpleUsed[$sizeLabelDataSku];
 
-                $priceIncrement = isset($pricesData[$parentProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : 0;
+                $priceIncrement = (isset($pricesData[$parentProdId]) && $pricesData[$parentProdId][$childProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : 0;
 
-                //if($priceIncrement){
+                if($priceIncrement){
                 $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
-                //}
+                }
 
             }
 
