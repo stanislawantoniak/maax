@@ -4,6 +4,8 @@ require_once Mage::getConfig()->getModuleDir('controllers', 'Dotpay_Dotpay') . D
 class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_NotificationController {
     public function indexAction() {
 
+        Mage::log($this->getRequest()->getPost(),null,"dotpay.log");
+
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($this->getRequest()->getPost('control'));
         if (!$order->getId())
@@ -20,16 +22,14 @@ class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_NotificationContr
             $order->addStatusToHistory(
                 Mage_Sales_Model_Order::STATE_PROCESSING,
                 Mage::helper('dotpay')->__('The payment has been accepted.'));
-/* never cancel */
+/* never cancel
         elseif ($this->getRequest()->getPost('t_status') == 3) {        
             $order->cancel(); 
             $order->addStatusToHistory(
                 Mage_Sales_Model_Order::STATE_CANCELED,
                 Mage::helper('dotpay')->__('The order has been canceled.'));
         }
-/* */
-
-        Mage::log($this->getRequest()->getPost(),null,"dotpay.log");
+*/
 
         $order->save();
 
