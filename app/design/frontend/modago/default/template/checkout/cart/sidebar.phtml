@@ -37,7 +37,7 @@
                     <a href="#" class="info_discount_voucher ff_os fz_11 underline"><?php echo $this->__("Do you have promo code?"); ?></a>
                     <?php endif; ?>
                     <div class="form_discount_voucher clearfix">
-                        <input type="text" id="num_discount_voucher" name="num_discount_voucher" placeholder="<?php echo $this->__("Enter your coupon"); ?>" />
+                        <input type="text" id="num_discount_voucher" name="num_discount_voucher" autocomplete="off" placeholder="<?php echo $this->__("Enter your coupon"); ?>" />
                         <a class="btn btn_black" id="applyCoupon-btn" href="#"><?php echo $this->__("Apply coupon"); ?></a>
                         <div class="coupon-errors"></div>
                     </div>
@@ -120,4 +120,12 @@
         e.preventDefault();
         Mall.Cart.applyCoupon();
     })
+    jQuery('[name=num_discount_voucher]').on("keydown", function (e) {
+        var code = e.keyCode || e.which;
+        if (code == 13) {
+            e.preventDefault();
+            Mall.Cart.applyCoupon();
+
+        }
+    });
 </script>
