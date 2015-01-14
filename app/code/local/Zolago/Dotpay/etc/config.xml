@@ -7,7 +7,10 @@
     </modules>
     <global>
 		<models>
-			<dotpay>
+			<zolagodotpay>
+                <class>Zolago_Dotpay_Model</class>
+            </zolagodotpay>
+            <dotpay>
 				<rewrite>
 					<paymentMethod>Zolago_Dotpay_Model_PaymentMethod</paymentMethod>
 				</rewrite>
