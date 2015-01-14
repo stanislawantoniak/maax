@@ -183,6 +183,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * Set field assigned_to_campaign to 0 to product
+     * Used when product attributes unset by crone
+     * @param $productId
+     */
+    public function unsetCampaignProductAssignedToCampaignFlag($campaignId, $productIds)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $write = $this->_getWriteAdapter();
+        $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
+    }
+
+    /**
      * @param $campaignId
      * @param $bannerId
      */

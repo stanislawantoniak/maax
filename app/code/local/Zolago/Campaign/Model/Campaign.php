@@ -85,6 +85,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
     public function unsetCampaignAttributes(){
+        $setProductsAsAssigned = array();
         //Select campaigns with expired date
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
@@ -200,6 +201,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                             } else {
                                 $recoverOptionsProducts[$websiteId] = $productIds;
                             }
+                            $setProductsAsAssigned[$campaignId] = $productIds;
 
                         }
                     }
@@ -216,6 +218,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     }
                     unset($store);
                 }
+            }
+
+            if(!empty($setProductsAsAssigned)){
+                /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+                $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
+                foreach($setProductsAsAssigned as $campaignId => $productsAssignedIds){
+                    $resourceModel->unsetCampaignProductAssignedToCampaignFlag($campaignId,$productsAssignedIds);
+                }
+
             }
 
             //3. unset options

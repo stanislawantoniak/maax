@@ -16,8 +16,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $id = $this->getRequest()->getParam('id');
         $campaign = $this->_initModel($id);
         $vendor = $this->_getSession()->getVendor();
-        krumo("----------------");
-krumo($campaign->getOrigData());
+
         // Existing campaign
         if ($campaign->getId()) {
             if ($campaign->getVendorId() != $vendor->getId()) {
@@ -364,7 +363,6 @@ krumo($campaign->getOrigData());
         }
         echo $previewImage;
     }
-
 
 
 }
