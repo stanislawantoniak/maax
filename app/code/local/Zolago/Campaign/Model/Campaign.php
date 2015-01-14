@@ -190,7 +190,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                             unset($store);
 
                         } elseif ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-                            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
+                            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => null);
                             foreach ($storesOfWebsite as $store) {
                                 $actionModel
                                     ->updateAttributes($productIds, $attributesData, (int)$store);
@@ -430,11 +430,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $sizeLabelDataSku = $sizeLabelData['sku'];
                 $childProdId = $simpleUsed[$sizeLabelDataSku];
 
-                $priceIncrement = isset($pricesData[$parentProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : 0;
+                $priceIncrement = (isset($pricesData[$parentProdId]) && $pricesData[$parentProdId][$childProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : 0;
 
-                //if($priceIncrement){
+                if($priceIncrement){
                 $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
-                //}
+                }
 
             }
 
