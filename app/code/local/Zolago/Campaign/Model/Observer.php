@@ -14,7 +14,7 @@ class Zolago_Campaign_Model_Observer
         /* @var $campaign Zolago_Campaign_Model_Campaign */
         $campaignId = $campaign->getId();
 
-//        $campaignPromoSaleType = $campaign->getType();
+        $campaignPromoSaleType = $campaign->getType();
         if (empty($campaignId)) {
             //not implement to new campaigns
             return;
