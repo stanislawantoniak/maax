@@ -66,7 +66,7 @@ abstract class Zolago_Payment_Model_Client {
 				$transaction->save();
 
 				if ($transaction->getId()) {
-					if($is_closed) {
+					if($status == self::TRANSACTION_STATUS_COMPLETED) {
 						Mage::dispatchEvent(
 							"zolagopayment_append_allocation",
 							array(
