@@ -67,7 +67,7 @@ abstract class Zolago_Payment_Model_Client {
 				$transaction = false; //because transaction with this txn_id is already closed
 			}
 
-			if($transaction !== false) {
+			if(is_object($transaction)) {
 				foreach ($data as $key => $value) {
 					$transaction->setAdditionalInformation($key, $value);
 				}
