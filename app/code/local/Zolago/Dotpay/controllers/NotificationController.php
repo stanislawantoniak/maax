@@ -5,7 +5,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 {
 	public function indexAction()
 	{
-
+		Mage::log('got in',null,"transactions.log");
 		$data = $this->getRequest()->getPost();
 
 		/** @var Mage_Sales_Model_Order $order */
