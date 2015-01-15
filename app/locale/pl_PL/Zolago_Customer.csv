@@ -1,4 +1,4 @@
-"Error: Empty token","Błąd: Brak tokenu"
+﻿"Error: Empty token","Błąd: Brak tokenu"
 "Error: Wrong token","Błąd: Nieprawidłowy lub wykorzystany token"
 "Error: System error during request":"Wystąpił błąd systemu! Spróbuj ponownie później."
 "Info: Email changed","Adres email został zmieniony"
@@ -30,3 +30,5 @@
 "Forget me","Zapomnij mnie"
 "Some error occured!", "Wystąpiły nieprzewidziane błędy. Prosimy spróbować później."
 "Your privacy has been saved", "Twoje ustawienia prywatności zostały zapisane"
+"This field is required","Proszę wypełnić pole"
+"This field is required.","Proszę wypełnić pole"

@@ -13,7 +13,8 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 	
     public function editAction() {
         Mage::register('as_frontend', true);
-        $campaign = $this->_initModel();
+        $id = $this->getRequest()->getParam('id');
+        $campaign = $this->_initModel($id);
         $vendor = $this->_getSession()->getVendor();
 
         // Existing campaign
@@ -48,7 +49,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $campaignId = $this->getRequest()->getParam('id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
         $isAjax = $this->getRequest()->getParam('isAjax',false);
-        $campaign = $this->_initModel();
+        $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
 
         // Existing campaign
@@ -61,17 +62,18 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
             return $this->_redirect("*/*");
         }
-        $skuS = array();
+        $skuVS = array();
         if (is_string($productsStr)) {
-            $skuS = array_map('trim', explode(",", $productsStr));
+            $skuVS = array_map('trim', explode(",", $productsStr));
         }
 
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
-            ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->addAttributeToFilter('skuv', array('in' => $skuVS))
             ->addAttributeToFilter('udropship_vendor', $vendor->getId())
-            ->addAttributeToFilter('visibility', array('neq' => 1))
+            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))
             ->getAllIds();
+
         $productIds = array();
         if (!empty($collection)) {
             foreach ($collection as $productId) {
@@ -84,6 +86,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $model->saveProducts($campaignId, $productIds);
 
         $this->renderLayout();
+
         if (!$isAjax) {
             return $this->_redirectReferer();
         }
@@ -99,8 +102,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if ($formKey != $formKeyPost) {
             return $this->_redirectReferer();
         }
+        $id = $this->getRequest()->getPost('campaign_id');
+        $campaign = $this->_initModel($id);
 
-        $campaign = $this->_initModel();
+
         $vendor = $this->_getSession()->getVendor();
 
 
@@ -137,6 +142,14 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 }
 
                 $campaign->save();
+
+
+                Mage::dispatchEvent(
+                    "campaign_save_after",
+                    array(
+                        "campaign" => $campaign
+                    )
+                );
             } else {
                 $this->_getSession()->setFormData($data);
                 foreach ($validErrors as $error) {
@@ -155,6 +168,8 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             Mage::logException($e);
             return $this->_redirectReferer();
         }
+
+
 
         return $this->_redirect("*/*");
 	}
@@ -209,11 +224,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 	/**
 	 * @return Zolago_Campaign_Model_Campaign
 	 */
-	protected function _initModel() {
+	protected function _initModel($modelId) {
 		if(Mage::registry('current_campaign') instanceof Zolago_Campaign_Model_Campaign){
 			return Mage::registry('current_campaign');
 		}
-		$modelId = (int)$this->getRequest()->getParam("id");
+
 		$model = Mage::getModel("zolagocampaign/campaign");
 		/* @var $model Zolago_Campaign_Model_Campaign */
 		if($modelId){
