@@ -13,6 +13,17 @@
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
             </redirect_url>
+
+            <cancel_time>
+                <label>Cancel new transaction time</label>
+                <comment>Time in hours</comment>
+                <frontend_type>text</frontend_type>
+                <sort_order>7</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+            </cancel_time>
+
           </fields>
         </dotpay>
       </groups>
