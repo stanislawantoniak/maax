@@ -16,9 +16,11 @@ abstract class Zolago_Payment_Model_Client {
 	 * @param string $txnId
 	 * @param string $txnType
 	 * @param array $data
+	 * @param string $comment
 	 * @return bool|int
+	 * @throws Exception
 	 */
-	public function saveTransaction($order,$amount,$status,$txnId,$txnType,$data=array()) {
+	public function saveTransaction($order,$amount,$status,$txnId,$txnType,$data=array(),$comment="") {
 		if($order instanceof Mage_Sales_Model_Order
 			&& is_numeric($amount)
 			&& $txnId
@@ -34,7 +36,7 @@ abstract class Zolago_Payment_Model_Client {
 			$transaction->loadByTxnId($txnId);
 
 			if(!$transaction->getId()) {
-				Mage::log("NEW TRANSACTION");
+				//create new transaction
 				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
 
 				$transaction
@@ -46,12 +48,11 @@ abstract class Zolago_Payment_Model_Client {
 					->setCustomerId($customerId);
 
 			} elseif($transaction->getId() && !$transaction->getIsClosed() ) {
-				Mage::log("EXISTING OPEN TRANSACTION");
+				//update existing transaction
 				$transaction
 					->setIsClosed($is_closed)
 					->setTxnStatus($status);
 			} else {
-				Mage::log("EXISTING CLOSED TRANSACTION");
 				$transaction = false; //because transaction with this txn_id is already closed
 			}
 
@@ -65,6 +66,18 @@ abstract class Zolago_Payment_Model_Client {
 				$transaction->save();
 
 				if ($transaction->getId()) {
+					if($is_closed) {
+						Mage::dispatchEvent(
+							"zolagopayment_append_allocation",
+							array(
+								"transaction_id" => $transaction->getId(),
+								"allocation_type" => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
+								"operator_id" => null,
+								"comment" => $comment
+							)
+						);
+					}
+
 					return $transaction->getId();
 				}
 			}
