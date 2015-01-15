@@ -27,13 +27,10 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @return bool|int
 	 */
 	public function saveTransaction($order,$data) {
-		Mage::log('got_inside',null,"transactions.log");
 		if($this->validateData($data)) { //first validation
-			Mage::log('data_validated',null,"transactions.log");
 			$status = $this->getOperationStatus($data['operation_status']); //then get status
 			$type = $this->getOperationType($data); //and get type
 			if($data['operation_status'] && $data['operation_type']) { //if they're correct
-				Mage::log('status_and_type_validated_saving',null,"transactions.log");
 				return parent::saveTransaction( //trigger parent action
 					$order,
 					$data['operation_amount'],
@@ -51,7 +48,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @param array $data
 	 * @return bool
 	 */
-	protected function validateData($data) {
+	public function validateData($data) {
 		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
 		$signature=
 			$PIN.

@@ -8,8 +8,6 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 
 		$data = $this->getRequest()->getPost();
 
-		Mage::log($data,null,"dotpay.log");
-
 		/** @var Mage_Sales_Model_Order $order */
 		$order = Mage::getModel('sales/order');
 		$order->loadByIncrementId($data['control']);
@@ -17,18 +15,24 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 			die('ERR');
 		}
 
-		if (!$this->isDataIntegrity($order->getPayment()->getMethodInstance()->getConfigData('pin'))) {
+		/** @var Zolago_Dotpay_Model_Client $client */
+		$client = Mage::getModel("zolagodotpay/client");
+
+		if (!$client->validateData($data)) {
 			die('ERR');
 		}
 
-		list($amount, $currency) = explode(' ', $data['orginal_amount']);
-		if (!($order->getOrderCurrencyCode() == $currency && round($order->getGrandTotal(), 2) == $amount)) {
+
+		if (!($order->getOrderCurrencyCode() == $data['operation_original_currency']
+			&& round($order->getGrandTotal(), 2) == $data['operation_original_amount'])) {
 			die('ERR');
 		}
-		if ($data['t_status'] == 2) {
+
+		if ($data['operation_status'] == Zolago_Dotpay_Model_Client::DOTPAY_OPERATION_STATUS_COMPLETED) {
 			$order->addStatusHistoryComment(
 				Mage::helper('dotpay')->__('The payment has been accepted.'),
 				Mage_Sales_Model_Order::STATE_PROCESSING);
+			$order->save();
 		}
 
 		/* never cancel
@@ -40,53 +44,9 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 				}
 		*/
 
-		$order->save();
-
 		//Save transaction
-		/** @var Zolago_Dotpay_Model_Client $client */
-		$client = Mage::getModel("zolagodotpay/client");
-		Mage::log('saving_transaction',null,"transactions.log");
 		$client->saveTransaction($order,$data);
-		Mage::log('transaction_saved',null,"transactions.log");
 
 		die('OK');
-	}
-
-	protected function isDataIntegrity($pin)
-	{
-
-		$sellerAccount = new Dotpay_Model_SellerAccount;
-		$sellerAccount->
-		setId($this->getRequest()->getPost('id'))->
-		setPin($pin);
-
-		$customer = new Dotpay_Model_Customer;
-		$customer->
-		setEmail($this->getRequest()->getPost('email'));
-
-		$transaction = new Dotpay_Model_Transaction;
-		$transaction->
-		setAmount($this->getRequest()->getPost('amount'))->
-		setDescription($this->getRequest()->getPost('description'))->
-		setControl($this->getRequest()->getPost('control'))->
-		setCode($this->getRequest()->getPost('code'))->
-		setSellerAccount($sellerAccount)->
-		setCustomer($customer);
-
-		$transactionConfirmation = new Dotpay_Model_TransactionConfirmation;
-		$transactionConfirmation->
-		setStatus($this->getRequest()->getPost('status'))->
-		setTId($this->getRequest()->getPost('t_id'))->
-		setOriginalAmount($this->getRequest()->getPost('orginal_amount'))->
-		setTStatus($this->getRequest()->getPost('t_status'))->
-		setService($this->getRequest()->getPost('service'))->
-		setUsername($this->getRequest()->getPost('username'))->
-		setPassword($this->getRequest()->getPost('password'))->
-		setTransaction($transaction);
-
-		if ($this->getRequest()->getPost('md5') == $transactionConfirmation->computeMd5())
-			return TRUE;
-
-		return FALSE;
 	}
 }
