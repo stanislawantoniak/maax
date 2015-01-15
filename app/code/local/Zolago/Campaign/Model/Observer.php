@@ -19,6 +19,8 @@ class Zolago_Campaign_Model_Observer
             //not implement to new campaigns
             return;
         }
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i", $localeTime);
 
 //        $rabatChanged = $campaign->dataHasChangedFor('percent');
 //        $salePriceTypeChanged = $campaign->dataHasChangedFor('price_source_id');
@@ -39,6 +41,13 @@ class Zolago_Campaign_Model_Observer
             $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
             $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
         //}
+
+
+        if($campaign->getData('date_to')<= $localeTimeF){
+            $campaign->setStatus(Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
+            $campaign->save();
+        }
+        //die('test');
     }
 
     static function setProductAttributes()

@@ -191,7 +191,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
     }
 
     /**
@@ -456,6 +456,31 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
+
+        //set status=inactive to expired campaigns
+        $select->from(array("campaign" => $table),
+            array(
+                "campaign.campaign_id",
+                "campaign.campaign_id"
+            )
+        );
+        $select->where("campaign.date_to<='{$localeTimeF}'");
+        $expiredCampaigns = $this->getReadConnection()->fetchPairs($select);
+
+        if (!empty($expiredCampaigns)) {
+
+            $collection = Mage::getModel("zolagocampaign/campaign")
+                ->getCollection();
+            $collection->addFieldToFilter('campaign_id', array('in', $expiredCampaigns));
+
+            foreach ($collection as $collectionItem) {
+                $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
+                $collectionItem->save();
+            }
+        }
+
+
+        $select = $this->getReadConnection()->select();
         $select->from(array("campaign" => $table),
             array(
                 "campaign.type as type",
@@ -483,7 +508,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign.date_from>'{$localeTimeF}' OR campaign.date_to<='{$localeTimeF}' OR campaign.status<>{$activeCampaignStatus} OR (campaign.date_from IS NULL AND campaign.date_to IS NULL)");
-        $select->where("campaign_product.assigned_to_campaign=1");
+        $select->where("campaign_product.assigned_to_campaign=0");
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {

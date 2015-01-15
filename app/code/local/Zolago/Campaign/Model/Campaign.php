@@ -633,7 +633,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                 //set null to attribute for default store id (required for good quote calculation)
                 Mage::getSingleton('catalog/product_action')
-                    ->updateAttributes(array($productId), array('campaign_regular_id' => null,'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+                    ->updateAttributes(array($productId), array('special_price' => null,'campaign_regular_id' => null,'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
 
                 $productIdsUpdated[$productId] = $productId;
 
