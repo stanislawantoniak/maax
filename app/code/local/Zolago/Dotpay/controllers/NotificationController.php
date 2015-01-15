@@ -21,7 +21,13 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 		Mage::log("no_order_err",null,"transactions.log");
 
 		/** @var Zolago_Dotpay_Model_Client $client */
-		$client = Mage::getModel("zolagodotpay/client");
+		Mage::log("trying_to_load_client",null,"transactions.log");
+		try {
+			$client = Mage::getModel("zolagodotpay/client");
+			Mage::log("client_loaded", null, "transactions.log");
+		} catch(Exception $e) {
+			Mage::logException($e);
+		}
 
 		Mage::log('tesing',null,"transactions.log");
 		if (!$client->validateData($data)) {
