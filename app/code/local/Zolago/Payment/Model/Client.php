@@ -41,6 +41,7 @@ abstract class Zolago_Payment_Model_Client {
 			Mage::log("TRANSACTION CLASS END");
 			//DEBUGGING
 
+			try {
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			$transaction = Mage::getModel("sales/order_payment_transaction");
 			$transaction->loadByTxnId($txnId);
@@ -77,14 +78,9 @@ abstract class Zolago_Payment_Model_Client {
 				}
 
 				Mage::log("trying to save...");
-				try {
+
 					$transaction->save();
-				} catch (Exception $e) {
-					Mage::log("TRANSACTION EXCEPTION START:");
-					Mage::log($e);
-					Mage::log("TRANSACTION EXCEPTION END");
-					Mage::log("not saved :((");
-				}
+
 				Mage::log("saved!");
 
 				if ($transaction->getId()) {
@@ -93,6 +89,12 @@ abstract class Zolago_Payment_Model_Client {
 			} else {
 				Mage::log("Transaction is not an object:");
 				Mage::log($transaction);
+			}
+			} catch (Exception $e) {
+				Mage::log("TRANSACTION EXCEPTION START:");
+				Mage::log($e);
+				Mage::log("TRANSACTION EXCEPTION END");
+				Mage::log("not saved :((");
 			}
 		}
 		return false;
