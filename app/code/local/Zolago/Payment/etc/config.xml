@@ -44,7 +44,7 @@
             <zolagopayment_append_allocation>
                 <observers>
                     <zolago_payment_allocation_observer>
-                        <class>zolagopayment/observer</class>
+                        <class>zolagopayment/allocation_observer</class>
                         <method>allocationTransaction</method>
                     </zolago_payment_allocation_observer>
                 </observers>
