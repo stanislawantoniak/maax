@@ -282,7 +282,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $collection = Mage::getModel('catalog/product')->getCollection();
         $collection
             ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
-        //@todo ask is should be enabled
+
         $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection
