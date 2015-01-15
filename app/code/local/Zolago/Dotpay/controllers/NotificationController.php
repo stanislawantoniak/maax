@@ -12,6 +12,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 		$order = Mage::getModel('sales/order');
 		$order->loadByIncrementId($data['control']);
 		if (!$order->getId()) {
+			Mage::log('order_err',null,"transactions.log");
 			die('ERR');
 		}
 
