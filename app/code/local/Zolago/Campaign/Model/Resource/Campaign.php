@@ -474,7 +474,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             $collection->addFieldToFilter('campaign_id', array('in', $expiredCampaigns));
 
             foreach ($collection as $collectionItem) {
-                $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_INACTIVE);
+                $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
                 $collectionItem->save();
             }
         }
