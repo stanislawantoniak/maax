@@ -41,7 +41,9 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
                 'allocation_type'   => $allocation_type,
                 'operator_id'       => $operator_id,
                 'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-                'comment'           => $comment);
+                'comment'           => $comment,
+                'customer_id'       => $po['customer_id']
+            );
         }
         return $data;
     }
@@ -55,7 +57,8 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
      *    'allocation_type'   => $allocation_type,
      *    'operator_id'       => $operator_id,
      *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-     *    'comment'           => $comment ));
+     *    'comment'           => $comment
+     *    'customer_id'       => $po['customer_id']));
      *
      * @param $data
      */
