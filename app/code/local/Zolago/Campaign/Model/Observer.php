@@ -14,31 +14,31 @@ class Zolago_Campaign_Model_Observer
         /* @var $campaign Zolago_Campaign_Model_Campaign */
         $campaignId = $campaign->getId();
 
-        $campaignPromoSaleType = $campaign->getType();
+//        $campaignPromoSaleType = $campaign->getType();
         if (empty($campaignId)) {
             //not implement to new campaigns
             return;
         }
 
-        $rabatChanged = $campaign->dataHasChangedFor('percent');
-        $salePriceTypeChanged = $campaign->dataHasChangedFor('price_source_id');
-        $rabatOrPriceTypeChanged = false;
+//        $rabatChanged = $campaign->dataHasChangedFor('percent');
+//        $salePriceTypeChanged = $campaign->dataHasChangedFor('price_source_id');
+//        $rabatOrPriceTypeChanged = false;
+//
+//
+//        if ($rabatChanged) {
+//            $rabatOrPriceTypeChanged = true;
+//        }
+//
+//        if ($salePriceTypeChanged) {
+//            $rabatOrPriceTypeChanged = true;
+//        }
 
-
-        if ($rabatChanged) {
-            $rabatOrPriceTypeChanged = true;
-        }
-
-        if ($salePriceTypeChanged) {
-            $rabatOrPriceTypeChanged = true;
-        }
-
-        if (($campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) && $rabatOrPriceTypeChanged) {
+        //if (($campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) && $rabatOrPriceTypeChanged) {
             //set to campaign products assigned_to_campaign = 0
             /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
             $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
             $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
-        }
+        //}
     }
 
     static function setProductAttributes()
