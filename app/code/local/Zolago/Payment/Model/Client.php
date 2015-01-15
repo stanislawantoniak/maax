@@ -42,15 +42,17 @@ abstract class Zolago_Payment_Model_Client {
 			//DEBUGGING
 
 			try {
+
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			$transaction = Mage::getModel("sales/order_payment_transaction");
+			$transaction->setOrderPaymentObject($order->getPayment());
 			$transaction->loadByTxnId($txnId);
+
 			if(!$transaction->getId()) {
 				Mage::log("NEW TRANSACTION");
 				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
 
 				$transaction
-					->setOrderPaymentObject($order->getPayment())
 					->setTxnId($txnId)
 					->setTxnType($txnType)
 					->setIsClosed($is_closed)
