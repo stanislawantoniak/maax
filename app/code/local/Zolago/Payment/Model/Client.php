@@ -49,18 +49,15 @@ abstract class Zolago_Payment_Model_Client {
 				Mage::log("NEW TRANSACTION");
 				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
 
-				/** @var Mage_Sales_Model_Order_Payment $payment */
-				$paymentId = $order->getPayment()->getEntityId();
-
 				$transaction
-					->setOrderId($order->getId())
-					->setPaymentId($paymentId)
+					->setOrderPaymentObject($order->getPayment())
 					->setTxnId($txnId)
 					->setTxnType($txnType)
 					->setIsClosed($is_closed)
 					->setTxnAmount($amount)
 					->setTxnStatus($status)
 					->setCustomerId($customerId);
+
 			} elseif($transaction->getId() && !$transaction->getIsClosed() ) {
 				Mage::log("EXISTING OPEN TRANSACTION");
 				$transaction
