@@ -44,11 +44,7 @@ abstract class Zolago_Payment_Model_Client {
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			$transaction = Mage::getModel("sales/order_payment_transaction");
 			$transaction->loadByTxnId($txnId);
-			if($transaction->getId()) {
-				$transaction
-					->setIsClosed($is_closed)
-					->setTxnStatus($status);
-			} else {
+			if(!$transaction->getId()) {
 				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
 
 				/** @var Mage_Sales_Model_Order_Payment $payment */
@@ -63,25 +59,33 @@ abstract class Zolago_Payment_Model_Client {
 					->setTxnAmount($amount)
 					->setTxnStatus($status)
 					->setCustomerId($customerId);
+			} elseif($transaction->getId() && !$transaction->getIsClosed() ) {
+				$transaction
+					->setIsClosed($is_closed)
+					->setTxnStatus($status);
+			} else {
+				$transaction = false; //because transaction with this txn_id is already closed
+			}
 
-				foreach($data as $key=>$value) {
-					$transaction->setAdditionalInformation($key,$value);
+			if($transaction !== false) {
+				foreach ($data as $key => $value) {
+					$transaction->setAdditionalInformation($key, $value);
 				}
-			}
 
-			Mage::log("trying to save...");
-			try {
-				$transaction->save();
-			} catch(Exception $e) {
-				Mage::log("TRANSACTION EXCEPTION START:");
-				Mage::log($e);
-				Mage::log("TRANSACTION EXCEPTION END");
-				Mage::log("not saved :((");
-			}
-			Mage::log("saved!");
+				Mage::log("trying to save...");
+				try {
+					$transaction->save();
+				} catch (Exception $e) {
+					Mage::log("TRANSACTION EXCEPTION START:");
+					Mage::log($e);
+					Mage::log("TRANSACTION EXCEPTION END");
+					Mage::log("not saved :((");
+				}
+				Mage::log("saved!");
 
-			if($transaction->getId()) {
-				return $transaction->getId();
+				if ($transaction->getId()) {
+					return $transaction->getId();
+				}
 			}
 		}
 		return false;
