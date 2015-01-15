@@ -21,7 +21,11 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	//dotpay pin config path
 	const DOTPAY_PIN_CONFIG_PATH = "payment/dotpay/pin";
 
-
+	/**
+	 * @param Mage_Sales_Model_Order $order
+	 * @param array $data
+	 * @return bool|int
+	 */
 	public function saveTransaction($order,$data) {
 		if($this->validateData($data)) { //first validation
 			$status = $this->getOperationStatus($data['operation_status']); //then get status
@@ -39,7 +43,11 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		return false; //if not return false
 	}
 
-	//validate data given by
+	/**
+	 * validate data provided by dotpay post to urlc
+	 * @param array $data
+	 * @return bool
+	 */
 	protected function validateData($data) {
 		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
 		$signature=
@@ -66,6 +74,11 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		return $signature == $data['signature'];
 	}
 
+	/**
+	 * map dotpay status to transaction status
+	 * @param string $status
+	 * @return bool|int
+	 */
 	protected function getOperationStatus($status) {
 		switch($status) {
 			case self::DOTPAY_OPERATION_STATUS_NEW:
@@ -85,6 +98,11 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		return false;
 	}
 
+	/**
+	 * map dotpay transaction type to magento transaction type
+	 * @param string $type
+	 * @return bool|string
+	 */
 	protected function getOperationType($type) {
 		//todo: check if logic is correct here
 		switch($type) {
