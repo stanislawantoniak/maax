@@ -283,7 +283,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $collection
             ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         //@todo ask is should be enabled
-        //$collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection
             ->addFieldToFilter('entity_id', array('in' => $ids));
@@ -304,6 +304,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $skuSizeRelation = array();
 
         $simpleUsed = array();
+        /* @var $configModel  Mage_Catalog_Model_Product_Type_Configurable */
+        $configModel = Mage::getModel('catalog/product_type_configurable');
+
         foreach ($collection as $_product) {
 
             $productId = $_product->getId();
@@ -312,8 +315,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             $configurableProductIds[$productId] = $productId;
 
-            /* @var $configModel  Mage_Catalog_Model_Product_Type_Configurable */
-            $configModel = Mage::getModel('catalog/product_type_configurable');
+
             $configurableOptions = $configModel->getConfigurableOptions($_product);
 
             if (isset($configurableOptions[$attributeSizeId])) {
