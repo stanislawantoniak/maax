@@ -13,7 +13,6 @@ abstract class Zolago_Payment_Model_Client {
 	 * @param Mage_Sales_Model_Order $order
 	 * @param float $amount
 	 * @param int $status
-	 * @param int $providerId
 	 * @param string $txnId
 	 * @param string $txnType
 	 * @param array $data
@@ -28,20 +27,6 @@ abstract class Zolago_Payment_Model_Client {
 		) {
 
 			$is_closed = $status == self::TRANSACTION_STATUS_NEW ? 0 : 1; // transaction is closed when status is other than new
-
-			//DEBUGGING
-			Mage::log("PAYMENT START:");
-			$logData['order_id'] = $order->getId();
-			$logData = array_merge($logData,$order->getPayment()->getData());
-			if(isset($logData['method_instance'])) unset($logData['method_instance']);
-			Mage::log($logData);
-			Mage::log("PAYMENT END");
-			Mage::log("TRANSACTION CLASS:");
-			Mage::log(get_class(Mage::getModel("sales/order_payment_transaction")));
-			Mage::log("TRANSACTION CLASS END");
-			//DEBUGGING
-
-			try {
 
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			$transaction = Mage::getModel("sales/order_payment_transaction");
@@ -70,30 +55,18 @@ abstract class Zolago_Payment_Model_Client {
 				$transaction = false; //because transaction with this txn_id is already closed
 			}
 
-			if(is_object($transaction)) {
-				Mage::log("Transaction is an object so trying to save it");;
-				foreach ($data as $key => $value) {
-					$transaction->setAdditionalInformation($key, $value);
-				}
+			if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
 
-				Mage::log("trying to save...");
+				$transaction->setAdditionalInformation(
+					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+					$data
+				);
 
-					$transaction->save();
-
-				Mage::log("saved!");
+				$transaction->save();
 
 				if ($transaction->getId()) {
 					return $transaction->getId();
 				}
-			} else {
-				Mage::log("Transaction is not an object:");
-				Mage::log($transaction);
-			}
-			} catch (Exception $e) {
-				Mage::log("TRANSACTION EXCEPTION START:");
-				Mage::log($e->getMessage());
-				Mage::log("TRANSACTION EXCEPTION END");
-				Mage::log("not saved :((");
 			}
 		}
 		return false;
