@@ -11,7 +11,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     }
 
     public function allocationTransaction($transaction_id, $allocation_type, $operator_id = null, $comment = '') {
-
+        Mage::log("allocationTransaction",null,"allocation.log");
         $data = $this->getResource()->getDataAllocationForTransaction($transaction_id, $allocation_type, $operator_id, $comment);
         $this->getResource()->appendAllocations($data);
 
