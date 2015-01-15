@@ -29,7 +29,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	public function saveTransactionFromPing($order,$data) {
 		if($this->validateData($data)) { //first validation
 			$status = $this->getOperationStatus($data['operation_status']); //then get status
-			$type = $this->getOperationType($data); //and get type
+			$type = $this->getOperationType($data['operation_type']); //and get type
 			if($data['operation_status'] && $data['operation_type']) { //if they're correct
 				return parent::saveTransaction( //trigger parent action
 					$order,
