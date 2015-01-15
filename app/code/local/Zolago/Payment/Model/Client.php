@@ -92,7 +92,7 @@ abstract class Zolago_Payment_Model_Client {
 			}
 			} catch (Exception $e) {
 				Mage::log("TRANSACTION EXCEPTION START:");
-				Mage::log($e);
+				Mage::log($e->getMessage());
 				Mage::log("TRANSACTION EXCEPTION END");
 				Mage::log("not saved :((");
 			}
