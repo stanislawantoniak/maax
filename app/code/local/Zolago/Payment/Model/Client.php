@@ -34,16 +34,22 @@ abstract class Zolago_Payment_Model_Client {
 			/** @var Mage_Sales_Model_Order_Payment $payment */
 			$paymentId = $order->getPayment()->getEntityId();
 
+
+			//DEBUGGING
 			Mage::log("PAYMENT START:");
-			$logData = $order->getPayment()->getData();
+			$logData['order_id'] = $order->getId();
+			$logData = array_merge($logData,$order->getPayment()->getData());
 			if(isset($logData['method_instance'])) unset($logData['method_instance']);
 			Mage::log($logData);
 			Mage::log("PAYMENT END");
+			Mage::log("TRANSACTION CLASS:");
+			Mage::log(get_class(Mage::getModel("sales/order_payment_transaction")));
+			Mage::log("TRANSACTION CLASS END");
+			//DEBUGGING
 
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			$transaction = Mage::getModel("sales/order_payment_transaction");
 			$transaction
-				->setOrder($order)
 				->setOrderId($order->getId())
 				->setPaymentId($paymentId)
 				->setTxnId($txnId)
