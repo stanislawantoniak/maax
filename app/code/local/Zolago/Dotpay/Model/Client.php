@@ -50,31 +50,27 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 */
 	public function validateData($data) {
 		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
-		Mage::log($PIN);
-		try {
-			$signature =
-				$PIN .
-				$data['id'] .
-				$data['operation_number'] .
-				$data['operation_type'] .
-				$data['operation_status'] .
-				$data['operation_amount'] .
-				$data['operation_currency'] .
-				$data['operation_original_amount'] .
-				$data['operation_original_currency'] .
-				$data['operation_datetime'] .
-				$data['operation_related_number'] .
-				$data['control'] .
-				$data['description'] .
-				$data['email'] .
-				$data['p_info'] .
-				$data['p_email'] .
-				$data['channel'];
+		//isset for all because response not always gives all data
+		$signature =
+			$PIN .
+			(isset($data['id']) ? $data['id'] : '') .
+			(isset($data['operation_number']) ? $data['operation_number'] : '') .
+			(isset($data['operation_type']) ? $data['operation_type'] : '') .
+			(isset($data['operation_status']) ? $data['operation_status'] : '') .
+			(isset($data['operation_amount']) ? $data['operation_amount'] : '') .
+			(isset($data['operation_currency']) ? $data['operation_currency'] : '') .
+			(isset($data['operation_original_amount']) ? $data['operation_original_amount'] : '') .
+			(isset($data['operation_original_currency']) ? $data['operation_original_currency'] : '') .
+			(isset($data['operation_datetime']) ? $data['operation_datetime'] : '') .
+			(isset($data['operation_related_number']) ? $data['operation_related_number'] : '') .
+			(isset($data['control']) ? $data['control'] : '') .
+			(isset($data['description']) ? $data['description'] : '') .
+			(isset($data['email']) ? $data['email'] : '') .
+			(isset($data['p_info']) ? $data['p_info'] : '') .
+			(isset($data['p_email']) ? $data['p_email'] : '') .
+			(isset($data['channel']) ? $data['channel'] : '');
 
-			$signature = hash('sha256', $signature);
-		} catch(Exception $e) {
-			Mage::logException($e);
-		}
+		$signature = hash('sha256', $signature);
 		Mage::log($signature,null,"dotpay_sign.log");
 		Mage::log($data['signature'],null,"dotpay_sign.log");
 		return $signature == $data['signature'];
