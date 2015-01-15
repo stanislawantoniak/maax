@@ -3,6 +3,8 @@ abstract class Zolago_Payment_Model_Client {
 	const TRANSACTION_STATUS_NEW = 1;
 	const TRANSACTION_STATUS_COMPLETED = 2;
 	const TRANSACTION_STATUS_REJECTED = 3;
+	const TRANSACTION_STATUS_CANCELED = 4;
+	const TRANSACTION_STATUS_COMPLAINT = 5;
 
 
 	protected function _connect() {
