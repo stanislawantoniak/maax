@@ -51,26 +51,30 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	public function validateData($data) {
 		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
 		Mage::log($PIN);
-		$signature=
-			$PIN.
-			$data['id'].
-			$data['operation_number'].
-			$data['operation_type'].
-			$data['operation_status'].
-			$data['operation_amount'].
-			$data['operation_currency'].
-			$data['operation_original_amount'].
-			$data['operation_original_currency'].
-			$data['operation_datetime'].
-			$data['operation_related_number'].
-			$data['control'].
-			$data['description'].
-			$data['email'].
-			$data['p_info'].
-			$data['p_email'].
-			$data['channel'];
+		try {
+			$signature =
+				$PIN .
+				$data['id'] .
+				$data['operation_number'] .
+				$data['operation_type'] .
+				$data['operation_status'] .
+				$data['operation_amount'] .
+				$data['operation_currency'] .
+				$data['operation_original_amount'] .
+				$data['operation_original_currency'] .
+				$data['operation_datetime'] .
+				$data['operation_related_number'] .
+				$data['control'] .
+				$data['description'] .
+				$data['email'] .
+				$data['p_info'] .
+				$data['p_email'] .
+				$data['channel'];
 
-		$signature=hash('sha256', $signature);
+			$signature = hash('sha256', $signature);
+		} catch(Exception $e) {
+			Mage::logException($e);
+		}
 		Mage::log($signature,null,"dotpay_sign.log");
 		Mage::log($data['signature'],null,"dotpay_sign.log");
 		return $signature == $data['signature'];
