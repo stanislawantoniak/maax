@@ -33,7 +33,7 @@ class Orba_Common_Ajax_Cart_CouponController extends Orba_Common_Ajax_CartContro
                     $couponM = Mage::getModel('salesrule/coupon');
                     $couponM->load($code, 'code');
                     $salesRuleId = $couponM->getRuleId();
-                    $couponS = mage::getModel('salesrule/rule');
+                    $couponS = Mage::getModel('salesrule/rule');
                     $couponS->load($salesRuleId);
 
                     if ($couponS->getId()) {
