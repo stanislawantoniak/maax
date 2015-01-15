@@ -178,9 +178,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                                 foreach ($productIds as $productId) {
                                     $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store);
                                     $campaignIds = explode(",", $val);
-                                    $campaignIds = array_diff($campaignIds, array($campaignId));
+                                    $campaignIds = array_diff($campaignIds, array($campaignId));                                    
                                     if (!empty($campaignIds)) {
-                                        $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
+                                        $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => implode(',',$campaignIds));
                                         $actionModel
                                             ->updateAttributes($productIds, $attributesData, (int)$store);
                                     }
