@@ -29,12 +29,6 @@ abstract class Zolago_Payment_Model_Client {
 
 			$is_closed = $status == self::TRANSACTION_STATUS_NEW ? 0 : 1; // transaction is closed when status is other than new
 
-			$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
-
-			/** @var Mage_Sales_Model_Order_Payment $payment */
-			$paymentId = $order->getPayment()->getEntityId();
-
-
 			//DEBUGGING
 			Mage::log("PAYMENT START:");
 			$logData['order_id'] = $order->getId();
@@ -49,21 +43,41 @@ abstract class Zolago_Payment_Model_Client {
 
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			$transaction = Mage::getModel("sales/order_payment_transaction");
-			$transaction
-				->setOrderId($order->getId())
-				->setPaymentId($paymentId)
-				->setTxnId($txnId)
-				->setTxnType($txnType)
-				->setIsClosed($is_closed)
-				->setTxnAmount($amount)
-				->setTxnStatus($status)
-				->setCustomerId($customerId);
+			$transaction->loadByTxnId($txnId);
+			if($transaction->getId()) {
+				$transaction
+					->setIsClosed($is_closed)
+					->setTxnStatus($status);
+			} else {
+				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
 
-			foreach($data as $key=>$value) {
-				$transaction->setAdditionalInformation($key,$value);
+				/** @var Mage_Sales_Model_Order_Payment $payment */
+				$paymentId = $order->getPayment()->getEntityId();
+
+				$transaction
+					->setOrderId($order->getId())
+					->setPaymentId($paymentId)
+					->setTxnId($txnId)
+					->setTxnType($txnType)
+					->setIsClosed($is_closed)
+					->setTxnAmount($amount)
+					->setTxnStatus($status)
+					->setCustomerId($customerId);
+
+				foreach($data as $key=>$value) {
+					$transaction->setAdditionalInformation($key,$value);
+				}
 			}
+
 			Mage::log("trying to save...");
-			$transaction->save();
+			try {
+				$transaction->save();
+			} catch(Exception $e) {
+				Mage::log("TRANSACTION EXCEPTION START:");
+				Mage::log($e);
+				Mage::log("TRANSACTION EXCEPTION END");
+				Mage::log("not saved :((");
+			}
 			Mage::log("saved!");
 
 			if($transaction->getId()) {
