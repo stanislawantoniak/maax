@@ -36,4 +36,11 @@
             </updatetransactions>
         </jobs>
     </crontab>
+    <default>
+        <payment>
+            <dotpay>
+                <cancel_time>30</cancel_time>
+            </dotpay>
+        </payment>
+    </default>
 </config>

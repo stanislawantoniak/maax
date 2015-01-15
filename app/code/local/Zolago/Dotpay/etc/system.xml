@@ -16,7 +16,7 @@
 
             <cancel_time>
                 <label>Cancel new transaction time</label>
-                <comment>Time in hours</comment>
+                <comment>Time in minutes</comment>
                 <frontend_type>text</frontend_type>
                 <sort_order>7</sort_order>
                 <show_in_default>1</show_in_default>
