@@ -67,14 +67,6 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                 return Mage::helper('zolagomodago')->__('The coupon is expired');
             }
 
-            //check if coupon does not meet conditions
-            $salesRuleId = $couponM->getRuleId();
-            $couponS = mage::getModel('salesrule/rule');
-            $couponS->load($salesRuleId);
-
-            if ($couponS->getId()) {
-                return Mage::helper('zolagomodago')->__('The coupon does meet conditions') . ': ' . $couponS->getDescription();
-            }
         }
 
         return $error;
