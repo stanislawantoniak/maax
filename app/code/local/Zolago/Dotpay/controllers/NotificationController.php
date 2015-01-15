@@ -50,7 +50,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 			$data['amount'],
 			$data['t_status'],
 			$data['t_id'],
-			Mage_Sales_Model_Order_Payment_Transaction::TYPE_PAYMENT,
+			Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER,
 			$data
 		);
 
