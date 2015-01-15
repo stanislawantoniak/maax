@@ -24,6 +24,7 @@
                     <page_footer>Zolago_Adminhtml_Block_Page_Footer</page_footer>
                     <newsletter_subscriber_grid>Zolago_Adminhtml_Block_Newsletter_Subscriber_Grid</newsletter_subscriber_grid>
                     <promo_quote_edit_tab_coupons_grid>Zolago_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid</promo_quote_edit_tab_coupons_grid>
+                    <sales_transactions_grid>Zolago_Adminhtml_Block_Sales_Transactions_Grid</sales_transactions_grid>
                 </rewrite>
             </adminhtml>
         </blocks>
