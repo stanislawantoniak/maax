@@ -58,7 +58,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 
 		//Save transaction
 		Mage::log('saving',null,"transactions.log");
-		$client->saveTransaction($order,$data);
+		$client->saveTransactionFromPing($order,$data);
 
 		die('OK');
 	}
