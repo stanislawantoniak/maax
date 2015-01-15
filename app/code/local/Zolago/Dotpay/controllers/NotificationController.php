@@ -8,6 +8,8 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 
 		$data = $this->getRequest()->getPost();
 
+		Mage::log($data,null,"dotpay.log");
+
 		/** @var Mage_Sales_Model_Order $order */
 		$order = Mage::getModel('sales/order');
 		$order->loadByIncrementId($data['control']);

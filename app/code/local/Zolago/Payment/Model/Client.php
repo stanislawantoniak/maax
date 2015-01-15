@@ -1,10 +1,9 @@
 <?php
 abstract class Zolago_Payment_Model_Client {
 	const TRANSACTION_STATUS_NEW = 1;
-	const TRANSACTION_STATUS_COMPLETED = 2;
-	const TRANSACTION_STATUS_REJECTED = 3;
-	const TRANSACTION_STATUS_CANCELED = 4;
-	const TRANSACTION_STATUS_COMPLAINT = 5;
+	const TRANSACTION_STATUS_PROCESSING = 2;
+	const TRANSACTION_STATUS_COMPLETED = 3;
+	const TRANSACTION_STATUS_REJECTED = 4;
 
 
 	protected function _connect() {
@@ -60,10 +59,12 @@ abstract class Zolago_Payment_Model_Client {
 
 			if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
 
-				$transaction->setAdditionalInformation(
-					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-					$data
-				);
+				if(count($data)) {
+					$transaction->setAdditionalInformation(
+						Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+						$data
+					);
+				}
 
 				$transaction->save();
 
@@ -94,16 +95,17 @@ abstract class Zolago_Payment_Model_Client {
 	}
 
 	protected function validateTransactionStatus($status) {
-		if($status == self::TRANSACTION_STATUS_NEW ||
-			$status == self::TRANSACTION_STATUS_COMPLETED ||
-			$status == self::TRANSACTION_STATUS_REJECTED) {
+		if    ($status == self::TRANSACTION_STATUS_NEW
+			|| $status == self::TRANSACTION_STATUS_PROCESSING
+			|| $status == self::TRANSACTION_STATUS_COMPLETED
+			|| $status == self::TRANSACTION_STATUS_REJECTED) {
 			return true;
 		}
 		return false;
 	}
 
 	protected function validateTransactionType($type) {
-		if($type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH ||
+		if ($type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH ||
 			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE ||
 			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER ||
 			$type == Mage_Sales_Model_Order_Payment_Transaction::TYPE_PAYMENT ||
