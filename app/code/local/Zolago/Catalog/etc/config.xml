@@ -149,7 +149,17 @@
 					</files>
 				</Zolago_Catalog>
 			</modules>
-		</translate>		
+		</translate>	
+		<events>
+			<catalog_controller_product_init>
+				<observers>
+                    <zolago_catalog_product_init>
+                        <class>Zolago_Catalog_Model_Observer</class>
+                        <method>productInit</method>
+                    </zolago_catalog_product_init>
+                </observers>
+			</catalog_controller_product_init>
+		</events>	
     </frontend>
     <adminhtml>
 		<translate>

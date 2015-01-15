@@ -109,7 +109,10 @@ var Mall = {
         jQuery.ajax({
             cache: false,
             dataType: "json",
-            data: {},
+            data: {
+				"product_id": Mall.reg.get("varnish_product_id"),
+				"category_id": Mall.reg.get("varnish_category_id")
+			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
             },
@@ -174,6 +177,20 @@ var Mall = {
 		}
 		jQuery("#persistent-forget-mobile,#persistent-forget-desktop").
 				html(persistentContent);
+		
+		// Process search context
+		var searchContext = jQuery(".search-context").html('');
+		if(data.content.search && data.content.search.select_options){
+			jQuery.each(data.content.search.select_options, function(){
+				searchContext.append(jQuery("<option>").attr({
+					"value": this.value,
+					"selected": this.selected
+				}).text(this.text));
+			});
+		}
+		// Wood-based... how to replace opts?
+		searchContext.selectbox("detach");
+		searchContext.selectbox("attach");
 		
     },
 

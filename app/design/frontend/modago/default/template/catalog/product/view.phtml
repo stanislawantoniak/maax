@@ -412,4 +412,10 @@ if($vendorContext && $vendorContext->getId()) {
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
     Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
+	
+	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
+	<?php if($_product->getCategory()):?>
+	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
+	<?php endif;?>
+	
 </script>
