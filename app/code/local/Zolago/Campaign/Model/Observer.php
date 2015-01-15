@@ -43,7 +43,8 @@ class Zolago_Campaign_Model_Observer
         //}
 
 
-        if($campaign->getData('date_to')<= $localeTimeF){
+        if((strtotime($campaign->getData('date_to'))<= $localeTime) 
+            && ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE) ){
             $campaign->setStatus(Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
             $campaign->save();
         }
