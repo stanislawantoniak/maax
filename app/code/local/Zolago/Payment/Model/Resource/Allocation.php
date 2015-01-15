@@ -17,7 +17,8 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 
         $select->from(array("pt" => $tableSPT), 'pt.order_id');
         $select->where('pt.transaction_id = ?', $transaction_id);
-        $select->where('pt.is_closed = 1');
+        $select->where('pt.txn_status = ?',Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
+
         Mage::log((string)$select,null,"allocation.log");
 
         $ordersIDs = $this->getReadConnection()->fetchAll($select);
