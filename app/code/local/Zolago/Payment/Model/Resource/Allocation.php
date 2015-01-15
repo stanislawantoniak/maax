@@ -43,6 +43,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
                 'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
                 'comment'           => $comment);
         }
+        Mage::log($data);
         return $data;
     }
 

@@ -66,7 +66,6 @@ abstract class Zolago_Payment_Model_Client {
 				$transaction->save();
 
 				if ($transaction->getId() && $status == self::TRANSACTION_STATUS_COMPLETED) {
-					Mage::log("DISPATCH",null,"allocation.log");
 					Mage::dispatchEvent(
 						"zolagopayment_append_allocation",
 						array(
@@ -78,8 +77,6 @@ abstract class Zolago_Payment_Model_Client {
 					);
 
 					return $transaction->getId();
-				} else {
-					Mage::log("NOT DISPATCH",null,"allocation.log");
 				}
 			}
 		}
