@@ -44,9 +44,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
     public function productsAction()
     {
+
         $this->loadLayout();
 
-        $campaignId = $this->getRequest()->getParam('id',null);
+        $campaignId = $this->getRequest()->getParam('campaign_id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
         $isAjax = $this->getRequest()->getParam('isAjax',false);
         $campaign = $this->_initModel($campaignId);
@@ -234,9 +235,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		if($modelId){
 			$model->load($modelId);
 		}
-		if(!$this->_validateModel($model)){
-			throw new Mage_Core_Exception(Mage::helper('zolagocampaign')->__("Model is not vaild"));
-		}
+//		if(!$this->_validateModel($model)){
+//			throw new Mage_Core_Exception(Mage::helper('zolagocampaign')->__("Model is not vaild"));
+//		}
 		Mage::register('current_campaign', $model);
 		return $model;
 	}
