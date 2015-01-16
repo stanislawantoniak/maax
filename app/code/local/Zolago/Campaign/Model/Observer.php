@@ -53,6 +53,7 @@ class Zolago_Campaign_Model_Observer
 
     static function setProductAttributes()
     {
+
         $productsIdsPullToSolr = array();
 
         /* @var $modelCampaign Zolago_Campaign_Model_Campaign */
@@ -147,7 +148,6 @@ class Zolago_Campaign_Model_Observer
             }
         }
 
-
         //2. Set options
         /* @var $modelCampaign Zolago_Campaign_Model_Campaign */
         $modelCampaign = Mage::getModel('zolagocampaign/campaign');
@@ -157,8 +157,25 @@ class Zolago_Campaign_Model_Observer
 //
 //        //3. reindex
 
+         //Better performance
+        $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+        /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+        $indexer->reindexEntities($productsIdsPullToSolr);
+
+//        $numberQ = 20;
+//        if (count($productsIdsPullToSolr) > $numberQ) {
+//            $productsToReindexC = array_chunk($productsIdsPullToSolr, $numberQ);
+//            foreach ($productsToReindexC as $productsToReindexCItem) {
+//                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
 //
-//        //4. push to solr
+//            }
+//            unset($productsToReindexCItem);
+//        } else {
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsIdsPullToSolr);
+
+        //}
+//
+////        //4. push to solr
         Mage::dispatchEvent(
             "catalog_converter_price_update_after",
             array(
