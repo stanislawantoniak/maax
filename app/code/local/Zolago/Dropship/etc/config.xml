@@ -27,6 +27,8 @@
 					<pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
 					<!-- Vendor model -->
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
+					<!-- Observer model -->
+					<observer>Zolago_Dropship_Model_Observer</observer>
 				</rewrite>
 			</udropship>
 			<udropship_mysql4>

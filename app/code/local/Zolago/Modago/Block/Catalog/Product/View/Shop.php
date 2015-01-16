@@ -1,0 +1,4 @@
+<?php
+class Zolago_Modago_Block_Catalog_Product_View_Shop extends Mage_Catalog_Block_Product_View_Abstract{
+	
+}
