@@ -182,7 +182,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                                     if (!empty($campaignIds)) {
                                         $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
                                         $actionModel
-                                            ->updateAttributes($productIds, $attributesData, (int)$store);
+                                            ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
                                     }
                                 }
                                 unset($productId);
@@ -193,7 +193,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                             $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => null);
                             foreach ($storesOfWebsite as $store) {
                                 $actionModel
-                                    ->updateAttributes($productIds, $attributesData, (int)$store);
+                                    ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
                             }
                             unset($store);
                             if(isset($recoverOptionsProducts[$websiteId])){
@@ -214,7 +214,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
                     foreach ($storesOfWebsite as $store) {
                         $actionModel
-                            ->updateAttributes($productIdsToUpdate, $attributesData, (int)$store);
+                            ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
                     }
                     unset($store);
                 }
@@ -239,9 +239,25 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             //4. reindex
-
-
-            //5. push to solr
+            // Better performance
+//            $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+//            /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+//            $indexer->reindexEntities($productIdsToUpdate);
+//
+//            $numberQ = 20;
+//            if (count($productIdsToUpdate) > $numberQ) {
+//                $productsToReindexC = array_chunk($productIdsToUpdate, $numberQ);
+//                foreach ($productsToReindexC as $productsToReindexCItem) {
+//                    Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+//
+//                }
+//                unset($productsToReindexCItem);
+//            } else {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
+//            }
+//
+//
+//            //5. push to solr
             Mage::dispatchEvent(
                 "catalog_converter_price_update_after",
                 array(
@@ -345,7 +361,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         unset($parentId);
         unset($childProducts);
 
-
+        Mage::log($productsData);
         //2. get prices for simple from converters
         if (empty($productsData)) {
             return;
@@ -362,6 +378,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             foreach ($simpleProductsData as $childProductId => $childData) {
                 $newPrice = $converter->getPrice($childData['udropship_vendor'], $childData['skuv'], $priceType);
 
+                //if no price in converter do nothing
                 if (!empty($newPrice)) {
                     $newPriceWithPercent = $newPrice - $newPrice * ((int)$percent / 100);
                     $actualSpecialPricesForChildren[$parentProductId][$childProductId] = $newPriceWithPercent;
@@ -409,13 +426,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             unset($childPrice);
 
             foreach ($storesToUpdate as $storeId) {
-                Mage::getSingleton('catalog/product_action')->updateAttributes(
+                Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                     array($parentProdId), array('special_price' => $minPriceForProduct), $storeId
                 );
             }
 
             //set null to attribute for default store id (required for good quote calculation)
-            Mage::getSingleton('catalog/product_action')->updateAttributes(
+            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                 array($parentProdId), array('msrp' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
             );
 
@@ -437,16 +454,17 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $sizeLabelDataSku = $sizeLabelData['sku'];
                 $childProdId = $simpleUsed[$sizeLabelDataSku];
 
-                $priceIncrement = (isset($pricesData[$parentProdId]) && $pricesData[$parentProdId][$childProdId]) ? $pricesData[$parentProdId][$childProdId]['option_price_increment'] : 0;
+                $priceIncrement = $pricesData[$parentProdId][$childProdId]['option_price_increment'];
 
-                if($priceIncrement){
-                $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
+
+                //if no price in converter do nothing
+                if ($pricesData[$parentProdId][$childProdId]) {
+                    $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
                 }
 
             }
 
         }
-
 
         //5. set special price to configurable
         if(!empty($optionsData)){
@@ -546,7 +564,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     if (!empty($campaignIds)) {
                         $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
                         $actionModel
-                            ->updateAttributes($productIds, $attributesData, (int)$store);
+                            ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
                     }
                 }
                 unset($productId);
@@ -557,14 +575,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
             foreach ($stores as $store) {
                 $actionModel
-                    ->updateAttributes($productIds, $attributesData, (int)$store);
+                    ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
             }
             unset($store);
         }
         $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
         foreach ($stores as $store) {
             $actionModel
-                ->updateAttributes($productIds, $attributesData, (int)$store);
+                ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
         }
     }
 
@@ -587,11 +605,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                     foreach ($stores as $store) {
                         Mage::getSingleton('catalog/product_action')
-                            ->updateAttributes(array($productId), $attributesData, $store);
+                            ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                     }
                     //set null to attribute for default store id (required for good quote calculation)
                     Mage::getSingleton('catalog/product_action')
-                        ->updateAttributes(array($productId), array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+                        ->updateAttributesNoIndex(array($productId), array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
 
                     $productIdsUpdated[$productId] = $productId;
                 }
@@ -628,12 +646,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                 foreach ($stores as $store) {
                     Mage::getSingleton('catalog/product_action')
-                        ->updateAttributes(array($productId), $attributesData, $store);
+                        ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                 }
 
                 //set null to attribute for default store id (required for good quote calculation)
                 Mage::getSingleton('catalog/product_action')
-                    ->updateAttributes(array($productId), array('special_price' => null,'campaign_regular_id' => null,'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+                    ->updateAttributesNoIndex(array($productId), array('special_price' => null,'campaign_regular_id' => null,'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
 
                 $productIdsUpdated[$productId] = $productId;
 
