@@ -171,6 +171,16 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * Set recalculate flag in all active campaigns for products
+     * @param array $productIds
+     * @return 
+     */
+     public function putProductsToRecalculate($campaignId,$productIds) {
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $write = $this->_getWriteAdapter();
+        $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
+     }
+    /**
      * Set field assigned_to_campaign to 1 to product
      * Used when product attributes set by crone
      * @param $productId
@@ -455,28 +465,20 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $localeTimeF = date("Y-m-d H:i", $localeTime);
 
         $table = $this->getTable("zolagocampaign/campaign");
-        $select = $this->getReadConnection()->select();
-
-        //set status=inactive to expired campaigns
-        $select->from(array("campaign" => $table),
-            array(
-                "campaign.campaign_id",
-                "campaign.campaign_id"
-            )
-        );
-        $select->where("campaign.date_to<='{$localeTimeF}'");
-        $expiredCampaigns = $this->getReadConnection()->fetchPairs($select);
-
-        if (!empty($expiredCampaigns)) {
-
-            $collection = Mage::getModel("zolagocampaign/campaign")
+        $collection = Mage::getModel("zolagocampaign/campaign")
                 ->getCollection();
-            $collection->addFieldToFilter('campaign_id', array('in', $expiredCampaigns));
+        $collection->addFieldToFilter('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $collection->addFieldToFilter('date_to', array('lt'=>$localeTimeF));
 
-            foreach ($collection as $collectionItem) {
-                $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
-                $collectionItem->save();
-            }
+        foreach ($collection as $collectionItem) {
+            $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
+            $collectionItem->save();
+            Mage::dispatchEvent(
+                "campaign_save_after",
+                array(
+                    "campaign" => $collectionItem,
+                )
+            );                                                                                                                                
         }
 
 
@@ -874,7 +876,28 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             throw $e;
         }
     }
+    public function setRebuildProductInValidCampaign($productsIds) {
+        $readConnection = $this->_getReadAdapter();
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $readConnection->select();
 
+        $select->from(array("campaign" => $table),"campaign.campaign_id");
+        $select->join(
+            array("product" => $this->getTable("zolagocampaign/campaign_product")),
+            "product.campaign_id = campaign.campaign_id",
+            "product.product_id"
+            );
+        $select->where("campaign.status = ?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $select->where("product.product_id in(?)", $productsIds);
+        $_return = $readConnection->fetchAll($select);
+        $campaigns = array();
+        foreach ($_return as $val) {
+            $campaigns[$val['campaign_id']][$val['product_id']] = $val['product_id'];
+        }
+        foreach ($campaigns as $campain => $products) {
+            $this->putProductsToRecalculate($campain,$products);
+        }
+    }
     public function getIsProductsInValidCampaign($productsIds) {
 
 
