@@ -1,5 +1,10 @@
 <?php
 class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
+	//api access data
+	private $login;
+	private $password;
+	private $apiUrl;
+
 	//operation statuses
 	const DOTPAY_OPERATION_STATUS_NEW                               = 'new';                               //nowa
 	const DOTPAY_OPERATION_STATUS_PROCESSING                        = 'processing';                        //przetwarzana
@@ -18,8 +23,19 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	const DOTPAY_OPERATION_TYPE_UNIDENTIFIED_PAYMENT                = 'unidentified_payment';              //płatność niezidentyfikowana
 	const DOTPAY_OPERATION_TYPE_COMPLAINT                           = 'complaint';                         //reklamacja
 
-	//dotpay pin config path
+	//dotpay config paths
 	const DOTPAY_PIN_CONFIG_PATH = "payment/dotpay/pin";
+	const DOTPAY_CANCEL_TIME_CONFIG_PATH = "payment/dotpay/cancel_time"; //time in minutes
+	const DOTPAY_API_URL_CONFIG_PATH = "payment/dotpay/api_url";
+	const DOTPAY_LOGIN_CONFIG_PATH = "payment/dotpay/login";
+	const DOTPAY_PASSWORD_CONFIG_PATH = "payment/dotpay/password";
+
+	//dotpay error codes
+	const DOTPAY_STATUS_OK = 'OK';
+	const DOTPAY_STATUS_ERROR = 'ERR';
+
+	//payment method database name
+	const PAYMENT_METHOD = 'dotpay';
 
 	/**
 	 * @param Mage_Sales_Model_Order $order
@@ -121,6 +137,123 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			case self::DOTPAY_OPERATION_TYPE_PAYMENT_MULTIMERCHANT_PARENT:
 			case self::DOTPAY_OPERATION_TYPE_COMPLAINT:
 				return false;
+		}
+		return false;
+	}
+
+	protected function getExpirationTime() {
+		$cancel_time = Mage::getStoreConfig(self::DOTPAY_CANCEL_TIME_CONFIG_PATH);
+		return date('Y-m-d H:i:s', strtotime("-$cancel_time minutes"));
+	}
+
+	public function getDotpayTransactionsToUpdate() {
+		return parent::getTransactionsToUpdate(self::PAYMENT_METHOD);
+	}
+
+	public function getDotpayTransactionsToCancel() {
+		return parent::getTransactionsToCancel(self::PAYMENT_METHOD,$this->getExpirationTime());
+	}
+
+	public function cancelDotpayTransaction() {
+
+	}
+
+	private function getLogin() {
+		if(!$this->login) {
+			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH);
+		}
+		return $this->login;
+	}
+
+	private function getPassword() {
+		if(!$this->password) {
+			$this->password = Mage::getStoreConfig(self::DOTPAY_PASSWORD_CONFIG_PATH);
+		}
+		return $this->password;
+	}
+
+	private function getApiUrl() {
+		//return "http://modago.dev/test/curltest.php";
+		//Test url: https://ssl.dotpay.pl/test_seller/api/
+		//Normal url: https://ssl.dotpay.pl/s2/login/api/
+		if(!$this->apiUrl) {
+			$this->apiUrl = Mage::getStoreConfig(self::DOTPAY_API_URL_CONFIG_PATH);
+		}
+		return $this->apiUrl;
+	}
+
+	public function dotpayCurl(
+			$function=false, //operations or accounts
+			$operationNumber=false, //dotpay operation number (example: M1234-5678)
+			$method=false, //dotpay api method
+			$parameters=array(), //additional parameters as array("key1"=>"value1","key2"=>"value2")
+			$usePost=false,
+			$customRequest="" //custom request that changes method behaviour
+	) {
+		$login = $this->getLogin();
+		$password = $this->getPassword();
+		$url = $this->getApiUrl(); //should already contain tracing slash (!!!)
+
+
+		$urlData = array();
+		if($function) { // operations or accounts
+			$urlData[] = $function;
+		}
+
+		if($operationNumber) {
+			$urlData[] = $operationNumber;
+		}
+
+		if($method) {
+			$urlData[] = $method;
+		}
+
+		$urlData = count($urlData) ? implode("/",$urlData)."/" : '';
+
+		if(count($parameters)) {
+			$parameters = "?".http_build_query($parameters);
+			$urlData = $urlData.$parameters;
+		}
+
+		$fields = null;
+		$ch = curl_init();
+		echo $url.$urlData;
+
+		curl_setopt ($ch, CURLOPT_URL,$url.$urlData);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 1);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_CAINFO, Mage::getBaseDir()."/ca-bundle.crt");
+		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_TIMEOUT, 100);
+		curl_setopt($ch, CURLOPT_USERPWD, $login.":".$password);
+		if($method && $customRequest) {
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
+		}
+		if($usePost) {
+			curl_setopt ($ch, CURLOPT_POST, 1);
+			curl_setopt ($ch, CURLOPT_POSTFIELDS, $fields);
+		}
+
+		$response = curl_exec($ch);
+
+		curl_close ($ch);
+
+		return Mage::helper('core')->jsonDecode($response);
+	}
+
+	/**
+	 * @param $txnId
+	 * @return array|bool
+	 */
+	public function getDotpayTransactionUpdateFromApi($txnId) {
+		$dotpayTransaction = $this->dotpayCurl("operations",$txnId);
+		if(isset($dotpayTransaction['number']) && $dotpayTransaction['number'] == $txnId) {
+			return array(
+				"txnId" => $dotpayTransaction['number'],
+				"orderId" => $dotpayTransaction['control'],
+				"txnStatus" => $this->getOperationStatus($dotpayTransaction['status'])
+			);
 		}
 		return false;
 	}

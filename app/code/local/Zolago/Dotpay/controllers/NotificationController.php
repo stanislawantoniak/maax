@@ -5,61 +5,35 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 {
 	public function indexAction()
 	{
-		Mage::log('got in',null,"transactions.log");
 		$data = $this->getRequest()->getPost();
-		Mage::log($data,null,"transactions.log");
 
 		/** @var Mage_Sales_Model_Order $order */
 		$order = Mage::getModel('sales/order');
-		Mage::log("created_model",null,"transactions.log");
 		$order->loadByIncrementId($data['control']);
-		Mage::log("loaded_model",null,"transactions.log");
 		if (!$order->getId()) {
-			Mage::log('order_err', null, "transactions.log");
-			die('ERR');
+			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
 		}
-		Mage::log("no_order_err",null,"transactions.log");
 
 		/** @var Zolago_Dotpay_Model_Client $client */
-		Mage::log("trying_to_load_client",null,"transactions.log");
-		try {
-			$client = Mage::getModel("zolagodotpay/client");
-			Mage::log("client_loaded", null, "transactions.log");
-		} catch(Exception $e) {
-			Mage::logException($e);
-		}
+		$client = Mage::getModel("zolagodotpay/client");
 
-		Mage::log('tesing',null,"transactions.log");
-		if (!$client->validateData($data)) {
-			die('ERR');
-		}
-
-		Mage::log('tesing2',null,"transactions.log");
 		if (!($order->getOrderCurrencyCode() == $data['operation_original_currency']
 			&& round($order->getGrandTotal(), 2) == $data['operation_original_amount'])) {
-			die('ERR');
+			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
 		}
-
-		if ($data['operation_status'] == Zolago_Dotpay_Model_Client::DOTPAY_OPERATION_STATUS_COMPLETED) {
-			$order->addStatusHistoryComment(
-				Mage::helper('dotpay')->__('The payment has been accepted.'),
-				Mage_Sales_Model_Order::STATE_PROCESSING);
-			$order->save();
-		}
-
-		/* never cancel
-				elseif ($this->getRequest()->getPost('t_status') == 3) {
-					$order->cancel();
-					$order->addStatusToHistory(
-						Mage_Sales_Model_Order::STATE_CANCELED,
-						Mage::helper('dotpay')->__('The order has been canceled.'));
-				}
-		*/
 
 		//Save transaction
-		Mage::log('saving',null,"transactions.log");
-		$client->saveTransactionFromPing($order,$data);
-
-		die('OK');
+		$transaction = $client->saveTransactionFromPing($order,$data);
+		if($transaction !== false) {
+			if ($data['operation_status'] == Zolago_Dotpay_Model_Client::DOTPAY_OPERATION_STATUS_COMPLETED) {
+				$order->addStatusHistoryComment(
+					Mage::helper('dotpay')->__('The payment has been accepted.'),
+					Mage_Sales_Model_Order::STATE_PROCESSING);
+				$order->save();
+			}
+			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_OK);
+		} else {
+			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
+		}
 	}
 }
