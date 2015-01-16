@@ -154,10 +154,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		return parent::getTransactionsToCancel(self::PAYMENT_METHOD,$this->getExpirationTime());
 	}
 
-	public function cancelDotpayTransaction() {
-
-	}
-
 	private function getLogin() {
 		if(!$this->login) {
 			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH);
@@ -217,7 +213,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 		$fields = null;
 		$ch = curl_init();
-		echo $url.$urlData;
 
 		curl_setopt ($ch, CURLOPT_URL,$url.$urlData);
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 1);
