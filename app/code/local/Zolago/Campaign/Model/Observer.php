@@ -162,18 +162,18 @@ class Zolago_Campaign_Model_Observer
         /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
         $indexer->reindexEntities($productsIdsPullToSolr);
 
-//        $numberQ = 20;
-//        if (count($productsIdsPullToSolr) > $numberQ) {
-//            $productsToReindexC = array_chunk($productsIdsPullToSolr, $numberQ);
-//            foreach ($productsToReindexC as $productsToReindexCItem) {
-//                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
-//
-//            }
-//            unset($productsToReindexCItem);
-//        } else {
+        $numberQ = 20;
+        if (count($productsIdsPullToSolr) > $numberQ) {
+            $productsToReindexC = array_chunk($productsIdsPullToSolr, $numberQ);
+            foreach ($productsToReindexC as $productsToReindexCItem) {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+
+            }
+            unset($productsToReindexCItem);
+        } else {
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsIdsPullToSolr);
 
-        //}
+        }
 //
 ////        //4. push to solr
         Mage::dispatchEvent(
