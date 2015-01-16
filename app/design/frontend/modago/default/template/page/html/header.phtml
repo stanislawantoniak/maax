@@ -3,7 +3,10 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 29.04.14
  */
-$_isCheckout = $this->getLayout()->getBlock("root")->getIsCheckout();
+$_isCheckout = false;
+if($this->getLayout()->getBlock("root")){
+	$_isCheckout = $this->getLayout()->getBlock("root")->getIsCheckout();
+}
 $_baseUrl = Mage::getUrl("/", array("_no_vendor"=>true));
 /** @var $this Zolago_Modago_Block_Page_Header_Bottommenu */
 ?>

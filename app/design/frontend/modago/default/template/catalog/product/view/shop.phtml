@@ -1,0 +1,84 @@
+<!-- PRODUCT SHOP -->
+<?php $_product = $this->getProduct();?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php 
+    // prices
+    $price = $_product->getPrice();
+    $finalPrice = $_product->getFinalPrice();
+    $sizeAttr = $_product->getResource()->getAttribute('size');
+    $productAttrs = array();
+    if($_product->getTypeId() == 'configurable') {
+        $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
+    }
+?>
+<div id="product-shop" class="col-lg-8 col-md-12 clearfix">
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <?php echo $this->getBlockHtml('formkey') ?>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+
+        <div class="product-name"><h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1></div>
+        <p class="short-description hidden-xs">
+            <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+        </p>
+
+        <?php if ($_product->getCanShowPrice() !== false): ?>
+            <div class="price-box-bundle">
+                <div class="price-box">
+                    <p class="price">
+                        <span class="price-label"><?php echo $this->__("price"); ?>:</span>
+                        <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false); ?><?php endif; ?></span>
+                        <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo Mage::helper('core')->currency($_product->getFinalPrice(), true, false); ?><?php endif; ?></span>
+                    </p>
+                </div>
+                <ul>
+                    <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
+                    <li><?php echo $this->getStoreReturnHeadline(); ?></li>
+                </ul>
+            </div>
+        <?php endif; ?>
+<!--        catalog.product.related-->
+        <?php echo $this->getChildHtml('catalog.product.related'); ?>
+<!--        catalog.product.related end-->
+
+        <div class="size-box-bundle" id="product-options">
+            <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+                <?php if (!empty($productAttrs)) : ?>
+                    <?php foreach($productAttrs as $_attribute) : ?>
+                        <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+                            <div class="size-box clearfix clr">
+                                <div class="size">
+                                    <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
+
+                                    <div class="form-group form-radio">
+
+                                        <br />
+                                        
+                                        <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
+                                           data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?> <?php endif; ?></a>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <div class="row">
+                <div class="action-box-bundle clearfix">
+                    <div class="col-xs-6" id="product-likeboxes">
+						
+                    </div>
+					<script type="text/javascript">
+					</script>
+
+                    <div class="col-xs-6 text-right">
+                        <button class="btn button button-primary ico addBasket" title="<?php echo $this->__("Choose size first"); ?>" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
