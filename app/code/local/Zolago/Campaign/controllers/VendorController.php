@@ -47,7 +47,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $this->loadLayout();
 
-        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+        $campaignId = $this->getRequest()->getParam('id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
         $isAjax = $this->getRequest()->getParam('isAjax',false);
         $campaign = $this->_initModel($campaignId);
