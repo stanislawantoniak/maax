@@ -509,8 +509,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign.date_from>'{$localeTimeF}' OR campaign.date_to<='{$localeTimeF}' OR campaign.status<>{$activeCampaignStatus} OR (campaign.date_from IS NULL AND campaign.date_to IS NULL)");
         $select->where("campaign_product.assigned_to_campaign=0");
+        $select->where("campaign.status <> ?",$activeCampaignStatus);
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {
