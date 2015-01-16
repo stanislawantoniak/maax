@@ -39,6 +39,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		);
 		//$profiler->log("Context");
 		
+		
         $content = array(
             'user_account_url' => Mage::getUrl('customer/account', array("_no_vendor"=>true)),
             'user_account_url_orders' => Mage::getUrl('sales/order/process', array("_no_vendor"=>true)),
@@ -59,6 +60,24 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			'search' => $searchContext
         );
 		//$profiler->log("Rest");
+		
+		// Load product context data
+		
+		if($productId=$this->getRequest()->getParam("product_id")){
+			$product = Mage::getModel("catalog/product");
+			/* @var $product Mage_Catalog_Model_Product */
+			$product->setId($productId);
+			
+			// Load wishlist count
+			$wishlistCount = $product->getResource()->getAttributeRawValue(
+					$productId, "wishlist_count", Mage::app()->getStore()->getId());
+			
+			$content['product'] = array(
+				"entity_id"=>$productId,
+				"in_my_wishlist" => Mage::helper('zolagowishlist')->productBelongsToMyWishlist($product),
+				"wishlist_count" => (int)$wishlistCount
+			);
+		}
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);
