@@ -26,6 +26,7 @@
                     <promo_quote_edit_tab_coupons_grid>Zolago_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid</promo_quote_edit_tab_coupons_grid>
                     <sales_transactions_grid>Zolago_Adminhtml_Block_Sales_Transactions_Grid</sales_transactions_grid>
                     <sales_order_view_tab_transactions>Zolago_Adminhtml_Block_Sales_Order_View_Tab_Transactions</sales_order_view_tab_transactions>
+                    <sales_transactions_child_grid>Zolago_Adminhtml_Block_Sales_Transactions_Child_Grid</sales_transactions_child_grid>
                 </rewrite>
             </adminhtml>
         </blocks>
