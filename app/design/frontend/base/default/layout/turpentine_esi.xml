@@ -36,7 +36,6 @@
         message and the number of items in the shopping cart so it must be
         cached per-client.
         -->
-        <!--
         <reference name="header">
             <action method="setEsiOptions">
                 <params>
@@ -49,7 +48,6 @@
                 </params>
             </action>
         </reference>
-        -->
         <!-- This block is inside of the header block on mage EE, so it could
         be commented out for EE stores for a small performance increase -->
         <reference name="cart_sidebar">

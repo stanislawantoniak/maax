@@ -11,7 +11,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
 	protected $numFound;
-
+	protected $_rootId;
 	/**
 	 * @var array
 	 */
@@ -56,6 +56,55 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	protected $_availableStoreIds;
 
+	/**
+	 * @param Mage_Catalog_Model_Product | null $product
+	 * @param int $rootId
+	 * @return type
+	 */
+	public function getDefaultCategory($product, $rootId) {
+		/* @var $product Mage_Catalog_Model_Product */
+		
+		if(!$product){
+			return null;
+		}
+		
+        $category = null;
+        // if no category, try to get category from product
+		
+		$catIds = $product->getCategoryIds();
+		$collection = Mage::getResourceModel('catalog/category_collection');
+		/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+
+		$collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+		$collection->addAttributeToFilter("is_active", 1);
+		$collection->addPathFilter("/$rootId/");
+		// Get first category
+		if($collection->count()) {
+			$category = $collection->getFirstItem();
+		}
+		
+        return $category;
+	}
+	
+	/*
+	 * @return int
+	 */
+	public function getRootCategoryId() {
+		if (is_null($this->_rootId)) {
+            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            if ($vendor) {
+                $rootId = Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory(
+					$vendor,
+					Mage::app()->getWebsite()->getId()
+				);
+            } else {
+                $rootId = Mage::app()->getStore()->getRootCategoryId();
+            }
+            $this->_rootId = $rootId;
+        }
+        return $this->_rootId;     
+	}
+	
 	/**
 	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
 	 * @return array
@@ -280,37 +329,39 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	/**
 	 * Construct context search selector Array
+	 * @param array $contextData
 	 * @return array
 	 */
-	public function getContextSelectorArray() {
+	public function getContextSelectorArray($contextData = array()) {
 		/** @var $this Zolago_Solrsearch_Helper_Data */
 		/** @var Zolago_Dropship_Model_Vendor $_vendor */
 		$array = array();
-
+		
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		$currentCategory = $this->getCurrentCategory();
+		
+		// Setup varnish context
+		if(!$currentCategory && isset($contextData['category_id'])){
+			$categoryCandidate = Mage::getModel("catalog/category")->
+				load($contextData['category_id']);
+			/* @var $categoryCandidate Mage_Catalog_Model_Category */
+			if($categoryCandidate->getIsActive()){
+				$currentCategory = $categoryCandidate;
+			}
+		}
+		
+		
 		$queryText = Mage::helper('solrsearch')->getParam('q');
 
-		$array['url'] = Mage::getUrl("search/index/index", array("_secure" => Mage::app()->getStore()->isCurrentlySecure()));
-		$array['method'] = "get";
-		$array['input_name'] = 'q';
-		$array['select_name'] = 'scat';
-
 		$array['input_current_value'] = $queryText;
-
-		$array['select_options'] = array();
-
-		$array['select_options'][0] = array(
+		$array['select_options'] = array(array(
 			'value' => 0,
 			'text' => $this->__('Everywhere'),
 			'selected' => true
-		);
-
-		$array['input_empty_text'] = $this->__('Search entire store here...');
+		));
 
 		// This vendor
 		if ($_vendor && $_vendor->getId()) {
-
 			/** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
 			$helperZDM = Mage::helper("zolagodropshipmicrosite");
 			$vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
@@ -328,7 +379,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			// Make "Everywhere" unselected
 			$array['select_options'][0]['selected'] = false;
 		} else {
-
 			// Categories are only shown for global context and not for vendor context
 			$allCats = Mage::getModel('catalog/category')->getCollection()
 					->addAttributeToSelect('*')
@@ -350,20 +400,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 					);
 				}
 			}
-
+			
 			if ($currentCategory) {
-
-
 				$rootCategory = Mage::app()->getStore()->getRootCategoryId();
-
 				if ($rootCategory != $currentCategory->getId()) {
-
-					$selected = true;
 
 					$array['select_options'][] = array(
 						'text' => $this->__('This category'),
 						'value' => $currentCategory->getId(),
-						'selected' => $selected
+						'selected' => true
 					);
 
 					$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_DropshipVendorProduct>
+            <version>0.0.1</version>
+        </Zolago_DropshipVendorProduct>
+    </modules>
+
+    <global>
+		<models>
+			<udprod>
+				<rewrite>
+					<observer>Zolago_DropshipVendorProduct_Model_Observer</observer>
+				</rewrite>
+			</udprod>
+		</models>
+	</global>
+</config>

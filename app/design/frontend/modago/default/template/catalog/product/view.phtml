@@ -51,15 +51,6 @@ $avg = $_reviewBlock->getAvarageRating();
     /** @var $_product Zolago_Catalog_Model_Product*/
     $_product = $this->getProduct();
 
-    // prices
-    $price = $_product->getPrice();
-    $finalPrice = $_product->getFinalPrice();
-    $sizeAttr = $_product->getResource()->getAttribute('size');
-    $productAttrs = array();
-    if($_product->getTypeId() == 'configurable') {
-        $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
-    }
-
     $_helperSizetable = Mage::helper('zolagosizetable');
     /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
     $vendor_id = $_product->getData('udropship_vendor');
@@ -108,99 +99,7 @@ if($vendorContext && $vendorContext->getId()) {
 <!-- END GALERY PRODUCT -->
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
-<!-- PRODUCT SHOP -->
-<div id="product-shop" class="col-lg-8 col-md-12 clearfix">
-
-    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-        <?php echo $this->getBlockHtml('formkey') ?>
-        <div class="no-display">
-            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-            <input type="hidden" name="related_product" id="related-products-field" value="" />
-        </div>
-
-        <div class="product-name"><h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1></div>
-        <p class="short-description hidden-xs">
-            <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
-        </p>
-
-        <?php if ($_product->getCanShowPrice() !== false): ?>
-            <div class="price-box-bundle">
-                <div class="price-box">
-                    <p class="price">
-                        <span class="price-label"><?php echo $this->__("price"); ?>:</span>
-                        <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false); ?><?php endif; ?></span>
-                        <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo Mage::helper('core')->currency($_product->getFinalPrice(), true, false); ?><?php endif; ?></span>
-                    </p>
-                </div>
-                <ul>
-                    <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
-                    <li><?php echo $this->getStoreReturnHeadline(); ?></li>
-                </ul>
-            </div>
-        <?php endif; ?>
-<!--        catalog.product.related-->
-        <?php echo $this->getChildHtml('catalog.product.related'); ?>
-<!--        catalog.product.related end-->
-
-        <div class="size-box-bundle" id="product-options">
-            <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-                <?php if (!empty($productAttrs)) : ?>
-                    <?php foreach($productAttrs as $_attribute) : ?>
-                        <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
-                            <div class="size-box clearfix clr">
-                                <div class="size">
-                                    <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
-
-                                    <div class="form-group form-radio">
-
-                                        <br />
-                                        
-                                        <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
-                                           data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?> <?php endif; ?></a>                                        
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            <?php endif; ?>
-
-            <div class="row">
-                <div class="action-box-bundle clearfix">
-                    <div class="col-xs-6">
-                        <div class="addLike-box <?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="notadded-wishlist">
-                            <span class="product-context-like-count">&nbsp;<?php if($this->getProduct()->getWishlistCount() > 0) : ?><?php echo (int) $this->getProduct()->getWishlistCount(); ?></span> <?php echo $this->helper("zolagomodago")->getPluralForm((int) $this->getProduct()->getWishlistCount(), array(
-                                $this->__("person like"),
-                                $this->__("people likes"),
-                                $this->__("people polish more than few likes"),
-                            )); ?> <?php echo $this->__("this product"); ?><?php endif; ?><a href="#" onclick="Mall.wishlist.addToWishlistFromProduct(<?php echo $_product->getId(); ?>);return false;" class="addLike"><?php echo $this->__("Add to<br />favorites"); ?></a>
-                        </div>
-
-                        <div class="addedLike-box <?php if(!Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="added-wishlist">
-                            <a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct(<?php echo $this->getProduct()->getId(); ?>);return false;">
-                            <?php if((int) $this->getProduct()->getWishlistCount() - 1 == 0): ?>
-                                <?php echo $this->__("You like this"); ?><span class="product-context-like-count" style="color: #4f4f4f"></span><br><span><?php echo $this->__("remove from favorites"); ?></span>
-                            <?php else: ?>
-                                <?php echo $this->__("You and"); ?> <span class="product-context-like-count" style="color: #4f4f4f"><?php echo ((int) $this->getProduct()->getWishlistCount())-1; ?></span> <?php echo $this->helper('zolagomodago')->getPluralForm(
-                                    (int) $this->getProduct()->getWishlistCount() - 1, array(
-                                        $this->__("person"),
-                                        $this->__("people"),
-                                        $this->__("people polish more than few"),
-                                )); ?> <?php echo $this->__("like this product"); ?><br><span><?php echo $this->__("remove from favorites"); ?></span>
-                            <?php endif; ?>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket" title="<?php echo $this->__("Choose size first"); ?>" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-</div>
+<?php echo $this->getChildHtml('product.shop');?>
 
 <!-- END:/ PRODUCT SHOP -->
 <!-- SELLER BOX BUNDLE -->
@@ -360,7 +259,8 @@ if($vendorContext && $vendorContext->getId()) {
                             <p class="size"><?php echo ucfirst($this->__("size")); ?>: <span></span></p>
 
                             <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span>1</span></p></td>
-                        <td class="price"><?php echo $this->helper('core')->currency($finalPrice, true, false); ?></td>
+							<?php /* ensure the price in popup is correct */ ?>
+							<td class="price"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -412,4 +312,10 @@ if($vendorContext && $vendorContext->getId()) {
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
     Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
+	
+	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
+	<?php if($_product->getCategory()):?>
+	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
+	<?php endif;?>
+	
 </script>
