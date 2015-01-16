@@ -36,7 +36,6 @@
         message and the number of items in the shopping cart so it must be
         cached per-client.
         -->
-        <!--
         <reference name="header">
             <action method="setEsiOptions">
                 <params>
@@ -46,14 +45,6 @@
                         <wishlist_item_delete_after/>
                         <sales_quote_save_after/>
                     </flush_events>
-                </params>
-            </action>
-        </reference>
-        -->
-		<reference name="header">
-            <action method="setEsiOptions">
-                <params>
-                    <access>public</access>
                 </params>
             </action>
         </reference>

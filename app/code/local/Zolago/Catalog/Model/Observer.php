@@ -7,8 +7,7 @@
  *
  */
 class Zolago_Catalog_Model_Observer
-{
-
+{	
 	/**
 	 * Handle default category on product page
 	 * @area: frontend

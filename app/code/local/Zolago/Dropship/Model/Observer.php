@@ -1,9 +1,21 @@
 <?php
 
-class Zolago_Dropship_Model_Observer {
+class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
 	
 	/**
-	 * 
+	 * Clear afetr laod quote better performance
+	 * @todo possible bugs not compatibile with unirgy?
+	 * @param type $observer
+	 * @return Zolago_Dropship_Model_Observer
+	 */
+	public function sales_quote_load_after($observer){
+		if(Mage::helper("zolagocommon")->isUserDataRequest()){
+			return;
+		}
+		parent::sales_quote_load_after($observer);
+	}
+	
+	/**
 	 * @param type $observer
 	 * @return \Zolago_Dropship_Model_Observer
 	 */

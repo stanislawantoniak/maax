@@ -7,6 +7,9 @@
     </modules>
 	<global>
 		<models>
+			<zolagoturpentine>
+				<class>Zolago_Turpentine_Model</class>
+			</zolagoturpentine>
 			<turpentine>
 				<rewrite>
 					<!-- Swap vcl tempalte file -->
@@ -25,4 +28,16 @@
 		</resources>
 		-->
 	</global>
+	<frontend>
+		<events>
+			<catalog_controller_product_view>
+				<observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>productView</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+			</catalog_controller_product_view>
+		</events>	
+    </frontend>
 </config>

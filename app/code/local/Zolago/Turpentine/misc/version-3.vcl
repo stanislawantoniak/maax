@@ -228,7 +228,7 @@ sub vcl_hash {
     }
     hash_data(req.http.Ssl-Offloaded);
     if (req.http.X-Normalized-User-Agent) {
-        hash_data(req.http.X-Normalized-User-Agent);
+		hash_data(req.http.X-Normalized-User-Agent);
     }
     if (req.http.Accept-Encoding) {
         # make sure we give back the right encoding
@@ -237,7 +237,8 @@ sub vcl_hash {
     if (req.http.X-Varnish-Store || req.http.X-Varnish-Currency) {
         # make sure data is for the right store and currency based on the *store*
         # and *currency* cookies
-        hash_data("s=" + req.http.X-Varnish-Store + "&c=" + req.http.X-Varnish-Currency);
+		# ignore it for now
+		# hash_data("s=" + req.http.X-Varnish-Store + "&c=" + req.http.X-Varnish-Currency);
     }
 
     if (req.http.X-Varnish-Esi-Access == "private" &&
