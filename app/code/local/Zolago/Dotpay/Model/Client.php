@@ -87,8 +87,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			(isset($data['channel']) ? $data['channel'] : '');
 
 		$signature = hash('sha256', $signature);
-		Mage::log($signature,null,"dotpay_sign.log");
-		Mage::log($data['signature'],null,"dotpay_sign.log");
 		return $signature == $data['signature'];
 	}
 
