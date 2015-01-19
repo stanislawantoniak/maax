@@ -28,12 +28,17 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 
         $select->from(array("po" => $tablePo));
         $select->where("po.order_id IN(?)", $ordersIDs);
+        $select->joinLeft(array("order" => $this->getTable("sales/order")),
+            "order.entity_id = po.order_id",
+            "order.customer_is_guest");
+
         $poData = $this->getReadConnection()->fetchAll($select);
 
 //        Mage::log("poData");
 //        Mage::log($poData);
 
         foreach ($poData as $po) {
+            $order =
             $data[] = array(
                 'transaction_id'    => $transaction_id,
                 'po_id'             => $po['entity_id'],
@@ -42,7 +47,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
                 'operator_id'       => $operator_id,
                 'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
                 'comment'           => $comment,
-                'customer_id'       => $po['customer_id']
+                'customer_id'       => ((!$po['customer_is_guest']) && !is_null($po['customer_is_guest'])) ? $po['customer_id'] : null
             );
         }
         return $data;
