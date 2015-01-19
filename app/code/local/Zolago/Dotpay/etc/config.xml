@@ -7,7 +7,10 @@
     </modules>
     <global>
 		<models>
-			<dotpay>
+			<zolagodotpay>
+                <class>Zolago_Dotpay_Model</class>
+            </zolagodotpay>
+            <dotpay>
 				<rewrite>
 					<paymentMethod>Zolago_Dotpay_Model_PaymentMethod</paymentMethod>
 				</rewrite>
@@ -25,4 +28,19 @@
             </dotpay> 
         </routers>
 	</frontend>
+    <crontab>
+        <jobs>
+            <updatetransactions>
+                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
+                <run><model>zolagodotpay/observer::updateTransactions</model></run>
+            </updatetransactions>
+        </jobs>
+    </crontab>
+    <default>
+        <payment>
+            <dotpay>
+                <cancel_time>30</cancel_time>
+            </dotpay>
+        </payment>
+    </default>
 </config>

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Payment>
-            <version>0.0.8</version>
+            <version>0.0.10</version>
         </Zolago_Payment>
     </modules>
     <global>
@@ -22,6 +22,9 @@
                     <provider>
                         <table>zolago_payment_provider</table>
                     </provider>
+                    <allocation>
+                        <table>zolago_payment_allocation</table>
+                    </allocation>
                 </entities>
             </zolagopayment_resource>
         </models>
@@ -37,6 +40,16 @@
                 </setup>
             </zolagopayment_setup>
         </resources>
+        <events>
+            <zolagopayment_append_allocation>
+                <observers>
+                    <zolago_payment_allocation_observer>
+                        <class>zolagopayment/allocation_observer</class>
+                        <method>allocationTransaction</method>
+                    </zolago_payment_allocation_observer>
+                </observers>
+            </zolagopayment_append_allocation>
+        </events>
     </global>
     <frontend>
 		<translate>
