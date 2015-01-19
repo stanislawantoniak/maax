@@ -38,7 +38,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 //        Mage::log($poData);
 
         foreach ($poData as $po) {
-            $order =
+
             $data[] = array(
                 'transaction_id'    => $transaction_id,
                 'po_id'             => $po['entity_id'],
