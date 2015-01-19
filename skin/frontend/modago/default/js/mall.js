@@ -879,8 +879,10 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 function cart_add_coupon_callback(response) {
     if(response.status == false) {
         // show message
-        location.reload();
+        jQuery('.coupon-errors').html(response.message);
+        //location.reload();
     } else {
+        jQuery('.coupon-errors').html('');
         location.reload();
     }
 }
