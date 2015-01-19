@@ -276,9 +276,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     public function setProductOptionsByCampaign($salesPromoProductsData, $websiteId)
     {
+
         if (empty($salesPromoProductsData)) {
             return;
         }
+
+        /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+        $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
 
         /* @var $catalogHelper Zolago_Catalog_Helper_Data */
         $catalogHelper = Mage::helper('zolagocatalog');
@@ -289,14 +293,83 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             return;
         }
 
+
+        $ids = array_keys($salesPromoProductsData);
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+        $priceTypes = $this->getOptionsData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+
+        //Ping converter to get special price
+        try {
+            /* @var $converter Zolago_Converter_Model_Client */
+            $converter = Mage::getModel('zolagoconverter/client');
+        } catch (Exception $e) {
+            Mage::throwException("Converter is unavailable: check credentials");
+            return;
+        }
+
+        //1. simple
+        $collectionS = Mage::getModel('catalog/product')->getCollection();
+        $collectionS->addAttributeToSelect(array('skuv'));
+        $collectionS
+            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+
+        $collectionS->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+        $collectionS->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+        $collectionS
+            ->addFieldToFilter('entity_id', array('in' => $ids));
+
+        foreach ($collectionS as $_productS) {
+            $productSId = $_productS->getId();
+            $dataSimpleProduct = isset($salesPromoProductsData[$productSId]) ? $salesPromoProductsData[$productSId] : false;
+
+            if (!$dataSimpleProduct) {
+                continue;
+            }
+
+            $priceSType = isset($priceTypes[$dataSimpleProduct['price_source']]) ? $priceTypes[$dataSimpleProduct['price_source']] : false;
+
+            $priceSSimple = isset($dataSimpleProduct['price_percent']) ? $dataSimpleProduct['price_percent'] : false;
+            if ($priceSType && $priceSSimple) {
+                $udropship_vendor = $_productS->getData('udropship_vendor');
+                $skuv = $_productS->getData('skuv');
+                $newSimplePrice = $converter->getPrice($udropship_vendor, $skuv, $priceSType);
+
+                if (!empty($newSimplePrice)) {
+                    $newSimplePricePriceWithPercent = $newSimplePrice - $newSimplePrice * ((int)$priceSSimple / 100);
+                    foreach ($storesToUpdate as $storeId) {
+                        $aM->updateAttributesPure(
+                            array($productSId),
+                            array(
+                                'special_price' => $newSimplePricePriceWithPercent,
+
+                                'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
+                                'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
+                                'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
+                                'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : ''
+                            ),
+                            $storeId
+                        );
+                    }
+                    unset($storeId);
+                    //set null to attribute for default store id (required for good quote calculation)
+                    $aM->updateAttributesPure(array($productSId), array('special_price' => null, 'campaign_regular_id' => null, 'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+
+                    $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataSimpleProduct['campaign_id']), $productSId);
+                }
+            }
+
+        }
+
+
+
+        //2. get simple products related to configurable
         $attributeSize = Mage::getResourceModel('catalog/product')
             ->getAttribute('size');
         $attributeSizeId = $attributeSize->getAttributeId();
 
-        $ids = array_keys($salesPromoProductsData);
-
         $configurableProductIds = array();
-        //1. get simple products related to configurable
+        //2. get simple products related to configurable
         $collection = Mage::getModel('catalog/product')->getCollection();
         $collection
             ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
@@ -307,15 +380,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             ->addFieldToFilter('entity_id', array('in' => $ids));
 
 
-        //Ping converter to get special price
-        try {
-            /* @var $converter Zolago_Converter_Model_Client */
-            $converter = Mage::getModel('zolagoconverter/client');
-        } catch (Exception $e) {
-            Mage::throwException("Converter is unavailable: check credentials");
-            return;
-        }
-        $priceTypes = $this->getOptionsData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+
+
 
 
         $productsData = array(); //configurable options data
@@ -416,10 +482,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         $pricesData = array();
-        /* @var $aM Zolago_Catalog_Model_Product_Action */
-        $aM = Mage::getSingleton('catalog/product_action');
+
         foreach ($actualSpecialPricesForChildren as $parentProdId => $actualSpecialPrices) {
             $minPriceForProduct = min(array_values($actualSpecialPrices));
+
+            $dataConfigurableProduct = isset($salesPromoProductsData[$parentProdId]) ? $salesPromoProductsData[$parentProdId] : false;
+            if (!$dataConfigurableProduct) {
+                continue;
+            }
 
             $pricesData[$parentProdId]['special_price'] = $minPriceForProduct;
             foreach ($actualSpecialPrices as $childProdId => $childPrice) {
@@ -431,7 +501,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($storesToUpdate as $storeId) {
                 $aM->updateAttributesPure(
-                    array($parentProdId), array('special_price' => $minPriceForProduct), $storeId
+                    array($parentProdId),
+                    array(
+                        'special_price' => $minPriceForProduct,
+
+                        'campaign_strikeout_price_type' => $dataConfigurableProduct['campaign_strikeout_price_type'],
+                        'campaign_regular_id' => $dataConfigurableProduct['campaign_id'],
+                        'special_from_date' => !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '',
+                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : ''
+                    ),
+                    $storeId
                 );
             }
 
@@ -476,8 +555,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $campaignResourceModel = Mage::getResourceModel('zolagocampaign/campaign');
             $campaignResourceModel->insertOptionsBasedOnCampaign($optionsData);
         }
-
-        //@todo reindex options
 
     }
 
