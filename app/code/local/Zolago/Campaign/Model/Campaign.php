@@ -356,9 +356,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     unset($storeId);
                     //set null to attribute for default store id (required for good quote calculation)
                     $aM->updateAttributesPure(array($productSId), array('special_price' => null, 'campaign_regular_id' => null, 'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
-
-                    $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataSimpleProduct['campaign_id']), $productSId);
                     $productsIdsPullToSolr[$productSId] = $productSId;
+                    $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataSimpleProduct['campaign_id']), $productSId);
+
                 }
             }
 
