@@ -32,7 +32,9 @@ class Zolago_Solrsearch_Model_Solr_Vendor_Landingpage_Product_List extends Zolag
      * @return int
      */
     public function getCurrentLimit() {
-       return 8;
+        return (int) Mage::getStoreConfig(
+            "zolagomodago_catalog/zolagomodago_cataloglisting/vendor_landingpage_n_products",
+            Mage::app()->getStore());
     }
 
 
