@@ -4,6 +4,20 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	const XML_PATH_DEFAULT_IDENTITY = "sales_email/order/identity";
 	
 	/**
+	 * Check is top customer data for varnish request
+	 * @return boolean
+	 */
+	public function isUserDataRequest() {
+		$request = Mage::app()->getRequest();
+		if($request->getModuleName()=="orbacommon" && 
+		   $request->getControllerName()=="ajax_customer" && 
+		   $request->getActionName()=="get_account_information"){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * @param string $email
 	 * @param string $name
 	 * @param string $template

@@ -7,8 +7,29 @@
  *
  */
 class Zolago_Catalog_Model_Observer
-{
-
+{	
+	/**
+	 * Handle default category on product page
+	 * @area: frontend
+	 * @event: catalog_controller_product_init
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function productInit(Varien_Event_Observer $observer) {
+		$product = $observer->getEvent()->getProduct();
+		/* @var $product Mage_Catalog_Model_Products */
+		
+		// No category id
+		if(!$product->getCategory()){
+			$rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+			$category = Mage::helper("zolagosolrsearch")->getDefaultCategory($product, $rootId);
+			/* @var $category Mage_Catalog_Model_Category */
+			if($category && $category->getId()){
+				$product->setCategory($category);
+				Mage::register('current_category', $category);
+			}	
+		}
+	}
+	
     public function addColumnWidthField(Varien_Event_Observer $observer)
     {
         $fieldset = $observer->getForm()->getElement('front_fieldset');

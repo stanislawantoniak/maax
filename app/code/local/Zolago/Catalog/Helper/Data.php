@@ -40,6 +40,9 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function getStoresForWebsites($websiteIds)
     {
+        if(empty($websiteIds)){
+            return;
+        }
         $stores = array();
         $storesCollection = Mage::getModel('core/store')->getCollection();
         $storesCollection->addFieldToFilter('website_id', array('in', $websiteIds));

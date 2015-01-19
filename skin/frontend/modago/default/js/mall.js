@@ -109,7 +109,10 @@ var Mall = {
         jQuery.ajax({
             cache: false,
             dataType: "json",
-            data: {},
+            data: {
+				"product_id": Mall.reg.get("varnish_product_id"),
+				"category_id": Mall.reg.get("varnish_category_id")
+			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
             },
@@ -163,7 +166,104 @@ var Mall = {
         }
         // replace favorites url
         jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
-    },
+		
+		// add footer persistent infos
+		var persistentContent = "";
+		if(data.content.persistent){
+			persistentContent = "<a href=\"" + data.content.persistent_url + "\">" + 
+				Mall.i18nValidation.__("remove_my_data_from_this_device", "Remove my data from device") + 
+				" <i class=\"fa fa-angle-right\"></i>" +
+				"</a>";
+		}
+		jQuery("#persistent-forget-mobile,#persistent-forget-desktop").
+				html(persistentContent);
+		
+		// Process search context
+		var searchContext = jQuery(".search-context").html('');
+		if(data.content.search && data.content.search.select_options){
+			jQuery.each(data.content.search.select_options, function(){
+				searchContext.append(jQuery("<option>").attr({
+					"value": this.value,
+					"selected": this.selected
+				}).text(this.text));
+			});
+		}
+		// Wood-based... how to replace opts?
+		searchContext.selectbox("detach");
+		searchContext.selectbox("attach");
+		
+		// Process product context 
+
+		var likeBoxes = jQuery("#product-likeboxes");
+		if(data.content.product && likeBoxes.length){
+			var p = data.content.product, 
+				likeText, boxAdded, boxNotAdded;
+			
+			// Not added box
+			if(p.wishlist_count > 0){
+				likeText = this.getFavPluralText(p.wishlist_count);
+			}else{
+				likeText = "";
+			}
+			boxNotAdded = jQuery(
+				'<div class="addLike-box" id="notadded-wishlist">' + 
+					'<span class="product-context-like-count">&nbsp;' + likeText + '</span>' +
+					'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike">' + 
+						Mall.i18nValidation.__('add-to-br-favorites') +
+					'</a>' + 
+				'</div>');
+
+			// Added box
+			likeText = Mall.i18nValidation.__("you-like-this");
+				
+			if(p.wishlist_count > 1){
+				likeText = this.getFavPluralText(p.wishlist_count - 1, true);
+			}
+
+			boxAdded = jQuery(
+				'<div class="addedLike-box" id="added-wishlist">' + 
+					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;">'+ 
+					likeText +
+					'<br><span>'  + Mall.i18nValidation.__("remove-from-favorites") + '</span>'+ 
+					'</a>' + 
+				'</div>');
+			
+			
+			if(p.in_my_wishlist){
+				boxAdded.removeClass("hidden");
+				boxNotAdded.addClass("hidden");
+			}else{
+				boxNotAdded.removeClass("hidden");
+				boxAdded.addClass("hidden");
+			}
+			
+			likeBoxes.html('').
+					append(boxNotAdded).
+					append(boxAdded);
+		}
+		
+    },                               
+	
+	getFavPluralText: function(count, you){
+		var text = Mall.i18nValidation.__("people-polish-more-than-few");
+		if(count==1){
+			text = Mall.i18nValidation.__("person");
+		}else if(count < 5){
+			text = Mall.i18nValidation.__("people");
+		}
+		
+		if(count > 1){
+			text += ' ' + Mall.i18nValidation.__("likes-this-product");
+		}else{
+			if(you){
+				text += ' ' + Mall.i18nValidation.__("like-this-product");
+			}else{
+				text += ' ' + Mall.i18nValidation.__("likes-this-product");
+			}
+		}
+		
+		return (you ? Mall.i18nValidation.__("you-and") + " " : "") + count  + " " + text;
+	},
 
     setProductsCountBadge : function(count) {
         if(count == 0) {
@@ -742,6 +842,7 @@ function addtocartcallback(response) {
         } else {
             popup.find("p.size>span").hide();
         }
+		popup.find("td.price").text(jQuery(".price-box-bundle span.price").text());
         jQuery("#popup-after-add-to-cart").modal('show');
         Mall.getAccountInfo();
     }
@@ -778,8 +879,10 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 function cart_add_coupon_callback(response) {
     if(response.status == false) {
         // show message
-        location.reload();
+        jQuery('.coupon-errors').html(response.message);
+        //location.reload();
     } else {
+        jQuery('.coupon-errors').html('');
         location.reload();
     }
 }
@@ -929,4 +1032,4 @@ jQuery(document).ready(function() {
 		.on('hidden.bs.modal', '.modal', function () {
 			jQuery('html,body').removeClass('modal-open');
 		});
-});
+});''

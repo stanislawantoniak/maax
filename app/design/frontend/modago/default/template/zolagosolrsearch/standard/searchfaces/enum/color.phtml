@@ -26,7 +26,7 @@
             <label title="<?php echo $item ?>"
                    for="<?php echo $this->getItemId($item)?>"
                    <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>
-                   data-param="<?php echo $this->getItemJson($item);?>"
+                   data-param='<?php echo $this->getItemJson($item);?>'
                    data-color="<?php echo $_color?>"
                    data-url="<?php echo $this->getItemUrl($item) ?>"
                    <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>

@@ -1,4 +1,4 @@
-"* Required Fields","* wymagane pola"
+﻿"* Required Fields","* wymagane pola"
 "A new password was sent","Nowe hasło zostało wysłane"
 "Account Dashboard","Panel konta"
 "Account Information","Dane konta"
@@ -444,3 +444,5 @@
 "Log Out","Wyloguj"
 "First Name","First Name"
 "Last Name","Last Name"
+"This field is required","Proszę wypełnić pole"
+

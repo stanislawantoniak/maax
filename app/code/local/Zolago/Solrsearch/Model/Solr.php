@@ -223,7 +223,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
             if(is_array($filterItem) && sizeof($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
-                foreach($filterItem as $value){
+                foreach($filterItem as $value){                
                     if ($key == 'price_decimal') {
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
                     }else if($key == 'price'){
@@ -241,7 +241,10 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
 							$value = $this->_paresPriceValue($value);
-                            $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
+							// price name - @refs SolrBridge_Solrsearch_Model_Solr_Query->getSortFieldByCode();
+							$priceFields = Mage::helper('solrsearch')->getPriceFields();
+							$priceName = 'sort_'.$priceFields[1];
+                            $query .= $priceName.':['.urlencode(trim($value).'.99999').']+OR+';
                         }
                         else if(array_key_exists($face_key, $rangeFields))
                         {

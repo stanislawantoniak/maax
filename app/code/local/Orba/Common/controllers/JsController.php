@@ -9,6 +9,9 @@ class Orba_Common_JsController extends Mage_Core_Controller_Front_Action {
         $this->loadLayout();
         $this->renderLayout();
         $expires = self::JS_LIB_EXPIRE_TIME;
+		
+		Mage::register('turpentine_nocache_flag', 0); // do cache
+		
         $this->getResponse()
                 ->clearHeaders()
                 ->setHeader('Content-type', 'application/javascript', true)
