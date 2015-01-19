@@ -210,7 +210,6 @@
 			</modules>
 		</translate>
 	</frontend>
- 
     <crontab>
         <jobs>
             <zolagocampaign_set_campaign_attributes>
