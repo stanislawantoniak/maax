@@ -31,7 +31,8 @@ class Zolago_Dotpay_Model_PaymentMethod extends Dotpay_Dotpay_Model_PaymentMetho
 			"street_n1" => "_",
 			//"street_n2" => "_",
 			"p_info"=> $store->getConfig('payment/zolagopayment_gateway/p_info'),
-			"p_email"=> $store->getConfig('payment/zolagopayment_gateway/p_email')
+			"p_email"=> $store->getConfig('payment/zolagopayment_gateway/p_email'),
+			"api_version"=>"dev"
 		);
 	}
 }
