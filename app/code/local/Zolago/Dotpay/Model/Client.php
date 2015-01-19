@@ -232,6 +232,8 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 		curl_close ($ch);
 
+		Mage::log($response);
+
 		return Mage::helper('core')->jsonDecode($response);
 	}
 
