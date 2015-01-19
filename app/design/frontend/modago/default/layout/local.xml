@@ -681,12 +681,18 @@
             <action method="addBodyClass">
                 <value>not-menu-mobile</value>
             </action>
-
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
 			</action>
-
 		</reference>
+
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/listing.js</script>
+            </action>
+        </reference>
+
 		<reference name="content">
 			<block type="zolagomodago/dropshipmicrositepro_vendor_header" name="vendor.header" template="unirgy/microsite/topbottomheader.phtml">
 				<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>
@@ -699,6 +705,7 @@
 					<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.desktop" template="unirgy/microsite/menu.desktop.phtml"/>
 				</block>
 				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 			</block>
 
 		</reference>
