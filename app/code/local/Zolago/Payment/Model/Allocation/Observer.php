@@ -14,7 +14,7 @@ class Zolago_Payment_Model_Allocation_Observer {
         if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction && !empty($allocation_type)) {
             /** @var Zolago_Payment_Model_Allocation $model */
             $model = Mage::getModel('zolagopayment/allocation');
-            $model->allocationTransaction($transaction_id, $allocation_type, $operator_id , $comment);
+            $model->allocationTransaction($transaction, $allocation_type, $operator_id , $comment);
         }
     }
 }
