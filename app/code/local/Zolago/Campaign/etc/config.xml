@@ -216,7 +216,7 @@
             <zolagocampaign_set_campaign_attributes>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>0,5 * * * *</cron_expr>
+                    <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocampaign/observer::setProductAttributes</model>
@@ -225,7 +225,7 @@
             <zolagocampaign_unset_campaign_attributes>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>0,5 * * * *</cron_expr>
+                    <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocampaign/observer::unsetCampaignAttributes</model>
