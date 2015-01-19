@@ -2,7 +2,7 @@
 class Zolago_Solrsearch_Model_Solr_Vendor_Landingpage_Product_Solr extends Zolago_Solrsearch_Model_Solr
 {
     /**
-     * Prepare solr filter query paprams
+     * Prepare solr filter query params
      */
     protected function prepareFilterQuery()
     {
@@ -46,7 +46,8 @@ class Zolago_Solrsearch_Model_Solr_Vendor_Landingpage_Product_Solr extends Zolag
     }
 
     public function getSortFieldByCode($attributeCode, $direction){
-        return 'sort_wishlist_count_int+desc,is_bestseller_int+desc';
+        //bestseller products of a vendor. Next value for listing is flag promotion, flag sale, favorite count.
+        return 'is_bestseller_int+desc,campaign_regular_id_int+desc,sort_wishlist_count_int+desc';
     }
 
     /**

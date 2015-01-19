@@ -654,12 +654,18 @@
             <action method="addBodyClass">
                 <value>not-menu-mobile</value>
             </action>
-
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
 			</action>
-
 		</reference>
+
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/listing.js</script>
+            </action>
+        </reference>
+
 		<reference name="content">
 			<block type="zolagomodago/dropshipmicrositepro_vendor_header" name="vendor.header" template="unirgy/microsite/topbottomheader.phtml">
 				<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>

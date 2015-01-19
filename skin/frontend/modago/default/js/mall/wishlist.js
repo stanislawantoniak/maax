@@ -396,7 +396,7 @@ Mall.wishlist = {
                 }).appendTo(wrapper);
 
                 jQuery("<span/>", {
-                    html: Mall.translate.__("You")
+                    html: Mall.translate.__("you")
                         + (Mall.wishlist.getWishlistCount(id) > 1
                         ? " + " + (Mall.wishlist.getWishlistCount(id) - 1) : "")
                 }).prependTo(likeCount);
