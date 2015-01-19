@@ -123,26 +123,34 @@ class Zolago_Campaign_Model_Observer
         $catalogHelper = Mage::helper('zolagocatalog');
         $storesToUpdateSalesPromo = $catalogHelper->getStoresForWebsites($websitesToUpdateSalesPromo);
 
-        if (!empty($dataToUpdate)) {
-            foreach ($dataToUpdate as $websiteIdSP => $dataToUpdateSalesPromo) {
-                $storesSP = isset($storesToUpdateSalesPromo[$websiteIdSP]) ? $storesToUpdateSalesPromo[$websiteIdSP] : false;
-                if ($storesSP) {
-                    $productIdsSPUpdated = $modelCampaign->setSalesPromoCampaignsToProduct($dataToUpdateSalesPromo, $storesSP);
-                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
-                }
-            }
-        }
+//        if (!empty($dataToUpdate)) {
+//            foreach ($dataToUpdate as $websiteIdSP => $dataToUpdateSalesPromo) {
+//                $storesSP = isset($storesToUpdateSalesPromo[$websiteIdSP]) ? $storesToUpdateSalesPromo[$websiteIdSP] : false;
+//                if ($storesSP) {
+//                    $productIdsSPUpdated = $modelCampaign->setSalesPromoCampaignsToProduct($dataToUpdateSalesPromo, $storesSP);
+//                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
+//                }
+//            }
+//        }
 
         $salesPromoProductsData = array();
 
         if (!empty($dataToUpdate)) {
             foreach ($dataToUpdate as $websiteIdOptions => $dataToUp) {
+
                 foreach ($dataToUp as $productId => $data) {
                     //collect data to change configurable product options
                     $salesPromoProductsData[$websiteIdOptions][$productId] = array(
                         'price_source' => $data['price_source'],
                         'price_percent' => $data['price_percent'],
-                        'website_id' => $data['website_id']
+                        'website_id' => $data['website_id'],
+
+
+                        'date_from' => $data['date_from'],
+                        'date_to' => $data['date_to'],
+
+                        'campaign_strikeout_price_type' => $data['strikeout_type'],
+                        'campaign_id' => $data['campaign_id']
                     );
                 }
             }

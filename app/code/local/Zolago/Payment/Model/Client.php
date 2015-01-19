@@ -66,7 +66,7 @@ abstract class Zolago_Payment_Model_Client {
 					Mage::dispatchEvent(
 						"zolagopayment_append_allocation",
 						array(
-							"transaction_id" => $transaction->getId(),
+							"transaction" => $transaction,
 							"allocation_type" => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
 							"operator_id" => null,
 							"comment" => $comment
