@@ -281,6 +281,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             return;
         }
 
+        /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+        $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
+
         /* @var $catalogHelper Zolago_Catalog_Helper_Data */
         $catalogHelper = Mage::helper('zolagocatalog');
         $stores = $catalogHelper->getStoresForWebsites($websiteId);
@@ -318,10 +321,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         foreach ($collectionS as $_productS) {
             $productSId = $_productS->getId();
+            $dataSimpleProduct = isset($salesPromoProductsData[$productSId]) ? $salesPromoProductsData[$productSId] : false;
 
-            $priceSType = isset($priceTypes[$salesPromoProductsData[$productSId]['price_source']]) ? $priceTypes[$salesPromoProductsData[$productSId]['price_source']] : false;
+            if (!$dataSimpleProduct) {
+                continue;
+            }
 
-            $priceSSimple = isset($salesPromoProductsData[$productSId]['price_percent']) ? $salesPromoProductsData[$productSId]['price_percent'] : false;
+            $priceSType = isset($priceTypes[$dataSimpleProduct['price_source']]) ? $priceTypes[$dataSimpleProduct['price_source']] : false;
+
+            $priceSSimple = isset($dataSimpleProduct['price_percent']) ? $dataSimpleProduct['price_percent'] : false;
             if ($priceSType && $priceSSimple) {
                 $udropship_vendor = $_productS->getData('udropship_vendor');
                 $skuv = $_productS->getData('skuv');
@@ -331,10 +339,23 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $newSimplePricePriceWithPercent = $newSimplePrice - $newSimplePrice * ((int)$priceSSimple / 100);
                     foreach ($storesToUpdate as $storeId) {
                         $aM->updateAttributesPure(
-                            array($productSId), array('special_price' => $newSimplePricePriceWithPercent), $storeId
+                            array($productSId),
+                            array(
+                                'special_price' => $newSimplePricePriceWithPercent,
+
+                                'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
+                                'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
+                                'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
+                                'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : ''
+                            ),
+                            $storeId
                         );
                     }
                     unset($storeId);
+                    //set null to attribute for default store id (required for good quote calculation)
+                    $aM->updateAttributesPure(array($productSId), array('special_price' => null, 'campaign_regular_id' => null, 'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+
+                    $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataSimpleProduct['campaign_id']), $productSId);
                 }
             }
 
@@ -465,6 +486,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         foreach ($actualSpecialPricesForChildren as $parentProdId => $actualSpecialPrices) {
             $minPriceForProduct = min(array_values($actualSpecialPrices));
 
+            $dataConfigurableProduct = isset($salesPromoProductsData[$parentProdId]) ? $salesPromoProductsData[$parentProdId] : false;
+            if (!$dataConfigurableProduct) {
+                continue;
+            }
+
             $pricesData[$parentProdId]['special_price'] = $minPriceForProduct;
             foreach ($actualSpecialPrices as $childProdId => $childPrice) {
                 $priceIncrement = (float)$childPrice - $minPriceForProduct;
@@ -475,7 +501,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($storesToUpdate as $storeId) {
                 $aM->updateAttributesPure(
-                    array($parentProdId), array('special_price' => $minPriceForProduct), $storeId
+                    array($parentProdId),
+                    array(
+                        'special_price' => $minPriceForProduct,
+
+                        'campaign_strikeout_price_type' => $dataConfigurableProduct['campaign_strikeout_price_type'],
+                        'campaign_regular_id' => $dataConfigurableProduct['campaign_id'],
+                        'special_from_date' => !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '',
+                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : ''
+                    ),
+                    $storeId
                 );
             }
 
