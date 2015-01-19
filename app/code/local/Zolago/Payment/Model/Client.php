@@ -32,7 +32,7 @@ abstract class Zolago_Payment_Model_Client {
 
 			if(!$transaction->getId()) {
 				//create new transaction
-				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : 0; //0 for guest
+				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : null; //null for guest
 
 				$transaction
 					->setTxnId($txnId)
