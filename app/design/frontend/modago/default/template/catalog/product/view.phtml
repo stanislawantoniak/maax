@@ -281,18 +281,7 @@ if($vendorContext && $vendorContext->getId()) {
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
-<?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-<script type="text/javascript">
-    var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
-    var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
 
-    jsonConfig.useSizeboxList = useSizeboxList;
-
-    Mall.product.productOptions(jsonConfig);
-    Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
-
-</script>
-<?php endif; ?>
 <script type="text/javascript">
     Mall.wishlist.addProduct({
         id: <?php echo $_product->getId(); ?>,
