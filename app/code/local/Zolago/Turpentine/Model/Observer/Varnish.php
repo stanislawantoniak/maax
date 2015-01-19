@@ -34,7 +34,9 @@ class Zolago_Turpentine_Model_Observer_Varnish extends Nexcessnet_Turpentine_Mod
 			
             if( Mage::helper( 'turpentine/varnish' )->getVarnishDebugEnabled() ) {
                 Mage::helper( 'turpentine/debug' )->logDebug(
-                    'Set Varnish cache flag header to: ' . $flag . " / " . Mage::app()->getRequest()->getRequestUri());
+                    'Set Varnish cache flag header to: ' . $flag . " / " . 
+					str_replace('%', '%%', Mage::app()->getRequest()->getRequestUri())
+				);
                 Mage::helper( 'turpentine/debug' )->logDebug(
                     'Set Varnish cache mode header to: ' . $onlyAllowed );
 				
