@@ -10,12 +10,12 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $this->_init('zolagopayment/allocation', "allocation_id");
     }
 
-    public function getDataAllocationForTransaction($transaction_id, $allocation_type, $operator_id = null, $comment = '') {
+    public function getDataAllocationForTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
         $tableSPT = $this->getTable('sales/payment_transaction');
         $select = $this->getReadConnection()->select();
 
         $select->from(array("pt" => $tableSPT), 'pt.order_id');
-        $select->where('pt.transaction_id = ?', $transaction_id);
+        $select->where('pt.transaction_id = ?', $transaction->getId());
         $select->where('pt.txn_status = ?',Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 
         $ordersIDs = $this->getReadConnection()->fetchAll($select);
@@ -36,19 +36,34 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 
 //        Mage::log("poData");
 //        Mage::log($poData);
-
+        $txnAmount = $transaction->getTxnAmount();
+        $flagBreak = false;
         foreach ($poData as $po) {
-
-            $data[] = array(
-                'transaction_id'    => $transaction_id,
+            $out = array(
+                'transaction_id'    => $transaction->getId(),
                 'po_id'             => $po['entity_id'],
-                'allocation_amount' => $po['grand_total_incl_tax'],
                 'allocation_type'   => $allocation_type,
                 'operator_id'       => $operator_id,
                 'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
                 'comment'           => $comment,
                 'customer_id'       => ((!$po['customer_is_guest']) && !is_null($po['customer_is_guest'])) ? $po['customer_id'] : null
             );
+
+            if ($po === end($poData)) {
+                //is last
+                $out['allocation_amount'] = $txnAmount;
+            } elseif ($txnAmount >= $po['grand_total_incl_tax']) {
+                $txnAmount -= $po['grand_total_incl_tax'];
+                $out['allocation_amount'] = $po['grand_total_incl_tax'];
+            } else {
+                $out['allocation_amount'] = $txnAmount;
+                $flagBreak = true;
+            }
+
+            $data[] = $out;
+            if ($flagBreak) {
+                break;
+            }
         }
         return $data;
     }
