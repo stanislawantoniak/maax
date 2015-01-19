@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <config>
     <modules>
         <Zolago_Campaign>
@@ -210,7 +210,7 @@
 			</modules>
 		</translate>
 	</frontend>
-
+ 
     <crontab>
         <jobs>
             <zolagocampaign_set_campaign_attributes>
