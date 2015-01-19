@@ -1,8 +1,8 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <config>
     <modules>
         <Zolago_Campaign>
-            <version>0.0.10</version>
+            <version>0.0.9</version>
         </Zolago_Campaign>
     </modules>
     <global>
@@ -47,14 +47,6 @@
 			</zolagocampaign>
 		</blocks>
 		<events>
-            <campaign_save_after>
-                <observers>
-                    <zolago_catalog_converter>
-                        <class>Zolago_Campaign_Model_Observer</class>
-                        <method>campaignAfterUpdate</method>
-                    </zolago_catalog_converter>
-                </observers>
-            </campaign_save_after>
             <campaign_product_remove_update_after>
                 <observers>
                     <zolagocampaign_remove_products>
@@ -98,124 +90,7 @@
             <zolagocampaign_set_campaign_attributes>
                 <schedule>
                     <!-- Run every 30 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagocampaign/observer::setProductAttributes</model>
-                </run>
-            </zolagocampaign_set_campaign_attributes>
-            <zolagocampaign_unset_campaign_attributes>
-                <schedule>
-                    <!-- Run every 30 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagocampaign/observer::unsetCampaignAttributes</model>
-                </run>
-            </zolagocampaign_unset_campaign_attributes>
-        </jobs>
-    </crontab>
-</config>
-<?xml version="1.0"?>
-<config>
-    <modules>
-        <Zolago_Campaign>
-            <version>0.0.10</version>
-        </Zolago_Campaign>
-    </modules>
-    <global>
-       <resources>
-            <zolagocampaign_setup>
-                <setup>
-                    <module>Zolago_Campaign</module>
-                </setup>
-            </zolagocampaign_setup>
-        </resources>
-		<models>
-			<zolagocampaign>
-				<class>Zolago_Campaign_Model</class>
-				<resourceModel>zolagocampaign_resource</resourceModel>
-			</zolagocampaign>
-			<zolagocampaign_resource>
-				<class>Zolago_Campaign_Model_Resource</class>
-				<entities>
-					<campaign>
-						<table>zolago_campaign</table>
-					</campaign>
-					<campaign_website>
-						<table>zolago_campaign_website</table>
-					</campaign_website>
-					<campaign_product>
-						<table>zolago_campaign_product</table>
-					</campaign_product>
-                    <campaign_placement>
-                        <table>zolago_campaign_placement</table>
-                    </campaign_placement>
-				</entities>
-			</zolagocampaign_resource>
-		</models>
-		<helpers>
-			<zolagocampaign>
-				<class>Zolago_Campaign_Helper</class>
-			</zolagocampaign>
-		</helpers>
-		<blocks>
-			<zolagocampaign>
-				<class>Zolago_Campaign_Block</class>
-			</zolagocampaign>
-		</blocks>
-		<events>
-            <campaign_save_after>
-                <observers>
-                    <zolago_catalog_converter>
-                        <class>Zolago_Campaign_Model_Observer</class>
-                        <method>campaignAfterUpdate</method>
-                    </zolago_catalog_converter>
-                </observers>
-            </campaign_save_after>
-            <campaign_product_remove_update_after>
-                <observers>
-                    <zolagocampaign_remove_products>
-                        <class>Zolago_Campaign_Model_Observer</class>
-                        <method>productAttributeRevert</method>
-                    </zolagocampaign_remove_products>
-                </observers>
-            </campaign_product_remove_update_after>
-		</events>
-    </global>
-	<frontend>
-		<routers>
-			<zolagocampaign>
-				<use>standard</use>
-				<args>
-					<module>Zolago_Campaign</module>
-					<frontName>campaign</frontName>
-				</args>
-			</zolagocampaign>
-		</routers>
-		<layout>
-			<updates>
-				<zolagocampaign>
-					<file>zolagocampaign.xml</file>
-				</zolagocampaign>
-			</updates>
-		</layout>
-		<translate>
-			<modules>
-				<Zolago_Campaign>
-					<files>
-						<default>Zolago_Campaign.csv</default>
-					</files>
-				</Zolago_Campaign>
-			</modules>
-		</translate>
-	</frontend>
-    <crontab>
-        <jobs>
-            <zolagocampaign_set_campaign_attributes>
-                <schedule>
-                    <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>0,30 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocampaign/observer::setProductAttributes</model>
@@ -224,7 +99,7 @@
             <zolagocampaign_unset_campaign_attributes>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocampaign/observer::unsetCampaignAttributes</model>
