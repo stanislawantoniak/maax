@@ -33,5 +33,11 @@
  */
 class Zolago_Adminhtml_Block_Sales_Transactions_Child_Grid extends Zolago_Adminhtml_Block_Sales_Transactions_Grid
 {
-
+	protected function _prepareCollection()
+	{
+		$collection = Mage::getResourceModel('sales/order_payment_transaction_collection');
+		$collection->addParentIdFilter(Mage::registry('current_transaction')->getId());
+		$this->setCollection($collection);
+		return parent::_prepareCollection();
+	}
 }
