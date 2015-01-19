@@ -120,7 +120,7 @@ abstract class Zolago_Payment_Model_Client {
 			&& $expiration) {
 			$transactions
 				->addFieldToFilter('txn_status',self::TRANSACTION_STATUS_NEW)
-				->addFieldToFilter('created_at', array('lt' => $expiration))
+				->addFieldToFilter('main_table.created_at', array('lt' => $expiration))
 				->load();
 			return $transactions;
 		}
