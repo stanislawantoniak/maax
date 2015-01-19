@@ -188,51 +188,57 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		$password = $this->getPassword();
 		$url = $this->getApiUrl(); //should already contain tracing slash (!!!)
 
+		if($login && $password && $url) {
+			$urlData = array();
+			if ($function) { // operations or accounts
+				$urlData[] = $function;
+			}
 
-		$urlData = array();
-		if($function) { // operations or accounts
-			$urlData[] = $function;
+			if ($operationNumber) {
+				$urlData[] = $operationNumber;
+			}
+
+			if ($method) {
+				$urlData[] = $method;
+			}
+
+			$urlData = count($urlData) ? implode("/", $urlData) . "/" : '';
+
+			if (count($parameters)) {
+				$parameters = "?" . http_build_query($parameters);
+				$urlData = $urlData . $parameters;
+			}
+
+			$fields = null;
+			$ch = curl_init();
+
+			curl_setopt($ch, CURLOPT_URL, $url . $urlData);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+			curl_setopt($ch, CURLOPT_CAINFO, Mage::getBaseDir() . "/ca-bundle.crt");
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+			curl_setopt($ch, CURLOPT_USERPWD, $login . ":" . $password);
+			if ($method && $customRequest) {
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
+			}
+			if ($usePost) {
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+			}
+
+			$response = curl_exec($ch);
+
+			curl_close($ch);
+
+			try {
+				return Mage::helper('core')->jsonDecode($response);
+			} catch(Exception $e) {
+				Mage::logException($e);
+			}
 		}
-
-		if($operationNumber) {
-			$urlData[] = $operationNumber;
-		}
-
-		if($method) {
-			$urlData[] = $method;
-		}
-
-		$urlData = count($urlData) ? implode("/",$urlData)."/" : '';
-
-		if(count($parameters)) {
-			$parameters = "?".http_build_query($parameters);
-			$urlData = $urlData.$parameters;
-		}
-
-		$fields = null;
-		$ch = curl_init();
-
-		curl_setopt ($ch, CURLOPT_URL,$url.$urlData);
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 1);
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 2);
-		curl_setopt($ch, CURLOPT_CAINFO, Mage::getBaseDir()."/ca-bundle.crt");
-		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt ($ch, CURLOPT_TIMEOUT, 100);
-		curl_setopt($ch, CURLOPT_USERPWD, $login.":".$password);
-		if($method && $customRequest) {
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
-		}
-		if($usePost) {
-			curl_setopt ($ch, CURLOPT_POST, 1);
-			curl_setopt ($ch, CURLOPT_POSTFIELDS, $fields);
-		}
-
-		$response = curl_exec($ch);
-
-		curl_close ($ch);
-
-		return Mage::helper('core')->jsonDecode($response);
+		return false;
 	}
 
 	/**
