@@ -8,6 +8,8 @@ class Zolago_Payment_Model_Allocation_Observer {
      */
     public function salesOrderPaymentTransactionSaveAfter(Varien_Event_Observer $observer) {
         /** @var Mage_Sales_Model_Order_Payment_Transaction $observer */
+
+        Mage::log($observer, null, "aloc.log");
         Mage::getModel("zolagopayment/allocation")->importDataFromTransaction($observer);
 
     }
