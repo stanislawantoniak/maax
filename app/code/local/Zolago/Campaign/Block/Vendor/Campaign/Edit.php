@@ -109,17 +109,18 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         ));
 
         // Prices definition
-
-        $prices->addField("price_source_id", "select", array(
-            "name" => "price_source_id",
+        $priceSourceCode = Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_DISCOUNT_PRICE_SOURCE_CODE;
+        $prices->addField($priceSourceCode, "select", array(
+            "name" => $priceSourceCode,
             "required" => true,
             "class" => "form-control",
             "label" => $helper->__('Special Price source'),
             "values" => Mage::getSingleton('zolagocampaign/campaign_pricesource')->toOptionHash()
         ));
 
-        $prices->addField("percent", "text", array(
-            "name" => "percent",
+        $percentCode = Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_DISCOUNT_CODE;
+        $prices->addField($percentCode, "text", array(
+            "name" => $percentCode,
             "required" => true,
             "class" => "form-control positiveInteger",
             "label" => $helper->__('Discount percent')

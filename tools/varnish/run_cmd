@@ -1,0 +1,1 @@
+/usr/local/Cellar/varnish3/3.0.5/sbin/varnishd -a :80 -T localhost:6082 -b 127.0.0.1:8081 -p cli_buffer=10000 -p esi_syntax=0x2

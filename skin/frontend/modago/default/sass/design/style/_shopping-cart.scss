@@ -232,6 +232,15 @@
 					text-align: center;
 					text-transform: uppercase;
 				}
+
+              .coupon-errors {
+                &:not(:empty) {
+                  clear: both;
+                  color: red;
+                  display: block;
+                  padding-top: 8px;
+                }
+              }
 			}
 			.coupon-list {
 				dt {

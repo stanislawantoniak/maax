@@ -40,4 +40,35 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 			return false;
 		}
 	}
+
+    public static function analyzeCouponByCustomerRequest($code)
+    {
+        $error = '';
+        if (empty($code)) {
+            return;
+        }
+        $couponU = Mage::getModel('salesrule/coupon/usage');
+        $couponU->load($code, 'code');
+        if ($couponU->getId()) {
+            $timesUsed = $couponU->getTimesUsed();
+            if ($timesUsed > 0) {
+                return Mage::helper('zolagomodago')->__('The coupon code has already been used.');
+            }
+        }
+
+        //check if coupon expired
+        $couponM = Mage::getModel('salesrule/coupon');
+        $couponM->load($code, 'code');
+
+        if ($couponM->getId()) {
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $localeTimeF = date("Y-m-d H:i", $localeTime);
+            if ($couponM->getData('expiration_date') <= $localeTimeF) {
+                return Mage::helper('zolagomodago')->__('The coupon is expired');
+            }
+
+        }
+
+        return $error;
+    }
 }
