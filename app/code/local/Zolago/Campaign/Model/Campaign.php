@@ -322,6 +322,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 continue;
             }
 
+            $productFlag = '';
+            if ($dataSimpleProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
+                $productFlag = 1;
+            } elseif ($dataSimpleProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+                $productFlag = 2;
+            }
+
             $priceSType = isset($priceTypes[$dataSimpleProduct['price_source']]) ? $priceTypes[$dataSimpleProduct['price_source']] : false;
 
             $priceSSimple = isset($dataSimpleProduct['price_percent']) ? $dataSimpleProduct['price_percent'] : false;
@@ -341,7 +348,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                                 'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
                                 'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
                                 'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
-                                'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : ''
+                                'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : '',
+
+                                'product_flag' => $productFlag
                             ),
                             $storeId
                         );
