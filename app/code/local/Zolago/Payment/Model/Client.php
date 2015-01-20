@@ -44,9 +44,9 @@ abstract class Zolago_Payment_Model_Client {
 
 			} elseif($transaction->getId() && !$transaction->getIsClosed() ) {
 				//update existing transaction
-//				$transaction
-//					->setIsClosed($this->getIsClosedByStatus($status))
-//					->setTxnStatus($status);
+				$transaction
+					->setIsClosed($this->getIsClosedByStatus($status))
+					->setTxnStatus($status);
 			} else {
 				$transaction = false; //because transaction with this txn_id is already closed
 			}
