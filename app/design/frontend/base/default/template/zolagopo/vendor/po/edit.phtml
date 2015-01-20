@@ -10,7 +10,7 @@
 <?php $_statusModel			= $_po->getStatusModel(); ?>
 <?php $_aggregated			= $_po->getAggregated();?>
 <?php $_isEditable			= $this->isEditable();?>
-
+<?php $transactionDetails = $this->getTransactionDetails($_po);?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="row page-heading">
@@ -142,6 +142,9 @@
 		<div class="col-md-4">
 			<div class="widget box">
 				<div class="widget-header"> <h4><i class="icon-usd"></i> <?php echo $_hlp->__("Payment");?></h4>
+                    <?php $pdData = $transactionDetails->getData(); ?>
+
+                    <?php if(!empty($pdData)): ?>
                     <div class="toolbar no-padding">
                         <div class="btn-group">
 							<span data-toggle="modal" data-target="#paymentsModal"  class="btn btn-xs">
@@ -150,6 +153,7 @@
 							</span>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z"> 

@@ -1,6 +1,10 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */ ?>
 <?php $_hlp = Mage::helper("zolagopo"); ?>
-<?php $_po = $this->getPo(); ?>
+
+<?php $paymentDetails = $this->getParentBlock()->getTransactionDetails($this->getPo()); ?>
+<?php $pdData = $paymentDetails->getData(); if(empty($pdData)){return; } ?>
+
+<?php $operatorId = $paymentDetails->getOperatorId();  ?>
 <!-- Modals comment -->
 <div class="modal fade" id="paymentsModal">
     <div class="modal-dialog">
@@ -10,14 +14,30 @@
                 <h4 class="modal-title"><?php echo $_hlp->__("Payment details"); ?></h4>
             </div>
             <div class="modal-body">
-                Table
-                <?php //krumo($_po->getDAta()); ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal"><?php echo $_hlp->__("Cancel"); ?></button>
-                <button type="submit" class="btn form-btn-loading btn-primary"
-                        data-loading-text="<?php echo $_hlp->__("Loading..."); ?>"><?php echo $_hlp->__("Send"); ?></button>
+
+                <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th><?php echo $_hlp->__("Details");?></th>
+                        <th><?php echo $_hlp->__("Operator ID");?></th>
+                        <th><?php echo $_hlp->__("Amount");?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $paymentDetails->getTransactionId(); ?></td>
+                        <td>Payment method</td>
+                        <td>
+                            <?php if(is_null($operatorId)): ?>
+                                <?php echo $_hlp->__("Automat");?>
+                            <?php else: ?>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo Mage::helper('core')->currency($paymentDetails->getAllocationAmount(), true, false); ?></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
