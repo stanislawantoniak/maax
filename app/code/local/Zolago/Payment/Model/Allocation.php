@@ -19,9 +19,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     public function importDataFromTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
 
         Mage::log("start importDataFromTransaction", null, "aloc.log");
-        Mage::log($transaction->getId());
-        Mage::log($allocation_type);
-        Mage::log($operator_id);
+        Mage::log($transaction->getId(),null, "aloc.log");
+        Mage::log($allocation_type,null, "aloc.log");
+        Mage::log($operator_id,null, "aloc.log");
 
         if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
 
@@ -32,9 +32,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     $payment = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
                     $comment = $payment->getMethod();
                 }
-                Mage::log($comment);
+                Mage::log($comment,null, "aloc.log");
                 $data = $this->getResource()->getDataAllocationForTransaction($transaction, $allocation_type, $operator_id, $comment);
-                Mage::log($data);
+                Mage::log($data,null, "aloc.log");
                 $this->appendAllocations($data);
             }
         }

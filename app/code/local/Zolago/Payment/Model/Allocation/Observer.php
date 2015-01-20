@@ -11,7 +11,7 @@ class Zolago_Payment_Model_Allocation_Observer {
 
         Mage::log("salesOrderPaymentTransactionSaveAfter START", null, "aloc.log");
 
-        Mage::log($observer->getData());
+        Mage::log($observer->getData(),null, "aloc.log");
         Mage::log("salesOrderPaymentTransactionSaveAfter START---", null, "aloc.log");
         $transaction = $observer->getData('transaction');
         $allocation_type = $observer->getData('allocation_type');
