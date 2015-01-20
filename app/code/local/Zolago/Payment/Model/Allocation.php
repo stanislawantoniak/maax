@@ -10,17 +10,22 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         $this->_init('zolagopayment/allocation');
     }
 
-    public function importDataFromTransaction($transaction) {
+    /**
+     * @param $transaction Mage_Sales_Model_Order_Payment_Transaction
+     * @param $allocation_type
+     * @param $operator_id
+     * @param $comment
+     */
+    public function importDataFromTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
 
         if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
             if ($transaction->getId() && $transaction->getStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED) {
-                /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
-                $allocation_type = Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT;
-                $operator_id = null;
-                /** @var Mage_Sales_Model_Order_Payment $payment */
-                $payment = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
-                $comment = $payment->getMethod();
 
+                if (empty($comment)) {
+                    /** @var Mage_Sales_Model_Order_Payment $payment */
+                    $payment = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
+                    $comment = $payment->getMethod();
+                }
                 $data = $this->getResource()->getDataAllocationForTransaction($transaction, $allocation_type, $operator_id, $comment);
                 $this->appendAllocations($data);
             }
