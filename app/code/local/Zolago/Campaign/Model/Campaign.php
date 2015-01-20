@@ -323,9 +323,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             $productFlag = '';
-            if ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
+            if ($dataSimpleProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
                 $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION;
-            } elseif ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+            } elseif ($dataSimpleProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
                 $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
             }
 
