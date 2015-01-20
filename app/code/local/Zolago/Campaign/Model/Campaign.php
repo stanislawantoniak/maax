@@ -539,15 +539,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $size = $sizes[$sizeLabel];
                 $sizeLabelDataSku = $sizeLabelData['sku'];
                 $childProdId = $simpleUsed[$sizeLabelDataSku];
-
-                $priceIncrement = $pricesData[$parentProdId][$childProdId]['option_price_increment'];
-
-
-                //if no price in converter do nothing
-                if ($pricesData[$parentProdId][$childProdId]) {
+                $isPriceExistInConverter = isset($pricesData[$parentProdId][$childProdId]);
+                if ($isPriceExistInConverter) {
+                    $priceIncrement = $pricesData[$parentProdId][$childProdId]['option_price_increment'];
                     $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
                 }
-
             }
 
         }
