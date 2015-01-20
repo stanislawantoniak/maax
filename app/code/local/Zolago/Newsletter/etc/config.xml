@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Newsletter>
-			<version>0.0.2</version>
+			<version>0.0.4</version>
 		</Zolago_Newsletter>
 	</modules>
 	<frontend>
@@ -47,7 +47,16 @@
 		<models>
 			<zolagonewsletter>
 				<class>Zolago_Newsletter_Model</class>
+				<resourceModel>zolagonewsletter_resource</resourceModel>
 			</zolagonewsletter>
+			<zolagonewsletter_resource>
+				<class>Zolago_Newsletter_Model_Resource</class>
+				<entities>
+					<subscriber>
+						<table>newsletter_subscriber</table>
+					</subscriber>
+				</entities>
+			</zolagonewsletter_resource>
 		</models>
 		<helpers>
 			<zolagonewsletter>

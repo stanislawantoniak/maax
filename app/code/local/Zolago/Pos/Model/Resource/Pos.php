@@ -161,25 +161,13 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
      */
     public static function getSkuAssoc($skus = array())
     {
-        $readConnection = Mage::getSingleton('core/resource')
-            ->getConnection('core_read');
+        $collection = Mage::getModel('catalog/product')->getCollection();
+        $collection->addFieldToFilter('sku', array("in" => $skus));
 
-        $select = $readConnection->select();
-        $select
-            ->from('catalog_product_entity AS products',
-                array(
-                     'sku',
-                     'product_id' => 'entity_id'
-                )
-            )
-            ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-
-
-        if (!empty($skus)) {
-            $select->where("sku IN (?)", $skus);
+        $skuAssoc = array();
+        foreach ($collection as $collectionI) {
+            $skuAssoc[$collectionI->getSku()] = $collectionI->getId();
         }
-
-        $skuAssoc = $readConnection->fetchPairs($select);
         return $skuAssoc;
     }
 

@@ -13,7 +13,8 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 	
     public function editAction() {
         Mage::register('as_frontend', true);
-        $campaign = $this->_initModel();
+        $id = $this->getRequest()->getParam('id');
+        $campaign = $this->_initModel($id);
         $vendor = $this->_getSession()->getVendor();
 
         // Existing campaign
@@ -43,30 +44,50 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
     public function productsAction()
     {
+
         $this->loadLayout();
 
         $campaignId = $this->getRequest()->getParam('id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
         $isAjax = $this->getRequest()->getParam('isAjax',false);
+        $campaign = $this->_initModel($campaignId);
+        $vendor = $this->_getSession()->getVendor();
 
-        $skuS = array();
-        if (is_string($productsStr)) {
-            $skuS = array_map('trim', explode(",", $productsStr));
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("*/*");
+            }
+        } elseif($this->getRequest()->getParam('id',null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("*/*");
         }
+        $skuVS = array();
+        if (is_string($productsStr)) {
+            $skuVS = array_map('trim', explode(",", $productsStr));
+        }
+
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
-            ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->addAttributeToFilter('skuv', array('in' => $skuVS))
+            ->addAttributeToFilter('udropship_vendor', $vendor->getId())
+            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))
             ->getAllIds();
+
         $productIds = array();
         if (!empty($collection)) {
             foreach ($collection as $productId) {
                 $productIds[] = $productId;
             }
         }
-        $model = Mage::getModel("zolagocampaign/campaign");
-        $model->getResource()->saveProducts($campaignId, $productIds);
+
+        /* @var $model Zolago_Campaign_Model_Resource_Campaign*/
+        $model = Mage::getResourceModel("zolagocampaign/campaign");
+        $model->saveProducts($campaignId, $productIds);
 
         $this->renderLayout();
+
         if (!$isAjax) {
             return $this->_redirectReferer();
         }
@@ -76,9 +97,18 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
+        // Form key valid?
+        $formKey = Mage::getSingleton('core/session')->getFormKey();
+        $formKeyPost = $this->getRequest()->getParam('form_key');
+        if ($formKey != $formKeyPost) {
+            return $this->_redirectReferer();
+        }
+        $id = $this->getRequest()->getPost('campaign_id');
+        $campaign = $this->_initModel($id);
 
-        $campaign = $this->_initModel();
+
         $vendor = $this->_getSession()->getVendor();
+
 
         // Try save
         $data = $this->getRequest()->getParams();
@@ -96,26 +126,31 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             $validErrors = $campaign->validate();
             if ($validErrors === true) {
                 // Fix empty value
-                if($campaign->getId()==""){
+                if ($campaign->getId() == "") {
                     $campaign->setId(null);
                 }
+
                 // Add stuff for new campaign
-                if(!$campaign->getId()) {
+                if (!$campaign->getId()) {
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
                 }
 
-
-                if($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE){
-                    Mage::log("Generate user friendly url");
+                if ($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
                     $nameForCustomer = $data["name_customer"];
                     $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
                     $campaign->addData(array('url_key' => $urlKey));
-
                 }
 
-
                 $campaign->save();
+
+
+                Mage::dispatchEvent(
+                    "campaign_save_after",
+                    array(
+                        "campaign" => $campaign
+                    )
+                );
             } else {
                 $this->_getSession()->setFormData($data);
                 foreach ($validErrors as $error) {
@@ -123,17 +158,19 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 }
                 return $this->_redirectReferer();
             }
-            $this->_getSession()->addSuccess($helper->__("Campaign Saved"));
+            $this->_getSession()->addSuccess($helper->__("Campaign has been saved"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addError($helper->__("Some error occure"));
+            $this->_getSession()->addError($helper->__("Some error occurred"));
             $this->_getSession()->setFormData($data);
             Mage::logException($e);
             return $this->_redirectReferer();
         }
+
+
 
         return $this->_redirect("*/*");
 	}
@@ -147,6 +184,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $productId = $this->getRequest()->getParam("id");
 
         if (!empty($campaignId) && !empty($productId)) {
+            /* @var $model Zolago_Campaign_Model_Resource_Campaign */
             $model = Mage::getResourceModel("zolagocampaign/campaign");
             $model->removeProduct($campaignId, $productId);
         }
@@ -168,7 +206,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         return $this->_redirectReferer();
     }
 
-	
+
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');
 		$store = Mage::app()->getStore();
@@ -176,34 +214,34 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		/* @var $collection Mage_Core_Model_Resource_Url_Rewrite_Collection */
 		$collection->addStoreFilter($store);
 		$collection->addFieldToFilter("request_path", $key);
-		
+
 		$response = array("status"=>1, "content"=>$collection->getSize()==0);
-		
+
 		$this->getResponse()->
 				setHeader('Content-type', 'application/json')->
 				setBody(Mage::helper('core')->jsonEncode($response));
 	}
-	
+
 	/**
 	 * @return Zolago_Campaign_Model_Campaign
 	 */
-	protected function _initModel() {
+	protected function _initModel($modelId) {
 		if(Mage::registry('current_campaign') instanceof Zolago_Campaign_Model_Campaign){
 			return Mage::registry('current_campaign');
 		}
-		$modelId = (int)$this->getRequest()->getParam("id");
+
 		$model = Mage::getModel("zolagocampaign/campaign");
 		/* @var $model Zolago_Campaign_Model_Campaign */
 		if($modelId){
 			$model->load($modelId);
 		}
-		if(!$this->_validateModel($model)){
-			throw new Mage_Core_Exception(Mage::helper('zolagocampaign')->__("Model is not vaild"));
-		}
+//		if(!$this->_validateModel($model)){
+//			throw new Mage_Core_Exception(Mage::helper('zolagocampaign')->__("Model is not vaild"));
+//		}
 		Mage::register('current_campaign', $model);
 		return $model;
 	}
-	
+
 	/**
 	 * @param Zolago_Campaign_Model_Campaign $model
 	 * @return boolean
@@ -326,4 +364,5 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         }
         echo $previewImage;
     }
+
 }

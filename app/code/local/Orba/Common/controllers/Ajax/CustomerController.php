@@ -6,12 +6,16 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
     public function get_account_informationAction()
     {
-        $q = Mage::getSingleton('checkout/cart')->getQuote();
-        $q->getTotals();
-
-
+		
+		//$profiler = Mage::helper('zolagocommon/profiler');
+		/* @var $profiler Zolago_Common_Helper_Profiler */
+		
+		//$profiler->start();
+        
         /*shipping_cost*/
+		
         $cost = Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
+		//$profiler->log("Quote shipping costs");
 
         $costSum = 0;
         if (!empty($cost)) {
@@ -23,6 +27,17 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$quote = Mage::helper('checkout/cart')->getQuote();
 		/* @var $quote Mage_Sales_Model_Quote */
 		$totals = $quote->getTotals();
+		//$profiler->log("Quote totals");
+		
+		$persistent = Mage::helper('persistent/session')->isPersistent() && 
+			!Mage::getSingleton('customer/session')->isLoggedIn();
+		
+		//$profiler->log("Persistent");
+		
+		$searchContext = Mage::helper('zolagosolrsearch')->getContextSelectorArray(
+				$this->getRequest()->getParams()
+		);
+		//$profiler->log("Context");
 		
 		
         $content = array(
@@ -39,8 +54,30 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
                 'show_cart_url' => Mage::getUrl('checkout/cart', array("_no_vendor"=>true)),
                 'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
                 'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
-            )
+            ),
+			'persistent' => $persistent,
+			'persistent_url' => Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true)),
+			'search' => $searchContext
         );
+		//$profiler->log("Rest");
+		
+		// Load product context data
+		
+		if($productId=$this->getRequest()->getParam("product_id")){
+			$product = Mage::getModel("catalog/product");
+			/* @var $product Mage_Catalog_Model_Product */
+			$product->setId($productId);
+			
+			// Load wishlist count
+			$wishlistCount = $product->getResource()->getAttributeRawValue(
+					$productId, "wishlist_count", Mage::app()->getStore()->getId());
+			
+			$content['product'] = array(
+				"entity_id"=>$productId,
+				"in_my_wishlist" => Mage::helper('zolagowishlist')->productBelongsToMyWishlist($product),
+				"wishlist_count" => (int)$wishlistCount
+			);
+		}
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);

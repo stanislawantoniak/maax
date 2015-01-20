@@ -315,6 +315,10 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $resource = Mage::getSingleton('core/resource');
             foreach ($pidList as $pid) {
+				/**
+				 * @todo full product load not required;
+				 * use mass action save
+				 */
                 $_product = Mage::getModel('catalog/product')->load($pid);
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');

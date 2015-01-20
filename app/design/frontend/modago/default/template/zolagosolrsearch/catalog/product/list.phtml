@@ -7,7 +7,7 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 19.08.2014
  */
-/** @var $product Mage_Catalog_Model_Product */
+/** @var $product Zolago_Solrsearch_Model_Catalog_Product */
 $_productImageUrl = '';
 $_collection = $this->getCollection();
 
@@ -51,9 +51,9 @@ $_collection = $this->getCollection();
                                     </div>
                                     <div class="price clearfix">
                                         <div class="col-price">
-                                            <?php if ($product->getPrice() != $product->getFinalPrice()) : ?>
+                                            <?php if ($product->getStrikeoutPrice() != $product->getFinalPrice()) : ?>
                                                 <span class="old">
-                                                    <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
+                                                    <?php echo $this->helper('core')->currency($product->getStrikeoutPrice(), true, false); ?>
                                                 </span>
                                             <?php endif; ?>
                                             <span>
@@ -194,6 +194,9 @@ $_collection = $this->getCollection();
         event.preventDefault();
         Mall.listing.loadMoreProducts();
     });
+	
+	Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+
 </script>
 
 </div>

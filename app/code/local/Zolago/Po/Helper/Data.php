@@ -262,6 +262,12 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		return $dhlSettings;
 	}
 	
+	/**
+	 * @todo handle configurable product
+	 * @param Mage_Sales_Model_Order_Item $item
+	 * @param Zolago_Po_Model_Po_Item $poItem
+	 * @return \Zolago_Po_Helper_Data
+	 */
 	public function prepareOrderItemByPoItem(Mage_Sales_Model_Order_Item $item, 
 		Zolago_Po_Model_Po_Item $poItem) {
 		
@@ -323,6 +329,11 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		}
 		// Stock item 
 		$stockItem = $product->getStockItem();
+		
+		/**
+		* @todo PO item if this has parent PO item use its ORDER item id 
+		* as value of parent_item_id of new ORDER item
+		*/
 		
 		$data = array(			
 			"order_id"						=> $order->getId(),

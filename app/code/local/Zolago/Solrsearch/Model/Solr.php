@@ -3,6 +3,8 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 {
 	
 	const REGISTER_KEY = "current_solr_data";
+	const FLAGS_FACET = "flags_facet";
+	const RATING_FACET = "product_rating_facet";
 	
 	protected $_specialKeys = array(
 		'is_new_facet',
@@ -47,9 +49,37 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	
 	public function prepareFacetAndBoostFields() {
 		parent::prepareFacetAndBoostFields();
-		$this->facetFields[] = Zolago_Solrsearch_Block_Faces::FLAGS_FACET;
+		$this->facetFields[] = Zolago_Solrsearch_Model_Solr::FLAGS_FACET;
+		// remove facets non existing in filters
+		$availableFacets = $this->getAvailableFacets();
+		$this->facetFields = array_intersect($this->facetFields,$availableFacets);
 	}
 
+	
+    /**
+     * facets available for category
+     * @return array
+     */
+     public function getAvailableFacets() {
+         $category = $this->getCurrentCategory();
+         $facets = array('category_facet'); //always
+         if ($category->getUsePriceFilter()) {
+             $facets[] = Mage::helper('zolagosolrsearch')->getPriceFacet();
+         }
+         if ($category->getUseFlagFilter()) {
+             $facets[] = Zolago_Solrsearch_Model_Solr::FLAGS_FACET;
+         }
+         if ($category->getUseReviewFilter()) {
+             $facets[] = self::RATING_FACET;
+         }
+         $collection = Mage::getResourceModel('zolagocatalog/category_filter_collection');
+         $collection->joinAttributeCode();
+         $collection->addCategoryFilter($category);
+         foreach ($collection as $item) {
+            $facets[]  = $item->getAttributeCode().'_facet';             
+         }
+         return $facets;
+     }
 	
     /**
      * add category id to search results
@@ -133,7 +163,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         if (!is_array($filterQuery) || !isset($filterQuery)) {
             $filterQuery = array();
         }
-
         $defaultFilterQuery = array(
                 'store_id' => array(Mage::app()->getStore()->getId()),
                 'website_id' => array(Mage::app()->getStore()->getWebsiteId()),
@@ -194,7 +223,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
             if(is_array($filterItem) && sizeof($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
-                foreach($filterItem as $value){
+                foreach($filterItem as $value){                
                     if ($key == 'price_decimal') {
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
                     }else if($key == 'price'){
@@ -212,7 +241,10 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
 							$value = $this->_paresPriceValue($value);
-                            $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
+							// price name - @refs SolrBridge_Solrsearch_Model_Solr_Query->getSortFieldByCode();
+							$priceFields = Mage::helper('solrsearch')->getPriceFields();
+							$priceName = 'sort_'.$priceFields[1];
+                            $query .= $priceName.':['.urlencode(trim($value).'.99999').']+OR+';
                         }
                         else if(array_key_exists($face_key, $rangeFields))
                         {
@@ -267,7 +299,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         } else {
 			$filterQueryString .= '%29';
 		}
-
         $this->filterQuery = $filterQueryString;
     }
 	

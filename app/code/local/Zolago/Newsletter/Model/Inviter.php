@@ -151,6 +151,13 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			$model = Mage::getModel("newsletter/subscriber");
 			$subscriber = $model->loadByEmail($email);
 			$subscriberId = $subscriber->getId();
+
+			//check newsletter subscription confirmation in config
+			$confirmationNeeded = Mage::getStoreConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1;
+			if(!$confirmationNeeded && $status == self::STATUS_UNCONFIRMED) {
+				$status = self::STATUS_SUBSCRIBED;
+			}
+
 			if(!$subscriberId) {
 				/** @var Mage_Customer_Model_Customer $customer */
 				$customer = Mage::getModel("customer/customer")
@@ -177,6 +184,8 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 					$this->_setSubscriberId($sid);
 					if($status == self::STATUS_UNCONFIRMED) {
 						$this->sendConfirmationRequestEmail($sid);
+					} elseif($status == self::STATUS_SUBSCRIBED) {
+						$this->sendConfirmationSuccessEmail($sid);
 					}
 					return true;
 				}
@@ -202,8 +211,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
                     $subscriber->save();
                     if($status == self::STATUS_UNCONFIRMED) {
                         $this->sendConfirmationRequestEmail($subscriberId);
-                    }
-                    if($status == self::STATUS_SUBSCRIBED) {
+                    } elseif($status == self::STATUS_SUBSCRIBED) {
                         $this->sendConfirmationSuccessEmail($subscriberId);
                     }
                     return true;

@@ -54,6 +54,27 @@ class Zolago_Catalog_Model_Product_Action extends Mage_Catalog_Model_Product_Act
         return $this;
     }
 
+    /**
+     * @param $productIds
+     * @param $attrData
+     * @param $storeId
+     * @return $this
+     * @throws Exception
+     */
+    public function updateAttributesPure($productIds, $attrData, $storeId)
+    {
+        $this->_getResource()->updateAttributes($productIds, $attrData, $storeId);
+        $this->setData(
+            array(
+                'product_ids' => array_unique($productIds),
+                'attributes_data' => $attrData,
+                'store_id' => $storeId
+            )
+        );
+
+        return $this;
+    }
+
     public function reindexAfterMassAttributeChange(){
         // register mass action indexer event
         Mage::getSingleton('index/indexer')->processEntityAction(

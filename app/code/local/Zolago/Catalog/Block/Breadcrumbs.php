@@ -36,7 +36,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             $category = Mage::helper('catalog')->getCategory();
             if (!$category ||
                 $category->getId() == $this->_getRootCategoryId()) {
-                $category = $this->_getDefaultCategory();
+                $category = $this->_getDefaultCategory(
+					$this->_getProduct(), 
+					$this->_getRootCategoryId()
+				);
             }
             if ($category) {
                 $path = $this->_preparePath($category);
@@ -86,23 +89,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         return $this->_vendor;
     }
 
-    
-    /**
-     * id of root category (depends from website and vendor)
-     * @return int
-     */
-     protected function _getRootCategoryId() {
-        if (is_null($this->_rootId)) {
-            $vendor = $this->_getVendor();
-            if ($vendor) {
-                $rootId = Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory($vendor,Mage::app()->getWebsite()->getId());
-            } else {
-                $rootId = Mage::app()->getStore()->getRootCategoryId();
-            }
-            $this->_rootId = $rootId;
-        }
-        return $this->_rootId;     
-     }
+ 
 
 	/**
 	 * 
@@ -187,28 +174,21 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
     /**
      * breadcrumb for product
+	 * @param Mage_Catalog_Model_Product $product
      * @return array
      */
-    protected function _getDefaultCategory() {
-        $category = null;
-        $rootId = $this->_getRootCategoryId();
-        // if no category, try to get category from product
-        if ($product = $this->_getProduct()) {
-            /* @var $product Mage_Catalog_Model_Product */
-            $catIds = $product->getCategoryIds();
-            $collection = Mage::getResourceModel('catalog/category_collection');
-            /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
-
-            $collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
-            $collection->addAttributeToFilter("is_active", 1);
-            $collection->addPathFilter("/$rootId/");
-            // Get first category
-            if($collection->count()) {
-                $category = $collection->getFirstItem();
-            }
-        }
-        return $category;
+    protected function _getDefaultCategory($product, $rootId) {
+		return Mage::helper("zolagosolrsearch")->getDefaultCategory($product, $rootId);
     }
+	   
+    /**
+     * id of root category (depends from website and vendor)
+     * @return int
+     */
+     protected function _getRootCategoryId() {
+        return Mage::helper("zolagosolrsearch")->getRootCategoryId();
+     }
+	
     /**
      * breadcrumb for listing
      * @return array
@@ -284,7 +264,18 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         }
 
         if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
+            if ($this->_isSearchContext()) {
+                $helperZSS = Mage::helper('zolagosolrsearch');
+                if ($helperZSS->getNumFound()) {
+                    $query = $helperZSS->getSolrRealQ();  
+                } else {
+                    $query = $helperZSS->getQueryText();  
+                }
+                $title = $helperZSS->__('Search results for:').' '.$query;
+            } else {
+                $title = join($this->getTitleSeparator(), array_reverse($title));
+            }
+            $headBlock->setTitle($title);
         }
 
         // Do not prapare bc again

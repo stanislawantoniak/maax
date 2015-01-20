@@ -442,17 +442,17 @@ jQuery.noConflict();
 //            block_invoice.toggle();
 //        });
 
-        var view_default_pay = $('#view_default_pay');
-        var view_block_default_pay = $('.default_pay > .panel > .panel-body > .panel');
-        var form_group_default_pay = $('.form-group.default_pay');
-        view_default_pay.on('click', function(e){
-            var txt = $(this).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ? 'zmień sposób płatności' : 'porzuć zmianę';
-            e.preventDefault();
-            view_block_default_pay.toggle();
-            form_group_default_pay.closest('.row').css({marginBottom:'15px'});
-            $(this).text(txt);
-            //$(this).closest('.panel-footer').hide();
-        });
+        //var view_default_pay = $('#view_default_pay');
+        //var view_block_default_pay = $('.default_pay > .panel > .panel-body > .panel');
+        //var form_group_default_pay = $('.form-group.default_pay');
+        //view_default_pay.on('click', function(e){
+        //    var txt = $(this).closest('.panel').children('.panel-body').find('.panel-default').is(':visible') ? 'zmień sposób płatności' : 'porzuć zmianę';
+        //    e.preventDefault();
+        //    view_block_default_pay.toggle();
+        //    form_group_default_pay.closest('.row').css({marginBottom:'15px'});
+        //    $(this).text(txt);
+        //    //$(this).closest('.panel-footer').hide();
+        //});
 
         var stara_cena = jQuery('.table-summary-product .cena .stara_cena');
         var stara_cena_szer = stara_cena.innerWidth();
@@ -2433,7 +2433,7 @@ jQuery.noConflict();
         function showSubMenuMobile(){
             var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a');
 
-            //dodanie filtra aby w navigation mozna bylo dac klikalnego linka
+            //aby w navigation mozna bylo dac klikalnego linka
             //wystarczy dodac do anchor'a class="clickable"
             mobileMenu = $(mobileMenu).filter(function( index ) {
                 return !$(this ).hasClass('clickable');
@@ -2467,18 +2467,18 @@ jQuery.noConflict();
             if (navSubClone.is(':visible')) {
 
                 navSubClone.on('click', 'a', function(event) {
-                    event.preventDefault();
-                    if ($(this).hasClass('children')) {
-                        containerCloneMenu.html('');
-                        $(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300,function(){
-                            var $container = $('.jsMasonry');
-                            $container.masonry({
-                                itemSelector: '.box'
-                            });
-                        });
-                    } else {
-                        containerCloneMenu.html('');
-                    };
+                    //aby w navigation mozna bylo dac klikalnego linka
+                    //wystarczy dodac do anchor'a class="clickable"
+                    if(!$(this).hasClass('clickable')) {
+                        event.preventDefault();
+                        if ($(this).hasClass('children')) {
+                            containerCloneMenu.html('');
+                            $(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300);
+                        } else {
+                            containerCloneMenu.html('');
+                        };
+                    }
+
                 });
             };
         };
@@ -2493,11 +2493,14 @@ jQuery.noConflict();
 // ZAZNACZENIE AKTYWNEJ POZYCJI MENU
         function activeMenu() {
             $('#nav_desc').on('click', 'a', function(event) {
-                event.preventDefault();
-                $(this).closest('#nav_desc').find('.active').removeClass('active');
-                $(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
-                $(this).find('i').addClass('fa-caret-up');
-                $(this).addClass('active');
+                if(!$(this).hasClass('clickable')){
+                    event.preventDefault();
+                    $(this).closest('#nav_desc').find('.active').removeClass('active');
+                    $(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
+                    $(this).find('i').addClass('fa-caret-up');
+                    $(this).addClass('active');
+                }
+
             });
         }
 

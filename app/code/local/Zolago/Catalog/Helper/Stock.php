@@ -23,7 +23,8 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
         $dataXML = array();
         foreach ($xml->stocksPerPOS->pos as $pos) {
-            $posId = (string)$pos->attributes()['id'];
+            $l = $pos->attributes();
+            $posId = (string)$l['id'];
 
             foreach ($pos->product as $product) {
                 $skuMerchant = (string)$product->sku;

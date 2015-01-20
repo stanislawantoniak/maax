@@ -24,6 +24,17 @@
         <class>Zolago_Sales_Helper</class>
       </zolagosales>
     </helpers>
+    <sales>
+        <quote>
+            <item>
+                <product_attributes>
+                    <campaign_regular_id/>
+                    <campaign_strikeout_price_type/>
+                    <msrp/>
+                </product_attributes>
+            </item>
+        </quote>
+    </sales>
   </global>
   <frontend>
     <translate>

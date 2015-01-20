@@ -2,10 +2,15 @@
 <config>
     <modules>
         <Zolago_Payment>
-            <version>0.0.1</version>
+            <version>0.0.10</version>
         </Zolago_Payment>
     </modules>
     <global>
+        <helpers>
+            <zolagopayment>
+                <class>Zolago_Payment_Helper</class>
+            </zolagopayment>
+        </helpers>
         <models>
             <zolagopayment>
                 <class>Zolago_Payment_Model</class>
@@ -17,6 +22,9 @@
                     <provider>
                         <table>zolago_payment_provider</table>
                     </provider>
+                    <allocation>
+                        <table>zolago_payment_allocation</table>
+                    </allocation>
                 </entities>
             </zolagopayment_resource>
         </models>
@@ -32,7 +40,28 @@
                 </setup>
             </zolagopayment_setup>
         </resources>
+        <events>
+            <zolagopayment_append_allocation>
+                <observers>
+                    <zolago_payment_allocation_observer>
+                        <class>zolagopayment/allocation_observer</class>
+                        <method>allocationTransaction</method>
+                    </zolago_payment_allocation_observer>
+                </observers>
+            </zolagopayment_append_allocation>
+        </events>
     </global>
+    <frontend>
+		<translate>
+			<modules>
+				<Zolago_Payment>
+					<files>
+						<default>Zolago_Payment.csv</default>
+					</files>
+				</Zolago_Payment>
+			</modules>
+		</translate>
+    </frontend>
 	<default>
 		<payment>
             <zolagopayment_gateway>

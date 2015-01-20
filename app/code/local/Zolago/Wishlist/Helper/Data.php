@@ -60,6 +60,21 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 			$wishlist = Mage::getModel("wishlist/wishlist");
 			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
 			
+			// First try to load by persistent
+			$persistentHelper = Mage::helper('persistent/session');
+			/* @var $persistentHelper Mage_Persistent_Helper_Session */
+			
+			if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
+				$customerId = $persistentHelper->getSession()->getCustomerId();
+				$wishlist->loadByCustomer($customerId);
+				// No wishlist existing - set customer id to new wishlist
+				if(!$wishlist->getId()){
+					$wishlist->setCustomerId($customerId);
+				}
+				return $wishlist;
+			}
+			
+			// Second make cookie for ghost customer to emulate
 			$cookie = $this->getCookieModel()->get(self::COOKIE_NAME);
 			
 			if($cookie){

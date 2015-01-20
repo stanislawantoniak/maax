@@ -53,7 +53,9 @@ $cost = $items->cost;
                 <dd class="separator large"><?php echo $this->__('Shipping cost'); ?>: <strong><?php echo $formattedCost; ?> </strong></dd>
             </dl>
             <figure class="logo-courier pull-right">
-                <img alt="" src="/skin/frontend/modago/default/images/def-logo-kurier.png">
+                <div class="shipment-icon">
+                    <i class="fa fa-truck fa-3x"></i>
+                </div>
             </figure>
         </div>
     </div>
@@ -75,7 +77,9 @@ $cost = $items->cost;
                 .prop("checked", true);
         }
     </script>
-
+    <script type="text/javascript">
+        Mall.translate.add("please-select-shipping", "<?php echo $this->__("Please select shipping"); ?>");
+    </script>
 <?php else: ?>
     <div class="panel panel-default panel-color">
         <div class="panel-body">

@@ -252,12 +252,24 @@
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items" template="page/html/header/bottom.category.items.phtml"/>
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items.mobile" template="page/html/header/bottom.category.items.mobile.phtml"/>
 			<!-- </block> -->
+			<!-- Varnish cache esi public block-->
+			<action method="setEsiOptions">
+                <params>
+                    <access>public</access>
+                </params>
+            </action>
 		</reference>
 
 		<reference name="footer">
 			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
 				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
 			</block>
+			<!-- Varnish cache esi public block-->
+			<action method="setEsiOptions">
+                <params>
+                    <access>public</access>
+                </params>
+            </action>
 		</reference>
 		<!-- remove cart link - better performance-->
 		<remove name="checkout_cart_link"/>
@@ -601,7 +613,20 @@
 				<block name="product.review.form" type="zolagomodago/review_form"/>
 			</block>
 			<block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
-			<block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+			
+			<block type="zolagomodago/catalog_product_view_shop" name="product.shop" template="catalog/product/view/shop.phtml">
+				<block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+				<!-- ESI Varnish cache depends on *product* registry key -->
+				<action method="setEsiOptions">
+					<params>
+						<access>public</access>
+						<registry_keys>
+							<product/>
+						</registry_keys>
+						<ttl>600</ttl> <!-- time to live for price block (sec) -->
+					</params>
+				</action>
+			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
 		</reference>
@@ -654,12 +679,18 @@
             <action method="addBodyClass">
                 <value>not-menu-mobile</value>
             </action>
-
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
 			</action>
-
 		</reference>
+
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/listing.js</script>
+            </action>
+        </reference>
+
 		<reference name="content">
 			<block type="zolagomodago/dropshipmicrositepro_vendor_header" name="vendor.header" template="unirgy/microsite/topbottomheader.phtml">
 				<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>
@@ -672,6 +703,7 @@
 					<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.desktop" template="unirgy/microsite/menu.desktop.phtml"/>
 				</block>
 				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 			</block>
 
 		</reference>
@@ -750,6 +782,11 @@
 	
 	<checkout_singlepage_index>
 		<update handle="checkout_updater" />
+        <reference name="root">
+            <action method="addBodyClass">
+                <value>logged</value>
+            </action>
+        </reference>
 		<reference name="head">
 			<action method="addItem">
 				<type>skin_js</type>
