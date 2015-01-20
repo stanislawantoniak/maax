@@ -15,6 +15,5 @@ class Zolago_Payment_Model_Allocation_Observer {
         $comment = $observer->getData('comment');
 
         Mage::getModel("zolagopayment/allocation")->importDataFromTransaction($transaction, $allocation_type, $operator_id, $comment);
-        Mage::log("salesOrderPaymentTransactionSaveAfter end", null, "aloc.log");
     }
 }
