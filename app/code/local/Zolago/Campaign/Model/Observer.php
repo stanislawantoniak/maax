@@ -118,21 +118,6 @@ class Zolago_Campaign_Model_Observer
             unset($campaignSalesPromoItem);
         }
 
-//        $websitesToUpdateSalesPromo = array_keys($dataToUpdate);
-        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-//        $catalogHelper = Mage::helper('zolagocatalog');
-//        $storesToUpdateSalesPromo = $catalogHelper->getStoresForWebsites($websitesToUpdateSalesPromo);
-
-//        if (!empty($dataToUpdate)) {
-//            foreach ($dataToUpdate as $websiteIdSP => $dataToUpdateSalesPromo) {
-//                $storesSP = isset($storesToUpdateSalesPromo[$websiteIdSP]) ? $storesToUpdateSalesPromo[$websiteIdSP] : false;
-//                if ($storesSP) {
-//                    $productIdsSPUpdated = $modelCampaign->setSalesPromoCampaignsToProduct($dataToUpdateSalesPromo, $storesSP);
-//                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
-//                }
-//            }
-//        }
-
         $salesPromoProductsData = array();
 
         if (!empty($dataToUpdate)) {
@@ -148,7 +133,7 @@ class Zolago_Campaign_Model_Observer
 
                         'date_from' => $data['date_from'],
                         'date_to' => $data['date_to'],
-
+                        'campaign_type' => $data['type'],
                         'campaign_strikeout_price_type' => $data['strikeout_type'],
                         'campaign_id' => $data['campaign_id']
                     );

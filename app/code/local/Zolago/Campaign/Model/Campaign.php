@@ -134,19 +134,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         }
 
-        //When ending date comes Campaign status goes to archive
-        /* already archived
-        if(!empty($archiveCampaigns)){
-            $collection = Mage::getModel("zolagocampaign/campaign")
-                ->getCollection();
-            $collection->addFieldToFilter('campaign_id', array('in', $archiveCampaigns));
-
-            foreach ($collection as $collectionItem) {
-                $collectionItem->setData('status', Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
-                $collectionItem->save();
-            }
-        }
-        */
         if (!empty($anotherCampaignProducts)) {
             $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);       
         }
@@ -213,7 +200,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     //unset special price
                     //unset special price dates
                     //unset SRP price
-                    $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '');
+                    $attributesData = array(
+                        'special_price' => '',
+                        'special_from_date' => '',
+                        'special_to_date' => '',
+                        'campaign_strikeout_price_type' => '',
+                        'product_flag' => null
+                    );
                     foreach ($storesOfWebsite as $store) {
                         $actionModel
                             ->updateAttributesPure($productIdsToUpdate, $attributesData, (int)$store);
@@ -502,6 +495,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             unset($childProdId);
             unset($childPrice);
 
+            $productFlag = '';
+            if ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
+                $productFlag = 1;
+            } elseif ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+                $productFlag = 2;
+            }
+
             foreach ($storesToUpdate as $storeId) {
                 $aM->updateAttributesPure(
                     array($parentProdId),
@@ -511,7 +511,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                         'campaign_strikeout_price_type' => $dataConfigurableProduct['campaign_strikeout_price_type'],
                         'campaign_regular_id' => $dataConfigurableProduct['campaign_id'],
                         'special_from_date' => !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '',
-                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : ''
+                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : '',
+
+                        'product_flag' => $productFlag
                     ),
                     $storeId
                 );
@@ -521,6 +523,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $aM->updateAttributesPure(
                 array($parentProdId), array('msrp' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
             );
+            $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataConfigurableProduct['campaign_id']), $parentProdId);
             $productsIdsPullToSolr[$parentProdId] = $parentProdId;
             unset($childProdId);
             unset($priceIncrement);
