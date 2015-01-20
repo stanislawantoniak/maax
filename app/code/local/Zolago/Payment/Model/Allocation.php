@@ -19,9 +19,12 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     public function importDataFromTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
 
         Mage::log("start importDataFromTransaction", null, "aloc.log");
+
+        Mage::log(get_class($transaction),null, "aloc.log");
         Mage::log($transaction->getId(),null, "aloc.log");
         Mage::log($allocation_type,null, "aloc.log");
         Mage::log($operator_id,null, "aloc.log");
+        Mage::log($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction,null, "aloc.log");
 
         if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
 
