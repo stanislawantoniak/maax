@@ -61,7 +61,7 @@ abstract class Zolago_Payment_Model_Client {
 				}
 
 				$transaction->save();
-
+Mage::dispatchEvent()
                 return $transaction->getId();
 			}
 		}
