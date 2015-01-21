@@ -18,8 +18,6 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $select->where("a.po_id = ?" , $poId);
 
         $sum = $this->getReadConnection()->fetchRow($select);
-        Mage::log($sum, null, "a.log");
-        Mage::log("return: " . $sum['sum'], null, "a.log");
         return $sum['sum'];
     }
 
