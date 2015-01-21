@@ -667,7 +667,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             /** @var Zolago_Po_Helper_Data $hlp */
             $hlp = Mage::helper("zolagopo");
             Mage::log("_processStatus", null, "a.log");
-            $hlp->updateStatusByAllocation($this,false);
+            $hlp->updateStatusByAllocation($this);
         }
 	}
 	
