@@ -50,6 +50,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
             $allocation = Mage::getModel("zolagopayment/allocation");
             $allocation->setData($allocationData);
             $allocation->save();
+
+            Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getSingleton("zolagopo")->load($data['po_id'])));
         }
     }
 
