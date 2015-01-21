@@ -663,7 +663,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	protected function _processStatus() {
 		if(!$this->getId()){
 			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
-		}
+		} else {
+            /** @var Zolago_Po_Helper_Data $hlp */
+            $hlp = Mage::helper("zolagopo");
+            $hlp->updateStatusByAllocation($this);
+        }
 	}
 	
 	protected function _processMaxShippingDate() {

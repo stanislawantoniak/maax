@@ -164,54 +164,19 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	}
 
     public function updateStatusByAllocation($observer){
-        Mage::log("updateStatusByAllocation -===-=-" , null, "a.log");
-        try {
-            /* @var $po Zolago_Po_Model_Po */
-            $po = $observer->getEvent()->getData('po');
-            if(!$po->getId()) {
-                $po = $observer->getPo();
-            }
+        Mage::log("updateStatusByAllocation -====-" , null, "a.log");
 
-            Mage::log("updateStatusByAllocation; po_id: " . $po->getId(), null, "a.log");
-            if ($po instanceof Zolago_Po_Model_Po && $po->getId()) {
-//                $oldStatus = $observer->getEvent()->getOldStatus();
-                $newStatus = $po->getUdropshipStatus();
-
-//                Mage::log("$oldStatus -> $newStatus ", null, "a.log");
-
-                //to have payment status updated when PO is changed
-                $grandTotal = $po->getGrandTotalInclTax();
-                /** @var Zolago_Payment_Model_Allocation $allocationModel */
-                $allocationModel = Mage::getModel("zolagopayment/allocation");
-                $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-                Mage::log("GT: $grandTotal || sum: $sumAmount", null, "a.log");
-
-                //czeka na płatność
-                if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT && ($grandTotal <= $sumAmount)) {
-                    //rowny albo nadplata
-
-                    Mage::log("new status is STATUS_PAYMENT", null, "a.log");
-                    $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
-                    $po->save();
-                    Mage::log("save status to STATUS_PENDING", null, "a.log");
-                } //czeka na spakowanie
-                elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount && !$po->isCod())) {
-                    //jest mniej niz potrzeba
-                    Mage::log("new status is STATUS_PENDING", null, "a.log");
-                    $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
-                    $po->save();
-                    Mage::log("save status to STATUS_PAYMENT", null, "a.log");
-                } //czeka na rezerwacje
-                elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
-                    Mage::log("new status is STATUS_BACKORDER", null, "a.log");
-                    $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
-                    $po->save();
-                    Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
-                }
-            }
-        }catch (Exception $e) {
-            Mage::logException($e);
+        /* @var $po Zolago_Po_Model_Po */
+        $po = $observer->getEvent()->getData('po');
+        if(!$po->getId()) {
+            $po = $observer->getPo();
         }
+
+        Mage::log("updateStatusByAllocation; po_id: " . $po->getId(), null, "a.log");
+        /** @var Zolago_Po_Helper_Data $hlp */
+        $hlp = Mage::helper("zolagopo");
+        $hlp->updateStatusByAllocation($po);
+
     }
 
 	/**
