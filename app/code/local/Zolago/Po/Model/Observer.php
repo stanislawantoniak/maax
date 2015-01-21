@@ -159,40 +159,53 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 					$params
 				);
 			}
-            //to have payment status updated when PO is changed
-            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT ||
-               $newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING){
 
-                $grandTotal = $po->getGrandTotalInclTax();
-                /** @var Zolago_Payment_Model_Allocation $allocationModel */
-                $allocationModel = Mage::getModel("zolagopayment/allocation");
-                $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-                Mage::log("GT: $grandTotal || sum: $sumAmount" , null, "a.log");
+            //to have payment status updated when PO is changed
+            $grandTotal = $po->getGrandTotalInclTax();
+            /** @var Zolago_Payment_Model_Allocation $allocationModel */
+            $allocationModel = Mage::getModel("zolagopayment/allocation");
+            $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+            Mage::log("GT: $grandTotal || sum: $sumAmount" , null, "a.log");
+
+            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT){
 
                 if ($grandTotal <= $sumAmount) {
-                    if ($oldStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING) {
+                    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_PENDING) {
                         $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                         $po->save();
                         Mage::log("save status to STATUS_PENDING" , null, "a.log");
                     }
                 } else {
-                    if ($oldStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT) {
+                    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_PAYMENT) {
                         $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
                         $po->save();
                         Mage::log("save status to STATUS_PAYMENT" , null, "a.log");
                     }
                 }
             }
-            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER) {
-                $grandTotal = $po->getGrandTotalInclTax();
-                /** @var Zolago_Payment_Model_Allocation $allocationModel */
-                $allocationModel = Mage::getModel("zolagopayment/allocation");
-                $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-                Mage::log("GT: $grandTotal || sum: $sumAmount" , null, "a.log");
+
+            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING){
 
                 if ($grandTotal <= $sumAmount) {
-                    if ($oldStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER) {
-                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_BACKORDER);
+                    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_PENDING) {
+                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
+                        $po->save();
+                        Mage::log("save status to STATUS_PENDING" , null, "a.log");
+                    }
+                } else {
+                    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_PAYMENT) {
+                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
+                        $po->save();
+                        Mage::log("save status to STATUS_PAYMENT" , null, "a.log");
+                    }
+                }
+            }
+
+            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER) {
+
+                if ($grandTotal <= $sumAmount) {
+                    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_PENDING) {
+                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                         $po->save();
                         Mage::log("save status to STATUS_BACKORDER" , null, "a.log");
                     }

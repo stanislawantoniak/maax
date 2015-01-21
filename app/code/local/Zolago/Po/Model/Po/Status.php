@@ -4,55 +4,55 @@ class Zolago_Po_Model_Po_Status
 	/**
 	 * Dropship statuses
 	 */
-	
+
 	/**
 	 * czeka na spakowanie
 	 */
-    const STATUS_PENDING    = Zolago_Po_Model_Source::UDPO_STATUS_PENDING; 
+    const STATUS_PENDING    = Zolago_Po_Model_Source::UDPO_STATUS_PENDING;// 0
 	/**
 	 * w trakcie pakowania
 	 */
-    const STATUS_EXPORTED   = Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED;
+    const STATUS_EXPORTED   = Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED;// 10
 	/**
 	 * czeka na potwierdzenie
 	 */
-    const STATUS_ACK        = Zolago_Po_Model_Source::UDPO_STATUS_ACK;
+    const STATUS_ACK        = Zolago_Po_Model_Source::UDPO_STATUS_ACK;// 9
 	/**
 	 * czeka na rezerwację
 	 */
-    const STATUS_BACKORDER  = Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER;
+    const STATUS_BACKORDER  = Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER;// 5
 	/**
 	 * problem
 	 */
-    const STATUS_ONHOLD     = Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD;
+    const STATUS_ONHOLD     = Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD;// 4
 	/**
 	 * spakowane
 	 */
-    const STATUS_READY      = Zolago_Po_Model_Source::UDPO_STATUS_READY;
+    const STATUS_READY      = Zolago_Po_Model_Source::UDPO_STATUS_READY;// 3
 	/**
 	 * N/O
 	 */
-    const STATUS_PARTIAL    = Zolago_Po_Model_Source::UDPO_STATUS_PARTIAL;
+    const STATUS_PARTIAL    = Zolago_Po_Model_Source::UDPO_STATUS_PARTIAL;// 2
 	/**
 	 * wysłane
 	 */
-    const STATUS_SHIPPED    = Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED;
+    const STATUS_SHIPPED    = Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED;// 1
 	/**
 	 * anulowane
 	 */
-    const STATUS_CANCELED   = Zolago_Po_Model_Source::UDPO_STATUS_CANCELED;
+    const STATUS_CANCELED   = Zolago_Po_Model_Source::UDPO_STATUS_CANCELED;// 6
 	/**
 	 * dostarczone
 	 */
-	const STATUS_DELIVERED  = Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED;
+	const STATUS_DELIVERED  = Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED;// 7
 	/**
 	 * zwrócone
 	 */
-    const STATUS_RETURNED   = Zolago_Po_Model_Source::UDPO_STATUS_RETURNED;
+    const STATUS_RETURNED   = Zolago_Po_Model_Source::UDPO_STATUS_RETURNED;// 11
 	/**
 	 * czeka na płatność
 	 */
-    const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT; 
+    const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT;// 12
 
 	static function getFinishStatuses() {
 		return array(
