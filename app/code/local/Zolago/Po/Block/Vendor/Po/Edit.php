@@ -379,17 +379,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		return $this->getData("all_messages_count");
 	}
 
-    /**
-     * @return int
-     */
-    public function isPaymentDetails()
-    {
-        /* @var $allocationCollection Zolago_Payment_Model_Resource_Allocation_Collection */
-        $allocationCollection = Mage::getModel('zolagopayment/allocation')
-            ->getCollection();
-        $allocationCollection->addFieldToFilter('po_id', $this->getPo()->getId());
-        return $allocationCollection;
-    }
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @return int

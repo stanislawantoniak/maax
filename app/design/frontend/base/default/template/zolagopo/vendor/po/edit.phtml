@@ -148,9 +148,11 @@
                     </h4>
 
                     <?php
-                    $paymentDetails = $this->isPaymentDetails()->getData();
+                    $paymentDetails = Mage::helper('zolagopayment')
+                        ->getPaymentDetails($this->getPo()->getId());
+
                     //if no payment details do not show Payment details button
-                    if (!empty($paymentDetails)): ?>
+                    if ($paymentDetails->getSize() > 0): ?>
                         <div class="toolbar no-padding">
                             <div class="btn-group">
 							<span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
@@ -538,9 +540,13 @@
 	echo $this->getChildHtml("vendor_po_edit_compose");
 
 /*******************************************************************************
- *	Payments modal
+ *    Payments modal
  *******************************************************************************/
-echo $this->getChildHtml("vendor_po_edit_payments");
+if ($paymentDetails->getSize() > 0) {
+    echo $this->getChild("vendor_po_edit_payments")
+        ->setData('payment_details', $paymentDetails)
+        ->toHtml();
+}
 	
 /*******************************************************************************
  *	Split modal
