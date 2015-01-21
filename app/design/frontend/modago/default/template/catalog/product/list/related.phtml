@@ -1,11 +1,13 @@
-<?php if($this->getItems()->getSize()): ?>
+<?php
+$itemsCount = $this->getItems()->getSize();
+if($itemsCount): ?>
 <div class="color-box-bundle">
     <div class="color-box">
         <div class="color">
             <span class="color-label"><?php echo $this->__("Other colors"); ?>:</span>
 
             <div id="wrapper-rwd-color">
-                <div id="rwd-color" class="rwd-carousel">
+                <div id="rwd-color" class="rwd-carousel <?php if($itemsCount > 5): ?> size-carousel<?php endif; ?>">
                     <?php /** @var $_item Mage_Catalog_Model_Product */ ?>
                     <?php foreach($this->getItems() as $_item) : ?>
                     <div class="item">

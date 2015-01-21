@@ -724,7 +724,9 @@ Mall.product = {
     createOption: function(id, option, groupElement) {
         var label = jQuery("<label/>", {
             "for": ("size_" + option.id),
-            "class": option.is_salable == false ? "no-size" : ""
+            "class": option.is_salable == false ? "no-size" : "",
+            'data-toggle': 'tooltip',
+            'data-placement': 'top'
         }).appendTo(groupElement);
         var _options = {
             type: "radio",
@@ -946,6 +948,9 @@ jQuery(document).ready(function() {
         jQuery('#content').css('margin-top', '0px');
     }
 
+    jQuery(".no-size").tooltip({
+        template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
+    });
     jQuery("#add-to-cart").tooltip({
         template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
     });
@@ -954,6 +959,7 @@ jQuery(document).ready(function() {
             jQuery("#add-to-cart").tooltip('destroy');
         }
     });
+
 
     jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {
         var backdrop =  jQuery('#sb-site').find('.modal-backdrop');

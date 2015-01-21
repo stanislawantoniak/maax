@@ -272,10 +272,14 @@
 	position:relative;
 	z-index: 1;
 }
+#rwd-color.size-carousel {
+    padding: 0 10px 0 12px;
+}
 #rwd-color {
 	width: 300px;
-//	padding: 0 10px 0 20px;
+
     padding: 0 10px 0 0;
+
 	.rwd-prev,
 	.rwd-next {
 		text-indent: -999em;
