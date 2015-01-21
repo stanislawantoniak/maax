@@ -141,7 +141,28 @@
 		</div>
 		<div class="col-md-4">
 			<div class="widget box">
-				<div class="widget-header"> <h4><i class="icon-usd"></i> <?php echo $_hlp->__("Payment");?></h4> </div>
+                <div class="widget-header">
+                    <h4>
+                        <i class="icon-usd"></i>
+                        <?php echo $_hlp->__("Payment"); ?>
+                    </h4>
+
+                    <?php
+                    $paymentDetails = Mage::helper('zolagopayment')
+                        ->getPaymentDetails($this->getPo()->getId());
+
+                    //if no payment details do not show Payment details button
+                    if ($paymentDetails->getSize() > 0): ?>
+                        <div class="toolbar no-padding">
+                            <div class="btn-group">
+							<span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
+								<i class="glyphicon glyphicon-pushpin"></i>
+                                <?php echo $_hlp->__("Payment details"); ?>
+							</span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
@@ -517,6 +538,15 @@
  *	Compose modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_compose");
+
+/*******************************************************************************
+ *    Payments modal
+ *******************************************************************************/
+if ($paymentDetails->getSize() > 0) {
+    echo $this->getChild("vendor_po_edit_payments")
+        ->setData('payment_details', $paymentDetails)
+        ->toHtml();
+}
 	
 /*******************************************************************************
  *	Split modal
