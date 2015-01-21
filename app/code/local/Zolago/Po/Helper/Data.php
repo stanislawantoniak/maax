@@ -21,7 +21,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
             /** @var Zolago_Payment_Model_Allocation $allocationModel */
             $allocationModel = Mage::getModel("zolagopayment/allocation");
             $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-            Mage::log("GT: $grandTotal || sum: $sumAmount", null, "a.log");
+            Mage::log("GT: $grandTotal || sum: $sumAmount ||po_id: " . $po->getId(), null, "a.log");
 
             //czeka na płatność
             if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT && ($grandTotal <= $sumAmount)) {
