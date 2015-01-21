@@ -74,7 +74,24 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         return $data;
     }
 
-
+	/**
+	 * patam data as:
+	 * array(
+	 *    'transaction_id'    => $transaction_id,
+	 *    'po_id'             => $po_id,
+	 *    'allocation_amount' => $allocation_amount,
+	 *    'allocation_type'   => $allocation_type,
+	 *    'operator_id'       => $operator_id,
+	 *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
+	 *    'comment'           => $comment
+	 *    'customer_id'       => $po['customer_id']));
+	 *
+	 * @param $data
+	 */
+	public function appendAllocations($data) {
+		$writeConnection = $this->_getWriteAdapter();
+		$writeConnection->insertMultiple($this->getTable('zolagopayment/allocation'), $data);
+	}
 
 
 }

@@ -7,5 +7,12 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
         parent::_construct();
         $this->_init('zolagopayment/allocation');
     }
-	
+
+	public function addPoIdFilter($po_id) {
+		return $this->addFieldToFilter('po_id',$po_id);
+	}
+
+	public function addAllocationTypeFilter($type) {
+		return $this->addFieldToFilter('allocation_type',$type);
+	}
 }

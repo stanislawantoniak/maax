@@ -6,6 +6,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_UNDERPAID = 'underpaid'; // niedoplata
 
+	protected $session;
+
     protected function _construct() {
         $this->_init('zolagopayment/allocation');
     }
@@ -43,21 +45,190 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
      *    'comment'           => $comment
      *    'customer_id'       => $po['customer_id']));
      *
-     * @param $data
+     * @param array $data
+     * @return bool
      */
     public function appendAllocations($data) {
+	    try {
+		    foreach ($data as $allocationData) {
+			    $allocation = Mage::getModel("zolagopayment/allocation");
+			    $allocation->setData($allocationData);
+			    $allocation->save();
 
-        foreach ($data as $allocationData) {
-            $allocation = Mage::getModel("zolagopayment/allocation");
-            $allocation->setData($allocationData);
-            $allocation->save();
-
-            Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getModel("zolagopo/po")->load($allocationData['po_id'])));
-        }
+			    Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getModel("zolagopo/po")->load($allocationData['po_id'])));
+		    }
+		    return true;
+	    } catch(Exception $e) {
+		    Mage::logException($e);
+	    }
+	    return false;
     }
 
+	/**
+	 * params data as:
+	 * array(
+	 *    'transaction_id'    => $transaction_id,
+	 *    'po_id'             => $po_id,
+	 *    'allocation_amount' => $allocation_amount,
+	 *    'allocation_type'   => $allocation_type,
+	 *    'operator_id'       => $operator_id,
+	 *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
+	 *    'comment'           => $comment
+	 *    'customer_id'       => $po['customer_id']));
+	 *
+	 * @param array $data
+	 * @return bool
+	 */
+	public function appendMultipleAllocations($data) {
+		try {
+			$this->getResource()->appendAllocations($data);
+			return true;
+		} catch(Exception $e) {
+			Mage::logException($e);
+		}
+		return false;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $poId
+	 * @return int|bool
+	 */
     public function getSumOfAllocations($poId) {
-        return $this->getResource()->getSumOfAllocations($poId);
+	    $poId = $this->getPoId($poId);
+        return $poId ? $this->getResource()->getSumOfAllocations($poId) : false;
     }
 
+	public function createOverpayment($po) {
+		$po = $this->getPo($po);
+		if($po->getId() && $this->isOperatorMode()) { //check if po exists and
+			$poGrandTotal = $po->getGrandTotalInclTax();
+			$poAllocationSum = $this->getSumOfAllocations($po->getId());
+			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
+				$operatorId = $this->getOperatorId();
+				$overpaymentAmount = $poGrandTotal - $poAllocationSum;
+				$payments = $this->getPoPayments($po); //get all po payments
+				$allocations = array();
+				if($payments) { //if there are any then
+					$createdAt = Mage::getSingleton('core/date')->gmtDate();
+					$helper = Mage::helper("zolagopayment");
+					foreach($payments as $payment) {
+						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
+							if($payment->getTxnAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
+								$paymentDecreaseAmount = $overpaymentAmount;
+								$overpaymentAmount = 0;
+							} else { //if not allocate as much as possible and leave rest to be taken from next payment
+								$paymentDecreaseAmount = $payment->getTxnAmount();
+								$overpaymentAmount -= $paymentDecreaseAmount;
+							}
+							//create payment decrease
+							$allocations[] = array(
+								'transaction_id' => $payment->getTransactionId(),
+								'po_id' => $po->getId(),
+								'allocation_amount' => -$paymentDecreaseAmount,
+								'allocation_type' => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
+								'operator_id' => $operatorId,
+								'created_at' => $createdAt,
+								'comment' => $helper->__("Moved to overpayment"),
+								'customerId' =>  $po->getCustomerId()
+							);
+
+							//create overpayment
+							$allocations[] = array(
+								'transaction_id' => $payment->getTransactionId(),
+								'po_id' => $po->getId(),
+								'allocation_amount' => $paymentDecreaseAmount,
+								'allocation_type' => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
+								'operator_id' => $operatorId,
+								'created_at' => $createdAt,
+								'comment' => $helper->__("Created overpayment"),
+								'customerId' =>  $po->getCustomerId()
+							);
+						} else {
+							break;
+						}
+					}
+					return $this->appendMultipleAllocations($allocations);
+				}
+
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po_id
+	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getPoPayments($po_id) {
+		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
+		$collection = $this->getPoAllocations($po_id);
+		if($collection) {
+			$collection->addPoIdFilter($po_id);
+			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
+			return $collection;
+		}
+		return false;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po_id
+	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getPoAllocations($po_id) {
+		$po_id = $this->getPoId($po_id);
+		if($po_id) {
+			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
+			$collection = $this->getCollection();
+			$collection->addPoIdFilter($po_id);
+			return $collection;
+		}
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function isOperatorMode() {
+		return $this->getSession()->isOperatorMode();
+	}
+
+	/**
+	 * @return int
+	 */
+	protected function getOperatorId() {
+		return $this->getSession()->getOperator()->getId();
+	}
+
+	/**
+	 * @return Zolago_Dropship_Model_Session
+	 */
+	protected function getSession() {
+		if(!$this->session) {
+			/** @var Zolago_Dropship_Model_Session session */
+			$this->session = Mage::getSingleton("zolagodropship/session");
+		}
+		return $this->session;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po
+	 * @return Zolago_Po_Model_Po
+	 */
+	protected function getPo($po) {
+		if(!$po instanceof Zolago_Po_Model_Po) {
+			$po = Mage::getModel("zolago/po")->load($po);
+		}
+		return $po;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po
+	 * @return int
+	 */
+	protected function getPoId($po) {
+		if($po instanceof Zolago_Po_Model_Po) {
+			return $po->getId();
+		}
+		return $po;
+	}
 }
