@@ -277,7 +277,7 @@ Mall.wishlist = {
                     Mall.translate.__("person", "person"),
                     Mall.translate.__("people", "people"),
                     Mall.translate.__("people-polish-more-than-few", "osób")
-                ]) + " lubicie ten product";
+                ]) + " lubi ten produkt";
             likeHtml += "<br>";
             likeHtml += jQuery("<span/>", {
                 html: Mall.translate.__("remove-from-favorites", "remove from favorites")

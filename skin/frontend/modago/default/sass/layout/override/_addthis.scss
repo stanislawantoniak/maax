@@ -1,12 +1,15 @@
 .addthis_sharing_toolbox {
-	@media(max-width: $screen-sm-max) {
+	@media(max-width: $screen-xs-max) {
 		text-align: center;
 		margin-top: 12px;
 		margin-bottom: -12px;
-		.at-share-tbx-element {
-			.at-share-btn {
-				margin: 0 8px;
-			}
+	}
+	@media(min-width: $screen-sm-min) {
+		zoom: 0.75;
+	}
+	.at-share-tbx-element {
+		.at-share-btn {
+			margin: 0 8px;
 		}
 	}
 }

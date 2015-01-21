@@ -210,13 +210,13 @@
 			}
 		}
 		.addLike-box {
+			white-space: nowrap;
 			@media (max-width: 360px) {
 			margin-top: 1px;
 			@media screen and (-webkit-min-device-pixel-ratio:0) {
 					margin-top: 2px;
 				}
 			}
-
 		}
 		.addedLike-box {
 		    @media (max-width: 810px) {
