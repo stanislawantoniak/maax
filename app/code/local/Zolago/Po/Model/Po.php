@@ -624,6 +624,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
 			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
 		}
+
+		//unset customer_id if order is made by guest
+		if((!$this->getId() || $this->isObjectNew()) && $this->getOrder()->getCustomerIsGuest()) {
+			$this->setCustomerId(null);
+		}
 		
 		$this->_processAlert();
 		$this->_processStatus();
