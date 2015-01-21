@@ -168,13 +168,16 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         try {
             /* @var $po Zolago_Po_Model_Po */
             $po = $observer->getEvent()->getData('po');
+            if(!$po->getId()) {
+                $po = $observer->getPo();
+            }
 
             Mage::log("updateStatusByAllocation; po_id: " . $po->getId(), null, "a.log");
             if ($po instanceof Zolago_Po_Model_Po && $po->getId()) {
-                $oldStatus = $observer->getEvent()->getOldStatus();
-                $newStatus = $observer->getEvent()->getNewStatus();
+//                $oldStatus = $observer->getEvent()->getOldStatus();
+                $newStatus = $po->getUdropshipStatus();
 
-                Mage::log("$oldStatus -> $newStatus ", null, "a.log");
+//                Mage::log("$oldStatus -> $newStatus ", null, "a.log");
 
                 //to have payment status updated when PO is changed
                 $grandTotal = $po->getGrandTotalInclTax();
