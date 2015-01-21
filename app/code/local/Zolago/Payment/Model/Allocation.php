@@ -53,4 +53,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         }
     }
 
+    public function getSumOfAllocations($poId) {
+        return $this->getResource()->getSumOfAllocations($poId);
+    }
+
 }
