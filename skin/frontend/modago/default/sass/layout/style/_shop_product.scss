@@ -53,7 +53,9 @@
 	.size-box-bundle {
 		.color-label,
 		.size-label {
-			width: 135px;
+//			width: 135px;
+            width: auto;
+            margin-right: 5px;
 			display: inline-block;
 			float: left;
             @media (min-width: 768px) and (max-width: 814px) {
@@ -75,7 +77,7 @@
 				display:inline-block;
 				margin-right:8px;
 				&:first-child {
-					margin-left:-2px;
+//					margin-left:-2px;
 				}
 				img {
 					position:absolute;
@@ -272,7 +274,8 @@
 }
 #rwd-color {
 	width: 300px;
-	padding: 0 10px 0 20px;
+//	padding: 0 10px 0 20px;
+    padding: 0 10px 0 0;
 	.rwd-prev,
 	.rwd-next {
 		text-indent: -999em;
