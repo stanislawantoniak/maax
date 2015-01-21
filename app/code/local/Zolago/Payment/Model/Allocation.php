@@ -46,16 +46,22 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
      * @param $data
      */
     public function appendAllocations($data) {
-        Mage::log("appendAllocations;  " , null, "a.log");
-        foreach($data as $allocationData) {
-            Mage::log("appendAllocations;-=-==-=  " , null, "a.log");
-            $allocation = Mage::getModel("zolagopayment/allocation");
-            $allocation->setData($allocationData);
-            $allocation->save();
+        try {
 
-            Mage::log("append alloc foreach " . get_class(Mage::getSingleton("zolagopo")->load($data['po_id'])), null, "a.log");
 
-            Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getSingleton("zolagopo")->load($data['po_id'])));
+            Mage::log("appendAllocations;  ", null, "a.log");
+            foreach ($data as $allocationData) {
+                Mage::log("appendAllocations;-=-==-=  ", null, "a.log");
+                $allocation = Mage::getModel("zolagopayment/allocation");
+                $allocation->setData($allocationData);
+                $allocation->save();
+
+                Mage::log("append alloc foreach " . get_class(Mage::getSingleton("zolagopo")->load($data['po_id'])), null, "a.log");
+
+                Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getSingleton("zolagopo")->load($data['po_id'])));
+            }
+        } catch (Exception $e) {
+            Mage::log("appendAllocations ERROROROR" , null, "a.log");
         }
     }
 
