@@ -164,7 +164,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	}
 
     public function updateStatusByAllocation($observer){
-
+        Mage::log("updateStatusByAllocation -===-=-" , null, "a.log");
         try {
             /* @var $po Zolago_Po_Model_Po */
             $po = $observer->getEvent()->getData('po');
