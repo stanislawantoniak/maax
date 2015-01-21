@@ -46,6 +46,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
      * @param $data
      */
     public function appendAllocations($data) {
+        Mage::log($data, null, "a.log");
         try {
 
 

@@ -206,7 +206,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                     Mage::log("new status is STATUS_BACKORDER", null, "a.log");
                     $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                     $po->save();
-                    Mage::log("save status to STATUS_BACKORDER", null, "a.log");
+                    Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
                 }
             }
         }catch (Exception $e) {
