@@ -34,7 +34,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 
                 Mage::log("save status to STATUS_PENDING", null, "a.log");
             } //czeka na spakowanie
-            elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount && !$po->isCod())) {
+            elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
                 //jest mniej niz potrzeba
                 Mage::log("new status is STATUS_PENDING", null, "a.log");
 //                $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
