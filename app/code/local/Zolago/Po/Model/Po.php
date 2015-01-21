@@ -624,9 +624,15 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
 			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
 		}
+
+		//unset customer_id if order is made by guest
+		if((!$this->getId() || $this->isObjectNew()) && $this->getOrder()->getCustomerIsGuest()) {
+			$this->setCustomerId(null);
+		}
 		
 		$this->_processAlert();
 		$this->_processStatus();
+
 		$this->_processMaxShippingDate();
 		
 		return parent::_beforeSave();
@@ -657,7 +663,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	protected function _processStatus() {
 		if(!$this->getId()){
 			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
-		}
+		} else {
+            /** @var Zolago_Po_Helper_Data $hlp */
+            $hlp = Mage::helper("zolagopo");
+            Mage::log("_processStatus", null, "a.log");
+            $hlp->updateStatusByAllocation($this,false);
+        }
 	}
 	
 	protected function _processMaxShippingDate() {

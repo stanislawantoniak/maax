@@ -79,9 +79,9 @@ $panel-bottom: #FEFEFE;
 }
 
 // FONT
-$fontLight : 'latolight';
-$fontRegular :'latoregular';
-$fontBlack : 'latoblack';
+$fontLight: latolight, sans-serif;
+$fontRegular: latoregular, sans-serif;
+$fontBlack: latoblack, sans-serif;
 // SPRITES MAP 
 $allMap: sprite-map("sprites/all/*.png", $layout: smart, $spacing:50px);
 

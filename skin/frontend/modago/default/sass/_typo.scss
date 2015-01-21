@@ -416,10 +416,13 @@ h2 {
 	  margin-top: 0px;
 	  text-align:left;
 	  @media (max-width: $screen-xs-max) {
-		font-size: 11px;
+		font-size: 14px;
 		font-weight: normal;
-		 font-family: 'OpenSansRegular';
+		 font-family: $fontRegular;
 	  }
+		@media(max-width: 360px) {
+			margin-left: -5px;
+		}
 	  span {
 	    position:absolute;
 	    right:12px;
@@ -434,6 +437,9 @@ h2 {
 	    position:absolute;
 	    left:0px;
 	    top:0px;
+		  @media(max-width: 360px) {
+			  left: 5px;
+		  }
 	  }
 	}
 }
@@ -1270,6 +1276,8 @@ a {
 .followUs {
 	text-align: center;
 	padding-top: 10px;
+	padding-bottom: 10px;
+	height: 45px;
 	clear: both;
 	ul {
 		margin:0;

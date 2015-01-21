@@ -10,6 +10,17 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $this->_init('zolagopayment/allocation', "allocation_id");
     }
 
+    public function getSumOfAllocations($poId) {
+        $tableAllo = $this->getTable('zolagopayment/allocation');
+        $select = $this->getReadConnection()->select();
+
+        $select->from(array("a" => $tableAllo), "SUM(a.allocation_amount) as sum");
+        $select->where("a.po_id = ?" , $poId);
+
+        $sum = $this->getReadConnection()->fetchRow($select);
+        return $sum['sum'];
+    }
+
     public function getDataAllocationForTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
         $tableSPT = $this->getTable('sales/payment_transaction');
         $select = $this->getReadConnection()->select();
@@ -19,9 +30,6 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $select->where('pt.txn_status = ?',Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 
         $ordersIDs = $this->getReadConnection()->fetchAll($select);
-
-//        Mage::log("ordersIDs");
-//        Mage::log($ordersIDs);
 
         $tablePo = $this->getTable("udpo/po");
         $select = $this->getReadConnection()->select();
@@ -34,8 +42,6 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 
         $poData = $this->getReadConnection()->fetchAll($select);
 
-//        Mage::log("poData");
-//        Mage::log($poData);
         $txnAmount = $transaction->getTxnAmount();
         $flagBreak = false;
         foreach ($poData as $po) {
@@ -68,26 +74,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         return $data;
     }
 
-    /**
-     * patam data as:
-     * array(
-     *    'transaction_id'    => $transaction_id,
-     *    'po_id'             => $po_id,
-     *    'allocation_amount' => $allocation_amount,
-     *    'allocation_type'   => $allocation_type,
-     *    'operator_id'       => $operator_id,
-     *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-     *    'comment'           => $comment
-     *    'customer_id'       => $po['customer_id']));
-     *
-     * @param $data
-     */
-    public function appendAllocations($data) {
 
-        $writeConnection = $this->_getWriteAdapter();
-        $writeConnection->insertMultiple($this->getTable('zolagopayment/allocation'), $data);
-
-    }
 
 
 }

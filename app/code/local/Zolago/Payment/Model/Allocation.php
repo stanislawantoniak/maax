@@ -10,26 +10,54 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         $this->_init('zolagopayment/allocation');
     }
 
-    public function allocationTransaction($transaction_id, $allocation_type, $operator_id = null, $comment = '') {
-        $data = $this->getResource()->getDataAllocationForTransaction($transaction_id, $allocation_type, $operator_id, $comment);
-        $this->getResource()->appendAllocations($data);
+    /**
+     * @param $transaction Mage_Sales_Model_Order_Payment_Transaction
+     * @param $allocation_type
+     * @param $operator_id
+     * @param $comment
+     */
+    public function importDataFromTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
 
+        if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
+            if ($transaction->getId() && $transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED) {
+                if (empty($comment)) {
+                    /** @var Mage_Sales_Model_Order_Payment $payment */
+                    $payment = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
+                    $comment = $payment->getMethod();
+                }
+                $data = $this->getResource()->getDataAllocationForTransaction($transaction, $allocation_type, $operator_id, $comment);
+                $this->appendAllocations($data);
+            }
+        }
     }
 
+    /**
+     * params data as:
+     * array(
+     *    'transaction_id'    => $transaction_id,
+     *    'po_id'             => $po_id,
+     *    'allocation_amount' => $allocation_amount,
+     *    'allocation_type'   => $allocation_type,
+     *    'operator_id'       => $operator_id,
+     *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
+     *    'comment'           => $comment
+     *    'customer_id'       => $po['customer_id']));
+     *
+     * @param $data
+     */
+    public function appendAllocations($data) {
 
+        foreach ($data as $allocationData) {
+            $allocation = Mage::getModel("zolagopayment/allocation");
+            $allocation->setData($allocationData);
+            $allocation->save();
 
-//    POPRAWKI OD MACIEJ ABY NIE ZAPOMNIEC
-//TODO:
-//1.
-//W zapisie transakcji wywoływany jest event
-//Mage::dispatchEvent("zolagopayment_append_allocation" ...
-//i to jest błąd. Event nie ma nic wpolnego z dodaniem alokacji.
-//Jest to event importu transkacji więc powien nazywać się np zolagopayment_transaction_import_after, lub w ogóle można skorzystać z save after obiketu transkacji
-//Dopiero w obsludze tego eventu dodajesz alkoacje. trzba rozroznic te dwie rzeczy.
-//Event to nazwa zdarzenia które zaszło, a nie które czynności którą dopiero chesz wykonać
-//
-//2. Zolago_Payment_Model_Allocation powien mieć metodę importDataFromTransaction gdzie na podstawie transakcji zapełniasz model wymaganymi danymi.
-//resztę dopisujesz recznie jeśli trzeba. potem robisz zwykly save bez odnoszenia sie do resource $this->getResource()->appendAllocations($data);
-//W obecny sposób, gdyby chciec podpiąć sie pod event save after dla alokacji - nie ma możliowści - robi to resource bezpośrednio
+            Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getModel("zolagopo/po")->load($allocationData['po_id'])));
+        }
+    }
+
+    public function getSumOfAllocations($poId) {
+        return $this->getResource()->getSumOfAllocations($poId);
+    }
 
 }

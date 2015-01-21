@@ -54,9 +54,9 @@
 		.size-label {
 			line-height: 47px;
 			text-transform: uppercase;
-			font-size: 11px;
+			font-size: 12px;
 			color:#020202;
-            font-weight: bold;
+            font-family: $fontBlack;
             @media (min-width: 768px) and (max-width: 814px) {
 				line-height: 29px;
 			}
@@ -95,7 +95,7 @@
 	}
 	.size-box-bundle {
 		.size-label { 
-			line-height: 29px;
+			line-height: 39px;
 		}
 		.form-group {
 			label {
@@ -103,9 +103,9 @@
 					background:#fff;
 					border:1px solid #afafaf;
 					text-align:center;
-					line-height: 29px;
+					line-height: 39px;
 					color:#858585;
-					font-size:12px;
+					font-size:14px;
 					font-family:$fontRegular;
 					font-weight: normal;
 				}
@@ -133,7 +133,7 @@
 			}
 		}
 		.view-sizing {
-			font-size: 11px;
+			font-size: 14px;
 			white-space: nowrap;
 			.linkToModal {
 				text-align: right;
@@ -141,11 +141,8 @@
 		}
 	}
 	.action-box-bundle {
-		font-size: 11px;
-		color:#000;		
-		@media (max-width: 360px) {
-			font-size: 9px;
-		}
+		font-size: 12px;
+		color:#000;
 		.addLike {
 			border:2px solid #a6a6a6;
 			@include border-radius(5px);
@@ -162,13 +159,13 @@
 		}
 		.likeAdded {
 			color:#4f4f4f;
-			background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
+			background:#fff url('../images/heart-like.png') 8px 15px no-repeat;
 			span {
 				color:#dcdcdc;
 			}
 			&:hover {
 				text-decoration: none;
-				background:#fff url('../images/heart.png') 8px 11px no-repeat;
+				/*background:#fff url('../images/heart.png') 8px 11px no-repeat;*/
 				span {
 					color:#4f4f4f;
 				}

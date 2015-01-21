@@ -324,9 +324,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             $productFlag = '';
             if ($dataSimpleProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
-                $productFlag = 1;
+                $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION;
             } elseif ($dataSimpleProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-                $productFlag = 2;
+                $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
             }
 
             $priceSType = isset($priceTypes[$dataSimpleProduct['price_source']]) ? $priceTypes[$dataSimpleProduct['price_source']] : false;
@@ -357,7 +357,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     }
                     unset($storeId);
                     //set null to attribute for default store id (required for good quote calculation)
-                    $aM->updateAttributesPure(array($productSId), array('special_price' => null, 'campaign_regular_id' => null, 'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+                    $aM->updateAttributesPure(array($productSId), array('special_price' => null, 'campaign_regular_id' => null, 'product_flag' => null,'campaign_strikeout_price_type' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
                     $productsIdsPullToSolr[$productSId] = $productSId;
                     $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataSimpleProduct['campaign_id']), $productSId);
 
@@ -506,9 +506,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             $productFlag = '';
             if ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
-                $productFlag = 1;
+                $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION;
             } elseif ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-                $productFlag = 2;
+                $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
             }
 
             foreach ($storesToUpdate as $storeId) {
@@ -529,8 +529,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             //set null to attribute for default store id (required for good quote calculation)
-            $aM->updateAttributesPure(
-                array($parentProdId), array('msrp' => null), Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+            $aM->updateAttributesPure(array($parentProdId),
+                array(
+                    'special_price' => null,
+                    'campaign_regular_id' => null,
+                    'product_flag' => null,
+                    'campaign_strikeout_price_type' => null
+                ),
+                Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
             );
             $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataConfigurableProduct['campaign_id']), $parentProdId);
             $productsIdsPullToSolr[$parentProdId] = $parentProdId;

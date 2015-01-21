@@ -41,14 +41,16 @@
             </zolagopayment_setup>
         </resources>
         <events>
-            <zolagopayment_append_allocation>
+            <zolagopayment_save_transaction_after>
                 <observers>
                     <zolago_payment_allocation_observer>
                         <class>zolagopayment/allocation_observer</class>
-                        <method>allocationTransaction</method>
+                        <method>salesOrderPaymentTransactionSaveAfter</method>
                     </zolago_payment_allocation_observer>
                 </observers>
-            </zolagopayment_append_allocation>
+            </zolagopayment_save_transaction_after>
+
+
         </events>
     </global>
     <frontend>
