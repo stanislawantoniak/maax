@@ -627,6 +627,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		
 		$this->_processAlert();
 		$this->_processStatus();
+
 		$this->_processMaxShippingDate();
 		
 		return parent::_beforeSave();
