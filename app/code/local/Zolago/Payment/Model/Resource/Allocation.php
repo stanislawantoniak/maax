@@ -14,7 +14,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $tableAllo = $this->getTable('zolagopayment/allocation');
         $select = $this->getReadConnection()->select();
 
-        $select->from(array("a" => $tableAllo), "SUM(a.allocation_amount) as `sum`");
+        $select->from(array("a" => $tableAllo), "SUM(a.allocation_amount) as sum");
         $select->where("a.po_id = ?" , $poId);
 
         $sum = $this->getReadConnection()->fetchRow($select);
