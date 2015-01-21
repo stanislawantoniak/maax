@@ -149,7 +149,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					}
 					return $this->appendMultipleAllocations($allocations);
 				}
-
 			}
 		}
 		return false;
@@ -230,5 +229,12 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			return $po->getId();
 		}
 		return $po;
+	}
+
+	/**
+	 * @return Zolago_Payment_Model_Resource_Allocation
+	 */
+	public function getResource() {
+		return parent::getResource();
 	}
 }
