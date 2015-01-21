@@ -51,12 +51,12 @@
             </zolagopayment_save_transaction_after>
 
             <zolagopayment_allocation_save_after>
-                <observer>
+                <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
                         <method>updateStatusByAllocation</method>
                     </zolagopo>
-                </observer>
+                </observers>
             </zolagopayment_allocation_save_after>
         </events>
     </global>
