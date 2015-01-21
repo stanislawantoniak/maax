@@ -58,7 +58,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
                 Mage::log("append alloc foreach " . get_class(Mage::getSingleton("zolagopo")->load($data['po_id'])), null, "a.log");
 
-                Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getSingleton("zolagopo/po")->load($data['po_id'])));
+                Mage::dispatchEvent("zolagopayment_allocation_save_after", array('po' => Mage::getModel("zolagopo/po")->load($data['po_id'])));
             }
         } catch (Exception $e) {
             Mage::logException($e);
