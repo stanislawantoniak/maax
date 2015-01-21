@@ -3,6 +3,8 @@
 class Zolago_Payment_Model_Allocation_Observer {
 
     /**
+     * Fires when payment transaction is saved
+     * to import data from transaction to create allocations
      *
      * @param Varien_Event_Observer $observer Mage_Sales_Model_Order_Payment_Transaction
      */

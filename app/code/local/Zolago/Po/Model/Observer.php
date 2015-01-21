@@ -131,9 +131,14 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	public function poChangeStatus($observer) {
 		/* @var $po Zolago_Po_Model_Po */
 		$po = $observer->getEvent()->getData('po');
+
+        Mage::log("poChangeStatus; po_id: " . $po->getId(), null, "a.log");
 		if($po instanceof Zolago_Po_Model_Po && $po->getId()){
 			$oldStatus = $observer->getEvent()->getOldStatus();
 			$newStatus = $observer->getEvent()->getNewStatus();
+
+            Mage::log("$oldStatus -> $newStatus " , null, "a.log");
+
 			// Status changed to shipped
 			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
 				// Register for use by email template block
@@ -154,7 +159,51 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 					$params
 				);
 			}
+            //to have payment status updated when PO is changed
+            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT ||
+               $newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING){
+
+                $grandTotal = $po->getGrandTotalInclTax();
+                Mage::log("grand total: " . $grandTotal, null, "a.log");
+                /** @var Zolago_Payment_Model_Allocation $allocationModel */
+                $allocationModel = Mage::getModel("zolagopayment/allocation");
+                $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+                Mage::log("$grandTotal || $sumAmount" , null, "a.log");
+                if ($grandTotal <= $sumAmount) {
+
+                    if ($newStatus != Zolago_Po_Model_Po_Status::STATUS_PENDING) {
+                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
+                        $po->save();
+                        Mage::log("save status to STATUS_PENDING" , null, "a.log");
+                    }
+                } else {
+                    if ($newStatus != Zolago_Po_Model_Po_Status::STATUS_PAYMENT) {
+                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
+                        $po->save();
+                        Mage::log("save status to STATUS_PAYMENT" , null, "a.log");
+                    }
+                }
+            }
+            if($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER) {
+                $grandTotal = $po->getGrandTotalInclTax();
+                Mage::log("grand total: " . $grandTotal, null, "a.log");
+                /** @var Zolago_Payment_Model_Allocation $allocationModel */
+                $allocationModel = Mage::getModel("zolagopayment/allocation");
+                $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+                Mage::log("$grandTotal || $sumAmount" , null, "a.log");
+                if ($grandTotal <= $sumAmount) {
+                    if ($newStatus != Zolago_Po_Model_Po_Status::STATUS_BACKORDER) {
+                        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_BACKORDER);
+                        $po->save();
+                        Mage::log("save status to STATUS_BACKORDER" , null, "a.log");
+                    }
+                } else {
+                    //
+                }
+            }
 		}
+
+
 	}
 	
 	/**
