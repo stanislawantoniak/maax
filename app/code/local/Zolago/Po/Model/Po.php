@@ -572,12 +572,15 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return boolean
     */
    public function isPaid() {
+       Mage::log("isPaid", null, 'a.log');
 	   if($this->isGatewayPayment()){
 		   /**
 		    * @todo implement logic based on transaction
 		    */
+           Mage::log("isPaid return false", null, 'a.log');
 		   return false;
 	   }
+       Mage::log("isPaid return true", null, 'a.log');
 	   return true;
    }
    
