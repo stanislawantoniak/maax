@@ -416,9 +416,9 @@ h2 {
 	  margin-top: 0px;
 	  text-align:left;
 	  @media (max-width: $screen-xs-max) {
-		font-size: 11px;
+		font-size: 14px;
 		font-weight: normal;
-		 font-family: 'OpenSansRegular';
+		 font-family: $fontRegular;
 	  }
 	  span {
 	    position:absolute;
