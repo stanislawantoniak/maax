@@ -57,6 +57,15 @@
 			</udpo>
 		</models>
 		<events>
+            <zolagopayment_allocation_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>updateStatusByAllocation</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocation_save_after>
+
 			<zolagopo_po_split>
 				<observers>
 					<zolagopo>

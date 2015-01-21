@@ -50,14 +50,7 @@
                 </observers>
             </zolagopayment_save_transaction_after>
 
-            <zolagopayment_allocation_save_after>
-                <observers>
-                    <zolagopo>
-                        <model>zolagopo/observer</model>
-                        <method>updateStatusByAllocation</method>
-                    </zolagopo>
-                </observers>
-            </zolagopayment_allocation_save_after>
+
         </events>
     </global>
     <frontend>
