@@ -21,12 +21,12 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$collection->addHasShipment();
 		$collection->joinAggregatedNames();
 		$collection->addPaymentStatuses();
-
 		$this->_applyExternalFilters($collection);
-		
         $this->setCollection($collection);
 
        parent::_prepareCollection();
+
+		Mage::log((string)$this->getCollection()->getSelect(),null,"test4.log");
 	}
 	
 	/**
@@ -73,10 +73,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		//payment status
 		$paymentStatus=$this->getFilterValueByIndex("payment_status");
 		if(!is_null($paymentStatus)) {
-			$collection->getSelect()->having("payment_status = ?",$paymentStatus);
+			$collection->getSelect()->having("`payment_status` = ?",$paymentStatus);
 		}
-
-		Mage::log((string)$collection->getSelect(),null,"test2.log");
 
 		return $this;
 	}
@@ -327,7 +325,9 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 				return $this;
 			break;
 		}
-		return parent::_addColumnFilterToCollection($column);
+		if($column->getId() != 'payment_status') {
+			return parent::_addColumnFilterToCollection($column);
+		}
 	}
 
 
