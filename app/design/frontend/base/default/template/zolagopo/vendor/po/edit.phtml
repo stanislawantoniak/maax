@@ -166,11 +166,12 @@
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
-						<dd>Opłacono [dev]</dd> 
+						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
-						<dd>1 034,00 PLN [dev]</dd> 
-						<dt><?php echo $_hlp->__("Debt");?>:</dt> 
-						<dd> 34,00 PLN [dev]</dd> 
+						<dd><?php echo $_po->getPaymentAmount(); ?></dd>
+						<dt><?php echo $_hlp->__("Debt");?>:</dt>
+						<?php $debtAmount = $_po->getDebtAmount(); ?>
+						<dd><?php echo $debtAmount > 0 ? "+" : $debtAmount < 0 ? "-" : ""; ?> <?php echo $_po->getDebtAmount(); ?></dd>
 					</dl>
 				</div>
 			</div>

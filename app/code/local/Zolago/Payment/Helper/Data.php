@@ -29,8 +29,10 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
                 )
             );
         $allocationCollection->addFieldToFilter('po_id', $poId);
-        $allocationCollection->addAllocationTypeFilter(Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
-        $allocationCollection->addAllocationTypeFilter($plusType);
+//        $allocationCollection->addAllocationTypeFilter(Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
+//        $allocationCollection->addAllocationTypeFilter($plusType);
+
+
 
         return $allocationCollection;
     }
