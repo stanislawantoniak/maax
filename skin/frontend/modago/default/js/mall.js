@@ -995,7 +995,7 @@ jQuery(document).ready(function() {
                 if (isNaN(height)) {
                     height = 29;//px
                 }
-                //jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
+                jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
                 jQuery('.size-box .mCSB_container').css("margin-right", "0px");
             } else {
                 height = 4 * height;
