@@ -120,7 +120,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     Mage::log($payments->getSize(), null, "op.log");
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
-							if($payment->getTxnAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
+							if($payment->getAllocationAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
                                 Mage::log("tuttaj 1", null, "op.log");
 								$paymentDecreaseAmount = $overpaymentAmount;
 								$overpaymentAmount = 0;
@@ -128,7 +128,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 							} else { //if not allocate as much as possible and leave rest to be taken from next payment
                                 Mage::log("tuttaj 2", null, "op.log");
-								$paymentDecreaseAmount = $payment->getTxnAmount();
+								$paymentDecreaseAmount = $payment->getAllocationAmount();
 								$overpaymentAmount -= $paymentDecreaseAmount;
 							}
                             Mage::log("paymentDecreaseAmount $paymentDecreaseAmount", null, "op.log");
