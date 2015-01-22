@@ -1048,7 +1048,7 @@ jQuery(document).ready(function() {
     } else {
         jQuery('#select-size-mobile-choice-trigger').click(function () {
             //alert('click');
-            jQuery(".size-box select").removeClass('hidden').focus();
+            jQuery(".size-box select").removeClass('hidden').tap();
         });
 
         jQuery(".size-box select").change(function () {
