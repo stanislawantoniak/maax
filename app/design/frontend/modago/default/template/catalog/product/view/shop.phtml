@@ -55,10 +55,9 @@
                                     <div class="form-group form-radio">
 
                                         <br />
-                            <?php if (!empty($sizeTableValue)) : ?>
+
                                         <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
-                                           data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
-                            <?php endif; ?>
+                                           data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?> <?php endif; ?></a>
                                     </div>
                                 </div>
                             </div>
