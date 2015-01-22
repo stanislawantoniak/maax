@@ -710,7 +710,7 @@ Mall.product = {
             }).appendTo(groupElement);
 
             //create select part
-            var formGroupElementSelectClass = (deskTopDevice) ? 'form-control select-styled' : 'mobile-native-select';
+            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : 'mobile-native-select';
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
                 class: formGroupElementSelectClass
