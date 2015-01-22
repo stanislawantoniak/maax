@@ -34,7 +34,7 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
             ->join(
                 'sales_payment_transaction',
                 'main_table.transaction_id =sales_payment_transaction.transaction_id',
-                array('sales_payment_transaction.txn_id', 'sales_payment_transaction.increment_id'))
+                array('sales_payment_transaction.txn_id'))
             ->joinLeft(
                 'zolago_operator',
                 'main_table.operator_id =zolago_operator.operator_id',
