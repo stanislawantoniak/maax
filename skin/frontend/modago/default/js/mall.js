@@ -704,9 +704,9 @@ Mall.product = {
             var deskTopDevice = !Mall.getIsBrowserMobile();
 
             // create form group for selectbox options
-            var formGroupElementClass = (deskTopDevice) ? 'form-group styledSelected scrollbar' : '';
+            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : '';
             var formGroupElement = jQuery("<div/>", {
-                class: formGroupElementClass
+                class: "form-group" + formGroupElementClass
             }).appendTo(groupElement);
 
             //create select part
