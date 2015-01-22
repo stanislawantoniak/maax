@@ -573,14 +573,20 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     */
    public function isPaid() {
 	   if(!$this->isCod()){
-		   $grandTotal = $this->getGrandTotalInclTax();
-		   /** @var Zolago_Payment_Model_Allocation $allocationModel */
-		   $allocationModel = Mage::getModel("zolagopayment/allocation");
-		   $sumAmount = $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
-		   return $sumAmount >= $grandTotal ? true : false;
+		   return $this->getPaymentAmount() >= $this->getGrandTotalInclTax() ? true : false;
 	   }
 	   return true;
    }
+
+	public function getPaymentAmount() {
+		/** @var Zolago_Payment_Model_Allocation $allocationModel */
+		$allocationModel = Mage::getModel("zolagopayment/allocation");
+		return $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+	}
+
+	public function getDebtAmount() {
+		return $this->getGrandTotalInclTax() - $this->getPaymentAmount();
+	}
    
    /**
     * @return Zolago_Po_Model_Po_Status
