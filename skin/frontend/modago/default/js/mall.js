@@ -1016,6 +1016,15 @@ jQuery(document).ready(function() {
     if (jQuery('.size-box option').length >= 2) {
         jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
     }
+
+
+
+    var myScroll;
+    function loaded() {
+        myScroll = new iScroll('sbOptionsWrapper');
+    }
+    document.addEventListener('DOMContentLoaded', loaded, false);
+
     //#######################
     //## END SIZE-BOX -> SELECTBOX
     //#######################
