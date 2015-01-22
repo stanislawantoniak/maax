@@ -374,12 +374,12 @@ class Zolago_Po_Model_Po_Status
 	 * @param string $newStatus
 	 */
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
-		$newStatus = $this->getPoStatusByAllocation($po,$newStatus);
-		Mage::log($newStatus,null,"po_statuses.log");
+		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
+		Mage::log($newStatus." | ".$newStatus2,null,"po_statuses.log");
 		$hlp = Mage::helper("udpo");
 		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
-		$hlp->processPoStatusSave($po, $newStatus, true);
+		$hlp->processPoStatusSave($po, $newStatus2, true);
 	}
 	
 	/**
