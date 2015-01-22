@@ -75,7 +75,7 @@
                         </tr>
                         <tr>
                             <th><?php echo $_hlp->__("Transaction"); ?></th>
-                            <th><?php echo $_hlp->__("PO ID"); ?></th>
+                            <th><?php echo $_hlp->__("Order ID"); ?></th>
                             <th><?php echo $_hlp->__("Details"); ?></th>
                             <th><?php echo $_hlp->__("Operator"); ?></th>
                             <th><?php echo $_hlp->__("Amount"); ?></th>
@@ -85,7 +85,7 @@
                     <?php foreach ($overpayDetails as $overpayDetail): ?>
                         <tr>
                             <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                            <td><?php echo $overpayDetail->getPoId(); ?></td>
+                            <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                             <td><?php echo $overpayDetail->getComment(); ?></td>
                             <td>
                                 <?php $operatorId = $overpayDetail->getOperatorId(); ?>
