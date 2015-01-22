@@ -6,6 +6,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 	protected $_vendorId;
 	protected $_vendorJoined = false;
 	protected $_productJoined = false;
+	protected $_allocationsJoined = false;
 	
 	public function addAlertFilter($int) {
 		$this->getSelect()->where("main_table.alert & ".(int)$int);
@@ -21,6 +22,55 @@ class Zolago_Po_Model_Resource_Po_Collection
 	public function addVendorData() {
 	    return $this->_joinVendorTable();
 	}
+	public function addPaymentStatuses() {
+		return $this->_joinAllocationsTable();
+	}
+
+/*	public function getAllIds($limit = null, $offset = null) {
+		if($this->_allocationsJoined) {
+			$this->addFieldToSelect("IF(SUM(allocation.allocation_amount)>=main_table.grand_total_incl_tax,1,0) AS `payment_status`");
+		}
+		parent::getAllIds();
+	}*/
+
+	/**
+	 * Create all ids retrieving select with limitation
+	 * Backward compatibility with EAV collection
+	 *
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Mage_Eav_Model_Entity_Collection_Abstract
+	 */
+	protected function _getAllIdsSelect($limit = null, $offset = null)
+	{
+		$idsSelect = clone $this->getSelect();
+		$idsSelect->reset(Zend_Db_Select::ORDER);
+		$idsSelect->reset(Zend_Db_Select::LIMIT_COUNT);
+		$idsSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
+		if(!$this->_allocationsJoined) {
+			$idsSelect->reset(Zend_Db_Select::COLUMNS);
+		}
+		$idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
+		$idsSelect->limit($limit, $offset);
+		return $idsSelect;
+	}
+
+	/**
+	 * Retrive all ids for collection
+	 * Backward compatibility with EAV collection
+	 *
+	 * @param int $limit
+	 * @param int $offset
+	 * @return array
+	 */
+	public function getAllIds($limit = null, $offset = null)
+	{
+		return $this->getConnection()->fetchCol(
+			$this->_getAllIdsSelect($limit, $offset),
+			$this->_bindParams
+		);
+	}
+
 	public function addVendorFilter($vendor) {
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
@@ -230,6 +280,19 @@ class Zolago_Po_Model_Resource_Po_Collection
         return $this;
         
     }
+
+	protected function _joinAllocationsTable() {
+		if(!$this->_allocationsJoined) {
+			$this->getSelect()->joinLeft(
+				array("allocation"=>$this->getTable("zolagopayment/allocation")),
+				"allocation.po_id = main_table.entity_id AND allocation.allocation_type = '".Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT."'",
+				"IF(SUM(allocation.allocation_amount)>=main_table.grand_total_incl_tax,1,0) AS payment_status"
+			);
+			$this->_allocationsJoined = true;
+		}
+		return $this;
+	}
+
 	protected function _joinOrderTable()
     {
         if (!$this->_orderJoined) {

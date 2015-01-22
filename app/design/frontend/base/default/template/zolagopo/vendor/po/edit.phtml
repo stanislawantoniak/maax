@@ -150,9 +150,11 @@
                     <?php
                     $paymentDetails = Mage::helper('zolagopayment')
                         ->getPaymentDetails($this->getPo()->getId());
+                    $overpayDetails = Mage::helper('zolagopayment')
+                        ->getOverpaymentDetails($this->getPo()->getId());
 
                     //if no payment details do not show Payment details button
-                    if ($paymentDetails->getSize() > 0): ?>
+                    if (($paymentDetails->getSize() > 0) || ($overpayDetails->getSize() > 0)): ?>
                         <div class="toolbar no-padding">
                             <div class="btn-group">
 							<span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
@@ -168,10 +170,10 @@
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
 						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
-						<dd><?php echo $_po->getPaymentAmount(); ?></dd>
+						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
 						<dt><?php echo $_hlp->__("Debt");?>:</dt>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
-						<dd><?php echo $debtAmount > 0 ? "+" : ""; ?> <?php echo $debtAmount; ?></dd>
+						<dd><?php echo $debtAmount > 0 ? "+" : ""; ?><?php echo $_po->getCurrencyFormattedAmount($debtAmount); ?></dd>
 					</dl>
 				</div>
 			</div>
@@ -543,9 +545,11 @@
 /*******************************************************************************
  *    Payments modal
  *******************************************************************************/
-if ($paymentDetails->getSize() > 0) {
+if (($paymentDetails->getSize() > 0) || ($overpayDetails->getSize() > 0)) {
     echo $this->getChild("vendor_po_edit_payments")
         ->setData('payment_details', $paymentDetails)
+        ->setData('overpay_details', $overpayDetails)
+        ->setData('po', $_po)
         ->toHtml();
 }
 	
