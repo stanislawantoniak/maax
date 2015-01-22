@@ -381,7 +381,7 @@ class Zolago_Po_Model_Po_Status
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
 	}
-	
+
 	/**
 	 * @param Zolago_Po_Model_Po|int $status
 	 * @return int
@@ -401,7 +401,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function getPoStatusByAllocation(Zolago_Po_Model_Po $po,$status=false) {
 		if ($po->getId()) {
-			$status = $status ? $status : $po->getUdropshipStatus();
+			$status = !is_null($status) && $status !== false ? $status : $po->getUdropshipStatus();
 
 			if($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT
 				|| $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
