@@ -121,12 +121,18 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
 							if($payment->getTxnAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
+                                Mage::log("tuttaj 1");
 								$paymentDecreaseAmount = $overpaymentAmount;
 								$overpaymentAmount = 0;
+
+
 							} else { //if not allocate as much as possible and leave rest to be taken from next payment
+                                Mage::log("tuttaj 1");
 								$paymentDecreaseAmount = $payment->getTxnAmount();
 								$overpaymentAmount -= $paymentDecreaseAmount;
 							}
+                            Mage::log("paymentDecreaseAmount $paymentDecreaseAmount", null, "op.log");
+                            Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
 							//create payment decrease
 							$allocations[] = array(
 								'po_id' => $po->getId(),
