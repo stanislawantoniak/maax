@@ -63,11 +63,18 @@
 }
 
 #seller-box-bundle {
-	@media (max-width: $screen-xs-max) {
-		border-right:none;
-		border-left:none;
-		border-bottom:none;
-	}  
+  @media (max-width: $screen-xs-max) {
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+  }
+
+  #question-form-mobile {
+    label {
+      font-weight: normal;
+    }
+  }
+
 }
 
 .seller-box-description,
