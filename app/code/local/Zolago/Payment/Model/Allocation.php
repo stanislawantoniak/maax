@@ -212,8 +212,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			$collection->getSelect()->columns(array("allocation_amount_sum" => "SUM(main_table.allocation_amount)"));
 			$collection->getSelect()->group("main_table.transaction_id");
 			$collection->getSelect()->having("allocation_amount_sum > 0");
-
-			Mage::log((string)$collection->getSelect());
+			$collection->setOrder('allocation_id','DESC');
 			return $collection;
 		}
 		return false;
