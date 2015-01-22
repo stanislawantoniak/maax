@@ -188,15 +188,23 @@
 			
 			
 		}
-		.size-box {
-			margin-bottom: 25px;
-			.sbHolder {
-				width:167px;
-			}
-          select.mobile-native-select {
-              width: 200px;
-          }
-		}
+      .size-box {
+        margin-bottom: 25px;
+        .sbHolder {
+          width: 167px;
+        }
+        select.mobile-native-select {
+          width: 218px;
+          top: -22px;
+          left: 1px;
+          position: relative;
+          z-index: 1;
+        }
+        #select-size-mobile-trigger {
+          width: 220px;
+          z-index: 10;
+        }
+      }
 	}
 	.action-box-bundle {
 		margin-bottom:20px;
