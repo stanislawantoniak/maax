@@ -79,7 +79,7 @@ class Zolago_Po_Model_Po_Status
 		}
 		if($po->getAlert()){
 			$po->setUdropshipStatus(self::STATUS_ACK);
-		}elseif($po->isGatewayPayment()){
+		}elseif(!$po->isCod()){
 			$po->setUdropshipStatus(self::STATUS_BACKORDER);
 		}else{
 			$po->setUdropshipStatus(self::STATUS_PENDING);
