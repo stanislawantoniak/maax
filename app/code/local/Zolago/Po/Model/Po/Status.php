@@ -366,6 +366,7 @@ class Zolago_Po_Model_Po_Status
 	 * @param string $newStatus
 	 */
 	public function changeStatus(Zolago_Po_Model_Po $po, $newStatus) {
+		$newStatus = $this->getPoStatusByAllocation($po,$newStatus);
 		$this->_processStatus($po, $newStatus);
 	}
 
@@ -389,6 +390,40 @@ class Zolago_Po_Model_Po_Status
 			return $status->getUdropshipStatus();
 		}
 		return $status;
+	}
+
+	/**
+	 * Checks if status that you want to set on po is ok according to payment allocations
+	 * @param Zolago_Po_Model_Po $po
+	 * @param bool $status
+	 * @return bool|int
+	 */
+	public function getPoStatusByAllocation(Zolago_Po_Model_Po $po,$status=false) {
+		if ($po->getId()) {
+			$status = $status ? $status : $po->getUdropshipStatus();
+
+			if($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT
+				|| $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
+				|| $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
+			{
+				$grandTotal = $po->getGrandTotalInclTax();
+				/** @var Zolago_Payment_Model_Allocation $allocationModel */
+				$allocationModel = Mage::getModel("zolagopayment/allocation");
+				$sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+
+				//czeka na płatność lub czeka na rezerwacje
+				if (($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
+					&& $grandTotal <= $sumAmount)
+				{
+					return Zolago_Po_Model_Po_Status::STATUS_PENDING; //rowny albo nadplata
+				} //czeka na spakowanie
+				elseif ($status == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
+					return Zolago_Po_Model_Po_Status::STATUS_PAYMENT; //jest mniej niz potrzeba
+				}
+			}
+			return $status;
+		}
+		return false;
 	}
    
 }

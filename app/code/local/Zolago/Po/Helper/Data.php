@@ -9,12 +9,12 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
     /**
      * to have payment status updated when PO is changed
      *
-     * @param $po
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $save
      * @throws Exception
      */
-    public function updateStatusByAllocation($po, $save = true) {
-
-        if ($po instanceof Zolago_Po_Model_Po && $po->getId()) {
+    public function updatePoStatusByAllocation(Zolago_Po_Model_Po $po, $save = true) {
+        if ($po->getId()) {
             $newStatus = $po->getUdropshipStatus();
 
             $grandTotal = $po->getGrandTotalInclTax();
@@ -54,8 +54,6 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
             }
         }
     }
-
-
 
 	/**
 	 * @param Zolago_Po_Model_Po_Item $item
