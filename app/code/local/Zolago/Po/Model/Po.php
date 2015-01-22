@@ -572,15 +572,13 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return boolean
     */
    public function isPaid() {
-       Mage::log("isPaid", null, 'a.log');
-	   if($this->isGatewayPayment()){
-		   /**
-		    * @todo implement logic based on transaction
-		    */
-           Mage::log("isPaid return false", null, 'a.log');
-		   return false;
+	   if(!$this->isCod()){
+		   $grandTotal = $this->getGrandTotalInclTax();
+		   /** @var Zolago_Payment_Model_Allocation $allocationModel */
+		   $allocationModel = Mage::getModel("zolagopayment/allocation");
+		   $sumAmount = $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+		   return $sumAmount >= $grandTotal ? true : false;
 	   }
-       Mage::log("isPaid return true", null, 'a.log');
 	   return true;
    }
    
@@ -666,12 +664,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	protected function _processStatus() {
 		if(!$this->getId()){
 			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
-		} else {
+		}// else {
             /** @var Zolago_Po_Helper_Data $hlp */
-            $hlp = Mage::helper("zolagopo");
-            Mage::log("_processStatus", null, "a.log");
-            $hlp->updateStatusByAllocation($this, false);
-        }
+           // $hlp = Mage::helper("zolagopo");
+          //  Mage::log("_processStatus", null, "a.log");
+          //  $hlp->updateStatusByAllocation($this, false);
+        //}
 	}
 	
 	protected function _processMaxShippingDate() {

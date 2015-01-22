@@ -159,23 +159,19 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 					$params
 				);
 			}
-            $this->updateStatusByAllocation($observer);
 		}
 	}
 
-    public function updateStatusByAllocation($observer){
-        Mage::log("updateStatusByAllocation -====-" , null, "a.log");
-
+    public function updatePoStatusByAllocation($observer){
         /* @var $po Zolago_Po_Model_Po */
         $po = $observer->getEvent()->getData('po');
         if(!$po->getId()) {
             $po = $observer->getPo();
         }
 
-        Mage::log("updateStatusByAllocation; po_id: " . $po->getId(), null, "a.log");
         /** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("zolagopo");
-        $hlp->updateStatusByAllocation($po);
+        $hlp->updatePoStatusByAllocation($po);
 
     }
 
