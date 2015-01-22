@@ -109,7 +109,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 //                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
-				$overpaymentAmount = $poAllocationSum - $poGrandTotal;
+				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
 				$payments = $this->getPoPayments($po); //get all po payments
 				$allocations = array();
 //                Mage::log("operatorid: $operatorId", null, "op.log");
@@ -160,7 +160,18 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					}
 //                    Mage::log("allocations:", null, "op.log");
 //                    Mage::log($allocations, null, "op.log");
-					return $this->appendMultipleAllocations($allocations);
+					$r = $this->appendMultipleAllocations($allocations);
+
+                    if ($r) {
+                        Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
+                            array(
+                                'po' => $po,
+                                "operator_id" => $operatorId,
+                                "amount" => $finalOverpaymentAmount
+                            ));
+                    }
+                    return $r;
+
 				}
 			}
 		}
