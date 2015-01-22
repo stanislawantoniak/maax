@@ -369,6 +369,10 @@ class Zolago_Po_Model_Po_Status
 		$this->_processStatus($po, $newStatus);
 	}
 
+	public function updateStatusByAllocation(Zolago_Po_Model_Po $po) {
+		$this->changeStatus($po,$po->getUdropshipStatus());
+	}
+
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @param string $newStatus
