@@ -169,10 +169,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             $po = $observer->getPo();
         }
 
-        /** @var Zolago_Po_Helper_Data $hlp */
-        $hlp = Mage::helper("zolagopo");
-        $hlp->updatePoStatusByAllocation($po);
-
+	    if($po->getId()) {
+		    /** @var Zolago_Po_Model_Po_Status $statusModel */
+		    $statusModel = Mage::getSingleton("zolagopo/po_status");
+		    $statusModel->updateStatusByAllocation($po);
+	    }
     }
 
 	/**

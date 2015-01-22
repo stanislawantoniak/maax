@@ -366,8 +366,11 @@ class Zolago_Po_Model_Po_Status
 	 * @param string $newStatus
 	 */
 	public function changeStatus(Zolago_Po_Model_Po $po, $newStatus) {
-		$newStatus = $this->getPoStatusByAllocation($po,$newStatus);
 		$this->_processStatus($po, $newStatus);
+	}
+
+	public function updateStatusByAllocation(Zolago_Po_Model_Po $po) {
+		$this->changeStatus($po,$po->getUdropshipStatus());
 	}
 
 	/**
@@ -375,12 +378,14 @@ class Zolago_Po_Model_Po_Status
 	 * @param string $newStatus
 	 */
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
+		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
+		Mage::log($newStatus." | ".$newStatus2,null,"po_statuses.log");
 		$hlp = Mage::helper("udpo");
 		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
-		$hlp->processPoStatusSave($po, $newStatus, true);
+		$hlp->processPoStatusSave($po, $newStatus2, true);
 	}
-	
+
 	/**
 	 * @param Zolago_Po_Model_Po|int $status
 	 * @return int
@@ -400,7 +405,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function getPoStatusByAllocation(Zolago_Po_Model_Po $po,$status=false) {
 		if ($po->getId()) {
-			$status = $status ? $status : $po->getUdropshipStatus();
+			$status = !is_null($status) && $status !== false ? $status : $po->getUdropshipStatus();
 
 			if($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT
 				|| $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
