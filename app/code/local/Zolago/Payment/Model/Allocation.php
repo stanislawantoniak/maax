@@ -99,15 +99,22 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     }
 
 	public function createOverpayment($po) {
+
 		$po = $this->getPo($po);
+        Mage::log($po->getId(), null, "op.log");
 		if($po->getId() && $this->isOperatorMode()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
+            Mage::log("poGrandTotal $poGrandTotal || poAllocationSum $poAllocationSum", null, "op.log");
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
+                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
 				$overpaymentAmount = $poGrandTotal - $poAllocationSum;
 				$payments = $this->getPoPayments($po); //get all po payments
 				$allocations = array();
+                Mage::log("operatorid: $operatorId", null, "op.log");
+                Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
+                Mage::log("payments $payments", null, "op.log");
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
 					$helper = Mage::helper("zolagopayment");
@@ -147,6 +154,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
+                    Mage::log("allocations:", null, "op.log");
+                    Mage::log($allocations, null, "op.log");
 					return $this->appendMultipleAllocations($allocations);
 				}
 			}
