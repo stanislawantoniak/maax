@@ -101,38 +101,36 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	public function createOverpayment($po) {
 
 		$po = $this->getPo($po);
-        Mage::log($po->getId(), null, "op.log");
+//        Mage::log($po->getId(), null, "op.log");
 		if($po->getId() && $this->isOperatorMode()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
-            Mage::log("poGrandTotal $poGrandTotal || poAllocationSum $poAllocationSum", null, "op.log");
+//            Mage::log("poGrandTotal $poGrandTotal || poAllocationSum $poAllocationSum", null, "op.log");
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
-                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
+//                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
 				$overpaymentAmount = $poAllocationSum - $poGrandTotal;
 				$payments = $this->getPoPayments($po); //get all po payments
 				$allocations = array();
-                Mage::log("operatorid: $operatorId", null, "op.log");
-                Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
+//                Mage::log("operatorid: $operatorId", null, "op.log");
+//                Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
 					$helper = Mage::helper("zolagopayment");
-                    Mage::log($payments->getSize(), null, "op.log");
+//                    Mage::log($payments->getSize(), null, "op.log");
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
 							if($payment->getAllocationAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
-                                Mage::log("tuttaj 1", null, "op.log");
+//                                Mage::log("tuttaj 1", null, "op.log");
 								$paymentDecreaseAmount = $overpaymentAmount;
 								$overpaymentAmount = 0;
-
-
 							} else { //if not allocate as much as possible and leave rest to be taken from next payment
-                                Mage::log("tuttaj 2", null, "op.log");
+//                                Mage::log("tuttaj 2", null, "op.log");
 								$paymentDecreaseAmount = $payment->getAllocationAmount();
 								$overpaymentAmount -= $paymentDecreaseAmount;
 							}
-                            Mage::log("paymentDecreaseAmount $paymentDecreaseAmount", null, "op.log");
-                            Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
+//                            Mage::log("paymentDecreaseAmount $paymentDecreaseAmount", null, "op.log");
+//                            Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
 							//create payment decrease
 							$allocations[] = array(
                                 'transaction_id' => $payment->getTransactionId(),
@@ -160,8 +158,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
-                    Mage::log("allocations:", null, "op.log");
-                    Mage::log($allocations, null, "op.log");
+//                    Mage::log("allocations:", null, "op.log");
+//                    Mage::log($allocations, null, "op.log");
 					return $this->appendMultipleAllocations($allocations);
 				}
 			}
