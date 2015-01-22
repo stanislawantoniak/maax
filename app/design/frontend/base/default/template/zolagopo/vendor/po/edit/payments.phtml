@@ -72,6 +72,7 @@
                     </div>
                 <?endif; ?>
 
+                <?php if($overpayDetails->getSize() > 0): ?>
                 <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
                     <thead>
                         <tr>
@@ -114,6 +115,7 @@
 
                     </tbody>
                 </table>
+                <?php endif; ?>
             </div>
         </div>
     </div>
