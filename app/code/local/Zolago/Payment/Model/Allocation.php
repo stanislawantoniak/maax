@@ -129,14 +129,13 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							}
 							//create payment decrease
 							$allocations[] = array(
-								'transaction_id' => $payment->getTransactionId(),
 								'po_id' => $po->getId(),
-								'allocation_amount' => -$paymentDecreaseAmount,
+								'allocation_amount' => -1 * $paymentDecreaseAmount,
 								'allocation_type' => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
 								'operator_id' => $operatorId,
 								'created_at' => $createdAt,
 								'comment' => $helper->__("Moved to overpayment"),
-								'customerId' =>  $po->getCustomerId()
+								'customer_id' =>  $po->getCustomerId()
 							);
 
 							//create overpayment
@@ -148,7 +147,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'operator_id' => $operatorId,
 								'created_at' => $createdAt,
 								'comment' => $helper->__("Created overpayment"),
-								'customerId' =>  $po->getCustomerId()
+								'customer_id' =>  $po->getCustomerId()
 							);
 						} else {
 							break;
