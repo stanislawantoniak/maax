@@ -589,7 +589,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 
 	public function getCurrencyFormattedAmount($amount) {
-		Mage::helper('core')->currency(
+		return Mage::helper('core')->currency(
 			$amount,
 			true,
 			false
