@@ -1,6 +1,7 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */ ?>
 <?php $_hlp = Mage::helper("zolagopo"); ?>
 <?php $paymentDetails = $this->getData('payment_details'); ?>
+<?php $overpayDetails = $this->getData('overpay_details'); ?>
 
 <!-- Modals comment -->
 <div class="modal fade" id="paymentsModal">
@@ -47,6 +48,39 @@
                 <a class="btn btn-primary" data-toggle="modal"
                    href="<?php echo $this->getCreateOverpaymentUrl("createOverpayment"); ?>">
                     <?php echo $_hlp->__("Create overpayment"); ?></a>
+
+                <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
+                    <thead>
+                    <tr>
+                        <th><?php echo $_hlp->__("Transaction"); ?></th>
+                        <th><?php echo $_hlp->__("Details"); ?></th>
+                        <th><?php echo $_hlp->__("Operator"); ?></th>
+                        <th><?php echo $_hlp->__("Amount"); ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($overpayDetails as $overpayDetail): ?>
+                        <tr>
+                            <td><?php echo $overpayDetail->getTxnId(); ?></td>
+                            <td><?php echo $overpayDetail->getComment(); ?></td>
+                            <td>
+                                <?php $operatorId = $overpayDetail->getOperatorId(); ?>
+                                <?php if (is_null($operatorId)): ?>
+                                    <?php echo $_hlp->__("Automat"); ?>
+                                <?php else: ?>
+                                    <?php echo $overpayDetail->getFirstname(); ?>&nbsp;
+                                    <?php echo $overpayDetail->getLastname(); ?>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php echo Mage::helper('core')
+                                    ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
