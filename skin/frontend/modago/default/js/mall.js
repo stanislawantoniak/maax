@@ -1046,9 +1046,23 @@ jQuery(document).ready(function() {
             }
         });
     } else {
+        var openSelect = function(selector){
+            var element = jQuery(selector)[0], worked = false;
+            if (document.createEvent) { // all browsers
+                var e = document.createEvent("MouseEvents");
+                e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                worked = element.dispatchEvent(e);
+            } else if (element.fireEvent) { // ie
+                worked = element.fireEvent("onmousedown");
+            }
+            if (!worked) { // unknown browser / error
+                alert("It didn't worked in your browser.");
+            }
+        }
         jQuery('#select-size-mobile-choice-trigger').click(function () {
             //alert('click');
-            jQuery(".size-box select").removeClass('hidden').tap();
+            jQuery(".size-box select").removeClass('hidden');
+            openSelect(jQuery(".size-box select"));
         });
 
         jQuery(".size-box select").change(function () {
