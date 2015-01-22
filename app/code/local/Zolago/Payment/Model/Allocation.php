@@ -117,6 +117,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
 					$helper = Mage::helper("zolagopayment");
+                    Mage::log($payments->getSize(), null, "op.log");
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
 							if($payment->getTxnAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
