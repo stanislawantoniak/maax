@@ -125,7 +125,17 @@ jQuery.noConflict();
                 }
             });
         });
+        $('#question-form-mobile').submit(function () {
+            if ($(this).valid()) {
+                addFormSpinner($(this));
+            }
+        });
 
+        function addFormSpinner(form) {
+            var submitButton = form.find('button[type=submit]');
+            submitButton.prop("disabled", "disabled");
+            submitButton.find('i').addClass('fa fa-spinner fa-spin');
+        }
         $('.table-footer-group').on('click', '.deliver_info', function(e){
             var _w = $(window).innerWidth();
             if (_w <=767) {
