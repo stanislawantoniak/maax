@@ -549,6 +549,7 @@ if ($paymentDetails->getSize() > 0) {
     echo $this->getChild("vendor_po_edit_payments")
         ->setData('payment_details', $paymentDetails)
         ->setData('overpay_details', $overpayDetails)
+        ->setData('po', $_po)
         ->toHtml();
 }
 	
