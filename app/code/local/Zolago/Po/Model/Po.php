@@ -587,6 +587,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	public function getDebtAmount() {
 		return -($this->getGrandTotalInclTax() - $this->getPaymentAmount());
 	}
+
+	public function getCurrencyFormattedAmount($amount) {
+		Mage::helper('core')->currency(
+			$amount,
+			true,
+			false
+		);
+	}
    
    /**
     * @return Zolago_Po_Model_Po_Status
