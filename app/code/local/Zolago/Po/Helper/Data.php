@@ -30,8 +30,9 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                 if ($save) {
                     $po->save();
+                    Mage::log("save status to STATUS_PENDING", null, "a.log");
                 }
-                Mage::log("save status to STATUS_PENDING", null, "a.log");
+
             } //czeka na spakowanie
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
                 //jest mniej niz potrzeba
@@ -39,16 +40,17 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
                 if ($save) {
                     $po->save();
+                    Mage::log("save status to STATUS_PAYMENT", null, "a.log");
                 }
-                Mage::log("save status to STATUS_PAYMENT", null, "a.log");
+
             } //czeka na rezerwacje
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
                 Mage::log("new status is STATUS_BACKORDER", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                 if ($save) {
                     $po->save();
+                    Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
                 }
-                Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
             }
         }
     }
