@@ -179,6 +179,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		if($collection) {
 			$collection->addPoIdFilter($po_id);
 			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
+            $collection->addOrder("allocation_amount");//desc
+            $collection->getSelect()->where("allocation_amount > 0");
 			return $collection;
 		}
 		return false;
