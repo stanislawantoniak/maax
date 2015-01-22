@@ -345,7 +345,7 @@
     }
   }
   .short-description {
-    font-size: 11px;
+    font-size: 12px;
     color: #383838;
     margin-bottom: 6px;
     a {
@@ -530,19 +530,19 @@
       margin-bottom: 5px;
       margin-left: 2px;
       label {
-        width:31px;
-        height:31px;
+        width:41px;
+        height:41px;
         position: relative;
         span {
-          width:31px;
-          height:31px;
+          width:41px;
+          height:41px;
           display:block;
           background:#fff;
           border:1px solid #afafaf;
           text-align:center;
-          line-height: 29px;
+          line-height: 39px;
           color:#858585;
-          font-size:12px;
+          font-size:14px;
           font-family:$fontRegular;
           font-weight: normal;
           position:absolute;
@@ -574,10 +574,10 @@
     }
     .view-sizing {
       display:block;
-      font-size: 11px;
+      font-size: 14px;
       float: right;
       position: absolute;
-      bottom: -10px;
+      bottom: -25px;
       left: 0px;
       white-space: nowrap;
       @media (max-width: 814px) {
@@ -642,7 +642,7 @@
       }
     }
     .addLike-box {
-      margin-top: -15px !important;
+      margin-top: -18px !important;
       @media (max-width: 360px) {
         margin-top: 1px;
         @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -678,17 +678,27 @@
       }
     }
     .likeAdded {
+      min-width: 145px;
       display:block;
       height:43px;
       padding: 7px 0 0 43px;
       color:#4f4f4f;
-      background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
+      background:#fff url('../images/heart-like.png') 8px 15px no-repeat;
+	    @media(min-width: 440px) {
+		    white-space: nowrap;
+	    }
+	    @media(min-width: $screen-sm-min) {
+		    white-space: normal !important;
+	    }
+	    @media(min-width: 810px) {
+		    white-space: nowrap !important;
+	    }
       span {
         color:#dcdcdc;
       }
       &:hover {
         text-decoration: none;
-        background:#fff url('../images/heart.png') 8px 11px no-repeat;
+        /*background:#fff url('../images/heart.png') 8px 11px no-repeat;*/
         span {
           color:#4f4f4f;
         }

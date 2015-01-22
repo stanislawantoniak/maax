@@ -109,22 +109,18 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
 				return false;
-			} else {
-				if($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
-                    //status 0 is when user create account (fresh new account)
-                    //in DB status is null but getSubscriberStatus return 0
-					$this->_setSubscriberId($sid);
-					$confirm_code = $subscription->getSubscriberConfirmCode();
-					if(!$confirm_code) {
-						$subscription->setSubscriberConfirmCode($this->_getInvitationCode());
-						$subscription->save();
-					} else {
-						$this->_setInvitationCode($subscription->getSubscriberConfirmCode());
-					}
-					return true;
+			} elseif($this->_canRepeatInvitation()) {
+				$this->_setSubscriberId($sid);
+				$confirm_code = $subscription->getSubscriberConfirmCode();
+				if(!$confirm_code) {
+					$subscription->setSubscriberConfirmCode($this->_getInvitationCode());
+					$subscription->save();
 				} else {
-					return false;
+					$this->_setInvitationCode($subscription->getSubscriberConfirmCode());
 				}
+				return true;
+			} else {
+				return false;
 			}
 		} else {
 			return $this->_addInactiveSubscriber($email);

@@ -131,9 +131,14 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	public function poChangeStatus($observer) {
 		/* @var $po Zolago_Po_Model_Po */
 		$po = $observer->getEvent()->getData('po');
+
+        Mage::log("poChangeStatus; po_id: " . $po->getId(), null, "a.log");
 		if($po instanceof Zolago_Po_Model_Po && $po->getId()){
 			$oldStatus = $observer->getEvent()->getOldStatus();
 			$newStatus = $observer->getEvent()->getNewStatus();
+
+            Mage::log("$oldStatus -> $newStatus " , null, "a.log");
+
 			// Status changed to shipped
 			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
 				// Register for use by email template block
@@ -154,9 +159,26 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 					$params
 				);
 			}
+            $this->updateStatusByAllocation($observer);
 		}
 	}
-	
+
+    public function updateStatusByAllocation($observer){
+        Mage::log("updateStatusByAllocation -====-" , null, "a.log");
+
+        /* @var $po Zolago_Po_Model_Po */
+        $po = $observer->getEvent()->getData('po');
+        if(!$po->getId()) {
+            $po = $observer->getPo();
+        }
+
+        Mage::log("updateStatusByAllocation; po_id: " . $po->getId(), null, "a.log");
+        /** @var Zolago_Po_Helper_Data $hlp */
+        $hlp = Mage::helper("zolagopo");
+        $hlp->updateStatusByAllocation($po);
+
+    }
+
 	/**
 	 * PO Compose	
 	 * @param type $observer

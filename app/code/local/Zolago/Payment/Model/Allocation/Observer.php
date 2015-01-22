@@ -3,6 +3,8 @@
 class Zolago_Payment_Model_Allocation_Observer {
 
     /**
+     * Fires when payment transaction is saved
+     * to import data from transaction to create allocations
      *
      * @param Varien_Event_Observer $observer Mage_Sales_Model_Order_Payment_Transaction
      */
@@ -13,7 +15,7 @@ class Zolago_Payment_Model_Allocation_Observer {
         $allocation_type = $observer->getData('allocation_type');
         $operator_id = $observer->getData('operator_id');
         $comment = $observer->getData('comment');
-        Mage::getModel("zolagopayment/allocation")->importDataFromTransaction($transaction, $allocation_type, $operator_id, $comment);
 
+        Mage::getModel("zolagopayment/allocation")->importDataFromTransaction($transaction, $allocation_type, $operator_id, $comment);
     }
 }

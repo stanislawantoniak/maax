@@ -49,6 +49,8 @@
                     </zolago_payment_allocation_observer>
                 </observers>
             </zolagopayment_save_transaction_after>
+
+
         </events>
     </global>
     <frontend>
