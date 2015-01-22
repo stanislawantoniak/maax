@@ -13,7 +13,7 @@
                 <h4 class="modal-title"><?php echo $_hlp->__("Payment details"); ?></h4>
             </div>
             <div class="modal-body">
-                <?php if($paymentDetails->getSize() > 0): ?>
+                <?php if($paymentDetails->count() > 0): ?>
                     <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
                         <thead>
                             <tr>
@@ -94,7 +94,8 @@
                     <?php endif; ?>
                 <?php endif; ?>
 
-                <?php if($overpayDetails->getSize() > 0): ?>
+                <?php if($overpayDetails->count() > 0): ?>
+	                <?php Mage::log((string)$overpayDetails->getSelect(),null,"cos.log"); ?>
                     <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
                         <thead>
                             <tr>
@@ -114,7 +115,7 @@
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
+                                <td><?php echo $overpayDetail->getCreatedAtLast(); ?></td>
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $overpayDetail->getComment(); ?></td>
                                 <td>
@@ -128,7 +129,7 @@
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
-                                        ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
+                                        ->currency($overpayDetail->getAllocationAmountSum(), true, false); ?>
                                 </td>
                                 <td>
                                     <a class="btn btn-primary" data-toggle="modal"

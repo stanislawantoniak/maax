@@ -1,7 +1,6 @@
 <?php
 
 class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
-
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_UNDERPAID = 'underpaid'; // niedoplata
@@ -207,6 +206,26 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
 			$collection = $this->getCollection();
 			$collection->addPoIdFilter($po_id);
+			return $collection;
+		}
+		return false;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po_id
+	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getPoOverpayments($po_id) {
+		$po_id = $this->getPoId($po_id);
+		if($po_id) {
+			$collection = $this->getPoAllocations($po_id);
+			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
+			$collection->getSelect()->columns(array(
+				"allocation_amount_sum" => "SUM(main_table.allocation_amount)",
+				"created_at_last" => "MAX(main_table.created_at)"
+			));
+			$collection->getSelect()->group("main_table.transaction_id");
+			$collection->getSelect()->having("allocation_amount_sum > 0");
 			return $collection;
 		}
 		return false;
