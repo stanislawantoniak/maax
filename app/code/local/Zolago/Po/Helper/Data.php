@@ -28,41 +28,26 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
                 //rowny albo nadplata
                 Mage::log("new status is STATUS_PAYMENT", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
-//                $po->getResource()->saveAttribute($po, 'udropship_status');
-//
-//                    Mage::getSingleton("zolagopo/po_status")->changeStatus($po, $newStatus);
-//	                $po->save();
                 if ($save) {
                     $po->save();
                 }
-//
                 Mage::log("save status to STATUS_PENDING", null, "a.log");
             } //czeka na spakowanie
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
                 //jest mniej niz potrzeba
                 Mage::log("new status is STATUS_PENDING", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
-//                $po->getResource()->saveAttribute($po, 'udropship_status');
-//
-//                    Mage::getSingleton("zolagopo/po_status")->changeStatus($po, $newStatus);
-//		            $po->save();
                 if ($save) {
                     $po->save();
                 }
-//
                 Mage::log("save status to STATUS_PAYMENT", null, "a.log");
             } //czeka na rezerwacje
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
                 Mage::log("new status is STATUS_BACKORDER", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
-//                $po->getResource()->saveAttribute($po, 'udropship_status');
-//
-//                    Mage::getSingleton("zolagopo/po_status")->changeStatus($po, $newStatus);
-//		            $po->save();
                 if ($save) {
                     $po->save();
                 }
-//
                 Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
             }
         }
