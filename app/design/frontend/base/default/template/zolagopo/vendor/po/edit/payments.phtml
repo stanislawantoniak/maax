@@ -52,31 +52,31 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><?php echo $_hlp->__("Final price");?></td>
+                            <td><strong><?php echo $_hlp->__("Final price");?></strong></td>
                             <td>
-                                <?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?>
+                                <strong><?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><?php echo $_hlp->__("Paid");?></td>
+                            <td><strong><?php echo $_hlp->__("Paid");?></td>
                             <td>
-                                <?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?>
+                                <strong><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><?php echo $_hlp->__("Difference:"); ?></td>
-                            <td>
+                            <td><strong><?php echo $_hlp->__("Difference:"); ?></strong></td>
+                            <td><strong>
                                 <?php
                                 $debtAmount = $_po->getDebtAmount();
                                 echo $debtAmount > 0 ? "+" : "";
                                 echo $_po->getCurrencyFormattedAmount($debtAmount);
-                                ?>
+                                ?></strong>
                             </td>
                         </tr>
 
