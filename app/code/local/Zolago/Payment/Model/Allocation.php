@@ -114,7 +114,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$allocations = array();
                 Mage::log("operatorid: $operatorId", null, "op.log");
                 Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
-                Mage::log("payments $payments", null, "op.log");
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
 					$helper = Mage::helper("zolagopayment");
