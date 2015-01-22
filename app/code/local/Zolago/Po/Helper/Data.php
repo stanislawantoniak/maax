@@ -9,51 +9,51 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
     /**
      * to have payment status updated when PO is changed
      *
-     * @param $po
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $save
      * @throws Exception
      */
-    public function updateStatusByAllocation($po,$save = true) {
-
-        if ($po instanceof Zolago_Po_Model_Po && $po->getId()) {
+    public function updatePoStatusByAllocation(Zolago_Po_Model_Po $po, $save = true) {
+        if ($po->getId()) {
             $newStatus = $po->getUdropshipStatus();
 
             $grandTotal = $po->getGrandTotalInclTax();
             /** @var Zolago_Payment_Model_Allocation $allocationModel */
             $allocationModel = Mage::getModel("zolagopayment/allocation");
             $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-            Mage::log("GT: $grandTotal || sum: $sumAmount", null, "a.log");
+            Mage::log("GT: $grandTotal || sum: $sumAmount ||po_id: " . $po->getId(), null, "a.log");
 
             //czeka na płatność
             if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT && ($grandTotal <= $sumAmount)) {
                 //rowny albo nadplata
                 Mage::log("new status is STATUS_PAYMENT", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
-                if($save) {
-	                $po->save();
+                if ($save) {
+                    $po->save();
+                    Mage::log("save status to STATUS_PENDING", null, "a.log");
                 }
-                Mage::log("save status to STATUS_PENDING", null, "a.log");
+
             } //czeka na spakowanie
-            elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount && !$po->isCod())) {
+            elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
                 //jest mniej niz potrzeba
                 Mage::log("new status is STATUS_PENDING", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
-	            if($save) {
-		            $po->save();
-	            }
-                Mage::log("save status to STATUS_PAYMENT", null, "a.log");
+                if ($save) {
+                    $po->save();
+                    Mage::log("save status to STATUS_PAYMENT", null, "a.log");
+                }
+
             } //czeka na rezerwacje
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
                 Mage::log("new status is STATUS_BACKORDER", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
-	            if($save) {
-		            $po->save();
-	            }
-                Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
+                if ($save) {
+                    $po->save();
+                    Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
+                }
             }
         }
     }
-
-
 
 	/**
 	 * @param Zolago_Po_Model_Po_Item $item

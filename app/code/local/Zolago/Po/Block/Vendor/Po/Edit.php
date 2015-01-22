@@ -378,7 +378,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		}
 		return $this->getData("all_messages_count");
 	}
-	
+
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @return int

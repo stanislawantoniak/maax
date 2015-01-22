@@ -224,6 +224,8 @@
 				<type>skin_js</type>
 				<script>js/fns.js</script>
 			</action>
+
+
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
 			<block type="core/text" name="addthis.javascript">
 				<action method="setText">
