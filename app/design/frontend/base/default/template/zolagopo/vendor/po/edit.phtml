@@ -154,7 +154,7 @@
                         ->getOverpaymentDetails($this->getPo()->getId());
 
                     //if no payment details do not show Payment details button
-                    if ($paymentDetails->getSize() > 0): ?>
+                    if (($paymentDetails->getSize() > 0) || ($overpayDetails->getSize() > 0)): ?>
                         <div class="toolbar no-padding">
                             <div class="btn-group">
 							<span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
@@ -545,7 +545,7 @@
 /*******************************************************************************
  *    Payments modal
  *******************************************************************************/
-if ($paymentDetails->getSize() > 0) {
+if (($paymentDetails->getSize() > 0) || ($overpayDetails->getSize() > 0)) {
     echo $this->getChild("vendor_po_edit_payments")
         ->setData('payment_details', $paymentDetails)
         ->setData('overpay_details', $overpayDetails)
