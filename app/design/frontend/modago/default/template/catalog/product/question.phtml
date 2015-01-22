@@ -41,27 +41,25 @@ $session = Mage::getSingleton('customer/session');
                             <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
                                     <option value=""><?php echo $this->__("Choose shop"); ?></option>
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
-
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
-
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
-
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
-
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
-
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
+                                <?php endforeach; ?>
+                                <?php foreach($vendors as $id=>$name): ?>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
                             </select>
 						</div>
