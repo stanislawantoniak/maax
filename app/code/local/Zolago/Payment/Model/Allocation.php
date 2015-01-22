@@ -135,6 +135,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                             Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
 							//create payment decrease
 							$allocations[] = array(
+                                'transaction_id' => $payment->getTransactionId(),
 								'po_id' => $po->getId(),
 								'allocation_amount' => -1 * $paymentDecreaseAmount,
 								'allocation_type' => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
