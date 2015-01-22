@@ -173,7 +173,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 * @param int|Zolago_Po_Model_Po $po_id
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
-	public function getPoAllocations($po_id) {
+	protected function getPoAllocations($po_id) {
 		$po_id = $this->getPoId($po_id);
 		if($po_id) {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */

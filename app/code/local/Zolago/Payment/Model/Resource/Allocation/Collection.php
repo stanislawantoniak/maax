@@ -15,4 +15,8 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 	public function addAllocationTypeFilter($type) {
 		return $this->addFieldToFilter('allocation_type',$type);
 	}
+
+	public function addCustomerIdFilter($customerId) {
+		return $this->addFieldToFilter('customer_id',$customerId);
+	}
 }
