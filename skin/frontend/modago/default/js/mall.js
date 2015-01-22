@@ -1047,8 +1047,8 @@ jQuery(document).ready(function() {
         });
     } else {
         jQuery('#select-size-mobile-choice-trigger').click(function () {
-            alert('click');
-            jQuery(".size-box select").removeClass('hidden').trigger('click');
+            //alert('click');
+            jQuery(".size-box select").removeClass('hidden').focus();
         });
 
         jQuery(".size-box select").change(function () {
