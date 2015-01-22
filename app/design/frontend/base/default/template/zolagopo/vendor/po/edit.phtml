@@ -150,6 +150,8 @@
                     <?php
                     $paymentDetails = Mage::helper('zolagopayment')
                         ->getPaymentDetails($this->getPo()->getId());
+                    $overpayDetails = Mage::helper('zolagopayment')
+                        ->getOverpaymentDetails($this->getPo()->getId());
 
                     //if no payment details do not show Payment details button
                     if ($paymentDetails->getSize() > 0): ?>
@@ -546,6 +548,8 @@
 if ($paymentDetails->getSize() > 0) {
     echo $this->getChild("vendor_po_edit_payments")
         ->setData('payment_details', $paymentDetails)
+        ->setData('overpay_details', $overpayDetails)
+        ->setData('po', $_po)
         ->toHtml();
 }
 	
