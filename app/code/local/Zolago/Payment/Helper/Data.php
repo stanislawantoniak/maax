@@ -41,7 +41,11 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
                 array(
                     'zolago_operator.firstname',
                     'zolago_operator.lastname'
-                )
+                ))
+            ->joinLeft(
+                'udropship_po',
+                'main_table.po_id = udropship_po.entity_id',
+                array('udropship_po.increment_id')
             );
         $allocationCollection->addFieldToFilter('po_id', $poId);
 
