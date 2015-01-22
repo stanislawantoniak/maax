@@ -1593,7 +1593,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $allocModel = Mage::getModel("zolagopayment/allocation");
             $error = $allocModel->createOverpayment($udpo);
             if (!$error) {
-                if (Mage::getSingleton("zolagodropship/session")->isOperatorMode()) {
+                if (!Mage::getSingleton("zolagodropship/session")->isOperatorMode()) {
                     throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You need to be operator to do overpayment"));
                 } else {
                     throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Overpayment can not be created"));

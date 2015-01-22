@@ -188,8 +188,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 * @return bool
 	 */
 	protected function isOperatorMode() {
-		return $this->getSession()->isOperatorMode();
-//        return true;
+//		return $this->getSession()->isOperatorMode();
+        return true; //temporary for testing
 	}
 
 	/**
