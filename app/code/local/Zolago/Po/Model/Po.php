@@ -572,14 +572,29 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return boolean
     */
    public function isPaid() {
-	   if($this->isGatewayPayment()){
-		   /**
-		    * @todo implement logic based on transaction
-		    */
-		   return false;
+	   if(!$this->isCod()){
+		   return $this->getPaymentAmount() >= $this->getGrandTotalInclTax() ? true : false;
 	   }
 	   return true;
    }
+
+	public function getPaymentAmount() {
+		/** @var Zolago_Payment_Model_Allocation $allocationModel */
+		$allocationModel = Mage::getModel("zolagopayment/allocation");
+		return $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+	}
+
+	public function getDebtAmount() {
+		return -($this->getGrandTotalInclTax() - $this->getPaymentAmount());
+	}
+
+	public function getCurrencyFormattedAmount($amount) {
+		return Mage::helper('core')->currency(
+			$amount,
+			true,
+			false
+		);
+	}
    
    /**
     * @return Zolago_Po_Model_Po_Status
@@ -624,6 +639,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
 			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
 		}
+
+		//unset customer_id if order is made by guest
+		if((!$this->getId() || $this->isObjectNew()) && $this->getOrder()->getCustomerIsGuest()) {
+			$this->setCustomerId(null);
+		}
 		
 		$this->_processAlert();
 		$this->_processStatus();
@@ -658,7 +678,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	protected function _processStatus() {
 		if(!$this->getId()){
 			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
-		}
+		}// else {
+            /** @var Zolago_Po_Helper_Data $hlp */
+           // $hlp = Mage::helper("zolagopo");
+          //  Mage::log("_processStatus", null, "a.log");
+          //  $hlp->updateStatusByAllocation($this, false);
+        //}
 	}
 	
 	protected function _processMaxShippingDate() {
@@ -669,6 +694,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		}
 		
 		
+	}
+
+	public function save() {
+		$return = parent::save();
+		Mage::dispatchEvent("zolagopo_po_save_after",array('po'=>$this));
+		return $return;
 	}
    
 }
