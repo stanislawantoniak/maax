@@ -6,6 +6,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 	protected $_vendorId;
 	protected $_vendorJoined = false;
 	protected $_productJoined = false;
+	protected $_allocationsJoined = false;
 	
 	public function addAlertFilter($int) {
 		$this->getSelect()->where("main_table.alert & ".(int)$int);
@@ -21,6 +22,10 @@ class Zolago_Po_Model_Resource_Po_Collection
 	public function addVendorData() {
 	    return $this->_joinVendorTable();
 	}
+	public function addPaymentStatuses() {
+		return $this->_joinAllocationsTable();
+	}
+
 	public function addVendorFilter($vendor) {
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
@@ -230,6 +235,19 @@ class Zolago_Po_Model_Resource_Po_Collection
         return $this;
         
     }
+
+	protected function _joinAllocationsTable() {
+		if(!$this->_allocationsJoined) {
+			$this->getSelect()->joinLeft(
+				array("allocation"=>$this->getTable("zolagopayment/allocation")),
+				"allocation.po_id = main_table.entity_id AND allocation.allocation_type = '".Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT."'",
+				"IF(SUM(allocation.allocation_amount)>=main_table.grand_total_incl_tax,1,0) AS payment_status"
+			);
+			$this->_allocationsJoined = true;
+		}
+		return $this;
+	}
+
 	protected function _joinOrderTable()
     {
         if (!$this->_orderJoined) {
