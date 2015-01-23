@@ -5,6 +5,7 @@ $overpayDetails = $this->getData('overpay_details');
 $_po = $this->getData('po');
 $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
 $showTooltipMsg = $hlp->__("You do not have permission to this function");
+$allocateTooltipMsg = $hlp->__("Allocate to the current order");
 ?>
 
 <!-- Modals comment -->
@@ -128,7 +129,7 @@ $showTooltipMsg = $hlp->__("You do not have permission to this function");
                                 <td>
                                     <a class="btn btn-primary"
                                        href="<?php echo $this->getOverpaymentUrl("allocateOverpayments"); ?>"
-                                        <?php echo $show ? "" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
+                                        <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
                                         <?php echo $_hlp->__("Allocate"); ?>[dev]
                                     </a>
                                 </td>
