@@ -35,8 +35,9 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 			'zolago_operator',
 			'main_table.operator_id =zolago_operator.operator_id',
 			array(
-				'zolago_operator.firstname',
-				'zolago_operator.lastname'
+/*				'zolago_operator.firstname',
+				'zolago_operator.lastname'*/
+				'zolago_operator.login'
 			));
 		return $this;
 	}
