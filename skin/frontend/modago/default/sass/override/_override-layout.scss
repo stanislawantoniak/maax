@@ -218,9 +218,10 @@
     }
   }
   figure {
-    margin-top: 0px;
+    margin-top: 5px;
     margin-bottom:10px;
     padding-left: 0px;
+    text-align: center;
     @media (max-width: $screen-xs-max) {
       display: inline-block;
       vertical-align: middle;
@@ -236,9 +237,6 @@
     img {
       max-width: 120px;
       max-height: 60px;
-      @media (max-width: $screen-xs-max) {
-        margin-left:13px;
-      }
     }
   }
   .seller {

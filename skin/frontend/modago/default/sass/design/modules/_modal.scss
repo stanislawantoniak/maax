@@ -47,7 +47,8 @@
 			text-align: left;
 			font-size: 12px;
 		.modal-body {
-			overflow-x: auto;
+			overflow: auto;
+			overflow-x: auto !important;
 		}
-		}
+	}
 }

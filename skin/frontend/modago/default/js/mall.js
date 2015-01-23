@@ -686,9 +686,10 @@ Mall.product = {
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOption(group.id, option, formGroupElement);
             });
+            var sizesCount = jQuery('input[type=radio][id^=size_]:not(:disabled)').length;
 
             if (sizesCount == 1) {
-                var singleInput = jQuery('input[id^=size_][type=radio]');
+                var singleInput = jQuery('input[type=radio][id^=size_]:not(:disabled)');
                 singleInput.attr('checked', 'checked').trigger('click');
             }
 
