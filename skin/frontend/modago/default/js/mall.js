@@ -687,6 +687,11 @@ Mall.product = {
                 Mall.product.createOption(group.id, option, formGroupElement);
             });
 
+            if (sizesCount == 1) {
+                var singleInput = jQuery('input[id^=size_][type=radio]');
+                singleInput.attr('checked', 'checked').trigger('click');
+            }
+
             this.applyAdditionalRules(group, formGroupElement);
         } else { //selectbox
 
