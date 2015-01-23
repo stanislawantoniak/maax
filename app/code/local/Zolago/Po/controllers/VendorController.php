@@ -1611,7 +1611,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
         return $this->_redirectReferer();
 
-
     }
 }
 
