@@ -201,14 +201,19 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 	/**
 	 * @param int|Zolago_Po_Model_Po $po_id
+	 * @param bool $byCustomer
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
-	protected function getPoAllocations($po_id) {
+	protected function getPoAllocations($po_id,$byCustomer=false) {
 		$po_id = $this->getPoId($po_id);
 		if($po_id) {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
 			$collection = $this->getCollection();
-			$collection->getSelect()->where("main_table.po_id = ?",$po_id);
+			if(!$byCustomer) {
+				$collection->getSelect()->where("main_table.po_id = ?", $po_id);
+			} else {
+				$collection->getSelect()->where("main_table.customer_id = ?", $this->getPo($po_id)->getCustomerId());
+			}
 			return $collection;
 		}
 		return false;
@@ -221,7 +226,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	public function getPoOverpayments($po_id) {
 		$po_id = $this->getPoId($po_id);
 		if($po_id) {
-			$collection = $this->getPoAllocations($po_id);
+			$customer = $this->getPo($po_id)->getCustomerId();
+			$byCustomer = $customer ? true : false;
+			$collection = $this->getPoAllocations($po_id,$byCustomer);
 			$collection->getSelect()
 				->reset(Zend_Db_Select::COLUMNS)
 				->columns(array(
