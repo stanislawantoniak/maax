@@ -3,6 +3,9 @@
 <?php $paymentDetails = $this->getData('payment_details'); ?>
 <?php $overpayDetails = $this->getData('overpay_details'); ?>
 <?php $_po = $this->getData('po'); ?>
+<?php
+$show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
+?>
 
 <!-- Modals comment -->
 <div class="modal fade" id="paymentsModal">
@@ -85,8 +88,9 @@
                     <?php if ($_po->getDebtAmount() > 0): ?>
                         <div class="row">
                             <div class="col-xs-12" style="padding-bottom: 6px;">
-                                <a class="btn btn-primary" data-toggle="modal"
-                                   href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>">
+                                <a class="btn btn-primary"
+                                   href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>"
+                                    <?php echo $show ? "" : " disabled onclick='return false;' data-toggle='tooltip' data-placement='top' title='[dev]'"; ?>>
                                     <?php echo $_hlp->__("Create overpayment"); ?>
                                 </a>
                             </div>

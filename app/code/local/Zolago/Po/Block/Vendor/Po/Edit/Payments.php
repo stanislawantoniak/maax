@@ -16,4 +16,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Payments
     }
 
 
+    public function isAllowed($resource) {
+        return Mage::getSingleton('udropship/session')->isAllowed($resource);
+    }
 }
