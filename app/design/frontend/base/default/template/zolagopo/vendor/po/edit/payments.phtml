@@ -90,7 +90,7 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                             <div class="col-xs-12" style="padding-bottom: 6px;">
                                 <a class="btn btn-primary"
                                    href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>"
-                                    <?php echo $show ? "" : " disabled onclick='return false;' data-toggle='tooltip' data-placement='top' title='[dev]'"; ?>>
+                                    <?php echo $show ? "" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='[dev]'"; ?>>
                                     <?php echo $_hlp->__("Create overpayment"); ?>
                                 </a>
                             </div>
