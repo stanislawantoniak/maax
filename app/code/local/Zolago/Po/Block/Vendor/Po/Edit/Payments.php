@@ -14,6 +14,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Payments
 
         Mage::log($action, null, "url.log");
         Mage::log($this->getUrl("udpo/vendor/overpayment/$action", $params), null, "url.log");
+        Mage::log($this->getUrl("*/*/$action", $params), null, "url.log");
 
 
         return $this->getUrl("udpo/vendor/overpayment/$action", $params);
