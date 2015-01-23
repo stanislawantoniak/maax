@@ -30,4 +30,8 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
         return;
     }
 
+
+    public function allocateOverpaymentsAction() {
+        //todo
+    }
 }

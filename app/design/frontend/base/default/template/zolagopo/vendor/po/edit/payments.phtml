@@ -81,7 +81,7 @@ $showTooltipMsg = $hlp->__("You do not have permission to this function");
                             <div class="col-xs-12" style="padding-bottom: 6px;">
                                 <a class="btn btn-primary"
                                    href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>"
-                                    <?php echo $show ? "" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='[dev]'"; ?>>
+                                    <?php echo $show ? "" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
                                     <?php echo $_hlp->__("Create overpayment"); ?>
                                 </a>
                             </div>
@@ -126,15 +126,20 @@ $showTooltipMsg = $hlp->__("You do not have permission to this function");
                                         ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary" data-toggle="modal"
-                                       href="#<?php //echo $this->getOverpaymentUrl("yyy"); ?>">
-                                        <?php echo $_hlp->__("[dev]"); ?></a>
+                                    <a class="btn btn-primary"
+                                       href="<?php echo $this->getOverpaymentUrl("allocateOverpayments"); ?>"
+                                        <?php echo $show ? "" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
+                                        <?php echo $_hlp->__("Allocate"); ?>[dev]
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
                 <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel"); ?></button>
             </div>
         </div>
     </div>
