@@ -1045,26 +1045,12 @@ jQuery(document).ready(function() {
                 Mall.setSuperAttribute(jQuery("#size_" + value));
             }
         });
+
+        if (jQuery('.size-box option').length >= 2) {
+            jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
+        }
+
     } else {
-        //var openSelect = function(selector){
-        //    var element = jQuery(selector)[0], worked = false;
-        //    if (document.createEvent) { // all browsers
-        //        var e = document.createEvent("MouseEvents");
-        //        e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        //        worked = element.dispatchEvent(e);
-        //    } else if (element.fireEvent) { // ie
-        //        worked = element.fireEvent("onmousedown");
-        //    }
-        //    if (!worked) { // unknown browser / error
-        //        alert("It didn't worked in your browser.");
-        //    }
-        //}
-        //jQuery('#select-size-mobile-choice-trigger').click(function () {
-        //    //alert('click');
-        //    jQuery(".size-box select").removeClass('hidden');
-        //    openSelect(jQuery(".size-box select"));
-        //});
-        //
         //jQuery(".size-box select").change(function () {
         //    var selectedOption = jQuery(this).find('option:selected');
         //    console.log(selectedOption.text());
@@ -1076,18 +1062,24 @@ jQuery(document).ready(function() {
             theme: "bootstrap",
             //mobile: true,
             native: true,
-            defaultText: "Select size",
-            autoWidth:false
-        })
+            defaultText: Mall.translate.__('Select size'),
+            autoWidth: false
+        });
+        jQuery(".size-box select").bind({
+            "change": function (ev, obj) {
+                console.log(obj);
+                var selectedOption = jQuery(this).find('option:selected');
+                console.log(selectedOption);
+                Mall.setSuperAttribute(selectedOption);
+            }
+        });
     }
 
 
     if(jQuery(".size-box option").length == 1) {
         Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
     }
-    if (jQuery('.size-box option').length >= 2) {
-        jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
-    }
+
 
 
 
