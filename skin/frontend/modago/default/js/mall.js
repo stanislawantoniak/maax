@@ -723,6 +723,15 @@ Mall.product = {
                 class: formGroupElementSelectClass
             }).appendTo(formGroupElement);
 
+            if(Mall.getIsBrowserMobile() && jQuery(group.options).length >= 2){
+                //jQuery("<option/>", {
+                //    value: '',
+                //    html: jQuery('.size-label').text(),
+                //    "data-id": 0,
+                //    name: ("super_attribute["+ group.id +"]")
+                //}).appendTo(formGroupElementSelect);
+
+            }
 
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
@@ -1055,9 +1064,8 @@ jQuery(document).ready(function() {
             autoWidth: false
         });
         jQuery(".size-box select").bind({
-            "change": function (ev, obj) {
+            "change": function () {
                 var selectedOption = jQuery(this).find('option:selected');
-                console.log(selectedOption);
                 Mall.setSuperAttribute(selectedOption);
             }
         });
