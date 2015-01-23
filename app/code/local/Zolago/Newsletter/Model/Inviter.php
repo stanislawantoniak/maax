@@ -64,7 +64,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			return false;
 		}
 		$logtest = $this->_isEmailSuitableForInvitation($email);
-		Mage::log($logtest,null,"news.log");
+		Mage::log(($logtest ? "true" : "false"),null,"news.log");
 		if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
 			&& $logtest) {
