@@ -720,15 +720,9 @@ Mall.product = {
             var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : ' form-control mobile-native-select-w';
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
-                class: formGroupElementSelectClass,
-                width: '200px',
-                'data-size':3
+                class: formGroupElementSelectClass
             }).appendTo(formGroupElement);
 
-            //if(Mall.getIsBrowserMobile()){
-            //    var selectSizeTrigger = '<div class="" id="select-size-mobile-trigger" style="width:220px;"></div>';
-            //    jQuery(selectSizeTrigger).prependTo(formGroupElement);
-            //}
 
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
@@ -1051,12 +1045,7 @@ jQuery(document).ready(function() {
         }
 
     } else {
-        //jQuery(".size-box select").change(function () {
-        //    var selectedOption = jQuery(this).find('option:selected');
-        //    console.log(selectedOption.text());
-        //    Mall.setSuperAttribute(selectedOption);
-        //    jQuery('#select-size-mobile-label').text(selectedOption.text());
-        //});
+
 
         jQuery(".size-box select").selectBoxIt({
             theme: "bootstrap",
@@ -1067,7 +1056,6 @@ jQuery(document).ready(function() {
         });
         jQuery(".size-box select").bind({
             "change": function (ev, obj) {
-                console.log(obj);
                 var selectedOption = jQuery(this).find('option:selected');
                 console.log(selectedOption);
                 Mall.setSuperAttribute(selectedOption);
