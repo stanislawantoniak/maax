@@ -109,7 +109,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 //                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
 				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
-				$payments = $this->getPoPayments($po); //get all po payments
+				$payments = $this->getPoPayments($po,true); //get all po payments
 				$allocations = array();
 //                Mage::log("operatorid: $operatorId", null, "op.log");
 //                Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
@@ -179,18 +179,21 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 	/**
 	 * @param int|Zolago_Po_Model_Po $po
+	 * @param bool $orderByAmount
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
-	public function getPoPayments($po) {
+	public function getPoPayments($po,$orderByAmount=false) {
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
         $po_id = $this->getPoId($po);
 
 		$collection = $this->getPoAllocations($po_id);
 		if($collection) {
 			$collection->addPoIdFilter($po_id);
-			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
-            $collection->addOrder("allocation_amount");//desc
-            $collection->getSelect()->where("allocation_amount > 0");
+			$collection->getSelect()->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
+			if($orderByAmount) {
+				$collection->addOrder("main_table.allocation_amount");//desc
+			}
+            $collection->getSelect()->where("main_table.allocation_amount > 0");
 			return $collection;
 		}
 		return false;
@@ -219,8 +222,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		$po_id = $this->getPoId($po_id);
 		if($po_id) {
 			$collection = $this->getPoAllocations($po_id);
-			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
 			$collection->getSelect()
+				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
 				->reset(Zend_Db_Select::COLUMNS)
 				->columns(array(
 					"allocation_id" => "MAX(main_table.allocation_id)",
