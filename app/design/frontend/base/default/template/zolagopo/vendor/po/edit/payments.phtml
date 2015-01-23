@@ -1,10 +1,11 @@
-<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */ ?>
-<?php $_hlp = Mage::helper("zolagopo"); ?>
-<?php $paymentDetails = $this->getData('payment_details'); ?>
-<?php $overpayDetails = $this->getData('overpay_details'); ?>
-<?php $_po = $this->getData('po'); ?>
-<?php
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */
+$_hlp = Mage::helper("zolagopo");
+$paymentDetails = $this->getData('payment_details');
+$overpayDetails = $this->getData('overpay_details');
+$_po = $this->getData('po');
 $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
+$showTooltipMsg = $hlp->__("You do not have permission to this function");
+$allocateTooltipMsg = $hlp->__("Allocate to the current order");
 ?>
 
 <!-- Modals comment -->
@@ -19,9 +20,6 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                 <?php if($paymentDetails->count() > 0): ?>
                     <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
                         <thead>
-                            <tr>
-                                <th colspan="5" style="text-align: center;"><?php echo $_hlp->__("Payments"); ?></th>
-                            </tr>
                             <tr>
                                 <th><?php echo $_hlp->__("Transaction"); ?></th>
                                 <th><?php echo $_hlp->__("Date"); ?></th>
@@ -55,15 +53,6 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong><?php echo $_hlp->__("Final price");?></strong></td>
-                            <td>
-                                <strong><?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                             <td><strong><?php echo $_hlp->__("Paid");?></strong></td>
                             <td>
                                 <strong><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></strong>
@@ -73,24 +62,27 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong><?php echo $_hlp->__("Difference"); ?>:</strong></td>
-                            <td><strong>
-                                <?php
-                                $debtAmount = $_po->getDebtAmount();
-                                echo $debtAmount > 0 ? "+" : "";
-                                echo $_po->getCurrencyFormattedAmount($debtAmount);
-                                ?></strong>
+                            <td><strong><?php echo $_hlp->__("Order amount");?></strong></td>
+                            <td>
+                                <strong><?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?></strong>
                             </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong><?php echo $_po->getDebtAmount() > 0 ? $_hlp->__("Overpaid") : $_hlp->__("Underpaid");?>:</strong></td>
+                            <td><strong><?php echo $_po->getCurrencyFormattedAmount(abs($_po->getDebtAmount())); ?></strong></td>
                         </tr>
 
                         </tbody>
                     </table>
                     <?php if ($_po->getDebtAmount() > 0): ?>
-                        <div class="row">
+                        <div class="row pull-right">
                             <div class="col-xs-12" style="padding-bottom: 6px;">
                                 <a class="btn btn-primary"
                                    href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>"
-                                    <?php echo $show ? "" : " disabled onclick='return false;' data-toggle='tooltip' data-placement='top' title='[dev]'"; ?>>
+                                    <?php echo $show ? "" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
                                     <?php echo $_hlp->__("Create overpayment"); ?>
                                 </a>
                             </div>
@@ -102,7 +94,7 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                     <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
                         <thead>
                             <tr>
-                                <th colspan="7" style="text-align: center;"><?php echo $_hlp->__("Overpayments"); ?></th>
+                                <th colspan="7" style="text-align: center;"><?php echo $_hlp->__("Customer overpayments"); ?></th>
                             </tr>
                             <tr>
                                 <th><?php echo $_hlp->__("Transaction"); ?></th>
@@ -135,9 +127,11 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                                         ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary" data-toggle="modal"
-                                       href="#<?php //echo $this->getOverpaymentUrl("yyy"); ?>">
-                                        <?php echo $_hlp->__("[dev]"); ?></a>
+                                    <a class="btn btn-primary"
+                                       href="<?php echo $this->getOverpaymentUrl("allocateOverpayments"); ?>"
+                                        <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
+                                        <?php echo $_hlp->__("Allocate"); ?>[dev]
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -145,6 +139,12 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                     </table>
                 <?php endif; ?>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel"); ?></button>
+            </div>
         </div>
     </div>
 </div>
+<!--<script>-->
+<!--    jQuery('[data-toggle="tooltip"]').tooltip();-->
+<!--</script>-->
