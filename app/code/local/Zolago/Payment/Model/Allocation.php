@@ -223,28 +223,23 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		if($po_id) {
 			$collection = $this->getPoAllocations($po_id);
 			$collection->getSelect()
-				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
 				->reset(Zend_Db_Select::COLUMNS)
 				->columns(array(
-					"allocation_id" => "MAX(main_table.allocation_id)",
-					"transaction_id" => "main_table.transaction_id",
-					"po_id" => "main_table.po_id",
+					"main_table.allocation_id",
+					"main_table.transaction_id",
+					"main_table.po_id",
 					"allocation_amount" => "SUM(main_table.allocation_amount)",
-					"allocation_type" => "main_table.allocation_type",
-					"created_at" => "MAX(main_table.created_at)",
-					"customer_id" => "main_table.customer_id"
+					"main_table.allocation_type",
+					"main_table.created_at",
+					"main_table.customer_id",
+					"main_table.operator_id",
+					"main_table.comment"
 				))
-				->joinLeft(
-					array("main_table_again" => "zolago_payment_allocation"),
-					"MAX(main_table.allocation_id) = main_table_again.allocation_id",
-					array(
-						"operator_id"=>"main_table_again.operator_id",
-						"comment"=>"main_table_again.comment"
-					));
-			$collection->getSelect()->group("transaction_id");
-			$collection->getSelect()->having("allocation_amount > 0");
+				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
+				->having("allocation_amount > 0")
+				->order("main_table.created_at",Zend_Db_Select::SQL_DESC)
+				->limit(1);
 
-			Mage::log((string)$collection->getSelect(),null,"test123.log");
 			return $collection;
 		}
 		return false;
