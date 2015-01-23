@@ -220,7 +220,8 @@
 "Loading...","Zapisuję..."
 "Overpayment created","Utworzono nadpłatę"
 "Amount due","Niedopłata"
-"Debt","Niedopłata"
+"Underpaid","Niedopłata"
+"Overpaid","Nadpłata"
 "Outstanding amount","Nadpłata"
 "Discount","Zniżka za sztukę"
 "Transaction","Transakcja"
@@ -228,4 +229,4 @@
 "Operator","Operator"
 "Amount","Ilość"
 "Payment details","Szczegóły płatności"
-
+"Cash on delivery","Za pobraniem"
