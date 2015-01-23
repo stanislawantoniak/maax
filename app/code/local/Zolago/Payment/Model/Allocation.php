@@ -241,8 +241,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 						"operator_id"=>"main_table_again.operator_id",
 						"comment"=>"main_table_again.comment"
 					));
-			$collection->getSelect()->group("main_table.transaction_id");
-			$collection->getSelect()->having("allocation_amount_sum > 0");
+			$collection->getSelect()->group("transaction_id");
+			$collection->getSelect()->having("allocation_amount > 0");
 			return $collection;
 		}
 		return false;
