@@ -115,7 +115,7 @@
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAtLast(); ?></td>
+                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $overpayDetail->getComment(); ?></td>
                                 <td>
@@ -129,7 +129,7 @@
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
-                                        ->currency($overpayDetail->getAllocationAmountSum(), true, false); ?>
+                                        ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
                                     <a class="btn btn-primary" data-toggle="modal"
