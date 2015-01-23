@@ -64,16 +64,18 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
      */
     public function addOverpayComment(Zolago_Po_Model_Po $po, $isVendorNotified, $isVisibleToVendor, $operator_id, $amount) {
 
-        Mage::log("addOverpayComment start", null, "c.log");
-
         /** @var Zolago_Payment_Helper_Data $helperZP */
         $helperZP = Mage::helper("zolagopayment");
         /** @var Zolago_Operator_Model_Operator $modelOperator */
         $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
 
         $fullName = $modelOperator->getFullname();
-        $_comment = "[$fullName] " . $helperZP->__("Created overpayment") . ": $amount";
-        Mage::log("comment: $_comment", null, "c.log");
+        $_comment =
+            "[$fullName] " .
+            $helperZP->__("Created overpayment") .
+            ": " .
+            Mage::helper('core')->currency($amount, true, false)
+        ;
 
         $po->addComment($_comment, $isVendorNotified, $isVisibleToVendor);
         if ($isVendorNotified) {
@@ -81,7 +83,6 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
             Mage::helper('udropship')->processQueue();
         }
         $po->saveComments();
-        Mage::log("comment save; addOverpayComment end", null, "c.log");
     }
 
 	/**
