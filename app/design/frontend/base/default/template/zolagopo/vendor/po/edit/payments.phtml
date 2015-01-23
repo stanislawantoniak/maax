@@ -89,6 +89,9 @@
                                    href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>">
                                     <?php echo $_hlp->__("Create overpayment"); ?>
                                 </a>
+                                test acl
+                                <?php var_dump(Mage::getSingleton('udropship/session')->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR));
+                                 ?>
                             </div>
                         </div>
                     <?php endif; ?>

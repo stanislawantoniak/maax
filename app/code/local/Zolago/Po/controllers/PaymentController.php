@@ -14,8 +14,8 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
 //            Mage::log("error:" . ($error ? "1" : "0"), null, "op.log");
                 if (!$error) {
                     if (!Mage::getSingleton("zolagodropship/session")->isOperatorMode()) {
-                        //no needed because of Acl ?
-                        throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You need to be operator to do overpayment"));
+                        //info for vendor, only operator with role "Payment manage" can do this
+                        throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You need to be operator with role `Payment manage`"));
                     } else {
                         throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Overpayment can not be created"));
                     }
