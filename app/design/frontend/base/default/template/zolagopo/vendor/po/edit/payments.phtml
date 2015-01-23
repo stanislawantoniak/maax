@@ -38,8 +38,7 @@
                                     <?php if (is_null($operatorId)): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
-                                        <?php echo $paymentDetail->getFirstname(); ?>&nbsp;
-                                        <?php echo $paymentDetail->getLastname(); ?>
+                                        <?php echo $paymentDetail->getFirstname(); ?>&nbsp;<?php echo $paymentDetail->getLastname(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
