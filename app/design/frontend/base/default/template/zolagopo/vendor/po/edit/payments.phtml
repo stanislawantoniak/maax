@@ -52,15 +52,6 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong><?php echo $_hlp->__("Final price");?></strong></td>
-                            <td>
-                                <strong><?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                             <td><strong><?php echo $_hlp->__("Paid");?></strong></td>
                             <td>
                                 <strong><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></strong>
@@ -70,14 +61,17 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong><?php echo $_hlp->__("Difference"); ?>:</strong></td>
-                            <td><strong>
-                                <?php
-                                $debtAmount = $_po->getDebtAmount();
-                                echo $debtAmount > 0 ? "+" : "";
-                                echo $_po->getCurrencyFormattedAmount($debtAmount);
-                                ?></strong>
+                            <td><strong><?php echo $_hlp->__("Order amount");?></strong></td>
+                            <td>
+                                <strong><?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?></strong>
                             </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong><?php echo $_po->getDebtAmount() > 0 ? $_hlp->__("Overpaid") : $_hlp->__("Underpaid");?>:</strong></td>
+                            <td><strong><?php echo $_po->getCurrencyFormattedAmount(abs($_po->getDebtAmount())); ?></strong></td>
                         </tr>
 
                         </tbody>

@@ -175,7 +175,7 @@
 						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
 						<dt><?php echo $debtAmount > 0 ? $_hlp->__("Overpaid") : $_hlp->__("Underpaid");?>:</dt>
-						<dd><?php echo $debtAmount > 0 ? "+" : ""; ?><?php echo $_po->getCurrencyFormattedAmount($debtAmount); ?></dd>
+						<dd><?php echo $_po->getCurrencyFormattedAmount(abs($debtAmount)); ?></dd>
 					</dl>
 				</div>
 			</div>
