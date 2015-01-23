@@ -77,7 +77,7 @@ $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
                         </tbody>
                     </table>
                     <?php if ($_po->getDebtAmount() > 0): ?>
-                        <div class="row">
+                        <div class="row pull-right">
                             <div class="col-xs-12" style="padding-bottom: 6px;">
                                 <a class="btn btn-primary"
                                    href="<?php echo $this->getOverpaymentUrl("createOverpayment"); ?>"
