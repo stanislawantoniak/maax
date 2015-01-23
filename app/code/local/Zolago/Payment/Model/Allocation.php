@@ -276,7 +276,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 */
 	protected function getPo($po) {
 		if(!$po instanceof Zolago_Po_Model_Po) {
-			$po = Mage::getModel("zolago/po")->load($po);
+			$po = Mage::getModel("zolagopo/po")->load($po);
 		}
 		return $po;
 	}

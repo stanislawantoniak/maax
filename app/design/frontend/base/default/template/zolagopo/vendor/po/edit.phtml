@@ -166,7 +166,9 @@
                     <?php endif; ?>
                 </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
-					<dl class="dl-horizontal dl-z"> 
+					<dl class="dl-horizontal dl-z">
+						<dt><?php echo $_hlp->__("Payment method"); ?>:</dt>
+						<dd><?php echo $this->getPaymentMethod($_po); ?></dd>
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
 						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
