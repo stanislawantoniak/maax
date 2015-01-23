@@ -18,6 +18,8 @@ class Zolago_Po_OverpaymentController extends Zolago_Dropship_Controller_Vendor_
                 }
             } else {
                 $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Overpayment created"));
+                $this->_redirect('udpo/vendor/edit', array('id' => $udpo->getId()));
+                return;
             }
 
         } catch (Mage_Core_Exception $e) {
@@ -28,8 +30,6 @@ class Zolago_Po_OverpaymentController extends Zolago_Dropship_Controller_Vendor_
         }
         $this->_redirect('udpo/vendor/edit', array('id' => $udpo->getId()));
         return;
-
-//        return $this->_redirectReferer();
     }
 
 }
