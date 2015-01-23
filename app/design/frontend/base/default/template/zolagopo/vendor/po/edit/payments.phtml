@@ -32,14 +32,14 @@
                             <tr>
                                 <td><?php echo $paymentDetail->getTxnId(); ?></td>
                                 <td><?php echo $paymentDetail->getCreatedAt(); ?></td>
-                                <td><?php echo $paymentDetail->getComment(); ?></td>
+                                <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
                                 <td>
                                     <?php $operatorId = $paymentDetail->getOperatorId(); ?>
                                     <?php if (is_null($operatorId)): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
-                                        <?php echo $paymentDetail->getFirstname(); ?>&nbsp;
-                                        <?php echo $paymentDetail->getLastname(); ?>
+                                        <?php /*echo $paymentDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $paymentDetail->getLastname(); */?>
+	                                    <?php echo $paymentDetail->getEmail(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -70,7 +70,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong><?php echo $_hlp->__("Difference:"); ?></strong></td>
+                            <td><strong><?php echo $_hlp->__("Difference"); ?>:</strong></td>
                             <td><strong>
                                 <?php
                                 $debtAmount = $_po->getDebtAmount();
@@ -114,21 +114,21 @@
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAtLast(); ?></td>
+                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
-                                <td><?php echo $overpayDetail->getComment(); ?></td>
+                                <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
                                 <td>
                                     <?php $operatorId = $overpayDetail->getOperatorId(); ?>
                                     <?php if (is_null($operatorId)): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
-                                        <?php echo $overpayDetail->getFirstname(); ?>&nbsp;
-                                        <?php echo $overpayDetail->getLastname(); ?>
+                                        <?php /*echo $overpayDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $overpayDetail->getLastname(); */?>
+	                                    <?php echo $overpayDetail->getEmail(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
-                                        ->currency($overpayDetail->getAllocationAmountSum(), true, false); ?>
+                                        ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
                                     <a class="btn btn-primary" data-toggle="modal"

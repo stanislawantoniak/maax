@@ -314,7 +314,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $oldPrice = $po->getShippingAmountIncl();
             $store = $po->getOrder()->getStore();
 
-            if(empty($price) || (float)$price<0) {
+            if(is_null($price) || (float)$price<0) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Illegal price"));
             }
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
@@ -474,7 +474,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $item = $po->getItemById($itemId);
         /* @var $item Zolago_Po_Model_Po_Item */
 
-        $price = $request->getParam("product_price");
+        $price = str_replace(",",".",$request->getParam("product_price"));
         $qty = $request->getParam("product_qty", 1);
         $discount = $request->getParam("product_discount", 0);
 
