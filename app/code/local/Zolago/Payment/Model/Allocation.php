@@ -101,7 +101,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 		$po = $this->getPo($po);
 //        Mage::log($po->getId(), null, "op.log");
-		if($po->getId() && $this->isOperatorMode()) { //check if po exists and
+		if($po->getId()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
 //            Mage::log("poGrandTotal $poGrandTotal || poAllocationSum $poAllocationSum", null, "op.log");
