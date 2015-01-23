@@ -108,7 +108,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 //                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
-				$overpaymentAmount = $poAllocationSum - $poGrandTotal;
+				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
 				$payments = $this->getPoPayments($po); //get all po payments
 				$allocations = array();
 //                Mage::log("operatorid: $operatorId", null, "op.log");
@@ -159,7 +159,18 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					}
 //                    Mage::log("allocations:", null, "op.log");
 //                    Mage::log($allocations, null, "op.log");
-					return $this->appendMultipleAllocations($allocations);
+					$r = $this->appendMultipleAllocations($allocations);
+
+                    if ($r) {
+                        Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
+                            array(
+                                'po' => $po,
+                                "operator_id" => $operatorId,
+                                "amount" => $finalOverpaymentAmount
+                            ));
+                    }
+                    return $r;
+
 				}
 			}
 		}
@@ -209,11 +220,12 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		if($po_id) {
 			$collection = $this->getPoAllocations($po_id);
 			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
-			$collection->getSelect()->columns(array("allocation_amount_sum" => "SUM(main_table.allocation_amount)"));
+			$collection->getSelect()->columns(array(
+				"allocation_amount_sum" => "SUM(main_table.allocation_amount)",
+				"created_at_last" => "MAX(main_table.created_at)"
+			));
 			$collection->getSelect()->group("main_table.transaction_id");
 			$collection->getSelect()->having("allocation_amount_sum > 0");
-
-			Mage::log((string)$collection->getSelect());
 			return $collection;
 		}
 		return false;

@@ -115,7 +115,7 @@
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
+                                <td><?php echo $overpayDetail->getCreatedAtLast(); ?></td>
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $overpayDetail->getComment(); ?></td>
                                 <td>
