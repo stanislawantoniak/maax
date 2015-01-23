@@ -10,7 +10,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const ROLE_HELPDESK								= "helpdesk";
 	const ROLE_MASS_OPERATOR						= "mass_operator";
 	const ROLE_PRODUCT_OPERATOR						= "product_operator";
-	
+	const ROLE_OVERPAY_OPERATOR						= "overpay_operator";
+
 	
 	// Reousrce definition
 	
@@ -53,8 +54,13 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	
 	// Campaign managment
 	const RES_CAMPAIGN_VENDOR						= "campaign/vendor";
-	
-	
+
+
+    // Overpayments managment
+	const RES_OVERPAY_OPERATOR						= "udpo/vendor/createOverpayment";
+    // underpaid managment
+	const RES_UNDERPAID_OPERATOR      				= "udpo/vendor/createOverpayment";
+
 
 	// Resources as array
 	protected static $_currentResources = array(
@@ -88,7 +94,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// Operator manage
 		self::RES_UDROPSHIP_OPERATOR				=> "Operator manage",
 		// Campaign managment
-		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage"
+		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage",
+        // Overpayments managment
+        self::RES_OVERPAY_OPERATOR                  => "Overpay manage",
+        // underpaid managment
+        self::RES_UNDERPAID_OPERATOR                => "Underpaid manage",
 	
 	);
 	
@@ -99,7 +109,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::ROLE_RMA_OPERATOR						=> "RMA Operator",	
 		self::ROLE_HELPDESK							=> "Helpdesk",	
 		self::ROLE_MASS_OPERATOR					=> "Mass Operator",	
-		self::ROLE_PRODUCT_OPERATOR					=> "Product Operator"
+		self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
+		self::ROLE_OVERPAY_OPERATOR                 => "Overpay Operator"
 	);
 	
 	
@@ -145,7 +156,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// Build ACL Rules - Mass Actions
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);
-		
+
+        // Build ACL Rules - Overpayments managment
+        $this->setRule(Self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_OVERPAY_OPERATOR);
+        $this->setRule(Self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_UNDERPAID_OPERATOR);
+
 	}
 	
 	/**

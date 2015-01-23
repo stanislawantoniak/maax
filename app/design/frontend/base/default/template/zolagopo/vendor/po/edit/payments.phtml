@@ -39,7 +39,7 @@
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
                                         <?php /*echo $paymentDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $paymentDetail->getLastname(); */?>
-	                                    <?php echo $paymentDetail->getLogin(); ?>
+	                                    <?php echo $paymentDetail->getEmail(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -70,7 +70,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong><?php echo $_hlp->__("Difference:"); ?></strong></td>
+                            <td><strong><?php echo $_hlp->__("Difference"); ?>:</strong></td>
                             <td><strong>
                                 <?php
                                 $debtAmount = $_po->getDebtAmount();
@@ -123,7 +123,7 @@
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
                                         <?php /*echo $overpayDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $overpayDetail->getLastname(); */?>
-	                                    <?php echo $overpayDetail->getLogin(); ?>
+	                                    <?php echo $overpayDetail->getEmail(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>

@@ -475,8 +475,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         /* @var $item Zolago_Po_Model_Po_Item */
 
         $price = str_replace(",",".",$request->getParam("product_price"));
-        $qty = $request->getParam("product_qty", 1);
-        $discount = $request->getParam("product_discount", 0);
+        $qty = (int)$request->getParam("product_qty", 1);
+        $discount = str_replace(",",".",$request->getParam("product_discount", 0));
 
         $product = Mage::getModel("catalog/product");//
 
@@ -1610,7 +1610,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
         }
         return $this->_redirectReferer();
-
 
     }
 }
