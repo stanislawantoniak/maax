@@ -38,8 +38,7 @@
                                     <?php if (is_null($operatorId)): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
-                                        <?php echo $paymentDetail->getFirstname(); ?>&nbsp;
-                                        <?php echo $paymentDetail->getLastname(); ?>
+                                        <?php echo $paymentDetail->getFirstname(); ?>&nbsp;<?php echo $paymentDetail->getLastname(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -95,7 +94,6 @@
                 <?php endif; ?>
 
                 <?php if($overpayDetails->count() > 0): ?>
-	                <?php Mage::log((string)$overpayDetails->getSelect(),null,"cos.log"); ?>
                     <table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
                         <thead>
                             <tr>
@@ -115,7 +113,7 @@
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAtLast(); ?></td>
+                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $overpayDetail->getComment(); ?></td>
                                 <td>
@@ -129,7 +127,7 @@
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
-                                        ->currency($overpayDetail->getAllocationAmountSum(), true, false); ?>
+                                        ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
                                     <a class="btn btn-primary" data-toggle="modal"

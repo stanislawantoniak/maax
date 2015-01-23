@@ -224,4 +224,10 @@
 "Operator","Operator"
 "Amount","Ilość"
 "Payment details","Szczegóły płatności"
-
+"Not paid","Nieopłacone"
+"dotpay","Dotpay"
+"Create overpayment","Utwórz nadpłatę"
+"Payments","Płatności"
+"Difference","Różnica"
+"Overpayments","Nadpłaty"
+"Allocate","Przypisz"
