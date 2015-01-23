@@ -4,8 +4,6 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
 {
     public function createOverpaymentAction() {
 
-        Mage::log("createOverpaymentAction start", null, "co.log");
-
         try {
             $po_id = $this->getRequest()->getParam("id");//po_id
             $po = Mage::getModel("zolagopo/po")->load($po_id);
