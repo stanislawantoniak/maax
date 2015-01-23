@@ -32,13 +32,14 @@
                             <tr>
                                 <td><?php echo $paymentDetail->getTxnId(); ?></td>
                                 <td><?php echo $paymentDetail->getCreatedAt(); ?></td>
-                                <td><?php echo $paymentDetail->getComment(); ?></td>
+                                <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
                                 <td>
                                     <?php $operatorId = $paymentDetail->getOperatorId(); ?>
                                     <?php if (is_null($operatorId)): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
-                                        <?php echo $paymentDetail->getFirstname(); ?>&nbsp;<?php echo $paymentDetail->getLastname(); ?>
+                                        <?php /*echo $paymentDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $paymentDetail->getLastname(); */?>
+	                                    <?php echo $paymentDetail->getLogin(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -115,14 +116,14 @@
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
                                 <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
-                                <td><?php echo $overpayDetail->getComment(); ?></td>
+                                <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
                                 <td>
                                     <?php $operatorId = $overpayDetail->getOperatorId(); ?>
                                     <?php if (is_null($operatorId)): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
-                                        <?php echo $overpayDetail->getFirstname(); ?>&nbsp;
-                                        <?php echo $overpayDetail->getLastname(); ?>
+                                        <?php /*echo $overpayDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $overpayDetail->getLastname(); */?>
+	                                    <?php echo $overpayDetail->getLogin(); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
