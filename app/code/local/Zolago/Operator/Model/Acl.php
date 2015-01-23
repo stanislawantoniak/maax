@@ -57,7 +57,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
 
     // Overpayments managment
-	const RES_PAYMENT_OPERATOR						= "udpo/vendor_payment";
+	const RES_PAYMENT_OPERATOR						= "udpo/payment";
 
 
 	// Resources as array
