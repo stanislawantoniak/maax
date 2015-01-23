@@ -443,7 +443,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			//return $xml_array;
 			Mage::log($channel,null,"xml.log");
 			//Mage::log($payment->getProvider(),null,"payment.log");
-			return $helper->__($method).($channelName ? "(".$channelName.")" : "");
+			return $helper->__($method).($channelName ? " (".$channelName.")" : "");
 		}
 	}
 	
