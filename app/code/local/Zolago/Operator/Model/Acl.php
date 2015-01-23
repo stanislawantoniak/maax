@@ -156,6 +156,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         // Build ACL Rules - Overpayments managment
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PAYMENT_OPERATOR, self::RES_PAYMENT_OPERATOR);
 
+        Mage::log("__construct() in Acl.php end", null, "co.log");
 	}
 	
 	/**
