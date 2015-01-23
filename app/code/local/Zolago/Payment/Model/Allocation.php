@@ -205,7 +205,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		if($po_id) {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
 			$collection = $this->getCollection();
-			$collection->addPoIdFilter($po_id);
+			$collection->getSelect()->where("main_table.po_id = ?",$po_id);
 			return $collection;
 		}
 		return false;
