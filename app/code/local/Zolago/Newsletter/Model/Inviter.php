@@ -55,6 +55,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 * @return bool
 	 */
 	public function sendInvitationEmail($email) {
+		Mage::log("$email | in",null,"news.log");
 		if (
 			$this->getImportMode()
 			|| !$this->_getInvitationEmailTemplateId()
@@ -63,10 +64,11 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			return false;
 		}
 		$logtest = $this->_isEmailSuitableForInvitation($email);
+		Mage::log($logtest,null,"news.log");
 		if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
 			&& $logtest) {
-			Mage::log($logtest,null,"news.log");
+
 			/** @var Zolago_Common_Helper_Data $helper */
 			$helper = Mage::helper("zolagocommon");
 			return $helper->sendEmailTemplate(
