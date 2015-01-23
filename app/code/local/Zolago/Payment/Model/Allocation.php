@@ -243,6 +243,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					));
 			$collection->getSelect()->group("transaction_id");
 			$collection->getSelect()->having("allocation_amount > 0");
+
+			Mage::log((string)$collection->getSelect(),null,"test123.log");
 			return $collection;
 		}
 		return false;
