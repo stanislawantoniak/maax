@@ -1,11 +1,14 @@
-<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */
+<?php
+
+/* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */
 $_hlp = Mage::helper("zolagopo");
 $paymentDetails = $this->getData('payment_details');
 $overpayDetails = $this->getData('overpay_details');
 $_po = $this->getData('po');
 $show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
-$showTooltipMsg = $hlp->__("You do not have permission to this function");
-$allocateTooltipMsg = $hlp->__("Allocate to the current order");
+$showTooltipMsg = $_hlp->__("You do not have permission to this function");
+$allocateTooltipMsg = $_hlp->__("Allocate to the current order");
+
 ?>
 
 <!-- Modals comment -->
