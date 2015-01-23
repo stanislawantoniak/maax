@@ -171,8 +171,8 @@
 						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
 						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
-						<dt><?php echo $_hlp->__("Debt");?>:</dt>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
+						<dt><?php echo $debtAmount > 0 ? $_hlp->__("Overpaid") : $_hlp->__("Underpaid");?>:</dt>
 						<dd><?php echo $debtAmount > 0 ? "+" : ""; ?><?php echo $_po->getCurrencyFormattedAmount($debtAmount); ?></dd>
 					</dl>
 				</div>
