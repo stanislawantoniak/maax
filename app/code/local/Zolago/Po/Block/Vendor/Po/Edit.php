@@ -422,7 +422,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 
 	public function getPaymentMethod(Zolago_Po_Model_Po $po) {
-		$helper = Mage::helper("zolagopo");
+		$helper = Mage::helper("zolagopayment");
 		if($po->isCod()) {
 			return $helper->__("Cash on delivery");
 		} else {
