@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Po_Vendor_OverpaymentController extends Zolago_Dropship_Controller_Vendor_Abstract
+class Zolago_Po_OverpaymentController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
     public function createOverpaymentAction() {
         try {
