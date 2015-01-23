@@ -28,7 +28,9 @@ class Zolago_Po_OverpaymentController extends Zolago_Dropship_Controller_Vendor_
             Mage::logException($e);
             $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
         }
-        $this->_redirect('udpo/vendor/edit', array('id' => $udpo->getId()));
+        $this->_redirect('udropship');
+
+
         return;
     }
 
