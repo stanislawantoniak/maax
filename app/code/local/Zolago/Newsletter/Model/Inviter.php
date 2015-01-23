@@ -62,10 +62,11 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		) {
 			return false;
 		}
-
+		$logtest = $this->_isEmailSuitableForInvitation($email);
 		if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
-			&& $this->_isEmailSuitableForInvitation($email)) {
+			&& $logtest) {
+			Mage::log($logtest,null,"news.log");
 			/** @var Zolago_Common_Helper_Data $helper */
 			$helper = Mage::helper("zolagocommon");
 			return $helper->sendEmailTemplate(
@@ -105,6 +106,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		$model = Mage::getModel("newsletter/subscriber");
 		$subscription = $model->loadByEmail($email);
 		$sid = $subscription->getId();
+		$save = false;
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
@@ -114,9 +116,16 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				$confirm_code = $subscription->getSubscriberConfirmCode();
 				if(!$confirm_code) {
 					$subscription->setSubscriberConfirmCode($this->_getInvitationCode());
-					$subscription->save();
+					$save = true;
 				} else {
 					$this->_setInvitationCode($subscription->getSubscriberConfirmCode());
+				}
+				if(is_null($status) || $status == 0) {
+					$subscription->setSubscriberStatus(self::STATUS_NOT_ACTIVE);
+					$save = true;
+				}
+				if($save) {
+					$subscription->save();
 				}
 				return true;
 			} else {
