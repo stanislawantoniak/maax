@@ -73,6 +73,16 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_save_after>
+
+            <zolagopayment_create_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>addOverpayComment</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_create_overpayment_save_after>
+
 			<zolagopo_po_split>
 				<observers>
 					<zolagopo>

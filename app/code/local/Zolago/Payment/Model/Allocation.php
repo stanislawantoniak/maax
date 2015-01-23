@@ -1,7 +1,6 @@
 <?php
 
 class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
-
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_UNDERPAID = 'underpaid'; // niedoplata
@@ -109,8 +108,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 //                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
-				$overpaymentAmount = $poAllocationSum - $poGrandTotal;
-				$payments = $this->getPoPayments($po); //get all po payments
+				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
+				$payments = $this->getPoPayments($po,true); //get all po payments
 				$allocations = array();
 //                Mage::log("operatorid: $operatorId", null, "op.log");
 //                Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
@@ -160,7 +159,18 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					}
 //                    Mage::log("allocations:", null, "op.log");
 //                    Mage::log($allocations, null, "op.log");
-					return $this->appendMultipleAllocations($allocations);
+					$r = $this->appendMultipleAllocations($allocations);
+
+                    if ($r) {
+                        Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
+                            array(
+                                'po' => $po,
+                                "operator_id" => $operatorId,
+                                "amount" => $finalOverpaymentAmount
+                            ));
+                    }
+                    return $r;
+
 				}
 			}
 		}
@@ -169,18 +179,21 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 	/**
 	 * @param int|Zolago_Po_Model_Po $po
+	 * @param bool $orderByAmount
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
-	public function getPoPayments($po) {
+	public function getPoPayments($po,$orderByAmount=false) {
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
         $po_id = $this->getPoId($po);
 
 		$collection = $this->getPoAllocations($po_id);
 		if($collection) {
 			$collection->addPoIdFilter($po_id);
-			$collection->addAllocationTypeFilter(self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
-            $collection->addOrder("allocation_amount");//desc
-            $collection->getSelect()->where("allocation_amount > 0");
+			$collection->getSelect()->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
+			if($orderByAmount) {
+				$collection->addOrder("main_table.allocation_amount");//desc
+			}
+            $collection->getSelect()->where("main_table.allocation_amount > 0");
 			return $collection;
 		}
 		return false;
@@ -195,7 +208,38 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		if($po_id) {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
 			$collection = $this->getCollection();
-			$collection->addPoIdFilter($po_id);
+			$collection->getSelect()->where("main_table.po_id = ?",$po_id);
+			return $collection;
+		}
+		return false;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po_id
+	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getPoOverpayments($po_id) {
+		$po_id = $this->getPoId($po_id);
+		if($po_id) {
+			$collection = $this->getPoAllocations($po_id);
+			$collection->getSelect()
+				->reset(Zend_Db_Select::COLUMNS)
+				->columns(array(
+					"main_table.allocation_id",
+					"main_table.transaction_id",
+					"main_table.po_id",
+					"allocation_amount" => "SUM(main_table.allocation_amount)",
+					"main_table.allocation_type",
+					"main_table.created_at",
+					"main_table.customer_id",
+					"main_table.operator_id",
+					"main_table.comment"
+				))
+				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
+				->having("allocation_amount > 0")
+				->order("main_table.created_at",Zend_Db_Select::SQL_DESC)
+				->limit(1);
+
 			return $collection;
 		}
 		return false;
@@ -205,8 +249,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 * @return bool
 	 */
 	protected function isOperatorMode() {
-//		return $this->getSession()->isOperatorMode();
-        return true; //temporary for testing
+		return $this->getSession()->isOperatorMode();
 	}
 
 	/**

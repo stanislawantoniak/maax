@@ -148,13 +148,13 @@
                     </h4>
 
                     <?php
-                    $paymentDetails = Mage::helper('zolagopayment')
-                        ->getPaymentDetails($this->getPo()->getId());
-                    $overpayDetails = Mage::helper('zolagopayment')
-                        ->getOverpaymentDetails($this->getPo()->getId());
+                    /** @var Zolago_Payment_Helper_Data $paymentHelper */
+                    $paymentHelper = Mage::helper('zolagopayment');
+                    $paymentDetails = $paymentHelper->getPaymentDetails($this->getPo()->getId());
+                    $overpayDetails = $paymentHelper->getOverpaymentDetails($this->getPo()->getId());
 
                     //if no payment details do not show Payment details button
-                    if (($paymentDetails->getSize() > 0) || ($overpayDetails->getSize() > 0)): ?>
+                    if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
                         <div class="toolbar no-padding">
                             <div class="btn-group">
 							<span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
@@ -171,8 +171,8 @@
 						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
 						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
-						<dt><?php echo $_hlp->__("Debt");?>:</dt>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
+						<dt><?php echo $debtAmount > 0 ? $_hlp->__("Overpaid") : $_hlp->__("Underpaid");?>:</dt>
 						<dd><?php echo $debtAmount > 0 ? "+" : ""; ?><?php echo $_po->getCurrencyFormattedAmount($debtAmount); ?></dd>
 					</dl>
 				</div>
@@ -545,7 +545,7 @@
 /*******************************************************************************
  *    Payments modal
  *******************************************************************************/
-if (($paymentDetails->getSize() > 0) || ($overpayDetails->getSize() > 0)) {
+if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)) {
     echo $this->getChild("vendor_po_edit_payments")
         ->setData('payment_details', $paymentDetails)
         ->setData('overpay_details', $overpayDetails)

@@ -687,6 +687,11 @@ Mall.product = {
                 Mall.product.createOption(group.id, option, formGroupElement);
             });
 
+            if (sizesCount == 1) {
+                var singleInput = jQuery('input[id^=size_][type=radio]');
+                singleInput.attr('checked', 'checked').trigger('click');
+            }
+
             this.applyAdditionalRules(group, formGroupElement);
         } else { //selectbox
 
@@ -704,24 +709,38 @@ Mall.product = {
             var deskTopDevice = !Mall.getIsBrowserMobile();
 
             // create form group for selectbox options
-            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : '';
+            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : ' select-size-mobile-trigger';
             var formGroupElement = jQuery("<div/>", {
                 class: "form-group" + formGroupElementClass
             }).appendTo(groupElement);
 
+
+
             //create select part
-            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : 'mobile-native-select';
+            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : ' form-control mobile-native-select-w';
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
-                class: formGroupElementSelectClass
+                class: formGroupElementSelectClass,
+                width: '200px',
+                'data-size':3
             }).appendTo(formGroupElement);
+
+            //if(Mall.getIsBrowserMobile()){
+            //    var selectSizeTrigger = '<div class="" id="select-size-mobile-trigger" style="width:220px;"></div>';
+            //    jQuery(selectSizeTrigger).prependTo(formGroupElement);
+            //}
+
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
             });
+
 			
             this.applyAdditionalRules(group,formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-			jQuery('div.size-box div.size a').css('position','relative');
-			jQuery('div.size-box div.size a').css('top','5px');
+            if(deskTopDevice){
+                jQuery('div.size-box div.size a').css('position','relative');
+                jQuery('div.size-box div.size a').css('top','5px');
+            }
+
         }
 
 
@@ -730,7 +749,9 @@ Mall.product = {
     createOption: function(id, option, groupElement) {
         var label = jQuery("<label/>", {
             "for": ("size_" + option.id),
-            "class": option.is_salable == false ? "no-size" : ""
+            "class": option.is_salable == false ? "no-size" : "",
+            'data-toggle': 'tooltip',
+            'data-placement': 'top'
         }).appendTo(groupElement);
         var _options = {
             type: "radio",
@@ -952,6 +973,9 @@ jQuery(document).ready(function() {
         jQuery('#content').css('margin-top', '0px');
     }
 
+    jQuery(".no-size").tooltip({
+        template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
+    });
     jQuery("#add-to-cart").tooltip({
         template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
     });
@@ -960,6 +984,7 @@ jQuery(document).ready(function() {
             jQuery("#add-to-cart").tooltip('destroy');
         }
     });
+
 
     jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {
         var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
@@ -1020,19 +1045,41 @@ jQuery(document).ready(function() {
                 Mall.setSuperAttribute(jQuery("#size_" + value));
             }
         });
+
+        if (jQuery('.size-box option').length >= 2) {
+            jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
+        }
+
     } else {
-        jQuery(".size-box select").change(function () {
-            Mall.setSuperAttribute(jQuery(this).find('option:selected'));
-        })
+        //jQuery(".size-box select").change(function () {
+        //    var selectedOption = jQuery(this).find('option:selected');
+        //    console.log(selectedOption.text());
+        //    Mall.setSuperAttribute(selectedOption);
+        //    jQuery('#select-size-mobile-label').text(selectedOption.text());
+        //});
+
+        jQuery(".size-box select").selectBoxIt({
+            theme: "bootstrap",
+            //mobile: true,
+            native: true,
+            defaultText: Mall.translate.__('Select size'),
+            autoWidth: false
+        });
+        jQuery(".size-box select").bind({
+            "change": function (ev, obj) {
+                console.log(obj);
+                var selectedOption = jQuery(this).find('option:selected');
+                console.log(selectedOption);
+                Mall.setSuperAttribute(selectedOption);
+            }
+        });
     }
 
 
     if(jQuery(".size-box option").length == 1) {
         Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
     }
-    if (jQuery('.size-box option').length >= 2) {
-        jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
-    }
+
 
 
 

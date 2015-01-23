@@ -314,7 +314,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $oldPrice = $po->getShippingAmountIncl();
             $store = $po->getOrder()->getStore();
 
-            if(empty($price) || (float)$price<0) {
+            if(is_null($price) || (float)$price<0) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Illegal price"));
             }
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
@@ -474,9 +474,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $item = $po->getItemById($itemId);
         /* @var $item Zolago_Po_Model_Po_Item */
 
-        $price = $request->getParam("product_price");
-        $qty = $request->getParam("product_qty", 1);
-        $discount = $request->getParam("product_discount", 0);
+        $price = str_replace(",",".",$request->getParam("product_price"));
+        $qty = (int)$request->getParam("product_qty", 1);
+        $discount = str_replace(",",".",$request->getParam("product_discount", 0));
 
         $product = Mage::getModel("catalog/product");//
 
@@ -1586,33 +1586,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return Mage::getStoreConfig('tax/calculation/price_includes_tax', $store);
     }
 
-    public function createOverpaymentAction() {
-        try {
-            $udpo = $this->_registerPo();
-            /** @var Zolago_Payment_Model_Allocation $allocModel */
-            $allocModel = Mage::getModel("zolagopayment/allocation");
-            $error = $allocModel->createOverpayment($udpo);
-//            Mage::log("error:" . ($error ? "1" : "0"), null, "op.log");
-            if (!$error) {
-                if (!Mage::getSingleton("zolagodropship/session")->isOperatorMode()) {
-                    throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You need to be operator to do overpayment"));
-                } else {
-                    throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Overpayment can not be created"));
-                }
-            } else {
-                $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Overpayment created"));
-            }
-
-        } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-        } catch (Exception $e) {
-            Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
-        }
-        return $this->_redirectReferer();
-
-
-    }
 }
 
 

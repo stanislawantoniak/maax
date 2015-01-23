@@ -19,4 +19,36 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 	public function addCustomerIdFilter($customerId) {
 		return $this->addFieldToFilter('customer_id',$customerId);
 	}
+
+	public function joinTransactions() {
+		$this->getSelect()
+			->join(
+				'sales_payment_transaction',
+				'main_table.transaction_id =sales_payment_transaction.transaction_id',
+				array('sales_payment_transaction.txn_id'));
+		return $this;
+	}
+
+	public function joinOperators() {
+		$this->getSelect()
+			->joinLeft(
+			'zolago_operator',
+			'main_table.operator_id =zolago_operator.operator_id',
+			array(
+/*				'zolago_operator.firstname',
+				'zolago_operator.lastname'*/
+				'zolago_operator.email'
+			));
+		return $this;
+	}
+
+	public function joinPos() {
+		$this->getSelect()
+			->joinLeft(
+				'udropship_po',
+				'main_table.po_id = udropship_po.entity_id',
+				array('udropship_po.increment_id')
+			);
+		return $this;
+	}
 }
