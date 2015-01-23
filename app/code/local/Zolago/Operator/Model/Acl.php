@@ -57,9 +57,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
 
     // Overpayments managment
-	const RES_OVERPAY_OPERATOR						= "udpo/vendor/createOverpayment";
-    // underpaid managment
-	const RES_UNDERPAID_OPERATOR      				= "udpo/vendor/createOverpayment";
+	const RES_OVERPAY_OPERATOR						= "udpo/vendor_overpayment";
 
 
 	// Resources as array
@@ -97,9 +95,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage",
         // Overpayments managment
         self::RES_OVERPAY_OPERATOR                  => "Overpay manage",
-        // underpaid managment
-        self::RES_UNDERPAID_OPERATOR                => "Underpaid manage",
-	
+
 	);
 	
 	// Roles as array
@@ -159,7 +155,6 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
         // Build ACL Rules - Overpayments managment
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_OVERPAY_OPERATOR);
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_UNDERPAID_OPERATOR);
 
 	}
 	
