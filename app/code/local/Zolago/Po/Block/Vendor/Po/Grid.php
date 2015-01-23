@@ -26,7 +26,6 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
        parent::_prepareCollection();
 
-		Mage::log((string)$this->getCollection()->getSelect(),null,"test4.log");
 	}
 	
 	/**
