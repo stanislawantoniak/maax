@@ -158,8 +158,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);
 
         // Build ACL Rules - Overpayments managment
-        $this->setRule(Self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_OVERPAY_OPERATOR);
-        $this->setRule(Self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_UNDERPAID_OPERATOR);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_OVERPAY_OPERATOR);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_UNDERPAID_OPERATOR);
 
 	}
 	
