@@ -209,6 +209,7 @@
 "Shipping amount has been changed","Koszt transportu zamówienia został zmieniony"
 "Item changed","Pozycja została zmieniona"
 "Shipping cost changed","Koszt transportu został zmieniony"
+"[PO status changed from %s to %s]","Status PO zmieniony z %s na %s"
 "Manual discount", "Rabat ustawiony ręcznie"
 "%d order processed","Przetworzono zamówień: %d"
 "Are you sure?","Czy jesteś pewien?"
