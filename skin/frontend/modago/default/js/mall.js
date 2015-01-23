@@ -709,7 +709,7 @@ Mall.product = {
             var deskTopDevice = !Mall.getIsBrowserMobile();
 
             // create form group for selectbox options
-            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : ' select-container';
+            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : ' select-size-mobile-trigger';
             var formGroupElement = jQuery("<div/>", {
                 class: "form-group" + formGroupElementClass
             }).appendTo(groupElement);
@@ -717,23 +717,18 @@ Mall.product = {
 
 
             //create select part
-            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : 'mobile-native-select hidden';
+            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : ' form-control mobile-native-select-w';
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
-                class: formGroupElementSelectClass
+                class: formGroupElementSelectClass,
+                width: '200px',
+                'data-size':3
             }).appendTo(formGroupElement);
 
-            if(Mall.getIsBrowserMobile()){
-                var selectSizeTrigger = '<div class="select2-container form-control" id="select-size-mobile-trigger" style="width:220px;z-index:10;">' +
-                    '<a href="javascript:void(0)" class="select2-choice" tabindex="-1" id="select-size-mobile-choice-trigger">' +
-                    ' <span class="select2-chosen" id="select-size-mobile-label">'+group.label+'</span>' +
-                    '<span class="select2-arrow" role="presentation">' +
-                    '<b role="presentation"></b>' +
-                    '</span>' +
-                    '</a>' +
-                    '</div>';
-                jQuery(selectSizeTrigger).prependTo(formGroupElement);
-            }
+            //if(Mall.getIsBrowserMobile()){
+            //    var selectSizeTrigger = '<div class="" id="select-size-mobile-trigger" style="width:220px;"></div>';
+            //    jQuery(selectSizeTrigger).prependTo(formGroupElement);
+            //}
 
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
@@ -1051,31 +1046,39 @@ jQuery(document).ready(function() {
             }
         });
     } else {
-        var openSelect = function(selector){
-            var element = jQuery(selector)[0], worked = false;
-            if (document.createEvent) { // all browsers
-                var e = document.createEvent("MouseEvents");
-                e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-                worked = element.dispatchEvent(e);
-            } else if (element.fireEvent) { // ie
-                worked = element.fireEvent("onmousedown");
-            }
-            if (!worked) { // unknown browser / error
-                alert("It didn't worked in your browser.");
-            }
-        }
-        jQuery('#select-size-mobile-choice-trigger').click(function () {
-            //alert('click');
-            jQuery(".size-box select").removeClass('hidden');
-            openSelect(jQuery(".size-box select"));
-        });
+        //var openSelect = function(selector){
+        //    var element = jQuery(selector)[0], worked = false;
+        //    if (document.createEvent) { // all browsers
+        //        var e = document.createEvent("MouseEvents");
+        //        e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        //        worked = element.dispatchEvent(e);
+        //    } else if (element.fireEvent) { // ie
+        //        worked = element.fireEvent("onmousedown");
+        //    }
+        //    if (!worked) { // unknown browser / error
+        //        alert("It didn't worked in your browser.");
+        //    }
+        //}
+        //jQuery('#select-size-mobile-choice-trigger').click(function () {
+        //    //alert('click');
+        //    jQuery(".size-box select").removeClass('hidden');
+        //    openSelect(jQuery(".size-box select"));
+        //});
+        //
+        //jQuery(".size-box select").change(function () {
+        //    var selectedOption = jQuery(this).find('option:selected');
+        //    console.log(selectedOption.text());
+        //    Mall.setSuperAttribute(selectedOption);
+        //    jQuery('#select-size-mobile-label').text(selectedOption.text());
+        //});
 
-        jQuery(".size-box select").change(function () {
-            var selectedOption = jQuery(this).find('option:selected');
-            console.log(selectedOption.text());
-            Mall.setSuperAttribute(selectedOption);
-            jQuery('#select-size-mobile-label').text(selectedOption.text());
-        });
+        jQuery(".size-box select").selectBoxIt({
+            theme: "bootstrap",
+            //mobile: true,
+            native: true,
+            defaultText: "Select size",
+            autoWidth:false
+        })
     }
 
 
