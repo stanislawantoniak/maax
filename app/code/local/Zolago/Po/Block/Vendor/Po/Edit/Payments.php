@@ -11,6 +11,12 @@ class Zolago_Po_Block_Vendor_Po_Edit_Payments
             "id"=> $this->getPo()->getId(),
             "form_key" => Mage::getSingleton('core/session')->getFormKey()
         );
+
+        Mage::log($action, null, "url.log");
+        Mage::log($this->getUrl("udpo/vendor/overpayment/$action", $params), null, "url.log");
+        Mage::log($this->getUrl("*/*/$action", $params), null, "url.log");
+
+
         return $this->getUrl("udpo/vendor/overpayment/$action", $params);
     }
 
