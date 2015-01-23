@@ -69,7 +69,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         /** @var Zolago_Operator_Model_Operator $modelOperator */
         $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
 
-        $fullName = $modelOperator->getFullname();
+        $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getLogin();
         $_comment =
             "[$fullName] " .
             $helperZP->__("Created overpayment") .
