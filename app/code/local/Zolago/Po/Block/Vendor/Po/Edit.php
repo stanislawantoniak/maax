@@ -428,9 +428,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		} else {
 			$payment = $po->getOrder()->getPayment();
 			$method = $payment->getMethod();
-			if($method == Zolago_Dotpay_Model_Client::PAYMENT_METHOD) {
-				Mage::log($payment->getAdditionalData(),null,"payment.log");
-			}
+			Mage::log($payment->getAdditionalData(),null,"payment.log");
 			return $helper->__($method);
 		}
 	}
