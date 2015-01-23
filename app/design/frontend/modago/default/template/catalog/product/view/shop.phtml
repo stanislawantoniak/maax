@@ -10,6 +10,15 @@
     if($_product->getTypeId() == 'configurable') {
         $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
     }
+
+$_helperSizetable = Mage::helper('zolagosizetable');
+/** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
+$vendor_id = $_product->getData('udropship_vendor');
+$storeId = Mage::app()->getStore()->getStoreId();
+$attributeSetId = $_product->getData('attribute_set_id');
+$brandId = $_product->getData( 'manufacturer');
+
+$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 ?>
 <div id="product-shop" class="col-lg-8 col-md-12 clearfix">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
