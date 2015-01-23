@@ -37,7 +37,7 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 			array(
 /*				'zolago_operator.firstname',
 				'zolago_operator.lastname'*/
-				'zolago_operator.login'
+				'zolago_operator.email'
 			));
 		return $this;
 	}
