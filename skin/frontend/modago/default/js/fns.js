@@ -1470,13 +1470,10 @@ jQuery.noConflict();
             $('.viewFormComments').on('click', function(event) {
                 event.preventDefault();var intFrameWidth = window.innerWidth;
                 wrapperFormReview.slideToggle(200, function(){
-
-                    if (intFrameWidth >480) {
-                        var animeOffset = $("#block-review-form").offset().top - 80;
-                        $('html, body').animate({
-                            scrollTop: animeOffset
-                        }, 800);
-                    };
+                    var animeOffset = $("#block-review-form").offset().top - 80;
+                    $('html, body').animate({
+                        scrollTop: animeOffset
+                    }, 800);
                 });
 
             });
