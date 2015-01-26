@@ -21,35 +21,26 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
             /** @var Zolago_Payment_Model_Allocation $allocationModel */
             $allocationModel = Mage::getModel("zolagopayment/allocation");
             $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-//            Mage::log("GT: $grandTotal || sum: $sumAmount ||po_id: " . $po->getId(), null, "a.log");
 
             //czeka na płatność
             if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT && ($grandTotal <= $sumAmount)) {
                 //rowny albo nadplata
-//                Mage::log("new status is STATUS_PAYMENT", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                 if ($save) {
                     $po->save();
-//                    Mage::log("save status to STATUS_PENDING", null, "a.log");
                 }
-
             } //czeka na spakowanie
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
                 //jest mniej niz potrzeba
-//                Mage::log("new status is STATUS_PENDING", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
                 if ($save) {
                     $po->save();
-//                    Mage::log("save status to STATUS_PAYMENT", null, "a.log");
                 }
-
             } //czeka na rezerwacje
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
-//                Mage::log("new status is STATUS_BACKORDER", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                 if ($save) {
                     $po->save();
-//                    Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
                 }
             }
         }
@@ -93,7 +84,6 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
     }
 
     public function addAllocationComment(Zolago_Po_Model_Po $oldPo, Zolago_Po_Model_Po $newPo, $isVendorNotified, $isVisibleToVendor, $operator_id, $amount){
-        Mage::log("addAllocationComment", null, 'c.log');
         /** @var Zolago_Payment_Helper_Data $helperZP */
         $helperZP = Mage::helper("zolagopayment");
         /** @var Zolago_Operator_Model_Operator $modelOperator */
@@ -113,9 +103,6 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
                 $oldPo->getIncrementId(),
                 $newPo->getIncrementId(),
                 Mage::helper('core')->currency($amount, true, false));
-
-        Mage::log("$comment", null, 'c.log');
-
 
         $newPo->addComment($comment, $isVendorNotified, $isVisibleToVendor);
         if ($isVendorNotified) {
