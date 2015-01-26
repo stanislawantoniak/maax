@@ -97,39 +97,33 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         return $poId ? $this->getResource()->getSumOfAllocations($poId) : false;
     }
 
+    public function allocateOverpayments($po) {
+        $po = $this->getPo($po);
+    }
+
 	public function createOverpayment($po) {
 
 		$po = $this->getPo($po);
-//        Mage::log($po->getId(), null, "op.log");
 		if($po->getId()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
-//            Mage::log("poGrandTotal $poGrandTotal || poAllocationSum $poAllocationSum", null, "op.log");
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
-//                Mage::log("grandtotoal jest mniejszy od sumy", null, "op.log");
 				$operatorId = $this->getOperatorId();
 				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
 				$payments = $this->getPoPayments($po,true); //get all po payments
 				$allocations = array();
-//                Mage::log("operatorid: $operatorId", null, "op.log");
-//                Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
 					$helper = Mage::helper("zolagopayment");
-//                    Mage::log($payments->getSize(), null, "op.log");
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
 							if($payment->getAllocationAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
-//                                Mage::log("tuttaj 1", null, "op.log");
 								$paymentDecreaseAmount = $overpaymentAmount;
 								$overpaymentAmount = 0;
 							} else { //if not allocate as much as possible and leave rest to be taken from next payment
-//                                Mage::log("tuttaj 2", null, "op.log");
 								$paymentDecreaseAmount = $payment->getAllocationAmount();
 								$overpaymentAmount -= $paymentDecreaseAmount;
 							}
-//                            Mage::log("paymentDecreaseAmount $paymentDecreaseAmount", null, "op.log");
-//                            Mage::log("overpaymentAmount $overpaymentAmount", null, "op.log");
 							//create payment decrease
 							$allocations[] = array(
                                 'transaction_id' => $payment->getTransactionId(),
@@ -157,10 +151,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
-//                    Mage::log("allocations:", null, "op.log");
-//                    Mage::log($allocations, null, "op.log");
 					$r = $this->appendMultipleAllocations($allocations);
-
                     if ($r) {
                         Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
                             array(
@@ -170,7 +161,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                             ));
                     }
                     return $r;
-
 				}
 			}
 		}
@@ -224,9 +214,13 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
 	public function getPoOverpayments($po_id) {
+
+        $po = $this->getPo($po_id);
+        $udpoVendorId = $po->getUdropshipVendor();
+
 		$po_id = $this->getPoId($po_id);
 		if($po_id) {
-			$customer = $this->getPo($po_id)->getCustomerId();
+			$customer = $po->getCustomerId();
 			$byCustomer = $customer ? true : false;
 			$collection = $this->getPoAllocations($po_id,$byCustomer);
 			$collection->getSelect()
@@ -242,7 +236,12 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					"main_table.operator_id",
 					"main_table.comment"
 				))
+                ->joinLeft(
+                    array("udpo" => Mage::getSingleton('core/resource')->getTableName('udpo/po')),
+                    "udpo.entity_id = main_table.po_id",
+                    "udpo.udropship_vendor")
 				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
+				->where("udpo.udropship_vendor = ?" , $udpoVendorId)
 				->having("allocation_amount > 0")
 				->order("main_table.created_at",Zend_Db_Select::SQL_DESC);
 //				->limit(1);
