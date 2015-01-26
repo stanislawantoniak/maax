@@ -39,7 +39,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
                                 <td>
                                     <?php $operatorId = $paymentDetail->getOperatorId(); ?>
-                                    <?php if (is_null($operatorId)): ?>
+                                    <?php if ($paymentDetail->getIsAutomat()): ?>
                                         <?php echo $_hlp->__("Automat"); ?>
                                     <?php else: ?>
                                         <?php /*echo $paymentDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $paymentDetail->getLastname(); */?>
