@@ -82,9 +82,6 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                     <div class="col-xs-6" id="product-likeboxes">
 						
                     </div>
-					<script type="text/javascript">
-					</script>
-
                     <div class="col-xs-6 text-right">
                         <button class="btn button button-primary ico addBasket" title="<?php echo $this->__("Choose size first"); ?>" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                     </div>

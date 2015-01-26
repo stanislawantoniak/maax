@@ -199,7 +199,7 @@ var Mall = {
 		var likeBoxes = jQuery("#product-likeboxes");
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
-				likeText, boxAdded, boxNotAdded;
+				likeText, boxAdded, boxNotAdded, boxLoading;
 			
 			// Not added box
 			if(p.wishlist_count > 0){
@@ -229,19 +229,28 @@ var Mall = {
 					'<br><span>'  + Mall.i18nValidation.__("remove-from-favorites") + '</span>'+ 
 					'</a>' + 
 				'</div>');
+
+			boxLoading = jQuery(
+				'<div class="addingLike-box" id="adding-wishlist">' +
+					'<i class="fa fa-spinner fa-spin fa-2x"></i>' +
+				'</div>'
+			);
 			
 			
 			if(p.in_my_wishlist){
 				boxAdded.removeClass("hidden");
 				boxNotAdded.addClass("hidden");
+				boxLoading.addClass("hidden");
 			}else{
 				boxNotAdded.removeClass("hidden");
 				boxAdded.addClass("hidden");
+				boxLoading.addClass("hidden");
 			}
 			
 			likeBoxes.html('').
 					append(boxNotAdded).
-					append(boxAdded);
+					append(boxAdded).
+					append(boxLoading);
 		}
 		
     },                               
