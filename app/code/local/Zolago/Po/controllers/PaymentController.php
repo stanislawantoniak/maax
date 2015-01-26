@@ -12,7 +12,6 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
                 /** @var Zolago_Payment_Model_Allocation $allocModel */
                 $allocModel = Mage::getModel("zolagopayment/allocation");
                 $error = $allocModel->createOverpayment($po);
-//            Mage::log("error:" . ($error ? "1" : "0"), null, "op.log");
                 if (!$error) {
                     throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Overpayment can not be created"));
                 } else {
