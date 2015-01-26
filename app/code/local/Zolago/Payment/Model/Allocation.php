@@ -103,7 +103,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     public function allocateOverpayment($newPo, $transactionId) {
         $newPo = $this->getPo($newPo);
         $coll = null;
-        $endAmountAllocation = 0;
+
 
         if ($newPo->getId()) { //check if po exists and
             $debtAmount = $newPo->getDebtAmount();
@@ -119,14 +119,13 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                 $alocAmount = $data['allocation_amount'];
                 $oldPo = $this->getPo($data['po_id']);
 
+                $endAmountAllocation = 0;
                 if ($alocAmount >= $debtAmount) {
                     $endAmountAllocation = $debtAmount;
                 } else {
                     $endAmountAllocation = (-1 * $alocAmount);
                 }
 
-                //ujemne
-                //stare id
                 $allocations[] = array(
                     'transaction_id'    => $transactionId,
                     'po_id'             => $oldPo->getId(),

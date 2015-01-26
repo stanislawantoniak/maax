@@ -177,6 +177,32 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	    }
     }
 
+    public function addAllocationComment($observer) {
+        /** @var Zolago_Po_Helper_Data $hlp */
+        $hlp = Mage::helper("zolagopo");
+
+        /* @var $oldPo Zolago_Po_Model_Po */
+        $oldPo = $observer->getEvent()->getData('oldPo');
+        if(!$oldPo->getId()) {
+            $oldPo = $observer->getPo();
+        }
+        /* @var $oldPo Zolago_Po_Model_Po */
+        $newPo = $observer->getEvent()->getData('newPo');
+        if(!$newPo->getId()) {
+            $newPo = $observer->getPo();
+        }
+
+        if($newPo->getId()) {
+            $hlp->addAllocationComment(
+                $oldPo,
+                $newPo,
+                false,
+                true,
+                $observer->getEvent()->getData('operator_id'),
+                $observer->getEvent()->getData('amount'));
+        }
+    }
+
     public function addOverpayComment($observer) {
         /** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("zolagopo");

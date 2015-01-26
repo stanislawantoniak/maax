@@ -92,6 +92,43 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         $po->saveComments();
     }
 
+    public function addAllocationComment(Zolago_Po_Model_Po $oldPo, Zolago_Po_Model_Po $newPo, $isVendorNotified, $isVisibleToVendor, $operator_id, $amount){
+        /** @var Zolago_Payment_Helper_Data $helperZP */
+        $helperZP = Mage::helper("zolagopayment");
+        /** @var Zolago_Operator_Model_Operator $modelOperator */
+        $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
+
+        if ($modelOperator->getId()) {
+            //if is operator
+            $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getEmail();
+        } else {
+            //if is vendor
+            $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
+        }
+
+        $_comment =
+            "[$fullName] " .
+            $helperZP->__("Overpayment moved from %s to %s. Amount: %s",
+                $oldPo->getIncrementId(),
+                $newPo->getIncrementId(),
+                Mage::helper('core')->currency($amount, true, false));
+
+
+        $newPo->addComment($_comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($newPo, $_comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $newPo->saveComments();
+
+        $oldPo->addComment($_comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($oldPo, $_comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $oldPo->saveComments();
+    }
+
 	/**
 	 * @param Zolago_Po_Model_Po_Item $item
 	 * @return Mage_Catalog_Helper_Image
