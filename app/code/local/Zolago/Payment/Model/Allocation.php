@@ -233,7 +233,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				->reset(Zend_Db_Select::COLUMNS)
 				->columns(array(
 					"main_table.allocation_id",
-					"main_table.transaction_id",
+					"DISTINCT(main_table.transaction_id)",
 					"main_table.po_id",
 					"allocation_amount" => "SUM(main_table.allocation_amount)",
 					"main_table.allocation_type",
@@ -244,8 +244,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				))
 				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
 				->having("allocation_amount > 0")
-				->order("main_table.created_at",Zend_Db_Select::SQL_DESC)
-				->limit(1);
+				->order("main_table.created_at",Zend_Db_Select::SQL_DESC);
+//				->limit(1);
 
 			return $collection;
 		}
