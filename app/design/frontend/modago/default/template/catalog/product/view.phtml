@@ -142,14 +142,6 @@ if($vendorContext && $vendorContext->getId()) {
     </header>
     <?php $attributesData = $this->getAdditionalDataDetailed(true,false); ?>
     <div class="main">
-        <ul class="list">
-            <li>
-                <strong><?php echo $this->__("Product name"); ?>: </strong> <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
-            </li>
-            <li>
-                <strong><?php echo $this->__("Sku"); ?>: </strong> <?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku') ?>
-            </li>
-        </ul>
         <p><?php echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description'); ?></p>
         <?php if (!empty($attributesData)) : ?>
             <ul class="list">
@@ -159,11 +151,7 @@ if($vendorContext && $vendorContext->getId()) {
                     <?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
                         <?php echo $this->escapeHtml($attr['value']); ?>
                     <?php else: ?>
-                        <ul class="list bullet_02">
-                            <?php foreach ($attr['value'] as $opt) : ?>
-                                <li><?php echo $this->escapeHtml($opt); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+	                    <?php echo implode(",",$attr['value']); ?>
                     <?php endif; ?>
                 </li>
                     <?php endforeach; ?>
