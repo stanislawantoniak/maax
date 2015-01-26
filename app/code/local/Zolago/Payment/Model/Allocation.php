@@ -119,7 +119,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$allocations = array();
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
-					$helper = Mage::helper("zolagopayment");
+
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
 							if($payment->getAllocationAmount() >= $overpaymentAmount) {//check if currently selected payment has enough cash to create overpayment from it
@@ -137,7 +137,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type' => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
 								'operator_id' => $operatorId,
 								'created_at' => $createdAt,
-								'comment' => $helper->__("Moved to overpayment"),
+								'comment' => "Moved to overpayment",
 								'customer_id' =>  $po->getCustomerId()
 							);
 
@@ -149,7 +149,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type' => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
 								'operator_id' => $operatorId,
 								'created_at' => $createdAt,
-								'comment' => $helper->__("Created overpayment"),
+								'comment' => "Created overpayment",
 								'customer_id' =>  $po->getCustomerId()
 							);
 						} else {
@@ -250,8 +250,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				->having("allocation_amount > 0")
 				->group("main_table.transaction_id")
 				->order("main_table.created_at",Zend_Db_Select::SQL_DESC);
-//				->limit(1);
-			Mage::log((string)$collection->getSelect(),null,"sql.log");
 			return $collection;
 		}
 		return false;
