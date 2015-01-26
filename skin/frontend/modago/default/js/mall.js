@@ -446,6 +446,11 @@ var Mall = {
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
+	    var popup = jQuery("#popup-after-add-to-cart");
+	    popup.find(".modal-error").hide();
+	    popup.find(".modal-loaded").hide();
+	    popup.find(".modal-loading").show();
+	    popup.modal('show');
         OrbaLib.Cart.add({
             "product_id": id,
             "super_attribute": attr,
@@ -572,7 +577,7 @@ Mall.rwdCarousel = {
             if(this.clientHeight > height) {
                 height = this.clientHeight;
             }
-        })
+        });
 
         return height;
     },
@@ -861,10 +866,13 @@ Mall.product = {
 // callbacks
 
 function addtocartcallback(response) {
+	var popup = jQuery("#popup-after-add-to-cart");
     if(response.status == false) {
-        Mall.showMessage(response.message, "error");
+	    popup.find(".modal-loading").hide();
+	    popup.find(".modal-loaded").hide();
+	    popup.find(".modal-error").show();
+        popup.find(".modal-error-txt").html(response.message);
     } else {
-        var popup = jQuery("#popup-after-add-to-cart");
         if(Mall.product._current_product_type == 'configurable') {
             var superAttr = jQuery(Mall._current_superattribute);
             var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-id"));
@@ -874,7 +882,9 @@ function addtocartcallback(response) {
             popup.find("p.size>span").hide();
         }
 		popup.find("td.price").text(jQuery(".price-box-bundle span.price").text());
-        jQuery("#popup-after-add-to-cart").modal('show');
+	    popup.find(".modal-error").hide();
+	    popup.find(".modal-loading").hide();
+	    popup.find(".modal-loaded").show();
         Mall.getAccountInfo();
     }
 }

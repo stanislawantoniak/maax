@@ -243,11 +243,25 @@ if($vendorContext && $vendorContext->getId()) {
 <div class="modal fade bs-example-modal-lg container-fluid" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="max-width: 450px;">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+	        <div class="modal-error modal-header" style="display: none;">
+		        <h2 class="title_section"><?php echo $this->__("Error occured!"); ?></h2>
+	        </div>
+            <div class="modal-loading modal-header">
+                <h2 class="title_section"><?php echo $this->__("Adding product to cart..."); ?></h2>
             </div>
-            <div class="modal-body">
+	        <div class="modal-loaded modal-header" style="display: none;">
+		        <button type="button" class="close" data-dismiss="modal"></button>
+		        <h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+	        </div>
+	        <div class="modal-body modal-error" style="display: none">
+		        <div class="modal-error-txt">
+
+		        </div>
+	        </div>
+	        <div class="modal-body modal-loading" style="text-align: center">
+		        <i class="fa fa-spinner fa-spin fa-2x"></i>
+	        </div>
+            <div class="modal-loaded modal-body" style="display: none;">
                 <table>
                     <tbody id="product-added">
                     <tr>
