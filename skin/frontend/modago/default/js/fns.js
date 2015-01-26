@@ -131,6 +131,12 @@ jQuery.noConflict();
             }
         });
 
+        $('#question-form').submit(function () {
+            if ($(this).valid()) {
+                addFormSpinner($(this));
+            }
+        });
+
         function addFormSpinner(form) {
             var submitButton = form.find('button[type=submit]');
             submitButton.prop("disabled", "disabled");
