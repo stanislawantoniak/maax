@@ -6,6 +6,11 @@
 		.modal-header {
 			border: none;
 		}
+
+	.modal-body {
+		overflow: auto;
+		overflow-x: auto !important;
+	}
 		
 		ul {
 			@include no-bullets;
