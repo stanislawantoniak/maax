@@ -152,7 +152,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'is_automat'        => $this->isAutomat()
                 );
 
-                $r = $this->appendMultipleAllocations($allocations);
+                $r = $this->appendAllocations($allocations);
                 if ($r) {
                     Mage::dispatchEvent("zolagopayment_allocate_overpayment_save_after",
                         array(
