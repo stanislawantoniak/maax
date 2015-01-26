@@ -97,6 +97,7 @@ switch($_reviewsCount) {
     <div class="main clearfix">
         <div class="col-sm-12" id="comments">
             <div class="row">
+	            <?php echo $this->getChildHtml('product.review.form'); ?>
                 <?php foreach($this->getReviewsForProduct() as $review) : ?>
                     <?php
                     $avgReview = $this->getSingleReviewAvarage($review);
@@ -125,7 +126,6 @@ switch($_reviewsCount) {
                     </div>
                 <?php endforeach; ?>
                 <?php echo $this->getChildHtml('product_review_list.toolbar'); ?>
-                <?php echo $this->getChildHtml('product.review.form'); ?>
             </div>
         </div>
     </div>
