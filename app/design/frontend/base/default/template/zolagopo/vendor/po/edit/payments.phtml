@@ -131,7 +131,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 </td>
                                 <td>
                                     <a class="btn btn-primary"
-                                       href="<?php echo $this->getOverpaymentUrl("allocateOverpayments"); ?>"
+                                       href="<?php echo $this->getOverpaymentUrl("allocateOverpayments", array('transaction_id' => $overpayDetail->getTransactionId() )); ?>"
                                         <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
                                         <?php echo $_hlp->__("Allocate"); ?>[dev]
                                     </a>

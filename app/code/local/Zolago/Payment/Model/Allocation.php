@@ -3,7 +3,6 @@
 class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
-    const ZOLAGOPAYMENT_ALLOCATION_TYPE_UNDERPAID = 'underpaid'; // niedoplata
 
 	protected $session;
 
@@ -97,8 +96,14 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         return $poId ? $this->getResource()->getSumOfAllocations($poId) : false;
     }
 
-    public function allocateOverpayments($po) {
-        $po = $this->getPo($po);
+    public function allocateOverpayments($poFrom, $transactionId) {
+        $poFrom = $this->getPo($poFrom);
+
+        if ($poFrom->getId()) { //check if po exists and
+            $overpayment = $this->getPoOverpayments($poFrom);
+
+
+        }
     }
 
 	public function createOverpayment($po) {

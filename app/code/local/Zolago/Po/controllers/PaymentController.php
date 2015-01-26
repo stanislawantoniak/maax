@@ -5,8 +5,8 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
     public function createOverpaymentAction() {
 
         try {
-            $po_id = $this->getRequest()->getParam("id");//po_id
-            $po = Mage::getModel("zolagopo/po")->load($po_id);
+            $poId = $this->getRequest()->getParam("id");//po_id
+            $po = Mage::getModel("zolagopo/po")->load($poId);
 
             if ($po->getId()) {
                 /** @var Zolago_Payment_Model_Allocation $allocModel */
@@ -35,13 +35,14 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
     public function allocateOverpaymentsAction() {
 
         try {
-            $po_id = $this->getRequest()->getParam("id");//po_id
-            $po = Mage::getModel("zolagopo/po")->load($po_id);
+            $poId = $this->getRequest()->getParam("id");//po_id
+            $transactionId = $this->getRequest()->getParam("transaction_id");
+            $po = Mage::getModel("zolagopo/po")->load($poId);
 
             if ($po->getId()) {
                 /** @var Zolago_Payment_Model_Allocation $allocModel */
                 $allocModel = Mage::getModel("zolagopayment/allocation");
-                $error = $allocModel->allocateOverpayments($po);
+                $error = $allocModel->allocateOverpayments($po, $transactionId);
                 if (!$error) {
                     throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Allocations overpayments can not be completed"));
                 } else {
