@@ -245,7 +245,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				->having("allocation_amount > 0")
 				->order("main_table.created_at",Zend_Db_Select::SQL_DESC);
 //				->limit(1);
-			Mage::log($collection->getSelect()->__toString(),null,"sql.log");
+			Mage::log((string)$collection->getSelect(),null,"sql.log");
 			return $collection;
 		}
 		return false;
