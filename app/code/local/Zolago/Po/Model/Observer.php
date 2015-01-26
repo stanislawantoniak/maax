@@ -178,6 +178,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     }
 
     public function addAllocationComment($observer) {
+        Mage::log("observer addAllocationComment", null, 'c.log');
         /** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("zolagopo");
 
