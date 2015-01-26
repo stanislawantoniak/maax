@@ -243,10 +243,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
      * @return int
      */
     public function isAutomat() {
-        Mage::log("isAutomat", null, 'c.log');
-        Mage::log(!$this->isOperatorMode(), null, 'c.log');
-        Mage::log(!$this->isVendorMode(), null, 'c.log');
-        return (!$this->isOperatorMode() && !$this->isVendorMode()) ? 1 : 0;
+        return (!$this->getSession()->isLoggedIn()) ? 1 : 0;
     }
 
 	/**
