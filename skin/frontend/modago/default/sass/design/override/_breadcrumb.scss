@@ -1,12 +1,12 @@
 .brandshop-breadcrumps,
 ol.breadcrumb {
 	background:none;
-	font-family: 'OpenSansRegular';
+	font-family: $fontRegular;
 	font-size: 11px;
 	a:link,
 	a:visited {
 		color:#000;
-		font-family: 'OpenSansRegular';
+		font-family: $fontRegular;
 		font-size: 11px;			
 	}
 	a:hover {
