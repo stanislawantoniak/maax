@@ -125,13 +125,7 @@ jQuery.noConflict();
                 }
             });
         });
-        $('#question-form-mobile').submit(function () {
-            if ($(this).valid()) {
-                addFormSpinner($(this));
-            }
-        });
-
-        $('#question-form').submit(function () {
+        $('#question-form-mobile,#question-form').submit(function () {
             if ($(this).valid()) {
                 addFormSpinner($(this));
             }
