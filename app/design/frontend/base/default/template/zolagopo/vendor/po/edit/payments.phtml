@@ -130,11 +130,13 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                         ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary"
-                                       href="<?php echo $this->getOverpaymentUrl("allocateOverpayments", array('transaction_id' => $overpayDetail->getTransactionId() )); ?>"
-                                        <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
-                                        <?php echo $_hlp->__("Allocate"); ?>[dev]
-                                    </a>
+                                    <?php if($_po->getDebtAmount() > 0): ?>
+                                        <a class="btn btn-primary"
+                                           href="<?php echo $this->getOverpaymentUrl("allocateOverpayment", array('transaction_id' => $overpayDetail->getTransactionId() )); ?>"
+                                            <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
+                                            <?php echo $_hlp->__("Allocate"); ?>[dev]
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
