@@ -885,6 +885,7 @@ function addtocartcallback(response) {
 	    popup.find(".modal-error").hide();
 	    popup.find(".modal-loading").hide();
 	    popup.find(".modal-loaded").show();
+	    popup.modal("show");
         Mall.getAccountInfo();
     }
 }

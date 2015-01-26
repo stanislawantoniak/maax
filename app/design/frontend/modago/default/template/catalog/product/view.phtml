@@ -244,9 +244,11 @@ if($vendorContext && $vendorContext->getId()) {
     <div class="modal-dialog modal-lg" style="max-width: 450px;">
         <div class="modal-content">
 	        <div class="modal-error modal-header" style="display: none;">
+		        <button type="button" class="close" data-dismiss="modal"></button>
 		        <h2 class="title_section"><?php echo $this->__("Error occured!"); ?></h2>
 	        </div>
             <div class="modal-loading modal-header">
+	            <button type="button" class="close" data-dismiss="modal"></button>
                 <h2 class="title_section"><?php echo $this->__("Adding product to cart..."); ?></h2>
             </div>
 	        <div class="modal-loaded modal-header" style="display: none;">
