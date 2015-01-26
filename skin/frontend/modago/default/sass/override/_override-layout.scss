@@ -175,13 +175,12 @@
       position:relative;
       overflow:hidden;
       span.note {
-        margin-right: 0px;
+        margin-right: 5px;
         float: left;
         &+span {
-          float:none;
           font-size: 11px;
           color:#646464;
-          font-family: 'OpenSansRegular';
+          font-family: $fontRegular;
           line-height: 13px;
           float: left;
         }
