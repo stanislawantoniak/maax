@@ -749,7 +749,7 @@ Mall.product = {
             }
 
 	        if(group.options.length = 1) {
-		        alert("jeden");
+		        console.log(group.options);
 	        } else {
 		        jQuery.each(group.options, function(index, option) {
 			        Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
