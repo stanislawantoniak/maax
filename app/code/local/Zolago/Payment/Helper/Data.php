@@ -39,7 +39,8 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 		$collection
 			->joinTransactions()
 			->joinOperators()
-			->joinPos();
+			->joinPos()
+            ->joinVendors();
 
 		return $collection;
 	}

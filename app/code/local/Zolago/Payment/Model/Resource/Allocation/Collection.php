@@ -37,7 +37,7 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 			array(
 /*				'zolago_operator.firstname',
 				'zolago_operator.lastname'*/
-				'zolago_operator.email'
+				'zolago_operator.email as operator_email'
 			));
 		return $this;
 	}
@@ -51,4 +51,15 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 			);
 		return $this;
 	}
+
+    public function joinVendors() {
+        $this->getSelect()
+            ->joinLeft(
+                'udropship_vendor',
+                'main_table.vendor_id = udropship_vendor.vendor_id',
+                array(
+                    'udropship_vendor.email as vendor_email'
+                ));
+        return $this;
+    }
 }
