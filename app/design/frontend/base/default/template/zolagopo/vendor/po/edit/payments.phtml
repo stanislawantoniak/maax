@@ -117,13 +117,17 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
                                 <td>
-                                    <?php $operatorId = $overpayDetail->getOperatorId(); ?>
-                                    <?php if (is_null($operatorId)): ?>
-                                        <?php echo $_hlp->__("Automat"); ?>
-                                    <?php else: ?>
-                                        <?php /*echo $overpayDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $overpayDetail->getLastname(); */?>
-	                                    <?php echo $overpayDetail->getEmail(); ?>
-                                    <?php endif; ?>
+                                    <?php
+                                    var_dump($overpayDetail);
+
+                                    if ($overpayDetail->getIsAutomat()) {
+                                        echo $_hlp->__("Automat");
+                                    } elseif(is_null($overpayDetail->getOperatorId())) {
+                                        echo $overpayDetail->getVendorEmail();
+                                    } else {
+                                        echo $overpayDetail->getOperatorEmail();
+                                    }
+                                    ?>
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
