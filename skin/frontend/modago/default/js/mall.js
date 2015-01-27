@@ -748,13 +748,13 @@ Mall.product = {
 
             }
 
-	        if(group.options.length = 1) {
+/*	        if(group.options.length = 1) {
 		        console.log(group.options);
-	        } else {
+	        } else {*/
 		        jQuery.each(group.options, function(index, option) {
 			        Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
 		        });
-	        }
+//	        }
 
 			
             this.applyAdditionalRules(group,formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
