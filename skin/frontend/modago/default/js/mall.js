@@ -704,7 +704,7 @@ Mall.product = {
 
             if (sizesCount == 1) {
                 var singleInput = jQuery('input[type=radio][id^=size_]:not(:disabled)');
-                singleInput.attr('checked', 'checked').trigger('click');
+                singleInput.attr('checked', true).trigger('click');
             }
 
             this.applyAdditionalRules(group, formGroupElement);
@@ -748,9 +748,13 @@ Mall.product = {
 
             }
 
-            jQuery.each(group.options, function(index, option) {
-                Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
-            });
+	        if(group.options.length = 1) {
+		        alert("jeden");
+	        } else {
+		        jQuery.each(group.options, function(index, option) {
+			        Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
+		        });
+	        }
 
 			
             this.applyAdditionalRules(group,formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
