@@ -59,6 +59,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                     <?php foreach($productAttrs as $_attribute) : ?>
 
                         <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+				            <?php $haveSizes = true; ?>
                             <div class="size-box clearfix clr">
                                 <div class="size">
                                     <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
@@ -83,7 +84,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 						
                     </div>
                     <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket" title="<?php echo $this->__("Choose size first"); ?>" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
+                        <button class="btn button button-primary ico addBasket" <?php if($haveSizes): ?>title="<?php echo $this->__("Choose size first"); ?>"<?php endif; ?> id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                     </div>
                 </div>
             </div>
