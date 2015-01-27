@@ -1690,13 +1690,12 @@ jQuery.noConflict();
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
 
-        var toggleXS = $('body').find('.toggle-xs');
-        //
         $('.toggle-xs').on('click', '.title_section', function(event) {
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
                 $(this).closest('.section').find('.main, .rwdCarousel').slideToggle();
+                $(this).closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
                 $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
             };
         });
@@ -1744,7 +1743,8 @@ jQuery.noConflict();
                     // });
 
                 } else {
-                    $('.toggle-xs').find('.main').hide();
+
+                    $(".toggle-xs[data-mobiletoggle='false']").find('.main').hide();
                     $('.block-complementary-product.toggle-xs').find('.main').show();
                     //$('body.node-type-view-product').find('.section').find('.title_section').closest('header').children('h2').children('i').removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down')
                     //$('body.node-type-view-product').find('.section').find('.title_section').closest('header').next('div').css({
