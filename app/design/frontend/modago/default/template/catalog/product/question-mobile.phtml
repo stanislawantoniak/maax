@@ -65,10 +65,15 @@ $session = Mage::getSingleton('customer/session');
         <div class="col-xs-11">
             <div class="buttons-set">
                 <p class="required" aria-required="true"><?php echo $this->__('* Required Fields') ?></p>
-                <button type="submit" title="<?php echo $this->__('Submit') ?>" class="btn sending">
-                    <span><span><?php echo $this->__('Submit') ?></span></span></button>
+                <button type="submit" title="<?php echo $this->__('Submit') ?>" class="btn button button-primary large pull-right sending">
+                    <i></i>
+                    <span><span><?php echo $this->__('Submit') ?></span></span>
+                </button>
             </div>
         </div>
     </div>
 </form>
+    <script type="text/javascript">
+
+    </script>
 <?php endif;?>

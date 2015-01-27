@@ -130,6 +130,9 @@
 			<action method="addCss">
 				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
 			</action>
+            <action method="addCss">
+                <stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
+            </action>
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
@@ -224,6 +227,11 @@
 				<type>skin_js</type>
 				<script>js/fns.js</script>
 			</action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/selectBoxIt/js/jquery.selectBoxIt.min.js</script>
+            </action>
+
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
 			<block type="core/text" name="addthis.javascript">
 				<action method="setText">

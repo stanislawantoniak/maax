@@ -142,14 +142,6 @@ if($vendorContext && $vendorContext->getId()) {
     </header>
     <?php $attributesData = $this->getAdditionalDataDetailed(true,false); ?>
     <div class="main">
-        <ul class="list">
-            <li>
-                <strong><?php echo $this->__("Product name"); ?>: </strong> <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
-            </li>
-            <li>
-                <strong><?php echo $this->__("Sku"); ?>: </strong> <?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku') ?>
-            </li>
-        </ul>
         <p><?php echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description'); ?></p>
         <?php if (!empty($attributesData)) : ?>
             <ul class="list">
@@ -159,11 +151,7 @@ if($vendorContext && $vendorContext->getId()) {
                     <?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
                         <?php echo $this->escapeHtml($attr['value']); ?>
                     <?php else: ?>
-                        <ul class="list bullet_02">
-                            <?php foreach ($attr['value'] as $opt) : ?>
-                                <li><?php echo $this->escapeHtml($opt); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+	                    <?php echo implode(",",$attr['value']); ?>
                     <?php endif; ?>
                 </li>
                     <?php endforeach; ?>
@@ -243,11 +231,27 @@ if($vendorContext && $vendorContext->getId()) {
 <div class="modal fade bs-example-modal-lg container-fluid" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="max-width: 450px;">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+	        <div class="modal-error modal-header" style="display: none;">
+		        <button type="button" class="close" data-dismiss="modal"></button>
+		        <h2 class="title_section"><?php echo $this->__("Error occured!"); ?></h2>
+	        </div>
+            <div class="modal-loading modal-header">
+	            <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Adding product to cart..."); ?></h2>
             </div>
-            <div class="modal-body">
+	        <div class="modal-loaded modal-header" style="display: none;">
+		        <button type="button" class="close" data-dismiss="modal"></button>
+		        <h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+	        </div>
+	        <div class="modal-body modal-error" style="display: none">
+		        <div class="modal-error-txt">
+
+		        </div>
+	        </div>
+	        <div class="modal-body modal-loading" style="text-align: center">
+		        <i class="fa fa-spinner fa-spin fa-2x"></i>
+	        </div>
+            <div class="modal-loaded modal-body" style="display: none;">
                 <table>
                     <tbody id="product-added">
                     <tr>
@@ -298,13 +302,18 @@ if($vendorContext && $vendorContext->getId()) {
     Mall.translate.add("person like", "<?php echo $this->__("person like"); ?>");
     Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
     Mall.translate.add("people likes", "<?php echo $this->__("people likes"); ?>");
+
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
     Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
+
+
 	
 	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
 	<?php if($_product->getCategory()):?>
 	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
 	<?php endif;?>
-	
+
+    jQuery('.no-size').attr('title',"<?php echo $this->__("This size is temporarily unavailable."); ?>");
+
 </script>

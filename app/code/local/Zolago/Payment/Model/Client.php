@@ -62,19 +62,20 @@ abstract class Zolago_Payment_Model_Client {
 
 				$transaction->save();
 
-				if ($transaction->getId() && $status == self::TRANSACTION_STATUS_COMPLETED) {
-					Mage::dispatchEvent(
-						"zolagopayment_append_allocation",
-						array(
-							"transaction" => $transaction,
-							"allocation_type" => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
-							"operator_id" => null,
-							"comment" => $comment
-						)
-					);
+                //there is no sales_order_payment_transaction_after/before_save
+                if ($transaction->getId() && $status == self::TRANSACTION_STATUS_COMPLETED) {
+                    Mage::dispatchEvent(
+                        "zolagopayment_save_transaction_after",
+                        array(
+                            "transaction" => $transaction,
+                            "allocation_type" => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
+                            "operator_id" => null,
+                            "comment" => $comment
+                        )
+                    );
 
-					return $transaction->getId();
-				}
+                    return $transaction->getId();
+                }
 			}
 		}
 		return false;

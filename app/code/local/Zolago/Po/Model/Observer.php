@@ -156,7 +156,63 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			}
 		}
 	}
-	
+
+    public function updatePoStatusByAllocation($observer){
+        /* @var $po Zolago_Po_Model_Po */
+        $po = $observer->getEvent()->getData('po');
+        if(!$po->getId()) {
+            $po = $observer->getPo();
+        }
+
+	    if($po->getId()) {
+		    /** @var Zolago_Po_Model_Po_Status $statusModel */
+		    $statusModel = Mage::getSingleton("zolagopo/po_status");
+		    $statusModel->updateStatusByAllocation($po);
+
+	    }
+    }
+
+    public function addAllocationComment($observer) {
+        /** @var Zolago_Po_Helper_Data $hlp */
+        $hlp = Mage::helper("zolagopo");
+
+        /* @var $oldPo Zolago_Po_Model_Po */
+        $oldPo = $observer->getEvent()->getData('oldPo');
+        if(!$oldPo->getId()) {
+            $oldPo = $observer->getPo();
+        }
+        /* @var $oldPo Zolago_Po_Model_Po */
+        $newPo = $observer->getEvent()->getData('newPo');
+        if(!$newPo->getId()) {
+            $newPo = $observer->getPo();
+        }
+
+        if($newPo->getId()) {
+            $hlp->addAllocationComment(
+                $oldPo,
+                $newPo,
+                false,
+                true,
+                $observer->getEvent()->getData('operator_id'),
+                $observer->getEvent()->getData('amount'));
+        }
+    }
+
+    public function addOverpayComment($observer) {
+        /** @var Zolago_Po_Helper_Data $hlp */
+        $hlp = Mage::helper("zolagopo");
+
+        /* @var $po Zolago_Po_Model_Po */
+        $po = $observer->getEvent()->getData('po');
+        if(!$po->getId()) {
+            $po = $observer->getPo();
+        }
+
+        if($po->getId()) {
+            $hlp->addOverpayComment($po, false, true, $observer->getEvent()->getData('operator_id'), $observer->getEvent()->getData('amount'));
+        }
+    }
+
 	/**
 	 * PO Compose	
 	 * @param type $observer
