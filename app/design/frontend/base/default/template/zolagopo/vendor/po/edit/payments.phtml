@@ -118,6 +118,8 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
                                 <td>
                                     <?php
+                                    var_dump($overpayDetail);
+
                                     if ($overpayDetail->getIsAutomat()) {
                                         echo $_hlp->__("Automat");
                                     } elseif(is_null($overpayDetail->getOperatorId())) {
