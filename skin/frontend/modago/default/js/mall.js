@@ -1092,14 +1092,16 @@ jQuery(document).ready(function() {
             "change": function () {
                 var selectedOption = jQuery(this).find('option:selected');
                 Mall.setSuperAttribute(selectedOption);
-            }
+            },
+	        "create": function() {
+		        if(jQuery(".size-box option").length == 1) {
+			        Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
+		        }
+	        }
         });
     }
 
 
-    if(jQuery(".size-box option").length == 1) {
-        Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
-    }
 
 
 
