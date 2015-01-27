@@ -38,13 +38,16 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $paymentDetail->getCreatedAt(); ?></td>
                                 <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
                                 <td>
-                                    <?php $operatorId = $paymentDetail->getOperatorId(); ?>
-                                    <?php if ($paymentDetail->getIsAutomat()): ?>
-                                        <?php echo $_hlp->__("Automat"); ?>
-                                    <?php else: ?>
-                                        <?php /*echo $paymentDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $paymentDetail->getLastname(); */?>
-	                                    <?php echo $paymentDetail->getEmail(); ?>
-                                    <?php endif; ?>
+                                    <?php
+                                    var_dump($paymentDetail);
+                                    if ($paymentDetail->getIsAutomat()) {
+                                        echo $_hlp->__("Automat");
+                                    } elseif(is_null($paymentDetail->getOperatorId())) {
+                                        echo $paymentDetail->getVendorEmail();
+                                    } else {
+                                        echo $paymentDetail->getOperatorEmail();
+                                    }
+                                    ?>
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
