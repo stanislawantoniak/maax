@@ -32,7 +32,6 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                             </tr>
                         </thead>
                         <tbody>
-                        <?php var_dump($paymentDetails->getData()); ?>
                         <?php foreach ($paymentDetails as $paymentDetail): ?>
                             <tr>
                                 <td><?php echo $paymentDetail->getTxnId(); ?></td>
@@ -40,7 +39,6 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
                                 <td>
                                     <?php
-//                                    var_dump($paymentDetail);
                                     if ($paymentDetail->getIsAutomat()) {
                                         echo $_hlp->__("Automat");
                                     } elseif(is_null($paymentDetail->getOperatorId())) {
