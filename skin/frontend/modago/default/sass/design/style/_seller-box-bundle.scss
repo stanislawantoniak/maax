@@ -15,9 +15,6 @@
 		font-size: 12px;
 		color:#000;
 		a {
-			@media(max-width: 375px) {
-				text-align: center !important;
-			}
 			@extend .seller;
 		}
 		@media (max-width: $screen-xs-max) {
