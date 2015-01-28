@@ -173,6 +173,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		$po = $this->getPo($po);
 		if($po->getId()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
+            if (in_array($po->getUdropshipStatusName(), $po->getStatusModel()->getFinishStatuses())) {
+                $poGrandTotal = 0;
+            }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
