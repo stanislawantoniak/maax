@@ -704,7 +704,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
                 ->setPoFilter($this->getId())
                 ->addFieldToFilter('is_visible_to_vendor', 1)
                 ->setCreatedAtOrder()
-                ->setEntityIdOrder();
+                ->setOrder('entity_id', 'desc');
 
             /**
              * When shipment created with adding comment, comments collection must be loaded before we added this comment.
