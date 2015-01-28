@@ -11,6 +11,7 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 	 * @return Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
     public function getOverpaymentDetails($poId) {
+
         return $this->_addJoins($this->_getModel()->getPoOverpayments($poId));
     }
 

@@ -103,10 +103,10 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                             </tr>
                             <tr>
                                 <th><?php echo $_hlp->__("Transaction"); ?></th>
-                                <th><?php echo $_hlp->__("Date"); ?></th>
+
                                 <th><?php echo $_hlp->__("Order ID"); ?></th>
                                 <th><?php echo $_hlp->__("Details"); ?></th>
-                                <th><?php echo $_hlp->__("Operator"); ?></th>
+
                                 <th><?php echo $_hlp->__("Amount"); ?></th>
                                 <th><?php echo $_hlp->__("Allocate"); ?></th>
                             </tr>
@@ -115,20 +115,10 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
+
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
-                                <td>
-                                    <?php
-                                    if ($overpayDetail->getIsAutomat()) {
-                                        echo $_hlp->__("Automat");
-                                    } elseif(is_null($overpayDetail->getOperatorId())) {
-                                        echo $overpayDetail->getVendorEmail();
-                                    } else {
-                                        echo $overpayDetail->getOperatorEmail();
-                                    }
-                                    ?>
-                                </td>
+
                                 <td>
                                     <?php echo Mage::helper('core')
                                         ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
