@@ -368,11 +368,11 @@ class Zolago_Po_Model_Po_Status
 	public function changeStatus(Zolago_Po_Model_Po $po, $newStatus) {
 		$this->_processStatus($po, $newStatus);
 
-        Mage::log("udpo status name: ". $po->getUdropshipStatusName(), null, "818.log");
+        Mage::log("udpo status name: ". $po->getUdropshipStatus(), null, "818.log");
         Mage::log($po->getStatusModel()->getFinishStatuses(), null, "818.log");
-        Mage::log(in_array($po->getUdropshipStatusName(), $po->getStatusModel()->getFinishStatuses()));
+        Mage::log(in_array($po->getUdropshipStatus(), $po->getStatusModel()->getFinishStatuses()) ? '1' : '0');
 
-        if (in_array($po->getUdropshipStatusName(), $po->getStatusModel()->getFinishStatuses())) {
+        if (in_array($po->getUdropshipStatus(), $po->getStatusModel()->getFinishStatuses())) {
             /** @var Zolago_Payment_Model_Allocation $allocModel */
             $allocModel = Mage::getModel("zolagopayment/allocation");
             $allocModel->createOverpayment($po);
