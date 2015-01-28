@@ -119,8 +119,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                 $alocAmount = $data['allocation_amount'];
                 $oldPo = $this->getPo($data['po_id']);
 
-	            Mage::log("Overpayment amount: ".$alocAmount." | Debt amount: ".$debtAmount,null,"overpayment.log");
-
                 $endAmountAllocation = 0;
                 if ($alocAmount >= abs($debtAmount)) {
                     $endAmountAllocation = $debtAmount;
