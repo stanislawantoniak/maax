@@ -1695,8 +1695,9 @@ jQuery.noConflict();
 			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
 		    });
 
+	    var toggling = false;
         $('.toggle-xs').on('click', '.title_section', function(event) {
-	        var toggling = false;
+
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
