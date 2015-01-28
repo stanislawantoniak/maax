@@ -217,7 +217,9 @@
     }
   }
   figure {
-    margin-top: 5px;
+	  @media(min-width: 376px) {
+		  margin-top: 5px;
+	  }
     margin-bottom:10px;
     padding-left: 0px;
     text-align: center;
@@ -1053,7 +1055,7 @@ form {
 }
    
 #seller-box-bundle .seller {
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 375px) {
     width: 49%;
   }
 }
