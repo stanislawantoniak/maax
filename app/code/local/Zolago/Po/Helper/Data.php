@@ -66,9 +66,9 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         } else {
             //if is vendor
             $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
-            if (empty($fullName)) {
-                $fullName = $helperZP->__("Automat");
-            }
+        }
+        if (empty($fullName)) {
+            $fullName = $helperZP->__("Automat");
         }
 
         $_comment =
@@ -98,6 +98,9 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         } else {
             //if is vendor
             $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
+        }
+        if (empty($fullName)) {
+            $fullName = $helperZP->__("Automat");
         }
 
         $comment =
