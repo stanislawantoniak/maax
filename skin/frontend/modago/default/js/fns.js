@@ -1687,13 +1687,13 @@ jQuery.noConflict();
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
 
-	    var toggleArrowCollapse = function () {
-		    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-	    };
-
 	    $('.panel-collapse')
-		    .on('shown.bs.collapse', toggleArrowCollapse())
-		    .on('hidden.bs.collapse', toggleArrowCollapse());
+		    .on('shown.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    })
+		    .on('hidden.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    });
 
         $('.toggle-xs').on('click', '.title_section', function(event) {
             var intFrameWidth = window.innerWidth;
