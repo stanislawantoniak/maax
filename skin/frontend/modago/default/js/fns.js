@@ -1,4 +1,4 @@
-var prevW = -1, prevH = -1, lastToggle;
+var prevW = -1, prevH = -1, lastToggle = 0;
 jQuery.noConflict();
 (function( $ ) {
     $(function() {
@@ -1706,6 +1706,7 @@ jQuery.noConflict();
 		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
 		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
 		                var i = self.find('i');
+		                console.log($.now() - lastToggle);
 		                if($.now() - lastToggle > 100) {
 			                lastToggle = $.now();
 			                if (i.hasClass('bullet-strzalka-down')) {
