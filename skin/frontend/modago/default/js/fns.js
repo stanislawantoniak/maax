@@ -1,4 +1,4 @@
-var prevW = -1, prevH = -1;
+var prevW = -1, prevH = -1, lastToggle;
 jQuery.noConflict();
 (function( $ ) {
     $(function() {
@@ -1698,7 +1698,6 @@ jQuery.noConflict();
         $('.toggle-xs').on('click', '.title_section', function(event) {
 
             var intFrameWidth = window.innerWidth;
-	        var completed = false;
             if(intFrameWidth < 768) {
                 event.preventDefault();
 	            var self = $(this);
@@ -1707,10 +1706,13 @@ jQuery.noConflict();
 		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
 		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
 		                var i = self.find('i');
-		                if(i.hasClass('bullet-strzalka-down')) {
-			                i.removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
-		                } else {
-			                i.removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down');
+		                if($.now() - lastToggle > 100) {
+			                lastToggle = $.now();
+			                if (i.hasClass('bullet-strzalka-down')) {
+				                i.removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
+			                } else {
+				                i.removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down');
+			                }
 		                }
 	                }
                 });
