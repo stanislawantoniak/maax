@@ -696,5 +696,27 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		Mage::dispatchEvent("zolagopo_po_save_after",array('po'=>$this));
 		return $return;
 	}
-   
+
+    public function getVendorCommentsCollection($reload=false)
+    {
+        if (is_null($this->_vendorComments) || $reload) {
+            $this->_vendorComments = Mage::getResourceModel('udpo/po_comment_collection')
+                ->setPoFilter($this->getId())
+                ->addFieldToFilter('is_visible_to_vendor', 1)
+                ->setCreatedAtOrder()
+                ->setEntityIdOrder();
+
+            /**
+             * When shipment created with adding comment, comments collection must be loaded before we added this comment.
+             */
+            $this->_vendorComments->load();
+
+            if ($this->getId()) {
+                foreach ($this->_vendorComments as $comment) {
+                    $comment->setPo($this);
+                }
+            }
+        }
+        return $this->_vendorComments;
+    }
 }
