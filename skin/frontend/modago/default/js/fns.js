@@ -1694,9 +1694,14 @@ jQuery.noConflict();
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
-                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle();
-                $(this).closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
-                $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	            var self = $(this);
+                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle({
+	                complete: function() {
+		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
+		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	                }
+                });
+
             };
         });
 
