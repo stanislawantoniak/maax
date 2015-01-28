@@ -774,7 +774,7 @@ Mall.product = {
             "for": ("size_" + option.id),
             "class": option.is_salable == false ? "no-size" : "",
             'data-toggle': 'tooltip',
-            'data-placement': 'top'
+            'data-placement': 'right'
         }).appendTo(groupElement);
         var _options = {
             type: "radio",
