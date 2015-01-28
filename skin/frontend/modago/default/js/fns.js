@@ -1706,12 +1706,14 @@ jQuery.noConflict();
 	                complete: function() {
 		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
 		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-		                completed = true;
+		                var i = self.find('i');
+		                if(i.hasClass('bullet-strzalka-down')) {
+			                i.removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
+		                } else {
+			                i.removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down');
+		                }
 	                }
                 });
-	            if(completed) {
-		            self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-	            }
             };
         });
 
