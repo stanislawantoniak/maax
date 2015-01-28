@@ -773,8 +773,7 @@ Mall.product = {
         var label = jQuery("<label/>", {
             "for": ("size_" + option.id),
             "class": option.is_salable == false ? "no-size" : "",
-            'data-toggle': 'tooltip',
-            'data-placement': 'right'
+            'data-toggle': 'tooltip'
         }).appendTo(groupElement);
         var _options = {
             type: "radio",
