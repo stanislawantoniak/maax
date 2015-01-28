@@ -367,16 +367,6 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function changeStatus(Zolago_Po_Model_Po $po, $newStatus) {
 		$this->_processStatus($po, $newStatus);
-
-        Mage::log("udpo status name: ". $po->getUdropshipStatus(), null, "818.log");
-        Mage::log($po->getStatusModel()->getFinishStatuses(), null, "818.log");
-        Mage::log( in_array($po->getUdropshipStatus(), array(self::STATUS_CANCELED, self::STATUS_SHIPPED, self::STATUS_RETURNED )) ? '1' : '0', null, "818.log");
-
-        if (in_array($po->getUdropshipStatus(), array(self::STATUS_CANCELED, self::STATUS_SHIPPED, self::STATUS_RETURNED ))) {
-            /** @var Zolago_Payment_Model_Allocation $allocModel */
-            $allocModel = Mage::getModel("zolagopayment/allocation");
-            $allocModel->createOverpayment($po);
-        }
 	}
 
 	public function updateStatusByAllocation(Zolago_Po_Model_Po $po) {
@@ -393,6 +383,16 @@ class Zolago_Po_Model_Po_Status
 		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
+
+        Mage::log("udpo status name: ". $newStatus2, null, "818.log");
+        Mage::log($po->getStatusModel()->getFinishStatuses(), null, "818.log");
+        Mage::log( in_array($newStatus2, array(self::STATUS_CANCELED, self::STATUS_SHIPPED, self::STATUS_RETURNED )) ? '1' : '0', null, "818.log");
+
+        if (in_array($newStatus2, array(self::STATUS_CANCELED, self::STATUS_SHIPPED, self::STATUS_RETURNED ))) {
+            /** @var Zolago_Payment_Model_Allocation $allocModel */
+            $allocModel = Mage::getModel("zolagopayment/allocation");
+            $allocModel->createOverpayment($po);
+        }
 	}
 
 	/**
