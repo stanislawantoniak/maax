@@ -1683,9 +1683,12 @@ jQuery.noConflict();
 
         $(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
-        $('#accordion').on('click', '.panel-title a', function () {
+        $(document).on('shown.bs.collapse', '#accordion .panel-title a', function () {
             $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
         });
+	    $(document).on('hidden.bs.collapse', '#accordion .panel-title a', function () {
+		    $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	    });
         $('#collapseOne').collapse({'toggle': false});
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
@@ -1694,9 +1697,14 @@ jQuery.noConflict();
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
-                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle();
-                $(this).closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
-                $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	            var self = $(this);
+                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle({
+	                complete: function() {
+		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
+		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	                }
+                });
+
             };
         });
 

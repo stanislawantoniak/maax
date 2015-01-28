@@ -680,6 +680,7 @@ Mall.product = {
     },
 
     createOptionGroup: function(group, useSizeboxList) {
+	    group.label = (group.label == "Rozmiar" ? "Wybierz rozmiar" : group.label);
         if(!useSizeboxList) {
             // insert option group
             var groupElement = jQuery("<div/>", {
@@ -772,8 +773,7 @@ Mall.product = {
         var label = jQuery("<label/>", {
             "for": ("size_" + option.id),
             "class": option.is_salable == false ? "no-size" : "",
-            'data-toggle': 'tooltip',
-            'data-placement': 'top'
+            'data-toggle': 'tooltip'
         }).appendTo(groupElement);
         var _options = {
             type: "radio",
@@ -904,6 +904,9 @@ function addtocartcallback(response) {
 }
 
 function number_format(number, decimals, dec_point, thousands_sep) {
+	if(thousands_sep == " ") {
+		thousands_sep = "&nbsp;";
+	}
     number = (number + '')
         .replace(/[^0-9+\-Ee.]/g, '');
     var n = !isFinite(+number) ? 0 : +number,
