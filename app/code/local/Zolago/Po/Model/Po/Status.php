@@ -370,7 +370,7 @@ class Zolago_Po_Model_Po_Status
 
         Mage::log("udpo status name: ". $po->getUdropshipStatus(), null, "818.log");
         Mage::log($po->getStatusModel()->getFinishStatuses(), null, "818.log");
-        Mage::log(in_array($po->getUdropshipStatus(), $po->getStatusModel()->getFinishStatuses()) ? '1' : '0');
+        Mage::log(in_array($po->getUdropshipStatus(), $po->getStatusModel()->getFinishStatuses()) ? '1' : '0', null, "818.log");
 
         if (in_array($po->getUdropshipStatus(), $po->getStatusModel()->getFinishStatuses())) {
             /** @var Zolago_Payment_Model_Allocation $allocModel */
