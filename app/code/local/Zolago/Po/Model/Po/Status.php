@@ -384,7 +384,7 @@ class Zolago_Po_Model_Po_Status
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
 
-        Mage::log("udpo status name: $newStatus2 " . $hlp = Mage::helper("udpo")->getPoStatusName($newStatus2), null, "818.log");
+        Mage::log("udpo status name: $newStatus2 " . Mage::helper("udpo")->getPoStatusName($newStatus2), null, "818.log");
         Mage::log($po->getStatusModel()->getFinishStatuses(), null, "818.log");
         Mage::log( in_array($newStatus2, array(self::STATUS_CANCELED, self::STATUS_SHIPPED, self::STATUS_RETURNED )) ? '1' : '0', null, "818.log");
 
