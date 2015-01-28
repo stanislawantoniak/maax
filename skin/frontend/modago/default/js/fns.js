@@ -1683,9 +1683,12 @@ jQuery.noConflict();
 
         $(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
-        $('#accordion').on('click', '.panel-title a', function () {
+        $(document).on('shown.bs.collapse', '#accordion .panel-title a', function () {
             $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
         });
+	    $(document).on('hidden.bs.collapse', '#accordion .panel-title a', function () {
+		    $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	    });
         $('#collapseOne').collapse({'toggle': false});
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
