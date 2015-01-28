@@ -173,7 +173,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		$po = $this->getPo($po);
 		if($po->getId()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
-            if (in_array($po->getUdropshipStatus(), $po->getStatusModel()->getFinishStatuses())) {
+            if (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
                 $poGrandTotal = 0;
             }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
