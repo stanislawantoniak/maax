@@ -95,7 +95,6 @@
         margin-right: 0px;
         float: left;
         &+span {
-          float:none;
           font-size: 11px;
           color:#646464;
           font-family: $fontRegular;
@@ -171,10 +170,9 @@
       width:50%;
       text-align: left;
       clear: left;
-      margin-left:10px;
       margin-bottom: 10px;
       min-height: 65px;
-      margin-right: 10px;
+      padding: 0 15px;
     }
     .seller-info {
       @media (max-width: $screen-xs-max) {
@@ -232,7 +230,6 @@
         margin-right: 0px;
         float: left;
         &+span {
-          float:none;
           font-size: 11px;
           color:#646464;
           font-family: $fontRegular;
