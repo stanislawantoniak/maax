@@ -680,6 +680,7 @@ Mall.product = {
     },
 
     createOptionGroup: function(group, useSizeboxList) {
+	    group.label = (group.label == "Rozmiar" ? "Wybierz rozmiar" : group.label);
         if(!useSizeboxList) {
             // insert option group
             var groupElement = jQuery("<div/>", {
