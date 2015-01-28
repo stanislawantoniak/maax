@@ -384,8 +384,6 @@ class Zolago_Po_Model_Po_Status
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
 
-        Mage::log("udpo status name: $newStatus2 " . Mage::helper("udpo")->getPoStatusName($newStatus2), null, "818.log");
-
         if (in_array($newStatus2, $this->getFinishStatuses())) {
             /** @var Zolago_Payment_Model_Allocation $allocModel */
             $allocModel = Mage::getModel("zolagopayment/allocation");
