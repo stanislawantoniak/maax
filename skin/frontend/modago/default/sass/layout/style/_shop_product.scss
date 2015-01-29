@@ -53,6 +53,7 @@
 	.size-box-bundle {
 		.color-label,
 		.size-label {
+			width: 90px;
 			display: inline-block;
 			float: left;
             @media (min-width: 768px) and (max-width: 814px) {
@@ -66,10 +67,7 @@
             }
 		}
 		.color-label {
-			width: 90px;
-		}
-		.size-label {
-			width: 111px;
+			margin-top: -10px;
 		}
 		.form-group {
 			display: inline-block;
@@ -330,10 +328,10 @@
 	overflow:hidden;
 	position:relative;
 	z-index: 1;
+	margin-top: -10px;
 }
 #rwd-color {
 	width: 300px;
-
     padding: 1px 10px 0 16px;
 	.rwd-prev,
 	.rwd-next {
