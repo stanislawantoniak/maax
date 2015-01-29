@@ -1704,15 +1704,12 @@ jQuery.noConflict();
                 self.closest('.section').find('.main, .rwdCarousel').slideToggle({
 	                complete: function() {
 		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
-		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
 		                var i = self.find('i');
-		                if($.now() - lastToggle > 100) {
+		                var diff = $.now() - lastToggle;
+		                if(diff > 100) {
+			                i.toggleClass("bullet-strzalka-up bullet-strzalka-down")
 			                lastToggle = $.now();
-			                if (i.hasClass('bullet-strzalka-down')) {
-				                i.removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
-			                } else {
-				                i.removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down');
-			                }
+			                console.log("wtf!");
 		                }
 	                }
                 });
