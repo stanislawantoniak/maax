@@ -986,6 +986,10 @@ jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
 
+	jQuery(".header_top").headroom({
+		offset: 60
+	});
+
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
         var curentUL = jQuery(this).closest('ul');
@@ -1132,7 +1136,6 @@ jQuery(document).ready(function() {
 		setTimeout(function() {
 			if(jQuery("#rwd-color").length) {
 				var colorQuantity = jQuery("#rwd-color .rwd-item").length;
-				console.log(colorQuantity);
 				if(colorQuantity <= 5) {
 					jQuery("#rwd-color").css({"padding-left": "0"});
 					jQuery("#product-options .size-box .size .size-label").css({width: "97px"})

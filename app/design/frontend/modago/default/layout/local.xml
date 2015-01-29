@@ -131,7 +131,7 @@
 				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
 			</action>
             <action method="addCss">
-                <stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
+                <stylesheet>js/bootstrap-select/css/bootstrap-select.min.css</stylesheet>
             </action>
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
@@ -140,6 +140,10 @@
 			<!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
 			<action method="addJs">
 				<script>jquery/jquery-1.11.0.min.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/headroom.js</script>
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
@@ -229,7 +233,7 @@
 			</action>
             <action method="addItem">
                 <type>skin_js</type>
-                <script>js/selectBoxIt/js/jquery.selectBoxIt.min.js</script>
+                <script>js/bootstrap-select/js/bootstrap-select.min.js</script>
             </action>
 
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
