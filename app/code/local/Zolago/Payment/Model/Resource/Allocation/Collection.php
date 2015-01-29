@@ -2,6 +2,7 @@
 
 class Zolago_Payment_Model_Resource_Allocation_Collection
     extends Mage_Core_Model_Resource_Db_Collection_Abstract {
+	private $_posJoined = false;
   
     protected function _construct() {
         parent::_construct();
@@ -43,13 +44,16 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 	}
 
 	public function joinPos($joinIncrement=true) {
-		$fields = $joinIncrement ? array('udropship_po.increment_id') : array();
-		$this->getSelect()
-			->joinLeft(
-				'udropship_po',
-				'main_table.po_id = udropship_po.entity_id',
-				$fields
-			);
+		if(!$this->_posJoined) {
+			$fields = $joinIncrement ? array('udropship_po.increment_id') : array();
+			$this->getSelect()
+				->joinLeft(
+					'udropship_po',
+					'main_table.po_id = udropship_po.entity_id',
+					$fields
+				);
+			$this->_posJoined = true;
+		}
 		return $this;
 	}
 
