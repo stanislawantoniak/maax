@@ -285,7 +285,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$collection->joinPos();
 				$collection->getSelect()->where("udropship_po.order_id = ?",$po->getOrderId());
 				$collection->getSelect()->where("udropship_po.udropship_vendor = ?",$po->getUdropshipVendor());
-				die((string)$collection->getSelect());
+				//die((string)$collection->getSelect());
 			} else {
 				$collection->getSelect()->where("main_table.customer_id = ?", $this->getPo($po_id)->getCustomerId());
 			}
