@@ -1138,6 +1138,7 @@ jQuery(document).ready(function() {
 					jQuery("#product-options .size-box .size .size-label").css({width: "97px"})
 				} else {
 					jQuery("#product-options .size-box .size .form-group").css({"padding": "0 22px"});
+					jQuery("#product-options .size-box .size .view-sizing").css({"padding": "0 22px"});
 				}
 			} else {
 				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})
