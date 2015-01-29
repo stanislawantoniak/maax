@@ -153,6 +153,8 @@
                     $paymentDetails = $paymentHelper->getPaymentDetails($this->getPo()->getId());
                     $overpayDetails = $paymentHelper->getOverpaymentDetails($this->getPo()->getId());
 
+                    Mage::log((string)$overpayDetails->getSelect(),null,"over.log");
+
                     //if no payment details do not show Payment details button
                     if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
                         <div class="toolbar no-padding">
