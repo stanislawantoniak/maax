@@ -320,7 +320,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					"main_table.operator_id",
 					"main_table.comment",
                     "main_table.vendor_id",
-                    "main_table.is_automat"
+                    "main_table.is_automat",
+					"udropship_po.increment_id"
 				))
 				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
 				->where("main_table.vendor_id = ?" , $udpoVendorId)
