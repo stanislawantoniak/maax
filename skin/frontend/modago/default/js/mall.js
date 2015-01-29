@@ -1047,7 +1047,7 @@ jQuery(document).ready(function() {
 		mobile: Mall.getIsBrowserMobile()
 	});*/
 
-    if(deskTopDevice){
+    if(!Mall.getIsBrowserMobile()){
         jQuery(".size-box select").selectbox({
             mobile: true,
             onOpen: function (inst) {
