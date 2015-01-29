@@ -1,4 +1,4 @@
-var prevW = -1, prevH = -1;
+var prevW = -1, prevH = -1, lastToggle = 0;
 jQuery.noConflict();
 (function( $ ) {
     $(function() {
@@ -1683,28 +1683,36 @@ jQuery.noConflict();
 
         $(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
-        $(document).on('shown.bs.collapse', '#accordion .panel-title a', function () {
-            $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-        });
-	    $(document).on('hidden.bs.collapse', '#accordion .panel-title a', function () {
-		    $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-	    });
         $('#collapseOne').collapse({'toggle': false});
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
 
+	    $('.panel-collapse')
+		    .on('shown.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    })
+		    .on('hidden.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    });
+
         $('.toggle-xs').on('click', '.title_section', function(event) {
+
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
 	            var self = $(this);
-                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle({
+                self.closest('.section').find('.main, .rwdCarousel').slideToggle({
 	                complete: function() {
 		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
-		                self.find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		                var i = self.find('i');
+		                var diff = $.now() - lastToggle;
+		                if(diff > 100) {
+			                i.toggleClass("bullet-strzalka-up bullet-strzalka-down")
+			                lastToggle = $.now();
+			                console.log("wtf!");
+		                }
 	                }
                 });
-
             };
         });
 
