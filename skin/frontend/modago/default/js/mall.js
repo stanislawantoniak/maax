@@ -1043,11 +1043,11 @@ jQuery(document).ready(function() {
     //#######################
     //## SIZE-BOX -> SELECTBOX
     //#######################
-	jQuery(".size-box select").selectpicker({
+/*	jQuery(".size-box select").selectpicker({
 		mobile: Mall.getIsBrowserMobile()
-	});
+	});*/
 
-    /*if(deskTopDevice){
+    if(deskTopDevice){
         jQuery(".size-box select").selectbox({
             mobile: true,
             onOpen: function (inst) {
@@ -1104,7 +1104,7 @@ jQuery(document).ready(function() {
 			    Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
 		    }
 	    });
-    }*/
+    }
 
 
 
