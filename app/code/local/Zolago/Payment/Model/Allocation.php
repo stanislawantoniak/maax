@@ -329,7 +329,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				->group("main_table.transaction_id")
 				->order("main_table.created_at",Zend_Db_Select::SQL_DESC);
 
-			die((string)$collection->getSelect());
 			return $collection;
 		}
 		return false;
