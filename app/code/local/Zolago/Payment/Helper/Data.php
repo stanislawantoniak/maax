@@ -48,8 +48,7 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 
 	private function _addOverpaymentJoins(Zolago_Payment_Model_Resource_Allocation_Collection $collection) {
 		$collection
-			->joinTransactions()
-			->getSelect()->columns('udropship_po.increment_id AS increment_id');
+			->joinTransactions();
 
 		return $collection;
 	}
