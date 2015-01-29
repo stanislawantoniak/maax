@@ -49,7 +49,7 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 	private function _addOverpaymentJoins(Zolago_Payment_Model_Resource_Allocation_Collection $collection) {
 		$collection
 			->joinTransactions()
-			->joinPos(false);
+			->joinPos();
 
 		return $collection;
 	}
