@@ -49,8 +49,8 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 				->joinLeft(
 					'udropship_po',
 					'main_table.po_id = udropship_po.entity_id',
-					'udropship_po.increment_id AS increment_id'
 				);
+			$this->addFieldToSelect('udropship_po.increment_id AS increment_id');
 			$this->_posJoined = true;
 		}
 		return $this;
