@@ -277,12 +277,13 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
 	protected function getPoAllocations($po_id,$byCustomer=false) {
-		$po_id = $this->getPoId($po_id);
-		if($po_id) {
+		$po = $this->getPo($po_id);
+		if($po) {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
 			$collection = $this->getCollection();
 			if(!$byCustomer) {
-				$collection->getSelect()->where("main_table.po_id = ?", $po_id);
+				$collection->joinPos();
+				$collection->getSelect()->where("udropship_po.order_id = ?",$po->getOrderId());
 			} else {
 				$collection->getSelect()->where("main_table.customer_id = ?", $this->getPo($po_id)->getCustomerId());
 			}
