@@ -1043,9 +1043,11 @@ jQuery(document).ready(function() {
     //#######################
     //## SIZE-BOX -> SELECTBOX
     //#######################
-    var deskTopDevice = !Mall.getIsBrowserMobile();
+/*	jQuery(".size-box select").selectpicker({
+		mobile: Mall.getIsBrowserMobile()
+	});*/
 
-    if(deskTopDevice){
+    if(!Mall.getIsBrowserMobile()){
         jQuery(".size-box select").selectbox({
             mobile: true,
             onOpen: function (inst) {
@@ -1125,4 +1127,22 @@ jQuery(document).ready(function() {
 		.on('hidden.bs.modal', '.modal', function () {
 			jQuery('html,body').removeClass('modal-open');
 		});
+
+	if(jQuery("body").hasClass("catalog-product-view")) {
+		setTimeout(function() {
+			if(jQuery("#rwd-color").length) {
+				var colorQuantity = jQuery("#rwd-color .rwd-item").length;
+				console.log(colorQuantity);
+				if(colorQuantity <= 5) {
+					jQuery("#rwd-color").css({"padding-left": "0"});
+					jQuery("#product-options .size-box .size .size-label").css({width: "97px"})
+				} else {
+					jQuery("#product-options .size-box .size .form-group").css({"padding": "0 22px"});
+					jQuery("#product-options .size-box .size .view-sizing").css({"padding": "0 22px"});
+				}
+			} else {
+				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})
+			}
+		},200);
+	}
 });''
