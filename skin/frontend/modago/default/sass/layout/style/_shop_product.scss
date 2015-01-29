@@ -69,7 +69,7 @@
 			width: 90px;
 		}
 		.size-label {
-			width: 107px;
+			width: 111px;
 		}
 		.form-group {
 			display: inline-block;
@@ -331,14 +331,10 @@
 	position:relative;
 	z-index: 1;
 }
-#rwd-color.size-carousel {
-    padding: 0 10px 0 12px;
-}
 #rwd-color {
 	width: 300px;
 
     padding: 1px 10px 0 16px;
-
 	.rwd-prev,
 	.rwd-next {
 		text-indent: -999em;
@@ -360,6 +356,9 @@
 		&.disabled {
 			visibility:hidden;
 		}
+	}
+	.rwd-wrapper-outer {
+		margin-left: 2px;
 	}
 }
 #product-shop  {
