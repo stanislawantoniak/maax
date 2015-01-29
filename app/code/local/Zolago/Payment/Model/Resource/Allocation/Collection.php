@@ -42,12 +42,13 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 		return $this;
 	}
 
-	public function joinPos() {
+	public function joinPos($joinIncrement=true) {
+		$fields = $joinIncrement ? array('udropship_po.increment_id') : array();
 		$this->getSelect()
 			->joinLeft(
 				'udropship_po',
 				'main_table.po_id = udropship_po.entity_id',
-				array('udropship_po.increment_id')
+				$fields
 			);
 		return $this;
 	}
