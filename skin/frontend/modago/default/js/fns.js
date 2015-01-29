@@ -1709,7 +1709,6 @@ jQuery.noConflict();
 		                if(diff > 100) {
 			                i.toggleClass("bullet-strzalka-up bullet-strzalka-down")
 			                lastToggle = $.now();
-			                console.log("wtf!");
 		                }
 	                }
                 });
@@ -2407,7 +2406,7 @@ jQuery.noConflict();
 
 // STYLED SELECTBOX
         function styledSelectBox() {
-            //$('.styledSelected').each(function(index, el) {
+/*            //$('.styledSelected').each(function(index, el) {
 
             //});
             $(".select-styled,.select-styled select").selectbox({
@@ -2416,7 +2415,7 @@ jQuery.noConflict();
                     initScrollBarFilterStyle();
                 }
             });
-            $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");
+            $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");*/
         }
 
 //SCROLLBAR 
