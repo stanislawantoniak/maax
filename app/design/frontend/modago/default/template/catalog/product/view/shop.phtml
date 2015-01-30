@@ -1,15 +1,22 @@
 <!-- PRODUCT SHOP -->
-<?php $_product = $this->getProduct();?>
-<?php $_helper = $this->helper('catalog/output'); ?>
-<?php 
-    // prices
-    $price = $_product->getPrice();
-    $finalPrice = $_product->getFinalPrice();
-    $sizeAttr = $_product->getResource()->getAttribute('size');
-    $productAttrs = array();
-    if($_product->getTypeId() == 'configurable') {
-        $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
-    }
+<?php
+/** @var Zolago_Modago_Block_Catalog_Product_View_Shop $this */
+/** @var Zolago_Catalog_Model_Product $_product */
+/** @var Mage_Catalog_Helper_Output $_helper */
+/** @var Zolago_Catalog_Helper_Data $hlp */
+
+$_product = $this->getProduct();
+$_helper = $this->helper('catalog/output');
+$hlp = Mage::helper('catalog/data');
+$isSalable = $_product->isSalable(); //product is salable
+// prices
+$price = $_product->getPrice();
+$finalPrice = $_product->getFinalPrice();
+$sizeAttr = $_product->getResource()->getAttribute('size');
+$productAttrs = array();
+if($_product->getTypeId() == 'configurable') {
+    $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
+}
 
 $_helperSizetable = Mage::helper('zolagosizetable');
 /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
@@ -81,11 +88,22 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
             <div class="row">
                 <div class="action-box-bundle clearfix">
                     <div class="col-xs-6" id="product-likeboxes">
-						
+
                     </div>
-                    <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket" <?php if(isset($haveSizes) && $haveSizes == true): ?>title="<?php echo $this->__("Choose size first"); ?>" data-toggle="tooltip" data-placemen="top"<?php endif; ?> id="add-to-cart" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
-                    </div>
+                    <?php if ($isSalable): ?>
+                        <div class="col-xs-6 text-right">
+                            <button class="btn button button-primary ico addBasket"
+                                    <?php if(isset($haveSizes) && $haveSizes == true): ?>title="<?php echo $hlp->__("Choose size first"); ?>" data-toggle="tooltip" data-placemen="top"<?php endif; ?>
+                                    id="add-to-cart"
+                                    onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
+                        </div>
+                    <?php else: ?>
+                        <div class="col-xs-6 text-right">
+                            <div class="temporary-absence-product-wrapper">
+                                <span class="temporary-absence-product"><?php echo $hlp->__("temporary absence product");//?></span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

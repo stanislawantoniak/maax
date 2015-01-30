@@ -719,6 +719,16 @@
         font-weight: normal;
       }
     }
+    .temporary-absence-product-wrapper{
+      padding: 5px;
+      text-align: center;
+      border: 1px solid $color-gold;
+      display: table-cell;
+    }
+    .temporary-absence-product {
+      text-transform: uppercase;
+      font-size: 13px;
+    }
   }
 }
 
