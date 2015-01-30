@@ -35,7 +35,7 @@
                                     <div class="price clearfix hidden-xs like-two-line">
                                         <div class="col-price">
 
-                                            <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice() || 1) : ?>
+                                            <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice()) : ?>
                                                 <div class="strikeout-price">
                                                     <?php echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false); ?>
                                                 </div>
