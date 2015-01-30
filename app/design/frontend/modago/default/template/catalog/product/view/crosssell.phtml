@@ -33,7 +33,10 @@
                                     <div class="name_product hidden-xs"><?php echo $this->escapeHtml($_item->getName()) ?></div>
                                     <div class="price clearfix hidden-xs like-two-line">
                                         <div class="col-price">
-                                            <span class="label"><?php echo $this->__("price"); ?>:</span><span><?php echo $_item->getFinalPrice(); ?> <?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); ?></span>
+                                            <span class="label"><?php echo $this->__("price"); ?>:</span>
+                                            <span>
+                                                <?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?>
+                                            </span>
                                         </div>
                                         <div class="like <?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?>liked<?php endif; ?>" data-idproduct="<?php echo $_item->getId(); ?>" data-status="<?php echo (int) Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item); ?>" onclick="Mall.wishlist.<?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item)) : ?>remove<?php else: ?>add<?php endif; ?>FromSmallBlock(this);return false;">
                                             <span class="icoLike">
