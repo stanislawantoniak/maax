@@ -4,9 +4,12 @@
 			background: #fff;
 			color: #515151;
 			.img_product {
-				border:1px solid $bc-primary;
+
 			}
 
+            .name_product {
+                margin-bottom:0px;
+            }
 			.price {
 				color:#000;
 				font-size: 20px;
@@ -31,7 +34,16 @@
 					font-family:$fontBlack;
 					color:#000;
 				}
+                .like_count {
+                    display: none!important;
+                }
+                .final-price {
 
+                }
+                .strikeout-price {
+                  font-size: 12px;
+                  text-decoration: line-through;
+                }
 			}
 			
 			.carousel-caption {

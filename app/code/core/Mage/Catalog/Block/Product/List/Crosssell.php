@@ -98,4 +98,18 @@ class Mage_Catalog_Block_Product_List_Crosssell extends Mage_Catalog_Block_Produ
         return $this->_itemCollection;
     }
 
+    /**
+     * return shorted to $n letters escaped name of product for visual purpose
+     *
+     * @param Zolago_Catalog_Model_Product $item
+     * @param int $n
+     * @return string
+     */
+    public function getShortProductName(Zolago_Catalog_Model_Product $item, $n) {
+        $productName = $this->escapeHtml($item->getName());
+        if (strlen($productName) > 50) {
+            $productName = substr($productName, 0, $n) . '...';
+        }
+        return $productName;
+    }
 }

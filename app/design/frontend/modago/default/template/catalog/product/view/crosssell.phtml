@@ -2,15 +2,14 @@
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 29.07.2014
- */
-?>
-<?php /** @var $this Mage_Catalog_Block_Product_List_Crosssell */ ?>
-<?php
-/**
+ *
  * cross sell items template
  *
  * @see Mage_Catalog_Block_Product_List_Crosssell
  */
+
+/** @var $this Mage_Catalog_Block_Product_List_Crosssell */
+
 ?>
 <?php if(count($this->getItems()) > 0) : ?>
     <section id="complementary_product" class="section bg-w clearfix" data-mobiletoggle="true">
@@ -23,27 +22,37 @@
                 <div class="rwd-carousel rwd-theme">
                     <?php foreach ($this->getItems() as $_item) : ?>
                         <div class="item">
-                            <?php /* @var $_item Mage_Catalog_Model_Product */ ?>
+                            <?php /* @var $_item Zolago_Catalog_Model_Product */ ?>
                             <a href="<?php echo $_item->getProductUrl(); ?>">
 
                                 <div class="box_listing_product">
                                     <figure class="img_product"><img
                                             src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(171, 219); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
                                             class="img-responsive"></figure>
-                                    <div class="name_product hidden-xs"><?php echo $this->escapeHtml($_item->getName()) ?></div>
+                                    <div class="name_product hidden-xs">
+                                        <?php echo $this->getShortProductName($_item, 50); ?>
+                                    </div>
                                     <div class="price clearfix hidden-xs like-two-line">
                                         <div class="col-price">
-                                            <span class="label"><?php echo $this->__("price"); ?>:</span>
-                                            <span>
+
+                                            <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice() || 1) : ?>
+                                                <div class="strikeout-price">
+                                                    <?php echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false); ?>
+                                                </div>
+                                            <?php endif; ?>
+                                            <div class="final-price">
                                                 <?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?>
-                                            </span>
+                                            </div>
                                         </div>
                                         <div class="like <?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?>liked<?php endif; ?>" data-idproduct="<?php echo $_item->getId(); ?>" data-status="<?php echo (int) Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item); ?>" onclick="Mall.wishlist.<?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item)) : ?>remove<?php else: ?>add<?php endif; ?>FromSmallBlock(this);return false;">
                                             <span class="icoLike">
                                                 <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
                                                 <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
                                             </span>
-                                            <span class="like_count"><span><?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?><?php echo $this->__("You"); ?><?php endif; ?><?php echo $_item->getWishlistCount() > 1 && Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) ? " + " : ""; ?></span><?php echo $_item->getWishlistCount() > 1 && Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) ? ((int) $_item->getWishlistCount() - 1) : ($_item->getWishlistCount() && !Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) > 0 ? $_item->getWishlistCount() : ""); ?></span>
+                                            <span class="like_count">
+                                                <span>
+                                                </span>
+                                            </span>
 
                                             <div class="toolLike"></div>
                                         </div>
