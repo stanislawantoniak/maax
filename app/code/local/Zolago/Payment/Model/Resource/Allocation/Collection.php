@@ -45,12 +45,11 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 
 	public function joinPos($joinIncrement=true) {
 		if(!$this->_posJoined) {
-			$fields = $joinIncrement ? array('udropship_po.increment_id') : array();
 			$this->getSelect()
 				->joinLeft(
 					'udropship_po',
 					'main_table.po_id = udropship_po.entity_id',
-					$fields
+					array('udropship_po.increment_id')
 				);
 			$this->_posJoined = true;
 		}
