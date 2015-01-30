@@ -83,7 +83,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
 
                         </tbody>
                     </table>
-                    <?php if ($_po->getDebtAmount() > 0 || $_po->isFinished()): ?>
+                    <?php if ($_po->getDebtAmount() > 0 && !$_po->isFinished()): ?>
                         <div class="row pull-right">
                             <div class="col-xs-12" style="padding-bottom: 6px;">
                                 <a class="btn btn-primary"
@@ -125,7 +125,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                         ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
-                                    <?php if($_po->getDebtAmount() < 0 || $_po->isFinished()): ?>
+                                    <?php if($_po->getDebtAmount() < 0 && !$_po->isFinished()): ?>
                                         <a class="btn btn-primary"
                                            href="<?php echo $this->getOverpaymentUrl("allocateOverpayment", array('transaction_id' => $overpayDetail->getTransactionId() )); ?>"
                                             <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>
