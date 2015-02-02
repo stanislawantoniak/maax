@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */
+/** @var Zolago_Po_Model_Po $_po */
 $_hlp = Mage::helper("zolagopo");
 $paymentDetails = $this->getData('payment_details');
 $overpayDetails = $this->getData('overpay_details');
@@ -38,13 +39,15 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $paymentDetail->getCreatedAt(); ?></td>
                                 <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
                                 <td>
-                                    <?php $operatorId = $paymentDetail->getOperatorId(); ?>
-                                    <?php if ($paymentDetail->getIsAutomat()): ?>
-                                        <?php echo $_hlp->__("Automat"); ?>
-                                    <?php else: ?>
-                                        <?php /*echo $paymentDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $paymentDetail->getLastname(); */?>
-	                                    <?php echo $paymentDetail->getEmail(); ?>
-                                    <?php endif; ?>
+                                    <?php
+                                    if ($paymentDetail->getIsAutomat()) {
+                                        echo $_hlp->__("Automat");
+                                    } elseif(is_null($paymentDetail->getOperatorId())) {
+                                        echo $paymentDetail->getVendorEmail();
+                                    } else {
+                                        echo $paymentDetail->getOperatorEmail();
+                                    }
+                                    ?>
                                 </td>
                                 <td>
                                     <?php echo Mage::helper('core')
@@ -80,7 +83,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
 
                         </tbody>
                     </table>
-                    <?php if ($_po->getDebtAmount() > 0): ?>
+                    <?php if ($_po->getDebtAmount() > 0 && !$_po->isFinished()): ?>
                         <div class="row pull-right">
                             <div class="col-xs-12" style="padding-bottom: 6px;">
                                 <a class="btn btn-primary"
@@ -101,10 +104,10 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                             </tr>
                             <tr>
                                 <th><?php echo $_hlp->__("Transaction"); ?></th>
-                                <th><?php echo $_hlp->__("Date"); ?></th>
+
                                 <th><?php echo $_hlp->__("Order ID"); ?></th>
                                 <th><?php echo $_hlp->__("Details"); ?></th>
-                                <th><?php echo $_hlp->__("Operator"); ?></th>
+
                                 <th><?php echo $_hlp->__("Amount"); ?></th>
                                 <th><?php echo $_hlp->__("Allocate"); ?></th>
                             </tr>
@@ -113,24 +116,16 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                         <?php foreach ($overpayDetails as $overpayDetail): ?>
                             <tr>
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
-                                <td><?php echo $overpayDetail->getCreatedAt(); ?></td>
+
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
                                 <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
-                                <td>
-                                    <?php $operatorId = $overpayDetail->getOperatorId(); ?>
-                                    <?php if (is_null($operatorId)): ?>
-                                        <?php echo $_hlp->__("Automat"); ?>
-                                    <?php else: ?>
-                                        <?php /*echo $overpayDetail->getFirstname(); */?><!--&nbsp;--><?php /*echo $overpayDetail->getLastname(); */?>
-	                                    <?php echo $overpayDetail->getEmail(); ?>
-                                    <?php endif; ?>
-                                </td>
+
                                 <td>
                                     <?php echo Mage::helper('core')
                                         ->currency($overpayDetail->getAllocationAmount(), true, false); ?>
                                 </td>
                                 <td>
-                                    <?php if($_po->getDebtAmount() < 0): ?>
+                                    <?php if($_po->getDebtAmount() < 0 && !$_po->isFinished()): ?>
                                         <a class="btn btn-primary"
                                            href="<?php echo $this->getOverpaymentUrl("allocateOverpayment", array('transaction_id' => $overpayDetail->getTransactionId() )); ?>"
                                             <?php echo $show ? " title='$allocateTooltipMsg'" : " style='opacity: 50%;' onclick='return false;' data-toggle='tooltip' data-placement='top' title='$showTooltipMsg'"; ?>>

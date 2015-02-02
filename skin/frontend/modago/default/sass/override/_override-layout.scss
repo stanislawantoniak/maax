@@ -217,7 +217,9 @@
     }
   }
   figure {
-    margin-top: 5px;
+	  @media(max-width: 452px) {
+		  margin-top: 5px;
+	  }
     margin-bottom:10px;
     padding-left: 0px;
     text-align: center;
@@ -359,7 +361,7 @@
   .price-box-bundle {
     position:relative;
     margin-bottom: 16px;
-  padding-right: 110px;
+    padding-right: 123px;
     @media (min-width: 768px) and (max-width: 819px) {
       margin-bottom: 0px;
     }
@@ -399,6 +401,9 @@
       position:absolute;
       right:0px;
       top:10px;
+      @media (max-width: $screen-xs-max) {
+        top:2px;
+      }
       li {
         font-size: 12px;
         color:#4f4f4f;
@@ -411,9 +416,6 @@
     .color-label,
     .size-label {
       line-height: 47px;
-//      width: 135px;
-      width: auto;
-      margin-right: 5px;
       display: inline-block;
       float: left;
       text-transform: uppercase;
@@ -615,7 +617,7 @@
 
     }
     .size-box {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       .sbHolder {
         width:167px;
       }
@@ -720,6 +722,16 @@
         font-weight: normal;
       }
     }
+    .temporary-absence-product-wrapper{
+      padding: 5px;
+      text-align: center;
+      border: 1px solid $color-gold;
+      display: table-cell;
+    }
+    .temporary-absence-product {
+      text-transform: uppercase;
+      font-size: 13px;
+    }
   }
 }
 
@@ -821,7 +833,8 @@ form {
 
     [type="text"],
     [type="email"],
-    [type="password"] {
+    [type="password"],
+    textarea{
       border-color : #ec695d;
     }
   }
@@ -862,7 +875,7 @@ form {
       color:gray;
       box-shadow: none;
     }
-    textarea {
+    textarea, textarea.form-control, textarea:focus, textarea.form-control:focus {
       border: 1px solid #bcbcbc;
       border-radius:1px;
       min-height: 132px;
@@ -1053,7 +1066,7 @@ form {
 }
    
 #seller-box-bundle .seller {
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 375px) {
     width: 49%;
   }
 }

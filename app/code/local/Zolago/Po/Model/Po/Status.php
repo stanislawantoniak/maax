@@ -62,7 +62,14 @@ class Zolago_Po_Model_Po_Status
 			self::STATUS_RETURNED
 		);;
 	}
-	
+    
+    static function getOverpaymentStatuses() {
+        return array (
+			self::STATUS_CANCELED,
+			self::STATUS_DELIVERED,
+			self::STATUS_SHIPPED,
+        );
+    }	
 	/**
 	 * if PO is NEW
 	 * set if ALERT is not null:
@@ -383,6 +390,12 @@ class Zolago_Po_Model_Po_Status
 		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
+
+        if (in_array($newStatus2, $this->getOverpaymentStatuses())) {
+            /** @var Zolago_Payment_Model_Allocation $allocModel */
+            $allocModel = Mage::getModel("zolagopayment/allocation");
+            $allocModel->createOverpayment($po);
+        }
 	}
 
 	/**

@@ -451,7 +451,7 @@ Product.Config.prototype = {
         else {
             str+= this.priceTemplate.evaluate({price:price.toFixed(2)});
         }
-        return str;
+        return str.replace(" ","&nbsp;");
     },
 
     clearSelect: function(element){

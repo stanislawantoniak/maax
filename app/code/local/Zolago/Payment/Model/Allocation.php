@@ -4,9 +4,11 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
 
+	protected $currentLocale;
 	protected $session;
 
     protected function _construct() {
+	    $this->currentLocale = Mage::app()->getLocale()->getLocaleCode();
         $this->_init('zolagopayment/allocation');
     }
 
@@ -22,8 +24,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
             if ($transaction->getId() && $transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED) {
                 if (empty($comment)) {
                     /** @var Mage_Sales_Model_Order_Payment $payment */
+	                $helper = Mage::helper("zolagopayment");
                     $payment = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
-                    $comment = $payment->getMethod();
+                    $comment = $helper->__($payment->getMethod());
                 }
                 $data = $this->getResource()->getDataAllocationForTransaction($transaction, $allocation_type, $operator_id, $comment);
                 $this->appendAllocations($data);
@@ -119,9 +122,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                 $alocAmount = $data['allocation_amount'];
                 $oldPo = $this->getPo($data['po_id']);
 
-	            Mage::log("Overpayment amount: ".$alocAmount." | Debt amount: ".$debtAmount,null,"overpayment.log");
+	            $this->setLocaleByPo($newPo);
+	            $helper = Mage::helper("zolagopayment");
 
-                $endAmountAllocation = 0;
                 if ($alocAmount >= abs($debtAmount)) {
                     $endAmountAllocation = $debtAmount;
                 } else {
@@ -135,7 +138,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
                     'operator_id'       => $this->getOperatorId(),
                     'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-                    'comment'           => "Overpayment moved to " . $newPo->getIncrementId(),
+                    'comment'           => $helper->__("Overpayment moved to %s",$newPo->getIncrementId()),
                     'customer_id'       => $oldPo->getCustomerId(),
                     'vendor_id'         => $oldPo->getVendor()->getId(),
                     'is_automat'        => $this->isAutomat()
@@ -148,12 +151,12 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
                     'operator_id'       => $this->getOperatorId(),
                     'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-                    'comment'           => "Overpayment moved from " . $oldPo->getIncrementId(),
+                    'comment'           => $helper->__("Overpayment moved from %s",$oldPo->getIncrementId()),
                     'customer_id'       => $newPo->getCustomerId(),
                     'vendor_id'         => $newPo->getVendor()->getId(),
                     'is_automat'        => $this->isAutomat()
                 );
-
+				$this->restoreLocale();
                 $r = $this->appendAllocations($allocations);
                 if ($r) {
                     Mage::dispatchEvent("zolagopayment_allocate_overpayment_save_after",
@@ -175,6 +178,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		$po = $this->getPo($po);
 		if($po->getId()) { //check if po exists and
 			$poGrandTotal = $po->getGrandTotalInclTax();
+            if (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
+                $poGrandTotal = 0;
+            }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
@@ -183,6 +189,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$allocations = array();
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
+					$this->setLocaleByPo($po);
+					$helper = Mage::helper("zolagopayment");
 
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
@@ -202,7 +210,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
 								'operator_id'       => $operatorId,
 								'created_at'        => $createdAt,
-								'comment'           => "Moved to overpayment",
+								'comment'           => $helper->__("Moved to overpayment"),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat()
@@ -216,7 +224,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
 								'operator_id'       => $operatorId,
 								'created_at'        => $createdAt,
-								'comment'           => "Created overpayment",
+								'comment'           => $helper->__("Created overpayment"),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat()
@@ -225,6 +233,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
+					$this->restoreLocale();
 					$r = $this->appendMultipleAllocations($allocations);
                     if ($r) {
                         Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
@@ -264,7 +273,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			if($orderByAmount) {
 				$collection->addOrder("main_table.allocation_amount");//desc
 			}
-            $collection->getSelect()->where("main_table.allocation_amount > 0");
 			return $collection;
 		}
 		return false;
@@ -276,14 +284,16 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
 	protected function getPoAllocations($po_id,$byCustomer=false) {
-		$po_id = $this->getPoId($po_id);
-		if($po_id) {
+		$po = $this->getPo($po_id);
+		if($po instanceof Zolago_Po_Model_Po) {
 			/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
 			$collection = $this->getCollection();
 			if(!$byCustomer) {
-				$collection->getSelect()->where("main_table.po_id = ?", $po_id);
+				$collection->joinPos();
+				$collection->getSelect()->where("udropship_po.order_id = ?", $po->getOrderId());
+				$collection->getSelect()->where("udropship_po.udropship_vendor = ?", $po->getUdropshipVendor());
 			} else {
-				$collection->getSelect()->where("main_table.customer_id = ?", $this->getPo($po_id)->getCustomerId());
+				$collection->getSelect()->where("main_table.customer_id = ?", $po->getCustomerId());
 			}
 			return $collection;
 		}
@@ -304,6 +314,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			$customer = $po->getCustomerId();
 			$byCustomer = $customer ? true : false;
 			$collection = $this->getPoAllocations($po_id,$byCustomer);
+			$collection->joinPos();
 			$collection->getSelect()
 				->reset(Zend_Db_Select::COLUMNS)
 				->columns(array(
@@ -317,13 +328,15 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 					"main_table.operator_id",
 					"main_table.comment",
                     "main_table.vendor_id",
-                    "main_table.is_automat"
+                    "main_table.is_automat",
+					"udropship_po.increment_id"
 				))
 				->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY)
 				->where("main_table.vendor_id = ?" , $udpoVendorId)
 				->having("allocation_amount > 0")
 				->group("main_table.transaction_id")
 				->order("main_table.created_at",Zend_Db_Select::SQL_DESC);
+
 			return $collection;
 		}
 		return false;
@@ -385,5 +398,19 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 */
 	public function getResource() {
 		return parent::getResource();
+	}
+
+	protected function setLocaleByPo($po) {
+		$po = $this->getPo($po);
+		if($po instanceof Zolago_Po_Model_Po) {
+			$locale = Mage::getModel('core/store')->load($po->getOrder()->getStoreId())->getLocaleCode();
+			Mage::app()->getLocale()->setLocaleCode($locale);
+			Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
+		}
+	}
+
+	protected function  restoreLocale() {
+		Mage::app()->getLocale()->setLocaleCode($this->currentLocale);
+		Mage::getSingleton('core/translate')->setLocale($this->currentLocale)->init('frontend', true);
 	}
 }

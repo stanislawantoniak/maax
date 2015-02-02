@@ -58,7 +58,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		/* @var $po Zolago_Po_Model_Po */
 		$newPo = $observer->getEvent()->getData('new_po');
 		/* @var $oldPos Zolago_Po_Model_Po */
-		$itemIds = $observer->getEvent()->getData('itme_ids');
+		$itemIds = $observer->getEvent()->getData('item_ids');
 		/* @var $newPos array */
 		
 		$header = Mage::helper('zolagopo')->__("PO Split (#%s&rarr;#%s)", $po->getIncrementId(), $newPo->getIncrementId());
@@ -72,6 +72,27 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		$this->_logEvent($po, $text);
 		$this->_logEvent($newPo, $text);
 	}
+
+    /**
+     * Split payment from old po and allocate rest of money to new po
+     */
+    public function paymentSplit($observer) {
+        /* @var $po Zolago_Po_Model_Po */
+        /* @var $newPo Zolago_Po_Model_Po */
+
+        $po = $observer->getEvent()->getData('po');
+        $newPo = $observer->getEvent()->getData('new_po');
+
+        /** @var Zolago_Payment_Model_Allocation $allocModel */
+        $allocModel = Mage::getModel("zolagopayment/allocation");
+        $allocModel->createOverpayment($po);
+
+        /** @var Zolago_Payment_Model_Allocation $c */
+        $coll = $allocModel->getPoOverpayments($newPo);
+        foreach ($coll as $c) {
+            $allocModel->allocateOverpayment($newPo, $c->getTransactionId());
+        }
+    }
 	
 	/**
 	 * 
@@ -137,6 +158,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			// Status changed to shipped
 			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
 				// Register for use by email template block
+				if (Mage::registry('current_po')) {
+				    Mage::unregister('current_po');
+				}
 				Mage::register('current_po', $po); 
 				// Do send email
 				$tracking = $po->getTracking();
@@ -450,5 +474,3 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     }
     //}}}
 }
-
-?>

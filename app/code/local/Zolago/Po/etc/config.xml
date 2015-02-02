@@ -98,6 +98,15 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_split>
+            <zolagopo_po_split>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>paymentSplit</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_split>
+
 			<zolagopo_po_shipping_cost>
 				<observers>
 					<zolagopo>
@@ -293,6 +302,9 @@
 				</Zolago_Po>
 			</modules>
 		</translate>
+		<secure_url>
+		    <udpo_vendor_aggregated>/udpo/vendor_aggregated/</udpo_vendor_aggregated>
+		</secure_url>
 	</frontend>
     <adminhtml>
         <layout>

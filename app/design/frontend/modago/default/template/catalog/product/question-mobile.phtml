@@ -74,6 +74,9 @@ $session = Mage::getSingleton('customer/session');
     </div>
 </form>
     <script type="text/javascript">
-
+        jQuery(document).ready(function () {
+            "use strict";
+            jQuery('#question-form-mobile').validate(Mall.validate.getDefaultValidationOptions());
+        });
     </script>
 <?php endif;?>

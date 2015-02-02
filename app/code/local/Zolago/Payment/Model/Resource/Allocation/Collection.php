@@ -2,6 +2,7 @@
 
 class Zolago_Payment_Model_Resource_Allocation_Collection
     extends Mage_Core_Model_Resource_Db_Collection_Abstract {
+	private $_posJoined = false;
   
     protected function _construct() {
         parent::_construct();
@@ -37,18 +38,32 @@ class Zolago_Payment_Model_Resource_Allocation_Collection
 			array(
 /*				'zolago_operator.firstname',
 				'zolago_operator.lastname'*/
-				'zolago_operator.email'
+				'zolago_operator.email as operator_email'
 			));
 		return $this;
 	}
 
-	public function joinPos() {
-		$this->getSelect()
-			->joinLeft(
-				'udropship_po',
-				'main_table.po_id = udropship_po.entity_id',
-				array('udropship_po.increment_id')
-			);
+	public function joinPos($joinIncrement=true) {
+		if(!$this->_posJoined) {
+			$this->getSelect()
+				->joinLeft(
+					'udropship_po',
+					'main_table.po_id = udropship_po.entity_id',
+					array('udropship_po.increment_id')
+				);
+			$this->_posJoined = true;
+		}
 		return $this;
 	}
+
+    public function joinVendors() {
+        $this->getSelect()
+            ->joinLeft(
+                'udropship_vendor',
+                'main_table.vendor_id = udropship_vendor.vendor_id',
+                array(
+                    'udropship_vendor.email as vendor_email'
+                ));
+        return $this;
+    }
 }
