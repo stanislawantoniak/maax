@@ -147,7 +147,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
                     'operator_id'       => $this->getOperatorId(),
                     'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-                    'comment'           => $helper->("Overpayment moved from %s",$oldPo->getIncrementId()),
+                    'comment'           => $helper->__("Overpayment moved from %s",$oldPo->getIncrementId()),
                     'customer_id'       => $newPo->getCustomerId(),
                     'vendor_id'         => $newPo->getVendor()->getId(),
                     'is_automat'        => $this->isAutomat()
