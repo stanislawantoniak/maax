@@ -92,8 +92,8 @@
 			</modules>
 		</translate>
 		<secure_url>
-		    <zolagocampaign_vendor_index>/campaign/vendor/index/</zolagocampaign_vendor_index>
-		    <zolagocampaign_placement_index>/campaign/placement/index/</zolagocampaign_placement_index>
+		    <zolagocampaign_vendor>/campaign/vendor/</zolagocampaign_vendor>
+		    <zolagocampaign_placement>/campaign/placement/</zolagocampaign_placement>
 		</secure_url>
 	</frontend>
 
