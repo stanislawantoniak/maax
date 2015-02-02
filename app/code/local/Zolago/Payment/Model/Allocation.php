@@ -22,8 +22,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
             if ($transaction->getId() && $transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED) {
                 if (empty($comment)) {
                     /** @var Mage_Sales_Model_Order_Payment $payment */
+	                $helper = Mage::helper("zolagopayment");
                     $payment = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
-                    $comment = $payment->getMethod();
+                    $comment = $helper->__($payment->getMethod());
                 }
                 $data = $this->getResource()->getDataAllocationForTransaction($transaction, $allocation_type, $operator_id, $comment);
                 $this->appendAllocations($data);
@@ -118,8 +119,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                 $data = $coll->addFieldToFilter("transaction_id", $transactionId)->getFirstItem();//nadplata dla danej transakcji
                 $alocAmount = $data['allocation_amount'];
                 $oldPo = $this->getPo($data['po_id']);
+	            $helper = Mage::helper("zolagopayment");
 
-                $endAmountAllocation = 0;
                 if ($alocAmount >= abs($debtAmount)) {
                     $endAmountAllocation = $debtAmount;
                 } else {
@@ -133,7 +134,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
                     'operator_id'       => $this->getOperatorId(),
                     'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-                    'comment'           => "Overpayment moved to " . $newPo->getIncrementId(),
+                    'comment'           => $helper->__("Overpayment moved to %s",$newPo->getIncrementId()),
                     'customer_id'       => $oldPo->getCustomerId(),
                     'vendor_id'         => $oldPo->getVendor()->getId(),
                     'is_automat'        => $this->isAutomat()
@@ -146,7 +147,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
                     'operator_id'       => $this->getOperatorId(),
                     'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
-                    'comment'           => "Overpayment moved from " . $oldPo->getIncrementId(),
+                    'comment'           => $helper->__("Overpayment moved from %s",$oldPo->getIncrementId()),
                     'customer_id'       => $newPo->getCustomerId(),
                     'vendor_id'         => $newPo->getVendor()->getId(),
                     'is_automat'        => $this->isAutomat()
@@ -184,6 +185,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$allocations = array();
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
+					$helper = Mage::helper("zolagopayment");
 
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
@@ -203,7 +205,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
 								'operator_id'       => $operatorId,
 								'created_at'        => $createdAt,
-								'comment'           => "Moved to overpayment",
+								'comment'           => $helper->__("Moved to overpayment"),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat()
@@ -217,7 +219,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
 								'operator_id'       => $operatorId,
 								'created_at'        => $createdAt,
-								'comment'           => "Created overpayment",
+								'comment'           => $helper->__("Created overpayment"),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat()
