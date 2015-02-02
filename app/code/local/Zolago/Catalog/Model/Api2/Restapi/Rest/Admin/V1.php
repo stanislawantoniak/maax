@@ -52,7 +52,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
 
         $json = json_encode($data);
-        Mage::log($json, 0);
+
         if (!empty($data)) {
             foreach ($data as $cmd => $batch) {
                 switch ($cmd) {
@@ -247,7 +247,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
         //queue inform_magento
         $skuS = array_keys($priceBatch);
-
+        Mage::log('Count: '.count($skuS), 0);
         if (empty($priceBatch)) {
             return;
         }
