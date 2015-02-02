@@ -158,6 +158,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			// Status changed to shipped
 			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
 				// Register for use by email template block
+				if (Mage::registry('current_po')) {
+				    Mage::unregister('current_po');
+				}
 				Mage::register('current_po', $po); 
 				// Do send email
 				$tracking = $po->getTracking();

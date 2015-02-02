@@ -1,3 +1,7 @@
 "Payment failed", "Płatność nie powiodła się"
 "Created overpayment","Utworzono nadpłatę"
 "dotpay","Dotpay"
+"Moved to overpayment","Przeniesiono na nadpłatę"
+"Created overpayment","Utworzono nadpłatę"
+"Overpayment moved to %s","Nadpłata przeniesiona do %s"
+"Overpayment moved from %s","Nadpłata przeniesiona z %s"
