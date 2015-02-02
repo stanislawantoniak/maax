@@ -6,9 +6,6 @@ body {
 }
 #header {
 	padding-top: 57px;
-	@include max-screen($screen-sm-max) {
-        padding-top: 41px;
-    }
 }
 #header-main {
 	//padding-top:35px;

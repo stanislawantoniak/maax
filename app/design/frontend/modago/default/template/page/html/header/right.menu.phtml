@@ -7,16 +7,29 @@
 ?>
 
 <!-- NAV RIGHT -->
-<div id="header_top_block_right" style="display: none;">
+<div id="header_top_block_right">
     <div id="user_menu" class="pull-right">
         <ul class="user-navigation pull-right">
-            <li id="link_your_account" class="hidden-sm hidden-xs">
-                <a href=""><i class="ico_your_account"></i><br><span class="hidden-sm hidden-xs"><?php echo $this->__("Your account"); ?></span></a>
+	        <li id="link_menu" class="hidden-md hidden-lg">
+		        <a href="#sliding-menu" class="toggleMenu sb-toggle-left">
+			        <img src="<?php echo $this->getSkinUrl("images/svg/menu.svg"); ?>" class="header_icon" />
+		        </a>
+	        </li>
+	        <li id="link_search" class="hidden-md hidden-lg">
+		        <a class="dropdown-toggle" data-dropdown="#dropdown-search" id="toggleSearch">
+			        <img src="<?php echo $this->getSkinUrl("images/svg/search.svg"); ?>" class="header_icon" />
+		        </a>
+	        </li>
+            <li id="link_your_account">
+                <a href="">
+	                <img src="<?php echo $this->getSkinUrl("images/svg/user.svg"); ?>" class="header_icon" />
+	                <span class="hidden-sm hidden-xs"><?php echo $this->__("Your account"); ?></span>
+                </a>
             </li>
             <li id="link_favorites">
-                <a href="#">
+                <a href="">
                     <span class="badge pull-right"></span>
-                    <i class="ico_favorites"></i><br>
+                    <img src="<?php echo $this->getSkinUrl("images/svg/favourite.svg"); ?>" class="header_icon" />
                     <span class="hidden-sm hidden-xs"><?php echo $this->__("Favorites"); ?></span>
                 </a>
 
@@ -24,7 +37,7 @@
             <li id="link_basket" class="basket-dropdown" style="position:relative;">
                 <a class="dropdown-toggle" data-dropdown="#dropdown-basket" href="">
                     <span class="badge pull-right"></span>
-                    <i class="ico_basket"></i><br>
+	                <img src="<?php echo $this->getSkinUrl("images/svg/cart.svg"); ?>" class="header_icon" />
                     <span class="hidden-sm hidden-xs"><?php echo $this->__("Basket"); ?></span>
                 </a>
             </li>

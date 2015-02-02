@@ -1955,27 +1955,6 @@ jQuery.noConflict();
             };
         });*/
 
-        $("#toggleSearch .dropdown-toggle").on('click', function(event) {
-            event.stopPropagation();
-            var thisLink = $(this);
-            var container = $("#dropdown-search");
-            thisLink.closest('#toggleSearch').toggleClass('open');
-            container.toggle();
-        });
-        $('#dropdown-search').click(function(e){
-            e.stopPropagation();
-        });
-
-        $(document).click(function(e){
-            var container = $("#dropdown-search");
-            if (container.is(":visible")) {
-                e.stopPropagation();
-                $('#toggleSearch').removeClass('open');
-                $('#dropdown-search').hide();
-            };
-        });
-
-
 
 
         $(document).on('mouseup touchstart', function (e){
@@ -1992,80 +1971,6 @@ jQuery.noConflict();
                 }
             }
         });
-
-        /*$(document).on('touchstart', function(){
-         var container = $(".fb-slidebar");
-         if(container.is(":visible")){
-
-         if (!container.is(e.target) && container.has(e.target).length === 0) {
-         //hide here
-         $('#sb-site').removeClass('open');
-         $('.fb-slidebar').removeClass('open');
-         $('body').removeClass('noscroll');
-         $('body').find('.noscroll').remove();
-         }
-         }
-         }*/
-
-
-
-
-
-
-        //$('.actionViewFilter').on('click', function(event){
-        //    event.preventDefault();
-        //    Mall.listing.insertMobileSidebar();
-        //    $('#sb-site').toggleClass('open');
-        //    $('.fb-slidebar').toggleClass('open');
-        //    var screenWidth = $(window).width();
-        //    var screenHeight = $(window).height();
-        //    $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
-//
-//                });
-
-//            $("#sidebar").slideToggle();
-
-
-
-//        $(".fb-slidebar-inner")
-//        $(".fb-slidebar-inner").load("/sidebar.inc", function(){
-//
-//                  init();
-//                  initScrollBarFilterMarka();
-//                  clearFilterManufacturerCheked();
-//                  visibleBtnClearFilterSize();
-//                  filterColor();
-//                  $( "#slider-range" ).slider({
-//                          range: true,
-//                          min: 0,
-//                          max: 500,
-//                          values: [ 75, 300 ],
-//                          slide: function(event, ui) {
-//                              $("#zakres_min").val(ui.values[0]);
-//                              $("#zakres_max").val(ui.values[1]);
-//
-//                          }
-//
-//                        });
-//                  $('#slider-range').on('click', 'a', function(event) {
-//                  var checkSlider = $('#checkSlider').find('input');
-//                  if (!checkSlider.is(':checked')) {
-//                    checkSlider.prop('checked', true);
-//                    $('#filter_price').find('.action').removeClass('hidden');
-//                  }
-//                });
-//
-//                  $('#sb-site').toggleClass('open');
-//                  $('.fb-slidebar').toggleClass('open');
-//                      var screenWidth = $(window).width();
-//                      var screenHeight = $(window).height();
-//                      $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
-//
-//                });
-
-//            $("#sidebar").slideToggle();
-//        });
-
 
 
 

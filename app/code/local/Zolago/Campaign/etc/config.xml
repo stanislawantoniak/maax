@@ -91,6 +91,10 @@
 				</Zolago_Campaign>
 			</modules>
 		</translate>
+		<secure_url>
+		    <zolagocampaign_vendor>/campaign/vendor/</zolagocampaign_vendor>
+		    <zolagocampaign_placement>/campaign/placement/</zolagocampaign_placement>
+		</secure_url>
 	</frontend>
 
     <crontab>
