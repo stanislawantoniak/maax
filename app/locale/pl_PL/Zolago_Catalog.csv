@@ -129,7 +129,7 @@
 "Choose the category", "Wybierz kategorię"
 "Cannot pass empty required attribute (%s)", "Brak wymaganych atrybutów (%s)"
 "%d selected product has empty required attribute(s) and/or is missing a base image:", "%d wybrany produkt(y) ma puste wartości atrybutów wymaganych i/lub nie ma zdjęcia głównego:"
-"MSRP Source", "Źródło ceny MSRP"
+"MSRP Source", "Źródło ceny przekreślonej"
 "Brandshop %s", "Sklep %s"
 "Vendor %s", "Sprzedawca %s"
 "Brandshop", "Sklep"

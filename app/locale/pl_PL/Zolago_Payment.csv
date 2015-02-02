@@ -3,5 +3,6 @@
 "dotpay","Dotpay"
 "Moved to overpayment","Przeniesiono na nadpłatę"
 "Created overpayment","Utworzono nadpłatę"
-"Overpayment moved to %s","Nadpłata przeniesiona do zamówienia %s"
-"Overpayment moved from %s","Nadpłata przeniesiona z zamówienia %s"
+"Overpayment moved to %s","Nadpłata przeniesiona do %s"
+"Overpayment moved from %s","Nadpłata przeniesiona z %s"
+"Allocations overpayments created","Przydzielono nadpłatę"
