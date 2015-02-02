@@ -37,7 +37,13 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                             <tr>
                                 <td><?php echo $paymentDetail->getTxnId(); ?></td>
                                 <td><?php echo $paymentDetail->getCreatedAt(); ?></td>
-                                <td><?php echo $_hlp->__($paymentDetail->getComment()); ?></td>
+                                <td><?php echo $_hlp->__(
+		                                str_replace(
+			                                $paymentDetail->getIncrementId(),
+			                                "%s",
+			                                $paymentDetail->getComment()
+		                                ),$paymentDetail->getIncrementId()); ?>
+                                </td>
                                 <td>
                                     <?php
                                     if ($paymentDetail->getIsAutomat()) {
