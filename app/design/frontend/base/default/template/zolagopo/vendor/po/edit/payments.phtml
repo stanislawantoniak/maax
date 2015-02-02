@@ -37,13 +37,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                             <tr>
                                 <td><?php echo $paymentDetail->getTxnId(); ?></td>
                                 <td><?php echo $paymentDetail->getCreatedAt(); ?></td>
-                                <td><?php echo $_hlp->__(
-		                                str_replace(
-			                                $paymentDetail->getIncrementId(),
-			                                "%s",
-			                                $paymentDetail->getComment()
-		                                ),$paymentDetail->getIncrementId())." (".$paymentDetail->getIncrementId().")"; ?>
-                                </td>
+                                <td><?php echo $paymentDetail->getComment(); ?></td>
                                 <td>
                                     <?php
                                     if ($paymentDetail->getIsAutomat()) {
@@ -124,7 +118,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
                                 <td><?php echo $overpayDetail->getTxnId(); ?></td>
 
                                 <td><?php echo $overpayDetail->getIncrementId(); ?></td>
-                                <td><?php echo $_hlp->__($overpayDetail->getComment()); ?></td>
+                                <td><?php echo $overpayDetail->getComment(); ?></td>
 
                                 <td>
                                     <?php echo Mage::helper('core')
