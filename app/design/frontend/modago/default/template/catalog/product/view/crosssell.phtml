@@ -31,21 +31,17 @@
                                             class="img-responsive"></figure>
                                     <div class="name_product hidden-xs">
                                         <?php echo $this->getShortProductName($_item, 50); ?>
-                                        <?php echo $_item->getStrikeoutPrice() . ' ' . $_item->getFinalPrice(); ?>
                                     </div>
                                     <div class="price clearfix hidden-xs like-two-line">
                                         <div class="col-price">
-
-
-
-                                                <div class="strikeout-price">
-                                                    <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice()) {
-                                                        echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false);
-                                                    } else {
-                                                        echo '&nbsp;';
-                                                    }
-                                                    ?>
-                                                </div>
+                                            <div class="strikeout-price">
+                                                <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice()) {
+                                                    echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false);
+                                                } else {
+                                                    echo '<br/>';
+                                                }
+                                                ?>
+                                            </div>
 
                                             <div class="final-price">
                                                 <?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?>
