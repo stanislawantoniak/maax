@@ -26,7 +26,7 @@
                             <a href="<?php echo $_item->getProductUrl(); ?>">
 
                                 <div class="box_listing_product">
-                                    <figure class="img_product"><img
+                                    <figure class="img_product" style="height: 219px;"><img
                                             src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(171, 219); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
                                             class="img-responsive"></figure>
                                     <div class="name_product hidden-xs">
@@ -42,7 +42,6 @@
                                                 }
                                                 ?>
                                             </div>
-
                                             <div class="final-price">
                                                 <?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?>
                                             </div>
