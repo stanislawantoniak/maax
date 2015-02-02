@@ -31,6 +31,7 @@ $likeWithStrikeoutPrice = false;
                                             class="img-responsive"></figure>
                                     <div class="name_product hidden-xs">
                                         <?php echo $this->getShortProductName($_item, 50); ?>
+                                        <?php echo $_item->getStrikeoutPrice() . ' ' . $_item->getFinalPrice(); ?>
                                     </div>
                                     <div class="price clearfix hidden-xs like-two-line">
                                         <div class="col-price">
