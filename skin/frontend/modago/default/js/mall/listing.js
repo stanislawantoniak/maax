@@ -909,12 +909,14 @@ Mall.listing = {
 	 */
 	insertMobileSidebar: function() {
 		if(this.getCurrentMobileFilterState() == 0) {
+            this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
 			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
 			jQuery("#sidebar").find(".sidebar").remove();
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
 			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(1);
-			this.attachFilterColorEvents();
+            this.initScrolls();
+            this.attachFilterColorEvents();
 			this.attachFilterIconEvents();
 			this.attachFilterEnumEvents();
 			this.attachFilterPriceEvents();
@@ -968,11 +970,13 @@ Mall.listing = {
 	 */
 	insertDesktopSidebar: function() {
 		if(this.getCurrentMobileFilterState() == 1) {
+            this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
 			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
 			jQuery("#sidebar").find(".sidebar").remove();
 			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
+            this.initScrolls();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -1531,12 +1535,11 @@ Mall.listing = {
 
 
 	initScrolls: function(scope, opts){
-
+        scope = scope || jQuery(".solr_search_facets");
 		opts = opts || {};
 
 		// Destroy scrolls if exists;
-		jQuery(".scrollable.mCustomScrollbar".scope)
-			.mCustomScrollbar("destroy");
+		this.destroyScrolls(scope);
 
 		var fm = jQuery(".scrollable", scope);
 		if (fm.length >= 1) {
@@ -1550,6 +1553,11 @@ Mall.listing = {
 			}, opts));
 		};
 	},
+
+    destroyScrolls: function(scope) {
+        scope = scope || jQuery(".solr_search_facets");
+        jQuery(".scrollable.mCustomScrollbar", scope).mCustomScrollbar("destroy");
+    },
 
 	/**
 	 *
