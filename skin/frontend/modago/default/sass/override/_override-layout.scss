@@ -833,7 +833,8 @@ form {
 
     [type="text"],
     [type="email"],
-    [type="password"] {
+    [type="password"],
+    textarea{
       border-color : #ec695d;
     }
   }
@@ -874,7 +875,7 @@ form {
       color:gray;
       box-shadow: none;
     }
-    textarea {
+    textarea, textarea.form-control, textarea:focus, textarea.form-control:focus {
       border: 1px solid #bcbcbc;
       border-radius:1px;
       min-height: 132px;
