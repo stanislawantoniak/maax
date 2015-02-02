@@ -405,10 +405,12 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		if($po instanceof Zolago_Po_Model_Po) {
 			$locale = Mage::getModel('core/store')->load($po->getOrder()->getStoreId())->getLocaleCode();
 			Mage::app()->getLocale()->setLocaleCode($locale);
+			Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
 		}
 	}
 
 	protected function  restoreLocale() {
 		Mage::app()->getLocale()->setLocaleCode($this->currentLocale);
+		Mage::getSingleton('core/translate')->setLocale($this->currentLocale)->init('frontend', true);
 	}
 }
