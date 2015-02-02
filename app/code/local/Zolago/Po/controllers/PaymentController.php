@@ -6,9 +6,13 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
 
         try {
             $poId = $this->getRequest()->getParam("id");//po_id
+            /** @var Zolago_Po_Model_Po $po */
             $po = Mage::getModel("zolagopo/po")->load($poId);
 
             if ($po->getId()) {
+                if (in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses())) {
+                    throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You can not assign overpayment to order with actual status"));
+                }
                 /** @var Zolago_Payment_Model_Allocation $allocModel */
                 $allocModel = Mage::getModel("zolagopayment/allocation");
                 $error = $allocModel->createOverpayment($po);
@@ -39,6 +43,9 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
             $po = Mage::getModel("zolagopo/po")->load($poId);
 
             if ($po->getId()) {
+                if (in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses())) {
+                    throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You can not assign overpayment to order with actual status"));
+                }
                 /** @var Zolago_Payment_Model_Allocation $allocModel */
                 $allocModel = Mage::getModel("zolagopayment/allocation");
                 $error = $allocModel->allocateOverpayment($po, $transactionId);
