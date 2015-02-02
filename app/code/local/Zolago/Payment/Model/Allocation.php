@@ -4,9 +4,11 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
 
+	protected $currentLocale;
 	protected $session;
 
     protected function _construct() {
+	    $this->currentLocale = Mage::app()->getLocale()->getLocaleCode();
         $this->_init('zolagopayment/allocation');
     }
 
@@ -119,6 +121,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                 $data = $coll->addFieldToFilter("transaction_id", $transactionId)->getFirstItem();//nadplata dla danej transakcji
                 $alocAmount = $data['allocation_amount'];
                 $oldPo = $this->getPo($data['po_id']);
+
+	            $this->setLocaleByPo($newPo);
 	            $helper = Mage::helper("zolagopayment");
 
                 if ($alocAmount >= abs($debtAmount)) {
@@ -152,7 +156,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     'vendor_id'         => $newPo->getVendor()->getId(),
                     'is_automat'        => $this->isAutomat()
                 );
-
+				$this->restoreLocale();
                 $r = $this->appendAllocations($allocations);
                 if ($r) {
                     Mage::dispatchEvent("zolagopayment_allocate_overpayment_save_after",
@@ -185,6 +189,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$allocations = array();
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
+					$this->setLocaleByPo($po);
 					$helper = Mage::helper("zolagopayment");
 
 					foreach($payments as $payment) {
@@ -228,6 +233,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
+					$this->restoreLocale();
 					$r = $this->appendMultipleAllocations($allocations);
                     if ($r) {
                         Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
@@ -392,5 +398,17 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	 */
 	public function getResource() {
 		return parent::getResource();
+	}
+
+	protected function setLocaleByPo($po) {
+		$po = $this->getPo($po);
+		if($po instanceof Zolago_Po_Model_Po) {
+			$locale = Mage::getModel('core/store')->load($po->getOrder()->getStoreId())->getLocaleCode();
+			Mage::app()->getLocale()->setLocaleCode($locale);
+		}
+	}
+
+	protected function  restoreLocale() {
+		Mage::app()->getLocale()->setLocaleCode($this->currentLocale);
 	}
 }
