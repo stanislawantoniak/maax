@@ -426,13 +426,34 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		if($po->isCod()) {
 			return $helper->__("Cash on delivery");
 		} else {
-			$method = $po->getOrder()->getPayment()->getMethod();
-			if($method == 'dotpay') {
-
+			$payment = $po->getOrder()->getPayment();
+			$method = $payment->getMethod();
+			$channelName = false;
+			if($method == Zolago_Dotpay_Model_Client::PAYMENT_METHOD) {
+				$channel = $payment->getAdditionalInformation('channel');
+				$channelCode = $this->getMethodCodeByChannel($channel);
+				$providerModel = Mage::getModel("zolagopayment/provider");
+				$providerCollection = $providerModel->getCollection();
+				$providerCollection->getSelect()->where("main_table.code = ?",$channelCode);
+				$providerCollection->load();
+				$provider = $providerCollection->getFirstItem();
+				$channelName = $provider->getName();
 			}
-			return $helper->__($method);
+			return $helper->__($method).($channelName ? " (".$channelName.")" : "");
 		}
 	}
 	
-	
+	private function getMethodCodeByChannel($channel) {
+		$deXml = simplexml_load_file(Mage::getConfig()->getModuleDir('etc', 'Zolago_Payment').DS.'payment.xml');
+		$deJson = json_encode($deXml);
+		$xml_array = json_decode($deJson,TRUE);
+		$payments_array = array_merge($xml_array['global']['zolagopayment']['gateway'],$xml_array['global']['zolagopayment']['cc']);
+		foreach($payments_array as $code=>$method) {
+			if(isset($method['base']['additional_information']['channel'])) {
+				if($method['base']['additional_information']['channel'] == $channel) {
+					return $code;
+				}
+			}
+		}
+	}
 }

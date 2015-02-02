@@ -10,7 +10,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const ROLE_HELPDESK								= "helpdesk";
 	const ROLE_MASS_OPERATOR						= "mass_operator";
 	const ROLE_PRODUCT_OPERATOR						= "product_operator";
-	const ROLE_OVERPAY_OPERATOR						= "overpay_operator";
+	const ROLE_PAYMENT_OPERATOR						= "payment_operator";
 
 	
 	// Reousrce definition
@@ -57,7 +57,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
 
     // Overpayments managment
-	const RES_OVERPAY_OPERATOR						= "udpo/vendor_overpayment";
+	const RES_PAYMENT_OPERATOR						= "udpo/payment";
 
 
 	// Resources as array
@@ -94,7 +94,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// Campaign managment
 		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage",
         // Overpayments managment
-        self::RES_OVERPAY_OPERATOR                  => "Overpay manage",
+        self::RES_PAYMENT_OPERATOR                  => "Payment manage",
 
 	);
 	
@@ -106,7 +106,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::ROLE_HELPDESK							=> "Helpdesk",	
 		self::ROLE_MASS_OPERATOR					=> "Mass Operator",	
 		self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
-		self::ROLE_OVERPAY_OPERATOR                 => "Overpay Operator"
+		self::ROLE_PAYMENT_OPERATOR                 => "Payment manage"
 	);
 	
 	
@@ -154,7 +154,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);
 
         // Build ACL Rules - Overpayments managment
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_OVERPAY_OPERATOR, self::RES_OVERPAY_OPERATOR);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PAYMENT_OPERATOR, self::RES_PAYMENT_OPERATOR);
 
 	}
 	

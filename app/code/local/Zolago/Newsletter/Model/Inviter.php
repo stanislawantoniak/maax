@@ -105,18 +105,26 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		$model = Mage::getModel("newsletter/subscriber");
 		$subscription = $model->loadByEmail($email);
 		$sid = $subscription->getId();
+		$save = false;
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
 				return false;
-			} elseif($this->_canRepeatInvitation()) {
+			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
 				$this->_setSubscriberId($sid);
 				$confirm_code = $subscription->getSubscriberConfirmCode();
 				if(!$confirm_code) {
 					$subscription->setSubscriberConfirmCode($this->_getInvitationCode());
-					$subscription->save();
+					$save = true;
 				} else {
 					$this->_setInvitationCode($subscription->getSubscriberConfirmCode());
+				}
+				if(is_null($status) || $status == 0) {
+					$subscription->setSubscriberStatus(self::STATUS_NOT_ACTIVE);
+					$save = true;
+				}
+				if($save) {
+					$subscription->save();
 				}
 				return true;
 			} else {

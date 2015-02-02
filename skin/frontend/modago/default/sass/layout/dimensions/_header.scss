@@ -2,6 +2,19 @@
     min-height: 65px;
 }
 /* HEADER TOP */
+.headroom {
+	-webkit-transition: top 200ms linear;
+	-moz-transition: top 200ms linear;
+	-ms-transition: top 200ms linear;
+	-o-transition: top 200ms linear;
+	transition: top 200ms linear;
+}
+.headroom--pinned {
+	top: 0 !important;
+}
+.headroom--unpinned {
+	top: -60px !important;
+}
 .header_top {
     position:fixed;
     top:0px;

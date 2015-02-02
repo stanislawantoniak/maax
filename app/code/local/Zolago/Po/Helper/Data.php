@@ -21,35 +21,26 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
             /** @var Zolago_Payment_Model_Allocation $allocationModel */
             $allocationModel = Mage::getModel("zolagopayment/allocation");
             $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
-//            Mage::log("GT: $grandTotal || sum: $sumAmount ||po_id: " . $po->getId(), null, "a.log");
 
             //czeka na płatność
             if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT && ($grandTotal <= $sumAmount)) {
                 //rowny albo nadplata
-//                Mage::log("new status is STATUS_PAYMENT", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                 if ($save) {
                     $po->save();
-//                    Mage::log("save status to STATUS_PENDING", null, "a.log");
                 }
-
             } //czeka na spakowanie
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
                 //jest mniej niz potrzeba
-//                Mage::log("new status is STATUS_PENDING", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
                 if ($save) {
                     $po->save();
-//                    Mage::log("save status to STATUS_PAYMENT", null, "a.log");
                 }
-
             } //czeka na rezerwacje
             elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
-//                Mage::log("new status is STATUS_BACKORDER", null, "a.log");
                 $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
                 if ($save) {
                     $po->save();
-//                    Mage::log("save status to STATUS_STATUS_PENDING", null, "a.log");
                 }
             }
         }
@@ -69,7 +60,17 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         /** @var Zolago_Operator_Model_Operator $modelOperator */
         $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
 
-        $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getEmail();
+        if ($modelOperator->getId()) {
+            //if is operator
+            $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getEmail();
+        } else {
+            //if is vendor
+            $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
+        }
+        if (empty($fullName)) {
+            $fullName = $helperZP->__("Automat");
+        }
+
         $_comment =
             "[$fullName] " .
             $helperZP->__("Created overpayment") .
@@ -83,6 +84,45 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
             Mage::helper('udropship')->processQueue();
         }
         $po->saveComments();
+    }
+
+    public function addAllocationComment(Zolago_Po_Model_Po $oldPo, Zolago_Po_Model_Po $newPo, $isVendorNotified, $isVisibleToVendor, $operator_id, $amount){
+        /** @var Zolago_Payment_Helper_Data $helperZP */
+        $helperZP = Mage::helper("zolagopayment");
+        /** @var Zolago_Operator_Model_Operator $modelOperator */
+        $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
+
+        if ($modelOperator->getId()) {
+            //if is operator
+            $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getEmail();
+        } else {
+            //if is vendor
+            $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
+        }
+        if (empty($fullName)) {
+            $fullName = $helperZP->__("Automat");
+        }
+
+        $comment =
+            "[$fullName] " .
+            $helperZP->__("Overpayment moved from %s to %s. Amount: %s",
+                $oldPo->getIncrementId(),
+                $newPo->getIncrementId(),
+                Mage::helper('core')->currency($amount, true, false));
+
+        $newPo->addComment($comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($newPo, $comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $newPo->saveComments();
+
+        $oldPo->addComment($comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($oldPo, $comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $oldPo->saveComments();
     }
 
 	/**

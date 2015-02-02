@@ -291,7 +291,7 @@ Autocomplete.prototype = {
 		}else{
 			formattedPrice = '&nbsp;';
 		}
-		return formattedPrice;
+		return formattedPrice.replace(" ","&nbsp;");
   },
   suggest: function() {
     if (this.suggestions.length === 0 && this.currentValue.length == 0) {

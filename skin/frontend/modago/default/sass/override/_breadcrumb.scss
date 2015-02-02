@@ -15,7 +15,7 @@ ol.breadcrumb {
 	background:none;
 	padding:0px 0px 0px;
 	margin:20px 0;
-	font-family: 'OpenSansRegular';
+	font-family: $fontRegular;
 	font-size: 11px;
 	li {
 		font-size: 11px;
@@ -32,7 +32,7 @@ ol.breadcrumb {
 		a:link,
 		a:visited {
 			color:#000;
-			font-family: 'OpenSansRegular';
+			font-family: $fontRegular;
 			font-size: 11px;			
 		}
 		a:hover {

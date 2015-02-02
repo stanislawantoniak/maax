@@ -54,7 +54,7 @@ switch($_reviewsCount) {
 }
 ?>
 
-<section id="note_product" class="section toggle-xs bg-w clearfix">
+<section id="note_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
     <header>
         <h2 class="title_section"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down visible-xs"></i>
         <span id="average_note_client" class="visible-xs">
@@ -89,7 +89,9 @@ switch($_reviewsCount) {
             <div class="add_opinion col-md-3 col-sm-12 hidden-xs">
                 <p><?php echo $this->__("Share your review with other users"); ?><br><a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a></p>
             </div>
-            <a href="#block-review-form" class="btn black viewFormComments visible-xs"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a>
+	        <div class="visible-xs" style="text-align: center">
+                <a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a>
+	        </div>
         </div>
 
     </div>
@@ -97,6 +99,7 @@ switch($_reviewsCount) {
     <div class="main clearfix">
         <div class="col-sm-12" id="comments">
             <div class="row">
+	            <?php echo $this->getChildHtml('product.review.form'); ?>
                 <?php foreach($this->getReviewsForProduct() as $review) : ?>
                     <?php
                     $avgReview = $this->getSingleReviewAvarage($review);
@@ -125,7 +128,6 @@ switch($_reviewsCount) {
                     </div>
                 <?php endforeach; ?>
                 <?php echo $this->getChildHtml('product_review_list.toolbar'); ?>
-                <?php echo $this->getChildHtml('product.review.form'); ?>
             </div>
         </div>
     </div>

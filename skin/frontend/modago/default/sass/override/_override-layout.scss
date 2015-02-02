@@ -175,13 +175,12 @@
       position:relative;
       overflow:hidden;
       span.note {
-        margin-right: 0px;
+        margin-right: 5px;
         float: left;
         &+span {
-          float:none;
           font-size: 11px;
           color:#646464;
-          font-family: 'OpenSansRegular';
+          font-family: $fontRegular;
           line-height: 13px;
           float: left;
         }
@@ -218,9 +217,12 @@
     }
   }
   figure {
-    margin-top: 0px;
+	  @media(max-width: 452px) {
+		  margin-top: 5px;
+	  }
     margin-bottom:10px;
     padding-left: 0px;
+    text-align: center;
     @media (max-width: $screen-xs-max) {
       display: inline-block;
       vertical-align: middle;
@@ -236,9 +238,6 @@
     img {
       max-width: 120px;
       max-height: 60px;
-      @media (max-width: $screen-xs-max) {
-        margin-left:13px;
-      }
     }
   }
   .seller {
@@ -362,6 +361,7 @@
   .price-box-bundle {
     position:relative;
     margin-bottom: 16px;
+  padding-right: 110px;
     @media (min-width: 768px) and (max-width: 819px) {
       margin-bottom: 0px;
     }
@@ -413,9 +413,6 @@
     .color-label,
     .size-label {
       line-height: 47px;
-//      width: 135px;
-      width: auto;
-      margin-right: 5px;
       display: inline-block;
       float: left;
       text-transform: uppercase;
@@ -617,7 +614,7 @@
 
     }
     .size-box {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       .sbHolder {
         width:167px;
       }
@@ -658,6 +655,9 @@
         margin-top: -7px;
       }
     }
+	  .addingLike-box {
+		  padding-left: 50px;
+	  }
     .addLike {
       width:149px;
       height:42px;
@@ -718,6 +718,16 @@
         font-size: 11px;
         font-weight: normal;
       }
+    }
+    .temporary-absence-product-wrapper{
+      padding: 5px;
+      text-align: center;
+      border: 1px solid $color-gold;
+      display: table-cell;
+    }
+    .temporary-absence-product {
+      text-transform: uppercase;
+      font-size: 13px;
     }
   }
 }
@@ -1052,7 +1062,7 @@ form {
 }
    
 #seller-box-bundle .seller {
-  @media(max-width: $screen-xs-max) {
+  @media(max-width: 375px) {
     width: 49%;
   }
 }

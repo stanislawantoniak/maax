@@ -6,6 +6,11 @@
 		.modal-header {
 			border: none;
 		}
+
+	.modal-body {
+		overflow: auto;
+		overflow-x: auto !important;
+	}
 		
 		ul {
 			@include no-bullets;
@@ -46,5 +51,9 @@
 	.modal-content {
 			text-align: left;
 			font-size: 12px;
+		.modal-body {
+			overflow: auto;
+			overflow-x: auto !important;
 		}
+	}
 }

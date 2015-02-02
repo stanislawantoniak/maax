@@ -1,4 +1,4 @@
-var prevW = -1, prevH = -1;
+var prevW = -1, prevH = -1, lastToggle = 0;
 jQuery.noConflict();
 (function( $ ) {
     $(function() {
@@ -64,7 +64,7 @@ jQuery.noConflict();
             });
             return valid;
         }, "");
-        $("#review-form, #question-form-mobile").each(function () {
+        $("#review-form").each(function () {
 
             $(this).validate({
                 success: "valid",
@@ -125,7 +125,7 @@ jQuery.noConflict();
                 }
             });
         });
-        $('#question-form-mobile').submit(function () {
+        $('#question-form-mobile,#question-form').submit(function () {
             if ($(this).valid()) {
                 addFormSpinner($(this));
             }
@@ -1470,13 +1470,10 @@ jQuery.noConflict();
             $('.viewFormComments').on('click', function(event) {
                 event.preventDefault();var intFrameWidth = window.innerWidth;
                 wrapperFormReview.slideToggle(200, function(){
-
-                    if (intFrameWidth >480) {
-                        var animeOffset = $("#block-review-form").offset().top - 80;
-                        $('html, body').animate({
-                            scrollTop: animeOffset
-                        }, 800);
-                    };
+                    var animeOffset = $("#block-review-form").offset().top - 80;
+                    $('html, body').animate({
+                        scrollTop: animeOffset
+                    }, 800);
                 });
 
             });
@@ -1686,21 +1683,35 @@ jQuery.noConflict();
 
         $(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
-        $('#accordion').on('click', '.panel-title a', function () {
-            $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-        });
         $('#collapseOne').collapse({'toggle': false});
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
 
-        var toggleXS = $('body').find('.toggle-xs');
-        //
+	    $('.panel-collapse')
+		    .on('shown.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    })
+		    .on('hidden.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    });
+
         $('.toggle-xs').on('click', '.title_section', function(event) {
+
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
-                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle();
-                $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	            var self = $(this);
+                self.closest('.section').find('.main, .rwdCarousel').slideToggle({
+	                complete: function() {
+		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
+		                var i = self.find('i');
+		                var diff = $.now() - lastToggle;
+		                if(diff > 100) {
+			                i.toggleClass("bullet-strzalka-up bullet-strzalka-down")
+			                lastToggle = $.now();
+		                }
+	                }
+                });
             };
         });
 
@@ -1747,7 +1758,8 @@ jQuery.noConflict();
                     // });
 
                 } else {
-                    $('.toggle-xs').find('.main').hide();
+
+                    $(".toggle-xs[data-mobiletoggle='false']").find('.main').hide();
                     $('.block-complementary-product.toggle-xs').find('.main').show();
                     //$('body.node-type-view-product').find('.section').find('.title_section').closest('header').children('h2').children('i').removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down')
                     //$('body.node-type-view-product').find('.section').find('.title_section').closest('header').next('div').css({
@@ -2394,7 +2406,7 @@ jQuery.noConflict();
 
 // STYLED SELECTBOX
         function styledSelectBox() {
-            //$('.styledSelected').each(function(index, el) {
+/*            //$('.styledSelected').each(function(index, el) {
 
             //});
             $(".select-styled,.select-styled select").selectbox({
@@ -2403,7 +2415,7 @@ jQuery.noConflict();
                     initScrollBarFilterStyle();
                 }
             });
-            $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");
+            $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");*/
         }
 
 //SCROLLBAR 

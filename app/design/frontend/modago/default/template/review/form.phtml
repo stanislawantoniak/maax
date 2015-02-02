@@ -31,7 +31,10 @@
         <?php if ($this->getAllowWriteReviewFlag()): ?>
         <form action="<?php echo Mage::getUrl('review/product/post', array('id' => $this->getProduct()->getId())); ?>" method="post" id="review-form" class="form clearfix" rel="form">
             <?php echo $this->getBlockHtml('formkey'); ?>
-            <h4><?php echo $this->escapeHtml($this->getProductInfo()->getName()); ?> - <strong><?php echo $this->__("Add your review"); ?></strong></h4>
+            <h4>
+	            <strong><?php echo $this->__("Add your review"); ?></strong><br />
+	            <?php echo $this->escapeHtml($this->getProductInfo()->getName()); ?>
+            </h4>
             <div class="fieldset review-stars-form">
                 <input type="hidden" name="validate_rating" class="validate-rating" value="">
 
@@ -39,7 +42,7 @@
                     <?php echo $this->getChildHtml('form_fields_before')?>
                     <?php if(count($this->getRatings())) : ?>
                     <table class="data-table review-summary-table ratings table raty_note" id="product-review-table">
-                        <caption><?php echo $this->__("Product ratings"); ?>:</caption>
+                        <caption><?php echo $this->__("Rate product's features"); ?>:</caption>
                         <tbody>
                         <?php foreach($this->getRatings() as $_rating) : ?>
                             <?php

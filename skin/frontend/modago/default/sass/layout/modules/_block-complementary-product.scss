@@ -77,12 +77,15 @@
 					height: 43px;
 					.col-price {
 						position:absolute;
-						top: 18px;
+						top: 8px;
 					}
 					.like {
 						    position:absolute;
-							top: 24px;
-						}
+							top: 14px;
+					}
+                    .like-with-strikeout-price {
+                        top: 31px;
+                    }
 				}
 			
 				.price {

@@ -53,9 +53,7 @@
 	.size-box-bundle {
 		.color-label,
 		.size-label {
-//			width: 135px;
-            width: auto;
-            margin-right: 5px;
+			width: 90px;
 			display: inline-block;
 			float: left;
             @media (min-width: 768px) and (max-width: 814px) {
@@ -68,6 +66,9 @@
             	display:block;
             }
 		}
+		.color-label {
+			margin-top: -10px;
+		}
 		.form-group {
 			display: inline-block;
 			label {
@@ -77,7 +78,7 @@
 				display:inline-block;
 				margin-right:8px;
 				&:first-child {
-//					margin-left:-2px;
+					margin-left:-2px;
 				}
 				img {
 					position:absolute;
@@ -201,28 +202,53 @@
           z-index: 1;
         }
         select.mobile-native-select-w {
-          width: 200px;
+          width: 167px;
         }
-        .selectboxit-container .selectboxit-options {
+        .selectboxit-container {
+          .selectboxit {
+            border-radius: 0;
+            border-top: solid 1px #afafaf;
+            border-bottom: solid 1px #afafaf;
+            border-left: solid 1px #afafaf;
+            &:hover {
+              border: solid 1px #1e1e1e;
+            }
 
-          /* Set's the drop down options width to the same width as the drop down button */
-          width: 198px;
+            .selectboxit-text {
+              color: #1e1e1e;
+              text-decoration: none;
+              text-indent: 10px;
+              font-family: Arial, sans-serif;
+              font-size: 12px;
+              font-weight: normal;
+            }
+            .selectboxit-arrow-container {
+              background: $selectMap;
+              @include sprite($selectMap, select_styled);
+              line-height:  image-height(sprite-file($selectMap, select_styled));
 
-          /* Set's the max-height property to only show a subset of the drop down items.
-             If you do not set a max-height property, SelectBoxIt will dynamically
-             position the dropdown (when opened) to make sure the drop down items are not
-             displayed outside of the current window viewport.
-          */
-          max-height: 50px;
+              .caret {
+                display: none;
+              }
+            }
+          }
+          .selectboxit-options {
 
+            /* Set's the drop down options width to the same width as the drop down button */
+            width: 167px;
+
+            /* Set's the max-height property to only show a subset of the drop down items.
+               If you do not set a max-height property, SelectBoxIt will dynamically
+               position the dropdown (when opened) to make sure the drop down items are not
+               displayed outside of the current window viewport.
+            */
+            max-height: 50px;
+
+          }
         }
-        #select-size-mobile-trigger {
-          width: 220px;
-//          z-index: 10;
-//          pointer-events: none;
-        }
+
         .select-size-mobile-trigger {
-          width:230px;
+          width:167px;
         }
       }
 	}
@@ -302,15 +328,11 @@
 	overflow:hidden;
 	position:relative;
 	z-index: 1;
-}
-#rwd-color.size-carousel {
-    padding: 0 10px 0 12px;
+	margin-top: -10px;
 }
 #rwd-color {
 	width: 300px;
-
-    padding: 0 10px 0 0;
-
+    padding: 1px 10px 0 16px;
 	.rwd-prev,
 	.rwd-next {
 		text-indent: -999em;
@@ -332,6 +354,9 @@
 		&.disabled {
 			visibility:hidden;
 		}
+	}
+	.rwd-wrapper-outer {
+		margin-left: 2px;
 	}
 }
 #product-shop  {

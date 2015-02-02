@@ -23,6 +23,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
     }
 
     public function getDataAllocationForTransaction($transaction, $allocation_type, $operator_id = null, $comment = '') {
+        /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
         $tableSPT = $this->getTable('sales/payment_transaction');
         $select = $this->getReadConnection()->select();
 
@@ -53,7 +54,9 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
                 'operator_id'       => $operator_id,
                 'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
                 'comment'           => $comment,
-                'customer_id'       => ((!$po['customer_is_guest']) && !is_null($po['customer_is_guest'])) ? $po['customer_id'] : null
+                'customer_id'       => ((!$po['customer_is_guest']) && !is_null($po['customer_is_guest'])) ? $po['customer_id'] : null,
+                'vendor_id'         => Mage::getModel("zolagopo/po")->load($po['entity_id'])->getVendor()->getId(),
+                'is_automat'        => $this->getAllocationModel()->isAutomat()
             );
 
             if ($po === end($poData)) {
@@ -94,6 +97,12 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 		$writeConnection->insertMultiple($this->getTable('zolagopayment/allocation'), $data);
 	}
 
+    /**
+     * @return false|Mage_Core_Model_Abstract|Zolago_Payment_Model_Allocation
+     */
+    protected function getAllocationModel() {
+        return Mage::getModel('zolagopayment/allocation');
+    }
 
 }
 

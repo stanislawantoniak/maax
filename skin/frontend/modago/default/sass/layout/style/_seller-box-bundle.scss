@@ -95,10 +95,9 @@
         margin-right: 0px;
         float: left;
         &+span {
-          float:none;
           font-size: 11px;
           color:#646464;
-          font-family: 'OpenSansRegular';
+          font-family: $fontRegular;
           line-height: 13px;
           float: left;
         }
@@ -169,14 +168,11 @@
     @media (max-width: $screen-xs-max) {
       float:right;
       width:50%;
-      margin-right: 5px;
       text-align: left;
       clear: left;
-      margin-left:10px;
-      display: inline-block;
       margin-bottom: 10px;
       min-height: 65px;
-      display: flex;
+      padding: 0 15px;
     }
     .seller-info {
       @media (max-width: $screen-xs-max) {
@@ -234,10 +230,9 @@
         margin-right: 0px;
         float: left;
         &+span {
-          float:none;
           font-size: 11px;
           color:#646464;
-          font-family: 'OpenSansRegular';
+          font-family: $fontRegular;
           line-height: 13px;
           float: left;
         }
