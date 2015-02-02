@@ -261,10 +261,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		$collection = $this->getPoAllocations($po_id);
 		if($collection) {
 			$collection->addPoIdFilter($po_id);
-			$collection->getSelect()->where(
-				"(main_table.allocation_type = '".self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT."') ".
-				"|| (main_table.allocation_type = '".self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY."' && main_table.allocation_amount < 0)"
-			);
+			$collection->getSelect()->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
 			if($orderByAmount) {
 				$collection->addOrder("main_table.allocation_amount");//desc
 			}
