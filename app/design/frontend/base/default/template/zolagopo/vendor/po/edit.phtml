@@ -148,6 +148,7 @@
                     </h4>
 
                     <?php
+                    var_dump($this->canShowPaymentDetails());
                     if ($this->canShowPaymentDetails()):
                         /** @var Zolago_Payment_Helper_Data $paymentHelper */
                         $paymentHelper = Mage::helper('zolagopayment');
