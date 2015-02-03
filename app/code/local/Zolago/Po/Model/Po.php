@@ -560,7 +560,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
        return $this->getOrder()->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
    }
 
-
     /**
      * return true if payment method is Banktransfer
      * if not return false
