@@ -464,20 +464,14 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
      */
     public function canShowPaymentDetails() {
         $po = $this->getPo();
-        Mage::log('can show payment');
-        Mage::log('po id:' . $po->getId());
-        Mage::log('method:' . $po->getOrder()->getPayment()->getMethod());
-
         if ($po->isCod()) {
-            Mage::log('is cod:' . $po->isCod().'|'.Mage::getStoreConfig("payment/cashondelivery/p_details"));
             //Cash On Delivery Payment
             return (bool) Mage::getStoreConfig("payment/cashondelivery/p_details");
         } elseif($po->isPaymentBanktransfer()) {
-            Mage::log('is banktransfer:' . $po->isPaymentBanktransfer().'|'.Mage::getStoreConfig("payment/banktransfer/p_details"));
             //Bank Transfer Payment
             return (bool) Mage::getStoreConfig("payment/banktransfer/p_details");
         } elseif ($po->isPaymentDotpay()) {
-            Mage::log('is dotpay:' . $po->isPaymentDotpay().'|'. Mage::getStoreConfig("payment/dotpay/p_details"));
+            //dotpay payment
             return (bool) Mage::getStoreConfig("payment/dotpay/p_details");
         } else {
             //for some new method not implemented yet

@@ -6,7 +6,7 @@
                 <dotpay>
                     <fields>
                         <p_details translate="label">
-                            <label>Is visible in udropship payments details?</label>
+                            <label>Is payment details are visible in the udropship?</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>200</sort_order>
@@ -214,7 +214,7 @@
                             <show_in_store>1</show_in_store>
                         </checkout_description>
                         <p_details translate="label">
-                            <label>Is visible in udropship payments details?</label>
+                            <label>Is payment details are visible in the udropship?</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>200</sort_order>
@@ -244,7 +244,7 @@
                             <show_in_store>1</show_in_store>
                         </checkout_description>
                         <p_details translate="label">
-                            <label>Is visible in udropship payments details?</label>
+                            <label>Is payment details are visible in the udropship?</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>200</sort_order>
