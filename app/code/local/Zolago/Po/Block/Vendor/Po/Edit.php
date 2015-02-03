@@ -466,19 +466,21 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         $po = $this->getPo();
         Mage::log('can show payment');
         Mage::log('po id:' . $po->getId());
-        Mage::log('is cod:' . $po->isCod());
-        Mage::log('is banktransfer:' . $po->isPaymentBanktransfer());
-        Mage::log('is gateway:' . $po->isGatewayPayment());
+        Mage::log('method:' . $po->getOrder()->getPayment()->getMethod());
 
         if ($po->isCod()) {
+            Mage::log('is cod:' . $po->isCod().'|'.Mage::getStoreConfig("payment/cashondelivery/p_details"));
             //Cash On Delivery Payment
             return (bool) Mage::getStoreConfig("payment/cashondelivery/p_details");
         } elseif($po->isPaymentBanktransfer()) {
+            Mage::log('is banktransfer:' . $po->isPaymentBanktransfer().'|'.Mage::getStoreConfig("payment/banktransfer/p_details"));
             //Bank Transfer Payment
             return (bool) Mage::getStoreConfig("payment/banktransfer/p_details");
         } elseif ($po->isGatewayPayment()) {
+            Mage::log('is gateway:' . $po->isGatewayPayment());
             $payment = $po->getOrder()->getPayment();
             $provider = $payment->getProvider();
+            Mage::log($provider);
             if ($provider == Zolago_Payment_Model_Abstract::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY) {
                 //Zolago Payment - Gateway -> OLAGOPAYMENT_PROVIDER_TYPE_GATEWAY
                 return (bool) Mage::getStoreConfig("payment/zolagopayment_gateway/p_details");
