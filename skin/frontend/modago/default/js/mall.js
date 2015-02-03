@@ -439,7 +439,7 @@ var Mall = {
         this._current_superattribute = currentSelection;
         // change prices
         var optionId = jQuery(this._current_superattribute).attr("value");
-        var superOptionId = jQuery(this._current_superattribute).attr("data-id");
+        var superOptionId = jQuery(this._current_superattribute).attr("data-superattribute");
         jQuery.each(Mall.product._options.attributes[superOptionId].options, function(index, opt) {
             if(optionId == opt.id) {
                 Mall.product.setPrices((parseFloat(Mall.product._options.basePrice) + parseFloat(opt.price)), (parseFloat(Mall.product._options.oldPrice) + parseFloat(opt.oldPrice)), Mall.product._options.template);
@@ -454,7 +454,7 @@ var Mall = {
         }
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
-        attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
+        attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
 	    var popup = jQuery("#popup-after-add-to-cart");
 	    popup.find(".modal-error").hide();
 	    popup.find(".modal-loaded").hide();
@@ -724,15 +724,15 @@ Mall.product = {
             var deskTopDevice = !Mall.getIsBrowserMobile();
 
             // create form group for selectbox options
-            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : ' select-size-mobile-trigger';
+            var formGroupElementClass = (deskTopDevice) ? ' ' : 'form-group select-size-mobile-trigger';
             var formGroupElement = jQuery("<div/>", {
-                class: "form-group" + formGroupElementClass
+                class: "" + formGroupElementClass
             }).appendTo(groupElement);
 
 
 
             //create select part
-            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : ' form-control mobile-native-select-w';
+            var formGroupElementSelectClass = (deskTopDevice) ? '  select-styled' : '  mobile-native-select-w';
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
                 class: formGroupElementSelectClass
@@ -800,8 +800,8 @@ Mall.product = {
             value: option.id,
             html: option.label,
             id: ("size_" + option.id),
-            "data-id": id,
-            name: ("super_attribute["+ id +"]"),
+            "data-superattribute": id,
+            name: ("super_attribute["+ id +"]")
         }).appendTo(groupElement);
     },
 
@@ -887,7 +887,7 @@ function addtocartcallback(response) {
     } else {
         if(Mall.product._current_product_type == 'configurable') {
             var superAttr = jQuery(Mall._current_superattribute);
-            var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-id"));
+            var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-superattribute"));
             popup.find("p.size>span").show();
             popup.find("p.size>span").html(label);
         } else {
@@ -1089,67 +1089,24 @@ jQuery(document).ready(function() {
 /*	jQuery(".size-box select").selectpicker({
 		mobile: Mall.getIsBrowserMobile()
 	});*/
-
-    if(!Mall.getIsBrowserMobile()){
-        jQuery(".size-box select").selectbox({
-            mobile: true,
-            onOpen: function (inst) {
-                var uid = jQuery(this).attr('sb');
-                var height = parseFloat(jQuery(".size-box li").first().css('line-height'));
-                height += parseInt(jQuery(".size-box li a").first().css('padding-top'));
-                height += parseInt(jQuery(".size-box li a").first().css('padding-bottom'));
-
-                var n = jQuery(".size-box li").length;
-                if( n < 4 ) {
-                    height = n * height;
-                    if (isNaN(height)) {
-                        height = 29;//px
-                    }
-                    jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
-                    jQuery('.size-box .mCSB_container').css("margin-right", "0px");
-                } else {
-                    height = 4 * height;
-                }
-
-                jQuery('.size-box #sbOptionsWrapper_' + uid).css('max-height', height);
-                jQuery('.size-box #sbOptionsWrapper_' + uid).css('width', jQuery('.size-box .sbHolder').outerWidth());
-
-            },
-
-            onChange: function(value, inst) {
-                Mall.setSuperAttribute(jQuery("#size_" + value));
-            }
-        });
-
-        if (jQuery('.size-box option').length >= 2) {
-            jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
-        }
-
-    } else {
-
-
-        jQuery(".size-box select").selectBoxIt({
-            theme: "bootstrap",
-            native: true,
-            defaultText: (jQuery(".size-box option").length > 1) ? Mall.translate.__('Select size') : '',
-            autoWidth: false
-        });
-        jQuery(".size-box select").bind({
-            "change": function () {
-                var selectedOption = jQuery(this).find('option:selected');
-                Mall.setSuperAttribute(selectedOption);
-            }
-        });
-
-
-    }
+    jQuery(".size-box select").selectBoxIt({
+        theme: "bootstrap",
+        native: Mall.getIsBrowserMobile(),
+        defaultText: (jQuery(".size-box option").length > 1) ? Mall.translate.__('Select size') : '',
+        autoWidth: false
+    });
     var optionsCount = jQuery(".size-box option").length;
     jQuery(document).ready(function () {
         if (optionsCount == 1) {
             Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
         }
     });
-
+    jQuery(".size-box select").bind({
+        "change": function () {
+            var selectedOption = jQuery(this).find('option:selected');
+            Mall.setSuperAttribute(selectedOption);
+        }
+    });
 
 
 

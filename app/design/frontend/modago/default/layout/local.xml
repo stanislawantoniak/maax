@@ -114,6 +114,9 @@
 			<action method="addCss">
 				<stylesheet>css/typography.css</stylesheet>
 			</action>
+            <action method="addCss">
+                <stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
+            </action>
 			<action method="addCss">
 				<stylesheet>css/layout.css</stylesheet>
 			</action>
@@ -130,12 +133,10 @@
 			<action method="addCss">
 				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
 			</action>
-            <action method="addCss">
-                <stylesheet>js/bootstrap-select/css/bootstrap-select.min.css</stylesheet>
-            </action>
-			<action method="addCss">
-				<stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
-			</action>
+            <!--<action method="addCss">-->
+                <!--<stylesheet>js/bootstrap-select/css/bootstrap-select.min.css</stylesheet>-->
+            <!--</action>-->
+
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
@@ -234,10 +235,10 @@
 				<type>skin_js</type>
 				<script>js/fns.js</script>
 			</action>
-            <action method="addItem">
-                <type>skin_js</type>
-                <script>js/bootstrap-select/js/bootstrap-select.min.js</script>
-            </action>
+            <!--<action method="addItem">-->
+                <!--<type>skin_js</type>-->
+                <!--<script>js/bootstrap-select/js/bootstrap-select.min.js</script>-->
+            <!--</action>-->
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/selectBoxIt/js/jquery.selectBoxIt.min.js</script>
