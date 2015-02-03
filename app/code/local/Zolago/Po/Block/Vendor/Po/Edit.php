@@ -460,6 +460,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
     public function canShowPaymentDetails() {
 //        return true;
         $po = $this->getPo();
-        return $po->getOrder()->getPayment()->getData();
+        $payment = $po->getOrder()->getPayment();
+        return $payment->getProvider();
     }
 }
