@@ -1127,26 +1127,25 @@ jQuery(document).ready(function() {
 
     } else {
 
-
+        var optionsCount = jQuery(".size-box option").length;
         jQuery(".size-box select").selectBoxIt({
             theme: "bootstrap",
-            //mobile: true,
             native: true,
-            defaultText: Mall.translate.__('Select size'),
+            defaultText: (optionsCount > 1) ? Mall.translate.__('Select size') : '',
             autoWidth: false
         });
         jQuery(".size-box select").bind({
             "change": function () {
                 var selectedOption = jQuery(this).find('option:selected');
                 Mall.setSuperAttribute(selectedOption);
-            },
+            }
         });
 
-	    jQuery(document).ready(function() {
-		    if(jQuery(".size-box option").length == 1) {
-			    Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
-		    }
-	    });
+        jQuery(document).ready(function () {
+            if (optionsCount == 1) {
+                Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
+            }
+        });
     }
 
 
