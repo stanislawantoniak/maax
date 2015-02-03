@@ -404,6 +404,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         if (empty($productConfigurableId)) {
             return;
         }
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
         $insert = array();
 
         foreach ($stores as $store) {
