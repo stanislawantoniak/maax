@@ -3,7 +3,7 @@
 	border-right:1px solid #ebebeb;
 	background:#fff;
 	border-top: 3px solid #6fffcf;
-	font-family: 'OpenSansRegular';
+	font-family: $fontRegular;
 	font-size: 12px;
 
 	.section {
@@ -28,7 +28,8 @@
 			text-transform: uppercase;
 		}
 		dd {
-			font-size:12px;
+			font-size:13px;
+            line-height: 13px;
 		}
 	}
 	.action {
@@ -173,7 +174,7 @@
 			label {
 				font-weight: normal;
 				cursor:pointer;
-				font-size: 12px;
+				font-size: 13px;
 				.suffix {
 					color: #b0b0b0;
 					font-size: 12px; }
@@ -230,7 +231,7 @@
                 line-height:17px;
                 background-repeat:no-repeat;
                 background-position: 0 0;
-                font-size:12px;
+                font-size:13px;
                 vertical-align:middle;
                 cursor:pointer;
                 font-weight:normal;

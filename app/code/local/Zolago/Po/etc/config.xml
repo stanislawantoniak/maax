@@ -57,6 +57,39 @@
 			</udpo>
 		</models>
 		<events>
+            <zolagopayment_allocation_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>updatePoStatusByAllocation</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocation_save_after>
+			<zolagopo_po_save_after>
+				<observers>
+					<zolagopo>
+						<class>zolagopo/observer</class>
+						<method>updatePoStatusByAllocation</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_save_after>
+            <zolagopayment_allocate_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>addAllocationComment</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocate_overpayment_save_after>
+            <zolagopayment_create_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>addOverpayComment</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_create_overpayment_save_after>
+
 			<zolagopo_po_split>
 				<observers>
 					<zolagopo>
@@ -65,6 +98,15 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_split>
+            <zolagopo_po_split>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>paymentSplit</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_split>
+
 			<zolagopo_po_shipping_cost>
 				<observers>
 					<zolagopo>
@@ -260,6 +302,9 @@
 				</Zolago_Po>
 			</modules>
 		</translate>
+		<secure_url>
+		    <udpo_vendor_aggregated>/udpo/vendor_aggregated/</udpo_vendor_aggregated>
+		</secure_url>
 	</frontend>
     <adminhtml>
         <layout>

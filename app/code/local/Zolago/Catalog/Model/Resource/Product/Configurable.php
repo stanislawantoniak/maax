@@ -262,6 +262,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
     public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
     {
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
         $msrpPricesSource = array(); $productRelations = array(); $msrpPrices = array();
         foreach ($stores as $store) {
             $priceSizeRelation = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
@@ -302,7 +304,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     }
                     unset($i);
                     $productMinimalPrice = min($productMinPrice);
-                    Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                    $aM->updateAttributesPure(
                         array($productConfigurableId), array('price' => $productMinimalPrice), $store
                     );
 
@@ -339,7 +341,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                         if (!empty($productMSRPMinPrice)) {
                             $productMSRPMinimalPrice = min($productMSRPMinPrice);
 
-                            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                            $aM->updateAttributesPure(
                                 array($productConfigurableId), array('msrp' => $productMSRPMinimalPrice), $store
                             );
                         }
@@ -402,6 +404,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         if (empty($productConfigurableId)) {
             return;
         }
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
         $insert = array();
 
         foreach ($stores as $store) {
@@ -418,7 +422,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             }
             unset($i);
             $productMinimalPrice = min($productMinPrice);
-            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+            $aM->updateAttributesPure(
                 array($productConfigurableId), array('price' => $productMinimalPrice), $store
             );
 

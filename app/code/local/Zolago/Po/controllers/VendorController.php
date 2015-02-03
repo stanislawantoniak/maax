@@ -314,7 +314,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $oldPrice = $po->getShippingAmountIncl();
             $store = $po->getOrder()->getStore();
 
-            if(empty($price) || (float)$price<0) {
+            if(is_null($price) || (float)$price<0) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Illegal price"));
             }
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
@@ -474,9 +474,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $item = $po->getItemById($itemId);
         /* @var $item Zolago_Po_Model_Po_Item */
 
-        $price = $request->getParam("product_price");
-        $qty = $request->getParam("product_qty", 1);
-        $discount = $request->getParam("product_discount", 0);
+        $price = str_replace(",",".",$request->getParam("product_price"));
+        $qty = (int)$request->getParam("product_qty", 1);
+        $discount = str_replace(",",".",$request->getParam("product_discount", 0));
 
         $product = Mage::getModel("catalog/product");//
 
@@ -1352,6 +1352,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             $newStatus = $this->getRequest()->getParam('status');
 
+
+
             if(!in_array($newStatus, array_keys($statusModel->getAvailableStatuses($udpo)))) {
                 throw new Mage_Core_Exception(
                     Mage::helper("zolagopo")->__("Requested status is wrong")
@@ -1583,6 +1585,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     protected function _getIsBruttoPrice($store=null) {
         return Mage::getStoreConfig('tax/calculation/price_includes_tax', $store);
     }
+
 }
 
 

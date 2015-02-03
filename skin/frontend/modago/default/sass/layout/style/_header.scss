@@ -1,16 +1,6 @@
 @import "../../other/variable";
 .header_top {
-    min-height: 57px;
-    @include max-screen($screen-sm-max) {
-        min-height: 41px;
-    }
-  
-}
-
-#toggleSearch {
-    > a { 
-      @include inline-block;
-    }
+    height: 57px;
 }
 
 /* USER MENU */

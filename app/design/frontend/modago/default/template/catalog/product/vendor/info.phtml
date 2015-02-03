@@ -17,7 +17,6 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
 <div id="seller-box-bundle">
     <div class="row">
         <div class="col-lg-12 col-md-6 clearfix">
-            <span class="seller-label  hidden-xs"><?php echo $this->__("Shop"); ?></span>
             <?php if (!$producer && !empty($brandShopId)): ?>
                 <figure>
                     <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
@@ -26,23 +25,18 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                 </figure>
                 <div class="seller">
                     <div class="seller-info">
-                        <a class="visible-xs clearfix" href="<?php echo $this->getBrandshopVendorUrl(); ?>">
-                            <?php echo $this->__("Shop"); ?>: <?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>
-                        </a>
-
-
                         <a class="clearfix" href="<?php echo $this->getVendorUrl(); ?>">
                             <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?>
                         </a>
-
                         <span><?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?></span>
-
                     </div>
 
                 </div>
             <?php else: ?>
                 <figure>
-                    <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
+	                <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
+                        <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
+	                </a>
                 </figure>
                 <div class="seller producer">
                     <div class="seller-info">

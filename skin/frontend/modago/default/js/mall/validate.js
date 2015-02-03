@@ -24,7 +24,9 @@ Mall.validate = {
                 target = isSelect2 ? elem.parent() : elem.closest("div");
 
             if (elem.attr('id') === 'pass'
-                || elem.is("textarea")
+                || elem.is("textarea:not(#question_text-mobile)")
+                    // gdzies moze byc uzyty textarea, aby zachowac zgodność wsteczną robię brzydki fix
+                    // fix wykorzystany na stronie poduktu, mobilna sekcja zadaj pytanie sprzedawcy
                 || elem.hasClass("closer-valid-ico")
                 || isSelect2
             ) {
@@ -56,8 +58,12 @@ Mall.validate = {
                 we = elem.innerWidth() + 25,
                 target = isSelect2 ? elem.parent() : elem.closest("div");
 
+
+
             if (elem.attr('id') === 'pass'
-                || elem.is("textarea")
+                || elem.is("textarea:not(#question_text-mobile)")
+                // gdzies moze byc uzyty textarea, aby zachowac zgodność wsteczną robię brzydki fix
+                // fix wykorzystany na stronie poduktu, mobilna sekcja zadaj pytanie sprzedawcy
                 || elem.hasClass("closer-valid-ico")
                 || isSelect2
             ) {
@@ -194,10 +200,10 @@ jQuery(document).ready(function () {
 
     jQuery( window ).resize(function() {
 
-        jQuery('.has-error input').each(function() {
+        jQuery('.has-error input, .has-error textarea').each(function() {
             Mall.validate._default_validation_options.highlight(jQuery(this));
         });
-        jQuery('.has-success input').each(function() {
+        jQuery('.has-success input, .has-success textarea').each(function() {
             Mall.validate._default_validation_options.unhighlight(jQuery(this));
         });
 

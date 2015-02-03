@@ -74,7 +74,6 @@ class Zolago_Payment_Block_Form extends Mage_Payment_Block_Form
                 $icon = $this->getSkinUrl('images/zolagopayment/payment_providers/dotpay-logo.png');
                 break;
         }
-        Mage::log($icon);
         return $icon;
     }
 

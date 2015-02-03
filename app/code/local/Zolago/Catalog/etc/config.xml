@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.23</version>
+            <version>0.0.24</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -160,6 +160,11 @@
                 </observers>
 			</catalog_controller_product_init>
 		</events>	
+		<secure_url>
+		    <udprod_vendor_product>/udprod/vendor_product/</udprod_vendor_product>
+		    <udprod_vendor_image>/udprod/vendor_image/</udprod_vendor_image>
+		    <udprod_vendor_price>/udprod/vendor_price/</udprod_vendor_price>
+		</secure_url>
     </frontend>
     <adminhtml>
 		<translate>

@@ -1,4 +1,4 @@
-var prevW = -1, prevH = -1;
+var prevW = -1, prevH = -1, lastToggle = 0;
 jQuery.noConflict();
 (function( $ ) {
     $(function() {
@@ -64,7 +64,7 @@ jQuery.noConflict();
             });
             return valid;
         }, "");
-        $("#review-form, #question-form-mobile").each(function () {
+        $("#review-form").each(function () {
 
             $(this).validate({
                 success: "valid",
@@ -125,7 +125,17 @@ jQuery.noConflict();
                 }
             });
         });
+        $('#question-form-mobile,#question-form').submit(function () {
+            if ($(this).valid()) {
+                addFormSpinner($(this));
+            }
+        });
 
+        function addFormSpinner(form) {
+            var submitButton = form.find('button[type=submit]');
+            submitButton.prop("disabled", "disabled");
+            submitButton.find('i').addClass('fa fa-spinner fa-spin');
+        }
         $('.table-footer-group').on('click', '.deliver_info', function(e){
             var _w = $(window).innerWidth();
             if (_w <=767) {
@@ -1460,13 +1470,10 @@ jQuery.noConflict();
             $('.viewFormComments').on('click', function(event) {
                 event.preventDefault();var intFrameWidth = window.innerWidth;
                 wrapperFormReview.slideToggle(200, function(){
-
-                    if (intFrameWidth >480) {
-                        var animeOffset = $("#block-review-form").offset().top - 80;
-                        $('html, body').animate({
-                            scrollTop: animeOffset
-                        }, 800);
-                    };
+                    var animeOffset = $("#block-review-form").offset().top - 80;
+                    $('html, body').animate({
+                        scrollTop: animeOffset
+                    }, 800);
                 });
 
             });
@@ -1676,21 +1683,35 @@ jQuery.noConflict();
 
         $(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
-        $('#accordion').on('click', '.panel-title a', function () {
-            $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-        });
         $('#collapseOne').collapse({'toggle': false});
         $('#collapseTwo').collapse({'toggle': false});
         $('#collapseThree').collapse({'toggle': false});
 
-        var toggleXS = $('body').find('.toggle-xs');
-        //
+	    $('.panel-collapse')
+		    .on('shown.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    })
+		    .on('hidden.bs.collapse', function () {
+			    jQuery(this).prev().find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+		    });
+
         $('.toggle-xs').on('click', '.title_section', function(event) {
+
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth < 768) {
                 event.preventDefault();
-                $(this).closest('.section').find('.main, .rwdCarousel').slideToggle();
-                $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
+	            var self = $(this);
+                self.closest('.section').find('.main, .rwdCarousel').slideToggle({
+	                complete: function() {
+		                self.closest('.section').attr('data-mobiletoggle', !$(this).closest('.section').data('mobiletoggle'));
+		                var i = self.find('i');
+		                var diff = $.now() - lastToggle;
+		                if(diff > 100) {
+			                i.toggleClass("bullet-strzalka-up bullet-strzalka-down")
+			                lastToggle = $.now();
+		                }
+	                }
+                });
             };
         });
 
@@ -1737,7 +1758,8 @@ jQuery.noConflict();
                     // });
 
                 } else {
-                    $('.toggle-xs').find('.main').hide();
+
+                    $(".toggle-xs[data-mobiletoggle='false']").find('.main').hide();
                     $('.block-complementary-product.toggle-xs').find('.main').show();
                     //$('body.node-type-view-product').find('.section').find('.title_section').closest('header').children('h2').children('i').removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down')
                     //$('body.node-type-view-product').find('.section').find('.title_section').closest('header').next('div').css({
@@ -1933,27 +1955,6 @@ jQuery.noConflict();
             };
         });*/
 
-        $("#toggleSearch .dropdown-toggle").on('click', function(event) {
-            event.stopPropagation();
-            var thisLink = $(this);
-            var container = $("#dropdown-search");
-            thisLink.closest('#toggleSearch').toggleClass('open');
-            container.toggle();
-        });
-        $('#dropdown-search').click(function(e){
-            e.stopPropagation();
-        });
-
-        $(document).click(function(e){
-            var container = $("#dropdown-search");
-            if (container.is(":visible")) {
-                e.stopPropagation();
-                $('#toggleSearch').removeClass('open');
-                $('#dropdown-search').hide();
-            };
-        });
-
-
 
 
         $(document).on('mouseup touchstart', function (e){
@@ -1970,80 +1971,6 @@ jQuery.noConflict();
                 }
             }
         });
-
-        /*$(document).on('touchstart', function(){
-         var container = $(".fb-slidebar");
-         if(container.is(":visible")){
-
-         if (!container.is(e.target) && container.has(e.target).length === 0) {
-         //hide here
-         $('#sb-site').removeClass('open');
-         $('.fb-slidebar').removeClass('open');
-         $('body').removeClass('noscroll');
-         $('body').find('.noscroll').remove();
-         }
-         }
-         }*/
-
-
-
-
-
-
-        //$('.actionViewFilter').on('click', function(event){
-        //    event.preventDefault();
-        //    Mall.listing.insertMobileSidebar();
-        //    $('#sb-site').toggleClass('open');
-        //    $('.fb-slidebar').toggleClass('open');
-        //    var screenWidth = $(window).width();
-        //    var screenHeight = $(window).height();
-        //    $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
-//
-//                });
-
-//            $("#sidebar").slideToggle();
-
-
-
-//        $(".fb-slidebar-inner")
-//        $(".fb-slidebar-inner").load("/sidebar.inc", function(){
-//
-//                  init();
-//                  initScrollBarFilterMarka();
-//                  clearFilterManufacturerCheked();
-//                  visibleBtnClearFilterSize();
-//                  filterColor();
-//                  $( "#slider-range" ).slider({
-//                          range: true,
-//                          min: 0,
-//                          max: 500,
-//                          values: [ 75, 300 ],
-//                          slide: function(event, ui) {
-//                              $("#zakres_min").val(ui.values[0]);
-//                              $("#zakres_max").val(ui.values[1]);
-//
-//                          }
-//
-//                        });
-//                  $('#slider-range').on('click', 'a', function(event) {
-//                  var checkSlider = $('#checkSlider').find('input');
-//                  if (!checkSlider.is(':checked')) {
-//                    checkSlider.prop('checked', true);
-//                    $('#filter_price').find('.action').removeClass('hidden');
-//                  }
-//                });
-//
-//                  $('#sb-site').toggleClass('open');
-//                  $('.fb-slidebar').toggleClass('open');
-//                      var screenWidth = $(window).width();
-//                      var screenHeight = $(window).height();
-//                      $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
-//
-//                });
-
-//            $("#sidebar").slideToggle();
-//        });
-
 
 
 
@@ -2384,7 +2311,7 @@ jQuery.noConflict();
 
 // STYLED SELECTBOX
         function styledSelectBox() {
-            //$('.styledSelected').each(function(index, el) {
+/*            //$('.styledSelected').each(function(index, el) {
 
             //});
             $(".select-styled,.select-styled select").selectbox({
@@ -2393,7 +2320,7 @@ jQuery.noConflict();
                     initScrollBarFilterStyle();
                 }
             });
-            $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");
+            $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");*/
         }
 
 //SCROLLBAR 

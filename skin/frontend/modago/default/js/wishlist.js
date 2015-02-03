@@ -173,6 +173,13 @@ Mall.wishlist = {
     addToWishlistFromProduct: function (id) {
         "use strict";
 
+	    var addedLikeBox = jQuery(".addedLike-box");
+	    var addLikeBox = jQuery(".addLike-box");
+	    var addingLikeBox = jQuery(".addingLike-box");
+
+	    addedLikeBox.addClass("hidden");
+	    addLikeBox.addClass("hidden");
+	    addingLikeBox.removeClass("hidden");
         OrbaLib.Wishlist.add({product: id}, function(data) {
             if(data.status === true) {
                 Mall.wishlist.added(id);
@@ -188,6 +195,14 @@ Mall.wishlist = {
      */
     removeFromWishlistFromProduct: function (id) {
         "use strict";
+
+	    var addedLikeBox = jQuery(".addedLike-box");
+	    var addLikeBox = jQuery(".addLike-box");
+	    var addingLikeBox = jQuery(".addingLike-box");
+
+	    addedLikeBox.addClass("hidden");
+	    addLikeBox.addClass("hidden");
+	    addingLikeBox.removeClass("hidden");
         OrbaLib.Wishlist.remove({product: id}, function (data) {
             Mall.wishlist.removed(id);
             Mall.wishlist.actionsAfterRemovingProductProduct(id, data);
@@ -277,12 +292,16 @@ Mall.wishlist = {
                     this.__("person", "person"),
                     this.__("people", "people"),
                     this.__("people-polish-more-than-few", "osób")
-                ]) + " lubicie ten product";
+                ]) + " lubi ten produkt";
             likeHtml += "<br>";
             likeHtml += jQuery("<span/>", {
                 html: Mall.translate.__("remove-from-favorites", "remove from favorites")
             }).wrap("<div/>").parent().html();
         }
+
+	    var addingLikeBox = jQuery(".addingLike-box");
+
+	    addingLikeBox.addClass("hidden");
 
         jQuery("#notadded-wishlist").hide();
         jQuery("#added-wishlist").removeClass("hidden");
@@ -336,6 +355,10 @@ Mall.wishlist = {
                 html: Mall.translate.__("add-to-br-favorites", "Add to<br />favorites")
             }).wrap("<div/>").parent().html();
         }
+
+	    var addingLikeBox = jQuery(".addingLike-box");
+
+	    addingLikeBox.addClass("hidden");
 
         jQuery("#notadded-wishlist").show().removeClass("hidden");
         jQuery("#added-wishlist").hide();
