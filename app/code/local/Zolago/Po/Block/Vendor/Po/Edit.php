@@ -464,6 +464,12 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
      */
     public function canShowPaymentDetails() {
         $po = $this->getPo();
+        Mage::log('can show payment');
+        Mage::log('po id:' . $po->getId());
+        Mage::log('is cod:' . $po->isCod());
+        Mage::log('is banktransfer:' . $po->isPaymentBanktransfer());
+        Mage::log('is gateway:' . $po->isGatewayPayment());
+
         if ($po->isCod()) {
             //Cash On Delivery Payment
             return (bool) Mage::getStoreConfig("payment/cashondelivery/p_details");
