@@ -22,7 +22,6 @@
 "Create agent","Załóż operatora"
 "Phone", "Telefon"
 "Details","Szczegóły"
-"Edit agent %s","Edycja operatora %s"
 "Mass Operator","Zarządzanie opisami i zdjęciami produktów"
 "Product Operator","Zarządzanie cenami produktów"
 "RMA Operator","Obsługa RMA"
@@ -35,3 +34,5 @@
 "Save","Zapisz"
 "Cancel","Anuluj"
 "Edit","Edycja"
+"Edit agent %s","Edycja operatora %s"
+"Edit agent","Edycja operatora"
