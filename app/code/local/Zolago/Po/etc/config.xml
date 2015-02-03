@@ -302,6 +302,9 @@
 				</Zolago_Po>
 			</modules>
 		</translate>
+		<secure_url>
+		    <udpo_vendor_aggregated>/udpo/vendor_aggregated/</udpo_vendor_aggregated>
+		</secure_url>
 	</frontend>
     <adminhtml>
         <layout>

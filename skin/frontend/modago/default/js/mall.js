@@ -592,19 +592,19 @@ Mall.rwdCarousel = {
     },
 
     alignComplementaryProductsPrices: function(obj) {
-        var tallestItem = this.findTallestItem(obj);
-        var h = 0;
-        var diff = 0;
-        jQuery.each(obj.rwd.rwdItems, function() {
-
-            if((h = this.clientHeight) < tallestItem) {
-                diff = tallestItem - h;
-                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-                    diff /= 2;
-                }
-                jQuery(this).find(".price").css("top", diff);
-            }
-        });
+        //var tallestItem = this.findTallestItem(obj);
+        //var h = 0;
+        //var diff = 0;
+        //jQuery.each(obj.rwd.rwdItems, function() {
+        //
+        //    if((h = this.clientHeight) < tallestItem) {
+        //        diff = tallestItem - h;
+        //        if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+        //            diff /= 2;
+        //        }
+        //        jQuery(this).find(".price").css("top", diff);
+        //    }
+        //});
     }
 };
 
@@ -978,8 +978,45 @@ function sales_order_details_top_resize() {
         }
     });
 }
+
+function initToggleSearch() {
+	var toggle = jQuery("#toggleSearch");
+	var dropdown = jQuery('#dropdown-search');
+
+	toggle.on('click', function(e) {
+		e.stopPropagation();
+
+		if(toggle.offset().left + 320 > jQuery(window).width()) {
+			dropdown.css({left: '', right: '0'});
+		} else {
+			dropdown.css({left: toggle.offset().left+'px', right: ''});
+		}
+		dropdown.show();
+		toggle.parent().addClass("open");
+	});
+
+	jQuery(document).click(function(e){
+		if (dropdown.is(":visible")) {
+			e.stopPropagation();
+			toggle.parent().removeClass('open');
+			dropdown.hide();
+		}
+	});
+}
+function positionToggleSearch() {
+	var dropdown = jQuery('#dropdown-search');
+	var toggle = jQuery("#toggleSearch");
+	if (dropdown.is(":visible")) {
+		if(toggle.offset().left + 320 > jQuery(window).width()) {
+			dropdown.css({left: '', right: '0'});
+		} else {
+			dropdown.css({left: toggle.offset().left+'px', right: ''});
+		}
+	}
+}
 jQuery(window).resize(function() {
     sales_order_details_top_resize();
+	positionToggleSearch();
 });
 
 jQuery(document).ready(function() {
@@ -989,6 +1026,8 @@ jQuery(document).ready(function() {
 	jQuery(".header_top").headroom({
 		offset: 60
 	});
+
+	initToggleSearch();
 
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
@@ -1088,26 +1127,25 @@ jQuery(document).ready(function() {
 
     } else {
 
-
+        var optionsCount = jQuery(".size-box option").length;
         jQuery(".size-box select").selectBoxIt({
             theme: "bootstrap",
-            //mobile: true,
             native: true,
-            defaultText: Mall.translate.__('Select size'),
+            defaultText: (optionsCount > 1) ? Mall.translate.__('Select size') : '',
             autoWidth: false
         });
         jQuery(".size-box select").bind({
             "change": function () {
                 var selectedOption = jQuery(this).find('option:selected');
                 Mall.setSuperAttribute(selectedOption);
-            },
+            }
         });
 
-	    jQuery(document).ready(function() {
-		    if(jQuery(".size-box option").length == 1) {
-			    Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
-		    }
-	    });
+        jQuery(document).ready(function () {
+            if (optionsCount == 1) {
+                Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
+            }
+        });
     }
 
 

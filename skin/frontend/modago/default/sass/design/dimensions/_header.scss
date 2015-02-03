@@ -42,11 +42,3 @@
         }
     }
 }
-
-#toggleSearch {
-    > a {
-        @include max-screen($screen-sm-max) {
-            line-height: 48px;
-        }
-    }
-}

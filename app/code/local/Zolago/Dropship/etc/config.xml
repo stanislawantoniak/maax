@@ -412,6 +412,12 @@
 				</Zolago_Dropship>
 			</modules>
 		</translate>		
+		<secure_url>
+		    <udropship_operator>/udropship/operator/</udropship_operator>
+		    <udropship_pos>/udropship/pos/</udropship_pos>
+		    <udropship_sizetable>/udropship/sizetable/</udropship_sizetable>
+		    <udropship_vendor_settings>/udropship/vendor_settings/</udropship_vendor_settings>
+		</secure_url>
 	</frontend>
 	<admin>
 		<routers>

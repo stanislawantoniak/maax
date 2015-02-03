@@ -32,41 +32,55 @@
         top:0px;
         width: 50%;
         @include max-screen($screen-sm-max) {
-            top: -5px;
-            margin-left: -15px;
+	        display: none;
         }
-         @media (max-width: 360px) { 
-                   margin-left: -15px;
-                 }
     }
      #header_top_block_center {
         position:absolute;
         left:50%;
-        margin-left: -81.5px;
-        top:5px;
-        width:163px;
-        @include max-screen($screen-sm-max) {
-            width: 130px;
-            margin-left: -65px;
-            top:2px;
+        margin-left: -80px;
+        top:1px;
+        width:160px;
+	     z-index: 10;
+	     img {
+		     width:100%;
+		     height:auto;
+	     }
+	     @include max-screen($screen-sm-max) {
+			left: 0;
+			margin-left: 0;
         }
-        img {
-            @include max-screen($screen-sm-max) {
-                width:100%;
-                height:auto;
-             } 
-        } 
+	     @include max-screen($screen-xs-max) {
+		     width: 120px;
+		     top: 8px;
+		     left: -10px;
+		     margin-left: 0;
+	     }
     }
     #header_top_block_right {
+	    width: 100%;
+	    padding-left: 165px;
         position:absolute;
         right: -10px;
         top:0px;
-        @include max-screen($screen-sm-max) {
-            top: -5px;
-        }
-        @include max-screen($screen-sm) {
-           right: -10px; 
-        }
+
+	    @include max-screen($screen-xs-max) {
+		    padding-left: 105px !important;
+	    }
+	    #user_menu {
+		    width: 100%;
+	    }
+	    .header_icon {
+		    margin-top: 3px;
+		    width: 24px;
+		    + span {
+			    display: block;
+			    margin-top: 3px;
+		    }
+		    @include max-screen($screen-sm-max) {
+			    margin-top: 0;
+		    }
+	    }
     }
     .block_toggle_menu {
          float: left;
@@ -77,17 +91,6 @@
             width:17px;
             margin-right: 5px;
             margin-left: 10px;
-        }
-    }
-    .toggleMenu {
-      @include sprite-dimensions($allMap, ico_menu);
-      @include inline-block;
-        float: left;
-        top: 13px;
-        position: relative;
-        @include max-screen($screen-sm-max) {
-            height:18px;
-            width:17px;
         }
     }
     .block_search {
@@ -105,28 +108,15 @@
         }    
 }
 
-#toggleSearch {
-    float:left;
-    
-    @include screen(550px, $screen-xs-max) { 
-        margin-right :26%;
-    }  
-    @include screen($screen-xs, 549px) {
-        margin-right :13%;
-    }
-        > a { 
-          height: 56px;
-          width: 53px;
-           @include max-screen($screen-sm-max) {
-                height: 45px;
-            }
-        }
-}
-
 /* USER MENU */
 .user-navigation  {
             @include reset-l;
             top:-4px;
+			width: 100%;
+			text-align: right;
+			@include  max-screen($screen-sm-max) {
+				margin-top: -3px;
+			}
             @include min-screen($screen-md) {
                 position: relative;
             }
@@ -134,22 +124,29 @@
                 padding: 0 0 0 0;
                 margin-left: 0;
                 width: 84px;
-                height:56px;
+                height:57px;
                 display:inline-block;
-               
+	            vertical-align: top;
+	            cursor: pointer;
+
+	            a:hover,&.open {
+		            background-color: #2A2A2A;
+	            }
+
                 @include max-screen($screen-sm-max) {
-                    width: 45px;
+                    width: 12%;
+	                min-width: 40px;
+	                &:hover {
+		                background-color: #2A2A2A;
+	                }
                 }
-                 @media (max-width: 360px) { 
-                    width: 45px;
-                 }
                 a:link,
                 a:visited {
                     @include max-screen($screen-sm-max) {
-                        padding-top: 14px !important; 
+                        padding-top: 14px !important;
                     }
                     @include min-screen($screen-md) {
-                        padding-top: 10px !important; 
+                        padding-top: 10px !important;
                     }
                 }
                 &.no-badge {
@@ -175,13 +172,21 @@
                    a:link,
                    a:visited {
                        @include max-screen($screen-sm-max) {
-                           padding-top: 14px !important; 
+                           padding-top: 14px !important;
                        }
                        @include min-screen($screen-md) {
-                           padding-top: 10px !important; 
+                           padding-top: 10px !important;
                        }
-                   } 
+                   }
                 }
+	            &#link_your_account {
+		            @include max-screen(369px) {
+			            display: none;
+		            }
+	            }
+	            &#link_search .header_icon {
+		            margin-top: -3px;
+	            }
             }
             a {
                 @include reset-m;
@@ -227,10 +232,7 @@
     // NAV DESKPOT
     //#nav_desc {
         .navigation {
-            margin-left:-10px;
-            margin-right: 0px;
-            margin-top:4px;
-            margin-bottom: 3px;
+	        margin: 0 0 3px -10px;
             padding:0px;
             li {
                 display:inline-block;
