@@ -477,7 +477,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
             //Bank Transfer Payment
             return (bool) Mage::getStoreConfig("payment/banktransfer/p_details");
         } elseif ($po->isPaymentDotpay()) {
-            Mage::log('is dotpay:' . $po->isPaymentDotpay().'|'. Mage::getStoreConfig("payment/dotpay/p_details"););
+            Mage::log('is dotpay:' . $po->isPaymentDotpay().'|'. Mage::getStoreConfig("payment/dotpay/p_details"));
             return (bool) Mage::getStoreConfig("payment/dotpay/p_details");
         } else {
             //for some new method not implemented yet
