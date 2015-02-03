@@ -73,7 +73,6 @@
                 <order_status>pending</order_status>
                 <title>Online Payment</title>
                 <allowspecific>0</allowspecific>
-                <p_details>1</p_details>
             </zolagopayment_gateway>
             <zolagopayment_cc>
                 <active>1</active>
@@ -82,7 +81,6 @@
                 <order_status>pending</order_status>
                 <title>Credit Card</title>
                 <allowspecific>0</allowspecific>
-                <p_details>1</p_details>
             </zolagopayment_cc>
 			<cashondelivery>
                 <visible>1</visible>
@@ -92,6 +90,9 @@
                 <visible>1</visible>
                 <p_details>1</p_details>
 			</banktransfer>
+            <dotpay>
+                <p_details>1</p_details>
+            </dotpay>
         </payment>
 	</default>
 </config>

@@ -476,18 +476,9 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
             Mage::log('is banktransfer:' . $po->isPaymentBanktransfer().'|'.Mage::getStoreConfig("payment/banktransfer/p_details"));
             //Bank Transfer Payment
             return (bool) Mage::getStoreConfig("payment/banktransfer/p_details");
-        } elseif ($po->isGatewayPayment()) {
-            Mage::log('is gateway:' . $po->isGatewayPayment());
-            $payment = $po->getOrder()->getPayment();
-            $provider = $payment->getProvider();
-            Mage::log($provider);
-            if ($provider == Zolago_Payment_Model_Abstract::ZOLAGOPAYMENT_PROVIDER_TYPE_GATEWAY) {
-                //Zolago Payment - Gateway -> OLAGOPAYMENT_PROVIDER_TYPE_GATEWAY
-                return (bool) Mage::getStoreConfig("payment/zolagopayment_gateway/p_details");
-            } else {
-                //Zolago Payment - Credit Card -> ZOLAGOPAYMENT_PROVIDER_TYPE_CC
-                return (bool) Mage::getStoreConfig("payment/zolagopayment_cc/p_details");
-            }
+        } elseif ($po->isPaymentDotpay()) {
+            Mage::log('is dotpay:' . $po->isPaymentDotpay().'|'. Mage::getStoreConfig("payment/dotpay/p_details"););
+            return (bool) Mage::getStoreConfig("payment/dotpay/p_details");
         } else {
             //for some new method not implemented yet
             return true;
