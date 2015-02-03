@@ -1127,11 +1127,11 @@ jQuery(document).ready(function() {
 
     } else {
 
-        var optionsCount = jQuery(".size-box option").length;
+
         jQuery(".size-box select").selectBoxIt({
             theme: "bootstrap",
             native: true,
-            defaultText: (optionsCount > 1) ? Mall.translate.__('Select size') : '',
+            defaultText: (jQuery(".size-box option").length > 1) ? Mall.translate.__('Select size') : '',
             autoWidth: false
         });
         jQuery(".size-box select").bind({
@@ -1141,14 +1141,14 @@ jQuery(document).ready(function() {
             }
         });
 
-        jQuery(document).ready(function () {
-            if (optionsCount == 1) {
-                Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
-            }
-        });
+
     }
-
-
+    var optionsCount = jQuery(".size-box option").length;
+    jQuery(document).ready(function () {
+        if (optionsCount == 1) {
+            Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
+        }
+    });
 
 
 
