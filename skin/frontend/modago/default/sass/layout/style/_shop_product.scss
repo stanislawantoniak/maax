@@ -130,7 +130,12 @@
 		@media (min-width: 768px) and (max-width: 991px) {
 			margin-bottom:0px;
 		}
-		.size-label { 
+		.size-label {
+          padding-left: 0;
+          width: auto;
+          &.size-label-radios {
+            margin-right: 10px;
+          }
 			@media (min-width: 768px) and (max-width: 814px) {
 							display:block;
 							width:100%;
@@ -190,6 +195,9 @@
 			
 		}
       .size-box {
+        .sizes-content {
+          padding-left: 0;
+        }
         margin-bottom: 25px;
         .sbHolder {
           width: 167px;
@@ -203,6 +211,7 @@
             border-radius: 0;
             background-color: #fff;
             border: solid 1px #afafaf;
+            width: 167px;
             &:hover {
               border-color:#4f4f4f;
             }
@@ -353,6 +362,9 @@
 	margin-top: -10px;
 }
 #rwd-color {
+  &.no-size-carousel {
+    padding-left: 0px;
+  }
 	width: 300px;
     padding: 1px 10px 0 16px;
 	.rwd-prev,

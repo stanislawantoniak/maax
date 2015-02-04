@@ -7,7 +7,7 @@ if($itemsCount): ?>
             <span class="color-label"><?php echo $this->__("Other colors"); ?>:</span>
 
             <div id="wrapper-rwd-color">
-                <div id="rwd-color" class="rwd-carousel <?php if($itemsCount > 5): ?> size-carousel<?php endif; ?>">
+                <div id="rwd-color" class="rwd-carousel <?php if($itemsCount <= 5): ?> no-size-carousel <?php endif; ?>">
                     <?php /** @var $_item Mage_Catalog_Model_Product */ ?>
                     <?php foreach($this->getItems() as $_item) : ?>
                     <div class="item">

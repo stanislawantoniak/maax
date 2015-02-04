@@ -688,7 +688,7 @@ Mall.product = {
             jQuery(".size-box").append(this._options_group_template);
             // create label group
             jQuery("<span/>", {
-                "class": "size-label",
+                "class": "size-label size-label-radios",
                 "html": (group.label + ":")
             }).appendTo(groupElement);
 
@@ -723,6 +723,7 @@ Mall.product = {
             });
 
             if (showSelect) {
+                var labelText = jQuery('.size-label').text();
                 // insert option group
                 var groupElement = jQuery("<div/>", {
                     "class": "size"
@@ -730,19 +731,20 @@ Mall.product = {
                 jQuery(".size-box").append(this._options_group_template);
                 // create label group
                 jQuery("<span/>", {
-                    "class": "size-label",
+                    "class": "size-label col-sm-6 col-md-6 col-xs-12",
                     "html": (group.label + ":")
+
                 }).appendTo(groupElement);
 
 
                 // create form group for selectbox options
-                var formGroupElementClass = (deskTopDevice) ? ' ' : 'form-group select-size-mobile-trigger';
+                var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
                 var formGroupElement = jQuery("<div/>", {
                     class: "" + formGroupElementClass
                 }).appendTo(groupElement);
 
                 //create select part
-                var formGroupElementSelectClass = (deskTopDevice) ? '  select-styled' : '  mobile-native-select-w';
+                var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
                 var formGroupElementSelect = jQuery("<select/>", {
                     id: "select-data-id-" + group.id,
                     class: formGroupElementSelectClass
@@ -1128,14 +1130,7 @@ jQuery(document).ready(function() {
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
 			if(jQuery("#rwd-color").length) {
-				var colorQuantity = jQuery("#rwd-color .rwd-item").length;
-				if(colorQuantity <= 5) {
-					jQuery("#rwd-color").css({"padding-left": "0"});
-					jQuery("#product-options .size-box .size .size-label").css({width: "97px"})
-				} else {
-					jQuery("#product-options .size-box .size .form-group").css({"padding": "0 22px"});
-					jQuery("#product-options .size-box .size .view-sizing").css({"padding": "0 22px"});
-				}
+
 			} else {
 				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})
 			}
