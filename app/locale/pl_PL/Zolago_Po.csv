@@ -141,6 +141,7 @@
 "Created date","Data utworzenia"
 "Paid", "Opłacone"
 "Not paid","Nieopłacone"
+"Not Paid","Nieopłacone"
 "Not confirmed","Niepotwierdzone"
 "Purchase Order: %s has currently dispatch ref.","Zamówienie: %s jest juz na zbiorówce"
 "Purchase Order(s) have different POSes","Zamówienia są przypisane do różnych POS"
