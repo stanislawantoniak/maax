@@ -194,24 +194,17 @@
         .sbHolder {
           width: 167px;
         }
-        select.mobile-native-select {
-          width: 218px;
-          top: -22px;
-          left: 1px;
-          position: relative;
-          z-index: 1;
-        }
+
         select.mobile-native-select-w {
           width: 167px;
         }
         .selectboxit-container {
           .selectboxit {
             border-radius: 0;
-            border-top: solid 1px #afafaf;
-            border-bottom: solid 1px #afafaf;
-            border-left: solid 1px #afafaf;
+            background-color: #fff;
+            border: solid 1px #afafaf;
             &:hover {
-              border: solid 1px #1e1e1e;
+              border-color:#4f4f4f;
             }
 
             .selectboxit-text {
@@ -232,6 +225,22 @@
               }
             }
           }
+          .dropdown-menu > li > a {
+            color: #1e1e1e;
+            text-decoration: none;
+            background-color: #ffffff;
+            text-indent: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+          }
+          .dropdown-menu .active > a,
+          .dropdown-menu .active > a:hover,
+          .dropdown-menu .active > a:focus {
+            color: #1e1e1e;
+            background: #f2f1f0;
+
+          }
           .selectboxit-options {
 
             /* Set's the drop down options width to the same width as the drop down button */
@@ -242,7 +251,20 @@
                position the dropdown (when opened) to make sure the drop down items are not
                displayed outside of the current window viewport.
             */
-            max-height: 50px;
+            max-height: 150px;
+
+            border-radius: 0;
+            background-color: #fff;
+            border: 1px solid #afafaf;
+            .selectboxit-option {
+
+                a {
+                  color: #1e1e1e;
+                  text-decoration: none;
+                }
+
+
+            }
 
           }
         }

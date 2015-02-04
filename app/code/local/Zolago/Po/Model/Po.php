@@ -566,9 +566,19 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      *
      * @return bool
      */
-   public function isPaymentBanktransfer() {
+    public function isPaymentBanktransfer() {
        return $this->getOrder()->getPayment()->getMethod() == Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
-   }
+    }
+
+    /**
+     * return true if payment method is dotpay
+     * if nor return false
+     *
+     * @return bool
+     */
+    public function isPaymentDotpay() {
+       return $this->getOrder()->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+    }
    
    /**
     * @see isPaymentCheckOnDelivery()
