@@ -13,7 +13,7 @@ $key = $this->getFacetKey();
     array_pop($key_withoutFacet);
 	$pureKey = implode("_", $key_withoutFacet);
     ?>
-    <div class="section clearfix">
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content filter-longlist"  id="filter_<?php echo $pureKey;?>">
             <div class="form-group clearfix ">

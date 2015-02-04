@@ -307,6 +307,12 @@ Mall.listing = {
 		}else{
 			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
 		}
+
+        //saveing state of rolled or not for mobile or desktop resolution
+        //because of different behaviour of sidebar in mobile and desktop
+        var attr = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled';
+        var attrVal = state ? 'open' : 'closed';
+        section.attr(attr, attrVal);
 	},
 
 	_doShowMore: function(section, state, animate){
@@ -916,6 +922,7 @@ Mall.listing = {
 			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(1);
             this.initScrolls();
+            this._processRollSections();
             this.attachFilterColorEvents();
 			this.attachFilterIconEvents();
 			this.attachFilterEnumEvents();
@@ -933,6 +940,25 @@ Mall.listing = {
 		return this;
 	},
 
+    /**
+     * roll and unroll sidebar sections for mobile and desktop resolution
+     * depends on current state of sidebar (mobile or desktop)
+     *
+     * @param scope
+     * @private
+     */
+    _processRollSections: function(scope) {
+        "use strict";
+        var scope    = scope || this.getFilters(),
+            attr     = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled',
+            sections = jQuery(".section", scope),
+            self     = this;
+
+        sections.each(function() {
+            var state = jQuery(this).attr(attr) == 'open' ? 1 : 0;
+            self._doRollSection(jQuery(this), state, false);
+        });
+    },
 	/**
 	 * Attaches delete single filter action.
 	 *
@@ -977,6 +1003,7 @@ Mall.listing = {
 			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
             this.initScrolls();
+            this._processRollSections();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -1602,6 +1629,17 @@ Mall.listing = {
 					!title.hasClass("open"),
 					true
 				);
+                //if sidebar is in mobile state and clicked section is going to be rolled up
+                //rest of sections will be rolled down
+                if (self.getCurrentMobileFilterState() && title.hasClass("closed")) {
+                    filters.not(filter).each(function(){
+                        self._doRollSection(
+                            jQuery(this),
+                            false, //close all other section in mobile resolution
+                            true
+                        );
+                    });
+                }
 				event.preventDefault();
 			});
 
