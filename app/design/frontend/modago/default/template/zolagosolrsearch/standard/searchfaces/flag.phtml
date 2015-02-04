@@ -1,4 +1,7 @@
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var $this Zolago_Solrsearch_Block_Faces_Flag */
+$key = $this->getFacetKey();
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -50,6 +53,33 @@
                 <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>"  class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
-
+        <?php if($isOptionSelected) : ?>
+            <div class="content-xs" id="filter_price_xs" data-content="xs">
+                <dl class="clearfix">
+                    <?php foreach ($this->getItems() as $item => $count): ?>
+                        <?php if ($this->getCanShowItem($item, $count) && $this->isItemActive($item)): ?>
+                            <?php
+                            $name = $this->getNameBasedOnContent($item);
+                            $class = $this->getClassBasedOnContent($item);
+                            ?>
+                            <dd>
+                                <span class="label">
+                                    <span class="value">
+                                        <?php echo $this->getItemValue($item); ?>
+                                    </span>
+                                    <span>
+                                        <a href="<?php echo $this->getItemUrl($item); ?>"
+                                           class="fa fa-times active-filter-label"
+                                           data-input="<?php echo $this->getItemId($item); ?>"></a>
+                                    </span>
+                                </span>
+                            </dd>
+                            <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
+                                   value="<?php echo $this->getItemValue($item); ?>"/>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </dl>
+            </div>
+        <?php endif; ?>
     </div>
 <?php endif; ?>
