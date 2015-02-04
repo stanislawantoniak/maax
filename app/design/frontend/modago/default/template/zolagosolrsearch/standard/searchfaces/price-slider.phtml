@@ -29,6 +29,7 @@ if($toValue==0){
 }
 
 $name = '';
+$somethingIsActive = $isOptionSelected;
 ?>
 <?php if ($max > 0 && (int)$max > (int)$min):?>
     <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
@@ -45,7 +46,7 @@ $name = '';
 					name="<?php echo $key; ?>" 
 					id="<?php echo $this->getItemId($range['value']);?>" 
 					class="css-checkbox"
-					<?php if ($this->isItemActive($range['value']) && !$isOptionSelected):?> checked="checked"<?php endif;?>
+					<?php if ($this->isItemActive($range['value']) && !$isOptionSelected):?> checked="checked"<?php $somethingIsActive = true; endif;?>
 				/>
                 <label for="<?php echo $this->getItemId($range['value']);?>" class="css-label">
 	                <span>
@@ -98,6 +99,28 @@ $name = '';
                 <a href="<?php echo $this->getRemoveAllUrl("price") ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div> 
         </div>
+        <?php if($somethingIsActive) : ?>
+            <div class="content-xs" id="filter_price_xs" data-content="xs">
+                <dl class="clearfix">
+                    <?php foreach($ranges as $range) : ?>
+                        <?php if ($this->isItemActive($range['value']) && !$isOptionSelected): ?>
+                            <dd>
+                                <span class="label">
+                                    <span class="value">
+                                        <?php echo $range['formatted']; ?>
+                                    </span>
+                                    <span>
+                                        <a href="<?php echo $this->getRemoveFacesUrl("price", $range['value']); ?>"
+                                           class="fa fa-times active-filter-label"
+                                           data-input="<?php echo $this->getItemId($range['value']); ?>"></a>
+                                    </span>
+                                </span>
+                            </dd>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </dl>
+            </div>
+        <?php endif; ?>
     </div>
     <script type="text/javascript">
         Mall.listing.setCurrentPriceRange(<?php echo $fromValue; ?>, <?php echo $toValue; ?>);

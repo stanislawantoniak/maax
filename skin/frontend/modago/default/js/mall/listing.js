@@ -1519,8 +1519,7 @@ Mall.listing = {
 	},
 
 	getActiveLabel: function(scope) {
-		scope = scope || Mall.listing.getActiveId();
-		return jQuery(scope+" .active-filter-label");
+		return jQuery(".active-filter-label");
 	},
 
 	getActiveRemove: function(scope) {
