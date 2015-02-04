@@ -101,24 +101,17 @@ $somethingIsActive = $isOptionSelected;
         </div>
         <?php if($somethingIsActive) : ?>
             <div class="content-xs" id="filter_price_xs" data-content="xs">
-                <dl class="clearfix">
-                    <?php foreach($ranges as $range) : ?>
-                        <?php if ($this->isItemActive($range['value']) && !$isOptionSelected): ?>
-                            <dd>
-                                <span class="label">
-                                    <span class="value">
-                                        <?php echo $range['formatted']; ?>
-                                    </span>
-                                    <span>
-                                        <a href="<?php echo $this->getRemoveFacesUrl("price", $range['value']); ?>"
-                                           class="fa fa-times active-filter-label"
-                                           data-input="<?php echo $this->getItemId($range['value']); ?>"></a>
-                                    </span>
-                                </span>
-                            </dd>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </dl>
+                <?php foreach($ranges as $range) : ?>
+                    <?php if ($this->isItemActive($range['value']) && !$isOptionSelected): ?>
+                        <div class="active-filter">
+                            <a href="<?php echo $this->getRemoveFacesUrl("price", $range['value']); ?>"
+                               class="active-filter-label"
+                               data-input="<?php echo $this->getItemId($range['value']); ?>">
+                                <?php echo $range['formatted']; ?><i class="fa fa-times"></i>
+                               </a>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
                 <div class="action clear clearfix <?php if(!$isOptionSelected && !$this->isFilterActive("price")): ?>hidden<?php endif; ?>">
                     <a href="<?php echo $this->getRemoveAllUrl("price") ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
                 </div>

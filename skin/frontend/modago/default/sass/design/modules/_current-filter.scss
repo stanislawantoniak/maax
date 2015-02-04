@@ -1,23 +1,36 @@
 .content-xs {
-  display: none;
   text-align: left;
-  dl {
-    dt {
-
+  .active-filter {
+    a {
+      display: inline-table;
+      border: 1px solid $color-gray2;
+      padding-left: 6px;
+      padding-right: 6px;
+      font-size: 12px;
+      height: 21px;
+      line-height: 21px;
+      color: $color-black;
+      @include border-radius(3px);
+      margin-top: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
     }
-    dd {
-      .label {
-        display: block;
-        height: 21px;
-        a {
-          display: inline-block;
-        }
+    i {
+      margin-left: 6px;
+    }
+    .fa {
+      color: $color-gray1;
+      font-size: 11px;
+    }
+    &:hover {
+      .fa {
+        cursor:pointer;
       }
     }
   }
 }
 
-#active-filters, #view-current-filter, .solr_search_facets .content-xs {
+#active-filters, #view-current-filter{
 	
 	h1 {
 		text-transform: uppercase;
@@ -40,11 +53,11 @@
 	            font-size: 12px;
 	            text-align: left;
 	            line-height:20px;
-	            border:1px solid #ededed;
+	            border:1px solid $color-gray2;
 	            font-weight: normal;
 	        }
 	            .fa {
-	                color:#949494;
+	                color: $color-gray1;
 	                font-size: 11px;
 	            }
 	             &:hover {
