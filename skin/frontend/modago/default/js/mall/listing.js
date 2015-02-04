@@ -278,8 +278,9 @@ Mall.listing = {
 
 
 	_doRollSection: function(section, state, animate){
-		var title = section.find("h3"),
-			content = section.find(".content"),
+		var title     = section.find("h3"),
+			content   = section.find(".content"),
+            contentXS = section.find(".content-xs"),
 			i = title.find('i');
 
 		if(animate){
@@ -313,6 +314,18 @@ Mall.listing = {
         var attr = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled';
         var attrVal = state ? 'open' : 'closed';
         section.attr(attr, attrVal);
+
+        //show and hide content-xs for mobile sidebar when section rolled up or rolled down
+        if (this.getCurrentMobileFilterState()) {
+            if (!state) {
+                contentXS.show();
+            } else {
+                contentXS.hide();
+            }
+        } else {
+            //on desktop resolution always hide .content-xs
+            contentXS.hide();
+        }
 	},
 
 	_doShowMore: function(section, state, animate){

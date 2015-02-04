@@ -1,4 +1,8 @@
-#active-filters, #view-current-filter {
+.content-xs {
+  display: none;
+}
+
+#active-filters, #view-current-filter, .solr_search_facets .content-xs {
 	
 	h1 {
 		text-transform: uppercase;
