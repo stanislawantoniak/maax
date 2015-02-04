@@ -66,7 +66,7 @@
 "go to campaign","kampanii"
 "Change priority","Zmiana priorytetu"
 "Creative","Kreacja"
-"POSITION %d","Pozycja %d"
+"POSITION","Pozycja"
 "SLOT %d","Miejsce %d"
 "Inspiration","Inspiracje"
 "Archive","Archiwalna"
@@ -84,7 +84,7 @@
 "Main image: url","URL dla obrazka"
 "Small screen image","Obrazek mobilny"
 "Small screen image: url","URL dla obrazka"
-"Max length is %d","Maksymalna długość to %d znaków"
+"Max length is ","Maksymalna długość to "
 "Campaigns managment","Zarządzanie kampaniami"
 "View","Przeglądaj"
 
