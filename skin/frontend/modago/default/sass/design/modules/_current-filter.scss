@@ -1,5 +1,20 @@
 .content-xs {
   display: none;
+  text-align: left;
+  dl {
+    dt {
+
+    }
+    dd {
+      .label {
+        display: block;
+        height: 21px;
+        a {
+          display: inline-block;
+        }
+      }
+    }
+  }
 }
 
 #active-filters, #view-current-filter, .solr_search_facets .content-xs {
