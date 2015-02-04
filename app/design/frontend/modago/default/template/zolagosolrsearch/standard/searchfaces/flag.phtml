@@ -54,14 +54,10 @@ $key = $this->getFacetKey();
             </div>
         </div>
         <?php if($isOptionSelected) : ?>
-            <div class="content-xs" id="filter_price_xs" data-content="xs">
+            <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
                 <dl class="clearfix">
                     <?php foreach ($this->getItems() as $item => $count): ?>
                         <?php if ($this->getCanShowItem($item, $count) && $this->isItemActive($item)): ?>
-                            <?php
-                            $name = $this->getNameBasedOnContent($item);
-                            $class = $this->getClassBasedOnContent($item);
-                            ?>
                             <dd>
                                 <span class="label">
                                     <span class="value">
