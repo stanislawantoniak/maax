@@ -61,9 +61,10 @@
 "Must be before corresponding end date","Must be before corresponding end date"
 "Must be after corresponding start date","Must be after corresponding start date"
 "Please enter start date or end date","Please enter start date or end date"
-"Creative is active. To edit","Kreacja jest aktywna. Kreację możesz edytować z poziomu"
+"Creative is active.","Kreacja jest aktywna."
+"To edit","Kreację możesz edytować z poziomu"
 "go to campaign","kampanii"
-"Change priority:","Zmiana priotytu"
+"Change priority","Zmiana priorytetu"
 "Creative","Kreacja"
 "POSITION %d","Pozycja %d"
 "SLOT %d","Miejsce %d"
@@ -84,6 +85,8 @@
 "Small screen image","Obrazek mobilny"
 "Small screen image: url","URL dla obrazka"
 "Max length is %d","Maksymalna długość to %d znaków"
+"Campaigns managment","Zarządzanie kampaniami"
+"View","Przeglądaj"
 
 
 
