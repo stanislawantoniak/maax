@@ -671,11 +671,6 @@ jQuery.noConflict();
                 }
             }
         });
-        $window.on('resize', function () {
-            if(widthWindow != $wWOryginal) {
-                if (widthWindow >= 768) {}
-            }
-        });
 
 
         /* ================= end:// checkout ================= */
@@ -1088,12 +1083,6 @@ jQuery.noConflict();
 
              });
              */
-            updateCarousel();
-            function updateCarousel(el){
-                //var current = $("#sync4").find('.synced').index();
-
-
-            }
 
 
             function syncPosition2(el){
@@ -1301,10 +1290,6 @@ jQuery.noConflict();
 //			return;
 //        });
 //equalizeHeights();
-        var flags_container = $('.carousel-stage');
-        if (flags_container.length > 0 ) {
-
-        };
 //
 //if ($('body').hasClass('node-type-list')) {
 ////  equalizeHeights();
@@ -1817,26 +1802,7 @@ jQuery.noConflict();
         //control sidebar
         if ($('body').hasClass('filter-sidebar')) {
 
-            if($(window).width() <= 768) {
-//       $("#sidebar").find('.sidebar').remove();
-//       $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
-//          init();
-//          initScrollBarFilterMarka();
-//          visibleBtnClearFilterSize();
-//
-//       });
 
-            } else {
-//        $(".fb-slidebar-inner").find('.sidebar').remove();
-//        $("#sidebar").load("/sidebar.inc", function(){
-//          //filterManufacturerUnCheked()
-//          init();
-//          initScrollBarFilterMarka();
-//          visibleBtnClearFilterSize();
-//
-//        });
-
-            }
             prevW = $(window).width();
             prevH = $(window).height();
             $(window).on("resize", function() {
@@ -1848,21 +1814,8 @@ jQuery.noConflict();
                 $('.toggle-xs').find('.main').hide();
                 $('.block-complementary-product.toggle-xs').find('.main').show();
 
-                var sidebarMain = $('body').find('#content .sidebar');
-                var sidebarAside = $('body').find('.fb-slidebar .sidebar')
-
-
                 if(intFrameWidth < 768) {
-                    if (sidebarMain.length === 0) {
-//              $("#sidebar").find('.sidebar').remove();
-//              $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
-//                init();
-//                initScrollBarFilterMarka();
-//                clearFilterManufacturerCheked();
-//                visibleBtnClearFilterSize();
-//
-//              });
-                    };
+
                     if ($('body').hasClass('noscroll')) {
                         var screenWidth = $(window).width();
                         var screenHeight = $(window).height();
@@ -1872,49 +1825,9 @@ jQuery.noConflict();
                         });
 
                     };
-                    //$('.toggle-xs').find('.main').attr('style', '').stop();
-
-                } else {
-                    if (sidebarMain.length === 0) {
-                        Mall.listing.insertDesktopSidebar();
-                        init();
-//              $(".fb-slidebar-inner").find('.sidebar').remove();
-//              $("#sidebar").load("/sidebar.inc", function(){
-//                init();
-//                initScrollBarFilterMarka();
-//                clearFilterManufacturerCheked();
-//                visibleBtnClearFilterSize();
-//
-//                $( "#slider-range" ).slider({
-//                   range: true,
-//                   min: 0,
-//                   max: 500,
-//                   values: [ 75, 300 ],
-//                   slide: function(event, ui) {
-//                       $("#zakres_min").val(ui.values[0]);
-//                       $("#zakres_max").val(ui.values[1]);
-//
-//
-//                   }
-//
-//                 });
-//                  $('#slider-range').on('click', 'a', function(event) {
-//                  var checkSlider = $('#checkSlider').find('input');
-//                  if (!checkSlider.is(':checked')) {
-//                   checkSlider.prop('checked', true);
-//                    $('#filter_price').find('.action').removeClass('hidden');
-//                  }
-//                });
-//
-//              });
-                    };
-                    $('#sb-site').removeClass('open');
-                    $('.fb-slidebar').removeClass('open');
-                    $('body').removeClass('noscroll').find('.noscroll').remove();
 
                 }
 
-//}
                 prevW = $(window).width();
                 prevH = $(window).height();
 

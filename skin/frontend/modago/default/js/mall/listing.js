@@ -948,6 +948,8 @@ Mall.listing = {
 			this.attachDeleteCurrentFilter();
             this.attachMiscActions();
 			this.initListingLinksEvents();
+
+            this.closeSlidebar();
 		}
 
 		return this;
@@ -1029,10 +1031,21 @@ Mall.listing = {
             this.attachDeleteCurrentFilter();
             this.attachMiscActions();
 			this.initListingLinksEvents();
+
+            this.closeSlidebar();
 		}
 
 		return this;
 	},
+
+
+    closeSlidebar: function() {
+        jQuery('.closeSlidebar').click();
+        jQuery('#sb-site').removeClass('open');
+        jQuery('.fb-slidebar').removeClass('open');
+        jQuery('body').removeClass('noscroll');
+        jQuery('body').find('.noscroll').remove();
+    },
 
 	/**
 	 * @param {object} node
@@ -2881,17 +2894,5 @@ jQuery(document).ready(function () {
         } else {
             Mall.listing.insertMobileSidebar();
         }
-    });
-    jQuery( window ).resize(function() {
-        if (window.innerWidth < 768 ) {
-            if(jQuery('.fb-slidebar.open').length){
-                jQuery('.closeSlidebar').click();
-                jQuery('#sb-site').removeClass('open');
-                jQuery('.fb-slidebar').removeClass('open');
-                jQuery('body').removeClass('noscroll');
-                jQuery('body').find('.noscroll').remove();
-            }
-        }
-
     });
 });
