@@ -64,6 +64,8 @@
 "Product - Brand shop info", "Produkt - Info o marce"
 "Vendor type", "Typ sprzedawcy"
 "Question was successfully saved","Odpowiedź została zapisana i przesłana do klienta."
+"Save","Zapisz"
+"Cancel","Anuluj"
 "Mass Actions","Zarządzanie opisami produktów"
 "Size tables","Tabele rozmiarów"
 "Use another DHL account for RMA","Użyj innego konta DHL do zwrotów"
@@ -74,8 +76,7 @@
 "DHL password","Hasło do DHL"
 "UPS password","Hasło do UPS"
 "License key","Klucz licencyjny"
-"Save","Zapisz"
-"Cancel","Anuluj"
+
 
 
 
