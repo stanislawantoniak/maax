@@ -394,11 +394,6 @@ jQuery.noConflict();
 				}
 			}
 		});
-		$window.on('resize', function () {
-			if(widthWindow != $wWOryginal) {
-				if (widthWindow >= 768) {}
-			}
-		});
 
 
 		/* ================= end:// checkout ================= */
@@ -817,8 +812,8 @@ jQuery.noConflict();
 				lupa.hide();
 			} else {
 				lupa.show();
-			};
-		})
+			}
+		});
 		if (widthWindow >= 767) {
 			showGalleryProduct();
 		}
@@ -1000,7 +995,7 @@ jQuery.noConflict();
 				oldPrice = tableCell.find('.product_price').children('span'),
 				oldPriceWidth = oldPrice.width() + 12;
 			oldPrice.css({
-				'margin-left': '-'+oldPriceWidth+'px',
+				'margin-left': '-'+oldPriceWidth+'px'
 			});
 		}
 
@@ -1150,7 +1145,7 @@ jQuery.noConflict();
 							height:screenHeight
 						});
 
-					};
+					}
 				} else {
 					if (sidebarMain.length === 0) {
 						Mall.listing.insertDesktopSidebar();

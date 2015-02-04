@@ -2835,12 +2835,14 @@ jQuery(document).ready(function () {
     jQuery( window ).resize(function() {
         if (window.innerWidth < 768 ) {
             if(jQuery('.fb-slidebar.open').length){
-                jQuery('.closeSlidebar').click();
-                jQuery('#sb-site').removeClass('open');
-                jQuery('.fb-slidebar').removeClass('open');
-                jQuery('body').removeClass('noscroll');
-                jQuery('body').find('.noscroll').remove();
+	            jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
             }
+        } else  {
+	        jQuery('.closeSlidebar').click();
+	        jQuery('#sb-site').removeClass('open');
+	        jQuery('.fb-slidebar').removeClass('open');
+	        jQuery('body').removeClass('noscroll');
+	        jQuery('body').find('.noscroll').remove();
         }
 
     });
