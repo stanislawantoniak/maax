@@ -6,6 +6,7 @@
     $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
+    $pureKey = implode("_", $key_withoutFacet);
     ?>
     <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
@@ -113,7 +114,6 @@
         </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-	            <?php $pureKey = implode("_", $key_withoutFacet); ?>
                 <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
@@ -139,6 +139,9 @@
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </dl>
+                <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
+                    <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                </div>
             </div>
         <?php endif; ?>
     </div>

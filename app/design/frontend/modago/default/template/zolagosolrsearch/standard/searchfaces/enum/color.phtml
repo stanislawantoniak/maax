@@ -78,13 +78,11 @@
             </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-
                 <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>"
                    data-filter-type="<?php echo $pureKey; ?>"
                    class="button button-third clear clearfilter-color">
 	                <?php echo $this->__("Clear"); ?></a>
             </div>
-
         </div>
         <?php if($isOptionSelected) : ?>
             <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
@@ -108,6 +106,12 @@
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </dl>
+                <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
+                    <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>"
+                       data-filter-type="<?php echo $pureKey; ?>"
+                       class="button button-third clear clearfilter-color">
+                        <?php echo $this->__("Clear"); ?></a>
+                </div>
             </div>
         <?php endif; ?>
     </div>
