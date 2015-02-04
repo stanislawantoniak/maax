@@ -1,4 +1,4 @@
-"Pos", "POS"
+﻿"Pos", "POS"
 "Create POS", "Stwórz POS"
 "Client number", "Numer klienta"
 "Phone", "Telefon"
@@ -21,6 +21,7 @@
 "Priority","Priorytet"
 "Action","Akcja"
 "Edit", "Edycja"
+"Name","Nazwa"
 "Address","Adres"
 "Phone","Telefon"
 "County","Kraj"
@@ -30,3 +31,10 @@
 "DHL Password","Hasło"
 "UPS Setting", "Konfiguracja UPS"
 "Use UPS", "Wysyłaj przez UPS"
+"Active","Aktywny"
+"Not Active","Nieaktywny"
+"Cancel","Anuluj"
+"Save","Zapisz"
+"This field is required.","To pole jest wymagane."
+
+
