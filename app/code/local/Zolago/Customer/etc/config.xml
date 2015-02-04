@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Customer>
-            <version>0.0.15</version>
+            <version>0.0.16</version>
         </Zolago_Customer>
     </modules>
     <global>
@@ -44,6 +44,7 @@
             <zolagocustomer_setup>
                 <setup>
                     <module>Zolago_Customer</module>
+                    <class>Mage_Customer_Model_Entity_Setup</class>
                 </setup>
             </zolagocustomer_setup>
         </resources>
