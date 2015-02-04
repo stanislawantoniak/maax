@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <config>
 	<global>
 		<zolagopayment>
@@ -478,15 +478,15 @@
 			<!-- Credit cards -->
 			<cc>
                 <!--MasterCard Mobile-->
-                <mcm>
-                    <base>
-                        <method>dotpay</method>
-                        <additional_information>
-                            <channel>245</channel>
-							<type>4</type>
-                        </additional_information>
-                    </base>
-                </mcm>
+                <!--<mcm>-->
+                    <!--<base>-->
+                        <!--<method>dotpay</method>-->
+                        <!--<additional_information>-->
+                            <!--<channel>245</channel>-->
+							<!--<type>4</type>-->
+                        <!--</additional_information>-->
+                    <!--</base>-->
+                <!--</mcm>-->
                 <!--Visa-->
                 <visa>
                     <base>

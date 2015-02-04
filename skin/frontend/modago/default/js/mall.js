@@ -439,7 +439,7 @@ var Mall = {
         this._current_superattribute = currentSelection;
         // change prices
         var optionId = jQuery(this._current_superattribute).attr("value");
-        var superOptionId = jQuery(this._current_superattribute).attr("data-id");
+        var superOptionId = jQuery(this._current_superattribute).attr("data-superattribute");
         jQuery.each(Mall.product._options.attributes[superOptionId].options, function(index, opt) {
             if(optionId == opt.id) {
                 Mall.product.setPrices((parseFloat(Mall.product._options.basePrice) + parseFloat(opt.price)), (parseFloat(Mall.product._options.oldPrice) + parseFloat(opt.oldPrice)), Mall.product._options.template);
@@ -454,7 +454,7 @@ var Mall = {
         }
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
-        attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
+        attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
 	    var popup = jQuery("#popup-after-add-to-cart");
 	    popup.find(".modal-error").hide();
 	    popup.find(".modal-loaded").hide();
@@ -688,7 +688,7 @@ Mall.product = {
             jQuery(".size-box").append(this._options_group_template);
             // create label group
             jQuery("<span/>", {
-                "class": "size-label",
+                "class": "size-label size-label-radios",
                 "html": (group.label + ":")
             }).appendTo(groupElement);
 
@@ -710,61 +710,61 @@ Mall.product = {
             this.applyAdditionalRules(group, formGroupElement);
         } else { //selectbox
 
-            // insert option group
-            var groupElement = jQuery("<div/>", {
-                "class": "size"
-            }).appendTo(".size-box");
-            jQuery(".size-box").append(this._options_group_template);
-            // create label group
-            jQuery("<span/>", {
-                "class": "size-label",
-                "html": (group.label + ":")
-            }).appendTo(groupElement);
+
 
             var deskTopDevice = !Mall.getIsBrowserMobile();
 
-            // create form group for selectbox options
-            var formGroupElementClass = (deskTopDevice) ? ' styledSelected scrollbar' : ' select-size-mobile-trigger';
-            var formGroupElement = jQuery("<div/>", {
-                class: "form-group" + formGroupElementClass
-            }).appendTo(groupElement);
+            //check if selectbox should be shown
+            var showSelect = false;
+            jQuery.each(group.options, function (index, option) {
+                if (option.is_salable) {
+                    showSelect = true;
+                }
+            });
+
+            if (showSelect) {
+                var labelText = jQuery('.size-label').text();
+                // insert option group
+                var groupElement = jQuery("<div/>", {
+                    "class": "size"
+                }).appendTo(".size-box");
+                jQuery(".size-box").append(this._options_group_template);
+                // create label group
+                jQuery("<span/>", {
+                    "class": "size-label col-sm-6 col-md-6 col-xs-12",
+                    "html": (group.label + ":")
+
+                }).appendTo(groupElement);
 
 
+                // create form group for selectbox options
+                var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
+                var formGroupElement = jQuery("<div/>", {
+                    class: "" + formGroupElementClass
+                }).appendTo(groupElement);
 
-            //create select part
-            var formGroupElementSelectClass = (deskTopDevice) ? ' form-control select-styled' : ' form-control mobile-native-select-w';
-            var formGroupElementSelect = jQuery("<select/>", {
-                id: "select-data-id-"+group.id,
-                class: formGroupElementSelectClass
-            }).appendTo(formGroupElement);
+                //create select part
+                var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
+                var formGroupElementSelect = jQuery("<select/>", {
+                    id: "select-data-id-" + group.id,
+                    class: formGroupElementSelectClass
+                }).appendTo(formGroupElement);
 
-            if(Mall.getIsBrowserMobile() && jQuery(group.options).length >= 2){
-                //jQuery("<option/>", {
-                //    value: '',
-                //    html: jQuery('.size-label').text(),
-                //    "data-id": 0,
-                //    name: ("super_attribute["+ group.id +"]")
-                //}).appendTo(formGroupElementSelect);
 
-            }
+                jQuery.each(group.options, function (index, option) {
+                    Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
+                });
 
-/*	        if(group.options.length = 1) {
-		        console.log(group.options);
-	        } else {*/
-		        jQuery.each(group.options, function(index, option) {
-			        Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
-		        });
-//	        }
-
-			
-            this.applyAdditionalRules(group,formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-            if(deskTopDevice){
-                jQuery('div.size-box div.size a').css('position','relative');
-                jQuery('div.size-box div.size a').css('top','5px');
+                this.applyAdditionalRules(group, formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
+                if (deskTopDevice) {
+                    jQuery('div.size-box div.size a').css('position', 'relative');
+                    jQuery('div.size-box div.size a').css('top', '5px');
+                }
+            } else {
+                jQuery('div.size-box').remove();
             }
 
         }
-
 
     },
 
@@ -777,7 +777,7 @@ Mall.product = {
         var _options = {
             type: "radio",
             id: ("size_" + option.id),
-            "data-id": id,
+            "data-superattribute": id,
             name: ("super_attribute["+ id +"]"),
             value: option.id,
             onclick: "Mall.setSuperAttribute(this);"
@@ -800,8 +800,8 @@ Mall.product = {
             value: option.id,
             html: option.label,
             id: ("size_" + option.id),
-            "data-id": id,
-            name: ("super_attribute["+ id +"]"),
+            "data-superattribute": id,
+            name: ("super_attribute["+ id +"]")
         }).appendTo(groupElement);
     },
 
@@ -887,7 +887,7 @@ function addtocartcallback(response) {
     } else {
         if(Mall.product._current_product_type == 'configurable') {
             var superAttr = jQuery(Mall._current_superattribute);
-            var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-id"));
+            var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-superattribute"));
             popup.find("p.size>span").show();
             popup.find("p.size>span").html(label);
         } else {
@@ -1089,68 +1089,24 @@ jQuery(document).ready(function() {
 /*	jQuery(".size-box select").selectpicker({
 		mobile: Mall.getIsBrowserMobile()
 	});*/
-
-    if(!Mall.getIsBrowserMobile()){
-        jQuery(".size-box select").selectbox({
-            mobile: true,
-            onOpen: function (inst) {
-                var uid = jQuery(this).attr('sb');
-                var height = parseFloat(jQuery(".size-box li").first().css('line-height'));
-                height += parseInt(jQuery(".size-box li a").first().css('padding-top'));
-                height += parseInt(jQuery(".size-box li a").first().css('padding-bottom'));
-
-                var n = jQuery(".size-box li").length;
-                if( n < 4 ) {
-                    height = n * height;
-                    if (isNaN(height)) {
-                        height = 29;//px
-                    }
-                    jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
-                    jQuery('.size-box .mCSB_container').css("margin-right", "0px");
-                } else {
-                    height = 4 * height;
-                }
-
-                jQuery('.size-box #sbOptionsWrapper_' + uid).css('max-height', height);
-                jQuery('.size-box #sbOptionsWrapper_' + uid).css('width', jQuery('.size-box .sbHolder').outerWidth());
-
-            },
-
-            onChange: function(value, inst) {
-                Mall.setSuperAttribute(jQuery("#size_" + value));
-            }
-        });
-
-        if (jQuery('.size-box option').length >= 2) {
-            jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
+    jQuery(".size-box select").selectBoxIt({
+        theme: "bootstrap",
+        native: Mall.getIsBrowserMobile(),
+        defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
+        autoWidth: false
+    });
+    var optionsCount = jQuery(".size-box option").length;
+    jQuery(document).ready(function () {
+        if (optionsCount == 1) {
+            Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
         }
-
-    } else {
-
-
-        jQuery(".size-box select").selectBoxIt({
-            theme: "bootstrap",
-            //mobile: true,
-            native: true,
-            defaultText: Mall.translate.__('Select size'),
-            autoWidth: false
-        });
-        jQuery(".size-box select").bind({
-            "change": function () {
-                var selectedOption = jQuery(this).find('option:selected');
-                Mall.setSuperAttribute(selectedOption);
-            },
-        });
-
-	    jQuery(document).ready(function() {
-		    if(jQuery(".size-box option").length == 1) {
-			    Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
-		    }
-	    });
-    }
-
-
-
+    });
+    jQuery(".size-box select").bind({
+        "change": function () {
+            var selectedOption = jQuery(this).find('option:selected');
+            Mall.setSuperAttribute(selectedOption);
+        }
+    });
 
 
 
@@ -1174,14 +1130,7 @@ jQuery(document).ready(function() {
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
 			if(jQuery("#rwd-color").length) {
-				var colorQuantity = jQuery("#rwd-color .rwd-item").length;
-				if(colorQuantity <= 5) {
-					jQuery("#rwd-color").css({"padding-left": "0"});
-					jQuery("#product-options .size-box .size .size-label").css({width: "97px"})
-				} else {
-					jQuery("#product-options .size-box .size .form-group").css({"padding": "0 22px"});
-					jQuery("#product-options .size-box .size .view-sizing").css({"padding": "0 22px"});
-				}
+
 			} else {
 				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})
 			}

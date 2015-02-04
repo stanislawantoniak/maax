@@ -84,10 +84,15 @@
             </zolagopayment_cc>
 			<cashondelivery>
                 <visible>1</visible>
+                <p_details>0</p_details>
 			</cashondelivery>
 			<banktransfer>
                 <visible>1</visible>
+                <p_details>1</p_details>
 			</banktransfer>
+            <dotpay>
+                <p_details>1</p_details>
+            </dotpay>
         </payment>
 	</default>
 </config>
