@@ -88,10 +88,10 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
              $checkoutSession = Mage::getSingleton('checkout/session');
              
             $quote = $checkoutSession->setLoadInactive()->getQuote();
-            if ($quote->getIsActive() && $quote->getCustomerId()) {
+            if ($quote->getIsActive() && $quote->getCustomerId() && $quote->hasItems()) {
                 $quoteItems = $quote->getAllVisibleItems();
                 Mage::register('persistent_quote_item',$quoteItems);
-            }                 
+            }
             $this->_expirePersistentSession();
             return;
         }

@@ -34,8 +34,10 @@ class Zolago_Sales_Model_Observer extends Mage_Sales_Model_Observer {
             $customerQuote = Mage::getModel('sales/quote')
                 ->setStoreId(Mage::app()->getStore()->getId())
                 ->loadByCustomer(Mage::getSingleton('customer/session')->getCustomerId());
-            $customerQuote->removeAllItems();
-            $customerQuote->save();
+            if ($quote->getId() != $customerQuote->getId()) {
+                $customerQuote->removeAllItems();
+                $customerQuote->save();            
+            }
         }
     }
 }
