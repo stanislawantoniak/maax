@@ -145,6 +145,13 @@
                         <fieldset>marketing</fieldset>
                         <position>40</position>
                     </terms_return_information>
+                	<basket_delivery_slogan>
+                        <label>Basket - Delivery info</label>
+                        <type>wysiwyg</type>
+                        <fieldset>marketing</fieldset>
+                        <position>45</position>
+						<only_admin>1</only_admin>
+                    </basket_delivery_slogan>
                 	<store_delivery_headline>
                         <label>Product - store section - delivery headline</label>
                         <type>text</type>
@@ -177,6 +184,7 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
+                    
 					<!-- DHL -->
                 	<use_dhl>
                         <label>Use DHL</label>

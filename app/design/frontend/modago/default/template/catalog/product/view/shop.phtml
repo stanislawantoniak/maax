@@ -27,7 +27,7 @@ $brandId = $_product->getData( 'manufacturer');
 
 $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 ?>
-<div id="product-shop" class="col-lg-8 col-md-12 clearfix">
+<div id="product-shop" class="col-lg-8 col-md-12 col-sm-12 clearfix" style="overflow-x:visible;">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php echo $this->getBlockHtml('formkey') ?>
         <div class="no-display">
@@ -68,13 +68,10 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                         <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
 				            <?php $haveSizes = true; ?>
                             <div class="size-box clearfix clr">
-                                <div class="size">
-                                    <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
-
-                                    <div class="form-group form-radio">
-
+                                <div class="size col-sm-12 col-md-12 col-xs-12">
+                                    <span class="size-label col-sm-6 col-md-6 col-xs-12"><?php echo $this->__("Select size"); ?>:</span>
+                                    <div class=" sizes-content form-group form-radio col-sm-6 col-md-5 col-xs-4">
                                         <br />
-
                                         <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
                                            data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?> <?php endif; ?></a>
                                     </div>

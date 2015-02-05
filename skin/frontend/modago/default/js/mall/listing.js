@@ -2892,7 +2892,22 @@ jQuery(document).ready(function () {
         if (window.innerWidth >= 768 ) {
             Mall.listing.insertDesktopSidebar();
         } else {
+            jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
             Mall.listing.insertMobileSidebar();
         }
     });
+    //jQuery( window ).resize(function() {
+    //    if (window.innerWidth < 768 ) {
+    //        if(jQuery('.fb-slidebar.open').length){
+	 //           jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
+    //        }
+    //    } else  {
+	 //       jQuery('.closeSlidebar').click();
+	 //       jQuery('#sb-site').removeClass('open');
+	 //       jQuery('.fb-slidebar').removeClass('open');
+	 //       jQuery('body').removeClass('noscroll');
+	 //       jQuery('body').find('.noscroll').remove();
+    //    }
+    //
+    //});
 });
