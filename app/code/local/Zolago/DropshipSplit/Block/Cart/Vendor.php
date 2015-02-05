@@ -2,8 +2,6 @@
 
 class Zolago_DropshipSplit_Block_Cart_Vendor extends Unirgy_DropshipSplit_Block_Cart_Vendor
 {
-	const NOMINAL_PRICE = 500;
-	
 	/**
 	 * @return string | null
 	 */
@@ -15,7 +13,7 @@ class Zolago_DropshipSplit_Block_Cart_Vendor extends Unirgy_DropshipSplit_Block_
 	 * @return boolean
 	 */
 	public function isHintAvailable() {
-		return $this->getSubtotal()<$this->getNominalPrice() && !$this->isFreeShipping(); 
+		return !$this->isFreeShipping(); 
 	}
 	
 	/**
@@ -30,8 +28,8 @@ class Zolago_DropshipSplit_Block_Cart_Vendor extends Unirgy_DropshipSplit_Block_
 	 * @todo implement
 	 * @return decimal
 	 */
-	public function getNominalPrice() {
-		return self::NOMINAL_PRICE;
+	public function getBasketDeliveryInfo() {
+	    return $this->getVendor()->getBasketDeliverySlogan();
 	}
 	
 	/**
