@@ -507,7 +507,11 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			$customer->setPassword($password);
             $quote->setPasswordHash($customer->encryptPassword($customer->getPassword()));
 		}
-		
+        $telephone = isset($accountData['telephone']) ? $accountData['telephone'] : "";
+        if(!empty($telephone)){
+            $customer->setPhone($telephone);
+        }
+
         $this->getQuote()->addData($data);//->save();
         return $this;
 		
