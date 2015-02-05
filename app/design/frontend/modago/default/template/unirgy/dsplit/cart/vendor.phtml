@@ -1,5 +1,6 @@
 <?php
 $_v = $this->getVendor();
+$info = $this->getBasketDeliveryInfo();
 ?>
 
 <?php switch ($this->getPart()): case 'header': ?>
@@ -46,10 +47,10 @@ $_v = $this->getVendor();
                     <?php echo $this->__("Minimal shipping cost"); ?>:
                     <?php endif; ?>
 
-                    <?php if($this->isHintAvailable()):?>
+                    <?php if($this->isHintAvailable() && $info):?>
                         <div class="bubble visible-lg">
                             <div>
-                                <p><?php echo $this->__("Free shipping from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
+                                <?php echo $info; ?>
                             </div>
                         </div>
                     <?php endif;?>

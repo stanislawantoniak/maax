@@ -206,7 +206,6 @@ class Mage_Checkout_Model_Session extends Mage_Core_Model_Session_Abstract
         }
 
         Mage::dispatchEvent('load_customer_quote_before', array('checkout_session' => $this));
-
         $customerQuote = Mage::getModel('sales/quote')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->loadByCustomer(Mage::getSingleton('customer/session')->getCustomerId());

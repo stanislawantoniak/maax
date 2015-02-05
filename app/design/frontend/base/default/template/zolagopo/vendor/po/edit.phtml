@@ -412,8 +412,20 @@
 								</dd>
 								<dt><?php echo $_hlp->__("Dispatch date");?>:</dt>
 								<dd>
-									<?php echo $_hlp->__("N/A");?>
+                                    <?php if ($_tracking->getShippedDate()): ?>
+                                        <?php echo $this->escapeHtml($_tracking->getShippedDate()); ?>
+                                    <?php else: ?>
+                                        <?php echo $_hlp->__("N/A");?>
+                                    <?php endif; ?>
 								</dd>
+                                <dt><?php echo $_hlp->__("Delivery date");?>:</dt>
+                                <dd>
+                                    <?php if ($_tracking->getDeliveredDate()): ?>
+                                        <?php echo $this->escapeHtml($_tracking->getDeliveredDate()); ?>
+                                    <?php else: ?>
+                                        <?php echo $_hlp->__("N/A");?>
+                                    <?php endif; ?>
+                                </dd>
 							</dl>
 						</div>
 						<div class="col-md-6">

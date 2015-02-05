@@ -1,3 +1,6 @@
+* {
+	outline: none !important;
+}
 body {
 	&> .modal-backdrop {
 		display:none!important;
@@ -61,5 +64,11 @@ body {
 .modal-dialog {
 	@media(max-width:767px) {
 		margin: 20px 20px;
+	}
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	img[src*=".svg"] {
+		width: 100%;
 	}
 }

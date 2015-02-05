@@ -139,6 +139,11 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+
+        //hide btn filter product if no products (search for example)
+        this.processActionViewFilter();
+
+        //do stufs with images height
         this.initImagesHeight();
 
 		// Reset form
@@ -168,6 +173,15 @@ Mall.listing = {
 		this.setLoadMoreLabel();
 
 	},
+
+    /**
+     * hide btn filter product if no products/no sidebar (search for example)
+     */
+    processActionViewFilter: function() {
+        if (!jQuery('#sidebar').length && !this.isVendorLandingpage()) {
+            jQuery('.view_filter:has(.actionViewFilter)').hide();
+        }
+    },
 
 	setInitProducts: function(products){
 		this._init_products = products;
@@ -278,8 +292,9 @@ Mall.listing = {
 
 
 	_doRollSection: function(section, state, animate){
-		var title = section.find("h3"),
-			content = section.find(".content"),
+		var title     = section.find("h3"),
+			content   = section.find(".content"),
+            contentXS = section.find(".content-xs"),
 			i = title.find('i');
 
 		if(animate){
@@ -307,6 +322,24 @@ Mall.listing = {
 		}else{
 			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
 		}
+
+        //saveing state of rolled or not for mobile or desktop resolution
+        //because of different behaviour of sidebar in mobile and desktop
+        var attr = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled';
+        var attrVal = state ? 'open' : 'closed';
+        section.attr(attr, attrVal);
+
+        //show and hide content-xs for mobile sidebar when section rolled up or rolled down
+        if (this.getCurrentMobileFilterState()) {
+            if (!state) {
+                contentXS.show();
+            } else {
+                contentXS.hide();
+            }
+        } else {
+            //on desktop resolution always hide .content-xs
+            contentXS.hide();
+        }
 	},
 
 	_doShowMore: function(section, state, animate){
@@ -902,13 +935,17 @@ Mall.listing = {
 		return this;
 	},
 
+    isVendorLandingpage: function() {
+        return jQuery('.umicrosite-index-landingpage').length;
+    },
+
 	/**
 	 * Moves filters sidebar to mobile container.
 	 *
 	 * @returns {Mall.listing}
 	 */
 	insertMobileSidebar: function() {
-		if(this.getCurrentMobileFilterState() == 0) {
+		if(this.getCurrentMobileFilterState() == 0 && !this.isVendorLandingpage()) {
             this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
 			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
 			jQuery("#sidebar").find(".sidebar").remove();
@@ -916,6 +953,7 @@ Mall.listing = {
 			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(1);
             this.initScrolls();
+            this._processRollSections();
             this.attachFilterColorEvents();
 			this.attachFilterIconEvents();
 			this.attachFilterEnumEvents();
@@ -928,11 +966,32 @@ Mall.listing = {
 			this.attachDeleteCurrentFilter();
             this.attachMiscActions();
 			this.initListingLinksEvents();
+
+            this.closeSlidebar();
 		}
 
 		return this;
 	},
 
+    /**
+     * roll and unroll sidebar sections for mobile and desktop resolution
+     * depends on current state of sidebar (mobile or desktop)
+     *
+     * @param scope
+     * @private
+     */
+    _processRollSections: function(scope) {
+        "use strict";
+        var scope    = scope || this.getFilters(),
+            attr     = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled',
+            sections = jQuery(".section", scope),
+            self     = this;
+
+        sections.each(function() {
+            var state = jQuery(this).attr(attr) == 'open' ? 1 : 0;
+            self._doRollSection(jQuery(this), state, false);
+        });
+    },
 	/**
 	 * Attaches delete single filter action.
 	 *
@@ -969,7 +1028,7 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	insertDesktopSidebar: function() {
-		if(this.getCurrentMobileFilterState() == 1) {
+		if(this.getCurrentMobileFilterState() == 1 && !this.isVendorLandingpage()) {
             this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
 			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
@@ -977,6 +1036,7 @@ Mall.listing = {
 			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
             this.initScrolls();
+            this._processRollSections();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -989,10 +1049,21 @@ Mall.listing = {
             this.attachDeleteCurrentFilter();
             this.attachMiscActions();
 			this.initListingLinksEvents();
+
+            this.closeSlidebar();
 		}
 
 		return this;
 	},
+
+
+    closeSlidebar: function() {
+        jQuery('.closeSlidebar').click();
+        jQuery('#sb-site').removeClass('open');
+        jQuery('.fb-slidebar').removeClass('open');
+        jQuery('body').removeClass('noscroll');
+        jQuery('body').find('.noscroll').remove();
+    },
 
 	/**
 	 * @param {object} node
@@ -1492,8 +1563,7 @@ Mall.listing = {
 	},
 
 	getActiveLabel: function(scope) {
-		scope = scope || Mall.listing.getActiveId();
-		return jQuery(scope+" .active-filter-label");
+		return jQuery(".active-filter-label");
 	},
 
 	getActiveRemove: function(scope) {
@@ -1602,6 +1672,17 @@ Mall.listing = {
 					!title.hasClass("open"),
 					true
 				);
+                //if sidebar is in mobile state and clicked section is going to be rolled up
+                //rest of sections will be rolled down
+                if (self.getCurrentMobileFilterState() && title.hasClass("closed")) {
+                    filters.not(filter).each(function(){
+                        self._doRollSection(
+                            jQuery(this),
+                            false, //close all other section in mobile resolution
+                            true
+                        );
+                    });
+                }
 				event.preventDefault();
 			});
 
@@ -2829,19 +2910,22 @@ jQuery(document).ready(function () {
         if (window.innerWidth >= 768 ) {
             Mall.listing.insertDesktopSidebar();
         } else {
+            jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
             Mall.listing.insertMobileSidebar();
         }
     });
-    jQuery( window ).resize(function() {
-        if (window.innerWidth < 768 ) {
-            if(jQuery('.fb-slidebar.open').length){
-                jQuery('.closeSlidebar').click();
-                jQuery('#sb-site').removeClass('open');
-                jQuery('.fb-slidebar').removeClass('open');
-                jQuery('body').removeClass('noscroll');
-                jQuery('body').find('.noscroll').remove();
-            }
-        }
-
-    });
+    //jQuery( window ).resize(function() {
+    //    if (window.innerWidth < 768 ) {
+    //        if(jQuery('.fb-slidebar.open').length){
+	 //           jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
+    //        }
+    //    } else  {
+	 //       jQuery('.closeSlidebar').click();
+	 //       jQuery('#sb-site').removeClass('open');
+	 //       jQuery('.fb-slidebar').removeClass('open');
+	 //       jQuery('body').removeClass('noscroll');
+	 //       jQuery('body').find('.noscroll').remove();
+    //    }
+    //
+    //});
 });

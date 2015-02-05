@@ -72,5 +72,31 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 			$customer->setSkipCopyPersonalData(false);
         }
     }
+    /**
+     * Reset session data when customer re-authenticates
+     * save old quote items
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function customerAuthenticatedEvent($observer)
+    {
+        /** @var $customerSession Mage_Customer_Model_Session */
+        $customerSession = Mage::getSingleton('customer/session');
+        $customerSession->setCustomerId(null)->setCustomerGroupId(null);
+
+        if (Mage::app()->getRequest()->getParam('context') != 'checkout') {            
+             $checkoutSession = Mage::getSingleton('checkout/session');
+             
+            $quote = $checkoutSession->setLoadInactive()->getQuote();
+            if ($quote->getIsActive() && $quote->getCustomerId() && $quote->hasItems()) {
+                $quoteItems = $quote->getAllVisibleItems();
+                Mage::register('persistent_quote_item',$quoteItems);
+            }
+            $this->_expirePersistentSession();
+            return;
+        }
+
+        $this->setQuoteGuest();
+    }
 	
 }

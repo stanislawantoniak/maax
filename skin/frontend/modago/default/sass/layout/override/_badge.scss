@@ -1,26 +1,33 @@
 .user-navigation {
-	a {
-		position:relative;
+	#link_favorites {
 		.badge {
-		    padding: 5px 5px 5px 3px;
-		    position:absolute;
-		    top:11px;
-		    right:10px;
-		   @include max-screen($screen-sm-max) {
-		        padding: 3px 3px 2px 2px;
-		        top:9px;
-		    	right:-3px;
-		   }
-		}
-		&.dropdown-toggle {
-			.badge {
-				right:15px;
-				top:11px;
-				 @include max-screen($screen-sm-max) {
-				 	right:4px;
-				 }
+			top: -1px !important;
+			@include max-screen($screen-sm-max) {
+				top: -11px !important;
 			}
 		}
+	}
+
+	.badgeHolder {
+		position: relative;
+		width: 24px;
+		margin: 0 auto 3px auto;
+		.badge {
+			padding: 2px 4px 1px 2px;
+			position: absolute !important;
+			top: 0 !important;
+			right: -15px !important;
+			@include max-screen($screen-sm-max) {
+				top: -10px !important;
+				padding: 3px 3px 2px 2px;
+			}
+			@include max-screen(410px) {
+				right: -5px !important;
+			}
+		}
+	}
+	a {
+		position:relative;
 	}
 }
 
