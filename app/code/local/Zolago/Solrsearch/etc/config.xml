@@ -362,8 +362,8 @@
         <jobs>
             <zolagosolrsearch_process_queue>
                 <schedule>
-                    <!-- Run every 5 minutes -->
-                    <cron_expr>3,8,13,18,23,28,33,38,43,48,53,58 * * * *</cron_expr>
+                    <!-- Run every 2-3 min-->
+                    <cron_expr>3,5,8,11,13,16,18,,20,23,26,28,31,33,36,38,41,43,46,48,51,53,56,58,59 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagosolrsearch/observer::cronProcessQueue</model>
