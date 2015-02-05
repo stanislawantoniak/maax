@@ -210,7 +210,7 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
             case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED:
                 $status = $this->__('Delivered');
                 $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
-                $track->setShippedDate(Varien_Date::now());
+                $track->setDeliveredDate(Varien_Date::now());
                 $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
                 break;
             case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_EXCEPTION:
@@ -218,7 +218,6 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
             case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE_2:
                 $status = $this->__('Canceled');
                 $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
-                $track->setShippedDate(null);
                 $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
                 break;
             case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_BILLING_RECEIVED:
@@ -229,7 +228,9 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
             case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_OUT_FOR_DELIVERY:
                 $status = $this->__('Shipped');
                 $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
-                $track->setShippedDate(Varien_Date::now());
+                if (!$track->getShippedDate()) {
+                    $track->setShippedDate(Varien_Date::now());
+                }
                 $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
                 break;
             default:
