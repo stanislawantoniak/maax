@@ -817,6 +817,28 @@ jQuery.noConflict();
 		if (widthWindow >= 767) {
 			showGalleryProduct();
 		}
+		function showGalleryProduct() {
+			$('#product-gallery #sync1').on('click', 'a', function(event) {
+				event.preventDefault();
+				var widthWindow = $(window).width();
+				if (widthWindow >= 767) {
+
+					$( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
+
+					$('#lightbox').css({display:'block'});
+
+					//$('#lightbox').find('.inner-item').css({visibility:'hidden'})
+
+					setTimeout(function(){
+						//$('#lightbox').find('.inner-item').css({visibility:'visible'})
+					}, 500);
+					$('body').addClass('lightbox');
+					galeriaProduktu();
+					$('body').addClass('lightbox');
+
+				}
+			});
+		}
 
 		var lightbox = $('#lightbox');
 		if (lightbox) {
