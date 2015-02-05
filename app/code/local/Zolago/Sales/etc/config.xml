@@ -16,6 +16,7 @@
         <rewrite>
           <quote>Zolago_Sales_Model_Quote</quote>
           <order_config>Zolago_Sales_Model_Order_Config</order_config>
+          <observer>Zolago_Sales_Model_Observer</observer>
         </rewrite>
       </sales>
     </models>
@@ -35,6 +36,16 @@
             </item>
         </quote>
     </sales>
+    <events>
+        <load_customer_quote_before>
+            <observers>
+                <sales>
+                    <class>sales/observer</class>
+                    <method>loadCustomerQuoteBefore</method>
+                </sales>
+            </observers>
+        </load_customer_quote_before>
+    </events>
   </global>
   <frontend>
     <translate>
