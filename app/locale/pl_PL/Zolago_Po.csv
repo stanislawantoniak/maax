@@ -141,6 +141,7 @@
 "Created date","Data utworzenia"
 "Paid", "Opłacone"
 "Not paid","Nieopłacone"
+"Not Paid","Nieopłacone"
 "Not confirmed","Niepotwierdzone"
 "Purchase Order: %s has currently dispatch ref.","Zamówienie: %s jest juz na zbiorówce"
 "Purchase Order(s) have different POSes","Zamówienia są przypisane do różnych POS"
@@ -252,4 +253,4 @@
 "Please enter 1 more character","Proszę wprowadzić jeszcze jeden znak"
 "Item %s has been removed","Produkt %s został usunięty z zamówienia"
 "of","z"
-"Purchase Order(s): %s has currently dispatch ref","Zamówienie: %s jest juz na zbiorówce."
+"Purchase Order(s): %s has currently dispatch ref.","Zamówienie: %s jest juz na zbiorówce."

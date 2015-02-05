@@ -277,37 +277,13 @@ var Mall = {
 	},
 
     setProductsCountBadge : function(count) {
-        if(count == 0) {
-            jQuery("#link_basket>a>span.badge").remove();
-            jQuery("#link_basket").removeClass();
-            jQuery("#link_basket").addClass("no-badge");
-        } else {
-            jQuery("#link_basket").removeClass();
-            // check if badge exists
-            if(jQuery("#link_basket>a>span.badge").length > 0) {
-                // change only number in badge
-                jQuery("#link_basket>a>span.badge").text(count);
-            } else {
-                jQuery("#link_basket>a>i").before('<span class="badge pull-right">'+ count + '</span>');
-            }
-        }
+	    count = count == 0 ? "" : (count > 99 ? "99+" : count);
+	    jQuery("#link_basket>a>div>span.badge").text(count);
     },
 
     setFavoritesCountBadge : function(count) {
-        if(count == 0) {
-            jQuery("#link_favorites>a>span.badge").remove();
-            jQuery("#link_favorites").removeClass();
-            jQuery("#link_favorites").addClass("no-badge");
-        } else {
-            jQuery("#link_favorites").removeClass();
-            // check if badge exists
-            if(jQuery("#link_favorites>a>span.badge").length > 0) {
-                // change only number in badge
-                jQuery("#link_favorites>a>span.badge").text(count);
-            } else {
-                jQuery("#link_favorites>a>i").before('<span class="badge pull-right">'+ count + '</span>');
-            }
-        }
+	    count = count == 0 ? "" : (count > 99 ? "99+" : count);
+	    jQuery("#link_favorites>a>div>span.badge").text(count);
     },
 
     setUserBlockData : function(content) {
@@ -957,7 +933,7 @@ function basket_dropdown() {
             jQuery("#dropdown-basket").show();
         }
     },function() {
-        if (!jQuery(".basket-dropdown").is(":hover") || !jQuery("#link_basket").is(":hover") || !jQuery("#dropdown_basket").is(":hover")) {
+        if (!jQuery(".basket-dropdown:hover").length > 0 || !jQuery("#link_basket").is(":hover") || !jQuery("#dropdown_basket").is(":hover")) {
             jQuery("#link_basket").removeClass('open');
             jQuery("#dropdown-basket").hide();
         }
