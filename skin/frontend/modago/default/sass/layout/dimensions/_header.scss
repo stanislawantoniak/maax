@@ -12,8 +12,17 @@
 .headroom--pinned {
 	top: 0 !important;
 }
-.headroom--unpinned {
-	top: -60px !important;
+body {
+	@media screen and (max-height: 749px) {
+		.headroom--unpinned {
+			top: -60px !important;
+		}
+	}
+	@media screen and (min-height: 750px) {
+		.headroom--unpinned {
+			top: 0 !important;
+		}
+	}
 }
 .header_top {
     position:fixed;
@@ -72,13 +81,13 @@
 	    }
 	    .header_icon {
 		    margin-top: 3px;
-		    width: 24px;
+		    width: 22px;
 		    + span {
 			    display: block;
 			    margin-top: 3px;
 		    }
 		    @include max-screen($screen-sm-max) {
-			    margin-top: 0;
+			    margin-top: 2px;
 		    }
 	    }
     }
@@ -172,7 +181,7 @@
 		            }
 	            }
 	            &#link_search .header_icon {
-		            margin-top: -3px;
+		            margin-top: -1px;
 	            }
             }
             a {
