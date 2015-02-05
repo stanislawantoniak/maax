@@ -139,6 +139,11 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+
+        //hide btn filter product if no products (search for example)
+        this.processActionViewFilter();
+
+        //do stufs with images height
         this.initImagesHeight();
 
 		// Reset form
@@ -168,6 +173,15 @@ Mall.listing = {
 		this.setLoadMoreLabel();
 
 	},
+
+    /**
+     * hide btn filter product if no products/no sidebar (search for example)
+     */
+    processActionViewFilter: function() {
+        if (!jQuery('#sidebar').length && !this.isVendorLandingpage()) {
+            jQuery('.view_filter:has(.actionViewFilter)').hide();
+        }
+    },
 
 	setInitProducts: function(products){
 		this._init_products = products;
@@ -921,13 +935,17 @@ Mall.listing = {
 		return this;
 	},
 
+    isVendorLandingpage: function() {
+        return jQuery('.umicrosite-index-landingpage').length;
+    },
+
 	/**
 	 * Moves filters sidebar to mobile container.
 	 *
 	 * @returns {Mall.listing}
 	 */
 	insertMobileSidebar: function() {
-		if(this.getCurrentMobileFilterState() == 0) {
+		if(this.getCurrentMobileFilterState() == 0 && !this.isVendorLandingpage()) {
             this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
 			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
 			jQuery("#sidebar").find(".sidebar").remove();
@@ -1010,7 +1028,7 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	insertDesktopSidebar: function() {
-		if(this.getCurrentMobileFilterState() == 1) {
+		if(this.getCurrentMobileFilterState() == 1 && !this.isVendorLandingpage()) {
             this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
 			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
