@@ -511,7 +511,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         if(!empty($telephone)){
             $customer->setPhone($telephone);
         }
-
         $this->getQuote()->addData($data);//->save();
         return $this;
 		
@@ -530,13 +529,14 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
 		Mage::log("Prepare for new customer");
-		
+
 		// Customer should be new object - even presitance
 		
         $customer = Mage::getModel('customer/customer');
 		
         /* @var $customer Mage_Customer_Model_Customer */
         $customerBilling = $billing->exportCustomerAddress();
+
         $customer->addAddress($customerBilling);
         $billing->setCustomerAddress($customerBilling);
         $customerBilling->setIsDefaultBilling(true);
@@ -552,6 +552,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         Mage::helper('core')->copyFieldset('checkout_onepage_quote', 'to_customer', $quote, $customer);
         $customer->setPassword($customer->decryptPassword($quote->getPasswordHash()));
         $customer->setPasswordHash($customer->hashPassword($customer->getPassword()));
+        $telephone = $billing->getTelephone();
+        if(!empty($telephone)){
+            $customer->setData('phone', $telephone);
+        }
         $quote->setCustomer($customer)
             ->setCustomerId(true);
     }
