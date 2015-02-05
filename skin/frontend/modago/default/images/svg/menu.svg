@@ -14,7 +14,8 @@
    id="svg2986"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="menu.svg">
+   sodipodi:docname="menu.svg"
+   viewBox="0 0 64 64">
   <defs
      id="defs2988" />
   <sodipodi:namedview
@@ -25,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.5"
-     inkscape:cx="32"
+     inkscape:cx="32.363636"
      inkscape:cy="32"
      inkscape:current-layer="menu"
      showgrid="true"
@@ -34,7 +35,7 @@
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="147"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata2991">
@@ -44,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,7 +59,7 @@
        id="menu">
       <path
          inkscape:connector-curvature="0"
-         d="m 3,19.125 18,0 0,-2 -18,0 z M 3,13 21,13 21,11 3,11 z m 0,-8.125 0,2 18,0 0,-2 z"
+         d="m 3.84375,18 16.3125,0 0,-2 -16.3125,0 z m 0,-5 16.3125,0 0,-2 -16.3125,0 z m 0,-7 0,2 16.3125,0 0,-2 z"
          id="path5"
          style="fill:#ffffff"
          sodipodi:nodetypes="ccccccccccccccc" />
