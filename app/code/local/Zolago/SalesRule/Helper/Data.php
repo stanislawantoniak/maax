@@ -122,7 +122,6 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                         $timesUsedByCustomer = $couponUsageByCustomerM->getTimesUsed();
 
                         if ($timesUsedByCustomer >= (int)$usagePerCustomer) {
-                            Mage::log('The coupon code has already been used by U ;)');
                             return Mage::helper('zolagomodago')->__('The coupon code has already been used.');
                         }
                     }
