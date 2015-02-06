@@ -52,11 +52,6 @@ Mall.listing = {
 	 */
 	_current_price_rage: [0, 0],
 
-    /**
-     * Current scrollTop number
-     */
-    _currentScrollTop: 0,
-
 	/**
 	 * Lock for loading and showing items when scrolling.
 	 */
@@ -1556,12 +1551,11 @@ Mall.listing = {
 			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + jQuery(window).height() + 'px"></div>');
 
             //fix for no scrool when mobile filters open
-            self._currentTop = jQuery(window).scrollTop();
-            //jQuery(window).scroll(function() {
-            //    console.log('nie skroluj!');
-            //    jQuery(this).scrollTop(self._currentTop);
-            //});
-            jQuery(document).on('touchstart','.noscroll',function(e) { e.preventDefault(); });
+            jQuery(document).on('touchstart','.noscroll',function(e) {
+                if (jQuery(e.target).hasClass('noscroll')) {
+                    e.preventDefault();
+                }
+            });
 		});
 	},
 
