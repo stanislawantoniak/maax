@@ -24,24 +24,14 @@ class Orba_Common_Ajax_Cart_CouponController extends Orba_Common_Ajax_CartContro
                     $this->_setCartSuccessResponse('Discount coupon has been applied.');
                 } else {
                     //analyze code
-                    $res = Zolago_SalesRule_Helper_Data::analyzeCouponByCustomerRequest($code);
-                    if (!empty($res)) {
-                        throw Mage::exception('Orba_Common', $res);
-                    }
 
-                    //check if coupon does not meet conditions
-                    $couponM = Mage::getModel('salesrule/coupon');
-                    $couponM->load($code, 'code');
-                    $salesRuleId = $couponM->getRuleId();
-                    $couponS = Mage::getModel('salesrule/rule');
-                    $couponS->load($salesRuleId);
+                    /* @var $zolagoSalesruleHelper Zolago_SalesRule_Helper_Data */
+                    $zolagoSalesruleHelper = Mage::helper('zolagosalesrule');
+                    $couponErrors = $zolagoSalesruleHelper->analyzeCouponByCustomerRequest($code);
+                    $couponErrorsText = !empty($couponErrors) ? $couponErrors : 'Coupon code is invalid.';
 
-                    if ($couponS->getId()) {
-
-                        throw Mage::exception('Orba_Common', Mage::helper('zolagomodago')->__('The coupon does meet conditions') . ': ' . $couponS->getDescription());
-                    }
                     $cart->saveCoupon($oldCoupon);
-                    throw Mage::exception('Orba_Common', 'Coupon code is invalid.');
+                    throw Mage::exception('Orba_Common', $couponErrorsText);
                 }
             } else {
                 throw Mage::exception('Orba_Common', 'No code has been specified.');
