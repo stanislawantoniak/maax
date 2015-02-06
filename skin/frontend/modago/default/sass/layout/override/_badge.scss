@@ -3,7 +3,16 @@
 		.badge {
 			top: -1px !important;
 			@include max-screen($screen-sm-max) {
-				top: -11px !important;
+				top: -6px !important;
+				&.badgeSingle {
+					right: -6px !important;
+				}
+				&.badgeDouble {
+					right: -10px !important;
+				}
+				&.badgeTriple {
+					right: -14px !important;
+				}
 			}
 		}
 	}
@@ -18,11 +27,20 @@
 			top: 0 !important;
 			right: -15px !important;
 			@include max-screen($screen-sm-max) {
-				top: -10px !important;
+				top: -5px !important;
 				padding: 3px 3px 2px 2px;
+				&.badgeSingle {
+					right: -4px !important;
+				}
+				&.badgeDouble {
+					right: -9px !important;
+				}
+				&.badgeTriple {
+					right: -13px !important;
+				}
 			}
 			@include max-screen(410px) {
-				right: -5px !important;
+				right: -13px !important;
 			}
 		}
 	}
