@@ -26,6 +26,16 @@
 			position: absolute !important;
 			top: 0 !important;
 			right: -15px !important;
+			&.badgeSingle {
+				right: -7px !important;
+			}
+			&.badgeDouble {
+				right: -12px !important;
+			}
+			&.badgeTriple {
+				right: -18px !important;
+			}
+
 			@include max-screen($screen-sm-max) {
 				top: -5px !important;
 				padding: 3px 3px 2px 2px;
@@ -33,10 +43,10 @@
 					right: -4px !important;
 				}
 				&.badgeDouble {
-					right: -9px !important;
+					right: -7px !important;
 				}
 				&.badgeTriple {
-					right: -13px !important;
+					right: -10px !important;
 				}
 			}
 			@include max-screen(410px) {

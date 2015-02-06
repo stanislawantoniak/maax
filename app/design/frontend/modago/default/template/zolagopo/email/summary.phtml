@@ -3,18 +3,14 @@
 <?php $_po = $this->getPo();?>
 
 <?php if($this->getItems()): ?>
-<table>
-	<thead>
-		<tr>
-			<th style="text-align: left;"><?php echo $_helper->__("Img.");?></th>
-			<th style="text-align: left; padding: 5px;"><?php echo $_helper->__("Product name");?></th>
-			<th style="text-align: right; padding: 5px;"><?php echo $_helper->__("Price");?></th>
-			<th style="text-align: right; padding: 5px;"><?php echo $_helper->__("Qty");?></th>
-			<th style="text-align: right; padding: 5px;"><?php echo $_helper->__("Value");?></th>
-		</tr>
+<table cellpadding="5" style="font-family:'Arial','Helvetica',sans-serif;min-width:100%;margin:0;padding:0" class="productsTable">
+	<thead style="font-size: 13px; text-align: left">
+	<tr>
+		<th colspan="2" align="left" style="text-align:left" class="productColumn">Produkt</th>
+		<th align="left" style="text-align:left" class="valueColumn">Wartość</th>
+	</tr>
 	</thead>
-	<tbody>
-		
+	<tbody style="font-size: 15px">
 		<?php foreach($this->getItems() as $_item):?>
 			<?php echo $this->renderItem($_item);?>
 		<?php endforeach;?>
@@ -22,26 +18,26 @@
 		<?php $_shippingCost = (float)$_po->getShippingAmountIncl();?>
 		<?php $_discount = (float)$_po->getSubtotalDiscount();?>
 		<tr>
-			<td colspan="4" style="text-align: right; padding: 2px 5px;"><?php echo $_helper->__("Shipping cost");?>:</td>
-			<td style="text-align: right; padding: 2px 5px;">
+			<td colspan="2" style="text-align:right;"><?php echo $_helper->__("Shipping cost");?>:</td>
+			<td style="text-align:right;">
 				<strong>
 					<?php echo Mage::helper("core")->formatPrice($_shippingCost, false);?>
 				</strong>
 			</td>
 		</tr>
 		<?php if($_discount>0):?>
-		<tr>
-			<td colspan="4" style="text-align: right; padding: 2px 5px;"><?php echo $_helper->__("Discount");?>:</td>
-			<td style="text-align: right; padding: 2px 5px;">
-				<strong>
-					<?php echo Mage::helper("core")->formatPrice($_discount * -1, false);?>
-				</strong>
-			</td>
-		</tr>
+			<tr>
+				<td colspan="2" style="text-align:right;"><?php echo $_helper->__("Discount");?>:</td>
+				<td style="text-align:right;">
+					<strong>
+						<?php echo Mage::helper("core")->formatPrice($_discount * -1, false);?>
+					</strong>
+				</td>
+			</tr>
 		<?php endif;?>
 		<tr>
-			<td colspan="4" style="text-align: right; padding: 2px 5px;"><?php echo $_helper->__("Total");?>:</td>
-			<td style="text-align: right; padding: 2px 5px;">
+			<td colspan="2" style="text-align:right;"><?php echo $_helper->__("Total");?>:</td>
+			<td style="text-align:right;">
 				<strong>
 					<?php echo Mage::helper("core")->formatPrice($_po->getGrandTotalInclTax(), false);?>
 				</strong>
@@ -50,51 +46,3 @@
 	</tbody>
 </table>
 <?php endif;?>
-<?php /*
- <table cellpadding="5" style="font-family:'Arial','Helvetica',sans-serif;min-width:100%;margin:0;padding:0" class="productsTable">
-									<thead style="font-size: 13px; text-align: left">
-									<tr>
-										<th colspan="2" align="left" style="text-align:left" class="productColumn">Produkt</th>
-										<th align="left" style="text-align:left" class="valueColumn">Wartość</th>
-									</tr>
-									</thead>
-									<tbody style="font-size: 15px">
-									<tr>
-										<td colspan="2" style="padding-bottom:0" class="productNameColumn">Kostium Kąpielowy</td>
-										<td rowspan="2">45,72&nbsp;zł</td>
-									</tr>
-									<tr>
-										<td width="50" style="padding-top:0;" class="imgColumn"><img
-												src="http://dev01.lorante.com/media/catalog/product/cache/1/image/300x/040ec09b1e35df139433887a97daa66f/b/i/bigimg.php_id_59608"
-												alt="{{prod.img.alt}}"
-												width="50"
-												height="75"
-												/>
-										</td>
-										<td style="padding-top:0">
-											<span style="font-size: 11px">Rozmiar: M</span><br/>
-											<span style="font-size: 11px">Cena: 64,90&nbsp;zł</span><br/>
-											<span style="font-size: 11px">Ilość: 1</span><br/>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="2" style="padding-bottom:0" class="productNameColumn">Acilia Somechange 2</td>
-										<td rowspan="2">45,72&nbsp;zł</td>
-									</tr>
-									<tr>
-										<td width="50" style="padding-top:0;width:50px" class="imgColumn"><img
-												src="http://dev01.lorante.com/media/catalog/product/cache/1/image/300x/040ec09b1e35df139433887a97daa66f/b/i/bigimg.php_id_21906"
-												alt="{{prod.img.alt}}"
-												width="50"
-												height="75"
-												/>
-										</td>
-										<td style="padding-top:0">
-											<span style="font-size: 11px">Rozmiar: XXL</span><br/>
-											<span style="font-size: 11px">Cena: 1987,99&nbsp;zł</span><br/>
-											<span style="font-size: 11px">Ilość: 1</span><br/>
-										</td>
-									</tr>
-									</tbody>
-								</table>
- */?>
