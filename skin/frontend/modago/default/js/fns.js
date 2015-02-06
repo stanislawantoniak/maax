@@ -153,8 +153,6 @@ jQuery.noConflict();
 			triggerConditionsShipping.find('.modal-body').html('');
 		});
 
-
-
 		$(window).on('load resize', function(){
 			var link = $('.forgot-password');
 			$.each( link, function() {
@@ -167,11 +165,6 @@ jQuery.noConflict();
 				});
 			});
 		});
-
-
-
-
-
 
 		$('.hint').not('input').tooltip({
 			placement: function() {
@@ -249,9 +242,6 @@ jQuery.noConflict();
 			$(this).closest('.block_info_order').find('.adres_dostawy').toggle();
 			$(this).closest('.block_info_order').next('.table-summary-product').toggle();
 			$(this).closest('.panel-body').next('.panel-footer').toggle();
-			if(pf.is(':visible')) {
-				//pf.css({display:'none'})
-			}
 		});
 
 		var default_pay_bank = $('.default_pay input[name=pay_method]');

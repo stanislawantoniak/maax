@@ -125,6 +125,12 @@ var Mall = {
     getIsBrowserMobile: function(){
         return jQuery.browser.device = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
     },
+	hideBasketLoading: function() {
+		jQuery('#dropdown-basket').find('.loading_basket').hide();
+	},
+	showBasketContent: function() {
+		jQuery('#dropdown-basket').find('.summary_basket').show();
+	},
     buildAccountInfo: function(data, status) {
         // determine status
         if(data.status == false) {
@@ -138,6 +144,13 @@ var Mall = {
         Mall.setFavoritesCountBadge(data.content.favorites_count);
         // set products count badge
         Mall.setProductsCountBadge(data.content.cart.all_products_count);
+
+	    //hide basket loading
+	    Mall.hideBasketLoading();
+
+	    //and show basket content
+	    Mall.showBasketContent();
+
         var dropdownBasket = jQuery("#dropdown-basket");
         data.content.cart.total_amount = number_format(data.content.cart.total_amount, 2, ",", " ");
         data.content.cart.see_your_cart_msg = Mall.i18nValidation.__("see_your_cart_msg", "See your cart");
@@ -277,13 +290,17 @@ var Mall = {
 	},
 
     setProductsCountBadge : function(count) {
+	    var newClass = count > 9 ? 'badgeDouble' : (count > 99 ? 'badgeTriple' : 'badgeSingle');
 	    count = count == 0 ? "" : (count > 99 ? "99+" : count);
-	    jQuery("#link_basket>a>div>span.badge").text(count);
+	    var badge = jQuery("#link_basket>a>div>span.badge");
+	    badge.removeClass('badgeDouble badgeTriple badgeSingle').addClass(newClass).text(count);
     },
 
     setFavoritesCountBadge : function(count) {
+	    var newClass = count > 9 ? 'badgeDouble' : (count > 99 ? 'badgeTriple' : 'badgeSingle');
 	    count = count == 0 ? "" : (count > 99 ? "99+" : count);
-	    jQuery("#link_favorites>a>div>span.badge").text(count);
+	    var badge = jQuery("#link_favorites>a>div>span.badge");
+	    badge.removeClass('badgeDouble badgeTriple badgeSingle').addClass(newClass).text(count);
     },
 
     setUserBlockData : function(content) {
