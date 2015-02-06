@@ -52,6 +52,11 @@ Mall.listing = {
 	 */
 	_current_price_rage: [0, 0],
 
+    /**
+     * Current scrollTop number
+     */
+    _currentScrollTop: 0,
+
 	/**
 	 * Lock for loading and showing items when scrolling.
 	 */
@@ -142,6 +147,8 @@ Mall.listing = {
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
+        //fix for noscroll when mobile filters open
+        this.processCloseSlidebar();
 
         //do stufs with images height
         this.initImagesHeight();
@@ -181,6 +188,15 @@ Mall.listing = {
         if (!jQuery('#sidebar').length && !this.isVendorLandingpage()) {
             jQuery('.view_filter:has(.actionViewFilter)').hide();
         }
+    },
+
+    processCloseSlidebar: function() {
+        var self = this;
+        jQuery('.noscroll').on('click',  function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            self.closeSlidebar();
+        });
     },
 
 	setInitProducts: function(products){
@@ -1063,6 +1079,9 @@ Mall.listing = {
         jQuery('.fb-slidebar').removeClass('open');
         jQuery('body').removeClass('noscroll');
         jQuery('body').find('.noscroll').remove();
+
+        //cancel fix for no scrool when mobile filters open
+        jQuery(window).off('scrool');
     },
 
 	/**
@@ -1533,9 +1552,14 @@ Mall.listing = {
 			self.insertMobileSidebar();
 			jQuery('#sb-site').toggleClass('open');
 			jQuery('.fb-slidebar').toggleClass('open');
-			//var screenWidth = jQuery(window).width();
-			var screenHeight = jQuery(window).height();
-			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + screenHeight + 'px"></div>');
+			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + jQuery(window).height() + 'px"></div>');
+
+            //fix for no scrool when mobile filters open
+            self._currentTop = jQuery(window).scrollTop();
+            jQuery(window).scroll(function() {
+                console.log('nie skroluj!');
+                jQuery(this).scrollTop(self._currentTop);
+            })
 		});
 	},
 
@@ -2904,28 +2928,15 @@ Mall.listing = {
 
 jQuery(document).ready(function () {
 	"use strict";
-	Mall.listing.init();
-
-    jQuery( window ).resize(function() {
-        if (window.innerWidth >= 768 ) {
-            Mall.listing.insertDesktopSidebar();
-        } else {
-            jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
-            Mall.listing.insertMobileSidebar();
-        }
-    });
-    //jQuery( window ).resize(function() {
-    //    if (window.innerWidth < 768 ) {
-    //        if(jQuery('.fb-slidebar.open').length){
-	 //           jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()})
-    //        }
-    //    } else  {
-	 //       jQuery('.closeSlidebar').click();
-	 //       jQuery('#sb-site').removeClass('open');
-	 //       jQuery('.fb-slidebar').removeClass('open');
-	 //       jQuery('body').removeClass('noscroll');
-	 //       jQuery('body').find('.noscroll').remove();
-    //    }
-    //
-    //});
+    if (jQuery('body.filter-sidebar').length) {
+        Mall.listing.init();
+        jQuery(window).resize(function () {
+            if (window.innerWidth >= 768) {
+                Mall.listing.insertDesktopSidebar();
+            } else {
+                jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()});
+                Mall.listing.insertMobileSidebar();
+            }
+        });
+    }
 });

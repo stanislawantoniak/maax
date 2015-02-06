@@ -1290,7 +1290,6 @@ jQuery.noConflict();
 			responsJcarousel();             // POKAZ SLAJDÓW
 			masonryMenu();                  // KAFELKI LISTY PRODUKTÓW
 			// MENU MOBILE
-			closeBlockFilter();             // ZAMKNIĘCIE BLOKU Z FILTRAMI
 			activeMenu();                   // ZAZNACZENIE AKTYWNEJ POZYCJI MENU
 			cloneMenu();                    // CLONOWANIE MENU
 			linkCloseMenu();                // ZAMKNIĘCIE SUBMENU
@@ -1546,18 +1545,7 @@ jQuery.noConflict();
 				$('#view-current-filter').find('.view_filter').css('margin-top', 24);
 			});
 		}
-// ZAMKNIĘCIE BLOKU Z FILTRAMI
-		function closeBlockFilter(){
-			$('.noscroll').on('click',  function(event) {
-				event.preventDefault();
-				/* Act on the event */
-				$('#sb-site').removeClass('open');
-				$('.fb-slidebar').removeClass('open');
-				$('body').removeClass('noscroll');
-				$('body').find('.noscroll').remove();
-			});
 
-		}
 
 
 		jQuery(".filter-enum input[type=image]").click(function(){
