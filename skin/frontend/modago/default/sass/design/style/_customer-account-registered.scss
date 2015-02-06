@@ -127,18 +127,18 @@
 }
 
 .my-account .box-wrapper{
-	border-right: 1px solid #ebebeb;
+	border-right: 1px solid $color-gray3;
 }
 
 .my-account .background-wrapper{
 	background: $body-bg;
 	padding: 30px 15px;
-	@media (max-width: $screen-sm-min){
+	@media (max-width: $screen-xs-max){
 		margin: 20px 8px 0 8px;
 	}
 }
 .my-account .data-table .products{
-	@media (max-width: $screen-sm-min){
+	@media (max-width: $screen-xs-max){
 		display:none;
 	}
 }
