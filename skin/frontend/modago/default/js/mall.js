@@ -991,13 +991,15 @@ function initToggleSearch() {
 		}
 		dropdown.show();
 		toggle.parent().addClass("open");
+		toggle.css('pointer-events','none');
 	});
 
 	jQuery(document).click(function(e){
 		if (dropdown.is(":visible")) {
-			e.stopPropagation();
+			e.preventDefault();
 			toggle.parent().removeClass('open');
 			dropdown.hide();
+			toggle.css('pointer-events','');
 		}
 	});
 }
