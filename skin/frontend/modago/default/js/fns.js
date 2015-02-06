@@ -950,20 +950,20 @@ jQuery.noConflict();
 			$(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
 		});
 
-		$(document).ready(function () {
-			$(".menu-5columns dt a, .menu-5columns dt span,.menu-5columns dd a").each(function (i, item) {
-
-				if ($(item).textWidth() >= 152) {
-					$(item).addClass("long-wrap");
-				}
-			})
-		});
-
-		$.fn.textWidth = function (text, font) {
-			if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-			$.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-			return $.fn.textWidth.fakeEl.width();
-		};
+		//$(document).ready(function () {
+		//	$(".menu-5columns dt a, .menu-5columns dt span,.menu-5columns dd a").each(function (i, item) {
+        //
+			//	if ($(item).textWidth() >= 152) {
+			//		$(item).addClass("long-wrap");
+			//	}
+			//})
+		//});
+        //
+		//$.fn.textWidth = function (text, font) {
+		//	if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
+		//	$.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
+		//	return $.fn.textWidth.fakeEl.width();
+		//};
 
 		function listinghelper() {
 
