@@ -82,7 +82,8 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         //check if coupon expired
         $localeTime = Mage::getModel('core/date')->timestamp(time());
         $localeTimeF = date("Y-m-d H:i", $localeTime);
-        if ($couponM->getData('expiration_date') <= $localeTimeF) {
+        $expirationDate = $couponM->getData('expiration_date');
+        if (!empty($expirationDate) && $expirationDate <= $localeTimeF) {
             return Mage::helper('zolagomodago')->__('The coupon is expired');
         }
 
