@@ -60,6 +60,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                 'salesrule.rule_id = main_table.rule_id',
                 array('description', 'from_date', 'to_date', 'uses_per_customer', 'uses_per_coupon'));
         $couponCollection->addFieldToFilter('code', $code);
+        $couponCollection->addFieldToFilter('salesrule.is_active', 1);
         $couponCollection->addFieldToFilter('website_id', Mage::app()->getWebsite()->getId());
         $couponM = $couponCollection->getFirstItem();
 
