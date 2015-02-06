@@ -73,7 +73,7 @@
 				<script>solrsearch/autocompleteWidget.js</script>
 			</action>
 			<action method="removeItem">
-				<type>js</type>
+				<type>js_css</type>
 				<script>solrsearch/autocomplete.css</script>
 			</action>
 			<action method="removeItem">
@@ -104,10 +104,17 @@
 				<type>skin_css</type>
 				<stylesheet>solrsearch/css/style.css</stylesheet>
 			</action>
+			<action method="removeItem">
+				<type>skin_css</type>
+				<stylesheet>css/print.css</stylesheet>
+			</action>
 
 			<!--<action method="addCss">-->
 			<!--<stylesheet>css/font-awesome.css</stylesheet>-->
 			<!--</action>-->
+			<action method="addCss">
+				<stylesheet>css/lato.css</stylesheet>
+			</action>
 			<action method="addCss">
 				<stylesheet>css/bootstrap.css</stylesheet>
 			</action>
