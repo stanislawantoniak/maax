@@ -1074,10 +1074,6 @@ Mall.listing = {
         jQuery('.fb-slidebar').removeClass('open');
         jQuery('body').removeClass('noscroll');
         jQuery('body').find('.noscroll').remove();
-
-        //cancel fix for no scrool when mobile filters open
-        //jQuery(window).off('scrool');
-        jQuery(document).off('touchstart','.noscroll');
     },
 
 	/**
@@ -1549,13 +1545,6 @@ Mall.listing = {
 			jQuery('#sb-site').toggleClass('open');
 			jQuery('.fb-slidebar').toggleClass('open');
 			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + jQuery(window).height() + 'px"></div>');
-
-            //fix for no scrool when mobile filters open
-            jQuery(document).on('touchstart','.noscroll',function(e) {
-                if (jQuery(e.target).hasClass('noscroll')) {
-                    e.preventDefault();
-                }
-            });
 		});
 	},
 

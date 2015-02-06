@@ -47,6 +47,11 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         if (empty($code)) {
             return;
         }
+        $customerSession = Mage::getSingleton('customer/session');
+        $groupId = 0;
+        if($customerSession->isLoggedIn()){
+            $groupId    = Mage::getSingleton('customer/session')->getCustomerGroupId();
+        }
 
         /* @var $couponCollection Mage_SalesRule_Model_Resource_Coupon_Collection */
         $couponCollection = Mage::getModel('salesrule/coupon')
@@ -56,9 +61,14 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
             ->join(array('salesrule_website' => 'salesrule_website'),
                 'salesrule_website.rule_id = main_table.rule_id',
                 array('website_id'))
+            ->join(array('salesrule_customer_group' => 'salesrule_customer_group'),
+                'salesrule_customer_group.rule_id = main_table.rule_id',
+                array('customer_group_id'))
             ->join(array('salesrule' => 'salesrule'),
                 'salesrule.rule_id = main_table.rule_id',
                 array('description', 'from_date', 'to_date', 'uses_per_customer', 'uses_per_coupon'));
+        $couponCollection->addFieldToFilter('customer_group_id', $groupId);
+        $couponCollection->addFieldToFilter('salesrule.is_active', 1);
         $couponCollection->addFieldToFilter('code', $code);
         $couponCollection->addFieldToFilter('website_id', Mage::app()->getWebsite()->getId());
         $couponM = $couponCollection->getFirstItem();
@@ -96,7 +106,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              * INNER JOIN salesrule_customer scu ON sco.rule_id = scu.rule_id
              * GROUP BY scu.customer_id;
              */
-            $customerSession = Mage::getSingleton('customer/session');
+
             if ($customerSession->isLoggedIn()) {
                 $customer = $customerSession->getCustomer();
                 $customerId = $customer->getId();
@@ -112,7 +122,6 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                         $timesUsedByCustomer = $couponUsageByCustomerM->getTimesUsed();
 
                         if ($timesUsedByCustomer >= (int)$usagePerCustomer) {
-                            Mage::log('The coupon code has already been used by U ;)');
                             return Mage::helper('zolagomodago')->__('The coupon code has already been used.');
                         }
                     }
