@@ -1081,7 +1081,8 @@ Mall.listing = {
         jQuery('body').find('.noscroll').remove();
 
         //cancel fix for no scrool when mobile filters open
-        jQuery(window).off('scrool');
+        //jQuery(window).off('scrool');
+        jQuery(document).off('touchstart','.noscroll');
     },
 
 	/**
@@ -1556,10 +1557,11 @@ Mall.listing = {
 
             //fix for no scrool when mobile filters open
             self._currentTop = jQuery(window).scrollTop();
-            jQuery(window).scroll(function() {
-                console.log('nie skroluj!');
-                jQuery(this).scrollTop(self._currentTop);
-            })
+            //jQuery(window).scroll(function() {
+            //    console.log('nie skroluj!');
+            //    jQuery(this).scrollTop(self._currentTop);
+            //});
+            jQuery(document).on('touchstart','.noscroll',function(e) { e.preventDefault(); });
 		});
 	},
 
