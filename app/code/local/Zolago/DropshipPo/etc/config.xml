@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+	<global>
+		<helpers>
+			<udpo>
+				<rewrite>
+					<data>
+						Zolago_DropshipPo_Helper_Data
+					</data>
+				</rewrite>
+			</udpo>
+		</helpers>
+	</global>
+</config>

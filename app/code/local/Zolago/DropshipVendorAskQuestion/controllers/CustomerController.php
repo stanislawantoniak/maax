@@ -52,7 +52,7 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
                 catch (Exception $e) {
                     $error = true;
                     $this->_saveFormData($data);
-                    $session->addError($this->__('Unable to post the question.'));
+                    $session->addError($this->__('Unable to post the question. 2'));
                 }
             }
             else {
@@ -64,7 +64,7 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
                     }
                 }
                 else {
-                    $session->addError($this->__('Unable to post the question.'));
+                    $session->addError($this->__('Unable to post the question. 1'));
                 }
                 Mage::getSingleton('udqa/session')->setDataPopulate( $question );
             }
