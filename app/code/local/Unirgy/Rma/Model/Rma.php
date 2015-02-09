@@ -453,6 +453,8 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             ->setIsSecureMode(true);
         $paymentBlock->getMethod()->setStore($order->getStore()->getId());
 
+
+	    /** @var Zolago_Common_Model_Core_Email_Template $mailTemplate */
         $mailTemplate = Mage::getModel('zolagocommon/core_email_template');
 
         $template = Mage::getStoreConfig(self::XML_PATH_EMAIL_TEMPLATE, $order->getStoreId());
@@ -550,16 +552,18 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             'rma_url'                   => Mage::getUrl('sales/rma/view', array('id' => $this->getId())),
         ));
 
-        foreach ($sendTo as $recipient) {
-            $mailTemplate->setDesignConfig(array('area'=>'frontend', 'store'=>$order->getStoreId()))
-                ->sendTransactional(
-                    $template,
-                    Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $order->getStoreId()),
-                    $recipient['email'],
-                    $recipient['name'],
-                    $data
-                );
-        }
+	    if(isset($sendTo)) {
+		    foreach ($sendTo as $recipient) {
+			    $mailTemplate->setDesignConfig(array('area' => 'frontend', 'store' => $order->getStoreId()))
+				    ->send(
+					    $template,
+					    Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $order->getStoreId()),
+					    $recipient['email'],
+					    $recipient['name'],
+					    $data
+				    );
+		    }
+	    }
 
         $translate->setTranslateInline(true);
 
