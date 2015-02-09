@@ -553,7 +553,7 @@ jQuery.noConflict();
 
 		function galeriaProduktu(){
 // start
-			var lightbox = $("lightbox");
+			var lightbox = $("#lightbox");
 			var sync3 = lightbox.find("#sync3");
 			var sync4 = lightbox.find("#sync4");
 			var wrapperSync4 = $('#wrapper-sync4');
@@ -595,8 +595,8 @@ jQuery.noConflict();
 					}
 				},
 				afterInit:function(elem) {
-					var that = this
-					that.rwdControls.prependTo(elem)
+					var that = this;
+					that.rwdControls.prependTo(elem);
 					lightbox.find('.inner-item').css({visibility:'hidden'});
 					lightbox.find('#galeria-lightbox #sync3 .rwd-wrapper-outer').prepend('<div class="loader" style="text-align:center;"><img src="'+Config.path.ajaxLoader+'" /></div>')
 					imagesLoaded( document.querySelector('#galeria-lightbox #sync3 .rwd-item .item'), function( instance ) {
@@ -817,15 +817,9 @@ jQuery.noConflict();
 
 					$('#lightbox').css({display:'block'});
 
-					//$('#lightbox').find('.inner-item').css({visibility:'hidden'})
-
-					setTimeout(function(){
-						//$('#lightbox').find('.inner-item').css({visibility:'visible'})
-					}, 500);
 					$('body').addClass('lightbox');
 					galeriaProduktu();
 					$('body').addClass('lightbox');
-
 				}
 			});
 		}
