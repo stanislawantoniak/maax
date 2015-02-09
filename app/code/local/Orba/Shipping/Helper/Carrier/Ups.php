@@ -22,6 +22,12 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
     const UPS_STATUS_NOT_AVAILABLE = '111';
     const UPS_STATUS_NOT_AVAILABLE_2          = '222';
 
+    const UPS_TYPE_DELIVERED = 'D';
+    const UPS_TYPE_IN_TRANSIT = 'I';
+    const UPS_TYPE_EXCEPTION = 'X';
+    const UPS_TYPE_PICKUP = 'P';
+    const UPS_TYPE_MANIFEST_PICKUP = 'M';
+
     const UPS_HEADER = 'UPS tracking info';
     const UPS_DIR		= 'ups';
     const UPS_FILE_EXT	= 'pdf';
@@ -183,7 +189,66 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         $this->_processTrackStatus($_track, $result);
 
     }
+
+    /**
+     *
+     * @param string $code ups delivery code
+     * @param Mage_Sales_Model_Order_Shipment_Track $track
+     * @return string
+     */
+    protected function _parseStatusCode($code,$track) {
+        $status			= $this->__('Ready to Ship');
+        switch ($code) {
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED:
+            $status = $this->__('Delivered');
+            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
+            $track->setDeliveredDate(Varien_Date::now());
+            $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+            break;
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_EXCEPTION:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE_2:
+            $status = $this->__('Canceled');
+            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+            $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
+            break;
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_BILLING_RECEIVED:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_TRANSIT:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED_ORIGIN_CFS:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED_DESTINATION_CFS:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_WAREHOUSING:
+        case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_OUT_FOR_DELIVERY:
+            $status = $this->__('Shipped');
+            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
+            $track->setShippedDate(Varien_Date::now());
+            $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
+            break;
+        default:
+            break;
+        }
+        return $status;
+    }
     //}}}
+
+    /**
+     *
+     * @param
+     * @return
+     */
+    protected function _parseActivity($events,&$upsMessage) {
+        foreach ($events as $singleEvent) {
+            $description = isset($singleEvent->Description)? $singleEvent->Description: $singleEvent->Status->Description;
+            if (isset($singleEvent->ActivityLocation)) {
+                $location = isset($singleEvent->ActivityLocation->City)? $singleEvent->ActivityLocation->City: (empty($singleEvent->ActivityLocation->Address->City)? '':$singleEvent->ActivityLocation->Address->City);
+            } else {
+                $location = '';
+            }
+            $upsMessage[] =
+                $this->__('Description: ') . $description . PHP_EOL
+                . (empty($location)? '':($this->__('Terminal: ') . $location . PHP_EOL))
+                . $this->__('Time: ') . date('Y-m-d H:i:s',strtotime($singleEvent->Date.$singleEvent->Time)) . PHP_EOL.PHP_EOL;
+        }
+    }
     /**
      * Process Single Ups Track and Trace Record
      *
@@ -203,46 +268,61 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
             Mage::helper('orbashipping/carrier_ups')->_log('UPS Service Error: ' .$upsResult['error']);
             $upsMessage[] = 'UPS Service Error: ' .$upsResult['error'];
         }
-        elseif (property_exists($upsResult, 'Shipment')
-                && property_exists($upsResult->Shipment, 'Activity')) {
-            $shipmentIdMessage = $this->__('Tracking ID') . ': '. $upsResult->Shipment->InquiryNumber->Value . PHP_EOL;
-            switch ($upsResult->Shipment->CurrentStatus->Code) {
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED:
-                $status = $this->__('Delivered');
-                $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
-                $track->setShippedDate(Varien_Date::now());
-                $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
-                break;
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_EXCEPTION:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE_2:
-                $status = $this->__('Canceled');
-                $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
-                $track->setShippedDate(null);
-                $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
-                break;
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_BILLING_RECEIVED:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_TRANSIT:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED_ORIGIN_CFS:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED_DESTINATION_CFS:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_WAREHOUSING:
-            case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_OUT_FOR_DELIVERY:
-                $status = $this->__('Shipped');
-                $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
-                $track->setShippedDate(Varien_Date::now());
-                $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
-                break;
-            default:
-                break;
+        elseif (property_exists($upsResult, 'Shipment')) {
+            $number = empty($upsResult->Shipment->InquiryNumber->Value)? $upsResult->Shipment->ReferenceNumber->Value: $upsResult->Shipment->InquiryNumber->Value;
+            $shipmentIdMessage = $this->__('Tracking ID') . ': '. $number . PHP_EOL;
+            if (!empty($upsResult->Shipment->PickupDate))  {
+                    $date = strtotime($upsResult->Shipment->PickupDate);
+                    $track->setShippedDate(date('Y-m-d H:i:s',$date));
             }
+
+            if (!empty($upsResult->Shipment->CurrentStatus->Code)) {
+                $status = $this->_parseStatusCode($upsResult->Shipment->CurrentStatus->Code,$track);
+                if (isset($upsResult->Shipment->Activity)) {
+                    if (is_array($upsResult->Shipment->Activity)) {
+                        $events = array_reverse($upsResult->Shipment->Activity);
+                    } else {
+                        $events = array($upsResult->Shipment->Activity);
+                    }
+                    $this->_parseActivity($events,$upsMessage);
+                }
+            } elseif (!empty($upsResult->Shipment->Package)) {
             
-            $events = array_reverse($upsResult->Shipment->Activity);            
-            foreach ($events as $singleEvent) {
-                $upsMessage[] =
-                    $this->__('Description: ') . $singleEvent->Description . PHP_EOL
-                    . $this->__('Terminal: ') . $singleEvent->ActivityLocation->City . PHP_EOL
-                    . $this->__('Time: ') . date('Y-m-d H:i:s',strtotime($singleEvent->Date.$singleEvent->Time)) . PHP_EOL.PHP_EOL;
+                if (!is_array($upsResult->Shipment->Package)) {
+                    $package = array($upsResult->Shipment->Package);
+                } else {
+                    $package = $upsResult->Shipment->Package;
+                }
+                foreach ($package as $pack) {
+                    if ($pack->Activity) {
+                        if (is_array($pack->Activity)) {
+                            $events = $pack->Activity;
+                        } else {
+                            $events = array($pack->Activity);
+                        }
+                        $this->_parseActivity($events,$upsMessage);
+                        foreach ($events as $event) {
+                            if (isset($event->Status->Type)) {
+                                $trackingNumber = isset($event->TrackingNumber)? $event->TrackingNumber:'';
+                                if ($trackingNumber == $track->getTrackNumber) {
+                                    switch ($event->Status->Type) {
+                                    case Orba_Shipping_Helper_Carrier_Ups::UPS_TYPE_DELIVERED:
+                                        $status = $this->__('Delivered');
+                                        $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
+                                        $track->setDeliveredDate(date('Y-m-d H:i:s',strtotime($event->Date.$event->Time)));
+                                        $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+                                        break;
+                                    default:
+                                        ;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
+
         }
         else {
             //UPS Scenario: No T&T Data Recieved
