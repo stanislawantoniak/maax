@@ -77,6 +77,7 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 		foreach($this->getPoCollection() as $po){
 			/* @var $po Zolago_Po_Model_Po */
 			$po->getStatusModel()->processConfirmSend($po);
+			$po->setShipped();
 		}
 		$this->setStatus(Zolago_Po_Model_Aggregated_Status::STATUS_CONFIRMED);
 		$this->save();

@@ -73,7 +73,7 @@
 				<script>solrsearch/autocompleteWidget.js</script>
 			</action>
 			<action method="removeItem">
-				<type>js</type>
+				<type>js_css</type>
 				<script>solrsearch/autocomplete.css</script>
 			</action>
 			<action method="removeItem">
@@ -104,10 +104,17 @@
 				<type>skin_css</type>
 				<stylesheet>solrsearch/css/style.css</stylesheet>
 			</action>
+			<action method="removeItem">
+				<type>skin_css</type>
+				<stylesheet>css/print.css</stylesheet>
+			</action>
 
 			<!--<action method="addCss">-->
 			<!--<stylesheet>css/font-awesome.css</stylesheet>-->
 			<!--</action>-->
+			<action method="addCss">
+				<stylesheet>css/lato.css</stylesheet>
+			</action>
 			<action method="addCss">
 				<stylesheet>css/bootstrap.css</stylesheet>
 			</action>
@@ -245,11 +252,6 @@
 			</action>
 
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
-			<block type="core/text" name="addthis.javascript">
-				<action method="setText">
-					<text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
-				</action>
-			</block>
 		</reference>
 
 		<reference name="root">
@@ -261,13 +263,16 @@
 
 		<reference name="header">
 			<!-- <block type="page/html_header" name="header" as="header" template="page/html/header.phtml"> -->
-			<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml"/>
+			<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
+                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+			</block>
 			<block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml"/>
 			<block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
 			<block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
 			<block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml">
 			</block>
-			<block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
+
+            <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
 			<block type="zolagomodago/page_header_bottommenu" name="page.header.bottom.menu" template="page/html/header/bottom.menu.phtml"/>
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items" template="page/html/header/bottom.category.items.phtml"/>
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items.mobile" template="page/html/header/bottom.category.items.mobile.phtml"/>
@@ -666,6 +671,11 @@
 				<type>js</type>
 				<script>varien/configurable.js</script>
 			</action>
+			<block type="core/text" name="addthis.javascript">
+				<action method="setText">
+					<text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
+				</action>
+			</block>
 		</reference>
 
 	</catalog_product_view>

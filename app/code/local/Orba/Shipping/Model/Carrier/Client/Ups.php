@@ -58,8 +58,9 @@ class Orba_Shipping_Model_Carrier_Client_Ups extends Mage_Core_Model_Abstract {
             $soap->__setSoapHeaders($header);
             $result = $soap->$method($message);
         } catch (Exception $xt) {
+            $message = !empty($xt->detail->Errors->ErrorDetail->PrimaryErrorCode->Description)? $xt->detail->Errors->ErrorDetail->PrimaryErrorCode->Description:$xt->getMessage();
             $result = array(
-                          'error' => $xt->getMessage()
+                          'error' => $message,
                       );
         }
         return $result;
