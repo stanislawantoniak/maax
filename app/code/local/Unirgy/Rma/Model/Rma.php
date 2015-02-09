@@ -550,10 +550,11 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             'store_name'                => $store->getFrontendName(),
             'resolution_notes'          =>$this->getResolutionNotes(),
             'rma_url'                   => Mage::getUrl('sales/rma/view', array('id' => $this->getId())),
+	        'use_attachments'           => true
         ));
 
 
-	    /** @var Zolago_Common_Helper_Data $mailer_helper */
+	    /** @var Zolago_Common_Helper_Data $mailer */
 	    $mailer = Mage::helper('zolagocommon');
 	    if(isset($sendTo)) {
 		    foreach ($sendTo as $recipient) {
