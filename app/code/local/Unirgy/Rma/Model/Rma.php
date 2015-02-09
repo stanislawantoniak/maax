@@ -408,19 +408,24 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             'show_both_notes'       =>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
             'customer_notes'        =>$this->getStatusCustomerNotes(),
             'show_resolution_notes' =>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
-            'resolution_notes'      =>$this->getResolutionNotes()
+            'resolution_notes'      =>$this->getResolutionNotes(),
+	        'use_attachments'       => true
         ));
 
-        foreach ($sendTo as $recipient) {
-            $mailTemplate
-                ->sendTransactional(
-                    $template,
-                    Mage::getStoreConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $order->getStoreId()),
-                    $recipient['email'],
-                    $recipient['name'],
-                    $data
-                );
-        }
+	    /** @var Zolago_Common_Helper_Data $mailer */
+	    $mailer = Mage::helper('zolagocommon');
+	    if(isset($sendTo)) {
+		    foreach ($sendTo as $recipient) {
+			    $mailer->sendEmailTemplate(
+				    $recipient['email'],
+				    $recipient['name'],
+				    $template,
+				    $data,
+				    $order->getStoreId(),
+				    Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $order->getStoreId())
+			    );
+		    }
+	    }
 
         $hlp->setDesignStore();
 
