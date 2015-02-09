@@ -252,11 +252,6 @@
 			</action>
 
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
-			<block type="core/text" name="addthis.javascript">
-				<action method="setText">
-					<text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
-				</action>
-			</block>
 		</reference>
 
 		<reference name="root">
@@ -673,6 +668,11 @@
 				<type>js</type>
 				<script>varien/configurable.js</script>
 			</action>
+			<block type="core/text" name="addthis.javascript">
+				<action method="setText">
+					<text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
+				</action>
+			</block>
 		</reference>
 
 	</catalog_product_view>
