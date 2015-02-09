@@ -1102,7 +1102,7 @@ jQuery(document).ready(function() {
         }
     });
     jQuery(".size-box select").bind({
-        "change": function () {
+        "option-click": function () {
             var selectedOption = jQuery(this).find('option:selected');
             Mall.setSuperAttribute(selectedOption);
         }
