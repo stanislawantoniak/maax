@@ -9,7 +9,7 @@
     array_pop($key_withoutFacet);
 	$pureKey = implode("_", $key_withoutFacet);
     ?>
-    <div class="section clearfix">
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content filter-color"  id="filter_<?php echo $key; ?>">
     <?php foreach ($this->getItems() as $item => $count): ?>
@@ -78,13 +78,28 @@
             </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-
                 <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>"
                    data-filter-type="<?php echo $pureKey; ?>"
                    class="button button-third clear clearfilter-color">
 	                <?php echo $this->__("Clear"); ?></a>
             </div>
-
         </div>
+        <?php if($isOptionSelected) : ?>
+            <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
+                <div class="active-filter">
+                    <?php foreach ($this->getItems() as $item => $count): ?>
+                        <?php if ($this->getCanShowItem($item, $count) && $this->isItemActive($item)): ?>
+                            <a href="<?php echo $this->getItemUrl($item); ?>"
+                               class="active-filter-label"
+                               data-input="<?php echo $this->getItemId($item); ?>">
+                                <?php echo $this->getItemValue($item); ?><i class="fa fa-times"></i>
+                            </a>
+                            <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
+                                   value="<?php echo $this->getItemValue($item); ?>"/>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 <?php endif; ?>

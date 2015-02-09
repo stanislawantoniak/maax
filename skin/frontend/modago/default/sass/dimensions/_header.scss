@@ -71,17 +71,6 @@
             margin-left: 10px;
         }
     }
-    .toggleMenu {
-      @include sprite-dimensions($icoMapDesktop, ico_menu);
-      @include inline-block;
-        float: left;
-        top: 13px;
-        position: relative;
-        @include max-screen($screen-sm-max) {
-            height:18px;
-            width:17px;
-        }
-    }
     .block_search {
             float:left;
             
@@ -95,27 +84,6 @@
                 margin-right: 12.92517006802721%;
             };
         }    
-}
-
-#toggleSearch {
-    float:left;
-    @include max-screen($screen-sm) {
-        //margin-right: 29px;
-    }
-    @include screen(550px, $screen-xs-max) { 
-        margin-right :26%;
-    }  
-    @include screen($screen-xs, 549px) {
-        margin-right :13%;
-    }
-        > a { 
-          height: 56px;
-          width: 53px;
-          line-height: 48px;
-           @include max-screen($screen-sm-max) {
-                height: 45px;
-            }
-        }
 }
 
 /* USER MENU */

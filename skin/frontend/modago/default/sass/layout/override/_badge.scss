@@ -1,26 +1,61 @@
 .user-navigation {
-	a {
-		position:relative;
+	#link_favorites {
 		.badge {
-		    padding: 5px 5px 5px 3px;
-		    position:absolute;
-		    top:11px;
-		    right:10px;
-		   @include max-screen($screen-sm-max) {
-		        padding: 3px 3px 2px 2px;
-		        top:9px;
-		    	right:-3px;
-		   }
-		}
-		&.dropdown-toggle {
-			.badge {
-				right:15px;
-				top:11px;
-				 @include max-screen($screen-sm-max) {
-				 	right:4px;
-				 }
+			top: -1px !important;
+			@include max-screen($screen-sm-max) {
+				top: -6px !important;
+				&.badgeSingle {
+					right: -6px !important;
+				}
+				&.badgeDouble {
+					right: -10px !important;
+				}
+				&.badgeTriple {
+					right: -14px !important;
+				}
 			}
 		}
+	}
+
+	.badgeHolder {
+		position: relative;
+		width: 24px;
+		margin: 0 auto 3px auto;
+		.badge {
+			padding: 2px 4px 1px 2px;
+			position: absolute !important;
+			top: 0 !important;
+			right: -15px !important;
+			&.badgeSingle {
+				right: -7px !important;
+			}
+			&.badgeDouble {
+				right: -12px !important;
+			}
+			&.badgeTriple {
+				right: -18px !important;
+			}
+
+			@include max-screen($screen-sm-max) {
+				top: -5px !important;
+				padding: 3px 3px 2px 2px;
+				&.badgeSingle {
+					right: -4px !important;
+				}
+				&.badgeDouble {
+					right: -7px !important;
+				}
+				&.badgeTriple {
+					right: -10px !important;
+				}
+			}
+			@include max-screen(410px) {
+				right: -13px !important;
+			}
+		}
+	}
+	a {
+		position:relative;
 	}
 }
 
@@ -39,4 +74,7 @@
 }
 #link_basket {
     top: -1px;
+	&.open a {
+		border-bottom: 4px solid #2a2a2a;
+	}
 }

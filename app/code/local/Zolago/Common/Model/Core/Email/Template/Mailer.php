@@ -23,7 +23,7 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 	 * @return string
 	 */
 	public function getLogoFile() {
-		return "images/logo_header_lightbox.png";
+		return "images/logo_email.png";
 	}
 	
     /**

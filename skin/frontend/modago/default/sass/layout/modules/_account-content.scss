@@ -1,13 +1,14 @@
 .account-content {
     margin-top: 0px;
     @media (max-width: $screen-xs-max) {
-        margin-top: -51px;
+        margin-top: -33px;
     }
+    min-height: 400px;
 }
 
 .lower-breadcrumbs {
     #header-main {
-        @media (min-width: $screen-xs-max) {
+        @media (min-width: $screen-sm-min) {
             padding-top: 0px;
             padding-bottom: 0px;
         }

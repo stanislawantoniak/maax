@@ -362,21 +362,20 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED:
                     $status = $this->__('Delivered');
                     $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
-                    $track->setShippedDate(Varien_Date::now());
+                    $date = date('Y-m-d',strtotime($singleEvent->timestamp));
+                    $track->setDeliveredDate($date);
                     $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
                     $shipped = false;
                     break;
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_RETURNED:
                     $status = $this->__('Returned');
                     $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
-                    $track->setShippedDate(null);
                     $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
                     $shipped = false;
                     break;
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_WRONG:
                     $status = $this->__('Canceled');
                     $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
-                    $track->setShippedDate(null);
                     $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
                     $shipped = false;
                     break;
@@ -390,7 +389,8 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                     if (!$shipped) {
                         $status = $this->__('Shipped');
                         $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
-                        $track->setShippedDate(Varien_Date::now());
+                        $date = date('Y-m-d',strtotime($singleEvent->timestamp));
+                        $track->setShippedDate($date);
                         $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
                         $shipped = true;
                     }

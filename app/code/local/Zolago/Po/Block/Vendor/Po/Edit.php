@@ -456,4 +456,26 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			}
 		}
 	}
+
+    /**
+     * Return true/false if button/modal window can be shown for payment method for current PO
+     *
+     * @return bool
+     */
+    public function canShowPaymentDetails() {
+        $po = $this->getPo();
+        if ($po->isCod()) {
+            //Cash On Delivery Payment
+            return (bool) Mage::getStoreConfig("payment/cashondelivery/p_details");
+        } elseif($po->isPaymentBanktransfer()) {
+            //Bank Transfer Payment
+            return (bool) Mage::getStoreConfig("payment/banktransfer/p_details");
+        } elseif ($po->isPaymentDotpay()) {
+            //dotpay payment
+            return (bool) Mage::getStoreConfig("payment/dotpay/p_details");
+        } else {
+            //for some new method not implemented yet
+            return true;
+        }
+    }
 }

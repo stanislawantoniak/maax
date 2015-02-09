@@ -11,7 +11,7 @@
         $isSearch = $this->getIsSearch();
         $isParrentRoot = $this->getIsParentRootCategory();
     ?>
-	<div class="section clearfix">
+	<div class="section clearfix" data-xs-rolled="open" data-lg-rolled="<?php echo $sectionClass; ?>">
 		<h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
 		<div class="content" id="filter_category">
 			<dl>

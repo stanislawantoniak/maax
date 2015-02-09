@@ -9,26 +9,6 @@
   
 }
 
-#toggleSearch {
-    > a { 
-      @include inline-block;
-      text-align: center;
-      &::selection {
-        background: transparent; /* Safari */
-        }
-      &::-moz-selection {
-        background: transparent; /* Firefox */
-      }
-
-    }
-    &.open {
-        > a {
-            background: #2a2a2a;  
-        }
-       
-    }
-}
-
 /* USER MENU */
 .user-navigation  {
             @include reset-l;

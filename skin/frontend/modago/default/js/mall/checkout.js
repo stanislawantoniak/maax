@@ -103,7 +103,8 @@
 		if(candidateIndex > this.getTotalSteps()){
 			candidateIndex = this.getTotalSteps();
 		}
-		return this.go(candidateIndex);
+        jQuery('.messages i').click(); //don't show messages in next steeps
+        return this.go(candidateIndex);
 	}
 	
 	/**
