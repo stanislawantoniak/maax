@@ -333,7 +333,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             ->setIsSecureMode(true);
         $paymentBlock->getMethod()->setStore($order->getStore()->getId());
 
-        $mailTemplate = Mage::getModel('udropship/email');
+        $mailTemplate = Mage::getModel('zolagocommon/core_email_template');
 
         $template = Mage::getStoreConfig(self::XML_PATH_UPDATE_EMAIL_TEMPLATE, $order->getStoreId());
         if ($order->getCustomerIsGuest()) {
@@ -453,7 +453,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             ->setIsSecureMode(true);
         $paymentBlock->getMethod()->setStore($order->getStore()->getId());
 
-        $mailTemplate = Mage::getModel('udropship/email');
+        $mailTemplate = Mage::getModel('zolagocommon/core_email_template');
 
         $template = Mage::getStoreConfig(self::XML_PATH_EMAIL_TEMPLATE, $order->getStoreId());
         if ($order->getCustomerIsGuest()) {
