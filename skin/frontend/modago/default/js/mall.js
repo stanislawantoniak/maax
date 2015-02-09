@@ -186,18 +186,21 @@ var Mall = {
         }
         // replace favorites url
         jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
-		
-		// add footer persistent infos
-		var persistentContent = "";
-		if(data.content.persistent){
-			persistentContent = "<a href=\"" + data.content.persistent_url + "\">" + 
-				Mall.i18nValidation.__("remove_my_data_from_this_device", "Remove my data from device") + 
-				" <i class=\"fa fa-angle-right\"></i>" +
-				"</a>";
-		}
-		jQuery("#persistent-forget-mobile,#persistent-forget-desktop").
-				html(persistentContent);
-		
+
+        // add footer persistent infos
+        //but not in checkout
+        if (!jQuery('body').hasClass('checkout')) {
+            var persistentContent = "";
+            if (data.content.persistent) {
+                persistentContent = "<a href=\"" + data.content.persistent_url + "\">" +
+                Mall.i18nValidation.__("remove_my_data_from_this_device", "Remove my data from device") +
+                " <i class=\"fa fa-angle-right\"></i>" +
+                "</a>";
+            }
+            jQuery("#persistent-forget-mobile,#persistent-forget-desktop").
+                html(persistentContent);
+        }
+
 		// Process search context
 		var searchContext = jQuery(".search-context").html('');
 		if(data.content.search && data.content.search.select_options){
