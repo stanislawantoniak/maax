@@ -817,15 +817,9 @@ jQuery.noConflict();
 
 					$('#lightbox').css({display:'block'});
 
-					//$('#lightbox').find('.inner-item').css({visibility:'hidden'})
-
-					setTimeout(function(){
-						//$('#lightbox').find('.inner-item').css({visibility:'visible'})
-					}, 500);
 					$('body').addClass('lightbox');
 					galeriaProduktu();
 					$('body').addClass('lightbox');
-
 				}
 			});
 		}
