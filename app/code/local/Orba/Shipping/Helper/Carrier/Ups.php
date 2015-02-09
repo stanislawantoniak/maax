@@ -220,9 +220,7 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_OUT_FOR_DELIVERY:
             $status = $this->__('Shipped');
             $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
-            if (!$track->getShippedDate()) {
-                $track->setShippedDate(Varien_Date::now());
-            }
+            $track->setShippedDate(Varien_Date::now());
             $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
             break;
         default:
@@ -274,10 +272,8 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
             $number = empty($upsResult->Shipment->InquiryNumber->Value)? $upsResult->Shipment->ReferenceNumber->Value: $upsResult->Shipment->InquiryNumber->Value;
             $shipmentIdMessage = $this->__('Tracking ID') . ': '. $number . PHP_EOL;
             if (!empty($upsResult->Shipment->PickupDate))  {
-                if (!$track->getShippedDate()) {
                     $date = strtotime($upsResult->Shipment->PickupDate);
                     $track->setShippedDate(date('Y-m-d H:i:s',$date));
-                }
             }
 
             if (!empty($upsResult->Shipment->CurrentStatus->Code)) {

@@ -389,10 +389,8 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                     if (!$shipped) {
                         $status = $this->__('Shipped');
                         $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
-                        if (!$track->getShippedDate()) {
-                            $date = date('Y-m-d',strtotime($singleEvent->timestamp));
-                            $track->setShippedDate($date);
-                        }
+                        $date = date('Y-m-d',strtotime($singleEvent->timestamp));
+                        $track->setShippedDate($date);
                         $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
                         $shipped = true;
                     }

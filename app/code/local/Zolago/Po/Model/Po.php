@@ -746,7 +746,9 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      */
      public function setShipped() {
          $track = $this->getTracking();
-         $track->setShippedDate(Varien_Date::now());
-         $track->save();
+         if (!$track->getShippedDate()) {
+             $track->setShippedDate(Varien_Date::now());
+             $track->save();
+         }
      }
 }

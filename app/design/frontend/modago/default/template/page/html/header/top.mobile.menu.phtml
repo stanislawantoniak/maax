@@ -1,0 +1,5 @@
+<?php
+
+if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
+    echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-mobile')->toHtml();
+}
