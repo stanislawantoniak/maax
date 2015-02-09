@@ -955,7 +955,7 @@ function basket_dropdown() {
             jQuery("#dropdown-basket").show();
         }
     },function() {
-        if (!jQuery(".basket-dropdown:hover").length > 0 || !jQuery("#link_basket").is(":hover") || !jQuery("#dropdown_basket").is(":hover")) {
+        if (!jQuery(".basket-dropdown:hover").length > 0 || !jQuery("#link_basket:hover").length > 0 || !jQuery("#dropdown_basket:hover").length > 0) {
             jQuery("#link_basket").removeClass('open');
             jQuery("#dropdown-basket").hide();
         }
