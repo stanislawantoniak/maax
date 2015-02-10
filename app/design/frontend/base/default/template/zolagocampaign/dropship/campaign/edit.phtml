@@ -115,7 +115,7 @@
     </div>
 <?php endif; ?>
     <script type="text/javascript">
-        jQuery(function ($) {
+        jQuery(document).ready(function ($) {
 
             jQuery("#browseProducts form").submit(function (e) {
                 e.preventDefault();
@@ -139,7 +139,7 @@
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
-                            success: function(result){
+                            success: function (result) {
                                 jQuery(('#zolagocampaign_campaign_product_grid')).html(jQuery(result).find('#zolagocampaign_campaign_product_grid').html());
                                 jQuery("#zolagocampaign_campaign_product_grid_table .filter input")
                                     .addClass("form-control");
@@ -154,11 +154,11 @@
             });
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            jQuery(document).on('click', '.btn[data-action=remove]', function(e){
+            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
                 e.preventDefault();
                 var campaignId = jQuery("input[name=campaign_id]").val();
                 var path = jQuery(this).attr('href');
-                removeCampaignGridItemLink(path,campaignId);
+                removeCampaignGridItemLink(path, campaignId);
             })
             function removeCampaignGridItemLink(path, campaignId) {
                 var link = path + "campaignId/" + campaignId;
@@ -190,22 +190,18 @@
             });
 
 
-
             var urlTypeManual = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK; ?>';
             var urlTypeLandingPage = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE; ?>';
 
 
             var urlKeyContainer = jQuery(form).find('[name="url_key"]').parents('.form-group');
-            jQuery(document).ready(function(){
-                toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'),urlKeyContainer);
 
-                jQuery(form).find('input[name="url_type"]').on('change', function () {
-                    toggleUrlKeyField(jQuery(this),urlKeyContainer);
+            toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'), urlKeyContainer);
 
-                })
+            jQuery(form).find('input[name="url_type"]').on('change', function () {
+                toggleUrlKeyField(jQuery(this), urlKeyContainer);
+
             })
-
-
             function toggleUrlKeyField(element, toggleContainer) {
                 var type = element.val();
                 switch (type) {
