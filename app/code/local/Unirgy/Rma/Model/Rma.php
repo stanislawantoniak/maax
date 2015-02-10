@@ -333,7 +333,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             ->setIsSecureMode(true);
         $paymentBlock->getMethod()->setStore($order->getStore()->getId());
 
-        $mailTemplate = Mage::getModel('udropship/email');
+        $mailTemplate = Mage::getModel('zolagocommon/core_email_template');
 
         $template = Mage::getStoreConfig(self::XML_PATH_UPDATE_EMAIL_TEMPLATE, $order->getStoreId());
         if ($order->getCustomerIsGuest()) {
@@ -408,19 +408,24 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             'show_both_notes'       =>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
             'customer_notes'        =>$this->getStatusCustomerNotes(),
             'show_resolution_notes' =>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
-            'resolution_notes'      =>$this->getResolutionNotes()
+            'resolution_notes'      =>$this->getResolutionNotes(),
+	        'use_attachments'       => true
         ));
 
-        foreach ($sendTo as $recipient) {
-            $mailTemplate
-                ->sendTransactional(
-                    $template,
-                    Mage::getStoreConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $order->getStoreId()),
-                    $recipient['email'],
-                    $recipient['name'],
-                    $data
-                );
-        }
+	    /** @var Zolago_Common_Helper_Data $mailer */
+	    $mailer = Mage::helper('zolagocommon');
+	    if(isset($sendTo)) {
+		    foreach ($sendTo as $recipient) {
+			    $mailer->sendEmailTemplate(
+				    $recipient['email'],
+				    $recipient['name'],
+				    $template,
+				    $data,
+				    $order->getStoreId(),
+				    Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $order->getStoreId())
+			    );
+		    }
+	    }
 
         $hlp->setDesignStore();
 
@@ -453,7 +458,9 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             ->setIsSecureMode(true);
         $paymentBlock->getMethod()->setStore($order->getStore()->getId());
 
-        $mailTemplate = Mage::getModel('udropship/email');
+
+	    /** @var Zolago_Common_Model_Core_Email_Template $mailTemplate */
+        $mailTemplate = Mage::getModel('zolagocommon/core_email_template');
 
         $template = Mage::getStoreConfig(self::XML_PATH_EMAIL_TEMPLATE, $order->getStoreId());
         if ($order->getCustomerIsGuest()) {
@@ -548,18 +555,24 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             'store_name'                => $store->getFrontendName(),
             'resolution_notes'          =>$this->getResolutionNotes(),
             'rma_url'                   => Mage::getUrl('sales/rma/view', array('id' => $this->getId())),
+	        'use_attachments'           => true
         ));
 
-        foreach ($sendTo as $recipient) {
-            $mailTemplate->setDesignConfig(array('area'=>'frontend', 'store'=>$order->getStoreId()))
-                ->sendTransactional(
-                    $template,
-                    Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $order->getStoreId()),
-                    $recipient['email'],
-                    $recipient['name'],
-                    $data
-                );
-        }
+
+	    /** @var Zolago_Common_Helper_Data $mailer */
+	    $mailer = Mage::helper('zolagocommon');
+	    if(isset($sendTo)) {
+		    foreach ($sendTo as $recipient) {
+			    $mailer->sendEmailTemplate(
+				    $recipient['email'],
+				    $recipient['name'],
+				    $template,
+				    $data,
+				    $order->getStoreId(),
+				    Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $order->getStoreId())
+			    );
+		    }
+	    }
 
         $translate->setTranslateInline(true);
 

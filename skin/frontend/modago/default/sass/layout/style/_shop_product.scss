@@ -210,10 +210,14 @@
           .selectboxit {
             border-radius: 0;
             background-color: #fff;
-            border: solid 1px #afafaf;
+//            border: solid 1px #afafaf;
+            border-top: 1px solid #afafaf;
+            border-left: 1px solid #afafaf;
+            border-bottom: 1px solid #afafaf;
             width: 167px;
             &:hover {
               border-color:#4f4f4f;
+              border-right: 1px solid #4f4f4f;
             }
 
             .selectboxit-text {
@@ -234,6 +238,7 @@
               }
             }
           }
+
           .dropdown-menu > li > a {
             color: #1e1e1e;
             text-decoration: none;

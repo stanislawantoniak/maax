@@ -9,6 +9,7 @@ var Mall = {
     _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
+    _size_label: null,
 
     extend: function(subclass, superclass) {
         function Dummy(){}
@@ -186,18 +187,21 @@ var Mall = {
         }
         // replace favorites url
         jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
-		
-		// add footer persistent infos
-		var persistentContent = "";
-		if(data.content.persistent){
-			persistentContent = "<a href=\"" + data.content.persistent_url + "\">" + 
-				Mall.i18nValidation.__("remove_my_data_from_this_device", "Remove my data from device") + 
-				" <i class=\"fa fa-angle-right\"></i>" +
-				"</a>";
-		}
-		jQuery("#persistent-forget-mobile,#persistent-forget-desktop").
-				html(persistentContent);
-		
+
+        // add footer persistent infos
+        //but not in checkout
+        if (!jQuery('body').hasClass('checkout')) {
+            var persistentContent = "";
+            if (data.content.persistent) {
+                persistentContent = "<a href=\"" + data.content.persistent_url + "\">" +
+                Mall.i18nValidation.__("remove_my_data_from_this_device", "Remove my data from device") +
+                " <i class=\"fa fa-angle-right\"></i>" +
+                "</a>";
+            }
+            jQuery("#persistent-forget-mobile,#persistent-forget-desktop").
+                html(persistentContent);
+        }
+
 		// Process search context
 		var searchContext = jQuery(".search-context").html('');
 		if(data.content.search && data.content.search.select_options){
@@ -668,6 +672,7 @@ Mall.product = {
 
     clearAttributesContainer: function() {
         this._size_table_template = jQuery(".size-box").find("a.view-sizing")[0].outerHTML;
+        this._size_label = jQuery('.size-box .size-label').text();
         jQuery(".size-box").find("div.size").remove();
     },
 
@@ -687,7 +692,7 @@ Mall.product = {
             // create label group
             jQuery("<span/>", {
                 "class": "size-label size-label-radios",
-                "html": (group.label + ":")
+                "html": (this._size_label + ":")
             }).appendTo(groupElement);
 
             // create form group for options
@@ -730,7 +735,7 @@ Mall.product = {
                 // create label group
                 jQuery("<span/>", {
                     "class": "size-label col-sm-6 col-md-6 col-xs-12",
-                    "html": (group.label + ":")
+                    "html": (this._size_label + ":")
 
                 }).appendTo(groupElement);
 
@@ -1102,7 +1107,7 @@ jQuery(document).ready(function() {
         }
     });
     jQuery(".size-box select").bind({
-        "change": function () {
+        "option-click": function () {
             var selectedOption = jQuery(this).find('option:selected');
             Mall.setSuperAttribute(selectedOption);
         }
