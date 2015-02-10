@@ -6,7 +6,7 @@
 "Date To","Data do"
 "Price source","Źródło ceny"
 "Discount percent","Rabat"
-"Price SRP","Cena SRP"
+"Price SRP","Cena przekreślona"
 "Status","Status"
 "Action","Akcja"
 "Edit campaign","Edycja kampanii"
@@ -51,9 +51,9 @@
 "Strikeout price","Cena przekreślona"
 "Previous price","Poprzednia cena"
 "MSRP price","Cena przekreślona w produkcie"
-"Must be before corresponding end date","Must be before corresponding end date"
-"Must be after corresponding start date","Must be after corresponding start date"
-"Please enter start date or end date","Please enter start date or end date"
+"Must be before corresponding end date","Musi być przed datą końca"
+"Must be after corresponding start date","Musi być po dacie startu"
+"Please enter start date or end date","Proszę wprowadzić datę startu lub końca"
 "Creative is active.","Kreacja jest aktywna."
 "To edit","Kreację możesz edytować z poziomu"
 "go to campaign","kampanii"
@@ -75,4 +75,6 @@
 "Are you sure","Czy jesteś pewien"
 "Do you want to delete placement?","Czy chcesz usunąć kreację?"
 "Delete","Usuń"
+"Campaign does not exists","Kampania nie istnieje lub nie masz do niej uprawnień (cross-id)"
+
 
