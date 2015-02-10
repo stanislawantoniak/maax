@@ -9,6 +9,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 {
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON = "udqa/general/customer_new_question_confirmation";
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY = "udqa/general/vendor_email_identity";
+	const XML_PATH_EMAIL_CUTOMER_REPLY = 'udqa/general/customer_email_template';
 	
 	/**
 	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
@@ -36,7 +37,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			$helper->sendEmailTemplate(
 				$question->getCustomerEmail(), 
 				$question->getCustomerName(), 
-				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON, $storeId), 
+				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUTOMER_REPLY, $storeId),
 				$templateParams, 
 				$storeId,
 				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId)
@@ -46,7 +47,45 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 		}
         return parent::notifyCustomer($question);
     }
-    /**
+
+	/**
+	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
+	 * @return Zolago_DropshipVendorAskQuestion_Helper_Data $this
+	 */
+	public function notifyAdminCustomer($question)
+	{
+		/**
+		 * @todo add store_id to question
+		 */
+		$storeId = Mage::app()->getStore()->getId();
+		$vendor = Mage::helper("udropship")->getVendor($question->getVendorId());
+		$localVendorId = Mage::helper("udropship")->getLocalVendorId($storeId);
+		// Params
+		$templateParams = array(
+			"question"			=> $question,
+			"vendor"			=> $vendor,
+			"local_vendor"		=> $localVendorId && $localVendorId==$vendor->getId(),
+			"use_attachments"	=> true
+		);
+
+		$helper = Mage::helper("zolagocommon");
+		/* @var $helper Zolago_Common_Helper_Data */
+		$helper->sendEmailTemplate(
+			$question->getCustomerEmail(),
+			$question->getCustomerName(),
+			Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON, $storeId),
+			$templateParams,
+			$storeId,
+			Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId)
+		);
+
+		Mage::log("this function was used",null,"question.log");
+
+		return $this;
+	}
+
+
+	/**
      * Notify vendor agents
      *
      * @param $question
