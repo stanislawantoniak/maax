@@ -10,7 +10,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $this->setDefaultDir('desc');
         // Need
         $this->setGridClass('z-grid');
-        $this->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
+        $this->setTemplate("zolagocatalog/widget/grid.phtml");
 
     }
 
