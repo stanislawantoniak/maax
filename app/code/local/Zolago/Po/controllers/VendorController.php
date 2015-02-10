@@ -3,7 +3,7 @@
 class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract {
 
 
-    const EMAIL_TEMPLATE = "zolagopo_compose";
+    const XML_PATH_ZOLAGO_PO_COMPOSE_EMAIL_TEMPLATE = "udropship/purchase_order/zolagopo_compose";
 
     const ACTION_CONFIRM_STOCK = "confirm_stock";
     const ACTION_START_PACKING = "start_packing";
@@ -1428,8 +1428,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                               );
             $title = Mage::helper("zolagopo")->__("[%s] message of order #%s", $vendor->getVendorName(), $order->getIncrementId());
 
-            if(!$this->_sendEmailTemplate($order->getCustomerName(), $order->getCustomerEmail(), $title,
-                                          self::EMAIL_TEMPLATE, $templateParams, $store->getId())) {
+            if(!$this->_sendEmailTemplate($order->getCustomerName(),
+                $order->getCustomerEmail(),
+                $title,
+                Mage::getStoreConfig(self::XML_PATH_ZOLAGO_PO_COMPOSE_EMAIL_TEMPLATE, $store->getId()),
+                $templateParams,
+                $store->getId())) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Cannot send mail"));
             }
 
@@ -1543,7 +1547,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                           $template, $templateParams = array(), $storeId = null)
     {
         $emailTemplate = Mage::getModel("core/email_template");
-        /* @var $emailTempalte Mage_Core_Model_Email_Template */
+        /* @var $emailTemplate Mage_Core_Model_Email_Template */
 
 
         // Set required design parameters

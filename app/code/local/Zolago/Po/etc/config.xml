@@ -239,7 +239,7 @@
 		</fieldsets>
 		<template>
             <email>
-               <zolagopo_compose  translate="label" module="zolagopo">
+               <zolagopo_compose translate="label" module="zolagopo">
                    <label>PO Customer Message</label>
                    <file>zolagopo_compose.html</file>
                    <type>html</type>
@@ -256,6 +256,7 @@
         <udropship>
             <purchase_order>
                 <status_changed_shipped>udropship_purchase_order_status_changed_shipped</status_changed_shipped>
+                <zolagopo_compose>zolagopo_compose</zolagopo_compose>
 			</purchase_order>
 		</udropship>
 	</default>

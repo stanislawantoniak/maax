@@ -9,6 +9,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 {
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON = "udqa/general/customer_new_question_confirmation";
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY = "udqa/general/vendor_email_identity";
+	const XML_PATH_EMAIL_CUTOMER_REPLY = 'udqa/general/admin_customer_email_template';
 	
 	/**
 	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
@@ -36,7 +37,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			$helper->sendEmailTemplate(
 				$question->getCustomerEmail(), 
 				$question->getCustomerName(), 
-				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON, $storeId), 
+				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUTOMER_REPLY, $storeId),
 				$templateParams, 
 				$storeId,
 				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId)
@@ -46,7 +47,60 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 		}
         return parent::notifyCustomer($question);
     }
-    /**
+
+	/**
+	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
+	 * @return Zolago_DropshipVendorAskQuestion_Helper_Data $this
+	 */
+/*	public function notifyAdminCustomer($question)
+	{
+		$store = Mage::helper('udqa')->getStore($question);
+		if (Mage::helper('udqa')->isNotifyAdminCustomer($question)) {
+			Mage::helper('udropship')->setDesignStore($store);
+
+			$storeId = $store->getId();
+			$localVendorId = Mage::helper("udropship")->getLocalVendorId($storeId);
+			$identity = $store->getConfig('udqa/general/vendor_email_identity');
+			$vendor = Mage::helper("udropship")->getVendor($question->getVendorId());
+			$template = $store->getConfig('udqa/general/admin_customer_email_template');
+			$adminIdent = $store->getConfig('udqa/general/admin_email_identity');
+
+			$data = array(
+				'store' => $store,
+				'store_name' => $store->getName(),
+				'customer_name' => $question->getCustomerName(),
+				'customer_email' => $question->getCustomerEmail(),
+				'vendor' => Mage::helper("udropship")->getVendor($question->getVendorId()),
+				'vendor_name' => $question->getVendorName(),
+				'vendor_email' => $question->getVendorEmail(),
+				'local_vendor'		=> $localVendorId && $localVendorId==$vendor->getId(),
+				'question' => $question,
+				'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
+				'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+				'use_attachements' => true
+			);
+
+			$helper = Mage::helper("zolagocommon");
+			/* @var $helper Zolago_Common_Helper_Data
+			$helper->sendEmailTemplate(
+				Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/email', $store),
+				Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/name', $store),
+				$template,
+				$data,
+				$storeId,
+				$identity
+			);
+
+			$question->setIsAdminAnswerNotified(1);
+			Mage::getResourceSingleton('udropship/helper')->updateModelFields($question, array('is_admin_answer_notified'));
+
+			Mage::helper('udropship')->setDesignStore();
+		}
+		return $this;
+	}*/
+
+
+	/**
      * Notify vendor agents
      *
      * @param $question
