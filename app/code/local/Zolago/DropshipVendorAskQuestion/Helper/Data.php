@@ -81,7 +81,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			);
 
 			$helper = Mage::helper("zolagocommon");
-			/* @var $helper Zolago_Common_Helper_Data */
+			/* @var $helper Zolago_Common_Helper_Data
 			$helper->sendEmailTemplate(
 				Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/email', $store),
 				Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/name', $store),
