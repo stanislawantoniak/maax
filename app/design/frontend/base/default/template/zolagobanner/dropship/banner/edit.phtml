@@ -28,7 +28,7 @@ $captionsNumber = (int)$config->captions_number;
 				<?php if($this->isModelNew()):?>
 					<?php echo Mage::helper("zolagobanner")->__("New campaign creative");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit campaign creative '%s'", $_model->getName());?>
+					<?php echo Mage::helper("zolagobanner")->__("Edit campaign creative '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
