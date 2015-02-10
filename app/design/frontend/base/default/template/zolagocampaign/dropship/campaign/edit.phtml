@@ -115,11 +115,12 @@
     </div>
 <?php endif; ?>
     <script type="text/javascript">
-        jQuery(document).ready(function () {
+        var j = jQuery.noConflict();
+        j(document).ready(function () {
 
-            jQuery("#browseProducts form").submit(function (e) {
+            j("#browseProducts form").submit(function (e) {
                 e.preventDefault();
-                var campaignProductsSource = jQuery("textarea[name=campaign_products_source]").val();
+                var campaignProductsSource = j("textarea[name=campaign_products_source]").val();
 
                 if (campaignProductsSource.length <= 0) {
                     noty({
@@ -129,19 +130,19 @@
                     });
                 } else {
                     //push products to campaign form field
-                    jQuery("input[name=campaign_products]").val(campaignProductsSource);
-                    jQuery("#browseProducts").modal("hide");
+                    j("input[name=campaign_products]").val(campaignProductsSource);
+                    j("#browseProducts").modal("hide");
                     //update grid if edit
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
-                        jQuery.ajax({
+                        j.ajax({
                             url: '/campaign/vendor/products',
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
                             success: function (result) {
-                                jQuery(('#zolagocampaign_campaign_product_grid')).html(jQuery(result).find('#zolagocampaign_campaign_product_grid').html());
-                                jQuery("#zolagocampaign_campaign_product_grid_table .filter input")
+                                j(('#zolagocampaign_campaign_product_grid')).html(j(result).find('#zolagocampaign_campaign_product_grid').html());
+                                j("#zolagocampaign_campaign_product_grid_table .filter input")
                                     .addClass("form-control");
                             }
                         })
@@ -149,15 +150,15 @@
                 }
             });
 
-            jQuery("#browseProducts").on("show.bs.modal", function () {
+            j("#browseProducts").on("show.bs.modal", function () {
                 console.log("Init loading products")
             });
-            jQuery(".grid table .filter input,.grid table .filter select")
+            j(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
+            j(document).on('click', '.btn[data-action=remove]', function (e) {
                 e.preventDefault();
-                var campaignId = jQuery("input[name=campaign_id]").val();
-                var path = jQuery(this).attr('href');
+                var campaignId = j("input[name=campaign_id]").val();
+                var path = j(this).attr('href');
                 removeCampaignGridItemLink(path, campaignId);
             })
             function removeCampaignGridItemLink(path, campaignId) {
@@ -165,11 +166,11 @@
                 window.location = link;
             }
 
-            jQuery('.datetimepicker').datetimepicker({
+            j('.datetimepicker').datetimepicker({
                 format: 'd-m-Y H:i'
             });
 
-            var form = jQuery("#edit-campaign");
+            var form = j("#edit-campaign");
             new Zolago.formIntegrator(form);
             form.validate({
                 rules: {
@@ -194,12 +195,12 @@
             var urlTypeLandingPage = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE; ?>';
 
 
-            var urlKeyContainer = jQuery(form).find('[name="url_key"]').parents('.form-group');
+            var urlKeyContainer = j(form).find('[name="url_key"]').parents('.form-group');
 
-            toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'), urlKeyContainer);
+            toggleUrlKeyField(j(form).find('input[name="url_type"]:checked'), urlKeyContainer);
 
-            jQuery(form).find('input[name="url_type"]').on('change', function () {
-                toggleUrlKeyField(jQuery(this), urlKeyContainer);
+            j(form).find('input[name="url_type"]').on('change', function () {
+                toggleUrlKeyField(j(this), urlKeyContainer);
 
             })
             function toggleUrlKeyField(element, toggleContainer) {
