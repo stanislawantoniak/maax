@@ -125,6 +125,10 @@ body {
 			text-align: right;
 			@include  max-screen($screen-sm-max) {
 				margin-top: -3px;
+				height: 54px !important;
+				&#link_search.open {
+					height: 57px !important;
+				}
 			}
             @include min-screen($screen-md) {
                 position: relative;
@@ -133,11 +137,14 @@ body {
                 padding: 0 0 0 0;
                 margin-left: 0;
                 width: 84px;
-                height:54px;
+                height:58px;
                 display:inline-block;
 	            vertical-align: top;
 	            cursor: pointer;
 
+	            &#link_basket {
+		            height: 61px;
+	            }
 	            a:hover,&.open {
 		            background-color: #2A2A2A;
 	            }
@@ -184,9 +191,6 @@ body {
 	            }
 	            &#link_search .header_icon {
 		            margin-top: -1px;
-	            }
-	            &#link_basket a:hover {
-		            border-bottom: 3px solid #2a2a2a;
 	            }
             }
             a {
