@@ -46,6 +46,9 @@
     </zolagocampaign_vendor_products>
 
     <zolagocampaign_placement_index>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>../../../frontend/default/udropship/css/zolagocampaign.css</name></action>
+        </reference>
         <update handle="udropship_vendor" />
         <update handle="adminhtml_head" />
         <update handle="bootstrap"/>
