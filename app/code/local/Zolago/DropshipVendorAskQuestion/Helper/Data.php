@@ -52,7 +52,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
 	 * @return Zolago_DropshipVendorAskQuestion_Helper_Data $this
 	 */
-	public function notifyAdminCustomer($question)
+/*	public function notifyAdminCustomer($question)
 	{
 		$store = Mage::helper('udqa')->getStore($question);
 		if (Mage::helper('udqa')->isNotifyAdminCustomer($question)) {
@@ -97,7 +97,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			Mage::helper('udropship')->setDesignStore();
 		}
 		return $this;
-	}
+	}*/
 
 
 	/**
