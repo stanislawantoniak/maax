@@ -14,6 +14,10 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Mage_Core_Model_Cookie
+	 */
 	public function getCookieModel() {
 		if(!$this->_cookie){
 			$this->_cookie = Mage::getModel('core/cookie');
@@ -56,6 +60,12 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 	public function getWishlist() {
 		$session = Mage::getSingleton("customer/session");
 		/* @var $session Mage_Customer_Model_Session */
+		
+		// If wishlis registered by action controller just return it
+		if(Mage::registry('wishlist')){
+			return Mage::registry('wishlist');
+		}
+		
 		if(!$session->isLoggedIn()){
 			$wishlist = Mage::getModel("wishlist/wishlist");
 			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
@@ -92,8 +102,8 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 				}
 			}
 			
-			
-			return $wishlist;
+			// Parent function should recoginize as not null and return it 
+			$this->_wishlist = $wishlist;
 		}
 		return parent::getWishlist();
 	}
