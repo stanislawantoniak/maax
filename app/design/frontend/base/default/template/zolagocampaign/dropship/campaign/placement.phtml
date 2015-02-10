@@ -17,18 +17,21 @@ $categoriesList = $this->getVendorCategoriesList();
                 <div class="col-md-12">
                     <div class="widget box">
                         <div class="widget-header">
-                            <h4><i class="icon-pin-flag"></i><?php echo $category['name']; ?></h4>
-                            <div class="toolbar no-padding">
-                                <h4><i class="icon-pin-flag"></i>
-                                    <a href="<?php echo $category['edit_url']; ?>"><?php echo $_helper->__('Edit'); ?>
-                                    </a></h4>
+                            <a class="widget-header-link" href="<?php echo $category['edit_url']; ?>">
+                                <h4><i class="icon-pin-flag"></i><?php echo $category['name']; ?></h4>
 
-                                <div class="btn-group">
+                                <div class="toolbar no-padding">
+                                    <h4><i class="icon-pin-flag"></i>
+                                        <?php echo $_helper->__('Edit'); ?>
+                                    </h4>
+
+                                    <div class="btn-group">
                                     <span class="btn btn-xs widget-collapse">
                                         <i class="icon-angle-up"></i>
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <!--<div class="widget-content banner-type" style="display: block;">
                            Category content
