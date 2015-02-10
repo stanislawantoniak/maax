@@ -164,7 +164,7 @@ sub vcl_recv {
         }
         # no frontend cookie was sent to us
         if (req.http.Cookie !~ "frontend=") {
-            if (client.ip ~ crawler_acl ||
+            if (client.ip ~ crawler_acl &&
                     req.http.User-Agent ~ "^(?:{{crawler_user_agent_regex}})$") {
                 # it's a crawler, give it a fake cookie
                 set req.http.Cookie = "frontend=crawler-session";
@@ -357,7 +357,9 @@ sub vcl_fetch {
 }
 
 sub vcl_deliver {
+	set resp.http.X-Varnish-Hassession = 0;
     if (req.http.X-Varnish-Faked-Session) {
+		set resp.http.X-Varnish-Hassession = 1;
         # need to set the set-cookie header since we just made it out of thin air
         call generate_session_expires;
         set resp.http.Set-Cookie = req.http.X-Varnish-Faked-Session +
