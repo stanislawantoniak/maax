@@ -159,6 +159,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 return $this->_redirectReferer();
             }
             $this->_getSession()->addSuccess($helper->__("Campaign has been saved"));
+            $campaignId = $campaign->getId();
+            if ($campaign->isObjectNew() && !empty($campaignId)) {
+                return $this->_redirect("*/*/edit/id/" . $campaignId);
+            }
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
@@ -169,8 +173,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             Mage::logException($e);
             return $this->_redirectReferer();
         }
-
-
 
         return $this->_redirect("*/*");
 	}
