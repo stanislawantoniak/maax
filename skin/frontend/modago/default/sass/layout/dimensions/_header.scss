@@ -126,9 +126,7 @@ body {
 			@include  max-screen($screen-sm-max) {
 				margin-top: -3px;
 				height: 54px !important;
-				&#link_search.open {
-					height: 57px !important;
-				}
+
 			}
             @include min-screen($screen-md) {
                 position: relative;
@@ -142,11 +140,14 @@ body {
 	            vertical-align: top;
 	            cursor: pointer;
 
-	            &#link_basket {
-		            height: 61px;
-	            }
 	            a:hover,&.open {
 		            background-color: #2A2A2A;
+	            }
+
+	            @include min-screen($screen-md-min) {
+		            &#link_basket {
+			            height: 61px;
+		            }
 	            }
 
                 @include max-screen($screen-sm-max) {
@@ -154,6 +155,9 @@ body {
 	                &:hover {
 		                background-color: #2A2A2A;
 	                }
+	                &#link_search.open {
+		                 height: 57px !important;
+	                 }
                 }
 	            @include max-screen(410px) {
 		            width: 50px;
