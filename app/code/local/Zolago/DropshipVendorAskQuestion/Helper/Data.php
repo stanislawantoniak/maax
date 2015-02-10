@@ -60,7 +60,6 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
         if (self::isNotifyVendorAgents($question)) {
             Mage::helper('udropship')->setDesignStore($store);
             $emails = array();
-            $tpl = Mage::getModel('zoloagocommon/core_email_template');
 
             $vendorId = $question->getVendorId();
 
