@@ -60,7 +60,6 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
         if (self::isNotifyVendorAgents($question)) {
             Mage::helper('udropship')->setDesignStore($store);
             $emails = array();
-            $tpl = Mage::getModel('core/email_template');
 
             $vendorId = $question->getVendorId();
 
@@ -88,13 +87,21 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                     'question'           => $question,
                     'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
                     'show_vendor_info'   => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+	                'use_attachments'    => true
                 );
 
+	            /** @var Zolago_Common_Helper_Data $mailer */
+	            $mailer = Mage::helper('zolagocommon');
                 foreach ($emails as $email => $_) {
                     $data['vendor_name'] = implode(' ', array($_['firstname'], $_['lastname']));
-                    $tpl
-                        ->sendTransactional($template, $identity, $email, $question->getVendorName(), $data);
-
+	                $mailer->sendEmailTemplate(
+		                $email,
+		                $data['vendor_name'],
+		                $template,
+		                $data,
+		                $store->getId(),
+		                $identity
+	                );
                 }
                 unset($email);
                 unset($_);
