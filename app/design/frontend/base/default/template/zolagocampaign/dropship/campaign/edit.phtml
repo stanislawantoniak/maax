@@ -22,9 +22,10 @@
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 
-
-
-		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+		<div class="form-actions">
+            <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
+            <a href="<?php echo Mage::getUrl('campaign/vendor'); ?>" class="btn btn-default pull-right"><?php echo $_helper->__("Cancel");?></a>
+        </div>
 	</form>
 </div>
 
