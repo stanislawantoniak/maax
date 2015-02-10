@@ -49,7 +49,7 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
                     Mage::helper('wishlist')->__("Requested wishlist doesn't exist")
                 );
             }
-
+			Mage::log("Wishlist in registry " . $wishlist->getId() . " " . $wishlist->getSharingCode());
             Mage::register('wishlist', $wishlist);
         } catch (Mage_Core_Exception $e) {
             Mage::getSingleton('wishlist/session')->addError($e->getMessage());
@@ -72,6 +72,7 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
 		$wishlist = $this->_getWishlist();
 		if(!$wishlist->getId()){
 			$wishlist->save();
+			Mage::log("Saving..." . $wishlist->getId() . " " . $wishlist->getSharingCode());
 		}
 		return parent::_addItemToWishList();
 	}

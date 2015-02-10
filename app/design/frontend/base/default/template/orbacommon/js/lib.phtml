@@ -2,10 +2,10 @@ var OrbaLib = {
 	Wishlist: {
 		/** @todo add form_key **/
 		add: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/add', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/add', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
         },
 		remove: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/remove', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/remove', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
         },
 	},
 	Customer: {
