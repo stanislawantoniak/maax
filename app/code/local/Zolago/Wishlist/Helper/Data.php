@@ -66,7 +66,7 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 			return Mage::registry('wishlist');
 		}
 		
-		if(!$session->isLoggedIn()){
+		if(is_null($this->_wishlist) && !$session->isLoggedIn()){
 			$wishlist = Mage::getModel("wishlist/wishlist");
 			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
 			
