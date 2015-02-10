@@ -235,10 +235,10 @@ select.form-control {
   min-height: 24px;
 }
 .shipping-info .dl-horizontal.dl-z dt {
-  width: 100px;
+  width: 150px;
 }
 .shipping-info .dl-horizontal.dl-z dd {
-  margin-left: 120px;
+  margin-left: 160px;
 }
 .widget-content.orders,
 .widget-content.rma {
