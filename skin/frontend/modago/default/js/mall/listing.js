@@ -1646,7 +1646,14 @@ Mall.listing = {
 	initSortEvents: function(scope){
 		var sortingSelect = this.getSortSelect(scope),
 			self = this;
-		sortingSelect.selectbox();
+		//sortingSelect.selectbox();
+        sortingSelect.selectBoxIt({
+            autoWidth: false,
+            native: false,
+            isMobile: function(){
+                return false;
+            }
+        });
 		if(this.getPushStateSupport()) {
 			sortingSelect.change(function () {
 				var selected = jQuery(this).find(":selected");
@@ -2578,8 +2585,10 @@ Mall.listing = {
 		} else {
 			select.val(select.find(":first-child").val());
 		}
-		select.selectbox('detach');
-		select.selectbox('attach');
+		//select.selectbox('detach');
+		//select.selectbox('attach');
+        select.selectBoxIt('destroy');
+        select.selectBoxIt();
 		return this;
 	},
 	/**

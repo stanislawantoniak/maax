@@ -1,110 +1,114 @@
-.styledSelected {
-  .selectboxit-container {
-    .selectboxit {
-      background-image: none;
-      border-radius: 0;
+.selectboxit-container {
+  .selectboxit {
+    background-image: none;
+    border-radius: 0;
+    background-color: #fff;
+    border-color: #ccc;
+
+    &:hover {
+      border-color: #4f4f4f;
       background-color: #fff;
-      border-color: #ccc;
-      //      width: 167px;
-      &:hover {
-        border-color: #4f4f4f;
-        background-color: #fff;
-      }
-      &:focus {
-        border-color: #4f4f4f;
-        box-shadow: none;
-      }
 
-      .selectboxit-text {
-        color: #1e1e1e;
-        text-decoration: none;
-        //        text-indent: 10px;
-        font-family: Arial, sans-serif;
-        font-size: 12px;
-        font-weight: normal;
-      }
-      .selectboxit-arrow-container {
-        background: $selectMap;
-        @include sprite($selectMap, select_styled);
-        line-height: image-height(sprite-file($selectMap, select_styled));
-        height: 29px;
-        width: 29px;
+    }
+    &:focus {
+      border-color: #4f4f4f;
+      background-color: #fff;
+      box-shadow: none;
 
-        .caret {
-          border: none;
-        }
-        .selectboxit-arrow {
-          border: none;
-        }
-      }
     }
 
-    .dropdown-menu > li > a {
+    .selectboxit-text {
       color: #1e1e1e;
       text-decoration: none;
-      background-color: #ffffff;
-      //      text-indent: 10px;
+      //        text-indent: 10px;
       font-family: Arial, sans-serif;
       font-size: 12px;
       font-weight: normal;
     }
-    .dropdown-menu .active > a,
-    .dropdown-menu .active > a:hover,
-    .dropdown-menu .active > a:focus {
-      color: #1e1e1e;
-      background: #f2f1f0;
-    }
+    .selectboxit-arrow-container {
+      background: $selectMap;
+      @include sprite($selectMap, select_styled);
+      line-height: image-height(sprite-file($selectMap, select_styled));
+      height: 29px;
+      width: 29px;
 
-
-    .selectboxit-list .selectboxit-option-anchor {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      font-weight: normal;
-      color: #333333;
-    }
-    .selectboxit-list > .selectboxit-focus > .selectboxit-option-anchor {
-      color: #1e1e1e;
-      background: #f2f1f0;
-      background-image: none;
-      background-repeat: repeat-x;
-    }
-    .selectboxit-list > .selectboxit-disabled > .selectboxit-option-anchor {
-      color: #999999;
-    }
-
-
-    .selectboxit-options {
-
-      /* Set's the drop down options width to the same width as the drop down button */
-      //      width: 167px;
-
-      /* Set's the max-height property to only show a subset of the drop down items.
-         If you do not set a max-height property, SelectBoxIt will dynamically
-         position the dropdown (when opened) to make sure the drop down items are not
-         displayed outside of the current window viewport.
-      */
-      max-height: 200px;
-
-      border-radius: 0;
-      background-color: #fff;
-      border-color: #afafaf;
-      z-index: 100;
-      box-shadow: none;
-      .selectboxit-option {
-
-        a {
-          color: #1e1e1e;
-          text-decoration: none;
-        }
-
+      .caret {
+        border: none;
       }
-
+      .selectboxit-arrow {
+        border: none;
+      }
     }
   }
 
+  .dropdown-menu > li > a {
+    color: #1e1e1e;
+    text-decoration: none;
+    background-color: #ffffff;
+    //      text-indent: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+  }
+  .dropdown-menu .active > a,
+  .dropdown-menu .active > a:hover,
+  .dropdown-menu .active > a:focus {
+    color: #1e1e1e;
+    background: #f2f1f0;
+  }
+
+  .selectboxit-list .selectboxit-option-anchor {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    color: #333333;
+  }
+  .selectboxit-list > .selectboxit-focus > .selectboxit-option-anchor {
+    color: #1e1e1e;
+    background: #f2f1f0;
+    background-image: none;
+    background-repeat: repeat-x;
+  }
+  .selectboxit-list > .selectboxit-disabled > .selectboxit-option-anchor {
+    color: #999999;
+  }
+
+  .selectboxit-options {
+
+    /* Set's the drop down options width to the same width as the drop down button */
+    //      width: 167px;
+
+    /* Set's the max-height property to only show a subset of the drop down items.
+       If you do not set a max-height property, SelectBoxIt will dynamically
+       position the dropdown (when opened) to make sure the drop down items are not
+       displayed outside of the current window viewport.
+    */
+    max-height: 200px;
+
+    border-radius: 0;
+    background-color: #fff;
+    border-color: #afafaf;
+    z-index: 100;
+    box-shadow: none;
+    .selectboxit-option {
+      a {
+        color: #1e1e1e;
+        text-decoration: none;
+      }
+
+    }
+
+  }
 }
+
 .cart-qty-field {
   .selectboxit {
     width: 60px;
+  }
+}
+
+.sort-by-container {
+  .selectboxit {
+    width: 160px;
   }
 }
