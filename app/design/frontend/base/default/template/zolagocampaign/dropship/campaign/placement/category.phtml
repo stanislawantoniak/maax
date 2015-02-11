@@ -127,17 +127,17 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                     <?php echo $placement['status']['message']; ?>
 
                                                                     <?php if($placement['show_edit_link']): ?>
-                                                                    To edit <a data-edit-val="link-edit" href=""
+                                                                        <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
                                                                        target="_blank">
-                                                                        <?php echo $_helper->__('go to campaign'); ?>
-                                                                    </a>.
+                                                                        <?php echo $_helper->__('go to campaign.'); ?>
+                                                                    </a>
                                                                      <?php endif; ?>
                                                                         <?php else:?>
                                                                         <?php if($placement['show_edit_link']): ?>
-                                                                        To edit <a data-edit-val="link-edit" href=""
+                                                                            <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
                                                                                    target="_blank">
-                                                                            <?php echo $_helper->__('go to campaign'); ?>
-                                                                        </a>.
+                                                                            <?php echo $_helper->__('go to campaign.'); ?>
+                                                                        </a>
                                                                         <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 </span>

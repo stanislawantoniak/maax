@@ -14,8 +14,7 @@
 "Save","Zapisz"
 "Image is required","Obrazek jest wymagany"
 "This field is required.","To pole jest wymagane."
-"Top caption: url","Top caption: url"
-"Top caption: text","Top caption: text"
-"Bottom caption: url","Bottom caption: url"
-"Bottom caption: text","Bottom caption: text"
-
+"Top caption: url","Górny napis: url"
+"Top caption: text","Górny napis: tekst"
+"Bottom caption: url","Dolny napis: url"
+"Bottom caption: text","Dolny napis: tekst"
