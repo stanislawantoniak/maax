@@ -3,7 +3,7 @@
  * @homepage http://xdsoft.net/jqplugins/datetimepicker/
  * (c) 2014, Chupurnov Valeriy.
  */
-(function($) {
+;(function ($) {
     'use strict';
     var default_options  = {
         i18n:{
@@ -1434,7 +1434,7 @@
         });
     };
     $.fn.datetimepicker.defaults = default_options;
-})( jQuery );
+})(jQuery);
 
 /*
  * Copyright (c) 2013 Brandon Aaron (http://brandonaaron.net)
