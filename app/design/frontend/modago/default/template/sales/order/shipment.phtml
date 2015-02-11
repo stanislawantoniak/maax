@@ -37,7 +37,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 	<div class="sales-order-shipment">
 		<div class="shipment-top">
 			<span class="order-top-title"><?php echo $_helper->__('delivery'); ?></span>
-			<span><?php echo ($paid ? 'opłacone' : 'nieopłacone')." | status: ".$status ?></span><br/>
 			<?php if(
 				!$paid &&
 				($status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_ACK ||
