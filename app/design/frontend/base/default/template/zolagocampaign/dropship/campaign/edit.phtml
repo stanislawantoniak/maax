@@ -115,7 +115,7 @@
     </div>
 <?php endif; ?>
     <script type="text/javascript">
-        jQuery(document).ready(function ($) {
+        jQuery(document).ready(function () {
 
             jQuery("#browseProducts form").submit(function (e) {
                 e.preventDefault();
@@ -134,7 +134,7 @@
                     //update grid if edit
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
-                        $.ajax({
+                        jQuery.ajax({
                             url: '/campaign/vendor/products',
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
