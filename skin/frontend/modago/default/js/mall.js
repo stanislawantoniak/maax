@@ -1112,7 +1112,8 @@ jQuery(document).ready(function() {
     });
     jQuery('#shopping-cart .select-styled').selectBoxIt({
         //theme: "bootstrap",
-        native: Mall.getIsBrowserMobile()
+        native: false,
+        isMobile: false
     });
 
 
