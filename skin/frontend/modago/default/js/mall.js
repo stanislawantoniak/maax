@@ -163,7 +163,7 @@ var Mall = {
         data.content.cart.products_count_msg = Mall.i18nValidation.__("products_count_msg", "See your cart");
         data.content.cart.products_worth_msg = Mall.i18nValidation.__("products_worth_msg", "See your cart");
         data.content.cart.shipping_cost_msg = Mall.i18nValidation.__("shipping_cost_msg", "See your cart");
-        jQuery("#dropdown-basket").find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
+	    dropdownBasket.find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
 //        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
 
         // build product list
@@ -171,9 +171,10 @@ var Mall = {
         // build object for filling products template
         Mall._data = data.content;
         // clear products
-        jQuery("#product-list").html("");
+	    var productList = jQuery("#product-list");
+	    productList.html("");
         if(products.length == 0) {
-            jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+	        productList.html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
         } else {
             jQuery.each(products, function(key) {
                 if(typeof products[key].options[0] != "undefined") {
@@ -181,7 +182,7 @@ var Mall = {
                     products[key].attr_value = products[key].options[0].value;
                     products[key].currency_symbol = Mall._data.cart.currency_symbol;
                     products[key].unit_price = number_format(products[key].unit_price, 2, ",", " ");
-                    jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
+	                productList.append(Mall.replace(Mall._product_template, products[key]));
                 }
             });
         }
@@ -212,9 +213,6 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
-		// Wood-based... how to replace opts?
-		searchContext.selectbox("detach");
-		searchContext.selectbox("attach");
 		
 		// Process product context 
 

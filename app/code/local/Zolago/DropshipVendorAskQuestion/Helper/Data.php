@@ -17,6 +17,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 	 */
 	public function notifyCustomer($question)
     {
+	    Mage::log("notifyCustomer",null,'question.log');
 		if($question->isObjectNew()){
 			/**
 			 * @todo add store_id to question
@@ -37,7 +38,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			$helper->sendEmailTemplate(
 				$question->getCustomerEmail(), 
 				$question->getCustomerName(), 
-				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUTOMER_REPLY, $storeId),
+				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON, $storeId),
 				$templateParams, 
 				$storeId,
 				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId)
@@ -52,8 +53,11 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 	 * @param Zolago_DropshipVendorAskQuestion_Model_Question $question
 	 * @return Zolago_DropshipVendorAskQuestion_Helper_Data $this
 	 */
-/*	public function notifyAdminCustomer($question)
+	public function notifyAdminCustomer($question)
 	{
+		Mage::log("notifyAdminCustomer",null,'question.log');
+		return parent::notifyAdminCustomer($question);
+
 		$store = Mage::helper('udqa')->getStore($question);
 		if (Mage::helper('udqa')->isNotifyAdminCustomer($question)) {
 			Mage::helper('udropship')->setDesignStore($store);
@@ -81,7 +85,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			);
 
 			$helper = Mage::helper("zolagocommon");
-			/* @var $helper Zolago_Common_Helper_Data
+			/** @var $helper Zolago_Common_Helper_Data */
 			$helper->sendEmailTemplate(
 				Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/email', $store),
 				Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/name', $store),
@@ -97,7 +101,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			Mage::helper('udropship')->setDesignStore();
 		}
 		return $this;
-	}*/
+	}
 
 
 	/**
@@ -109,6 +113,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
      */
     public function notifyVendorAgent($question)
     {
+	    Mage::log("notifyVendorAgent",null,'question.log');
         $store = Mage::helper('udqa')->getStore($question);
 
         if (self::isNotifyVendorAgents($question)) {

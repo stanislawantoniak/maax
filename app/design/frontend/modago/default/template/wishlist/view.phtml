@@ -6,15 +6,16 @@ $backUrl = $this->getUrl('customer/account');
 /** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
 $_collection = $this->getWishlistItems();
 
+
 ?>
 
 <?php if ($this->helper('wishlist')->isAllow()) : ?>
     <div class="my-wishlist">
 
-        <?php if ($_helperCustomer->isLoggedIn()) : ?>
-            <?php if ($this->hasWishlistItems()): //Zalogowany i ma jakies ulubione ?>
+        <?php if ($_helperCustomer->isLoggedIn() || Mage::helper('persistent/session')->isPersistent()) : ?>
+            <?php if ($this->hasWishlistItems()): //Zalogowany/persistant i ma jakies ulubione ?>
                 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-logged-full')->toHtml(); ?>
-            <?php else: //Zalogowany nie ma ulubionych ?>
+            <?php else: //Zalogowany/persistant nie ma ulubionych ?>
                 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-logged-empty')->toHtml(); ?>
             <?php endif ?>
         <?php else: ?>
