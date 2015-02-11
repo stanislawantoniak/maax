@@ -38,7 +38,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 			$helper->sendEmailTemplate(
 				$question->getCustomerEmail(), 
 				$question->getCustomerName(), 
-				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUTOMER_REPLY, $storeId),
+				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON, $storeId),
 				$templateParams, 
 				$storeId,
 				Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId)
