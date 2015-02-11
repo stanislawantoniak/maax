@@ -1111,9 +1111,11 @@ jQuery(document).ready(function() {
         }
     });
     jQuery('#shopping-cart .select-styled').selectBoxIt({
-        //theme: "bootstrap",
+        autoWidth: false,
         native: false,
-        isMobile: false
+        isMobile: function(){
+            return false;
+        }
     });
 
 
