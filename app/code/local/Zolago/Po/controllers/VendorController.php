@@ -1007,7 +1007,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                     'quantity'		=> Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_QTY,
                                     'nonStandard'	=> $r->getParam('specify_orbadhl_custom_dim'),
                                     'shipmentDate'  => $this->_porcessDhlDate($r->getParam('specify_orbadhl_shipping_date')),
-                                    'shippingAmount'=> $r->getParam('shipping_amount')
+                                    'shippingAmount'=> $udpo->getGrandTotalInclTax()
                                 );
             $number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
             if (!$number) {
