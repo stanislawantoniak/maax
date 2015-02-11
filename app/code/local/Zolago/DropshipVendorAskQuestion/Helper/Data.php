@@ -78,7 +78,6 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
      */
     public function notifyVendorAgent($question)
     {
-	    Mage::log("notifyVendorAgent",null,'question.log');
         $store = Mage::helper('udqa')->getStore($question);
 
         if (self::isNotifyVendorAgents($question)) {

@@ -44,9 +44,6 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 			$mailer->setStoreId($storeId);
 			$mailer->setTemplateId($template);
 			$mailer->setTemplateParams($templateParams);
-			if(!is_null($bcc)) {
-				$mailer->
-			}
 			return $mailer->send();
 	}
 	/**
