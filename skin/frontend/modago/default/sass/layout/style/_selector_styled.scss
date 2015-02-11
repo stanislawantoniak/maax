@@ -55,12 +55,7 @@
       background: #f2f1f0;
     }
 
-    .selectboxit-list {
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      box-shadow: none;
-    }
+
     .selectboxit-list .selectboxit-option-anchor {
       font-family: Arial, sans-serif;
       font-size: 12px;
@@ -88,11 +83,13 @@
          position the dropdown (when opened) to make sure the drop down items are not
          displayed outside of the current window viewport.
       */
-      max-height: 150px;
+      max-height: 200px;
 
       border-radius: 0;
       background-color: #fff;
-      border: 1px solid #afafaf;
+      border-color: #afafaf;
+      z-index: 100;
+      box-shadow: none;
       .selectboxit-option {
 
         a {
@@ -103,5 +100,11 @@
       }
 
     }
+  }
+
+}
+.cart-qty-field {
+  .selectboxit {
+    width: 60px;
   }
 }
