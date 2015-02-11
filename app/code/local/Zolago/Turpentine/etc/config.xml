@@ -18,6 +18,13 @@
 				</rewrite>
 			</turpentine>
 		</models>
+		<helpers>
+			<turpentine>
+				<rewrite>
+					<esi>Zolago_Turpentine_Helper_Esi</esi>
+				</rewrite>
+			</turpentine>
+		</helpers>
 		<!-- 
 		<resources>
 			<zolagoturpentine_setup>

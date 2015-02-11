@@ -84,6 +84,7 @@ sub generate_session_expires {
         now_tm.tm_sec += {{esi_private_ttl}};
         mktime(&now_tm);
         char date_buf [50];
+
         strftime(date_buf, sizeof(date_buf)-1, "%a, %d-%b-%Y %H:%M:%S %Z", &now_tm);
         VRT_SetHdr(sp, HDR_RESP,
             "\031X-Varnish-Cookie-Expires:",
@@ -362,8 +363,18 @@ sub vcl_deliver {
 		set resp.http.X-Varnish-Hassession = 1;
         # need to set the set-cookie header since we just made it out of thin air
         call generate_session_expires;
-        set resp.http.Set-Cookie = req.http.X-Varnish-Faked-Session +
-            "; expires=" + resp.http.X-Varnish-Cookie-Expires + "; path=/";
+
+        #set resp.http.Set-Cookie = req.http.X-Varnish-Faked-Session +
+        #    "; expires=" + resp.http.X-Varnish-Cookie-Expires + "; path=/";
+        
+		set resp.http.Set-Cookie = req.http.X-Varnish-Faked-Session + "; path=/";
+		
+		#set expire if expire > 0, else use default broser window close time
+		if ("{{esi_private_ttl}}" != "" && "{{esi_private_ttl}}" != "0") {	
+			set resp.http.Set-Cookie = resp.http.Set-Cookie  + 
+				"; expires=" + resp.http.X-Varnish-Cookie-Expires;
+		}
+
         if (req.http.Host) {
             set resp.http.Set-Cookie = resp.http.Set-Cookie +
                 "; domain=" + regsub(req.http.Host, ":\d+$", "");
