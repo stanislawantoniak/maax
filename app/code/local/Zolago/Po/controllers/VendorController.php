@@ -1122,7 +1122,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $udpo->setUseLabelShippingAmount(true);
             }
             elseif ($r->getParam('shipping_amount')) {
-                $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
+                $udpo->setShipmentShippingAmount($udpo->getGrandTotalInclTax());
             }
             $udpo->setUdpoNoSplitPoFlag(true);
 
