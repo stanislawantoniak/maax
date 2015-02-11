@@ -213,6 +213,13 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
+        jQuery('.select-box .search-context').selectBoxIt({
+            autoWidth: false,
+            native: false,
+            isMobile: function(){
+                return false;
+            }
+        });
 		
 		// Process product context 
 
@@ -1117,6 +1124,7 @@ jQuery(document).ready(function() {
             return false;
         }
     });
+
 
 
     //#######################
