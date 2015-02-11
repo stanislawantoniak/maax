@@ -77,4 +77,15 @@
 			</adminhtml>
 		</routers>
 	</admin>
+    <frontend>
+        <translate>
+            <modules>
+                <Zolago_Adminhtml>
+                    <files>
+                        <default>Zolago_Adminhtml.csv</default>
+                    </files>
+                </Zolago_Adminhtml>
+            </modules>
+        </translate>
+    </frontend>
 </config>

@@ -1110,7 +1110,10 @@ jQuery(document).ready(function() {
             Mall.setSuperAttribute(selectedOption);
         }
     });
-
+    jQuery('#shopping-cart .select-styled').selectBoxIt({
+        //theme: "bootstrap",
+        native: Mall.getIsBrowserMobile()
+    });
 
 
     //#######################
