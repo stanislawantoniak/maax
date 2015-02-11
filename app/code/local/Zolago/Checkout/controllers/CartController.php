@@ -16,6 +16,105 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
         /** @var Zolago_Checkout_Helper_Data $helper */
         $helper = Mage::helper("zolagocheckout");
         $helper->fixCartShippingRates();
+
+        //fix for removing items from cart and quote if they are out of stock
+        $cart = $this->_getCart();
+        if ($cart->getQuote()->getItemsCount()) {
+
+            $items = $cart->getItems();
+            foreach ($items as $item) {
+                /** @var Mage_Sales_Model_Quote_Item $item */
+                /** @var Zolago_CatalogInventory_Helper_Data $helperZCI */
+                $helperZCI = Mage::helper("zolagocataloginventory");
+
+                // for all items in quote we check if item have flag FLAG_OUT_OF_STOCK or FLAG_NO_STOCK_INFO
+                // then we need to remove such item and inform customer about that
+                if (in_array($helperZCI->getQuoteItemAvailableFlag($item),
+                    array(Zolago_CatalogInventory_Helper_Data::FLAG_OUT_OF_STOCK,
+                        Zolago_CatalogInventory_Helper_Data::FLAG_NO_STOCK_INFO))
+                ) {
+
+                    // remove errors for current item
+                    $this->_removeErrorsFromQuoteAndItem($item, Mage_CatalogInventory_Helper_Data::ERROR_QTY);
+
+                    // remove errors for all children for this item
+                    foreach ($item->getChildren() as $p) {
+                        $this->_removeErrorsFromQuoteAndItem($p, Mage_CatalogInventory_Helper_Data::ERROR_QTY);
+                    }
+
+                    // we need to inform customer about that we removed it
+                    $parentItem = $item->getParentItem();
+                    if (!empty($parentItem)) {
+                        $session = Mage::getSingleton('customer/session');
+                        $sizeText = $item->getProduct()->getAttributeText('size');
+                        if (empty($sizeText)) {
+                            $session->addError( Mage::helper('zolagocheckout')
+                                ->__('Product %s was removed from cart because is out of stock.',
+                                    $item->getName(),
+                                    $sizeText));
+                        } else {
+                            $session->addError( Mage::helper('zolagocheckout')
+                                ->__('Product %s size %s was removed from cart because is out of stock.',
+                                    $item->getName(),
+                                    $sizeText));
+                        }
+
+                    }
+
+                    // now we remove item (and all children if exists)
+                    $cart->removeItem($item->getItemId());
+                }
+            }
+            $cart->save();
+        }
+        //end fix
         parent::indexAction();
+    }
+
+    /**
+     * Removes error statuses from quote and item, set by observer Mage_CatalogInventory_Model_Observer
+     *
+     * @param Mage_Sales_Model_Quote_Item $item
+     * @param int $code
+     * @return Mage_Sales_Model_Quote_Item $item
+     */
+    protected function _removeErrorsFromQuoteAndItem($item, $code)
+    {
+        $params = array(
+            'origin' => 'cataloginventory',
+            'code' => $code
+        );
+
+        if ($item->getHasError()) {
+            $item->removeErrorInfosByParams($params);
+        }
+
+        $quote = $item->getQuote();
+        $quoteItems = $quote->getItemsCollection();
+        $canRemoveErrorFromQuote = true;
+
+        foreach ($quoteItems as $quoteItem) {
+            if ($quoteItem->getItemId() == $item->getItemId()) {
+                continue;
+            }
+
+            $errorInfos = $quoteItem->getErrorInfos();
+            foreach ($errorInfos as $errorInfo) {
+                if ($errorInfo['code'] == $code) {
+                    $canRemoveErrorFromQuote = false;
+                    break;
+                }
+            }
+
+            if (!$canRemoveErrorFromQuote) {
+                break;
+            }
+        }
+
+        if ($quote->getHasError() && $canRemoveErrorFromQuote) {
+            $quote->removeErrorInfosByParams(null, $params);
+        }
+
+        return $item;
     }
 }
