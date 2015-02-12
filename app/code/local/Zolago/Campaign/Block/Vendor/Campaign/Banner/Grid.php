@@ -96,7 +96,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Banner_Grid extends Mage_Adminhtml_B
                  'link_target' => '_self',
                  'link_param'  => 'id',
                  'type'        => 'action',
-                 'link_label'  => 'Remove',
+                 'link_label'  => $_helper->__('Remove'),
                  'filter'      => false,
                  'sortable'    => false
             )
