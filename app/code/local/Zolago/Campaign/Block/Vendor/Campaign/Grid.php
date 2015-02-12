@@ -96,7 +96,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
 				'index'		=> 'campaign_id',
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_label'=> $_helper->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
