@@ -191,12 +191,13 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         $obj->costsCenter = null;
         return $obj;
     }
-    protected function _createService($shipment, $shippingAmount) {
+    protected function _createService($shipment, $shippingAmount,$udpo) {
         $order = $shipment->getOrder();
-        $collectOnDeliveryValue = $this->_getCollectOnDeliveryValue($shipment, $shippingAmount);
+        $collectOnDeliveryValue = $this->_getCollectOnDeliveryValue($shipment, $shippingAmount,$udpo);
         $obj = new StdClass();
         $obj->product = self::SHIPMENT_DOMESTIC;
-        if ($order->getPayment()->getMethod() == 'cashondelivery') {
+        if (($order->getPayment()->getMethod() == 'cashondelivery')
+            && ($collectOnDeliveryValue > 0)) {
             $obj->collectOnDelivery			= true;
             $obj->collectOnDeliveryValue	= $collectOnDeliveryValue;
             $obj->collectOnDeliveryForm		= self::PAYMENT_TYPE;
@@ -210,7 +211,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
      *
      * @param array Mage_Sales_Model_Order_Shipment
      */
-    public function createShipments($shipment, $shipmentSettings) {
+    public function createShipments($shipment, $shipmentSettings,$udpo) {
         if (empty($shipment)) {
             return false;
         }
@@ -223,7 +224,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         $obj->receiver = $this->_createReceiver($shipment);
         $obj->pieceList = $this->_createPieceList($shipmentSettings);
         $obj->payment = $this->_createPayment();
-        $obj->service = $this->_createService($shipment, $shipmentSettings['shippingAmount']);
+        $obj->service = $this->_createService($shipment, $shipmentSettings['shippingAmount'],$udpo);
         $obj->shipmentDate = $shipmentSettings['shipmentDate'];
         $obj->content = Mage::helper('zolagopo')->__('Shipment') . ': ' . $shipment->getIncrementId();
         $shipmentObject->item[] = $obj;
@@ -393,9 +394,11 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
      *
      * @return float COD Value
      */
-    protected function _getCollectOnDeliveryValue($shipment, $shippingAmount)
+    protected function _getCollectOnDeliveryValue($shipment, $shippingAmount,$udpo)
     {
-        return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shippingAmount;
+        $val = $udpo->getGrandTotalInclTax()-$udpo->getPaymentAmount();
+        return ($val>0)? $val:0;
+        
     }
     protected function _getRmaAccountNumber() {        
         if (!$account = $this->_vendor->getDhlRmaAccount()) {

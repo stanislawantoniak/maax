@@ -1122,7 +1122,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $udpo->setUseLabelShippingAmount(true);
             }
             elseif ($r->getParam('shipping_amount')) {
-                $udpo->setShipmentShippingAmount($udpo->getGrandTotalInclTax());
+                $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
             }
             $udpo->setUdpoNoSplitPoFlag(true);
 
@@ -1523,7 +1523,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         if ($posModel && $posModel->getId()) {
             $dhlClient->setPos($posModel);
-            $dhlResult	= $dhlClient->createShipments($shipment, $shipmentSettings);
+            $dhlResult	= $dhlClient->createShipments($shipment, $shipmentSettings,$udpo);
             $result		= $dhlClient->processDhlShipmentsResult('createShipments', $dhlResult);
 
             if ($result['shipmentId']) {
