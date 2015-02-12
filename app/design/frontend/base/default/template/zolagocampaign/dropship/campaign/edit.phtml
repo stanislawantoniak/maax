@@ -35,37 +35,15 @@
     <li style="float:right" class="">
         <a name="tmp"></a>
     </li>
-    <li style="float:right" class="">
-        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
-    </li>
     <li style="float:right" class="active">
         <a href="#tab_products" data-toggle="tab"><?php echo $_helper->__('Products'); ?></a>
     </li>
+    <li style="float:right" class="">
+        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
+    </li>
+
 </ul>
 <div class="tab-content">
-    <div id="tab_banners" class="tab-pane">
-        <br>
-        <div class="container z-grid">
-            <div class="widget box">
-                <div class="widget-header">
-                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Campaign creatives"); ?></h4>
-                    <div class="toolbar no-padding">
-                        <div class="btn-group">
-                            <a href="<?php echo $this->getAddNewBannerPath(); ?>">
-                                <span class="btn btn-xs"><i class="icon-plus"></i>
-                                    <?php echo $_helper->__("Add new campaign creative"); ?>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="widget-content">
-                    <?php echo $this->getBannersGrid()->toHtml(); ?>
-                </div>
-            </div>
-
-        </div>
-    </div>
     <div id="tab_products" class="tab-pane active">
         <br>
         <div class="container z-grid">
@@ -89,7 +67,29 @@
 
         </div>
     </div>
+    <div id="tab_banners" class="tab-pane">
+        <br>
+        <div class="container z-grid">
+            <div class="widget box">
+                <div class="widget-header">
+                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Campaign creatives"); ?></h4>
+                    <div class="toolbar no-padding">
+                        <div class="btn-group">
+                            <a href="<?php echo $this->getAddNewBannerPath(); ?>">
+                                <span class="btn btn-xs"><i class="icon-plus"></i>
+                                    <?php echo $_helper->__("Add new campaign creative"); ?>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content">
+                    <?php echo $this->getBannersGrid()->toHtml(); ?>
+                </div>
+            </div>
 
+        </div>
+    </div>
 </div>
 <!--Products tab-->
 <div class="modal fade" id="browseProducts">
