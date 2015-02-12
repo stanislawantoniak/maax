@@ -107,8 +107,63 @@
   }
 }
 
+/*Sort select on listing*/
 .sort-by-container {
   .selectboxit {
     width: 160px;
+  }
+}
+
+/*Search desktop*/
+.block_search {
+  select {
+    height: 26px;
+  }
+  .selectboxit-container {
+    span {
+      height: 26px;
+      line-height: 26px;
+    }
+    .selectboxit {
+      width: 134px;
+      height: 26px;
+      line-height: 26px;
+      border: none;
+      .selectboxit-arrow-container {
+        height: 26px;
+        line-height: 26px;
+        background: url(../images/select-icons.png) 0 -117px no-repeat;
+        outline: none;
+        &:link {
+          background: url(../images/select-icons.png) 0 -168px no-repeat;
+        }
+        &:visited {
+          background: url(../images/select-icons.png) 0 -17px no-repeat;
+        }
+        &:hover {
+          background: url(../images/select-icons.png) 0 -69px no-repeat;
+        }
+      }
+      .selectboxit-text {
+              height: 26px;
+              line-height: 26px;
+      }
+    }
+    .selectboxit-options {
+      width: 134px;
+      a {
+        height: 26px;
+        line-height: 26px;
+      }
+    }
+  }
+}
+
+/*Search mobile*/
+#dropdown-search {
+  .selectboxit-container {
+    .selectboxit {
+      width: 282px;
+    }
   }
 }

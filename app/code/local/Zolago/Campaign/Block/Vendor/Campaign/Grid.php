@@ -89,14 +89,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
 
 		
 		$this->addColumn("actions", array(
-                'header'    => Mage::helper('zolagopos')->__('Action'),
+                'header'    => $_helper->__('Action'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
                 'width'     => '50px',
                 'type'      => 'action',
 				'index'		=> 'campaign_id',
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_label'=> $_helper->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
