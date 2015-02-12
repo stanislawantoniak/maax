@@ -53,11 +53,11 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         </div>
                         <div class="widget-content banner-type" style="display: block;">
 
-                            <span data-source="banner-type-code" class="hidden"><?php echo $titleCode; ?></span>
+                            <span data-source="banner-type-code" class="hidden"><?php echo $_helper->__($titleCode); ?></span>
                                 <?php for($i=1; $i<= $bannerType->position_count; $i++): ?>
                                     <div class="banner-positions">
                                         <div class="col-md-6">
-                                            <span data-source="position"><?php echo $bannerType->position_label; ?> <?php echo $i; ?></span>
+                                            <span data-source="position"><?php echo $_helper->__($bannerType->position_label . ' %s', $i); ?></span>
                                             <span data-source="position-n" class="hidden"><?php echo $i; ?></span>
                                         </div>
                                         <div class="col-md-6">
