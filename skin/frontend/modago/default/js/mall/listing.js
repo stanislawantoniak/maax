@@ -1648,11 +1648,7 @@ Mall.listing = {
 			self = this;
 		//sortingSelect.selectbox();
         sortingSelect.selectBoxIt({
-            autoWidth: false,
-            native: false,
-            isMobile: function(){
-                return false;
-            }
+            autoWidth: false
         });
 		if(this.getPushStateSupport()) {
 			sortingSelect.change(function () {
@@ -2585,8 +2581,7 @@ Mall.listing = {
 		} else {
 			select.val(select.find(":first-child").val());
 		}
-		//select.selectbox('detach');
-		//select.selectbox('attach');
+
         select.selectBoxIt('destroy');
         select.selectBoxIt();
 		return this;
