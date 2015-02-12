@@ -37,8 +37,8 @@ $session = Mage::getSingleton('customer/session');
 					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
 				<?php else: ?>
 					<li class="wide">
-						<div class="form-group select-container">
-                            <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
+						<div class="form-group select-box-it-select-container">
+                            <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry select-box-it-select" required>
                                     <option value=""><?php echo $this->__("Choose shop"); ?></option>
                                 <?php foreach($vendors as $id=>$name): ?>
                                     <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
@@ -104,16 +104,22 @@ $session = Mage::getSingleton('customer/session');
         var vidselect =  jQuery(vidselectid),
             questionform =  jQuery("#question-form");
 
-        vidselect.select2({
-            minimumResultsForSearch: -1
+
+        vidselect.selectBoxIt({
+            autoWidth: false
+        });
+        var validationOptions = jQuery.extend({}, Mall.validate.getDefaultValidationOptions(), {
+            ignore: ''//i.e. do not ignore hidden elements
+            ,errorPlacement: function (error, element) {
+                error.appendTo(element.parents(".form-group"));
+            }
         });
 
-        questionform.validate(Mall.validate.getDefaultValidationOptions());
-
+        questionform.validate(validationOptions);
 
         // this is required to trigger validation on select change
         vidselect.on("change", function() {
-            questionform.validate().element(vidselectid);
+            questionform.validate(validationOptions).element(vidselectid);
         });
     });
 </script>
