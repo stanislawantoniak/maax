@@ -213,12 +213,8 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
-        jQuery('.select-box .search-context').selectBoxIt({
-            autoWidth: false,
-            native: false,
-            isMobile: function(){
-                return false;
-            }
+        jQuery('.search-context').selectBoxIt({
+            autoWidth: false
         });
 		
 		// Process product context 
@@ -1118,11 +1114,7 @@ jQuery(document).ready(function() {
         }
     });
     jQuery('#shopping-cart .select-styled').selectBoxIt({
-        autoWidth: false,
-        native: false,
-        isMobile: function(){
-            return false;
-        }
+        autoWidth: false
     });
 
 
