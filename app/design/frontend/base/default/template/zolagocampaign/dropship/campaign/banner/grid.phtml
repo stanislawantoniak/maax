@@ -229,10 +229,10 @@ $numColumns = sizeof($this->getColumns());
                         <?php endif; ?>
 
                         <?php if($_curPage < $_lastPage): ?>
-                        <button class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
-                            <?php else: ?>
-                                <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
-                            <?php endif; ?>
+                            <button class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                        <?php else: ?>
+                            <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                        <?php endif; ?>
                     </div>
                 </div>
 
