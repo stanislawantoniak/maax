@@ -1100,7 +1100,7 @@ jQuery(document).ready(function() {
 		mobile: Mall.getIsBrowserMobile()
 	});*/
     jQuery(".size-box select").selectBoxIt({
-        theme: "bootstrap",
+        //theme: "bootstrap",
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
         autoWidth: false
