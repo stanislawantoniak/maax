@@ -142,14 +142,14 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 
 		
 		$this->addColumn("actions", array(
-                'header'    => Mage::helper('zolagopos')->__('Action'),
+                'header'    => $_helper->__('Action'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
                 'width'     => '50px',
                 'type'      => 'action',
 				'index'		=> 'question_id',
 				'link_action'=> "*/*/questionEdit",
 				'link_param'=> 'id',
-				'link_label'=> $this->__('View'),
+				'link_label'=> $_helper->__('View'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
