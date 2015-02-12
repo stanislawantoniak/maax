@@ -161,16 +161,17 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		if($this->isModuleActive('zolagocampaign') && $this->isAllowed("zolagocampaign/vendor")){
             $groupOne[] = array(
                 "active" => $this->isActive("zolagocampaign"),
+                "icon"	 => "icon-star",
+                "label"	 => $this->__('Campaigns'),
+                "url"	 => $this->getUrl('zolagocampaign/vendor/index')
+            );
+            $groupOne[] = array(
+                "active" => $this->isActive("zolagocampaign"),
                 "icon"	 => "icon-th",
                 "label"	 => $this->__('Manage placements'),
                 "url"	 => $this->getUrl('zolagocampaign/placement/index')
             );
-			$groupOne[] = array(
-				"active" => $this->isActive("zolagocampaign"),
-				"icon"	 => "icon-star",
-				"label"	 => $this->__('Campaigns'),
-				"url"	 => $this->getUrl('zolagocampaign/vendor/index')
-			);
+
 
 		}
 		$grouped = $this->_processGroups($groupOne);
