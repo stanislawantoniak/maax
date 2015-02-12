@@ -141,7 +141,8 @@ jQuery(function($){
 
 
 
-            selects.select2({minimumResultsForSearch: -1});
+            //selects.select2({minimumResultsForSearch: -1});
+            selects.selectBoxIt();
 			selects.change(selectHandler);
 
             // Handle next click

@@ -168,3 +168,23 @@
     }
   }
 }
+
+
+/*Rma*/
+.condition-wrapper {
+  &.has-error {
+    .selectboxit-container {
+      .selectboxit {
+        border-color: #a94442;
+      }
+    }
+  }
+  &.has-success {
+    .selectboxit-container {
+      .selectboxit {
+        border-color: #3c763d;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      }
+    }
+  }
+}
