@@ -6,9 +6,9 @@
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagopo")->__("New campaign");?>
+					<?php echo $_helper->__("New campaign");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit campaign '%s'", $_model->getName());?>
+					<?php echo $_helper->__("Edit campaign '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
