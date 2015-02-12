@@ -223,8 +223,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 'type'      => 'action',
 				'index'		=> 'entity_id',
 				'link_action'=> "*/*/edit",
-				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_param' => 'id',
+				'link_label' => Mage::helper("zolagopo")->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false

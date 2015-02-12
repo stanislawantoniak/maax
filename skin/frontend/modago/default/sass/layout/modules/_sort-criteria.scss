@@ -9,21 +9,23 @@
 			margin-right: -31px;
 		}
 		li {
-			display:inline-block;
-			float:left;
-			@media (max-width: $screen-xs-max) {
-				margin-right: 20px
-			}
-			.form-group {
-				margin-bottom: 0px;
-			}
-			label,
-			.label,
-			.value {
-				padding:0px;
-				margin: 0px;
-			}
-			&+li {
+          &:not(.selectboxit-option){
+            display:inline-block;
+            float:left;
+            @media (max-width: $screen-xs-max) {
+              margin-right: 20px
+            }
+            .form-group {
+              margin-bottom: 0px;
+            }
+            label,
+            .label,
+            .value {
+              padding:0px;
+              margin: 0px;
+            }
+          }
+			&+li.sort-criteria-selector {
 				margin-left: 35px;
 				@media (max-width: $screen-xs-max) {
 					margin-left: 0px;

@@ -6,9 +6,9 @@
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagopo")->__("New campaign");?>
+					<?php echo $_helper->__("New campaign");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit campaign '%s'", $_model->getName());?>
+					<?php echo $_helper->__("Edit campaign '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
@@ -32,18 +32,20 @@
 <!--        Show product tab and banners tab only on edit page-->
 <?php if(!$this->isModelNew()) :?>
 <ul style="margin-top:6px" class="nav nav-tabs">
+
     <li style="float:right" class="">
         <a name="tmp"></a>
     </li>
     <li style="float:right" class="">
-        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
-    </li>
-    <li style="float:right" class="active">
         <a href="#tab_products" data-toggle="tab"><?php echo $_helper->__('Products'); ?></a>
     </li>
+    <li style="float:right" class="active">
+        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
+    </li>
+
 </ul>
 <div class="tab-content">
-    <div id="tab_products" class="tab-pane active">
+    <div id="tab_products" class="tab-pane ">
         <br>
         <div class="container z-grid">
 
@@ -66,7 +68,7 @@
 
         </div>
     </div>
-    <div id="tab_banners" class="tab-pane">
+    <div id="tab_banners" class="tab-pane active">
         <br>
         <div class="container z-grid">
             <div class="widget box">
@@ -123,7 +125,7 @@
 
                 if (campaignProductsSource.length <= 0) {
                     noty({
-                        text: "Enter product SKUs please",
+                        text: "<?php echo $_helper->__('Enter product SKUs please'); ?>",
                         type: 'error',
                         timeout: 2000
                     });
