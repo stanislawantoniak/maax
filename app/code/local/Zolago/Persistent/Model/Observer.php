@@ -61,15 +61,34 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
         /* @var $checkoutSession Mage_Checkout_Model_Session */
         $checkoutSession = Mage::getSingleton('checkout/session');
         if ($this->_isShoppingCartPersist()) {
-			$customer = $this->_getPersistentCustomer();
-			// By setting this flag quote object knows should do not import 
-			// personal data of customer
-			$customer->setSkipCopyPersonalData(true);
-            $checkoutSession->setCustomer($customer);
-            if (!$checkoutSession->hasQuote()) {
-                $checkoutSession->getQuote();
-            }
-			$customer->setSkipCopyPersonalData(false);
+	        if($actionName == 'checkout_guest_continue') {
+		        $quote = $checkoutSession->getQuote();
+
+		        //remove persistant cookie
+		        /** @var Mage_Persistent_Model_Session $persHelper */
+		        $persHelper = Mage::helper('persistent/session');
+		        $persHelper->getSession()->removePersistentCookie();
+
+		        $quote
+			        ->setCustomerId(null)
+			        ->setCustomerEmail(null)
+			        ->setCustomerFirstname(null)
+			        ->setCustomerLastname(null)
+			        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
+			        ->setIsPersistent(false)
+			        ->collectTotals()
+			        ->save();
+	        } else {
+		        $customer = $this->_getPersistentCustomer();
+		        // By setting this flag quote object knows should do not import
+		        // personal data of customer
+		        $customer->setSkipCopyPersonalData(true);
+		        $checkoutSession->setCustomer($customer);
+		        if (!$checkoutSession->hasQuote()) {
+			        $checkoutSession->getQuote();
+		        }
+		        $customer->setSkipCopyPersonalData(false);
+	        }
         }
     }
     /**
@@ -86,7 +105,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 
         if (Mage::app()->getRequest()->getParam('context') != 'checkout') {            
              $checkoutSession = Mage::getSingleton('checkout/session');
-             
+
             $quote = $checkoutSession->setLoadInactive()->getQuote();
             if ($quote->getIsActive() && $quote->getCustomerId() && $quote->hasItems()) {
                 $quoteItems = $quote->getAllVisibleItems();
