@@ -1130,12 +1130,7 @@ jQuery.noConflict();
 				}
 			}
 		});
-        $(document).click(function (e) {
-            var container = $("#dropdown-search");
-            if (!container.is(":visible")) {
-                jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'visible');
-            }
-        });
+
 		$(document).on('mouseup touchend', function (e){
 			var container = $(".fb-slidebar");
 			if(container.is(":visible")){
