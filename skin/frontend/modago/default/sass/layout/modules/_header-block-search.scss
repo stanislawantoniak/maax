@@ -14,45 +14,6 @@
                 float: left;
             }
         }
-
-        .sbToggle {
-            display: block;
-            height: 30px;
-            position: absolute;
-            right: 0;
-            width: 30px;
-            top: -2px;
-        }
-
-        .sbOptionsWrapper{
-            left: -1px;
-            margin: 0;
-            padding: 0 0 5px 0;
-            position: absolute;
-            top: 30px;
-            width: 135px;
-            z-index: 1;
-            overflow-y: auto;
-            li {
-                padding: 0 7px;
-            }
-            a {
-                display: block;
-                padding: 7px 0 7px 3px;
-            }
-            .sbDisabled {
-                display: block;
-                padding: 7px 0 7px 3px;
-            }
-            .sbGroup {
-                display: block;
-                padding: 7px 0 7px 3px;
-            }
-            .sbSub {
-            padding-left: 17px;
-            }
-        }
-
         .select-box {
             float: left;
             width:134px;
@@ -72,36 +33,6 @@
 
         input[type="image"] {
             float:left;
-        }
-        
-        .sbHolder {
-        	height:26px;
-        	width:100%;
-        }
-
-        .sbSelector {
-        	height:26px;
-        	padding-left: 10px;
-        	display: inline-block;
-        }
-
-        .sbOptionsWrapper {
-        	width:100%;
-        	left:0px;
-        	padding-top:6px;
-        	li {
-        		padding:0;
-        		height:auto;
-        		border:none;
-        		a {
-        			padding: 9px 5px 9px 15px;
-        			height:auto;
-        			&:hover {
-        				margin:0px;
-        			}
-        		}
-        		
-        	}
         }
 
     }

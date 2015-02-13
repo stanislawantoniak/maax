@@ -133,17 +133,6 @@
 			<action method="addCss">
 				<stylesheet>css/jquery-ui.css</stylesheet>
 			</action>
-			<!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
-			<action method="addCss">
-				<stylesheet>js/vendor/select2/select2.css</stylesheet>
-			</action>
-			<action method="addCss">
-				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
-			</action>
-            <!--<action method="addCss">-->
-                <!--<stylesheet>js/bootstrap-select/css/bootstrap-select.min.css</stylesheet>-->
-            <!--</action>-->
-
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
@@ -196,14 +185,7 @@
 				<type>skin_js</type>
 				<script>js/jquery.mousewheel.js</script>
 			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/jquery.selectbox-0.2.js</script>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/vendor/select2/select2.js</script>
-			</action>
+
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/imagesloaded.pkgd.min.js</script>

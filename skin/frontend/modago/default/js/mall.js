@@ -1080,15 +1080,15 @@ jQuery(document).ready(function() {
 
     });
 
-    jQuery("#product-listing-sort-control").selectbox({
-        onOpen: function (inst) {
-//            initScrollBarFilterStyle();
-        },
-
-        onChange: function(value, inst) {
-            location.href = value;
-        }
-    });
+//    jQuery("#product-listing-sort-control").selectbox({
+//        onOpen: function (inst) {
+////            initScrollBarFilterStyle();
+//        },
+//
+//        onChange: function(value, inst) {
+//            location.href = value;
+//        }
+//    });
     //#######################
     //## SIZE-BOX -> SELECTBOX
     //#######################
