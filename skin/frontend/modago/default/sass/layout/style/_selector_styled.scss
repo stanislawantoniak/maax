@@ -149,6 +149,29 @@
 
 /*Rma*/
 .condition-wrapper {
+  .selectboxit-container {
+    .selectboxit {
+      width: 245px;
+      @media (max-width: $screen-xs-min) {
+        width: 200px;
+      }
+      @media (max-width: 400px) {
+        width: 180px;
+      }
+      @media (max-width: 360px) {
+        width: 170px;
+      }
+      @media (max-width: 350px) {
+        width: 160px;
+      }
+      @media (max-width: 340px) {
+        width: 150px;
+      }
+      @media (max-width: 330px) {
+        width: 135px;
+      }
+    }
+  }
   &.has-error {
     .selectboxit-container {
       .selectboxit {

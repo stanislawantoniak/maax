@@ -142,7 +142,9 @@ jQuery(function($){
 
 
             //selects.select2({minimumResultsForSearch: -1});
-            selects.selectBoxIt();
+            selects.selectBoxIt({
+                autoWidth: false
+            });
 			selects.change(selectHandler);
 
             // Handle next click
