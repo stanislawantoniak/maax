@@ -88,13 +88,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
 //                'payment_html' => $paymentBlockHtml,
                 'use_attachements'    => true,
                 'customerIsGuest'     => $this->getCustomerIsGuest(),
-
-                'isMoreVendors'       => true, //todo
-                '$vendorNameList'     => 'SELECTED FEMME, JAKIS INNY SKLEP',//todo
-                'createNewAccountUrl' => 'http://modago.pl/rejestracja/', //todo
-                'myAccountCheckOrderStatusUrl' => 'http://modago.pl/myaccount/costam/costam', //todo
-                'poList'              => array() //todo
-
+                'isMoreVendors'       => $this->isMoreVendors(),
+                '$vendorNameList'     => $this->getVendorNameList(),
+                //todo cala lista zjdec z kazdego po albo z calego order
             )
         );
 
@@ -119,4 +115,53 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
 
         return $this;
     }
+
+    /**
+     * @return Unirgy_DropshipPo_Model_Mysql4_Po_Collection $poList
+     */
+    public function getPoListByOrder() {
+        $collection = Mage::getResourceModel('udpo/po_collection');
+        $collection->addFieldToFilter("order_id", $this->getId());
+        return $collection;
+    }
+
+    protected function isMoreVendors() {
+        return $this->getPoListByOrder($this)->getSize() >= 2 ? true : false;
+    }
+
+    protected function getVendorNameList() {
+        $collection = $this->getPoListByOrder();
+        $str = '';
+
+        foreach ($collection as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            $str .= $po->getVendorName() . ', ';
+        }
+
+        return trim($str, " ,");
+    }
+
+    /**
+     * @return Zolago_Po_Model_Po
+     */
+    public function firstPo() {
+        return $this->getPoListByOrder()->getFirstItem();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormattedGrandTotalInclTax() {
+        $sum = 0;
+        $collection =  $this->getPoListByOrder();
+        foreach ($collection as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            $sum += $po->getGrandTotalInclTax();
+        }
+
+        return Mage::app()->getLocale()->currency(
+            $this->getStore()->getCurrentCurrencyCode()
+        )->toCurrency($sum);
+    }
+
 }

@@ -3,15 +3,42 @@
  * part of order_new email template for products table coresponding to vendor
  */
 
+/** @var Zolago_Modago_Block_Sales_Order_Email_New $this */
+
+/** @var Zolago_Sales_Model_Order $order */
+//$order = Mage::getModel('sales/order')->load(30); //only for testing
 $order = $this->getOrder();
-//$poList = $this->getPoList();
 
-echo 'test czy sie wyswietla ten phtml';
+/** @var Zolago_Po_Helper_Data $helperUDPO */
+$helperUDPO = Mage::helper('udpo');
+/** @var Unirgy_DropshipPo_Model_Mysql4_Po_Collection $poList */
+$poList = $order->getPoListByOrder();
+
+/** @var Zolago_Po_Model_Po $udpo */
+//$udpo = $helperUDPO->toUdpo($order);
 
 
-//foreach ($poList as $po) {
-////    ugly hack
-//    Mage::register("current_po", $po);
-//    echo $this->getLayout()->createBlock('zolagomodago/po_email_summary')->toHtml();
-//}
+$count = $poList->getSize();
+$i = 1;
+foreach ($poList as $po):
+    /** @var Zolago_Po_Model_Po $po */
+    var_dump((int)$po->isPaymentDotpay());
+    var_dump((int)$po->isCod());
+    var_dump((int)$po->isPaymentBanktransfer());
+    ?>
 
+    <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+        Sklep: <?php echo $po->getVendorName(); ?><?php echo $count >= 2 ? "(Przesyłka $i z $count)" : ""; ?><br/>
+        <a href="<?php echo "dev"; ?>" style="text-decoration:none">skontaktuj się ze sklepem</a>
+    </div>
+    <span class="spacer">&nbsp;</span>
+    <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+        Planowana data wysyłki: <?php echo '[todo]'; ?> <?php ($po->isCod()) ? '' : "(może się zmienić w przypadku braku płatności)" ;?>
+    </div>
+
+    <?php
+    Mage::register("current_po", $po);// ugly hack for this block
+    echo $this->getLayout()->createBlock('zolagomodago/po_email_summary')->setTemplate("zolagopo/email/summary.phtml")->toHtml();
+    ?>
+    <span class="spacer">&nbsp;</span>
+<?php endforeach; ?>

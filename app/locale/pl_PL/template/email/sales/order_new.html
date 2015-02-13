@@ -87,7 +87,7 @@
                                 <span class="spacer">&nbsp;</span>
 
                                 <!--START SEKCJA PLATNOSCI ONLIE-->
-                                {{depend po.isPaymentDotpay()}}
+                                {{depend order.firstPo().isPaymentDotpay()}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Czekamy jeszcze na potwierdzenie przyjęcia wpłaty od operatora systemu płatności. Proces ten trwa zazwyczaj do kilku minut. Zamówienie trafi do realizacji, jak tylko odnotujemy płatność. O statusie płatności zostaniesz poinformowany w osobnym mailu.
                                 </div>
@@ -97,7 +97,7 @@
                                 <!--END SEKCJA PLATNOSCI ONLIE-->
 
                                 <!--START SEKCJA COD-->
-                                {{depend po.isCod()}}
+                                {{depend order.firstPo().isCod()}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
                                     W momencie wysłania paczki, dostaniesz maila od sklepu ze szczegółowymi informacjami dotyczącymi przesyłki. Za zamówienie zapłacisz przy odbiorze.
                                 </div>
@@ -106,9 +106,9 @@
                                 <!--END SEKCJA COD-->
 
                                 <!--START SEKCJA PRZELEW TRADYCYJNY-->
-                                {{depend po.isPaymentBanktransfer()}}
+                                {{depend order.firstPo().isPaymentBanktransfer()}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Prosimy o dokonanie przelewu w wysokości {{var po.getFormattedGrandTotalInclTax()}} na następujące konto, wpisując sam numer zamówienia jako tytuł przelewu:
+                                    Prosimy o dokonanie przelewu w wysokości {{var order.getFormattedGrandTotalInclTax()}} na następujące konto, wpisując sam numer zamówienia jako tytuł przelewu:
                                 </div>
                                 <span class="spacer">&nbsp;</span>
 
@@ -129,7 +129,7 @@
                                 </div>
                                 <span class="spacer">&nbsp;</span>
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    <strong>Tytuł przelewu:</strong> {{var po.getIncrementId()}}
+                                    <strong>Tytuł przelewu:</strong> {{var order.getIncrementId()}}
                                 </div>
                                 <span class="spacer">&nbsp;</span>
                                 <span class="spacer">&nbsp;</span>
@@ -143,18 +143,18 @@
 
                                 {{if customerIsGuest}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Jeśli chcesz na bieżąco śledzić stan realizacji zamówienia, stwórz konto w naszym serwisie. Wystarczy, że podasz hasło do logowania: <a href="{{var createNewAccountUrl}}" style="text-decoration:none;color:#777">załóż konto, by śledzić stan realizacji zamówienia.</a>
+                                    Jeśli chcesz na bieżąco śledzić stan realizacji zamówienia, stwórz konto w naszym serwisie. Wystarczy, że podasz hasło do logowania: <a href="{{store url="customer/account/login/"}}" style="text-decoration:none">załóż konto, by śledzić stan realizacji zamówienia.</a>
                                 </div>
                                 {{else}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Stan realizacji tego zamówienia możesz śledzić w swoim koncie, klikając w ten link: <a href="{{var myAccountCheckOrderStatusUrl}}" style="text-decoration:none;color:#777">sprawdź stan zamówienia.</a>
+                                    Stan realizacji tego zamówienia możesz śledzić w swoim koncie, klikając w ten link: <a href="{{store url="sales/order/process/"}}" style="text-decoration:none">sprawdź stan zamówienia.</a>
                                 </div>
                                 {{/if}}
                                 <span class="spacer">&nbsp;</span>
 
 
                                 <h2 style="font-size:15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
-                                    <strong>ZAMÓWIENIE NR. {{var po.getIncrementId()}}</strong>
+                                    <strong>ZAMÓWIENIE NR. {{var order.getIncrementId()}}</strong>
                                 </h2>
 
                                 {{block type='zolagomodago/sales_order_email_new' template='sales/order/email/new.phtml' order=$order}}
@@ -164,14 +164,14 @@
                                 </h2>
 
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    {{var po.getShippingAddress().format('html')}}
+                                    {{var order.firstPo().getShippingAddress().format('html')}}
                                 </div>
 
-                                {{depend po.isBillingSameAsOrder()}}
+                                {{depend order.firstPo().isBillingSameAsOrder()}}
                                 <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
                                     <strong>Dane do faktury:</strong>
                                 </h2>
-                                {{var po.getBillingAddress().format('html')}}
+                                {{var order.firstPo().getBillingAddress().format('html')}}
                                 <span class="spacer">&nbsp;</span>
                                 {{/depend}}
 
