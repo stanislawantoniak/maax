@@ -28,9 +28,9 @@ class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
             $out = array();
             foreach ($collection as $po) {
 				/* @var $po Zolago_Po_Model_Po */
-                //if ($po->getLastNotCanceledShipment() && $po->canBeReturned()) {
+                if ($po->getLastNotCanceledShipment() && $po->canBeReturned()) {
                     $this->_poList[] = $po;
-                //}
+                }
             }
         }
         return $this->_poList;
