@@ -44,7 +44,7 @@
                 </div>
                 <dl class="coupon-list" id="cart_coupon" style="display: <?php if(!$_hasCoupon): ?>none;<?php endif; ?>">
                     <dt><?php echo $this->__("Your coupon:"); ?></dt>
-                    <dd class="ff_os fz_12" <?php if($_hasCoupon && $_couponDescription): ?>data-toggle="tooltip" data-placement="top" title="<?php echo $_couponDescription; ?>" <?php endif; ?> style="height: auto; background: none;"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
+                    <dd class="ff_os fz_12" <?php if($_hasCoupon && $_couponDescription): ?>data-toggle="tooltip" data-placement="bottom" title="<?php echo $_couponDescription; ?>" <?php endif; ?> style="height: auto; background: none;"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
                 </dl>
 
             </div>
