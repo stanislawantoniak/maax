@@ -2927,10 +2927,6 @@ jQuery(document).ready(function () {
         } else {
             jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'visible');
         }
-
-        var a = jQuery('.sort-by-container .selectboxit-container').css('pointer-events');
-        console.log(a);
-
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
