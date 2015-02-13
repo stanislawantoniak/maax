@@ -1096,17 +1096,17 @@ jQuery(document).ready(function() {
 		mobile: Mall.getIsBrowserMobile()
 	});*/
     jQuery(".size-box select").selectBoxIt({
-        //theme: "bootstrap",
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
         autoWidth: false
     });
     var optionsCount = jQuery(".size-box option").length;
-    jQuery(document).ready(function () {
+
         if (optionsCount == 1) {
             Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
         }
-    });
+
+
     jQuery(".size-box select").bind({
         "option-click": function () {
             var selectedOption = jQuery(this).find('option:selected');
@@ -1136,6 +1136,11 @@ jQuery(document).ready(function() {
 			jQuery('html,body').removeClass('modal-open');
 		});
 
+    jQuery('#dropdown-search .styledSelected').on('click', function () {
+        if (jQuery('#dropdown-search').is(':visible')) {
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+        }
+    })
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
 			if(jQuery("#rwd-color").length) {
