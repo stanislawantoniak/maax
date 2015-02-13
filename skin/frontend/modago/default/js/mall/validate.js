@@ -54,7 +54,7 @@ Mall.validate = {
 
         unhighlight: function(element, errorClass, validClass) {
             var isSelect2 = jQuery(element).hasClass("select-box-it-select");
-            console.log(isSelect2);
+
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.innerWidth() + 25,
                 target = isSelect2 ? elem.parent() : elem.closest("div");

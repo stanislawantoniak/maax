@@ -2243,7 +2243,7 @@ jQuery.noConflict();
 
             filterStyleSelect.on('click', '.clear', function(event) {
                 filterStyleSelect.find('select').val('');
-                filterStyleSelect.find('.sbSelector').text('');
+                //filterStyleSelect.find('.sbSelector').text('');
                 $(this).addClass('hidden');
 
             });

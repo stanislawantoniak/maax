@@ -88,8 +88,10 @@
 
 /*Sort select on listing*/
 .sort-by-container {
-  .selectboxit {
-    width: 160px;
+  .selectboxit-container {
+    .selectboxit {
+      width: 160px;
+    }
   }
 }
 
@@ -135,6 +137,9 @@
         line-height: 26px;
       }
     }
+  }
+  .selectboxit-list {
+    z-index: 400;
   }
 }
 
