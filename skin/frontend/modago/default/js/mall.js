@@ -1136,10 +1136,8 @@ jQuery(document).ready(function() {
 			jQuery('html,body').removeClass('modal-open');
 		});
 
-    jQuery('#dropdown-search .styledSelected').on('click', function () {
-        if (jQuery('#dropdown-search').is(':visible')) {
-            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
-        }
+    jQuery('#dropdown-search').on('click', function () {
+        jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
     })
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
