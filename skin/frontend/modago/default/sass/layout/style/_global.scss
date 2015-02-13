@@ -1,6 +1,9 @@
 body.noscroll{
     overflow: hidden; height: 100% ;
 }
+body.nobreadcrumbs #header-main {
+	padding: 0 !important;
+}
 div.noscroll {
 	position:fixed;
 	overflow:hidden;
