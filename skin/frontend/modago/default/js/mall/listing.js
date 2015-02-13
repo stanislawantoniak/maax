@@ -2917,6 +2917,19 @@ Mall.listing = {
 
 jQuery(document).ready(function () {
 	"use strict";
+
+    jQuery('body').click(function (e) {
+
+        if(jQuery(e.target).parents("#dropdown-search").length>0){
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+        } else {
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'visible');
+        }
+
+        var a = jQuery('.sort-by-container .selectboxit-container').css('pointer-events');
+        console.log(a);
+
+    });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
         jQuery(window).resize(function () {
