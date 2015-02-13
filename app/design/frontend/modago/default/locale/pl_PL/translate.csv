@@ -239,6 +239,7 @@
 "Enter company name.","Wprowadź nazwę firmy."
 "Enter city name.","Wprowadź nazwę miasta."
 "Tax number is incorrect. Enter as a string of digits e.g. 1234567890.","Wprowadzony NIP jest niepoprawny. Wpisz jako ciąg liczb np. 12345567890."
+"Enter tax number","Wprowadź NIP"
 "Enter company name or first name and second name.","Wprowadź nazwę firmy albo imię i nazwisko."
 "Enter a password with at least six characters.","Wprowadź hasło minimum sześcioznakowe."
 "Roll up","Zwiń"

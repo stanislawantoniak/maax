@@ -845,6 +845,11 @@
 				<script>js/mall/checkout/guest.js</script>
 			</action>
 		</reference>
+		<reference name="root">
+			<action method="addBodyClass">
+				<value>nobreadcrumbs</value>
+			</action>
+		</reference>
 		<reference name="content">
 			<block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
 				<block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml">
