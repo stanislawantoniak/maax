@@ -51,9 +51,6 @@
                 <name>left</name>
             </action>
             <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
-            <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
         </reference>
@@ -136,9 +133,6 @@
             </action>
             <action method="unsetChild">
                 <name>left</name>
-            </action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
             </action>
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>

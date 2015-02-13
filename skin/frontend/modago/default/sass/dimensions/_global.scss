@@ -73,11 +73,6 @@ body {
 	}
 }
 
-.not-menu-mobile {
-	#nav_mobile {
-		display:none !important;
-	}
-}
 #navCategory { 
 	&.visible-xs {
 		@media (max-width: $screen-sm-min) { 
