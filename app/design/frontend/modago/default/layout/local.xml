@@ -807,6 +807,9 @@
             <action method="addBodyClass">
                 <value>logged</value>
             </action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
         </reference>
 		<reference name="head">
 			<action method="addItem">

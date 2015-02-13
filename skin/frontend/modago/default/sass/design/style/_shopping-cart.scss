@@ -205,6 +205,10 @@
 				}
 				span:first-child {
 					font-size: 14px;
+					@include max-screen($screen-sm-max) {
+						font-size: 13px;
+						text-transform: none;
+					}
 //					line-height: 0px;
 				}
 				span:last-child {
