@@ -2917,7 +2917,9 @@ Mall.listing = {
 
 jQuery(document).ready(function () {
 	"use strict";
-
+    jQuery('#toggleSearch').click(function(){
+        jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+    })
     jQuery('body').click(function (e) {
 
         if(jQuery(e.target).parents("#dropdown-search").length>0){
