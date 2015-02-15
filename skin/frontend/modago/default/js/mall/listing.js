@@ -2583,7 +2583,9 @@ Mall.listing = {
 		}
 
         select.selectBoxIt('destroy');
-        select.selectBoxIt();
+        select.selectBoxIt({
+            autoWidth: false
+        });
 		return this;
 	},
 	/**
