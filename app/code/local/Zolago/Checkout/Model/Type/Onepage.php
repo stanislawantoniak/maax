@@ -43,8 +43,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 
             // force send email no metter if there is $redirectUrl
             // in parent::saveOrder() line ~812
-            $service = Mage::getModel('sales/service_quote', $quote);
-            $order = $service->getOrder();
+            $order = Mage::getModel('sales/order');
+            $order->load($this->getCheckout()->getLastOrderId());
             if ($order) {
                 Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
                 if ($order->getCanSendNewEmailFlag()) {
