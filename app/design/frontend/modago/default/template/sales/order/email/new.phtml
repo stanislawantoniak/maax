@@ -12,6 +12,9 @@
 $helper = Mage::helper('zolagosales');
 //$order = Mage::getModel('sales/order')->load(30); //only for testing
 $order = $this->getOrder();
+if (!$order) {
+    return; //only for not getting error when view template email
+}
 $helperUDPO = Mage::helper('udpo');
 $poList = $order->getPoListByOrder();
 $count = $poList->getSize();

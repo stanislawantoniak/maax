@@ -10,8 +10,6 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
      */
     public function sendNewOrderEmail()
     {
-        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
-
         $storeId = $this->getStore()->getId();
 
         if (!Mage::helper('sales')->canSendNewOrderEmail($storeId)) {
