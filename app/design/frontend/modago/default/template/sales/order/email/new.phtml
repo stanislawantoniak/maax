@@ -36,6 +36,7 @@ foreach ($poList as $po): /** @var Zolago_Po_Model_Po $po */ ?>
     <?php
     Mage::register("current_po", $po);// ugly hack for this block
     echo $this->getLayout()->createBlock('zolagomodago/po_email_summary')->setTemplate("zolagopo/email/summary.phtml")->toHtml();
+    Mage::unregister("current_po");
     ?>
     <span class="spacer">&nbsp;</span>
 <?php endforeach; ?>
