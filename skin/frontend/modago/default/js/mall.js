@@ -10,7 +10,6 @@ var Mall = {
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
-
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -1109,6 +1108,7 @@ jQuery(document).ready(function() {
 
     jQuery(".size-box select").bind({
         "option-click": function () {
+            jQuery("#add-to-cart").tooltip('destroy');
             var selectedOption = jQuery(this).find('option:selected');
             Mall.setSuperAttribute(selectedOption);
         }
