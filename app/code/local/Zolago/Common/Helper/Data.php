@@ -32,9 +32,9 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
 			}
 
-
+            /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
-			/* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+            /** @var Mage_Core_Model_Email_Info $emailInfo */
 			$emailInfo = Mage::getModel('core/email_info');
 			$emailInfo->addTo($email, $name);
 			$mailer->addEmailInfo($emailInfo);
