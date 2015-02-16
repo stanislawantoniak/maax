@@ -1549,7 +1549,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
      * @param $template
      * @param array $templateParams
      * @param null $storeId
-     * @return Zolago_Po_VendorController
+     * @return Zolago_Common_Model_Core_Email_Template_Mailer
      */
     protected function _sendEmailTemplate($customerName, $customerEmail,
                                         $template, $templateParams = array(), $storeId = null)
