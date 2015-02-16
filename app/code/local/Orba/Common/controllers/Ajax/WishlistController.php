@@ -26,6 +26,7 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 			return;
 		}
 		
+		
 		// Send correct data
 		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
 	}

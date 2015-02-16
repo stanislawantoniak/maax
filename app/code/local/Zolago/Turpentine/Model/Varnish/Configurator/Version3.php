@@ -14,5 +14,13 @@ class Zolago_Turpentine_Model_Varnish_Configurator_Version3
 		}
 		return parent::_getVclTemplateFilename($baseFilename);
     }
+	
+	protected function _getTemplateVars() {
+		$vars = parent::_getTemplateVars();
+		// Override esi private ttl - is real magento cookie time - always!
+        $vars['esi_private_ttl'] = 
+				Mage::helper( 'turpentine/esi' )->getSystemCookieLifeTime();
+        return $vars;
+	}
 
 }

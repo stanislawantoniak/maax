@@ -49,7 +49,6 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
                     Mage::helper('wishlist')->__("Requested wishlist doesn't exist")
                 );
             }
-
             Mage::register('wishlist', $wishlist);
         } catch (Mage_Core_Exception $e) {
             Mage::getSingleton('wishlist/session')->addError($e->getMessage());
