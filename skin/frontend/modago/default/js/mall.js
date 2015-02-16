@@ -438,6 +438,7 @@ var Mall = {
     },
 
     setSuperAttribute: function(currentSelection) {
+		jQuery("#add-to-cart").tooltip('destroy');
         this._current_superattribute = currentSelection;
         // change prices
         var optionId = jQuery(this._current_superattribute).attr("value");
