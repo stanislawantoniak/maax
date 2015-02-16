@@ -1428,16 +1428,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                   "use_attachments" => true,
                                   "store_name" => $store->getFrontendName(),
                               );
-            $title = Mage::helper("zolagopo")->__("[%s] message of order #%s", $vendor->getVendorName(), $order->getIncrementId());
 
-            if(!$this->_sendEmailTemplate($order->getCustomerName(),
+            $this->_sendEmailTemplate(
+                $order->getCustomerName(),
                 $order->getCustomerEmail(),
-                $title,
-                Mage::getStoreConfig(self::XML_PATH_ZOLAGO_PO_COMPOSE_EMAIL_TEMPLATE, $store->getId()),
+                self::XML_PATH_ZOLAGO_PO_COMPOSE_EMAIL_TEMPLATE,
                 $templateParams,
-                $store->getId())) {
-                throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Cannot send mail"));
-            }
+                $store->getId()
+                );
 
             Mage::dispatchEvent("zolagopo_po_compose", array(
                                     "po"		=> $udpo,
@@ -1545,43 +1543,35 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $number;
     }
 
-    protected function _sendEmailTemplate($customerName, $customerEmail, $title,
-                                          $template, $templateParams = array(), $storeId = null)
+    /**
+     * @param $customerName
+     * @param $customerEmail
+     * @param $template
+     * @param array $templateParams
+     * @param null $storeId
+     * @return Zolago_Po_VendorController
+     */
+    protected function _sendEmailTemplate($customerName, $customerEmail,
+                                        $template, $templateParams = array(), $storeId = null)
     {
-        $emailTemplate = Mage::getModel("zolagocommon/core_email_template");
-        /* @var $emailTemplate Zolago_Common_Model_Core_Email_Template */
+        $templateParams['use_attachements'] = true;
 
+        $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 
-        // Set required design parameters
-        // and delegate email sending to Mage_Core_Model_Email_Template
-        $emailTemplate->
-        setDesignConfig(array('area' => 'frontend', 'store' => $storeId));
+        $emailInfo = Mage::getModel('core/email_info');
+        $emailInfo->addTo($customerEmail, $customerName);
+        $mailer->addEmailInfo($emailInfo);
 
-        if (is_numeric($template)) {
-            $emailTemplate->load($template);
-        } else {
-            $localeCode = Mage::getStoreConfig('general/locale/code', $storeId);
-            $emailTemplate->loadDefault($template, $localeCode);
-        }
+        // Set all required params and send emails
+        $mailer->setSender(array(
+            'name' => Mage::getStoreConfig('trans_email/ident_support/name', $storeId),
+            'email' => Mage::getStoreConfig('trans_email/ident_support/email', $storeId)));
+        $mailer->setStoreId($storeId);
+        $mailer->setTemplateId(Mage::getStoreConfig($template, $storeId));
+        $mailer->setTemplateParams($templateParams);
 
-        $senderName = Mage::getStoreConfig('trans_email/ident_support/name',
-                                           $storeId);
-        $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email',
-                                            $storeId);
-
-        $emailTemplate->setSenderEmail($senderEmail);
-        $emailTemplate->setSenderName($senderName);
-
-        if(!$emailTemplate->getTemplateSubject()) {
-            $emailTemplate->setTemplateSubject($title);
-        }
-
-        return $emailTemplate->send(
-                   $customerEmail,
-                   $customerName,
-                   $templateParams
-               );
-
+        return $mailer->send();
     }
 
     /**
