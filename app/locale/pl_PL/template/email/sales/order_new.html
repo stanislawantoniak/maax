@@ -1,0 +1,190 @@
+<!--@subject {{var store.getFrontendName()}} – potwierdzenie złożenia zamówienia nr {{var order.getIncrementId()}} @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"var logo_url":"Email Logo Image Url",
+"var logo_alt":"Email Logo Image Alt",
+"htmlescape var=$order.getCustomerName()":"Customer Name",
+"var store.getFrontendName()":"Store Name",
+"store url=\"customer/account/\"":"Customer Account Url",
+"var order.increment_id":"Order Id",
+"var order.getCreatedAtFormated('long')":"Order Created At (datetime)",
+"var order.getBillingAddress().format('html')":"Billing Address",
+"var payment_html":"Payment Details",
+"var order.getShippingAddress().format('html')":"Shipping Address",
+"var order.getShippingDescription()":"Shipping Description",
+"layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
+"var order.getEmailCustomerNote()":"Email Order Note"}
+@-->
+
+<body style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
+<!--[if gte mso 9]>
+<style type="text/css">
+    .container {
+        width: 580px;
+    }
+    .lowerMarginWhite {
+        margin: 25px 35px 10px 35px;
+    }
+    .productsTable {
+        width: 510px;
+    }
+    .spacer {
+        margin: 0 0 25px 0;
+    }
+    .productColumn {
+        width: 420px;
+    }
+    .valueColumn {
+        width: 80px;
+    }
+    .imgColumn {
+        width: 60px;
+    }
+    .productNameColumn {
+        padding-top:10px;
+    }
+</style>
+<![endif]-->
+<style type="text/css">
+    @media only screen and (max-width: 480px) {
+        .borderContainer {
+            border: none !important;
+        }
+
+        .lowerMarginBlack {
+            margin-left: -20px !important;
+        }
+
+        .lowerMarginWhite {
+            border-left: 15px solid white !important;
+            border-right: 15px solid white !important;
+        }
+    }
+</style>
+<div style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
+    <center>
+        <div class="borderContainer" style="border:20px solid #e5e5e5">
+            <div>
+                <table style="direction:ltr;text-align:left;font-family:'Arial','Helvetica',sans-serif;color:#444;background-color:white;max-width:580px"
+                       cellpadding="0" cellspacing="0" border="0" class="container">
+                    <tbody>
+                    <tr>
+                        <td style="margin:0;padding:0">
+                            <div style="width:100%;background-color:black;border-bottom:3px solid #C6A662;">
+                                <div class="lowerMarginBlack">
+                                    <a href='{{store url=""}}' style="text-decoration:none;border:none">
+                                        <img width="175" height="52" alt="{{var logo_alt}}"
+                                             src="cid:logo.png">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="lowerMarginWhite"
+                                 style="border-top:25px solid white;border-bottom:10px solid white;border-left:35px solid white;border-right:35px solid white;font-family:'Arial','Helvetica',sans-serif;font-size:13px;">
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Dziękujemy za złożenie zamówienia w naszej galerii handlowej. Twoje zamówienie zostało przekazane do {{if isMoreVendors}}sklepów{{else}}sklepu{{/if}} {{var vendorNameList}}
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+
+                                <!--START SEKCJA PLATNOSCI ONLIE-->
+                                {{depend order.firstPo().isPaymentDotpay()}}
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Czekamy jeszcze na potwierdzenie przyjęcia wpłaty od operatora systemu płatności. Proces ten trwa zazwyczaj do kilku minut. Zamówienie trafi do realizacji, jak tylko odnotujemy płatność. O statusie płatności zostaniesz poinformowany w osobnym mailu.
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+
+                                {{/depend}}
+                                <!--END SEKCJA PLATNOSCI ONLIE-->
+
+                                <!--START SEKCJA COD-->
+                                {{depend order.firstPo().isCod()}}
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    W momencie wysłania paczki, dostaniesz maila od sklepu ze szczegółowymi informacjami dotyczącymi przesyłki. Za zamówienie zapłacisz przy odbiorze.
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                {{/depend}}
+                                <!--END SEKCJA COD-->
+
+                                <!--START SEKCJA PRZELEW TRADYCYJNY-->
+                                {{depend order.firstPo().isPaymentBanktransfer()}}
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Prosimy o dokonanie przelewu w wysokości {{var order.getFormattedGrandTotalInclTax()}} na następujące konto, wpisując sam numer zamówienia jako tytuł przelewu:
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Odbiorca: Modago Sklep
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Adres: Barkocińska 6, 02-776 Warszawa
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Nr konta: {{config path='payment/banktransfer/account_number'}}
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    <strong>Bank:</strong> Pekao S.A.
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    <strong>Tytuł przelewu:</strong> {{var order.getIncrementId()}}
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                <span class="spacer">&nbsp;</span>
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Zamówienie trafi do realizacji, jak tylko wpłynie płatność. Produkty rezerwowane są na tydzień. Jeśli w tym czasie nie odnotujemy wpłaty, zamówienie zostanie anulowane.
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+                                {{/depend}}
+                                <!--END SEKCJA PRZELEW TRADYCYJNY-->
+
+                                {{if customerIsGuest}}
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Jeśli chcesz na bieżąco śledzić stan realizacji zamówienia, stwórz konto w naszym serwisie. Wystarczy, że podasz hasło do logowania: <a href="{{store url="customer/account/login/"}}" style="text-decoration:none">załóż konto, by śledzić stan realizacji zamówienia.</a>
+                                </div>
+                                {{else}}
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Stan realizacji tego zamówienia możesz śledzić w swoim koncie, klikając w ten link: <a href="{{store url="sales/order/process/"}}" style="text-decoration:none">sprawdź stan zamówienia.</a>
+                                </div>
+                                {{/if}}
+                                <span class="spacer">&nbsp;</span>
+
+
+                                <h2 style="font-size:15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
+                                    <strong>ZAMÓWIENIE NR. {{var order.getIncrementId()}}</strong>
+                                </h2>
+
+                                {{block type='zolagomodago/sales_order_email_new' template='sales/order/email/new.phtml' order=$order}}
+
+                                <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
+                                    <strong>Adres dostawy:</strong>
+                                </h2>
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    {{var order.firstPo().getShippingAddress().format('html')}}
+                                </div>
+
+                                {{depend order.firstPo().needInvoice()}}
+                                <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
+                                    <strong>Dane do faktury:</strong>
+                                </h2>
+                                {{var order.firstPo().getBillingAddress().format('html')}}
+                                <span class="spacer">&nbsp;</span>
+                                {{/depend}}
+
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="background-color:#e5e5e5;direction:ltr;color:#777;font-size:11px;border:10px solid #E5E5E5;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif;text-align:center">&copy;
+                    2014 <a href='{{store url=""}}' style="text-decoration:none;color:#777">Modago.pl</a>
+                </div>
+            </div>
+        </div>
+    </center>
+</div>
+</body>
