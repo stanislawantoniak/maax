@@ -367,29 +367,15 @@
 			<action method="addBodyClass">
 				<value>node-type-shopping-cart</value>
 			</action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
+			
 		</reference>
 		<reference name="head">
 			<action method="removeItem">
 				<type>js</type>
 				<script>varien/weee.js</script>
-			</action>
-		</reference>
-		<reference name="breadcrumbs">
-			<action method="addCrumb">
-				<crumbName>Home</crumbName>
-				<crumbInfo>
-					<label>Home</label>
-					<title>Home</title>
-					<link>/</link>
-				</crumbInfo>
-			</action>
-			<action method="addCrumb">
-				<crumbName>cart</crumbName>
-				<crumbInfo>
-					<label>Shopping Cart</label>
-					<title>Shopping Cart</title>
-					<link>/checkout/cart</link>
-				</crumbInfo>
 			</action>
 		</reference>
 
