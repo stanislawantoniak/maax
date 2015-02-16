@@ -46,9 +46,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             $order = Mage::getModel('sales/order');
             $order->load($this->getCheckout()->getLastOrderId());
             if ($order) {
-                Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
                 if ($order->getCanSendNewEmailFlag()) {
-                    Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
                     try {
                         $order->sendNewOrderEmail();
                     } catch (Exception $e) {
