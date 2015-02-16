@@ -1424,7 +1424,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                   "order" => $order,
                                   "store" => $store,
                                   "vendor" => $vendor,
-                                  "message" => $message
+                                  "message" => $message,
+                                  "use_attachments" => true,
+                                  "store_name" => $store->getFrontendName(),
                               );
             $title = Mage::helper("zolagopo")->__("[%s] message of order #%s", $vendor->getVendorName(), $order->getIncrementId());
 
@@ -1546,8 +1548,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     protected function _sendEmailTemplate($customerName, $customerEmail, $title,
                                           $template, $templateParams = array(), $storeId = null)
     {
-        $emailTemplate = Mage::getModel("core/email_template");
-        /* @var $emailTemplate Mage_Core_Model_Email_Template */
+        $emailTemplate = Mage::getModel("zolagocommon/core_email_template");
+        /* @var $emailTemplate Zolago_Common_Model_Core_Email_Template */
 
 
         // Set required design parameters
