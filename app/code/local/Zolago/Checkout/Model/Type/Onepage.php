@@ -46,7 +46,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             $service = Mage::getModel('sales/service_quote', $quote);
             $order = $service->getOrder();
             if ($order) {
+                Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
                 if ($order->getCanSendNewEmailFlag()) {
+                    Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
                     try {
                         $order->sendNewOrderEmail();
                     } catch (Exception $e) {
