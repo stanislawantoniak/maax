@@ -89,7 +89,7 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
                 'use_attachements'    => true,
                 'customerIsGuest'     => $this->getCustomerIsGuest(),
                 'isMoreVendors'       => $this->isMoreVendors(),
-                '$vendorNameList'     => $this->getVendorNameList(),
+                'vendorNameList'     => $this->getVendorNameList(),
                 "_ATTACHMENTS"        => Mage::helper("zolagopo")->getOrderImagesAsAttachments($this)
             )
         );
