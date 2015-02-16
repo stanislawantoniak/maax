@@ -767,7 +767,7 @@ form {
 	    input[type=checkbox].css-checkbox + label.css-label:hover,
 	    input[type=radio].css-radio + label.css-label:hover {
 	        //background-position: 0 -50px;
-	        @include sprite($btnCheck, hover);
+	        //@include sprite($btnCheck, hover);
 	        color:#999999;
 	    }
 	    input[type=checkbox].css-checkbox:checked + label.css-label,
@@ -1754,11 +1754,12 @@ figure {
 
 .tooltip {
 			border-radius: 0px;
+			opacity: 1 !important;
 			.tooltip-inner{
 				background:#f0f0f0;
 				white-space: normal;
 				padding: 6px 8px;
-				color:#000;
+				color:#ea687e;
 				border-radius: 0px;
 				max-width: 400px;
 			}

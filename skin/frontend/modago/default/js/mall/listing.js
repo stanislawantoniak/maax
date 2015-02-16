@@ -1648,11 +1648,7 @@ Mall.listing = {
 			self = this;
 		//sortingSelect.selectbox();
         sortingSelect.selectBoxIt({
-            autoWidth: false,
-            native: false,
-            isMobile: function(){
-                return false;
-            }
+            autoWidth: false
         });
 		if(this.getPushStateSupport()) {
 			sortingSelect.change(function () {
@@ -2585,10 +2581,11 @@ Mall.listing = {
 		} else {
 			select.val(select.find(":first-child").val());
 		}
-		//select.selectbox('detach');
-		//select.selectbox('attach');
+
         select.selectBoxIt('destroy');
-        select.selectBoxIt();
+        select.selectBoxIt({
+            autoWidth: false
+        });
 		return this;
 	},
 	/**
@@ -2922,6 +2919,17 @@ Mall.listing = {
 
 jQuery(document).ready(function () {
 	"use strict";
+    jQuery('#toggleSearch').click(function(){
+        jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+    })
+    jQuery('body').click(function (e) {
+
+        if(jQuery(e.target).parents("#dropdown-search").length>0){
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+        } else {
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'visible');
+        }
+    });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
         jQuery(window).resize(function () {

@@ -19,18 +19,6 @@ class Zolago_Persistent_IndexController extends Mage_Persistent_IndexController
 	}
 	
 	/**
-	 * Forget CMS page
-	 * @return type
-	 */
-    public function testAction() {
-		if($this->_getHelper()->isPersistent()){
-			echo "TAK";
-			return;
-		}
-		echo "NO";
-	}
-	
-	/**
 	 * Do remove persistent
 	 * @return type
 	 */

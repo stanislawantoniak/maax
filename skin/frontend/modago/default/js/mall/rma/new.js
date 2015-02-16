@@ -38,9 +38,16 @@ jQuery(function($){
 			var self = this;
 			this.steps = [this.step1, this.step2, this.step3];
 
-			this.validation = this.newRma.validate(
-				Mall.validate.getOptions()
-			);
+            var rmaValidationOptions = jQuery.extend({}, Mall.validate.getOptions(), {
+                ignore: '',
+                wrapper: "div",
+                errorPlacement: function (error, element) {
+                    if(jQuery(element).filter('[id^=condition-]')){
+                        error.appendTo(element.parents(".form-group"));
+                    }
+                }
+            });
+			this.validation = this.newRma.validate(rmaValidationOptions);
 			
 			// Inicjuamy 3 kroki zawsze
 			// Wewnątrz każdej sprawdzmy czy mozna
@@ -139,9 +146,9 @@ jQuery(function($){
 				}
 			});
 
-
-
-            selects.select2({minimumResultsForSearch: -1});
+            selects.selectBoxIt({
+                autoWidth: false
+            });
 			selects.change(selectHandler);
 
             // Handle next click

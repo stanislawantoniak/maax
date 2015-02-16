@@ -133,17 +133,6 @@
 			<action method="addCss">
 				<stylesheet>css/jquery-ui.css</stylesheet>
 			</action>
-			<!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
-			<action method="addCss">
-				<stylesheet>js/vendor/select2/select2.css</stylesheet>
-			</action>
-			<action method="addCss">
-				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
-			</action>
-            <!--<action method="addCss">-->
-                <!--<stylesheet>js/bootstrap-select/css/bootstrap-select.min.css</stylesheet>-->
-            <!--</action>-->
-
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
@@ -196,14 +185,7 @@
 				<type>skin_js</type>
 				<script>js/jquery.mousewheel.js</script>
 			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/jquery.selectbox-0.2.js</script>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/vendor/select2/select2.js</script>
-			</action>
+
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/imagesloaded.pkgd.min.js</script>
@@ -471,9 +453,6 @@
 			<action method="addBodyClass">
 				<value>view-menu-category</value>
 			</action>
-			<action method="addBodyClass">
-				<value>not-menu-mobile</value>
-			</action>
 		</reference>
 		<reference name="head">
             <action method="addItem">
@@ -535,9 +514,6 @@
             </action>
             <action method="addBodyClass">
                 <value>view-menu-category</value>
-            </action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
             </action>
             <action method="addBodyClass">
                 <value>catalog-category-view</value>
@@ -706,9 +682,6 @@
 			<action method="addBodyClass">
 				<value>node-type-page-shop</value>
 			</action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
 			</action>
@@ -816,6 +789,9 @@
             <action method="addBodyClass">
                 <value>logged</value>
             </action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
         </reference>
 		<reference name="head">
 			<action method="addItem">
@@ -849,6 +825,11 @@
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/mall/checkout/guest.js</script>
+			</action>
+		</reference>
+		<reference name="root">
+			<action method="addBodyClass">
+				<value>nobreadcrumbs</value>
 			</action>
 		</reference>
 		<reference name="content">
@@ -921,9 +902,6 @@
             </action>
             <action method="unsetChild">
                 <name>left</name>
-            </action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
             </action>
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
@@ -1591,9 +1569,6 @@
                 <template>page/1column.phtml</template>
             </action>
             <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
-            <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
         </reference>
@@ -1634,9 +1609,6 @@
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
-            </action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
             </action>
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
@@ -1681,19 +1653,12 @@
                 <template>page/1column.phtml</template>
             </action>
             <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
-            <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
         </reference>
         <reference name="content">
-
-
-
             <block type="core/template" name="contact.gallery" template="help/contact-gallery.phtml" />
             <block type="core/template" name="messages.fix" template="help/messagesfix.phtml" />
-
         </reference>
     </help_contact_gallery>
 
