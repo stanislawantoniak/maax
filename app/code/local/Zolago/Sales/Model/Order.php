@@ -90,7 +90,7 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
                 'customerIsGuest'     => $this->getCustomerIsGuest(),
                 'isMoreVendors'       => $this->isMoreVendors(),
                 '$vendorNameList'     => $this->getVendorNameList(),
-                //todo cala lista zjdec z kazdego po albo z calego order
+                "_ATTACHMENTS"        => Mage::helper("zolagopo")->getOrderImagesAsAttachments($this)
             )
         );
 

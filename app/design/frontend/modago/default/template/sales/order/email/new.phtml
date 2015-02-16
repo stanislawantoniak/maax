@@ -4,36 +4,30 @@
  */
 
 /** @var Zolago_Modago_Block_Sales_Order_Email_New $this */
-
+/** @var Zolago_Sales_Helper_Data $helper */
 /** @var Zolago_Sales_Model_Order $order */
+/** @var Zolago_Po_Helper_Data $helperUDPO */
+/** @var Unirgy_DropshipPo_Model_Mysql4_Po_Collection $poList */
+
+$helper = Mage::helper('zolagosales');
 //$order = Mage::getModel('sales/order')->load(30); //only for testing
 $order = $this->getOrder();
-
-/** @var Zolago_Po_Helper_Data $helperUDPO */
 $helperUDPO = Mage::helper('udpo');
-/** @var Unirgy_DropshipPo_Model_Mysql4_Po_Collection $poList */
 $poList = $order->getPoListByOrder();
-
-/** @var Zolago_Po_Model_Po $udpo */
-//$udpo = $helperUDPO->toUdpo($order);
-
-
 $count = $poList->getSize();
 $i = 1;
-foreach ($poList as $po):
-    /** @var Zolago_Po_Model_Po $po */
-    var_dump((int)$po->isPaymentDotpay());
-    var_dump((int)$po->isCod());
-    var_dump((int)$po->isPaymentBanktransfer());
-    ?>
+
+foreach ($poList as $po): /** @var Zolago_Po_Model_Po $po */ ?>
 
     <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-        Sklep: <?php echo $po->getVendorName(); ?><?php echo $count >= 2 ? "(Przesyłka $i z $count)" : ""; ?><br/>
-        <a href="<?php echo "dev"; ?>" style="text-decoration:none">skontaktuj się ze sklepem</a>
+        <?php echo $helper->__("Shop:"); ?> <?php echo $po->getVendorName(); ?> <?php echo $count >= 2 ? $helper->__("(Shipment %d of %d)", $i, $count): ""; ?><br/>
+        <a href="<?php echo Mage::getUrl("help/contact/vendor", array(
+            "vendor" => $po->getVendor()->getId(),
+            "po"     => $po->getId())); ?>" style="text-decoration:none"><?php echo $helper->__("contact with shop"); ?></a>
     </div>
     <span class="spacer">&nbsp;</span>
     <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-        Planowana data wysyłki: <?php echo '[todo]'; ?> <?php ($po->isCod()) ? '' : "(może się zmienić w przypadku braku płatności)" ;?>
+        <?php echo $helper->__("Max shipping date:"); ?> <?php echo $po->getMaxShippingDate(); ?> <?php ($po->isCod()) ? '' : $helper->__("(may change in the case of non-payment)"); ?>
     </div>
 
     <?php

@@ -167,7 +167,7 @@
                                     {{var order.firstPo().getShippingAddress().format('html')}}
                                 </div>
 
-                                {{depend order.firstPo().isBillingSameAsOrder()}}
+                                {{depend order.firstPo().needInvoice()}}
                                 <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
                                     <strong>Dane do faktury:</strong>
                                 </h2>

@@ -158,6 +158,28 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		
 		return $attachments;
 	}
+
+    /**
+     * get all images attachments from order witch can have more
+     * then 1 PO
+     *
+     * @param Zolago_Sales_Model_Order $order
+     * @return array
+     */
+    public function getOrderImagesAsAttachments(Zolago_Sales_Model_Order $order) {
+
+        $coll = $order->getPoListByOrder();
+        $allAttachments = array();
+
+        foreach ($coll as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            $attachments = $this->getPoImagesAsAttachments($po);
+            foreach ($attachments as $att) {
+                $allAttachments[] = $att;
+            }
+        }
+        return $allAttachments;
+    }
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
