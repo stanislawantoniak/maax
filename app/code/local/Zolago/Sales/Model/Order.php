@@ -85,8 +85,8 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
                 'billing'      => $this->getBillingAddress(),
 //                'payment_html' => $paymentBlockHtml,
                 'use_attachements'    => true,
-                'customerIsGuest'     => $this->getCustomerIsGuest(),
-                'isMoreVendors'       => $this->isMoreVendors(),
+                'customerIsGuest'     => $this->getCustomerIsGuest() ? true : false,
+                'isMoreVendors'       => $this->isMoreVendors() ? true : false,
                 'vendorNameList'     => $this->getVendorNameList(),
                 "_ATTACHMENTS"        => Mage::helper("zolagopo")->getOrderImagesAsAttachments($this)
             )
