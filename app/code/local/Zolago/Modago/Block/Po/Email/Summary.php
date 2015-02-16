@@ -1,5 +1,5 @@
 <?php
-class mozeZolago_Modago_Block_Po_Email_Summary extends Mage_Core_Block_Template
+class Zolago_Modago_Block_Po_Email_Summary extends Mage_Core_Block_Template
 {
 	/**
 	 * @return Zolago_Po_Model_Po | null
