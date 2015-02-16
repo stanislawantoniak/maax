@@ -4,6 +4,7 @@
 "Name","Nazwa"
 "Content","Zawartość"
 "Box Image *","Obrazek *"
+"Box Image","Obrazek"
 "Box Image: url","URL dla obrazka"
 "Main image","Obrazek podstawowy"
 "Main image: url","URL dla obrazka"
@@ -13,4 +14,8 @@
 "Save","Zapisz"
 "Image is required","Obrazek jest wymagany"
 "This field is required.","To pole jest wymagane."
-
+"Top caption: url","Górny napis: url"
+"Top caption: text","Górny napis: tekst"
+"Bottom caption: url","Dolny napis: url"
+"Bottom caption: text","Dolny napis: tekst"
+"Edit","Edytuj"

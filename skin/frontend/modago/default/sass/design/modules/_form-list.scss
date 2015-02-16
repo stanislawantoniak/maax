@@ -9,8 +9,12 @@ ul.form-list {
 		}
 	}
 }
-form#question-form{
-	margin: 25px 0;
+
+form#question-form {
+  margin: 25px 0;
+  .error {
+    padding-left: 0px !important;
+  }
 }
 div#contact-container{
 	padding: 30px;

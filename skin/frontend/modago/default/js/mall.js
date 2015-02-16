@@ -10,7 +10,6 @@ var Mall = {
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
-
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -163,7 +162,7 @@ var Mall = {
         data.content.cart.products_count_msg = Mall.i18nValidation.__("products_count_msg", "See your cart");
         data.content.cart.products_worth_msg = Mall.i18nValidation.__("products_worth_msg", "See your cart");
         data.content.cart.shipping_cost_msg = Mall.i18nValidation.__("shipping_cost_msg", "See your cart");
-        jQuery("#dropdown-basket").find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
+	    dropdownBasket.find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
 //        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
 
         // build product list
@@ -171,9 +170,10 @@ var Mall = {
         // build object for filling products template
         Mall._data = data.content;
         // clear products
-        jQuery("#product-list").html("");
+	    var productList = jQuery("#product-list");
+	    productList.html("");
         if(products.length == 0) {
-            jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+	        productList.html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
         } else {
             jQuery.each(products, function(key) {
                 if(typeof products[key].options[0] != "undefined") {
@@ -181,7 +181,7 @@ var Mall = {
                     products[key].attr_value = products[key].options[0].value;
                     products[key].currency_symbol = Mall._data.cart.currency_symbol;
                     products[key].unit_price = number_format(products[key].unit_price, 2, ",", " ");
-                    jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
+	                productList.append(Mall.replace(Mall._product_template, products[key]));
                 }
             });
         }
@@ -212,9 +212,9 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
-		// Wood-based... how to replace opts?
-		searchContext.selectbox("detach");
-		searchContext.selectbox("attach");
+        jQuery('.search-context').selectBoxIt({
+            autoWidth: false
+        });
 		
 		// Process product context 
 
@@ -438,6 +438,7 @@ var Mall = {
     },
 
     setSuperAttribute: function(currentSelection) {
+		jQuery("#add-to-cart").tooltip('destroy');
         this._current_superattribute = currentSelection;
         // change prices
         var optionId = jQuery(this._current_superattribute).attr("value");
@@ -1079,15 +1080,15 @@ jQuery(document).ready(function() {
 
     });
 
-    jQuery("#product-listing-sort-control").selectbox({
-        onOpen: function (inst) {
-//            initScrollBarFilterStyle();
-        },
-
-        onChange: function(value, inst) {
-            location.href = value;
-        }
-    });
+//    jQuery("#product-listing-sort-control").selectbox({
+//        onOpen: function (inst) {
+////            initScrollBarFilterStyle();
+//        },
+//
+//        onChange: function(value, inst) {
+//            location.href = value;
+//        }
+//    });
     //#######################
     //## SIZE-BOX -> SELECTBOX
     //#######################
@@ -1095,22 +1096,26 @@ jQuery(document).ready(function() {
 		mobile: Mall.getIsBrowserMobile()
 	});*/
     jQuery(".size-box select").selectBoxIt({
-        theme: "bootstrap",
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
         autoWidth: false
     });
     var optionsCount = jQuery(".size-box option").length;
-    jQuery(document).ready(function () {
+
         if (optionsCount == 1) {
             Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
         }
-    });
+
+
     jQuery(".size-box select").bind({
         "option-click": function () {
+            jQuery("#add-to-cart").tooltip('destroy');
             var selectedOption = jQuery(this).find('option:selected');
             Mall.setSuperAttribute(selectedOption);
         }
+    });
+    jQuery('#shopping-cart .select-styled').selectBoxIt({
+        autoWidth: false
     });
 
 

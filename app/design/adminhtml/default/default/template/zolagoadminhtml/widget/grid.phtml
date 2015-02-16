@@ -8,6 +8,7 @@
  *  getPagerVisibility()
  *  getVarNamePage()
  */
+$_helper = Mage::helper("zolagoadminhtml");
 $numColumns = sizeof($this->getColumns());
 ?>
 <div id="<?php echo $this->getId() ?>">
@@ -31,12 +32,12 @@ $numColumns = sizeof($this->getColumns());
 			<div class="pull-left form-inline">
 				<div class="text-holder">
 					<label>
-					<?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+					<?php echo $_helper->__('Total %d records found.', $this->getCollection()->getSize()) ?>
 					<span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
 					</label>
 				</div>
 				<div class="text-holder">
-					<label><?php echo $this->__('View') ?></label>
+					<label><?php echo $_helper->__('View') ?></label>
 				</div>
 				<div class="form-group">
 					<select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
@@ -48,7 +49,7 @@ $numColumns = sizeof($this->getColumns());
 					</select>
 				</div>
 				<div class="text-holder">
-					<label><?php echo $this->__('per page.') ?></label>
+					<label><?php echo $_helper->__('per page.') ?></label>
 				</div>
 			</div>
 			<?php if($this->getMainButtonsHtml()):?>
@@ -64,19 +65,19 @@ $numColumns = sizeof($this->getColumns());
 				</div>
 				<div class="text-holder">
 					<label>
-						<?php echo $this->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
+						<?php echo $_helper->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
 					</label>
 				</div>
 				<div class="form-group">
 					<div class="btn-group">
 						<?php if($_curPage>1): ?>
-						<button class="btn btn-default"  title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+						<button class="btn btn-default"  title="<?php echo $_helper->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
 						<?php else: ?>
 							<button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
 						<?php endif; ?>
 
 						<?php if($_curPage < $_lastPage): ?>
-							<button class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+							<button class="btn btn-default"  title="<?php echo $_helper->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
 						<?php else: ?>
 							<button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
 						<?php endif; ?>
@@ -100,7 +101,7 @@ $numColumns = sizeof($this->getColumns());
     <?php if($this->getExportTypes()): ?>
 		<div class="next-row">
 			<div class="col-md-4">
-				<img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
+				<img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $_helper->__('Export to:') ?>
 				<select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;" class="form-control">
 				<?php foreach ($this->getExportTypes() as $_type): ?>
 					<option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
@@ -207,12 +208,12 @@ $numColumns = sizeof($this->getColumns());
 			<div class="col-md-6 form-inline">
 				<div class="checkbox">
 					<label>
-					<?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+					<?php echo $_helper->__('Total %d records found.', $this->getCollection()->getSize()) ?>
 					<span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
 					</label>
 				</div>
 				<div class="checkbox">
-					<label><?php echo $this->__('View') ?></label>
+					<label><?php echo $_helper->__('View') ?></label>
 				</div>
 				<div class="form-group">
 					<select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
@@ -224,7 +225,7 @@ $numColumns = sizeof($this->getColumns());
 					</select>
 				</div>
 				<div class="checkbox">
-					<label><?php echo $this->__('per page.') ?></label>
+					<label><?php echo $_helper->__('per page.') ?></label>
 				</div>
 			</div>
 			<div class="col-md-6 form-inline">
@@ -236,19 +237,19 @@ $numColumns = sizeof($this->getColumns());
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo $this->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
+							<?php echo $_helper->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
 						</label>
 					</div>
 					<div class="form-group">
 						<div class="btn-group">
 							<?php if($_curPage>1): ?>
-								<button class="btn btn-default"  title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+								<button class="btn btn-default"  title="<?php echo $_helper->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
 							<?php else: ?>
 								<button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
 							<?php endif; ?>
 
 							<?php if($_curPage < $_lastPage): ?>
-								<button  class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+								<button  class="btn btn-default"  title="<?php echo $_helper->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
 							<?php else: ?>
 								<button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
 							<?php endif; ?>

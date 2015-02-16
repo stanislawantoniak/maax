@@ -25,6 +25,8 @@
         }
 */
 
+        $this->getLayout()->getBlock('root')->addBodyClass('filter-sidebar');
+
         return parent::_prepareLayout();
     }
 

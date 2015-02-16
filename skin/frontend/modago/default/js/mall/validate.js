@@ -18,7 +18,7 @@ Mall.validate = {
         messages: { },
 
         highlight: function(element, errorClass, validClass) {
-            var isSelect2 = jQuery(element).hasClass("select2-offscreen");
+            var isSelect2 = jQuery(element).hasClass("select-box-it-select");
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.actual( 'innerWidth' ) + 25,
                 target = isSelect2 ? elem.parent() : elem.closest("div");
@@ -53,7 +53,8 @@ Mall.validate = {
         },
 
         unhighlight: function(element, errorClass, validClass) {
-            var isSelect2 = jQuery(element).hasClass("select2-offscreen");
+            var isSelect2 = jQuery(element).hasClass("select-box-it-select");
+
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.innerWidth() + 25,
                 target = isSelect2 ? elem.parent() : elem.closest("div");

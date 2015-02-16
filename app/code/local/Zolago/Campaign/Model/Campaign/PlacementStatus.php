@@ -28,10 +28,10 @@ class Zolago_Campaign_Model_Campaign_PlacementStatus{
             self::TYPE_FUTURE => 'icon-time'
         );
         $messages = array(
-            self::TYPE_EXPIRED => 'Campaign has ended. Creative is not active.',
-            self::TYPE_ACTIVE => 'Creative is active.',
-            self::TYPE_EXPIRES_SOON => 'Creative will expire soon',
-            self::TYPE_FUTURE => 'Creative will start soon'
+            self::TYPE_EXPIRED => Mage::helper("zolagocampaign")->__('Campaign has ended. Creative is not active.'),
+            self::TYPE_ACTIVE => Mage::helper("zolagocampaign")->__('Creative is active.'),
+            self::TYPE_EXPIRES_SOON => Mage::helper("zolagocampaign")->__('Creative will expire soon.'),
+            self::TYPE_FUTURE => Mage::helper("zolagocampaign")->__('Creative will start soon.')
         );
 
         foreach ($this->toOptionHash() as $option => $label) {

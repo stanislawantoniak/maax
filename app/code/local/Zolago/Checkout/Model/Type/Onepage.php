@@ -41,6 +41,19 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			// Parent save order
 			$return = parent::saveOrder();
 
+            // force send email no metter if there is $redirectUrl
+            // in parent::saveOrder() line ~812
+            $order = Mage::getModel('sales/order');
+            $order->load($this->getCheckout()->getLastOrderId());
+            if ($order) {
+                if ($order->getCanSendNewEmailFlag()) {
+                    try {
+                        $order->sendNewOrderEmail();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+            }
 
             if(Mage::getSingleton('customer/session')->isLoggedIn()
                 && $this->getQuote()->getCustomerId()) {

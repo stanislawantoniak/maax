@@ -390,7 +390,7 @@ jQuery.noConflict();
 		var widthWindow = $(window).innerWidth();
 		var kolumnaPrawa =  $("div.col-01").innerHeight();
 		var kolumnaLewa = $("div.col-02").innerHeight();
-		if (widthWindow >= 768) {
+		if (widthWindow >= 748) {
 			if (kolumnaLewa > kolumnaPrawa) {
 				$("div.col-01").css({'height' : kolumnaLewa});
 			} else {
@@ -400,9 +400,11 @@ jQuery.noConflict();
 		$( window ).resize(function() {
 			var widthWindow = $(window).innerWidth();
 			var col01 = $("div.col-01"), col02 = $("div.col-02");
+			col01.css({'height' : 'auto'});
+			col02.css({'height' : 'auto'});
 			var kolumnaPrawa =  col01.innerHeight();
 			var kolumnaLewa = col02.innerHeight();
-			if (widthWindow >= 768) {
+			if (widthWindow >= 748) {
 				if (kolumnaLewa > kolumnaPrawa) {
 					col01.css({'height' : kolumnaLewa});
 				} else {

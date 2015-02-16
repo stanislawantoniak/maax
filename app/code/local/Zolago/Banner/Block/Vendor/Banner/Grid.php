@@ -49,7 +49,7 @@ class Zolago_Banner_Block_Vendor_Banner_Grid extends Mage_Adminhtml_Block_Widget
 				'index'		=> 'banner_id',
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_label'=> $_helper->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false

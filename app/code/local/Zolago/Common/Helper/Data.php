@@ -25,16 +25,16 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @param int | Mage_Core_Model_Store $storeId
 	 */
 	public function sendEmailTemplate($email, $name, $template, 
-			array $templateParams = array(), $storeId=true, $sender=null) {
+			array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
 		
 			$storeId = Mage::app()->getStore($storeId)->getId();
 			if(is_null($sender)){
 				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
 			}
 
-
+            /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
-			/* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+            /** @var Mage_Core_Model_Email_Info $emailInfo */
 			$emailInfo = Mage::getModel('core/email_info');
 			$emailInfo->addTo($email, $name);
 			$mailer->addEmailInfo($emailInfo);

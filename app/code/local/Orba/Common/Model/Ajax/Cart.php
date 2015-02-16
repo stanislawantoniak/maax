@@ -45,6 +45,7 @@ class Orba_Common_Model_Ajax_Cart extends Mage_Core_Model_Abstract {
         if ($qty < 0) {
             throw Mage::exception('Orba_Common', 'Product quantity must be greater than zero.');
         }
+	    /** @var Mage_Checkout_Model_Cart $cart */
         $cart = Mage::getSingleton('checkout/cart');
         $params = array(
             'product' => $productId,

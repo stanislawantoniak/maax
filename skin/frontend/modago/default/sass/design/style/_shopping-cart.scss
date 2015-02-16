@@ -102,12 +102,6 @@
 						line-height: 22px;
 					}
 					&.cell-03 {
-						.styledSelected {
-							.sbSelector,
-							.sbOptions  {
-								text-align: left;
-							}
-						}
 						.select-group.medium {
 							.button-select {
 								font-size: 11px;
@@ -205,6 +199,10 @@
 				}
 				span:first-child {
 					font-size: 14px;
+					@include max-screen($screen-sm-max) {
+						font-size: 13px;
+						text-transform: none;
+					}
 //					line-height: 0px;
 				}
 				span:last-child {
