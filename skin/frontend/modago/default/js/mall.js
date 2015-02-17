@@ -203,7 +203,7 @@ var Mall = {
         }
 
 		// Process search context
-		var searchContext = jQuery(".search-context").html('');
+		var searchContext = jQuery("select[name=scat]").html('');
 		if(data.content.search && data.content.search.select_options){
 			jQuery.each(data.content.search.select_options, function(){
 				searchContext.append(jQuery("<option>").attr({
@@ -212,7 +212,7 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
-        jQuery('.search-context').selectBoxIt({
+        jQuery('select[name=scat]').selectBoxIt({
             autoWidth: false
         });
 		
