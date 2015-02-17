@@ -71,7 +71,7 @@ $cost = $items->cost;
         //And auto select the FIRST method, if any checked before for quote
         var countMethods = jQuery('#shipping-methods .panel-color').size();
         if(parseInt(countMethods) == 1){
-            jQuery('#shipping-methods .panel-color').addClass('selected-shipping');
+//            jQuery('#shipping-methods .panel-color').addClass('selected-shipping');
             jQuery('#shipping-methods .panel-color').find('input[name=_shipping_method]')
                 .attr("checked", "checked")
                 .prop("checked", true);
