@@ -5,7 +5,7 @@ $installer = $this;
 $installer->startSetup();
 $vendorTable = $this->getTable("udropship/vendor");
 
-// vendors on mainpage in customized sequence (order)
+// Customer can ask vendor?
 $installer->getConnection()->addColumn($vendorTable, "can_ask", array(
     "type"     => Varien_Db_Ddl_Table::TYPE_SMALLINT,
     "lenght"   => 1,
