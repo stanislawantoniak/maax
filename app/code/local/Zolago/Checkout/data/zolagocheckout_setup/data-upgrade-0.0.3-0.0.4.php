@@ -1,7 +1,6 @@
 <?php
 $newContent = <<<EOD
-Potwierdzenie zamówienia przez kliknięcie przycisku "Zamawiam i płacę" wiąże się z obowiązkiem opłacenia zamówienia. </br>
-Nie będzie już można dokonać zmian w koszyku.
+Potwierdzenie zamówienia przez kliknięcie przycisku "Zamawiam i płacę" wiąże się z obowiązkiem opłacenia zamówienia. Nie będzie już można dokonać zmian w koszyku.
 EOD;
 
 
