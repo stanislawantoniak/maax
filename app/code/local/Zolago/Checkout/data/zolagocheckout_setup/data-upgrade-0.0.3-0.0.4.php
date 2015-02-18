@@ -19,7 +19,7 @@ $data['title'] = 'Checkout review footer';
 $cms->setData($data)->save();
 
 $newContent = <<<EOD
-Potwierdzenie zamówienia przez kliknięcie przycisku "Zamawiam i płacę" wiąże się z obowiązkiem zapłaty przy odbiorze przesyłki.
+Potwierdzenie zamówienia przez kliknięcie przycisku "Zamawiam i płacę" wiąże się z obowiązkiem zapłaty przy odbiorze przesyłki. Nie będzie już można dokonać zmian w koszyku.
 EOD;
 
 
