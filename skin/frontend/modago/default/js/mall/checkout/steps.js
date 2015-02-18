@@ -1623,6 +1623,13 @@
 				return null;
 			},
 			
+			getCheckoutReviewInfo: function (){
+				if (this.getSelectedPayment() == 'cashondelivery') {
+					return jQuery("#checkout-review-info-cod").html();
+				} else {	
+					return jQuery("#checkout-review-info").html();
+				}
+			},
 			getCostForVendor: function(vendorId, methodCode){
 				var costs = this.getVendorCosts();
 				if(typeof costs == "object" && 
@@ -1721,10 +1728,11 @@
 			code: "review",
 			_sidebarAddressesTemplate: "",
 			_sidebarDeliverypaymentTemplate: "",
-			
+			_reviewInfoTemplate: "",
 			onPrepare: function(checkoutObject){
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
+				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
@@ -1751,7 +1759,12 @@
 					this.getSidebarDeliverypayment(), 
 					this.getSidebarDeliverypaymentTemplate()
 				);
-				
+				var textpotwierdzenie = checkout.getReviewInfo();
+				checkout.prepareReviewInfo(
+					textpotwierdzenie,
+					this.getReviewInfo(),
+					this.getReviewInfoTemplate()
+				);
 				this._prepareTotals(checkout);
 			},
 			
@@ -1803,6 +1816,12 @@
 			getSidebarDeliverypaymentTemplate: function(){
 				return this._sidebarDeliverypaymentTemplate;
 			},
+			getReviewInfoTemplate: function() {	
+				return this._reviewInfoTemplate;
+			},
+			getReviewInfo: function() {
+				return this.content.find(".text-potwierdzenie");
+			}
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {
