@@ -80,13 +80,13 @@
 
 			<div class="row hidden-xs">
 				<div class="col-md-6 col-sm-12 col-md-push-3">
-					<p class="text-potwierdzenie"><?php echo $this->getCheckoutReviewInfo(); ?></p>
+					<p class="text-potwierdzenie">{{checkout_review_info}}</p>
 				</div>
 				<div class="col-md-3 col-sm-6 col-md-pull-6">
 					<a href="#"  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
 				</div>
 				<div class="col-md-3 col-sm-6">
-					<button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $_helper->__('Order now'); ?></button>
+					<button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
 				</div>
 			</div>
 
@@ -139,7 +139,8 @@
 					<div class="col-md-12  col-sm-4">
 						<h4><?php echo $_helper->__('Delivery type'); ?>:</h4>
 						<dl>
-							<dd>{{carrier_name}} - {{carrier_method}}</dd>
+							<dd>{{carrier_name}} </dd>
+							<dd>{{carrier_method}}</dd>
 						</dl>
 					</div>
 					<div class="col-md-12  col-sm-4">
@@ -158,17 +159,21 @@
 			</div>
 		</section>
 		<div class="main bg-w visible-xs opened-panel-group">  
-			<p><?php echo $this->getCheckoutReviewInfo(); ?></p>
+			<p class="text-potwierdzenie">{{checkout_review_info}}</p>
 			<div class="row">
 				<div class="col-sm-6">
 					<a  href="#"  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
 				</div>
 				<div class="col-sm-6">
-					<button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $this->__('Place order'); ?></button>
+					<button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $this->__('Order now and pay'); ?></button>
 				</div>
 			</div>
 
 		</div>
 	</div>
 
+</div>
+<div style="visibility:hidden" id="checkout-review-hidden-box">
+	<div id="checkout-review-info-cod"><?php echo $this->getCheckoutReviewInfoCod(); ?></div>
+	<div id="checkout-review-info"><?php echo $this->getCheckoutReviewInfo(); ?></div>
 </div>
