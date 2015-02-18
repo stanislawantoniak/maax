@@ -123,9 +123,13 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             $this->_redirect('*/*/');
             return;
         }
-		
-			
-		parent::loginPostAction();
+
+        //trim username
+        $login = $this->getRequest()->getPost('login');
+        $login['username'] = trim($login['username']);
+        $this->getRequest()->setPost('login', $login);
+
+        parent::loginPostAction();
 		
 		
 		

@@ -20,9 +20,6 @@ Mall.validate.validators = {
     emailbackend: function (value, elem, params) {
         "use strict";
 
-        var respone = {status: false, content: ''},
-            promise;
-
         if (!this.email(value, elem, params)) {
             return false;
         }
@@ -30,12 +27,11 @@ Mall.validate.validators = {
         if(params.form_key === undefined) {return false;}
         if(!params.url.length) {return false;}
 
-
-        promise = jQuery.ajax({
+        var promise = jQuery.ajax({
             url: params.url,
             data: {
                 form_key: params.form_key,
-                email: value
+                email: jQuery.trim(value)
             },
             dataType: 'json',
             cache: false,
