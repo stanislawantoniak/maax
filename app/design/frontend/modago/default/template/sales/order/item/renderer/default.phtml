@@ -87,11 +87,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getOrderItem()->ge
                     <div class="small"><span class="show-in-595">Ilość:</span>&nbsp;<?php echo round($_item->getQty()); ?>
                     </div>
                 </div>
-<style type="text/css">
-     .sbSelector:link, .sbSelector:visited, .sbSelector:hover {
-        text-align: left;
-    }
-</style>
+
                 <!--Sub total starts here -->
                 <?php if (($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
                     <div class="a-right" style="padding-top:5px;">

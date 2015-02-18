@@ -10,7 +10,6 @@ var Mall = {
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
-
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -204,7 +203,7 @@ var Mall = {
         }
 
 		// Process search context
-		var searchContext = jQuery(".search-context").html('');
+		var searchContext = jQuery("select[name=scat]").html('');
 		if(data.content.search && data.content.search.select_options){
 			jQuery.each(data.content.search.select_options, function(){
 				searchContext.append(jQuery("<option>").attr({
@@ -213,7 +212,7 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
-        jQuery('.search-context').selectBoxIt({
+        jQuery('select[name=scat]').selectBoxIt({
             autoWidth: false
         });
 		
@@ -439,6 +438,7 @@ var Mall = {
     },
 
     setSuperAttribute: function(currentSelection) {
+		jQuery("#add-to-cart").tooltip('destroy');
         this._current_superattribute = currentSelection;
         // change prices
         var optionId = jQuery(this._current_superattribute).attr("value");
@@ -1080,15 +1080,15 @@ jQuery(document).ready(function() {
 
     });
 
-    jQuery("#product-listing-sort-control").selectbox({
-        onOpen: function (inst) {
-//            initScrollBarFilterStyle();
-        },
-
-        onChange: function(value, inst) {
-            location.href = value;
-        }
-    });
+//    jQuery("#product-listing-sort-control").selectbox({
+//        onOpen: function (inst) {
+////            initScrollBarFilterStyle();
+//        },
+//
+//        onChange: function(value, inst) {
+//            location.href = value;
+//        }
+//    });
     //#######################
     //## SIZE-BOX -> SELECTBOX
     //#######################
@@ -1096,19 +1096,20 @@ jQuery(document).ready(function() {
 		mobile: Mall.getIsBrowserMobile()
 	});*/
     jQuery(".size-box select").selectBoxIt({
-        //theme: "bootstrap",
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
         autoWidth: false
     });
     var optionsCount = jQuery(".size-box option").length;
-    jQuery(document).ready(function () {
+
         if (optionsCount == 1) {
             Mall.setSuperAttribute(jQuery(".size-box option:not(:disabled)"));
         }
-    });
+
+
     jQuery(".size-box select").bind({
         "option-click": function () {
+            jQuery("#add-to-cart").tooltip('destroy');
             var selectedOption = jQuery(this).find('option:selected');
             Mall.setSuperAttribute(selectedOption);
         }

@@ -23,98 +23,6 @@
             	border:none;
             }
         }
-
-        .sbToggle {
-            background: url(../images/select-icons.png) 0 -116px no-repeat;
-            display: block;
-            height: 30px;
-            outline: none;
-            position: absolute;
-            right: 0;
-
-            width: 30px;
-            top: -2px;
-            &:link {
-                background: url(../images/select-icons.png) 0 -167px no-repeat;
-
-            }
-            &:visited {
-                background: url(../images/select-icons.png) 0 -16px no-repeat;
-            }
-            &:hover {
-                background: url(../images/select-icons.png) 0 -68px no-repeat;
-            }
-        }
-
-        .sbHolderDisabled {
-            background-color: #3C3C3C;
-            border: solid 1px #515151;
-            .sbHolder{
-                
-            }
-            .sbToggle{
-                background: url(../images/select-icons.png) 0 -66px no-repeat;
-            }
-        }
-
-        .sbOptionsWrapper{
-            background-color: #fff;
-            border: none;
-            list-style: none;
-            left: -1px;
-            margin: 0;
-            padding: 0 0 5px 0;
-            position: absolute;
-            top: 30px;
-            width: 135px;
-            z-index: 1;
-            overflow-y: auto;
-            box-shadow: 0 0 0 5px rgba(0,0,0,0.2);
-
-            li {
-                padding: 0 7px;
-            }
-            a {
-                border-bottom: dotted 1px #515151;
-                display: block;
-                outline: none;
-                padding: 7px 0 7px 3px;
-                &:link,
-                &:visited {
-                    color: #000;
-                    text-decoration: none;
-                }
-                &:hover,
-                &:focus,
-                &.sbFocus{
-                    color: #000;
-                }
-            }
-            li {
-                &.last {
-                    a {
-                        border-bottom: none;
-                    }
-                }
-            }
-            .sbDisabled {
-                border-bottom: dotted 1px #515151;
-                color: #999;
-                display: block;
-                padding: 7px 0 7px 3px;
-            }
-            .sbGroup {
-                border-bottom: dotted 1px #515151;
-                color: #EBB52D;
-                display: block;
-                font-weight: bold;
-                padding: 7px 0 7px 3px;
-            }
-            .sbSub {
-            padding-left: 17px;
-            }
-        }
-
         .select-box {
             float: left;
             width:134px;
@@ -138,54 +46,54 @@
             float:left;
         }
         
-        .sbHolder {
-        	height:26px;
-        	width:100%;
-        	background:url('../images/bg-search.png') 0 0 repeat-x;
-        	border:none;
-        	font-size: 12px;
-        	color:#888888;
-        }
+//        .sbHolder {
+//        	height:26px;
+//        	width:100%;
+//        	background:url('../images/bg-search.png') 0 0 repeat-x;
+//        	border:none;
+//        	font-size: 12px;
+//        	color:#888888;
+//        }
 
-        .sbSelector {
-        	height:26px;
-            width: 105px;
-        	line-height:26px;
-        	color:#000;
-        	padding-left: 10px;
-        	display: inline-block;
-        	text-decoration: none;
-        }
+//        .sbSelector {
+//        	height:26px;
+//            width: 105px;
+//        	line-height:26px;
+//        	color:#000;
+//        	padding-left: 10px;
+//        	display: inline-block;
+//        	text-decoration: none;
+//        }
 
-        .sbToggle {
-        	background-position: 0 -69px;
-        }
+//        .sbToggle {
+//        	background-position: 0 -69px;
+//        }
 
-        .sbOptionsWrapper {
-        	width:100%;
-        	background:#fff;
-        	border:none;
-        	left:0px;
-        	padding-top:6px;
-        	@include box-shadow(rgba(1,1,1,.12) 0 3px 5px);
-        	li {
-        		padding:0;
-        		height:auto;
-        		border:none;
-        		a {
-        			padding: 9px 5px 9px 15px;
-        			height:auto;
-        			line-height:auto;
-        			color:#000;
-        			border:none;
-        			&:hover {
-        				margin:0px;
-        				background:#f2f1f0;
-        			}
-        		}
-        		
-        	}
-        }
+//        .sbOptionsWrapper {
+//        	width:100%;
+//        	background:#fff;
+//        	border:none;
+//        	left:0px;
+//        	padding-top:6px;
+//        	@include box-shadow(rgba(1,1,1,.12) 0 3px 5px);
+//        	li {
+//        		padding:0;
+//        		height:auto;
+//        		border:none;
+//        		a {
+//        			padding: 9px 5px 9px 15px;
+//        			height:auto;
+//        			line-height:auto;
+//        			color:#000;
+//        			border:none;
+//        			&:hover {
+//        				margin:0px;
+//        				background:#f2f1f0;
+//        			}
+//        		}
+//
+//        	}
+//        }
 
     }
 }

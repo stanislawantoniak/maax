@@ -16,7 +16,6 @@
       box-shadow: none;
 
     }
-
     .selectboxit-text {
       color: #1e1e1e;
       text-decoration: none;
@@ -41,63 +40,42 @@
     }
   }
 
-  .dropdown-menu > li > a {
-    color: #1e1e1e;
-    text-decoration: none;
-    background-color: #ffffff;
-    //      text-indent: 10px;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-  }
-  .dropdown-menu .active > a,
-  .dropdown-menu .active > a:hover,
-  .dropdown-menu .active > a:focus {
-    color: #1e1e1e;
-    background: #f2f1f0;
-  }
-
-  .selectboxit-list .selectboxit-option-anchor {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    color: #333333;
-  }
-  .selectboxit-list > .selectboxit-focus > .selectboxit-option-anchor {
-    color: #1e1e1e;
-    background: #f2f1f0;
-    background-image: none;
-    background-repeat: repeat-x;
-  }
-  .selectboxit-list > .selectboxit-disabled > .selectboxit-option-anchor {
-    color: #999999;
-  }
-
-  .selectboxit-options {
-
-    /* Set's the drop down options width to the same width as the drop down button */
-    //      width: 167px;
-
-    /* Set's the max-height property to only show a subset of the drop down items.
-       If you do not set a max-height property, SelectBoxIt will dynamically
-       position the dropdown (when opened) to make sure the drop down items are not
-       displayed outside of the current window viewport.
-    */
+  .selectboxit-list {
     max-height: 200px;
-
     border-radius: 0;
     background-color: #fff;
     border-color: #afafaf;
     z-index: 100;
     box-shadow: none;
     .selectboxit-option {
-      a {
+      .selectboxit-option-anchor {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
         color: #1e1e1e;
         text-decoration: none;
       }
-
     }
+    .selectboxit-focus {
+      .selectboxit-option-anchor {
+        color: #1e1e1e;
+        background: #f2f1f0;
+        background-image: none;
+        background-repeat: repeat-x;
+      }
+    }
+    .selectboxit-disabled {
+      .selectboxit-option-anchor {
+        color: #999999;
+      }
+    }
+  }
+}
 
+/*Product page size select*/
+.size-box {
+  .selectboxit {
+    width: 167px;
   }
 }
 
@@ -110,8 +88,11 @@
 
 /*Sort select on listing*/
 .sort-by-container {
-  .selectboxit {
-    width: 160px;
+  .selectboxit-container {
+//    pointer-events: none;
+    .selectboxit {
+      width: 160px;
+    }
   }
 }
 
@@ -146,8 +127,8 @@
         }
       }
       .selectboxit-text {
-              height: 26px;
-              line-height: 26px;
+        height: 26px;
+        line-height: 26px;
       }
     }
     .selectboxit-options {
@@ -157,6 +138,9 @@
         line-height: 26px;
       }
     }
+  }
+  .selectboxit-list {
+    z-index: 400;
   }
 }
 
@@ -169,9 +153,31 @@
   }
 }
 
-
 /*Rma*/
 .condition-wrapper {
+  .selectboxit-container {
+    .selectboxit {
+      width: 245px;
+      @media (max-width: $screen-xs-min) {
+        width: 200px;
+      }
+      @media (max-width: 400px) {
+        width: 180px;
+      }
+      @media (max-width: 360px) {
+        width: 170px;
+      }
+      @media (max-width: 350px) {
+        width: 160px;
+      }
+      @media (max-width: 340px) {
+        width: 150px;
+      }
+      @media (max-width: 330px) {
+        width: 135px;
+      }
+    }
+  }
   &.has-error {
     .selectboxit-container {
       .selectboxit {

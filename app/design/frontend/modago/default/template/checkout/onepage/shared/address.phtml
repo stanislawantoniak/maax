@@ -26,7 +26,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="row">
 						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_firstname"><?php echo $this->__("First name"); ?></label>
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerFirstname()); ?>" class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" data-original-title="<?php echo $this->__("Enter name."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerFirstname()); ?>" class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" <?php /* data-original-title="<?php echo $this->__("Enter name."); ?>" */ ?>>
 						</div>
 					</div>
 
@@ -35,7 +35,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="row">
 						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_lastname"><?php echo $this->__("Last name"); ?></label>
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerLastname()); ?>" class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" data-original-title="<?php echo $this->__("Enter last name."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerLastname()); ?>" class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" <?php /* <data-original-title="<?php echo $this->__("Enter last name."); ?>" */ ?>>
 						</div>
 					</div>
 				</div>
@@ -43,7 +43,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="row">
 						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_email"><?php echo $this->__("Email"); ?></label>
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" data-original-title="<?php echo $this->__("Enter email address."); ?>">
+							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" <?php /* data-original-title="<?php echo $this->__("Enter email address."); ?>" */ ?>>
 						</div>
 					</div>
 				</div>
@@ -51,7 +51,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="row">
 						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_telephone"><?php echo $this->__("Telephone number"); ?></label>
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>">
+							<input type="tel" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>">
 						</div>
 					</div>
 				</div>
@@ -82,6 +82,14 @@ $_billingAddress = $_quote->getBillingAddress();
             <?php endif; ?>
 			<div class="row hide-success-vaild ">
                 <?php $agreements = $this->getAgreements(); ?>
+				<div class="form-group form-checkbox small text-align-left">
+
+					<input type="checkbox" id="agreement_tos" class="css-checkbox invoice_vat"
+					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
+					       <?php if($agreements['agreement_tos']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
+				</div>
 				<?php if(!$this->isCustomerSubscribed()):?>
 				<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container">
 					<input type="hidden" name="agreement[newsletter]" value="0" />
@@ -92,14 +100,6 @@ $_billingAddress = $_quote->getBillingAddress();
 					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
 				</div>
 				<?php endif;?>
-				<div class="form-group form-checkbox small text-align-left">
-
-					<input type="checkbox" id="agreement_tos" class="css-checkbox invoice_vat"
-					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
-					       <?php if($agreements['agreement_tos']):?>checked="checked"<?php endif;?>
-						>
-					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
-				</div>
 			</div>
 			<div class="row action">
 				<div class="col-sm-6">

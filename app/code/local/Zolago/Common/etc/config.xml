@@ -33,6 +33,11 @@
             <zolagocommon>
                 <class>Zolago_Common_Model</class>
             </zolagocommon>
+            <core>
+                <rewrite>
+                    <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
+                </rewrite>
+            </core>
         </models>
         <resources>
             <zolagocommon_setup>

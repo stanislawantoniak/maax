@@ -2223,13 +2223,13 @@ function styledSelectBox() {
   //$('.styledSelected').each(function(index, el) {
     
   //});
-  $(".select-styled,.select-styled select").selectbox({
-
-      onOpen: function (inst) {
-        initScrollBarFilterStyle();
-      }
-    });
-  $(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");
+  //$(".select-styled,.select-styled select").selectbox({
+  //
+  //    onOpen: function (inst) {
+  //      initScrollBarFilterStyle();
+  //    }
+  //  });
+  //$(".select-styled:disabled,.select-styled select:disabled").selectbox("disable");
 }
 
 //SCROLLBAR 
