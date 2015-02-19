@@ -121,6 +121,20 @@
                         <fieldset>integration</fieldset>
                         <position>1</position>
                     </vendor_type>
+                    <can_ask>
+                        <label>Customer can ask?</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>integration</fieldset>
+                        <position>2</position>
+                    </can_ask>
+                    <sequence>
+                        <label>Sequence</label>
+                        <note>Vendor on main page in customized sequence</note>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>3</position>
+                    </sequence>
                 	<marketing_store_information>
                         <label>Main store menu - marketing store information</label>
                         <type>wysiwyg</type>
