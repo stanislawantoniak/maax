@@ -119,6 +119,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                     $model = Mage::getModel("catalog/category")->load(Mage::registry('current_category')->getId());
                     Mage::unregister('current_category');
                     Mage::registry('current_category', $model);
+                } else {
+                    $model = Mage::registry('current_category');
                 }
 			}else{
 				$model = $this->getParentCategoryAnonymous();//Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
