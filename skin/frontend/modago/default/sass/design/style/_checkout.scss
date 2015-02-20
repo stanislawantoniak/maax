@@ -1,49 +1,61 @@
-#checkout  {
+#checkout {
+	@include max-screen($screen-sm-max) {
+		.modal-body {
+			padding: 0 !important;
+			.panel {
+				border: none !important;
+				.panel-body {
+					padding: 15px 0 !important;
+					overflow: hidden;
+				}
+			}
+		}
+	}
 	section {
 		header {
 			h2 {
 				font-weight: bold;
 				font-family: $fontRegular;
-				@media (max-width:359px) {
+				@media (max-width: 359px) {
 					font-size: 16px;
 				}
 			}
 		}
 	}
-  #shipping-methods {
-    .panel-body {
-      dt {
-        font-weight: normal;
-        font-family: latoblack;
-      }
-      dd.separator {
-        strong {
-          font-weight: normal;
-          font-family: latoblack;
-        }
-      }
-      .logo-courier {
-        @media (max-width: 480px) {
-          width: auto;
-        }
-        .shipment-icon {
-          margin-top: 20px;
-          margin-right: 20px;
-        }
-      }
-    }
-  }
+	#shipping-methods {
+		.panel-body {
+			dt {
+				font-weight: normal;
+				font-family: latoblack;
+			}
+			dd.separator {
+				strong {
+					font-weight: normal;
+					font-family: latoblack;
+				}
+			}
+			.logo-courier {
+				@media (max-width: 480px) {
+					width: auto;
+				}
+				.shipment-icon {
+					margin-top: 20px;
+					margin-right: 20px;
+				}
+			}
+		}
+	}
 	.panel {
 		@include border-radius(2px);
-		border-color:$bc-primary;
+		border-color: $bc-primary;
 		&.panel-color {
-				background:$panel-top;
-			}
+			background: $panel-top;
+		}
 		.panel-body {
 			.current-addres,
 			.top-panel {
 				border-bottom: 1px solid $bc-primary;
-				background:$panel-top;
+				background: $panel-top;
 			}
 			.top-panel {
 				h4 {
@@ -52,37 +64,37 @@
 					font-size: 14px;
 				}
 			}
-            h4.addressbook-add-new {
-                font-family: $fontRegular;
-                font-size: 16px;
-            }
+			h4.addressbook-add-new {
+				font-family: $fontRegular;
+				font-size: 16px;
+			}
 		}
 		.panel-heading {
-				background: none;
-				border-bottom: none;
-				text-transform: uppercase;
-				color:#000;
-			}
-		.panel-footer {
-			background:transparent;
-			border:none;
+			background: none;
+			border-bottom: none;
+			text-transform: uppercase;
+			color: #000;
 		}
-		
+		.panel-footer {
+			background: transparent;
+			border: none;
+		}
+
 		&.current {
-			border-color:$bc-secondary;
+			border-color: $bc-secondary;
 		}
 		.panel {
 			h4 {
 				text-transform: uppercase;
-				@media (max-width:359px) {
+				@media (max-width: 359px) {
 					font-size: 16px;
 				}
-			}			
+			}
 		}
 	}
 	dd.action {
 		a {
-			@media(max-width:359px) {
+			@media(max-width: 359px) {
 				font-size: 12px;
 			}
 		}
@@ -92,9 +104,9 @@
 		font-weight: bold;
 	}
 	.border-top {
-		border-top:1px solid #eeedf0;
+		border-top: 1px solid #eeedf0;
 		&:first-child {
-			border-top:none;
+			border-top: none;
 		}
 	}
 	.sidebar-secound {
@@ -117,7 +129,7 @@
 		}
 	}
 	#sidebar {
-		
+
 		h2 {
 			font-size: 18px;
 			font-family: "latoregular";
@@ -127,7 +139,7 @@
 			cursor: pointer;
 			white-space: nowrap;
 			&:before {
-				background: #6fffcf;	
+				background: #6fffcf;
 			}
 		}
 		h4 {
@@ -137,220 +149,231 @@
 		}
 		.list-group {
 			li {
-				border:none;
+				border: none;
 				a {
 					font-size: 13px;
 				}
 			}
 		}
 	}
-  form {
-    .form-group.form-radio {
-      @media (max-width: $screen-xs-min) {
-        margin-bottom: 0px;
-      }
-    }
-    fieldset {
-
-      &.no-border {
-        border: none;
-      }
-      legend {
-        font-size: 14px;
-        font-weight: bold;
-        color: #000;
-        border-color: #eeedf0;
-      }
-    }
-
-    label {
-      font-size: 12px;
-      line-height: 29px;
-      padding-right: 2px;
-      text-align: right;
-      font-weight: normal;
-      @media (max-width: 767px) {
-        text-align: left;
-      }
-      &.double-line {
-        line-height: 1.2;
-      }
-    }
-
-    .form-checkbox {
-      &.default_pay {
-        @media (max-width: 767px) {
-          text-align: left
-        }
-      }
-
-      label {
-        line-height: 17px !important;
-      }
-    }
-    .form-radio {
-      label {
-        font-size: 14px;
-        text-align: left;
-        line-height: 17px;
-        display: block;
-      }
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="tel"] {
-      line-height: 29px;
-    }
-    #payment_form_zolagopayment_gateway,
-    #payment_form_zolagopayment_cc {
-      .provider-item {
-        margin-bottom: -15px;
-        @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
-          margin-bottom: 10px;
-        }
-      }
-      .col-xs-6 {
-        @media (max-width: 500px) {
-          padding-left: 2px;
-          padding-right: 2px;
-        }
-      }
-      list-style: none;
-      label {
-        line-height: 15px;
-        text-align: center;
-        margin-bottom: 15px;
-        cursor: pointer;
-        .payment-provider-logo-wrapper {
-          border: 1px solid $bc-primary;
-          background: #fff;
-          line-height: 80px;
-          display: inline-block;
-          width: 100%;
-		  margin-bottom:6px;
-          img {
-            max-width: 120px;
-            @media (min-width: 430px) and (max-width: 600px) {
-              max-width: 150px;
-            }
-            @media (min-width: 601px) and (max-width: 767px) {
-              max-width: 160px;
-            }
-            @media (max-width: 425px) {
-              max-width: 93px;
-            }
-          }
-        }
-        img {
-          background: #fff;
-        }
-        &:hover {
-          .payment-provider-logo-wrapper {
-            border-color: #9F9F9F; //$bc-secondary;
-          }
-		  span {
-			text-decoration:underline;
-		  }
-        }
-      }
-      input[type=radio]:checked + label {
-        .payment-provider-logo-wrapper {
-          border-color: #9F9F9F; //$bc-secondary;
-        }
-        span {
-          text-decoration: underline
-        }
-      }
-    }
-  }
-	.text-align-left {
-		label {
-			text-align: left!important;
+	form {
+		.form-group.form-radio {
+			@media (max-width: $screen-xs-min) {
+				margin-bottom: 0px;
+			}
 		}
-		text-align: left!important;
-	}
-}
+		fieldset {
 
+			&.no-border {
+				border: none;
+			}
+			legend {
+				font-size: 14px;
+				font-weight: bold;
+				color: #000;
+				border-color: #eeedf0;
+			}
+		}
 
-#checkout {
-	.panel {
-		box-shadow:none;
-		background:$panel-bottom;
-	}
-		.panel-body {
-			.panel {
-				background:#fff;
-				&.payment-selected {
-					border-color :$bc-secondary;
+		label {
+			font-size: 12px;
+			line-height: 29px;
+			padding-right: 15px;
+			text-align: right;
+			font-weight: normal;
+			@media (max-width: 767px) {
+				text-align: left;
+			}
+			&.double-line {
+				line-height: 1.2;
+			}
+		}
+
+		.form-checkbox {
+			&.default_pay {
+				@media (max-width: 767px) {
+					text-align: left
+				}
+			}
+
+			label {
+				line-height: 17px !important;
+			}
+		}
+		.form-radio {
+			label {
+				font-size: 14px;
+				text-align: left;
+				line-height: 17px;
+				display: block;
+			}
+		}
+		input[type="text"],
+		input[type="email"],
+		input[type="password"],
+		input[type="tel"] {
+			line-height: 29px;
+		}
+		#payment_form_zolagopayment_gateway,
+		#payment_form_zolagopayment_cc {
+			.provider-item {
+				margin-bottom: -15px;
+				@media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+					margin-bottom: 10px;
+				}
+			}
+			.col-xs-6 {
+				@media (max-width: 500px) {
+					padding-left: 2px;
+					padding-right: 2px;
+				}
+			}
+			list-style: none;
+			label {
+				line-height: 15px;
+				text-align: center;
+				margin-bottom: 15px;
+				cursor: pointer;
+				.payment-provider-logo-wrapper {
+					border: 1px solid $bc-primary;
+					background: #fff;
+					height: 65px;
+					padding: 5px 10px;
+					display: inline-table;
+					width: 100%;
+					margin-bottom: 6px;
+					.payment-provider-logo-inside-wrapper {
+						display: table-cell;
+						vertical-align: middle;
+						img {
+							max-width: 110px;
+							max-height: 50px;
+							@media (min-width: 430px) and (max-width: 600px) {
+								max-width: 150px;
+								max-height: 65px;
+							}
+							@media (min-width: 601px) and (max-width: 767px) {
+								max-width: 160px;
+								max-height: 65px;
+							}
+						}
+					}
+				}
+				img {
+					background: #fff;
+				}
+				&:hover {
+					.payment-provider-logo-wrapper {
+						border-color: #9F9F9F; //$bc-secondary;
+					}
+					span {
+						text-decoration: underline;
+					}
+				}
+			}
+			input[type=radio]:checked + label {
+				.payment-provider-logo-wrapper {
+					border-color: #9F9F9F; //$bc-secondary;
+				}
+				span {
+					text-decoration: underline
 				}
 			}
 		}
-		.default_pay {
+	}
+	.text-align-left {
+		label {
+			text-align: left !important;
+		}
+		text-align: left !important;
+	}
+}
+
+#checkout {
+	.panel {
+		box-shadow: none;
+		background: $panel-bottom;
+	}
+	.panel-body {
+		.panel {
+			background: #fff;
+			&.payment-selected {
+				border-color: $bc-secondary;
+			}
+		}
+	}
+	.default_pay {
 		> .panel {
 			> .panel-body {
 				> .panel {
 					&:hover {
-						border-color :$bc-secondary;
+						border-color: $bc-secondary;
 					}
 				}
 			}
-		} 
+		}
 	}
 }
 
 #checkout {
-  .default_pay {
-    > .panel {
+	.default_pay {
+		> .panel {
 
-      > .panel-footer {
-        text-align: right;
-      }
-      > .panel-body {
-        dt {
-          font-weight: normal;
-          font-family: latoblack;
-        }
-        #payment-provider {
-          margin-top: 12px;
-          img {
-            width: 50px;
-          }
-        }
-        .default_pay_selected_bank {
-          text-align: right;
-          figure {
-            min-height: 60px;
-            display: inline-table;
-            vertical-align: middle;
-            border: 1px solid #eeedf0;
-            padding: 5px;
-            background-color: white;
-            div {
-              display: table-cell;
-              vertical-align: middle;
-              img {
-                max-height: 67px;
-                @media (max-width: 460px) {
-                  max-height: 50px;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+			> .panel-footer {
+				text-align: right;
+			}
+			> .panel-body {
+				dt {
+					font-weight: normal;
+					font-family: latoblack;
+				}
+				#payment-provider {
+					margin-top: 12px;
+					img {
+						width: 50px;
+					}
+				}
+				.default_pay_selected_bank {
+					text-align: right;
+					figure {
+						display: inline-table;
+						vertical-align: middle;
+						border: 1px solid #eeedf0;
+						background-color: white;
+						width: 110px;
+						height: 55px;
+						padding: 10px;
+						div {
+							display: table-cell;
+							vertical-align: middle;
+							img {
+								max-height: 55px;
+								max-width: 110px;
+								@media (max-width: 460px) {
+									max-height: 50px;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.online-data img {
+		max-width: 110px;
+		max-height: 65px;
+		margin-top: 10px;
+	}
 }
 
 @media (min-width: $screen-lg-min) {
-  .col-lg-3-pi {
-    width: 20%;
-    float: left;
-    min-height: 1px;
-    padding-left: 7px;
-    padding-right: 7px;
-    position: relative;
+	.col-lg-3-pi {
+		width: 20%;
+		float: left;
+		min-height: 1px;
+		padding-left: 7px;
+		padding-right: 7px;
+		position: relative;
 
-  }
+	}
 }
