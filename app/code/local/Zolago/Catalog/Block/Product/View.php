@@ -112,9 +112,16 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	 */
 	public function getParentCategory() {
 		if(!$this->hasData("parent_category")){
-			if(Mage::registry('current_category') instanceof Mage_Catalog_Model_Category){
-                //load again model because this model don't have all required data
-                $model = Mage::getModel("catalog/category")->load(Mage::registry('current_category')->getId());
+			if(($currCat = Mage::registry('current_category')) instanceof Mage_Catalog_Model_Category){
+                $name = $currCat->getName();
+                if (empty($name)) {
+                    // load again model because this model don't have all required data
+                    $model = Mage::getModel("catalog/category")->load(Mage::registry('current_category')->getId());
+                    Mage::unregister('current_category');
+                    Mage::registry('current_category', $model);
+                } else {
+                    $model = Mage::registry('current_category');
+                }
 			}else{
 				$model = $this->getParentCategoryAnonymous();//Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
 			}

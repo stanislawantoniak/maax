@@ -90,8 +90,28 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     {
         $parentCategoryPath = '/';
         $currentCategory = Mage::registry('current_category');
+
         if (!empty($currentCategory)) {
-            $parentCategoryPath = Mage::getUrl($currentCategory->getParentCategory()->getUrlPath());
+            $currentCategoryParent = $currentCategory->getParentCategory();
+            $urlPath = $currentCategoryParent->getUrlPath();
+            $currentCategoryParentId = $currentCategoryParent->getId();
+
+            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            if (!empty($vendor)) {
+                $vendorRootCategory = $vendor->getRootCategory();
+
+                if (!empty($vendorRootCategory)) {
+                    $currentStoreId = Mage::app()->getStore()->getId();
+                    $vendorRootCategoryForSite = isset($vendorRootCategory[$currentStoreId]) ? $vendorRootCategory[$currentStoreId] : false;
+                    if ($vendorRootCategoryForSite) {
+                        if ($vendorRootCategoryForSite == $currentCategoryParentId) {
+                            $urlPath = $parentCategoryPath;
+                        }
+                    }
+                }
+            }
+
+            $parentCategoryPath = Mage::getUrl($urlPath);
         }
         return $parentCategoryPath;
     }
