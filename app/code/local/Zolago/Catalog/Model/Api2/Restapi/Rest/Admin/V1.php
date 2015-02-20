@@ -252,7 +252,18 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             return;
         }
 
-        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+//        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
+        $collection = Zolago_Pos_Model_Resource_Pos::getSkuCollection($skuS);
+
+        // get sku-id associated array
+        $skeleton = array();
+        foreach ($collection as $product) {
+            /** @var Zolago_Catalog_Model_Product $product */
+            $skeleton[$product->getSku()] = $product->getId();
+        }
+
 
         if (empty($skeleton)) {
             return;
@@ -392,6 +403,16 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         //Save price
         $model->savePriceValues($insert, $ids);
+
+//testy
+//        Varnish ban products
+        foreach ($ids as $id) {
+
+            Mage::log('banowanie id:' . $id, null, 'mylog.log');
+            Mage::dispatchEvent("zolagocatalog_converter_prices_complete", array('product' => Mage::getModel( 'catalog/product' )->load( $id )));
+        }
+
+
     }
 
 

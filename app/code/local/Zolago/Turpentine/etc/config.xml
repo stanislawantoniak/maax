@@ -15,6 +15,7 @@
 					<!-- Swap vcl tempalte file -->
 					<varnish_configurator_version3>Zolago_Turpentine_Model_Varnish_Configurator_Version3</varnish_configurator_version3>
 					<observer_varnish>Zolago_Turpentine_Model_Observer_Varnish</observer_varnish>
+                    <observer_ban>Zolago_Turpentine_Model_Observer_Ban</observer_ban>
 				</rewrite>
 			</turpentine>
 		</models>
@@ -22,6 +23,7 @@
 			<turpentine>
 				<rewrite>
 					<esi>Zolago_Turpentine_Helper_Esi</esi>
+                    <ban>Zolago_Turpentine_Helper_Ban</ban>
 				</rewrite>
 			</turpentine>
 		</helpers>
@@ -34,6 +36,18 @@
 			</zolagoturpentine_setup>
 		</resources>
 		-->
+
+        <!--tymczasowo do testow-->
+        <events>
+            <zolagocatalog_converter_prices_complete>
+                <observers>
+                    <turpentine_varnish_catalog_product_save_commit_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banProductPageCache</method>
+                    </turpentine_varnish_catalog_product_save_commit_after>
+                </observers>
+            </zolagocatalog_converter_prices_complete>
+        </events>
 	</global>
 	<frontend>
 		<events>
