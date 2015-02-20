@@ -26,6 +26,35 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 		return $this;
 	}
 	
+    /**
+     * create new quest quote and merge items from old
+     */
+	protected function _clearPersistent() {
+	    // user not logged in
+	    $checkoutSession = Mage::getSingleton('checkout/session');
+	    $oldQuote = $checkoutSession->getQuote();
+	    $session = Mage::helper('persistent/session')->getSession();
+	    $session->removePersistentCookie();
+	    $checkoutSession->unsetAll();	   
+	    $oldQuote
+	        ->setCustomerId(null)
+	        ->setCustomerEmail(null)
+	        ->setCustomerFirstname(null)
+	        ->setCustomerLastname(null)
+	        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
+	        ->setIsPersistent(false);
+        $newQuote = Mage::getModel('sales/quote');
+        $newQuote->merge($oldQuote);
+        $newQuote
+	        ->setStoreId(Mage::app()->getStore()->getId())
+            ->setIsActive(true)
+            ->setIsPersistent(false)
+            ->collectTotals()
+            ->save();
+	    $newId = $newQuote->getId();
+	    $checkoutSession->setQuoteId($newId);	    
+	    $checkoutSession->getQuote();
+	}
 	/**
 	 * Emulate quote override to set special flag that tells quote 
 	 * to handle diffrent customer 
@@ -35,11 +64,6 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	 */
 	public function emulateQuote($observer)
     {
-        if (!Mage::helper('persistent')->canProcess($observer)
-            || !$this->_getPersistentHelper()->isPersistent() 
-			|| Mage::getSingleton('customer/session')->isLoggedIn()) {
-            return;
-        }
 		
         /* @var $action Mage_Checkout_OnepageController */
         $action = $observer->getEvent()->getControllerAction();
@@ -57,28 +81,20 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
         if (!in_array($actionName, $goActions) && !in_array($action->getRequest()->getModuleName(), $goModules)) {
             return;
         }
+        // clear persistent if guest
+        if (!Mage::helper('persistent')->canProcess($observer)
+            || !$this->_getPersistentHelper()->isPersistent() 
+			|| Mage::getSingleton('customer/session')->isLoggedIn()) {
+            return;
+        }
+        if($actionName == 'checkout_guest_continue') {
+            $this->_clearPersistent();
+            return;
+        }
 
         /* @var $checkoutSession Mage_Checkout_Model_Session */
         $checkoutSession = Mage::getSingleton('checkout/session');
-        if ($this->_isShoppingCartPersist()) {
-	        if($actionName == 'checkout_guest_continue') {
-		        $quote = $checkoutSession->getQuote();
-
-		        //remove persistant cookie
-		        /** @var Mage_Persistent_Model_Session $persHelper */
-		        $persHelper = Mage::helper('persistent/session');
-		        $persHelper->getSession()->removePersistentCookie();
-
-		        $quote
-			        ->setCustomerId(null)
-			        ->setCustomerEmail(null)
-			        ->setCustomerFirstname(null)
-			        ->setCustomerLastname(null)
-			        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
-			        ->setIsPersistent(false)
-			        ->collectTotals()
-			        ->save();
-	        } else {
+        if ($this->_isShoppingCartPersist()) {            
 		        $customer = $this->_getPersistentCustomer();
 		        // By setting this flag quote object knows should do not import
 		        // personal data of customer
@@ -88,7 +104,6 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 			        $checkoutSession->getQuote();
 		        }
 		        $customer->setSkipCopyPersonalData(false);
-	        }
         }
     }
     /**
