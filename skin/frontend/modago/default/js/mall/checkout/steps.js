@@ -55,6 +55,25 @@
 					this.processSelectedAddressNode(node, addressObject, addressBook, type);
 					
 					target.html(node);
+
+
+					var companyExists = addressObject._data.company !== null ? true : false;
+					var vatIdExists = addressObject._data.vat_id !== null ? true : false;
+					var companyAddress = target.find('.companyAddress');
+
+					if(type == "shipping") {
+						if(companyExists) {
+							companyAddress.show();
+						}
+					} else if(type == "billing") {
+						if(companyExists) {
+							target.find('.nameAddress').hide();
+							companyAddress.show();
+						}
+						if(vatIdExists) {
+							target.find('.vatIdAddress').show();
+						}
+					}
 					
 				}else{
 					target.html(Mall.translate.__("no-addresses"));
@@ -86,6 +105,24 @@
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
 						target.append(node);
+
+						var companyExists = this._data.company !== null ? true : false;
+						var vatIdExists = this._data.vat_id !== null ? true : false;
+						var companyAddress = target.find('.companyAddress');
+
+						if(type == "shipping") {
+							if(companyExists) {
+								companyAddress.show();
+							}
+						} else if(type == "billing") {
+							if(companyExists) {
+								target.find('.nameAddress').hide();
+								companyAddress.show();
+							}
+							if(vatIdExists) {
+								target.find('.vatIdAddress').show();
+							}
+						}
 					});
                 }else{
                     target.html(Mall.translate.__("no-addresses"));
@@ -506,12 +543,12 @@
 				
 				if(doOpen){
 					block.show();
-					contextActions.find(".edit").show().addClass("displayed")
+					contextActions.find(".edit").show().addClass("displayed");
 					element.addClass("open");
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
-					contextActions.find(".edit").hide().removeClass("displayed")
+					contextActions.find(".edit").hide().removeClass("displayed");
 					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
