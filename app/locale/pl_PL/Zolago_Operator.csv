@@ -1,4 +1,5 @@
-﻿"Details", "Szczegóły"
+﻿"Agents","Użytkownicy"
+"Details", "Szczegóły"
 "Password", "Hasło"
 "Confirm password", "Potwierdź hasło"
 "First name", "Imię"
@@ -16,7 +17,6 @@
 "Operators", "Użytkownicy"
 "Current POS", "Bieżący POS"
 "There is no operators", "Brak użytkowników
-"Agents", "Użytkownicy"
 "Agents list", "Lista użytkowników"
 "Browse agents list","Przeglądaj i edytuj użytkowników"
 "Create agent","Dodaj użytkownika"
