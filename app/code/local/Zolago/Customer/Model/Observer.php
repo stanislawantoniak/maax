@@ -27,6 +27,9 @@ class Zolago_Customer_Model_Observer {
 	 * @param type $observer
 	 */
 	public function customerLogout($observer) {
+		/* return because this is already done by app/code/local/Zolago/Persistent/Model/Observer.php:64 */
+		return;
+
 		$customer = $observer->getEvent()->getCustomer();
 		$checkout = Mage::getModel("checkout/session");
 		/* @var $checkout Mage_Checkout_Model_Session */

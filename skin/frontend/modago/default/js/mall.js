@@ -500,9 +500,10 @@ var Mall = {
 
     getMallHeaderHeight: function () {
         "use strict";
+	    var header = jQuery("#header");
 
-        if (jQuery("#header")) {
-            return jQuery("#header").outerHeight();
+        if (header.length) {
+            return header.outerHeight();
         }
 
         return 0;

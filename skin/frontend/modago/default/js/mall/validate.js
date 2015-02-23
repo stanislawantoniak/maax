@@ -117,7 +117,7 @@ Mall.validate = {
 			var modal = jQuery('.modal:visible');
 			var scrollTo = modal.length
 							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
-							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight(),
+							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight() - 35,
 				scrollMe = modal.length ? modal : jQuery('html, body');
 
             scrollMe.animate({
