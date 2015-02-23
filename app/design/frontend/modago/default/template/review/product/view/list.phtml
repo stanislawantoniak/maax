@@ -122,7 +122,7 @@ switch($_reviewsCount) {
                                 </span></aside>
                         <?php endif; ?>
                         <div class="body_comments col-sm-12">
-                                <?php echo $review->getData('detail_html'); ?>
+                                <?php echo $review->getDetailHtmlFormatted(); ?>
                         </div>
 
                     </div>
