@@ -7,16 +7,7 @@ class Orba_Shipping_DhlController extends Mage_Core_Controller_Front_Action
 	public function indexAction() {
 		$this->_redirect('/');
 	}
-    public function testAction() {
-        $configValue1 = Mage::getStoreConfig('carriers/orbaups/id');
 
-        $configValue2 = Mage::getStoreConfig('carriers/orbaups/password');
-
-        echo $configValue1;
-        echo '<br />';
-        echo $configValue2;
-
-    }
 	public function lpAction() {
 		$dhlFile			= false;
 		$result	= array(
