@@ -1574,8 +1574,17 @@
 	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
 	                    if(selectedBank.length) {
 		                    selectedBank.show();
-		                    var offset = jQuery(window).height() < 750 ? 65 : 125;
-		                    jQuery("html, body").animate({scrollTop: selectedBank.offset().top - offset}, 600);
+		                    var offsetWithoutHeader = -35;
+		                    var offsetWithHeader = -95;
+		                    var scrollTo = selectedBank.prev('div').find('.label-wrapper').offset().top;
+		                    var scrollFrom = jQuery(document).scrollTop();
+		                    if((scrollTo < scrollFrom && jQuery(window).height() < 750) || jQuery(window).height() >= 750) {
+			                    scrollTo += offsetWithHeader;
+		                    } else {
+			                    scrollTo += offsetWithoutHeader;
+		                    }
+
+		                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
 	                    }
                     }
 
@@ -1796,7 +1805,10 @@
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
-					jQuery('.default_pay.selected-payment').find('.panel.panel-default').hide();
+					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
+						jQuery('#view_default_pay').trigger('click');
+						jQuery('html,body').scrollTop(0);
+					}
 				});
 			},
 			
