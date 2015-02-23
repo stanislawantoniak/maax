@@ -220,16 +220,17 @@
       label {
         line-height: 15px;
         text-align: center;
-        margin-bottom: 0px;
+        margin-bottom: 15px;
         cursor: pointer;
         .payment-provider-logo-wrapper {
           border: 1px solid $bc-primary;
           background: #fff;
-          line-height: 100px;
+          line-height: 80px;
           display: inline-block;
           width: 100%;
+		  margin-bottom:6px;
           img {
-            max-width: 120px;
+            max-width: 105px;
             @media (min-width: 430px) and (max-width: 600px) {
               max-width: 150px;
             }
@@ -248,6 +249,9 @@
           .payment-provider-logo-wrapper {
             border-color: #9F9F9F; //$bc-secondary;
           }
+		  span {
+			text-decoration:underline;
+		  }
         }
       }
       input[type=radio]:checked + label {
@@ -344,8 +348,8 @@
     width: 20%;
     float: left;
     min-height: 1px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 7px;
+    padding-right: 7px;
     position: relative;
 
   }

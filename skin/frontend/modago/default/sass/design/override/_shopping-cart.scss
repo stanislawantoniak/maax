@@ -16,6 +16,7 @@
 				strong {
 					max-width: 300px;
 					display: inline-block;
+					padding-right: 15px;
 					vertical-align: top;
 					@include max-screen($screen-md-max) {
 						max-width: 33%;

@@ -7,6 +7,9 @@
 		}
 		.modal-body {
 			padding: 10px 20px 15px;
+			@include max-screen($screen-xs-max) {
+				padding: 0;
+			}
 		}
 		.title_section {
 			margin-left:-30px;

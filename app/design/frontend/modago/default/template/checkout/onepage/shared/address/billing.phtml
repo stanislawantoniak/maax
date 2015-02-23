@@ -50,7 +50,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
     <div class="form-group clearfix border-top">
         <div class="row">
             <label class="col-sm-3" for="billing_vat_id"><?php echo $this->__("VAT ID"); ?></label>
-            <div class="col-lg-3 col-md-5 col-sm-5">
+            <div class="col-lg-9 col-md-9 col-sm-5">
                 <input type="tel" value="<?php echo $this->escapeHtml($_billingAddress->getVatId()); ?>" class="form-control nip hint validate-nip" name="billing[vat_id]" id="billing_vat_id" data-original-title="<?php echo $this->__("Enter tax number"); ?>" >
             </div>
         </div>
@@ -68,7 +68,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
     <div class="form-group clearfix border-top">
         <div class="row">
             <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
-            <div class="col-sm-5">
+            <div class="col-lg-9 col-md-9 col-sm-9">
                 <input type="tel" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcodeWithReplace" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>">
             </div>
         </div>

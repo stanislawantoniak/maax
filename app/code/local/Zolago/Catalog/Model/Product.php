@@ -81,4 +81,14 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
         $helper = Mage::helper("zolagocatalog/product");
         return $helper->getStrikeoutPrice($this, $qty);
     }
+
+    /**
+     * Checks whether product has enabled status
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED;
+    }
 }

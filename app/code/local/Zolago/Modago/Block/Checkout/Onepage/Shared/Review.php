@@ -118,6 +118,10 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
         $storeId = Mage::app()->getStore()->getId();
         return $this->getLayout()->createBlock('cms/block')->setBlockId('checkout-review-footer-'.$storeId)->toHtml();
     }
+    public function getCheckoutReviewInfoCod() {
+        $storeId = Mage::app()->getStore()->getId();
+        return $this->getLayout()->createBlock('cms/block')->setBlockId('checkout-review-footer-cod-'.$storeId)->toHtml();
+    }
     //}}}
     
     //{{{ 

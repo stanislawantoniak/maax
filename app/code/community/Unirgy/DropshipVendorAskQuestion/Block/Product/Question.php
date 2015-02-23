@@ -41,14 +41,23 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
 */
 
 	public function getVendorsList() {
-		$vendors = Mage::getSingleton('udropship/source')->getVendors();
-		$local = $this->getLocalVendorId();
-		unset($vendors[$local]);
-		return $vendors;
+        /** @var Zolago_Dropship_Model_Source $modelUds */
+        $modelUds = Mage::getSingleton('zolagodropship/source');
+		$vendors = $modelUds->getCanAskVendors();
+        $local = $this->getLocalVendorId();
+        $v = array();
+        foreach ($vendors as $vendor) {
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $v[$vendor->getVendorId()] = $vendor->getVendorName();
+        }
+		unset($v[$local]);
+		return $v;
 	}
 
 	public function getLocalVendorId() {
-		return Mage::helper('udropship/data')->getLocalVendorId();
+        /** @var Zolago_Dropship_Helper_Data $hlp */
+        $hlp = Mage::helper('udropship/data');
+		return $hlp->getLocalVendorId();
 	}
 
 	public function isGallery()

@@ -288,7 +288,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         }
 
         $onepage = $this->getOnepage();
-        $email = $this->getRequest()->getParam("email");
+        $email = trim($this->getRequest()->getParam("email"));
         $isExits = $onepage->customerEmailExists($email, Mage::app()->getWebsite()->getId());
         $isExits = $isExits === false ? false : true;
 

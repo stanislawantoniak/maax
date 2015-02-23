@@ -73,6 +73,11 @@
 		color: #fff;
 		line-height: 19px;
 		font-size: 13px;
+		&.view_basket {
+			position: absolute;
+			bottom: 35px;
+			right: 0;
+		}
 	}
     .dropdown-panel {
         width:370px;
