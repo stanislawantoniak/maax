@@ -1,12 +1,38 @@
 <?php
+/* @var $this Zolago_Modago_Block_Sales_Order_Item_Renderer_Default */
 $_item = $this->getItem();
 $_helper = Mage::helper("zolagocataloginventory");
+$_product =$this->getItem()->getOrderItem()->getProduct();
+
+$mediaGallery = $_product->getData('media_gallery');
+
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getOrderItem()->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 ?>
 <div class="table-row clearfix">
     <div class="colgroup-01 clearfix">
         <div class="clearfix">
-            <figure><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></figure>
+            <figure>
+                <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE && empty($mediaGallery['images'])): ?>
+                    <!--                load image from parent configurable-->
+                    <?php
+                    /* @var $res Mage_Catalog_Model_Product_Type_Configurable */
+                    $res = Mage::getResourceSingleton('catalog/product_type_configurable');
+                    $parentIds = $res->getParentIdsByChild($_product->getId());
+                    ?>
+
+                    <?php if (isset($parentIds[0])) : ?>
+                        <?php $parent = Mage::getModel('catalog/product')->load($parentIds[0]); ?>
+                        <img
+                            src="<?php echo $this->helper('xmlconnect/catalog_product_image')->init($parent, 'thumbnail')->resize(53, 69); ?>"
+                            alt="<?php echo $this->escapeHtml($_product->getName()) ?>"/>
+                    <?php endif; ?>
+
+
+                <?php else: ?>
+                    <img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>"
+                         alt="<?php echo $this->escapeHtml($this->getProductName()) ?>"/>
+                <?php endif; ?>
+            </figure>
             <div class="description_checked_product">
                 <div class="product_name"><?php echo $this->escapeHtml($this->getProductName()) ?></div>
                 <?php if ($_options = $this->getOptionList()):?>
