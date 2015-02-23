@@ -57,8 +57,8 @@
 					target.html(node);
 
 
-					var companyExists = addressObject._data.company !== null ? true : false;
-					var vatIdExists = addressObject._data.vat_id !== null ? true : false;
+					var companyExists = addressObject._data.company && addressObject._data.company.length ? true : false;
+					var vatIdExists = addressObject._data.vat_id && addressObject._data.vat_id.length ? true : false;
 					var companyAddress = target.find('.companyAddress');
 
 					if(type == "shipping") {
@@ -104,11 +104,11 @@
 						var data = self.processAddressToDisplay(this);
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
-						target.append(node);
 
-						var companyExists = this._data.company !== null ? true : false;
-						var vatIdExists = this._data.vat_id !== null ? true : false;
-						var companyAddress = target.find('.companyAddress');
+
+						var companyExists = this._data.company && this._data.company.length ? true : false;
+						var vatIdExists = this._data.vat_id && this._data.vat_id.length ? true : false;
+						var companyAddress = node.find('.companyAddress');
 
 						if(type == "shipping") {
 							if(companyExists) {
@@ -116,13 +116,15 @@
 							}
 						} else if(type == "billing") {
 							if(companyExists) {
-								target.find('.nameAddress').hide();
+								node.find('.nameAddress').hide();
 								companyAddress.show();
 							}
 							if(vatIdExists) {
-								target.find('.vatIdAddress').show();
+								node.find('.vatIdAddress').show();
 							}
 						}
+
+						target.append(node);
 					});
                 }else{
                     target.html(Mall.translate.__("no-addresses"));
@@ -263,7 +265,11 @@
                 panelBody.append(formGroup);
 
                 jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
+	                if(item.name == 'vat_id' || item.name == 'telephone' || item.name == 'postcode') {
+		                item.type = 'tel';
+	                }
                     formGroup = self.getFormGroup();
+
                     element = self.getInput(
                         item.name
                         , item.id
