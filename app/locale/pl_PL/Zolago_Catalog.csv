@@ -126,6 +126,7 @@
 "Set", "Ustaw"
 "Substract", "Usuń"
 "Submit", "Wyślij"
+"Filter","Filtruj"
 "Apply to selection", "Zastosuj do wybranych"
 "Choose the category", "Wybierz kategorię"
 "Cannot pass empty required attribute (%s)", "Brak wymaganych atrybutów (%s)"
@@ -149,4 +150,3 @@
 "temporary absence product","chwilowy brak produktu"
 "of %s","of %s"
 "Additional filters","Filtry dodatkowe"
-"Filter","Filtruj"
