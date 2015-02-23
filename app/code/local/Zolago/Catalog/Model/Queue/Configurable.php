@@ -155,7 +155,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
                 Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
 
         Mage::dispatchEvent(
-            "catalog_converter_queue_configurable_execute_varnish",
+            "catalog_converter_queue_configurable_complete",
             array("products" => $coll)
         );
     }

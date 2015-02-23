@@ -38,14 +38,25 @@
 		</resources>
 		-->
         <events>
-            <catalog_converter_queue_configurable_execute_varnish>
+            <catalog_converter_queue_configurable_complete>
                 <observers>
                     <zolago_turpentine_observer_ban>
                         <class>turpentine/observer_ban</class>
                         <method>banMultiProductPageCache</method>
                     </zolago_turpentine_observer_ban>
                 </observers>
-            </catalog_converter_queue_configurable_execute_varnish>
+            </catalog_converter_queue_configurable_complete>
+
+            <zolagocatalog_converter_stock_complete>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </zolagocatalog_converter_stock_complete>
+
+
         </events>
 	</global>
 	<frontend>

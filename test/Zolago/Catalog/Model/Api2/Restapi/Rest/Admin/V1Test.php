@@ -3,43 +3,44 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 
     public function testStock() {
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+        $liczba = 15;
         $param =array (
             5 => array (
                 '5-9942-L' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-M' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-S' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-XL' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' =>1,
+                    'SKLEP1' =>$liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0
                 ),
                 '5-9942-XXL' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0
                 ),
             ),
         );
         $obj::updateStockConverter($param);
-        
-                                                                                                                                                    
+
+
     }
 
 
