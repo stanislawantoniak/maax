@@ -257,3 +257,4 @@
 "Delivery date","Data dostarczenia"
 "Email template when vendor send message to customer","Szablon emaila kiedy sprzedawca wysyła wiadomość do kupującego"
 "Edit","Edytuj"
+"Order %s has invalid status","Zamówienie %s ma nieprawidłowy status"
