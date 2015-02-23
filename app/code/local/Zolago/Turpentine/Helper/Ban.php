@@ -2,44 +2,36 @@
 
 class Zolago_Turpentine_Helper_Ban extends Nexcessnet_Turpentine_Helper_Ban {
 
+    /**
+     * @param $ids
+     * @return array
+     */
     public function getMultiProductBanRegex( $ids ) {
+        /** @var Mage_Core_Model_Resource_Url_Rewrite_Collection $coll */
+        $coll = Mage::getModel('core/url_rewrite')->getCollection();
+        $coll->distinct(true);
+        $coll->addFieldToSelect('request_path');
+        $coll->addFieldToSelect('product_id');
+        $coll->addFieldToFilter('product_id', array( 'in' => $ids));
 
         $urlPatterns = array();
-        foreach($this->getmultiParentProducts($ids) as $product) {
-            if ( $product->getUrlKey() ) {
-                $urlPatterns[] = $product->getUrlKey();
-            }
+        foreach ($coll as $row) {
+            $rp = $row->getData('request_path');
+            $productId = $row->getData('product_id');
+            $urlPatterns["$rp"] = true;
+            $urlPatterns["catalog/product/view/id/$productId"] = true;
         }
-        if ( empty($urlPatterns) ) {
-            $urlPatterns[] = "##_NEVER_MATCH_##";
+        $urlPatternsFin = array();
+        foreach ($urlPatterns as $key => $v) {
+            $urlPatternsFin['regex'][] = "(?:$key)";
+            $urlPatternsFin['heating'][] = $key;
         }
-        $pattern = sprintf( '(?:%s)', implode( '|', $urlPatterns ) );
-        return $pattern;
+        unset($urlPatterns);
 
-    }
-
-
-    public function getMultiParentProducts($ids) {
-
-        /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable $resCPTC */
-        $resCPTC = Mage::getResourceModel('catalog/product_type_configurable');
-        $forBanIds = array_flip($resCPTC->getParentIdsByChild($ids));
-
-        foreach ($ids as $id) {
-            if (!isset($forBanIds[$id])) {
-                $forBanIds[$id] = true;// any value, no needed
-            }
+        if ( empty($urlPatternsFin) ) {
+            $urlPatternsFin[] = "##_NEVER_MATCH_##";
         }
 
-        $resultBanIds = array();
-        foreach ($forBanIds as $key => $id) {
-            $resultBanIds[] = $key;
-        }
-        unset($forBanIds);
-
-        $forVarnishColl = Mage::getModel('catalog/product')->getCollection();
-        $forVarnishColl->addFieldToFilter('entity_id', array("in" => $resultBanIds));
-
-        return $forVarnishColl;
+        return $urlPatternsFin;
     }
 }

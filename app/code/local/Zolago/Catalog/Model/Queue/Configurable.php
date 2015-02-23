@@ -145,7 +145,19 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             )
         );
 
+        // Varnish & Turpentine
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->addFieldToFilter('entity_id', array( 'in' => $productsToReindex));
+        $coll->addAttributeToFilter("visibility", array('in' =>
+            array( Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
 
+        Mage::dispatchEvent(
+            "catalog_converter_queue_configurable_execute_varnish",
+            array("products" => $coll)
+        );
     }
 
 
