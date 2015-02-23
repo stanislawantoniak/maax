@@ -28,7 +28,7 @@ class Zolago_Review_Model_Review  extends Unirgy_DropshipVendorRatings_Model_Rev
      */
     public function getDetailHtmlFormatted()
     {
-        return str_replace("\r\n", "<br />", trim($this->getDetail()));
+        return strip_tags(str_replace("\r\n", "<br />", trim($this->getDetail())),'<br>');
     }
 
 }
