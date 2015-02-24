@@ -142,8 +142,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			
 			// Do import of personal data
 			$quote->setCustomerEmail(null);
-			$quote->setCustomerFirstname(null);
-			$quote->setCustomerLastname(null);
+			//$quote->setCustomerFirstname(null);
+			//$quote->setCustomerLastname(null);
 			
 			if(is_null($billing) || is_null($shipping)){
 				// Funciton setting the customer
