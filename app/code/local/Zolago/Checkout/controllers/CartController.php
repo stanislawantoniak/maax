@@ -15,6 +15,7 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
     {
         //fix for removing items from cart and quote if they are out of stock
         $cart = $this->_getCart();
+        $cart->getCheckoutSession()->resetCheckout();
         if ($cart->getQuote()->getItemsCount()) {
 
             $items = $cart->getItems();
