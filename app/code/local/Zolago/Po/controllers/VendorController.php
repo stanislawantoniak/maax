@@ -1421,7 +1421,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             $templateParams = array(
                                   "po" => $udpo,
-                                  "o                rder" => $order,
+                                  "order" => $order,
                                   "store" => $store,
                                   "vendor" => $vendor,
                                   "message" => strip_tags(str_replace("\r\n", "<br />", trim($message)),'<br>'),
