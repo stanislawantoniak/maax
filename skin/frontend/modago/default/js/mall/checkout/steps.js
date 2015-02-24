@@ -1714,7 +1714,8 @@
 
                         if (bankDataSource.length) {
 	                        var selectedPaymentImgSrc = jQuery('.default_pay_selected_bank').find('img').attr('src');
-                            return '<img src="' + selectedPaymentImgSrc + '" alt="' + bankDataSource.data("bankName") + '" />';
+                            return '<span>' + bankDataSource.data("bankName") + '</span>' +
+	                            '<img src="' + selectedPaymentImgSrc + '" alt="' + bankDataSource.data("bankName") + '" />';
                             //return ;
                         }
                     }

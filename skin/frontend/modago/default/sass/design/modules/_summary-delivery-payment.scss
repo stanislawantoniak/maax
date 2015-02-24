@@ -1,6 +1,11 @@
 #checkout {
 	.online-data img {
-		max-width: 110px;
+		max-width: 80px;
+		float: right;
+		margin-top: -20px;
+		border: 1px solid black;
+		padding: 5px;
+		margin-bottom: 20px;
 	}
 	.panel {
 		&.panel-custom {
@@ -17,7 +22,6 @@
 				
 				.lb {
 					//width:59px;
-					text-align:right;
 					text-align:right;
 					&+span {
 						text-align: right;
