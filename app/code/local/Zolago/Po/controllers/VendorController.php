@@ -1424,7 +1424,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                   "order" => $order,
                                   "store" => $store,
                                   "vendor" => $vendor,
-                                  "message" => $message,
+                                  "message" => Mage::helper('zolagocommon')->nToBr($message),
                                   "use_attachments" => true,
                                   "store_name" => $store->getFrontendName(),
                               );

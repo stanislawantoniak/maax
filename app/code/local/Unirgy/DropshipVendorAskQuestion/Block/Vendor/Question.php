@@ -128,10 +128,10 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'name' => 'question_text',
             'label' => $this->__('Question Text'),
             'required' => true,
-			'class'	=> 'note',
-            'is_wide'=>true,
-            'is_bottom'=>true,
-            'text' => $data->getQuestionText()
+            'class' => 'note',
+            'is_wide' => true,
+            'is_bottom' => true,
+            'text' => Mage::helper('zolagocommon')->nToBr($data->getQuestionText())
         ));
 
         $fieldset->addField('answer_text', $this->isEditable($question) ? 'editor' : 'note', array(
@@ -143,7 +143,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'required' => true,
             'is_wide'=>true,
             'is_bottom'=>true,
-			'text' => !$this->isEditable($question)  ? $question->getAnswerText() : ""
+			'text' => !$this->isEditable($question)  ? Mage::helper('zolagocommon')->nToBr($question->getAnswerText()) : ""
         ));
         
         $this->_prepareFieldsetColumns($fieldset);

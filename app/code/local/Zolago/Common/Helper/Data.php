@@ -169,4 +169,16 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		$combined_pdf->save($save_file);
 	}
+
+    /**
+     * @param $text
+     * @return string
+     */
+    public function nToBr($text)
+    {
+        if (empty($text)) {
+            return '';
+        }
+        return strip_tags(nl2br(trim($text)), '<br>');
+    }
 }
