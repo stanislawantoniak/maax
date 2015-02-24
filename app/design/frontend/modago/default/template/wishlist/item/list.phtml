@@ -44,6 +44,7 @@ $_helper = Mage::helper('zolagocatalog/product');
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
+                                </a>
                                     <div class="price clearfix">
                                         <div class="col-price">
                                             <?php if ($_product->getPrice() != $_product->getFinalPrice()) : ?>
@@ -91,7 +92,7 @@ $_helper = Mage::helper('zolagocatalog/product');
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
-                                </a>
+
                             </div>
                         </div>
                     <?php endforeach; ?>

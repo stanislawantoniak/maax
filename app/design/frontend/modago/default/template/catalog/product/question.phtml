@@ -1,4 +1,6 @@
 <?php
+/** @var Unirgy_DropshipVendorAskQuestion_Block_Product_Question $this */
+
 if(!$this->isGallery()) {
 	$product = $this->getProduct();
 	$vendors = $product ? $product->getUdropshipVendor() : $this->getVendorsList();

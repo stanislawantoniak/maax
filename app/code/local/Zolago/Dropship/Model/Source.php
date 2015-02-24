@@ -42,5 +42,24 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
         return $out;
     }
 
+    /**
+     * @param bool $canAsk
+     * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
+     */
+    public function getCanAskVendors($canAsk = true)
+    {
+        /** @var Zolago_Dropship_Model_Vendor $modelUdv */
+        $modelUdv = Mage::getModel('udropship/vendor');
+        /** @var Unirgy_Dropship_Model_Mysql4_Vendor_Collection $vendors */
+        $vendors = $modelUdv->getCollection()
+            ->setItemObjectClass('Varien_Object')
+            ->addFieldToSelect(array('vendor_name'))
+            ->addStatusFilter('A')
+            ->addFilter('can_ask', $canAsk)
+            ->setOrder('vendor_name', 'asc');
+
+        return $vendors;
+    }
+
 }
  

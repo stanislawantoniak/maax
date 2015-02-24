@@ -55,6 +55,25 @@
 					this.processSelectedAddressNode(node, addressObject, addressBook, type);
 					
 					target.html(node);
+
+
+					var companyExists = addressObject._data.company && addressObject._data.company.length ? true : false;
+					var vatIdExists = addressObject._data.vat_id && addressObject._data.vat_id.length ? true : false;
+					var companyAddress = target.find('.companyAddress');
+
+					if(type == "shipping") {
+						if(companyExists) {
+							companyAddress.show();
+						}
+					} else if(type == "billing") {
+						if(companyExists) {
+							target.find('.nameAddress').hide();
+							companyAddress.show();
+						}
+						if(vatIdExists) {
+							target.find('.vatIdAddress').show();
+						}
+					}
 					
 				}else{
 					target.html(Mall.translate.__("no-addresses"));
@@ -85,6 +104,26 @@
 						var data = self.processAddressToDisplay(this);
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
+
+
+						var companyExists = this._data.company && this._data.company.length ? true : false;
+						var vatIdExists = this._data.vat_id && this._data.vat_id.length ? true : false;
+						var companyAddress = node.find('.companyAddress');
+
+						if(type == "shipping") {
+							if(companyExists) {
+								companyAddress.show();
+							}
+						} else if(type == "billing") {
+							if(companyExists) {
+								node.find('.nameAddress').hide();
+								companyAddress.show();
+							}
+							if(vatIdExists) {
+								node.find('.vatIdAddress').show();
+							}
+						}
+
 						target.append(node);
 					});
                 }else{
@@ -117,24 +156,25 @@
 
                 //hint data
                 //shoping and billing
-                jQuery('#shipping_firstname, #billing_firstname').attr('data-original-title', Mall.translate.__("Enter name."));
+                /*jQuery('#shipping_firstname, #billing_firstname').attr('data-original-title', Mall.translate.__("Enter name."));
                 jQuery('#shipping_lastname, #billing_lastname').attr('data-original-title', Mall.translate.__("Enter last name."));
                 jQuery('#shipping_company, #billing_company').attr('data-original-title', Mall.translate.__("Enter company name."));
-                jQuery('#shipping_street_1, #billing_street_1').attr('data-original-title', Mall.translate.__("Enter street and number."));
+                jQuery('#shipping_street_1, #billing_street_1').attr('data-original-title', Mall.translate.__("Enter street and number."));*/
                 jQuery('#shipping_postcode, #billing_postcode').attr('data-original-title', Mall.translate.__("Zip-code should be entered in the format xx-xxx."));
-                jQuery('#shipping_city, #billing_city').attr('data-original-title', Mall.translate.__("Enter city name."));
+                //jQuery('#shipping_city, #billing_city').attr('data-original-title', Mall.translate.__("Enter city name."));
                 jQuery('#shipping_telephone, #billing_telephone').attr('data-original-title', Mall.translate.__("Phone number we need only to contact concerning orders for example courier delivering the shipment."));
+                jQuery('#shipping_vat_id, #billing_vat_id').attr('data-original-title',Mall.translate.__("Enter tax number"));
                 //end hint data
 
                 //visual fix for hints
-                jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
+                /*jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
                     placement: function(a, element) {
                         var viewport = window.innerWidth;
                         var placement = "right";
-                        if (viewport < 991) {
+                        if (viewport < 960) {
                             placement = "top";
                         }
-                        if (viewport < 768) {
+	                    if (viewport < 768) {
                             placement = "right";
                         }
                         if (viewport < 600) {
@@ -143,7 +183,7 @@
                         return placement;
                     },
                     trigger: "focus"
-                });
+                });*/
                 jQuery('.phone, .zipcode, .nip').tooltip({
                     placement: "right",
                     trigger: "focus"
@@ -225,7 +265,11 @@
                 panelBody.append(formGroup);
 
                 jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
+	                if(item.name == 'vat_id' || item.name == 'telephone' || item.name == 'postcode') {
+		                item.type = 'tel';
+	                }
                     formGroup = self.getFormGroup();
+
                     element = self.getInput(
                         item.name
                         , item.id
@@ -505,12 +549,12 @@
 				
 				if(doOpen){
 					block.show();
-					contextActions.find(".edit").show().addClass("displayed")
+					contextActions.find(".edit").show().addClass("displayed");
 					element.addClass("open");
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
-					contextActions.find(".edit").hide().removeClass("displayed")
+					contextActions.find(".edit").hide().removeClass("displayed");
 					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
@@ -1387,9 +1431,13 @@
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
+	            var animationSpeed = 600;
+				var htmlBody = jQuery("html, body");
                 if (!ifPanelClosed) {
-                    jQuery("html, body").animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, 600, 'swing', function () {
-                    });
+	                htmlBody.animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, animationSpeed);
+                } else {
+	                var offset = jQuery(window).height() < 750 ? 140 : 100;
+	                htmlBody.animate({scrollTop: jQuery('.css-radio.payment-method').first().offset().top + offset}, animationSpeed);
                 }
 
             },
@@ -1523,7 +1571,21 @@
                     jQuery(this).closest('.panel').addClass('payment-selected');
                     jQuery('.selected_bank').hide();
                     if (jQuery(this).is(":checked")) {
-                        jQuery(this).closest('.form-group').next('.selected_bank').show();
+	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
+	                    if(selectedBank.length) {
+		                    selectedBank.show();
+		                    var offsetWithoutHeader = -35;
+		                    var offsetWithHeader = -95;
+		                    var scrollTo = selectedBank.prev('div').find('.label-wrapper').offset().top;
+		                    var scrollFrom = jQuery(document).scrollTop();
+		                    if((scrollTo < scrollFrom && jQuery(window).height() < 750) || jQuery(window).height() >= 750) {
+			                    scrollTo += offsetWithHeader;
+		                    } else {
+			                    scrollTo += offsetWithoutHeader;
+		                    }
+
+		                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
+	                    }
                     }
 
                 });
@@ -1539,6 +1601,7 @@
 
 				this.content.find("#step-1-prev").click(function(){
 					checkoutObject.prev();
+					jQuery(window).trigger("resize");
 					return false;
 				});
 
@@ -1552,6 +1615,7 @@
 					this.getSidebarAddresses(), 
 					this.getSidebarAddressesTemplate()
 				);
+				jQuery(window).trigger("resize");
 			},
 
             collect: function () {
@@ -1623,6 +1687,13 @@
 				return null;
 			},
 			
+			getCheckoutReviewInfo: function (){
+				if (this.getSelectedPayment() == 'cashondelivery') {
+					return jQuery("#checkout-review-info-cod").html();
+				} else {	
+					return jQuery("#checkout-review-info").html();
+				}
+			},
 			getCostForVendor: function(vendorId, methodCode){
 				var costs = this.getVendorCosts();
 				if(typeof costs == "object" && 
@@ -1642,7 +1713,10 @@
                         var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='" + bank + "']");
 
                         if (bankDataSource.length) {
-                            return bankDataSource.data("bankName");
+	                        var selectedPaymentImgSrc = jQuery('.default_pay_selected_bank').find('img').attr('src');
+                            return '<span>' + bankDataSource.data("bankName") + '</span>' +
+	                            '<img src="' + selectedPaymentImgSrc + '" alt="' + bankDataSource.data("bankName") + '" />';
+                            //return ;
                         }
                     }
                 }
@@ -1721,16 +1795,21 @@
 			code: "review",
 			_sidebarAddressesTemplate: "",
 			_sidebarDeliverypaymentTemplate: "",
-			
+			_reviewInfoTemplate: "",
 			onPrepare: function(checkoutObject){
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
+				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
+					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
+						jQuery('#view_default_pay').trigger('click');
+						jQuery('html,body').scrollTop(0);
+					}
 				});
 			},
 			
@@ -1751,7 +1830,12 @@
 					this.getSidebarDeliverypayment(), 
 					this.getSidebarDeliverypaymentTemplate()
 				);
-				
+				var textpotwierdzenie = checkout.getReviewInfo();
+				checkout.prepareReviewInfo(
+					textpotwierdzenie,
+					this.getReviewInfo(),
+					this.getReviewInfoTemplate()
+				);
 				this._prepareTotals(checkout);
 			},
 			
@@ -1803,6 +1887,12 @@
 			getSidebarDeliverypaymentTemplate: function(){
 				return this._sidebarDeliverypaymentTemplate;
 			},
+			getReviewInfoTemplate: function() {	
+				return this._reviewInfoTemplate;
+			},
+			getReviewInfo: function() {
+				return this.content.find(".text-potwierdzenie");
+			}
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {

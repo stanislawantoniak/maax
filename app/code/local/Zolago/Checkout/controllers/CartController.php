@@ -13,10 +13,6 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
      */
     public function indexAction()
     {
-        /** @var Zolago_Checkout_Helper_Data $helper */
-        $helper = Mage::helper("zolagocheckout");
-        $helper->fixCartShippingRates();
-
         //fix for removing items from cart and quote if they are out of stock
         $cart = $this->_getCart();
         if ($cart->getQuote()->getItemsCount()) {
@@ -27,12 +23,27 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
                 /** @var Zolago_CatalogInventory_Helper_Data $helperZCI */
                 $helperZCI = Mage::helper("zolagocataloginventory");
 
-                // for all items in quote we check if item have flag FLAG_OUT_OF_STOCK or FLAG_NO_STOCK_INFO
-                // then we need to remove such item and inform customer about that
-                if (in_array($helperZCI->getQuoteItemAvailableFlag($item),
+                /** @var Zolago_Catalog_Model_Product $product */
+                $product = $item->getProduct();
+
+                $noStock = in_array($helperZCI->getQuoteItemAvailableFlag($item),
                     array(Zolago_CatalogInventory_Helper_Data::FLAG_OUT_OF_STOCK,
-                        Zolago_CatalogInventory_Helper_Data::FLAG_NO_STOCK_INFO))
-                ) {
+                        Zolago_CatalogInventory_Helper_Data::FLAG_NO_STOCK_INFO));
+                $isSalable = $product->isSalable();
+                $isEnabled = $product->isEnabled();
+
+                //item can have status different then `enabled`
+                //so we need to remember for children to remove them too
+                if ($noStock || !$isSalable || !$isEnabled ) {
+                    $children = $item->getChildren();
+                    foreach ($children as $childItem) {
+                        /** @var Mage_Sales_Model_Quote_Item $childItem */
+                        $childItem->setData('remove', true);
+                    }
+                }
+
+                // if below is true we need to remove such item and inform customer about that
+                if ($noStock || !$isSalable || !$isEnabled || $item->getData('remove')) {
 
                     // remove errors for current item
                     $this->_removeErrorsFromQuoteAndItem($item, Mage_CatalogInventory_Helper_Data::ERROR_QTY);
@@ -58,14 +69,20 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
                                     $item->getName(),
                                     $sizeText));
                         }
-
                     }
 
                     // now we remove item (and all children if exists)
                     $cart->removeItem($item->getItemId());
                 }
             }
+
+            /** @var Zolago_Checkout_Helper_Data $helper */
+            $helper = Mage::helper("zolagocheckout");
+            $helper->fixCartShippingRates();
+
             $cart->save();
+            //after save, items with status disabled are removed from card so we need to remove last error message
+            $this->_getQuote()->removeMessageByText('error', Mage::helper('cataloginventory')->__('Some of the products are currently out of stock'));
         }
         //end fix
         parent::indexAction();

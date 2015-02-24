@@ -23,21 +23,6 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 	    $localVendorId = Mage::helper("udropship")->getLocalVendorId($storeId);
 	    $identity = Mage::getStoreConfig(self::XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY, $storeId);
 
-	    $templateParams = array(
-		    'store' => $store,
-		    'store_name' => $store->getName(),
-		    'customer_name' => $question->getCustomerName(),
-		    'customer_email' => $question->getCustomerEmail(),
-		    "vendor" => $vendor,
-		    'vendor_name' => $question->getVendorName(),
-		    'vendor_email' => $question->getVendorEmail(),
-		    "local_vendor" => $localVendorId && $localVendorId==$vendor->getId(),
-		    'question' => $question,
-		    'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
-		    'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
-		    "use_attachments" => true
-	    );
-
 	    Mage::helper('udropship')->setDesignStore($store);
 
 		if($question->isObjectNew()){
@@ -49,6 +34,24 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 		}
 
 	    if($template) {
+            $questionText = $question->getData('question_text');
+            $question->setData('question_text',Mage::helper('zolagocommon')->nToBr($questionText));
+
+            $templateParams = array(
+                'store' => $store,
+                'store_name' => $store->getName(),
+                'customer_name' => $question->getCustomerName(),
+                'customer_email' => $question->getCustomerEmail(),
+                "vendor" => $vendor,
+                'vendor_name' => $question->getVendorName(),
+                'vendor_email' => $question->getVendorEmail(),
+                "local_vendor" => $localVendorId && $localVendorId==$vendor->getId(),
+                'question' => $question,
+                'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
+                'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+                "use_attachments" => true
+            );
+
 		    $helper = Mage::helper("zolagocommon");
 		    /* @var $helper Zolago_Common_Helper_Data */
 		    $helper->sendEmailTemplate(

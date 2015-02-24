@@ -65,3 +65,6 @@
 "Bank", "Bank"
 "Please select bank", "Proszę wybrać bank"
 "Qty", "Ilość"
+"Order now and pay", "Zamawiam i płacę"
+"Product %s size %s was removed from cart because is out of stock.","Produkt %s rozmiar %s został usunięty z koszyka z powodu braku dostępności na magazynie."
+"Product %s was removed from cart because is out of stock.","Produkt %s został usunięty z koszyka z powodu braku dostępności na magazynie."

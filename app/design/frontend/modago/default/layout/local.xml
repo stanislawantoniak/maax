@@ -843,6 +843,9 @@
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
         </reference>
         <reference name="content">
             <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>

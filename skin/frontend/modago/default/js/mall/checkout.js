@@ -492,11 +492,17 @@
 			carrier_name: step.getCarrierName(),
 			carrier_method: step.getCarrierMethod(),
 			payment_method: step.getPaymentMethod(),
-            hasProviders: step.hasProviders(),
-			online_data: step.getProvidersData(),
+	        hasProviders: step.hasProviders(),
+			online_data: step.getProvidersData()
 		};
-	}
-	
+	};
+	Mall.Checkout.prototype.getReviewInfo = function () {
+		var step = this.getStepByCode("shippingpayment");
+		return {
+			checkout_review_info: step.getCheckoutReviewInfo(),
+		};
+		
+	};	
 	/**
 	 * @param {Mall.Customer.Address} billing
 	 * @param {Mall.Customer.Address} shipping
@@ -525,6 +531,7 @@
 		// Bind click
 		sidebar.find(".prev-button-address").click(function(){
 			self.go(0); // Address is always 1st step
+			jQuery(window).trigger("resize");
 			return false;
 		});
 			
@@ -558,7 +565,11 @@
 			
 		return sidebar;
 	};
-		
+	Mall.Checkout.prototype.prepareReviewInfo = function (
+		dataObject, textInfo, template) {
+		textInfo.html(Mall.replace(template, dataObject));
+		return textInfo;		
+	};		
 	/**
 	 * @param {bool} isInvoice
 	 * @returns {string}

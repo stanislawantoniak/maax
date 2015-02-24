@@ -181,6 +181,9 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
                 ->addFieldToFilter('is_visible_to_vendor',1)
                 ->setCreatedAtOrder();
 
+	        $this->_vendorComments->getSelect()->where("comment IS NOT NULL");
+
+
             $this->_vendorComments->load();
 
             if ($this->getId()) {

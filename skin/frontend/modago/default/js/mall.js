@@ -463,6 +463,8 @@ var Mall = {
 	    popup.find(".modal-loaded").hide();
 	    popup.find(".modal-loading").show();
 	    popup.modal('show');
+	    popup.css('pointer-events','none');
+	    jQuery('#add-to-cart').css('pointer-events','none');
         OrbaLib.Cart.add({
             "product_id": id,
             "super_attribute": attr,
@@ -500,9 +502,10 @@ var Mall = {
 
     getMallHeaderHeight: function () {
         "use strict";
+	    var header = jQuery("#header");
 
-        if (jQuery("#header")) {
-            return jQuery("#header").outerHeight();
+        if (header.length) {
+            return header.outerHeight();
         }
 
         return 0;
@@ -902,8 +905,11 @@ function addtocartcallback(response) {
 	    popup.find(".modal-loading").hide();
 	    popup.find(".modal-loaded").show();
 	    popup.modal("show");
+
         Mall.getAccountInfo();
     }
+	popup.css({display: 'block','pointer-events':'auto'});
+	jQuery("#add-to-cart").css("pointer-events","auto");
 }
 
 function number_format(number, decimals, dec_point, thousands_sep) {

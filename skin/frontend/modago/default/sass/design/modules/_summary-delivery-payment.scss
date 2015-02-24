@@ -1,4 +1,12 @@
 #checkout {
+	.online-data img {
+		max-width: 80px;
+		float: right;
+		margin-top: -20px;
+		border: 1px solid black;
+		padding: 5px;
+		margin-bottom: 20px;
+	}
 	.panel {
 		&.panel-custom {
 			.panel-body {
@@ -15,10 +23,9 @@
 				.lb {
 					//width:59px;
 					text-align:right;
-					text-align:right;
 					&+span {
 						text-align: right;
-						font-weight: bold;
+//						font-weight: bold;
 					}
 				}
 			}
@@ -141,10 +148,10 @@
 					text-align:right;
 					display:inline-block;
 					text-align:right;
-					&+span {
-						text-align: right;				
-						font-weight: bold;
-					}
+				}
+				.total_shipping, .price, .total_discout {
+//					font-weight:bold;
+					text-align: right;				
 				}
 			}
 		}

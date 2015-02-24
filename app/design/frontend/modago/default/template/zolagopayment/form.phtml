@@ -26,10 +26,10 @@
                     />
                 <label for="<?php echo $_id; ?>" class="clearfix">
                     <div class="payment-provider-logo-wrapper">
-                        <img
-                            class="" src="<?php echo $this->getProviderLogoUrl($_provider); ?>"
-                             alt="<?php echo $this->escapeHtml($_provider->getName()); ?>"
-                             style="" />
+	                    <div class="payment-provider-logo-inside-wrapper">
+                            <img src="<?php echo $this->getProviderLogoUrl($_provider); ?>"
+                                 alt="<?php echo $this->escapeHtml($_provider->getName()); ?>" />
+	                    </div>
                     </div>
                     <span class="hidden-xs"><?php echo $this->escapeHtml($_provider->getName());?></span>
                 </label>

@@ -161,7 +161,12 @@ class Zolago_Campaign_Model_Observer
         $modelCampaign = Mage::getModel('zolagocampaign/campaign');
         foreach ($salesPromoProductsData as $websiteId => $salesPromoProductsDataH) {
             $productIdsSPUpdated = $modelCampaign->setProductOptionsByCampaign($salesPromoProductsDataH, $websiteId);
-            $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
+            if(!empty($productIdsSPUpdated)){
+                $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
+            }
+        }
+        if(empty($productsIdsPullToSolr)){
+            return;
         }
 //
 //        //3. reindex
