@@ -23,7 +23,7 @@ class Zolago_Persistent_Model_Observer_Session extends Mage_Persistent_Model_Obs
 			Mage::helper('persistent/session')->setRememberMeChecked((bool)$rememberMeCheckbox);
 		}
 		
-        return parent::synchronizePersistentOnLogin($observer);
+        parent::synchronizePersistentOnLogin($observer);
     }
 
 }

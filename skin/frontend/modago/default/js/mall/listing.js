@@ -639,14 +639,14 @@ Mall.listing = {
 					Mall.listing.setAutoappend(false);
 				}
 				// build wishlist collection
-				jQuery.each(data.content.products, function (index, item) {
-					"use strict";
-					Mall.wishlist.addProduct({
-						id: item.entity_id,
-						wishlist_count: item.wishlist_count,
-						in_your_wishlist: item.in_my_wishlist ? true : false
-					});
-				});
+				//jQuery.each(data.content.products, function (index, item) {
+				//	"use strict";
+				//	Mall.wishlist.addProduct({
+				//		id: item.entity_id,
+				//		wishlist_count: item.wishlist_count,
+				//		in_your_wishlist: item.in_my_wishlist ? true : false
+				//	});
+				//});
 			} else {
 				// @todo hide buttons etc
 				Mall.listing.removeLockFromQueue(); // this is dummy expression
@@ -673,6 +673,11 @@ Mall.listing = {
 			_item = Mall.listing.createProductEntity(item);
             grid.append(_item);
             items = items.add(_item);
+            Mall.wishlist.addProduct({
+                id: item.entity_id,
+                wishlist_count: item.wishlist_count,
+                in_your_wishlist: item.in_my_wishlist ? true : false
+            });
 		});
 
         grid.shuffle('appended', items);
@@ -758,9 +763,12 @@ Mall.listing = {
 			html: product.name
 		}).appendTo(link);
 
-		priceBox = jQuery("<div/>", {
-			"class": "price clearfix"
-		}).appendTo(link);
+		//priceBox = jQuery("<div/>", {
+		//	"class": "price clearfix"
+		//}).appendTo(link);
+        priceBox = jQuery("<div/>", {
+            "class": "price clearfix"
+        }).insertAfter(link);
 
 		colPrice = jQuery("<div/>", {
 			"class": "col-price"
@@ -789,8 +797,8 @@ Mall.listing = {
 			"data-idproduct": product.entity_id,
 			"data-status": product.in_my_wishlist,
 			onclick: product.in_my_wishlist
-				? "Mall.wishlist.removeFromSmallBlock(this);return false;"
-				: "Mall.wishlist.addFromSmallBlock(this);return false;"
+				? "Mall.wishlist.removeFromSmallBlock(this);"
+				: "Mall.wishlist.addFromSmallBlock(this);"
 		}).appendTo(priceBox);
 
 		likeIco = jQuery("<span/>", {

@@ -261,6 +261,9 @@
 	@media (max-width: $screen-xs-max) {
 		padding-top: 11px;
 	}
+	@media (max-width: 379px) {
+		padding-top: 20px;
+	}
 }
 .value_quality_delivery {
 	position:relative;

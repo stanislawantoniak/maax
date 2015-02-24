@@ -7,7 +7,7 @@ class Orba_Shipping_DhlController extends Mage_Core_Controller_Front_Action
 	public function indexAction() {
 		$this->_redirect('/');
 	}
-	
+
 	public function lpAction() {
 		$dhlFile			= false;
 		$result	= array(

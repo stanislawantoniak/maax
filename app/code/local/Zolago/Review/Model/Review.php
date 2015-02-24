@@ -23,4 +23,12 @@ class Zolago_Review_Model_Review  extends Unirgy_DropshipVendorRatings_Model_Rev
 		return $return;
 	}
 
+    /**
+     * @return mixed
+     */
+    public function getDetailHtmlFormatted()
+    {
+        return strip_tags(str_replace("\r\n", "<br />", trim($this->getDetail())),'<br>');
+    }
+
 }

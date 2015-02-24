@@ -32,6 +32,9 @@
         }
       }
     }
+    .shipping-collect i {
+	    display: none;
+    }
   }
 	.panel {
 		@include border-radius(2px);
@@ -230,7 +233,7 @@
           width: 100%;
 		  margin-bottom:6px;
           img {
-            max-width: 120px;
+            max-width: 105px;
             @media (min-width: 430px) and (max-width: 600px) {
               max-width: 150px;
             }
