@@ -1431,7 +1431,7 @@
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
-	            if(jQuery(window).width() < 992) {
+	            if(jQuery(window).width() < 977) {
 		            var animationSpeed = 600;
 		            var htmlBody = jQuery("html, body");
 		            if (!ifPanelClosed) {
@@ -1576,7 +1576,7 @@
 	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
 	                    if(selectedBank.length) {
 		                    selectedBank.show();
-		                    if(jQuery(window).width() < 992) {
+		                    if(jQuery(window).width() < 977) {
 			                    var offsetWithoutHeader = -35;
 			                    var offsetWithHeader = -95;
 			                    var scrollTo = selectedBank.prev('div').find('.label-wrapper').offset().top;
