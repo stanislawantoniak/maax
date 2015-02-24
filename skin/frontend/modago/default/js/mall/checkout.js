@@ -531,6 +531,7 @@
 		// Bind click
 		sidebar.find(".prev-button-address").click(function(){
 			self.go(0); // Address is always 1st step
+			jQuery(window).trigger("resize");
 			return false;
 		});
 			
