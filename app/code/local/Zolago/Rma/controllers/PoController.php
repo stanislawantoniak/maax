@@ -285,7 +285,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 				);
 				if($customerAddress && $customerAddress->getId()){
 					$orderAddress = $rma->getShippingAddress();
-					$this->_prepareShippingAddress($customerAddress, $orderAddress);
+					$orderAddress = $this->_prepareShippingAddress($customerAddress, $orderAddress);
 					$rma->setOwnShippingAddress($orderAddress);
 				}
 			}
@@ -355,7 +355,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             );
             if ($customerAddress && $customerAddress->getId()) {
                 $orderAddress = $rma->getShippingAddress();
-                $this->_prepareShippingAddress($customerAddress, $orderAddress);
+                $orderAddress = $this->_prepareShippingAddress($customerAddress, $orderAddress);
                 $rma->setOwnShippingAddress($orderAddress);
             }
         }
