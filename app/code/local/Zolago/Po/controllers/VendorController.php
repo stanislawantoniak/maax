@@ -1419,14 +1419,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $vendor = $this->_getVendor();
             $message = $r->getParam("message");
 
-            $message = strip_tags(str_replace("\r\n", "<br />", trim($message)),'<br>');
-
             $templateParams = array(
                                   "po" => $udpo,
-                                  "order" => $order,
+                                  "o                rder" => $order,
                                   "store" => $store,
                                   "vendor" => $vendor,
-                                  "message" => $message,
+                                  "message" => strip_tags(str_replace("\r\n", "<br />", trim($message)),'<br>'),
                                   "use_attachments" => true,
                                   "store_name" => $store->getFrontendName(),
                               );
