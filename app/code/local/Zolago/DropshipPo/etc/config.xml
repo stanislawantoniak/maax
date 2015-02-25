@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <config>
+    <modules>
+        <Unirgy_Dropship>
+
+        </Unirgy_Dropship>
+    </modules>
 	<global>
 		<helpers>
 			<udpo>
