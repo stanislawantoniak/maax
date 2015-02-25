@@ -233,8 +233,6 @@ class Unirgy_Dropship_Model_Vendor extends Mage_Core_Model_Abstract
     */
     public function sendOrderNotificationEmail($shipment)
     {
-        Mage::log('test', null, 'mylog.log');
-
         $order = $shipment->getOrder();
         $store = $order->getStore();
 
