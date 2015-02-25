@@ -384,7 +384,34 @@ table.foot-empty-cells tfoot td:empty {
 .clearbr {
 	clear:both;
 }
-
+/*fix for horizontal scroll for grid*/
+.grid-hscroll-1400w .z-grid{
+    min-width: 1400px!important;
+}
+.grid-hscroll-1150w .z-grid{
+    min-width: 1150px!important;
+}
+.grid-hscroll-950w .z-grid{
+    min-width: 950px!important;
+}
+.grid-hscroll-700w .z-grid{
+    min-width: 700px!important;
+}
+@media (max-width: 767px) {
+    .udpo-vendor-index.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+    .udpo-vendor_aggregated-index.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+    .udqa-vendor-questions.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+    .urma-vendor-index.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+}
+/*fix for horizontal scroll for grid end*/
 
 /* cursor pointer for rows with links */
 .table tbody tr[title^=http] td {
