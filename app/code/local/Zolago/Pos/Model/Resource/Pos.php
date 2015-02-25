@@ -153,6 +153,20 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
     }
 
     /**
+     * get products with skuS
+     *
+     * @param array $skus
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    public static function getSkuCollection($skus = array()) {
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
+        $collection = Mage::getModel('catalog/product')->getCollection();
+        $collection->addFieldToFilter('sku', array("in" => $skus));
+
+        return $collection;
+    }
+
+    /**
      * get sku-id associated array
      *
      * @param array $skus
@@ -161,8 +175,7 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
      */
     public static function getSkuAssoc($skus = array())
     {
-        $collection = Mage::getModel('catalog/product')->getCollection();
-        $collection->addFieldToFilter('sku', array("in" => $skus));
+        $collection = self::getSkuCollection($skus);
 
         $skuAssoc = array();
         foreach ($collection as $collectionI) {

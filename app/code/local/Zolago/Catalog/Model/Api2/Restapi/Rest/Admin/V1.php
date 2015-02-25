@@ -236,8 +236,21 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         Mage::getResourceModel('cataloginventory/indexer_stock')
             ->reindexProducts($productsIds);
 
-        //send to solr queue
-        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
+        // Varnish & Turpentine
+        /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable $modelZCPC */
+        $modelCPTC = Mage::getResourceModel('catalog/product_type_configurable');
+        $parentIds = $modelCPTC->getParentIdsByChild($productIds);
+        $allIds = array_merge($parentIds, $productIds);
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->addFieldToFilter('entity_id', array( 'in' => $allIds));
+        $coll->addAttributeToFilter("visibility", array('in' =>
+            array( Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
+
+        //send to solr queue & ban url in varnish
+        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $coll));
     }
 
     /**

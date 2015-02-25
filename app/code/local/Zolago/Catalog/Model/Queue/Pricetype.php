@@ -83,7 +83,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                 $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
                 $stores[] = $_storeId;
             }
-            $skuvs_count = count($skuvs);
+
             foreach ($skuvs as $count => $productData) {
                 $productId = $productData['product_id'];
                 $parentId = $productData['parent'];

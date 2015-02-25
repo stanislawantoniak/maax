@@ -604,15 +604,15 @@
 			<block type="zolagomodago/catalog_product_view_shop" name="product.shop" template="catalog/product/view/shop.phtml">
 				<block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
 				<!-- ESI Varnish cache depends on *product* registry key -->
-				<action method="setEsiOptions">
-					<params>
-						<access>public</access>
-						<registry_keys>
-							<product/>
-						</registry_keys>
-						<ttl>600</ttl> <!-- time to live for price block (sec) -->
-					</params>
-				</action>
+				<!--<action method="setEsiOptions">-->
+					<!--<params>-->
+						<!--<access>public</access>-->
+						<!--<registry_keys>-->
+							<!--<product/>-->
+						<!--</registry_keys>-->
+						<!--<ttl>600</ttl> &lt;!&ndash; time to live for price block (sec) &ndash;&gt;-->
+					<!--</params>-->
+				<!--</action>-->
 			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
