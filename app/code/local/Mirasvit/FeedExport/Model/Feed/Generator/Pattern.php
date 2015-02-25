@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -95,7 +95,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
                     break;
             }
 
-            if ($value === null) {
+            if ($value === '' || $value === null || $value === false) {
                 $model = Mage::getSingleton('feedexport/feed_generator_pattern_global')->setFeed($this->getFeed());
                 $value = $model->getValue($pattern, $obj);
             }

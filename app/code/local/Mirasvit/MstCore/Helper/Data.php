@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -31,9 +31,17 @@ class Mirasvit_MstCore_Helper_Data extends Mage_Core_Helper_Data
 
     public function pr($arr, $ip = false, $die = false)
     {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $clientIp = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $clientIp = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $clientIp = $_SERVER['REMOTE_ADDR'];
+        }
+
         if (!$ip) {
             pr($arr);
-        } elseif ($_SERVER['REMOTE_ADDR'] == $ip) {
+        } elseif ($clientIp == $ip) {
             pr($arr);
             if ($die) {
                 die();

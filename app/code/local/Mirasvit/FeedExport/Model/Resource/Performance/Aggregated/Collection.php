@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -57,6 +57,7 @@ class Mirasvit_FeedExport_Model_Resource_Performance_Aggregated_Collection
                 }
             }
         }
+        $this->_selectedColumns['cr'] = 'SUM(orders) / SUM(clicks) * 100';
 
         return $this->_selectedColumns;
     }
