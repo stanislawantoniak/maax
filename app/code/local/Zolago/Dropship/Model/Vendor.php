@@ -184,8 +184,6 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
     public function sendOrderNotificationEmail($shipment)
     {
-        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
-
         $order = $shipment->getOrder();
         $store = $order->getStore();
 
@@ -286,7 +284,6 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         } else {
             $email = $this->getEmail();
         }
-//        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $this->getVendorName(), $data);
 
         /* @var $helper Zolago_Common_Helper_Data */
         $helper = Mage::helper("zolagocommon");
