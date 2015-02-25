@@ -24,7 +24,9 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
 			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
-			$collection->setOrder("vendor_name");
+//			$collection->setOrder("vendor_name");
+            $collection->setOrder("sequence", "ASC");
+            $collection->setPageSize(12);
 			// Load serialized data
 			foreach($collection as $vendor){
 				Mage::helper('udropship')->loadCustomData($vendor);
@@ -56,9 +58,10 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	 */
 	public function getVendorResizedLogoUrl(Unirgy_Dropship_Model_Vendor $vendor, 
 			$width=130, $height=74) {
-		
-		return Mage::helper("zolagodropship")->
-				getVendorLogoResizedUrl($vendor, $width, $height);
+        /* @var $zolagodropship Zolago_Dropship_Helper_Data */
+		$zolagodropship = Mage::helper("zolagodropship");
+
+		return $zolagodropship->getVendorLogoResizedUrl($vendor, $width, $height);
 	}
 	
 	/**
