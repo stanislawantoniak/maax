@@ -314,7 +314,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 			array(
 				'store_name' => $store->getName(),
 				'vendor_name' => $vendor->getVendorName(),
-				'use_attachements' => true,
+				'use_attachments' => true,
 				'url' => Mage::getUrl('udropship/vendor/password', array(
 						'confirm' => $vendor->getRandomHash(),
 					)
@@ -353,7 +353,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 			'order_id'        => $order->getIncrementId(),
 			'shipment_url'    => Mage::getUrl('udropship/vendor/', array('_query'=>'filter_order_id_from='.$order->getIncrementId().'&filter_order_id_to='.$order->getIncrementId())),
 			'packingslip_url' => Mage::getUrl('udropship/vendor/pdf', array('shipment_id'=>$shipment->getId())),
-			'use_attachements'=> true
+			'use_attachments'=> true
 		);
 
 		if ($this->isUdpoActive() && ($po = Mage::helper('udpo')->getShipmentPo($shipment))) {
@@ -420,7 +420,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 					'order_id'  => $order->getId(),
 				)),
 				'comment'      => $comment,
-				'use_attachements'=>true
+				'use_attachments'=>true
 			);
 			if ($this->isUdpoActive() && ($po = Mage::helper('udpo')->getShipmentPo($shipment))) {
 				$data['po_id'] = $po->getIncrementId();
