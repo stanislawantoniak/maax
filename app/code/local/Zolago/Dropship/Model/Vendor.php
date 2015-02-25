@@ -182,4 +182,125 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
     }
 
+    public function sendOrderNotificationEmail($shipment)
+    {
+        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
+
+        $order = $shipment->getOrder();
+        $store = $order->getStore();
+
+        $hlp = Mage::helper('udropship');
+        $data = array();
+
+        $adminTheme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+        if ($store->getConfig('udropship/vendor/attach_packingslip') && $this->getAttachPackingslip()) {
+            Mage::getDesign()->setArea('adminhtml')
+                ->setPackageName(!empty($adminTheme[0]) ? $adminTheme[0] : 'default')
+                ->setTheme(!empty($adminTheme[1]) ? $adminTheme[1] : 'default');
+
+            $orderShippingAmount = $order->getShippingAmount();
+            $order->setShippingAmount($shipment->getShippingAmount());
+
+            $pdf = Mage::helper('udropship')->getVendorShipmentsPdf(array($shipment));
+
+            $order->setShippingAmount($orderShippingAmount);
+
+            $data['_ATTACHMENTS'][] = array(
+                'content'=>$pdf->render(),
+                'filename'=>'packingslip-'.$order->getIncrementId().'-'.$this->getId().'.pdf',
+                'type'=>'application/x-pdf',
+            );
+        }
+
+        if ($store->getConfig('udropship/vendor/attach_shippinglabel') && $this->getAttachShippinglabel() && $this->getLabelType()) {
+            try {
+                if (!$shipment->getResendNotificationFlag()) {
+                    $hlp->unassignVendorSkus($shipment);
+                    $batch = Mage::getModel('udropship/label_batch')->setVendor($this)->processShipments(array($shipment));
+                    if ($batch->getErrors()) {
+                        if (Mage::app()->getRequest()->getRouteName()=='udropship') {
+                            Mage::throwException($batch->getErrorMessages());
+                        } else {
+                            Mage::helper('udropship/error')->sendLabelRequestFailedNotification($shipment, $batch->getErrorMessages());
+                        }
+                    } else {
+                        $labelModel = $hlp->getLabelTypeInstance($batch->getLabelType());
+                        foreach ($shipment->getAllTracks() as $track) {
+                            $data['_ATTACHMENTS'][] = $labelModel->renderTrackContent($track);
+                        }
+                    }
+                } else {
+                    $batchIds = array();
+                    foreach ($shipment->getAllTracks() as $track) {
+                        $batchIds[$track->getBatchId()][] = $track;
+                    }
+                    foreach ($batchIds as $batchId => $tracks) {
+                        $batch = Mage::getModel('udropship/label_batch')->load($batchId);
+                        if (!$batch->getId()) continue;
+                        if (count($tracks)>1) {
+                            $labelModel = Mage::helper('udropship')->getLabelTypeInstance($batch->getLabelType());
+                            $data['_ATTACHMENTS'][] = $labelModel->renderBatchContent($batch);
+                        } else {
+                            reset($tracks);
+                            $labelModel = Mage::helper('udropship')->getLabelTypeInstance($batch->getLabelType());
+                            $data['_ATTACHMENTS'][] = $labelModel->renderTrackContent(current($tracks));
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                // ignore if failed
+            }
+        }
+
+        $hlp->setDesignStore($store);
+        $shippingAddress = $order->getShippingAddress();
+        if (!$shippingAddress) {
+            $shippingAddress = $order->getBillingAddress();
+        }
+        $hlp->assignVendorSkus($shipment);
+        $data += array(
+            'shipment'        => $shipment,
+            'order'           => $order,
+            'vendor'          => $this,
+            'store_name'      => $store->getName(),
+            'vendor_name'     => $this->getVendorName(),
+            'order_id'        => $order->getIncrementId(),
+            'customer_info'   => Mage::helper('udropship')->formatCustomerAddress($shippingAddress, 'html', $this),
+            'shipping_method' => $shipment->getUdropshipMethodDescription() ? $shipment->getUdropshipMethodDescription() : $this->getShippingMethodName($order->getShippingMethod(), true),
+            'shipment_url'    => Mage::getUrl('udropship/vendor/', array('_query'=>'filter_order_id_from='.$order->getIncrementId().'&filter_order_id_to='.$order->getIncrementId())),
+            'packingslip_url' => Mage::getUrl('udropship/vendor/pdf', array('shipment_id'=>$shipment->getId())),
+            'use_attachments' => true
+        );
+
+        $template = $this->getEmailTemplate();
+        if (!$template) {
+            $template = $store->getConfig('udropship/vendor/vendor_email_template');
+        }
+        $identity = $store->getConfig('udropship/vendor/vendor_email_identity');
+
+        $data['_BCC'] = $this->getNewOrderCcEmails();
+        Mage::log($data['_BCC'], null, 'mylog.log');
+
+        if (($emailField = $store->getConfig('udropship/vendor/vendor_notification_field'))) {
+            $email = $this->getData($emailField) ? $this->getData($emailField) : $this->getEmail();
+        } else {
+            $email = $this->getEmail();
+        }
+//        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $this->getVendorName(), $data);
+
+        /* @var $helper Zolago_Common_Helper_Data */
+        $helper = Mage::helper("zolagocommon");
+        $helper->sendEmailTemplate(
+            $email,
+            $this->getVendorName(),
+            $template,
+            $data,
+            true,
+            $identity
+        );
+
+        $hlp->unassignVendorSkus($shipment);
+
+        $hlp->setDesignStore();
+    }
 }
