@@ -3,6 +3,7 @@ class Zolago_DropshipPo_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
 	public function sendNewPoNotificationEmail($po, $comment = '')
 	{
+        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
 		$order = $po->getOrder();
 		$store = $order->getStore();
 
