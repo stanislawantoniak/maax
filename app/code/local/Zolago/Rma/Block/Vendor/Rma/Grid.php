@@ -128,6 +128,13 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		return parent::_prepareColumns();
 	}
+
+	public function getRowUrl($row) {
+		return $this->getUrl('*/*/edit', array(
+				'id'=>$row->getId()
+			)
+		);
+	}
 	
 	protected function _prepareLayout() {
 		 $ret = parent::_prepareLayout();
@@ -223,6 +230,9 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	
 	protected function _prepareMassaction()
     {
+	    /* remove mass action for now */
+	    return $this;
+
         $this->setMassactionIdField('main_table.entity_id');
         $this->getMassactionBlock()->setFormFieldName('rma');
 		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
@@ -274,10 +284,6 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
 	public function getVendor() {
 		return $this->getParentBlock()->getVendor();
-	}
-	
-	public function getRowUrl($item) {
-		return null;
 	}
 	
 }
