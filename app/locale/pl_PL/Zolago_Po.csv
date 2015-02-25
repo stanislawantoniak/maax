@@ -146,7 +146,7 @@
 "Purchase Order: %s has currently dispatch ref.","Zamówienie: %s jest juz na zbiorówce"
 "Purchase Order(s) have different POSes","Zamówienia są przypisane do różnych POS"
 "Dispatch list removed","Usunięto zbiorówki(ę)"
-"Shipping label","List przewozowy"
+"Shipping label","List<br>przewozowy"
 "Dispatch ref. confirmed","Zbiorówka została powierdzona."
 "Shipping canceled.","Przesyłka skasowana."
 "Sender: %s", "Nazwa nadawcy: %s"
