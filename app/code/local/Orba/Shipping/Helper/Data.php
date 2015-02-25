@@ -153,4 +153,23 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $dhlValidZip;
     }
+    
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+     public function getShippingManager($carrier) {
+         switch ($carrier) {
+             case Orba_Shipping_Model_Carrier_Dhl::CODE:
+                 $model = Mage::getModel('orbashipping/carrier_dhl');
+                 break;
+             case Orba_Shipping_Model_Carrier_Ups::CODE:
+                 $model = Mage::getModel('orbashipping/carrier_ups');
+                 break;
+             default:
+                 $model = Mage::getModel('orbashipping/carrier_default');
+         }
+         return $model;
+     }
 }

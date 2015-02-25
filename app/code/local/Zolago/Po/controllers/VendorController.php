@@ -35,10 +35,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
             $collection->addAttributeToFilter(array(
-				array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
-				array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
-				array("attribute"=>"name",		"like"=> '%'.$q.'%')
-			), "left");
+                                                  array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
+                                                  array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
+                                                  array("attribute"=>"name",		"like"=> '%'.$q.'%')
+                                              ), "left");
 
             $collection->load();
 
@@ -97,13 +97,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $this->_renderPage(array('default', 'adminhtml_head'), 'udpo');
     }
 
-	/**
-	 * Edit po
-	 * @return void
-	 */
+    /**
+     * Edit po
+     * @return void
+     */
     public function editAction() {
         try {
-			$this->_registerPo();
+            $this->_registerPo();
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
@@ -531,10 +531,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $finalPrice = $price-$discount;
             $baseRowPrice = $price * $qty;
             $finalRowPrice = $finalPrice * $qty;
-			/**
-			 * @todo this is real percent, magento use basic percent sum rule percent 1 + rule prcent 2
-			 * so 10 + 10 = 20; the price is discoutne by price * 10% * 10%, so final  result is not sum!
-			 */
+            /**
+             * @todo this is real percent, magento use basic percent sum rule percent 1 + rule prcent 2
+             * so 10 + 10 = 20; the price is discoutne by price * 10% * 10%, so final  result is not sum!
+             */
             $discountPrecent = round(($discount/$price)*100, 2);
 
             $discountAmount = $baseRowPrice - $finalRowPrice;
@@ -687,42 +687,42 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $item Zolago_Po_Model_Po_Item */
 
             $itemData = array(
-				'row_total'				=> $priceExclTax * $qty,
-				'price'					=> $priceExclTax,
-				'weight'				=> $product->getWeight(),
-				'qty'					=> $qty,
-				'qty_shipped'			=> null,
-				'product_id'			=> $product->getId(),
-				'order_item_id'			=> null,
-				'additional_data'		=> null,
-				'description'			=> null,
-				'name'					=> $product->getName(),
-				'sku'					=> $product->getSku(),
-				'base_cost'				=> $product->getCost(),
-				'qty_invoiced'			=> null,
-				'qty_canceled'			=> null,
-				'vendor_sku'			=> null, // add by helper
-				'vendor_simple_sku'		=> null, // add by helper
-				'is_virtual'			=> $product->isVirtual(),
-				'commission_percent'	=> null, // ad by helper
-				'transaction_fee'		=> null, // add by helper
-				'price_incl_tax'		=> $priceInclTax,
-				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
-				'discount_amount'		=> $discountAmount,
-				'discount_percent'		=> $discountPrecent,
-				'row_total_incl_tax'	=> $priceInclTax*$qty,
-				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
-				'parent_item_id'		=> null
-			);
-			
+                            'row_total'				=> $priceExclTax * $qty,
+                            'price'					=> $priceExclTax,
+                            'weight'				=> $product->getWeight(),
+                            'qty'					=> $qty,
+                            'qty_shipped'			=> null,
+                            'product_id'			=> $product->getId(),
+                            'order_item_id'			=> null,
+                            'additional_data'		=> null,
+                            'description'			=> null,
+                            'name'					=> $product->getName(),
+                            'sku'					=> $product->getSku(),
+                            'base_cost'				=> $product->getCost(),
+                            'qty_invoiced'			=> null,
+                            'qty_canceled'			=> null,
+                            'vendor_sku'			=> null, // add by helper
+                            'vendor_simple_sku'		=> null, // add by helper
+                            'is_virtual'			=> $product->isVirtual(),
+                            'commission_percent'	=> null, // ad by helper
+                            'transaction_fee'		=> null, // add by helper
+                            'price_incl_tax'		=> $priceInclTax,
+                            'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+                            'discount_amount'		=> $discountAmount,
+                            'discount_percent'		=> $discountPrecent,
+                            'row_total_incl_tax'	=> $priceInclTax*$qty,
+                            'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
+                            'parent_item_id'		=> null
+                        );
+
             $item->addData($itemData);
             $po->addItem($item);
-			
-			/**
-			 * @todo add child of configurable item
-			 * clone parentItem, unset order item, change & unset some data
-			 * set new child->setParentItem(parentItem)
-			 */
+
+            /**
+             * @todo add child of configurable item
+             * clone parentItem, unset order item, change & unset some data
+             * set new child->setParentItem(parentItem)
+             */
 
             Mage::helper("udropship")->addVendorSkus($po);
             if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
@@ -730,9 +730,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             Mage::dispatchEvent("zolagopo_po_item_add", array(
-				"po"		=> $po,
-				"item"		=> $item
-			));
+                                    "po"		=> $po,
+                                    "item"		=> $item
+                                ));
 
             $po->updateTotals(true);
 
@@ -961,68 +961,39 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
     }
 
-
-    //{{{
-    /**
-     * creating dhl shipping
-     * @param Zolago_Po_Model_Po $udpo
-     * @param Mage_Sales_Model_Order_Shipment $shipment
-     * @param Unirgy_DropshipMicrosite_Model_Store $store
-     * @return string
-     */
-    protected function _addShippingDhl($udpo,$shipment,$store) {
-        /**
-         * DHL: Make a WebApi Call to get T&T Data
-         */
+    protected function _addShipping($carrier,$udpo,$shipment) {
+        $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $r = $this->getRequest();
-        $hlp = Mage::helper('udropship');
-        $udpoHlp = Mage::helper('udpo');
-
-        $vendor = $hlp->getVendor($udpo->getUdropshipVendor());
-        $session = $this->_getSession();
-
-        $dhlSettings = $udpoHlp->getDhlSettings($vendor, $udpo->getDefaultPosId());
+        $shippingManager->prepareParams($r,$shipment,$udpo);
+        $pos = $udpo->getDefaultPos();
+        $shippingManager->setSenderAddress($pos->getSenderAddress());
+        $receiver = $udpo->getShippingAddress()->getData();
+        $shippingManager->setReceiverCustomerAddress($receiver);
+        $result = $shippingManager->createShipments();
         $number = null;
-        $weight =  $r->getParam("weight");
+        if ($result['shipmentId']) {
+            $number = $result['shipmentId'];
+        } else {
+            Mage::helper('udropship')->addShipmentComment(
+                $shipment,
+                $result['message']
+            );
+            $shipment->save();
+            Mage::helper('orbashipping')->addUdpoComment($udpo, $result['message'], false, true, false);
 
-        if(empty($weight)) {
-            if($shipment && $shipment->getTotalWeight()) {
-                $weight = ceil($shipment->getTotalWeight());
-            } else {
-                $weight = Mage::helper('orbashipping/carrier_dhl')->getDhlDefaultWeight();
-            }
+            $session->addError($this->__('%s Service Error. Shipment Canceled. Please try again later.',$carrier));
         }
 
-
-        $shipment->setTotalWeight($weight);
-
-        if ($shipment && $dhlSettings) {
-
-            $shipmentSettings = array(
-                                    'type'			=> $r->getParam('specify_orbadhl_type'),
-                                    'width'			=> $r->getParam('specify_orbadhl_width'),
-                                    'height'		=> $r->getParam('specify_orbadhl_height'),
-                                    'length'		=> $r->getParam('specify_orbadhl_length'),
-                                    'weight'		=> $weight,
-                                    'quantity'		=> Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_QTY,
-                                    'nonStandard'	=> $r->getParam('specify_orbadhl_custom_dim'),
-                                    'shipmentDate'  => $this->_porcessDhlDate($r->getParam('specify_orbadhl_shipping_date')),
-                                    'shippingAmount'=> $r->getParam('shipping_amount')
-                                );
-            $number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
-            if (!$number) {
-                $session->addError($this->__('Shipping creation fail'));
-                $udpoHlp->cancelShipment($shipment, true);
-                $udpo->getStatusModel()->processStartPacking($udpo, true);
-                return null;
-            }
+        if (!$number) {
+            $session = $this->_getSession();
+            $session->addError($this->__('Shipping creation fail'));
+            $udpoHlp->cancelShipment($shipment, true);
+            $udpo->getStatusModel()->processStartPacking($udpo, true);
+            return null;
         }
         return $number;
-
     }
-    //}}}
 
-    //{{{
     /**
      * creating manual shipping
      * @return string
@@ -1031,23 +1002,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $number = $this->getRequest()->getParam('tracking_id');
         return $number;
     }
-    //}}}
-    
-    //{{{ 
+
+    //{{{
     /**
      * creating ups shipping
-     * @return string 
+     * @return string
      */
     protected function _addShippingUps($udpo,$shipment) {
         $number = $this->getRequest()->getParam('tracking_id');
-            if (!$number) {                
-                $udpoHlp = Mage::helper('udpo');
-                $session = $this->_getSession();
-                $session->addError($this->__('Shipping creation fail'));
-                $udpoHlp->cancelShipment($shipment, true);
-                $udpo->getStatusModel()->processStartPacking($udpo, true);
-                return null;
-            }
+        if (!$number) {
+            $udpoHlp = Mage::helper('udpo');
+            $session = $this->_getSession();
+            $session->addError($this->__('Shipping creation fail'));
+            $udpoHlp->cancelShipment($shipment, true);
+            $udpo->getStatusModel()->processStartPacking($udpo, true);
+            return null;
+        }
         return $number;
     }
     //}}}
@@ -1137,7 +1107,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             //}
-
+            $number = $this->_addShipping($carrier,$udpo,$shipment);
+            /*
             switch($carrier) {
             case Orba_Shipping_Model_Carrier_Dhl::CODE:
                 $number = $this->_addShippingDhl($udpo,$shipment,$store);
@@ -1149,6 +1120,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $number = $this->_addShippingManually();
                 ;
             }
+            */
             if (!$number) {
                 return $this->_redirectReferer();
 
@@ -1258,6 +1230,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             $session->setHighlight($highlight);
         } catch (Exception $e) {
+            throw $e;
             $session->addError($e->getMessage());
         }
 
@@ -1435,7 +1408,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 self::XML_PATH_ZOLAGO_PO_COMPOSE_EMAIL_TEMPLATE,
                 $templateParams,
                 $store->getId()
-                );
+            );
 
             Mage::dispatchEvent("zolagopo_po_compose", array(
                                     "po"		=> $udpo,
@@ -1552,7 +1525,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
      * @return Zolago_Common_Model_Core_Email_Template_Mailer
      */
     protected function _sendEmailTemplate($customerName, $customerEmail,
-                                        $template, $templateParams = array(), $storeId = null)
+                                          $template, $templateParams = array(), $storeId = null)
     {
         $templateParams['use_attachements'] = true;
 
@@ -1564,8 +1537,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         // Set all required params and send emails
         $mailer->setSender(array(
-            'name' => Mage::getStoreConfig('trans_email/ident_support/name', $storeId),
-            'email' => Mage::getStoreConfig('trans_email/ident_support/email', $storeId)));
+                               'name' => Mage::getStoreConfig('trans_email/ident_support/name', $storeId),
+                               'email' => Mage::getStoreConfig('trans_email/ident_support/email', $storeId)));
         $mailer->setStoreId($storeId);
         $mailer->setTemplateId(Mage::getStoreConfig($template, $storeId));
         $mailer->setTemplateParams($templateParams);

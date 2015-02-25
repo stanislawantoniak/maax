@@ -53,6 +53,16 @@
         </orbashipping>
       </track_api>
     </udropship>
+		<translate>
+			<modules>
+				<Orba_Shipping>
+					<files>
+						<default>Orba_Shipping.csv</default>
+					</files>
+				</Orba_Shipping>
+			</modules>
+		</translate>		
+
   </global>
   <frontend>
     <routers>

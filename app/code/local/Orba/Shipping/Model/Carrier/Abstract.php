@@ -36,5 +36,8 @@ class Orba_Shipping_Model_Carrier_Abstract extends
 	public function isTrackingAvailable(){
         return true; 
     }
+    public function prepareParams($request,$shipment,$udpo) {
+        return $this;
+    }
 
 }
