@@ -462,6 +462,8 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$order = $po->getOrder();
         $store = $order->getStore();
 		$pos = $po->getPos();
+        Mage::log($pos->getName(), null, 'mylog.log');
+
 		
 		$emailField = $store->getConfig('udropship/vendor/vendor_notification_field');
         Mage::log($emailField, null, 'mylog.log');
