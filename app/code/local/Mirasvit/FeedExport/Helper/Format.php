@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -115,7 +115,9 @@ class Mirasvit_FeedExport_Helper_Format extends Mage_Core_Helper_Abstract
             $delimiter = "\t";
         }
         $enclosure = $format['enclosure'];
-        $mapping   = $format['mapping'];
+        if (isset($format['mapping'])) {
+            $mapping   = $format['mapping'];
+        }
 
         if ($format['extra_header']) {
             $xml .= $format['extra_header'].PHP_EOL;
@@ -123,57 +125,63 @@ class Mirasvit_FeedExport_Helper_Format extends Mage_Core_Helper_Abstract
 
         if ($format['include_header']) {
             $columns = array();
-            foreach ($format['mapping']['header'] as $indx => $header) {
-                $columns[] = $header;
+            if (isset($format['mapping'])) {
+                foreach ($format['mapping']['header'] as $indx => $header) {
+                    $columns[] = $header;
+                }
             }
             $xml .= implode($delimiter, $columns).PHP_EOL;
         }
 
-        if (!is_array($mapping['type'])) {
-            $mapping['type'] = array();
+        if (isset($mapping)) {
+            if (!is_array($mapping['type'])) {
+                $mapping['type'] = array();
+            }
         }
 
         $xml .= '{each type="product"}'.PHP_EOL;
         $columns = array();
-        foreach ($mapping['type'] as $indx => $type) {
-            $pattern = $enclosure;
+        if (isset($mapping)) {
+            foreach ($mapping['type'] as $indx => $type) {
+                $pattern = $enclosure;
 
-            $pattern .= $mapping['prefix'][$indx];
+                $pattern .= $mapping['prefix'][$indx];
 
-            if ($type == 'attribute' || $type == 'parent_attribute') {
-                if ($mapping['value_attribute'][$indx]) {
-                    $pattern .= '{'.$mapping['value_attribute'][$indx];
-                    if ($type == 'parent_attribute') {
-                        $pattern .= '|parent';
-                    }
-                    if ($mapping['limit'][$indx]) {
-                        $pattern .= ', [substr 0 '.$mapping['limit'][$indx].']';
-                    }
-                    if (isset($mapping['formatters']) && $mapping['formatters'][$indx]) {
-                        switch ($mapping['formatters'][$indx]) {
-                            case 'strip_tags':
-                                $pattern .= ', [strip_tags]';
-                                break;
-
-                            case 'intval':
-                                $pattern .= ', [intval]';
-                                break;
-
-                            case 'price':
-                                $pattern .= ', [number_format 2 . ]';
-                                break;
+                if ($type == 'attribute' || $type == 'parent_attribute') {
+                    if ($mapping['value_attribute'][$indx]) {
+                        $pattern .= '{'.$mapping['value_attribute'][$indx];
+                        if ($type == 'parent_attribute') {
+                            $pattern .= '|parent';
                         }
-                    }
-                    $pattern .= ', [csvPretty '.$format['delimiter'].']';
-                    $pattern .= '}';
-                }
-            } else {
-                $pattern .= $mapping['value_pattern'][$indx];
-            }
+                        if ($mapping['limit'][$indx]) {
+                            $pattern .= ', [substr 0 '.$mapping['limit'][$indx].']';
+                        }
+                        if (isset($mapping['formatters']) && $mapping['formatters'][$indx]) {
+                            switch ($mapping['formatters'][$indx]) {
+                                case 'strip_tags':
+                                    $pattern .= ', [strip_tags]';
+                                    break;
 
-            $pattern .= $mapping['suffix'][$indx];
-            $pattern .= $enclosure;
-            $columns[] = $pattern;
+                                case 'intval':
+                                    $pattern .= ', [intval]';
+                                    break;
+
+                                case 'price':
+                                    $pattern .= ', [number_format 2 . ]';
+                                    break;
+                            }
+                        }
+                        $pattern .= ', [csvPretty '.$format['delimiter'].']';
+                        $pattern .= '}';
+                    }
+                } else {
+                    $pattern .= $mapping['value_pattern'][$indx];
+                }
+
+                $pattern .= $mapping['suffix'][$indx];
+                $pattern .= $enclosure;
+                $columns[] = $pattern;
+            }
         }
         $xml .= implode($delimiter, $columns).PHP_EOL;
         $xml .= '{/each}';

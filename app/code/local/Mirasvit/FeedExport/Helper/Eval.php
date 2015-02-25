@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -79,7 +79,7 @@ class Mirasvit_FeedExport_Helper_Eval extends Mage_Core_Helper_Abstract
     public function html2plain($value)
     {
         // 194 -> 32
-        $value = str_replace('Â ', ' ', $value);
+        $value = str_replace(' ', ' ', $value);
 
         $value = strip_tags($value);
 

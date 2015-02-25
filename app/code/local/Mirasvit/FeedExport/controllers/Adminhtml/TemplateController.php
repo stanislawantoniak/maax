@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -186,5 +186,17 @@ class Mirasvit_FeedExport_Adminhtml_TemplateController extends Mage_Adminhtml_Co
         Mage::register('current_model', $model);
 
         return $model;
+    }
+
+    public function getRowAction()
+    {
+        $attributeSelect = Mage::helper('feedexport/html')->getAttributeSelectHtml('csv[mapping][value_attribute][]', 'attribute', 'width:180px;display:block');
+        $outputType = Mage::helper('feedexport/html')->getFormattersHtml('csv[mapping][formatters][]');
+        $output = array('value' => $attributeSelect, 'type' => $outputType);
+
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('content-type', 'application/json')
+            ->setBody(json_encode($output));
     }
 }
