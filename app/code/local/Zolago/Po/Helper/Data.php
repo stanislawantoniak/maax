@@ -435,9 +435,6 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         } else {
             $email = $vendor->getEmail();
         }
-        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
-        Mage::log($emailField, null, 'mylog.log');
-        Mage::log($email, null, 'mylog.log');
 
 //        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
         /* @var $helper Zolago_Common_Helper_Data */
@@ -462,13 +459,9 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$order = $po->getOrder();
         $store = $order->getStore();
 		$pos = $po->getPos();
-        Mage::log($pos->getName(), null, 'mylog.log');
 
-		
 		$emailField = $store->getConfig('udropship/vendor/vendor_notification_field');
-        Mage::log($emailField, null, 'mylog.log');
 
-		
 		if(!$emailField){
 			$emailField = "email";
 		}

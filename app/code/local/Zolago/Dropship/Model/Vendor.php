@@ -277,7 +277,6 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         $identity = $store->getConfig('udropship/vendor/vendor_email_identity');
 
         $data['_BCC'] = $this->getNewOrderCcEmails();
-        Mage::log($data['_BCC'], null, 'mylog.log');
 
         if (($emailField = $store->getConfig('udropship/vendor/vendor_notification_field'))) {
             $email = $this->getData($emailField) ? $this->getData($emailField) : $this->getEmail();
