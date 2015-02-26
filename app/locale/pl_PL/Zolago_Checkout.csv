@@ -56,6 +56,8 @@
 "VAT Id", "NIP"
 "Pho.", "Tel."
 "Quantity", "Ilość"
+"Subtotal:","Wartość produktów:"
+"Shipping from:","Koszt dostawy od:"
 "Roll products", "Zwiń produkty"
 "Order now", "Zamawiam"
 "Show products", "Pokaż produkty"
