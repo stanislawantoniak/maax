@@ -21,6 +21,13 @@
                 <class>Zolago_DropshipMicrositePro_Model</class>
             </zolagoudmspro>
 		</models>
+        <helpers>
+            <udmspro>
+                <rewrite>
+                    <data>Zolago_DropshipMicrositePro_Helper_Data</data>
+                </rewrite>
+            </udmspro>
+        </helpers>
 		<udropship>
 		    <vendor>
 		        <fieldsets>
