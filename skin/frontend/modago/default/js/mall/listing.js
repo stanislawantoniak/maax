@@ -164,6 +164,10 @@ Mall.listing = {
 
 		// Init thinks
 		this.initFilterEvents();
+
+		// filters delegation - better performance than initiation of each filter event on every ajax reload
+		this.delegateFilterEvents();
+
 		this.initOnpopstateEvent();
 		this.initSortEvents();
 		this.initActiveEvents();
@@ -238,7 +242,6 @@ Mall.listing = {
 		scope = scope || jQuery(".solr_search_facets");
 		this.preprocessFilterContent(scope);
 		this.initScrolls(scope);
-		this.attachMiscActions(scope);
 		this.attachFilterColorEvents(scope);
 		this.attachFilterIconEvents(scope);
 		this.attachFilterEnumEvents(scope);
@@ -304,58 +307,36 @@ Mall.listing = {
     },
 
 
-	_doRollSection: function(section, state, animate){
+	_doRollSection: function(section, state){
 		var title     = section.find("h3"),
 			content   = section.find(".content"),
             contentXS = section.find(".content-xs"),
-			i = title.find('i');
+			i = title.find('i'),
+			open = 'open',
+			closed = 'closed',
+			arrowUp = 'fa-chevron-up',
+			arrowDown = 'fa-chevron-down',
+			isMobile = this.getCurrentMobileFilterState(),
+			dataAttr = (isMobile ? 'xs' : 'lg') + '-rolled';
 
-		if(animate){
-			if(state){
-				content.stop(true,true).slideDown(200, function(){
-					title.removeClass("closed").addClass("open");
-					Mall.listing.setMainSectionHeight();
-				});
-
-			}else{
-				content.stop(true,true).slideUp(100, function(){
-					title.removeClass("open").addClass("closed");
-					Mall.listing.setMainSectionHeight();
-				});
-			}
-		}else{
-			if(state){
-				content.show();
-				title.removeClass("closed").addClass("open");
+		if(state){
+			content.show();
+			title.removeClass(closed).addClass(open);
+			i.removeClass(arrowDown).addClass(arrowUp);
+			section.data(dataAttr,open);
+			contentXS.hide();
+		} else {
+			content.hide();
+			title.removeClass(open).addClass(closed);
+			i.removeClass(arrowUp).addClass(arrowDown);
+			section.data(dataAttr,closed);
+			if(isMobile) {
+				contentXS.show();
 			} else {
-				content.hide();
-				title.removeClass("open").addClass("closed");
+				contentXS.hide();
 			}
 		}
 		Mall.listing.setMainSectionHeight();
-		if(state){
-			i.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-		}else{
-			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-		}
-
-        //saveing state of rolled or not for mobile or desktop resolution
-        //because of different behaviour of sidebar in mobile and desktop
-        var attr = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled';
-        var attrVal = state ? 'open' : 'closed';
-        section.attr(attr, attrVal);
-
-        //show and hide content-xs for mobile sidebar when section rolled up or rolled down
-        if (this.getCurrentMobileFilterState()) {
-            if (!state) {
-                contentXS.show();
-            } else {
-                contentXS.hide();
-            }
-        } else {
-            //on desktop resolution always hide .content-xs
-            contentXS.hide();
-        }
 	},
 
 	_doShowMore: function(section, state, animate){
@@ -1098,10 +1079,10 @@ Mall.listing = {
 		if(!this.isDisplayMobile()) {
 			var filters = Mall.listing.getFiltersBlock();
 			mainSection.css('min-height', (filters.height() + 50) + 'px');
+			jQuery(window).trigger("scroll"); //footer fix
 		} else {
 			mainSection.css('min-height', '');
 		}
-		jQuery(window).trigger("scroll"); //footer fix
 	},
 
 	isDisplayMobile: function() {
@@ -1663,7 +1644,7 @@ Mall.listing = {
 	},
 
 	getFilters: function(){
-		return jQuery(".solr_search_facets");
+		return jQuery("#solr_search_facets");
 	},
 
 	getToolbar: function(){
@@ -1748,72 +1729,70 @@ Mall.listing = {
 		}
 	},
 
-	attachMiscActions: function(scope){
-		var filters = jQuery(".section", scope),
-			self = this;
+	delegateFilterEvents: function() {
+		var self = this,
+			filtersId = '#solr_search_facets',
+			hiddenClass = 'hidden';
 
-		filters.each(function(){
-			var filter = jQuery(this),
-				clearWrapper = filter.find(".action.clear"),
-				clearButton = clearWrapper.find("a"),
-				title = filter.find("h3"),
-				sm = filter.find(".showmore-filters");
-
-			// Handle roll up / down
-			title.on('click', function(event) {
-				self._doRollSection(
-					filter,
-					!title.hasClass("open"),
-					false
-				);
-                //if sidebar is in mobile state and clicked section is going to be rolled up
-                //rest of sections will be rolled down
-                if (self.getCurrentMobileFilterState()) {
-                    filters.not(filter).each(function(){
-	                    if(jQuery(this).find('h3').hasClass('open')) {
-		                    self._doRollSection(
-			                    jQuery(this),
-			                    false, //close all other section in mobile resolution
-			                    false
-		                    );
-	                    }
-                    });
-                }
-				event.preventDefault();
-			});
-
-			// Handle showmore
-			sm.on("click", function(event) {
-				self._doShowMore(filter, !(jQuery(this).attr("data-state")=="1"), true);
-				event.preventDefault();
-			});
-
-			// Handle clear button
-			filter.on('change', ':checkbox', function(e) {
-				if (filter.find(":checkbox:checked").length) {
-					clearWrapper.removeClass("hidden");
-				} else {
-					clearWrapper.addClass("hidden");
-				}
-			});
-			if(self.getPushStateSupport()) {
-				clearButton.on('click', function (event) {
-					event.preventDefault();
-					self.removeSingleFilterType(this);
-					clearWrapper.addClass('hidden');
-				});
-			} else {
-				clearButton.on('click',function () {
-					self.showAjaxLoading();
-					window.location = jQuery(this).prop('href');
+		//filters slide up/down
+		jQuery(document).delegate(filtersId+' h3','click',function(e) {
+			e.preventDefault();
+			var me = jQuery(this);
+			self._doRollSection(
+				me.parent(),
+				!me.hasClass("open"),
+				false
+			);
+			if(self.getCurrentMobileFilterState()) {
+				self.getFilters().find('h3.open').not(me).each(function() {
+					self._doRollSection(
+						jQuery(this).parent(),
+						false,
+						false
+					);
 				});
 			}
-
 		});
 
+		jQuery(document).delegate(filtersId+' .showmore-filters','click',function(e) {
+			e.preventDefault();
+			var me = jQuery(this);
+			self._doShowMore(
+				me.parents('.section'),
+				!me.data('state') == '1',
+				false
+			);
+		});
+
+		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
+			e.preventDefault();
+			var me = jQuery(this).parents('.section'),
+				button = me.find('.action.clear');
+			if(me.find(":checkbox:checked").length) {
+				if(button.hasClass(hiddenClass)) {
+					button.removeClass(hiddenClass);
+				}
+			} else {
+				button.addClass(hiddenClass);
+			}
+		});
+
+
+		var clearBtnSelector = filtersId+' .action.clear a';
+		if(self.getPushStateSupport()) {
+			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				e.preventDefault();
+				var me = jQuery(this);
+				self.removeSingleFilterType(me);
+				me.parent().addClass(hiddenClass);
+			});
+		} else {
+			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				self.showAjaxLoading();
+			});
+		}
+
 	},
-
-
 
 	/**
 	 * Attaches events to color filter.
