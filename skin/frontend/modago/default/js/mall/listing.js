@@ -317,24 +317,24 @@ Mall.listing = {
 			arrowUp = 'fa-chevron-up',
 			arrowDown = 'fa-chevron-down',
 			isMobile = this.getCurrentMobileFilterState(),
-			dataAttr = (isMobile ? 'xs' : 'lg') + '-rolled';
-
+			dataAttr = 'data-' + (isMobile ? 'xs' : 'lg') + '-rolled';
 		if(state){
 			content.show();
 			title.removeClass(closed).addClass(open);
 			i.removeClass(arrowDown).addClass(arrowUp);
-			section.data(dataAttr,open);
+			section.attr(dataAttr,open);
 			contentXS.hide();
 		} else {
 			content.hide();
 			title.removeClass(open).addClass(closed);
 			i.removeClass(arrowUp).addClass(arrowDown);
-			section.data(dataAttr,closed);
+			section.attr(dataAttr,closed);
 			if(isMobile) {
 				contentXS.show();
-			} else {
-				contentXS.hide();
 			}
+		}
+		if(!isMobile) {
+			contentXS.hide();
 		}
 		Mall.listing.setMainSectionHeight();
 	},
