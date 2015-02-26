@@ -32,9 +32,12 @@ $session = Mage::getSingleton('customer/session');
 
     <input type="hidden" name="question[visibility]" value="0" />
 
+<?php if(!is_array($vendors)): ?>
     <div class="row">
-tu bedzie logo
+tu bedzie logo jeœli vendor jest wybrany 
     </div>
+<?php endif; ?>
+
     <div class="row">
         <fieldset class="fieldset col-xs-11">
             <ul class="form-list">
