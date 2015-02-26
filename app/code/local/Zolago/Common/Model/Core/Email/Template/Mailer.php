@@ -36,8 +36,6 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
      */
     public function send()
     {
-        Mage::log('test tutaj', null, 'mylog.log');
-
         /** @var Zolago_Common_Model_Core_Email_Template $emailTemplate */
         $emailTemplate = Mage::getModel('zolagocommon/core_email_template');
         // Send all emails from corresponding list
