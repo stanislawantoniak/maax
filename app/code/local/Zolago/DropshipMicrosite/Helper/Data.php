@@ -223,6 +223,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function sendVendorSignupEmail($registration)
     {
+        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
         $store = Mage::app()->getDefaultStoreView();
         Mage::helper('udropship')->setDesignStore($store);
 
@@ -235,7 +236,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
             array(
                 'store_name' => $store->getName(),
                 'vendor' => $registration,
-                'use_attachments' =>true
+                'use_attachments' => true
             ),
             $store->getId(),
             $store->getConfig('udropship/vendor/vendor_email_identity')
@@ -259,7 +260,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
             array(
                 'store_name' => $store->getName(),
                 'vendor' => $vendor,
-                'use_attachments' =>true
+                'use_attachments' => true
             ),
             $store->getId(),
             $store->getConfig('udropship/vendor/vendor_email_identity')

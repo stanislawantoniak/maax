@@ -4,8 +4,6 @@ class Varien_Data_Form_Element_Time extends Varien_Data_Form_Element_Abstract
 {
     public function getElementHtml()
     {
-        Mage::log('tutaj', null, 'mylog.log');
-
         $this->addClass('select');
 
         $value_hrs = 0;
