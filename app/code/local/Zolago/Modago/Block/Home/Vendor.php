@@ -21,13 +21,14 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	 */
 	public function getVendorColleciton() {
 		if(!$this->hasData("vendor_collection")){
+            $vendorsCount = Mage::getStoreConfig('design/popular_brands/popular_brands_count');
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
 			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
             $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
 //			$collection->setOrder("vendor_name");
             $collection->setOrder("sequence", "DESC");
-            $collection->setPageSize(12);
+            $collection->setPageSize($vendorsCount);
 			// Load serialized data
 
 			foreach($collection as $vendor){
