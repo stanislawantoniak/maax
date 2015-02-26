@@ -2,13 +2,15 @@
 /**
  * Content of this block is ajax loaded
  * for varnish
+
+$_helper = Mage::helper('Zolago_Solrsearch');
  */
 ?>
 
 <div class="block_search search hidden-sm hidden-xs">
     <form action="<?php echo Mage::getUrl("search/index/index", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get" role="search">
         <div class="form-group">
-            <input type="text" class="form-control" name="q" placeholder="<?php echo $this->__('Search entire store here...'); ?>" value="">
+            <input type="text" class="form-control" name="q" placeholder="<?php echo $this->__('Search...'); ?>" value="">
         </div>
         <div class="select-box">
             <select name="scat" class="form-control select-styled search-context">
@@ -17,6 +19,6 @@
                 <?php endforeach; */ ?>
             </select>
         </div>
-        <input type="image" src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>" name="<?php echo $this->__("Search"); ?>" alt="<?php echo $this->__("Search"); ?>">
+        <input type="image" src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>" name="<?php echo $this->__('Search'); ?>" alt="<?php echo $this->__('Search'); ?>">
     </form>
 </div>

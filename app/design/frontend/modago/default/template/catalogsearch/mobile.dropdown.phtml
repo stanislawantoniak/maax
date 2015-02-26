@@ -2,6 +2,9 @@
 /**
  * Content of this block is ajax loaded
  * for varnish
+
+
+$_helper = Mage::helper('Zolago_Solrsearch');
  */
 ?>
 
@@ -12,7 +15,7 @@
 
                 <form class="clearfix" role="search" action="<?php echo Mage::getUrl("search/index/index", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="q" placeholder="<?php echo $this->__('Search entire store here...'); ?>">
+                        <input type="text" class="form-control" name="q" placeholder="<?php echo $this->__('Search...'); ?>">
                     </div>
                     <div class="form-group styledSelected">
 						
