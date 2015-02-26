@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -85,14 +85,14 @@ class Mirasvit_FeedExport_Model_Feed_Generator_State extends Varien_Object
         return $this;
     }
 
-    public function load()
+    public function load($iteration = 0)
     {
         if ($this->_io->fileExists($this->getStateFile())) {
             $json = $this->_io->read($this->getStateFile());
             $data = json_decode($json, true);
 
-            if (stripos(PHP_OS, 'win') === false && !$json) {
-                return $this->load();
+            if (stripos(PHP_OS, 'win') === false && !$json && $iteration < 15) {
+                return $this->load($iteration + 1);
             }
 
             $this->_data = $data;

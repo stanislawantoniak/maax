@@ -323,28 +323,42 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 			'order_id' => $order->getIncrementId(),
 			'customer_info' => Mage::helper('udropship')->formatCustomerAddress($shippingAddress, 'html', $vendor),
 			'rma_url' => Mage::getUrl('urma/vendor/', array('_query' => 'filter_rma_id_from=' . $rma->getIncrementId() . '&filter_rma_id_to=' . $rma->getIncrementId())),
+            'use_attachments' => true
 		);
 
 		$template = $store->getConfig('urma/general/new_rma_vendor_email_template');
 		$identity = $store->getConfig('udropship/vendor/vendor_email_identity');
 
+        /* @var $helper Zolago_Common_Helper_Data */
+        $helper = Mage::helper("zolagocommon");
 
-		$emailM = Mage::getModel('udropship/email');
 		$data['_BCC'] = $vendor->getNewOrderCcEmails();
 		if (($emailField = $store->getConfig('udropship/vendor/vendor_notification_field'))) {
 			$email = $vendor->getData($emailField) ? $vendor->getData($emailField) : $vendor->getEmail();
 			$data['recepient'] = $vendor->getVendorName();
-			$emailM->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+            $helper->sendEmailTemplate(
+                $email,
+                $vendor->getVendorName(),
+                $template,
+                $data,
+                true,
+                $identity
+            );
 		} else {
-//            $email = $vendor->getEmail();
 			//Send Email to vendor agents of super vendor
 			$vendorM = Mage::getResourceModel('udropship/vendor');
 			$superVendorAgents = $vendorM->getSuperVendorAgentEmails($vendor->getId());
 			if (!empty($superVendorAgents)) {
 				foreach ($superVendorAgents as $email => $_) {
 					$data['recepient'] = implode(' ', array($_['firstname'], $_['lastname']));
-					$emailM
-							->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+                    $helper->sendEmailTemplate(
+                        $email,
+                        $vendor->getVendorName(),
+                        $template,
+                        $data,
+                        true,
+                        $identity
+                    );
 				}
 			}
 			//Send Email to vendor agents of vendor
@@ -352,8 +366,14 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 			if (!empty($vendorAgents)) {
 				foreach ($vendorAgents as $email => $_) {
 					$data['recepient'] = implode(' ', array($_['firstname'], $_['lastname']));
-					$emailM
-							->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+                    $helper->sendEmailTemplate(
+                        $email,
+                        $vendor->getVendorName(),
+                        $template,
+                        $data,
+                        true,
+                        $identity
+                    );
 				}
 			}
 		}

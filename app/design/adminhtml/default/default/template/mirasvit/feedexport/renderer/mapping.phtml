@@ -1,4 +1,5 @@
 <?php
+$_url = Mage::helper('adminhtml')->getUrl('feedexport/adminhtml_template/getRow');
 $_mapping = $this->getMapping();
 $_cnt = count($_mapping['header']);
 if ($_cnt == 0) {
@@ -45,7 +46,7 @@ if ($_cnt == 0) {
                     </select>
                 </td>
                 <td>
-                    <input style="display:<?php echo $_mapping['type'][$i] == 'pattern' ? 'block' : 'none';?>;" type="text" class="input-text" name="csv[mapping][value_pattern][]" value="<?php echo $_mapping['value_pattern'][$i] ?>" />
+                    <input style="display:<?php echo $_mapping['type'][$i] == 'pattern' ? 'block' : 'none';?>;" type="text" class="input-text" name="csv[mapping][value_pattern][]" value="<?php echo htmlspecialchars($_mapping['value_pattern'][$i]) ?>" />
                     <?php echo Mage::helper('feedexport/html')->getAttributeSelectHtml('csv[mapping][value_attribute][]', $_mapping['value_attribute'][$i], 'width:180px;display:'.($_mapping['type'][$i] == 'pattern' ? 'none' : 'block')) ?>
                 </td>
                 <td>
@@ -64,7 +65,7 @@ if ($_cnt == 0) {
         <?php endfor ?>
         </table>
         <p style="margin-top:10px;">
-            <button onclick="FeedExportMapping.rowAdd(); return false;" class="button"><span><span><?php echo $this->__('Add Row') ?></span></span></button>
+            <button onclick="FeedExportMapping.rowAdd('<?php echo $_url ?>'); return false;" class="button"><span><span><?php echo $this->__('Add Row') ?></span></span></button>
         </p>
     </div>
 </div>

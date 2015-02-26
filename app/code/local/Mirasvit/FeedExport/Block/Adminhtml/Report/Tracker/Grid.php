@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -72,6 +72,14 @@ class Mirasvit_FeedExport_Block_Adminhtml_Report_Tracker_Grid extends Mage_Admin
             'sortable'      => false,
             'currency_code' => $currencyCode,
             'rate'          => $rate,
+        ));
+
+        $this->addColumn('cr', array(
+            'header'    => Mage::helper('feedexport')->__('Conversion Rate'),
+            'index'     => 'cr',
+            'type'      => 'number',
+            'total'     => 'sum',
+            'sortable'  => false
         ));
 
         return parent::_prepareColumns();

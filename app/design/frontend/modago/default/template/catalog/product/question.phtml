@@ -41,7 +41,7 @@ $session = Mage::getSingleton('customer/session');
 					<li class="wide">
 						<div class="form-group select-box-it-select-container">
                             <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry select-box-it-select" required>
-                                    <option value=""><?php echo $this->__("Choose shop"); ?></option>
+                                    <option value=""><?php echo Mage::helper('zolagoudqa')->__('Choose shop'); ?></option>
                                 <?php foreach($vendors as $id=>$name): ?>
                                     <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
@@ -50,34 +50,38 @@ $session = Mage::getSingleton('customer/session');
 					</li>
 				<?php endif; ?>
                 <?php if(!$session->isLoggedIn()):?>
+
                 <li class="wide">
                     <div class="form-group">
-                        <label for="customer_name" class="required" aria-required="true"><?php echo $this->__('Your Name') ?> <em>*</em></label>
+                        <label for="customer_name" class="required" aria-required="true"><?php echo Mage::helper('zolagoudqa')->__('Your Name') ?> <em>*</em></label>
                         <div class="input-box">
                             <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint closer-valid-ico" required
                                 value="<?php echo $customer_name; ?>"/>
                         </div>
                     </div>
                 </li>
+
+
                 <li class="wide">
                     <div class="form-group">
-                        <label for="customer_email" class="required" aria-required="true"><?php echo $this->__('Email') ?> <em>*</em></label>
+                        <label for="customer_email" class="required" aria-required="true"><?php echo Mage::helper('zolagoudqa')->__('Your Email') ?> <em>*</em></label>
                         <div class="input-box">
                             <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint closer-valid-ico" required data-rule-email="true"
                                 value="<?php echo $customer_email; ?>"/>
                         </div>
                     </div>
                 </li>
+
                 <?php else:?>
                     <input type="hidden" name="question[customer_name]" value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>" />
                     <input type="hidden" name="question[customer_email]" value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>" />
                 <?php endif;?>
                 <li class="wide">
                     <div class="form-group">
-                        <label for="question_text" class="required" aria-required="true"><?php echo $this->__('Question Text') ?> <em>*</em></label>
+                        <label for="question_text" class="required" aria-required="true"><?php echo Mage::helper('zolagoudqa')->__('Your Question') ?> <em>*</em></label>
                         <div class="input-box">
                             <textarea name="question[question_text]" id="question_text" title="" class="required-entry input-text form-control"
-                                      cols="5" rows="3" data-original-title="<?php echo $this->__('Question Text') ?>"
+                                      cols="5" rows="3" data-original-title="<?php echo Mage::helper('zolagoudqa')->__('Your Question') ?>"
                                       required><?php echo $question_text; ?></textarea>
                         </div>
                     </div>
@@ -88,17 +92,17 @@ $session = Mage::getSingleton('customer/session');
     <div class="row">
         <div class="col-xs-11">
             <div class="buttons-set">
-                <p class="required" aria-required="true"><?php echo $this->__('* Required Fields') ?></p>
-                <button type="submit" title="<?php echo $this->__('Submit') ?>" class="btn button button-primary  sending">
+                <p class="required" aria-required="true"><?php echo Mage::helper('zolagoudqa')->__('* Required Fields') ?></p>
+                <button type="submit" title="<?php echo Mage::helper('zolagoudqa')->__('Submit') ?>" class="btn button button-primary  sending">
                     <i></i>
-                    <span><span><?php echo $this->__('Submit') ?></span></span></button>
+                    <span><span><?php echo Mage::helper('zolagoudqa')->__('Submit') ?></span></span></button>
             </div>
         </div>
     </div>
 </form>
 <script type="text/javascript">
-	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
-	Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+	Mall.i18nValidation.add("required", "<?php echo Mage::helper('zolagoudqa')->__('This field is required') ?>");
+	Mall.i18nValidation.add("email", "<?php echo Mage::helper('zolagoudqa')->__('Valid email is required.') ?>");
 </script>
 <script>
     jQuery(document).ready(function() {

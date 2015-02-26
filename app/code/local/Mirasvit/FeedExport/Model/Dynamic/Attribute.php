@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -36,22 +36,24 @@ class Mirasvit_FeedExport_Model_Dynamic_Attribute extends Mage_Core_Model_Abstra
             }
 
             $valid = true;
-            foreach ($condition['attribute'] as $indx => $attrCode) {
-                $attrPattern = '{'.$attrCode.'}';
-                $attrValue = $patternModel->getPatternValue($attrPattern, 'product', $product);
+            if (isset($condition['attribute'])) {
+                foreach ($condition['attribute'] as $indx => $attrCode) {
+                    $attrPattern = '{'.$attrCode.'}';
+                    $attrValue = $patternModel->getPatternValue($attrPattern, 'product', $product);
 
-                $options = $this->getOptions($attrCode);
+                    $options = $this->getOptions($attrCode);
 
-                if (isset($options[$condition['value'][$indx]])) {
-                    $condition['value'][$indx] = $options[$condition['value'][$indx]];
-                }
+                    if (isset($options[$condition['value'][$indx]])) {
+                        $condition['value'][$indx] = $options[$condition['value'][$indx]];
+                    }
 
-                $validator = Mage::getModel('feedexport/dynamic_attribute_validator');
-                $validator->setValue($condition['value'][$indx])
-                    ->setOperator($condition['condition'][$indx]);
+                    $validator = Mage::getModel('feedexport/dynamic_attribute_validator');
+                    $validator->setValue($condition['value'][$indx])
+                        ->setOperator($condition['condition'][$indx]);
 
-                if (!$validator->validateAttribute($attrValue)) {
-                    $valid = false;
+                    if (!$validator->validateAttribute($attrValue)) {
+                        $valid = false;
+                    }
                 }
             }
 
@@ -67,7 +69,7 @@ class Mirasvit_FeedExport_Model_Dynamic_Attribute extends Mage_Core_Model_Abstra
 
         if ($value === null) {
             $default = @$conditions['default'];
-            if ($default['value_attribute']) {
+            if ($default['output_type'] == 'attribute') {
                 $value = $patternModel->getPatternValue('{'.$default['value_attribute'].'}', 'product', $product);;
             } else {
                 $value = $patternModel->getPatternValue($default['value_pattern'], 'product', $product);

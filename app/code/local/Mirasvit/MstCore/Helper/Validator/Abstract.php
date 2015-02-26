@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -153,5 +153,31 @@ class Mirasvit_MstCore_Helper_Validator_Abstract extends Mage_Core_Helper_Abstra
     protected function _dbConn()
     {
         return $this->_dbRes()->getConnection('core_write');
+    }
+
+    /**
+     * @param string $layoutName - e.g. catalogsearch.xml
+     * @param string $handleName - e.g. catalogsearch_result_index
+     * @return array $container  - one-dimensional array with nodes
+     */
+    protected function getHandleNodesFromLayout($layoutName, $handleName)
+    {
+        $container = array();
+        $appEmulation = Mage::getSingleton('core/app_emulation');
+        $initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation(
+            Mage::app()->getDefaultStoreView()->getId(),
+            Mage_Core_Model_App_Area::AREA_FRONTEND
+        );
+
+        $catalogSearchLayoutFile = Mage::getDesign()->getLayoutFilename($layoutName);
+        $catalogSearchXml = new Zend_Config_Xml($catalogSearchLayoutFile, $handleName);
+        $catalogSearchArray = $catalogSearchXml->toArray();
+
+        $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($catalogSearchArray));
+        $container = iterator_to_array($iterator, false);
+
+        $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+
+        return $container;
     }
 }

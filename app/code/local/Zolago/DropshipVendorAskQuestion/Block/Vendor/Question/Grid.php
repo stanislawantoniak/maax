@@ -158,10 +158,10 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		
 		return parent::_prepareColumns();
 	}
-	
-	
-	public function getRowUrl($item) {
-		return null;
-	}
+
+
+    public function getRowUrl($row){
+        return $this->getUrl('*/*/questionEdit', array('id'=>$row->getId()));
+    }
 	
 }

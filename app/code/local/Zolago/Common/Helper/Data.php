@@ -26,6 +26,8 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function sendEmailTemplate($email, $name, $template, 
 			array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
+
+            $templateParams['use_attachments'] = true;
 		
 			$storeId = Mage::app()->getStore($storeId)->getId();
 			if(is_null($sender)){

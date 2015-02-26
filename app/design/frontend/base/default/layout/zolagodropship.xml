@@ -10,6 +10,10 @@
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
+				<name>js/plugins/select2/select2_locale_pl.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
 				<name>js/plugins/validation/jquery.validate.min.js</name>
 			</action>
 			<action method="addItem">
