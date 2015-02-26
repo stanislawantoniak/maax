@@ -735,7 +735,7 @@ Mall.listing = {
 		}).appendTo(figure);
 
 		vendor = jQuery("<div/>", {
-			"class": "logo_manufacturer"
+			"class": "logo_manufacturer",
 			"style": "background-image:url("+ product.manufacturer_logo_url +")"
 		}).appendTo(link);
 
