@@ -39,7 +39,7 @@ class Orba_Shipping_Model_Carrier_Client_Abstract extends Mage_Core_Model_Abstra
      */
     protected function _prepareErrorMessage($xt) {
             $result = array(
-                'error' => $xt->getMessage()
+                'error' => $xt->getMessage(),
             );
             return $result;
     }

@@ -49,6 +49,43 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         return (bool)(int)$pos->getUseDhl();
     }
 
+
+	public function getDhlRmaSettings($vendorId) {
+		$dhlSettings = false;
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+        $useRma = $vendor->getDhlRma();
+        $useDhl = $vendor->getUseDhl();
+        if ((!$account = $vendor->getDhlRmaAccount()) || (!$useRma)) {            
+            if ((!$account = $vendor->getDhlAccount()) || (!$useDhl)) {
+                return false;
+            }
+        }
+        if ((!$login = $vendor->getDhlRmaLogin()) || (!$useRma)) {
+            if (!$login = $vendor->getDhlLogin()) {
+                return false;
+            }
+        }
+
+        if ((!$password = $vendor->getDhlRmaPassword()) || (!$useRma)) {
+            if (!$password = $vendor->getDhlPassword()) {
+                return false;
+            }
+        }
+        // default params
+        $dhlSettings = array (
+            'login' => $login,
+            'password' => $password,
+            'account' => $account,            
+            'weight' => 2,
+            'height' => 1,
+            'length' => 1,
+            'width' => 1,
+            'quantity' => 1,            
+            'type' => Zolago_Dhl_Model_Client::SHIPMENT_TYPE_PACKAGE,
+        );
+        return $dhlSettings;
+	}
+
     /**
      * Initialize DHL Web API Client
      *
@@ -273,7 +310,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $dhlValidZip = true;
         if (!empty($zip)) {
             $zip = str_replace('-', '', $zip);
-            $zipModel = Mage::getModel('zolagodhl/zip');
+            $zipModel = Mage::getModel('orbashipping/zip');
             $source = $zipModel->load($zip, 'zip')->getId();
             if (!empty($source)) {
                 return true;
@@ -344,7 +381,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $oldStatus = $track->getUdropshipStatus();
         if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
             //Dhl Error Scenario
-            Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$dhlResult['error']);
+            Mage::helper('orbashipping/carrier_dhl')->_log(Mage::helper('zolagopo')->__('DHL Service Error: %s', $dhlResult['error']));
             $dhlMessage[] = 'DHL Service Error: ' .$dhlResult['error'];
         }
         elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {

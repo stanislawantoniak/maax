@@ -1,27 +1,27 @@
 <?php
 
 /**
- * Class Zolago_Dhl_Model_Zip
+ * Class Orba_Shipping_Model_Zip
  *
- * @category    Zolago
- * @package     Zolago_Dhl
+ * @category    Orba
+ * @package     Orba_Shipping
  *
  */
-class Zolago_Dhl_Model_Resource_Zip extends Mage_Core_Model_Resource_Db_Abstract
+class Orba_Shipping_Model_Resource_Zip extends Mage_Core_Model_Resource_Db_Abstract
 {
     /**
      * Init table
      */
     protected function _construct()
     {
-        $this->_init('zolagodhl/zip', 'id');
+        $this->_init('orbashipping/zip', 'id');
     }
 
     /**
      *
      * @param $zip
      *
-     * @return Zolago_Dhl_Model_Resource_Zip
+     * @return Orba_Shipping_Model_Resource_Zip
      * @throws Exception
      */
     public function updateDhlZip($country,$zip)

@@ -102,6 +102,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 				Mage::throwException("No rma created");
 			}
         } catch (Exception $e) {
+            throw $e;
             $session->
 				addError($e->getMessage())->
 				setData("rma", $request->getParam('rma'));

@@ -1,1 +1,6 @@
-"%s Service Error. Shipment Canceled. Please try again later.", "Błąd serwisu %s. Przesyłka anulowana. Spróbuj ponownie później."
+"DHL Service Error", "Błąd serwisu DHL"
+"DHL API Service Error", "Błąd API serwisu DHL"
+"DHL Service Error. Shipment Canceled. Please try again later.", "Błąd serwisu DHL. Wysyłka anulowana. Proszę spróbować później."
+"DHL Waybill", "List przewozowy"
+"DHL Service Error: %s", "Błąd serwisu DHL: %s"
+

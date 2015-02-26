@@ -14,9 +14,9 @@
       <orbashipping_resource>
         <class>Orba_Shipping_Model_Resource</class>
         <entities>
-          <dhl_zip>
+          <zip>
             <table>zolago_dhl_zip</table>
-          </dhl_zip>
+          </zip>
         </entities>
       </orbashipping_resource>
     </models>
@@ -53,16 +53,15 @@
         </orbashipping>
       </track_api>
     </udropship>
-		<translate>
-			<modules>
-				<Orba_Shipping>
-					<files>
-						<default>Orba_Shipping.csv</default>
-					</files>
-				</Orba_Shipping>
-			</modules>
-		</translate>		
-
+    <translate>
+      <modules>
+        <Orba_Shipping>
+          <files>
+            <default>Orba_Shipping.csv</default>
+          </files>
+        </Orba_Shipping>
+      </modules>
+    </translate>
   </global>
   <frontend>
     <routers>
@@ -81,6 +80,15 @@
         </args>
       </udropship>
     </routers>
+    <translate>
+      <modules>
+        <Orba_Shipping>
+          <files>
+            <default>Orba_Shipping.csv</default>
+          </files>
+        </Orba_Shipping>
+      </modules>
+    </translate>
     <layout>
       <updates>
         <orbashipping>

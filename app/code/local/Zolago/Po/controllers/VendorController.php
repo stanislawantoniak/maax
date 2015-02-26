@@ -962,9 +962,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     }
 
     protected function _addShipping($carrier,$udpo,$shipment) {
+        $session = $this->_getSession();
         $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $r = $this->getRequest();
-        $shippingManager->prepareParams($r,$shipment,$udpo);
+        $shippingManager->prepareSettings($r,$shipment,$udpo);
         $pos = $udpo->getDefaultPos();
         $shippingManager->setSenderAddress($pos->getSenderAddress());
         $receiver = $udpo->getShippingAddress()->getData();
@@ -979,15 +980,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $result['message']
             );
             $shipment->save();
-            Mage::helper('orbashipping')->addUdpoComment($udpo, $result['message'], false, true, false);
+            Mage::helper('orbashipping/carrier')->addUdpoComment($udpo, $result['message'], false, true, false);
 
-            $session->addError($this->__('%s Service Error. Shipment Canceled. Please try again later.',$carrier));
+            $session->addError(Mage::helper('zolagopo')->__('Service Error. Shipment Canceled. Please try again later.'));
         }
 
         if (!$number) {
-            $session = $this->_getSession();
-            $session->addError($this->__('Shipping creation fail'));
-            $udpoHlp->cancelShipment($shipment, true);
+            $session->addError(Mage::helper('zolagopo')->__('Shipping creation fail'));
+            Mage::helper('udpo')->cancelShipment($shipment, true);
             $udpo->getStatusModel()->processStartPacking($udpo, true);
             return null;
         }
@@ -1003,24 +1003,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $number;
     }
 
-    //{{{
-    /**
-     * creating ups shipping
-     * @return string
-     */
-    protected function _addShippingUps($udpo,$shipment) {
-        $number = $this->getRequest()->getParam('tracking_id');
-        if (!$number) {
-            $udpoHlp = Mage::helper('udpo');
-            $session = $this->_getSession();
-            $session->addError($this->__('Shipping creation fail'));
-            $udpoHlp->cancelShipment($shipment, true);
-            $udpo->getStatusModel()->processStartPacking($udpo, true);
-            return null;
-        }
-        return $number;
-    }
-    //}}}
     /**
      * @return void
      * @throws Mage_Core_Exception
@@ -1230,7 +1212,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             $session->setHighlight($highlight);
         } catch (Exception $e) {
-            throw $e;
             $session->addError($e->getMessage());
         }
 
@@ -1367,7 +1348,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 /* @var $udpoHlp Unirgy_DropshipPo_Helper_Data */
                 $udpoHlp->cancelShipment($shipment, true);
                 $udpo->getStatusModel()->processCancelShipment($udpo);
-                $this->_getSession()->addSuccess("Shipping canceled.");
+                $this->_getSession()->addSuccess(Mage::helper('zolagopo')->__("Shipping canceled."));
             } else {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Wrong shipment."));
             }
@@ -1477,44 +1458,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
     }
 
-    protected function _porcessDhlDate($date) {
-        $_date = explode("-", $date);
-        if(count($_date)==3) {
-            if(count($_date[0])==4) {
-                return $date;
-            }
-            return $_date[2] . "-" . $_date[1] . "-" . $_date[0];
-        }
-    }
 
-    protected function _createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo) {
-        $number		= false;
-        $dhlClient	= Mage::helper('orbashipping/carrier_dhl')->startClient($dhlSettings);
-        $posModel	= Mage::getModel('zolagopos/pos')->load($udpo->getDefaultPosId());
-        $session = $this->_getSession();
-        /* @var $session Zolago_Dropship_Model_Session */
-
-        if ($posModel && $posModel->getId()) {
-            $dhlClient->setPos($posModel);
-            $dhlResult	= $dhlClient->createShipments($shipment, $shipmentSettings,$udpo);
-            $result		= $dhlClient->processDhlShipmentsResult('createShipments', $dhlResult);
-
-            if ($result['shipmentId']) {
-                $number = $result['shipmentId'];
-            } else {
-                Mage::helper('udropship')->addShipmentComment(
-                    $shipment,
-                    $result['message']
-                );
-                $shipment->save();
-                Mage::helper('zolagodhl')->addUdpoComment($udpo, $result['message'], false, true, false);
-
-                $session->addError($this->__('DHL Service Error. Shipment Canceled. Please try again later.'));
-            }
-        }
-
-        return $number;
-    }
 
     /**
      * @param $customerName

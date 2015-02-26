@@ -54,21 +54,6 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
 		return date('Y-m-d H:i:s', time()+$repeatIn);		
 	}
 	
-    public function addUdpoComment($udpo, $comment, $isVendorNotified=false, $visibleToVendor=false, $userName = false)
-    {
-		if (!$userName) {
-			$userName = self::USER_NAME_COMMENT;
-		}
-		$commentModel = Mage::getModel('udpo/po_comment')
-			->setParentId($udpo->getId())
-			->setComment($comment)
-			->setCreatedAt(now())
-			->setIsVendorNotified($isVendorNotified)
-			->setIsVisibleToVendor($visibleToVendor)
-			->setUdropshipStatus(Mage::helper("udpo")->getUdpoStatusName($udpo))
-			->setUsername($userName);
-		$commentModel->save();
-	}
 	
 	/**
 	 * Check if DHL Waybill cna be shown

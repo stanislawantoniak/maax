@@ -6,15 +6,13 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     			
 	const CODE = "orbadhl";
     protected $_code = self::CODE;
-    protected $_client;
-    protected $_senderAddress;
-    protected $_recevierAddress;
+    protected $_clientSettings;
+    protected $_shipmentSettings;
 
-    public function prepareParams($params,$shipment,$udpo) {
+    public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
-        $settings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
-        $this->_client = Mage::helper('orbashipping/carrier_dhl')->startClient($settings);
+        $this->_clientSettings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
         
         $weight =  $params->getParam("weight");
 
@@ -47,17 +45,12 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
                                     'deliveryValue' => ($deliveryValue>0)? $deliveryValue:0,
                                     'content'		=> Mage::helper('zolagopo')->__('Shipment') . ': ' . $shipment->getIncrementId(),
                                 );
-        $this->_client->setShipmentSettings($shipmentSettings);
+        $this->_shipmentSettings = $shipmentSettings;
 
-    }
-    public function setSenderAddress($address) {
-        $this->_client->setShipperAddress($address);
-    }
-    public function setReceiverAddress($address) {
-        $this->_client->setReceiverAddress($address);
     }
     public function setReceiverCustomerAddress($data) {
         $params = array (
+            'country' => $data['country_id'],
             'name' => $data['firstname'].' '.$data['lastname'].($data['company'] ? ' '.$data['company'] : ''),
             'postcode' =>$data['postcode'],
             'city' => $data['city'],
@@ -66,11 +59,21 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
             'contact_phone' => $data['telephone'], 
             'contact_email' => $data['email'],
         );
-        $this->_cilent->setReceiverAddress($params);
+        $this->setReceiverAddress($params);
     }
     public function createShipments() {
-        $dhlResult = $this->_client->createShipments();
-        $results = $this->_client->processDhlShipmentResults('createShipments',$dhlResults);
+        $settings = $this->_clientSettings;
+        $client = Mage::helper('orbashipping/carrier_dhl')->startClient($settings);
+        if (!$client) {
+            throw new Mage_Core_Exception(Mage::helper('orbashipping')->_('Cant connect to %s server','DHL'));
+        }
+        $shipmentSettings = $this->_shipmentSettings;
+        $client->setShipmentSettings($shipmentSettings);
+        $client->setShipperAddress($this->_senderAddress);
+        $client->setReceiverAddress($this->_receiverAddress);
+
+        $dhlResult = $client->createShipments();
+        $results = $client->processDhlShipmentsResult('createShipments',$dhlResult);
         return $results;
     }
 	                	    

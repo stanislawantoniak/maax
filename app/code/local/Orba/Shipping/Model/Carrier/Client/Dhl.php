@@ -85,6 +85,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     protected function _createReceiver() {
         $data = $this->_receiverAddress;
         $obj = new StdClass();
+        $obj->country = $data['country'];
         $obj->name = $data['name'];
         $obj->postalCode = $this->formatDhlPostCode($data['postcode']);
         $obj->city = $data['city'];
@@ -144,6 +145,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
      * Create Shipments
      */
     public function createShipments() {
+        $shipmentSettings = $this->_settings;
         $message = new StdClass();
         $message->authData = $this->_auth;
         $shipmentObject = new StdClass();
@@ -152,8 +154,9 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $obj->receiver = $this->_createReceiver();
         $obj->pieceList = $this->_createPieceList();
         $obj->payment = $this->_createPayment();
-        $obj->service = $this->_createService($shipment, $shipmentSettings['shippingAmount'],$udpo);
-        $obj->shipmentDate = $shipmentSettings['shipmentDate'];
+        $obj->service = $this->_createService();
+        $obj->skipRestrictionCheck = false;
+        $obj->shipmentDate = $this->_processDhlDate($shipmentSettings['shipmentDate']);
         $obj->content = $shipmentSettings['content'];
         $shipmentObject->item[] = $obj;
 
@@ -260,22 +263,22 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
                       'shipmentId'	=> false,
                       'message'		=> ''
                   );
-
+        $helper = Mage::helper('zolagopo');
         if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
             //Dhl Error Scenario
             Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$dhlResult['error']);
             $result['shipmentId']	= false;
-            $result['message']		= 'DHL Service Error: ' .$dhlResult['error'];
+            $result['message']		= $helper->__('DHL Service Error: %s',$dhlResult['error']);
         }
         elseif (property_exists($dhlResult, 'createShipmentsResult') && property_exists($dhlResult->createShipmentsResult, 'item')) {
             $item = $dhlResult->createShipmentsResult->item;
             $result['shipmentId']	= $item->shipmentId;
-            $result['message']		= 'Tracking ID: ' . $item->shipmentId;
+            $result['message']		= $helper->__('Tracking ID: %s ', $item->shipmentId);
         }
         else {
             Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$method);
             $result['shipmentId']	= false;
-            $result['message']		= 'DHL Service Error: ' .$method;
+            $result['message']		= $helper->__('DHL Service Error: %s', $method);
         }
 
         return $result;
@@ -428,4 +431,20 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $message->shipment = $shipment;
         return $this->_sendMessage('createShipment',$message);
     }
+    
+    /**
+     * change date into dhl accepted format
+     * @param string $date
+     */
+
+    protected function _processDhlDate($date) {
+        $_date = explode("-", $date);
+        if(count($_date)==3) {
+            if(count($_date[0])==4) {
+                return $date;
+            }
+            return $_date[2] . "-" . $_date[1] . "-" . $_date[0];
+        }
+    }
+
 }
