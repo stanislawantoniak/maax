@@ -50,7 +50,7 @@ $session = Mage::getSingleton('customer/session');
 					</li>
 				<?php endif; ?>
                 <?php if(!$session->isLoggedIn()):?>
-<?php /* usuwam na próbê pole imienia
+
                 <li class="wide">
                     <div class="form-group">
                         <label for="customer_name" class="required" aria-required="true"><?php echo Mage::helper('zolagoudqa')->__('Your Name') ?> <em>*</em></label>
@@ -61,7 +61,7 @@ $session = Mage::getSingleton('customer/session');
                     </div>
                 </li>
 
-*/ ?>
+
                 <li class="wide">
                     <div class="form-group">
                         <label for="customer_email" class="required" aria-required="true"><?php echo Mage::helper('zolagoudqa')->__('Your Email') ?> <em>*</em></label>
@@ -71,6 +71,7 @@ $session = Mage::getSingleton('customer/session');
                         </div>
                     </div>
                 </li>
+
                 <?php else:?>
                     <input type="hidden" name="question[customer_name]" value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>" />
                     <input type="hidden" name="question[customer_email]" value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>" />
