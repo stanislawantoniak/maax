@@ -220,5 +220,53 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		return $base;
 	}
-	
+
+    public function sendVendorSignupEmail($registration)
+    {
+        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
+        $store = Mage::app()->getDefaultStoreView();
+        Mage::helper('udropship')->setDesignStore($store);
+
+        /** @var Zolago_Common_Helper_Data $mailer */
+        $mailer = Mage::helper('zolagocommon');
+        $mailer->sendEmailTemplate(
+            $registration->getEmail(),
+            $registration->getVendorName(),
+            $store->getConfig('udropship/microsite/signup_template'),
+            array(
+                'store_name' => $store->getName(),
+                'vendor' => $registration,
+                'use_attachments' => true
+            ),
+            $store->getId(),
+            $store->getConfig('udropship/vendor/vendor_email_identity')
+        );
+        Mage::helper('udropship')->setDesignStore();
+
+        return $this;
+    }
+
+    public function sendVendorWelcomeEmail($vendor)
+    {
+        $store = Mage::app()->getDefaultStoreView();
+        Mage::helper('udropship')->setDesignStore($store);
+
+        /** @var Zolago_Common_Helper_Data $mailer */
+        $mailer = Mage::helper('zolagocommon');
+        $mailer->sendEmailTemplate(
+            $vendor->getEmail(),
+            $vendor->getVendorName(),
+            $store->getConfig('udropship/microsite/welcome_template'),
+            array(
+                'store_name' => $store->getName(),
+                'vendor' => $vendor,
+                'use_attachments' => true
+            ),
+            $store->getId(),
+            $store->getConfig('udropship/vendor/vendor_email_identity')
+        );
+        Mage::helper('udropship')->setDesignStore();
+
+        return $this;
+    }
 }
