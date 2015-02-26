@@ -353,7 +353,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 			'order_id'        => $order->getIncrementId(),
 			'shipment_url'    => Mage::getUrl('udropship/vendor/', array('_query'=>'filter_order_id_from='.$order->getIncrementId().'&filter_order_id_to='.$order->getIncrementId())),
 			'packingslip_url' => Mage::getUrl('udropship/vendor/pdf', array('shipment_id'=>$shipment->getId())),
-			'use_attachments'=> true
+			'use_attachments' => true
 		);
 
 		if ($this->isUdpoActive() && ($po = Mage::helper('udpo')->getShipmentPo($shipment))) {
