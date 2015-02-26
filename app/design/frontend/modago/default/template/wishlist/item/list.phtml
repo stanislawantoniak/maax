@@ -36,11 +36,7 @@ $_helper = Mage::helper('zolagocatalog/product');
                                             alt="<?php $this->escapeHtml($_product->getName()); ?>"
                                             class="img-responsive"/>
                                     </figure>
-                                    <div class="logo_manufacturer">
-                                        <img class="img-responsive"
-                                             src="<?php echo $_helper->getManufacturerLogoUrl($_product); ?>"
-                                             alt="<?php echo $this->escapeHtml($_product->getManufacturer()); ?>"/>
-                                    </div>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
