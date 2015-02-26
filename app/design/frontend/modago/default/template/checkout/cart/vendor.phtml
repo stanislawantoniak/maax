@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 12.08.2014
@@ -8,6 +8,7 @@
 
 <?php
 $_v = $this->getVendor();
+$_helper = Mage::helper('Zolago_Checkout');
 ?>
 <?php switch ($this->getPart()): case 'header': ?>
 
@@ -30,18 +31,18 @@ $_v = $this->getVendor();
     <tr class="udropship-cart-vendor-footer">
         <td colspan="10">
             <div style="float:right">
-                <?php echo $this->__('Subtotal:')?>
+                <?php echo $_helper->__('Subtotal:')?>
                 <strong><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></strong>
             </div>
             <?php if($this->isHintAvailable()):?>
                 <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px;">
-                    <?php echo $this->__("Free shippign from");?>:
+                    <?php echo $_helper->__('Free shipping from');?>:
                     <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong>
                 </div>
             <?php endif;?>
             <?php if(($bestRate=$this->getMinimalShippingRate())!==null):?>
                 <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px;">
-                    <?php echo $this->__('Shippign from:')?>
+                    <?php echo $_helper->__('Shipping from:')?>
                     <strong><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?> </strong>
                     (<?php echo $bestRate->getMethodTitle();?>)
                 </div>
