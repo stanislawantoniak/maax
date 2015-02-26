@@ -43,7 +43,7 @@ $_helper = Mage::helper('zolagoudqa');
 					<li class="wide">
 						<div class="form-group select-box-it-select-container">
                             <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry select-box-it-select" required>
-                                    <option value=""><?php echo $_helper->__('Choose shop'); ?></option>
+                                    <option value=""><?php echo $_helper->__('Select vendor'); ?></option>
                                 <?php foreach($vendors as $id=>$name): ?>
                                     <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
