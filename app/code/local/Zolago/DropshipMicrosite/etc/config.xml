@@ -15,6 +15,11 @@
 			<zolagodropshipmicrosite>
 				<class>Zolago_DropshipMicrosite_Helper</class>
 			</zolagodropshipmicrosite>
+            <rewrite>
+                <umicrosite>
+                    <data>Zolago_DropshipMicrosite_Helper_Datarewrite</data>
+                </umicrosite>
+            </rewrite>
 		</helpers>
 		<models>
 			<zolagodropshipmicrosite>

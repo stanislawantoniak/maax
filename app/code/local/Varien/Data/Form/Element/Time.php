@@ -4,6 +4,7 @@ class Varien_Data_Form_Element_Time extends Varien_Data_Form_Element_Abstract
 {
     public function getElementHtml()
     {
+
         $this->addClass('select');
 
         $value_hrs = 0;
