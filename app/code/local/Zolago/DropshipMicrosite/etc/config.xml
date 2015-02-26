@@ -9,17 +9,17 @@
 		<blocks>
             <zolagodropshipmicrosite>
                 <class>Zolago_DropshipMicrosite_Block</class>
-            </zolagodropshipmicrosite>			
+            </zolagodropshipmicrosite>
 		</blocks>
 		<helpers>
 			<zolagodropshipmicrosite>
 				<class>Zolago_DropshipMicrosite_Helper</class>
 			</zolagodropshipmicrosite>
-            <rewrite>
-                <umicrosite>
+            <umicrosite>
+                <rewrite>
                     <data>Zolago_DropshipMicrosite_Helper_Datarewrite</data>
-                </umicrosite>
-            </rewrite>
+                </rewrite>
+            </umicrosite>
 		</helpers>
 		<models>
 			<zolagodropshipmicrosite>
