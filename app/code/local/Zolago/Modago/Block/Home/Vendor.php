@@ -16,7 +16,6 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	 */
 	
 	/**
-	 * @todo add website filter (implement before) & cache results
 	 * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
 	 */
 	public function getVendorColleciton() {
@@ -28,7 +27,7 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
             $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
             $collection->addFieldToFilter('vendor_id', array('neq' => $localVendorId));
-//			$collection->setOrder("vendor_name");
+
             $collection->setOrder("sequence", "DESC");
             $collection->setPageSize($vendorsCount);
 			// Load serialized data
