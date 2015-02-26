@@ -11,7 +11,6 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosi
 
     public function sendVendorSignupEmail($registration)
     {
-        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
         $store = Mage::app()->getDefaultStoreView();
         Mage::helper('udropship')->setDesignStore($store);
 
