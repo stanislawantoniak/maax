@@ -136,14 +136,22 @@ Mall.listing = {
 	_noDelay: false,
 
 	/**
+	 * variable that stores content block
+	 */
+	_content_block: '',
+
+	/**
+	 * variable that stores filters block
+	 */
+	_filters_block: '',
+
+	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
-        //fix for noscroll when mobile filters open
-        this.processCloseSlidebar();
 
         //do stufs with images height
         this.initImagesHeight();
@@ -156,6 +164,10 @@ Mall.listing = {
 
 		// Init thinks
 		this.initFilterEvents();
+
+		// filters delegation - better performance than initiation of each filter event on every ajax reload
+		this.delegateFilterEvents();
+
 		this.initOnpopstateEvent();
 		this.initSortEvents();
 		this.initActiveEvents();
@@ -180,18 +192,9 @@ Mall.listing = {
      * hide btn filter product if no products/no sidebar (search for example)
      */
     processActionViewFilter: function() {
-        if (!jQuery('#sidebar').length && !this.isVendorLandingpage()) {
+        if (!jQuery('#solr_search_facets').length && !this.isVendorLandingpage()) {
             jQuery('.view_filter:has(.actionViewFilter)').hide();
         }
-    },
-
-    processCloseSlidebar: function() {
-        var self = this;
-        jQuery('.noscroll').on('click',  function(event) {
-            event.preventDefault();
-            /* Act on the event */
-            self.closeSlidebar();
-        });
     },
 
 	setInitProducts: function(products){
@@ -239,7 +242,6 @@ Mall.listing = {
 		scope = scope || jQuery(".solr_search_facets");
 		this.preprocessFilterContent(scope);
 		this.initScrolls(scope);
-		this.attachMiscActions(scope);
 		this.attachFilterColorEvents(scope);
 		this.attachFilterIconEvents(scope);
 		this.attachFilterEnumEvents(scope);
@@ -249,6 +251,9 @@ Mall.listing = {
 		this.attachFilterFlagEvents(scope);
 		this.attachFilterPriceSliderEvents(scope);
 		this.attachFilterSizeEvents(scope);
+		this.attachDeleteCurrentFilter();
+		this.initListingLinksEvents();
+		this.updateFilters();
 	},
 
 
@@ -302,55 +307,36 @@ Mall.listing = {
     },
 
 
-	_doRollSection: function(section, state, animate){
+	_doRollSection: function(section, state){
 		var title     = section.find("h3"),
 			content   = section.find(".content"),
             contentXS = section.find(".content-xs"),
-			i = title.find('i');
+			i = title.find('i'),
+			open = 'open',
+			closed = 'closed',
+			arrowUp = 'fa-chevron-up',
+			arrowDown = 'fa-chevron-down',
+			isMobile = this.getCurrentMobileFilterState(),
+			dataAttr = (isMobile ? 'xs' : 'lg') + '-rolled';
 
-		if(animate){
-			if(state){
-				content.stop(true,true).slideDown(200, function(){
-					title.removeClass("closed").addClass("open");
-				});
-
-			}else{
-				content.stop(true,true).slideUp(100, function(){
-					title.removeClass("open").addClass("closed");
-				});
-			}
-		}else{
-			if(state){
-				content.show();
-				title.removeClass("closed").addClass("open");
-			}else{
-				content.hide();
-				title.removeClass("open").addClass("closed");
-			}
-		}
 		if(state){
-			i.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-		}else{
-			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+			content.show();
+			title.removeClass(closed).addClass(open);
+			i.removeClass(arrowDown).addClass(arrowUp);
+			section.data(dataAttr,open);
+			contentXS.hide();
+		} else {
+			content.hide();
+			title.removeClass(open).addClass(closed);
+			i.removeClass(arrowUp).addClass(arrowDown);
+			section.data(dataAttr,closed);
+			if(isMobile) {
+				contentXS.show();
+			} else {
+				contentXS.hide();
+			}
 		}
-
-        //saveing state of rolled or not for mobile or desktop resolution
-        //because of different behaviour of sidebar in mobile and desktop
-        var attr = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled';
-        var attrVal = state ? 'open' : 'closed';
-        section.attr(attr, attrVal);
-
-        //show and hide content-xs for mobile sidebar when section rolled up or rolled down
-        if (this.getCurrentMobileFilterState()) {
-            if (!state) {
-                contentXS.show();
-            } else {
-                contentXS.hide();
-            }
-        } else {
-            //on desktop resolution always hide .content-xs
-            contentXS.hide();
-        }
+		Mall.listing.setMainSectionHeight();
 	},
 
 	_doShowMore: function(section, state, animate){
@@ -549,7 +535,7 @@ Mall.listing = {
             var forceObject = {
                 start: this.getLoadNextStart(),
                 rows: this.getLoadNextOffset()
-            }
+            };
 
             this.setQueueLoadLock();
 
@@ -963,30 +949,13 @@ Mall.listing = {
 	 *
 	 * @returns {Mall.listing}
 	 */
-	insertMobileSidebar: function() {
+	updateFiltersMobile: function() {
 		if(this.getCurrentMobileFilterState() == 0 && !this.isVendorLandingpage()) {
-            this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
-			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
-			jQuery("#sidebar").find(".sidebar").remove();
-			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
-			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
+			this.positionFilters();
 			this.setCurrentMobileFilterState(1);
-            this.initScrolls();
-            this._processRollSections();
-            this.attachFilterColorEvents();
-			this.attachFilterIconEvents();
-			this.attachFilterEnumEvents();
-			this.attachFilterPriceEvents();
-			this.attachFilterDroplistEvents();
-			this.attachFilterLongListEvents();
-			this.attachFilterFlagEvents();
-			this.attachFilterPriceSliderEvents();
-			this.attachFilterSizeEvents();
-			this.attachDeleteCurrentFilter();
-            this.attachMiscActions();
-			this.initListingLinksEvents();
-
-            this.closeSlidebar();
+		}
+		if(!jQuery('.'+this.getMobileFiltersOverlayClass()).length) {
+			this.getFilters().hide();
 		}
 
 		return this;
@@ -1046,43 +1015,91 @@ Mall.listing = {
 	 *
 	 * @returns {Mall.listing}
 	 */
-	insertDesktopSidebar: function() {
+	updateFiltersDesktop: function() {
 		if(this.getCurrentMobileFilterState() == 1 && !this.isVendorLandingpage()) {
-            this.destroyScrolls();// mCustomScrollbar dont work well with cloned elements
-			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
-			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
-			jQuery("#sidebar").find(".sidebar").remove();
-			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
-            this.initScrolls();
-            this._processRollSections();
-            this.attachFilterColorEvents();
-            this.attachFilterIconEvents();
-            this.attachFilterEnumEvents();
-            this.attachFilterPriceEvents();
-            this.attachFilterDroplistEvents();
-            this.attachFilterLongListEvents();
-            this.attachFilterFlagEvents();
-            this.attachFilterPriceSliderEvents();
-            this.attachFilterSizeEvents();
-            this.attachDeleteCurrentFilter();
-            this.attachMiscActions();
-			this.initListingLinksEvents();
-
-            this.closeSlidebar();
+			this._processRollSections();
+            this.closeMobileFilters();
 		}
-
 		return this;
 	},
 
+	/**
+	 * gets filters main block
+	 * @returns {*}
+	 */
+	getFiltersBlock: function() {
+		return jQuery('#solr_search_facets');
+	},
 
-    closeSlidebar: function() {
-        jQuery('.closeSlidebar').click();
-        jQuery('#sb-site').removeClass('open');
-        jQuery('.fb-slidebar').removeClass('open');
-        jQuery('body').removeClass('noscroll');
-        jQuery('body').find('.noscroll').remove();
-    },
+	/**
+	 * Updates filters sidebar variables according to screen width
+	 */
+	updateFilters: function() {
+		var self = Mall.listing;
+		if(self.isDisplayMobile()) {
+			self.updateFiltersMobile();
+		} else {
+			self.updateFiltersDesktop();
+		}
+		self._processRollSections();
+		self.positionFilters();
+	},
+
+	positionFilters: function() {
+		var self = Mall.listing;
+		var filters = self.getFiltersBlock();
+		if(this.isDisplayMobile()) {
+			filters
+				.removeClass(self.getFiltersClassDesktop())
+				.addClass(self.getFiltersClassMobile())
+				.css({
+					top: '',
+					left: '',
+					height: jQuery(window).height()
+				});
+		} else {
+			var content = self.getContentBlock();
+			filters
+				.removeClass(self.getFiltersClassMobile())
+				.addClass(self.getFiltersClassDesktop())
+				.css({
+					'top': content.offset().top,
+					'left': content.offset().left + 15,
+					'height': ''
+				});
+
+		}
+		self.setMainSectionHeight();
+		return self;
+	},
+
+	setMainSectionHeight: function() {
+		var mainSection = jQuery('section#main');
+		if(!this.isDisplayMobile()) {
+			var filters = Mall.listing.getFiltersBlock();
+			mainSection.css('min-height', (filters.height() + 50) + 'px');
+			jQuery(window).trigger("scroll"); //footer fix
+		} else {
+			mainSection.css('min-height', '');
+		}
+	},
+
+	isDisplayMobile: function() {
+		return jQuery('.hidden-xs').css('display') == "none";
+	},
+
+	getContentBlock: function() {
+		return jQuery('#content');
+	},
+
+	getFiltersClassMobile: function() {
+		return "filters-mobile";
+	},
+
+	getFiltersClassDesktop: function() {
+		return "filters-desktop";
+	},
 
 	/**
 	 * @param {object} node
@@ -1396,11 +1413,17 @@ Mall.listing = {
 	},
 
 	showAjaxLoading: function(){
+		if(this.getFilters().length) {
+			this.positionFilters();
+		}
 		this.getAjaxLoader().show();
 	},
 
 	hideAjaxLoading: function(){
 		this.getAjaxLoader().hide();
+		if(this.getFilters().length) {
+			this.positionFilters();
+		}
 	},
 
 	isLoading: function(){
@@ -1547,13 +1570,45 @@ Mall.listing = {
 
 		var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
 
-		mobileFilterBtn.on('click', function(event) {
-			event.preventDefault();
-			self.insertMobileSidebar();
-			jQuery('#sb-site').toggleClass('open');
-			jQuery('.fb-slidebar').toggleClass('open');
-			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + jQuery(window).height() + 'px"></div>');
-		});
+		mobileFilterBtn.click(Mall.listing.openMobileFilters);
+	},
+
+	openMobileFilters: function(e) {
+		e.preventDefault();
+		var self = Mall.listing;
+		self.getFilters().show();
+		jQuery('html').addClass(self.getMobileFiltersOpenedClass);
+		jQuery('body').append(self.getMobileFiltersOverlay());
+		self.processCloseMobileFilters();
+	},
+
+	closeMobileFilters: function() {
+		var self = Mall.listing;
+		self.getFilters().hide();
+		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
+		jQuery('body').find('.'+self.getMobileFiltersOverlayClass()).remove();
+	},
+
+	processCloseMobileFilters: function() {
+		this.getMobileFiltersOverlay().click(Mall.listing.closeMobileFilters);
+	},
+
+	getMobileFiltersOpenedClass: function() {
+		return 'noscroll-filters';
+	},
+
+	getMobileFiltersOverlay: function() {
+		var overlayClass = this.getMobileFiltersOverlayClass();
+		var currentOverlay = jQuery('.'+overlayClass);
+		if(!currentOverlay.length) {
+			return jQuery('<div class="' + overlayClass + '"></div>');
+		} else {
+			return currentOverlay;
+		}
+	},
+
+	getMobileFiltersOverlayClass: function() {
+		return 'filters-overlay';
 	},
 
 	getMobileFilterBtn: function() {
@@ -1589,7 +1644,7 @@ Mall.listing = {
 	},
 
 	getFilters: function(){
-		return jQuery(".solr_search_facets");
+		return jQuery("#solr_search_facets");
 	},
 
 	getToolbar: function(){
@@ -1638,7 +1693,7 @@ Mall.listing = {
 					updateOnBrowserResize:true
 				} // removed extra commas
 			}, opts));
-		};
+		}
 	},
 
     destroyScrolls: function(scope) {
@@ -1674,70 +1729,70 @@ Mall.listing = {
 		}
 	},
 
-	attachMiscActions: function(scope){
-		var filters = jQuery(".section", scope),
-			self = this;
+	delegateFilterEvents: function() {
+		var self = this,
+			filtersId = '#solr_search_facets',
+			hiddenClass = 'hidden';
 
-		filters.each(function(){
-			var filter = jQuery(this),
-				clearWrapper = filter.find(".action.clear"),
-				clearButton = clearWrapper.find("a"),
-				title = filter.find("h3"),
-				sm = filter.find(".showmore-filters");
-
-			// Handle roll up / down
-			title.on('click', function(event) {
-				self._doRollSection(
-					filter,
-					!title.hasClass("open"),
-					true
-				);
-                //if sidebar is in mobile state and clicked section is going to be rolled up
-                //rest of sections will be rolled down
-                if (self.getCurrentMobileFilterState() && title.hasClass("closed")) {
-                    filters.not(filter).each(function(){
-                        self._doRollSection(
-                            jQuery(this),
-                            false, //close all other section in mobile resolution
-                            true
-                        );
-                    });
-                }
-				event.preventDefault();
-			});
-
-			// Handle showmore
-			sm.on("click", function(event) {
-				self._doShowMore(filter, !(jQuery(this).attr("data-state")=="1"), true);
-				event.preventDefault();
-			});
-
-			// Handle clear button
-			filter.on('change', ':checkbox', function(e) {
-				if (filter.find(":checkbox:checked").length) {
-					clearWrapper.removeClass("hidden");
-				} else {
-					clearWrapper.addClass("hidden");
-				}
-			});
-			if(self.getPushStateSupport()) {
-				clearButton.on('click', function (event) {
-					event.preventDefault();
-					self.removeSingleFilterType(this);
-					clearWrapper.addClass('hidden');
-				});
-			} else {
-				clearButton.on('click',function () {
-					self.showAjaxLoading();
-					window.location = jQuery(this).prop('href');
+		//filters slide up/down
+		jQuery(document).delegate(filtersId+' h3','click',function(e) {
+			e.preventDefault();
+			var me = jQuery(this);
+			self._doRollSection(
+				me.parent(),
+				!me.hasClass("open"),
+				false
+			);
+			if(self.getCurrentMobileFilterState()) {
+				self.getFilters().find('h3.open').not(me).each(function() {
+					self._doRollSection(
+						jQuery(this).parent(),
+						false,
+						false
+					);
 				});
 			}
-
 		});
 
+		jQuery(document).delegate(filtersId+' .showmore-filters','click',function(e) {
+			e.preventDefault();
+			var me = jQuery(this);
+			self._doShowMore(
+				me.parents('.section'),
+				!me.data('state') == '1',
+				false
+			);
+		});
+
+		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
+			e.preventDefault();
+			var me = jQuery(this).parents('.section'),
+				button = me.find('.action.clear');
+			if(me.find(":checkbox:checked").length) {
+				if(button.hasClass(hiddenClass)) {
+					button.removeClass(hiddenClass);
+				}
+			} else {
+				button.addClass(hiddenClass);
+			}
+		});
+
+
+		var clearBtnSelector = filtersId+' .action.clear a';
+		if(self.getPushStateSupport()) {
+			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				e.preventDefault();
+				var me = jQuery(this);
+				self.removeSingleFilterType(me);
+				me.parent().addClass(hiddenClass);
+			});
+		} else {
+			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				self.showAjaxLoading();
+			});
+		}
+
 	},
-
-
 
 	/**
 	 * Attaches events to color filter.
@@ -2929,7 +2984,7 @@ jQuery(document).ready(function () {
 	"use strict";
     jQuery('#toggleSearch').click(function(){
         jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
-    })
+    });
     jQuery('body').click(function (e) {
 
         if(jQuery(e.target).parents("#dropdown-search").length>0){
@@ -2940,13 +2995,6 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
-        jQuery(window).resize(function () {
-            if (window.innerWidth >= 768) {
-                Mall.listing.insertDesktopSidebar();
-            } else {
-                jQuery('body').find('.noscroll').css({width: jQuery(window).width(), height: jQuery(window).height()});
-                Mall.listing.insertMobileSidebar();
-            }
-        });
+        jQuery(window).resize(Mall.listing.updateFilters);
     }
 });

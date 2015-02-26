@@ -1281,7 +1281,6 @@ jQuery.noConflict();
 			clearFilterManufacturerCheked();
 			deleteCurrentFilter();          // USUWANIE AKTYWNYCH FILTRÓW
 			filterColor();                  // OBSŁUGA FILTRA KOLOR
-			clearFilter();                  // CZYSZCZENIE FILTRÓW
 			recentlyViewed();               // POKAZ SLAJDÓW
 			responsJcarousel();             // POKAZ SLAJDÓW
 			masonryMenu();                  // KAFELKI LISTY PRODUKTÓW
@@ -1622,14 +1621,6 @@ jQuery.noConflict();
 				filterColor.on('click', '.clear', function(event) {
 					$(this).closest('.action').addClass('hidden');
 				});
-			});
-		}
-
-// CZYSZCZENIE FILTRÓW
-		function clearFilter(){
-			$('.block-filter').on('click', '.clear', function(event) {
-				event.preventDefault();
-				$(this).closest('.content').find('input[type="checkbox"]:checked').removeAttr('checked');
 			});
 		}
 
