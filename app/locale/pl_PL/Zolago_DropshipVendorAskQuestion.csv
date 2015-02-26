@@ -1,9 +1,5 @@
-﻿"Your Name","Twoje imię"
-"Email","Twój adres e-mail"
-"Question","Twoje pytanie"
-"Customer new question confirmation", "Potwierdzenie wysłania zapytania do sklepu"
-"This field is required","Proszę wypełnić pole"
-"This field is required.","Proszę wypełnić pole"
+﻿"Customer new question confirmation", "Potwierdzenie wysłania zapytania do sklepu"
+"This field is required","To pole jest wymagane - prosimy o wprowadzenie wartości."
 "Order","Kolejność"
 "Action","Akcja"
 "View","Zobacz"
@@ -11,4 +7,12 @@
 "Save","Zapisz"
 "Cancel","Anuluj"
 "Choose shop","Wybierz sprzedawcę"
+"* Required Fields","* Pola wymagane"
+"Valid email is required.","Prosimy o wprowadzenie poprawnego adresu email."
+"Submit","Wyślij"
+"Your Name","Twoje imię"
+"Email","Twój adres e-mail"
+"Your Question","Twoje pytanie"
+
+
 
