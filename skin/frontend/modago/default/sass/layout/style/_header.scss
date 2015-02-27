@@ -101,8 +101,11 @@
     .vendor-top-bottom-header-logo {
       display: table-cell;
       img {
-        max-height: 70px;
-        max-width: 130px;
+        max-height: 52px;
+        max-width: 170px;
+        @media (max-width: $screen-xs-max) {
+          max-height: 42px;
+        }
       }
     }
     .vendor-top-bottom-header-links {
