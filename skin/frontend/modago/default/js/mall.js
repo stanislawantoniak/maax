@@ -536,8 +536,15 @@ var Mall = {
                 return str;
             }
         }
-    }
+    },
 
+    disableSearchNoQuery: function() {
+        jQuery('#header_top_block_left form, #dropdown-search form').submit(function(e) {
+            if(!jQuery('input[name=q]', this).val().length) {
+                e.preventDefault();
+            }
+        });
+    },
 }
 
 
@@ -1040,6 +1047,7 @@ jQuery(document).ready(function() {
 	});
 
 	initToggleSearch();
+    Mall.disableSearchNoQuery();
 
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
