@@ -34,16 +34,18 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         foreach ($this->_params as $key=>$param) {
             $dhlSettings[$key] = $param;
         }
+        $dhlSettings['deliveryValue'] = (string)$rma->getTotalValue();
         $carrierManager->setShipmentSettings($dhlSettings);        
+        $vendorId = $rma->getUdropshipVendor();
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         // sender customer, receiver vendor
         $address = $vendor->getRmaAddress();
+        $carrierManager->setReceiverAddress($address);
         
-        $client = Mage::helper('zolagodhl')->startDhlClient($dhlSettings);        
-        // overwriting default params
-        
-        
-        $client->setRma($this->_rma);
-        $out = $client->createShipmentAtOnce($dhlSettings);
+        $address = $rma->getFormattedAddressForCarrier();
+        $carrierManager->setSenderAddress($address);
+
+        $out = $carrierManager->createShipmentAtOnce();        
 		if ($out) {
 		    if (is_array($out) && !empty($out['error'])) {
 			    $_helper = Mage::helper('zolagorma');
@@ -57,10 +59,10 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
 			$ioAdapter			= new Varien_Io_File();
 			$fileName			= $out->createShipmentResult->shipmentTrackingNumber.'.pdf';
 			$fileContent		= base64_decode($out->createShipmentResult->label->labelContent);
-			$fileLocation		= Mage::helper('zolagodhl')->getDhlFileDir() . $fileName;
+			$fileLocation		= Mage::helper('orbashipping/carrier_dhl')->getDhlFileDir() . $fileName;
 			$result = @$ioAdapter->filePutContent($fileLocation, $fileContent);
 			if (!$result) {
-    		    Mage::throwException(Mage::helper('zolagodhl')->__('Print label error'));
+    		    Mage::throwException(Mage::helper('orbashipping')->__('Print label error'));
 			}
 			return array (
 			    'trackingNumber' => $out->createShipmentResult->shipmentTrackingNumber,
@@ -68,7 +70,7 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
 			    'size' => $result,
             );
 		} else {
-                Mage::throwException(Mage::helper('zolagodhl')->__('Create shipment error'));
+                Mage::throwException(Mage::helper('orbashipping')->__('Create shipment error'));
 		}		
     }
 }

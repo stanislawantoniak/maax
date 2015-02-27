@@ -11,7 +11,8 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     const SHIPMENT_DOMESTIC			= 'AH';
 
     const PAYMENT_TYPE				= 'BANK_TRANSFER';
-    const PAYER_TYPE				= 'SHIPPER';
+    const PAYER_TYPE_SHIPPER		= 'SHIPPER';
+    const PAYER_TYPE_RECEIVER		= 'RECEIVER';
     const SHIPMENT_RMA_CONTENT      = 'Reklamacyjny zwrot do nadawcy';
 
     const DHL_LABEL_TYPE			= 'LP';
@@ -19,7 +20,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         'dropOffType' => 'REQUEST_COURIER',
         'serviceType' => 'AH',
         'labelType' => self::DHL_LABEL_TYPE,
-        'shippingPaymentType' => self::PAYER_TYPE,
+        'shippingPaymentType' => self::PAYER_TYPE_SHIPPER,
         'paymentType'   => self::PAYMENT_TYPE,
         'labelType' => self::DHL_LABEL_TYPE,
         
@@ -81,6 +82,30 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $obj->houseNumber = self::ADDRESS_HOUSE_NUMBER;
         $obj->contactPhone = $data['phone'];
         return $obj;
+    }    
+    protected function _createShipperAtOnce() {
+        return $this->_createAddressAtOnce($this->_shipperAddress);
+    }
+    protected function _createReceiverAtOnce() {
+        return $this->_createAddressAtOnce($this->_receiverAddress);
+    }
+    protected function _createAddressAtOnce($data) {
+        $message = new StdClass;
+        $address = new StdClass;
+        $address->name = $data['name'];
+        $address->city = substr($data['city'],0,17);
+        $address->postalCode = $this->formatDhlPostCode($data['postcode']);
+        $address->street = $data['street'];
+        $address->houseNumber = self::ADDRESS_HOUSE_NUMBER;
+        $address->country = $data['country'];
+        $contact = new StdClass;
+        $contact->personName = $data['personName'];
+        $contact->phoneNumber = $data['phone'];
+        $contact->emailAddress = $data['email'];
+        $message->address = $address;
+        $message->contact = $contact;
+        return $message;
+
     }
     protected function _createReceiver() {
         $data = $this->_receiverAddress;
@@ -97,7 +122,6 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
 		$this->_address = null;
         return $obj;
     }
-    
     
     protected function _createPieceList() {
         $shipmentSettings = $this->_settings;
@@ -341,10 +365,11 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     }
     protected function _prepareSpecialServices() {
         $message = new StdClass();
-        $message->item[] = $this->_addSpecialItem('UBEZP',$this->_rma->getTotalValue());
+        $message->item[] = $this->_addSpecialItem('UBEZP',$this->_settings['deliveryValue']);
         return $message;
     }
-    protected function _prepareShipmentAtOnce() {
+    protected function _prepareShipmentInfoAtOnce() {
+        $shipmentSettings = $this->_shipmentSettings;
         $message = new StdClass;
         $message->dropOffType = $this->_default_params['dropOffType'];
         $message->serviceType = $this->_default_params['serviceType'];        
@@ -355,54 +380,10 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $message->labelType = $this->_default_params['labelType'];
         return $message;       
     }
-    protected function _prepareClientAddress() {
-        $address = $this->_rma->getShippingAddress();
-        $data = $address->getData();
-        $message = new StdClass();
-        $message->name = $data['firstname'].' '.$data['lastname'];
-        $message->postalCode = $this->formatDhlPostCode($data['postcode']);
-        $message->city = substr($data['city'],0,17);
-        $message->street = $data['street'];
-        $message->houseNumber = self::ADDRESS_HOUSE_NUMBER;
-        $contact = new StdClass;
-        $contact->personName = $message->name;
-        $contact->phoneNumber = $data['telephone'];
-        $order = $this->_rma->getOrder();
-        $contact->emailAddress = $order->getCustomerEmail();
-        $out = new StdClass;
-        $out->contact = $contact;
-        $out->address = $message;
-        return $out;
-    }
-    protected function _prepareVendorAddress() {
-        $vendorId = $this->_rma->getUdropshipVendor();
-        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
-        $data = $vendor->getData();
+    protected function _prepareShipmentAtOnce() {
         $message = new StdClass;
-        $address = new StdClass;
-        $address->name = $data['company_name'];
-        $address->city = substr($data['city'],0,17);
-        $address->postalCode = $this->formatDhlPostCode($data['zip']);
-        $address->street = $data['street'];
-        $address->houseNumber = self::ADDRESS_HOUSE_NUMBER;
-        $contact = new StdClass;
-        $contact->personName = $address->name;
-        $contact->phoneNumber = $data['telephone'];
-        $contact->emailAddress = $data['email'];
-        $message->address = $address;
-        $message->contact = $contact;
-        return $message;
-    }
-    protected function _prepareShipClient() {
-        $message = new StdClass;
-        $message->shipper = $this->_prepareClientAddress();
-        $message->receiver = $this->_prepareVendorAddress();
-        return $message;
-    }
-    protected function _prepareShipVendor() {
-        $message = new StdClass;
-        $message->shipper = $this->_prepareVendorAddress();
-        $message->receiver = $this->_prepareClientAddress();
+        $message->shipper = $this->_createShipperAtOnce();
+        $message->receiver = $this->_createReceiverAtOnce();
         return $message;
     }
     protected function _prepareShipmentTime() {
@@ -415,19 +396,14 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     /**
      * creating shipment and book courier in one request
      */
-    public function createShipmentAtOnce($dhlSettings) {
-        $this->_settings = $dhlSettings;
+    public function createShipmentAtOnce() {
         $message = new StdClass;
         $message->authData = $this->_auth;
         $shipment = new stdClass;
-        $shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
-        if (empty($dhlSettings['vendor'])) {
-            $shipment->ship = $this->_prepareShipClient();        
-        } else {
-            $shipment->ship = $this->_prepareShipVendor();
-        }
+        $shipment->shipmentInfo = $this->_prepareShipmentInfoAtOnce(); 
+        $shipment->ship = $this->_prepareShipmentAtOnce();
         $shipment->content = self::SHIPMENT_RMA_CONTENT;
-        $shipment->pieceList = $this->_createPieceList($dhlSettings);
+        $shipment->pieceList = $this->_createPieceList();
         $message->shipment = $shipment;
         return $this->_sendMessage('createShipment',$message);
     }

@@ -3,4 +3,7 @@
 "DHL Service Error. Shipment Canceled. Please try again later.", "Błąd serwisu DHL. Wysyłka anulowana. Proszę spróbować później."
 "DHL Waybill", "List przewozowy"
 "DHL Service Error: %s", "Błąd serwisu DHL: %s"
+"Create shipment error", "Błąd przy tworzeniu wysyłki"
+"Print label error", "Błąd przy drukowaniu etykiety"
+
 

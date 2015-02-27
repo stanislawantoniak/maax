@@ -6,13 +6,11 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     			
 	const CODE = "orbadhl";
     protected $_code = self::CODE;
-    protected $_clientSettings;
-    protected $_shipmentSettings;
 
     public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
-        $this->_clientSettings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
+        $settings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
         
         $weight =  $params->getParam("weight");
 
@@ -45,7 +43,12 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
                                     'deliveryValue' => ($deliveryValue>0)? $deliveryValue:0,
                                     'content'		=> Mage::helper('zolagopo')->__('Shipment') . ': ' . $shipment->getIncrementId(),
                                 );
-        $this->_shipmentSettings = $shipmentSettings;
+        // add shipment settings
+        foreach ($shipmentSettings as $key => $val) {
+            $settings[$key] = $val;
+        }
+        $this->setShipmentSettings($settings);
+        return $settings;
 
     }
     public function setReceiverCustomerAddress($data) {
@@ -61,20 +64,28 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         );
         $this->setReceiverAddress($params);
     }
-    public function createShipments() {
-        $settings = $this->_clientSettings;
+    protected function _startClient() {
+        $settings = $this->_settings;
         $client = Mage::helper('orbashipping/carrier_dhl')->startClient($settings);
         if (!$client) {
             throw new Mage_Core_Exception(Mage::helper('orbashipping')->_('Cant connect to %s server','DHL'));
         }
-        $shipmentSettings = $this->_shipmentSettings;
-        $client->setShipmentSettings($shipmentSettings);
+        $client->setShipmentSettings($settings);
         $client->setShipperAddress($this->_senderAddress);
         $client->setReceiverAddress($this->_receiverAddress);
-
+        return $client;
+    }
+    public function createShipments() {
+        $client = $this->_startClient();
         $dhlResult = $client->createShipments();
         $results = $client->processDhlShipmentsResult('createShipments',$dhlResult);
         return $results;
+    }
+    public function createShipmentAtOnce() {
+        $client = $this->_startClient();
+        // only for rma requests
+//       $client->setParam('shippingPaymentType',Orba_Shipping_Model_Carrier_Client_Dhl::PAYER_TYPE_RECEIVER);
+        return $client->createShipmentAtOnce();                
     }
 	                	    
 }

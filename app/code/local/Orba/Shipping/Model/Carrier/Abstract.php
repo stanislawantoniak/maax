@@ -8,8 +8,11 @@ class Orba_Shipping_Model_Carrier_Abstract extends
 
     protected $_senderAddress;
     protected $_recevierAddress;
+    protected $_settings;
 
-
+    public function setShipmentSettings($settings) {
+        $this->_settings = $settings;
+    }
     public function setSenderAddress($address) {
         $this->_senderAddress = $address;
     }

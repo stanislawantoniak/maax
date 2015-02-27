@@ -181,5 +181,18 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     public function getVendorLogoUrl() {
         return Mage::getBaseUrl(Mage_core_model_store::URL_TYPE_MEDIA) . $this->getData('logo');
     }
-
+    public function getRmaAddress() {
+        $data = $this->getData();
+        $address = array (	
+            'name' 		=> (empty($data['company_name']))? $data['vendor_name']:$data['company_name'],
+            'city' 		=> $data['city'],
+            'postcode' 	=> $data['zip'],
+            'street' 	=> $data['street'],
+            'personName' => $data['vendor_attn'],
+            'phone' 	=> $data['rma_executive_telephone_mobile'],
+            'email' 	=> $data['rma_executive_email'],
+            'country'	=> $data['country_id'],
+        );
+        return $address;
+    }
 }

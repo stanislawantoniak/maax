@@ -81,7 +81,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             'length' => 1,
             'width' => 1,
             'quantity' => 1,            
-            'type' => Zolago_Dhl_Model_Client::SHIPMENT_TYPE_PACKAGE,
+            'type' => Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE,
         );
         return $dhlSettings;
 	}
@@ -221,6 +221,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         }
         return $dhlFile;
     }
+
 
     /**
      * Check if DHL Waybill cna be shown

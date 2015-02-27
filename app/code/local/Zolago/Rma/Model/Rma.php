@@ -114,6 +114,22 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	   return $this->getBillingAddress()->getId() == $this->getPo()->getBillingAddress()->getId();
    }
    
+   public function getFormattedAddressForCarrier() {
+       $data = $this->getData();
+       $addressId = $data['customer_address_id'];
+       $address = Mage::getModel('customer/address')->load($addressId)->getData();
+       $out = array (
+           'name' 		=> (empty($address['company']))? ($address['firstname'].' '.$address['lastname']):$address['company'],
+           'city' 		=> $address['city'],
+           'postcode' 	=> $address['postcode'],           
+           'street' 	=> $address['street'],
+           'personName' => $address['firstname'].' '.$address['lastname'],
+           'phone' 		=>$address['telephone'],
+           'email' 		=> $this->getOrder()->getCustomerEmail(),
+           'country'	=> $address['country_id'],
+       );
+       return $out;
+   }
    
    /**
     * @return Mage_Sales_Model_Order_Address
