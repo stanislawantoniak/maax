@@ -28,8 +28,8 @@ $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
                         <div id="category-header-vendor-box">
                             <span class="vendor-type"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?></span>
                             <span>
-                                <img class="vendor-logo hidden-xs" src="<?php echo $this->getVendorResizedLogoUrl($vendor); ?>"/>
-                                <img class="vendor-logo visible-xs" src="<?php echo $this->getVendorResizedLogoUrl($vendor,170,42); ?>"/>
+                                <img class="vendor-logo desktop-logo" src="<?php echo $this->getVendorResizedLogoUrl($vendor); ?>"/>
+                                <img class="vendor-logo mobile-logo" src="<?php echo $this->getVendorResizedLogoUrl($vendor,170,42); ?>"/>
                             </span>
                         </div>
                     </div>
