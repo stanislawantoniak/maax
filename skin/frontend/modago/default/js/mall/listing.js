@@ -1264,8 +1264,13 @@ Mall.listing = {
 		this.getAjaxLoader().is(":visisble");
 	},
 
+	/**
+	 * var and function that stores / generates ajax loader div
+	 */
+	_ajax_loader: '',
 	getAjaxLoader: function(){
-		if(!jQuery("#ajax-filter-loader").length){
+		if(!this._ajax_loader.length) {
+			var ajaxLoaderId = 'ajax-filter-loader';
 			var overlay = jQuery("<div>").css({
 				"background":	"rgba(255,255,255,0.8) \
 					url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') \
@@ -1277,10 +1282,11 @@ Mall.listing = {
 				"top":			"0",
 				"z-index":		"1000000",
 				"color":		"#fff"
-			}).attr("id", "ajax-filter-loader");
+			}).attr("id", ajaxLoaderId);
 			jQuery("body").append(jQuery(overlay));
+			this._ajax_loader = jQuery('#'+ajaxLoaderId);
 		}
-		return jQuery("#ajax-filter-loader");
+		return this._ajax_loader;
 	},
 
 	rebuildContents: function(content){
@@ -1679,7 +1685,7 @@ Mall.listing = {
 		if(!this.isDisplayMobile()) {
 			var filters = Mall.listing.getFilters();
 			mainSection.css('min-height', (filters.height() + 50) + 'px');
-			Mall.listing.triggerResize(); //footer fix
+			jQuery(window).trigger("scroll"); //footer fix
 		} else {
 			mainSection.css('min-height', '');
 		}
