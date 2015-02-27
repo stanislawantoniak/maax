@@ -267,7 +267,7 @@ abstract class Mage_Rule_Model_Condition_Abstract
         foreach ($valueOption as $k => $v) {
             $opt[] = array('value' => $k, 'label' => $v);
         }
-        Mage::log($valueOption, null, 'mylog.log');
+        Mage::log($opt, null, 'mylog.log');
         return $opt;
     }
 
