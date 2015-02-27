@@ -1,28 +1,90 @@
-<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
-        <tr>
-            <td align="center" valign="top" style="padding:20px 0 20px 0">
-                <!-- [ header starts here] -->
-                <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
-                    <tr>
-                        <td valign="top">
-                            <a href="{{store url=""}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a></td>
-                    </tr>
-                <!-- [ middle starts here] -->
-                    <tr>
-                        <td valign="top">
-                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Drogi {{htmlescape var=$customer.name}},</h1>
-                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Aby potwierdzić zmianę swojego adresu email prosimy kliknąć w ten link:</p>
-                            <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;"><a href="{{var confirm_link}}">{{var confirm_link}}</a></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Dziękujemy, <strong>{{var store.getFrontendName()}}</strong></p></center></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+﻿<body style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
+<!--[if gte mso 9]>
+<style type="text/css">
+	.container {
+		width: 580px;
+	}
+	.lowerMarginWhite {
+		margin: 25px 35px 10px 35px;
+	}
+	.productsTable {
+		width: 510px;
+	}
+	.spacer {
+		margin: 0 0 25px 0;
+	}
+	.productColumn {
+		width: 420px;
+	}
+	.valueColumn {
+		width: 80px;
+	}
+	.imgColumn {
+		width: 60px;
+	}
+	.productNameColumn {
+		padding-top:10px;
+	}
+</style>
+<![endif]-->
+<style type="text/css">
+	@media only screen and (max-width: 480px) {
+		.borderContainer {
+			border: none !important;
+		}
+
+		.lowerMarginBlack {
+			margin-left: -20px !important;
+		}
+
+		.lowerMarginWhite {
+			border-left: 15px solid white !important;
+			border-right: 15px solid white !important;
+		}
+	}
+</style>
+<div style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
+	<center>
+		<div class="borderContainer" style="border:20px solid #e5e5e5">
+			<div>
+				<table style="direction:ltr;text-align:left;font-family:'Arial','Helvetica',sans-serif;color:#444;background-color:white;max-width:580px"
+				       cellpadding="0" cellspacing="0" border="0" class="container">
+					<tbody>
+					<tr>
+						<td style="margin:0;padding:0">
+							<div style="width:100%;background-color:black;border-bottom:3px solid #C6A662;">
+								<div class="lowerMarginBlack">
+									<a href='{{store url=""}}' style="text-decoration:none;border:none">
+										<img width="175" height="52" alt="{{var logo_alt}}"
+										     src="cid:logo.png">
+									</a>
+								</div>
+							</div>
+                                                           <div class="lowerMarginWhite"
+							     style="border-top:25px solid white;border-bottom:10px solid white;border-left:35px solid white;border-right:35px solid white;font-family:'Arial','Helvetica',sans-serif;font-size:13px;">
+								<h1 style="font-weight:normal;font-size:21px;border-bottom:15px solid white;font-family:'Arial','Helvetica',sans-serif">
+							    Prosimy o potwierdzenie adresu e-mail.
+							    </h1>
+							   <div style="border-top:25px solid white;border-bottom:35px solid white;line-height:1.4em;margin:0;padding:0">
+							     <p>
+								Aby potwierdzić zmianę swojego adresu email prosimy kliknąć w ten link:
+							    </p>
+							     <p>
+							        <a href="{{var confirm_link}}">{{var confirm_link}}</a></p>
+						            </div>
+							    <div style="border-top:25px solid white;border-bottom:35px solid white;line-height:1.4em;margin:0;padding:0">
+   								Zespół <a href='{{store url=""}}' style="text-decoration:none;color:#444">Modago.pl</a>
+							    </div>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				<div style="background-color:#e5e5e5;direction:ltr;color:#777;font-size:11px;border:10px solid #E5E5E5;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif;text-align:center">&copy;
+					2014 <a href='{{store url=""}}' style="text-decoration:none;color:#777">Modago.pl</a>
+				</div>
+			</div>
+		</div>
+	</center>
 </div>
 </body>
