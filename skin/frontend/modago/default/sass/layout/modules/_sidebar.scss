@@ -208,39 +208,6 @@
   }
 }
 
-.fb-slidebar {
-  .filter-longlist {
-    input[type="text"] {
-      width: 162px !important;
-    }
-  }
-  .filter-color {
-    max-width: 200px;
-    label {
-      margin: 6px 11px;
-      &:nth-child(3n+1) {
-        margin-left: 0;
-      }
-    }
-  }
-  .filter-size {
-    max-width: 200px;
-    label {
-      margin: 7px 11px;
-      &:nth-child(3n+1) {
-        margin-left: 0;
-      }
-    }
-  }
-  #filter_price {
-    #od_do {
-      .form-action {
-        float: left;
-      }
-    }
-  }
-}
-
 #solr_search_facets {
 	position: absolute;
 	&.filters-desktop {
@@ -251,11 +218,42 @@
 		top: 0;
 		left: 0;
 		overflow-y: auto;
-		width: 225px;
+		width: 240px;
+
+		.filter-longlist {
+			input[type="text"] {
+				width: 162px !important;
+			}
+		}
+		.filter-color {
+			max-width: 200px;
+			label {
+				margin: 6px 11px;
+				&:nth-child(3n+1) {
+					margin-left: 0;
+				}
+			}
+		}
+		.filter-size {
+			max-width: 200px;
+			label {
+				margin: 7px 11px;
+				&:nth-child(3n+1) {
+					margin-left: 0;
+				}
+			}
+		}
+		#filter_price {
+			#od_do {
+				.form-action {
+					float: left;
+				}
+			}
+		}
 	}
 }
 
-.filters-overlay {
+#filters-overlay {
 	position: absolute;
 	background-color: rgba(0,0,0,.5);
 	width: 100%;
@@ -273,12 +271,12 @@ html.noscroll-filters {
 		height: 100%;
 	}
 	#sb-site {
-		margin-left: 225px;
+		margin-left: 240px;
 		position: static;
 		overflow: hidden;
 		height: 100%;
 	}
 	header#header .header_top {
-		left: 225px;
+		left: 240px;
 	}
 }
