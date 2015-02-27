@@ -1291,6 +1291,9 @@ Mall.listing = {
 
 		// All filters
 		var filters = jQuery(content.filters);
+		if(this.getMobileFiltersOverlay().is(":visible")) {
+			filters.show();
+		}
 		this.getFilters().replaceWith(filters);
 
 		this.initFilterEvents(filters);
@@ -1376,13 +1379,18 @@ Mall.listing = {
 			}
 
 			active.click(function() {
-				jQuery(this).parent().parent().detach();
-				unCheckbox(jQuery(this).data('input'));
-				if (active.length == 1) {
-					detachActive();
+				var me = jQuery(this);
+				if(!me.parent().hasClass('query-text-iks')) {
+					me.parents('dd').detach();
+					unCheckbox(me.data('input'));
+					if (active.length == 1) {
+						detachActive();
+					}
+					self.reloadListingNow();
+					return false;
+				} else {
+					self.showAjaxLoading();
 				}
-				self.reloadListingNow();
-				return false;
 			});
 
 			remove.click(function() {
@@ -1419,7 +1427,7 @@ Mall.listing = {
 		e.preventDefault();
 		var self = Mall.listing;
 		self.getFilters().show();
-		jQuery('html').addClass(self.getMobileFiltersOpenedClass);
+		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		self.showMobileFiltersOverlay();
 		self.triggerResize();
 	},
@@ -1625,14 +1633,6 @@ Mall.listing = {
 	},
 
 	/**
-	 * gets filters main block
-	 * @returns {*}
-	 */
-	getFiltersBlock: function() {
-		return jQuery('#solr_search_facets');
-	},
-
-	/**
 	 * Updates filters sidebar variables according to screen width
 	 */
 	updateFilters: function() {
@@ -1648,7 +1648,7 @@ Mall.listing = {
 
 	positionFilters: function() {
 		var self = Mall.listing;
-		var filters = self.getFiltersBlock();
+		var filters = self.getFilters();
 		if(this.isDisplayMobile()) {
 			filters
 				.removeClass(self.getFiltersClassDesktop())
@@ -1677,9 +1677,9 @@ Mall.listing = {
 	setMainSectionHeight: function() {
 		var mainSection = jQuery('section#main');
 		if(!this.isDisplayMobile()) {
-			var filters = Mall.listing.getFiltersBlock();
+			var filters = Mall.listing.getFilters();
 			mainSection.css('min-height', (filters.height() + 50) + 'px');
-			jQuery(window).trigger("scroll"); //footer fix
+			Mall.listing.triggerResize(); //footer fix
 		} else {
 			mainSection.css('min-height', '');
 		}

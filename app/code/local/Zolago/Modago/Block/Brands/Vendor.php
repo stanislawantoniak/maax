@@ -12,7 +12,9 @@ class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
             $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
-            $collection->setOrder("sequence", "ASC");
+
+            $collection->setOrder("sequence", Varien_Data_Collection::SORT_ORDER_ASC);
+            $collection->setOrder("vendor_name", Varien_Data_Collection::SORT_ORDER_ASC);
 
             $collection->addFieldToFilter('vendor_id', array('neq' => $localVendorId));
 			// Load serialized data

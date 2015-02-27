@@ -28,7 +28,9 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
             $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
             $collection->addFieldToFilter('vendor_id', array('neq' => $localVendorId));
 
-            $collection->setOrder("sequence", "ASC");
+            $collection->setOrder("sequence", Varien_Data_Collection::SORT_ORDER_ASC);
+            $collection->setOrder("vendor_name", Varien_Data_Collection::SORT_ORDER_ASC);
+
             $collection->setPageSize($vendorsCount);
 			// Load serialized data
 
