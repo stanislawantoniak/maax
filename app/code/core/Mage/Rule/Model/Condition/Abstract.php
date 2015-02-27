@@ -319,6 +319,8 @@ abstract class Mage_Rule_Model_Condition_Abstract
         }
 
         $options = $this->getValueSelectOptions();
+        Mage::log($options, null, 'mylog.log');
+
         $valueArr = array();
         if (!empty($options)) {
             foreach ($options as $o) {

@@ -1264,8 +1264,13 @@ Mall.listing = {
 		this.getAjaxLoader().is(":visisble");
 	},
 
+	/**
+	 * var and function that stores / generates ajax loader div
+	 */
+	_ajax_loader: '',
 	getAjaxLoader: function(){
-		if(!jQuery("#ajax-filter-loader").length){
+		if(!this._ajax_loader.length) {
+			var ajaxLoaderId = 'ajax-filter-loader';
 			var overlay = jQuery("<div>").css({
 				"background":	"rgba(255,255,255,0.8) \
 					url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') \
@@ -1277,10 +1282,11 @@ Mall.listing = {
 				"top":			"0",
 				"z-index":		"1000000",
 				"color":		"#fff"
-			}).attr("id", "ajax-filter-loader");
+			}).attr("id", ajaxLoaderId);
 			jQuery("body").append(jQuery(overlay));
+			this._ajax_loader = jQuery('#'+ajaxLoaderId);
 		}
-		return jQuery("#ajax-filter-loader");
+		return this._ajax_loader;
 	},
 
 	rebuildContents: function(content){
@@ -1291,6 +1297,9 @@ Mall.listing = {
 
 		// All filters
 		var filters = jQuery(content.filters);
+		if(this.getMobileFiltersOverlay().is(":visible")) {
+			filters.show();
+		}
 		this.getFilters().replaceWith(filters);
 
 		this.initFilterEvents(filters);
@@ -1376,13 +1385,18 @@ Mall.listing = {
 			}
 
 			active.click(function() {
-				jQuery(this).parent().parent().detach();
-				unCheckbox(jQuery(this).data('input'));
-				if (active.length == 1) {
-					detachActive();
+				var me = jQuery(this);
+				if(!me.parent().hasClass('query-text-iks')) {
+					me.parents('dd').detach();
+					unCheckbox(me.data('input'));
+					if (active.length == 1) {
+						detachActive();
+					}
+					self.reloadListingNow();
+					return false;
+				} else {
+					self.showAjaxLoading();
 				}
-				self.reloadListingNow();
-				return false;
 			});
 
 			remove.click(function() {
@@ -1419,7 +1433,7 @@ Mall.listing = {
 		e.preventDefault();
 		var self = Mall.listing;
 		self.getFilters().show();
-		jQuery('html').addClass(self.getMobileFiltersOpenedClass);
+		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		self.showMobileFiltersOverlay();
 		self.triggerResize();
 	},
@@ -1625,14 +1639,6 @@ Mall.listing = {
 	},
 
 	/**
-	 * gets filters main block
-	 * @returns {*}
-	 */
-	getFiltersBlock: function() {
-		return jQuery('#solr_search_facets');
-	},
-
-	/**
 	 * Updates filters sidebar variables according to screen width
 	 */
 	updateFilters: function() {
@@ -1648,7 +1654,7 @@ Mall.listing = {
 
 	positionFilters: function() {
 		var self = Mall.listing;
-		var filters = self.getFiltersBlock();
+		var filters = self.getFilters();
 		if(this.isDisplayMobile()) {
 			filters
 				.removeClass(self.getFiltersClassDesktop())
@@ -1677,7 +1683,7 @@ Mall.listing = {
 	setMainSectionHeight: function() {
 		var mainSection = jQuery('section#main');
 		if(!this.isDisplayMobile()) {
-			var filters = Mall.listing.getFiltersBlock();
+			var filters = Mall.listing.getFilters();
 			mainSection.css('min-height', (filters.height() + 50) + 'px');
 			jQuery(window).trigger("scroll"); //footer fix
 		} else {
