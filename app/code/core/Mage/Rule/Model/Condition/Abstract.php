@@ -314,6 +314,8 @@ abstract class Mage_Rule_Model_Condition_Abstract
     public function getValueName()
     {
         $value = $this->getValue();
+        Mage::log($value, null, 'mylog.log');
+        
         if (is_null($value) || '' === $value) {
             return '...';
         }
