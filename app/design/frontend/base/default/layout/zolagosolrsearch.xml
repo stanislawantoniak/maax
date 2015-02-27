@@ -27,12 +27,12 @@
     <umicrosite_landing>
 		<remove name="catalog.leftnav" />
         <remove name="enterprisecatalog.leftnav"/>
-		<reference name="left">
+<!--		<reference name="left">
            <block type="solrsearch/faces" name="searchfaces" as="searchFaces" before="-" >
             	<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets" />
             	<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets" />
             </block>
-        </reference>
+        </reference>-->
 	</umicrosite_landing>
 	
 	<umicrosite_current_vendor_products_list_solr>
