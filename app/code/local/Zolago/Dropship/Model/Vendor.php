@@ -89,7 +89,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		}
 		return $this->getData('child_vendor_ids');
 	}
-	
+
 	/**
 	 * @return array
 	 */
