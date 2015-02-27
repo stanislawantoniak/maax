@@ -40,10 +40,6 @@ class Mirasvit_FeedExport_Block_Adminhtml_Rule_Edit_Tab_General extends Mage_Adm
             'value'    => $model->getName()
         ));
 
-        Mage::log(Mage::getSingleton('feedexport/system_config_source_ruleType')->toOptionArray(), null, 'mylog.log');
-        Mage::log(Mage::getSingleton('feedexport/system_config_source_ruleType')->toOption(), null, 'mylog.log');
-
-
         $general->addField('type', 'select', array(
             'label'    => __('Filter Type'),
             'required' => true,

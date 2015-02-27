@@ -262,9 +262,12 @@ abstract class Mage_Rule_Model_Condition_Abstract
         if ($this->hasValueOption()) {
             $valueOption = (array) $this->getValueOption();
         }
+        Mage::log($valueOption, null, 'mylog.log');
+
         foreach ($valueOption as $k => $v) {
             $opt[] = array('value' => $k, 'label' => $v);
         }
+        Mage::log($valueOption, null, 'mylog.log');
         return $opt;
     }
 
