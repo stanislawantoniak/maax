@@ -38,5 +38,8 @@ class Orba_Shipping_Model_Carrier_Default extends Orba_Shipping_Model_Carrier_Ab
         }
         return $result;
     }
+    public function createShipmentAtOnce() {
+        Mage::throwException(Mage::helper('orbacommon')->__('Not implemented yet'));
+    }
 
 }

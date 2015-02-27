@@ -107,7 +107,7 @@ class Orba_Shipping_DhlController extends Mage_Core_Controller_Front_Action
             return;
         }
 
-        $dhlHelper = Mage::helper('zolagodhl');
+        $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
         $dhlValidZip = $dhlHelper->isDHLValidZip($country,$zip);
 
         if (!$dhlValidZip) {

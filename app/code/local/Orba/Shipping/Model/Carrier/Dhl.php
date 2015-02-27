@@ -7,6 +7,44 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 	const CODE = "orbadhl";
     protected $_code = self::CODE;
 
+    public function prepareRmaSettings($request,$vendor,$rma) {
+        $vendorId = $vendor->getId();
+        $settings = Mage::helper('orbashipping/carrier_dhl')->getDhlRmaSettings($vendorId);
+        $width = (float)$request->getParam('specify_orbadhl_width');
+        $height = (float)$request->getParam('specify_orbadhl_height');
+        $length = (float)$request->getParam('specify_orbadhl_length');
+        $date = $request->getParam('specify_orbadhl_shipping_date');
+        $weight = ceil((float)$request->getParam('weight'));
+        $type = $request->getParam('specify_orbadhl_type');
+        switch ($type) {
+            case 'PACKAGE':
+                $dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE;
+            break;
+            case 'ENVELOPE':
+                $dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_ENVELOPE;
+            break;
+            default:
+                throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown DHL package type"));
+        }        
+        $dhlParams = array (
+            'width' => $width,
+            'height' => $height,            
+            'length' => $length,
+            'shipmentDate' => $date,
+            'weight' => ($weight>1)? $weight:1,
+            'type' => $dhlType,
+        );
+        if ($request->getParam('specify_orbadhl_custom_dim',false)) {
+            $dhlParams['nonStandard'] = true;
+        }
+        $dhlParams['deliveryValue'] = (string)$rma->getTotalValue();
+        foreach ($dhlParams as $key => $param) {
+            $settings[$key] = $param;
+        }
+        $this->setShipmentSettings($settings);
+        return $settings;
+                 
+    }
     public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
@@ -83,9 +121,33 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     }
     public function createShipmentAtOnce() {
         $client = $this->_startClient();
-        // only for rma requests
-//       $client->setParam('shippingPaymentType',Orba_Shipping_Model_Carrier_Client_Dhl::PAYER_TYPE_RECEIVER);
-        return $client->createShipmentAtOnce();                
+        $out = $client->createShipmentAtOnce();                
+		if ($out) {
+		    if (is_array($out) && !empty($out['error'])) {
+			    $_helper = Mage::helper('zolagorma');
+			    if($out['error'] == "Błędy walidacji zamówienia: W zadanych godzinach realizacji przybycie kuriera jest niemożliwe") {
+					$error = $_helper->__("There was an error when booking courier for you. On the date that you chose courier cannot pick up the shipment. Please try some other date or hour.");
+			    } else {
+				    $error = $out['error'];
+			    }
+    		    Mage::throwException($error);
+		    }
+			$ioAdapter			= new Varien_Io_File();
+			$fileName			= $out->createShipmentResult->shipmentTrackingNumber.'.pdf';
+			$fileContent		= base64_decode($out->createShipmentResult->label->labelContent);
+			$fileLocation		= Mage::helper('orbashipping/carrier_dhl')->getDhlFileDir() . $fileName;
+			$result = @$ioAdapter->filePutContent($fileLocation, $fileContent);
+			if (!$result) {
+    		    Mage::throwException(Mage::helper('orbashipping')->__('Print label error'));
+			}
+			return array (
+			    'trackingNumber' => $out->createShipmentResult->shipmentTrackingNumber,
+			    'file' => $fileLocation,
+			    'size' => $result,
+            );
+		} else {
+                Mage::throwException(Mage::helper('orbashipping')->__('Create shipment error'));
+		}		
     }
-	                	    
+            	    
 }

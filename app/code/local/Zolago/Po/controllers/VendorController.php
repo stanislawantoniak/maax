@@ -1090,19 +1090,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             //}
             $number = $this->_addShipping($carrier,$udpo,$shipment);
-            /*
-            switch($carrier) {
-            case Orba_Shipping_Model_Carrier_Dhl::CODE:
-                $number = $this->_addShippingDhl($udpo,$shipment,$store);
-                break;
-            case Orba_Shipping_Model_Carrier_Ups::CODE:
-                $number = $this->_addShippingUps($udpo,$shipment);
-                break;
-            default:
-                $number = $this->_addShippingManually();
-                ;
-            }
-            */
             if (!$number) {
                 return $this->_redirectReferer();
 

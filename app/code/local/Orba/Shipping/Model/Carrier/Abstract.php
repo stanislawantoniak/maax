@@ -52,6 +52,9 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     public function prepareSettings($request,$shipment,$udpo) {
         return $this;
     }
+    public function prepareRmaSettings($request,$vendor,$rma) {
+        return $this;
+    }
     
     public function setReceiverCustomerAddress($address) {
         $this->setReceiverAddress($address);
@@ -60,5 +63,9 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     public function createShipments() {
         return null;
     }
+    public function createShipmentAtOnce() {
+        Mage::throwException(Mage::helper('orbacommon')->__('Not implemented yet'));
+    }
+
 
 }

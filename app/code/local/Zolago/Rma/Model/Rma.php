@@ -113,8 +113,23 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
    public function isBillingSameAsPo() {
 	   return $this->getBillingAddress()->getId() == $this->getPo()->getBillingAddress()->getId();
    }
-   
-   public function getFormattedAddressForCarrier() {
+   public function getFormattedAddressForVendor() {
+       $data = $this->getData();
+       $addressId = $data['shipping_address_id'];
+       $address = Mage::getModel('sales/order_address')->load($addressId)->getData();
+       $out = array (
+           'name' 		=> (empty($address['company']))? ($address['firstname'].' '.$address['lastname']):$address['company'],
+           'city' 		=> $address['city'],
+           'postcode' 	=> $address['postcode'],           
+           'street' 	=> $address['street'],
+           'personName' => $address['firstname'].' '.$address['lastname'],
+           'phone' 		=>$address['telephone'],
+           'email' 		=> $this->getOrder()->getCustomerEmail(),
+           'country'	=> $address['country_id'],
+       );
+       return $out;
+   }
+   public function getFormattedAddressForCustomer() {
        $data = $this->getData();
        $addressId = $data['customer_address_id'];
        $address = Mage::getModel('customer/address')->load($addressId)->getData();

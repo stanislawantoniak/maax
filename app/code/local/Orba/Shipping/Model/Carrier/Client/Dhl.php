@@ -139,7 +139,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
             $obj->quantity	= $shipmentSettings['quantity'];
             break;
         }
-        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? null:$shipmentSettings['nonStandard'];
+        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? false:$shipmentSettings['nonStandard'];
         $ret = new StdClass();
         $ret->item[] = $obj;
         return $ret;
@@ -147,7 +147,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     protected function _createPayment() {
         $obj = new StdClass();
         $obj->paymentMethod = self::PAYMENT_TYPE;
-        $obj->payerType		= self::PAYER_TYPE;
+        $obj->payerType		= self::PAYER_TYPE_SHIPPER;
         $obj->accountNumber = $this->getDhlAccount();
         $obj->costsCenter = null;
         return $obj;
