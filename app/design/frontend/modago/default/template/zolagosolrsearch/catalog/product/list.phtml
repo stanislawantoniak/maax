@@ -17,9 +17,6 @@ $_collection = $this->getCollection();
 <div id="content" class="container-fluid">
 <div class="row">
 <div class="col-sm-12">
-<div id="sidebar" class="hidden-xs">
-    <?php echo $this->getChildHtml('searchfaces'); ?>
-</div>
 <div id="content-main">
 <div class="container-fluid" id="items-product">
     <div class="row">
@@ -41,11 +38,7 @@ $_collection = $this->getCollection();
                                              data-width="<?php echo $_productImageInfo['width']; ?>"
                                              data-height="<?php echo $_productImageInfo['height']; ?>"/>
                                     </figure>
-                                    <div class="logo_manufacturer">
-                                        <img class="img-responsive"
-                                             src="<?php echo $product->getManufacturerLogoUrl(); ?>"
-                                             alt="<?php echo $this->escapeHtml($product->getManufacturer()); ?>"/>
-                                    </div>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($product->getName()); ?>
                                     </div>

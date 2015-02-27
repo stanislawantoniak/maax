@@ -426,6 +426,27 @@
 
 	</zolagomodago_index_index>
 
+    <zolagomodago_brands_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Shops</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml">
+
+                   </block>
+        </reference>
+    </zolagomodago_brands_index>
+
 	<solrbridge_solrsearch_category_view>
 		<remove name="mana.catalog.leftnav"/>
 		<remove name="solrsearch_category_view"/>
@@ -462,6 +483,13 @@
 			</action>
 		</reference>
 
+		<reference name="before_body_end">
+			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+				<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+			</block>
+		</reference>
+
         <reference name="content">
 
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
@@ -473,13 +501,7 @@
             <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar"/>
             <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
-                    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
-                        <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
-                        <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
-                    </block>
-                </block>
-
+                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list" />
                 <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
                 <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
             </block>
@@ -504,6 +526,9 @@
             <action method="addBodyClass">
                 <value>catalog-category-view</value>
             </action>
+	        <action method="addBodyClass">
+	            <value>node-type-list</value>
+            </action>
         </reference>
         <reference name="head">
             <action method="addItem">
@@ -527,6 +552,13 @@
             </action>
         </reference>
 
+	    <reference name="before_body_end">
+		    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+			    <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+			    <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+		    </block>
+	    </reference>
+
         <reference name="content">
             <!--removing category listing-->
             <remove name="solrsearch_product_list_header"/>
@@ -542,10 +574,6 @@
 
                 <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar"/>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
-                    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
-                        <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
-                        <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
-                    </block>
                 </block>
             </block>
 

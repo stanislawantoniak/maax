@@ -1458,7 +1458,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     protected function _sendEmailTemplate($customerName, $customerEmail,
                                           $template, $templateParams = array(), $storeId = null)
     {
-        $templateParams['use_attachements'] = true;
+        $templateParams['use_attachments'] = true;
 
         $mailer = Mage::getModel('core/email_template_mailer');
         /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */

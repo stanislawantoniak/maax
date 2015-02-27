@@ -56,6 +56,7 @@
 "VAT Id", "NIP"
 "Pho.", "Tel."
 "Quantity", "Ilość"
+"Product total","Wartość produktów"
 "Roll products", "Zwiń produkty"
 "Order now", "Zamawiam"
 "Show products", "Pokaż produkty"
@@ -68,3 +69,8 @@
 "Order now and pay", "Zamawiam i płacę"
 "Product %s size %s was removed from cart because is out of stock.","Produkt %s rozmiar %s został usunięty z koszyka z powodu braku dostępności na magazynie."
 "Product %s was removed from cart because is out of stock.","Produkt %s został usunięty z koszyka z powodu braku dostępności na magazynie."
+"Vendor","Sprzedawca"
+"Minimal shipping cost","Koszt dostawy od"
+"Shipping rules and cost","Warunki i koszty dostawy"
+
+

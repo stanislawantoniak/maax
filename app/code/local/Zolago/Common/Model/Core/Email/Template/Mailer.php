@@ -27,7 +27,7 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 	}
 	
     /**
-	 * Override email tempalte supported attachments
+	 * Override email template supported attachments
 	 * 
      * Send all emails from email list
      * @see self::$_emailInfos

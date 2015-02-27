@@ -11,10 +11,17 @@
             height:auto;
         }
     }
-    .logo_manufacturer {
-        margin-bottom:18px;
-        padding:0 8px;
-    }
+  .logo_manufacturer {
+	margin: 15px 8px;
+    max-width: 100px;
+    max-height: 30px;
+	height: 30px;
+
+    display: block;
+    background-size: contain;
+	background-position: left center;
+	background-repeat: no-repeat;
+  }
     .name_product {
         margin-bottom:18px;
         padding:0 8px;
