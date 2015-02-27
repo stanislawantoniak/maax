@@ -935,170 +935,9 @@ Mall.listing = {
 		return this;
 	},
 
-    isVendorLandingpage: function() {
-        return jQuery('.umicrosite-index-landingpage').length;
-    },
-
 	/**
-	 * Moves filters sidebar to mobile container.
-	 *
+	 * @param node
 	 * @returns {Mall.listing}
-	 */
-	updateFiltersMobile: function() {
-		if(this.getCurrentMobileFilterState() == 0 && !this.isVendorLandingpage()) {
-			this.positionFilters();
-			this.setCurrentMobileFilterState(1);
-		}
-		if(!jQuery('.'+this.getMobileFiltersOverlayClass()).length) {
-			this.getFilters().hide();
-		}
-
-		return this;
-	},
-
-    /**
-     * roll and unroll sidebar sections for mobile and desktop resolution
-     * depends on current state of sidebar (mobile or desktop)
-     *
-     * @param scope
-     * @private
-     */
-    _processRollSections: function(scope) {
-        "use strict";
-        var scope    = scope || this.getFilters(),
-            attr     = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled',
-            sections = jQuery(".section", scope),
-            self     = this;
-
-        sections.each(function() {
-            var state = jQuery(this).attr(attr) == 'open' ? 1 : 0;
-            self._doRollSection(jQuery(this), state, false);
-        });
-    },
-	/**
-	 * Attaches delete single filter action.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	attachDeleteCurrentFilter: function () {
-		"use strict";
-		jQuery('.current-filter, .view_filter').on('click', '.label>i', function(event) {
-			var removeUrl = jQuery(event.target).attr("data-params");
-			location.href = removeUrl;
-			event.preventDefault();
-			var lLabel = jQuery(this).closest('dd').find('.label').length - 1;
-			if (lLabel >= 1) {
-				jQuery(this).closest('.label').remove();
-
-			} else {
-				jQuery(this).closest('dl').remove();
-			};
-			if (lLabel == 0) {
-				jQuery('#view-current-filter').find('.view_filter').css('margin-top', 20);
-			}
-		});
-		jQuery('.current-filter, .view_filter').on('click', '.action a', function(event) {
-			jQuery(this).closest('dl').remove();
-			jQuery('#view-current-filter').find('.view_filter').css('margin-top', 24);
-		});
-
-		return this;
-	},
-
-	/**
-	 * Moves filters sidebar to desktop container.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	updateFiltersDesktop: function() {
-		if(this.getCurrentMobileFilterState() == 1 && !this.isVendorLandingpage()) {
-			this.setCurrentMobileFilterState(0);
-			this._processRollSections();
-            this.closeMobileFilters();
-		}
-		return this;
-	},
-
-	/**
-	 * gets filters main block
-	 * @returns {*}
-	 */
-	getFiltersBlock: function() {
-		return jQuery('#solr_search_facets');
-	},
-
-	/**
-	 * Updates filters sidebar variables according to screen width
-	 */
-	updateFilters: function() {
-		var self = Mall.listing;
-		if(self.isDisplayMobile()) {
-			self.updateFiltersMobile();
-		} else {
-			self.updateFiltersDesktop();
-		}
-		self._processRollSections();
-		self.positionFilters();
-	},
-
-	positionFilters: function() {
-		var self = Mall.listing;
-		var filters = self.getFiltersBlock();
-		if(this.isDisplayMobile()) {
-			filters
-				.removeClass(self.getFiltersClassDesktop())
-				.addClass(self.getFiltersClassMobile())
-				.css({
-					top: '',
-					left: '',
-					height: jQuery(window).height()
-				});
-		} else {
-			var content = self.getContentBlock();
-			filters
-				.removeClass(self.getFiltersClassMobile())
-				.addClass(self.getFiltersClassDesktop())
-				.css({
-					'top': content.offset().top,
-					'left': content.offset().left + 15,
-					'height': ''
-				});
-
-		}
-		self.setMainSectionHeight();
-		return self;
-	},
-
-	setMainSectionHeight: function() {
-		var mainSection = jQuery('section#main');
-		if(!this.isDisplayMobile()) {
-			var filters = Mall.listing.getFiltersBlock();
-			mainSection.css('min-height', (filters.height() + 50) + 'px');
-			jQuery(window).trigger("scroll"); //footer fix
-		} else {
-			mainSection.css('min-height', '');
-		}
-	},
-
-	isDisplayMobile: function() {
-		return jQuery('.hidden-xs').css('display') == "none";
-	},
-
-	getContentBlock: function() {
-		return jQuery('#content');
-	},
-
-	getFiltersClassMobile: function() {
-		return "filters-mobile";
-	},
-
-	getFiltersClassDesktop: function() {
-		return "filters-desktop";
-	},
-
-	/**
-	 * @param {object} node
-	 * @returns {void}
 	 */
 	nodeChanged: function (node){
 		this.reloadListing();
@@ -1452,6 +1291,9 @@ Mall.listing = {
 
 		// All filters
 		var filters = jQuery(content.filters);
+		if(this.getMobileFiltersOverlay().is(":visible")) {
+			filters.show();
+		}
 		this.getFilters().replaceWith(filters);
 
 		this.initFilterEvents(filters);
@@ -1537,13 +1379,18 @@ Mall.listing = {
 			}
 
 			active.click(function() {
-				jQuery(this).parent().parent().detach();
-				unCheckbox(jQuery(this).data('input'));
-				if (active.length == 1) {
-					detachActive();
+				var me = jQuery(this);
+				if(!me.parent().hasClass('query-text-iks')) {
+					me.parents('dd').detach();
+					unCheckbox(me.data('input'));
+					if (active.length == 1) {
+						detachActive();
+					}
+					self.reloadListingNow();
+					return false;
+				} else {
+					self.showAjaxLoading();
 				}
-				self.reloadListingNow();
-				return false;
 			});
 
 			remove.click(function() {
@@ -1568,46 +1415,70 @@ Mall.listing = {
 		mobileFilterBtn.click(Mall.listing.openMobileFilters);
 	},
 
+
+	/**
+	 *
+	 *
+	 * FILTERS START
+	 *
+	 *
+	 **/
 	openMobileFilters: function(e) {
 		e.preventDefault();
 		var self = Mall.listing;
 		self.getFilters().show();
-		jQuery('html').addClass(self.getMobileFiltersOpenedClass);
-		jQuery('body').append(self.getMobileFiltersOverlay());
-		self.processCloseMobileFilters();
+		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
+		self.showMobileFiltersOverlay();
+		self.triggerResize();
 	},
 
 	closeMobileFilters: function() {
 		var self = Mall.listing;
 		self.getFilters().hide();
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
-		jQuery('body').find('.'+self.getMobileFiltersOverlayClass()).remove();
-	},
-
-	processCloseMobileFilters: function() {
-		this.getMobileFiltersOverlay().click(Mall.listing.closeMobileFilters);
+		self.hideMobileFiltersOverlay();
+		self.triggerResize();
 	},
 
 	getMobileFiltersOpenedClass: function() {
 		return 'noscroll-filters';
 	},
 
-	getMobileFiltersOverlay: function() {
-		var overlayClass = this.getMobileFiltersOverlayClass();
-		var currentOverlay = jQuery('.'+overlayClass);
-		if(!currentOverlay.length) {
-			return jQuery('<div class="' + overlayClass + '"></div>');
-		} else {
-			return currentOverlay;
-		}
+	/**
+	 * variable that stores overlay
+	 */
+	_mobile_filters_overlay: '',
+
+	showMobileFiltersOverlay: function() {
+		this.getMobileFiltersOverlay().show();
 	},
 
-	getMobileFiltersOverlayClass: function() {
+	hideMobileFiltersOverlay: function() {
+		this.getMobileFiltersOverlay().hide();
+	},
+
+	getMobileFiltersOverlay: function() {
+		if(!this._mobile_filters_overlay.length) {
+			var overlayId = this.getMobileFiltersOverlayId();
+			jQuery('body').append(
+				jQuery('<div id="' + overlayId + '"></div>')
+			);
+			this._mobile_filters_overlay = jQuery('#'+overlayId);
+		}
+		return this._mobile_filters_overlay;
+	},
+
+	getMobileFiltersOverlayId: function() {
 		return 'filters-overlay';
 	},
 
 	getMobileFilterBtn: function() {
 		return jQuery("#filters-btn .actionViewFilter");
+	},
+
+	/** trigger window resize for correct filter positioning **/
+	triggerResize: function() {
+		jQuery(window).resize();
 	},
 
 	getProducts: function(){
@@ -1642,25 +1513,6 @@ Mall.listing = {
 		return jQuery("#solr_search_facets");
 	},
 
-	getToolbar: function(){
-		return jQuery("#sort-criteria");
-	},
-
-	getSortSelect: function(scope) {
-		var scope = scope || this.getToolbar();
-		return jQuery('#sort-by',scope);
-	},
-
-	getDirInput: function(scope) {
-		var scope = scope || this.getToolbar();
-		return jQuery('#sort-dir',scope);
-	},
-
-	getSortInput: function(scope) {
-		var scope = scope || this.getToolbar();
-		return jQuery('#sort-val',scope);
-	},
-
 	/**
 	 * Return current mobile filters state. Is mobile or not.
 	 *
@@ -1672,7 +1524,7 @@ Mall.listing = {
 
 
 	initScrolls: function(scope, opts){
-        scope = scope || jQuery(".solr_search_facets");
+		scope = scope || jQuery(".solr_search_facets");
 		opts = opts || {};
 
 		// Destroy scrolls if exists;
@@ -1691,37 +1543,162 @@ Mall.listing = {
 		}
 	},
 
-    destroyScrolls: function(scope) {
-        scope = scope || jQuery(".solr_search_facets");
-        jQuery(".scrollable.mCustomScrollbar", scope).mCustomScrollbar("destroy");
-    },
+	destroyScrolls: function(scope) {
+		scope = scope || jQuery(".solr_search_facets");
+		jQuery(".scrollable.mCustomScrollbar", scope).mCustomScrollbar("destroy");
+	},
+
+	isVendorLandingpage: function() {
+		return jQuery('.umicrosite-index-landingpage').length;
+	},
 
 	/**
+	 * Moves filters sidebar to mobile container.
 	 *
-	 * @param {type} scope
-	 * @returns {undefined}
+	 * @returns {Mall.listing}
 	 */
-	initSortEvents: function(scope){
-		var sortingSelect = this.getSortSelect(scope),
-			self = this;
-		//sortingSelect.selectbox();
-        sortingSelect.selectBoxIt({
-            autoWidth: false
-        });
-		if(this.getPushStateSupport()) {
-			sortingSelect.change(function () {
-				var selected = jQuery(this).find(":selected");
-				self.setSort(selected.data('sort'));
-				self.setDir(selected.data('dir'));
-				self.reloadListing();
-			});
-		} else {
-			sortingSelect.change(function () {
-				var url = jQuery(this).find(":selected").data("url");
-				self.showAjaxLoading();
-				window.location = url;
-			});
+	updateFiltersMobile: function() {
+		if(this.getCurrentMobileFilterState() == 0 && !this.isVendorLandingpage()) {
+			this.positionFilters();
+			this.setCurrentMobileFilterState(1);
 		}
+		if(!jQuery('#'+this.getMobileFiltersOverlayId()).length) {
+			this.getFilters().hide();
+		}
+
+		return this;
+	},
+
+	/**
+	 * roll and unroll sidebar sections for mobile and desktop resolution
+	 * depends on current state of sidebar (mobile or desktop)
+	 *
+	 * @param scope
+	 * @private
+	 */
+	_processRollSections: function(scope) {
+		"use strict";
+		var scope    = scope || this.getFilters(),
+			attr     = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled',
+			sections = jQuery(".section", scope),
+			self     = this;
+
+		sections.each(function() {
+			var state = jQuery(this).attr(attr) == 'open' ? 1 : 0;
+			self._doRollSection(jQuery(this), state, false);
+		});
+	},
+	/**
+	 * Attaches delete single filter action.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	attachDeleteCurrentFilter: function () {
+		"use strict";
+		jQuery('.current-filter, .view_filter').on('click', '.label>i', function(event) {
+			var removeUrl = jQuery(event.target).attr("data-params");
+			location.href = removeUrl;
+			event.preventDefault();
+			var lLabel = jQuery(this).closest('dd').find('.label').length - 1;
+			if (lLabel >= 1) {
+				jQuery(this).closest('.label').remove();
+
+			} else {
+				jQuery(this).closest('dl').remove();
+			};
+			if (lLabel == 0) {
+				jQuery('#view-current-filter').find('.view_filter').css('margin-top', 20);
+			}
+		});
+		jQuery('.current-filter, .view_filter').on('click', '.action a', function(event) {
+			jQuery(this).closest('dl').remove();
+			jQuery('#view-current-filter').find('.view_filter').css('margin-top', 24);
+		});
+
+		return this;
+	},
+
+	/**
+	 * Moves filters sidebar to desktop container.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	updateFiltersDesktop: function() {
+		if(this.getCurrentMobileFilterState() == 1 && !this.isVendorLandingpage()) {
+			this.setCurrentMobileFilterState(0);
+			this._processRollSections();
+			this.closeMobileFilters();
+		}
+		return this;
+	},
+
+	/**
+	 * Updates filters sidebar variables according to screen width
+	 */
+	updateFilters: function() {
+		var self = Mall.listing;
+		if(self.isDisplayMobile()) {
+			self.updateFiltersMobile();
+		} else {
+			self.updateFiltersDesktop();
+		}
+		self._processRollSections();
+		self.positionFilters();
+	},
+
+	positionFilters: function() {
+		var self = Mall.listing;
+		var filters = self.getFilters();
+		if(this.isDisplayMobile()) {
+			filters
+				.removeClass(self.getFiltersClassDesktop())
+				.addClass(self.getFiltersClassMobile())
+				.css({
+					top: '',
+					left: '',
+					height: jQuery(window).height()
+				});
+		} else {
+			var content = self.getContentBlock();
+			filters
+				.removeClass(self.getFiltersClassMobile())
+				.addClass(self.getFiltersClassDesktop())
+				.css({
+					'top': content.offset().top,
+					'left': content.offset().left + 15,
+					'height': ''
+				});
+
+		}
+		self.setMainSectionHeight();
+		return self;
+	},
+
+	setMainSectionHeight: function() {
+		var mainSection = jQuery('section#main');
+		if(!this.isDisplayMobile()) {
+			var filters = Mall.listing.getFilters();
+			mainSection.css('min-height', (filters.height() + 50) + 'px');
+			Mall.listing.triggerResize(); //footer fix
+		} else {
+			mainSection.css('min-height', '');
+		}
+	},
+
+	isDisplayMobile: function() {
+		return jQuery('.hidden-xs').css('display') == "none";
+	},
+
+	getContentBlock: function() {
+		return jQuery('#content');
+	},
+
+	getFiltersClassMobile: function() {
+		return "filters-mobile";
+	},
+
+	getFiltersClassDesktop: function() {
+		return "filters-desktop";
 	},
 
 	delegateFilterEvents: function() {
@@ -1749,6 +1726,7 @@ Mall.listing = {
 			}
 		});
 
+		// filters show more btn
 		jQuery(document).delegate(filtersId+' .showmore-filters','click',function(e) {
 			e.preventDefault();
 			var me = jQuery(this);
@@ -1759,6 +1737,7 @@ Mall.listing = {
 			);
 		});
 
+		// show/hide clear button on filter select/unselect
 		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
 			e.preventDefault();
 			var me = jQuery(this).parents('.section'),
@@ -1772,7 +1751,7 @@ Mall.listing = {
 			}
 		});
 
-
+		// handle filters clearing
 		var clearBtnSelector = filtersId+' .action.clear a';
 		if(self.getPushStateSupport()) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
@@ -1787,6 +1766,64 @@ Mall.listing = {
 			});
 		}
 
+		// handle mobile filters overlay click
+		jQuery(document).delegate('#'+self.getMobileFiltersOverlayId(),'click', self.closeMobileFilters);
+
+	},
+
+	/**
+	 *
+	 *
+	 * FILTERS END
+	 *
+	 *
+	 **/
+
+	getToolbar: function(){
+		return jQuery("#sort-criteria");
+	},
+
+	getSortSelect: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-by',scope);
+	},
+
+	getDirInput: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-dir',scope);
+	},
+
+	getSortInput: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-val',scope);
+	},
+
+	/**
+	 *
+	 * @param {type} scope
+	 * @returns {undefined}
+	 */
+	initSortEvents: function(scope){
+		var sortingSelect = this.getSortSelect(scope),
+			self = this;
+		//sortingSelect.selectbox();
+        sortingSelect.selectBoxIt({
+            autoWidth: false
+        });
+		if(this.getPushStateSupport()) {
+			sortingSelect.change(function () {
+				var selected = jQuery(this).find(":selected");
+				self.setSort(selected.data('sort'));
+				self.setDir(selected.data('dir'));
+				self.reloadListing();
+			});
+		} else {
+			sortingSelect.change(function () {
+				var url = jQuery(this).find(":selected").data("url");
+				self.showAjaxLoading();
+				window.location = url;
+			});
+		}
 	},
 
 	/**

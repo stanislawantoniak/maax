@@ -15,8 +15,15 @@
                     <div class="vendor-logo-items">
                         <h3><?php echo $this->__("popular brands"); ?></h3>
                         <?php $n = 1; ?>
+<?php $vendorsCount = Mage::getStoreConfig('design/popular_brands/popular_brands_count');
 
-                        <?php for($i=1; $i<=10; $i++): ?>
+$makeFakeLoop = count($vendors) < $vendorsCount;
+if($makeFakeLoop) {
+    $lastVendor = new stdClass();
+}
+
+?>
+
                             <?php foreach ($vendors as $v): ?>
                                 <div class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item">
                                     <a href="<?php echo $this->getVendorBaseUrl($v); ?>">
@@ -58,10 +65,69 @@
                                     <div class="clearfix visible-lg"></div>
                                 <?php endif; ?>
 
+                                <!--cache last element for  fake loop only for testing!!!-->
+                                <?php if($makeFakeLoop && $n==count($vendors)){
+                                    $lastVendor = $v;
+                                }?>
+                                <!--cache last element for  fake loop only for testing!!!-->
+
+
+
                                 <?php $n++; ?>
+
                             <?php endforeach; ?>
 
-                        <?php endfor; ?>
+
+                        <!--                        fake loop only for testing!!!-->
+                        <?php if($makeFakeLoop):?>
+                            <?php for($i=(count($vendors)+1); $i<=$vendorsCount; $i++): ?>
+                                <div class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item">
+                                    <a href="<?php echo $this->getVendorBaseUrl($lastVendor); ?>">
+                                        <span class="pop-shop-img-wr">
+                                            <img src="<?php echo $this->getVendorResizedLogoUrl($lastVendor, 100,44); ?>" alt="">
+                                        </span>
+                                        <span class="vendor-logo-item-name">
+                                            <?php echo $this->getVendorName($lastVendor); ?> &gt;
+                                        </span>
+                                    </a>
+                                </div>
+
+                                <?php if ($n % 2 == 0): ?>
+                                    <div class="clearfix visible-xxs"></div>
+                                <?php endif; ?>
+
+                                <?php if ($n % 3 == 0): ?>
+                                    <div class="clearfix visible-xs"></div>
+                                <?php endif; ?>
+
+                                <?php if ($n % 4 == 0): ?>
+                                    <div class="clearfix visible-xss-landscape"></div>
+                                <?php endif; ?>
+
+                                <?php if ($n % 5 == 0): ?>
+                                    <div class="clearfix visible-xs-landscape"></div>
+                                <?php endif; ?>
+
+                                <?php if ($n % 6 == 0): ?>
+                                    <div class="clearfix visible-sm"></div>
+                                    <div class="clearfix visible-md"></div>
+                                <?php endif; ?>
+
+                                <?php if ($n % 7 == 0): ?>
+                                    <div class="clearfix visible-sm-landscape"></div>
+                                <?php endif; ?>
+
+                                <?php if ($n % 8 == 0): ?>
+                                    <div class="clearfix visible-lg"></div>
+                                <?php endif; ?>
+
+
+                                <?php $n++; ?>
+                            <?php endfor; ?>
+                        <?php endif; ?>
+                        <!--                        fake loop only for testing!!!-->
+
+
                     </div>
                 </div>
             </div>
