@@ -155,6 +155,8 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
     public function getValueSelectOptions()
     {
         $this->_prepareValueOptions();
+        Mage::log($this->getData('value_select_options'), null, 'mylog.log');
+
         return $this->getData('value_select_options');
     }
 
