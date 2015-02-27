@@ -426,6 +426,27 @@
 
 	</zolagomodago_index_index>
 
+    <zolagomodago_brands_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Shops</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml">
+
+                   </block>
+        </reference>
+    </zolagomodago_brands_index>
+
 	<solrbridge_solrsearch_category_view>
 		<remove name="mana.catalog.leftnav"/>
 		<remove name="solrsearch_category_view"/>

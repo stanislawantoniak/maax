@@ -1,36 +1,20 @@
 <?php
-/**
- * Author: Paweł Chyl <pawel.chyl@orba.pl>
- * Date: 25.04.14
- */
 
-class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
+class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 {
-	/*
-	 * Potrzebuję tutaj kolekcję, która będzie zawierać:
-	 * - obrazek maksymalnie 130x74px
-	 * - url gdzie ma kierować element listy lub klucz i nazwę routa
-	 * - tekst - nazwę vendora
-	 *
-	 * Dodatkowo URL do ZOBACZ WIĘCEJ MAREK
-	 */
-	
 	/**
-	 * @todo add website filter (implement before) & cache results
 	 * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
 	 */
-	public function getVendorColleciton() {
+	public function getVendorCollection() {
 		if(!$this->hasData("vendor_collection")){
-            $vendorsCount = Mage::getStoreConfig('design/popular_brands/popular_brands_count');
+
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
 			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
             $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
 //			$collection->setOrder("vendor_name");
-            $collection->setOrder("sequence", "DESC");
-            $collection->setPageSize($vendorsCount);
-			// Load serialized data
 
+			// Load serialized data
 			foreach($collection as $vendor){
 				Mage::helper('udropship')->loadCustomData($vendor);
 			}
@@ -74,12 +58,6 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	public function getVendorBaseUrl(Unirgy_Dropship_Model_Vendor $vendor) {
 		return Mage::helper("umicrosite")->getVendorBaseUrl($vendor);
 	}
-	
-	/**
-	 * @return string
-	 */
-	public function getViewMoreUrl() {
-		return $this->getUrl("modago/brands");
-	}
+
 	
 } 
