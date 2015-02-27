@@ -922,7 +922,6 @@ jQuery.noConflict();
 
 		shippingHelper();
 		openFormReview();
-		listinghelper();
 
 		function openFormReview() {
 			var footerComments = $('.footer_comments');
@@ -945,57 +944,6 @@ jQuery.noConflict();
 			var selText = $(this).text();
 			$(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
 		});
-
-		//$(document).ready(function () {
-		//	$(".menu-5columns dt a, .menu-5columns dt span,.menu-5columns dd a").each(function (i, item) {
-        //
-			//	if ($(item).textWidth() >= 152) {
-			//		$(item).addClass("long-wrap");
-			//	}
-			//})
-		//});
-        //
-		//$.fn.textWidth = function (text, font) {
-		//	if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-		//	$.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-		//	return $.fn.textWidth.fakeEl.width();
-		//};
-
-		function listinghelper() {
-
-			var listProducts = $('#items-product');
-			var listItemsProducts = listProducts.children('.item');
-			listItemsProducts.each(function(index, el) {
-
-
-				var children = $(this).children('.box_listing_product');
-				var widthThis = children.innerWidth()-15;
-
-				var childrenPrice = children.find('.col-price').innerWidth();
-				var childrenLike = children.find('.like').innerWidth();
-
-				var widthBlock = parseInt(childrenPrice + childrenLike);
-
-				var widthThisHalf = parseInt(widthThis/2);
-
-				if (widthBlock < widthThis) {
-
-				}
-				if (widthBlock > 0 && //To prevent using this script before products loaded
-					widthBlock > widthThis) {
-					if (childrenPrice > widthThisHalf) {
-						$(this).find('.price').addClass('price-two-line');
-					} else {
-						$(this).find('.price').removeClass('price-two-line');
-					}
-					if (childrenLike > widthThisHalf) {
-						$(this).find('.price').addClass('like-two-line');
-					} else {
-						$(this).find('.price').removeClass('like-two-line');
-					}
-				}
-			});
-		}
 
 		function shippingHelper() {
 			var tableWrapper = $('.tableWrapper'),
@@ -1084,8 +1032,6 @@ jQuery.noConflict();
 
 			var intFrameWidth = window.innerWidth;
 			if($(window).width() != prevW) {
-				listinghelper();
-
 				if (intFrameWidth > 767) {
 					$('.toggle-xs').each(function(index, el) {
 						$(this).find('.main').show();
