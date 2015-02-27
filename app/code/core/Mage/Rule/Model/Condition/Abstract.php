@@ -322,11 +322,13 @@ abstract class Mage_Rule_Model_Condition_Abstract
             return '...';
         }
 
+        Mage::log('start =================', null, 'mylog.log');
+
         $options = $this->getValueSelectOptions();
 
         Mage::log($value, null, 'mylog.log');
         Mage::log($options, null, 'mylog.log');
-        Mage::log('==================', null, 'mylog.log');
+        Mage::log('stop ==================', null, 'mylog.log');
 
 
         $valueArr = array();
