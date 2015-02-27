@@ -93,9 +93,8 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
                 ->load()
                 ->toOptionArray();
         } elseif ($this->getAttribute() === 'is_in_stock') {
-            $selectOptions = array();
-            $options = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
-            $selectOptions = $options;
+//            $selectOptions = array();
+            $selectOptions = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
 //            foreach ($options as $option) {
 //                $selectOptions[$option['value']] = $option['label'];
 //            }
@@ -116,10 +115,6 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
         // Set new values only if we really got them
         if ($selectOptions !== null) {
             // Overwrite only not already existing values
-            Mage::log($selectOptions, null, 'mylog.log');
-            Mage::log(!$selectReady, null, 'mylog.log');
-
-
             if (!$selectReady) {
                 $this->setData('value_select_options', $selectOptions);
             }
@@ -160,8 +155,6 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
     public function getValueSelectOptions()
     {
         $this->_prepareValueOptions();
-        Mage::log($this->getData('value_select_options'), null, 'mylog.log');
-
         return $this->getData('value_select_options');
     }
 
