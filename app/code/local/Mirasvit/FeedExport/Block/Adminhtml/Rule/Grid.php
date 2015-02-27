@@ -49,9 +49,6 @@ class Mirasvit_FeedExport_Block_Adminhtml_Rule_Grid extends Mage_Adminhtml_Block
             'index'  => 'name',
         ));
 
-        Mage::log(Mage::getSingleton('feedexport/system_config_source_ruleType')->toOptions(), null, 'mylog.log');
-        Mage::log(Mage::getSingleton('feedexport/system_config_source_ruleType')->toOptionsArray(), null, 'mylog.log');
-
         $this->addColumn('type', array(
             'header'  => __('Type'),
             'align'   => 'left',
