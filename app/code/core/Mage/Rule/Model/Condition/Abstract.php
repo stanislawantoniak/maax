@@ -323,7 +323,7 @@ abstract class Mage_Rule_Model_Condition_Abstract
         }
 
         Mage::log('start =================', null, 'mylog.log');
-
+        Mage::log(get_class($this), null,'mylog.log');
         $options = $this->getValueSelectOptions();
 
 //        Mage::log($value, null, 'mylog.log');
