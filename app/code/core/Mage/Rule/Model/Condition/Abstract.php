@@ -326,8 +326,8 @@ abstract class Mage_Rule_Model_Condition_Abstract
 
         $options = $this->getValueSelectOptions();
 
-        Mage::log($value, null, 'mylog.log');
-        Mage::log($options, null, 'mylog.log');
+//        Mage::log($value, null, 'mylog.log');
+//        Mage::log($options, null, 'mylog.log');
         Mage::log('stop ==================', null, 'mylog.log');
 
 
