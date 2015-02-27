@@ -85,6 +85,9 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
 
         // Get array of select options. It will be used as source for hashed options
         $selectOptions = null;
+        Mage::log('atrybut:', null, 'mylog.log');
+        Mage::log($this->getAttribute(), null, 'mylog.log');
+
         if ($this->getAttribute() === 'attribute_set_id') {
             $entityTypeId = Mage::getSingleton('eav/config')
                 ->getEntityType('catalog_product')->getId();
