@@ -262,12 +262,9 @@ abstract class Mage_Rule_Model_Condition_Abstract
         if ($this->hasValueOption()) {
             $valueOption = (array) $this->getValueOption();
         }
-        Mage::log($valueOption, null, 'mylog.log');
-
         foreach ($valueOption as $k => $v) {
             $opt[] = array('value' => $k, 'label' => $v);
         }
-        Mage::log($opt, null, 'mylog.log');
         return $opt;
     }
 
@@ -322,6 +319,10 @@ abstract class Mage_Rule_Model_Condition_Abstract
         }
 
         $options = $this->getValueSelectOptions();
+
+        Mage::log($value, null, 'mylog.log');
+        Mage::log($options, null, 'mylog.log');
+
         $valueArr = array();
         if (!empty($options)) {
             foreach ($options as $o) {
