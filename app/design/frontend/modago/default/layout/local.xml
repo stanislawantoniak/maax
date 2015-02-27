@@ -552,6 +552,13 @@
             </action>
         </reference>
 
+	    <reference name="before_body_end">
+		    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+			    <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+			    <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+		    </block>
+	    </reference>
+
         <reference name="content">
             <!--removing category listing-->
             <remove name="solrsearch_product_list_header"/>
