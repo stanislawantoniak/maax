@@ -77,20 +77,20 @@ $_collection = $this->getCollection();
                                         <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
                                              data-idproduct="<?php echo $product->getId(); ?>"
                                              data-status="<?php echo (int)$product->getInMyWishlist(); ?>">
-                                            <span class="icoLike">
-                                                <img class="img-01"
-                                                     src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
-                                                     alt=""/>
-                                                <img class="img-02"
-                                                      src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>"
-                                                      alt=""/>
-                                            </span>
                                             <span class="like_count">
                                                 <span>
                                                     <?php echo $inMyWishlist; ?>
                                                     <?php echo $plusSign; ?>
                                                 </span>
-                                                <?php echo $wishlistCount; ?>
+	                                            <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
+                                            </span>
+	                                        <span class="icoLike">
+                                                <img class="img-01"
+                                                     src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
+                                                     alt=""/>
+                                                <img class="img-02"
+                                                     src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>"
+                                                     alt=""/>
                                             </span>
                                             <div class="toolLike"></div>
                                         </div>
