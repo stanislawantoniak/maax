@@ -49,7 +49,7 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	public function getPdfUrl(Zolago_Rma_Model_Rma $rma) {
 		$helperTrack = Mage::helper('zolagorma/tracking');
         /** @var Zolago_Dhl_Helper_Data $helperDhl */
-		$helperDhl = Mage::helper('zolagodhl');
+		$helperDhl = Mage::helper('orbashipping/carrier_dhl');
 		$customer = Mage::getSingleton('customer/session')->getCustomer();
 		
 		$track = $helperTrack->getRmaTrackingForCustomer($rma, $customer);

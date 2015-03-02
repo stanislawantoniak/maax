@@ -54,21 +54,6 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
 		return date('Y-m-d H:i:s', time()+$repeatIn);		
 	}
 	
-    public function addUdpoComment($udpo, $comment, $isVendorNotified=false, $visibleToVendor=false, $userName = false)
-    {
-		if (!$userName) {
-			$userName = self::USER_NAME_COMMENT;
-		}
-		$commentModel = Mage::getModel('udpo/po_comment')
-			->setParentId($udpo->getId())
-			->setComment($comment)
-			->setCreatedAt(now())
-			->setIsVendorNotified($isVendorNotified)
-			->setIsVisibleToVendor($visibleToVendor)
-			->setUdropshipStatus(Mage::helper("udpo")->getUdpoStatusName($udpo))
-			->setUsername($userName);
-		$commentModel->save();
-	}
 	
 	/**
 	 * Check if DHL Waybill cna be shown
@@ -89,68 +74,22 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		return $canShow;
 	}
-    public static function getAlertText($int) {
-        switch ($int) {
-            case self::ALERT_DHL_ZIP_ERROR:
-                return "Zip code in shipment address is not valid. There will be a problem when shipping to that address.";
-                break;
-        }
-        return "";
-    }
     /**
-     * Check if entered zip available on DHL
-     * @param $country
-     * @param $zip
-     *
-     * @return bool
+     * 
+     * @param 
+     * @return 
      */
-    public function isDHLValidZip($country, $zip)
-    {   
-        $dhlValidZip = true;
-        if (!empty($zip)) {
-            $zip = str_replace('-', '', $zip);
-            $zipModel = Mage::getModel('zolagodhl/zip');
-            $source = $zipModel->load($zip, 'zip')->getId();
-            if (!empty($source)) {
-                return true;
-            } else {
-                $dhlClient = Mage::getModel('zolagodhl/client');
-                $login = Mage::helper('core')->decrypt($this->getDhlLogin());
-                $password = Mage::helper('core')->decrypt($this->getDhlPassword());
-                $dhlClient->setAuth($login, $password);                
-                $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
-                if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
-                    $empty = new StdClass;
-                    $empty->domesticExpress9 = false;
-                    $empty->domesticExpress12 = false;
-                    $empty->deliveryEvening = false;
-                    $empty->deliverySaturday = false;
-                    $empty->exPickupFrom     = 'brak';
-                    $empty->exPickupTo       = 'brak';
-                    $empty->drPickupFrom     = 'brak';
-                    $empty->drPickupTo       = 'brak';
-                    if ($ret->getPostalCodeServicesResult == $empty) {
-                        $dhlValidZip = false;
-                    } else {
-                        $dhlValidZip = true;
-                    }
-
-                    if ($dhlValidZip) {
-                        $zipModel = Mage::getResourceModel('zolagodhl/zip');
-                        $zipModel->updateDhlZip($country, $zip);
-                    }
-
-                } else {
-                    if (isset($ret['error'])) {
-                        $this->_log("Check PL zip availability:" . $ret['error'], 'dhl_zip.log');
-                    } else {
-                        $this->_log("Check PL zip availability:error", 'dhl_zip.log');
-                    }
-                    //if there was an communication error forms should PASS validation
-                    $dhlValidZip = false;
-                }
-            }
-        }
-        return $dhlValidZip;
-    }
+     public function getShippingManager($carrier) {
+         switch ($carrier) {
+             case Orba_Shipping_Model_Carrier_Dhl::CODE:
+                 $model = Mage::getModel('orbashipping/carrier_dhl');
+                 break;
+             case Orba_Shipping_Model_Carrier_Ups::CODE:
+                 $model = Mage::getModel('orbashipping/carrier_ups');
+                 break;
+             default:
+                 $model = Mage::getModel('orbashipping/carrier_default');
+         }
+         return $model;
+     }
 }

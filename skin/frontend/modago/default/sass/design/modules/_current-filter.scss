@@ -150,23 +150,6 @@
       @media (max-width: $screen-xs-max) {
         max-height: 42px;
       }
-      &.desktop-logo {
-        visibility: visible;
-        width: initial;
-        @media (max-width: $screen-xs-max) {
-          visibility: hidden;
-          width: 0;
-        }
-      }
-      &.mobile-logo {
-        visibility: hidden;
-        width: 0;
-        @media (max-width: $screen-xs-max) {
-          visibility: visible;
-          width: initial;
-          max-height: 42px;
-        }
-      }
     }
     .vendor-type{
       display: inline-block;

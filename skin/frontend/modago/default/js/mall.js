@@ -4,7 +4,7 @@
 
 var Mall = {
     _data: {},
-    _product_template: '<tr><td class="thumb"><a href="{{url}}"><img src="{{image_url}}" alt=""></a></td><td class="desc"><p class="name_product"><a href="{{url}}">{{name}}</a></p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
+    _product_template: '<tr id="product-{{number}}"><td class="thumb"><a href="{{url}}"><img src="{{image_url}}" alt=""></a></td><td class="desc"><p class="name_product"><a href="{{url}}">{{name}}</a></p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
     _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
@@ -173,15 +173,21 @@ var Mall = {
 	    var productList = jQuery("#product-list");
 	    productList.html("");
         if(products.length == 0) {
-	        productList.html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+	        productList.html('<p style="text-align: center;margin-top:20px;">' + Mall.i18nValidation.__("No products in basket.", "No products in basket.") + '</p>');
         } else {
             jQuery.each(products, function(key) {
-                if(typeof products[key].options[0] != "undefined") {
-                    products[key].attr_label = products[key].options[0].label;
-                    products[key].attr_value = products[key].options[0].value;
+                if(typeof products[key].options != "undefined") {
+                    var isSimpleProduct = typeof products[key].options[0] == "undefined";
+                    products[key].attr_label = isSimpleProduct ? '' : products[key].options[0].label;
+                    products[key].attr_value = isSimpleProduct ? '' : products[key].options[0].value;
                     products[key].currency_symbol = Mall._data.cart.currency_symbol;
                     products[key].unit_price = number_format(products[key].unit_price, 2, ",", " ");
+                    products[key].number = key;
 	                productList.append(Mall.replace(Mall._product_template, products[key]));
+                    if (isSimpleProduct) {
+                        //fix for size attr in template ( left ":" )
+                        jQuery('#product-' + key + ' .size', productList).html('');
+                    }
                 }
             });
         }
@@ -540,7 +546,7 @@ var Mall = {
 
     disableSearchNoQuery: function() {
         jQuery('#header_top_block_left form, #dropdown-search form').submit(function(e) {
-            if(!jQuery('input[name=q]', this).val().length) {
+            if(!jQuery.trim(jQuery('input[name=q]', this).val()).length) {
                 e.preventDefault();
             }
         });
