@@ -63,7 +63,7 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
         // ALWAYS ADD LOGO.PNG TO ATTACHMENTS
         /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
         $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
-        if (!$mailer->isLogoAdded()) {
+        if (!$mailer->isLogoAdded($variables)) {
             $variables['use_attachments'] = true;
             $mailer->setTemplateParams($variables);
             $variables = $mailer->getTemplateParams();
