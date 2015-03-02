@@ -218,7 +218,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
      * @param int $timestamp
      * @return array
      */
-    protected function _getDhlPostalService($timestamp,$zip) {
+    protected function _getDhlPostalService($zip,$timestamp) {
         $dhlClient = Mage::getModel('orbashipping/carrier_client_dhl');
         $login = $this->getDhlLogin();
         $password = $this->getDhlPassword();
@@ -258,7 +258,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
      * @return stdClass
      */
     public function getDhlPickupParamsForDay($timestamp,$zip) {
-        $ret = $this->_getDhlPostalService($timestamp,$zip);
+        $ret = $this->_getDhlPostalService($zip,$timestamp);
         return $ret;
     }
     /**
