@@ -88,7 +88,6 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
 		$carrierCode = $track->getCarrierCode () ;
 		if (in_array($carrierCode,$allowCarriers) 
-    	    // zolagodhl
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
 				$track->setNextCheck(date('Y-m-d H:i:s', time()));

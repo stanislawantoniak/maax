@@ -85,6 +85,24 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
 		$this->setPriority(1);
 		return $this;
 	}
+	
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+     public function getSenderAddress() {
+         $data = $this->getData();
+         $address = array (
+             'name'     => $data['company'],
+             'postcode' => $data['postcode'],
+             'city'     => $data['city'],
+             'country'  => $data['country_id'],
+             'street'   => $data['street'],
+             'phone'    => $data['phone'],
+        );
+        return $address;
+     }
     
 }
 

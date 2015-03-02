@@ -782,6 +782,11 @@ Mall.listing = {
 				: "Mall.wishlist.addFromSmallBlock(this);"
 		}).appendTo(priceBox);
 
+		jQuery("<span/>", {
+			"class": "like_count",
+			html: likeText + (parseInt(product.wishlist_count, 10) > 0 ? (product.wishlist_count > 99) ? "99+ " : product.wishlist_count : "") + " "
+		}).appendTo(like);
+
 		likeIco = jQuery("<span/>", {
 			"class": "icoLike"
 		}).appendTo(like);
@@ -797,12 +802,6 @@ Mall.listing = {
 			alt: "",
 			"class": "img-02"
 		}).appendTo(likeIco);
-
-		jQuery("<span/>", {
-			"class": "like_count",
-			html: likeText + (parseInt(product.wishlist_count, 10) > 0
-				? product.wishlist_count : "")
-		}).appendTo(like);
 
 		jQuery("<div/>", {
 			"class": "toolLike"

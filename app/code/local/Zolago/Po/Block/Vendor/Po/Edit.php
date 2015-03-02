@@ -32,11 +32,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         //Dhl zip validation
         $shippingId = $po->getShippingAddressId();
         $address = Mage::getModel('sales/order_address')->load($shippingId);
-
         $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
-        $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
+        $dhlActive = Mage::helper('orbashipping/carrier_dhl')->isActive();
         if ($dhlEnabled && $dhlActive) {
-            $dhlHelper = Mage::helper('zolagodhl');
+            $dhlHelper = Mage::helper('orbashipping/carrier_dhl');            
             $dhlValidZip = $dhlHelper->isDHLValidZip($address->getCountry(), $address->getPostcode());
             if (!$dhlValidZip) {
                 $alert[] = array(
@@ -124,7 +123,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function isShippignLetterFile($trackingNo) {
-		return Mage::helper("zolagodhl")->getIsDhlFileAvailable($trackingNo);
+		return Mage::helper("orbashipping/carrier_dhl")->getIsDhlFileAvailable($trackingNo);
 	}
 	
 	public function getAllStatuses() {
@@ -332,7 +331,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function canPosUseDhl() {
-		return Mage::helper('zolagodhl')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
+		return Mage::helper('orbashipping')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
 	}
 	
 	public function getMethodName($poShippingMethod) {

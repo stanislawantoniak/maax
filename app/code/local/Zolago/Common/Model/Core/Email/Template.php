@@ -58,6 +58,17 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
 		////////////////////////////////////////////////////////////////////////
 		// Start changes
 		////////////////////////////////////////////////////////////////////////
+
+        // GLOBAL HARDCODE
+        // ALWAYS ADD LOGO.PNG TO ATTACHMENTS
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+        $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
+        if (!$mailer->isLogoAdded()) {
+            $variables['use_attachments'] = true;
+            $mailer->setTemplateParams($variables);
+            $variables = $mailer->getTemplateParams();
+        }
+
 		if (!empty($variables['_ATTACHMENTS'])) {
             foreach ((array)$variables['_ATTACHMENTS'] as $a) {
                 if (is_string($a)) {

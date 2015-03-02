@@ -18,7 +18,23 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 		}
 		return parent::setTemplateParams($templateParams);
 	}
-	
+
+    /**
+     * Check is logo attached by overridden fnc setTemplateParams(...)
+     * @param array $templateParams
+     * @return bool true|false
+     */
+    public function isLogoAdded(array $templateParams = array()){
+        $isAdded = false;
+        foreach ($templateParams as $param) {
+            if (isset($param['id']) && $param['id'] == "logo.png") {
+                $isAdded = true;
+                break;
+            }
+        }
+        return $isAdded;
+    }
+
 	/**
 	 * @return string
 	 */
