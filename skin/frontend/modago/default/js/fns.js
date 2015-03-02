@@ -922,7 +922,6 @@ jQuery.noConflict();
 
 		shippingHelper();
 		openFormReview();
-		listinghelper();
 
 		function openFormReview() {
 			var footerComments = $('.footer_comments');
@@ -945,57 +944,6 @@ jQuery.noConflict();
 			var selText = $(this).text();
 			$(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
 		});
-
-		//$(document).ready(function () {
-		//	$(".menu-5columns dt a, .menu-5columns dt span,.menu-5columns dd a").each(function (i, item) {
-        //
-			//	if ($(item).textWidth() >= 152) {
-			//		$(item).addClass("long-wrap");
-			//	}
-			//})
-		//});
-        //
-		//$.fn.textWidth = function (text, font) {
-		//	if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-		//	$.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-		//	return $.fn.textWidth.fakeEl.width();
-		//};
-
-		function listinghelper() {
-
-			var listProducts = $('#items-product');
-			var listItemsProducts = listProducts.children('.item');
-			listItemsProducts.each(function(index, el) {
-
-
-				var children = $(this).children('.box_listing_product');
-				var widthThis = children.innerWidth()-15;
-
-				var childrenPrice = children.find('.col-price').innerWidth();
-				var childrenLike = children.find('.like').innerWidth();
-
-				var widthBlock = parseInt(childrenPrice + childrenLike);
-
-				var widthThisHalf = parseInt(widthThis/2);
-
-				if (widthBlock < widthThis) {
-
-				}
-				if (widthBlock > 0 && //To prevent using this script before products loaded
-					widthBlock > widthThis) {
-					if (childrenPrice > widthThisHalf) {
-						$(this).find('.price').addClass('price-two-line');
-					} else {
-						$(this).find('.price').removeClass('price-two-line');
-					}
-					if (childrenLike > widthThisHalf) {
-						$(this).find('.price').addClass('like-two-line');
-					} else {
-						$(this).find('.price').removeClass('like-two-line');
-					}
-				}
-			});
-		}
 
 		function shippingHelper() {
 			var tableWrapper = $('.tableWrapper'),
@@ -1084,8 +1032,6 @@ jQuery.noConflict();
 
 			var intFrameWidth = window.innerWidth;
 			if($(window).width() != prevW) {
-				listinghelper();
-
 				if (intFrameWidth > 767) {
 					$('.toggle-xs').each(function(index, el) {
 						$(this).find('.main').show();
@@ -1278,13 +1224,8 @@ jQuery.noConflict();
 //FUNCTION & INIT
 
 		function init(){
-			clearFilterManufacturerCheked();
-			deleteCurrentFilter();          // USUWANIE AKTYWNYCH FILTRÓW
-			filterColor();                  // OBSŁUGA FILTRA KOLOR
-			clearFilter();                  // CZYSZCZENIE FILTRÓW
 			recentlyViewed();               // POKAZ SLAJDÓW
 			responsJcarousel();             // POKAZ SLAJDÓW
-			masonryMenu();                  // KAFELKI LISTY PRODUKTÓW
 			// MENU MOBILE
 			activeMenu();                   // ZAZNACZENIE AKTYWNEJ POZYCJI MENU
 			cloneMenu();                    // CLONOWANIE MENU
@@ -1465,6 +1406,9 @@ jQuery.noConflict();
 						} else {
 							containerCloneMenu.html('');
 						}
+						if(jQuery('body').hasClass('filter-sidebar')) {
+							Mall.listing.positionFilters();
+						}
 					}
 
 				});
@@ -1493,8 +1437,10 @@ jQuery.noConflict();
 				$(this).closest('ul').remove();
 				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
+				if(jQuery('body').hasClass('filter-sidebar')) {
+					Mall.listing.positionFilters();
+				}
 			});
-
 		}
 		function linkCloseMenu() {
 			var containerCloneMenu = $('#nav_desc');
@@ -1504,132 +1450,9 @@ jQuery.noConflict();
 				$('#nav_desc').find('.active').removeClass('active');
 				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
-			});
-
-		}
-
-
-// LISTA PRODUKTÓW
-
-		function masonryMenu() {
-			$('.header_bottom .dropdown').on('shown.bs.dropdown', function () {
-				var $container = $('.jsMasonry');
-				$container.masonry({
-					itemSelector: '.box'
-				});
-			});
-		}
-
-// AKTYWNE FILTRY
-		function deleteCurrentFilter() {
-			$('.current-filter, .view_filter').on('click', '.label>i', function(event) {
-				location.href = jQuery(event.target).attr("data-params");
-				event.preventDefault();
-				var lLabel = $(this).closest('dd').find('.label').length - 1;
-				if (lLabel >= 1) {
-					$(this).closest('.label').remove();
-
-				} else {
-					$(this).closest('dl').remove();
+				if(jQuery('body').hasClass('filter-sidebar')) {
+					Mall.listing.positionFilters();
 				}
-				if (lLabel == 0) {
-					$('#view-current-filter').find('.view_filter').css('margin-top', 20);
-				}
-			});
-			$('.current-filter, .view_filter').on('click', '.action a', function(event) {
-				$(this).closest('dl').remove();
-				$('#view-current-filter').find('.view_filter').css('margin-top', 24);
-			});
-		}
-
-
-
-		jQuery(".filter-enum input[type=image]").click(function(){
-			return false;
-		});
-
-		function clearFilterManufacturerCheked() {
-			var blockList = $("#filter_manufacturer")
-
-			blockList.on('click', 'a.clear', function(event) {
-
-				var list = $(this).parents(".manufacturerList");
-				var origOrder = list.children();
-				//event.preventDefault();
-				list.find('.lastChecked').removeClass('lastChecked')
-				var i, checked = document.createDocumentFragment(),
-					unchecked = document.createDocumentFragment();
-
-				for (i = 0; i < origOrder.length; i++) {
-					if (origOrder[i].getElementsByTagName("input")[0].checked) {
-						checked.appendChild(origOrder[i]);
-					} else {
-						unchecked.appendChild(origOrder[i]);
-					}
-					list.append(checked).append(unchecked).children('li');
-				}
-			});
-		}
-
-// OBSŁUGA FILTRA KOLOR
-		function filterColor() {
-
-			$('.filter-color label').each(function(index, el) {
-				var colorFilter = $(this).data('color');
-				var srcImg = $(this).data('img');
-				var srcImgHover = $(this).data('imghover');
-				$(this).find('span').children('span').css({
-					'background-color': colorFilter
-				});
-				if ($(this).attr("data-img")) {
-					$(this).find('span').children('span').css({
-						'background-image': 'url('+srcImg+')'
-					});
-				}
-
-				$(this).on('mouseenter', function(){
-					if (colorFilter && !$(this).attr("data-img")) {
-						$(this).find('span').children('span').css({
-							'background-image': 'none'
-						})
-					}
-
-					if ($(this).attr("data-imgHover")) {
-						console.log(srcImgHover);
-						$(this).find('span').children('span').css({
-							'background-image': 'url('+srcImgHover+')'
-						})
-					}
-				});
-
-				$(this).on('mouseleave', function(){
-					if (srcImg) {
-						$(this).find('span').children('span').css({'background-image': 'url('+srcImg+')'})
-					}
-				});
-
-				var filterColor = $('#filter_color');
-				filterColor.on('click', ':checkbox', function(event) {
-					$('.filter-color .clear').removeClass('hidden');
-					var filterColorLenght = $('.filter-color input:checked').length;
-					if (filterColorLenght >= 1) {
-						$('.filter-color .action').removeClass('hidden');
-					} else {
-						$('.filter-color .action').addClass('hidden');
-					}
-				});
-
-				filterColor.on('click', '.clear', function(event) {
-					$(this).closest('.action').addClass('hidden');
-				});
-			});
-		}
-
-// CZYSZCZENIE FILTRÓW
-		function clearFilter(){
-			$('.block-filter').on('click', '.clear', function(event) {
-				event.preventDefault();
-				$(this).closest('.content').find('input[type="checkbox"]:checked').removeAttr('checked');
 			});
 		}
 
@@ -2136,31 +1959,3 @@ jQuery.noConflict();
 
 	});
 })(jQuery);
-
-(function($,sr){
-
-	// debouncing function from John Hann
-	// http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
-	var debounce = function (func, threshold, execAsap) {
-		var timeout;
-
-		return function debounced () {
-			var obj = this, args = arguments;
-			function delayed () {
-				if (!execAsap)
-					func.apply(obj, args);
-				timeout = null;
-			}
-
-			if (timeout)
-				clearTimeout(timeout);
-			else if (execAsap)
-				func.apply(obj, args);
-
-			timeout = setTimeout(delayed, threshold || 100);
-		};
-	};
-	// smartresize
-	jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
-
-})(jQuery,'smartresize');

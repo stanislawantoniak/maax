@@ -37,6 +37,9 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
             $questionText = $question->getData('question_text');
             $question->setData('question_text',Mage::helper('zolagocommon')->nToBr($questionText));
 
+            $answerText = $question->getData('answer_text');
+            $question->setData('answer_text',Mage::helper('zolagocommon')->nToBr($answerText));
+
             $templateParams = array(
                 'store' => $store,
                 'store_name' => $store->getName(),

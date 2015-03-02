@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -29,6 +29,9 @@ class Mirasvit_MstCore_Helper_Version extends Mage_Core_Helper_Abstract
                 $xml = @simplexml_load_file($configEE,'SimpleXMLElement', LIBXML_NOCDATA);
                 if ($xml !== false) {
                     $package = (string)$xml->default->design->package->name;
+                    if (!$package) {
+                        $package = strtolower(Mage::getEdition());
+                    }
                     if ($package == 'enterprise') {
                         self::$_edition = 'ee';
                     } else {

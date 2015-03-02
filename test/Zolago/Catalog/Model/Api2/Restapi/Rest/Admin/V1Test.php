@@ -3,43 +3,44 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 
     public function testStock() {
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+        $liczba = 15;
         $param =array (
             5 => array (
                 '5-9942-L' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-M' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-S' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0   
                 ),
                 '5-9942-XL' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' =>1,
+                    'SKLEP1' =>$liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0
                 ),
                 '5-9942-XXL' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => 3,
+                    'SKLEP1' => $liczba,
                     'MAGAZYN' => 0,
                     'k99' => 0
                 ),
             ),
         );
         $obj::updateStockConverter($param);
-        
-                                                                                                                                                    
+
+
     }
 
 
@@ -51,49 +52,46 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 //        "25768-M":{"A":31.9,"B":32.9},
 //      "25768-XL":{"A":31.9,"B":32.9},"25767-XXL":{"A":31.9,"B":32.9},"25767-XL":{"A":31.9,"B":32.9},
 //      "25768-S":{"A":31.9,"B":32.9},"25767-S":{"A":31.9,"B":32.9}}}]} ';
+        $randomek = rand(5, 500);
+        Mage::log("nowa cena: ".$randomek, null, 'mylog.log');
+
         $param = array(
-            '4-32035-20X-L' => array(
-                'A' => 5,
+        '5-24939-BIALY-XXL' => array(
+                'A' => $randomek,
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
             ),
-            '4-32035-20X-M' => array(
-                'A' => 5,
-                'B' => 7,
-                'C' => 8,
-                'Z' => 7
-            ),
-            '4-32035-20X-XL' => array(
-                'A' => 5,
-                'B' => 8,
-                'C' => 8,
-                'Z' => 5
-            ),
-
-
-            '4-20735-00X-L' => array(
-                'A' => 5,
-                'B' => 1,
-                'C' => 8,
-                'Z' => 4
-            ),
-            '4-20735-00X-M' => array(
-                'A' => 2,
-                'B' => 22,
-                'C' => 8,
-                'Z' => 3
-            ),
-            '4-20735-00X-S' => array(
-                'A' => 5,
+        '5-24939-BIALY-XL' => array(
+                'A' => $randomek+1,
                 'B' => 6,
-                'C' => 8,
-                'Z' => 2
+                'C' => 18,
+                'Z' => 88
             ),
+        '5-24939-BIALY-S' => array(
+                'A' => $randomek+2,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+        '5-24939-BIALY-L' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+
+//        '5123124' => array(
+//            'A' => $randomek+3,
+//            'B' => 6,
+//            'C' => 18,
+//            'Z' => 88
+//        )
         );
         //$param = json_encode($json);
         $obj::updatePricesConverter($param);
-
+        Zolago_Catalog_Model_Observer::processPriceTypeQueue();
+        Zolago_Catalog_Model_Observer::processConfigurableQueue();
     }
 
     public function testCreate()

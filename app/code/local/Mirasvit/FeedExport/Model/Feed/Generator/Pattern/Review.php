@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -28,31 +28,39 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Review
         switch($pattern['key']) {
             case 'product_name':
                 $product = $this->getProduct($review);
-                $value      = $product->getName();
+                $value   = $product->getName();
                 break;
 
             case 'product_url':
                 $product = $this->getProduct($review);
-                $value      = $product->getProductUrl(false);
+                $value   = $product->getProductUrl(false);
                 break;
 
             case 'sku':
                 $product = $this->getProduct($review);
-                $value      = $product->getSku();
+                $value   = $product->getSku();
                 break;
 
             case 'manufacturer':
                 $product = $this->getProduct($review);
-                $value      = $product->getManufacturer();
+                $value   = $product->getAttributeText('manufacturer');
                 break;
 
             case 'review_url':
                 $product = $this->getProduct($review);
-                $value      = Mage::getUrl('review/product/view', array('id'=> $review->getReviewId()));
+                $value   = Mage::getUrl('review/product/view', array('id'=> $review->getReviewId()));
                 break;
 
             case 'rating':
-                $value = $this->getAveregeRating($review);
+                $value = $this->getAveregeReviewRating($review);
+                break;
+
+            case 'product_rating':
+                $value = $this->getAveregeProductRating($review);
+                break;
+
+            case 'review_date':
+                $value = date('c', strtotime($review->getCreatedAt()));
                 break;
 
             default:
@@ -82,7 +90,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Review
         return $this->_loadedProducts[$review->getEntityPkValue()];
     }
 
-    public function getAveregeRating($review)
+    public function getAveregeProductRating($review)
     {
         $avg = 5;
 
@@ -92,6 +100,27 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Review
 
         if($summary_data->getRatingSummary()) {
             $avg = 0.05 * $summary_data->getRatingSummary();
+        }
+
+        return $avg;
+    }
+
+    public function getAveregeReviewRating($review)
+    {
+        $avg = 5;
+
+        $votes = Mage::getModel('rating/rating_option_vote')->getResourceCollection()
+                ->setReviewFilter($review->getReviewId())
+                ->setStoreFilter($review->getStoreId())
+                ->load();
+
+        if (count($votes) > 0) {
+            $rating = 0;
+            foreach ($votes as $vote) {
+                $rating += $vote->getPercent();
+            }
+
+            $avg = 0.05 * ($rating / count($votes));
         }
 
         return $avg;

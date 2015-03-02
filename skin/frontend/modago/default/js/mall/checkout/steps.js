@@ -1431,14 +1431,16 @@
                 form_group_default_pay.closest('.row').css({marginBottom: '15px'});
                 jQuery(e.target).text(txt);
 
-	            var animationSpeed = 600;
-				var htmlBody = jQuery("html, body");
-                if (!ifPanelClosed) {
-	                htmlBody.animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, animationSpeed);
-                } else {
-	                var offset = jQuery(window).height() < 750 ? 140 : 100;
-	                htmlBody.animate({scrollTop: jQuery('.css-radio.payment-method').first().offset().top + offset}, animationSpeed);
-                }
+	            if(jQuery(window).width() < 977) {
+		            var animationSpeed = 600;
+		            var htmlBody = jQuery("html, body");
+		            if (!ifPanelClosed) {
+			            htmlBody.animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, animationSpeed);
+		            } else {
+			            var offset = jQuery(window).height() < 750 ? 140 : 100;
+			            htmlBody.animate({scrollTop: jQuery('.css-radio.payment-method').first().offset().top + offset}, animationSpeed);
+		            }
+	            }
 
             },
 
@@ -1574,17 +1576,19 @@
 	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
 	                    if(selectedBank.length) {
 		                    selectedBank.show();
-		                    var offsetWithoutHeader = -35;
-		                    var offsetWithHeader = -95;
-		                    var scrollTo = selectedBank.prev('div').find('.label-wrapper').offset().top;
-		                    var scrollFrom = jQuery(document).scrollTop();
-		                    if((scrollTo < scrollFrom && jQuery(window).height() < 750) || jQuery(window).height() >= 750) {
-			                    scrollTo += offsetWithHeader;
-		                    } else {
-			                    scrollTo += offsetWithoutHeader;
-		                    }
+		                    if(jQuery(window).width() < 977) {
+			                    var offsetWithoutHeader = -35;
+			                    var offsetWithHeader = -95;
+			                    var scrollTo = selectedBank.prev('div').find('.label-wrapper').offset().top;
+			                    var scrollFrom = jQuery(document).scrollTop();
+			                    if ((scrollTo < scrollFrom && jQuery(window).height() < 750) || jQuery(window).height() >= 750) {
+				                    scrollTo += offsetWithHeader;
+			                    } else {
+				                    scrollTo += offsetWithoutHeader;
+			                    }
 
-		                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
+			                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
+		                    }
 	                    }
                     }
 

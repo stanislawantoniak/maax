@@ -16,16 +16,24 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	 */
 	
 	/**
-	 * @todo add website filter (implement before) & cache results
 	 * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
 	 */
 	public function getVendorColleciton() {
 		if(!$this->hasData("vendor_collection")){
+            $localVendorId = Mage::helper('udropship/data')->getLocalVendorId();
+            $vendorsCount = Mage::getStoreConfig('design/popular_brands/popular_brands_count');
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
 			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
-			$collection->setOrder("vendor_name");
+            $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
+            $collection->addFieldToFilter('vendor_id', array('neq' => $localVendorId));
+
+            $collection->setOrder("sequence", Varien_Data_Collection::SORT_ORDER_ASC);
+            $collection->setOrder("vendor_name", Varien_Data_Collection::SORT_ORDER_ASC);
+
+            $collection->setPageSize($vendorsCount);
 			// Load serialized data
+
 			foreach($collection as $vendor){
 				Mage::helper('udropship')->loadCustomData($vendor);
 			}
@@ -56,9 +64,10 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	 */
 	public function getVendorResizedLogoUrl(Unirgy_Dropship_Model_Vendor $vendor, 
 			$width=130, $height=74) {
-		
-		return Mage::helper("zolagodropship")->
-				getVendorLogoResizedUrl($vendor, $width, $height);
+        /* @var $zolagodropship Zolago_Dropship_Helper_Data */
+		$zolagodropship = Mage::helper("zolagodropship");
+
+		return $zolagodropship->getVendorLogoResizedUrl($vendor, $width, $height);
 	}
 	
 	/**
@@ -70,11 +79,10 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @todo implement controller action - now is 404
 	 * @return string
 	 */
 	public function getViewMoreUrl() {
-		return $this->getUrl("udropship/index/vendors");
+		return $this->getUrl("modago/brands");
 	}
 	
 } 

@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -93,11 +93,11 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
                 ->load()
                 ->toOptionArray();
         } elseif ($this->getAttribute() === 'is_in_stock') {
-            $selectOptions = array();
-            $options = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
-            foreach ($options as $option) {
-                $selectOptions[$option['value']] = $option['label'];
-            }
+//            $selectOptions = array();
+            $selectOptions = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
+//            foreach ($options as $option) {
+//                $selectOptions[$option['value']] = $option['label'];
+//            }
         } elseif ($this->getAttribute() === 'type_id') {
             $selectOptions = Mage::getSingleton('catalog/product_type')->getOptionArray();
         } elseif (is_object($this->getAttributeObject())) {

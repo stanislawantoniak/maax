@@ -12,6 +12,16 @@ class Zolago_Rma_Block_Vendor_Rma extends Mage_Core_Block_Template
 		return $this->getGrid()->getJsObjectName();
 	}
 
+    protected function _prepareLayout()
+    {
+        //fix for horizontal scroll for grid
+        $this->getLayout()
+            ->getBlock('root')
+            ->addBodyClass('grid-hscroll-fix')
+            ->addBodyClass('grid-hscroll-1150w');
+        return parent::_prepareLayout();
+    }
+
 	/**
 	 * @return Zolago_Rma_Block_Vendor_Rma_Grid
 	 */

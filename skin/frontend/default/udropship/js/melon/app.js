@@ -245,6 +245,10 @@ var App = function($) {
 	var calculateHeight = function() {
 		$('body').height('100%');
 
+        if($('body').hasClass('grid-hscroll-fix')) {
+            return;
+        }
+
 		var $header         = $('.header');
 		var header_height   = $header.outerHeight();
 

@@ -144,12 +144,18 @@
       margin-bottom: 12px;
     }
     img {
-      width: 185px;
+      //      width: 185px;
+      max-width: 170px;
+      max-height: 52px;
+      @media (max-width: $screen-xs-max) {
+        max-height: 42px;
+      }
     }
     .vendor-type{
       display: inline-block;
       vertical-align: bottom;
       text-transform: uppercase;
+      margin-right: 10px;
     }
   }
 

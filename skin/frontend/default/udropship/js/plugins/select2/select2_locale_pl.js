@@ -18,7 +18,7 @@
         },
         formatInputTooShort: function (input, min) {
             var n = min - input.length;
-            return "Wpisz jeszcze " + n + " znak" + pl_suffix(n) + ".";
+            return "Proszę wprowadzić jeszcze " + n + " znak" + pl_suffix(n) + ".";
         },
         formatInputTooLong: function (input, max) {
             var n = input.length - max;

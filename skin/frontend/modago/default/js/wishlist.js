@@ -398,6 +398,10 @@ Mall.wishlist = {
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
                     onclick: "Mall.wishlist.removeFromSmallBlock(this);"
                 });
+	            likeCount = jQuery("<span/>", {
+		            "class": "like_count"
+	            }).appendTo(wrapper);
+
                 ico = jQuery("<span/>", {
                     "class": "icoLike"
                 }).appendTo(wrapper);
@@ -414,14 +418,10 @@ Mall.wishlist = {
                     alt: ""
                 }).appendTo(ico);
 
-                likeCount = jQuery("<span/>", {
-                    "class": "like_count"
-                }).appendTo(wrapper);
-
                 jQuery("<span/>", {
                     html: Mall.wishlist.__("you", "You")
                         + (Mall.wishlist.getWishlistCount(id) > 1
-                        ? " + " + (Mall.wishlist.getWishlistCount(id) - 1) : "")
+                        ? " + " + (Mall.wishlist.getWishlistCount(id) - 1 > 99 ? "99+" : Mall.wishlist.getWishlistCount(id) - 1) : "") + " "
                 }).prependTo(likeCount);
 
                 jQuery("<div/>", {
@@ -470,6 +470,13 @@ Mall.wishlist = {
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
                     onclick: "Mall.wishlist.addFromSmallBlock(this);"
                 });
+
+	            likeCount = jQuery("<span/>", {
+		            "class": "like_count",
+		            html: (Mall.wishlist.getWishlistCount(id) > 0
+			            ? (Mall.wishlist.getWishlistCount(id) > 99 ? "99+ " : Mall.wishlist.getWishlistCount(id)) : "") + " "
+	            }).appendTo(wrapper);
+
                 ico = jQuery("<span/>", {
                     "class": "icoLike"
                 }).appendTo(wrapper);
@@ -485,12 +492,6 @@ Mall.wishlist = {
                     src: Config.path.heartLiked,
                     alt: ""
                 }).appendTo(ico);
-
-                likeCount = jQuery("<span/>", {
-                    "class": "like_count",
-                    html: (Mall.wishlist.getWishlistCount(id) > 0
-                        ? Mall.wishlist.getWishlistCount(id) : "")
-                }).appendTo(wrapper);
 
                 jQuery("<span/>", {
                     html: ""

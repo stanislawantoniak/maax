@@ -7,8 +7,8 @@ e6914e1cbf0198387795c6c2113d145d  app/locale/en_US/template/email/feedexport/gen
 028a6925f40c3a2ce9c99d408050da5c  app/design/adminhtml/default/default/layout/mirasvit_feedexport.xml
 ac5d80b8a04060bcaf59ddb45912e754  app/design/adminhtml/default/default/template/mirasvit/feedexport/renderer/attribute_helper.phtml
 2d525c5b4ea3d308689574365f6411ae  app/design/adminhtml/default/default/template/mirasvit/feedexport/renderer/tracker/filter.phtml
-f80b3f6b94f0531ac7d79e1b8dae16f6  app/design/adminhtml/default/default/template/mirasvit/feedexport/renderer/mapping.phtml
-7ea8ed71640c4a658f25c294e2751f2d  app/design/adminhtml/default/default/template/mirasvit/feedexport/dynamic/attribute/conditions.phtml
+9a4509f38fc93fe30002b4a8a9194783  app/design/adminhtml/default/default/template/mirasvit/feedexport/renderer/mapping.phtml
+08eaf8819320ef3a756f404c660f40c2  app/design/adminhtml/default/default/template/mirasvit/feedexport/dynamic/attribute/conditions.phtml
 4ad64b1fc2e86a70dbc7de833cbebb61  app/design/adminhtml/default/default/template/mirasvit/feedexport/dynamic/category/renderer/mapping.phtml
 e4b0cda6aef5b91b0dc142c158178009  app/design/adminhtml/default/default/template/mirasvit/feedexport/feed/generator/loader.phtml
 260ed64109f7db462fa024eb7d07fb79  app/design/adminhtml/default/default/template/mirasvit/feedexport/rule/new/created.phtml
@@ -22,6 +22,7 @@ af14077f6b1912639c70caebe82b9edd  app/code/local/Mirasvit/FeedExport/sql/feedexp
 250f7a789a0a1c7122249ee54e868f41  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.7.3-0.0.7.4.php
 dc902af8514cf1328a387a70858a8945  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.3-0.0.4.php
 53184c9f812af89e3a9163eda65c4b6d  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.7-0.0.7.1.php
+7be37c47e4c5953994e065f56d0a3c30  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.7.4-0.0.7.5.php
 e6a94349ce214200d35275fd9ba1ffd2  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.7.1-0.0.7.2.php
 42ac4490cd43afe8c466b0f15e4869cc  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.2-0.0.3.php
 448df17685641524c64243b6e121b11b  app/code/local/Mirasvit/FeedExport/sql/feedexport_setup/mysql4-upgrade-0.0.7.2-0.0.7.3.php
@@ -45,12 +46,12 @@ b26c61b0d5cdedd0885b7e41522ef70c  app/code/local/Mirasvit/FeedExport/Block/Admin
 9c080aab12b4096e0088271c0e73fbc4  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Form.php
 9e8eb428338ac03427b966f3d9c0dbaa  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/New.php
 1f3f304c70a6ebcda9d1579414efbee9  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/Ftp.php
-320c177736a8436b331a289e227e4dad  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/Additional.php
+c378ea2d085ea86f66fccdaa7bb62c49  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/Additional.php
 4d9aae836169eb76604838e1d5f731fd  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/Ga.php
 ed1ebaecdb1412bd0986843611f9279b  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/Rules.php
 f087659b44ff315ba0ca4da02243c47b  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/History.php
 261d034630a01fbcedd7ec7a984a1c29  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/Cron.php
-6b6b862d06c69d58f7cdefe79a127cae  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/General.php
+9cf38919928ae8f54feabf2e82e0e01b  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/General.php
 e34bcd674c9231e3794ab97e2a3ccbd1  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/History/Grid.php
 49e08d9920ad58f37f86021145db05d1  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tab/History/Grid/Renderer/Message.php
 dd6c0656962979c8e583b5dcbbb62071  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Feed/Edit/Tabs.php
@@ -86,7 +87,7 @@ e43d45ac13dd4da314646b9fbde13303  app/code/local/Mirasvit/FeedExport/Block/Admin
 6a7fd88da7ad80c87dd82909c6cb5ae3  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Report/Tracker.php
 206b98e2c3df800952187d77347c71fd  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Report/Product/Grid.php
 5c5279dbe2211f2ab7cf23a9aab71589  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Report/Product/Filter.php
-7ee55595fee88f45a0901bd5ce78b755  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Report/Tracker/Grid.php
+ce34b681625da55cfccf7b106ce57c05  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Report/Tracker/Grid.php
 0df71d0218bcc9278b6d22e2cdfb4015  app/code/local/Mirasvit/FeedExport/Block/Adminhtml/Report/Tracker/Filter.php
 e39328ddae4774c5b1c9ab6e3009096c  app/code/local/Mirasvit/FeedExport/Model/Config.php
 1f4b5d4c40b94bad46055acfe80e62f8  app/code/local/Mirasvit/FeedExport/Model/Template.php
@@ -97,8 +98,8 @@ fcee0eb90de4b05fdfa8795060e63dbb  app/code/local/Mirasvit/FeedExport/Model/Notif
 1e3ac732755db3ed70869bf038cf5881  app/code/local/Mirasvit/FeedExport/Model/Rule/Condition/Performance.php
 2dde7d524b8029be0e9afcd707d6d626  app/code/local/Mirasvit/FeedExport/Model/Feed/History.php
 ab2dc7f53bf27cbe36fce0ef8c586fbd  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action.php
-f1f2dd90350ba5a6a2eb4ca188162e82  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/State.php
-370a2fb82942685ac480e462a31b372e  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/Finish.php
+9e5648a174d3a8e48587af59e1d0e2f6  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/State.php
+32c204451a8604c02e0952807a01cdd7  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/Finish.php
 ec51060ff659143d2e0db99d1b5a5016  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/Init.php
 6f2ef56d78893205680296ce76218173  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/Validation.php
 6f4d08cfc5d3436a9841f454408479c2  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/MergeRules.php
@@ -107,13 +108,13 @@ b63a3b2dbf14b36f098af7a6d39277e7  app/code/local/Mirasvit/FeedExport/Model/Feed/
 3f6a21284e11b9748a8af19a77c9c868  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/Iterator/Rule.php
 61199c56287e62470f4106d3c9fd1a97  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/Iterator/Entity.php
 d01d3cb072561101ce4d09653ab1bd8e  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Action/MergeFiles.php
-bd428225af6f4430cbfe7b7353bf09f3  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern/Product.php
+0062aac84cc90774e4cc67eb3e868ebf  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern/Product.php
 b14131313e2c7f0e2bc04b829effeb0e  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern/Category.php
 a1579c216cc764f4852d88314b1ea078  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern/Global.php
-bde90d0a3b14a559839eb557362b7794  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern/Review.php
-dac86e793558fe994e8434ecfb640337  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern.php
+995de4ffa6e5dc22d532d350c0c82e00  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern/Review.php
+9cc45786ec32e618ebd74653e1bc0987  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator/Pattern.php
 89e2ba787161c5a784df6009880bfab7  app/code/local/Mirasvit/FeedExport/Model/Feed/Generator.php
-509c888f0045d30ede06af9ba2ac0110  app/code/local/Mirasvit/FeedExport/Model/Feed.php
+757bc09956e5d7f153ff90723aea2a25  app/code/local/Mirasvit/FeedExport/Model/Feed.php
 c9fa83cf38d5709e1d9342791d44b847  app/code/local/Mirasvit/FeedExport/Model/Resource/Template.php
 e2e8ff7a9c3dd6d0416ffe44111f6cd8  app/code/local/Mirasvit/FeedExport/Model/Resource/Rule/Collection.php
 8df1157b0e7678a18dbe37d9c939f872  app/code/local/Mirasvit/FeedExport/Model/Resource/Feed/History.php
@@ -130,14 +131,14 @@ af7cf433b564ac23efa8bb22fac67319  app/code/local/Mirasvit/FeedExport/Model/Resou
 b7221f7677e889851a6b0d616d2bb29f  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Order.php
 8d0f0add49693c08146328434b6c0e1d  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Click/Collection.php
 a31aec5fe8f82c7fbc4fa35a3b70ff5f  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Aggregated.php
-4c50f882075f5879f25de639a5137aa3  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Aggregated/Collection.php
+67e3e8504e186397e977a299a5a9fde2  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Aggregated/Collection.php
 e72ea568c92146bdd8c1bdba94aade4c  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Order/Collection.php
 cc3389ab1471b235b6c0bd25dfc353dd  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Rule.php
 496d98eb95b6db3616625ca34fb3f18f  app/code/local/Mirasvit/FeedExport/Model/Resource/Performance/Product/Collection.php
 7ed4d064c5207fc7dcdd006fcfaf5972  app/code/local/Mirasvit/FeedExport/Model/Dynamic/Category.php
 f5bcebb59537b722b199fadf5ea412fa  app/code/local/Mirasvit/FeedExport/Model/Dynamic/Attribute/Validator.php
 d41d8cd98f00b204e9800998ecf8427e  app/code/local/Mirasvit/FeedExport/Model/Dynamic/Attribute/Condition.php
-04f481a1e95b1715f2917753c01c3544  app/code/local/Mirasvit/FeedExport/Model/Dynamic/Attribute.php
+0658c8218c01f63d001dabbbcc50e061  app/code/local/Mirasvit/FeedExport/Model/Dynamic/Attribute.php
 efb2ab197d0d14fce7fd9c2f7dd812d3  app/code/local/Mirasvit/FeedExport/Model/Rule.php
 cb282053633bc8da6aed057ab9e1a5fa  app/code/local/Mirasvit/FeedExport/Model/Observer.php
 1a5f36c8ceba492032de7c0aff819d23  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/Template.php
@@ -148,6 +149,7 @@ a091f5dadaeb31d7dd1c8bbdfbd69513  app/code/local/Mirasvit/FeedExport/Model/Syste
 1c0d8fe238bab62591516f466233ce59  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/Time.php
 28e7547df9cfcccef3ee5bdddbca40c3  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/Attribute.php
 38cd4f30cbf8be6d57bafb6e2ec0808a  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/Delimiter.php
+2a3d8c8a12db95dc93d0f97bc1a79bfc  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/Archive.php
 ca26660b5025a37ae50bbaadf8dd89a6  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/EmailEvent.php
 f1dc7233d8fba1b15e4396852436989b  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/Type.php
 0199389f602c15f858f16e2d9a8f418d  app/code/local/Mirasvit/FeedExport/Model/System/Config/Source/FtpProtocol.php
@@ -156,10 +158,10 @@ ebcd2f416b393dbda8bc83f167d99ef8  app/code/local/Mirasvit/FeedExport/Model/Perfo
 e1b4c13ea75b0a9239a09498ae4721ec  app/code/local/Mirasvit/FeedExport/Model/Performance/Aggregated.php
 5096fb979ab6334cda2665cee51c94c9  app/code/local/Mirasvit/FeedExport/Model/Performance/Rule.php
 8e60fb76034ccf6746aa7f23b481aa4d  app/code/local/Mirasvit/FeedExport/etc/adminhtml.xml
-dae2e98f6dec3bb3aebadae5a1aa1f5f  app/code/local/Mirasvit/FeedExport/etc/config.xml
+bebc482dd6e75ed0e90123091e4edeed  app/code/local/Mirasvit/FeedExport/etc/config.xml
 ebeca46e34dc7fa9392c40ddbfe56204  app/code/local/Mirasvit/FeedExport/etc/system.xml
 c7239c9db80594aed6f76bb4ded8c5e2  app/code/local/Mirasvit/FeedExport/controllers/GenerateController.php
-a9178696fd37408e6109cedf64c5a0b6  app/code/local/Mirasvit/FeedExport/controllers/Adminhtml/TemplateController.php
+4ea131a64bdfc8aaa0709c05b587b88a  app/code/local/Mirasvit/FeedExport/controllers/Adminhtml/TemplateController.php
 6c68603bb26370b1e3b7b7c6bf20e0f2  app/code/local/Mirasvit/FeedExport/controllers/Adminhtml/Dynamic/CategoryController.php
 889437aaff84dfbce09b3d1af95cff87  app/code/local/Mirasvit/FeedExport/controllers/Adminhtml/Dynamic/AttributeController.php
 c14521973d0339fc6507a944cb22b319  app/code/local/Mirasvit/FeedExport/controllers/Adminhtml/RuleController.php
@@ -183,22 +185,22 @@ c0178a93ff16eb37dded19937053d905  app/code/local/Mirasvit/FeedExport/Test/Model/
 c48fe3851a3aae11e2c0e2dc3ec44c97  app/code/local/Mirasvit/FeedExport/Test/Model/Feed/Generator/Pattern/CategoryTest/fixtures/categories.yaml
 53b3313d44c27e29e536bd6fd8e858fe  app/code/local/Mirasvit/FeedExport/Test/phpunit.xml
 7b951eac6538c612273f8bf2f3237d7c  app/code/local/Mirasvit/FeedExport/Test/Helper/RequestTest.php
-bd5b72e20ac9493c1c20d317344c65e2  app/code/local/Mirasvit/FeedExport/Helper/String.php
+9c3ef162e844e0a2d56fc4187ce73357  app/code/local/Mirasvit/FeedExport/Helper/String.php
 6197405d215fdc5423de1e3aaa7a3482  app/code/local/Mirasvit/FeedExport/Helper/Validator.php
 6645c2f5a202eb3c67b4f5d9a063082b  app/code/local/Mirasvit/FeedExport/Helper/Eval.php
 8eeb380752d9dc2cd39e5094875c7378  app/code/local/Mirasvit/FeedExport/Helper/Html.php
-de1709bd3e1806bd3381c8fe42b147f6  app/code/local/Mirasvit/FeedExport/Helper/Data.php
+d9bc1b464b650a897f34f12f8aa65d49  app/code/local/Mirasvit/FeedExport/Helper/Data.php
 8a98bd4c2c254cf21c9aea6ba0c3f8b1  app/code/local/Mirasvit/FeedExport/Helper/Request.php
 94f08e3d7981488b4ef4107bd2c15755  app/code/local/Mirasvit/FeedExport/Helper/Help.php
 de001d2ebc289cfb8cc46e106dc8a2fa  app/code/local/Mirasvit/FeedExport/Helper/Io.php
-370abc6951831a77eab1674e4964eb5c  app/code/local/Mirasvit/FeedExport/Helper/Format.php
-c86cd736dacba31669354df8a8c35e42  js/mirasvit/core/amcharts-3.4.5/themes/light.js
-a6b7aebc4fda89e11be3604c887db8e2  js/mirasvit/core/amcharts-3.4.5/themes/black.js
-506e6bf55d6a5f1ca0d490c57e92326a  js/mirasvit/core/amcharts-3.4.5/themes/chalk.js
-529e8655bf76f0843bd16a16de1641d2  js/mirasvit/core/amcharts-3.4.5/themes/dark.js
-768c2a0720df7f622d23640b4e8cabac  js/mirasvit/core/amcharts-3.4.5/themes/patterns.js
-b5fe992048f2775d4cfa05e7ffad7f2d  js/mirasvit/core/amcharts-3.4.5/pie.js
-1c3656fb4903ffbac50e3724674a276f  js/mirasvit/core/amcharts-3.4.5/radar.js
+36f2a7b40bb8ffc81d1750fd3cbc2ca2  app/code/local/Mirasvit/FeedExport/Helper/Format.php
+d5060b9f79a134b6e042580c6805485f  js/mirasvit/core/amcharts-3.4.5/themes/light.js
+6f7935f87457dbc8ed6898894104b7e8  js/mirasvit/core/amcharts-3.4.5/themes/black.js
+382b741ccf49775f248233471883cee6  js/mirasvit/core/amcharts-3.4.5/themes/chalk.js
+6910c36f0a7e0bd5c182eea49c2d7295  js/mirasvit/core/amcharts-3.4.5/themes/dark.js
+e4677928dd1c4d7cf12fa22302e40d64  js/mirasvit/core/amcharts-3.4.5/themes/patterns.js
+99d05dc08af22253e2eacaa0d5931c92  js/mirasvit/core/amcharts-3.4.5/pie.js
+edeed238da26e41c7b69d2ab03f2a683  js/mirasvit/core/amcharts-3.4.5/radar.js
 00d264d466dc8ab803e7bb3b15f2094f  js/mirasvit/core/amcharts-3.4.5/images/dragIcon.gif
 ea5d81e23d3d31b1aaa29c45c3f7f5a8  js/mirasvit/core/amcharts-3.4.5/images/lensWhite.png
 75127395dc9a8fbf655194d5db477e51  js/mirasvit/core/amcharts-3.4.5/images/exportWhite.png
@@ -207,62 +209,70 @@ e5b5004a8442140ab4bb2431481b1114  js/mirasvit/core/amcharts-3.4.5/images/dragIco
 30b513aa9cf3c2edcaaed50b9ec59cb5  js/mirasvit/core/amcharts-3.4.5/images/dragIconBlack.gif
 2fe6793cd5acc1d611f20f28d3e39dc5  js/mirasvit/core/amcharts-3.4.5/images/export.png
 569552e72e28596babf3291ec60f9444  js/mirasvit/core/amcharts-3.4.5/images/dragIconH.gif
-93af1d519c1106994e645a9eb497c5e2  js/mirasvit/core/amcharts-3.4.5/serial.js
-1724ea406e90608b0eb8a7f4864405ed  js/mirasvit/core/amcharts-3.4.5/amcharts.js
-e3d6b8f63597556aea4e266f1b12ff7b  js/mirasvit/core/amcharts-3.4.5/xy.js
-1e8a2b0500d405478c0d2e964ae90ce3  js/mirasvit/core/amcharts-3.4.5/gauge.js
-33ef39e4ab2a7f0e80b4bf35509585c0  js/mirasvit/core/amcharts-3.4.5/funnel.js
+3273933f510ad0502cbb9463b1687c02  js/mirasvit/core/amcharts-3.4.5/serial.js
+9f387f61086fea383e3d46c5e0033df0  js/mirasvit/core/amcharts-3.4.5/amcharts.js
+abf73d273c74f1a1e6465707d5125241  js/mirasvit/core/amcharts-3.4.5/xy.js
+c6cab91fd9e1b8739ef57b9d0552638f  js/mirasvit/core/amcharts-3.4.5/gauge.js
+8e321e8f4e25aeba8d04355d32ecc213  js/mirasvit/core/amcharts-3.4.5/funnel.js
 41462889f78a78e72110517a94f9fa0d  js/mirasvit/core/codemirror/xml.js
 c81bef039e5689aba4e0d0fc5dcff6dc  js/mirasvit/core/codemirror/codemirror.js
 c76671c0141ce04b3a973c8f42fc45a8  js/mirasvit/core/codemirror/codemirror.css
 da3c9b554b2978ea4655828cff6e000c  js/mirasvit/code/feedexport/performance.js
-7c2806119b01c30721ee401105335b4f  js/mirasvit/code/feedexport/adminhtml/dynamic/attribute.js
+17070befa1ddfba430f34d48417de548  js/mirasvit/code/feedexport/adminhtml/dynamic/attribute.js
 df960e904e1c00d2a01fa4bdfd40b71d  js/mirasvit/code/feedexport/adminhtml/dynamic/category.js
 28383325458f681dc4e62ea672fa43aa  js/mirasvit/code/feedexport/adminhtml/feedexport.js
 50694ffa3fbe5769bb661a9e6584033e  js/mirasvit/code/feedexport/adminhtml/feed/generator.js
 7662d349465c82b965328dc69c719689  js/mirasvit/code/feedexport/adminhtml/feed/generator/loader.js
 d41d8cd98f00b204e9800998ecf8427e  js/mirasvit/code/feedexport/adminhtml/template/content/xml.js
 77fd4610c1150aba9558343fbfe244e1  js/mirasvit/code/feedexport/adminhtml/template/content/renderer/attribute_helper.js
-9ca63bbe6c965238b1ee1359523b5517  js/mirasvit/code/feedexport/adminhtml/template/content/csv.js
+1ad94e541f488f96fb35cdd021795131  js/mirasvit/code/feedexport/adminhtml/template/content/csv.js
 83d9a8fbbe0bf48bbb79334aebd3e416  media/feed/rule/Base Product Filter.xml
 655448bd9ae712fa59df0fee101b4071  media/feed/rule/Filter For Configurable Products.xml
 fe1c55237d78bdb88ce8d1f12cb5faf5  media/feed/template/PriceRunner.xml
+8e07a5f6316ae9012f4029d4f4e20676  media/feed/template/TradeTracker.xml
 2a76df38c5d80827083cde65c5cde388  media/feed/template/ShopPrice.xml
 2bb3aab499c3d33a1c8ca4f06b4bf7ac  media/feed/template/Newegg.xml
+12728efbfb3a573bbc157c563a6bb8c7  media/feed/template/Become Europe.xml
 adfc39b7ef2ff660a422fba75a4c0fec  media/feed/template/Bing Shopping.xml
 0f38a6477aa1efdec1af920a2b1848fe  media/feed/template/Twenga.xml
 149d8356d09b5ea6cbb373ed6ea8ceed  media/feed/template/Beslist.xml
 996be2773ee3fe87c1cf8fdc407af5de  media/feed/template/Shopzilla.xml
 bb7d1f54872b938755fd3846ff509167  media/feed/template/Amazon(price).xml
-84d252dc19d84a883f7115a0b513e28d  media/feed/template/Sears.com Inventory.xml
+056a279475111919fb6c0d2c6345d3e0  media/feed/template/Rakuten (Apparel).xml
+e76035d94729c55854a66187e99391e3  media/feed/template/Sears.com Inventory.xml
 59d47b94b7bd7e4c2578406db235717e  media/feed/template/GetPrice Categories.xml
 da88d6d71f3d40a78e6585c4f8c34ed1  media/feed/template/Facebook (storefront).xml
-41906d092a5b8e5d39842f490563803e  media/feed/template/Google Shopping Review.xml
+7d36419960543f9ae5d26de2963910bd  media/feed/template/Google Shopping Review.xml
 6266f6b9505d7da2b5d62059d6a1368d  media/feed/template/Yandex Market.xml
 b098365a267ae400478fa2b5bc3e07c0  media/feed/template/Amazon(inventory).xml
+e78021b9496ff1cf3d368f06ff27b449  media/feed/template/eBay(Commerce Network).xml
 3fec5cfb1027f9ed36b971270e94b7d2  media/feed/template/Newegg(inventory).xml
 b34a6dc524f53ec22822094f5613b4ed  media/feed/template/PriceGrabber.xml
 168f3e29841383e6a82e393dc334adbf  media/feed/template/Amazon(pictures).xml
 f0ab029ffa78a01c0afd69ccdb436693  media/feed/template/SingleFeed.xml
 8854b6cc635218207feb0746d3047c32  media/feed/template/ShopMania.xml
-1b7c55a851c4de9c7d9af9d74065c025  media/feed/template/eBay(CNF).xml
+e461554da964050f01d58c90a707eb10  media/feed/template/eBay.com (Store).xml
 16bd3662796c448a943add0489a14417  media/feed/template/Kelkoo.xml
 639330157df5148a73909d10b2fafec5  media/feed/template/PaginePrezzi.xml
 4159054939231db1161b9a04731b25ba  media/feed/template/Idealo.it.xml
+8232250f67c53a63020b3ef5e1de0f5d  media/feed/template/Webgains.xml
 ae8bb4dd6dccccc16683c3615eb2fa79  media/feed/template/Google Shopping.xml
-7b5f626dc8c474ac0320f9a5ef8c46c1  media/feed/template/Sears.com Item.xml
+81f25074ac1391db26f515d760a7ead2  media/feed/template/Sears.com Item.xml
 2221828561202cc3abd58dcb894d715a  media/feed/template/Kieskeurig.xml
 76306d0b337ec7aa55ca8191b308e8c1  media/feed/template/Shopping.com.xml
 a6cd543c01f8dd1dddeb41f7b3493cf8  media/feed/template/it.bestshopping.com.xml
 2ef9da23ea7c69814e87a3ae80eb287b  media/feed/template/Nextag.xml
+68ffacb0c3a0eb6c5b26cba2c3cda809  media/feed/template/Partner-Ads.xml
 994f504fb9e05c175dab223a2904c9ff  media/feed/template/Sears.com Price.xml
 0b1be996b1fe2149a302ee870ff0263f  media/feed/template/Amazon(Marketplace).xml
 90438d9d4f05b694319c2a9286029274  media/feed/template/The Find.xml
 ab0746141ba43a92d3563cedd6c6ae2a  media/feed/template/GetPrice Products.xml
-7653c725f1ca4387dccac4f4bc0f1371  media/feed/template/AmazonAds.xml
+95541f0c6de4759e5896895e9871a58e  media/feed/template/AmazonAds.xml
 60a96536e3a50c70864a37e41d377f38  media/feed/template/LeGuide.com.xml
+eafa7682b2ae1d27b4358c12c9b34b65  media/feed/template/Billiger.de.xml
 33502af3e6d1c801e66f8d5ba041a49f  media/feed/template/Google Shopping (configurable products).xml
 53942954eb5dfc18eb9280024aa1fa91  media/feed/template/CJ.xml
+af376d31156edbadcd8d8929edf9af73  media/feed/template/TradeDoubler.xml
 571d16f62416a84e0af49077fe43c00f  shell/feedexport.php
 8ee4d30ff08e6167c9441fb84e6dea4b  skin/adminhtml/default/default/mirasvit/feedexport/feedexport.css
 f76991f6cf0d12c61af5d73e7798328c  skin/adminhtml/default/default/mirasvit/feedexport/feedexport.less

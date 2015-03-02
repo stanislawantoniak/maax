@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -87,6 +87,14 @@ class Mirasvit_FeedExport_Block_Adminhtml_Feed_Edit_Tab_General extends Mage_Adm
                 'title'    => __('Feed Access Url'),
                 'text'    => '<a href="'.$model->getUrl().'" target="_blank">'.$model->getUrl().'</a>',
             ));
+
+            if ($model->getArchiveUrl()) {
+                $general->addField('archive_access_url', 'note', array(
+                    'label'    => __('Feed Access Url (archive)'),
+                    'title'    => __('Feed Access Url (archive)'),
+                    'text'    => '<a href="'.$model->getArchiveUrl().'" target="_blank">'.$model->getArchiveUrl().'</a>',
+                ));
+            }
 
             if ($model->getGeneratedAt()) {
                 $general->addField('generated_at', 'note', array(

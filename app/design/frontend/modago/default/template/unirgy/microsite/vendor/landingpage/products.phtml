@@ -26,11 +26,7 @@ $_collection = $this->getCollection();
                                              data-width="<?php echo $_productImageInfo['width']; ?>"
                                              data-height="<?php echo $_productImageInfo['height']; ?>"/>
                                     </figure>
-                                    <div class="logo_manufacturer">
-                                        <img class="img-responsive"
-                                             src="<?php echo $product->getManufacturerLogoUrl(); ?>"
-                                             alt="<?php echo $this->escapeHtml($product->getManufacturer()); ?>"/>
-                                    </div>
+                                    <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($product->getName()); ?>
                                     </div>
@@ -68,6 +64,13 @@ $_collection = $this->getCollection();
                                         <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
                                              data-idproduct="<?php echo $product->getId(); ?>"
                                              data-status="<?php echo (int)$product->getInMyWishlist(); ?>">
+                                            <span class="like_count">
+                                                <span>
+                                                    <?php echo $inMyWishlist; ?>
+                                                    <?php echo $plusSign; ?>
+                                                </span>
+                                                <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
+                                            </span>
                                             <span class="icoLike">
                                                 <img class="img-01"
                                                      src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
@@ -75,13 +78,6 @@ $_collection = $this->getCollection();
                                                 <img class="img-02"
                                                      src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>"
                                                      alt=""/>
-                                            </span>
-                                            <span class="like_count">
-                                                <span>
-                                                    <?php echo $inMyWishlist; ?>
-                                                    <?php echo $plusSign; ?>
-                                                </span>
-                                                <?php echo $wishlistCount; ?>
                                             </span>
                                             <div class="toolLike"></div>
                                         </div>
@@ -119,6 +115,7 @@ $_collection = $this->getCollection();
     setTimeout(function(){grid.shuffle('update');}, 500);//sometimes with pushstate
 
     jQuery(grid).on('layout.shuffle', function() {
+	    console.log("tri1");
         Mall.listing.likePriceView();
     });
 

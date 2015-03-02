@@ -13,7 +13,7 @@ class Orba_Shipping_DhlController extends Mage_Core_Controller_Front_Action
 		$result	= array(
 			'status'	=> false,
 			'file'		=> false,
-			'message'	=> Mage::helper('orbashipping')->__('DHL Service Error')
+			'message'	=> Mage::helper('zolagopo')->__('DHL Service Error')
 		);
 		$request = $this->getRequest();
 		if ($request->getParam('trackNumber')) {
@@ -107,7 +107,7 @@ class Orba_Shipping_DhlController extends Mage_Core_Controller_Front_Action
             return;
         }
 
-        $dhlHelper = Mage::helper('zolagodhl');
+        $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
         $dhlValidZip = $dhlHelper->isDHLValidZip($country,$zip);
 
         if (!$dhlValidZip) {

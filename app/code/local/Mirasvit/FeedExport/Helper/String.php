@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -27,7 +27,6 @@ class Mirasvit_FeedExport_Helper_String extends Mage_Core_Helper_Abstract
 		if (is_array($string) || is_object($string) || is_null($string) || $string == '') {
 			return $string;
 		}
-
 		$string = $this->processGlobalRules($string);
 		if ($feed != null) {
 			$string = $this->processFeedRules($string, $feed);
@@ -88,22 +87,22 @@ class Mirasvit_FeedExport_Helper_String extends Mage_Core_Helper_Abstract
 	 * Processing string with a regular expression
 	 *
 	 * @param  string  $string    - attribute value
-	 * @param  string  $chars     - chars for regex
+	 * @param  string  $expr      - regex
 	 * @param  bool    $allowExpr - is regex and the type is allow
 	 * @return string  $string    - proccessed string
 	 */
-	private function stripExpr($string, $chars, $allowExpr)
+	private function stripExpr($string, $expr, $allowExpr)
 	{
 		if ($allowExpr) {
-			$chars = preg_match_all($chars, $string, $match);
+			$res = preg_match_all($expr, $string, $match);
 			$match = implode('', array_diff($match[0], array('')));
 			if ($res == 0 || $match == '') {
 				return '';
 			} else {
-				$chars = '/[^'.$this->escapeSpecialChars($match).']*/';
+				$expr = '/[^'.$this->escapeSpecialChars($match).']*/';
 			}
 		}
-		$string = preg_replace($chars, '', $string);
+		$string = preg_replace($expr, '', $string);
 
 		return $string;
 	}
@@ -130,8 +129,8 @@ class Mirasvit_FeedExport_Helper_String extends Mage_Core_Helper_Abstract
         $string = str_replace('', '', $string);
         $string = str_replace('', '', $string);
         $string = str_replace('', '', $string);
-        $string = str_replace('ÃÂ', '', $string);
-        $string = str_replace('ÃÂ', '', $string);
+        $string = str_replace('Â', '', $string);
+        $string = str_replace('Â', '', $string);
 
         return $string;
     }

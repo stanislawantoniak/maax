@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -71,6 +71,16 @@ class Mirasvit_FeedExport_Model_Feed extends Mage_Core_Model_Abstract
     {
         if (file_exists(Mage::getBaseDir('media').DS.'feed'.DS.$this->getFilenameWithExt())) {
             return Mage::getBaseUrl('media').'feed'.DS.$this->getFilenameWithExt();
+        }
+
+        return false;
+    }
+
+    public function getArchiveUrl()
+    {
+        if ($this->getArchivation() &&
+            file_exists(Mage::getBaseDir('media').DS.'feed'.DS.$this->getFilenameWithExt().'.'.$this->getArchivation())) {
+            return Mage::getBaseUrl('media').'feed'.DS.$this->getFilenameWithExt().'.'.$this->getArchivation();
         }
 
         return false;

@@ -36,6 +36,7 @@
             <core>
                 <rewrite>
                     <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
+                    <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
                 </rewrite>
             </core>
         </models>
@@ -46,6 +47,13 @@
                 </setup>
             </zolagocommon_setup>
         </resources>
+        <blocks>
+            <page>
+                <rewrite>
+                    <html_head>Zolago_Common_Block_Page_Html_Head</html_head>
+                </rewrite>
+            </page>
+        </blocks>
     </global>
     <admin>
         <routers>

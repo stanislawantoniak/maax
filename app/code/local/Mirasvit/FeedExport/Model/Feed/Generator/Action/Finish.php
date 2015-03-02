@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -28,8 +28,21 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Finish extends Mirasvit_Fe
 
         $io->copy($tmpPath.DS.'result.dat', $basePath.DS.$feed->getFilenameWithExt());
 
-        Mage::helper('feedexport')->getState()->setStatus('ready');
+        if ($feed->getArchivation()) {
+            if ($feed->getArchivation() == 'zip') {
+                $zip = new ZipArchive();
+                
+                $zipPath = $basePath.DS.$feed->getFilenameWithExt().'.zip';
 
+                if($zip->open($zipPath, ZIPARCHIVE::OVERWRITE) === true) {
+                    $zip->addFile($basePath.DS.$feed->getFilenameWithExt(), $feed->getFilenameWithExt());
+
+                    $zip->close();
+                }
+            }
+        }
+
+        Mage::helper('feedexport')->getState()->setStatus('ready');
 
         $resource         = Mage::getSingleton('core/resource');
         $connection       = $resource->getConnection('core_write');

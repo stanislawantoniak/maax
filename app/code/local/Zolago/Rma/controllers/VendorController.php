@@ -45,7 +45,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
              Mage::throwException(Mage::helper('zolagorma')->__('No tracking number'));
          }
          $ioAdapter = new Varien_Io_File();
-         $dhlFile = Mage::helper('zolagodhl')->getDhlFileDir() . $number . '.pdf';
+         $dhlFile = Mage::helper('orbashipping/carrier_dhl')->getDhlFileDir() . $number . '.pdf';
          return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
      }
     /**
@@ -174,47 +174,23 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
         return $this->_redirectReferer();
     }
-
-    /**
-     * Send request to DHL
-     * @return string
-     * @throws Mage_Core_Exception
-     */
-    protected function _getTrackingDhlNumber() {
+    protected function _getTrackingNumber($carrier) {
+        $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $request = $this->getRequest();
-        $width = (float)$request->getParam('specify_orbadhl_width');
-        $height = (float)$request->getParam('specify_orbadhl_height');
-        $length = (float)$request->getParam('specify_orbadhl_length');
-        $date = $request->getParam('specify_orbadhl_shipping_date');
-        $weight = ceil((float)$request->getParam('weight'));
-        $type = $request->getParam('specify_orbadhl_type');
-        switch ($type) {
-            case 'PACKAGE':
-                $dhlType = Zolago_Dhl_Model_Client::SHIPMENT_TYPE_PACKAGE;
-            break;
-            case 'ENVELOPE':
-                $dhlType = Zolago_Dhl_Model_Client::SHIPMENT_TYPE_ENVELOPE;
-            break;
-            default:
-                throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown DHL package type"));
-        }        
-        $dhlParams = array (
-            'width' => $width,
-            'height' => $height,            
-            'length' => $length,
-            'shipmentDate' => $date,
-            'weight' => ($weight>1)? $weight:1,
-            'type' => $dhlType,
-            'vendor' => true,
-        );
-        if (!$request->getParam('specify_orbadhl_custom_dim')) {
-            $dhlParams['nonStandard'] = true;
-        }
+		$vendor = $this->_getSession()->getVendor();
         $rma = $this->_registerRma();
-        $trackingParams = $rma->sendDhlRequest($dhlParams);        
+                        
+        $manager->prepareRmaSettings($request,$vendor,$rma);
+        
+        $address = $rma->getFormattedAddressForVendor();
+        $manager->setReceiverAddress($address);
+        $address = $vendor->getRmaAddress();
+        $manager->setSenderAddress($address);
+        $trackingParams = $manager->createShipmentAtOnce();
         $session = Mage::getSingleton('core/session');
         $session->setPdfNumberPrintId($trackingParams['trackingNumber']);
-        return $trackingParams['trackingNumber'];
+        return $trackingParams['trackingNumber'];        
+        
     }
     /**
      * Save tracking number
@@ -242,27 +218,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $length = (float)$request->getParam('length');
 
             $autoTracking = false;
-            // Override by dhl
-            switch($carrier) {
-            case "custom":
-                // N.O.
-                $trackingNumber = 'dev';
-                break;
-            case "ups":
-                // N.O.
-                $trackingNumber = 'dev';
-                break;
-            case Orba_Shipping_Model_Carrier_Dhl::CODE:
-                $trackingNumber = $this->_getTrackingDhlNumber();
-                break;
-            case Orba_Shipping_Model_Carrier_Ups::CODE:
-                $trackingNumber = $request->getParam('tracking_id');
-                break;
-            default:
-                throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown carrier"));
-                break;
-            }
-
+            
+            $trackingNumber = $this->_getTrackingNumber($carrier);
 
             $trackData = array(
                              "parent_id"				=>  $rma->getId(),
@@ -310,6 +267,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
+            throw $e;
             Mage::logException($e);
             $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
         }
