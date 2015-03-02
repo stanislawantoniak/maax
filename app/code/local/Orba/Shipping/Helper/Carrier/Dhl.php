@@ -295,7 +295,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
      * @return stdClass
      */
     public function getDhlPickupParamsForDay($timestamp,$zip) {
-        $ret = $this->_getDhlPostalService($timestamp,$zip);
+        $ret = $this->_getDhlPostalService($zip,$timestamp);
         return $ret;
     }
     /**
