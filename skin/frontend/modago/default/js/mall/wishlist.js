@@ -433,7 +433,9 @@ Mall.wishlist = {
                 jQuery(obj).remove();
 
                 Mall.buildAccountInfo(data, true);
-                Mall.wishlist.calculateWidths();
+	            if(Mall.listing !== null || Mall.wishlist !== null) {
+		            Mall.wishlist.calculateWidths();
+	            }
             }
         });
 
