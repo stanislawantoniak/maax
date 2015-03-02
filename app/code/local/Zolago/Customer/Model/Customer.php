@@ -45,6 +45,8 @@ class Zolago_Customer_Model_Customer extends Mage_Customer_Model_Customer
 	 */
 	protected function _sendEmailTemplate($template, $sender, $templateParams = array(), $storeId = null)
 	{
+        $templateParams['use_attachments'] = true;
+
 		/** @var $mailer Mage_Core_Model_Email_Template_Mailer */
 		$mailer = Mage::getModel('core/email_template_mailer');
 		$emailInfo = Mage::getModel('core/email_info');

@@ -24,6 +24,12 @@
                     <form>Zolago_Customer_Model_Customer_Form</form>
                 </rewrite>
             </customer>
+            <core>
+                <rewrite>
+                    <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
+                    <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
+                </rewrite>
+            </core>
         </models>
         <helpers>
             <zolagocustomer>
