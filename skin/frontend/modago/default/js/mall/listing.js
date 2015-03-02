@@ -1386,7 +1386,7 @@ Mall.listing = {
 			active.click(function() {
 				var me = jQuery(this);
 				if(!me.parent().hasClass('query-text-iks')) {
-					me.parents('dd').detach();
+					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
 					if (active.length == 1) {
 						detachActive();
