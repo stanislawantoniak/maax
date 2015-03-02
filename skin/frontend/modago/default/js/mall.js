@@ -540,7 +540,7 @@ var Mall = {
 
     disableSearchNoQuery: function() {
         jQuery('#header_top_block_left form, #dropdown-search form').submit(function(e) {
-            if(!jQuery('input[name=q]', this).val().length) {
+            if(!jQuery.trim(jQuery('input[name=q]', this).val()).length) {
                 e.preventDefault();
             }
         });
