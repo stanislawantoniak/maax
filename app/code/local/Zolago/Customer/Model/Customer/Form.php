@@ -11,8 +11,8 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
     {
         //perform parent validation
         $result = parent::validateData($data);
-        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
-        $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
+        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Orba_Shipping');
+        $dhlActive = Mage::helper('orbashipping/carrier_dhl')->isActive();
         //checking sipping address; perform additional validation
         if ($dhlEnabled && $dhlActive) {
             //if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
@@ -37,7 +37,7 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
         $errors = array();
         if (!empty($data['postcode'])) {
             $attribute = $this->getAttribute('postcode');
-            $dhlHelper = Mage::helper('zolagodhl');
+            $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
             $dhlValidZip = $dhlHelper->isDHLValidZip($data['country_id'],$data['postcode']);
 
             if (!$dhlValidZip) {
