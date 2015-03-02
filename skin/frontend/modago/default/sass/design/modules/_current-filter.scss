@@ -144,10 +144,11 @@
       margin-bottom: 12px;
     }
     img {
-      //      width: 185px;
+      height: 52px;
       max-width: 170px;
       max-height: 52px;
       @media (max-width: $screen-xs-max) {
+        height: 42px;
         max-height: 42px;
       }
     }
