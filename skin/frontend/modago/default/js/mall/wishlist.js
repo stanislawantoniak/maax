@@ -18,7 +18,11 @@ Mall.wishlist = {
 
     init: function () {
         "use strict";
-        setTimeout(function () {Mall.wishlist.calculateWidths();}, 500);
+        if(Mall.listing) {
+	        setTimeout(function () {
+		        Mall.wishlist.calculateWidths();
+	        }, 500);
+        }
     },
 
     /**
@@ -528,32 +532,30 @@ Mall.wishlist = {
 	_prev_window_width: '',
 
     likePriceView: function(){
-	    if(Mall.wishlist !== null) {
-		    if (this._prev_window_width != jQuery(window).width()) {
-			    jQuery('#items-product').find('.price').each(function () {
-				    var self = jQuery(this),
-					    fullWidth = self.width() - 10,
-					    price = self.find('.col-price'),
-					    priceWidth = price.outerWidth(),
-					    like = self.find('.like'),
-					    likeCount = like.find('.like_count'),
-					    likeCountWidth = likeCount.outerWidth(),
-					    likeIco = like.find('.icoLike'),
-					    likeIcoWidth = likeIco.outerWidth(),
-					    priceClass = 'price-two-line',
-					    likeClass = 'like-two-line';
+	    if(this._prev_window_width != jQuery(window).width()) {
+		    jQuery('#items-product').find('.price').each(function () {
+			    var self = jQuery(this),
+				    fullWidth = self.width() -10,
+				    price = self.find('.col-price'),
+				    priceWidth = price.outerWidth(),
+				    like = self.find('.like'),
+				    likeCount = like.find('.like_count'),
+				    likeCountWidth = likeCount.outerWidth(),
+				    likeIco = like.find('.icoLike'),
+				    likeIcoWidth = likeIco.outerWidth(),
+				    priceClass = 'price-two-line',
+				    likeClass = 'like-two-line';
 
-				    self.removeClass(priceClass + ' ' + likeClass);
+			    self.removeClass(priceClass + ' ' + likeClass);
 
-				    if (priceWidth + likeCountWidth > fullWidth) {
-					    self.addClass(likeClass + ' ' + priceClass);
-				    } else if (priceWidth + likeCountWidth + likeIcoWidth > fullWidth) {
-					    self.addClass(likeClass);
-				    }
-			    });
-			    this._prev_window_width = jQuery(window).width();
-			    Mall.listing.triggerResize();
-		    }
+			    if(priceWidth + likeCountWidth > fullWidth) {
+				    self.addClass(likeClass + ' ' + priceClass);
+			    } else if(priceWidth + likeCountWidth + likeIcoWidth > fullWidth) {
+				    self.addClass(likeClass);
+			    }
+		    });
+		    this._prev_window_width = jQuery(window).width();
+		    Mall.listing.triggerResize();
 	    }
     }
 };
