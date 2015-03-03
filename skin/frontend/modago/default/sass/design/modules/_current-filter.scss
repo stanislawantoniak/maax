@@ -139,37 +139,52 @@
     min-height: 77px;
     margin-top: 20px;
     @media (max-width: $screen-xs-max){
-      min-height: inherit;
+      min-height: 42px;
       margin-top: 12px;
       margin-bottom: 12px;
     }
 
-    .vendor-type{
-      display: inline-block;
-      vertical-align: bottom;
+
+    .vendor-top-bottom-header-label {
+      display: block;
+      float: left;
+      font-weight: normal;
+      margin-right: 0px;
+      padding-left: 0;
+      @media (max-width: $screen-xs-max) {
+        padding-top: 25px;
+      }
+
       text-transform: uppercase;
-      margin-right: 10px;
+      vertical-align: middle;
+      width: auto;
+      position: relative;
+
+      box-sizing: border-box;
+      padding-right: 10px;
     }
-    .vendor-logo {
+
+    .vendor-top-bottom-header-logo {
       background-position: left center;
       background-repeat: no-repeat;
       background-size: contain;
-      display: inline-block;
-      margin: 0;
+      display: block;
+      height: 52px;
+//      margin: 10px 0;
+      max-height: 52px;
       max-width: 170px;
       padding: 0 !important;
       width: 100%;
       position: relative;
       line-height: 72px;
-      height: 52px;
-      max-height: 52px;
       @media (max-width: $screen-xs-max) {
         height: 42px;
         max-height: 42px;
       }
-
       box-sizing: border-box;
+      float: left;
     }
+
   }
 
   #active-filters {
