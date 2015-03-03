@@ -7,7 +7,7 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 19.08.2014
  */
-/** @var $product Mage_Catalog_Model_Product */
+/** @var $product Zolago_Solrsearch_Model_Catalog_Product */
 $_productImageUrl = '';
 $_collection = $this->getCollection();
 
@@ -17,9 +17,6 @@ $_collection = $this->getCollection();
 <div id="content" class="container-fluid">
 <div class="row">
 <div class="col-sm-12">
-<div id="sidebar" class="hidden-xs">
-    <?php echo $this->getChildHtml('searchfaces'); ?>
-</div>
 <div id="content-main">
 <div class="container-fluid" id="items-product">
     <div class="row">
@@ -41,19 +38,16 @@ $_collection = $this->getCollection();
                                              data-width="<?php echo $_productImageInfo['width']; ?>"
                                              data-height="<?php echo $_productImageInfo['height']; ?>"/>
                                     </figure>
-                                    <div class="logo_manufacturer">
-                                        <img class="img-responsive"
-                                             src="<?php echo $product->getManufacturerLogoUrl(); ?>"
-                                             alt="<?php echo $this->escapeHtml($product->getManufacturer()); ?>"/>
-                                    </div>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($product->getName()); ?>
                                     </div>
+                                </a>
                                     <div class="price clearfix">
                                         <div class="col-price">
-                                            <?php if ($product->getPrice() != $product->getFinalPrice()) : ?>
+                                            <?php if ($product->getStrikeoutPrice() != $product->getFinalPrice()) : ?>
                                                 <span class="old">
-                                                    <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
+                                                    <?php echo $this->helper('core')->currency($product->getStrikeoutPrice(), true, false); ?>
                                                 </span>
                                             <?php endif; ?>
                                             <span>
@@ -83,25 +77,25 @@ $_collection = $this->getCollection();
                                         <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
                                              data-idproduct="<?php echo $product->getId(); ?>"
                                              data-status="<?php echo (int)$product->getInMyWishlist(); ?>">
-                                            <span class="icoLike">
-                                                <img class="img-01"
-                                                     src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
-                                                     alt=""/>
-                                                <img class="img-02"
-                                                      src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>"
-                                                      alt=""/>
-                                            </span>
                                             <span class="like_count">
                                                 <span>
                                                     <?php echo $inMyWishlist; ?>
                                                     <?php echo $plusSign; ?>
                                                 </span>
-                                                <?php echo $wishlistCount; ?>
+	                                            <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
+                                            </span>
+	                                        <span class="icoLike">
+                                                <img class="img-01"
+                                                     src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
+                                                     alt=""/>
+                                                <img class="img-02"
+                                                     src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>"
+                                                     alt=""/>
                                             </span>
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
-                                </a>
+
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -194,6 +188,9 @@ $_collection = $this->getCollection();
         event.preventDefault();
         Mall.listing.loadMoreProducts();
     });
+	
+	Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+
 </script>
 
 </div>

@@ -1,14 +1,14 @@
 <?php /* @var $this Zolago_Campaign_Block_Vendor_Campaign_Edit */ ?>
-<?php $_helper = Mage::helper("zolagocampaign");?>
+<?php $_helper = Mage::helper("zolagocampaign"); ?>
 <?php $_model = $this->getModel();?>
 <div class="container">
 	<div class="page-heading row">
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagopo")->__("New campaign");?>
+					<?php echo $_helper->__("New campaign");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit campaign '%s'", $_model->getName());?>
+					<?php echo $_helper->__("Edit campaign '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
@@ -22,27 +22,30 @@
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 
-
-
-		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+		<div class="form-actions">
+            <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
+            <a href="<?php echo Mage::getUrl('campaign/vendor'); ?>" class="btn btn-default pull-right"><?php echo $_helper->__("Cancel");?></a>
+        </div>
 	</form>
 </div>
 
 <!--        Show product tab and banners tab only on edit page-->
 <?php if(!$this->isModelNew()) :?>
 <ul style="margin-top:6px" class="nav nav-tabs">
+
     <li style="float:right" class="">
         <a name="tmp"></a>
     </li>
     <li style="float:right" class="">
-        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
+        <a href="#tab_products" data-toggle="tab"><?php echo $_helper->__('Products'); ?></a>
     </li>
     <li style="float:right" class="active">
-        <a href="#tab_products" data-toggle="tab">Products</a>
+        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
     </li>
+
 </ul>
 <div class="tab-content">
-    <div id="tab_products" class="tab-pane active">
+    <div id="tab_products" class="tab-pane ">
         <br>
         <div class="container z-grid">
 
@@ -65,7 +68,7 @@
 
         </div>
     </div>
-    <div id="tab_banners" class="tab-pane">
+    <div id="tab_banners" class="tab-pane active">
         <br>
         <div class="container z-grid">
             <div class="widget box">
@@ -114,33 +117,33 @@
     </div>
 <?php endif; ?>
     <script type="text/javascript">
-        jQuery(function ($) {
+        jQuery(document).ready(function () {
 
-            $("#browseProducts form").submit(function (e) {
+            jQuery("#browseProducts form").submit(function (e) {
                 e.preventDefault();
-                var campaignProductsSource = $("textarea[name=campaign_products_source]").val();
+                var campaignProductsSource = jQuery("textarea[name=campaign_products_source]").val();
 
                 if (campaignProductsSource.length <= 0) {
                     noty({
-                        text: "Enter product SKUs please",
+                        text: "<?php echo $_helper->__('Enter product SKUs please'); ?>",
                         type: 'error',
                         timeout: 2000
                     });
                 } else {
                     //push products to campaign form field
-                    $("input[name=campaign_products]").val(campaignProductsSource);
-                    $("#browseProducts").modal("hide");
+                    jQuery("input[name=campaign_products]").val(campaignProductsSource);
+                    jQuery("#browseProducts").modal("hide");
                     //update grid if edit
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
-                        $.ajax({
+                        jQuery.ajax({
                             url: '/campaign/vendor/products',
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
-                            success: function(result){
-                                $(('#zolagocampaign_campaign_product_grid')).html($(result).find('#zolagocampaign_campaign_product_grid').html());
-                                $("#zolagocampaign_campaign_product_grid_table .filter input")
+                            success: function (result) {
+                                jQuery(('#zolagocampaign_campaign_product_grid')).html(jQuery(result).find('#zolagocampaign_campaign_product_grid').html());
+                                jQuery("#zolagocampaign_campaign_product_grid_table .filter input")
                                     .addClass("form-control");
                             }
                         })
@@ -148,27 +151,27 @@
                 }
             });
 
-            $("#browseProducts").on("show.bs.modal", function () {
+            jQuery("#browseProducts").on("show.bs.modal", function () {
                 console.log("Init loading products")
             });
-            $(".grid table .filter input,.grid table .filter select")
+            jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            $(document).on('click', '.btn[data-action=remove]', function(e){
+            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
                 e.preventDefault();
-                var campaignId = $("input[name=campaign_id]").val();
-                var path = $(this).attr('href');
-                removeCampaignGridItemLink(path,campaignId);
+                var campaignId = jQuery("input[name=campaign_id]").val();
+                var path = jQuery(this).attr('href');
+                removeCampaignGridItemLink(path, campaignId);
             })
             function removeCampaignGridItemLink(path, campaignId) {
                 var link = path + "campaignId/" + campaignId;
                 window.location = link;
             }
 
-            $('.datetimepicker').datetimepicker({
+            jQuery('.datetimepicker').datetimepicker({
                 format: 'd-m-Y H:i'
             });
 
-            var form = $("#edit-campaign");
+            var form = jQuery("#edit-campaign");
             new Zolago.formIntegrator(form);
             form.validate({
                 rules: {
@@ -177,26 +180,30 @@
                     },
                     "date_from": {dateBefore: '#date_to'},
                     "date_to": {dateAfter: '#date_from'}
+                },
+                messages: {
+                    date_from: {
+                        dateBefore: '<?php echo $_helper->__('Must be before corresponding end date'); ?>'
+                    },
+                    date_to: {
+                        dateAfter: '<?php echo $_helper->__('Must be after corresponding start date'); ?>'
+                    }
                 }
             });
-
 
 
             var urlTypeManual = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK; ?>';
             var urlTypeLandingPage = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE; ?>';
 
 
-            var urlKeyContainer = $(form).find('[name="url_key"]').parents('.form-group');
-            $(document).ready(function(){
-                toggleUrlKeyField($(form).find('input[name="url_type"]:checked'),urlKeyContainer);
+            var urlKeyContainer = jQuery(form).find('[name="url_key"]').parents('.form-group');
 
-                $(form).find('input[name="url_type"]').on('change', function () {
-                    toggleUrlKeyField($(this),urlKeyContainer);
+            toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'), urlKeyContainer);
 
-                })
+            jQuery(form).find('input[name="url_type"]').on('change', function () {
+                toggleUrlKeyField(jQuery(this), urlKeyContainer);
+
             })
-
-
             function toggleUrlKeyField(element, toggleContainer) {
                 var type = element.val();
                 switch (type) {

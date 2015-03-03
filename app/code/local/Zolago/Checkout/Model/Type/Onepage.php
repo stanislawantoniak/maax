@@ -17,21 +17,67 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
      */
 	public function saveOrder() {
 		try{
-			$return = parent::saveOrder();
-			// Update customer data
-			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
-				$this->getQuote()->getCustomerId()){
-				$this->getQuote()->getCustomer()->save();
+			$quote = $this->getQuote();
+			$payment = $quote->getPayment();
+			$methodInstance = $payment->getMethodInstance();
+
+			// Do map payment here...
+			if($methodInstance instanceof Zolago_Payment_Model_Abstract){
+				$methodInstance->setQuote($this->getQuote());
+				if($newData = $methodInstance->getMappedPayment()){
+					// Instatize new payemnt instance
+					$instance = Mage::helper('payment')->getMethodInstance($newData['method']);
+					$instance->setInfoInstance($payment);
+					$payment->setMethodInstance($instance);
+					$this->savePayment($newData);
+					// Save additional data - import in this model do not save the payment
+					// directly after import
+					if(isset($newData['additional_information'])){
+						$payment->setAdditionalInformation($newData['additional_information']);
+						$payment->save();
+					}
+				}
 			}
+			// Parent save order
+			$return = parent::saveOrder();
+
+            // force send email no metter if there is $redirectUrl
+            // in parent::saveOrder() line ~812
+            $order = Mage::getModel('sales/order');
+            $order->load($this->getCheckout()->getLastOrderId());
+            if ($order) {
+                if ($order->getCanSendNewEmailFlag()) {
+                    try {
+                        $order->sendNewOrderEmail();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+            }
+
+            if(Mage::getSingleton('customer/session')->isLoggedIn()
+                && $this->getQuote()->getCustomerId()) {
+                // Update customer data
+                $customerPayment = $this->_checkoutSession->getPayment(true);
+                if (!is_null($customerPayment)
+                    && is_array($customerPayment)) {
+                    if (isset($customerPayment['method'])) {
+                        $this->getQuote()->getCustomer()->setLastUsedPayment($customerPayment);
+                    }
+                }
+
+                //save customer object
+                $this->getQuote()->getCustomer()->save();
+            }
+
+            //newsletter actions
 			$agreements = $this->_checkoutSession->getAgreements(true);
-			if($agreements['agreement_newsletter'] == 1) {
-				//
-				//todo: save to newsletter
-				//
+            /** @var Zolago_Newsletter_Model_Inviter $model */
+            $model = Mage::getModel('zolagonewsletter/inviter');
+			if(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 1) {
+                $model->addSubscriber($this->getQuote()->getCustomerEmail(),Zolago_Newsletter_Model_Subscriber::STATUS_UNCONFIRMED);
 			} elseif(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 0) {
 				// send invitation mail, model takes care of handling everything
-				/** @var Zolago_Newsletter_Model_Inviter $model */
-				$model = Mage::getModel('zolagonewsletter/inviter');
 				$model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
 			}
 			
@@ -96,8 +142,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			
 			// Do import of personal data
 			$quote->setCustomerEmail(null);
-			$quote->setCustomerFirstname(null);
-			$quote->setCustomerLastname(null);
+			//$quote->setCustomerFirstname(null);
+			//$quote->setCustomerLastname(null);
 			
 			if(is_null($billing) || is_null($shipping)){
 				// Funciton setting the customer
@@ -474,7 +520,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			$customer->setPassword($password);
             $quote->setPasswordHash($customer->encryptPassword($customer->getPassword()));
 		}
-		
+        $telephone = isset($accountData['telephone']) ? $accountData['telephone'] : "";
+        if(!empty($telephone)){
+            $customer->setPhone($telephone);
+        }
         $this->getQuote()->addData($data);//->save();
         return $this;
 		
@@ -493,13 +542,14 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
 		Mage::log("Prepare for new customer");
-		
+
 		// Customer should be new object - even presitance
 		
         $customer = Mage::getModel('customer/customer');
 		
         /* @var $customer Mage_Customer_Model_Customer */
         $customerBilling = $billing->exportCustomerAddress();
+
         $customer->addAddress($customerBilling);
         $billing->setCustomerAddress($customerBilling);
         $customerBilling->setIsDefaultBilling(true);
@@ -515,6 +565,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         Mage::helper('core')->copyFieldset('checkout_onepage_quote', 'to_customer', $quote, $customer);
         $customer->setPassword($customer->decryptPassword($quote->getPasswordHash()));
         $customer->setPasswordHash($customer->hashPassword($customer->getPassword()));
+        $telephone = $billing->getTelephone();
+        if(!empty($telephone)){
+            $customer->setData('phone', $telephone);
+        }
         $quote->setCustomer($customer)
             ->setCustomerId(true);
     }

@@ -25,6 +25,7 @@
         font-size: 20px;
         font-family:$fontRegular;
         .old {
+	        display: block;
             color:#000;
             text-decoration:line-through;
             font-size:15px;
@@ -32,7 +33,7 @@
         .like {  
             font-size:11px;
             font-family:$fontBlack;
-            color:#000;            
+            color:#000;
             .toolLike {
                 background: #fff;
                 border:1px solid #bcbaba;

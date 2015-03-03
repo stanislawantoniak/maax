@@ -136,9 +136,24 @@ Mall.listing = {
 	_noDelay: false,
 
 	/**
+	 * variable that stores content block
+	 */
+	_content_block: '',
+
+	/**
+	 * variable that stores filters block
+	 */
+	_filters_block: '',
+
+	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+
+        //hide btn filter product if no products (search for example)
+        this.processActionViewFilter();
+
+        //do stufs with images height
         this.initImagesHeight();
 
 		// Reset form
@@ -149,6 +164,10 @@ Mall.listing = {
 
 		// Init thinks
 		this.initFilterEvents();
+
+		// filters delegation - better performance than initiation of each filter event on every ajax reload
+		this.delegateFilterEvents();
+
 		this.initOnpopstateEvent();
 		this.initSortEvents();
 		this.initActiveEvents();
@@ -168,6 +187,15 @@ Mall.listing = {
 		this.setLoadMoreLabel();
 
 	},
+
+    /**
+     * hide btn filter product if no products/no sidebar (search for example)
+     */
+    processActionViewFilter: function() {
+        if (!jQuery('#solr_search_facets').length && !this.isVendorLandingpage()) {
+            jQuery('.view_filter:has(.actionViewFilter)').hide();
+        }
+    },
 
 	setInitProducts: function(products){
 		this._init_products = products;
@@ -214,7 +242,6 @@ Mall.listing = {
 		scope = scope || jQuery(".solr_search_facets");
 		this.preprocessFilterContent(scope);
 		this.initScrolls(scope);
-		this.attachMiscActions(scope);
 		this.attachFilterColorEvents(scope);
 		this.attachFilterIconEvents(scope);
 		this.attachFilterEnumEvents(scope);
@@ -224,6 +251,9 @@ Mall.listing = {
 		this.attachFilterFlagEvents(scope);
 		this.attachFilterPriceSliderEvents(scope);
 		this.attachFilterSizeEvents(scope);
+		this.attachDeleteCurrentFilter();
+		this.initListingLinksEvents();
+		this.updateFilters();
 	},
 
 
@@ -277,36 +307,36 @@ Mall.listing = {
     },
 
 
-	_doRollSection: function(section, state, animate){
-		var title = section.find("h3"),
-			content = section.find(".content"),
-			i = title.find('i');
-
-		if(animate){
-			if(state){
-				content.stop(true,true).slideDown(200, function(){
-					title.removeClass("closed").addClass("open");
-				});
-
-			}else{
-				content.stop(true,true).slideUp(100, function(){
-					title.removeClass("open").addClass("closed");
-				});
-			}
-		}else{
-			if(state){
-				content.show();
-				title.removeClass("closed").addClass("open");
-			}else{
-				content.hide();
-				title.removeClass("open").addClass("closed");
-			}
-		}
+	_doRollSection: function(section, state){
+		var title     = section.find("h3"),
+			content   = section.find(".content"),
+            contentXS = section.find(".content-xs"),
+			i = title.find('i'),
+			open = 'open',
+			closed = 'closed',
+			arrowUp = 'fa-chevron-up',
+			arrowDown = 'fa-chevron-down',
+			isMobile = this.getCurrentMobileFilterState(),
+			dataAttr = 'data-' + (isMobile ? 'xs' : 'lg') + '-rolled';
 		if(state){
-			i.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-		}else{
-			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+			content.show();
+			title.removeClass(closed).addClass(open);
+			i.removeClass(arrowDown).addClass(arrowUp);
+			section.attr(dataAttr,open);
+			contentXS.hide();
+		} else {
+			content.hide();
+			title.removeClass(open).addClass(closed);
+			i.removeClass(arrowUp).addClass(arrowDown);
+			section.attr(dataAttr,closed);
+			if(isMobile) {
+				contentXS.show();
+			}
 		}
+		if(!isMobile) {
+			contentXS.hide();
+		}
+		Mall.listing.setMainSectionHeight();
 	},
 
 	_doShowMore: function(section, state, animate){
@@ -505,7 +535,7 @@ Mall.listing = {
             var forceObject = {
                 start: this.getLoadNextStart(),
                 rows: this.getLoadNextOffset()
-            }
+            };
 
             this.setQueueLoadLock();
 
@@ -595,14 +625,14 @@ Mall.listing = {
 					Mall.listing.setAutoappend(false);
 				}
 				// build wishlist collection
-				jQuery.each(data.content.products, function (index, item) {
-					"use strict";
-					Mall.wishlist.addProduct({
-						id: item.entity_id,
-						wishlist_count: item.wishlist_count,
-						in_your_wishlist: item.in_my_wishlist ? true : false
-					});
-				});
+				//jQuery.each(data.content.products, function (index, item) {
+				//	"use strict";
+				//	Mall.wishlist.addProduct({
+				//		id: item.entity_id,
+				//		wishlist_count: item.wishlist_count,
+				//		in_your_wishlist: item.in_my_wishlist ? true : false
+				//	});
+				//});
 			} else {
 				// @todo hide buttons etc
 				Mall.listing.removeLockFromQueue(); // this is dummy expression
@@ -629,6 +659,11 @@ Mall.listing = {
 			_item = Mall.listing.createProductEntity(item);
             grid.append(_item);
             items = items.add(_item);
+            Mall.wishlist.addProduct({
+                id: item.entity_id,
+                wishlist_count: item.wishlist_count,
+                in_your_wishlist: item.in_my_wishlist ? true : false
+            });
 		});
 
         grid.shuffle('appended', items);
@@ -700,23 +735,21 @@ Mall.listing = {
 		}).appendTo(figure);
 
 		vendor = jQuery("<div/>", {
-			"class": "logo_manufacturer"
+			"class": "logo_manufacturer",
+			"style": "background-image:url("+ product.manufacturer_logo_url +")"
 		}).appendTo(link);
-
-		jQuery("<img/>", {
-			src: product.manufacturer_logo_url,
-			alt: product.manufacturer,
-			"class": "img-responsive"
-		}).appendTo(vendor);
 
 		jQuery("<div/>", {
 			"class": "name_product",
 			html: product.name
 		}).appendTo(link);
 
-		priceBox = jQuery("<div/>", {
-			"class": "price clearfix"
-		}).appendTo(link);
+		//priceBox = jQuery("<div/>", {
+		//	"class": "price clearfix"
+		//}).appendTo(link);
+        priceBox = jQuery("<div/>", {
+            "class": "price clearfix"
+        }).insertAfter(link);
 
 		colPrice = jQuery("<div/>", {
 			"class": "col-price"
@@ -745,9 +778,14 @@ Mall.listing = {
 			"data-idproduct": product.entity_id,
 			"data-status": product.in_my_wishlist,
 			onclick: product.in_my_wishlist
-				? "Mall.wishlist.removeFromSmallBlock(this);return false;"
-				: "Mall.wishlist.addFromSmallBlock(this);return false;"
+				? "Mall.wishlist.removeFromSmallBlock(this);"
+				: "Mall.wishlist.addFromSmallBlock(this);"
 		}).appendTo(priceBox);
+
+		jQuery("<span/>", {
+			"class": "like_count",
+			html: likeText + (parseInt(product.wishlist_count, 10) > 0 ? (product.wishlist_count > 99) ? "99+ " : product.wishlist_count : "") + " "
+		}).appendTo(like);
 
 		likeIco = jQuery("<span/>", {
 			"class": "icoLike"
@@ -764,12 +802,6 @@ Mall.listing = {
 			alt: "",
 			"class": "img-02"
 		}).appendTo(likeIco);
-
-		jQuery("<span/>", {
-			"class": "like_count",
-			html: likeText + (parseInt(product.wishlist_count, 10) > 0
-				? product.wishlist_count : "")
-		}).appendTo(like);
 
 		jQuery("<div/>", {
 			"class": "toolLike"
@@ -903,96 +935,8 @@ Mall.listing = {
 	},
 
 	/**
-	 * Moves filters sidebar to mobile container.
-	 *
+	 * @param node
 	 * @returns {Mall.listing}
-	 */
-	insertMobileSidebar: function() {
-		if(this.getCurrentMobileFilterState() == 0) {
-			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
-			jQuery("#sidebar").find(".sidebar").remove();
-			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
-			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
-			this.setCurrentMobileFilterState(1);
-			this.attachFilterColorEvents();
-			this.attachFilterIconEvents();
-			this.attachFilterEnumEvents();
-			this.attachFilterPriceEvents();
-			this.attachFilterDroplistEvents();
-			this.attachFilterLongListEvents();
-			this.attachFilterFlagEvents();
-			this.attachFilterPriceSliderEvents();
-			this.attachFilterSizeEvents();
-			this.attachDeleteCurrentFilter();
-            this.attachMiscActions();
-			this.initListingLinksEvents();
-		}
-
-		return this;
-	},
-
-	/**
-	 * Attaches delete single filter action.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	attachDeleteCurrentFilter: function () {
-		"use strict";
-		jQuery('.current-filter, .view_filter').on('click', '.label>i', function(event) {
-			var removeUrl = jQuery(event.target).attr("data-params");
-			location.href = removeUrl;
-			event.preventDefault();
-			var lLabel = jQuery(this).closest('dd').find('.label').length - 1;
-			if (lLabel >= 1) {
-				jQuery(this).closest('.label').remove();
-
-			} else {
-				jQuery(this).closest('dl').remove();
-			};
-			if (lLabel == 0) {
-				jQuery('#view-current-filter').find('.view_filter').css('margin-top', 20);
-			}
-		});
-		jQuery('.current-filter, .view_filter').on('click', '.action a', function(event) {
-			jQuery(this).closest('dl').remove();
-			jQuery('#view-current-filter').find('.view_filter').css('margin-top', 24);
-		});
-
-		return this;
-	},
-
-	/**
-	 * Moves filters sidebar to desktop container.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	insertDesktopSidebar: function() {
-		if(this.getCurrentMobileFilterState() == 1) {
-			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
-			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
-			jQuery("#sidebar").find(".sidebar").remove();
-			jQuery("#sidebar").html(currentSidebar.html());
-			this.setCurrentMobileFilterState(0);
-            this.attachFilterColorEvents();
-            this.attachFilterIconEvents();
-            this.attachFilterEnumEvents();
-            this.attachFilterPriceEvents();
-            this.attachFilterDroplistEvents();
-            this.attachFilterLongListEvents();
-            this.attachFilterFlagEvents();
-            this.attachFilterPriceSliderEvents();
-            this.attachFilterSizeEvents();
-            this.attachDeleteCurrentFilter();
-            this.attachMiscActions();
-			this.initListingLinksEvents();
-		}
-
-		return this;
-	},
-
-	/**
-	 * @param {object} node
-	 * @returns {void}
 	 */
 	nodeChanged: function (node){
 		this.reloadListing();
@@ -1302,19 +1246,30 @@ Mall.listing = {
 	},
 
 	showAjaxLoading: function(){
+		if(this.getFilters().length) {
+			this.positionFilters();
+		}
 		this.getAjaxLoader().show();
 	},
 
 	hideAjaxLoading: function(){
 		this.getAjaxLoader().hide();
+		if(this.getFilters().length) {
+			this.positionFilters();
+		}
 	},
 
 	isLoading: function(){
 		this.getAjaxLoader().is(":visisble");
 	},
 
+	/**
+	 * var and function that stores / generates ajax loader div
+	 */
+	_ajax_loader: '',
 	getAjaxLoader: function(){
-		if(!jQuery("#ajax-filter-loader").length){
+		if(!this._ajax_loader.length) {
+			var ajaxLoaderId = 'ajax-filter-loader';
 			var overlay = jQuery("<div>").css({
 				"background":	"rgba(255,255,255,0.8) \
 					url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') \
@@ -1326,10 +1281,11 @@ Mall.listing = {
 				"top":			"0",
 				"z-index":		"1000000",
 				"color":		"#fff"
-			}).attr("id", "ajax-filter-loader");
+			}).attr("id", ajaxLoaderId);
 			jQuery("body").append(jQuery(overlay));
+			this._ajax_loader = jQuery('#'+ajaxLoaderId);
 		}
-		return jQuery("#ajax-filter-loader");
+		return this._ajax_loader;
 	},
 
 	rebuildContents: function(content){
@@ -1340,6 +1296,9 @@ Mall.listing = {
 
 		// All filters
 		var filters = jQuery(content.filters);
+		if(this.getMobileFiltersOverlay().is(":visible")) {
+			filters.show();
+		}
 		this.getFilters().replaceWith(filters);
 
 		this.initFilterEvents(filters);
@@ -1425,13 +1384,18 @@ Mall.listing = {
 			}
 
 			active.click(function() {
-				jQuery(this).parent().parent().detach();
-				unCheckbox(jQuery(this).data('input'));
-				if (active.length == 1) {
-					detachActive();
+				var me = jQuery(this);
+				if(!me.parent().hasClass('query-text-iks')) {
+					me.parents('.label').detach();
+					unCheckbox(me.data('input'));
+					if (active.length == 1) {
+						detachActive();
+					}
+					self.reloadListingNow();
+					return false;
+				} else {
+					self.showAjaxLoading();
 				}
-				self.reloadListingNow();
-				return false;
 			});
 
 			remove.click(function() {
@@ -1453,19 +1417,73 @@ Mall.listing = {
 
 		var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
 
-		mobileFilterBtn.on('click', function(event) {
-			event.preventDefault();
-			self.insertMobileSidebar();
-			jQuery('#sb-site').toggleClass('open');
-			jQuery('.fb-slidebar').toggleClass('open');
-			//var screenWidth = jQuery(window).width();
-			var screenHeight = jQuery(window).height();
-			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + screenHeight + 'px"></div>');
-		});
+		mobileFilterBtn.click(Mall.listing.openMobileFilters);
+	},
+
+
+	/**
+	 *
+	 *
+	 * FILTERS START
+	 *
+	 *
+	 **/
+	openMobileFilters: function(e) {
+		e.preventDefault();
+		var self = Mall.listing;
+		self.getFilters().show();
+		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
+		self.showMobileFiltersOverlay();
+		self.triggerResize();
+	},
+
+	closeMobileFilters: function() {
+		var self = Mall.listing;
+		self.getFilters().hide();
+		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
+		self.hideMobileFiltersOverlay();
+		self.triggerResize();
+	},
+
+	getMobileFiltersOpenedClass: function() {
+		return 'noscroll-filters';
+	},
+
+	/**
+	 * variable that stores overlay
+	 */
+	_mobile_filters_overlay: '',
+
+	showMobileFiltersOverlay: function() {
+		this.getMobileFiltersOverlay().show();
+	},
+
+	hideMobileFiltersOverlay: function() {
+		this.getMobileFiltersOverlay().hide();
+	},
+
+	getMobileFiltersOverlay: function() {
+		if(!this._mobile_filters_overlay.length) {
+			var overlayId = this.getMobileFiltersOverlayId();
+			jQuery('body').append(
+				jQuery('<div id="' + overlayId + '"></div>')
+			);
+			this._mobile_filters_overlay = jQuery('#'+overlayId);
+		}
+		return this._mobile_filters_overlay;
+	},
+
+	getMobileFiltersOverlayId: function() {
+		return 'filters-overlay';
 	},
 
 	getMobileFilterBtn: function() {
 		return jQuery("#filters-btn .actionViewFilter");
+	},
+
+	/** trigger window resize for correct filter positioning **/
+	triggerResize: function() {
+		jQuery(window).resize();
 	},
 
 	getProducts: function(){
@@ -1488,8 +1506,7 @@ Mall.listing = {
 	},
 
 	getActiveLabel: function(scope) {
-		scope = scope || Mall.listing.getActiveId();
-		return jQuery(scope+" .active-filter-label");
+		return jQuery(".active-filter-label");
 	},
 
 	getActiveRemove: function(scope) {
@@ -1498,8 +1515,274 @@ Mall.listing = {
 	},
 
 	getFilters: function(){
-		return jQuery(".solr_search_facets");
+		return jQuery("#solr_search_facets");
 	},
+
+	/**
+	 * Return current mobile filters state. Is mobile or not.
+	 *
+	 * @returns {*}
+	 */
+	getCurrentMobileFilterState: function() {
+		return this._current_mobile_filter_state;
+	},
+
+
+	initScrolls: function(scope, opts){
+		scope = scope || jQuery(".solr_search_facets");
+		opts = opts || {};
+
+		// Destroy scrolls if exists;
+		this.destroyScrolls(scope);
+
+		var fm = jQuery(".scrollable", scope);
+		if (fm.length >= 1) {
+			fm.mCustomScrollbar(jQuery.extend({}, {
+				scrollButtons:{
+					enable:true
+				},
+				advanced:{
+					updateOnBrowserResize:true
+				} // removed extra commas
+			}, opts));
+		}
+	},
+
+	destroyScrolls: function(scope) {
+		scope = scope || jQuery(".solr_search_facets");
+		jQuery(".scrollable.mCustomScrollbar", scope).mCustomScrollbar("destroy");
+	},
+
+	isVendorLandingpage: function() {
+		return jQuery('.umicrosite-index-landingpage').length;
+	},
+
+	/**
+	 * Moves filters sidebar to mobile container.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	updateFiltersMobile: function() {
+		if(this.getCurrentMobileFilterState() == 0 && !this.isVendorLandingpage()) {
+			this.positionFilters();
+			this.setCurrentMobileFilterState(1);
+		}
+		if(!jQuery('#'+this.getMobileFiltersOverlayId()).length) {
+			this.getFilters().hide();
+		}
+
+		return this;
+	},
+
+	/**
+	 * roll and unroll sidebar sections for mobile and desktop resolution
+	 * depends on current state of sidebar (mobile or desktop)
+	 *
+	 * @param scope
+	 * @private
+	 */
+	_processRollSections: function(scope) {
+		"use strict";
+		var scope    = scope || this.getFilters(),
+			attr     = this.getCurrentMobileFilterState() ? 'data-xs-rolled' : 'data-lg-rolled',
+			sections = jQuery(".section", scope),
+			self     = this;
+
+		sections.each(function() {
+			var state = jQuery(this).attr(attr) == 'open' ? 1 : 0;
+			self._doRollSection(jQuery(this), state, false);
+		});
+	},
+	/**
+	 * Attaches delete single filter action.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	attachDeleteCurrentFilter: function () {
+		"use strict";
+		jQuery('.current-filter, .view_filter').on('click', '.label>i', function(event) {
+			var removeUrl = jQuery(event.target).attr("data-params");
+			location.href = removeUrl;
+			event.preventDefault();
+			var lLabel = jQuery(this).closest('dd').find('.label').length - 1;
+			if (lLabel >= 1) {
+				jQuery(this).closest('.label').remove();
+
+			} else {
+				jQuery(this).closest('dl').remove();
+			};
+			if (lLabel == 0) {
+				jQuery('#view-current-filter').find('.view_filter').css('margin-top', 20);
+			}
+		});
+		jQuery('.current-filter, .view_filter').on('click', '.action a', function(event) {
+			jQuery(this).closest('dl').remove();
+			jQuery('#view-current-filter').find('.view_filter').css('margin-top', 24);
+		});
+
+		return this;
+	},
+
+	/**
+	 * Moves filters sidebar to desktop container.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	updateFiltersDesktop: function() {
+		if(this.getCurrentMobileFilterState() == 1 && !this.isVendorLandingpage()) {
+			this.setCurrentMobileFilterState(0);
+			this._processRollSections();
+			this.closeMobileFilters();
+		}
+		return this;
+	},
+
+	/**
+	 * Updates filters sidebar variables according to screen width
+	 */
+	updateFilters: function() {
+		var self = Mall.listing;
+		if(self.isDisplayMobile()) {
+			self.updateFiltersMobile();
+		} else {
+			self.updateFiltersDesktop();
+		}
+		self._processRollSections();
+		self.positionFilters();
+	},
+
+	positionFilters: function() {
+		var self = Mall.listing;
+		var filters = self.getFilters();
+		if(this.isDisplayMobile()) {
+			filters
+				.removeClass(self.getFiltersClassDesktop())
+				.addClass(self.getFiltersClassMobile())
+				.css({
+					top: '',
+					left: '',
+					height: jQuery(window).height()
+				});
+		} else {
+			var content = self.getContentBlock();
+			filters
+				.removeClass(self.getFiltersClassMobile())
+				.addClass(self.getFiltersClassDesktop())
+				.css({
+					'top': content.offset().top,
+					'left': content.offset().left + 15,
+					'height': ''
+				});
+
+		}
+		self.setMainSectionHeight();
+		return self;
+	},
+
+	setMainSectionHeight: function() {
+		var mainSection = jQuery('section#main');
+		if(!this.isDisplayMobile()) {
+			var filters = Mall.listing.getFilters();
+			mainSection.css('min-height', (filters.height() + 50) + 'px');
+			jQuery(window).trigger("scroll"); //footer fix
+		} else {
+			mainSection.css('min-height', '');
+		}
+	},
+
+	isDisplayMobile: function() {
+		return jQuery('.hidden-xs').css('display') == "none";
+	},
+
+	getContentBlock: function() {
+		return jQuery('#content');
+	},
+
+	getFiltersClassMobile: function() {
+		return "filters-mobile";
+	},
+
+	getFiltersClassDesktop: function() {
+		return "filters-desktop";
+	},
+
+	delegateFilterEvents: function() {
+		var self = this,
+			filtersId = '#solr_search_facets',
+			hiddenClass = 'hidden';
+
+		//filters slide up/down
+		jQuery(document).delegate(filtersId+' h3','click',function(e) {
+			e.preventDefault();
+			var me = jQuery(this);
+			self._doRollSection(
+				me.parent(),
+				!me.hasClass("open"),
+				false
+			);
+			if(self.getCurrentMobileFilterState()) {
+				self.getFilters().find('h3.open').not(me).each(function() {
+					self._doRollSection(
+						jQuery(this).parent(),
+						false,
+						false
+					);
+				});
+			}
+		});
+
+		// filters show more btn
+		jQuery(document).delegate(filtersId+' .showmore-filters','click',function(e) {
+			e.preventDefault();
+			var me = jQuery(this);
+			self._doShowMore(
+				me.parents('.section'),
+				!me.data('state') == '1',
+				false
+			);
+		});
+
+		// show/hide clear button on filter select/unselect
+		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
+			e.preventDefault();
+			var me = jQuery(this).parents('.section'),
+				button = me.find('.action.clear');
+			if(me.find(":checkbox:checked").length) {
+				if(button.hasClass(hiddenClass)) {
+					button.removeClass(hiddenClass);
+				}
+			} else {
+				button.addClass(hiddenClass);
+			}
+		});
+
+		// handle filters clearing
+		var clearBtnSelector = filtersId+' .action.clear a';
+		if(self.getPushStateSupport()) {
+			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				e.preventDefault();
+				var me = jQuery(this);
+				self.removeSingleFilterType(me);
+				me.parent().addClass(hiddenClass);
+			});
+		} else {
+			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				self.showAjaxLoading();
+			});
+		}
+
+		// handle mobile filters overlay click
+		jQuery(document).delegate('#'+self.getMobileFiltersOverlayId(),'click', self.closeMobileFilters);
+
+	},
+
+	/**
+	 *
+	 *
+	 * FILTERS END
+	 *
+	 *
+	 **/
 
 	getToolbar: function(){
 		return jQuery("#sort-criteria");
@@ -1521,37 +1804,6 @@ Mall.listing = {
 	},
 
 	/**
-	 * Return current mobile filters state. Is mobile or not.
-	 *
-	 * @returns {*}
-	 */
-	getCurrentMobileFilterState: function() {
-		return this._current_mobile_filter_state;
-	},
-
-
-	initScrolls: function(scope, opts){
-
-		opts = opts || {};
-
-		// Destroy scrolls if exists;
-		jQuery(".scrollable.mCustomScrollbar".scope)
-			.mCustomScrollbar("destroy");
-
-		var fm = jQuery(".scrollable", scope);
-		if (fm.length >= 1) {
-			fm.mCustomScrollbar(jQuery.extend({}, {
-				scrollButtons:{
-					enable:true
-				},
-				advanced:{
-					updateOnBrowserResize:true
-				} // removed extra commas
-			}, opts));
-		};
-	},
-
-	/**
 	 *
 	 * @param {type} scope
 	 * @returns {undefined}
@@ -1559,7 +1811,10 @@ Mall.listing = {
 	initSortEvents: function(scope){
 		var sortingSelect = this.getSortSelect(scope),
 			self = this;
-		sortingSelect.selectbox();
+		//sortingSelect.selectbox();
+        sortingSelect.selectBoxIt({
+            autoWidth: false
+        });
 		if(this.getPushStateSupport()) {
 			sortingSelect.change(function () {
 				var selected = jQuery(this).find(":selected");
@@ -1575,60 +1830,6 @@ Mall.listing = {
 			});
 		}
 	},
-
-	attachMiscActions: function(scope){
-		var filters = jQuery(".section", scope),
-			self = this;
-
-		filters.each(function(){
-			var filter = jQuery(this),
-				clearWrapper = filter.find(".action.clear"),
-				clearButton = clearWrapper.find("a"),
-				title = filter.find("h3"),
-				sm = filter.find(".showmore-filters");
-
-			// Handle roll up / down
-			title.on('click', function(event) {
-				self._doRollSection(
-					filter,
-					!title.hasClass("open"),
-					true
-				);
-				event.preventDefault();
-			});
-
-			// Handle showmore
-			sm.on("click", function(event) {
-				self._doShowMore(filter, !(jQuery(this).attr("data-state")=="1"), true);
-				event.preventDefault();
-			});
-
-			// Handle clear button
-			filter.on('change', ':checkbox', function(e) {
-				if (filter.find(":checkbox:checked").length) {
-					clearWrapper.removeClass("hidden");
-				} else {
-					clearWrapper.addClass("hidden");
-				}
-			});
-			if(self.getPushStateSupport()) {
-				clearButton.on('click', function (event) {
-					event.preventDefault();
-					self.removeSingleFilterType(this);
-					clearWrapper.addClass('hidden');
-				});
-			} else {
-				clearButton.on('click',function () {
-					self.showAjaxLoading();
-					window.location = jQuery(this).prop('href');
-				});
-			}
-
-		});
-
-	},
-
-
 
 	/**
 	 * Attaches events to color filter.
@@ -2480,8 +2681,11 @@ Mall.listing = {
 		} else {
 			select.val(select.find(":first-child").val());
 		}
-		select.selectbox('detach');
-		select.selectbox('attach');
+
+        select.selectBoxIt('destroy');
+        select.selectBoxIt({
+            autoWidth: false
+        });
 		return this;
 	},
 	/**
@@ -2815,25 +3019,19 @@ Mall.listing = {
 
 jQuery(document).ready(function () {
 	"use strict";
-	Mall.listing.init();
+    jQuery('#toggleSearch').click(function(){
+        jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+    });
+    jQuery('body').click(function (e) {
 
-    jQuery( window ).resize(function() {
-        if (window.innerWidth >= 768 ) {
-            Mall.listing.insertDesktopSidebar();
+        if(jQuery(e.target).parents("#dropdown-search").length>0){
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
         } else {
-            Mall.listing.insertMobileSidebar();
+            jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'visible');
         }
     });
-    jQuery( window ).resize(function() {
-        if (window.innerWidth < 768 ) {
-            if(jQuery('.fb-slidebar.open').length){
-                jQuery('.closeSlidebar').click();
-                jQuery('#sb-site').removeClass('open');
-                jQuery('.fb-slidebar').removeClass('open');
-                jQuery('body').removeClass('noscroll');
-                jQuery('body').find('.noscroll').remove();
-            }
-        }
-
-    });
+    if (jQuery('body.filter-sidebar').length) {
+        Mall.listing.init();
+        jQuery(window).resize(Mall.listing.updateFilters);
+    }
 });

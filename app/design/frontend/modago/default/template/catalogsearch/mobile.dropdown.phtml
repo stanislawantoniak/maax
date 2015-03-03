@@ -1,9 +1,11 @@
 <?php
 /**
- * Author: Paweł Chyl <pawel.chyl@orba.pl>
- * Date: 19.05.14
+ * Content of this block is ajax loaded
+ * for varnish
  */
-$options = Mage::helper('zolagosolrsearch')->getContextSelectorArray();
+
+$_helper = Mage::helper('zolagosolrsearch');
+
 ?>
 
 <div id="dropdown-search" class="dropdown hidden-md hidden-lg">
@@ -11,19 +13,20 @@ $options = Mage::helper('zolagosolrsearch')->getContextSelectorArray();
         <div class="dropdown-panel-inner">
             <div class="searchDropdown">
 
-                <form class="clearfix" role="search" action="<?php echo $options['url']; ?>" method="<?php echo $options['method']; ?>">
+                <form class="clearfix" role="search" action="<?php echo Mage::getUrl("search/index/index", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="<?php echo $options['input_name']; ?>" placeholder="<?php echo $options['input_empty_text']; ?>" value="<?php echo $options['input_current_value']; ?>">
+                        <input type="text" class="form-control" name="q" placeholder="<?php echo $_helper->__('Search...'); ?>">
                     </div>
                     <div class="form-group styledSelected">
-                        <select name="<?php echo $options['select_name']; ?>" class="form-control  select-styled">
-                            <?php foreach($options['select_options'] as $opt) : ?>
+						
+                        <select name="scat" class="form-control  select-styled search-context">
+                            <?php /* foreach($options['select_options'] as $opt) : ?>
                                 <option value="<?php echo $opt['value']; ?>" <?php if($opt['selected']) : ?>selected="selected"<?php endif; ?>><?php echo $opt['text']; ?></option>
-                            <?php endforeach; ?>
+                            <?php endforeach; */ ?>
                         </select>
                     </div>
                     <div class="form-group action">
-                        <button class="btn sending pull-right"><?php echo $this->__("Search"); ?></button>
+                        <button class="btn button button-primary large sending pull-right"><?php echo $_helper->__("Search"); ?></button>
                     </div>
                 </form>
 

@@ -6,12 +6,16 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
     public function get_account_informationAction()
     {
-        $q = Mage::getSingleton('checkout/cart')->getQuote();
-        $q->getTotals();
-
-
+		
+		//$profiler = Mage::helper('zolagocommon/profiler');
+		/* @var $profiler Zolago_Common_Helper_Profiler */
+		
+		//$profiler->start();
+        
         /*shipping_cost*/
+		
         $cost = Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
+		//$profiler->log("Quote shipping costs");
 
         $costSum = 0;
         if (!empty($cost)) {
@@ -23,6 +27,17 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$quote = Mage::helper('checkout/cart')->getQuote();
 		/* @var $quote Mage_Sales_Model_Quote */
 		$totals = $quote->getTotals();
+		//$profiler->log("Quote totals");
+		
+		$persistent = Mage::helper('persistent/session')->isPersistent() && 
+			!Mage::getSingleton('customer/session')->isLoggedIn();
+		
+		//$profiler->log("Persistent");
+		
+		$searchContext = Mage::helper('zolagosolrsearch')->getContextSelectorArray(
+				$this->getRequest()->getParams()
+		);
+		//$profiler->log("Context");
 		
 		
         $content = array(
@@ -39,8 +54,30 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
                 'show_cart_url' => Mage::getUrl('checkout/cart', array("_no_vendor"=>true)),
                 'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
                 'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
-            )
+            ),
+			'persistent' => $persistent,
+			'persistent_url' => Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true)),
+			'search' => $searchContext
         );
+		//$profiler->log("Rest");
+		
+		// Load product context data
+		
+		if($productId=$this->getRequest()->getParam("product_id")){
+			$product = Mage::getModel("catalog/product");
+			/* @var $product Mage_Catalog_Model_Product */
+			$product->setId($productId);
+			
+			// Load wishlist count
+			$wishlistCount = $product->getResource()->getAttributeRawValue(
+					$productId, "wishlist_count", Mage::app()->getStore()->getId());
+			
+			$content['product'] = array(
+				"entity_id"=>$productId,
+				"in_my_wishlist" => Mage::helper('zolagowishlist')->productBelongsToMyWishlist($product),
+				"wishlist_count" => (int)$wishlistCount
+			);
+		}
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);
@@ -55,35 +92,36 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			$cartItems = array_slice($cartItems, 0, self::MAX_CART_ITEMS_COUNT);	
 		}
 		
-		// Product load 
-		$productsIds = array();
-		foreach ($cartItems as $item){
-            $productsIds[] = $item->getProductId();
-		}
-		
-		$collection = Mage::getResourceModel("catalog/product_collection");
-		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-		
-		$collection->addAttributeToSelect("name");
-		$collection->addAttributeToSelect("image");
-		$collection->addAttributeToSelect("url_path");
-		
-		if($productsIds){
-			$collection->addIdFilter($productsIds);
-		}else{
-			$collection->addIdFilter(-1);
-		}
+//		// Product load 
+//		$productsIds = array();
+//		foreach ($cartItems as $item){
+//            $productsIds[] = $item->getProductId();
+//		}
+//		
+//		$collection = Mage::getResourceModel("catalog/product_collection");
+//		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+//		
+//		$collection->addAttributeToSelect("name");
+//		$collection->addAttributeToSelect("image");
+//		$collection->addAttributeToSelect("url_path");
+//		
+//		if($productsIds){
+//			$collection->addIdFilter($productsIds);
+//		}else{
+//			$collection->addIdFilter(-1);
+//		}
 		
 		$array = array();
         foreach ($cartItems as $item)
         {
-            $productId = $item->getProductId();
-            $product = $collection->getItemById($productId);
+//            $productId = $item->getProductId();
+//            $product = $collection->getItemById($productId);
+            $product = $item->getProduct();
 			/* @var $product Mage_Catalog_Model_Product */
 			
 			if($product && $product->getId()){
 				$options = $this->_getProductOptions($item);
-				$image = Mage::helper('catalog/image')->init($product, 'image')->resize(40, 50);
+				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(40, 50);
 
 				$array[] = array(
 					'name' => $product->getName(),

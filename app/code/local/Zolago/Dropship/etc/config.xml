@@ -27,6 +27,8 @@
 					<pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
 					<!-- Vendor model -->
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
+					<!-- Observer model -->
+					<observer>Zolago_Dropship_Model_Observer</observer>
 				</rewrite>
 			</udropship>
 			<udropship_mysql4>
@@ -119,6 +121,20 @@
                         <fieldset>integration</fieldset>
                         <position>1</position>
                     </vendor_type>
+                    <can_ask>
+                        <label>Customer can ask?</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>integration</fieldset>
+                        <position>2</position>
+                    </can_ask>
+                    <sequence>
+                        <label>Sequence</label>
+                        <note>Vendor on main page in customized sequence</note>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>3</position>
+                    </sequence>
                 	<marketing_store_information>
                         <label>Main store menu - marketing store information</label>
                         <type>wysiwyg</type>
@@ -143,6 +159,13 @@
                         <fieldset>marketing</fieldset>
                         <position>40</position>
                     </terms_return_information>
+                	<basket_delivery_slogan>
+                        <label>Basket - Delivery info</label>
+                        <type>wysiwyg</type>
+                        <fieldset>marketing</fieldset>
+                        <position>45</position>
+						<only_admin>1</only_admin>
+                    </basket_delivery_slogan>
                 	<store_delivery_headline>
                         <label>Product - store section - delivery headline</label>
                         <type>text</type>
@@ -175,6 +198,7 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
+                    
 					<!-- DHL -->
                 	<use_dhl>
                         <label>Use DHL</label>
@@ -410,6 +434,12 @@
 				</Zolago_Dropship>
 			</modules>
 		</translate>		
+		<secure_url>
+		    <udropship_operator>/udropship/operator/</udropship_operator>
+		    <udropship_pos>/udropship/pos/</udropship_pos>
+		    <udropship_sizetable>/udropship/sizetable/</udropship_sizetable>
+		    <udropship_vendor_settings>/udropship/vendor_settings/</udropship_vendor_settings>
+		</secure_url>
 	</frontend>
 	<admin>
 		<routers>

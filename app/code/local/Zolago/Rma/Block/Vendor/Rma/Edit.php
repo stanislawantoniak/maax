@@ -171,14 +171,14 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
      * @return bool
      */
 	public function canVendorUseDhl() {
-	    return Mage::helper('zolagodhl')->isDhlEnabledForVendor($this->getVendor()) ||
-	            Mage::helper('zolagodhl')->isDhlEnabledForRma($this->getVendor());
+	    return Mage::helper('orbashipping')->isDhlEnabledForVendor($this->getVendor()) ||
+	            Mage::helper('orbashipping')->isDhlEnabledForRma($this->getVendor());
 	}
 	/**
 	 * @return bool
 	 */
 	public function canPosUseDhl() {
-		return Mage::helper('zolagodhl')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
+		return Mage::helper('orbashipping')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
 	}
 	
 	/**

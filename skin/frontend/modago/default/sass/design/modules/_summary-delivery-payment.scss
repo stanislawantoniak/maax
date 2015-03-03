@@ -1,4 +1,36 @@
 #checkout {
+	.sidebar-deliverypayment {
+		dl {
+			position: relative;
+		}
+		.online-data {
+			span {
+				display: block;
+				max-width: 140px;
+				min-height: 38px;
+				max-height: 38px;
+				@include max-screen(845px) {
+					max-width: 130px;
+				}
+				@include max-screen($screen-xs-max) {
+					max-width: 150px;
+				}
+			}
+			img {
+				max-width: 80px;
+				position: absolute;
+				top: -3px;
+				right: 0;
+				border: 1px solid black;
+				padding: 5px;
+				margin-bottom: 20px;
+				@include max-screen($screen-xs-max) {
+					right: auto;
+					left: 160px;
+				}
+			}
+		}
+	}
 	.panel {
 		&.panel-custom {
 			.panel-body {
@@ -15,10 +47,9 @@
 				.lb {
 					//width:59px;
 					text-align:right;
-					text-align:right;
 					&+span {
 						text-align: right;
-						font-weight: bold;
+//						font-weight: bold;
 					}
 				}
 			}
@@ -141,10 +172,10 @@
 					text-align:right;
 					display:inline-block;
 					text-align:right;
-					&+span {
-						text-align: right;				
-						font-weight: bold;
-					}
+				}
+				.total_shipping, .price, .total_discout {
+//					font-weight:bold;
+					text-align: right;				
 				}
 			}
 		}

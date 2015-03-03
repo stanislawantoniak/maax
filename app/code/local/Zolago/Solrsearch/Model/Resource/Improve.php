@@ -47,7 +47,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			}
 			foreach($attributes as $attributeId=>$attributeValues){
 				$attributeModel = $attrbiuteCollection->getItemById($attributeId);
-				$item->setOrigData($attributeModel->getAttributeCode() . "_facet", $attributeValues);
+                if ($attributeModel) {
+                    $item->setOrigData($attributeModel->getAttributeCode() . "_facet", $attributeValues);
+                }
 			}
 			Mage::getSingleton("zolagosolrsearch/data")->extendConfigurable($item, $attrbiuteCollection);
 		}

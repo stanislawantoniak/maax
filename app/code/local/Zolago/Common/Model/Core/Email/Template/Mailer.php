@@ -18,16 +18,16 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 		}
 		return parent::setTemplateParams($templateParams);
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getLogoFile() {
-		return "images/logo_header_lightbox.png";
+		return "images/logo_email.png";
 	}
 	
     /**
-	 * Override email tempalte supported attachments
+	 * Override email template supported attachments
 	 * 
      * Send all emails from email list
      * @see self::$_emailInfos
@@ -36,9 +36,11 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
      */
     public function send()
     {
+        /** @var Zolago_Common_Model_Core_Email_Template $emailTemplate */
         $emailTemplate = Mage::getModel('zolagocommon/core_email_template');
         // Send all emails from corresponding list
         while (!empty($this->_emailInfos)) {
+            /** @var Mage_Core_Model_Email_Info $emailInfo */
             $emailInfo = array_pop($this->_emailInfos);
             // Handle "Bcc" recepients of the current email
             $emailTemplate->addBcc($emailInfo->getBccEmails());

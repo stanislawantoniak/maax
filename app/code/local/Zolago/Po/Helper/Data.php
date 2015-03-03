@@ -4,8 +4,127 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 	const DEFAULT_PO_IMAGE_WIDTH = 53;
 	const DEFAULT_PO_IMAGE_HEIGHT = 69;
 	
-	protected $_condJoined = false;	
-	
+	protected $_condJoined = false;
+
+    /**
+     * to have payment status updated when PO is changed
+     *
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $save
+     * @throws Exception
+     */
+    public function updatePoStatusByAllocation(Zolago_Po_Model_Po $po, $save = true) {
+        if ($po->getId()) {
+            $newStatus = $po->getUdropshipStatus();
+
+            $grandTotal = $po->getGrandTotalInclTax();
+            /** @var Zolago_Payment_Model_Allocation $allocationModel */
+            $allocationModel = Mage::getModel("zolagopayment/allocation");
+            $sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+
+            //czeka na płatność
+            if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PAYMENT && ($grandTotal <= $sumAmount)) {
+                //rowny albo nadplata
+                $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
+                if ($save) {
+                    $po->save();
+                }
+            } //czeka na spakowanie
+            elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
+                //jest mniej niz potrzeba
+                $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
+                if ($save) {
+                    $po->save();
+                }
+            } //czeka na rezerwacje
+            elseif ($newStatus == Zolago_Po_Model_Po_Status::STATUS_BACKORDER && ($grandTotal <= $sumAmount)) {
+                $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_PENDING);
+                if ($save) {
+                    $po->save();
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @param $isVendorNotified
+     * @param $isVisibleToVendor
+     * @param $operator_id
+     * @param $amount
+     */
+    public function addOverpayComment(Zolago_Po_Model_Po $po, $isVendorNotified, $isVisibleToVendor, $operator_id, $amount) {
+
+        /** @var Zolago_Payment_Helper_Data $helperZP */
+        $helperZP = Mage::helper("zolagopayment");
+        /** @var Zolago_Operator_Model_Operator $modelOperator */
+        $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
+
+        if ($modelOperator->getId()) {
+            //if is operator
+            $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getEmail();
+        } else {
+            //if is vendor
+            $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
+        }
+        if (empty($fullName)) {
+            $fullName = $helperZP->__("Automat");
+        }
+
+        $_comment =
+            "[$fullName] " .
+            $helperZP->__("Created overpayment") .
+            ": " .
+            Mage::helper('core')->currency($amount, true, false)
+        ;
+
+        $po->addComment($_comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($po, $_comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $po->saveComments();
+    }
+
+    public function addAllocationComment(Zolago_Po_Model_Po $oldPo, Zolago_Po_Model_Po $newPo, $isVendorNotified, $isVisibleToVendor, $operator_id, $amount){
+        /** @var Zolago_Payment_Helper_Data $helperZP */
+        $helperZP = Mage::helper("zolagopayment");
+        /** @var Zolago_Operator_Model_Operator $modelOperator */
+        $modelOperator = Mage::getModel("zolagooperator/operator")->load($operator_id);
+
+        if ($modelOperator->getId()) {
+            //if is operator
+            $fullName = $modelOperator->getVendor()->getVendorName()." / ".$modelOperator->getEmail();
+        } else {
+            //if is vendor
+            $fullName = Mage::getSingleton('udropship/session')->getVendor()->getVendorName();
+        }
+        if (empty($fullName)) {
+            $fullName = $helperZP->__("Automat");
+        }
+
+        $comment =
+            "[$fullName] " .
+            $helperZP->__("Overpayment moved from %s to %s. Amount: %s",
+                $oldPo->getIncrementId(),
+                $newPo->getIncrementId(),
+                Mage::helper('core')->currency($amount, true, false));
+
+        $newPo->addComment($comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($newPo, $comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $newPo->saveComments();
+
+        $oldPo->addComment($comment, $isVendorNotified, $isVisibleToVendor);
+        if ($isVendorNotified) {
+            Mage::helper('udpo')->sendPoCommentNotificationEmail($oldPo, $comment);
+            Mage::helper('udropship')->processQueue();
+        }
+        $oldPo->saveComments();
+    }
+
 	/**
 	 * @param Zolago_Po_Model_Po_Item $item
 	 * @return Mage_Catalog_Helper_Image
@@ -39,6 +158,28 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		
 		return $attachments;
 	}
+
+    /**
+     * get all images attachments from order witch can have more
+     * then 1 PO
+     *
+     * @param Zolago_Sales_Model_Order $order
+     * @return array
+     */
+    public function getOrderImagesAsAttachments(Zolago_Sales_Model_Order $order) {
+
+        $coll = $order->getPoListByOrder();
+        $allAttachments = array();
+
+        foreach ($coll as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            $attachments = $this->getPoImagesAsAttachments($po);
+            foreach ($attachments as $att) {
+                $allAttachments[] = $att;
+            }
+        }
+        return $allAttachments;
+    }
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
@@ -115,16 +256,212 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		}
    
 	}
-	
+
+    public function _sendNewPoNotificationEmail($po, $comment='')
+    {
+        $order = $po->getOrder();
+        $store = $order->getStore();
+
+        $vendor = $po->getVendor();
+
+        $hlp = Mage::helper('udropship');
+        $udpoHlp = Mage::helper('udpo');
+        $data = array();
+
+        if (!$po->getResendNotificationFlag()
+            && ($store->getConfig('udropship/vendor/attach_packingslip') && $vendor->getAttachPackingslip()
+                || $store->getConfig('udropship/vendor/attach_shippinglabel') && $vendor->getAttachShippinglabel() && $vendor->getLabelType())
+        ) {
+            $udpoHlp->createReturnAllShipments=true;
+            if ($shipments = $udpoHlp->createShipmentFromPo($po, array(), true, true, true)) {
+                foreach ($shipments as $shipment) {
+                    $shipment->setNewShipmentFlag(true);
+                    $shipment->setDeleteOnFailedLabelRequestFlag(true);
+                }
+            }
+            $udpoHlp->createReturnAllShipments=false;
+        }
+
+        if ($po->getResendNotificationFlag()) {
+            foreach ($po->getShipmentsCollection() as $_shipment) {
+                if ($_shipment->getUdropshipStatus()!=Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                    $shipments[] = $_shipment;
+                    break;
+                }
+            }
+        }
+
+        $adminTheme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+
+        if ($store->getConfig('udropship/purchase_order/attach_po_pdf') && $vendor->getAttachPoPdf()) {
+            Mage::getDesign()->setArea('adminhtml')
+                ->setPackageName(!empty($adminTheme[0]) ? $adminTheme[0] : 'default')
+                ->setTheme(!empty($adminTheme[1]) ? $adminTheme[1] : 'default');
+
+            $orderShippingAmount = $order->getShippingAmount();
+            $order->setShippingAmount($po->getShippingAmount());
+
+            $pdf = Mage::helper('udpo')->getVendorPoMultiPdf(array($po));
+
+            $order->setShippingAmount($orderShippingAmount);
+
+            $data['_ATTACHMENTS'][] = array(
+                'content'=>$pdf->render(),
+                'filename'=>'purchase_order-'.$po->getIncrementId().'-'.$vendor->getId().'.pdf',
+                'type'=>'application/x-pdf',
+            );
+        }
+
+        if ($store->getConfig('udropship/vendor/attach_packingslip') && $vendor->getAttachPackingslip() && !empty($shipments)) {
+            Mage::getDesign()->setArea('adminhtml')
+                ->setPackageName(!empty($adminTheme[0]) ? $adminTheme[0] : 'default')
+                ->setTheme(!empty($adminTheme[1]) ? $adminTheme[1] : 'default');
+
+            foreach ($shipments as $shipment) {
+                $orderShippingAmount = $order->getShippingAmount();
+                $order->setShippingAmount($shipment->getShippingAmount());
+
+                $pdf = Mage::helper('udropship')->getVendorShipmentsPdf(array($shipment));
+
+                $order->setShippingAmount($orderShippingAmount);
+                $shipment->setDeleteOnFailedLabelRequestFlag(false);
+
+                $data['_ATTACHMENTS'][] = array(
+                    'content'=>$pdf->render(),
+                    'filename'=>'packingslip-'.$po->getIncrementId().'-'.$vendor->getId().'.pdf',
+                    'type'=>'application/x-pdf',
+                );
+            }
+        }
+
+        if ($store->getConfig('udropship/vendor/attach_shippinglabel') && $vendor->getAttachShippinglabel()
+            && $vendor->getLabelType() && !empty($shipments)
+        ) {
+            foreach ($shipments as $shipment) {
+                try {
+                    $hlp->unassignVendorSkus($shipment);
+                    $hlp->unassignVendorSkus($po);
+                    foreach ($shipment->getAllItems() as $sItem) {
+                        $firstOrderItem = $sItem->getOrderItem();
+                        break;
+                    }
+                    if (!isset($firstOrderItem) || !$firstOrderItem->getUdpompsManual()) {
+                        if (!$po->getResendNotificationFlag()) {
+                            $batch = Mage::getModel('udropship/label_batch')->setVendor($vendor)->processShipments(array($shipment));
+                            if ($batch->getErrors()) {
+                                if (Mage::app()->getRequest()->getRouteName()=='udropship') {
+                                    Mage::throwException($batch->getErrorMessages());
+                                } else {
+                                    Mage::helper('udropship/error')->sendLabelRequestFailedNotification($shipment, $batch->getErrorMessages());
+                                }
+                            } else {
+                                if ($batch->getShipmentCnt()>1) {
+                                    $labelModel = Mage::helper('udropship')->getLabelTypeInstance($batch->getLabelType());
+                                    $data['_ATTACHMENTS'][] = $labelModel->renderBatchContent($batch);
+                                } else {
+                                    $labelModel = $hlp->getLabelTypeInstance($batch->getLabelType());
+                                    foreach ($shipment->getAllTracks() as $track) {
+                                        $data['_ATTACHMENTS'][] = $labelModel->renderTrackContent($track);
+                                    }
+                                }
+                            }
+                        } else {
+                            $batchIds = array();
+                            foreach ($shipment->getAllTracks() as $track) {
+                                $batchIds[$track->getBatchId()][] = $track;
+                            }
+                            foreach ($batchIds as $batchId => $tracks) {
+                                $batch = Mage::getModel('udropship/label_batch')->load($batchId);
+                                if (!$batch->getId()) continue;
+                                if (count($tracks)>1) {
+                                    $labelModel = Mage::helper('udropship')->getLabelTypeInstance($batch->getLabelType());
+                                    $data['_ATTACHMENTS'][] = $labelModel->renderBatchContent($batch);
+                                } else {
+                                    reset($tracks);
+                                    $labelModel = Mage::helper('udropship')->getLabelTypeInstance($batch->getLabelType());
+                                    $data['_ATTACHMENTS'][] = $labelModel->renderTrackContent(current($tracks));
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception $e) {
+                    // ignore if failed
+                }
+            }
+        }
+
+        if (!empty($shipments)) {
+            foreach ($shipments as $shipment) {
+                if ($shipment->getNewShipmentFlag() && !$shipment->isDeleted()) {
+                    $shipment->setNoInvoiceFlag(false);
+                    $hlp->unassignVendorSkus($shipment);
+                    $hlp->unassignVendorSkus($po);
+                    $udpoHlp->invoiceShipment($shipment);
+                }
+            }
+        }
+
+        $hlp->setDesignStore($store);
+        $shippingAddress = $order->getShippingAddress();
+        if (!$shippingAddress) {
+            $shippingAddress = $order->getBillingAddress();
+        }
+        $hlp->assignVendorSkus($po);
+        $data += array(
+            'po'              => $po,
+            'order'           => $order,
+            'vendor'          => $vendor,
+            'comment'         => $comment,
+            'store_name'      => $store->getName(),
+            'vendor_name'     => $vendor->getVendorName(),
+            'po_id'           => $po->getIncrementId(),
+            'order_id'        => $order->getIncrementId(),
+            'customer_info'   => Mage::helper('udropship')->formatCustomerAddress($shippingAddress, 'html', $vendor),
+            'shipping_method' => $po->getUdropshipMethodDescription() ? $po->getUdropshipMethodDescription() : $vendor->getShippingMethodName($order->getShippingMethod(), true),
+            'po_url'          => Mage::getUrl('udpo/vendor/', array('_query'=>'filter_po_id_from='.$po->getIncrementId().'&filter_po_id_to='.$po->getIncrementId())),
+            'po_pdf_url'      => Mage::getUrl('udpo/vendor/udpoPdf', array('udpo_id'=>$po->getId())),
+            'use_attachments' => true
+        );
+
+        $template = $vendor->getEmailTemplate();
+        if (!$template) {
+            $template = $store->getConfig('udropship/purchase_order/new_po_vendor_email_template');
+        }
+        $identity = $store->getConfig('udropship/vendor/vendor_email_identity');
+
+        $data['_BCC'] = $vendor->getNewOrderCcEmails();
+        if (($emailField = $store->getConfig('udropship/vendor/vendor_notification_field'))) {
+            $email = $vendor->getData($emailField) ? $vendor->getData($emailField) : $vendor->getEmail();
+        } else {
+            $email = $vendor->getEmail();
+        }
+
+//        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+        /* @var $helper Zolago_Common_Helper_Data */
+        $helper = Mage::helper("zolagocommon");
+        $helper->sendEmailTemplate(
+            $email,
+            $vendor->getVendorName(),
+            $template,
+            $data,
+            true,
+            $identity
+        );
+
+        $hlp->unassignVendorSkus($po);
+
+        $hlp->setDesignStore();
+    }
+
 	public function sendNewPoNotificationEmail($po, $comment=''){
 		$vendor = $po->getVendor();
 		/* @var $po Zolago_Po_Model_Po */
 		$order = $po->getOrder();
         $store = $order->getStore();
 		$pos = $po->getPos();
-		
+
 		$emailField = $store->getConfig('udropship/vendor/vendor_notification_field');
-		
+
 		if(!$emailField){
 			$emailField = "email";
 		}
@@ -138,15 +475,12 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		// Replace vendor email to pos email & send mail & restore origin
 		$vendor->setData($emailField, $newEmail);	
 		$vendor->setData("po", $po);
-		$return = parent::sendNewPoNotificationEmail($po, $comment);
+		$this->_sendNewPoNotificationEmail($po, $comment);
 		$vendor->setData($emailField, $oldEmail);
 		$vendor->setData("po", null);
-		
-		
+
 		// Porocess queue
 		Mage::helper('udropship')->processQueue();
-		
-		return $return; 
 	}
 	
 	/**
@@ -262,6 +596,12 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		return $dhlSettings;
 	}
 	
+	/**
+	 * @todo handle configurable product
+	 * @param Mage_Sales_Model_Order_Item $item
+	 * @param Zolago_Po_Model_Po_Item $poItem
+	 * @return \Zolago_Po_Helper_Data
+	 */
 	public function prepareOrderItemByPoItem(Mage_Sales_Model_Order_Item $item, 
 		Zolago_Po_Model_Po_Item $poItem) {
 		
@@ -323,6 +663,11 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		}
 		// Stock item 
 		$stockItem = $product->getStockItem();
+		
+		/**
+		* @todo PO item if this has parent PO item use its ORDER item id 
+		* as value of parent_item_id of new ORDER item
+		*/
 		
 		$data = array(			
 			"order_id"						=> $order->getId(),

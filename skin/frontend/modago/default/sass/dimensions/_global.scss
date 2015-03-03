@@ -73,11 +73,6 @@ body {
 	}
 }
 
-.not-menu-mobile {
-	#nav_mobile {
-		display:none !important;
-	}
-}
 #navCategory { 
 	&.visible-xs {
 		@media (max-width: $screen-sm-min) { 
@@ -135,15 +130,6 @@ body {
 				//height:50px;
 			}
 		}
-	}
-}
-
-
-
-.node-type-checkout,
-.node-type-shopping-cart {
-	#content {
-		padding-top:0;
 	}
 }
 
@@ -222,6 +208,8 @@ section.bottom {
 			display:none!important;
 		}
 	}
+
+
 
 }
 section {

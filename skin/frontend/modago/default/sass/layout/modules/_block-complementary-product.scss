@@ -1,6 +1,10 @@
 #complementary_product {
 	@media (max-width: $screen-xs-max) {
-		margin-top:30px;
+		margin-top: 5px;
+		margin-bottom: -5px;
+	}
+	@media (min-width: $screen-sm-min) {
+		margin-top: 30px;
 	}
 }
 .block-complementary-product {
@@ -73,12 +77,12 @@
 					height: 43px;
 					.col-price {
 						position:absolute;
-						top: 18px;
+						top: 8px;
 					}
 					.like {
 						    position:absolute;
-							top: 24px;
-						}
+							top: 31px;
+					}
 				}
 			
 				.price {

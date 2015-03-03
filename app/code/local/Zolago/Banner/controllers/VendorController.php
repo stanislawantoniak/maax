@@ -218,7 +218,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                 }
                 return $this->_redirectReferer();
             }
-            $this->_getSession()->addSuccess($helper->__("Campaign creative Saved"));
+            $this->_getSession()->addSuccess($helper->__("Campaign creative saved"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_getSession()->setFormData($data);

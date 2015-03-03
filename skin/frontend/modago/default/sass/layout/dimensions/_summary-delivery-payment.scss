@@ -146,7 +146,7 @@
 				@media (max-width: $screen-xs-max) {
 					display:block;
 					position:absolute;
-					bottom:0px;
+					top:20px;
 					right:0px;
 				}
 				.stara_cena {
@@ -161,6 +161,8 @@
 					right:-33.333%;
 				}
 				@media (max-width: $screen-xs-max) {
+					font-size: 12px;
+					text-align: right !important;
 					display:block;
 				}
 				

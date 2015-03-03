@@ -1,4 +1,6 @@
 <?php
+/** @var Unirgy_DropshipVendorAskQuestion_Block_Product_Question $this */
+
 if(!$this->isGallery()) {
 	$product = $this->getProduct();
 	$vendors = $product ? $product->getUdropshipVendor() : $this->getVendorsList();
@@ -7,6 +9,8 @@ if(!$this->isGallery()) {
 }
 
 $session = Mage::getSingleton('customer/session');
+
+$_helper = Mage::helper('zolagoudqa');
 
     $dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
 
@@ -37,45 +41,49 @@ $session = Mage::getSingleton('customer/session');
 					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
 				<?php else: ?>
 					<li class="wide">
-						<div class="form-group select-container">
-                            <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
-                                    <option value=""><?php echo $this->__("Choose shop"); ?></option>
+						<div class="form-group select-box-it-select-container">
+                            <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry select-box-it-select" required>
+                                    <option value=""><?php echo $_helper->__('Select vendor'); ?></option>
                                 <?php foreach($vendors as $id=>$name): ?>
-                                    <option value="<?php echo $id; ?>" <?php echo ($vendor_id == $id) ? 'selected' : '' ?> ><?php echo $name; ?></option>
+                                    <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
                             </select>
 						</div>
 					</li>
 				<?php endif; ?>
                 <?php if(!$session->isLoggedIn()):?>
+
                 <li class="wide">
                     <div class="form-group">
-                        <label for="customer_name" class="required" aria-required="true"><?php echo $this->__('Your Name') ?> <em>*</em></label>
+                        <label for="customer_name" class="required" aria-required="true"><?php echo $_helper->__('Your Name') ?> <em>*</em></label>
                         <div class="input-box">
                             <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint closer-valid-ico" required
                                 value="<?php echo $customer_name; ?>"/>
                         </div>
                     </div>
                 </li>
+
+
                 <li class="wide">
                     <div class="form-group">
-                        <label for="customer_email" class="required" aria-required="true"><?php echo $this->__('Email') ?> <em>*</em></label>
+                        <label for="customer_email" class="required" aria-required="true"><?php echo $_helper->__('Your Email') ?> <em>*</em></label>
                         <div class="input-box">
                             <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint closer-valid-ico" required data-rule-email="true"
                                 value="<?php echo $customer_email; ?>"/>
                         </div>
                     </div>
                 </li>
+
                 <?php else:?>
                     <input type="hidden" name="question[customer_name]" value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>" />
                     <input type="hidden" name="question[customer_email]" value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>" />
                 <?php endif;?>
                 <li class="wide">
                     <div class="form-group">
-                        <label for="question_text" class="required" aria-required="true"><?php echo $this->__('Question Text') ?> <em>*</em></label>
+                        <label for="question_text" class="required" aria-required="true"><?php echo $_helper->__('Your Question') ?> <em>*</em></label>
                         <div class="input-box">
                             <textarea name="question[question_text]" id="question_text" title="" class="required-entry input-text form-control"
-                                      cols="5" rows="3" data-original-title="<?php echo $this->__('Question Text') ?>"
+                                      cols="5" rows="3" data-original-title="<?php echo $_helper->__('Your Question') ?>"
                                       required><?php echo $question_text; ?></textarea>
                         </div>
                     </div>
@@ -86,15 +94,17 @@ $session = Mage::getSingleton('customer/session');
     <div class="row">
         <div class="col-xs-11">
             <div class="buttons-set">
-                <p class="required" aria-required="true"><?php echo $this->__('* Required Fields') ?></p>
-                <button type="submit" title="<?php echo $this->__('Submit') ?>" class="btn button button-primary  sending"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+                <p class="required" aria-required="true"><?php echo $_helper->__('* Required Fields') ?></p>
+                <button type="submit" title="<?php echo $_helper->__('Submit') ?>" class="btn button button-primary  sending">
+                    <i></i>
+                    <span><span><?php echo $_helper->__('Submit') ?></span></span></button>
             </div>
         </div>
     </div>
 </form>
 <script type="text/javascript">
-	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
-	Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+	Mall.i18nValidation.add("required", "<?php echo $_helper->__('This field is required') ?>");
+	Mall.i18nValidation.add("email", "<?php echo $_helper->__('Valid email is required.') ?>");
 </script>
 <script>
     jQuery(document).ready(function() {
@@ -102,16 +112,22 @@ $session = Mage::getSingleton('customer/session');
         var vidselect =  jQuery(vidselectid),
             questionform =  jQuery("#question-form");
 
-        vidselect.select2({
-            minimumResultsForSearch: -1
+
+        vidselect.selectBoxIt({
+            autoWidth: false
+        });
+        var validationOptions = jQuery.extend({}, Mall.validate.getDefaultValidationOptions(), {
+            ignore: ''//i.e. do not ignore hidden elements
+            ,errorPlacement: function (error, element) {
+                error.appendTo(element.parents(".form-group"));
+            }
         });
 
-        questionform.validate(Mall.validate.getDefaultValidationOptions());
-
+        questionform.validate(validationOptions);
 
         // this is required to trigger validation on select change
         vidselect.on("change", function() {
-            questionform.validate().element(vidselectid);
+            questionform.validate(validationOptions).element(vidselectid);
         });
     });
 </script>

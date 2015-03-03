@@ -191,10 +191,10 @@
 					}
 					&.cell-03 {
 						padding-left:12px;
-						.styledSelected {
-							top:12px;
-							width:60px;
-						}
+//						.styledSelected {
+//							top:12px;
+//							width:60px;
+//						}
 						.select-group.medium {
 							width:60px;
 							margin-top: 13px;
@@ -260,6 +260,9 @@
 	margin-bottom: 15px;
 	@media (max-width: $screen-xs-max) {
 		padding-top: 11px;
+	}
+	@media (max-width: 379px) {
+		padding-top: 20px;
 	}
 }
 .value_quality_delivery {

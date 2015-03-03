@@ -102,12 +102,6 @@
 						line-height: 22px;
 					}
 					&.cell-03 {
-						.styledSelected {
-							.sbSelector,
-							.sbOptions  {
-								text-align: left;
-							}
-						}
 						.select-group.medium {
 							.button-select {
 								font-size: 11px;
@@ -147,7 +141,7 @@
 							font-size: 16px;
 							@media (max-width: $screen-xs-max) {
 								text-align: left;
-								font-size: 11px;
+								font-size: 13px;
 							}
 						}
 						&.cell-04 {
@@ -205,6 +199,10 @@
 				}
 				span:first-child {
 					font-size: 14px;
+					@include max-screen($screen-sm-max) {
+						font-size: 13px;
+						text-transform: none;
+					}
 //					line-height: 0px;
 				}
 				span:last-child {
@@ -232,6 +230,15 @@
 					text-align: center;
 					text-transform: uppercase;
 				}
+
+              .coupon-errors {
+                &:not(:empty) {
+                  clear: both;
+                  color: red;
+                  display: block;
+                  padding-top: 8px;
+                }
+              }
 			}
 			.coupon-list {
 				dt {

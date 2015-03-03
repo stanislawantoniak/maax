@@ -10,11 +10,10 @@ $_discountAmount = (float)$_item->getDiscountAmount();
 $_productMsrpPrice = $_itemPriceInclTax;
 
 if($_item->getProduct()){
-	$_productMsrpPrice = $_item->getProduct()->getPrice();
+	$_productMsrpPrice = $_item->getProduct()->getStrikeoutPrice();
 }
 
 $_qty = $this->getQty($_item);
-
 $_helper = Mage::helper("zolagocataloginventory");
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
@@ -33,7 +32,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 				<span><?php echo $this->getQty($_item); ?></span>
 			</div>
 			<div class="cena">
-				<?php if($_productMsrpPrice>$_itemPriceInclTax):?>
+				<?php if(round($_productMsrpPrice,2)>$_itemPriceInclTax):?>
 				<span class="stara_cena">
 					<?php echo Mage::helper("core")->formatPrice($_productMsrpPrice, false);?>
 				</span>

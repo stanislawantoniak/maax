@@ -1,12 +1,14 @@
 <?php
 $_v = $this->getVendor();
+$info = $this->getBasketDeliveryInfo();
+$_helper = Mage::helper('zolagocheckout');
 ?>
 
 <?php switch ($this->getPart()): case 'header': ?>
 
 <div class="panel panel-default">
     <?php if ($_v->getId()): ?>
-    <div class="panel-heading"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
+    <div class="panel-heading"><?php echo $_helper ->__("Vendor"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
     <?php else: ?>
     <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?></div>
     <?php endif ?>
@@ -40,16 +42,16 @@ $_v = $this->getVendor();
             </div>
 
             <div class="table-cell cell-03 label_value td">
-                <div class="value_quality_price"><?php echo $this->__('Subtotal:')?></div>
+                <div class="value_quality_price"><?php echo $_helper ->__('Product total')?>:</div>
                 <div class="value_quality_delivery">
                     <?php if(($bestRate=$this->getMinimalShippingRate())!==null):?>
-                    <?php echo $this->__("Minimal shipping cost"); ?>:
+                    <?php echo $_helper->__("Minimal shipping cost"); ?>:
                     <?php endif; ?>
 
-                    <?php if($this->isHintAvailable()):?>
+                    <?php if($this->isHintAvailable() && $info):?>
                         <div class="bubble visible-lg">
                             <div>
-                                <p><?php echo $this->__("Free shippign from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
+                                <?php echo $info; ?>
                             </div>
                         </div>
                     <?php endif;?>
@@ -66,8 +68,8 @@ $_v = $this->getVendor();
     <div class="table-footer-group visible-xs">
         <div class="table-row clearfix">
             <div class="table-cell cell-03 label_value td">
-                <div class="value_quality_price"><?php echo $this->__("Product total"); ?>:</div>
-                <div class="value_quality_delivery"><?php echo $this->__("Minimal shipping cost"); ?>:</div>
+                <div class="value_quality_price"><?php echo $_helper->__('Product total'); ?>:</div>
+                <div class="value_quality_delivery"><?php echo $_helper->__("Minimal shipping cost"); ?>:</div>
             </div>
             <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery"><?php if($bestRate): ?><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><?php endif; ?></div></div>
         </div>
@@ -76,7 +78,7 @@ $_v = $this->getVendor();
             <?php if($this->isHintAvailable()):?>
                 <div class="bubble visible-lg">
                     <div>
-                        <p><?php echo $this->__("Free shippign from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
+                        <p><?php echo $this->__("Free shipping from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
                     </div>
                 </div>
                 <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px; display: none;">
@@ -89,17 +91,18 @@ $_v = $this->getVendor();
 				<?php if($_slogans): ?>
 					<p><?php echo implode("<br/>", $_slogans);?></p>
                 <?php endif; ?>
-                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
+                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $_helper ->__('Shipping rules and cost'); ?></a>
 
             </div>
         </div>
+
         <div class="conditions_shipping panel panel-default">
-            <div class="panel-heading"><h2><?php echo $this->__("Shipping rules and cost"); ?>: <?php echo $_v->getVendorName() ?></h2></div>
+            <div class="panel-heading"><h2><?php echo $_helper ->__('Shipping rules and cost'); ?>: <?php echo $_v->getVendorName() ?></h2></div>
             <div class="panel-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
+Zawartoœæ z bloków w sprzedawcy [dev].
             </div>
         </div>
+
     </div>
 
 </div>

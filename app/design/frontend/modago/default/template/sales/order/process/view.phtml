@@ -12,7 +12,7 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
     $customerAccountPage = true;
 }
 ?>
-<section class="main bg-w  <?php if($customerAccountPage): ?> hidden-sm hidden-xs <?php endif; ?>">
+<section class="main bg-w  <?php if($customerAccountPage): ?> hidden-xs <?php endif; ?>">
 	<header class="title-section">
 		<div class="headerTop">
 			<div class="table-row clearfix" id="order_header">
@@ -138,7 +138,7 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 								</div>
 								<div class="table-cell cell-03 label_value td">
 									<div class="value_quality_price"><?php echo $_helper->__("Sum:"); ?></div>
-									<div class="value_quality_delivery"><?php echo $_helper->__("Shipping"); ?>:</div>
+									<div class="value_quality_delivery"><?php echo $_helper->__("Shipping cost"); ?>:</div>
 								</div>
 								<div class="table-cell cell-04 td">
 									<div class="quality_price"><?php echo Mage::helper('core')->formatPrice($_item->getData('grand_total_incl_tax')) ?></div>

@@ -83,8 +83,8 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
         $_helper = Mage::helper('orbacommon');
         $this->getResponse()
                 ->clearHeaders()
-                ->setHeader('Content-type', 'application/json', true)
-                ->setHeader('Set-Cookie', '', true);
+                ->setHeader('Content-type', 'application/json', true);
+                //->setHeader('Set-Cookie', '', true);
         if ($expires) {
             $this->getResponse()
                     ->setHeader('Cache-Control', 'public, cache, must-revalidate, post-check='.$expires.', pre-check='.$expires.', max-age='.$expires, true)

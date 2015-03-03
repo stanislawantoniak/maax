@@ -1,4 +1,39 @@
-#active-filters, #view-current-filter {
+.content-xs {
+  text-align: left;
+  .active-filter {
+    a {
+      display: inline-table;
+      border: 1px solid $color-gray2;
+      padding-left: 6px;
+      padding-right: 6px;
+      font-size: 12px;
+      height: 21px;
+      line-height: 21px;
+      color: $color-black;
+      @include border-radius(3px);
+      margin-top: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    i {
+      margin-left: 6px;
+    }
+    .fa {
+      color: $color-gray1;
+      font-size: 11px;
+    }
+    &:hover {
+      .fa {
+        cursor:pointer;
+      }
+    }
+  }
+  .action.clear {
+    margin-bottom: 10px;
+  }
+}
+
+#active-filters, #view-current-filter{
 	
 	h1 {
 		text-transform: uppercase;
@@ -21,11 +56,11 @@
 	            font-size: 12px;
 	            text-align: left;
 	            line-height:20px;
-	            border:1px solid #ededed;
+	            border:1px solid $color-gray2;
 	            font-weight: normal;
 	        }
 	            .fa {
-	                color:#949494;
+	                color: $color-gray1;
 	                font-size: 11px;
 	            }
 	             &:hover {
@@ -63,6 +98,10 @@
 	        }
 }
 
+.solrsearch-index-index #header-main {
+  padding-top: 0px;
+}
+
 #header-main {
     .wrapp-section {
         border: none;
@@ -87,10 +126,11 @@
       .right-wrapper:before {
         content: '';
         position: absolute;
-        height: 70%;
-        top: 15%;
+        height: auto;
+        top: 0;
         border-right: solid 2px #F2F1F0;
         left: -20px;
+        bottom: 15px;
       }
     }
   }
@@ -104,12 +144,19 @@
       margin-bottom: 12px;
     }
     img {
-      width: 185px;
+      height: 52px;
+      max-width: 170px;
+      max-height: 52px;
+      @media (max-width: $screen-xs-max) {
+        height: 42px;
+        max-height: 42px;
+      }
     }
     .vendor-type{
       display: inline-block;
       vertical-align: bottom;
       text-transform: uppercase;
+      margin-right: 10px;
     }
   }
 
@@ -130,7 +177,7 @@
 
       color: rgb(30, 30, 30);
 
-      font-family: OpenSansRegular;
+      font-family: $fontRegular;
       font-size: 11px;
 
 

@@ -8,6 +8,16 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 		return parent::_beforeToHtml();
 	}
 
+    protected function _prepareLayout()
+    {
+        //fix for horizontal scroll for grid
+        $this->getLayout()
+            ->getBlock('root')
+            ->addBodyClass('grid-hscroll-fix')
+            ->addBodyClass('grid-hscroll-1400w');
+        return parent::_prepareLayout();
+    }
+
 	public function getGridJsObjectName() {
 		return $this->getGrid()->getJsObjectName();
 	}

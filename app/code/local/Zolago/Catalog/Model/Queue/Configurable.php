@@ -41,6 +41,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         $listUpdatedProducts = array();
         $listUpdatedQueue = array();
+        $listProductsIds = array();
 
         $data = $collection->getData();
 
@@ -52,6 +53,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $queueId = $colItem['queue_id'];
 
             $listUpdatedProducts[$productId] = $productId;
+            $listProductsIds[] = $productId;
             $listUpdatedQueue[$queueId] = $queueId;
         }
         unset($productId);
@@ -69,7 +71,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
 
-
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");
             return;
@@ -81,6 +82,19 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
         //--super attribute ids
 
+        $productsConfigurableIds = array();
+        foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
+            $superAttributeId = isset($superAttributes[$productConfigurableId])
+                ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
+            if ($superAttributeId) {
+                $productsConfigurableIds[] = $productConfigurableId;
+            }
+        }
+        $campaignResModel = Mage::getResourceModel('zolagocampaign/campaign'); /** @var $campaignResModel Zolago_Campaign_Model_Resource_Campaign*/
+        $listProductsIds = array_merge($listProductsIds, $productsConfigurableIds);
+        $productConfigurableIdsForCampaignCheck = $campaignResModel->getIsProductsInValidCampaign($listProductsIds);
+
+
         $productConfigurableIds = array();
 
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
@@ -89,9 +103,13 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             if ($superAttributeId) {
                 //update configurable product price
 
-                $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricingApp(
-                    $productConfigurableId, $superAttributeId, $storeId
-                );
+                //if product is in campaign(promo or sale)
+                //here attr price should not be touched
+                if (!in_array($productConfigurableId, $productConfigurableIdsForCampaignCheck) ) {
+                    $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricingApp(
+                        $productConfigurableId, $superAttributeId, $storeId
+                    );
+                }
 
                 $productConfigurableIds[$productConfigurableId] = $productConfigurableId;
             }
@@ -127,7 +145,19 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             )
         );
 
+        // Varnish & Turpentine
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->addFieldToFilter('entity_id', array( 'in' => $productsToReindex));
+        $coll->addAttributeToFilter("visibility", array('in' =>
+            array( Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
 
+        Mage::dispatchEvent(
+            "catalog_converter_queue_configurable_complete",
+            array("products" => $coll)
+        );
     }
 
 

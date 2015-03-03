@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Dotpay>
+            <version>0.0.1</version>
+        </Zolago_Dotpay>
+    </modules>
+    <global>
+		<models>
+			<zolagodotpay>
+                <class>Zolago_Dotpay_Model</class>
+            </zolagodotpay>
+            <dotpay>
+				<rewrite>
+					<paymentMethod>Zolago_Dotpay_Model_PaymentMethod</paymentMethod>
+				</rewrite>
+			</dotpay>
+		</models>
+	</global>
+	<frontend>
+		<routers>
+            <dotpay>  
+                <args>  
+                    <modules>  
+                        <Zolago_Dotpay before="Dotpay_Dotpay">Zolago_Dotpay</Zolago_Dotpay>  
+                    </modules>  
+                </args>  
+            </dotpay> 
+        </routers>
+	</frontend>
+    <crontab>
+        <jobs>
+            <zolagodotpay_update_transactions>
+                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
+                <run><model>zolagodotpay/observer::updateTransactions</model></run>
+            </zolagodotpay_update_transactions>
+        </jobs>
+    </crontab>
+    <default>
+        <payment>
+            <dotpay>
+                <cancel_time>30</cancel_time>
+            </dotpay>
+        </payment>
+    </default>
+</config>

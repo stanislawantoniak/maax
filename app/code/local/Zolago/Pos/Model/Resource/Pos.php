@@ -153,6 +153,20 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
     }
 
     /**
+     * get products with skuS
+     *
+     * @param array $skus
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    public static function getSkuCollection($skus = array()) {
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
+        $collection = Mage::getModel('catalog/product')->getCollection();
+        $collection->addFieldToFilter('sku', array("in" => $skus));
+
+        return $collection;
+    }
+
+    /**
      * get sku-id associated array
      *
      * @param array $skus
@@ -161,25 +175,12 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
      */
     public static function getSkuAssoc($skus = array())
     {
-        $readConnection = Mage::getSingleton('core/resource')
-            ->getConnection('core_read');
+        $collection = self::getSkuCollection($skus);
 
-        $select = $readConnection->select();
-        $select
-            ->from('catalog_product_entity AS products',
-                array(
-                     'sku',
-                     'product_id' => 'entity_id'
-                )
-            )
-            ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-
-
-        if (!empty($skus)) {
-            $select->where("sku IN (?)", $skus);
+        $skuAssoc = array();
+        foreach ($collection as $collectionI) {
+            $skuAssoc[$collectionI->getSku()] = $collectionI->getId();
         }
-
-        $skuAssoc = $readConnection->fetchPairs($select);
         return $skuAssoc;
     }
 

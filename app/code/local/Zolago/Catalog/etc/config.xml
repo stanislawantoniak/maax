@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.23</version>
+            <version>0.0.24</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -119,7 +119,6 @@
     </global>
     <frontend>
         <routers>
-			<!--
             <catalog>  
                 <args>  
                     <modules>  
@@ -127,7 +126,6 @@
                     </modules>  
                 </args>  
             </catalog> 
-			-->
 			<udprod>
 				<args>
 					<modules>
@@ -151,7 +149,22 @@
 					</files>
 				</Zolago_Catalog>
 			</modules>
-		</translate>		
+		</translate>	
+		<events>
+			<catalog_controller_product_init>
+				<observers>
+                    <zolago_catalog_product_init>
+                        <class>Zolago_Catalog_Model_Observer</class>
+                        <method>productInit</method>
+                    </zolago_catalog_product_init>
+                </observers>
+			</catalog_controller_product_init>
+		</events>	
+		<secure_url>
+		    <udprod_vendor_product>/udprod/vendor_product/</udprod_vendor_product>
+		    <udprod_vendor_image>/udprod/vendor_image/</udprod_vendor_image>
+		    <udprod_vendor_price>/udprod/vendor_price/</udprod_vendor_price>
+		</secure_url>
     </frontend>
     <adminhtml>
 		<translate>
@@ -178,8 +191,8 @@
         <jobs>
             <zolagocatalog_process_configurable_queue>
                 <schedule>
-                    <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <!-- Run every 2 minutes -->
+                    <cron_expr>*/2 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::processConfigurableQueue</model>
@@ -187,8 +200,8 @@
             </zolagocatalog_process_configurable_queue>
             <zolagocatalog_process_pricetype_queue>
                 <schedule>
-                    <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <!-- Run every 2 minutes -->
+                    <cron_expr>*/2 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::processPriceTypeQueue</model>
@@ -196,8 +209,8 @@
             </zolagocatalog_process_pricetype_queue>
             <zolagocatalog_clear_configurable_queue>
                 <schedule>
-                    <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <!-- Run every 10 minutes -->
+                    <cron_expr>*/10 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::clearConfigurableQueue</model>

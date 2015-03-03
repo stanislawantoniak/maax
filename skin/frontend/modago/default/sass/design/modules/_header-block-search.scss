@@ -5,72 +5,13 @@
             input[type="text"] {
                 color: #000;
                 font-size: 12px;
-                border-right:none;
                 @include border-radius(0px);
                 box-shadow: none;
-            	background:url('../images/bg-search.png') 0 0 repeat-x;
+            	background-color: #FFFFFF;
             	border:none;
+	            padding: 0 10px;
             }
         }
-
-        .sbToggle {
-            background: url(../images/select-icons.png) 0 -116px no-repeat;
-            outline: none;
-            &:link {
-                background: url(../images/select-icons.png) 0 -167px no-repeat;
-            }
-            &:visited {
-                background: url(../images/select-icons.png) 0 -16px no-repeat;
-            }
-            &:hover {
-                background: url(../images/select-icons.png) 0 -68px no-repeat;
-            }
-        }
-
-        .sbHolderDisabled {
-            background-color: #3C3C3C;
-            border: solid 1px #515151;
-            .sbToggle{
-                background: url(../images/select-icons.png) 0 -66px no-repeat;
-            }
-        }
-
-        .sbOptionsWrapper{
-            background-color: #fff;
-            border: none;
-            list-style: none;
-            box-shadow: 0 0 0 5px rgba(0,0,0,0.2);
-            a {
-                border-bottom: dotted 1px #515151;
-                &:link,
-                &:visited {
-                    color: #000;
-                    text-decoration: none;
-                }
-                &:hover,
-                &:focus,
-                &.sbFocus{
-                    color: #000;
-                }
-            }
-            li {
-                &.last {
-                    a {
-                        border-bottom: none;
-                    }
-                }
-            }
-            .sbDisabled {
-                border-bottom: dotted 1px #515151;
-                color: #999;
-            }
-            .sbGroup {
-                border-bottom: dotted 1px #515151;
-                color: #EBB52D;
-                font-weight: bold;
-            }
-        }
-
         .select-box {
             &:before {
                 border-right:1px solid #a4a4a4;
@@ -81,41 +22,7 @@
         input[type="image"] {
             float:left;
         }
-        
-        .sbHolder {
-        	background:url('../images/bg-search.png') 0 0 repeat-x;
-        	font-size: 12px;
-        	color:#888888;
-            border:none;
-        }
 
-        .sbSelector {
-        	line-height:26px;
-        	color:#000;
-        	text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .sbToggle {
-        	background-position: 0 -69px;
-        }
-
-        .sbOptionsWrapper {
-        	background:#fff;
-        	@include box-shadow(rgba(1,1,1,.12) 0 3px 5px);
-        	li {
-        		border:none;
-        		a {
-        			line-height:auto;
-        			color:#000;
-        			border:none;
-        			&:hover {
-        				background:#f2f1f0;
-        			}
-        		}
-        		
-        	}
-        }
 
     }
 }

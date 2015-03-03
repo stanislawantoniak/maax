@@ -14,7 +14,9 @@
 		<div class="hidden" id="selected-address-template">
 			<p class="pull-right default_delivery small-no-float">{{selected_caption}}</p>
 			<dl class="pull-left" >
-				<dt>{{firstname}} {{lastname}}</dt>
+				<dt class="nameAddress">{{firstname}} {{lastname}}</dt>
+				<dt class="companyAddress" style="display:none">{{company}}</dt>
+				<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
 				<dd>{{street}}</dd>
 				<dd>{{postcode}} {{city}}</dd>
 				<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
@@ -34,7 +36,9 @@
 			<div class="panel panel-default">
 				<div class="panel-body">
 					<dl class="pull-left small-no-float">
-						<dt>{{firstname}} {{lastname}}</dt>
+						<dt class="nameAddress">{{firstname}} {{lastname}}</dt>
+						<dt class="companyAddress" style="display:none">{{company}}</dt>
+						<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
 						<dd>{{street}}</dd>
 						<dd>{{postcode}} {{city}}</dd>
 						<dd class="action separator">
@@ -102,13 +106,14 @@
 					</div>
 				</div>
 			</div>
-			<?php if(!$this->isCustomerSubscribed()): ?>
+            <?php if (!$this->isCustomerSubscribed()): ?>
+                <?php  $agreements = $this->getAgreements(); ?>
 			<div class="row hide-success-vaild ">
 				<div class="form-group form-checkbox small text-align-left">
 					<input type="hidden" name="agreement[newsletter]" value="0" />
 					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
 					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
-					       <?php if($this->getAgreements()['agreement_newsletter']):?>checked="checked"<?php endif;?>
+					       <?php if($agreements['agreement_newsletter']):?>checked="checked"<?php endif;?>
 						>
 					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
 				</div>

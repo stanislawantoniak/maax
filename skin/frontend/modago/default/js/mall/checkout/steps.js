@@ -7,7 +7,7 @@
 	
 	
     Mall.Checkout.steps = {
-		
+
 		////////////////////////////////////////////////////////////////////////
 		// Addressbook
 		////////////////////////////////////////////////////////////////////////
@@ -55,6 +55,25 @@
 					this.processSelectedAddressNode(node, addressObject, addressBook, type);
 					
 					target.html(node);
+
+
+					var companyExists = addressObject._data.company && addressObject._data.company.length ? true : false;
+					var vatIdExists = addressObject._data.vat_id && addressObject._data.vat_id.length ? true : false;
+					var companyAddress = target.find('.companyAddress');
+
+					if(type == "shipping") {
+						if(companyExists) {
+							companyAddress.show();
+						}
+					} else if(type == "billing") {
+						if(companyExists) {
+							target.find('.nameAddress').hide();
+							companyAddress.show();
+						}
+						if(vatIdExists) {
+							target.find('.vatIdAddress').show();
+						}
+					}
 					
 				}else{
 					target.html(Mall.translate.__("no-addresses"));
@@ -85,6 +104,26 @@
 						var data = self.processAddressToDisplay(this);
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
+
+
+						var companyExists = this._data.company && this._data.company.length ? true : false;
+						var vatIdExists = this._data.vat_id && this._data.vat_id.length ? true : false;
+						var companyAddress = node.find('.companyAddress');
+
+						if(type == "shipping") {
+							if(companyExists) {
+								companyAddress.show();
+							}
+						} else if(type == "billing") {
+							if(companyExists) {
+								node.find('.nameAddress').hide();
+								companyAddress.show();
+							}
+							if(vatIdExists) {
+								node.find('.vatIdAddress').show();
+							}
+						}
+
 						target.append(node);
 					});
                 }else{
@@ -117,24 +156,25 @@
 
                 //hint data
                 //shoping and billing
-                jQuery('#shipping_firstname, #billing_firstname').attr('data-original-title', Mall.translate.__("Enter name."));
+                /*jQuery('#shipping_firstname, #billing_firstname').attr('data-original-title', Mall.translate.__("Enter name."));
                 jQuery('#shipping_lastname, #billing_lastname').attr('data-original-title', Mall.translate.__("Enter last name."));
                 jQuery('#shipping_company, #billing_company').attr('data-original-title', Mall.translate.__("Enter company name."));
-                jQuery('#shipping_street_1, #billing_street_1').attr('data-original-title', Mall.translate.__("Enter street and number."));
+                jQuery('#shipping_street_1, #billing_street_1').attr('data-original-title', Mall.translate.__("Enter street and number."));*/
                 jQuery('#shipping_postcode, #billing_postcode').attr('data-original-title', Mall.translate.__("Zip-code should be entered in the format xx-xxx."));
-                jQuery('#shipping_city, #billing_city').attr('data-original-title', Mall.translate.__("Enter city name."));
+                //jQuery('#shipping_city, #billing_city').attr('data-original-title', Mall.translate.__("Enter city name."));
                 jQuery('#shipping_telephone, #billing_telephone').attr('data-original-title', Mall.translate.__("Phone number we need only to contact concerning orders for example courier delivering the shipment."));
+                jQuery('#shipping_vat_id, #billing_vat_id').attr('data-original-title',Mall.translate.__("Enter tax number"));
                 //end hint data
 
                 //visual fix for hints
-                jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
+                /*jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
                     placement: function(a, element) {
                         var viewport = window.innerWidth;
                         var placement = "right";
-                        if (viewport < 991) {
+                        if (viewport < 960) {
                             placement = "top";
                         }
-                        if (viewport < 768) {
+	                    if (viewport < 768) {
                             placement = "right";
                         }
                         if (viewport < 600) {
@@ -143,7 +183,7 @@
                         return placement;
                     },
                     trigger: "focus"
-                });
+                });*/
                 jQuery('.phone, .zipcode, .nip').tooltip({
                     placement: "right",
                     trigger: "focus"
@@ -225,7 +265,11 @@
                 panelBody.append(formGroup);
 
                 jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
+	                if(item.name == 'vat_id' || item.name == 'telephone' || item.name == 'postcode') {
+		                item.type = 'tel';
+	                }
                     formGroup = self.getFormGroup();
+
                     element = self.getInput(
                         item.name
                         , item.id
@@ -505,12 +549,12 @@
 				
 				if(doOpen){
 					block.show();
-					contextActions.find(".edit").show().addClass("displayed")
+					contextActions.find(".edit").show().addClass("displayed");
 					element.addClass("open");
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
-					contextActions.find(".edit").hide().removeClass("displayed")
+					contextActions.find(".edit").hide().removeClass("displayed");
 					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
@@ -594,7 +638,7 @@
 			},
 
 			removeAddress: function(event){
-				console.log("Remove clicked", event.data);
+
                 var deffered,
                     self = this;
 
@@ -1368,6 +1412,139 @@
             _self_form_id: "co-shippingpayment",
 			_sidebarAddressesTemplate: "",
 			
+            handleChangePaymentMethodClick: function (e) {
+
+                var view_block_default_pay = jQuery('.default_pay > .panel > .panel-body > .panel');
+                var form_group_default_pay = jQuery('.default_pay');
+
+                view_block_default_pay.toggle();
+                var ifPanelClosed = jQuery(e.target).closest('.panel').children('.panel-body').find('.panel-default').is(':visible');
+                var txt = ifPanelClosed ? Mall.translate.__('cancel-changes') : Mall.translate.__('select-payment-type');
+
+                jQuery(".default_pay .panel").removeClass("payment-selected");
+                jQuery('.selected_bank').hide();
+
+                if(!ifPanelClosed){
+                    jQuery("input[name='payment[method]']").prop("checked",false);
+                    jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+                }
+                form_group_default_pay.closest('.row').css({marginBottom: '15px'});
+                jQuery(e.target).text(txt);
+
+	            if(jQuery(window).width() < 977) {
+		            var animationSpeed = 600;
+		            var htmlBody = jQuery("html, body");
+		            if (!ifPanelClosed) {
+			            htmlBody.animate({scrollTop: jQuery('.default_pay .top-panel').offset().top - 130}, animationSpeed);
+		            } else {
+			            var offset = jQuery(window).height() < 750 ? 140 : 100;
+			            htmlBody.animate({scrollTop: jQuery('.css-radio.payment-method').first().offset().top + offset}, animationSpeed);
+		            }
+	            }
+
+            },
+
+            renderPaymentSelected: function (paymentMethod, providerText, imgUrl) {
+                var selectedMethodContainer = jQuery(".default_pay .top-panel .row:first-child");
+                selectedMethodContainer.find("dl dt").html(paymentMethod);
+                if(jQuery.type(providerText) !== 'undefined'){
+                    selectedMethodContainer.find("dl dd#bank-name").html(providerText);
+                } else {
+                    selectedMethodContainer.find("dl dd#bank-name").html("");
+                }
+
+
+                var logo = jQuery('<img />');
+                logo.attr('src', imgUrl);
+
+                selectedMethodContainer.find("figure").find("div").html(logo);
+                jQuery(".default_pay .top-panel").show();
+            },
+
+            renderSupportedBySelected: function (label, imgUrl) {
+                var selectedMethodContainer = jQuery(".default_pay .top-panel .row:nth-child(2)");
+                if (imgUrl) {
+                    var logo = jQuery('<img />');
+                    logo.attr('src', imgUrl);
+                    selectedMethodContainer.find("dl dd#payment-provider span[target='provider-label']").html(label);
+                    selectedMethodContainer.find("dl dd#payment-provider span[target='provider-img']").html(logo);
+                } else {
+                    selectedMethodContainer.find("dl dd#payment-provider span[target='provider-label']").html("");
+                    selectedMethodContainer.find("dl dd#payment-provider span[target='provider-img']").html("");
+                }
+            },
+            setEmulatedValues: function(){
+                var m, p;
+                m = jQuery("input[name='payment[method]']:checked").val();
+
+                p = (typeof(jQuery("input[name='payment[additional_information][provider]']:checked").val()) !== "undefined") ? jQuery("input[name='payment[additional_information][provider]']:checked").val() : "";
+
+                jQuery("input[name='payment_emul']").val(m);
+                jQuery("input[name='payment_provider_emul']").val(p);
+
+                jQuery("input[name='payment[method]']").prop("checked",false);
+                jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+                jQuery('.selected_bank').hide();
+            },
+
+            handleSelectPaymentMethod: function (e) {
+                var self = this;
+
+                if (jQuery(e.target).is(":not(:checked)")) {
+                    return;
+                }
+
+                var paymentMemberName = jQuery(e.target).attr("name");
+                var paymentMethodNameAttr = "payment[method]";
+                var paymentMethodProviderNameAttr = "payment[additional_information][provider]";
+
+                var paymentMethodName;
+
+                if (paymentMemberName === paymentMethodNameAttr) {
+                    var paymentMethodCode = jQuery(e.target).val();
+
+                    if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
+                        paymentMethodName = jQuery(e.target).data("payment-method");
+
+                        //replace
+                        var methodLogoUrl = jQuery(e.target).closest('.form-group').find('label img').attr("src");
+                        var paymentDescription = jQuery(e.target).closest('.form-group').find(".payment-description").html();
+
+
+                        self.renderPaymentSelected(paymentMethodName,paymentDescription, methodLogoUrl);
+                        self.renderSupportedBySelected("");
+
+                        //close payment selector widget
+                        self.setEmulatedValues();
+
+                        jQuery('#view_default_pay').trigger("click");
+                    }
+
+
+                } else if (paymentMemberName === paymentMethodProviderNameAttr) {
+                    paymentMethodName = jQuery(e.target).closest('.panel.payment-selected').find('input[name="payment[method]"]').data("payment-method");
+                    var providerName = jQuery(e.target).data("bank-name");
+                    var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
+
+                    //replace
+                    self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
+
+
+                    var supportedByLogoUrl = jQuery(e.target).data("service-provider-icon");
+                    self.renderSupportedBySelected(Mall.translate.__('payment-supported-by'), supportedByLogoUrl);
+
+
+                    //close payment selector widget
+                    self.setEmulatedValues();
+
+
+                    jQuery('#view_default_pay').trigger("click");
+
+                }
+
+
+            },
+
 			onPrepare: function(checkoutObject){
                 this.validate.init();
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
@@ -1379,11 +1556,59 @@
                     }
 					return false;
                 });
-				
+
+
+                this.content.find("#view_default_pay").on('click', function (e) {
+                    self.handleChangePaymentMethodClick(e);
+
+                    return false;
+                });
+
+                //////////////////////
+                var default_pay_bank = jQuery('.default_pay input[name="payment[method]"]');
+                //jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
+
+                jQuery(default_pay_bank).on('change', function(){
+                    jQuery(default_pay_bank).closest('.panel').removeClass('payment-selected');
+                    jQuery(this).closest('.panel').addClass('payment-selected');
+                    jQuery('.selected_bank').hide();
+                    if (jQuery(this).is(":checked")) {
+	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
+	                    if(selectedBank.length) {
+		                    selectedBank.show();
+		                    if(jQuery(window).width() < 977) {
+			                    var offsetWithoutHeader = -35;
+			                    var offsetWithHeader = -95;
+			                    var scrollTo = selectedBank.prev('div').find('.label-wrapper').offset().top;
+			                    var scrollFrom = jQuery(document).scrollTop();
+			                    if ((scrollTo < scrollFrom && jQuery(window).height() < 750) || jQuery(window).height() >= 750) {
+				                    scrollTo += offsetWithHeader;
+			                    } else {
+				                    scrollTo += offsetWithoutHeader;
+			                    }
+
+			                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
+		                    }
+	                    }
+                    }
+
+                });
+                /////////////////////
+
+                // Handle payment select
+                var view_block_default_payS = jQuery('.checkout-singlepage-index .default_pay > .panel > .panel-body > .panel');
+                view_block_default_payS.toggle(); //close panels first time
+                var paymentMethod = this.content.find("input[name='payment[method]'],input[name='payment[additional_information][provider]']");
+                paymentMethod.change(function(e){
+                    self.handleSelectPaymentMethod(e);
+                }).change();
+
 				this.content.find("#step-1-prev").click(function(){
 					checkoutObject.prev();
+					jQuery(window).trigger("resize");
 					return false;
 				});
+
 			},
 			
 			onEnter: function(checkout){
@@ -1394,6 +1619,7 @@
 					this.getSidebarAddresses(), 
 					this.getSidebarAddressesTemplate()
 				);
+				jQuery(window).trigger("resize");
 			},
 
             collect: function () {
@@ -1404,6 +1630,11 @@
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     })
                     this.content.find("form .shipping-collect").html(inputs);
+
+                    var pInputs = '';
+                    pInputs += '<input type="hidden" name="payment[method]" value="' + jQuery("input[name='payment_emul']").val() + '" required="required" />';
+                    pInputs += '<input type="hidden" name="payment[additional_information][provider]" value="' + jQuery("input[name='payment_provider_emul']").val() + '" />';
+                    this.content.find("form .payment-collect").html(pInputs);
 
                     return this.content.find("form").serializeArray();
                 }
@@ -1429,11 +1660,12 @@
 			},
 			
 			getSelectedPayment: function(){
-				return this.content.find(".payment-method:radio:checked");
+				//return this.content.find(".payment-method:radio:checked");
+                return this.content.find("input[type=hidden][name='payment[method]']").val();
 			},
 			
 			getSelectedBank: function(){
-				return this.content.find("#payment_form_zolagopayment :radio:checked");
+                return this.content.find("input[type=hidden][name='payment[additional_information][provider]']").val();
 			},
 			
 			getCarrierName: function(){
@@ -1452,9 +1684,20 @@
 			},
 			
 			getPaymentMethod: function(){
-				return this.getSelectedPayment().data("paymentMethod");
+                var selectedPaymentSource = this.content.find("input:radio[name='payment[method]'][value='"+this.getSelectedPayment()+"']");
+                if(selectedPaymentSource.length){
+                    return selectedPaymentSource.data("paymentMethod");
+                }
+				return null;
 			},
 			
+			getCheckoutReviewInfo: function (){
+				if (this.getSelectedPayment() == 'cashondelivery') {
+					return jQuery("#checkout-review-info-cod").html();
+				} else {	
+					return jQuery("#checkout-review-info").html();
+				}
+			},
 			getCostForVendor: function(vendorId, methodCode){
 				var costs = this.getVendorCosts();
 				if(typeof costs == "object" && 
@@ -1464,19 +1707,32 @@
 				}
 				return null;
 			},
-			
-			getOnlineData: function(){
-				if(this.isOnlinePayment()){
-					var bank = this.getSelectedBank();
-					if(bank.length){
-						return bank.data("bankName");
-					}
-				}
-				return null;
-			},
-			
-			isOnlinePayment: function(){
-				return this.getSelectedPayment().data('online')=="1";
+
+            getProvidersData: function () {
+                var selectedPayment = this.getSelectedPayment();
+
+                if (selectedPayment === 'zolagopayment_gateway' || selectedPayment === 'zolagopayment_cc') {
+                    var bank = this.getSelectedBank();
+                    if (bank.length) {
+                        var bankDataSource = this.content.find("input:radio[name='payment[additional_information][provider]'][value='" + bank + "']");
+
+                        if (bankDataSource.length) {
+	                        var selectedPaymentImgSrc = jQuery('.default_pay_selected_bank').find('img').attr('src');
+                            return '<span>' + bankDataSource.data("bankName") + '</span>' +
+	                            '<img src="' + selectedPaymentImgSrc + '" alt="' + bankDataSource.data("bankName") + '" />';
+                            //return ;
+                        }
+                    }
+                }
+                return null;
+            },
+
+            hasProviders: function(){
+                var selectedPayment = this.getSelectedPayment();
+                if (selectedPayment === 'zolagopayment_gateway' || selectedPayment === 'zolagopayment_cc') {
+                    return true;
+                }
+                return null;
 			},
 			
 
@@ -1495,7 +1751,8 @@
                                     required: function(){
                                         var res = false;
                                         if(jQuery("[name='payment[method]']").is(":checked") &&
-                                            jQuery("[name='payment[method]']:checked").val() == "zolagopayment"){
+                                            (jQuery("[name='payment[method]']:checked").val() === "zolagopayment_cc" || jQuery("[name='payment[method]']:checked").val() === "zolagopayment_gateway")
+                                        ){
                                             res = true;
                                         }
                                         return res;
@@ -1504,13 +1761,13 @@
                             },
                             messages: {
                                 _shipping_method: {
-                                    required: Mall.translate.__("Please select shipping")
+                                    required: Mall.translate.__("please-select-shipping")
                                 },
-                                "payment[method]": {
-                                    required: Mall.translate.__("Please select payment")
-                                },
+                                //"payment[method][emul]": {
+                                //    required: Mall.translate.__("Please select payment")
+                                //},
                                 'payment[additional_information][provider]' : {
-                                    required: Mall.translate.__("Please select payment provider")
+                                    required: Mall.translate.__("please-select-bank")
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1542,16 +1799,21 @@
 			code: "review",
 			_sidebarAddressesTemplate: "",
 			_sidebarDeliverypaymentTemplate: "",
-			
+			_reviewInfoTemplate: "",
 			onPrepare: function(checkoutObject){
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
+				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
+					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
+						jQuery('#view_default_pay').trigger('click');
+						jQuery('html,body').scrollTop(0);
+					}
 				});
 			},
 			
@@ -1572,7 +1834,12 @@
 					this.getSidebarDeliverypayment(), 
 					this.getSidebarDeliverypaymentTemplate()
 				);
-				
+				var textpotwierdzenie = checkout.getReviewInfo();
+				checkout.prepareReviewInfo(
+					textpotwierdzenie,
+					this.getReviewInfo(),
+					this.getReviewInfoTemplate()
+				);
 				this._prepareTotals(checkout);
 			},
 			
@@ -1624,6 +1891,12 @@
 			getSidebarDeliverypaymentTemplate: function(){
 				return this._sidebarDeliverypaymentTemplate;
 			},
+			getReviewInfoTemplate: function() {	
+				return this._reviewInfoTemplate;
+			},
+			getReviewInfo: function() {
+				return this.content.find(".text-potwierdzenie");
+			}
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {

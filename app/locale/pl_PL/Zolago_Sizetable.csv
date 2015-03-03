@@ -1,9 +1,9 @@
-"Size tables","Tabele rozmiarów"
+﻿"Size tables","Tabele rozmiarów"
 "Size table","Tabela rozmiarów"
 "List","Lista"
 "Assign","Przypisz"
 "Size tables management","Zarządzaj tabelami rozmiarów"
-"New size table","Nowa tabela rozmiarów"
+"New size table","Dodaj tabelę rozmiarów"
 "Creating new size table","Tworzenie nowej tabeli rozmiarów"
 "Edit size table","Edycja tabeli rozmiarów"
 "Modify size table","Edytowanie tabeli rozmiarów"
@@ -58,3 +58,5 @@
 "Select a file","Wybierz plik"
 "Upload","Wyślij"
 "Cancel","Anuluj"
+"This field is required.","To pole jest wymagane."
+

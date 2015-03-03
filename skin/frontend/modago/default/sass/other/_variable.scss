@@ -23,6 +23,11 @@ $bc-secondary : #d9d9d9;
 $panel-top: #FCFCFC;
 $panel-bottom: #FEFEFE;
 
+$color-gold: #c6a662;
+$color-black: #000000;
+$color-gray1: #949494;
+$color-gray2: #ededed;
+$color-gray3: #ebebeb;
 
 @mixin border-all($size:1px) {
     
@@ -79,9 +84,9 @@ $panel-bottom: #FEFEFE;
 }
 
 // FONT
-$fontLight : 'latolight';
-$fontRegular :'latoregular';
-$fontBlack : 'latoblack';
+$fontLight: latolight, sans-serif;
+$fontRegular: latoregular, sans-serif;
+$fontBlack: latoblack, sans-serif;
 // SPRITES MAP 
 $allMap: sprite-map("sprites/all/*.png", $layout: smart, $spacing:50px);
 

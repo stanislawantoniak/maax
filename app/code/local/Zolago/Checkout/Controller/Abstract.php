@@ -192,13 +192,9 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if(isset($paymentResponse['error']) && $paymentResponse['error']==1){
 				throw new Mage_Core_Exception($paymentResponse['message']);
 			}
-			// Set default payment?
-			$defaultPayment = $request->getParam("default_pay");
-			if($defaultPayment===null || $defaultPayment=="1"){
-				$this->_getCustomerSession()->setTransferPayment(true);
-			}else{
-				$this->_getCustomerSession()->setTransferPayment(null);
-			}
+
+			//save selected payment to session in order to retrieve it after page refresh
+			$this->_getCheckoutSession()->setPayment($payment);
 		}
 		
 
@@ -292,7 +288,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         }
 
         $onepage = $this->getOnepage();
-        $email = $this->getRequest()->getParam("email");
+        $email = trim($this->getRequest()->getParam("email"));
         $isExits = $onepage->customerEmailExists($email, Mage::app()->getWebsite()->getId());
         $isExits = $isExits === false ? false : true;
 

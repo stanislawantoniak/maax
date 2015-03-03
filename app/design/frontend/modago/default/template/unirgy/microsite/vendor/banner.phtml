@@ -1,9 +1,15 @@
 <?php
+/** @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner */
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
-?>
-<?php $sliders = $this->getSliders(); ?>
 
+$sliders = $this->getSliders();
+$boxes = $this->getBoxes();
+
+?>
+
+<?php if (!empty($sliders) && !empty($boxes)): ?>
+    <div id="vendor-banners">
             <?php if($sliders): ?>
                 <section class="blockCarouselTop">
                     <div id="carousel-top-generic" class="carousel slide border-gray-1x" data-ride="carousel">
@@ -59,7 +65,7 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
                     </div>
                 </section>
             <?php endif; ?>
-<?php $boxes = $this->getBoxes(); ?>
+
 	<?php if ($boxes) : ?>
             <section class="block-promoted-banners">
                 <div id="rwd-banners" class="rwdCarousel">
@@ -87,5 +93,5 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
                 </div>
             </section>
             <?php endif; ?>
-
-
+    </div>
+<?php endif;?>

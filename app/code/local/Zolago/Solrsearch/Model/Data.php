@@ -321,7 +321,13 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		if($item->getOrigData('special_to_date')){
 			$docData['special_to_date_varchar'] = $item->getOrigData('special_to_date');
 		}
-		
+        //campaign
+        if ($item->getOrigData('campaign_regular_id')) {
+            $docData['campaign_regular_id_int'] = (int)$item->getOrigData('campaign_regular_id');
+        }
+        if ($item->getOrigData('campaign_strikeout_price_type')) {
+            $docData['campaign_strikeout_price_type_int'] = (int)$item->getOrigData('campaign_strikeout_price_type');
+        }
 		
 		// Imgae url
 		if($item->getOrigData('image')!==null && $item->getOrigData('image')!="no_selection"){

@@ -3,45 +3,35 @@
 	ul {
 		margin:0px;
 		padding:0px;
-		float:right;
-		@media (max-width: $screen-xs-max) {
-			float:right;
-			margin-right: -31px;
-		}
 		li {
-			display:inline-block;
-			float:left;
-			@media (max-width: $screen-xs-max) {
-				margin-right: 20px
+          &:not(.selectboxit-option){
+            display:inline-block;
+            float:left;
+            @media (max-width: $screen-xs-max) {
+              margin-right: 20px
+            }
+            .form-group {
+              margin-bottom: 0px;
+            }
+            label,
+            .label,
+            .value {
+              padding:0px;
+              margin: 0px;
+            }
+          }
+		}
+		li.sort-criteria-selector {
+			float: right;
+			@include max-screen(400px) {
+				float:none;
+				margin: 3px 0 4px;
+				width: 100%;
 			}
-			.form-group {
-				margin-bottom: 0px;
-			}
-			label,
-			.label,
-			.value {
-				padding:0px;
-				margin: 0px;
-			}
-			&+li {
-				margin-left: 35px;
-				@media (max-width: $screen-xs-max) {
-					margin-left: 0px;
-				}
+			@include max-screen($screen-xs-max) {
+				margin-right: -11px;
 			}
 		}
 	}
-	.sbOptionsWrapper{
-		max-height: 200px!important;
-		box-sizing: content-box;
-		ul {
-			float: none;
-			li {
-				line-height: 20px;
-			}
-		}
-	}
-	.sbSelector {
-		line-height: 28px;
-	}
+
 }

@@ -1,36 +1,27 @@
 .account-content {
     margin-top: 0px;
     @media (max-width: $screen-xs-max) {
-        margin-top: -51px;
+        margin-top: -33px;
     }
+    min-height: 400px;
 }
 
 .lower-breadcrumbs {
     #header-main {
-        @media (min-width: $screen-xs-max) {
+        @media (min-width: $screen-sm-min) {
             padding-top: 0px;
             padding-bottom: 0px;
         }
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-.newsletter-manage-index {
+.newsletter-manage-index,
+.customer-account-privacy {
   .more-info-txt {
     display: none;
   }
   #general-subscription {
-    display: table-cell!important;
+    display: table-cell !important;
   }
 
   .label-bold {
@@ -41,7 +32,8 @@
     margin-bottom: 0;
   }
 
-  .newsletter-border {
+  .newsletter-border,
+  .privacy-border {
     border: solid;
     border-width: 1px;
     border-color: #000000;
@@ -72,6 +64,7 @@
     width: 90%;
   }
 }
+
 
 .wishlist-index-index {
   p {

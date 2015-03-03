@@ -18,13 +18,15 @@ Mall.validate = {
         messages: { },
 
         highlight: function(element, errorClass, validClass) {
-            var isSelect2 = jQuery(element).hasClass("select2-offscreen");
+            var isSelect2 = jQuery(element).hasClass("select-box-it-select");
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.actual( 'innerWidth' ) + 25,
                 target = isSelect2 ? elem.parent() : elem.closest("div");
 
             if (elem.attr('id') === 'pass'
-                || elem.is("textarea")
+                || elem.is("textarea:not(#question_text-mobile)")
+                    // gdzies moze byc uzyty textarea, aby zachowac zgodność wsteczną robię brzydki fix
+                    // fix wykorzystany na stronie poduktu, mobilna sekcja zadaj pytanie sprzedawcy
                 || elem.hasClass("closer-valid-ico")
                 || isSelect2
             ) {
@@ -37,7 +39,8 @@ Mall.validate = {
                 .find('.form-ico-times').remove();
 
             if(elem.attr('name') !== 'payment[method]'
-                && elem.attr('name') !== 'payment[additional_information][provider]')
+                && elem.attr('name') !== 'payment[additional_information][provider]'
+            && elem.attr('name') !== '_shipping_method')
             {
                 target
                     .not( ".form-checkbox" )
@@ -45,17 +48,23 @@ Mall.validate = {
                     .append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
             }
 
+
             target.find('.form-ico-checked').remove();
         },
 
         unhighlight: function(element, errorClass, validClass) {
-            var isSelect2 = jQuery(element).hasClass("select2-offscreen");
+            var isSelect2 = jQuery(element).hasClass("select-box-it-select");
+
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.innerWidth() + 25,
                 target = isSelect2 ? elem.parent() : elem.closest("div");
 
+
+
             if (elem.attr('id') === 'pass'
-                || elem.is("textarea")
+                || elem.is("textarea:not(#question_text-mobile)")
+                // gdzies moze byc uzyty textarea, aby zachowac zgodność wsteczną robię brzydki fix
+                // fix wykorzystany na stronie poduktu, mobilna sekcja zadaj pytanie sprzedawcy
                 || elem.hasClass("closer-valid-ico")
                 || isSelect2
             ) {
@@ -70,7 +79,8 @@ Mall.validate = {
             target.find('#pass-error').remove();
 
             if(elem.attr('name') !== 'payment[method]'
-                && elem.attr('name') !== 'payment[additional_information][provider]')
+                && elem.attr('name') !== 'payment[additional_information][provider]'
+                && elem.attr('name') !== '_shipping_method')
             {
                 target
                     .not( ".form-checkbox" )
@@ -107,7 +117,7 @@ Mall.validate = {
 			var modal = jQuery('.modal:visible');
 			var scrollTo = modal.length
 							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
-							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight(),
+							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight() - 35,
 				scrollMe = modal.length ? modal : jQuery('html, body');
 
             scrollMe.animate({
@@ -191,10 +201,10 @@ jQuery(document).ready(function () {
 
     jQuery( window ).resize(function() {
 
-        jQuery('.has-error input').each(function() {
+        jQuery('.has-error input, .has-error textarea').each(function() {
             Mall.validate._default_validation_options.highlight(jQuery(this));
         });
-        jQuery('.has-success input').each(function() {
+        jQuery('.has-success input, .has-success textarea').each(function() {
             Mall.validate._default_validation_options.unhighlight(jQuery(this));
         });
 

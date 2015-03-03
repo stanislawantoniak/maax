@@ -36,7 +36,7 @@ dl, ul, ol, {
 }
 
 .ff_os {
-	 font-family: 'OpenSansRegular'!important;
+	 font-family: $fontRegular;
 }
 .fz_11 {
 	font-size: 11px!important;
@@ -188,7 +188,7 @@ a.underline {
 			position:absolute;
 			right:-(image-width(sprite-file($allMap, arrow-external-link)))*1.5;
 			top:2.5px;
-			margin-top: 5px;
+			margin-top: 1px;
 		}
 	}
 }
@@ -416,10 +416,13 @@ h2 {
 	  margin-top: 0px;
 	  text-align:left;
 	  @media (max-width: $screen-xs-max) {
-		font-size: 11px;
+		font-size: 14px;
 		font-weight: normal;
-		 font-family: 'OpenSansRegular';
+		 font-family: $fontRegular;
 	  }
+		@media(max-width: 360px) {
+			margin-left: -5px;
+		}
 	  span {
 	    position:absolute;
 	    right:12px;
@@ -434,6 +437,9 @@ h2 {
 	    position:absolute;
 	    left:0px;
 	    top:0px;
+		  @media(max-width: 360px) {
+			  left: 5px;
+		  }
 	  }
 	}
 }
@@ -761,7 +767,7 @@ form {
 	    input[type=checkbox].css-checkbox + label.css-label:hover,
 	    input[type=radio].css-radio + label.css-label:hover {
 	        //background-position: 0 -50px;
-	        @include sprite($btnCheck, hover);
+	        //@include sprite($btnCheck, hover);
 	        color:#999999;
 	    }
 	    input[type=checkbox].css-checkbox:checked + label.css-label,
@@ -1270,6 +1276,8 @@ a {
 .followUs {
 	text-align: center;
 	padding-top: 10px;
+	padding-bottom: 10px;
+	height: 45px;
 	clear: both;
 	ul {
 		margin:0;
@@ -1746,11 +1754,12 @@ figure {
 
 .tooltip {
 			border-radius: 0px;
+			opacity: 1 !important;
 			.tooltip-inner{
 				background:#f0f0f0;
 				white-space: normal;
 				padding: 6px 8px;
-				color:#000;
+				color:#ea687e;
 				border-radius: 0px;
 				max-width: 400px;
 			}

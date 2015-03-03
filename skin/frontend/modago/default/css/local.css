@@ -1,19 +1,3 @@
-#payment_form_zolagopayment .left {
-    float: left;
-}
-#checkout form .selected_bank ul {
-    list-style: none outside none;
-    margin: 0;
-    padding: 0;
-}
-#checkout .default_pay .selected_bank {
-    display: block;
-    margin-top: 21px;
-}
-#checkout .panel.panel-color.selected-shipping {
-    background: none repeat scroll 0 0 #d3d3d3;
-}
-
 #co-shippingpayment .fieldset-title {
     margin-bottom: 0px;
 }
@@ -22,15 +6,6 @@
 }
 #co-shippingpayment .data-validate span {
     padding-left: 0px !important;
-}
-
-
-/*Customer account menu mobile*/
-@media  (max-width: 768px) {
-    .customer-account-index ul.messages {
-        margin-top: -21px;
-        margin-bottom: 0px;
-    }
 }
 
 .header_bottom #customer-account-navigation-mobile > li {

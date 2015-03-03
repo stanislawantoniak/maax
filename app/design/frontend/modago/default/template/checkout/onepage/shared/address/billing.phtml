@@ -42,7 +42,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?> / <?php echo $this->__("Fullname"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" data-original-title="<?php echo $this->__("Enter company name or first name and second name."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" <?php /* data-original-title="<?php echo $this->__("Enter company name or first name and second name."); ?>" */ ?>>
             </div>
         </div>
     </div>
@@ -50,8 +50,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
     <div class="form-group clearfix border-top">
         <div class="row">
             <label class="col-sm-3" for="billing_vat_id"><?php echo $this->__("VAT ID"); ?></label>
-            <div class="col-lg-3 col-md-5 col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getVatId()); ?>" class="form-control nip hint validate-nip" name="billing[vat_id]" id="billing_vat_id" title="" >
+            <div class="col-lg-9 col-md-9 col-sm-5">
+                <input type="tel" value="<?php echo $this->escapeHtml($_billingAddress->getVatId()); ?>" class="form-control nip hint validate-nip" name="billing[vat_id]" id="billing_vat_id" data-original-title="<?php echo $this->__("Enter tax number"); ?>" >
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_street"><?php echo $this->__("Street and number"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" required="true" data-original-title="<?php echo $this->__("Enter street and number."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" required="true" <?php /* data-original-title="<?php echo $this->__("Enter street and number."); ?>" */ ?>>
             </div>
         </div>
     </div>
@@ -68,8 +68,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
     <div class="form-group clearfix border-top">
         <div class="row">
             <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
-            <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcodeWithReplace" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>">
+            <div class="col-lg-9 col-md-9 col-sm-9">
+                <input type="tel" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcodeWithReplace" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>">
             </div>
         </div>
     </div>
@@ -78,7 +78,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_city"><?php echo $this->__("City"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" required="true" data-original-title="<?php echo $this->__("Enter city name."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" required="true" <?php /* data-original-title="<?php echo $this->__("Enter city name."); ?>" */ ?>>
             </div>
         </div>
     </div>

@@ -10,7 +10,8 @@ class Orba_Common_Ajax_Cart_CouponController extends Orba_Common_Ajax_CartContro
      * 
      * @throws Orba_Common_Exception
      */
-    public function addAction() {
+    public function addAction()
+    {
         try {
             $request = $this->getRequest();
             $code = $request->getParam('code', null);
@@ -22,8 +23,15 @@ class Orba_Common_Ajax_Cart_CouponController extends Orba_Common_Ajax_CartContro
                 if ($code == $quote->getCouponCode()) {
                     $this->_setCartSuccessResponse('Discount coupon has been applied.');
                 } else {
+                    //analyze code
+
+                    /* @var $zolagoSalesruleHelper Zolago_SalesRule_Helper_Data */
+                    $zolagoSalesruleHelper = Mage::helper('zolagosalesrule');
+                    $couponErrors = $zolagoSalesruleHelper->analyzeCouponByCustomerRequest($code);
+                    $couponErrorsText = !empty($couponErrors) ? $couponErrors : 'Coupon code is invalid.';
+
                     $cart->saveCoupon($oldCoupon);
-                    throw Mage::exception('Orba_Common', 'Coupon code is invalid.');
+                    throw Mage::exception('Orba_Common', $couponErrorsText);
                 }
             } else {
                 throw Mage::exception('Orba_Common', 'No code has been specified.');

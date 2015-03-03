@@ -6,9 +6,6 @@ body {
 }
 #header {
 	padding-top: 57px;
-	@include max-screen($screen-sm-max) {
-        padding-top: 41px;
-    }
 }
 #header-main {
 	//padding-top:35px;
@@ -57,8 +54,8 @@ body {
 .sidebar-first {
 	#content-main {
 		margin-left: 205px; 
-		@media (max-width: $screen-sm-min) {
-			margin-left: 0;
+		@media (max-width: $screen-xs-max) {
+			margin-left: 0 !important;
 		 }
 	}
 }
@@ -67,33 +64,11 @@ body {
 		#content-main {
 			margin-left: 205px; 
 			@media (max-width: $screen-md-min) { 
-				margin-left: 0; 
+				margin-left: 0;
 			 }
 		}
 	}
 }
-
-.not-menu-mobile {
-	#nav_mobile {
-		display:none !important;
-	}
-}
-//#navCategory {
-//	&.visible-xs {
-//		@media (max-width: $screen-sm-min) {
-//			display:none!important;
-//		}
-//	}
-//}
-//.view-menu-category {
-//	#navCategory {
-//		&.visible-xs {
-//				@media (max-width: $screen-sm-min) {
-//					display:block!important;
-//				}
-//			}
-//	}
-//}
 
 .catalog-category-view {
   #nav_category_mobile {
@@ -108,7 +83,15 @@ body {
       display: none !important;
     }
   }
+  &.is-content-mode {
+    @media (max-width: $screen-xs-max) {
+      #navCategory, #nav_category_mobile {
+        display: block !important;
+      }
+    }
+  }
 }
+
 
 .node-type-customer-account-login.checkout {
 	#header {
@@ -152,15 +135,6 @@ body {
 	}
 }
 
-
-
-.node-type-checkout,
-.node-type-shopping-cart {
-	#content {
-		padding-top:0;
-	}
-}
-
 #bottom,
 section.bottom {
 	padding:30px 0;
@@ -186,14 +160,15 @@ section.bottom {
 			display:none!important;
 		 }
 	}
-	&.node-type-page-shop {
-		#nav_mobile {
-			@media (max-width: $screen-xs-max) { 
-				display:block!important;
-			 }
-		}
-	}
 }
+.is-content-mode {
+  #header {
+    @media (max-width: $screen-xs-max) {
+      min-height: 41px;
+    }
+  }
+}
+
 .inspiration-strips {
 	height: 5px;
 	position: absolute;
@@ -247,7 +222,7 @@ section {
 		padding: 30px 0 0;
 		margin-bottom: 15px;
 		@media (max-width: $screen-xs-max) {
-			padding: 10px 0 2px!important;
+			padding: 12px 0 5px!important;
 			margin-bottom: 0px;
 		}
 		&#product_shop {
@@ -422,4 +397,12 @@ section {
 			display:none;
 		}
 	}
+}
+
+.no-navigation-for-product-page {
+  @media (max-width: $screen-xs-max) {
+    #navigation {
+      display: none !important;
+    }
+  }
 }

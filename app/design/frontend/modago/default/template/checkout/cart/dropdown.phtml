@@ -4,6 +4,9 @@
  * Date: 02.05.14
  * @see Zolago_Modago_Block_Checkout_Cart
  */
+
+/** @var Zolago_Checkout_Helper_Data $hlp */
+$hlp = Mage::helper('zolagocheckout');
 ?>
 
 <div id="dropdown-basket" class="dropdown dropdown-anchor-right basket basket-dropdown" style="display: none;">
@@ -21,12 +24,17 @@
                 </ul>
                 <a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>
             </div>
+	        <div class="loading_basket">
+		        <i class="fa fa-spinner fa-spin"></i>
+	        </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    Mall.i18nValidation.add("see_your_cart_msg","<?php echo $this->__("See your cart"); ?>");
-    Mall.i18nValidation.add("products_count_msg","<?php echo $this->__("Products count"); ?>");
-    Mall.i18nValidation.add("products_worth_msg","<?php echo $this->__("Products worth"); ?>");
-    Mall.i18nValidation.add("shipping_cost_msg","<?php echo $this->__("Shipping cost"); ?>");
+    Mall.i18nValidation.add("see_your_cart_msg","<?php echo $hlp->__("See your cart"); ?>");
+    Mall.i18nValidation.add("products_count_msg","<?php echo $hlp->__("Products count"); ?>");
+    Mall.i18nValidation.add("products_worth_msg","<?php echo $hlp->__("Products worth"); ?>");
+    Mall.i18nValidation.add("shipping_cost_msg","<?php echo $hlp->__("Shipping cost"); ?>");
+    Mall.i18nValidation.add("No products in basket.","<?php echo $hlp->__("No products in basket."); ?>");
+    Mall.i18nValidation.add("remove_my_data_from_this_device","<?php echo $hlp->__("Remove my data from device"); ?>");
 </script>

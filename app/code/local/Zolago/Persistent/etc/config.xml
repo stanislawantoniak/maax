@@ -1,18 +1,70 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
-        <Zolago_Persistent>
-            <version>0.0.1</version>
-        </Zolago_Persistent>
-    </modules>
-
-    <global>
-        <models>
-            <persistent>
+	<modules>
+		<Zolago_Persistent>
+			<version>0.0.2</version>
+		</Zolago_Persistent>
+	</modules>
+	<global>
+		<models>
+			<zolagopersistent>
+				<class>Zolago_Persistent_Model</class>
+			</zolagopersistent>
+			<persistent>
 				<rewrite>
 					<observer>Zolago_Persistent_Model_Observer</observer>
+					<observer_session>Zolago_Persistent_Model_Observer_Session</observer_session>
 				</rewrite>
-            </persistent>
-        </models>
-    </global>
+			</persistent>
+		</models>
+		<blocks>
+			<zolagopersistent>
+				<class>Zolago_Persistent_Block</class>
+			</zolagopersistent>
+		</blocks>
+		<resources>
+            <zolagopersistent_setup>
+                <setup>
+                    <module>Zolago_Persistent</module>
+                </setup>
+            </zolagopersistent_setup>
+        </resources>
+	</global>
+	<frontend>
+		<events>
+			<customer_privacy_changed>
+				<observers>
+					<zolagopersistent>
+						<model>zolagopersistent/observer</model>
+						<method>customerPrivacyChanged</method>
+					</zolagopersistent>
+				</observers>
+			</customer_privacy_changed>
+		</events>
+		<routers>
+			<persistent>
+				<args>
+					<modules>
+						<Zolago_Persistent before="Mage_Persistent">Zolago_Persistent</Zolago_Persistent>
+					</modules>
+				</args>
+			</persistent>
+		</routers>
+		<translate>
+			<modules>
+				<Zolago_Persistent>
+					<files>
+						<default>Zolago_Persistent.csv</default>
+					</files>
+				</Zolago_Persistent>
+			</modules>
+		</translate>
+		<layout>
+            <updates>
+                <zolagopersistent>
+                    <file>zolagopersistent.xml</file>
+                </zolagopersistent>
+            </updates>
+        </layout>
+	</frontend>
 </config>

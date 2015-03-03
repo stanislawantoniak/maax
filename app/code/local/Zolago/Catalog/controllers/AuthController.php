@@ -29,7 +29,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     }
 
 
-
 }
 
 

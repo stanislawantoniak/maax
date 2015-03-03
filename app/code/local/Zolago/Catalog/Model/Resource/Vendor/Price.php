@@ -152,7 +152,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 			"price", 
 			"special_price", 
 			"campaign_regular_id",
-			"price_margin",
 			"msrp"
 		), 'left');
 		
@@ -191,6 +190,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 					Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE,
 					$storeId
 			);
+			$campaign['price_margin'] = $campaign['percent'];
 			$campaign['status_text'] = isset($statuses[$campaign['status']]) ? $statuses[$campaign['status']] : "";
 			$campaign['type_text'] = isset($campaign['type']) ? ucfirst($campaign['type']) : "";
 			$campaign['is_allowed'] = $isAllowedToCampaign;

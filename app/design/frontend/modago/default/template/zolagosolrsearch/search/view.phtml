@@ -3,9 +3,7 @@
 $_helperZSS = Mage::helper('zolagosolrsearch');
 /** @var $this Zolago_Solrsearch_Block_Search_View */
 ?>
-
-
-<?php if($this->isContentMode()): ?>
+<?php if(0 && $this->isContentMode()): ?>
     <?php //echo $this->getChildHtml('banner_result_title'); ?>
     <div id="content" class="container-fluid">
         <div class="row">
@@ -32,7 +30,7 @@ $_helperZSS = Mage::helper('zolagosolrsearch');
     <script type="text/javascript">
         jQuery(".wrapp-section").removeClass("bg-w");
     </script>
-<?php elseif($this->isMixedMode()): ?>
+<?php elseif(0 && $this->isMixedMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>
     <?php echo $this->getProductListHtml() ?>
 

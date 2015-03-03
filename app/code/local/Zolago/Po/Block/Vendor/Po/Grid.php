@@ -20,19 +20,19 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$collection->addProductNames();
 		$collection->addHasShipment();
 		$collection->joinAggregatedNames();
-		
-		$this->_applayExternalFilters($collection);
-		
+		$collection->addPaymentStatuses();
+		$this->_applyExternalFilters($collection);
         $this->setCollection($collection);
-		
-        return parent::_prepareCollection();
+
+       parent::_prepareCollection();
+
 	}
 	
 	/**
 	 * @param Zolago_Po_Model_Resource_Po_Collection $collection
 	 * @return Zolago_Po_Block_Vendor_Po_Grid
 	 */
-	protected function _applayExternalFilters(Zolago_Po_Model_Resource_Po_Collection $collection) {
+	protected function _applyExternalFilters(Zolago_Po_Model_Resource_Po_Collection $collection) {
 		
 		// Order Date
 		if($date=$this->getFilterValueByIndex("created_at")){
@@ -48,8 +48,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		if($date=$this->getFilterValueByIndex("shipment_date")){
 			$this->_applayDateFilter($collection, "shipment.created_at", $date);
 		}
-		
-		// Pos 
+
+		// Pos
 		if(($pos=$this->getFilterValueByIndex("default_pos_id")) && 
 			in_array($pos, $this->_getAllowedPosIds())){
 			// specified and validated
@@ -68,6 +68,13 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		if($statuses){
 			$collection->addAttributeToFilter("main_table.udropship_status", array("in"=>$statuses));
 		}
+
+		//payment status
+		$paymentStatus=$this->getFilterValueByIndex("payment_status");
+		if(!is_null($paymentStatus)) {
+			$collection->getSelect()->having("`payment_status` = ?",$paymentStatus);
+		}
+
 		return $this;
 	}
 	
@@ -168,6 +175,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("payment_status", array(
 			"header"	=>	Mage::helper("zolagopo")->__("Payment status"),
+			"index"     => "payment_status",
 			"type"		=>	"options",
 			"options"	=> array(
 				0=>Mage::helper("zolagopo")->__("Not Paid"), 
@@ -215,8 +223,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 'type'      => 'action',
 				'index'		=> 'entity_id',
 				'link_action'=> "*/*/edit",
-				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_param' => 'id',
+				'link_label' => Mage::helper("zolagopo")->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
@@ -316,16 +324,17 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 				return $this;
 			break;
 		}
-		return parent::_addColumnFilterToCollection($column);
+		if($column->getId() != 'payment_status') {
+			return parent::_addColumnFilterToCollection($column);
+		}
 	}
 
 
 	public function getVendor() {
 		return $this->getParentBlock()->getVendor();
 	}
-	
-	public function getRowUrl($item) {
-		return null;
-	}
-	
+
+    public function getRowUrl($row){
+        return $this->getUrl('*/*/edit', array('id'=>$row->getId()));
+    }
 }

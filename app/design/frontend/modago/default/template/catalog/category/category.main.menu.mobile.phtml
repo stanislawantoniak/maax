@@ -6,8 +6,7 @@
 
 /** @var $this Zolago_Modago_Block_Catalog_Category */
 $categoryCollection = $this->getCategoryCollection();
-?>
-
+if ($this->getCategoryLabel() || count($categoryCollection)) : ?>
 <nav id="navCategory" class="visible-xs">
     <?php if($this->getCategoryLabel()) : ?>
         <h3><?php echo $this->getCategoryLabel(); ?></h3>
@@ -23,3 +22,4 @@ $categoryCollection = $this->getCategoryCollection();
     </ul>
     <?php endif; ?>
 </nav>
+<?php endif;?>

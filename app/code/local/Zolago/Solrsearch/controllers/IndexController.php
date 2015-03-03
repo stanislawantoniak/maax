@@ -10,45 +10,58 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
     public function indexAction()
     {
-        $baseUrl = Mage::helper('zolagodropshipmicrosite')->getBaseUrl();
+        Mage::register('is_search_mode', true);
 
         $params = $this->getRequest()->getParams();
-        $params['q'] = Mage::helper('solrsearch')->getParam('q');
+        $params['q'] = strtolower(Mage::helper('solrsearch')->getParam('q'));
         $this->getRequest()->setParam('q', $params['q']);
+        if (isset($params['Szukaj_x'])) unset($params['Szukaj_x']);
+        if (isset($params['Szukaj_y'])) unset($params['Szukaj_y']);
 
-        // Set root category if in the vendor context
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-        if ($vendor && $vendor->getId()) {
 
-            // If "Everywhere" or specific category are selected
-            // redirect to global context from vendor context
+        // If "Everywhere" or specific category are selected
+        // redirect to global context from vendor context
+        if ($vendor && $vendor->getId()) {
             if(isset($params['scat']) && $params['scat'] == '0') {
 
-                $this->_redirectUrl($baseUrl . 'search?' . http_build_query($params));
-                return $this;
+                $_params['_query'] = $params;
+                $_params["_no_vendor"] = true;
+                $this->_redirect('search/index/index', $_params);
+                return;
             }
         }
+
+        // Checking scat
+        // Should always to be
+        // but if not, set to default
+        if(isset($params['scat'])) {
+
+            if($params['scat'] == '0') {
+                unset($params['scat']);
+            } elseif(!intval($params['scat'])) { //intval return int or 0 on failure
+                unset($params['scat']);
+            } else {
+                $params['scat'] = intval($params['scat']);
+            }
+        }
+        if(!isset($params['scat'])) {
+            if($vendor && $vendor->getId()){
+                /** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
+                $helperZDM = Mage::helper("zolagodropshipmicrosite");
+                $vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
+                $params['scat'] = $vendorRootCategoryId;
+            } else {
+                $params['scat'] = Mage::app()->getStore()->getRootCategoryId();
+            }
+        }
+
+        $searchCategory = Mage::getModel('catalog/category')->load($params['scat']);
+        Mage::register('current_category', $searchCategory);
 
         // Reset sessions
         Mage::getSingleton('core/session')->setSolrFilterQuery(array());
-
-        // When in the search mode
-        // Set current category to param['scat']
-        if (isset($params['scat'])) {
-            // override root category
-            if ($params['scat'] == '0') {
-                $params['scat'] = Mage::app()->getStore()->getRootCategoryId();
-            }
-            if ($params['scat'] != "0" && $params['scat'] != Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR) {
-
-                if (isset($params['is_search'])) {
-                    Mage::register('is_current_category_context', TRUE);
-                }
-                $search_category = Mage::getModel('catalog/category')->load($params['scat']);
-                Mage::register('current_category', $search_category);
-            }
-
-        }
 
         //Redirect to Url set for the search term
         $query = Mage::helper('catalogsearch')->getQuery();
@@ -88,39 +101,26 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
         $filterQuery = Mage::getSingleton('core/session')->getSolrFilterQuery();
 
-
-        // Use selected category
-        if(isset($params['scat'])) {
-
-            // Use current vendor
-            if ($vendor && $vendor->getId()) {
-                $filterQuery['udropship_vendor'] = urlencode($vendor->getId());
-                if($params['scat'] == Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR) {
-                    $vendor->rootCategory(); // set root vendor category as current
-                }
-            }
-
-            elseif($params['scat'] == '0') {
-                if(isset($filterQuery['udropship_vendor'])) unset($filterQuery['udropship_vendor']);
-                if(isset($filterQuery['category_id'])) unset($filterQuery['category_id']);
-            }
-
+        // Use current vendor
+        if ($vendor && $vendor->getId()) {
+            $filterQuery['udropship_vendor'] = urlencode($vendor->getId());
+            $vendor->rootCategory(); // set root vendor category as current
         }
-        Mage::getSingleton('core/session')->setSolrFilterQuery($filterQuery);
 
-        $this->loadLayout();
+        Mage::getSingleton('core/session')->setSolrFilterQuery($filterQuery);
 
         /** @var Zolago_Solrsearch_Model_Solr $solrModel */
         $solrModel = Mage::getModel('solrsearch/solr');
         $solrData = $solrModel->queryRegister($queryText);
         Mage::register('solrbridge_loaded_solr', $solrModel);
-
+        
+        $solrData = Mage::helper('zolagosolrsearch')->makeFallback($solrData,$queryText);
         if( isset($solrData['responseHeader']['params']['q']) && !empty($solrData['responseHeader']['params']['q']) ) {
 
             if ($queryText != $solrData['responseHeader']['params']['q']) {
                 $queryText = $solrData['responseHeader']['params']['q']; //poniewaz moze byc ulepszone np: baleron zamieni na baleriny
-
                 //Redirect to Url set for the search term
+                /** @var Mage_CatalogSearch_Model_Query $query */
                 $query = Mage::helper('catalogsearch')->getQuery();
                 $query->setStoreId(Mage::app()->getStore()->getId());
                 $query = $query->loadByQuery($queryText);
@@ -133,6 +133,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
             }
         }
 
+
+        $this->loadLayout();
         if (Mage::helper('solrsearch')->getSetting('allow_multiple_filter') > 0)
         {
             $this->saveLayerData($solrData, $queryText);

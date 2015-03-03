@@ -63,6 +63,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 		$collection = Mage::getResourceModel('urma/rma_comment_collection')
 			->setRmaFilter($rma->getId())
 			->setCreatedAtOrder();
+		$collection->getSelect()->where("comment IS NOT NULL");
 		$collection->addFieldToFilter("is_visible_on_front", 1); /* @todo check rma dataflow */
 		return $collection;
 	}

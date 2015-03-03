@@ -4,6 +4,20 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	const XML_PATH_DEFAULT_IDENTITY = "sales_email/order/identity";
 	
 	/**
+	 * Check is top customer data for varnish request
+	 * @return boolean
+	 */
+	public function isUserDataRequest() {
+		$request = Mage::app()->getRequest();
+		if($request->getModuleName()=="orbacommon" && 
+		   $request->getControllerName()=="ajax_customer" && 
+		   $request->getActionName()=="get_account_information"){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * @param string $email
 	 * @param string $name
 	 * @param string $template
@@ -11,16 +25,18 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @param int | Mage_Core_Model_Store $storeId
 	 */
 	public function sendEmailTemplate($email, $name, $template, 
-			array $templateParams = array(), $storeId=true, $sender=null) {
+			array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
+
+            $templateParams['use_attachments'] = true;
 		
 			$storeId = Mage::app()->getStore($storeId)->getId();
 			if(is_null($sender)){
 				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
 			}
 
-
+            /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
-			/* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+            /** @var Mage_Core_Model_Email_Info $emailInfo */
 			$emailInfo = Mage::getModel('core/email_info');
 			$emailInfo->addTo($email, $name);
 			$mailer->addEmailInfo($emailInfo);
@@ -155,4 +171,16 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		$combined_pdf->save($save_file);
 	}
+
+    /**
+     * @param $text
+     * @return string
+     */
+    public function nToBr($text)
+    {
+        if (empty($text)) {
+            return '';
+        }
+        return strip_tags(nl2br(trim($text)), '<br>');
+    }
 }

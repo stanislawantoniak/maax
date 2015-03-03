@@ -3,8 +3,22 @@
     <sections>
         <payment translate="label" module="zolagopayment">
             <groups>
-                <zolagopayment translate="label">
-                    <label>Zoalgo Payment</label>
+                <dotpay>
+                    <fields>
+                        <p_details translate="label">
+                            <label>Manage payment</label>
+                            <comment>Is payment details are visible in the udropship?</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_details>
+                    </fields>
+                </dotpay>
+                <zolagopayment_gateway translate="label">
+                    <label>Zolago Payment - Gateway</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1000</sort_order>
                     <show_in_default>1</show_in_default>
@@ -20,6 +34,120 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </active>
+						<visible translate="label">
+                            <label>Visible in checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </visible>
+                        <checkout_description translate="label">
+                            <label>Checkout description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </checkout_description>
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_new</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_status>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </sort_order>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>50</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>60</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+						<p_info translate="label">
+                            <label>Info for gatway</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_info>
+						<p_email translate="label">
+                            <label>Email for gatway</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_email>
+                    </fields>
+                </zolagopayment_gateway>
+				<zolagopayment_cc translate="label">
+                    <label>Zolago Payment - Credit Card</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+						<visible translate="label">
+                            <label>Visible in checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </visible>
+                        <checkout_description translate="label">
+                            <label>Checkout description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </checkout_description>
                         <order_status translate="label">
                             <label>New Order Status</label>
                             <frontend_type>select</frontend_type>
@@ -66,7 +194,77 @@
                             <can_be_empty>1</can_be_empty>
                         </specificcountry>
                     </fields>
-                </zolagopayment>
+                </zolagopayment_cc>
+				<cashondelivery>
+                    <fields>
+						<visible translate="label">
+                            <label>Visible in checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </visible>
+                        <checkout_description translate="label">
+                            <label>Checkout description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </checkout_description>
+                        <p_details translate="label">
+                            <label>Manage payment</label>
+                            <comment>Is payment details are visible in the udropship?</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_details>
+					</fields>
+				</cashondelivery>
+				<banktransfer>
+                    <fields>
+						<visible translate="label">
+                            <label>Visible in checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </visible>
+                        <checkout_description translate="label">
+                            <label>Checkout description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </checkout_description>
+                        <p_details translate="label">
+                            <label>Manage payment</label>
+                            <comment>Is payment details are visible in the udropship?</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </p_details>
+	                    <account_number translate="label">
+		                    <label>Account number</label>
+		                    <frontend_type>text</frontend_type>
+		                    <sort_order>250</sort_order>
+		                    <show_in_default>1</show_in_default>
+		                    <show_in_website>1</show_in_website>
+		                    <show_in_store>0</show_in_store>
+	                    </account_number>
+					</fields>
+				</banktransfer>
             </groups>
         </payment>
     </sections>

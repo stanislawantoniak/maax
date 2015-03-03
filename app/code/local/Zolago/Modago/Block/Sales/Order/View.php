@@ -16,7 +16,7 @@ class Zolago_Modago_Block_Sales_Order_View extends Mage_Sales_Block_Order_View {
 		}
 		$total = 0;
 		foreach ($this->getItems() as $_item){
-			$total += $_item->getData('shipping_amount_incl') + $_item->getData('grand_total_incl_tax'); 
+			$total += /*$_item->getData('shipping_amount_incl') +*/ $_item->getData('grand_total_incl_tax'); 
 		}
 		return $total;
 	}

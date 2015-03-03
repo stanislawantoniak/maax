@@ -140,7 +140,10 @@ $vendorQuestionFormAction = Mage::helper('zolagomodago')->getVendorQuestionFormA
     </div>
 </div>
 <script type="text/javascript">
-    Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
-    Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+    jQuery(document).ready(function() {
+        Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
+        Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+        jQuery("#question-form").validate(Mall.validate.getDefaultValidationOptions());
+    });
 </script>
 <!--ASK QUESTION END-->

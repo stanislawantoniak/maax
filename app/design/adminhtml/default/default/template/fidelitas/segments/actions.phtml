@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Licentia Fidelitas - Advanced Email and SMS Marketing Automation for E-Goi
+ *
+ * NOTICE OF LICENSE
+ * This source file is subject to the Creative Commons Attribution-NonCommercial 4.0 International  
+ * It is available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * @title      Advanced Email and SMS Marketing Automation
+ * @category   Marketing
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) 2012 Licentia - http://licentia.pt
+ * @license    Creative Commons Attribution-NonCommercial 4.0 International 
+ */
+
+?>
+
+<form action="<?php echo $this->getLoadUrl() ?>" method="post" id="email_template_load_form">
+    <?php echo $this->getBlockHtml('formkey') ?>
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend">
+                <?php echo Mage::helper('fidelitas')->__('Actions') ?>
+            </h4>
+            <div class="form-buttons"></div>
+        </div>
+        <div class="fieldset">
+            <?php  echo $this->getFormObject()->getElement('conditions')->toHtml() ?>
+        </div>
+    </div>
+</form>

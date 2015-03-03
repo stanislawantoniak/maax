@@ -1,12 +1,38 @@
 <?php
+/* @var $this Zolago_Modago_Block_Sales_Order_Item_Renderer_Default */
 $_item = $this->getItem();
 $_helper = Mage::helper("zolagocataloginventory");
+$_product =$this->getItem()->getOrderItem()->getProduct();
+
+$mediaGallery = $_product->getData('media_gallery');
+
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getOrderItem()->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 ?>
 <div class="table-row clearfix">
     <div class="colgroup-01 clearfix">
         <div class="clearfix">
-            <figure><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></figure>
+            <figure>
+                <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE && empty($mediaGallery['images'])): ?>
+                    <!--                load image from parent configurable-->
+                    <?php
+                    /* @var $res Mage_Catalog_Model_Product_Type_Configurable */
+                    $res = Mage::getResourceSingleton('catalog/product_type_configurable');
+                    $parentIds = $res->getParentIdsByChild($_product->getId());
+                    ?>
+
+                    <?php if (isset($parentIds[0])) : ?>
+                        <?php $parent = Mage::getModel('catalog/product')->load($parentIds[0]); ?>
+                        <img
+                            src="<?php echo $this->helper('xmlconnect/catalog_product_image')->init($parent, 'thumbnail')->resize(53, 69); ?>"
+                            alt="<?php echo $this->escapeHtml($_product->getName()) ?>"/>
+                    <?php endif; ?>
+
+
+                <?php else: ?>
+                    <img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>"
+                         alt="<?php echo $this->escapeHtml($this->getProductName()) ?>"/>
+                <?php endif; ?>
+            </figure>
             <div class="description_checked_product">
                 <div class="product_name"><?php echo $this->escapeHtml($this->getProductName()) ?></div>
                 <?php if ($_options = $this->getOptionList()):?>
@@ -37,7 +63,11 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getOrderItem()->ge
 <!-- inclusive price starts here -->
                 <?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
                     <div class="cena hidden-xs">
-                        <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
+                        <?php
+                        $_incl = $this->helper('checkout')->getPriceInclTax($_item);
+                        //minus discount
+                        $_incl = $_incl - ($_item->getData('discount_amount') / round($_item->getQty()));
+                        ?>
                         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
                         <span class="cart-tax-total" onclick="taxToggle('unit-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
             <?php else: ?>
@@ -83,15 +113,15 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getOrderItem()->ge
                     <div class="small"><span class="show-in-595">Ilość:</span>&nbsp;<?php echo round($_item->getQty()); ?>
                     </div>
                 </div>
-<style type="text/css">
-     .sbSelector:link, .sbSelector:visited, .sbSelector:hover {
-        text-align: left;
-    }
-</style>
+
                 <!--Sub total starts here -->
                 <?php if (($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
                     <div class="a-right" style="padding-top:5px;">
-                        <?php $_incl = $this->helper('checkout')->getSubtotalInclTax($_item); ?>
+                        <?php
+                        $_incl = $this->helper('checkout')->getSubtotalInclTax($_item);
+                        //minus discount
+                        $_incl = $_incl - $_item->getData('discount_amount');
+                        ?>
                             <span class="cart-price">
                                 <?php if (!empty($canApplyMsrp)): ?>
                                     <span class="cart-msrp-subtotal">--</span>

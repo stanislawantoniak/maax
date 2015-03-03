@@ -9,12 +9,27 @@ class Zolago_Customer_Model_Observer {
                 $today->subHour(Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
         );
     }
-	
+
+    public function customerChangeEmailConfirm($observer)
+    {
+//        $event = $observer->getEvent();
+//        $customer = $event->getCustomer();
+//        $customer->setCustomerConfirmedEmail(true);
+//
+//        //subscribe
+//        /* @var $newsletterInviter Zolago_Newsletter_Model_Subscriber */
+//        Mage::getModel('zolagonewsletter/subscriber')
+//            ->subscribeCustomer($customer);
+    }
+
 	/**
 	 * Clear quote presonal data when customer logout
 	 * @param type $observer
 	 */
 	public function customerLogout($observer) {
+		/* return because this is already done by app/code/local/Zolago/Persistent/Model/Observer.php:64 */
+		return;
+
 		$customer = $observer->getEvent()->getCustomer();
 		$checkout = Mage::getModel("checkout/session");
 		/* @var $checkout Mage_Checkout_Model_Session */
@@ -51,30 +66,5 @@ class Zolago_Customer_Model_Observer {
 			 */
 
 		}
-	}
-	
-	/**
-	 * Save last used payment method and additional data
-	 * @param type $observer
-	 */
-	public function salesOrderPaymentSaveAfter($observer) {
-		$payment = $observer->getEvent()->getDataObject();
-		/* @var $payment Mage_Sales_Model_Order_Payment */
-		if($payment->getId() && $payment->getOrder()){
-			$order = $payment->getOrder();
-			/* @var $order Mage_Sales_Model_Order */
-			$customer = Mage::getModel("customer/customer");
-			if($order->getCustomerId()){
-				$customer->load($order->getCustomerId());
-			}
-			if($customer->getId() && Mage::getSingleton('customer/session')->getTransferPayment(true)){
-				$data = array(
-					"method"			=> $payment->getMethod(),
-					"additional_information"	=> $payment->getAdditionalInformation()
-				);
-				$customer->setLastUsedPayment($data)->save();
-			}
-		}
-	
 	}
 }

@@ -32,11 +32,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         //Dhl zip validation
         $shippingId = $po->getShippingAddressId();
         $address = Mage::getModel('sales/order_address')->load($shippingId);
-
         $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
-        $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
+        $dhlActive = Mage::helper('orbashipping/carrier_dhl')->isActive();
         if ($dhlEnabled && $dhlActive) {
-            $dhlHelper = Mage::helper('zolagodhl');
+            $dhlHelper = Mage::helper('orbashipping/carrier_dhl');            
             $dhlValidZip = $dhlHelper->isDHLValidZip($address->getCountry(), $address->getPostcode());
             if (!$dhlValidZip) {
                 $alert[] = array(
@@ -124,7 +123,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function isShippignLetterFile($trackingNo) {
-		return Mage::helper("zolagodhl")->getIsDhlFileAvailable($trackingNo);
+		return Mage::helper("orbashipping/carrier_dhl")->getIsDhlFileAvailable($trackingNo);
 	}
 	
 	public function getAllStatuses() {
@@ -332,7 +331,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function canPosUseDhl() {
-		return Mage::helper('zolagodhl')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
+		return Mage::helper('orbashipping')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
 	}
 	
 	public function getMethodName($poShippingMethod) {
@@ -378,7 +377,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		}
 		return $this->getData("all_messages_count");
 	}
-	
+
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @return int
@@ -420,7 +419,62 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		}
 		return $this->getLayout()->createBlock($renderPath);
 	}
-  
+
+	public function getPaymentMethod(Zolago_Po_Model_Po $po) {
+		$helper = Mage::helper("zolagopayment");
+		if($po->isCod()) {
+			return $helper->__("Cash on delivery");
+		} else {
+			$payment = $po->getOrder()->getPayment();
+			$method = $payment->getMethod();
+			$channelName = false;
+			if($method == Zolago_Dotpay_Model_Client::PAYMENT_METHOD) {
+				$channel = $payment->getAdditionalInformation('channel');
+				$channelCode = $this->getMethodCodeByChannel($channel);
+				$providerModel = Mage::getModel("zolagopayment/provider");
+				$providerCollection = $providerModel->getCollection();
+				$providerCollection->getSelect()->where("main_table.code = ?",$channelCode);
+				$providerCollection->load();
+				$provider = $providerCollection->getFirstItem();
+				$channelName = $provider->getName();
+			}
+			return $helper->__($method).($channelName ? " (".$channelName.")" : "");
+		}
+	}
 	
-	
+	private function getMethodCodeByChannel($channel) {
+		$deXml = simplexml_load_file(Mage::getConfig()->getModuleDir('etc', 'Zolago_Payment').DS.'payment.xml');
+		$deJson = json_encode($deXml);
+		$xml_array = json_decode($deJson,TRUE);
+		$payments_array = array_merge($xml_array['global']['zolagopayment']['gateway'],$xml_array['global']['zolagopayment']['cc']);
+		foreach($payments_array as $code=>$method) {
+			if(isset($method['base']['additional_information']['channel'])) {
+				if($method['base']['additional_information']['channel'] == $channel) {
+					return $code;
+				}
+			}
+		}
+	}
+
+    /**
+     * Return true/false if button/modal window can be shown for payment method for current PO
+     *
+     * @return bool
+     */
+    public function canShowPaymentDetails() {
+        $po = $this->getPo();
+        if ($po->isCod()) {
+            //Cash On Delivery Payment
+            return (bool) Mage::getStoreConfig("payment/cashondelivery/p_details");
+        } elseif($po->isPaymentBanktransfer()) {
+            //Bank Transfer Payment
+            return (bool) Mage::getStoreConfig("payment/banktransfer/p_details");
+        } elseif ($po->isPaymentDotpay()) {
+            //dotpay payment
+            return (bool) Mage::getStoreConfig("payment/dotpay/p_details");
+        } else {
+            //for some new method not implemented yet
+            return true;
+        }
+    }
 }

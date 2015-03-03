@@ -2,36 +2,23 @@
 /**
  * client ups
  */
-class Orba_Shipping_Model_Carrier_Client_Ups extends Mage_Core_Model_Abstract {
-    protected $_auth;
-
+class Orba_Shipping_Model_Carrier_Client_Ups extends Orba_Shipping_Model_Carrier_Client_Abstract {
 
     /**
-     *
-     * authorization data
-     * @param string $user
-     * @param string $password
-     * @param string $account
-     * @return
+     * construct
      */
-
-    public function setAuth($user,$password,$account = null) {
-        $auth = array();
-        $auth['username'] = $user;
-        $auth['password'] = $password;
-        $auth['account'] = $account;
-        $this->_auth = $auth;
+    protected function _construct() {
+        $this->_init('orbashipping/carrier_ups_client');
     }
-
     //{{{
     /**
      * soap header
      * @return
      */
-    protected function _createSoapHeader() {
-        $usernameToken['Username'] = $this->_auth['username'];
-        $usernameToken['Password'] = $this->_auth['password'];
-        $serviceAccessLicense['AccessLicenseNumber'] = $this->_auth['account'];
+    protected function _prepareSoapHeader() {
+        $usernameToken['Username'] = $this->_auth->username;
+        $usernameToken['Password'] = $this->_auth->password;
+        $serviceAccessLicense['AccessLicenseNumber'] = $this->_auth->account;
         $upss['UsernameToken'] = $usernameToken;
         $upss['ServiceAccessToken'] = $serviceAccessLicense;
 
@@ -40,39 +27,39 @@ class Orba_Shipping_Model_Carrier_Client_Ups extends Mage_Core_Model_Abstract {
 
     }
     //}}}
+    
     /**
-     * message via soap
+     * wsdl url 
+     *
+     * return string;
      */
-    protected function _sendMessage($method, $message = null)
-    {
-        try {
+    protected function _getWsdlUrl() {
+        return Mage::getStoreConfig('carriers/orbaups/gateway');        
+    }
+    
+    /**
+     * @return array
+     */
+    protected function _getSoapMode() {
             $mode = array
                     (
                         'soap_version' => 'SOAP_1_1',  // use soap 1.1 client
                         'trace' => 1
                     );
-
-            $wsdl = Mage::getStoreConfig('carriers/orbaups/gateway');
-            $soap = new SoapClient($wsdl, $mode);
-            $header = $this->_createSoapHeader();
-            $soap->__setSoapHeaders($header);
-            $result = $soap->$method($message);
-        } catch (Exception $xt) {
-            $result = array(
-                          'error' => $xt->getMessage()
-                      );
-        }
-        return $result;
+            return $mode;
     }
-
-
-
-
+    
+    
     /**
-     * construct
+     * preparing error message
+     * @return string
      */
-    protected function _construct() {
-        $this->_init('orbashipping/carrier_ups_client');
+    protected function _prepareErrorMessage($xt) {
+        $message = !empty($xt->detail->Errors->ErrorDetail->PrimaryErrorCode->Description)? $xt->detail->Errors->ErrorDetail->PrimaryErrorCode->Description:$xt->getMessage();
+        $result = array (
+            'error' => $message,
+        );
+        return $result;
     }
 
 

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Customer>
-            <version>0.0.8</version>
+            <version>0.0.16</version>
         </Zolago_Customer>
     </modules>
     <global>
@@ -22,8 +22,15 @@
             <customer>
                 <rewrite>
                     <form>Zolago_Customer_Model_Customer_Form</form>
+                    <customer>Zolago_Customer_Model_Customer</customer>
                 </rewrite>
             </customer>
+            <core>
+                <rewrite>
+                    <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
+                    <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
+                </rewrite>
+            </core>
         </models>
         <helpers>
             <zolagocustomer>
@@ -44,6 +51,7 @@
             <zolagocustomer_setup>
                 <setup>
                     <module>Zolago_Customer</module>
+                    <class>Mage_Customer_Model_Entity_Setup</class>
                 </setup>
             </zolagocustomer_setup>
         </resources>
@@ -57,15 +65,6 @@
             </email>
         </template>
 		<events>
-			  <sales_order_payment_save_after>
-                <observers>
-                    <zolagocustomer>
-                        <type>singleton</type>
-                        <class>zolagocustomer/observer</class>
-                        <method>salesOrderPaymentSaveAfter</method>
-                    </zolagocustomer>
-                </observers>
-            </sales_order_payment_save_after>
 			<customer_logout>
 				 <observers>
                     <zolagocustomer>
@@ -75,6 +74,15 @@
                     </zolagocustomer>
                 </observers>
 			</customer_logout>
+            <zolagocustomer_change_email_confirm>
+                <observers>
+                    <zolagocustomer>
+                        <type>singleton</type>
+                        <class>zolagocustomer/observer</class>
+                        <method>customerChangeEmailConfirm</method>
+                    </zolagocustomer>
+                </observers>
+            </zolagocustomer_change_email_confirm>
 		</events>
     </global>
     <frontend>

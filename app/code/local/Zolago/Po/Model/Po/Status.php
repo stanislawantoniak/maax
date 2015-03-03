@@ -4,55 +4,55 @@ class Zolago_Po_Model_Po_Status
 	/**
 	 * Dropship statuses
 	 */
-	
+
 	/**
 	 * czeka na spakowanie
 	 */
-    const STATUS_PENDING    = Zolago_Po_Model_Source::UDPO_STATUS_PENDING; 
+    const STATUS_PENDING    = Zolago_Po_Model_Source::UDPO_STATUS_PENDING;// 0
 	/**
 	 * w trakcie pakowania
 	 */
-    const STATUS_EXPORTED   = Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED;
+    const STATUS_EXPORTED   = Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED;// 10
 	/**
 	 * czeka na potwierdzenie
 	 */
-    const STATUS_ACK        = Zolago_Po_Model_Source::UDPO_STATUS_ACK;
+    const STATUS_ACK        = Zolago_Po_Model_Source::UDPO_STATUS_ACK;// 9
 	/**
 	 * czeka na rezerwację
 	 */
-    const STATUS_BACKORDER  = Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER;
+    const STATUS_BACKORDER  = Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER;// 5
 	/**
 	 * problem
 	 */
-    const STATUS_ONHOLD     = Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD;
+    const STATUS_ONHOLD     = Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD;// 4
 	/**
 	 * spakowane
 	 */
-    const STATUS_READY      = Zolago_Po_Model_Source::UDPO_STATUS_READY;
+    const STATUS_READY      = Zolago_Po_Model_Source::UDPO_STATUS_READY;// 3
 	/**
 	 * N/O
 	 */
-    const STATUS_PARTIAL    = Zolago_Po_Model_Source::UDPO_STATUS_PARTIAL;
+    const STATUS_PARTIAL    = Zolago_Po_Model_Source::UDPO_STATUS_PARTIAL;// 2
 	/**
 	 * wysłane
 	 */
-    const STATUS_SHIPPED    = Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED;
+    const STATUS_SHIPPED    = Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED;// 1
 	/**
 	 * anulowane
 	 */
-    const STATUS_CANCELED   = Zolago_Po_Model_Source::UDPO_STATUS_CANCELED;
+    const STATUS_CANCELED   = Zolago_Po_Model_Source::UDPO_STATUS_CANCELED;// 6
 	/**
 	 * dostarczone
 	 */
-	const STATUS_DELIVERED  = Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED;
+	const STATUS_DELIVERED  = Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED;// 7
 	/**
 	 * zwrócone
 	 */
-    const STATUS_RETURNED   = Zolago_Po_Model_Source::UDPO_STATUS_RETURNED;
+    const STATUS_RETURNED   = Zolago_Po_Model_Source::UDPO_STATUS_RETURNED;// 11
 	/**
 	 * czeka na płatność
 	 */
-    const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT; 
+    const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT;// 12
 
 	static function getFinishStatuses() {
 		return array(
@@ -62,7 +62,14 @@ class Zolago_Po_Model_Po_Status
 			self::STATUS_RETURNED
 		);;
 	}
-	
+    
+    static function getOverpaymentStatuses() {
+        return array (
+			self::STATUS_CANCELED,
+			self::STATUS_DELIVERED,
+			self::STATUS_SHIPPED,
+        );
+    }	
 	/**
 	 * if PO is NEW
 	 * set if ALERT is not null:
@@ -79,7 +86,7 @@ class Zolago_Po_Model_Po_Status
 		}
 		if($po->getAlert()){
 			$po->setUdropshipStatus(self::STATUS_ACK);
-		}elseif($po->isGatewayPayment()){
+		}elseif(!$po->isCod()){
 			$po->setUdropshipStatus(self::STATUS_BACKORDER);
 		}else{
 			$po->setUdropshipStatus(self::STATUS_PENDING);
@@ -369,17 +376,28 @@ class Zolago_Po_Model_Po_Status
 		$this->_processStatus($po, $newStatus);
 	}
 
+	public function updateStatusByAllocation(Zolago_Po_Model_Po $po) {
+		$this->changeStatus($po,$po->getUdropshipStatus());
+	}
+
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @param string $newStatus
 	 */
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
+		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
 		$hlp = Mage::helper("udpo");
 		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
-		$hlp->processPoStatusSave($po, $newStatus, true);
+		$hlp->processPoStatusSave($po, $newStatus2, true);
+
+        if (in_array($newStatus2, $this->getOverpaymentStatuses())) {
+            /** @var Zolago_Payment_Model_Allocation $allocModel */
+            $allocModel = Mage::getModel("zolagopayment/allocation");
+            $allocModel->createOverpayment($po);
+        }
 	}
-	
+
 	/**
 	 * @param Zolago_Po_Model_Po|int $status
 	 * @return int
@@ -389,6 +407,40 @@ class Zolago_Po_Model_Po_Status
 			return $status->getUdropshipStatus();
 		}
 		return $status;
+	}
+
+	/**
+	 * Checks if status that you want to set on po is ok according to payment allocations
+	 * @param Zolago_Po_Model_Po $po
+	 * @param bool $status
+	 * @return bool|int
+	 */
+	public function getPoStatusByAllocation(Zolago_Po_Model_Po $po,$status=false) {
+		if ($po->getId()) {
+			$status = !is_null($status) && $status !== false ? $status : $po->getUdropshipStatus();
+
+			if($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT
+				|| $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
+				|| $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
+			{
+				$grandTotal = $po->getGrandTotalInclTax();
+				/** @var Zolago_Payment_Model_Allocation $allocationModel */
+				$allocationModel = Mage::getModel("zolagopayment/allocation");
+				$sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+
+				//czeka na płatność lub czeka na rezerwacje
+				if (($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
+					&& $grandTotal <= $sumAmount)
+				{
+					return Zolago_Po_Model_Po_Status::STATUS_PENDING; //rowny albo nadplata
+				} //czeka na spakowanie
+				elseif ($status == Zolago_Po_Model_Po_Status::STATUS_PENDING && ($grandTotal > $sumAmount) && !$po->isCod()) {
+					return Zolago_Po_Model_Po_Status::STATUS_PAYMENT; //jest mniej niz potrzeba
+				}
+			}
+			return $status;
+		}
+		return false;
 	}
    
 }

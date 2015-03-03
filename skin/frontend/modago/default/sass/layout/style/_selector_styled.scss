@@ -1,0 +1,205 @@
+.selectboxit-container {
+  .selectboxit {
+    background-image: none;
+    border-radius: 0;
+    background-color: #fff;
+    border-color: #ccc;
+
+    &:hover {
+      border-color: #4f4f4f;
+      background-color: #fff;
+
+    }
+    &:focus {
+      border-color: #4f4f4f;
+      background-color: #fff;
+      box-shadow: none;
+
+    }
+    .selectboxit-text {
+      color: #1e1e1e;
+      text-decoration: none;
+      //        text-indent: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+    }
+    .selectboxit-arrow-container {
+      background: $selectMap;
+      @include sprite($selectMap, select_styled);
+      line-height: image-height(sprite-file($selectMap, select_styled));
+      height: 29px;
+      width: 29px;
+
+      .caret {
+        border: none;
+      }
+      .selectboxit-arrow {
+        border: none;
+      }
+    }
+  }
+
+  .selectboxit-list {
+    max-height: 200px;
+    border-radius: 0;
+    background-color: #fff;
+    border-color: #afafaf;
+    z-index: 100;
+    box-shadow: none;
+    .selectboxit-option {
+      .selectboxit-option-anchor {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #1e1e1e;
+        text-decoration: none;
+      }
+    }
+    .selectboxit-focus {
+      .selectboxit-option-anchor {
+        color: #1e1e1e;
+        background: #f2f1f0;
+        background-image: none;
+        background-repeat: repeat-x;
+      }
+    }
+    .selectboxit-disabled {
+      .selectboxit-option-anchor {
+        color: #999999;
+      }
+    }
+  }
+}
+
+/*Product page size select*/
+.size-box {
+  .selectboxit {
+    width: 167px;
+  }
+}
+
+/*Cart qty select*/
+.cart-qty-field {
+  .selectboxit {
+    width: 60px;
+  }
+}
+
+/*Sort select on listing*/
+.sort-by-container {
+  .selectboxit-container {
+//    pointer-events: none;
+    .selectboxit {
+      width: 160px;
+    }
+  }
+}
+
+/*Search desktop*/
+.block_search {
+  select {
+    height: 26px;
+  }
+  .selectboxit-container {
+    span {
+      height: 26px;
+      line-height: 26px;
+    }
+    .selectboxit {
+      width: 134px;
+      height: 26px;
+      line-height: 26px;
+      border: none;
+      .selectboxit-arrow-container {
+        height: 26px;
+        line-height: 26px;
+        background: url(../images/select-icons.png) 0 -117px no-repeat;
+        outline: none;
+        &:link {
+          background: url(../images/select-icons.png) 0 -168px no-repeat;
+        }
+        &:visited {
+          background: url(../images/select-icons.png) 0 -17px no-repeat;
+        }
+        &:hover {
+          background: url(../images/select-icons.png) 0 -69px no-repeat;
+        }
+      }
+      .selectboxit-text {
+        height: 26px;
+        line-height: 26px;
+      }
+    }
+    .selectboxit-options {
+      width: 134px;
+      a {
+        height: 26px;
+        line-height: 26px;
+      }
+    }
+  }
+  .selectboxit-list {
+    z-index: 400;
+  }
+}
+
+/*Search mobile*/
+#dropdown-search {
+  .selectboxit-container {
+    .selectboxit {
+      width: 282px;
+    }
+  }
+}
+
+/*Rma*/
+.condition-wrapper {
+  .selectboxit-container {
+    .selectboxit {
+      width: 245px;
+      @media (max-width: $screen-xs-min) {
+        width: 200px;
+      }
+      @media (max-width: 400px) {
+        width: 180px;
+      }
+      @media (max-width: 360px) {
+        width: 170px;
+      }
+      @media (max-width: 350px) {
+        width: 160px;
+      }
+      @media (max-width: 340px) {
+        width: 150px;
+      }
+      @media (max-width: 330px) {
+        width: 135px;
+      }
+    }
+  }
+  &.has-error {
+    .selectboxit-container {
+      .selectboxit {
+        border-color: #a94442;
+      }
+    }
+  }
+  &.has-success {
+    .selectboxit-container {
+      .selectboxit {
+        border-color: #3c763d;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      }
+    }
+  }
+}
+
+/*Contact vendor select*/
+#question-form {
+  .selectboxit-container {
+    .selectboxit {
+      width: 300px;
+    }
+  }
+}

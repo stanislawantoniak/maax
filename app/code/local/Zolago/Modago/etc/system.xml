@@ -57,9 +57,42 @@
                             <show_in_store>1</show_in_store>
                             <validate>validate-number</validate>
                         </pixels_before_append>
+                        <vendor_landingpage_n_products translate="label">
+                            <label>N products to show in vendor landingpage</label>
+                            <comment>Integer value</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <validate>validate-number</validate>
+                        </vendor_landingpage_n_products>
                     </fields>
                 </zolagomodago_cataloglisting>
             </groups>
         </zolagomodago_catalog>
+
+        <design translate="label" module="zolagomodago">
+            <groups>
+                <popular_brands translate="label">
+                    <label>Popular brands block</label>
+                    <frontend_type>text</frontend_type>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>50</sort_order>
+                    <fields>
+                        <popular_brands_count translate="label">
+                            <label>Brand's icons number</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many brand's icons are shown on the front page</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </popular_brands_count>
+                    </fields>
+                </popular_brands>
+            </groups>
+        </design>
     </sections>
 </config>

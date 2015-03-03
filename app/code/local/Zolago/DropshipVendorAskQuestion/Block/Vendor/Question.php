@@ -34,6 +34,14 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
 	protected function _getSession(){
 		return Mage::getSingleton('udropship/session');
 	}
-	
-	
+
+    protected function _prepareLayout()
+    {
+        //fix for horizontal scroll for grid
+        $this->getLayout()
+            ->getBlock('root')
+            ->addBodyClass('grid-hscroll-fix')
+            ->addBodyClass('grid-hscroll-950w');
+        return parent::_prepareLayout();
+    }
 }

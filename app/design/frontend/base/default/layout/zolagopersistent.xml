@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<persistent_index_forget>
+		<reference name="root">
+			<action method="setBodyClass">
+				<value>nobreadcrumbs</value>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="core/template" template="zolagopersistent/forget.phtml" name="persistent.forget">
+				<block type="cms/block" name="persistent.forget.guest">
+					 <action method="setBlockId"><block_id>persistent_forget_guest</block_id></action>
+				</block>
+				<block name="persistent.forget.formkey" type="core/template" template="core/formkey.phtml"/> 
+			</block>
+		</reference>
+	</persistent_index_forget>
+</layout>

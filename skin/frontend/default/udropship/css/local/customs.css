@@ -235,10 +235,10 @@ select.form-control {
   min-height: 24px;
 }
 .shipping-info .dl-horizontal.dl-z dt {
-  width: 100px;
+  width: 150px;
 }
 .shipping-info .dl-horizontal.dl-z dd {
-  margin-left: 120px;
+  margin-left: 160px;
 }
 .widget-content.orders,
 .widget-content.rma {
@@ -359,4 +359,61 @@ table.foot-empty-cells tfoot td:empty {
 }
 .udropship-vendor_settings-rma .widget.box .widget-header h4 {
   margin: 10px 0;
+}
+#control-battons div div {                   
+    float: left;
+	margin-top:12px;
+	margin-left:8px;
+}
+#control-battons #input_search {
+	float:left;
+}
+#control-battons #search_button {
+	padding-left:6px;
+	padding-right:6px;
+	width:26px;
+}
+#control-battons div.input-group {
+	margin-top:0px;
+	margin-left:0px;
+}
+#uploader_wrapper {
+	margin-left:8px;
+	margin-top:12px;
+}
+.clearbr {
+	clear:both;
+}
+/*fix for horizontal scroll for grid*/
+.grid-hscroll-1400w .z-grid{
+    min-width: 1400px!important;
+}
+.grid-hscroll-1150w .z-grid{
+    min-width: 1150px!important;
+}
+.grid-hscroll-950w .z-grid{
+    min-width: 950px!important;
+}
+.grid-hscroll-700w .z-grid{
+    min-width: 700px!important;
+}
+@media (max-width: 767px) {
+    .udpo-vendor-index.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+    .udpo-vendor_aggregated-index.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+    .udqa-vendor-questions.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+    .urma-vendor-index.grid-hscroll-fix {
+        overflow: auto!important;
+    }
+}
+/*fix for horizontal scroll for grid end*/
+
+/* cursor pointer for rows with links */
+.table tbody tr[title^=http] td {
+	cursor: pointer;
 }

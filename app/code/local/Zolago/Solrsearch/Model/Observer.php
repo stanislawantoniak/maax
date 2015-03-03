@@ -104,7 +104,7 @@ class Zolago_Solrsearch_Model_Observer {
 		 * @todo add check solr-used attribute changed?
 		 */
 		
-		$this->_pushProduct($product, $product->getStoreId(), true);
+		$this->_pushProduct($product->getId(), $product->getStoreId(), true);
 		
 	}
 

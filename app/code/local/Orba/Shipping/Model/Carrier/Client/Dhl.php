@@ -2,13 +2,7 @@
 /**
  * client dhl
  */
-class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
-    protected $_auth;
-    protected $_pos;
-    protected $_rma;
-    protected $_operator;
-    protected $_address;
-    protected $_settings;
+class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier_Client_Abstract {
 
     const ADDRESS_HOUSE_NUMBER		= '.';
     const SHIPMENT_TYPE_PACKAGE		= 'PACKAGE';
@@ -17,7 +11,8 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
     const SHIPMENT_DOMESTIC			= 'AH';
 
     const PAYMENT_TYPE				= 'BANK_TRANSFER';
-    const PAYER_TYPE				= 'SHIPPER';
+    const PAYER_TYPE_SHIPPER		= 'SHIPPER';
+    const PAYER_TYPE_RECEIVER		= 'RECEIVER';
     const SHIPMENT_RMA_CONTENT      = 'Reklamacyjny zwrot do nadawcy';
 
     const DHL_LABEL_TYPE			= 'LP';
@@ -25,48 +20,16 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         'dropOffType' => 'REQUEST_COURIER',
         'serviceType' => 'AH',
         'labelType' => self::DHL_LABEL_TYPE,
-        'shippingPaymentType' => self::PAYER_TYPE,
+        'shippingPaymentType' => self::PAYER_TYPE_SHIPPER,
         'paymentType'   => self::PAYMENT_TYPE,
         'labelType' => self::DHL_LABEL_TYPE,
         
         
     );        
     
-    /**
-     *  @param Zolago_Rma_Model_Rma
-     */
-    public function setRma($rma) {
-        if (!empty($rma)) {
-            $this->_rma = $rma;
-        }
-        
-    }
-    /**
-     * @param Zolago_Pos_Model_Pos $pos
-     */
-    public function setPos($pos) {
-        if (!empty($pos)) {
-            $this->_pos = $pos;
-        }
-    }
 
     /**
-     * @param Zolago_Operator_Model_Operator $operator
-     */
-    public function setOperator($operator) {
-        if (!empty($operator)) {
-            $this->_operator = $operator;
-        }
-    }
-
-    public function __construct($pos = null,$operator = null )  {
-        $this->setPos($pos);
-        $this->setOperator($operator);
-    }
-
-    /**
-     * @param Zolago_Pos_Model_Pos $pos
-     * @param Zolago_Operator_Model_Operator $operator
+     *
      */
     protected function _construct() {
         $this->_init('orbashipping/carrier_dhl_client');
@@ -82,32 +45,16 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         return $account;
     }
     
-    public function setAuth($user,$password,$account = null) {
-        $auth = new StdClass();
-        $auth->username = $user;
-        $auth->password = $password;
-        $auth->account = $account;
-        $this->_auth = $auth;
+    
+    protected function _getWsdlUrl() {
+        return Mage::getStoreConfig('carriers/orbadhl/gateway');
+    }
+    protected function _getSoapMode() {
+        return array (
+            'trace' => 1,
+        );
     }
 
-
-    /**
-     * message via soap
-     */
-    protected function _sendMessage($method, $message = null)
-    {
-	    try {
-            $wsdl = Mage::getStoreConfig('carriers/orbadhl/gateway');
-            $soap = new SoapClient($wsdl, array('trace'=>1));
-            $result = $soap->$method($message);
-        } catch (Exception $xt) {
-            $result = array(
-                'error' => $xt->getMessage()
-            );
-        }
-
-        return $result;
-    }
     /**
      * shipments list
      */
@@ -126,7 +73,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         // todo
     }
     protected function _createShipper() {
-        $data = $this->_pos->getData();
+        $data = $this->_shipperAddress;
         $obj = new StdClass();
         $obj->name = $data['name'];
         $obj->postalCode = $this->formatDhlPostCode($data['postcode']);
@@ -135,35 +82,49 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         $obj->houseNumber = self::ADDRESS_HOUSE_NUMBER;
         $obj->contactPhone = $data['phone'];
         return $obj;
+    }    
+    protected function _createShipperAtOnce() {
+        return $this->_createAddressAtOnce($this->_shipperAddress);
     }
-    public function setAddressData($data) {
-        $this->_address = $data;
+    protected function _createReceiverAtOnce() {
+        return $this->_createAddressAtOnce($this->_receiverAddress);
     }
-    protected function _getAddressData($shipment) {
-        if (!$this->_address) {
-			$shippingId = $shipment->getShippingAddressId();
-            $model = Mage::getModel('sales/order_address');
-            $address = $model->load($shippingId);
-            $data = $address->getData();
-            $this->setAddressData($data);
-        }
-        return $this->_address;
+    protected function _createAddressAtOnce($data) {
+        $message = new StdClass;
+        $address = new StdClass;
+        $address->name = $data['name'];
+        $address->city = substr($data['city'],0,17);
+        $address->postalCode = $this->formatDhlPostCode($data['postcode']);
+        $address->street = $data['street'];
+        $address->houseNumber = self::ADDRESS_HOUSE_NUMBER;
+        $address->country = $data['country'];
+        $contact = new StdClass;
+        $contact->personName = $data['personName'];
+        $contact->phoneNumber = $data['phone'];
+        $contact->emailAddress = $data['email'];
+        $message->address = $address;
+        $message->contact = $contact;
+        return $message;
+
     }
-    protected function _createReceiver($shipment) {
-        $data = $this->_getAddressData($shipment);
+    protected function _createReceiver() {
+        $data = $this->_receiverAddress;
         $obj = new StdClass();
-        $obj->name = $data['firstname'].' '.$data['lastname'].($data['company'] ? ' '.$data['company'] : '');
+        $obj->country = $data['country'];
+        $obj->name = $data['name'];
         $obj->postalCode = $this->formatDhlPostCode($data['postcode']);
         $obj->city = $data['city'];
         $obj->street = $data['street'];
         $obj->houseNumber = self::ADDRESS_HOUSE_NUMBER;
-        $obj->contactPerson = $data['firstname'].' '.$data['lastname'];
-        $obj->contactPhone = $data['telephone'];
-        $obj->contactEmail = $data['email'];
+        $obj->contactPerson = $data['contact_person'];
+        $obj->contactPhone = $data['contact_phone'];
+        $obj->contactEmail = $data['contact_email'];
 		$this->_address = null;
         return $obj;
     }
-    protected function _createPieceList($shipmentSettings) {
+    
+    protected function _createPieceList() {
+        $shipmentSettings = $this->_settings;
         $obj = new StdClass();
         $obj->type				= $shipmentSettings['type'];
         switch ($shipmentSettings['type']) {
@@ -178,7 +139,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
             $obj->quantity	= $shipmentSettings['quantity'];
             break;
         }
-        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? null:$shipmentSettings['nonStandard'];
+        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? false:$shipmentSettings['nonStandard'];
         $ret = new StdClass();
         $ret->item[] = $obj;
         return $ret;
@@ -186,17 +147,16 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
     protected function _createPayment() {
         $obj = new StdClass();
         $obj->paymentMethod = self::PAYMENT_TYPE;
-        $obj->payerType		= self::PAYER_TYPE;
+        $obj->payerType		= self::PAYER_TYPE_SHIPPER;
         $obj->accountNumber = $this->getDhlAccount();
         $obj->costsCenter = null;
         return $obj;
     }
-    protected function _createService($shipment, $shippingAmount) {
-        $order = $shipment->getOrder();
-        $collectOnDeliveryValue = $this->_getCollectOnDeliveryValue($shipment, $shippingAmount);
+    protected function _createService() {
         $obj = new StdClass();
         $obj->product = self::SHIPMENT_DOMESTIC;
-        if ($order->getPayment()->getMethod() == 'cashondelivery') {
+        $collectOnDeliveryValue = $this->_settings['deliveryValue'];
+        if ($collectOnDeliveryValue > 0) {
             $obj->collectOnDelivery			= true;
             $obj->collectOnDeliveryValue	= $collectOnDeliveryValue;
             $obj->collectOnDeliveryForm		= self::PAYMENT_TYPE;
@@ -207,25 +167,21 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
     }
     /**
      * Create Shipments
-     *
-     * @param array Mage_Sales_Model_Order_Shipment
      */
-    public function createShipments($shipment, $shipmentSettings) {
-        if (empty($shipment)) {
-            return false;
-        }
-
+    public function createShipments() {
+        $shipmentSettings = $this->_settings;
         $message = new StdClass();
         $message->authData = $this->_auth;
         $shipmentObject = new StdClass();
         $obj = new StdClass();
         $obj->shipper = $this->_createShipper();
-        $obj->receiver = $this->_createReceiver($shipment);
-        $obj->pieceList = $this->_createPieceList($shipmentSettings);
+        $obj->receiver = $this->_createReceiver();
+        $obj->pieceList = $this->_createPieceList();
         $obj->payment = $this->_createPayment();
-        $obj->service = $this->_createService($shipment, $shipmentSettings['shippingAmount']);
-        $obj->shipmentDate = $shipmentSettings['shipmentDate'];
-        $obj->content = Mage::helper('zolagopo')->__('Shipment') . ': ' . $shipment->getIncrementId();
+        $obj->service = $this->_createService();
+        $obj->skipRestrictionCheck = false;
+        $obj->shipmentDate = $this->_processDhlDate($shipmentSettings['shipmentDate']);
+        $obj->content = $shipmentSettings['content'];
         $shipmentObject->item[] = $obj;
 
         $message->shipments = $shipmentObject;
@@ -331,22 +287,22 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
                       'shipmentId'	=> false,
                       'message'		=> ''
                   );
-
+        $helper = Mage::helper('zolagopo');
         if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
             //Dhl Error Scenario
             Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$dhlResult['error']);
             $result['shipmentId']	= false;
-            $result['message']		= 'DHL Service Error: ' .$dhlResult['error'];
+            $result['message']		= $helper->__('DHL Service Error: %s',$dhlResult['error']);
         }
         elseif (property_exists($dhlResult, 'createShipmentsResult') && property_exists($dhlResult->createShipmentsResult, 'item')) {
             $item = $dhlResult->createShipmentsResult->item;
             $result['shipmentId']	= $item->shipmentId;
-            $result['message']		= 'Tracking ID: ' . $item->shipmentId;
+            $result['message']		= $helper->__('Tracking ID: %s ', $item->shipmentId);
         }
         else {
             Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$method);
             $result['shipmentId']	= false;
-            $result['message']		= 'DHL Service Error: ' .$method;
+            $result['message']		= $helper->__('DHL Service Error: %s', $method);
         }
 
         return $result;
@@ -386,17 +342,6 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         return $result;
     }
 
-    /**
-     * Get COD Value for DHL Service per Shipment
-     *
-     * @param type $shipment
-     *
-     * @return float COD Value
-     */
-    protected function _getCollectOnDeliveryValue($shipment, $shippingAmount)
-    {
-        return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shippingAmount;
-    }
     protected function _getRmaAccountNumber() {        
         if (!$account = $this->_vendor->getDhlRmaAccount()) {
             if (!$account = $this->_vendor->getDhlAccount()) {
@@ -420,10 +365,11 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
     }
     protected function _prepareSpecialServices() {
         $message = new StdClass();
-        $message->item[] = $this->_addSpecialItem('UBEZP',$this->_rma->getTotalValue());
+        $message->item[] = $this->_addSpecialItem('UBEZP',$this->_settings['deliveryValue']);
         return $message;
     }
-    protected function _prepareShipmentAtOnce() {
+    protected function _prepareShipmentInfoAtOnce() {
+        $shipmentSettings = $this->_shipmentSettings;
         $message = new StdClass;
         $message->dropOffType = $this->_default_params['dropOffType'];
         $message->serviceType = $this->_default_params['serviceType'];        
@@ -434,54 +380,10 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         $message->labelType = $this->_default_params['labelType'];
         return $message;       
     }
-    protected function _prepareClientAddress() {
-        $address = $this->_rma->getShippingAddress();
-        $data = $address->getData();
-        $message = new StdClass();
-        $message->name = $data['firstname'].' '.$data['lastname'];
-        $message->postalCode = $this->formatDhlPostCode($data['postcode']);
-        $message->city = substr($data['city'],0,17);
-        $message->street = $data['street'];
-        $message->houseNumber = self::ADDRESS_HOUSE_NUMBER;
-        $contact = new StdClass;
-        $contact->personName = $message->name;
-        $contact->phoneNumber = $data['telephone'];
-        $order = $this->_rma->getOrder();
-        $contact->emailAddress = $order->getCustomerEmail();
-        $out = new StdClass;
-        $out->contact = $contact;
-        $out->address = $message;
-        return $out;
-    }
-    protected function _prepareVendorAddress() {
-        $vendorId = $this->_rma->getUdropshipVendor();
-        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
-        $data = $vendor->getData();
+    protected function _prepareShipmentAtOnce() {
         $message = new StdClass;
-        $address = new StdClass;
-        $address->name = $data['vendor_name'];
-        $address->city = substr($data['city'],0,17);
-        $address->postalCode = $this->formatDhlPostCode($data['zip']);
-        $address->street = $data['street'];
-        $address->houseNumber = self::ADDRESS_HOUSE_NUMBER;
-        $contact = new StdClass;
-        $contact->personName = $address->name;
-        $contact->phoneNumber = $data['telephone'];
-        $contact->emailAddress = $data['email'];
-        $message->address = $address;
-        $message->contact = $contact;
-        return $message;
-    }
-    protected function _prepareShipClient() {
-        $message = new StdClass;
-        $message->shipper = $this->_prepareClientAddress();
-        $message->receiver = $this->_prepareVendorAddress();
-        return $message;
-    }
-    protected function _prepareShipVendor() {
-        $message = new StdClass;
-        $message->shipper = $this->_prepareVendorAddress();
-        $message->receiver = $this->_prepareClientAddress();
+        $message->shipper = $this->_createShipperAtOnce();
+        $message->receiver = $this->_createReceiverAtOnce();
         return $message;
     }
     protected function _prepareShipmentTime() {
@@ -494,26 +396,31 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
     /**
      * creating shipment and book courier in one request
      */
-    public function createShipmentAtOnce($dhlSettings) {
-        $this->_settings = $dhlSettings;
+    public function createShipmentAtOnce() {
         $message = new StdClass;
         $message->authData = $this->_auth;
         $shipment = new stdClass;
-        $shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
-        if (empty($dhlSettings['vendor'])) {
-            $shipment->ship = $this->_prepareShipClient();        
-        } else {
-            $shipment->ship = $this->_prepareShipVendor();
-        }
+        $shipment->shipmentInfo = $this->_prepareShipmentInfoAtOnce(); 
+        $shipment->ship = $this->_prepareShipmentAtOnce();
         $shipment->content = self::SHIPMENT_RMA_CONTENT;
-        $shipment->pieceList = $this->_createPieceList($dhlSettings);
+        $shipment->pieceList = $this->_createPieceList();
         $message->shipment = $shipment;
         return $this->_sendMessage('createShipment',$message);
     }
-    public function setParam($param,$value) {
-        if (!isset($this->_default_params[$param])) {
-            Mage::throwException(sprintf('Wrong param name: %s',$param));
+    
+    /**
+     * change date into dhl accepted format
+     * @param string $date
+     */
+
+    protected function _processDhlDate($date) {
+        $_date = explode("-", $date);
+        if(count($_date)==3) {
+            if(count($_date[0])==4) {
+                return $date;
+            }
+            return $_date[2] . "-" . $_date[1] . "-" . $_date[0];
         }
-        $this->_default_params[$param] = $value;
     }
+
 }

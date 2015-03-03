@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.17</version>
+            <version>0.0.18</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -57,6 +57,39 @@
 			</udpo>
 		</models>
 		<events>
+            <zolagopayment_allocation_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>updatePoStatusByAllocation</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocation_save_after>
+			<zolagopo_po_save_after>
+				<observers>
+					<zolagopo>
+						<class>zolagopo/observer</class>
+						<method>updatePoStatusByAllocation</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_save_after>
+            <zolagopayment_allocate_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>addAllocationComment</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocate_overpayment_save_after>
+            <zolagopayment_create_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>addOverpayComment</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_create_overpayment_save_after>
+
 			<zolagopo_po_split>
 				<observers>
 					<zolagopo>
@@ -65,6 +98,15 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_split>
+            <zolagopo_po_split>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>paymentSplit</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_split>
+
 			<zolagopo_po_shipping_cost>
 				<observers>
 					<zolagopo>
@@ -197,7 +239,7 @@
 		</fieldsets>
 		<template>
             <email>
-               <zolagopo_compose  translate="label" module="zolagopo">
+               <zolagopo_compose translate="label" module="zolagopo">
                    <label>PO Customer Message</label>
                    <file>zolagopo_compose.html</file>
                    <type>html</type>
@@ -214,6 +256,7 @@
         <udropship>
             <purchase_order>
                 <status_changed_shipped>udropship_purchase_order_status_changed_shipped</status_changed_shipped>
+                <zolagopo_compose>zolagopo_compose</zolagopo_compose>
 			</purchase_order>
 		</udropship>
 	</default>
@@ -260,6 +303,9 @@
 				</Zolago_Po>
 			</modules>
 		</translate>
+		<secure_url>
+		    <udpo_vendor_aggregated>/udpo/vendor_aggregated/</udpo_vendor_aggregated>
+		</secure_url>
 	</frontend>
     <adminhtml>
         <layout>

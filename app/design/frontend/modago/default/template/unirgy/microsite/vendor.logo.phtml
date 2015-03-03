@@ -1,2 +1,10 @@
-<?php $vendorLogo = $this->getLogo(); ?>
-<img src="<?php if(!empty($vendorLogo)) { echo $vendorLogo; } ?>" alt="<?php echo $this->getVendorName(); ?>"/>
+<?php /* @var $this Zolago_DropshipMicrositePro_Block_Vendor_Logo */ ?>
+
+<div class="vendor-top-bottom-header-label">
+    <a href="<?php echo $this->getVendorUrl(); ?>"><?php echo $this->getVendorLabel(); ?></a>
+</div>
+<div class="vendor-top-bottom-header-logo">
+    <a href="<?php echo $this->getVendorUrl(); ?>">
+        <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->getVendorName(); ?>"/>
+    </a>
+</div>

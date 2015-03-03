@@ -10,7 +10,7 @@ $mainCategories = $this->getMainCategories();
 
 <?php if(count($mainCategories) > 0) : ?>
     <?php foreach($mainCategories as $cat) : ?>
-        <li class="">
+        <li>
             <a href="<?php echo $cat['has_dropdown'] ? '#' : $cat['url']; ?>" class="<?php echo $cat['has_dropdown'] ? 'children' : '' ?>"><?php echo $this->escapeHtml($cat['name']); ?> <?php echo $cat['has_dropdown'] ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
             <?php if($cat['has_dropdown']): ?>
                 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-' . $cat['category_id'])->toHtml(); ?>

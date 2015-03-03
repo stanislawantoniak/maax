@@ -14,6 +14,10 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return Mage_Core_Model_Cookie
+	 */
 	public function getCookieModel() {
 		if(!$this->_cookie){
 			$this->_cookie = Mage::getModel('core/cookie');
@@ -56,10 +60,31 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 	public function getWishlist() {
 		$session = Mage::getSingleton("customer/session");
 		/* @var $session Mage_Customer_Model_Session */
-		if(!$session->isLoggedIn()){
+		
+		// If wishlis registered by action controller just return it
+		if(Mage::registry('wishlist')){
+			return Mage::registry('wishlist');
+		}
+		
+		if(is_null($this->_wishlist) && !$session->isLoggedIn()){
 			$wishlist = Mage::getModel("wishlist/wishlist");
 			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
 			
+			// First try to load by persistent
+			$persistentHelper = Mage::helper('persistent/session');
+			/* @var $persistentHelper Mage_Persistent_Helper_Session */
+			
+			if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
+				$customerId = $persistentHelper->getSession()->getCustomerId();
+				$wishlist->loadByCustomer($customerId);
+				// No wishlist existing - set customer id to new wishlist
+				if(!$wishlist->getId()){
+					$wishlist->setCustomerId($customerId);
+				}
+				return $wishlist;
+			}
+			
+			// Second make cookie for ghost customer to emulate
 			$cookie = $this->getCookieModel()->get(self::COOKIE_NAME);
 			
 			if($cookie){
@@ -77,8 +102,8 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 				}
 			}
 			
-			
-			return $wishlist;
+			// Parent function should recoginize as not null and return it 
+			$this->_wishlist = $wishlist;
 		}
 		return parent::getWishlist();
 	}

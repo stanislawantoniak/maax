@@ -310,8 +310,6 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
             if (!$this->_canProcessRule($rule, $address)) {
                 continue;
             }
-			
-			Mage::log(get_class($rule->getActions()));
 
             if (!$rule->getActions()->validate($item)) {
                 continue;

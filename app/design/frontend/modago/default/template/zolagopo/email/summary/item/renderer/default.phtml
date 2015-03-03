@@ -1,5 +1,5 @@
 <?php /* @var $this Zolago_Modago_Block_Sales_Order_Item_Renderer_Default */ ?>
-<?php 
+<?php
 $_item = $this->getItem();
 
 $_itemPriceInclTax = (float)$_item->getPriceInclTax();
@@ -9,45 +9,38 @@ $_discountAmount = (float)$_item->getDiscountAmount();
 $_qty = round($_item->getQty());
 
 $_productMsrpPrice = $_itemPriceInclTax;
-if($_item->getProduct()){
+if ($_item->getProduct()) {
 	$_productMsrpPrice = $_item->getProduct()->getPrice();
 }
 ?>
 <tr>
-	<td>
-		<?php /* <img src="<?php echo $this->getProductThumbnail()->resize(53, 69) ?>"
-			 alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" 
-			 width="53" height="69"/> */ ?>
-		<?php /* Images as cid:<itemId>.jpg @see Zolago_Po_Helper_Data::getPoImagesAsAttachments(); */ ?>
-		<img src="cid:<?php echo $_item->getId() ?>.jpg"
-			 alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" 
-			 width="53" height="69"/>
+	<td colspan="2" style="padding-bottom:0" class="productNameColumn">
+		<?php echo $this->escapeHtml($_item->getName()); ?>
 	</td>
-	<td style="padding: 5px">
-		<?php echo $this->escapeHtml($_item->getName());?>
-		<?php if ($_options = $this->getOptionList()):?>
-			<br/>
-			<small>
+	<td rowspan="2">
+		<?php echo str_replace(" ","&nbsp;",Mage::helper("core")->formatPrice($_itemPriceInclTax * $_qty, false)); ?>
+	</td>
+</tr>
+<tr>
+	<td width="50" style="padding-top:0;" class="imgColumn">
+		<img src="cid:<?php echo $_item->getId() ?>.jpg"
+		     alt="<?php echo $this->escapeHtml($this->getProductName()) ?>"
+		     width="53" height="69"/>
+	</td>
+	<td style="padding-top:0">
+		<?php if ($_options = $this->getOptionList()): ?>
 			<?php foreach ($_options as $_option) : ?>
 				<?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-				<?php echo $this->escapeHtml($_option['label']) ?>: <?php echo  $this->escapeHtml($_formatedOptionValue['value']); ?>
+				<span style="font-size: 11px">
+					<?php echo $this->escapeHtml($_option['label']) ?>: <?php echo $this->escapeHtml($_formatedOptionValue['value']); ?>
+				</span><br/>
 			<?php endforeach; ?>
-			</small>
-		<?php endif;?>
-	</td>
-	<td style="text-align: right; padding: 5px">
-		<?php if($_productMsrpPrice>$_itemPriceInclTax):?>
-		<del style="color: #ccc; font-size: 10px;">
-			<?php echo Mage::helper("core")->formatPrice($_productMsrpPrice, false);?></del>
-		<?php endif;?>
-		<span>
-			<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax, false);?>
-		</span> 
-	</td>
-	<td style="text-align: right; padding: 5px">
-		<?php echo $_qty; ?>
-	</td>
-	<td style="text-align: right; padding: 5px">
-		<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax * $_qty, false);?>
+		<?php endif; ?>
+		<span style="font-size: 11px">
+			Cena: <?php echo str_replace(" ","&nbsp;",Mage::helper("core")->formatPrice($_itemPriceInclTax, false)); ?>
+		</span><br/>
+		<span style="font-size: 11px">
+			Ilość: <?php echo $_qty; ?>
+		</span>
 	</td>
 </tr>

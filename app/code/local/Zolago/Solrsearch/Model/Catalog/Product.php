@@ -2,7 +2,7 @@
 /**
  * Use only for listing products
  */
-class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product {
+class Zolago_Solrsearch_Model_Catalog_Product extends Zolago_Catalog_Model_Product {
 
 	/**
 	 * @return null | array

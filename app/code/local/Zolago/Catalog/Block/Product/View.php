@@ -5,28 +5,38 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	 * @return bool
 	 */
 	public function getIsBrandshop() {
-		return $this->getVendor()->isBrandshop();
+		if($this->getVendorContext()){
+			return $this->getVendorContext()->isBrandshop();
+		}
+		return false;
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getVendorUrl() {
-		return $this->getVendor()->getVendorUrl();
+		return $this->getVendorContext()->getVendorUrl();
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getVendorName() {
-		return $this->getVendor()->getVendorName();
+		return $this->getVendorContext()->getVendorName();
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getVendorLogoUrl() {
-		return Mage::getBaseUrl('media') . $this->getVendor()->getLogo();
+		return Mage::getBaseUrl('media') . $this->getVendorContext()->getLogo();
+	}
+	
+	/**
+	 * @return Zolago_Dropship_Model_Vendor
+	 */
+    public function getVendorContext() {
+		return Mage::helper("umicrosite")->getCurrentVendor();
 	}
 	
 	/**
@@ -102,8 +112,16 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	 */
 	public function getParentCategory() {
 		if(!$this->hasData("parent_category")){
-			if(Mage::registry('current_category') instanceof Mage_Catalog_Model_Category){
-				$model = Mage::registry('current_category');
+			if(($currCat = Mage::registry('current_category')) instanceof Mage_Catalog_Model_Category){
+                $name = $currCat->getName();
+                if (empty($name)) {
+                    // load again model because this model don't have all required data
+                    $model = Mage::getModel("catalog/category")->load(Mage::registry('current_category')->getId());
+                    Mage::unregister('current_category');
+                    Mage::registry('current_category', $model);
+                } else {
+                    $model = Mage::registry('current_category');
+                }
 			}else{
 				$model = $this->getParentCategoryAnonymous();//Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
 			}

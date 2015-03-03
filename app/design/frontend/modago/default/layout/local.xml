@@ -73,7 +73,7 @@
 				<script>solrsearch/autocompleteWidget.js</script>
 			</action>
 			<action method="removeItem">
-				<type>js</type>
+				<type>js_css</type>
 				<script>solrsearch/autocomplete.css</script>
 			</action>
 			<action method="removeItem">
@@ -104,16 +104,26 @@
 				<type>skin_css</type>
 				<stylesheet>solrsearch/css/style.css</stylesheet>
 			</action>
+			<action method="removeItem">
+				<type>skin_css</type>
+				<stylesheet>css/print.css</stylesheet>
+			</action>
 
 			<!--<action method="addCss">-->
 			<!--<stylesheet>css/font-awesome.css</stylesheet>-->
 			<!--</action>-->
+			<action method="addCss">
+				<stylesheet>css/lato.css</stylesheet>
+			</action>
 			<action method="addCss">
 				<stylesheet>css/bootstrap.css</stylesheet>
 			</action>
 			<action method="addCss">
 				<stylesheet>css/typography.css</stylesheet>
 			</action>
+            <action method="addCss">
+                <stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
+            </action>
 			<action method="addCss">
 				<stylesheet>css/layout.css</stylesheet>
 			</action>
@@ -123,13 +133,6 @@
 			<action method="addCss">
 				<stylesheet>css/jquery-ui.css</stylesheet>
 			</action>
-			<!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
-			<action method="addCss">
-				<stylesheet>js/vendor/select2/select2.css</stylesheet>
-			</action>
-			<action method="addCss">
-				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
-			</action>
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
@@ -137,6 +140,10 @@
 			<!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
 			<action method="addJs">
 				<script>jquery/jquery-1.11.0.min.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/headroom.js</script>
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
@@ -178,14 +185,7 @@
 				<type>skin_js</type>
 				<script>js/jquery.mousewheel.js</script>
 			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/jquery.selectbox-0.2.js</script>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/vendor/select2/select2.js</script>
-			</action>
+
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/imagesloaded.pkgd.min.js</script>
@@ -224,12 +224,16 @@
 				<type>skin_js</type>
 				<script>js/fns.js</script>
 			</action>
+            <!--<action method="addItem">-->
+                <!--<type>skin_js</type>-->
+                <!--<script>js/bootstrap-select/js/bootstrap-select.min.js</script>-->
+            <!--</action>-->
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/selectBoxIt/js/jquery.selectBoxIt.min.js</script>
+			</action>
+
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
-			<block type="core/text" name="addthis.javascript">
-				<action method="setText">
-					<text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
-				</action>
-			</block>
 		</reference>
 
 		<reference name="root">
@@ -241,23 +245,38 @@
 
 		<reference name="header">
 			<!-- <block type="page/html_header" name="header" as="header" template="page/html/header.phtml"> -->
-			<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml"/>
+			<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
+                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+			</block>
 			<block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml"/>
 			<block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
 			<block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
 			<block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml">
 			</block>
-			<block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
+
+            <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
 			<block type="zolagomodago/page_header_bottommenu" name="page.header.bottom.menu" template="page/html/header/bottom.menu.phtml"/>
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items" template="page/html/header/bottom.category.items.phtml"/>
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items.mobile" template="page/html/header/bottom.category.items.mobile.phtml"/>
 			<!-- </block> -->
+			<!-- Varnish cache esi public block-->
+			<action method="setEsiOptions">
+                <params>
+                    <access>public</access>
+                </params>
+            </action>
 		</reference>
 
 		<reference name="footer">
 			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
 				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
 			</block>
+			<!-- Varnish cache esi public block-->
+			<action method="setEsiOptions">
+                <params>
+                    <access>public</access>
+                </params>
+            </action>
 		</reference>
 		<!-- remove cart link - better performance-->
 		<remove name="checkout_cart_link"/>
@@ -348,29 +367,15 @@
 			<action method="addBodyClass">
 				<value>node-type-shopping-cart</value>
 			</action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
+			
 		</reference>
 		<reference name="head">
 			<action method="removeItem">
 				<type>js</type>
 				<script>varien/weee.js</script>
-			</action>
-		</reference>
-		<reference name="breadcrumbs">
-			<action method="addCrumb">
-				<crumbName>Home</crumbName>
-				<crumbInfo>
-					<label>Home</label>
-					<title>Home</title>
-					<link>/</link>
-				</crumbInfo>
-			</action>
-			<action method="addCrumb">
-				<crumbName>cart</crumbName>
-				<crumbInfo>
-					<label>Shopping Cart</label>
-					<title>Shopping Cart</title>
-					<link>/checkout/cart</link>
-				</crumbInfo>
 			</action>
 		</reference>
 
@@ -421,6 +426,27 @@
 
 	</zolagomodago_index_index>
 
+    <zolagomodago_brands_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Shops</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml">
+
+                   </block>
+        </reference>
+    </zolagomodago_brands_index>
+
 	<solrbridge_solrsearch_category_view>
 		<remove name="mana.catalog.leftnav"/>
 		<remove name="solrsearch_category_view"/>
@@ -433,9 +459,6 @@
 			</action>
 			<action method="addBodyClass">
 				<value>view-menu-category</value>
-			</action>
-			<action method="addBodyClass">
-				<value>not-menu-mobile</value>
 			</action>
 		</reference>
 		<reference name="head">
@@ -460,6 +483,13 @@
 			</action>
 		</reference>
 
+		<reference name="before_body_end">
+			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+				<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+			</block>
+		</reference>
+
         <reference name="content">
 
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
@@ -470,14 +500,8 @@
 
             <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar"/>
             <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
-
-                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
-                    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
-                        <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
-                        <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
-                    </block>
-                </block>
-
+                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list" />
                 <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
                 <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
             </block>
@@ -500,10 +524,10 @@
                 <value>view-menu-category</value>
             </action>
             <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
-            <action method="addBodyClass">
                 <value>catalog-category-view</value>
+            </action>
+	        <action method="addBodyClass">
+	            <value>node-type-list</value>
             </action>
         </reference>
         <reference name="head">
@@ -528,8 +552,17 @@
             </action>
         </reference>
 
-        <reference name="content">
+	    <reference name="before_body_end">
+		    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+			    <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+			    <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+		    </block>
+	    </reference>
 
+        <reference name="content">
+            <!--removing category listing-->
+            <remove name="solrsearch_product_list_header"/>
+            <remove name="zolagosolrsearch_category_view"/>
 
             <block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
 
@@ -539,13 +572,8 @@
                     <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
                 </block>
 
-
                 <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar"/>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
-                    <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
-                        <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
-                        <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
-                    </block>
                 </block>
             </block>
 
@@ -579,6 +607,9 @@
 			<action method="addBodyClass">
 				<value>node-type-view-product</value>
 			</action>
+            <action method="addBodyClass">
+                <value>no-navigation-for-product-page</value>
+            </action>
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
 		</reference>
 
@@ -597,7 +628,20 @@
 				<block name="product.review.form" type="zolagomodago/review_form"/>
 			</block>
 			<block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
-			<block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+			
+			<block type="zolagomodago/catalog_product_view_shop" name="product.shop" template="catalog/product/view/shop.phtml">
+				<block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+				<!-- ESI Varnish cache depends on *product* registry key -->
+				<!--<action method="setEsiOptions">-->
+					<!--<params>-->
+						<!--<access>public</access>-->
+						<!--<registry_keys>-->
+							<!--<product/>-->
+						<!--</registry_keys>-->
+						<!--<ttl>600</ttl> &lt;!&ndash; time to live for price block (sec) &ndash;&gt;-->
+					<!--</params>-->
+				<!--</action>-->
+			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
 		</reference>
@@ -617,6 +661,11 @@
 				<type>js</type>
 				<script>varien/configurable.js</script>
 			</action>
+			<block type="core/text" name="addthis.javascript">
+				<action method="setText">
+					<text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
+				</action>
+			</block>
 		</reference>
 
 	</catalog_product_view>
@@ -630,10 +679,6 @@
 	</udqa_catalog_product_view>
 
 	<umicrosite_index_landingpage>
-
-		<reference name="header">
-			<remove name="header_menu"/>
-		</reference>
 
 		<reference name="root">
 			<action method="addBodyClass">
@@ -651,12 +696,18 @@
 			<action method="addBodyClass">
 				<value>node-type-page-shop</value>
 			</action>
-
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
 			</action>
-
 		</reference>
+
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/listing.js</script>
+            </action>
+        </reference>
+
 		<reference name="content">
 			<block type="zolagomodago/dropshipmicrositepro_vendor_header" name="vendor.header" template="unirgy/microsite/topbottomheader.phtml">
 				<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>
@@ -669,6 +720,7 @@
 					<block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.desktop" template="unirgy/microsite/menu.desktop.phtml"/>
 				</block>
 				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 			</block>
 
 		</reference>
@@ -747,6 +799,14 @@
 	
 	<checkout_singlepage_index>
 		<update handle="checkout_updater" />
+        <reference name="root">
+            <action method="addBodyClass">
+                <value>logged</value>
+            </action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
+        </reference>
 		<reference name="head">
 			<action method="addItem">
 				<type>skin_js</type>
@@ -781,6 +841,11 @@
 				<script>js/mall/checkout/guest.js</script>
 			</action>
 		</reference>
+		<reference name="root">
+			<action method="addBodyClass">
+				<value>nobreadcrumbs</value>
+			</action>
+		</reference>
 		<reference name="content">
 			<block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
 				<block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml">
@@ -806,6 +871,9 @@
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
+	        <action method="addBodyClass">
+		        <value>nobreadcrumbs</value>
+	        </action>
         </reference>
         <reference name="content">
             <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
@@ -851,9 +919,6 @@
             </action>
             <action method="unsetChild">
                 <name>left</name>
-            </action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
             </action>
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
@@ -947,6 +1012,18 @@
 				<name>newsletter</name>
 				<path>newsletter/manage/</path>
 				<label>Settings mailing and sms</label>
+			</action>
+            <!--Privacy settings-->
+            <action method="addLink" translate="label">
+                <name>privacy</name>
+                <path>customer/account/privacy</path>
+                <label>Privacy settings</label>
+            </action>
+			<!--logout-->
+			<action method="addLink" translate="label">
+				<name>logout</name>
+				<path>customer/account/logout</path>
+				<label>Log out</label>
 			</action>
 		</reference>
 
@@ -1135,10 +1212,54 @@
                     <path>newsletter/manage/</path>
                     <label>Settings mailing and sms</label>
                 </action>
+                <!--Privacy settings-->
+                <action method="addLink" translate="label">
+                    <name>privacy</name>
+                    <path>customer/account/privacy</path>
+                    <label>Privacy settings</label>
+                </action>
+				<!--logout-->
+				<action method="addLink" translate="label">
+					<name>logout</name>
+					<path>customer/account/logout</path>
+					<label>Log out</label>
+				</action>
             </block>
         </reference>
 
 	</customer_account_index>
+
+    <customer_account_privacy translate="label">
+        <update handle="customer_account" />
+        <update handle="zolago_modago_customer_handle" />
+        <label>Privacy settings</label>
+        <action method="addBodyClass">
+            <value>customer-account-privacy</value>
+        </action>
+        <!-- Mage_Customer -->
+
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>account</crumbName>
+                <crumbInfo>
+                    <label>Privacy settings</label>
+                    <title>Privacy settings</title>
+                    <link>/customer/account/privacy</link>
+                </crumbInfo>
+            </action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="zolagocustomer/privacy" name="customer_privacy" template="zolagocustomer/privacy.phtml" />
+        </reference>
+    </customer_account_privacy>
 	
 	<zolago_modago_customer_handle>
 		<reference name="head">
@@ -1465,9 +1586,6 @@
                 <template>page/1column.phtml</template>
             </action>
             <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
-            <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
         </reference>
@@ -1508,9 +1626,6 @@
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
-            </action>
-            <action method="addBodyClass">
-                <value>not-menu-mobile</value>
             </action>
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
@@ -1555,19 +1670,12 @@
                 <template>page/1column.phtml</template>
             </action>
             <action method="addBodyClass">
-                <value>not-menu-mobile</value>
-            </action>
-            <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
         </reference>
         <reference name="content">
-
-
-
             <block type="core/template" name="contact.gallery" template="help/contact-gallery.phtml" />
             <block type="core/template" name="messages.fix" template="help/messagesfix.phtml" />
-
         </reference>
     </help_contact_gallery>
 

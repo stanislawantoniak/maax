@@ -105,6 +105,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$templateParams['order'] = $this->getOrder();
 		$templateParams['vendor'] = $this->getVendor();
 		$templateParams['carrier'] = $this->getCarrier();
+	    $templateParams['use_attachments'] = true;
 
         $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
         /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
@@ -550,7 +551,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return bool
     */
    public function isGatewayPayment() {
-	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
+	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE;
    }
 
    /**
@@ -559,6 +560,26 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    public function isPaymentCheckOnDelivery() {
        return $this->getOrder()->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
    }
+
+    /**
+     * return true if payment method is Banktransfer
+     * if not return false
+     *
+     * @return bool
+     */
+    public function isPaymentBanktransfer() {
+       return $this->getOrder()->getPayment()->getMethod() == Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
+    }
+
+    /**
+     * return true if payment method is dotpay
+     * if nor return false
+     *
+     * @return bool
+     */
+    public function isPaymentDotpay() {
+       return $this->getOrder()->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+    }
    
    /**
     * @see isPaymentCheckOnDelivery()
@@ -572,14 +593,29 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return boolean
     */
    public function isPaid() {
-	   if($this->isGatewayPayment()){
-		   /**
-		    * @todo implement logic based on transaction
-		    */
-		   return false;
+	   if(!$this->isCod()){
+		   return $this->getPaymentAmount() >= $this->getGrandTotalInclTax() ? true : false;
 	   }
 	   return true;
    }
+
+	public function getPaymentAmount() {
+		/** @var Zolago_Payment_Model_Allocation $allocationModel */
+		$allocationModel = Mage::getModel("zolagopayment/allocation");
+		return $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+	}
+
+	public function getDebtAmount() {
+		return -($this->getGrandTotalInclTax() - $this->getPaymentAmount());
+	}
+
+	public function getCurrencyFormattedAmount($amount) {
+		return Mage::helper('core')->currency(
+			$amount,
+			true,
+			false
+		);
+	}
    
    /**
     * @return Zolago_Po_Model_Po_Status
@@ -624,9 +660,15 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
 			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
 		}
+
+		//unset customer_id if order is made by guest
+		if((!$this->getId() || $this->isObjectNew()) && $this->getOrder()->getCustomerIsGuest()) {
+			$this->setCustomerId(null);
+		}
 		
 		$this->_processAlert();
 		$this->_processStatus();
+
 		$this->_processMaxShippingDate();
 		
 		return parent::_beforeSave();
@@ -669,5 +711,45 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		
 		
 	}
-   
+
+	public function save() {
+		$return = parent::save();
+		Mage::dispatchEvent("zolagopo_po_save_after",array('po'=>$this));
+		return $return;
+	}
+
+    public function getVendorCommentsCollection($reload=false)
+    {
+        if (is_null($this->_vendorComments) || $reload) {
+            $this->_vendorComments = Mage::getResourceModel('udpo/po_comment_collection')
+                ->setPoFilter($this->getId())
+                ->addFieldToFilter('is_visible_to_vendor', 1)
+                ->setCreatedAtOrder()
+                ->setOrder('entity_id', 'desc');
+
+            /**
+             * When shipment created with adding comment, comments collection must be loaded before we added this comment.
+             */
+            $this->_vendorComments->load();
+
+            if ($this->getId()) {
+                foreach ($this->_vendorComments as $comment) {
+                    $comment->setPo($this);
+                }
+            }
+        }
+        return $this->_vendorComments;
+    }
+    
+    /**
+     * set shipped data into tracking
+     * @return 
+     */
+     public function setShipped() {
+         $track = $this->getTracking();
+         if (!$track->getShippedDate()) {
+             $track->setShippedDate(Varien_Date::now());
+             $track->save();
+         }
+     }
 }

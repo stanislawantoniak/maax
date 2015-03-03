@@ -36,14 +36,11 @@ $_helper = Mage::helper('zolagocatalog/product');
                                             alt="<?php $this->escapeHtml($_product->getName()); ?>"
                                             class="img-responsive"/>
                                     </figure>
-                                    <div class="logo_manufacturer">
-                                        <img class="img-responsive"
-                                             src="<?php echo $_helper->getManufacturerLogoUrl($_product); ?>"
-                                             alt="<?php echo $this->escapeHtml($_product->getManufacturer()); ?>"/>
-                                    </div>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
+                                </a>
                                     <div class="price clearfix">
                                         <div class="col-price">
                                             <?php if ($_product->getPrice() != $_product->getFinalPrice()) : ?>
@@ -77,21 +74,21 @@ $_helper = Mage::helper('zolagocatalog/product');
                                         <div class="like liked"
                                              data-idproduct="<?php echo $_product->getId(); ?>"
                                              data-status="1">
-                                            <span class="icoLike">
-                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
-                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
-                                            </span>
                                             <span class="like_count">
                                                 <span>
                                                     <?php echo $inMyWishlist; ?>
                                                     <?php echo $plusSign; ?>
                                                 </span>
-                                                <?php echo $wishlistCount; ?>
+	                                            <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
+                                            </span>
+	                                        <span class="icoLike">
+                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt="" onclick="return false;" />
+                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt="" onclick="return false;" />
                                             </span>
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
-                                </a>
+
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -122,6 +119,7 @@ $_helper = Mage::helper('zolagocatalog/product');
     grid.shuffle('update');
 
     jQuery(grid).on('layout.shuffle', function() {
+	    console.log("tri2");
         Mall.wishlist.likePriceView();
         //fix for footer
         jQuery(window).resize();

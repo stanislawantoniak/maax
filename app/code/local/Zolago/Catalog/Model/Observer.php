@@ -7,8 +7,29 @@
  *
  */
 class Zolago_Catalog_Model_Observer
-{
-
+{	
+	/**
+	 * Handle default category on product page
+	 * @area: frontend
+	 * @event: catalog_controller_product_init
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function productInit(Varien_Event_Observer $observer) {
+		$product = $observer->getEvent()->getProduct();
+		/* @var $product Mage_Catalog_Model_Products */
+		
+		// No category id
+		if(!$product->getCategory()){
+			$rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+			$category = Mage::helper("zolagosolrsearch")->getDefaultCategory($product, $rootId);
+			/* @var $category Mage_Catalog_Model_Category */
+			if($category && $category->getId()){
+				$product->setCategory($category);
+				Mage::register('current_category', $category);
+			}	
+		}
+	}
+	
     public function addColumnWidthField(Varien_Event_Observer $observer)
     {
         $fieldset = $observer->getForm()->getElement('front_fieldset');
@@ -92,10 +113,10 @@ class Zolago_Catalog_Model_Observer
 
         $converterPriceType = isset($attributesData['converter_price_type']) ? $attributesData['converter_price_type']
             : 0;
-        $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : 0;
+        $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : null;
         $msrpType = (isset($attributesData['converter_msrp_type']) && $attributesData['converter_msrp_type'] == 0)? 1:0;
         $productIdsLog = implode(",", $productIds);
-        if (!empty($converterPriceType) || !empty($priceMargin) || !empty($msrpType)) {
+        if (!empty($converterPriceType) || !is_null($priceMargin) || !empty($msrpType)) {
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);
         }

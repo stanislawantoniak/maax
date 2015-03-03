@@ -7,10 +7,10 @@
 <?php $_rowPriceInclTax = $_item->getRowTotalInclTax();?>
 <?php $_discountAmount = $_item->getDiscountAmount(); ?>
 <?php $_itemDiscount = $_item->getDiscount(); ?>
+<?php $_discountInfo =$_item->getDiscountInfo();?>
 <?php $_finalItemPrice = $_priceInclTax - $_itemDiscount; ?>
 <?php $_finalRowPrice = $_rowPriceInclTax - $_discountAmount; ?>
 <?php $_sku = $_item->getFinalSku(); ?>
-
 <tr data-item-id="<?php echo $_item->getId();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableFormattedText($_item);?>">
 	<td class="align-center checkbox-column"><input type="checkbox"<?php if(!$this->getIsEditable()):?> disabled="disabled"<?php endif;?> name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
 	<td class="align-right"><?php echo $this->getLp();?></td>
@@ -18,9 +18,37 @@
 	<td><?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableHtml($_item);?></td>
 	<td class="align-right"><?php echo round($_item->getQty());?></td>
 	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
-	<td class="align-right">
+	<td class="align-right discount">
 		<?php if($_itemDiscount>0):?>
-			<span class="text-success"><?php echo Mage::helper("core")->currency(-1*$_itemDiscount);?></span>
+			<u  class="po-item-tooltip text-success"><?php echo Mage::helper("core")->currency(-1*$_itemDiscount);?></u>
+			<div class="hidden po-item-tooltip-content">
+				<?php if($_discountInfo):?>
+				<table>
+					<thead>
+						<tr>
+							<th class="align-right"><?php echo $this->__("Id");?></th>
+							<th class="align-left"><?php echo $this->__("Type (algorithm)");?></th>
+							<th class="align-left"><?php echo $this->__("Promotion name");?></th>
+							<th class="align-right"><?php echo $this->__("Discount per item");?></th>
+							<th class="align-left"><?php echo $this->__("Discount sponsored by");?></th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php foreach($_discountInfo as $_relation):?>
+						<tr>
+							<td class="align-right"><?php echo $_relation->getRuleId() ? $_relation->getRuleId() : "-";?></td>
+							<td class="align-left"><?php echo $this->getAlgorithmName($_relation);?></td>
+							<td class="align-left"><?php echo $this->escapeHtml($_relation->getName());?></td>
+							<td class="align-right"><?php echo Mage::helper("core")->formatPrice($_relation->getDiscountAmount()/$_item->getQty());?></td>
+							<td class="align-left"><?php echo $this->getPayerName($_relation);?></td>
+						</tr>
+					<?php endforeach;?>
+					</tbody>
+				</table>
+				<?php else:?>
+					<?php echo $this->__("No discount information");?>
+				<?php endif;?>
+			</div>
 		<?php else:?>
 			<?php echo Mage::helper("core")->currency($_itemDiscount);?>
 		<?php endif;?>
@@ -29,7 +57,7 @@
 	<td class="align-right"><?php echo $this->getPosQty($_item);?></td>
 	<td>
 		<?php if($this->getIsEditable()):?>
-		<button data-toggle="modal" data-item-id="<?php echo $_item->getId();?>" data-item-price="<?php echo $_priceInclTax;?>" data-item-discount="<?php echo $_itemDiscount;?>" data-item-qty="<?php echo $_item->getQty();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableFormattedText($_item);?>" data-target="#editItemModal" class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
+		<button data-toggle="modal" data-item-id="<?php echo $_item->getId();?>" data-item-price="<?php echo round($_priceInclTax, 2);?>" data-item-discount="<?php echo round($_itemDiscount,2);?>" data-item-qty="<?php echo $_item->getQty();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableFormattedText($_item);?>" data-target="#editItemModal" class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
 			<i class="icon-pencil"></i>
 		</button>
 		<span title="<?php if($this->getIsRemovable()): ?><?php echo $this->__("Remove Item");?><?php else:?><?php echo $this->__("The last item cannot be deleted. You can delete it when you add another item or cancel the order.");?><?php endif;?>" class="bs-tooltip inline-block">
