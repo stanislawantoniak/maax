@@ -156,9 +156,7 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
     {
         $this->_prepareValueOptions();
         $valueSelectOptions = $this->getData('value_select_options');
-        Mage::log($valueSelectOptions, null, 'mylog.log');
         $res = array();
-        $modified = false;
         if (!empty($valueSelectOptions)) {
             // checking if array is:
             // 1) [value] => [label]
@@ -179,12 +177,11 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
                         'label' => $value
                     );
                 }
-                $modified = true;
+                $valueSelectOptions = $res;
             }
         }
-        Mage::log($res, null, 'mylog.log');
 
-        return $modified ? $res : $valueSelectOptions;
+        return $valueSelectOptions;
     }
 
     /**
