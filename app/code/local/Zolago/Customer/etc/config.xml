@@ -22,6 +22,7 @@
             <customer>
                 <rewrite>
                     <form>Zolago_Customer_Model_Customer_Form</form>
+                    <customer>Zolago_Customer_Model_Customer</customer>
                 </rewrite>
             </customer>
             <core>

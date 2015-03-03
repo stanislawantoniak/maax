@@ -1,8 +1,10 @@
 <?php /* @var $this Zolago_DropshipMicrositePro_Block_Vendor_Logo */ ?>
 
-<div class="vendor-top-bottom-header-label"><?php echo $this->getVendorLabel(); ?></div>
-<a href="<?php echo $this->getVendorUrl(); ?>">
-    <div class="vendor-top-bottom-header-logo" style="background-image:url(<?php echo $this->getLogoUrl(); ?>)">
-    </div>
-</a>
-
+<div class="vendor-top-bottom-header-label">
+    <a href="<?php echo $this->getVendorUrl(); ?>"><?php echo $this->getVendorLabel(); ?></a>
+</div>
+<div class="vendor-top-bottom-header-logo">
+    <a href="<?php echo $this->getVendorUrl(); ?>">
+        <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->getVendorName(); ?>"/>
+    </a>
+</div>
