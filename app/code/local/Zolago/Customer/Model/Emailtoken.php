@@ -51,6 +51,7 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
     protected function _sendEmailTemplate($customer, 
         $template, $templateParams = array(), $storeId = null)
     {
+        $templateParams['use_attachments'] = true;
         $emailTemplate = Mage::getModel("core/email_template");
         /* @var $emailTempalte Mage_Core_Model_Email_Template */
        

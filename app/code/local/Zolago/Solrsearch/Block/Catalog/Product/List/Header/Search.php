@@ -20,5 +20,5 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Header_Search
         }
         return $this->getData('current-search');
     }
-        
+
 }

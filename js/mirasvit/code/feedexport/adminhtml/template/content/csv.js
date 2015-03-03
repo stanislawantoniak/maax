@@ -4,14 +4,22 @@ var FeedExportMapping = {
         e.ancestors()[1].remove();
     },
 
-    rowUp: function(e)
+    rowUp: function(e, c)
     {
-        FeedExportMapping.rowMove(e, 'up');   
+        if (c == 'DynamicAttribute') {
+            FeedExportDynamicAttribute.rowMove(e, 'up');
+        } else {
+            FeedExportMapping.rowMove(e, 'up');   
+        }
     },
 
-    rowDown: function(e)
+    rowDown: function(e, c)
     {
-        FeedExportMapping.rowMove(e, 'down');   
+        if (c == 'DynamicAttribute') {
+            FeedExportDynamicAttribute.rowMove(e, 'down');
+        } else {
+            FeedExportMapping.rowMove(e, 'down');
+        }
     },
 
     rowMove: function (e, direction)
@@ -46,9 +54,16 @@ var FeedExportMapping = {
         }
     },
 
-    rowAdd: function()
+    rowAdd: function(url)
     {
-        $$('#mapping-table tr').last().insert({'after' : $$('#mapping-table tr').last().cloneNode(true)});
+        this.request = new Ajax.Request(url, {
+            method: 'POST',
+            onComplete: function (response) {
+                var result = response.responseJSON;
+                var row = '<tr><td><button class="button" onclick="FeedExportMapping.rowUp(this); return false;"><span><span>↑</span></span></button><button class="button" onclick="FeedExportMapping.rowDown(this); return false;"><span><span>↓</span></span></button></td><td><input type="text" value="" name="csv[mapping][header][]" class="input-text"></td><td><input type="text" value="" name="csv[mapping][prefix][]" class="input-text"></td><td><select name="csv[mapping][type][]" onchange="FeedExportMapping.changeValueType(this)" style="width:100%;"><option value="attribute" selected="selected">Attribute</option><option value="parent_attribute">Parent Attribute</option><option value="pattern">Pattern</option></select></td><td><input type="text" value="" name="csv[mapping][value_pattern][]" class="input-text" style="display:none;">' + result.value + '</td><td><input type="text" class="input-text" name="csv[mapping][suffix][]" value=""></td><td>' + result.type + '</td><td><input type="text" value="" name="csv[mapping][limit][]" class="input-text"></td><td><button class="button" onclick="FeedExportMapping.rowRemove(this); return false;"><span><span>✖</span></span></button></td></tr>';
+                $$('#mapping-table tr').last().insert({'after': row});
+            }
+        });
     },
 
     changeValueType: function(e)

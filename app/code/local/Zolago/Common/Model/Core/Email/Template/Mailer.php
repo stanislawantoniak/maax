@@ -9,16 +9,37 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 	public function setTemplateParams(array $templateParams = array()) {
 		// Append logo if needed
 		if(isset($templateParams['use_attachments']) || isset($templateParams['_ATTACHMENTS'])){
-			$templateParams['_ATTACHMENTS'][] = array(
-				"filename"		=> Mage::helper("zolagocommon")->getDesignFileByStore(
-					$this->getLogoFile(), $this->getStoreId()),
-				"id"			=> "logo.png",
-				"disposition"	=> "inline"
-			);
+            if (!$this->isLogoAdded($templateParams)) {
+                $templateParams['_ATTACHMENTS'][] = array(
+                    "filename"		=> Mage::helper("zolagocommon")->getDesignFileByStore(
+                        $this->getLogoFile(), $this->getStoreId()),
+                    "id"			=> "logo.png",
+                    "disposition"	=> "inline"
+                );
+            }
 		}
 		return parent::setTemplateParams($templateParams);
 	}
-	
+
+    /**
+     * Check is logo attached by overridden fnc setTemplateParams(...)
+     * @param array $templateParams
+     * @return bool true|false
+     */
+    public function isLogoAdded(array $templateParams = array()){
+        if (empty($templateParams)) {
+            $templateParams = $this->getTemplateParams();
+        }
+        $isAdded = false;
+        foreach ($templateParams as $param) {
+            if (isset($param['id']) && $param['id'] == "logo.png") {
+                $isAdded = true;
+                break;
+            }
+        }
+        return $isAdded;
+    }
+
 	/**
 	 * @return string
 	 */
@@ -27,7 +48,7 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 	}
 	
     /**
-	 * Override email tempalte supported attachments
+	 * Override email template supported attachments
 	 * 
      * Send all emails from email list
      * @see self::$_emailInfos

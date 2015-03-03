@@ -113,7 +113,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
     {
         $request = $this->getRequest();
         $session = Mage::getSingleton('core/session');
-
         try {
             $this->_saveRmaDetails();
             $session->addSuccess($this->__("Courier data saved"));
@@ -142,6 +141,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         /* @var $rma Zolago_Rma_Model_Rma */
         $po = $rma->getPo();
 
+        $this->_rmaSetOwnShippingAddress($data, $rma);
+        $rma->save();
         // set tracking
         $dhlRequest = $this->_getTrackignRequest($data);
         $this->_setTracking($dhlRequest, $rma, $data);
@@ -162,8 +163,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
         $rma->setRmaStatus(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP);
         $rma->save();
-
-        $this->_rmaSetOwnShippingAddress($data, $rma);
 
         Mage::helper('udropship')->processQueue();
     }
@@ -285,7 +284,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 				);
 				if($customerAddress && $customerAddress->getId()){
 					$orderAddress = $rma->getShippingAddress();
-					$this->_prepareShippingAddress($customerAddress, $orderAddress);
+					$orderAddress = $this->_prepareShippingAddress($customerAddress, $orderAddress);
 					$rma->setOwnShippingAddress($orderAddress);
 				}
 			}
@@ -355,8 +354,9 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             );
             if ($customerAddress && $customerAddress->getId()) {
                 $orderAddress = $rma->getShippingAddress();
-                $this->_prepareShippingAddress($customerAddress, $orderAddress);
+                $orderAddress = $this->_prepareShippingAddress($customerAddress, $orderAddress);
                 $rma->setOwnShippingAddress($orderAddress);
+                $rma->setCustomerAddressId($data['customer_address_id']);
             }
         }
         return $rma;

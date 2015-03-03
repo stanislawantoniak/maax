@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Mirasvit_FeedExport>
-            <version>0.0.7.4</version>
+            <version>0.0.7.5</version>
         </Mirasvit_FeedExport>
     </modules>
     <global>
@@ -200,15 +200,6 @@
                 </observers>
             </adminhtml_catalog_product_grid_prepare_massaction>
         </events>
-		<translate>
-            <modules>
-                <Mirasvit_FeedExport>
-                    <files>
-                        <default>Mirasvit_FeedExport.csv</default>
-                    </files>
-                </Mirasvit_FeedExport>
-            </modules>
-        </translate>
     </adminhtml>
     <crontab>
         <jobs>

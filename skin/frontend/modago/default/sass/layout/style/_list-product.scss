@@ -11,10 +11,17 @@
             height:auto;
         }
     }
-    .logo_manufacturer {
-        margin-bottom:18px;
-        padding:0 8px;
-    }
+  .logo_manufacturer {
+	margin: 15px 8px;
+    max-width: 100px;
+    max-height: 30px;
+	height: 30px;
+
+    display: block;
+    background-size: contain;
+	background-position: left center;
+	background-repeat: no-repeat;
+  }
     .name_product {
         margin-bottom:18px;
         padding:0 8px;
@@ -31,11 +38,8 @@
             z-index: 900;
             cursor: pointer;
             .icoLike {
-                position:absolute;
-                top:0px;
-                right:0px;
                 .img-01 {
-                   display:block; 
+                   display:inline-block;
                 }
                 .img-02 {
                     display:none;
@@ -71,7 +75,6 @@
             &.hover {
                 .toolLike {
                     display:block; 
-
                 }
             } 
             &.liked {
@@ -81,7 +84,7 @@
                        display:none; 
                     }
                     .img-02 {
-                        display:block;
+                        display:inline-block;
                     }
                 }
             
@@ -93,7 +96,7 @@
                        display:none; 
                     }
                     .img-02 {
-                        display:block;
+                        display:inline-block;
                     }
                 }
             }
@@ -102,7 +105,7 @@
                     .icoLike {
 
                         .img-01 {
-                           display:block; 
+                           display:inline-block;
                         }
                         .img-02 {
                             display:none;
@@ -117,17 +120,15 @@
                     display:block;
                 }
             }
-            .like {
-                top: 21px;
-            }
         }
         &.like-two-line {
             .like {
-                top: -4px;
-                padding-right: 0px!important;
+	            text-align: center;
+	            margin-top: 0 !important;
+	            margin-bottom: -5px;
                 .icoLike {
-                    top: 22px;
-                    min-width: 21px;
+	                display: block;
+	                text-align: center;
                 }
             }
         }

@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -52,7 +52,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
         switch($pattern['key']) {
             case 'url':
-                $value = $product->getProductUrl(false);
+                $value = Mage::helper('feedexport')->getProductUrl($product, $this->getFeed()->getStoreId());
 
                 if ($this->getFeed()) {
                     $getParams = array();
@@ -365,6 +365,14 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
                 $mappingCategory = $this->_dynamicCategory[$mappingId];
 
                 $value = $mappingCategory->getMappingValue($obj->getData('category_id'));
+                if (null == $value) {
+                    foreach (array_reverse($obj->getCategoryIds()) as $category) {
+                        $value = $mappingCategory->getMappingValue($category);
+                        if (null != $value) {
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -437,18 +445,27 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
     protected function _prepareProductCategory(&$product)
     {
         $category = null;
+        $currentPosition = null;
 
-        $collection = $product->getCategoryCollection();
+        $collection = Mage::getModel('catalog/category')->getCollection();
         $collection->getSelect()
-            ->order(new Zend_Db_Expr('`at_product_id`.`position` asc'))
-            ->limit(1);
+            ->joinInner(
+                array('category_product' => $collection->getTable('catalog/category_product')),
+                'category_product.category_id = entity_id AND category_product.product_id = ' . $product->getId(),
+                array('product_position' => 'position')
+            )
+            ->order(new Zend_Db_Expr('`category_product`.`position` asc'));
 
-        if ($collection->getFirstItem()) {
-            $category = $collection->getFirstItem();
-            $category = $this->getCategory($category->getId());
+        foreach ($collection as $cat) {
+            if ((is_null($category) || $cat->getLevel() > $category->getLevel()) &&
+                (is_null($currentPosition) || $cat->getProductPosition() <= $currentPosition)
+            ) {
+                $category = $cat;
+                $currentPosition = $category->getProductPosition();
+            }
         }
 
-        if ($category) {
+        if ($category && $category = $this->getCategory($category->getId())) {
             $categoryPath = array($category->getName());
             $parentId     = $category->getParentId();
 

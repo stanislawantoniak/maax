@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -155,7 +155,33 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
     public function getValueSelectOptions()
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_select_options');
+        $valueSelectOptions = $this->getData('value_select_options');
+        $res = array();
+        if (!empty($valueSelectOptions)) {
+            // checking if array is:
+            // 1) [value] => [label]
+            // or
+            // 2) array( array('value' => value, 'label' => label))
+            // if 1) need to be transformed to 2)
+            $isCorrect = true;
+            foreach ($valueSelectOptions as $a) {
+                if (!isset($a['value'])){
+                    $isCorrect = false;
+                    break;
+                }
+            }
+            if (!$isCorrect) {
+                foreach ($valueSelectOptions as $index => $value) {
+                    $res[] = array(
+                        'value' => $index,
+                        'label' => $value
+                    );
+                }
+                $valueSelectOptions = $res;
+            }
+        }
+
+        return $valueSelectOptions;
     }
 
     /**

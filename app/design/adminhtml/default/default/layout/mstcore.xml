@@ -3,8 +3,11 @@
     <default>
         <reference name="head">
             <action method="addCss"><name>mstcore/css/base.css</name></action>
+            <action method="addCss"><name>mstcore/css/regexpal.css</name></action>
             <action method="addJs"><name>mirasvit/code/mstcore/adminhtml/help.js</name></action>
             <action method="addJs"><name>mirasvit/core/tooltip.js</name></action>
+            <action method="addJs"><script>mirasvit/core/regexp/regex-colorizer.js</script></action>
+            <action method="addJs"><script>mirasvit/core/regexp/regex-form.js</script></action>
         </reference>
     </default>
 

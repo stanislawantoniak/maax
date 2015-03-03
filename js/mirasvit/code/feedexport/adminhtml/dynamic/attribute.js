@@ -1,5 +1,4 @@
 var FeedExportDynamicAttribute = {
-
     init: function()
     {
         this.conditionRow = '<tr class="row" data-key="CID">' + $$('#conditions-table #row-template')[0].cloneNode(true).innerHTML + '</tr>';
@@ -14,7 +13,7 @@ var FeedExportDynamicAttribute = {
 
         this.reset(clone);
 
-        $$('#conditions-table').last().insert({'after' : clone});
+        $$('#conditions-table').last().insert(clone);
 
     },
 
@@ -38,11 +37,15 @@ var FeedExportDynamicAttribute = {
     {
         var table = e.ancestors()[0].select('table').last();
         var tr = table.select('tr').last();
-        var clone = tr.cloneNode(true)
 
+        if (!tr) {
+            var tableHidden = e.ancestors()[3].select('#row-template table').last();
+            tr = tableHidden.select('tr').last();
+        }
+
+        var clone = tr.cloneNode(true);
         this.reset(clone);
-
-        table.select('tr').last().insert({'after': clone});
+        table.insert(clone);
     },
 
     removeSubConditionRow: function(e)
@@ -75,7 +78,6 @@ var FeedExportDynamicAttribute = {
         if (element !== null) {
             cid = element.up('.row').readAttribute('data-key');
         }
-
         html = html.replace(/CID/g, cid);
 
         return html;
@@ -95,6 +97,38 @@ var FeedExportDynamicAttribute = {
                 var item = inputs[i];
                 item.value = '';
             }
+        }
+    },
+
+    rowMove: function (e, direction)
+    {
+        var tr = e.ancestors()[1];
+
+        var table = tr.parentNode;
+        
+        index = table.select('tr.row').indexOf(tr);
+        var prev = 1;
+        if (index > 0) {
+            prev = index - 1; 
+        }
+        
+        var next = table.select('tr.row').length - 2;
+        if (index < table.select('tr.row').length - 1) {
+            next = index + 1;
+        }
+            
+        prevli = table.select('tr.row')[prev];
+        nextli = table.select('tr.row')[next];
+          
+        tr.remove();
+            
+        switch(direction){
+            case 'up':
+                prevli.insert({before : tr});
+            break;
+            case 'down':
+                nextli.insert({after : tr});
+            break;
         }
     }
 };

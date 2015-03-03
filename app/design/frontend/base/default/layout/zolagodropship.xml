@@ -8,6 +8,13 @@
 				<type>skin_js</type>
 				<name>js/plugins/select2/select2.min.js</name>
 			</action>
+            <action method="addLocaleJs">
+                <type>skin_js</type>
+                <name>
+                    <pl_PL>js/plugins/select2/select2_locale_pl.js</pl_PL>
+                    <en_US>0</en_US>
+                </name>
+            </action>
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/plugins/validation/jquery.validate.min.js</name>

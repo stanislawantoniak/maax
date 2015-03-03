@@ -84,27 +84,13 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
                 'order'        => $this,
                 'billing'      => $this->getBillingAddress(),
 //                'payment_html' => $paymentBlockHtml,
-                'use_attachements'    => true,
+                'use_attachments'    => true,
                 'customerIsGuest'     => $this->getCustomerIsGuest() ? true : false,
                 'isMoreVendors'       => $this->isMoreVendors() ? true : false,
                 'vendorNameList'     => $this->getVendorNameList(),
                 "_ATTACHMENTS"        => Mage::helper("zolagopo")->getOrderImagesAsAttachments($this)
             )
         );
-
-
-//
-
-        /** @var Zolago_Dropship_Helper_Data $udropHlp */
-//        $udropHlp = Mage::helper('udropship');
-        /** @var Zolago_Po_Helper_Data $udpoHlp */
-//        $udpoHlp = Mage::helper('udpo');
-
-        /** @var Zolago_Po_Model_Po $po */
-//        $udpo = Mage::getModel("zolagopo/po")->load($this->getId());
-
-//        $vendor = $udropHlp->getVendor($udpo->getUdropshipVendor());
-
 
         $mailer->send();
 

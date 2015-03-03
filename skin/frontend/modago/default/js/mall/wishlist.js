@@ -18,7 +18,11 @@ Mall.wishlist = {
 
     init: function () {
         "use strict";
-        setTimeout(function () {Mall.wishlist.calculateWidths();}, 500);
+        if(Mall.listing) {
+	        setTimeout(function () {
+		        Mall.wishlist.calculateWidths();
+	        }, 500);
+        }
     },
 
     /**
@@ -397,6 +401,11 @@ Mall.wishlist = {
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
                     onclick: "Mall.wishlist.removeFromSmallBlock(this);"
                 });
+
+	            likeCount = jQuery("<span/>", {
+		            "class": "like_count"
+	            }).appendTo(wrapper);
+
                 ico = jQuery("<span/>", {
                     "class": "icoLike"
                 }).appendTo(wrapper);
@@ -413,14 +422,10 @@ Mall.wishlist = {
                     alt: ""
                 }).appendTo(ico);
 
-                likeCount = jQuery("<span/>", {
-                    "class": "like_count"
-                }).appendTo(wrapper);
-
                 jQuery("<span/>", {
                     html: Mall.translate.__("you")
                         + (Mall.wishlist.getWishlistCount(id) > 1
-                        ? " + " + (Mall.wishlist.getWishlistCount(id) - 1) : "")
+                        ? " + " + (Mall.wishlist.getWishlistCount(id) - 1 > 99 ? "99+" : Mall.wishlist.getWishlistCount(id) - 1) : "") + " "
                 }).prependTo(likeCount);
 
                 jQuery("<div/>", {
@@ -469,6 +474,13 @@ Mall.wishlist = {
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
                     onclick: "Mall.wishlist.addFromSmallBlock(this);"
                 });
+
+	            likeCount = jQuery("<span/>", {
+		            "class": "like_count",
+		            html: (Mall.wishlist.getWishlistCount(id) > 0
+			            ? (Mall.wishlist.getWishlistCount(id) > 99 ? "99+" : Mall.wishlist.getWishlistCount(id)) : "") + " "
+	            }).appendTo(wrapper);
+
                 ico = jQuery("<span/>", {
                     "class": "icoLike"
                 }).appendTo(wrapper);
@@ -484,12 +496,6 @@ Mall.wishlist = {
                     src: Config.path.heartLiked,
                     alt: ""
                 }).appendTo(ico);
-
-                likeCount = jQuery("<span/>", {
-                    "class": "like_count",
-                    html: (Mall.wishlist.getWishlistCount(id) > 0
-                        ? Mall.wishlist.getWishlistCount(id) : "")
-                }).appendTo(wrapper);
 
                 jQuery("<span/>", {
                     html: ""
@@ -518,61 +524,39 @@ Mall.wishlist = {
      */
     calculateWidths: function () {
         "use strict";
-
-        jQuery(".like").each(function (index, item) {
-
-            var wrapperWidth = jQuery(item).parent().outerWidth(true),
-                priceWidth = jQuery(item).parent().find(".col-price").outerWidth(true),
-                icoWidth = jQuery(item).find(".icoLike").outerWidth(true),
-                likeCountWidth = jQuery(item).find(".like_count").outerWidth(true);
-
-            if(wrapperWidth > 0){ //To prevent using this script before products loaded
-                if (icoWidth + likeCountWidth + priceWidth + 10 < wrapperWidth) {
-                    jQuery(item).parent().removeClass("like-two-line");
-                } else {
-                    jQuery(item).parent().addClass("like-two-line");
-                }
-            }
-
-        });
-
-        return this;
+	    Mall.wishlist._prev_window_width = '';
+	    Mall.wishlist.likePriceView();
+	    return this;
     },
 
+	_prev_window_width: '',
+
     likePriceView: function(){
+	    if(this._prev_window_width != jQuery(window).width()) {
+		    jQuery('#items-product').find('.price').each(function () {
+			    var self = jQuery(this),
+				    fullWidth = self.width() -10,
+				    price = self.find('.col-price'),
+				    priceWidth = price.outerWidth(),
+				    like = self.find('.like'),
+				    likeCount = like.find('.like_count'),
+				    likeCountWidth = likeCount.outerWidth(),
+				    likeIco = like.find('.icoLike'),
+				    likeIcoWidth = likeIco.outerWidth(),
+				    priceClass = 'price-two-line',
+				    likeClass = 'like-two-line';
 
-        var listProducts = jQuery('#items-product, #wishlist-items');
-        var listItemsProducts = listProducts.find('.item');
-        listItemsProducts.each(function(index, el) {
-            var children = jQuery(this).find('.box_listing_product');
-            var widthThis = children.innerWidth()-15;
+			    self.removeClass(priceClass + ' ' + likeClass);
 
-            var childrenPrice = children.find('.col-price').innerWidth();
-            var childrenLike = children.find('.like').innerWidth();
-
-            var widthBlock = parseInt(childrenPrice + childrenLike);
-
-            var widthThisHalf = parseInt(widthThis/2);
-
-            if (widthBlock < widthThis) {
-
-            };
-            if(widthBlock > 0){
-                if (widthBlock > widthThis) {
-                    if (childrenPrice > widthThisHalf) {
-                        jQuery(this).find('.price').addClass('price-two-line');
-                    } else {
-                        jQuery(this).find('.price').removeClass('price-two-line');
-                    };
-                    if (childrenLike > widthThisHalf) {
-                        jQuery(this).find('.price').addClass('like-two-line');
-                    } else {
-                        jQuery(this).find('.price').removeClass('like-two-line');
-                    };
-                };
-            }
-
-        });
+			    if(priceWidth + likeCountWidth > fullWidth) {
+				    self.addClass(likeClass + ' ' + priceClass);
+			    } else if(priceWidth + likeCountWidth + likeIcoWidth > fullWidth) {
+				    self.addClass(likeClass);
+			    }
+		    });
+		    this._prev_window_width = jQuery(window).width();
+		    Mall.listing.triggerResize();
+	    }
     }
 };
 

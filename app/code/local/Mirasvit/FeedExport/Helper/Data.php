@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -59,10 +59,10 @@ class Mirasvit_FeedExport_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * ÐÐ¾Ð·Ð²ÑÐ°ÑÐ°ÐµÑ Ð²ÑÐµÐ¼Ñ Ð¿ÑÐ¾ÑÐµÐ´ÑÐµÐµ Ñ Ð¼Ð¾Ð¼ÐµÐ½ÑÐ° $time
-     * ÑÐ¾ÑÐ¼Ð°Ð¼ x years x months x days x hours x min x sec
+     * Возвращает время прошедшее с момента $time
+     * формам x years x months x days x hours x min x sec
      *
-     * @param  integer $time timestamp Ñ ÐºÐ°ÐºÐ¾Ð³Ð¾ Ð¼Ð¾Ð¼ÐµÐ½ÑÐ°
+     * @param  integer $time timestamp с какого момента
      *
      * @return string
      */
@@ -106,5 +106,36 @@ class Mirasvit_FeedExport_Helper_Data extends Mage_Core_Helper_Abstract
     public function getState()
     {
         return Mage::registry('current_state');
+    }
+
+    public function getProductUrl($product, $storeId)
+    {
+        $isSeoFormattedUrl = false;
+        $productUrl        = null;
+        if (Mage::helper('mstcore')->isModuleInstalled('Mirasvit_Seo')) {
+            $urlFormat = Mage::getSingleton('seo/config')->getProductUrlFormat();
+            if ($urlFormat == Mirasvit_Seo_Model_Config::URL_FORMAT_LONG) {
+                $isSeoFormattedUrl = true;
+            }
+        }
+
+        if ($isSeoFormattedUrl) {
+            $longUrl = array();
+            $urlRewriteCollection = Mage::getModel('core/url_rewrite')->getCollection()
+                ->addFieldToFilter('store_id', $storeId)
+                ->addFieldToFilter('is_system', 1)
+                ->addFieldToFilter('product_id', $product->getId())
+                ->setOrder('category_id', 'desc');
+
+            foreach ($urlRewriteCollection as $url) {
+                $longUrl[strlen($url->getRequestPath())] = $url->getRequestPath();
+            }
+
+            $productUrl = Mage::getBaseUrl() . $longUrl[max(array_keys($longUrl))];
+        } else {
+            $productUrl = $product->getProductUrl(false);
+        }
+
+        return $productUrl;
     }
 }

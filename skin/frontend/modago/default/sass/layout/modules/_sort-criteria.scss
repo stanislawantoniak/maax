@@ -3,11 +3,6 @@
 	ul {
 		margin:0px;
 		padding:0px;
-		float:right;
-		@media (max-width: $screen-xs-max) {
-			float:right;
-			margin-right: -31px;
-		}
 		li {
           &:not(.selectboxit-option){
             display:inline-block;
@@ -25,11 +20,16 @@
               margin: 0px;
             }
           }
-			&+li.sort-criteria-selector {
-				margin-left: 35px;
-				@media (max-width: $screen-xs-max) {
-					margin-left: 0px;
-				}
+		}
+		li.sort-criteria-selector {
+			float: right;
+			@include max-screen(400px) {
+				float:none;
+				margin: 3px 0 4px;
+				width: 100%;
+			}
+			@include max-screen($screen-xs-max) {
+				margin-right: -11px;
 			}
 		}
 	}

@@ -61,6 +61,7 @@
     }
 }
 
+
 .pop-shop-seemore {
     display: block;
     width: 245px;
@@ -75,8 +76,6 @@
     width: 100%;
     display: inline-block;
 }
-
-
 #product-gallery {
     
     &.col-lg-5 {
@@ -159,4 +158,11 @@
           overflow: visible;
         }
     }
+}
+
+.lower-breadcrumbs {
+  #header-main {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
 }

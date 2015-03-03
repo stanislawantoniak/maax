@@ -10,8 +10,8 @@
  * @category  Mirasvit
  * @package   Advanced Product Feeds
  * @version   1.1.2
- * @build     452
- * @copyright Copyright (C) 2014 Mirasvit (http://mirasvit.com/)
+ * @build     518
+ * @copyright Copyright (C) 2015 Mirasvit (http://mirasvit.com/)
  */
 
 
@@ -263,7 +263,7 @@ class Mirasvit_FeedExport_Helper_Io extends Mage_Core_Helper_Abstract
                     Mage::throwException('Can\'t connect to host "'.$host.'"');
                 }
             } else {
-                Mage::throwException('You canât upload the file via SSH because PHP5-SSH2 extension is not installed.
+                Mage::throwException('You can’t upload the file via SSH because PHP5-SSH2 extension is not installed.
 Please contact your hosting provider to install the extension. More information at:
 <a href="http://www.php.net/manual/en/book.ssh2.php">http://www.php.net/manual/en/book.ssh2.php</a>');
             }
