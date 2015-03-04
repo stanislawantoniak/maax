@@ -3,7 +3,7 @@
 <config>
     <skin>modago</skin>
     <report>
-        <action>print</action>
+        <action></action>
         <subject></subject>
         <email_address></email_address>
         <trash>leave</trash>

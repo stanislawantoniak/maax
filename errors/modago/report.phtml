@@ -3,10 +3,6 @@
         <h1>Nastąpił błąd podczas przetwarzania żądania</h1>
     </div>
 
-    <?php if ('' == $this->reportAction): ?>
-        <h2>Wyświetlanie błędów jest domyślnie wyłączona ze względów bezpieczeństwa.</h2>
-    <?php endif; ?>
-
     <?php if ($this->reportAction == 'print'): ?>
     <div class="trace-container">
         <div class="trace">
@@ -18,6 +14,6 @@
     <?php endif; ?>
 
     <?php if ($this->reportId && $this->reportUrl): ?>
-        <p>Numer błędu: <a href="<?php echo htmlspecialchars($this->reportUrl) ?>"><?php echo $this->reportId ?></a></p>
+        <p>Numer błędu: <?php echo $this->reportId ?></a></p>
     <?php endif; ?>
 </div>
