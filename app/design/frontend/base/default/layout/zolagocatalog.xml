@@ -56,7 +56,11 @@
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />
 		<update handle="forms"/>
-        <update handle="dgrid03" />
+		<reference name="root">
+    			<action method="setTemplate">
+	    			<template>page/page_boot_grid3.phtml</template>
+		    	</action>
+        </reference>
 		<reference name="content">
 			<block name="price" type="zolagocatalog/vendor_price" template="zolagocatalog/price.phtml"/>
 		</reference>
@@ -85,7 +89,11 @@
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />
         <update handle="forms" />
-        <update handle="dgrid04" />
+		<reference name="root">
+    			<action method="setTemplate">
+	    			<template>page/page_boot_grid4.phtml</template>
+		    	</action>
+        </reference>
 		 
 		<reference name="content">
 			<block name="mass" type="zolagocatalog/vendor_product" template="zolagocatalog/product.phtml">
@@ -146,12 +154,12 @@
 		<update handle="udropship_vendor" />
 		<update handle="bootstrap" />
 		<update handle="noty" />
+		<reference name="root">
+    			<action method="setTemplate">
+	    			<template>page/page_boot_image.phtml</template>
+		    	</action>
+        </reference>
 		<reference name="head">
-		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery-ui/js/jquery-ui-1.10.4.min.js</name></action>
-		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action> 
-		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery.ui.plupload/jquery.ui.plupload.min.js</name></action>
-		    <action method="addCss"><stylesheet>plugins/plupload/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.css</stylesheet></action>
-		    <action method="addCss"><stylesheet>plugins/plupload/jquery.ui.plupload/css/jquery.ui.plupload.css</stylesheet></action>
 		</reference>
 		<reference name="content">
 			<block name="image" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    
@@ -161,19 +169,17 @@
 	<udprod_vendor_image_index>
 		<update handle="bootstrap" />
 		<update handle="noty" />
+		<reference name="root">
+    			<action method="setTemplate">
+	    			<template>page/page_boot_image.phtml</template>
+		    	</action>
+        </reference>
+
 		<reference name="head">
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/plugins/validation/jquery.validate.min.js</name>
 			</action>
-		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action>
-		    <action method="addItem"><type>skin_js</type><name>plugins/elfinder/js/elfinder.full.js</name></action>
-		    <action method="addItem"><type>skin_js</type><name>plugins/elfinder/js/jquery-ui.min.js</name></action>
-		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js</name></action>
-		    <action method="addCss"><stylesheet>plugins/elfinder/css/jquery-ui.css</stylesheet></action>
-		    <action method="addCss"><stylesheet>plugins/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css</stylesheet></action>
-		    <action method="addCss"><stylesheet>plugins/elfinder/css/elfinder.full.css</stylesheet></action>
-		    <action method="addCss"><stylesheet>plugins/elfinder/css/theme.css</stylesheet></action>
 		</reference>
 		<reference name="content">
 			<block name="image" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+    var BLANK_URL = '<?php echo $this->getJsUrl() ?>blank.html';
+    var BLANK_IMG = '<?php echo $this->getJsUrl() ?>spacer.gif';
+    var BASE_URL = '<?php echo $this->getUrl('*') ?>';
+    var SKIN_URL = '<?php echo $this->getSkinUrl() ?>';
+    var FORM_KEY = '<?php echo $this->getFormKey() ?>';
+</script>
+	
+	<?php echo $this->getChildHtml('head') ?>
+<?php $skin = $this->getSkinUrl(); ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $skin?>plugins/elfinder/css/jquery-ui.css" media="all">
+	<link rel="stylesheet" type="text/css" href="<?php echo $skin?>plugins/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css" media="all">
+	<link rel="stylesheet" type="text/css" href="<?php echo $skin?>plugins/elfinder/css/elfinder.full.css" media="all">
+	<link rel="stylesheet" type="text/css" href="<?php echo $skin?>plugins/elfinder/css/theme.css" media="all">
+	<script type="text/javascript" src="<?php echo $skin;?>plugins/plupload/plupload.full.min.js"></script>
+	<script type="text/javascript" src="<?php echo $skin;?>plugins/elfinder/js/elfinder.full.js"></script>
+	<script type="text/javascript" src="<?php echo $skin;?>plugins/elfinder/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="<?php echo $skin;?>plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+</head>
+<?php $class = ($this->getBodyClass())? $this->getBodyClass():'' ?>
+<body class="tundra<?php echo $class; ?>">
+<?php echo $this->getChildHtml('after_body_start') ?>
+
+<?php echo $this->getChildHtml('global_notices') ?>
+<?php echo $this->getChildHtml('header') ?>
+	
+<div id="container">
+	<?php echo $this->getChildHtml('sidebar') ?>
+	<div id="content">
+		
+		
+		<?php echo $this->getChildHtml('breadcrumbs') ?>
+		<?php echo $this->getChildHtml('global_messages') ?>
+		<?php echo $this->getChildHtml('messages') ?>
+		<?php echo $this->getChildHtml('content') ?>
+	</div>
+</div>
+<?php echo $this->getChildHtml('footer') ?>
+<?php echo $this->getChildHtml('before_body_end') ?>
+
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>
