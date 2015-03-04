@@ -151,7 +151,15 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			}
 		}		
 	}
-	
+
+    /**
+     * create automatic rma for returned shipments
+     * @param Mage_Salel_Model_Order_Shipment
+     */
+	protected function _createReturnRma($shipment) {
+	    $rma = Mage::getModel('urma/rma');
+	    
+	}
 	protected function _processOrder($_sTracks, $multiple = false)
 	{
 		$completeOrder = true;
@@ -165,12 +173,14 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			}
 		} else {
 			$sTrack = $_sTracks;
-			$shipmentStatus = $sTrack->getUdropshipStatus();
 			$shipment = $sTrack->getShipment();
+			$shipmentStatus = $shipment->getUdropshipStatus();
 			switch ($shipmentStatus) {
-				case Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED:
+				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED:
 					$this->_setOrderCompleteState($shipment);
 					break;
+				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED:
+				    $this->_createReturnRma($shipment);
 				default:
 					$completeOrder = false;
 					break;

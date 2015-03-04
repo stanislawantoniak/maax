@@ -147,5 +147,42 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
             $this->getStore()->getCurrentCurrencyCode()
         )->toCurrency($sum);
     }
+    
+   /**
+    * @todo implement
+    * @return bool
+    */
+   public function isGatewayPayment() {
+	   return $this->getPayment()->getMethod() == Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE;
+   }
+
+   /**
+    * @return bool
+    */
+   public function isPaymentCheckOnDelivery() {
+       return $this->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
+   }
+
+    /**
+     * return true if payment method is Banktransfer
+     * if not return false
+     *
+     * @return bool
+     */
+    public function isPaymentBanktransfer() {
+       return $this->getPayment()->getMethod() == Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
+    }
+
+    /**
+     * return true if payment method is dotpay
+     * if nor return false
+     *
+     * @return bool
+     */
+    public function isPaymentDotpay() {
+       return $this->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+    }
+   
+
 
 }
