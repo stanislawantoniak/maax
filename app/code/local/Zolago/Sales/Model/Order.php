@@ -148,4 +148,31 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
         )->toCurrency($sum);
     }
 
+
+    /**
+     * Replace customer email with new email
+     *
+     * @param $newEmail
+     * @param $customerId
+     * @param $storeId
+     */
+    public function replaceEmailInOrders($newEmail, $customerId, $storeId)
+    {
+        if (empty($customerId)) {
+            return;
+        }
+        $sameEmailCollection = $this->getCollection();
+
+        $sameEmailCollection->addFieldToFilter("customer_id", $customerId);
+        $sameEmailCollection->addFieldToFilter("store_id", $storeId);
+
+        if ($sameEmailCollection->count()) {
+            foreach ($sameEmailCollection as $order) {
+                $order->setCustomerEmail($newEmail);
+                $order->getResource()->saveAttribute($order, "customer_email");
+            }
+        }
+    }
+
+
 }
