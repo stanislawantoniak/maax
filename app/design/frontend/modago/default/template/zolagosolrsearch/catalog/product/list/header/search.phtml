@@ -28,7 +28,7 @@ $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
                         <div id="category-header-left">
                             <div id="category-header-vendor-box">
                                 <div class="vendor-header-label"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?></div>
-                                <a href="<?php echo $this->getVendorUrl(); ?>">
+                                <a href="<?php echo $vendor->getVendorUrl(); ?>">
                                     <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
                                 </a>
                             </div>

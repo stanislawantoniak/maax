@@ -1484,6 +1484,9 @@
 
                 jQuery("input[name='payment[method]']").prop("checked",false);
                 jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+
+	            jQuery("#"+this._self_form_id).valid();
+
                 jQuery('.selected_bank').hide();
             },
 
@@ -1546,7 +1549,6 @@
             },
 
 			onPrepare: function(checkoutObject){
-                this.validate.init();
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				var self = this;
 
@@ -1573,6 +1575,7 @@
                     jQuery(this).closest('.panel').addClass('payment-selected');
                     jQuery('.selected_bank').hide();
                     if (jQuery(this).is(":checked")) {
+	                    jQuery("#"+Mall.Checkout.steps.shippingpayment._self_form_id).valid();
 	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
 	                    if(selectedBank.length) {
 		                    selectedBank.show();
@@ -1586,12 +1589,10 @@
 			                    } else {
 				                    scrollTo += offsetWithoutHeader;
 			                    }
-
 			                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
 		                    }
 	                    }
                     }
-
                 });
                 /////////////////////
 
@@ -1612,6 +1613,7 @@
 			},
 			
 			onEnter: function(checkout){
+				this.validate.init();
 				var addresses = checkout.getBillingAndShipping();
 				checkout.prepareAddressSidebar(
 					addresses.billing, 
@@ -1628,7 +1630,7 @@
                     var inputs = '';
                     jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
-                    })
+                    });
                     this.content.find("form .shipping-collect").html(inputs);
 
                     var pInputs = '';
@@ -1739,35 +1741,35 @@
             validate: {
                 init: function () {
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
-                        .validate(Mall.validate.getOptions({
+                        .validate({
                             //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
-                                _shipping_method: {
+	                            '_shipping_method': {
+									required: true
+	                            },
+                                'payment_emul': {
                                     required: true
-                                },
-                                'payment[additional_information][provider]' : {
-                                    required: function(){
-                                        var res = false;
-                                        if(jQuery("[name='payment[method]']").is(":checked") &&
-                                            (jQuery("[name='payment[method]']:checked").val() === "zolagopayment_cc" || jQuery("[name='payment[method]']:checked").val() === "zolagopayment_gateway")
-                                        ){
-                                            res = true;
-                                        }
-                                        return res;
-                                    }
                                 }
                             },
                             messages: {
                                 _shipping_method: {
                                     required: Mall.translate.__("please-select-shipping")
                                 },
-                                //"payment[method][emul]": {
-                                //    required: Mall.translate.__("Please select payment")
-                                //},
-                                'payment[additional_information][provider]' : {
-                                    required: Mall.translate.__("please-select-bank")
+	                            payment_emul: {
+                                    required: function() {
+	                                    var payment_method = jQuery('input[name="payment[method]"]:checked');
+	                                    if(payment_method.length) {
+		                                    if(payment_method.val() == "zolagopayment_gateway") {
+			                                    return Mall.translate.__("please-select-bank");
+		                                    } else {
+			                                    return Mall.translate.__("please-select-card");
+		                                    }
+	                                    } else {
+		                                    return Mall.translate.__("please-select-payment");
+	                                    }
+                                    }
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1785,7 +1787,7 @@
                             errorPlacement: function(error, element) {
                                 jQuery(element).closest("fieldset").find('.data-validate').append(error);
                             }
-                        }));
+                        });
                 }
             }
 
