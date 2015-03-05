@@ -262,6 +262,5 @@
 "%s Service Error: %s", "Błąd serwisu %s: %s"
 "Tracking Error: %s", "Błąd generowania listu przewozowego: %s"
 "Empty carrier name", "Brak nazwy kuriera"
-"Invaild zip code","Niepoprawny kod pocztowy"
-
+"Invaild zip code","Niepoprawny kod pocztowy" 
 
