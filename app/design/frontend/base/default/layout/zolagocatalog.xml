@@ -84,6 +84,12 @@
         </block>
 	</udprod_vendor_price_detail_stockmodal>
 
+    <udprod_vendor_price_detail_removemodal>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagocatalog/vendor_price_modal" template="zolagocatalog/price/removemodal.phtml"/>
+        </block>
+    </udprod_vendor_price_detail_removemodal>
+
 	
 	<udprod_vendor_product_index>
 		<update handle="udropship_vendor" />
