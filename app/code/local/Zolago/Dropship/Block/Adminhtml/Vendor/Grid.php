@@ -40,7 +40,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Grid extends Unirgy_Dropship_Block_
         $this->addColumn('vendor_type', array(
             'header'    => $hlp->__('Vendor type'),
             'align'     => 'right',
-            'width'     => '50px',
+            'width'     => '20px',
             'index'     => 'vendor_type',
             'type'      => 'options',
             'options'=> Mage::getSingleton('zolagodropship/source')->setPath('vendorstype')->toOptionHash()
@@ -49,7 +49,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Grid extends Unirgy_Dropship_Block_
         $this->addColumn('url_key', array(
             'header'    => $hlp->__('URL key'),
             'align'     => 'right',
-            'width'     => '50px',
+            'width'     => '180px',
             'index'     => 'url_key',
             'type'      => 'text',
         ));
