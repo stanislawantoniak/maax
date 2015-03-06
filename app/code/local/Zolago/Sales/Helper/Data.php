@@ -21,7 +21,7 @@ class Zolago_Sales_Helper_Data extends Mage_Sales_Helper_Data {
 		$guestOrders = Mage::getResourceModel('sales/order_collection')
 			->addFieldToSelect($field)
 			->addFieldToFilter('customer_email', $email)
-			->addFieldToFilter('customer_id',array('neq' => $customer->getId()));
+			->addFieldToFilter('customer_id',array(array('neq' => $customer->getId()), array('null'=>true)));
 
 		return $guestOrders;
 	}
