@@ -9,7 +9,7 @@ $customerAccountPage = false;
 if ($request->getRouteName() == "customer" && $request->getControllerName() == "account" && $request->getActionName() == "index") {
 	$customerAccountPage = true;
 }
-
+var_dump($_helper->getGuestOrders()->count());
 if($_helper->getGuestOrders()->count()): ?>
 	<div class="order-view order-view-multi<?php if($customerAccountPage): ?> hidden-xs<?php endif; ?>">
 		<div class="section " id="content-main">
