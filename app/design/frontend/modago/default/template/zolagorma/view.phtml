@@ -81,14 +81,14 @@
 					<i class="glyphicon glyphicon-list-alt"></i>
 					<span class="uppercase"><?php echo $_helper->__("RMA Content"); ?></span>
 				</p>
-				<table>
-					<tbody>
+				<div class="rma-content-1">
+
 						<?php foreach($_rma->getItemsCollection() as $item):?>
-						<tr>
-							<td class="img">
+						<div class="rma-content-item">
+							<div class="img">
 								<img src="<?php echo $this->getRmaItemThumb($item);?>" alt=""/>
-							</td>
-							<td class="desc">
+							</div>
+							<div class="desc" style="margin-top: -<?php echo$this->getRmaItemThumbHeight($item).'px;' ;?>">
 								<p>
 									<span><?php echo $this->escapeHtml($item->getName());?></span>
 									<?php if($_attributes = $this->getConfigurableAttributesByItem($item)):?>
@@ -104,11 +104,11 @@
 									<span class="bold"><?php echo $_helper->__("Return reason");?>:</span><br/>
 									<?php echo $this->getItemCondition($item);?>
 								</div>
-							</td>
-						</tr>
+							</div>
+						</div>
 						<?php endforeach;?>
-					</tbody>
-				</table>
+
+				</div>
 				<?php if($_rma->getCommentText()):?>
 				<div class="comment-text">
 					<?php echo $this->escapeHtml($_rma->getCommentText());?>
