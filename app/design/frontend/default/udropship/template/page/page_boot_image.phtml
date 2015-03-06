@@ -19,6 +19,17 @@
 	<script type="text/javascript" src="<?php echo $skin;?>plugins/elfinder/js/elfinder.full.js"></script>
 	<script type="text/javascript" src="<?php echo $skin;?>plugins/elfinder/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="<?php echo $skin;?>plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<?php
+// locales
+    $locale = Mage::app()->getLocale()->getLocaleCode();
+    $tmp = explode('_',$locale);
+    $this->localeCode = $tmp[0];
+    $file[0] = sprintf('plugins/plupload/i18n/%s.js',$locale);
+    $file[1] = sprintf('plugins/elfinder/js/i18n/elfinder.%s.js',$locale);
+	foreach ($file as $item) :
+?>
+	<script type="text/javascript" src="<?php echo $skin.$item;?>"></script>
+<?php endforeach; ?>
 </head>
 <?php $class = ($this->getBodyClass())? $this->getBodyClass():'' ?>
 <body class="tundra<?php echo $class; ?>">
