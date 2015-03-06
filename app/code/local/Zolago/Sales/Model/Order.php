@@ -148,4 +148,14 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
         )->toCurrency($sum);
     }
 
+	public function assignToCustomer($customerId,$save=false) {
+		$this
+			->setCustomerIsGuest(0)
+			->setCustomerId($customerId);
+		if($save) {
+			$this->save();
+		}
+		return $this;
+	}
+
 }

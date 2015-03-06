@@ -9,13 +9,27 @@ ul.messages, ul.messages ul {
 ul.messages ul {
     padding-left: 0;
 }
-ul.messages >li.success-msg ul>li {
-    background: #73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
-    margin-top: 10px;
+ul.messages >li.success-msg ul {
+	>li {
+		background: #73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
+		margin-top: 10px;
+	}
+	>li:last-child {
+		@include max-screen($screen-xs-max) {
+			margin-bottom: 10px;
+		}
+	}
 }
-ul.messages >li.error-msg ul>li, ul.messages >li.notice-msg ul>li {
-    background: #e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
-    margin-top: 10px;
+ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul {
+	>li {
+		background: #e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
+		margin-top: 10px;
+	}
+	>li:last-child {
+		@include max-screen($screen-xs-max) {
+			margin-bottom: 10px;
+		}
+	}
 }
 ul.messages >li ul>li>span {
     background-color: #deeaca;
