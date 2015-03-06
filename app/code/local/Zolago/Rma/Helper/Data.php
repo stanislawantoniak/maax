@@ -4,7 +4,6 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
     const RMA_CUSTOMER_SUFFIX = '_for_customer';
 
-	
 	/**
 	 * Fill comment text with comment properties
 	 * @param Zolago_Rma_Model_Rma_Comment $comment
@@ -297,7 +296,12 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		$data = array();
 
 		$hlp->setDesignStore($store);
-		$shippingAddress = $order->getShippingAddress();
+		$rmaAddressId  = $rma->getData('customer_address_id');
+		if ($rmaAddressId) {
+			$shippingAddress = Mage::getModel('customer/address')->load($rmaAddressId);
+		} else {
+			$shippingAddress = $order->getShippingAddress();
+		}
 		if (!$shippingAddress) {
 			$shippingAddress = $order->getBillingAddress();
 		}
