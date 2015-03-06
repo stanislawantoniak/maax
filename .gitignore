@@ -21,7 +21,6 @@ skin/frontend/modago/default_orig_2
 /vendor/
 /Vagrantfile
 /puphpet/
-/errors/local.xml
 bin/
 /vendor/
 /.project

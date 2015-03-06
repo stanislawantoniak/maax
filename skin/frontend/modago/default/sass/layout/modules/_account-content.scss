@@ -1,8 +1,5 @@
 .account-content {
     margin-top: 0px;
-    @media (max-width: $screen-xs-max) {
-        margin-top: -33px;
-    }
     min-height: 400px;
 }
 

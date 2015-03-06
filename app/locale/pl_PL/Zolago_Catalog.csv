@@ -81,6 +81,7 @@
 "Archive", "Zarchiwizowane"
 "Change product price", "Zmień cenę produktu"
 "Change product price {{name}}", "Zmień cenę - {{name}}"
+"Remove {{name}} from campaing","Usuń {{name}} z kampanii"
 "Effective price", "Cena"
 "Price deviation", "Różnica w cenie"
 "Price A", "Cena A" 

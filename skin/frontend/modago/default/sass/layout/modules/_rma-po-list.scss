@@ -70,6 +70,11 @@
 					}
 				}
 			}
+            @media (min-width:$screen-sm-min) and (max-width: 900px)  {
+                .po-number {
+                    display: none;
+                }
+            }
 		}
 	}
 	.po-list-table-mobile {
