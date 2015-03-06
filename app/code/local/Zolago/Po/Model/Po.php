@@ -551,14 +551,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return bool
     */
    public function isGatewayPayment() {
-	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE;
+	   return $this->getOrder()->isGatewayPayment();
    }
 
    /**
     * @return bool
     */
    public function isPaymentCheckOnDelivery() {
-       return $this->getOrder()->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
+       return $this->getOrder()->isPaymentCheckOnDelivery();
    }
 
     /**
@@ -568,7 +568,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      * @return bool
      */
     public function isPaymentBanktransfer() {
-       return $this->getOrder()->getPayment()->getMethod() == Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
+       return $this->getOrder()->isPaymentBanktransfer();
     }
 
     /**
@@ -578,7 +578,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      * @return bool
      */
     public function isPaymentDotpay() {
-       return $this->getOrder()->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+       return $this->getOrder()->isPaymentDotpay();
     }
    
    /**
