@@ -276,8 +276,16 @@ define([
 						append(jQuery("<td>").text(misc.currency(campaign.price)))
 				)
 		
-				buttons.push({"label": Translator.translate("Remove from campaign")});
-		
+				buttons.push({
+                    "label": Translator.translate("Remove from campaign"),
+                    className: "campaign-product-remove editable",
+                    data: {
+                        campaign_regular_id: campaign.campaign_regular_id,
+                        campaign_name: campaign.name,
+                        product_id: data.entity_id
+                    }
+                });
+
 				divRight.append(table);
 		
 			}

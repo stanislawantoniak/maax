@@ -81,6 +81,9 @@
     <price-remove-form-campaign translate="message" module="zolagocatalog">
         <message>Remove from campaign</message>
     </price-remove-form-campaign>
+    <price-Remove-name-from-campaing translate="message" module="zolagocatalog">
+        <message>Remove {{name}} from campaing</message>
+    </price-Remove-name-from-campaing>
     <price-sale translate="message" module="zolagocatalog">
         <message>Sale</message>
     </price-sale>

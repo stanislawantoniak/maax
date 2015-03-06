@@ -693,7 +693,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
             unset($store);
         }
-        $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'campaign_strikeout_price_type' => '','product_flag' => null);
+        $attributesData = array(
+            'special_price' => '',
+            'special_from_date' => '',
+            'special_to_date' => '',
+            'campaign_strikeout_price_type' => '',
+            'product_flag' => null
+        );
         foreach ($stores as $store) {
             $actionModel
                 ->updateAttributesPure($productIds, $attributesData, (int)$store);

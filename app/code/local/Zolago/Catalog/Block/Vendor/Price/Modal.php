@@ -273,4 +273,20 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		return $ids;
 	}
 
+    /**
+     * It is getting current campaign for product
+     *
+     * @param Zolago_Catalog_Model_Product $product
+     * @return Zolago_Campaign_Model_Campaign|null
+     */
+    public function getCampaign(Zolago_Catalog_Model_Product $product) {
+
+        /* @var $campaign Zolago_Campaign_Model_Campaign */
+        $regular_id = $product->getData('campaign_regular_id');
+        if (!empty($regular_id)) {
+            return $campaign = Mage::getModel("zolagocampaign/campaign")->load($regular_id);
+        }
+        return null;
+    }
+
 }
