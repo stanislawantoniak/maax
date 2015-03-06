@@ -46,7 +46,7 @@ class Zolago_Sales_Model_Quote  extends Mage_Sales_Model_Quote
      */
     public function replaceEmailInQuote($newEmail, $customerId,$storeId)
     {
-        if (empty($oldEmail)) {
+        if (empty($customerId)) {
             return;
         }
         $sameEmailCollection = $this->getCollection();
