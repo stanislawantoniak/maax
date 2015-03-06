@@ -38,7 +38,32 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
         $this->setCollection($collection);
         return parent::_prepareCollection();
 	}
-	
+
+    /**
+     * @param $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection
+     * @param $column Mage_Adminhtml_Block_Widget_Grid_Column
+     * @return $this
+     */
+    protected function filterByEmailIfValid($collection, $column) {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $field = ( $column->getFilterIndex() ) ? $column->getFilterIndex() : $column->getIndex();
+        $cond = $column->getFilter()->getCondition();
+
+        if (Zend_Validate::is($value, 'EmailAddress')) {
+            // overridden behavior
+            $field = 'customer_email';
+        }
+
+        if ($field && isset($cond)) {
+            $collection->addFieldToFilter($field, $cond);
+        }
+
+        return $this;
+    }
+
 
     protected function _addColumnFilterToCollection($column){
 		if($column->getIndex()=="is_replied"){
@@ -48,7 +73,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		}
 		return parent::_addColumnFilterToCollection($column);
 	}
-	
+
 	protected function _prepareColumns() {
 		$_helper = Mage::helper("udqa");
 		
@@ -65,7 +90,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("Product"),
 		));
-		
+
 		$this->addColumn("product_sku", array(
 			"type"		=>	"text",
 			"index"		=>	"product_sku",
@@ -92,6 +117,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 			"index"		=>	"customer_name",
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("Customer name"),
+            'filter_condition_callback' => array($this, 'filterByEmailIfValid'),
 		));
 		
 		$this->addColumn("visibility", array(
@@ -163,5 +189,5 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
     public function getRowUrl($row){
         return $this->getUrl('*/*/questionEdit', array('id'=>$row->getId()));
     }
-	
+
 }

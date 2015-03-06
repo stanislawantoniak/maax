@@ -29,16 +29,40 @@ class Zolago_Customer_ConfirmController
         $email = $searchModel->getNewEmail();
         $customerId = $searchModel->getCustomerId();
         $searchModel->delete();
-        
+
+        //1. Change customer email
         $modelUser = Mage::getModel('customer/customer');
         $modelUser->load($customerId);
+        $storeId = $modelUser->getStoreId();
         $modelUser->setEmail($email);        
         $modelUser->save();
 
         /* @var $newsletterInviter Zolago_Newsletter_Model_Subscriber */
         Mage::getModel('zolagonewsletter/subscriber')
             ->subscribeCustomer($modelUser);
-        
+
+        //2. Change email in the table udropship_po
+        /* @var $poModel Zolago_Po_Model_Po */
+        $poModel = Mage::getModel('zolagopo/po');
+        $poModel->replaceEmailInPOs($email, $customerId, $storeId);
+
+        //3. Change email in the tables sales_flat_order and sales_flat_order_address
+        /* @var $ordersModel Zolago_Sales_Model_Order */
+        $ordersModel = Mage::getModel('sales/order');
+        $ordersModel->replaceEmailInOrders($email, $customerId, $storeId);
+
+        /* @var $orderAddressModel Zolago_Sales_Model_Order_Address */
+        $orderAddressModel = Mage::getModel('sales/order_address');
+        $orderAddressModel->replaceEmailInOrderAddress($email,$customerId);
+
+        //4. Change email in the tables sales_flat_quote and sales_flat_quote_address
+        /* @var $quoteModel Zolago_Sales_Model_Quote */
+        $quoteModel = Mage::getModel('sales/quote');
+        $quoteModel->replaceEmailInQuote($email, $customerId, $storeId);
+
+        /* @var $quoteAddressModel Zolago_Sales_Model_Quote_Address */
+        $quoteAddressModel = Mage::getModel('sales/quote_address');
+        $quoteAddressModel->replaceEmailInQuoteAddress($email,$customerId);
     }
 
     /**

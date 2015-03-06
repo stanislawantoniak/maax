@@ -695,6 +695,8 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			}
 		}
 	}
+
+
 	
 	protected function _processStatus() {
 		if(!$this->getId()){
@@ -752,4 +754,28 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
              $track->save();
          }
      }
+
+    /**
+     * Replace customer email with new email
+     *
+     * @param $newEmail
+     * @param $customerId
+     * @param $storeId
+     */
+    public function replaceEmailInPOs($newEmail, $customerId, $storeId)
+    {
+        if (empty($customerId)) {
+            return;
+        }
+        $sameEmailCollection = $this->getCollection();
+
+        $sameEmailCollection->addFieldToFilter("customer_id", $customerId);
+        $sameEmailCollection->addFieldToFilter("store_id", $storeId);
+        if ($sameEmailCollection->count()) {
+            foreach ($sameEmailCollection as $po) {
+                $po->setCustomerEmail($newEmail);
+                $po->getResource()->saveAttribute($po, "customer_email");
+            }
+        }
+    }
 }
