@@ -25,7 +25,7 @@
 		var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
 		Mall.rma.new.setReturnReasons(returnReasons);
 		
-		<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+		<?php foreach($_helper->getItemConditionTitlesForFront() as $_key=>$_label):?>
 		Mall.rma.new.addValidator(
 			'must-be-available-<?php echo $_key; ?>',
 			returnReasons[<?php echo $_key; ?>].message, 

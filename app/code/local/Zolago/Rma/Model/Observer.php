@@ -141,6 +141,21 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 						$statusObject->getCustomerNotes() : $statusObject->getTitle())),
 			$notify
 		);
+		if ($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN) {
+		    $po = $rma->getPo();
+		    $oldStatus = $po->getUdropshipStatus();
+		    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_RETURNED) {
+		        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_RETURNED);
+		        $helper = Mage::helper('udpo');
+                $_comment = $helper->__("[PO status changed from '%s' to '%s']",
+                            $helper->getPoStatusName($oldStatus),
+                            $helper->getPoStatusName(Zolago_Po_Model_Po_Status::STATUS_RETURNED)
+                            );
+		        $po->save();
+		        $po->addComment($_comment,false,true);
+		        $po->saveComments();
+		    }
+		}
 		/*$this->_logEvent(
 			$rma, 
 			Mage::helper('zolagorma')->__("Status changed (%s&rarr;%s)", 
@@ -436,4 +451,34 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
         $helper = Mage::helper('zolagorma');
         $helper->rmaTracking();
     }
+    
+    /**
+     * create rma for undelivered shipments
+     *
+     * @params Varien_Event_Observer $observer
+     */
+     public function createReturnRma(Varien_Event_Observer $observer) {
+         $reason = Mage::getStoreConfig('urma/general/zolagorma_reason_for_returned_shipment');
+         if (!$reason) {
+             return;
+         }
+         $shipment = $observer->getEvent()->getData('shipment');
+         $poId = $shipment->getUdpoId();
+         $po = Mage::getModel('zolagopo/po')->load($poId);
+         $items = $po->getItemsCollection();
+         $list = Mage::helper('zolagorma')->getItemList($items);
+         $out = array();
+         foreach ($list as $pack) {
+             foreach ($pack as $id=>$item) {
+                 $out['items_condition_single'][$item['entityId']][$id] = $reason;
+                 $out['items_single'][$item['entityId']][$id] = true;
+             }
+         }
+         $rmas = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($out);
+         foreach ($rmas as $rma) {
+             $rma->setRmaType(Zolago_Rma_Model_Rma::RMA_TYPE_RETURN);
+             $rma->save();
+         }
+     }
+
 }

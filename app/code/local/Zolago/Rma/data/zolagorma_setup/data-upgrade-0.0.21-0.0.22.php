@@ -4,7 +4,7 @@ $installer = $this;
 
 
 $installer->getConnection()->insert($installer->getTable('zolagorma/rma_reason'), array(
-	"name"		=>	"zwrot",
+	"name"		=>	"nieodebrana przesyłka",
 	"auto_days"	=>	0,
 	"allowed_days"	=>	0,
 	"message"	=> "",

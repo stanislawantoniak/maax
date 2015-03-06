@@ -166,6 +166,13 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 	 */
 	public function getItemConditionTitles() {
 		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
+		return $collection->toOptionHash();
+	}
+	/**
+	 * @return array
+	 */
+	public function getItemConditionTitlesForFront() {
+		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
 		$collection->addFilter('visible_on_front',true);
 		return $collection->toOptionHash();
 	}
