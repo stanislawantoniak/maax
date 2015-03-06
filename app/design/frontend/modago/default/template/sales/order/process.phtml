@@ -13,8 +13,8 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 <div class="page-title box-wrapper <?php if($customerAccountPage): ?> hidden-xs <?php endif; ?>">
 	<h1>
 		<span><?php echo $this->__('Orders in the realization') ?></span>
-		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
-		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?>&nbsp;&gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
 	</h1>
 </div>
 <div class="order-view order-view-multi <?php if($customerAccountPage): ?> hidden-xs <?php endif; ?>">
