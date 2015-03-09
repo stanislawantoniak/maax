@@ -129,7 +129,7 @@ jQuery(document).ready(function() {
 							<?php endif ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Date delivered");?>:</dt> 
-						<dd><?php echo ($_poTracking && $_poTracking->getShippedDate()) ? $this->formatDate($_poTracking->getShippedDate()) : $this->__("N/A");?></dd>
+						<dd><?php echo ($_poTracking && $_poTracking->getDeliveredDate()) ? $this->formatDate($_poTracking->getDeliveredDate()) : $this->__("N/A");?></dd>
 						<dt><?php echo $_helper->__("POS");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_pos->getName())?></dd>
 						<dt><?php echo $_helper->__("Payment method");?>:</dt> 
