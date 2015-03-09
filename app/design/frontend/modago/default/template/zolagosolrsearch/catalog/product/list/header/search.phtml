@@ -27,10 +27,10 @@ $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
                     <?php else: ?>
                         <div id="category-header-left">
                             <div id="category-header-vendor-box">
-                                <span class="vendor-type"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?></span>
-                                <span>
-                                <img class="vendor-logo desktop-logo" src="<?php echo $vendor->getVendorLogoUrl(); ?>"/>
-                                </span>
+                                <div class="vendor-header-label"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?></div>
+                                <a href="<?php echo $vendor->getVendorUrl(); ?>">
+                                    <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                                </a>
                             </div>
                         </div>
                         <div style="clear:both" class="visible-xs"></div>

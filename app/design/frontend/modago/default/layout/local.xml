@@ -1121,6 +1121,13 @@
                         <action method="setBlockId"><block_id>account-order-process-empty</block_id></action>
                     </block>
                 </block>
+	            <block type="zolagomodago/sales_order_process_attach" template="sales/order/process/attach.phtml" name="sales.order.process.attach" as="attach">
+		            <block type="cms/block" name="sales.order.process.attach.cms" as="cms">
+		                <action method="setBlockId">
+			                <block_id>account-order-process-attach</block_id>
+		                </action>
+		            </block>
+	            </block>
                 <block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
             </block>
 
@@ -1387,6 +1394,13 @@
 				<block type="core/template" template="sales/order/process/empty.phtml" name="sales.order.process.empty" as="empty">
 					<block type="cms/block" name="sales.order.process.empty.cms" as="cms">
 						<action method="setBlockId"><block_id>account-order-process-empty</block_id></action>
+					</block>
+				</block>
+				<block type="zolagomodago/sales_order_process_attach" template="sales/order/process/attach.phtml" name="sales.order.process.attach" as="attach">
+					<block type="cms/block" name="sales.order.process.attach.cms" as="cms">
+						<action method="setBlockId">
+							<block_id>account-order-process-attach</block_id>
+						</action>
 					</block>
 				</block>
 				<block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>

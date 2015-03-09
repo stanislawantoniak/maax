@@ -59,6 +59,8 @@ jQuery(document).ready(function() {
 				</div>
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
+						<dt><?php echo $_helper->__("RMA type");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_helper->__($_rma->getRmaTypeName()));?></dd> 
 						<dt><?php echo $_helper->__("RMA status");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_helper->__($_rma->getRmaStatusName()));?></dd> 
 						<dt><?php echo $_helper->__("RMA date");?>:</dt> 

@@ -147,7 +147,12 @@
 		width: 60px;
 	}
 	.desc{
-		padding-left: 10px;
+        padding-left: 70px;
+        padding-bottom: 15px;
+        @media (min-width: $screen-sm-min) and (max-width: 870px) {
+            padding-left: 0px;
+            margin-top: 10px!important;
+        }
 	} 
 	.comment-text{
 		margin-top: 15px;

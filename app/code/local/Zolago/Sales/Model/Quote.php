@@ -38,4 +38,27 @@ class Zolago_Sales_Model_Quote  extends Mage_Sales_Model_Quote
         return $this;
 	}
 
+    /**
+     * Replace customer email with new email
+     * @param $customerId
+     * @param $newEmail
+     * @param $storeId
+     */
+    public function replaceEmailInQuote($newEmail, $customerId,$storeId)
+    {
+        if (empty($customerId)) {
+            return;
+        }
+        $sameEmailCollection = $this->getCollection();
+        $sameEmailCollection->addFieldToFilter("store_id", $storeId);
+        $sameEmailCollection->addFieldToFilter("customer_id", $customerId);
+
+        if ($sameEmailCollection->count()) {
+            foreach ($sameEmailCollection as $quote) {
+                $quote->setCustomerEmail($newEmail);
+                $quote->save();
+            }
+        }
+    }
+
 }
