@@ -106,14 +106,14 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 </div>
 <?php /* configurable price/stock data */?>
 <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-<!--<script type="text/javascript">
-    var jsonConfig = <?php /*echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); */?>;
-    var useSizeboxList =  <?php /*echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); */?>;
+<script type="text/javascript">
+    var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
+    var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
 
     jsonConfig.useSizeboxList = useSizeboxList;
 
     Mall.product.productOptions(jsonConfig);
-    Mall.product._current_product_type = "<?php /*echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; */?>";
+    Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
 
-</script>-->
+</script>
 <?php endif; ?>
