@@ -1691,7 +1691,7 @@ Mall.listing = {
 	},
 
 	isDisplayMobile: function() {
-		return jQuery('.hidden-xs').css('display') == "none";
+		return jQuery('.actionViewFilter').is(':visible');
 	},
 
 	getContentBlock: function() {
