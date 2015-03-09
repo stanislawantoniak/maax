@@ -1,4 +1,3 @@
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_openedOrders = $this->getOpenedOrders(); ?>
 <?php $_helper = Mage::helper("zolagosales");?>
@@ -10,6 +9,7 @@
 		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
 	</h1>
 </div>
+<?php echo $this->getChildHtml("attach"); ?>
 <?php if($_orders->getSize()): ?>
 	<div class="background-wrapper box-wrapper">
 	<?php if ($_openedOrders): ?>
