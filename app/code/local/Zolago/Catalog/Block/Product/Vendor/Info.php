@@ -32,7 +32,12 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	public function getVendorUrl() {
 		return Mage::helper("umicrosite")->getVendorUrl($this->getVendor());
 	}
-
+    /**
+     * @return string
+     */
+    public function getVendorTypeLabel() {
+        return $this->getVendor()->getVendorTypeLabel();
+    }
     /**
      * @return string
      */

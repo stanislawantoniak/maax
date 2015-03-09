@@ -52,7 +52,7 @@
 										</label>
 										<select class="form-control" title="<?php echo $this->__("Return reason");?>" id="condition-<?php echo $key; ?>-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
 											<option value=""><?php echo $_helper->__('Select a reason...') ?></option>
-											<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+											<?php foreach($_helper->getItemConditionTitlesForFront() as $_key=>$_label):?>
 											<option <?php if(isset($_itemsConditionSingle[$item['entityId']][$key]) && $_itemsConditionSingle[$item['entityId']][$key]==$_key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($_key);?>"><?php echo $this->escapeHtml($_label); ?></option>
 											<?php endforeach;?>
 										</select>

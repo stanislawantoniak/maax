@@ -25,6 +25,24 @@ abstract class Zolago_Checkout_Controller_Abstract
             $this->_redirect('*/*');
             return;
         }
+
+		// Check if customer has name and phone number set in account if not set it now
+		/** @var Mage_Customer_Model_Session $session */
+		$session = Mage::getSingleton('customer/session');
+		$logged = $session->isLoggedIn();
+		if($logged) {
+			/** @var Zolago_Customer_Model_Customer $customer */
+			$customer = $session->getCustomer();
+			if(is_null($customer->getFirstname()) || is_null($customer->getLastname()) || is_null($customer->getPhone())) {
+				$request = $this->getRequest();
+				$data = $request->getParam('billing')['use_for_shipping'] ? $request->getParam('billing') : $request->getParam('shipping');
+				$customer
+					->setFirstname($data['firstname'])
+					->setLastname($data['lastname'])
+					->setPhone($data['telephone']);
+				$session->setCustomer($customer);
+			}
+		}
 		
 		try{
 			$this->importPostData();
@@ -38,15 +56,14 @@ abstract class Zolago_Checkout_Controller_Abstract
 			);
 			return $this->_prepareJsonResponse($response);
 		}
-		
+
 		parent::saveOrderAction();
-		
+
 		$helper = Mage::helper('core');
 		$oldResponse  = $helper->jsonDecode($this->getResponse()->getBody());
 		
 		$success = isset($oldResponse['success']) ? $oldResponse['success'] : false;
-		$logged = Mage::getSingleton('customer/session')->isLoggedIn();
-		
+
 		if(!isset($oldResponse['redirect'])){
 			$urlArray = array(
 				"*",
@@ -78,7 +95,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 	public function importPostData(){
 		$request = $this->getRequest();
 		$onepage = $this->getOnepage();
-		
+
 		/**
 		method:guest | register | customer
 		 */
