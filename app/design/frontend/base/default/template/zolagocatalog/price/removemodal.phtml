@@ -1,0 +1,24 @@
+<?php
+/**
+ * Modal for remove product from campaign
+ * @see skin/frontend/default/udropship/dojo/vendor-0.3/catalog/priceGrid/popup/campaign.js
+ * @see app/code/local/Zolago/Catalog/controllers/Vendor/Price/DetailController.php
+ */
+
+/** @var Zolago_Catalog_Block_Vendor_Price_Modal $this */
+/** @var Zolago_Catalog_Helper_Data $hlp */
+/** @var Zolago_Catalog_Model_Product $product */
+/** @var Zolago_Campaign_Model_Campaign $campaign */
+
+$hlp = Mage::helper('zolagocampaign');
+$product = $this->getProduct();
+$campaign = $this->getCampaign($product);
+
+?>
+
+<input type="hidden" name="entity_id" value="<?php echo $product->getId();?>"/>
+<input type="hidden" name="campaignId" value="<?php echo $campaign->getId();?>"/>
+
+<div style="margin-bottom: 30px">
+    <h3><?php echo $hlp->__('Are you sure you want to delete product %s from campaign %s?', $product->getName(), $campaign->getName()); ?></h3>
+</div>

@@ -38,6 +38,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 					}
 				}
 			}
+
 			// Parent save order
 			$return = parent::saveOrder();
 
@@ -160,10 +161,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
         return $this;
     }
-
-	protected function sendNewsletterInvite() {
-
-	}
 	
 	/**
 	 * Is the address filed with some data?

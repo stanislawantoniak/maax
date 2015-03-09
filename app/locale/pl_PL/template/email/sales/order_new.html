@@ -1,4 +1,4 @@
-﻿<!--@subject {{var store_name}} – potwierdzenie złożenia zamówienia nr {{var order.getIncrementId()}} @-->
+<!--@subject {{var store_name}} – potwierdzenie złożenia zamówienia nr {{var order.getIncrementId()}} @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "var logo_url":"Email Logo Image Url",
@@ -87,7 +87,7 @@
                                 <span class="spacer">&nbsp;</span>
 
                                 <!--START SEKCJA PLATNOSCI ONLIE-->
-                                {{depend order.firstPo().isPaymentDotpay()}}
+                                {{depend order.isPaymentDotpay()}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Czekamy jeszcze na potwierdzenie przyjęcia wpłaty od operatora systemu płatności. Proces ten trwa zazwyczaj do kilku minut. Zamówienie trafi do realizacji, jak tylko odnotujemy płatność. O statusie płatności zostaniesz poinformowany w osobnym mailu.
                                 </div>
@@ -97,7 +97,7 @@
                                 <!--END SEKCJA PLATNOSCI ONLIE-->
 
                                 <!--START SEKCJA COD-->
-                                {{depend order.firstPo().isCod()}}
+                                {{depend order.isCod()}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
                                     W momencie wysłania paczki, dostaniesz maila od sklepu ze szczegółowymi informacjami dotyczącymi przesyłki. Za zamówienie zapłacisz przy odbiorze.
                                 </div>
@@ -106,7 +106,7 @@
                                 <!--END SEKCJA COD-->
 
                                 <!--START SEKCJA PRZELEW TRADYCYJNY-->
-                                {{depend order.firstPo().isPaymentBanktransfer()}}
+                                {{depend order.isPaymentBanktransfer()}}
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Prosimy o dokonanie przelewu w wysokości {{var order.getFormattedGrandTotalInclTax()}} na następujące konto, wpisując sam numer zamówienia jako tytuł przelewu:
                                 </div>
@@ -165,15 +165,15 @@
                                 </h2>
 
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    {{var order.firstPo().getShippingAddress().format('html')}}
+                                    {{var order.getShippingAddress().format('html')}}
                                 </div>
 
-                                {{depend order.firstPo().needInvoice()}}
+                                {{depend order.getBillingAddress().getNeedInvoice()}}
                                 <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
                                     <strong>Dane do faktury:</strong>
                                 </h2>
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    {{var order.firstPo().getBillingAddress().format('html')}}
+                                    {{var order.getBillingAddress().format('html')}}
                                 </div>
                                 {{/depend}}
 

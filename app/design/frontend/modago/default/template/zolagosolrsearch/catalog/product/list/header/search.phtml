@@ -6,7 +6,7 @@
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
-
+$vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
  ?>
 <header id="header-main">
     <div class="wrapp-section bg-w">
@@ -27,10 +27,14 @@ $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
                     <?php else: ?>
                         <div id="category-header-left">
                             <div id="category-header-vendor-box">
-                                <span class="vendor-type"><?php echo $isBrandshop ? $this->__("Shop") : $this->__("Vendor"); ?></span>
-                                <span>
-                                <img class="vendor-logo desktop-logo" src="<?php echo $this->getVendorResizedLogoUrl($vendor, 170,52); ?>"/>
-                                </span>
+                        <?php if(!empty($vendorTypeLabel)): ?>
+                                <div class="vendor-header-label">
+                                    <?php echo $vendor->getVendorTypeLabel(); ?>
+                                </div>
+                        <?php endif; ?>
+                                <a href="<?php echo $vendor->getVendorUrl(); ?>">
+                                    <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                                </a>
                             </div>
                         </div>
                         <div style="clear:both" class="visible-xs"></div>

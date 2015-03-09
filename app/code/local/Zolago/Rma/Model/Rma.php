@@ -5,6 +5,9 @@
 class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 {
 	
+    const RMA_TYPE_STANDARD = '1';
+    const RMA_TYPE_RETURN = '2';
+
 	const TYPE_RMASHIPPING = "rmashipping";
 	const TYPE_RMABILLING = "rmabilling";
 	
@@ -306,4 +309,20 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
          $helper = Mage::helper('zolagorma');
          return $helper->getStaticCustomerPdf();
      }
+     
+    /**
+     * return rma type name
+     * @param int $id
+     * @return string
+     */
+    public function getRmaTypeName() {
+        $id = $this->getRmaType();
+        $model = Mage::getModel('zolagorma/system_source_type');
+        $val = $model->getTypeById($id);
+        if ($val) {
+            $helper = Mage::helper('zolagorma');
+            return $helper->__($val);
+        }
+        return '';
+    }
 }

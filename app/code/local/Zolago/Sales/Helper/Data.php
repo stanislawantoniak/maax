@@ -8,4 +8,25 @@ class Zolago_Sales_Helper_Data extends Mage_Sales_Helper_Data {
             ->addFieldToFilter('state', array('in' => Mage::getSingleton('sales/order_config')->getOpenOrdersStates()));
         return $openedOrders;
     }
+
+	/**
+	 * @param string|bool $email
+	 * @param bool $getAllData
+	 * @return Mage_Sales_Model_Resource_Order_Collection
+	 */
+	public function getGuestOrders($email=false,$getAllData=false) {
+		$field = $getAllData ? "*" : "entity_id";
+		$customer = $this->getCustomerSession()->getCustomer();
+		$email = $email ? $email : $customer->getEmail();
+		$guestOrders = Mage::getResourceModel('sales/order_collection')
+			->addFieldToSelect($field)
+			->addFieldToFilter('customer_email', $email)
+			->addFieldToFilter('customer_id',array(array('neq' => $customer->getId()), array('null'=>true)));
+
+		return $guestOrders;
+	}
+
+	public function getCustomerSession() {
+		return  Mage::getSingleton('customer/session');
+	}
 } 

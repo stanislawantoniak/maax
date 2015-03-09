@@ -23,11 +23,13 @@
 		}
 		li.sort-criteria-selector {
 			float: right;
-			margin-right: -11px;
 			@include max-screen(400px) {
 				float:none;
 				margin: 3px 0 4px;
 				width: 100%;
+			}
+			@include max-screen($screen-xs-max) {
+				margin-right: -11px;
 			}
 		}
 	}

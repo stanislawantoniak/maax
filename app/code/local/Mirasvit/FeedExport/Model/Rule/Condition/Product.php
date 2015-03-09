@@ -93,11 +93,11 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
                 ->load()
                 ->toOptionArray();
         } elseif ($this->getAttribute() === 'is_in_stock') {
-//            $selectOptions = array();
-            $selectOptions = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
-//            foreach ($options as $option) {
-//                $selectOptions[$option['value']] = $option['label'];
-//            }
+            $selectOptions = array();
+            $options = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
+            foreach ($options as $option) {
+                $selectOptions[$option['value']] = $option['label'];
+            }
         } elseif ($this->getAttribute() === 'type_id') {
             $selectOptions = Mage::getSingleton('catalog/product_type')->getOptionArray();
         } elseif (is_object($this->getAttributeObject())) {
@@ -155,7 +155,33 @@ class Mirasvit_FeedExport_Model_Rule_Condition_Product extends Mage_Rule_Model_C
     public function getValueSelectOptions()
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_select_options');
+        $valueSelectOptions = $this->getData('value_select_options');
+        $res = array();
+        if (!empty($valueSelectOptions)) {
+            // checking if array is:
+            // 1) [value] => [label]
+            // or
+            // 2) array( array('value' => value, 'label' => label))
+            // if 1) need to be transformed to 2)
+            $isCorrect = true;
+            foreach ($valueSelectOptions as $a) {
+                if (!isset($a['value'])){
+                    $isCorrect = false;
+                    break;
+                }
+            }
+            if (!$isCorrect) {
+                foreach ($valueSelectOptions as $index => $value) {
+                    $res[] = array(
+                        'value' => $index,
+                        'label' => $value
+                    );
+                }
+                $valueSelectOptions = $res;
+            }
+        }
+
+        return $valueSelectOptions;
     }
 
     /**

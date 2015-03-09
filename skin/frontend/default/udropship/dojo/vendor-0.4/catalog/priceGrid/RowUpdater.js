@@ -269,15 +269,23 @@ define([
 						append(jQuery("<td>").text(Translator.translate(campaign.status_text))).
 						append(jQuery("<td>").text(campaign.date_from)).
 						append(jQuery("<td>").text(campaign.date_to)).
-						append(jQuery("<td>").text(campaign.price_source_id)).
+						append(jQuery("<td>").text(campaign.price_source_id_text)).
 						append(jQuery("<td>").text(misc.percent(campaign.price_margin))).
 						append(jQuery("<td>").text(misc.currency(campaign.special_price))).
 						append(jQuery("<td>").text(misc.currency(campaign.msrp))).
 						append(jQuery("<td>").text(misc.currency(campaign.price)))
 				)
 		
-				buttons.push({"label": Translator.translate("Remove from campaign")});
-		
+				buttons.push({
+                    "label": Translator.translate("Remove from campaign"),
+                    className: "campaign-product-remove editable",
+                    data: {
+                        campaign_regular_id: campaign.campaign_regular_id,
+                        campaign_name: campaign.name,
+                        product_id: data.entity_id
+                    }
+                });
+
 				divRight.append(table);
 		
 			}

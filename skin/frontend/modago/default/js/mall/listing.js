@@ -1386,7 +1386,7 @@ Mall.listing = {
 			active.click(function() {
 				var me = jQuery(this);
 				if(!me.parent().hasClass('query-text-iks')) {
-					me.parents('dd').detach();
+					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
 					if (active.length == 1) {
 						detachActive();
@@ -1691,7 +1691,7 @@ Mall.listing = {
 	},
 
 	isDisplayMobile: function() {
-		return jQuery('.hidden-xs').css('display') == "none";
+		return jQuery('.actionViewFilter').is(':visible');
 	},
 
 	getContentBlock: function() {

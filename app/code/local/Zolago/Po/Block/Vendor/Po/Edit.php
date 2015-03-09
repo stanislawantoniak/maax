@@ -352,14 +352,19 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
+     * Filter by email in column customer_name
+     *
 	 * @param Zolago_Po_Model_Po $po
 	 * @return string
 	 */
 	public function getHelpdeskUrl(Zolago_Po_Model_Po $po) {
-		//filter_customer_name
+        // overridden behaviour in Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid
+        // grid -> column: customer_name
+        // filter_condition_callback => filterByEmailIfValid
 		return $this->getUrl("udqa/vendor/index", array(
-			"filter"=> Mage::helper("core")->urlEncode("customer_name=" . urlencode($this->getPo()->getOrder()->getCustomerName())))
+			"filter"=> Mage::helper("core")->urlEncode("customer_name=" . urlencode($po->getOrder()->getCustomerEmail())))
 		);
+
 	}
 	
 	/**
@@ -372,7 +377,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
 			$collection->addApprovedAnswersFilter();
 			$collection->addVendorFilter($this->getVendor());
-			$collection->addFieldToFilter("main_table.customer_name", array("like"=>$this->getPo()->getOrder()->getCustomerName()));
+			$collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));
 			$this->setData("all_messages_count", $collection->count());
 		}
 		return $this->getData("all_messages_count");
@@ -388,7 +393,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
 			$collection->addApprovedAnswersFilter();
 			$collection->addVendorFilter($this->getVendor());
-			$collection->addFieldToFilter("main_table.customer_name", array("like"=>$this->getPo()->getOrder()->getCustomerName()));
+            $collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));
 			$collection->addFieldToFilter("main_table.answer_text", array("null"=>true));
 			$this->setData("unread_messages_count", $collection->count());
 		}

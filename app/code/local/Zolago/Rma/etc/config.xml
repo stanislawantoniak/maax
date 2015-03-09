@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.21</version>
+			<version>0.0.22</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -80,6 +80,14 @@
 			</zolagopo_convert_po_item>
 		</fieldsets>
 		<events>
+		    <shipment_returned>
+		        <observers>
+		            <zolagorma>
+		                <model>zolagorma/observer</model>
+		                <method>createReturnRma</method>
+		            </zolagorma>
+		        </observers>
+		    </shipment_returned>
 			<zolagorma_rma_created>
 				<observers>
 					<zolagorma>

@@ -9,8 +9,8 @@
 <div class="page-title box-wrapper">
 	<h1>
 		<span><?php echo $_helper->__("Returns and complaints"); ?></span>
-		<span class="back-sm"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
-		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
+		<span class="back-sm"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back: my account'); ?>&nbsp;&gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
 	</h1>
 </div>
 <form method="post" id="new-rma" action="<?php echo $this->getUrl('*/*/saveRma', array("_secure"=>Mage::app()->getStore()->isCurrentlySecure())) ?>">
@@ -25,7 +25,7 @@
 		var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
 		Mall.rma.new.setReturnReasons(returnReasons);
 		
-		<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+		<?php foreach($_helper->getItemConditionTitlesForFront() as $_key=>$_label):?>
 		Mall.rma.new.addValidator(
 			'must-be-available-<?php echo $_key; ?>',
 			returnReasons[<?php echo $_key; ?>].message, 
