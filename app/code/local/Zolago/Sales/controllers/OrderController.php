@@ -82,6 +82,10 @@ class Zolago_Sales_OrderController extends Unirgy_Rma_OrderController
 				));
 			}
 		}
-		$this->_redirect("sales/order/process");
+		if($this->_getRefererUrl()) {
+			$this->_redirectReferer();
+		} else {
+			$this->_redirect("sales/order/process");
+		}
 	}
 }
