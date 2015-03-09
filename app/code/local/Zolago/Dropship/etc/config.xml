@@ -120,8 +120,15 @@
 						<source_model>zolagodropship/source</source_model>
                         <source>vendorstype</source>
                         <fieldset>integration</fieldset>
-                        <position>1</position>
+                        <position>0</position>
                     </vendor_type>
+                    <vendor_type_label>
+                        <label>Vendor name prefix</label>
+                        <note>Can be empty</note>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>0</position>
+                    </vendor_type_label>
                     <can_ask>
                         <label>Customer can ask?</label>
                         <type>select</type>
