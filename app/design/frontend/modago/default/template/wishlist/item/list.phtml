@@ -119,7 +119,6 @@ $_helper = Mage::helper('zolagocatalog/product');
     grid.shuffle('update');
 
     jQuery(grid).on('layout.shuffle', function() {
-	    console.log("tri2");
         Mall.wishlist.likePriceView();
         //fix for footer
         jQuery(window).resize();
