@@ -138,7 +138,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
 			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
 			<?php if ($trackingUrl && $tracking) : ?>
-			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a> [dev]</span>
+			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
 			<?php endif;?>
 		<?php elseif(
 			$status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED

@@ -1365,6 +1365,13 @@
 					<label>Order History Info</label>
 				</block>
 				<block type="zolagomodago/sales_order_history_empty" name="sales.order.history.empty" as="empty"/>
+				<block type="zolagomodago/sales_order_process_attach" template="sales/order/process/attach.phtml" name="sales.order.process.attach" as="attach">
+					<block type="cms/block" name="sales.order.process.attach.cms" as="cms">
+						<action method="setBlockId">
+							<block_id>account-order-process-attach</block_id>
+						</action>
+					</block>
+				</block>
 			</block>
 		</reference>
 	</sales_order_history>
