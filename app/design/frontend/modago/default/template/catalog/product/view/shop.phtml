@@ -4,28 +4,46 @@
 /** @var Zolago_Catalog_Model_Product $_product */
 /** @var Mage_Catalog_Helper_Output $_helper */
 /** @var Zolago_Catalog_Helper_Data $hlp */
-
+$i = 0;
+echo $i++;
 $_product = $this->getProduct();
+echo $i++;
 $_helper = $this->helper('catalog/output');
+echo $i++;
 $hlp = Mage::helper('catalog/data');
+echo $i++;
 $isSalable = $_product->isSalable(); //product is salable
+echo $i++;
 // prices
 $price = $_product->getPrice();
+echo $i++;
 $finalPrice = $_product->getFinalPrice();
+echo $i++;
 $sizeAttr = $_product->getResource()->getAttribute('size');
+echo $i++;
 $productAttrs = array();
+echo $i++;
 if($_product->getTypeId() == 'configurable') {
+	echo $i++;
     $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
 }
+echo $i++;
 
 $_helperSizetable = Mage::helper('zolagosizetable');
+echo $i++;
 /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
 $vendor_id = $_product->getData('udropship_vendor');
+echo $i++;
 $storeId = Mage::app()->getStore()->getStoreId();
+echo $i++;
 $attributeSetId = $_product->getData('attribute_set_id');
+echo $i++;
 $brandId = $_product->getData( 'manufacturer');
+echo $i++;
 $salableCount  = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getSalableCount();
+echo $i++;
 $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+echo $i++;
 ?>
 <div id="product-shop" class="col-lg-8 col-md-12 col-sm-12 clearfix" style="overflow-x:visible;">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
