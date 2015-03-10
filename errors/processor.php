@@ -241,6 +241,23 @@ class Error_Processor
     }
 
     /**
+     * Retrieve base host URL for logo (no server port and no path)
+     *
+     * @return string
+     */
+    public function getLogoUrl()
+    {
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } elseif (!empty($_SERVER['SERVER_NAME'])) {
+            $host = $_SERVER['SERVER_NAME'];
+        } else {
+            $host = 'localhost';
+        }
+        return 'http://' . $host;
+    }
+
+    /**
      * Retrieve base URL
      *
      * @return string
