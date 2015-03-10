@@ -370,7 +370,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				'value' => "{$vendorRootCategoryId}",
 				//like 'everywhere' is root category ( zero ),
 				//so when vendor is set the category is his root category
-				'text' => $this->__('In ') . $_vendor->getVendorName(),
+				'text' => $this->__('in ') . $_vendor->getVendorName(),
 				'selected' => true,
 			);
 
