@@ -151,7 +151,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			}
 		}		
 	}
-	
+
 	protected function _processOrder($_sTracks, $multiple = false)
 	{
 		$completeOrder = true;
@@ -165,12 +165,14 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			}
 		} else {
 			$sTrack = $_sTracks;
-			$shipmentStatus = $sTrack->getUdropshipStatus();
 			$shipment = $sTrack->getShipment();
+			$shipmentStatus = $shipment->getUdropshipStatus();
 			switch ($shipmentStatus) {
-				case Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED:
+				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED:
 					$this->_setOrderCompleteState($shipment);
 					break;
+				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED:
+				    Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
 				default:
 					$completeOrder = false;
 					break;

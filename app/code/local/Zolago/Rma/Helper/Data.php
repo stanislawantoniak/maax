@@ -168,6 +168,14 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
 		return $collection->toOptionHash();
 	}
+	/**
+	 * @return array
+	 */
+	public function getItemConditionTitlesForFront() {
+		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
+		$collection->addFilter('visible_on_front',true);
+		return $collection->toOptionHash();
+	}
 
 	/**
 	 * @param Zolago_Po_Model_Po $po
@@ -297,7 +305,12 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		$data = array();
 
 		$hlp->setDesignStore($store);
-		$shippingAddress = $order->getShippingAddress();
+		$rmaAddressId  = $rma->getData('customer_address_id');
+		if ($rmaAddressId) {
+		    $shippingAddress = Mage::getModel('customer/address')->load($rmaAddressId);
+		} else {
+    		$shippingAddress = $order->getShippingAddress();
+        }
 		if (!$shippingAddress) {
 			$shippingAddress = $order->getBillingAddress();
 		}

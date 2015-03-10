@@ -153,4 +153,7 @@
 "RMA order number","Dotyczy zamówienia nr"
 "Your comment","Twój komentarz"
 "Vendor comment","Komentarz sklepu"
-"Filters","Filtry"
+"Filters","Filtry",
+"RMA type", "Typ RMA",
+"Returned by courier", "Nieodebrana przesyłka"
+"Number","Numer"

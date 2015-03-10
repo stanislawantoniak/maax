@@ -68,7 +68,8 @@
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
 					<adminhtml_vendor_edit_tab_preferences>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences</adminhtml_vendor_edit_tab_preferences>
-				</rewrite>
+                    <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
+                </rewrite>
 			</udropship>
 		</blocks>
 		<helpers>
@@ -119,8 +120,15 @@
 						<source_model>zolagodropship/source</source_model>
                         <source>vendorstype</source>
                         <fieldset>integration</fieldset>
-                        <position>1</position>
+                        <position>0</position>
                     </vendor_type>
+                    <vendor_type_label>
+                        <label>Vendor name prefix</label>
+                        <note>Can be empty</note>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>0</position>
+                    </vendor_type_label>
                     <can_ask>
                         <label>Customer can ask?</label>
                         <type>select</type>

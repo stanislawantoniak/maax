@@ -59,6 +59,8 @@ jQuery(document).ready(function() {
 				</div>
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
+						<dt><?php echo $_helper->__("RMA type");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_helper->__($_rma->getRmaTypeName()));?></dd> 
 						<dt><?php echo $_helper->__("RMA status");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_helper->__($_rma->getRmaStatusName()));?></dd> 
 						<dt><?php echo $_helper->__("RMA date");?>:</dt> 
@@ -109,7 +111,7 @@ jQuery(document).ready(function() {
 						<dt><?php echo $_helper->__("Order date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_po->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Shipment date");?>:</dt> 
-						<dd><?php echo $_poShipment ? $this->formatDate($_poShipment->getCreatedAt()) : $_helper->__("N/A");?></dd> 
+						<dd><?php echo ($_poTracking && $_poTracking->getShippedDate()) ? $this->formatDate($_poTracking->getShippedDate()) : $this->__("N/A");?></dd>
 						<dt><?php echo $_helper->__("Tracking no.");?>:</dt> 
 						<dd>
 							<?php if($_poTracking):?>
@@ -127,7 +129,7 @@ jQuery(document).ready(function() {
 							<?php endif ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Date delivered");?>:</dt> 
-						<dd><?php echo ($_poTracking && $_poTracking->getShippedDate()) ? $this->formatDate($_poTracking->getShippedDate()) : $this->__("N/A");?></dd>
+						<dd><?php echo ($_poTracking && $_poTracking->getDeliveredDate()) ? $this->formatDate($_poTracking->getDeliveredDate()) : $this->__("N/A");?></dd>
 						<dt><?php echo $_helper->__("POS");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_pos->getName())?></dd>
 						<dt><?php echo $_helper->__("Payment method");?>:</dt> 

@@ -25,13 +25,14 @@ define([
 	"vendor/catalog/priceGrid/popup/stock",
 	"vendor/catalog/priceGrid/popup/mass/price",
 	"vendor/catalog/priceGrid/RowUpdater",
-	"vendor/misc"
+	"vendor/misc",
+    "vendor/catalog/priceGrid/popup/campaign"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
 	Keyboard, editor, declare, domConstruct, on, query, Memory, 
 	Observable, put, Cache, JsonRest, Selection, selector, lang, 
 	request, ObserverFilter, filterRendererFacory, 
 	singlePriceUpdater, singleStockUpdater, 
-	massPriceUpdater, RowUpdater, misc){
+	massPriceUpdater, RowUpdater, misc, campaignUpdater){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -596,6 +597,11 @@ define([
 	on.pausable(grid.domNode, ".dgrid-row .signle-stock-edit.editable :click", function(evt){
 		singleStockUpdater.handleClick(grid.row(evt), evt);
 	});
+
+    // Open dialog to remove product from campaign
+    on.pausable(grid.domNode, ".dgrid-row .campaign-product-remove.editable :click", function(evt){
+        campaignUpdater.handleClick(grid.row(evt), evt);
+    });
 			
 	
 	//Chandel data change
@@ -625,6 +631,10 @@ define([
 	
 	singleStockUpdater.setStoreId(switcher.value);
 	singleStockUpdater.setGrid(grid);
+
+    campaignUpdater.setStoreId(switcher.value);
+    campaignUpdater.setGrid(grid);
+
 	
 	updateSelectionButtons();
 	

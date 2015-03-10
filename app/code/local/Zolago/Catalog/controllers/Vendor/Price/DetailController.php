@@ -11,6 +11,33 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		$this->loadLayout();
 		$this->renderLayout();
 	}
+
+    /**
+     * Get html of remove-product-from-campaign modal (HTML)
+     */
+    public function removemodalAction() {
+        $this->_registerProduct();
+
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    /**
+     * remove product from campaign
+     */
+    public function removemodalSaveAction() {
+        $request = $this->getRequest();
+        $productId = $request->getParam("entity_id");
+        $campaignId = $request->getParam("campaignId");
+
+        if (!empty($campaignId) && !empty($productId)) {
+            /* @var $model Zolago_Campaign_Model_Resource_Campaign */
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->removeProduct($campaignId, $productId);
+        }
+        $this->_forward("get", "vendor_price", "udprod");
+    }
+
 	/**
 	 * Save prices
 	 * @return type

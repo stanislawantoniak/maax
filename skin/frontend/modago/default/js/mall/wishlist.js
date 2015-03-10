@@ -555,7 +555,7 @@ Mall.wishlist = {
 			    }
 		    });
 		    this._prev_window_width = jQuery(window).width();
-		    Mall.listing.triggerResize();
+		    jQuery(window).resize();
 	    }
     }
 };

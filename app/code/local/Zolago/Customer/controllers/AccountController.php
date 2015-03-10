@@ -370,6 +370,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 
             $this->renderLayout();
         } catch (Exception $exception) {
+	        $this->_getSession()->getMessages(true);
             $this->_getSession()->addError( $this->_getHelper('customer')->__('Your password reset link has expired.'));
             $this->_redirect('*/*/forgotpassword');
         }

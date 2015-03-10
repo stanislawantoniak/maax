@@ -47,14 +47,20 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
         }
         return Mage::getUrl(self::CONFIRM_PATH, array("token"=>$token));
     }
-    
+
     protected function _sendEmailTemplate($customer, 
         $template, $templateParams = array(), $storeId = null)
     {
         $templateParams['use_attachments'] = true;
+
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+        $mailer = Mage::getModel('core/email_template_mailer');
+        $mailer->setTemplateParams($templateParams);
+        $templateParams = $mailer->getTemplateParams();
+
         $emailTemplate = Mage::getModel("core/email_template");
         /* @var $emailTempalte Mage_Core_Model_Email_Template */
-       
+
         
         // Set required design parameters 
         // and delegate email sending to Mage_Core_Model_Email_Template
@@ -68,7 +74,7 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
             $emailTemplate->loadDefault($template, $localeCode);
         }
 
-        $senderName = Mage::getStoreConfig('trans_email/ident_support/name', 
+        $senderName = Mage::getStoreConfig('trans_email/ident_support/name',
                                                                     $storeId);
         $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email', 
                                                                     $storeId);
