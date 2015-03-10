@@ -63,7 +63,14 @@ class Zolago_Catalog_Block_Product_Vendor_Info
         $info .= '<div id="termsReturnInformation">' . $vendor->getTermsReturnInformation() . '</div>';
         return  $info;
 	}
-	
+    /**
+     * @return string|null
+     */
+    public function getBrandInformationHtml() {
+        $vendor = $this->getVendor();
+        $info = '<div id="marketingBrandInformation">' . $vendor->getMarketingBrandInformation() . '</div>';
+        return  $info;
+    }
 	/**
 	 * @return int
 	 */
