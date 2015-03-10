@@ -24,7 +24,6 @@ $boxes = $this->getBoxes();
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner">
-                            <?php krumo($sliders); ?>
                             <?php foreach($sliders as $n => $slider): ?>
                                 <div class="item <?php if($n == 0): ?>active<?php endif; ?>">
                                     <?php $slides = !empty($slider['banner_image']) ?unserialize($slider['banner_image']):array(); ?>
