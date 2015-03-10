@@ -6,7 +6,7 @@
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
-$vendorTypeLabel = $vendor->getVendorTypeLabel();
+$vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
  ?>
 <header id="header-main">
     <div class="wrapp-section bg-w">
