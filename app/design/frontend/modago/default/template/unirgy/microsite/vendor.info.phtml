@@ -7,52 +7,12 @@ $session = Mage::getSingleton('customer/session');
 $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 $vendorQuestionFormAction = Mage::helper('zolagomodago')->getVendorQuestionFormAction();
 
-$vendorCanAsk = $vendor->getCanAsk();
-
 $marketingInformation = $this->getMarketingInfo();
-
-
-$deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !empty($marketingInformation->return_information);
 ?>
 
-<ul class="vendor-top-bottom-header-links hidden-xs">
-    <?php if (!empty($marketingInformation->store_information_title)): ?>
-        <li>
-            <a data-target="#seller_description" data-toggle="modal">
-                <?php echo Mage::helper('zolagomodago')->__($marketingInformation->store_information_title); ?>
-            </a>
-        </li>
-    <?php endif; ?>
-
-    <?php if ($deliveryReturnsInfo): ?>
-    <li>
-        <a data-target="#terms_delivery" data-toggle="modal">
-            <?php echo $this->__("DELIVERY & RETURNS"); ?>
-        </a>
-    </li>
-    <?php endif; ?>
-
-    <?php if($vendorCanAsk): ?>
-        <li>
-            <a data-target="#ask_question" data-toggle="modal">
-                <?php echo Mage::helper('zolagomodago')->__('Ask A Question'); ?>
-            </a>
-        </li>
-    <?php endif; ?>
-
-
-    <?php if (!empty($marketingInformation->brand_information_title)): ?>
-        <li>
-            <a data-target="#brand_description" data-toggle="modal">
-                <?php echo Mage::helper('zolagomodago')->__($marketingInformation->brand_information_title); ?>
-            </a>
-        </li>
-    <?php endif; ?>
-</ul>
 
 
 <!--SHOP INFO-->
-<?php if (!empty($marketingInformation->store_information_title) && !empty($marketingInformation->store_information)): ?>
     <div class="modal fade bs-example-modal-lg" id="seller_description" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
         <div class="modal-dialog modal-lg">
@@ -65,16 +25,23 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
                 </div>
 
                 <div class="modal-body" style="color: #000000;">
-                    <?php echo $marketingInformation->store_information; ?>
+                    <?php if (!empty($marketingInformation->store_information)): ?>
+                        <?php echo $marketingInformation->store_information; ?>
+                    <?php else: ?>
+                        <dd>
+                            <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"><br/>
+                            <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
+                        </dd>
+                    <?php endif;?>
                 </div>
             </div>
         </div>
     </div>
-<?php endif; ?>
+
 <!--SHOP INFO end-->
 
 <!--DELIVERY & RETURNS-->
-<?php if ($deliveryReturnsInfo): ?>
+
 <div class="modal fade bs-example-modal-lg" id="terms_delivery" tabindex="-1" role="dialog"
      aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
     <div class="modal-dialog modal-lg">
@@ -90,11 +57,11 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
         </div>
     </div>
 </div>
-<?php endif; ?>
+
 <!--DELIVERY & RETURNS end-->
 
 <!--ASK QUESTION-->
-<?php if($vendorCanAsk): ?>
+
 <div class="modal fade bs-example-modal-lg in" id="ask_question" tabindex="-1" role="dialog"
      aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -186,7 +153,6 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
         jQuery("#question-form").validate(Mall.validate.getDefaultValidationOptions());
     });
 </script>
-<?php endif; ?>
 <!--ASK QUESTION END-->
 
 
