@@ -15,7 +15,7 @@ $marketingInformation = $this->getMarketingInfo();
 $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !empty($marketingInformation->return_information);
 ?>
 
-<ul class="vendor-top-bottom-header-links">
+<ul class="vendor-top-bottom-header-links hidden-xs">
     <?php if (!empty($marketingInformation->store_information_title)): ?>
         <li>
             <a data-target="#seller_description" data-toggle="modal">
