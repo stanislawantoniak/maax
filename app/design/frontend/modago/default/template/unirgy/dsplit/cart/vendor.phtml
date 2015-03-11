@@ -97,9 +97,13 @@ $_helper = Mage::helper('zolagocheckout');
         </div>
 
         <div class="conditions_shipping panel panel-default">
-            <div class="panel-heading"><h2><?php echo $_helper ->__('Shipping rules and cost'); ?>: <?php echo $_v->getVendorName() ?></h2></div>
+            <div class="panel-heading">
+                <h2>
+                    <?php echo $_helper ->__('Shipping rules and cost'); ?>: <?php echo $_v->getVendorName() ?>
+                </h2>
+            </div>
             <div class="panel-body">
-Zawartoœæ z bloków w sprzedawcy [dev].
+                <?php echo $_v->getTermsDeliveryInformation(); ?>
             </div>
         </div>
 
