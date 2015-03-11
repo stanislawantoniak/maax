@@ -2,6 +2,7 @@
 $_v = $this->getVendor();
 $info = $this->getBasketDeliveryInfo();
 $_helper = Mage::helper('zolagocheckout');
+$vendorDeliveryInfo = $_v->getTermsDeliveryInformation();
 ?>
 
 <?php switch ($this->getPart()): case 'header': ?>
@@ -37,8 +38,10 @@ $_helper = Mage::helper('zolagocheckout');
                 <?php if($_slogans): ?>
 					<p><?php echo implode("<br/>", $_slogans);?></p>
                 <?php endif; ?>
-                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
 
+                <?php if(!empty($vendorDeliveryInfo)): ?>
+                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
+                <?php endif; ?>
             </div>
 
             <div class="table-cell cell-03 label_value td">
@@ -86,16 +89,22 @@ $_helper = Mage::helper('zolagocheckout');
                 </div>
             <?php endif;?>
         </div>
+
         <div class="table-row clearfix">
             <div class="table-cell cell-01 td  no-border">
 				<?php if($_slogans): ?>
 					<p><?php echo implode("<br/>", $_slogans);?></p>
                 <?php endif; ?>
-                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $_helper ->__('Shipping rules and cost'); ?></a>
+
+                <?php if(!empty($vendorDeliveryInfo)): ?>
+                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >
+                    <?php echo $_helper ->__('Shipping rules and cost'); ?>
+                </a>
+                <?php endif; ?>
 
             </div>
         </div>
-
+        <?php if(!empty($vendorDeliveryInfo)): ?>
         <div class="conditions_shipping panel panel-default">
             <div class="panel-heading">
                 <h2>
@@ -103,10 +112,10 @@ $_helper = Mage::helper('zolagocheckout');
                 </h2>
             </div>
             <div class="panel-body">
-                <?php echo $_v->getTermsDeliveryInformation(); ?>
+                <?php echo $vendorDeliveryInfo; ?>
             </div>
         </div>
-
+        <?php endif; ?>
     </div>
 
 </div>
