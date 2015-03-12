@@ -1,5 +1,6 @@
 #topSlider {
 	display: none;
+	border: 1px solid #dbdbdb;
 	&.slick-initialized {
 		display: block;
 	}
