@@ -93,6 +93,9 @@
             <dotpay>
                 <p_details>1</p_details>
             </dotpay>
+            <payment_refunds>
+                <payment_refunds_automatic>2</payment_refunds_automatic>
+            </payment_refunds>
         </payment>
 	</default>
 </config>
