@@ -53,6 +53,26 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	    $info = $vendor->getTermsSellerInformation();
 		return $info;
 	}
+
+    /**
+     * @return string|null
+     */
+    public function getMarketingInfo() {
+        $vendor = $this->getVendor();
+
+
+        $info = new stdClass;
+        $info->store_information_title = $vendor->getData('marketing_store_information_title');
+        $info->store_information = $vendor->getData('marketing_store_information');
+
+        $info->brand_information_title = $vendor->getData('marketing_brand_information_title');
+        $info->brand_information = $vendor->getData('marketing_brand_information');
+
+        $info->delivery_information = $vendor->getTermsDeliveryInformation();
+        $info->return_information = $vendor->getTermsReturnInformation();
+
+        return $info;
+    }
 	
 	/**
 	 * @return string|null
@@ -63,7 +83,7 @@ class Zolago_Catalog_Block_Product_Vendor_Info
         $info .= '<div id="termsReturnInformation">' . $vendor->getTermsReturnInformation() . '</div>';
         return  $info;
 	}
-	
+
 	/**
 	 * @return int
 	 */

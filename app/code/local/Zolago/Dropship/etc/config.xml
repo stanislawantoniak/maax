@@ -137,18 +137,36 @@
                         <position>3</position>
                     </sequence>
                     <vendor_type_label>
-                        <label>Vendor name prefix. Vendor page - Seller information title</label>
+                        <label>Vendor name prefix</label>
                         <note>Can be empty</note>
                         <type>text</type>
                         <fieldset>marketing</fieldset>
                         <position>9</position>
                     </vendor_type_label>
+                    <marketing_store_information_title>
+                        <label>Vendor page - Seller information title</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>10</position>
+                    </marketing_store_information_title>
                 	<marketing_store_information>
                         <label>Vendor page - Seller information</label>
                         <type>wysiwyg</type>
                         <fieldset>marketing</fieldset>
-                        <position>10</position>
+                        <position>11</position>
                     </marketing_store_information>
+                    <marketing_brand_information_title>
+                        <label>Vendor page - Brand information title</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>12</position>
+                    </marketing_brand_information_title>
+                    <marketing_brand_information>
+                        <label>Vendor page - Brand information</label>
+                        <type>wysiwyg</type>
+                        <fieldset>marketing</fieldset>
+                        <position>13</position>
+                    </marketing_brand_information>
                 	<terms_seller_information>
                         <label>Product page - Seller information</label>
                         <type>wysiwyg</type>
@@ -167,19 +185,6 @@
                         <fieldset>marketing</fieldset>
                         <position>40</position>
                     </terms_return_information>
-                    <marketing_brand_information>
-                        <label>Vendor page - Brand information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>41</position>
-                    </marketing_brand_information>
-                	<basket_delivery_slogan>
-                        <label>Basket - Delivery info</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>45</position>
-						<only_admin>1</only_admin>
-                    </basket_delivery_slogan>
                 	<store_delivery_headline>
                         <label>Product - store section - delivery headline</label>
                         <type>text</type>
