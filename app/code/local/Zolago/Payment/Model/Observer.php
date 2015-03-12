@@ -16,10 +16,10 @@ class Zolago_Payment_Model_Observer
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
                 array(
-                    'max_allocation_amount' => 'SUM(allocation_amount)',
+                    'max_allocation_amount' => new Zend_Db_Expr('SUM(allocation_amount)'),
                     'customer_id',
                     'vendor_id',
-                    'created_at_hours_past' => '(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(MAX(created_at))) /3600',
+                    'created_at_hours_past' => new Zend_Db_Expr('(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(MAX(created_at))) /3600'),
                     'allocation_type',
                     'po_id',
                     'transaction_id'
