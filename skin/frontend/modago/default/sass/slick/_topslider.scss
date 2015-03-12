@@ -10,6 +10,10 @@
 		position: relative;
 		.topSlideImages img  {
 			width: 100%;
+			&.small {
+				width: auto;
+				margin: 0 auto;
+			}
 		}
 		.topSlideCaptions {
 			position: absolute;

@@ -648,7 +648,15 @@ Mall.Slick = {
 			autoplay: true,
 			autoplaySpeed: 4000,
 			arrows: false,
-			dots: true
+			dots: true,
+			responsive: [
+				{
+					breakpoint: 768,
+					settings: {
+						autoplay: false
+					}
+				}
+			]
 		},
 		init: function() {
 			var self = this;
