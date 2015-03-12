@@ -3,9 +3,9 @@
  * Class Zolago_Catalog_Helper_Data
  */
 class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
-	const ADDITIONAL_ATTRIBUTES_GROUP	= 'Additional columns';
-	const SPECIAL_LABELS_OLD_DELIMITER	= ':';
-	const SPECIAL_LABELS_NEW_DELIMITER	= ' | ';
+    const ADDITIONAL_ATTRIBUTES_GROUP	= 'Additional columns';
+    const SPECIAL_LABELS_OLD_DELIMITER	= ':';
+    const SPECIAL_LABELS_NEW_DELIMITER	= ' | ';
 
     /**
      * get id-sku associated array
@@ -40,7 +40,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function getStoresForWebsites($websiteIds)
     {
-        if(empty($websiteIds)){
+        if(empty($websiteIds)) {
             return;
         }
         $stores = array();
@@ -54,5 +54,15 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $stores;
     }
+
+    /**
+     * brand id
+     * @return int
+     */
+    public function getBrandId() {
+        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product','manufacturer');
+        return $attribute->getId();
+    }
+
 
 }
