@@ -147,3 +147,22 @@ $vendorQuestionFormAction = Mage::helper('zolagomodago')->getVendorQuestionFormA
     });
 </script>
 <!--ASK QUESTION END-->
+
+
+
+<!--ABOUT BRAND-->
+<div class="modal fade bs-example-modal-lg" id="brand_description" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Brand info"); ?></h2>
+            </div>
+            <div class="modal-body" style="color: #000000;">
+                <?php echo $this->getBrandInformationHtml(); ?>
+            </div>
+        </div>
+    </div>
+</div>
+<!--ABOUT BRAND-->
