@@ -125,6 +125,12 @@
                 <stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
             </action>
 			<action method="addCss">
+				<stylesheet>js/slick/slick.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/slick.css</stylesheet>
+			</action>
+			<action method="addCss">
 				<stylesheet>css/layout.css</stylesheet>
 			</action>
 			<action method="addCss">
@@ -194,10 +200,6 @@
 			<!--<action method="addItem"><type>skin_js</type><script>js/fitdivs.js</script></action>-->
 			<action method="addItem">
 				<type>skin_js</type>
-				<script>js/masonry.pkgd.min.js</script>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
 				<script>js/vendor/jquery.jcarousel.min.js</script>
 			</action>
 			<action method="addItem">
@@ -224,13 +226,13 @@
 				<type>skin_js</type>
 				<script>js/fns.js</script>
 			</action>
-            <!--<action method="addItem">-->
-                <!--<type>skin_js</type>-->
-                <!--<script>js/bootstrap-select/js/bootstrap-select.min.js</script>-->
-            <!--</action>-->
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/selectBoxIt/js/jquery.selectBoxIt.min.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/slick/slick.min.js</script>
 			</action>
 
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
@@ -421,6 +423,9 @@
 		<reference name="root">
 			<action method="addBodyClass">
 				<value>sidebar-first</value>
+			</action>
+			<action method="addBodyClass">
+				<value>nobreadcrumbs</value>
 			</action>
 		</reference>
 

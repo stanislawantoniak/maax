@@ -335,7 +335,7 @@
     padding-top: 0px;
     margin-bottom:15px;
     margin-top: 0;
-    border-bottom: 1px solid #eeedf0;
+    border-bottom: 1px solid $gray-lighter;
     @media (max-width: $screen-xs-max) {
       //margin-left: -4%;
       //padding-left: 4%;
@@ -406,7 +406,7 @@
       }
       li {
         font-size: 12px;
-        color:#4f4f4f;
+        color:$gray-dark;
         line-height: 1.5;
       }
     }
@@ -540,7 +540,7 @@
           height:41px;
           display:block;
           background:#fff;
-          border:1px solid #afafaf;
+          border:1px solid $gray;
           text-align:center;
           line-height: 39px;
           color:#858585;
@@ -667,7 +667,7 @@
       line-height: 1.2;
       padding: 7px 0 0 43px;
       font-size: 11px;
-      color:#4f4f4f;
+      color:$gray-dark;
       text-transform: uppercase;
       font-family: $fontRegular;
       background:#fff url('../images/heart.png') 8px 11px no-repeat;
@@ -684,7 +684,7 @@
       display:block;
       height:43px;
       padding: 7px 0 0 43px;
-      color:#4f4f4f;
+      color:$gray-dark;
       background:#fff url('../images/heart-like.png') 8px 15px no-repeat;
 	    @media(min-width: 440px) {
 		    white-space: nowrap;
@@ -702,7 +702,7 @@
         text-decoration: none;
         /*background:#fff url('../images/heart.png') 8px 11px no-repeat;*/
         span {
-          color:#4f4f4f;
+          color:$gray-dark;
         }
       }
     }
@@ -799,7 +799,7 @@ form {
       position:absolute;
 
       right:-5%;
-      color:#6fffcf;
+      color:$color-accent;
     }
   }
 
@@ -845,7 +845,7 @@ form {
       border: 1px solid #bcbcbc;
       border-radius:1px;
       box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
-      color:#1e1e1e;
+      color:$gray-darker;
       font-size:12px;
       padding: 13px 15px 13px 15px;
       width:100%;
@@ -878,7 +878,7 @@ form {
       min-height: 132px;
       box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
       padding: 12px 0 12px 15px;
-      color:#1e1e1e;
+      color:$gray-darker;
       font-size:12px;
       width:100%;
       font-family: $fontRegular;
@@ -930,12 +930,12 @@ form {
 
     input[type=radio].css-radio + label.css-label:hover {
       background-position: 0 -28px;
-      color:#1e1e1e;
+      color:$gray-darker;
     }
     input[type=checkbox].css-checkbox:checked + label.css-label,
     input[type=radio].css-radio:checked + label.css-label {
       background-position: 0 -55px;
-      color:#1e1e1e;
+      color:$gray-darker;
     }
     input[type=checkbox].css-checkbox:disabled + label.css-label,
     input[type=radio].css-radio:disabled + label.css-label {
@@ -1014,7 +1014,7 @@ form {
           vertical-align:middle;
           cursor:pointer;
           font-weight:normal;
-          color:#1e1e1e;
+          color:$gray-darker;
           img {
             float: left;
             position: relative;
@@ -1047,7 +1047,7 @@ form {
         input[type=radio].css-radio:checked + label.css-label {
           //background-position: 0 -100px;
           @include sprite($btnCheck, checked);
-          color:#1e1e1e;
+          color:$gray-darker;
         }
 
       }}}

@@ -172,7 +172,7 @@
 				}
 	}
 	.border-top {
-		border-top:1px solid #eeedf0;
+		border-top:1px solid $gray-lighter;
 		padding-top: 15px;
 		@media (max-width:767px) {
 			padding-top: 6px;
@@ -235,7 +235,7 @@
 				position: absolute;
 				left: 0px;
 				top: 0px;
-				background: #6fffcf;
+				background: $color-accent;
 				@media (max-width:480px) {
 					left: 14px;
 				}
@@ -292,7 +292,7 @@
 				position: absolute;
 				left: 0px;
 				top: 0px;
-				background: #6fffcf;
+				background: $color-accent;
 				@media (max-width:480px) {
 					left: 14px;
 				}
@@ -364,7 +364,7 @@
 				color:#000;
 				padding-bottom: 15px;
 				margin-bottom: 15px;
-				border-color:#eeedf0;
+				border-color:$gray-lighter;
 				&.first {
 					@media(max-width:760px) {
 					margin-bottom: 6px;
