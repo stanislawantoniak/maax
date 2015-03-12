@@ -3,7 +3,7 @@
       label {
         cursor:pointer;
         span {          
-          border:1px solid #afafaf;
+          border:1px solid $gray;
           text-align:center;
           line-height: 38px;
           font-size:12px;
@@ -96,7 +96,7 @@
           background:#fff;
           @include border-radius(5px);
           span {
-            border:1px solid #afafaf;
+            border:1px solid $gray;
           }
           
         }

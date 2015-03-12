@@ -91,13 +91,13 @@
 		height:13px;
 		width:134px;
 		position:relative;
-		background:#e2e2e2;
+		background:$gray-light;
 		
 		> span {
 			display:block;
 			position:absolute;
 			height:13px;
-			background:#6fffcf;
+			background:$color-accent;
 		}
 	}
 

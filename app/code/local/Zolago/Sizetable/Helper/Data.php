@@ -14,8 +14,7 @@ class Zolago_Sizetable_Helper_Data extends Mage_Core_Helper_Abstract{
      * @return int
      */
     public function getBrandId() {
-        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product','manufacturer');
-        return $attribute->getId();
+        Mage::helper('zolagocatalog')->getBrandId();
     }
 
 	public function getBrands($vendor,$storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID,$firstEmpty = false) {

@@ -1,5 +1,5 @@
 body {
-	color: #1e1e1e;
+	color: $gray-darker;
 	background: #F2F1F0;
 }
 ::-webkit-input-placeholder {
@@ -348,7 +348,7 @@ article {
 			display: block;
 			width: 18px;
 			height: 18px;
-			background: #6fffcf;
+			background: $color-accent;
 			position: absolute;
 			left: 0px;
 			top: 0px;
@@ -433,7 +433,7 @@ h2 {
 	    display:block;
 	    width:18px;
 	    height:18px;
-	    background:#6fffcf;
+	    background:$color-accent;
 	    position:absolute;
 	    left:0px;
 	    top:0px;
@@ -523,7 +523,7 @@ form {
 			position:absolute;
 			
 			right:-5%;
-			color:#6fffcf;
+			color:$color-accent;
 		}
 
 	}
@@ -565,7 +565,7 @@ form {
 			border: 1px solid #bcbcbc;
 			border-radius:1px;
 			box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
-			color:#1e1e1e;
+			color:$gray-darker;
 			font-size:12px;
 			padding: 13px 15px 13px 15px;
 			width:100%;
@@ -598,7 +598,7 @@ form {
 			min-height: 132px;
 			box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
 			padding: 12px 0 12px 15px;
-			color:#1e1e1e;
+			color:$gray-darker;
 			font-size:12px;
 			width:100%;
 			font-family: $fontRegular;
@@ -650,19 +650,19 @@ form {
 			}
 			input[type=checkbox].css-checkbox + label.css-label:hover {
 				@include sprite($checkboxMap, checkbox-h);
-				color:#1e1e1e;
+				color:$gray-darker;
 			}
 			input[type=radio].css-radio + label.css-label:hover {
 				@include sprite($radioMap, radio-h);
-				color:#1e1e1e;
+				color:$gray-darker;
 			}
 			input[type=checkbox].css-checkbox:checked + label.css-label {
 				@include sprite($checkboxMap, checkbox-c);
-				color:#1e1e1e;
+				color:$gray-darker;
 			}
 			input[type=radio].css-radio:checked + label.css-label {
 				@include sprite($radioMap, radio-h);
-				color:#1e1e1e;
+				color:$gray-darker;
 			}
 			input[type=checkbox].css-checkbox:disabled + label.css-label {
 				@include sprite($checkboxMap, checkbox-d);
@@ -742,7 +742,7 @@ form {
 	        vertical-align:middle;
 	        cursor:pointer;
 	        font-weight:normal;
-	        color:#1e1e1e;
+	        color:$gray-darker;
 	        img {
 	          float: left;
 	          position: relative;
@@ -774,7 +774,7 @@ form {
 	    input[type=radio].css-radio:checked + label.css-label {
 	        //background-position: 0 -100px;
 	        @include sprite($btnCheck, checked);
-	        color:#1e1e1e;
+	        color:$gray-darker;
 	    }
 
 }}}
@@ -849,7 +849,7 @@ form {
 		line-height: 25px;
 		border:2px solid #aeaeae;
 		@include border-radius(3px);
-		color:#4f4f4f;
+		color:$gray-dark;
 		text-transform: uppercase;
 		font-size:12px;
 		@media (max-width: $screen-sm-min) { 
@@ -871,21 +871,21 @@ form {
 	}
 	&.clear {
 		padding: 3px 15px;
-		color:#4f4f4f;
+		color:$gray-dark;
 		min-width: 92px;
 		font-size: 12px;
 		font-family: $fontRegular;
 		font-weight: normal;
 		text-align: center;
 		background:#fff;
-		border:2px solid #1e1e1e;
+		border:2px solid $gray-darker;
 		box-shadow: inset 1px 1px 0 0 #e6e6e6;
 		text-transform: uppercase;
 		@include border-radius(3px);
 
 		&:hover,
 		&.hover {
-			background: #1e1e1e;
+			background: $gray-darker;
 			border-color:#2e2e2e;
 			color:#fff;
 			box-shadow:none;
@@ -1286,7 +1286,7 @@ a {
 		li {
 			display:inline-block;
 			font-size: 10px;
-			color:#4f4f4f;
+			color:$gray-dark;
 			margin-right: 5px;
 			text-transform: uppercase;
 			line-height: image-height(sprite-file($allMap, follow_us_fb));
@@ -1540,20 +1540,20 @@ figure {
 	}
 	&.button-third {
 		padding: 3px 15px;
-		color:#4f4f4f;
+		color:$gray-dark;
 		font-weight: normal;
 		font-size: 12px;
 		font-family: $fontRegular;
 		min-width: 92px;
 		text-align: center;
 		background:#fff;
-		border:2px solid #1e1e1e;
+		border:2px solid $gray-darker;
 		box-shadow: inset 1px 1px 0 0 #e6e6e6;
 		@include border-radius(3px);
 		&:hover,
 		&.hover {
 
-			background: #1e1e1e;
+			background: $gray-darker;
 			border-color:#2e2e2e;
 			color:#fff;
 			box-shadow:none;
@@ -1574,7 +1574,7 @@ figure {
 	display:inline-block;
 	.button-select {
 		display:inline-block;	
-		border:1px solid #afafaf;
+		border:1px solid $gray;
 		position:relative;
 		background: #fff;
 		padding-left:5px;
@@ -1599,7 +1599,7 @@ figure {
 		}
 		&.disabled {
 			background: #f5f5f5;
-			border-color:#e2e2e2;
+			border-color:$gray-light;
 			.caret {
 				@include sprite($selectMap, select_styled_disabled);
 			}	
@@ -1610,7 +1610,7 @@ figure {
 			
 			left:0px;
 			width:100%;
-			border:1px solid #afafaf;
+			border:1px solid $gray;
 			background: #fff;
 			z-index: 900;
 			ul {
