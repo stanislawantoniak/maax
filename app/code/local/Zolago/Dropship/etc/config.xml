@@ -137,7 +137,7 @@
                         <position>3</position>
                     </sequence>
                     <vendor_type_label>
-                        <label>Vendor name prefix. Vendor page - Seller information title</label>
+                        <label>Vendor name prefix</label>
                         <note>Can be empty</note>
                         <type>text</type>
                         <fieldset>marketing</fieldset>
