@@ -650,7 +650,8 @@ Mall.Slick = {
 		options: {
 			autoplaySpeed: 4000,
 			arrows: false,
-			dots: true
+			dots: true,
+			adaptiveHeight: true
 		},
 		init: function() {
 			var self = this;
