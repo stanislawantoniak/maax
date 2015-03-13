@@ -8,30 +8,37 @@ class Zolago_Payment_Model_Observer
 
     public static function processRefunds()
     {
-        $configValue = Mage::getStoreConfig('payment_refunds/payment_refunds_automatic/interval');
-
-        $collection = Mage::getResourceModel("zolagopayment/allocation_collection");
-        $collection->addFieldToFilter('allocation_type', Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
-        $collection->getSelect()
-            ->reset(Zend_Db_Select::COLUMNS)
-            ->columns(
-                array(
-                    'max_allocation_amount' => new Zend_Db_Expr('SUM(allocation_amount)'),
-                    'customer_id',
-                    'vendor_id',
-                    'created_at_hours_past' => new Zend_Db_Expr('(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(MAX(created_at))) /3600'),
-                    'allocation_type',
-                    'po_id',
-                    'transaction_id'
-                )
-            )
-            ->group(array('transaction_id'))
-            ->having('max_allocation_amount>0')
-            ->having("created_at_hours_past >= {$configValue}");
+        /* @var $refundsModel Zolago_Payment_Model_Refund */
+        $refundsModel = Mage::getModel("zolagopayment/refund");
+        $collection = $refundsModel->getTransactionLastOverpayments();
 
         if (count($collection) > 0) {
-            //make refunds
-        }
+            $orderModel = Mage::getModel('sales/order');
+            //make refund transactions
+            foreach ($collection as $item) {
 
+                $amountToRefund = $item->getMaxAllocationAmount();
+                $amount = - $amountToRefund;
+
+                $orderId = $item->getOrderId();
+                $parentTransactionId = $item->getTransactionId();
+
+                $order = $orderModel->load($orderId);
+
+                $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW;
+
+                /* @todo change to dotpay txn_id */
+                $txnId = 'MODAGO_TEST_' . Mage::helper('zolagopayment')->RandomStringForRefund(20);
+
+                $parentsTxtId = $item->getTxnId();
+                $txnType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND;
+
+                /* @var $client Zolago_Dotpay_Model_Client */
+                $client = Mage::getModel("zolagodotpay/client");
+                $client->saveTransaction($order, $amount, $status, $txnId, $txnType, array(), '', $parentTransactionId,$parentsTxtId);
+
+            }
+        }
     }
+
 }
