@@ -1,15 +1,20 @@
 #topSlider {
 	display: none;
+	border: 1px solid #dbdbdb;
 	&.slick-initialized {
 		display: block;
 	}
 	.slick-slide {
 		display: inline-block;
-		vertical-align: middle;
+		vertical-align: top;
 		float: none;
 		position: relative;
 		.topSlideImages img  {
 			width: 100%;
+			&.small {
+				width: auto;
+				margin: 0 auto;
+			}
 		}
 		.topSlideCaptions {
 			position: absolute;
