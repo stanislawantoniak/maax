@@ -7,7 +7,7 @@
 		padding-top: 0px;
 		margin-bottom:15px;
 		margin-top: 0;
-		border-bottom: 1px solid #eeedf0;
+		border-bottom: 1px solid $gray-lighter;
 		@media (max-width: $screen-xs-max) { 
 			//margin-left: -4%;
 			//padding-left: 4%;
@@ -74,7 +74,7 @@
 			top:10px;
 			li {
 				font-size: 12px;	
-				color:#4f4f4f;
+				color:$gray-dark;
 				line-height: 1.5;
 			}
 		}
@@ -207,7 +207,7 @@
 					height:31px;
 					display:block;
 					background:#fff;
-					border:1px solid #afafaf;
+					border:1px solid $gray;
 					text-align:center;
 					line-height: 29px;
 					color:#858585;
@@ -331,7 +331,7 @@
 			line-height: 1.2;
 			padding: 7px 0 0 43px;
 			font-size: 11px;
-			color:#4f4f4f;
+			color:$gray-dark;
 			text-transform: uppercase;
 			font-family: $fontRegular;
 			background:#fff url('../images/heart.png') 8px 11px no-repeat;
@@ -347,7 +347,7 @@
 			display:block;
 			height:43px;
 			padding: 7px 0 0 43px;
-			color:#4f4f4f;
+			color:$gray-dark;
 			background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
 			span {
 				color:#dcdcdc;
@@ -356,7 +356,7 @@
 				text-decoration: none;
 				background:#fff url('../images/heart.png') 8px 11px no-repeat;
 				span {
-					color:#4f4f4f;
+					color:$gray-dark;
 				}
 			}
 		}

@@ -5,6 +5,9 @@
 /* @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Header */
 $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 $messagesBlock = $this->getMessagesBlock()->getGroupedHtml();
+
+$vendor = $this->getVendor();
+$vendorCanAsk = $vendor->getCanAsk();
 ?>
 
 
@@ -56,6 +59,7 @@ $messagesBlock = $this->getMessagesBlock()->getGroupedHtml();
                 <!--            vendor.info.mobile end-->
 
                 <!-- question form mobile-->
+                <?php if($vendorCanAsk): ?>
                 <li><a href="#"><?php echo $this->__("Submit a question to seller"); ?><i
                             class="fa fa-chevron-down"></i></a>
                     <ul>
@@ -66,6 +70,7 @@ $messagesBlock = $this->getMessagesBlock()->getGroupedHtml();
                         </li>
                     </ul>
                 </li>
+                <?php endif; ?>
                 <!-- question form mobile end-->
 
                 <!-- back to main gallery -->

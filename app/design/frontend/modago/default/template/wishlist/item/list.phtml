@@ -5,6 +5,7 @@
 $_collection = $this->getItems();
 /** @var Zolago_Catalog_Helper_Product $_helper */
 $_helper = Mage::helper('zolagocatalog/product');
+$brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
 ?>
 
 <div class="container-fluid" id="items-product">
@@ -16,17 +17,6 @@ $_helper = Mage::helper('zolagocatalog/product');
                         <?php $_product = $product->getProduct(); ?>
                         <?php $_productImageUrl = $_helper->getResizedImageUrl($_product); ?>
                         <?php $_productImageInfo = $_helper->getResizedImageInfo($_product); ?>
-                        <?php
-//                        var_dump($product->getWishlistCount());
-//                        var_dump($_product->getWishlistCount());
-//                        continue;
-
-//                        var_dump($product->getInMyWishlist());
-//                        continue;
-
-                        ?>
-
-
                         <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
@@ -36,7 +26,7 @@ $_helper = Mage::helper('zolagocatalog/product');
                                             alt="<?php $this->escapeHtml($_product->getName()); ?>"
                                             class="img-responsive"/>
                                     </figure>
-	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $brandImagesList[$product->getData('brand_id')]; ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>

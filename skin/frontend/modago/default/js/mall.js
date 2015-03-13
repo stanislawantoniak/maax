@@ -627,6 +627,49 @@ Mall.rwdCarousel = {
     }
 };
 
+// http://kenwheeler.github.io/slick/
+Mall.Slick = {
+	events: {
+		afterChange: 'afterChange',
+		beforeChange: 'beforeChange',
+		edge: 'edge',
+		init: 'init',
+		reInit: 'reInit',
+		setPosition: 'setPosition',
+		swipe: 'swipe'
+	},
+	init: function() {
+		Mall.Slick.top.init();
+	},
+	isAutoplay: function() {
+		return jQuery(window).width() > 767;
+	},
+	top: {
+		slider: false,
+		sliderId: '#topSlider',
+		options: {
+			autoplaySpeed: 4000,
+			arrows: false,
+			dots: true,
+			adaptiveHeight: true
+		},
+		init: function() {
+			var self = this;
+			if(self.slider === false && self.sliderAvailable()) {
+				self.slider = jQuery(self.sliderId);
+				if(Mall.Slick.isAutoplay()) {
+					self.options.autoplay = true;
+				}
+				self.slider.slick(self.options);
+			}
+		},
+		sliderAvailable: function() {
+			var self = this;
+			return jQuery(self.sliderId).length > 0;
+		}
+	}
+};
+
 Mall.Cart = {
     applyCoupon: function() {
         var coupon = jQuery("#num_discount_voucher").val();
@@ -1047,6 +1090,8 @@ jQuery(window).resize(function() {
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
+
+	Mall.Slick.init();
 
 	jQuery(".header_top").headroom({
 		offset: 60
