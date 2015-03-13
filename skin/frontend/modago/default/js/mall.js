@@ -641,27 +641,24 @@ Mall.Slick = {
 	init: function() {
 		Mall.Slick.top.init();
 	},
+	isAutoplay: function() {
+		return jQuery(window).width() < 768;
+	},
 	top: {
 		slider: false,
 		sliderId: '#topSlider',
 		options: {
-			autoplay: true,
 			autoplaySpeed: 4000,
 			arrows: false,
-			dots: true,
-			responsive: [
-				{
-					breakpoint: 768,
-					settings: {
-						autoplay: false
-					}
-				}
-			]
+			dots: true
 		},
 		init: function() {
 			var self = this;
 			if(self.slider === false && self.sliderAvailable()) {
 				self.slider = jQuery(self.sliderId);
+				if(Mall.Slick.isAutoplay()) {
+					self.options.autoplay = true;
+				}
 				self.slider.slick(self.options);
 			}
 		},
