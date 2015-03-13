@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_DropshipTierCommission>
+            <version>0.1</version>
+        </Zolago_DropshipTierCommission>
+    </modules>
+    <global>
+        <helpers>
+            <udtiercom>
+                <rewrite>
+                    <data>Zolago_DropshipTierCommission_Helper_Data</data>
+                </rewrite>
+            </udtiercom>
+        </helpers>
+        <blocks>
+            <udtiercom>
+                <rewrite>
+                    <adminhtml_systemConfigField_rates>Zolago_DropshipTierCommission_Block_Adminhtml_SystemConfigField_Rates</adminhtml_systemConfigField_rates>
+                    <!--fixed rates rewrite for remove-->
+                    <adminhtml_systemConfigField_fixedRates>Zolago_DropshipTierCommission_Block_Adminhtml_SystemConfigField_FixedRates</adminhtml_systemConfigField_fixedRates>
+                    <adminhtml_vendorEditTab_comRates_renderer_rates>Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Renderer_Rates</adminhtml_vendorEditTab_comRates_renderer_rates>
+                    <adminhtml_vendorEditTab_comRates_form>Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form</adminhtml_vendorEditTab_comRates_form>
+                </rewrite>
+            </udtiercom>
+        </blocks>
+    </global>
+</config>
