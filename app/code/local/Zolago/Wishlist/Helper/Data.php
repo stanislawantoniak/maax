@@ -107,7 +107,47 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 		}
 		return parent::getWishlist();
 	}
+    
+    /**
+     * 
+     * @return Mage_Wishlist_Model_Resource_Item_Collection
+     */
+	public function getWishlistItems() {
+	    $wishlist = $this->getWishlist();
+	    $collection = $wishlist->getItemCollection();
+	    $brandId = Mage::helper('zolagocatalog')->getBrandId();
+	    $collection->getSelect()
+	        ->joinLeft('catalog_product_entity_int', 'entity_id=product_id and attribute_id = '.$brandId, 'value as brand_id');
+        return $collection;
+	}
 	
+	
+    /**
+     * list of brands images
+     * @return 
+     */
+    public function getBrandImagesList() {
+            $list = array();
+			$manaFilter = Mage::getModel("mana_filters/filter2");
+			/* @var $manaFilter Mana_Filters_Model_Filter2 */
+			$manaFilter->load(trim(Mage::helper('solrsearch')->getSetting('brand_attribute_code')), "code");
+
+    		$collection = Mage::getResourceModel(
+						'mana_filters/filter2_value_' . 
+						(Mage::helper('mana_admin')->isGlobal() ? "" : "store_") . 
+						"collection"
+			);
+			if(!Mage::helper('mana_admin')->isGlobal()){
+				$collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
+			}
+			$collection->addFieldToFilter("filter_id", $manaFilter->getId());
+			
+			foreach ($collection as $item) {
+			    $list[$item->getOptionId()] = Mage::getBaseUrl('media') .  "m-image" . DS . $item->getNormalImage();
+            }
+            return $list;
+    }
+
 	/**
 	 * @param Mage_Catalog_Model_Product $product
 	 * @return boolean

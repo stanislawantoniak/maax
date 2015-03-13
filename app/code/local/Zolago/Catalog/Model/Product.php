@@ -54,6 +54,15 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
         return $this->getResource()->getConverterPriceType($skus);
     }
 
+	/**
+	 * @return string|null
+	 */
+	public function getManufacturerLogoUrl() {
+        /** @var $_helper Zolago_Solrsearch_Helper_Data*/
+        $_helper = Mage::helper("zolagocatalog/product");
+        return $_helper->getManufacturerLogoUrl($this);
+	}
+	
     /**
      * Get product final price
      *

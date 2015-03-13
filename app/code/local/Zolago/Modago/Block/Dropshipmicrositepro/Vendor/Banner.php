@@ -166,9 +166,9 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                                 $imageSliderResizePathMobile = Mage::getBaseDir('media') . DS . $this->getImageResizeMobilePath($type) . $sliderImage['path'];
 
                                 //Desktop
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH, self::BANNER_SLIDER_HEIGHT);
+                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH);
                                 //Mobile
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH, self::BANNER_SLIDER_M_HEIGHT);
+                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH);
 
                             }
                         }
@@ -213,14 +213,16 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         return self::BANNER_RESIZE_M_DIRECTORY . DS . $type;
     }
 
-    public function scaleBannerImage($imagePath, $imageResizePath, $width, $height)
+    public function scaleBannerImage($imagePath, $imageResizePath, $width, $height=null)
     {
         try
         {
             $image = new Varien_Image($imagePath);
-            $image->constrainOnly(false);
-            $image->keepFrame(true);
-            $image->backgroundColor(array(255, 255, 255));
+	        if(!is_null($height)) {
+		        $image->constrainOnly(false);
+		        $image->keepFrame(true);
+		        $image->backgroundColor(array(255, 255, 255));
+	        }
             $image->keepAspectRatio(true);
             $image->resize($width, $height);
             $image->save($imageResizePath);
