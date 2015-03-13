@@ -1411,6 +1411,8 @@
             doSave: true,
             _self_form_id: "co-shippingpayment",
 			_sidebarAddressesTemplate: "",
+	        _previous_payment: false,
+	        _previous_provider: false,
 			
             handleChangePaymentMethodClick: function (e) {
 
@@ -1439,6 +1441,19 @@
 		            } else {
 			            var offset = jQuery(window).height() < 750 ? 140 : 100;
 			            htmlBody.animate({scrollTop: jQuery('.css-radio.payment-method').first().offset().top + offset}, animationSpeed);
+		            }
+	            }
+
+	            if(!jQuery('.selected-payment div.panel.panel-default div.panel.panel-default').is(':visible')) { //if panel is closed
+		            var payment = jQuery('input[name=payment_emul]'), provider = jQuery('input[name=payment_provider_emul]');
+		            if(!payment.val() && this._previous_payment) {
+			            payment.val(this._previous_payment);
+			            if(payment.val() == 'zolagopayment_gateway' || payment.val() == 'zolagopayment_cc') {
+				            provider.val(this._previous_provider);
+			            }
+			            this._previous_payment = false;
+			            this._previous_provider = false;
+						jQuery('#'+this._self_form_id).valid();
 		            }
 	            }
 
@@ -1482,8 +1497,14 @@
                 jQuery("input[name='payment_emul']").val(m);
                 jQuery("input[name='payment_provider_emul']").val(p);
 
+	            this._previous_payment = false;
+	            this._previous_provider = false;
+
                 jQuery("input[name='payment[method]']").prop("checked",false);
                 jQuery("input[name='payment[additional_information][provider]']").prop("checked",false);
+
+	            jQuery("#"+this._self_form_id).valid();
+
                 jQuery('.selected_bank').hide();
             },
 
@@ -1546,9 +1567,10 @@
             },
 
 			onPrepare: function(checkoutObject){
-                this.validate.init();
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				var self = this;
+
+				this.validate.init();
 
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
@@ -1560,7 +1582,6 @@
 
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
-
                     return false;
                 });
 
@@ -1569,11 +1590,13 @@
                 //jQuery('body').find('.default_pay input[name="payment[method]"]:checked').closest('.panel').addClass('payment-selected');
 
                 jQuery(default_pay_bank).on('change', function(){
+	                var me = jQuery(this);
                     jQuery(default_pay_bank).closest('.panel').removeClass('payment-selected');
-                    jQuery(this).closest('.panel').addClass('payment-selected');
+                    me.closest('.panel').addClass('payment-selected');
                     jQuery('.selected_bank').hide();
-                    if (jQuery(this).is(":checked")) {
-	                    var selectedBank = jQuery(this).closest('.form-group').next('.selected_bank');
+                    if(me.is(":checked")) {
+	                    jQuery("#"+Mall.Checkout.steps.shippingpayment._self_form_id).valid();
+	                    var selectedBank = me.closest('.form-group').next('.selected_bank');
 	                    if(selectedBank.length) {
 		                    selectedBank.show();
 		                    if(jQuery(window).width() < 977) {
@@ -1586,12 +1609,20 @@
 			                    } else {
 				                    scrollTo += offsetWithoutHeader;
 			                    }
-
 			                    jQuery("html, body").animate({scrollTop: scrollTo}, 600);
 		                    }
 	                    }
                     }
-
+	                if(me.is(':visible')) {
+		                var val = me.val();
+		                if ((val == "zolagopayment_cc" || val == "zolagopayment_gateway") && !self._previous_payment) {
+			                var payment = jQuery('input[name=payment_emul]'), provider = jQuery('input[name=payment_provider_emul]');
+			                self._previous_payment = payment.val();
+			                self._previous_provider = provider.val();
+			                payment.val('');
+			                provider.val('');
+		                }
+	                }
                 });
                 /////////////////////
 
@@ -1628,7 +1659,7 @@
                     var inputs = '';
                     jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
-                    })
+                    });
                     this.content.find("form .shipping-collect").html(inputs);
 
                     var pInputs = '';
@@ -1739,35 +1770,35 @@
             validate: {
                 init: function () {
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
-                        .validate(Mall.validate.getOptions({
+                        .validate({
                             //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
-                                _shipping_method: {
+	                            '_shipping_method': {
+									required: true
+	                            },
+                                'payment_emul': {
                                     required: true
-                                },
-                                'payment[additional_information][provider]' : {
-                                    required: function(){
-                                        var res = false;
-                                        if(jQuery("[name='payment[method]']").is(":checked") &&
-                                            (jQuery("[name='payment[method]']:checked").val() === "zolagopayment_cc" || jQuery("[name='payment[method]']:checked").val() === "zolagopayment_gateway")
-                                        ){
-                                            res = true;
-                                        }
-                                        return res;
-                                    }
                                 }
                             },
                             messages: {
                                 _shipping_method: {
                                     required: Mall.translate.__("please-select-shipping")
                                 },
-                                //"payment[method][emul]": {
-                                //    required: Mall.translate.__("Please select payment")
-                                //},
-                                'payment[additional_information][provider]' : {
-                                    required: Mall.translate.__("please-select-bank")
+	                            payment_emul: {
+                                    required: function() {
+	                                    var payment_method = jQuery('input[name="payment[method]"]:checked');
+	                                    if(payment_method.length) {
+		                                    if(payment_method.val() == "zolagopayment_gateway") {
+			                                    return Mall.translate.__("please-select-bank");
+		                                    } else {
+			                                    return Mall.translate.__("please-select-card");
+		                                    }
+	                                    } else {
+		                                    return Mall.translate.__("please-select-payment");
+	                                    }
+                                    }
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1785,7 +1816,7 @@
                             errorPlacement: function(error, element) {
                                 jQuery(element).closest("fieldset").find('.data-validate').append(error);
                             }
-                        }));
+                        });
                 }
             }
 

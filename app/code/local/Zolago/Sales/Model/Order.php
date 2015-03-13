@@ -147,5 +147,79 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
             $this->getStore()->getCurrentCurrencyCode()
         )->toCurrency($sum);
     }
+    
+   /**
+    * @todo implement
+    * @return bool
+    */
+   public function isGatewayPayment() {
+	   return $this->getPayment()->getMethod() == Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE;
+   }
+
+   /**
+    * @return bool
+    */
+   public function isPaymentCheckOnDelivery() {
+       return $this->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
+   }
+
+    /**
+     * return true if payment method is Banktransfer
+     * if not return false
+     *
+     * @return bool
+     */
+    public function isPaymentBanktransfer() {
+       return $this->getPayment()->getMethod() == Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
+    }
+
+    /**
+     * return true if payment method is dotpay
+     * if nor return false
+     *
+     * @return bool
+     */
+    public function isPaymentDotpay() {
+       return $this->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+    }
+   
+
+
+
+    /**
+     * Replace customer email with new email
+     *
+     * @param $newEmail
+     * @param $customerId
+     * @param $storeId
+     */
+    public function replaceEmailInOrders($newEmail, $customerId, $storeId)
+    {
+        if (empty($customerId)) {
+            return;
+        }
+        $sameEmailCollection = $this->getCollection();
+
+        $sameEmailCollection->addFieldToFilter("customer_id", $customerId);
+        $sameEmailCollection->addFieldToFilter("store_id", $storeId);
+
+        if ($sameEmailCollection->count()) {
+            foreach ($sameEmailCollection as $order) {
+                $order->setCustomerEmail($newEmail);
+                $order->getResource()->saveAttribute($order, "customer_email");
+            }
+        }
+    }
+
+
+	public function assignToCustomer($customerId,$save=false) {
+		$this
+			->setCustomerIsGuest(0)
+			->setCustomerId($customerId);
+		if($save) {
+			$this->save();
+		}
+		return $this;
+	}
 
 }

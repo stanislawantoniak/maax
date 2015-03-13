@@ -5,9 +5,11 @@ class Zolago_Customer_Model_Observer {
      */
     public function cleanOldTokens() {
         $today = new Zend_Date();
-        echo Mage::getResourceModel("zolagocustomer/emailtoken")->cleanOldTokens(
+        echo (Mage::getResourceModel("zolagocustomer/emailtoken")->cleanOldTokens(
                 $today->subHour(Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
-        );
+	        && Mage::getResourceModel("zolagocustomer/attachtoken")->cleanOldTokens(
+		    $today->subHour(Zolago_Customer_Model_Attachtoken::HOURS_EXPIRE))
+        ));
     }
 
     public function customerChangeEmailConfirm($observer)

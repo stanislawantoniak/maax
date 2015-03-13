@@ -111,6 +111,18 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 			resize($width, $height)->
 			keepFrame(false);
 	}
+
+    /**
+     * @param Unirgy_Rma_Model_Rma_Item $rmaItem
+     * @param int $width
+     */
+    public function getRmaItemThumbHeight(Unirgy_Rma_Model_Rma_Item $rmaItem, $width=60) {
+        /** @var Mage_Catalog_Helper_Image $thumb */
+        $thumb = $rmaItem->getProductThumbHelper();
+        $w = $thumb->getOriginalWidth();
+        $ratio = $w / $width;
+        return (int)($thumb->getOriginalHeight() / $ratio);
+    }
 	
 	/**
 	 * @param int $item

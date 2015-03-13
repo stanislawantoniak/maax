@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <skin>modago</skin>
+    <report>
+        <action></action>
+        <subject></subject>
+        <email_address></email_address>
+        <trash>leave</trash>
+    </report>
+</config>

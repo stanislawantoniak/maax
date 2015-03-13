@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Customer>
-            <version>0.0.16</version>
+            <version>0.0.17</version>
         </Zolago_Customer>
     </modules>
     <global>
@@ -17,11 +17,15 @@
                     <emailtoken>
                         <table>zolago_customer_emailtoken</table>
                     </emailtoken>
+	                <attachtoken>
+		                <table>zolago_customer_attachtoken</table>
+	                </attachtoken>
                 </entities>
             </zolagocustomer_resource>
             <customer>
                 <rewrite>
                     <form>Zolago_Customer_Model_Customer_Form</form>
+                    <customer>Zolago_Customer_Model_Customer</customer>
                 </rewrite>
             </customer>
             <core>
@@ -61,6 +65,11 @@
                    <file>zolagocutomer_confirm_email.html</file>
                    <type>html</type>
                </zolagocustomer_confirmemail>
+	            <zolagocustomer_attach_orders_email>
+		            <label>Attach orders email</label>
+		            <file>zolagocustomer_attach_orders_email.html</file>
+		            <type>html</type>
+	            </zolagocustomer_attach_orders_email>
             </email>
         </template>
 		<events>
@@ -139,6 +148,10 @@
 				<newsletter>Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534)</newsletter>
 				<sms>Wyrażam zgodę na otrzymywanie wiadomości sms zawierających aktualizację stanu zamówienia oraz informacje o dostawie</sms>
 			</agreements>
+			<orders_attach>
+				<email_template>zolagocustomer_attach_orders_email</email_template>
+				<email_identity>support</email_identity>
+			</orders_attach>
 		</customer>
 	</default>
 </config>

@@ -24,7 +24,10 @@ $vendor_id = $_product->getData('udropship_vendor');
 $storeId = Mage::app()->getStore()->getStoreId();
 $attributeSetId = $_product->getData('attribute_set_id');
 $brandId = $_product->getData( 'manufacturer');
-
+if($_product->getTypeId() == 'configurable') { //fix for simple products
+	/** @var Zolago_Catalog_Block_Product_View_Type_Configurable $salableCount */
+	$salableCount = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getSalableCount();
+}
 $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 ?>
 <div id="product-shop" class="col-lg-8 col-md-12 col-sm-12 clearfix" style="overflow-x:visible;">
@@ -58,13 +61,11 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 <!--        catalog.product.related-->
         <?php echo $this->getChildHtml('catalog.product.related'); ?>
 <!--        catalog.product.related end-->
-
         <div class="size-box-bundle" id="product-options">
             <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 
                 <?php if (!empty($productAttrs)) : ?>
                     <?php foreach($productAttrs as $_attribute) : ?>
-
                         <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
 				            <?php $haveSizes = true; ?>
                             <div class="size-box clearfix clr">
@@ -90,7 +91,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                     <?php if ($isSalable): ?>
                         <div class="col-xs-6 text-right">
                             <button class="btn button button-primary ico addBasket"
-                                    <?php if(isset($haveSizes) && $haveSizes == true): ?>title="<?php echo $hlp->__("Choose size first"); ?>" data-toggle="tooltip" data-placemen="top"<?php endif; ?>
+                                    <?php if(isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>" data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
                                     id="add-to-cart"
                                     onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                         </div>

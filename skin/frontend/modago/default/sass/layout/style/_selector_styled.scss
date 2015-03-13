@@ -156,26 +156,39 @@
 /*Rma*/
 .condition-wrapper {
   .selectboxit-container {
+    width: 100%;
+          @media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
+            width: 80%;
+          }
     .selectboxit {
-      width: 245px;
-      @media (max-width: $screen-xs-min) {
-        width: 200px;
-      }
-      @media (max-width: 400px) {
-        width: 180px;
-      }
-      @media (max-width: 360px) {
-        width: 170px;
-      }
-      @media (max-width: 350px) {
-        width: 160px;
-      }
-      @media (max-width: 340px) {
-        width: 150px;
-      }
-      @media (max-width: 330px) {
-        width: 135px;
-      }
+      width: 100%;
+      display: block;
+
+//      width: 245px;
+//      @media (max-width: $screen-xs-min) {
+//        width: 200px;
+//      }
+//      @media (min-width: $screen-sm-min) and (max-width: 905px) {
+//        width: 180px;
+//      }
+//      @media (max-width: 400px) {
+//        width: 180px;
+//      }
+//      @media (max-width: 360px) {
+//        width: 170px;
+//      }
+//      @media (max-width: 350px) {
+//        width: 160px;
+//      }
+//      @media (max-width: 340px) {
+//        width: 150px;
+//      }
+//      @media (max-width: 330px) {
+//        width: 135px;
+//      }
+//      @media (max-width: 315px) {
+//        width: 100px;
+//      }
     }
   }
   &.has-error {
