@@ -37,8 +37,8 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         $pIds = array(); // Products ids
         foreach ($po->getAllItems() as $item) {
             /** @var Zolago_Po_Model_Po_Item $item */
-            if ($item->getParentItemId()){
-//                Mage::log('ma parenta item: ' . $item->getId(), null, 'mylog.log');
+            if ($item->getParentItemId() || $item->getOrderItem()->getParentItem() ){
+                Mage::log('ma parenta item: ' . $item->getId(), null, 'mylog.log');
                 continue;
             }
             if ($this->canSetCommission($item)) {
@@ -88,7 +88,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         foreach ($po->getAllItems() as $item) {
             /** @var Zolago_Po_Model_Po_Item $item */
             $itemId = spl_object_hash($item);
-            if ($item->getParentItemId() ||
+            if ($item->getParentItemId() || $item->getOrderItem()->getParentItem() ||
                 !($product = $products->getItemById($item->getProductId())) || !$this->canSetCommission($item)) {
                 continue;
             }
@@ -109,8 +109,9 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         $ratesToUse = array();
         foreach ($po->getAllItems() as $item) {
             /** @var Zolago_Po_Model_Po_Item $item */
-            if (!$this->canSetCommission($item) || $item->getParentItemId()) {
-//                Mage::log('no comm for product: '.$item->getId(), null, 'mylog.log');
+
+            if (!$this->canSetCommission($item) || $item->getParentItemId() || $item->getOrderItem()->getParentItem()) {
+                Mage::log('no comm for product: '.$item->getId(), null, 'mylog.log');
                 continue;
             }
 
@@ -150,7 +151,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                         $_rateToUse = array();
                         if ($this->isProductHaveFlagSale($product->getId(), $productsRelations, $productsWithFlagSale)) {
                             // Have flag SALE
-//                            Mage::log($product->getId() . " | " . $product->getSku() . ' have flage SALE!', null, 'mylog.log');
+                            Mage::log($product->getId() . " | " . $product->getSku() . ' have flage SALE!', null, 'mylog.log');
 
                             if (isset($tierRates[$catId]) && !empty($tierRates[$catId]['sale_value'])) {
                                 $_rateToUse['value'] = $tierRates[$catId]['sale_value'];
@@ -193,7 +194,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
             // If no commission found for this item
             // then default will be used
             if (!isset($ratesToUse[$itemId])) {
-//                Mage::log('No commission found for this item: '.$product->getId() . " | " . $product->getSku(), null, 'mylog.log');
+                Mage::log('No commission found for this item: '.$product->getId() . " | " . $product->getSku(), null, 'mylog.log');
                 // If 'Default Commission Percent' is set for vendor
                 // use it; if not use default
                 // that same logic for Default SALE commission Percent
@@ -215,7 +216,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 
             if (isset($ratesToUse[$itemId])) {
                 if (isset($ratesToUse[$itemId]['value'])) {
-//                    Mage::log("setCommissionPercent {$ratesToUse[$itemId]['value']} for: ". $product->getId() . " | " . $product->getSku(), null, 'mylog.log');
+                    Mage::log("[{$item->getId()}] setCommissionPercent {$ratesToUse[$itemId]['value']} for: ". $product->getId() . " | " . $product->getSku(), null, 'mylog.log');
                     $item->setCommissionPercent($ratesToUse[$itemId]['value']);
 //                    $item->save(); //only for tests
                 }
