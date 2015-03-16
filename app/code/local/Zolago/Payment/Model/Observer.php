@@ -24,6 +24,7 @@ class Zolago_Payment_Model_Observer
                 $orderId = $item->getOrderId();
                 $parentTransactionId = $item->getTransactionId();
 
+	            /** @var Mage_Sales_Model_Order $order */
                 $order = $orderModel->load($orderId);
 
                 $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW;
@@ -38,6 +39,10 @@ class Zolago_Payment_Model_Observer
                 /* @var $client Zolago_Dotpay_Model_Client */
                 $client = Mage::getModel("zolagodotpay/client");
                 $refundTransactionId = $client->saveTransaction($order, $amount, $status, $txnId, $txnType, array(), '', $parentTransactionId,$parentsTxtId);
+
+	            Mage::log("REFUND TRANS ID:");
+	            Mage::log($refundTransactionId);
+	            Mage::log("REFUND TRANS ID END");
 
 	            if($refundTransactionId) {
 		            // remove overpay allocation
