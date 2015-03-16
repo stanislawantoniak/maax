@@ -1,5 +1,5 @@
 <?php
-	class Zolago_Payment_PaymentController extends Mage_Core_Controller_Front_Action {
+	class Zolago_Payment_PaymentController extends Mage_Adminhtml_Controller_Action {
 
 		public function refundAction() {
 			var_dump($this->getRequest()->getData());
