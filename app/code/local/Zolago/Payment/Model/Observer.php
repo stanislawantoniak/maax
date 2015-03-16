@@ -40,10 +40,6 @@ class Zolago_Payment_Model_Observer
                 $client = Mage::getModel("zolagodotpay/client");
                 $refundTransactionId = $client->saveTransaction($order, $amount, $status, $txnId, $txnType, array(), '', $parentTransactionId,$parentsTxtId);
 
-	            Mage::log("REFUND TRANS ID:");
-	            Mage::log($refundTransactionId);
-	            Mage::log("REFUND TRANS ID END");
-
 	            if($refundTransactionId) {
 		            // remove overpay allocation
 		            /** @var Zolago_Payment_Model_Allocation $allocation */
@@ -51,7 +47,7 @@ class Zolago_Payment_Model_Observer
 		            $allocation->setData(array(
 			            'transaction_id' => $item->getData('transaction_id'),
 			            'po_id' => $item->getData('po_id'),
-			            'allocation_amount' => $item->getData('allocation_amount') * -1,
+			            'allocation_amount' => $amountToRefund,
 			            'allocation_type' => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
 			            'operator_id' => null,
 			            'created_at' => Mage::getSingleton('core/date')->gmtDate(),
@@ -68,7 +64,7 @@ class Zolago_Payment_Model_Observer
 		            $allocation->setData(array(
 			            'transaction_id' => $item->getData('transaction_id'),
 			            'po_id' => $item->getData('po_id'),
-			            'allocation_amount' => $item->getData('allocation_amount'),
+			            'allocation_amount' => abs($amountToRefund),
 			            'allocation_type' => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND,
 			            'operator_id' => null,
 			            'created_at' => Mage::getSingleton('core/date')->gmtDate(),
