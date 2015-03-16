@@ -3,7 +3,7 @@
 
 		public function refundAction() {
 			Mage::log("got here!");
-			var_dump($this->getRequest()->getData());
+			var_dump($this->getRequest()->getParam('txn'));
 			die();
 			/** @var Zolago_Dotpay_Model_Client $dotpay */
 			/*$dotpay = Mage::getModel("zolagodotpay/client");
