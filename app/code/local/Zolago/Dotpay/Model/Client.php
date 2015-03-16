@@ -226,7 +226,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			if ($usePost) {
 				curl_setopt($ch, CURLOPT_POST, 1);
 				if($postData) {
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
 					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 						'Content-Type: application/json',
 						'Content-Length: '.strlen($postData))
