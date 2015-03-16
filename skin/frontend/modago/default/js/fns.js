@@ -142,7 +142,7 @@ jQuery.noConflict();
 					.html();
 			}
 			
-			triggerConditionsShipping.modal('show');
+			//triggerConditionsShipping.modal('show');
 			triggerConditionsShipping.on('shown.bs.modal', function () {
 				triggerConditionsShipping.find('.modal-body').html('');
 				triggerConditionsShipping.find('.modal-body').append('<div class="panel panel-default">' + html + '</div>')
