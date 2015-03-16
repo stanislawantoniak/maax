@@ -453,10 +453,16 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 
 		$customer = $this->_getCustomer();
 		$data = $this->getRequest()->getPost();
+
+        if(isset($data['email'])){
+            $data['email'] = trim($data['email']);
+        }
+
 		try {
 			$errors = $this->_getCustomerErrors($this->getRequest()->getPost());
 			if (empty($errors)) {
 				unset($data['agreement']);
+
 				$customer->setData($data);
 				/* needed for proper newsletter handling */
 				$customer->setIsJustRegistered(true);
@@ -506,6 +512,8 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		);
 		$errors = array();
 		foreach($customer as $field => $value) {
+
+
 			if(!isset($required[$field])) {
 				$errors = array();
 				$errors[] = $this->__("Some error occured");
@@ -513,7 +521,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			} else {
 				if(strlen($value) < $required[$field]) {
 					$errors[] = $this->__(ucfirst($field)." is not correct");
-				} elseif($field == 'email' && !Zend_Validate::is($value, 'EmailAddress')) {
+				} elseif($field == 'email' && !Zend_Validate::is(trim($value), 'EmailAddress')) {
 					$errors[] = $this->__("Provided email is not correct");
 				}
 			}
