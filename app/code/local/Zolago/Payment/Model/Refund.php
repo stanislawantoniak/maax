@@ -6,7 +6,7 @@
 class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
 {
     /**
-     * @return Object
+     * @return Zolago_Payment_Model_Resource_Allocation_Collection
      */
     public function getTransactionLastOverpayments()
     {

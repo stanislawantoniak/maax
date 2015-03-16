@@ -34,6 +34,9 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	const DOTPAY_STATUS_OK = 'OK';
 	const DOTPAY_STATUS_ERROR = 'ERR';
 
+	//dotpay refund codes
+	const DOTPAY_REFUND_INVALID_AMOUNT = 'INVALID_AMOUNT';
+
 	//payment method database name
 	const PAYMENT_METHOD = 'dotpay';
 
@@ -226,6 +229,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			if ($usePost) {
 				curl_setopt($ch, CURLOPT_POST, 1);
 				if($postData) {
+					$postData = json_encode($postData);
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 						'Content-Type: application/json',
@@ -264,17 +268,13 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	}
 
 	/**
-	 * @param Zolago_Sales_Model_Order $order
-	 * @param String $txnId
+	 * @param Mage_Sales_Model_Order $order
+	 * @param Mage_Sales_Model_Order_Payment_Transaction $transaction
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function makeRefund($order,$txnId) {
+	public function makeRefund($order,$transaction) {
 		/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
-		$transaction = Mage::getModel("sales/order_payment_transaction");
-		$transaction
-			->setOrderPaymentObject($order->getPayment())
-			->loadByTxnId($txnId);
 		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
 			$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
 			$transaction->getTxnAmount() < 0) { //and amount is negative
@@ -284,11 +284,21 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			);
 			try {
 				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
-				if ($response['detail'] == 'ok') {
-					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_PROCESSING);
-					$transaction->save();
-					return true;
+				if (isset($response['error_code'])) {
+					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
+						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
+						$transaction->setIsClosed(1);
+					}
+				} elseif(isset($response['detail']) && $response['detail'] == 'ok') {
+					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
+					$transaction->setIsClosed(1);
 				}
+				$transaction->setAdditionalInformation(
+					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+					$response
+				);
+				$transaction->save();
+				return true;
 			} catch(Exception $e) {
 				Mage::logException($e);
 			}
