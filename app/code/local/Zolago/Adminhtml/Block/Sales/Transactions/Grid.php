@@ -71,4 +71,21 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
 
         return $grid;
     }
+
+	protected function _prepareMassaction()
+	{
+		$this->setMassactionIdField('main_table.entity_id');
+		$this->getMassactionBlock()->setFormFieldName('txn');
+		/*$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");*/
+
+		$this->getMassactionBlock()->addItem(
+			'make_refund',
+			array(
+				'label' => $this->__('Make refund'),
+				'url'   => $this->getUrl('payment/payment/refund') //this should be the url where there will be mass operation
+			)
+		);
+
+		return $this;
+	}
 }

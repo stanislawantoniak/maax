@@ -97,6 +97,59 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
     /**
+     * Return array like family tree
+     * roots is parents
+     * nodes are children
+     *
+     * example:
+     * for input array
+     * (
+     *    [0] => 25733
+     *    [1] => 2
+     *    [2] => 25734
+     *    [3] => 25735
+     * )
+     * return array could be
+     * [32339<parent_id>] => Array
+     *    (
+     *    [0] => 25733<child_id>
+     *    [1] => 25734<child_id>
+     *    [2] => 25735<child_id>
+     *    )
+     *
+     * @param $listUpdatedProducts
+     * @return array
+     */
+    public function getConfigurableSimpleRelationArray($listUpdatedProducts)
+    {
+
+        if (empty($listUpdatedProducts)) {
+            return array();
+        }
+        $listUpdatedProducts = implode(',', $listUpdatedProducts);
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+        $select
+            ->from(
+                'catalog_product_relation AS product_relation',
+                array(
+                    'configurable_product' => 'product_relation.parent_id',
+                    'simple_product' => 'product_relation.child_id'
+                )
+            )
+            ->where("product_relation.child_id IN({$listUpdatedProducts})");
+        //echo $select;
+
+        $result = $adapter->fetchAll($select);
+        $arr = array();
+        foreach ($result as $row) {
+            $arr[$row['configurable_product']][] = $row['simple_product'];
+        }
+
+        return $arr;
+    }
+
+    /**
      * @param $ids
      * @return array
      */

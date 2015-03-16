@@ -17,50 +17,53 @@ abstract class Zolago_Payment_Model_Client {
 	 * @return bool|int
 	 * @throws Exception
 	 */
-	public function saveTransaction($order,$amount,$status,$txnId,$txnType,$data=array(),$comment="") {
-		if($order instanceof Mage_Sales_Model_Order
-			&& is_numeric($amount)
-			&& $txnId
-			&& $this->validateTransactionStatus($status)
-			&& $this->validateTransactionType($txnType)
-		) {
+    public function saveTransaction($order, $amount, $status, $txnId, $txnType, $data = array(), $comment = "", $parentTrId = 0, $parentTxnId = 0)
+    {
+        if ($order instanceof Mage_Sales_Model_Order
+            && is_numeric($amount)
+            && $txnId
+            && $this->validateTransactionStatus($status)
+            && $this->validateTransactionType($txnType)
+        ) {
 
-			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
-			$transaction = Mage::getModel("sales/order_payment_transaction");
-			$transaction->setOrderPaymentObject($order->getPayment());
-			$transaction->loadByTxnId($txnId);
+            /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+            $transaction = Mage::getModel("sales/order_payment_transaction");
+            $transaction->setOrderPaymentObject($order->getPayment());
+            $transaction->loadByTxnId($txnId);
 
-			if(!$transaction->getId()) {
-				//create new transaction
-				$customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : null; //null for guest
+            if (!$transaction->getId()) {
+                //create new transaction
+                $customerId = !$order->getCustomerIsGuest() ? $order->getCustomerId() : null; //null for guest
 
-				$transaction
-					->setTxnId($txnId)
-					->setTxnType($txnType)
-					->setIsClosed($this->getIsClosedByStatus($status))
-					->setTxnAmount($amount)
-					->setTxnStatus($status)
-					->setCustomerId($customerId);
+                $transaction
+                    ->setTxnId($txnId)
+                    ->setTxnType($txnType)
+                    ->setIsClosed($this->getIsClosedByStatus($status))
+                    ->setTxnAmount($amount)
+                    ->setTxnStatus($status)
+                    ->setParentId($parentTrId)
+                    ->setParentTxnId($parentTxnId)
+                    ->setCustomerId($customerId);
 
-			} elseif($transaction->getId() && !$transaction->getIsClosed() ) {
-				//update existing transaction
-				$transaction
-					->setIsClosed($this->getIsClosedByStatus($status))
-					->setTxnStatus($status);
-			} else {
-				$transaction = false; //because transaction with this txn_id is already closed
-			}
+            } elseif ($transaction->getId() && !$transaction->getIsClosed()) {
+                //update existing transaction
+                $transaction
+                    ->setIsClosed($this->getIsClosedByStatus($status))
+                    ->setTxnStatus($status);
+            } else {
+                $transaction = false; //because transaction with this txn_id is already closed
+            }
 
-			if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
+            if ($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
 
-				if(count($data)) {
-					$transaction->setAdditionalInformation(
-						Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-						$data
-					);
-				}
+                if (count($data)) {
+                    $transaction->setAdditionalInformation(
+                        Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+                        $data
+                    );
+                }
 
-				$transaction->save();
+                $transaction->save();
 
                 //there is no sales_order_payment_transaction_after/before_save
                 if ($transaction->getId() && $status == self::TRANSACTION_STATUS_COMPLETED) {
@@ -76,10 +79,10 @@ abstract class Zolago_Payment_Model_Client {
 
                     return $transaction->getId();
                 }
-			}
-		}
-		return false;
-	}
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * @param Mage_Sales_Model_Order $order
