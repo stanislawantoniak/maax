@@ -81,7 +81,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
 			'make_refund',
 			array(
 				'label' => $this->__('Make refund'),
-				'url'   => $this->getUrl('payment/payment/refund')
+				'url'   => $this->getUrl('*/payment/refund')
 			)
 		);
 
