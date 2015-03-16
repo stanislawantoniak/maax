@@ -182,6 +182,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			$method=false, //dotpay api method
 			$parameters=array(), //additional parameters as array("key1"=>"value1","key2"=>"value2")
 			$usePost=false,
+			$postData=false,
 			$customRequest="" //custom request that changes method behaviour
 	) {
 		$login = $this->getLogin();
@@ -209,7 +210,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 				$urlData = $urlData . $parameters;
 			}
 
-			$fields = null;
 			$ch = curl_init();
 
 			curl_setopt($ch, CURLOPT_URL, $url . $urlData);
@@ -225,7 +225,13 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			}
 			if ($usePost) {
 				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+				if($postData) {
+					curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+						'Content-Type: application/json',
+						'Content-Length: '.strlen($postData))
+					);
+				}
 			}
 
 			$response = curl_exec($ch);
@@ -253,6 +259,39 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 				"orderId" => $dotpayTransaction['control'],
 				"txnStatus" => $this->getOperationStatus($dotpayTransaction['status'])
 			);
+		}
+		return false;
+	}
+
+	/**
+	 * @param Zolago_Sales_Model_Order $order
+	 * @param String $txnId
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function makeRefund($order,$txnId) {
+		/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+		$transaction = Mage::getModel("sales/order_payment_transaction");
+		$transaction
+			->setOrderPaymentObject($order->getPayment())
+			->loadByTxnId($txnId);
+		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
+			$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
+			$transaction->getTxnAmount() < 0) { //and amount is negative
+			$data = array(
+				'amount' => abs($transaction->getTxnAmount()),
+				'comment' => 'Modago refund id: '.$transaction->getTxnId()
+			);
+			try {
+				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
+				if ($response['detail'] == 'ok') {
+					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_PROCESSING);
+					$transaction->save();
+					return true;
+				}
+			} catch(Exception $e) {
+				Mage::logException($e);
+			}
 		}
 		return false;
 	}
