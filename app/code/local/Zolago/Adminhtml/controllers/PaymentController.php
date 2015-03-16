@@ -48,7 +48,7 @@
 			if($skipped) {
 				$this->_getSession()->addWarning($this->__('%s transactions has been skipped during refunding due to incorrect status or transaction type.', $skipped));
 			}
-			$this->_redirect('*/*/');
+			$this->_redirectReferer();
 		}
 
 		public function refundAction() {
