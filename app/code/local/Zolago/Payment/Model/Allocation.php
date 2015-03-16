@@ -1,8 +1,16 @@
 <?php
 
+/**
+ * Class Zolago_Payment_Model_Allocation
+ * @method float getAllocationAmount()
+ * @method Zolago_Payment_Model_Allocation setAllocationAmount(float $amount)
+ * @method int getTransactionId()
+ * @method Zolago_Payment_Model_Allocation setTransactionId(int $id)
+ */
 class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY   = 'overpay'; // nadplata
+	const ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND    = 'refund';
 
 	protected $currentLocale;
 	protected $session;
@@ -273,6 +281,23 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			if($orderByAmount) {
 				$collection->addOrder("main_table.allocation_amount");//desc
 			}
+			return $collection;
+		}
+		return false;
+	}
+
+	/**
+	 * @param int|Zolago_Po_Model_Po $po
+	 * @return bool|Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getPoRefunds($po) {
+		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
+		$po_id = $this->getPoId($po);
+
+		$collection = $this->getPoAllocations($po_id);
+		if($collection) {
+			$collection->addPoIdFilter($po_id);
+			$collection->getSelect()->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND);
 			return $collection;
 		}
 		return false;
