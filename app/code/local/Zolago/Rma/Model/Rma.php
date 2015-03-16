@@ -153,12 +153,6 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
     * @return Mage_Sales_Model_Order_Address
     */
    public function getShippingAddress() {
-       if ($customerAddressId = $this->getData('customer_address_id')) {
-            $shippingAddress = Mage::getModel('customer/address')->load($rmaAddressId);
-            if ($shippingAddress->getId()) {
-                return $shippingAddress;
-            }
-       }
 	   if($this->getShippingAddressId()){
 		   $address = $this->getOrder()->getAddressById($this->getShippingAddressId());
 		   if($address->getId()){

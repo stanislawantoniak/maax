@@ -205,7 +205,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
             $breadcrumbsBlock->addCrumb('vendor', array(
 				'label'=>Mage::helper('catalog')->__($vendor->getVendorName()),
-				'title'=>Mage::helper('catalog')->__('Vendor'),
+				'title'=>Mage::helper('catalog')->__($vendor->getVendorName()),
 				'link'=>Mage::getBaseUrl()
 			));
         } else {
