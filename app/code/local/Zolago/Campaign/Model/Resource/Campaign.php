@@ -944,11 +944,27 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
     }
 
+    /**
+     * return array with ids if product is in campaign with type
+     * sale or promo
+     * $type can be custom set
+     * @see Zolago_Campaign_Model_Campaign_Type::TYPE_*
+     *
+     * Example return array
+     * [32339<productId>] => Array
+     *    (
+     *    [0] => 16<campaignId>
+     *    )
+     *
+     * @param $productsIds
+     * @param $vendorId
+     * @param bool $type
+     * @return array
+     */
+    public function getIsProductsInSaleOrPromotion($productsIds, $vendorId, $type = false) {
 
-    public function getIsProductsInSaleOrPromotion($productsIds, $vendor) {
 
-
-        if(empty($vendor)){
+        if(empty($vendorId)){
             return;
         }
         $ids = $this->_getCampaignsAttributesId();
@@ -1003,13 +1019,19 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
 
-        $select->where("campaign.type IN(?)", array(
-            Zolago_Campaign_Model_Campaign_Type::TYPE_SALE,
-            Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION
-        ));
+        if (!$type) {
+            $select->where("campaign.type IN(?)", array(
+                Zolago_Campaign_Model_Campaign_Type::TYPE_SALE,
+                Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION
+            ));
+        } else {
+            $select->where("campaign.type IN(?)", array(
+                $type
+            ));
+        }
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        $select->where("vendor_id=?", $vendor);
+        $select->where("vendor_id=?", $vendorId);
         $select->where("campaign_product.product_id IN(?)", $productsIds);
         $select->where("campaign_product.assigned_to_campaign=1");
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);

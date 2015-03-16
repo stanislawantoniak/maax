@@ -595,6 +595,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
      * @return void
      */
     public function addItemAction() {
+        /** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("zolagopo");
 
         try {
@@ -614,7 +615,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $product = Mage::getModel("catalog/product")->
                    setStoreId($store->getId())->
                    load($request->getParam("product_id"));
-        /* @var $prodcut Mage_Catalog_Model_Product */
+        /** @var $product Mage_Catalog_Model_Product */
 
         $price = $request->getParam("product_price");
         $qty = $request->getParam("product_qty", 1);
@@ -716,7 +717,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                         );
 
             $item->addData($itemData);
-            $po->addItem($item);
+            $po->addItemWithTierCommission($item);
 
             /**
              * @todo add child of configurable item
@@ -725,9 +726,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
              */
 
             Mage::helper("udropship")->addVendorSkus($po);
-            if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
-                Mage::helper("udtiercom")->processPo($po);
-            }
 
             Mage::dispatchEvent("zolagopo_po_item_add", array(
                                     "po"		=> $po,
