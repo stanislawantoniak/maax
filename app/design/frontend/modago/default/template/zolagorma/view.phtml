@@ -11,9 +11,13 @@
 	</h1>
 </div>
 
-<div class="background-wrapper box-wrapper rma-po-list <?php echo $this->getIsClaim($_rma) ? "rma-claim" : "rma-return";?>">
+<div class="section background-wrapper box-wrapper rma-po-list <?php echo $this->getIsClaim($_rma) ? "rma-claim" : "rma-return";?>">
+	<header class="title-section">
+		<div class="headerTop">
+			<h2><?php echo $_helper->__("RMA no."); ?>: <?php echo $_rma->getIncrementId();?></h2>
+		</div>
+	</header>
 	<div class="rma-section rma-caption">
-		<span class="bold"><?php echo $_helper->__("RMA no."); ?></span>: <?php echo $_rma->getIncrementId();?><br/>
 		<span class="bold"><?php echo $_helper->__("RMA Date"); ?></span>: <?php echo Mage::helper("core")->formatDate($_rma->getCreatedAt());?><br/>
 		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <span class="uppercase"><?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?></span>
 	</div>

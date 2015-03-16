@@ -18,6 +18,8 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->addBodyClass('is-content-mode')
                 ->setTemplate('page/1column.phtml');
 
+			$this->getLayout()->getBlock('before_body_end')->unsetChild('searchfaces');
+
 
 		} elseif(!$this->isMixedMode()) {
             $this->getLayout()
@@ -25,6 +27,12 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->addBodyClass('node-type-list')
                 ->addBodyClass('filter-sidebar');
         }
+
+		if($this->isMixedMode()) {
+			$this->getLayout()
+				->getBlock('root')
+				->addBodyClass('filter-sidebar');
+		}
 
         /** @var Zolago_Dropship_Model_Vendor $vendor */
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();

@@ -642,7 +642,7 @@ Mall.Slick = {
 		Mall.Slick.top.init();
 	},
 	isAutoplay: function() {
-		return jQuery(window).width() < 768;
+		return jQuery(window).width() > 767;
 	},
 	top: {
 		slider: false,
@@ -650,7 +650,8 @@ Mall.Slick = {
 		options: {
 			autoplaySpeed: 4000,
 			arrows: false,
-			dots: true
+			dots: true,
+			adaptiveHeight: true
 		},
 		init: function() {
 			var self = this;
