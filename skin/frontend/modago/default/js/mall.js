@@ -660,12 +660,31 @@ Mall.Slick = {
 				if(Mall.Slick.isAutoplay()) {
 					self.options.autoplay = true;
 				}
-				self.slider.slick(self.options);
+				self.slick = self.slider.slick(self.options);
+				self.attachEvents();
 			}
 		},
 		sliderAvailable: function() {
 			var self = this;
 			return jQuery(self.sliderId).length > 0;
+		},
+		attachEvents: function() {
+			var self = this;
+			if(Mall.Slick.isAutoplay()) {
+				jQuery(window).scroll(function () {
+					if (self.inViewport()) {
+						self.slider.slick('slickPlay');
+					} else {
+						self.slider.slick('slickPause');
+					}
+				});
+			}
+		},
+		inViewport: function() {
+			var self = this;
+			var sliderOffset = self.slider.offset().top,
+				windowOffset = jQuery(window).scrollTop();
+			return windowOffset < sliderOffset;
 		}
 	}
 };
