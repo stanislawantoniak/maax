@@ -1,25 +1,47 @@
 <?php
-	class Zolago_Adminhtml_PaymentController extends Mage_Adminhtml_Controller_Action {
+	class Zolago_Adminhtml_PaymentController extends Mage_Adminhtml_Controller_Action
+	{
 
-		public function refundAction() {
+		public function massRefundAction()
+		{
 			$transactions = $this->getRequest()->getParam('txn');
 
-			foreach($transactions as $txnId) {
-				$transaction = Mage::getModel("sales/order_payment_transaction")->load($txnId);
-				var_dump($transaction);
-//				$transaction->setOrderPaymentObject($order->getPayment());
-//				$transaction->loadByTxnId($txnId);
-			}
+			$skipped = 0;
+			$success = 0;
+			$error = 0;
+
 			/** @var Zolago_Dotpay_Model_Client $dotpay */
-			/*$dotpay = Mage::getModel("zolagodotpay/client");
+			$dotpay = Mage::getModel("zolagodotpay/client");
 
-			$request = $this->getRequest();
-			$orderId = $request->getParam('orderid');*/
-			/** @var Zolago_Sales_Model_Order $order */
-			/*$order = Mage::getModel("sales/order")->load($orderId);
+			foreach ($transactions as $txnId) {
+				/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+				$transaction = Mage::getModel("sales/order_payment_transaction")->load($txnId);
+				if ($transaction->getData('txn_type') == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND &&
+					$transaction->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW &&
+					$transaction->getData('is_closed') == "0"
+				) {
 
-			$txnId = $request->getParam('txnid');
+					$order = $transaction->getOrder();
+					$payment = $order->getPayment();
+					$transaction->setOrderPaymentObject($payment);
 
-			$dotpay->makeRefund($order,$txnId);*/
+					//todo: if we'll add more payment providers handle refunds here
+					switch ($payment->getMethod()) {
+						case Zolago_Dotpay_Model_Client::PAYMENT_METHOD:
+							if ($dotpay->makeRefund($order, $transaction)) {
+								$success++;
+							} else {
+								$error++;
+							}
+							break;
+					}
+				} else {
+					$skipped++;
+				}
+			}
+		}
+
+		public function refundAction() {
+
 		}
 	}
