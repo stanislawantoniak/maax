@@ -39,6 +39,16 @@
 					$skipped++;
 				}
 			}
+			if($error) {
+				$this->_getSession()->addError($this->__('%s transactions has not been refunded due to an error.', $error));
+			}
+			if($success) {
+				$this->_getSession()->addSuccess($this->__('%s transactions has been successfully refunded.', $success));
+			}
+			if($skipped) {
+				$this->_getSession()->addWarning($this->__('%s transactions has been skipped during refunding due to incorrect status or transaction type.', $skipped));
+			}
+			$this->_redirect('*/*/');
 		}
 
 		public function refundAction() {
