@@ -35,10 +35,12 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         // NOTE: by now adding product to PO by vendor portal add only simple product
         // ( not pair configurable and simple (with link to configurable) like in standard behaviour )
         $pIds = array(); // Products ids
+        $pAll = array();
         foreach ($po->getAllItems() as $item) {
             /** @var Zolago_Po_Model_Po_Item $item */
+            $pAll[] = $item->getProductId();
             if ($item->getParentItemId() || $item->getOrderItem()->getParentItem() ){
-                Mage::log('ma parenta item: ' . $item->getId(), null, 'mylog.log');
+//                Mage::log('ma parenta item: ' . $item->getId(), null, 'mylog.log');
                 continue;
             }
             if ($this->canSetCommission($item)) {
@@ -49,30 +51,37 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 //        Mage::log($pIds, null, 'mylog.log');
 
         if (empty($pIds)) {
-            Mage::log('no products to process!', null, 'mylog.log');
+//            Mage::log('no products to process!', null, 'mylog.log');
             return;
         }
-        /** @var Mage_Catalog_Model_Resource_Product_Collection $products */
-        $products = Mage::getResourceModel('catalog/product_collection')->addIdFilter($pIds);
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $products */
+        $products = Mage::getResourceModel('zolagocatalog/product_collection');
+        $products->addIdFilter($pIds);
+        $products->addProductFlagAttributeToSelect($po->getStore()->getId());
+        $products->addReversProductRelation();
+
+//        Mage::log($products->getSelect()->__toString(), null, 'mylog.log');
 
         /** @var Zolago_Catalog_Model_Resource_Product_Configurable $modelZCPC */
         $modelZCPC = Mage::getResourceModel('zolagocatalog/product_configurable');
         $productsRelations = $modelZCPC->getConfigurableSimpleRelationArray($pIds);
 //        Mage::log($productsRelations, null, 'mylog.log');
 
-        $allIds = $pIds;
+        $allIds = $pAll;
         foreach ($productsRelations as $k => $v) {
             $allIds[] = $k;
         }
+        $allIds = array_unique($allIds);
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $allProducts */
+        $allProducts = Mage::getResourceModel('zolagocatalog/product_collection');
+        $allProducts->addIdFilter($allIds);
+        $allProducts->addProductFlagAttributeToSelect($po->getStore()->getId());
 
-//        Mage::log($allIds, null, 'mylog.log');
-
-
-        /** @var Zolago_Campaign_Model_Resource_Campaign $resCampaign */
-        $resCampaign = Mage::getModel('zolagocampaign/campaign')->getResource();
-        $productsWithFlagSale = $resCampaign->getIsProductsInSaleOrPromotion($allIds, $vendor->getId(), Zolago_Campaign_Model_Campaign_Type::TYPE_SALE);
-//        Mage::log($productsWithFlagSale, null, 'mylog.log');
-
+//        foreach ($allProducts as $p) {
+//            /** @var Zolago_Catalog_Model_Product $p */
+//            Mage::log($p->getSku(), null, 'mylog.log');
+//            Mage::log($p->getAttributeText('product_flag'), null, 'mylog.log');
+//        }
 
         // If product have attribute for custom commission
         // get info about it
@@ -111,7 +120,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
             /** @var Zolago_Po_Model_Po_Item $item */
 
             if (!$this->canSetCommission($item) || $item->getParentItemId() || $item->getOrderItem()->getParentItem()) {
-                Mage::log('no comm for product: '.$item->getId(), null, 'mylog.log');
+//                Mage::log('no comm for product: '.$item->getId(), null, 'mylog.log');
                 continue;
             }
 
@@ -149,10 +158,8 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     }
                     if ($catId && $topCats->getItemById($catId)) {
                         $_rateToUse = array();
-                        if ($this->isProductHaveFlagSale($product->getId(), $productsRelations, $productsWithFlagSale)) {
+                        if ($this->isProductHaveFlagSale($product, $allProducts)) {
                             // Have flag SALE
-                            Mage::log($product->getId() . " | " . $product->getSku() . ' have flage SALE!', null, 'mylog.log');
-
                             if (isset($tierRates[$catId]) && !empty($tierRates[$catId]['sale_value'])) {
                                 $_rateToUse['value'] = $tierRates[$catId]['sale_value'];
                                 $_isGlobalTier = false;
@@ -194,12 +201,12 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
             // If no commission found for this item
             // then default will be used
             if (!isset($ratesToUse[$itemId])) {
-                Mage::log('No commission found for this item: '.$product->getId() . " | " . $product->getSku(), null, 'mylog.log');
+//                Mage::log('No commission found for this item: '.$product->getId() . " | " . $product->getSku(), null, 'mylog.log');
                 // If 'Default Commission Percent' is set for vendor
                 // use it; if not use default
                 // that same logic for Default SALE commission Percent
                 $vcp = $vendor->getCommissionPercent();
-                if ($this->isProductHaveFlagSale($product->getId(), $productsRelations, $productsWithFlagSale)) {
+                if ($this->isProductHaveFlagSale($product, $allProducts)) {
                     if (!empty($vcp)) {
                         $ratesToUse[$itemId]['value'] = $locale->getNumber($vendor->getSaleCommissionPercent());
                     } else {
@@ -234,46 +241,19 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
     }
 
 
-    /**
-     * For $productsRelations
-     * @see Zolago_Catalog_Model_Resource_Product_Configurable->getConfigurableSimpleRelationArray
-     *
-     * For $productsWithFlagSale
-     * @see Zolago_Campaign_Model_Resource_Campaign->getIsProductsInSaleOrPromotion
-     *
-     * @param $productId
-     * @param $productsRelations
-     * @param $productsWithFlagSale
-     * @return bool
-     */
-    protected function isProductHaveFlagSale($productId, $productsRelations, $productsWithFlagSale) {
+    protected function isProductHaveFlagSale($product, $allProd) {
+
         // Validations
-        if (empty($productId) || empty($productsRelations) || empty($productsWithFlagSale)) {
+        if (empty($product) || empty($productsRelations)) {
             return false;
         }
 
-        // First easy check
-        if (isset($productsWithFlagSale[$productId])) {
+        if ($product->getAttributeText('product_flag') == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+//            Mage::log($product->getId() . " | " . $product->getSku(). " have flag SALE", null, 'mylog.log');
             return true;
         }
-
-        // Getting parentId of simple product
-        $parentId = null;
-        foreach ($productsRelations as $k => $v) {
-            foreach ($v as $simpleId) {
-                if ($simpleId == $productId) {
-                    $parentId = $k;
-                }
-            }
-        }
-
-        // Next easy check
-        if (is_null($parentId)) {
-            return false;
-        }
-
-        // Checking a parent od simple product
-        if (isset($productsRelations[$parentId])) {
+        if ($allProd->getItemById($product->getParentId())->getAttributeText('product_flag') == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+//            Mage::log($product->getId() . " | " . $product->getSku(). " have flag SALE because of parent", null, 'mylog.log');
             return true;
         }
 
