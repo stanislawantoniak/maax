@@ -47,7 +47,7 @@ class Zolago_Payment_Model_Observer
 		            $allocation->setData(array(
 			            'transaction_id' => $item->getData('transaction_id'),
 			            'po_id' => $item->getData('po_id'),
-			            'allocation_amount' => $amountToRefund,
+			            'allocation_amount' => -$amountToRefund,
 			            'allocation_type' => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
 			            'operator_id' => null,
 			            'created_at' => Mage::getSingleton('core/date')->gmtDate(),
@@ -64,7 +64,7 @@ class Zolago_Payment_Model_Observer
 		            $allocation->setData(array(
 			            'transaction_id' => $item->getData('transaction_id'),
 			            'po_id' => $item->getData('po_id'),
-			            'allocation_amount' => abs($amountToRefund),
+			            'allocation_amount' => $amountToRefund,
 			            'allocation_type' => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND,
 			            'operator_id' => null,
 			            'created_at' => Mage::getSingleton('core/date')->gmtDate(),
