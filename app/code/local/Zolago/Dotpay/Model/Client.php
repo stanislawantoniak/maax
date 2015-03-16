@@ -226,7 +226,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			if ($usePost) {
 				curl_setopt($ch, CURLOPT_POST, 1);
 				if($postData) {
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
 					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 						'Content-Type: application/json',
 						'Content-Length: '.strlen($postData))
@@ -264,17 +264,13 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	}
 
 	/**
-	 * @param Zolago_Sales_Model_Order $order
-	 * @param String $txnId
+	 * @param Mage_Sales_Model_Order $order
+	 * @param Mage_Sales_Model_Order_Payment_Transaction $transaction
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function makeRefund($order,$txnId) {
+	public function makeRefund($order,$transaction) {
 		/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
-		$transaction = Mage::getModel("sales/order_payment_transaction");
-		$transaction
-			->setOrderPaymentObject($order->getPayment())
-			->loadByTxnId($txnId);
 		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
 			$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
 			$transaction->getTxnAmount() < 0) { //and amount is negative
@@ -285,7 +281,8 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			try {
 				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
 				if ($response['detail'] == 'ok') {
-					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_PROCESSING);
+					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
+					$transaction->setIsClosed(1);
 					$transaction->save();
 					return true;
 				}
