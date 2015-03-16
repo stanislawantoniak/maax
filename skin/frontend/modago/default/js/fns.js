@@ -134,7 +134,7 @@ jQuery.noConflict();
 					.closest('.table-footer-group')
 					.next('.table-footer-group')
 					.find('.conditions_shipping').html();
-				console.log(html);
+
 			} else {
 				html = $(this)
 					.closest('.table-row')
