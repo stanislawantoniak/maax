@@ -280,6 +280,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			);
 			try {
 				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
+				Mage::log($response,null,'dotpay.log');
 				if ($response['detail'] == 'ok') {
 					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 					$transaction->setIsClosed(1);
