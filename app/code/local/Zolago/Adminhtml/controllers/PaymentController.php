@@ -1,5 +1,5 @@
 <?php
-	class Zolago_Adminhtml_TransactionController extends Mage_Adminhtml_Controller_Action {
+	class Zolago_Adminhtml_PaymentController extends Mage_Adminhtml_Controller_Action {
 
 		public function refundAction() {
 			Mage::log("got here!");
