@@ -17,7 +17,7 @@ abstract class Zolago_Payment_Model_Client {
 	 * @return bool|int
 	 * @throws Exception
 	 */
-    public function saveTransaction($order, $amount, $status, $txnId, $txnType, $data = array(), $comment = "", $parentTrId = 0, $parentTxnId = 0)
+    public function saveTransaction($order, $amount, $status, $txnId, $txnType, $data = array(), $comment = "", $parentTrId = null, $parentTxnId = null)
     {
         if ($order instanceof Mage_Sales_Model_Order
             && is_numeric($amount)
@@ -76,12 +76,10 @@ abstract class Zolago_Payment_Model_Client {
                             "comment" => $comment
                         )
                     );
-
-                    return $transaction->getId();
                 }
             }
         }
-        return false;
+	    return isset($transaction) && $transaction instanceof Mage_Sales_Model_Order_Payment_Transaction ? $transaction->getId() : false;
     }
 
 	/**
