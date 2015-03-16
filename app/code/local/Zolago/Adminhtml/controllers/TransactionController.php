@@ -2,6 +2,7 @@
 	class Zolago_Adminhtml_TransactionController extends Mage_Adminhtml_Controller_Action {
 
 		public function refundAction() {
+			Mage::log("got here!");
 			var_dump($this->getRequest()->getData());
 			die();
 			/** @var Zolago_Dotpay_Model_Client $dotpay */
