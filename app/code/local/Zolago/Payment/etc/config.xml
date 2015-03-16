@@ -64,6 +64,15 @@
 			</modules>
 		</translate>
     </frontend>
+	<admin>
+		<routers>
+			<zolagopayment>
+				<use>admin</use>
+				<module>Zolago_Payment</module>
+				<frontname>payment</frontname>
+			</zolagopayment>
+		</routers>
+	</admin>
 	<default>
 		<payment>
             <zolagopayment_gateway>
