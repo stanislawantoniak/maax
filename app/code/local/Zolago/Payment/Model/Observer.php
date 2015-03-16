@@ -16,6 +16,7 @@ class Zolago_Payment_Model_Observer
             $orderModel = Mage::getModel('sales/order');
             //make refund transactions
             foreach ($collection as $item) {
+				/** @var Zolago_Payment_Model_Allocation $item */
 
                 $amountToRefund = $item->getMaxAllocationAmount();
                 $amount = - $amountToRefund;
@@ -27,16 +28,55 @@ class Zolago_Payment_Model_Observer
 
                 $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW;
 
-                /* @todo change to dotpay txn_id */
-                $txnId = 'MODAGO_TEST_' . Mage::helper('zolagopayment')->RandomStringForRefund(20);
+	            /** @var Zolago_Payment_Helper_Data $helper */
+	            $helper = Mage::helper('zolagopayment');
+                $txnId = $helper->RandomStringForRefund();
 
                 $parentsTxtId = $item->getTxnId();
                 $txnType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND;
 
                 /* @var $client Zolago_Dotpay_Model_Client */
                 $client = Mage::getModel("zolagodotpay/client");
-                $client->saveTransaction($order, $amount, $status, $txnId, $txnType, array(), '', $parentTransactionId,$parentsTxtId);
+                $refundTransactionId = $client->saveTransaction($order, $amount, $status, $txnId, $txnType, array(), '', $parentTransactionId,$parentsTxtId);
 
+	            if($refundTransactionId) {
+		            // remove overpay allocation
+		            /** @var Zolago_Payment_Model_Allocation $allocation */
+		            $allocation = Mage::getModel("zolagopayment/allocation");
+		            $allocation->setData(array(
+			            'transaction_id' => $item->getData('transaction_id'),
+			            'po_id' => $item->getData('po_id'),
+			            'allocation_amount' => $item->getData('allocation_amount') * -1,
+			            'allocation_type' => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
+			            'operator_id' => null,
+			            'created_at' => Mage::getSingleton('core/date')->gmtDate(),
+			            'comment' => $helper->__("Moved to refund"),
+			            'customer_id' => $item->getData('customer_id'),
+			            'vendor_id' => $item->getData('vendor_id'),
+			            'is_automat' => 1
+		            ));
+		            $allocation->save();
+
+		            // create refund allocation
+		            /** @var Zolago_Payment_Model_Allocation $allocation */
+		            $allocation = Mage::getModel("zolagopayment/allocation");
+		            $allocation->setData(array(
+			            'transaction_id' => $item->getData('transaction_id'),
+			            'po_id' => $item->getData('po_id'),
+			            'allocation_amount' => $item->getData('allocation_amount'),
+			            'allocation_type' => Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND,
+			            'operator_id' => null,
+			            'created_at' => Mage::getSingleton('core/date')->gmtDate(),
+			            'comment' => $helper->__("Created refund (id: $txnId)"),
+			            'customer_id' => $item->getData('customer_id'),
+			            'vendor_id' => $item->getData('vendor_id'),
+			            'is_automat' => 1,
+			            'refund_transaction_id' => $refundTransactionId
+		            ));
+		            $allocation->save();
+	            } else {
+		            throw new Mage_Core_Exception("Automatic refund failed for allocation id: ".$item->getId());
+	            }
             }
         }
     }
