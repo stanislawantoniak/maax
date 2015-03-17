@@ -56,7 +56,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 	public function getSliders() {
 		$request = $this->_prepareRequest();
 		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);		
-		$finder = $this->getFinder();		
+		$finder = $this->getFinder();
 		return $finder->request($request);
 	}
 	
@@ -158,7 +158,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
             foreach ($imagesToScale as $type => $imagesToScaleData) {
                 switch ($type) {
                     case Zolago_Banner_Model_Banner_Type::TYPE_SLIDER:
-                        foreach ($imagesToScaleData as $sliderImageData) {
+/*                        foreach ($imagesToScaleData as $sliderImageData) {
                             foreach ($sliderImageData as $sliderImage) {
 
                                 $imageSliderPath = Mage::getBaseDir('media') . $sliderImage['path'];
@@ -172,10 +172,10 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
                             }
                         }
-                        unset($sliderImageData);
+                        unset($sliderImageData);*/
                         break;
                     case Zolago_Banner_Model_Banner_Type::TYPE_BOX:
-                        foreach ($imagesToScaleData as $boxImageData) {
+/*                        foreach ($imagesToScaleData as $boxImageData) {
                             foreach ($boxImageData as $boxImage) {
                                 $imageBoxPath = Mage::getBaseDir('media') . $boxImage['path'];
                                 $imageBoxResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $boxImage['path'];
@@ -183,7 +183,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                                 $this->scaleBannerImage($imageBoxPath, $imageBoxResizePath, self::BANNER_BOX_WIDTH, self::BANNER_BOX_HEIGHT);
                             }
                         }
-                        unset($sliderImageData);
+                        unset($sliderImageData);*/
                         break;
                     case Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION:
                         foreach ($imagesToScaleData as $boxImageData) {
