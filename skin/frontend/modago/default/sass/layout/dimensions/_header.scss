@@ -15,7 +15,7 @@
 body {
 	@media screen and (max-height: 749px) {
 		.headroom--unpinned {
-			top: -60px !important;
+			top: -57px !important;
 		}
 	}
 	@media screen and (min-height: 750px) {
@@ -292,6 +292,7 @@ body {
                 &.open {
                     -webkit-padding-start: 0px !important;
                     display:block;
+                  padding-left:0px !important;
                 }
             }
             li {

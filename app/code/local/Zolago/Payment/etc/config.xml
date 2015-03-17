@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Payment>
-            <version>0.0.11</version>
+            <version>0.0.12</version>
         </Zolago_Payment>
     </modules>
     <global>
@@ -64,6 +64,15 @@
 			</modules>
 		</translate>
     </frontend>
+	<admin>
+		<routers>
+			<zolagopayment>
+				<use>admin</use>
+				<module>Zolago_Payment</module>
+				<frontname>payment</frontname>
+			</zolagopayment>
+		</routers>
+	</admin>
 	<default>
 		<payment>
             <zolagopayment_gateway>
@@ -93,6 +102,22 @@
             <dotpay>
                 <p_details>1</p_details>
             </dotpay>
+            <payment_refunds>
+                <payment_refunds_automatic>2</payment_refunds_automatic>
+            </payment_refunds>
         </payment>
 	</default>
+    <crontab>
+        <jobs>
+            <zolagopayment_automatic_refunds>
+                <schedule>
+                    <!-- Run every 1 minute -->
+                    <cron_expr>0 */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagopayment/observer::processRefunds</model>
+                </run>
+            </zolagopayment_automatic_refunds>
+        </jobs>
+    </crontab>
 </config>

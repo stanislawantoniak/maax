@@ -53,4 +53,9 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 		return $collection;
 	}
 
+    public function RandomStringForRefund()
+    {
+        return MD5(strrev(microtime()));
+    }
+
 }

@@ -6,18 +6,18 @@
     border-color: #ccc;
 
     &:hover {
-      border-color: #4f4f4f;
+      border-color: $gray-dark;
       background-color: #fff;
 
     }
     &:focus {
-      border-color: #4f4f4f;
+      border-color: $gray-dark;
       background-color: #fff;
       box-shadow: none;
 
     }
     .selectboxit-text {
-      color: #1e1e1e;
+      color: $gray-darker;
       text-decoration: none;
       //        text-indent: 10px;
       font-family: Arial, sans-serif;
@@ -44,7 +44,7 @@
     max-height: 200px;
     border-radius: 0;
     background-color: #fff;
-    border-color: #afafaf;
+    border-color: $gray;
     z-index: 100;
     box-shadow: none;
     .selectboxit-option {
@@ -52,13 +52,13 @@
         font-family: Arial, sans-serif;
         font-size: 12px;
         font-weight: normal;
-        color: #1e1e1e;
+        color: $gray-darker;
         text-decoration: none;
       }
     }
     .selectboxit-focus {
       .selectboxit-option-anchor {
-        color: #1e1e1e;
+        color: $gray-darker;
         background: #f2f1f0;
         background-image: none;
         background-repeat: repeat-x;
@@ -154,41 +154,22 @@
 }
 
 /*Rma*/
+
 .condition-wrapper {
   .selectboxit-container {
     width: 100%;
           @media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
             width: 80%;
           }
+    span {
+      height: auto;
+    }
     .selectboxit {
       width: 100%;
       display: block;
-
-//      width: 245px;
-//      @media (max-width: $screen-xs-min) {
-//        width: 200px;
-//      }
-//      @media (min-width: $screen-sm-min) and (max-width: 905px) {
-//        width: 180px;
-//      }
-//      @media (max-width: 400px) {
-//        width: 180px;
-//      }
-//      @media (max-width: 360px) {
-//        width: 170px;
-//      }
-//      @media (max-width: 350px) {
-//        width: 160px;
-//      }
-//      @media (max-width: 340px) {
-//        width: 150px;
-//      }
-//      @media (max-width: 330px) {
-//        width: 135px;
-//      }
-//      @media (max-width: 315px) {
-//        width: 100px;
-//      }
+      .selectboxit-text {
+        height: 100%;
+      }
     }
   }
   &.has-error {

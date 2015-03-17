@@ -453,8 +453,11 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 
 		$customer = $this->_getCustomer();
 		$data = $this->getRequest()->getPost();
+        if(isset($data['email'])){
+            $data['email'] = trim($data['email']);
+        }
 		try {
-			$errors = $this->_getCustomerErrors($this->getRequest()->getPost());
+			$errors = $this->_getCustomerErrors($data);
 			if (empty($errors)) {
 				unset($data['agreement']);
 				$customer->setData($data);
