@@ -109,9 +109,10 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 
     public function addProductFlagAttributeToSelect($storeId = null) {
         if (!empty($storeId)) {
+            $this->setStoreId($storeId);
             $this->addStoreFilter($storeId);
         }
-        $this->addAttributeToSelect('product_flag');
+        $this->addAttributeToFilter('product_flag',Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE);
         return $this;
     }
 
