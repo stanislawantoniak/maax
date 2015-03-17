@@ -5,4 +5,30 @@
       <version>0.0.1</version>
     </GH_Api>
   </modules>
+  <global>
+    <resources>
+      <ghapi_setup>
+        <setup>
+          <module>GH_Api</module>
+        </setup>
+      </ghapi_setup>
+    </resources>
+  </global>
+  <frontend>
+    <routers>
+      <ghapi>
+        <use>standard</use>
+        <args>
+          <module>GH_Api</module>
+          <frontName>ghapi</frontName>
+        </args>
+      </ghapi>
+    </routers>
+    <layout>
+        <updates>
+            <ghapi>
+            </ghapi>
+        </updates>
+    </layout>
+  </frontend>
 </config>
