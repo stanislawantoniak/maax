@@ -383,10 +383,10 @@ class Mage_Index_Model_Indexer
             Mage::log('processed: ', null, 'attributes_log.log');
             Mage::log(print_r($processed, true), null, 'attributes_log.log');
             Mage::log('$hasLocks   ' . $hasLocks, null, 'attributes_log.log');
-            //if (!$hasLocks) {
-                call_user_func_array(array($process, $method), $args);
+            if (!$hasLocks) {
+                //call_user_func_array(array($process, $method), $args);
                 $processed[] = $code;
-            //}
+            }
             Mage::log('processed not locked: ', null, 'attributes_log.log');
             Mage::log(print_r($processed, true), null, 'attributes_log.log');
         }
