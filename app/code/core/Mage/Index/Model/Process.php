@@ -383,17 +383,17 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         while ($event = $eventsCollection->fetchItem()) {
             try {
                 Mage::log('_processEventsCollection processEvent  !!!!! ', null, 'attributes.log');
-                $this->processEvent($event);
-                if (!$skipUnmatched) {
-                    $eventProcessIds = $event->getProcessIds();
-                    if (!isset($eventProcessIds[$this->getId()])) {
-                        $event->addProcessId($this->getId(), null);
-                    }
-                }
+//                $this->processEvent($event);
+//                if (!$skipUnmatched) {
+//                    $eventProcessIds = $event->getProcessIds();
+//                    if (!isset($eventProcessIds[$this->getId()])) {
+//                        $event->addProcessId($this->getId(), null);
+//                    }
+//                }
             } catch (Exception $e) {
                 $event->addProcessId($this->getId(), self::EVENT_STATUS_ERROR);
             }
-            Mage::log('_processEventsCollection save !!!!! ', null, 'attributes.log');
+            Mage::log('_processEventsCollection save  !!!!! ', null, 'attributes.log');
 //            $event->save();
         }
         return $this;
