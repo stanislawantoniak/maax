@@ -223,7 +223,6 @@ class Mage_Index_Model_Indexer
             Mage::log('_runAll', null, 'attributes_log.log');
             $this->_runAll('indexEvents', array($entity, $type));
             $resourceModel->commit();
-            Mage::log('commit', null, 'attributes_log.log');
         } catch (Exception $e) {
             $resourceModel->rollBack();
             throw $e;
@@ -353,19 +352,17 @@ class Mage_Index_Model_Indexer
     {
         $checkLocks = $method != 'register';
         $processed = array();
+        Mage::log(print_r($this->getProcessesCollection(), true), null, 'attributes.log');
         foreach ($this->getProcessesCollection() as $process) {
             $code = $process->getIndexerCode();
-            Mage::log('process code: '.$code, null, 'attributes_log.log');
             if (in_array($code, $processed)) {
                 continue;
             }
             $hasLocks = false;
-            Mage::log('$process->getDepends()', null, 'attributes_log.log');
 
             if ($process->getDepends()) {
                 foreach ($process->getDepends() as $processCode) {
                     $dependProcess = $this->getProcessByCode($processCode);
-
                     if ($dependProcess && !in_array($processCode, $processed)) {
                         if ($checkLocks && $dependProcess->isLocked()) {
                             $hasLocks = true;
@@ -380,15 +377,11 @@ class Mage_Index_Model_Indexer
                     }
                 }
             }
-            Mage::log('processed: ', null, 'attributes_log.log');
-            Mage::log(print_r($processed, true), null, 'attributes_log.log');
-            Mage::log('$hasLocks   ' . $hasLocks, null, 'attributes_log.log');
+
             if (!$hasLocks) {
-                //call_user_func_array(array($process, $method), $args);
+                call_user_func_array(array($process, $method), $args);
                 $processed[] = $code;
             }
-            Mage::log('processed not locked: ', null, 'attributes_log.log');
-            Mage::log(print_r($processed, true), null, 'attributes_log.log');
         }
     }
 
