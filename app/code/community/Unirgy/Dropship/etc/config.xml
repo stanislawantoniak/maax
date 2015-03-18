@@ -84,7 +84,7 @@
             </udropship_mysql4>
             <cataloginventory>
                 <rewrite>
-                    <stock_item>Unirgy_Dropship_Model_Stock_Item</stock_item>
+                    <!--<stock_item>Unirgy_Dropship_Model_Stock_Item</stock_item>-->
                 </rewrite>
             </cataloginventory>
             <tax>
