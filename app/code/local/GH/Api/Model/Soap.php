@@ -59,10 +59,23 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
      */
 
     public function doLogin($loginParameters) {
+        $vendorId = $loginParameters->vendorId;
+        $password = $loginParameters->password;
+        $apiKey = $loginParameters->webApiKey;
+        
+        $model = Mage::getModel('ghapi/user');
         $obj = new StdClass();
-        $obj->status = 1;
-        $obj->message = 'ok';
-        $obj->token = $loginParameters->password.' '.$loginParameters->webApiKey.' '.$loginParameters->vendorId;
+        try {
+            $model->loginUser($vendorId,$password,$apiKey);
+            $token = $model->getSession()->getToken();
+            $obj->status = 1;
+            $obj->message = 'ok';
+            $obj->token = $token;
+        } catch (Exception $ex) {
+            $obj->status = 0;
+            $obj->message = $ex->getMessage();
+            $obj->token = '';
+        }
         return $obj;
     }
 
