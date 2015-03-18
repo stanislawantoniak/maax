@@ -52,8 +52,10 @@ class Mage_CatalogInventory_Model_Resource_Stock_Item extends Mage_Core_Model_Re
      */
     public function loadByProductId(Mage_CatalogInventory_Model_Stock_Item $item, $productId)
     {
+        Mage::log($item->getData(), null, 'attributes.log');
         $select = $this->_getLoadSelect('product_id', $productId, $item)
             ->where('stock_id = :stock_id');
+        Mage::log($select, null, 'attributes.log');
         $data = $this->_getReadAdapter()->fetchRow($select, array(':stock_id' => $item->getStockId()));
         if ($data) {
             $item->setData($data);
