@@ -377,11 +377,12 @@ class Mage_Index_Model_Indexer
 //                    }
 //                }
 //            }
-//
-            if (!$hasLocks) {
-                call_user_func_array(array($process, $method), $args);
-                $processed[] = $code;
-            }
+            Mage::log('$process   '.$process, null, 'attributes.log');
+            Mage::log('$method   '.$method, null, 'attributes.log');
+//            if (!$hasLocks) {
+//                call_user_func_array(array($process, $method), $args);
+//                $processed[] = $code;
+//            }
         }
     }
 
