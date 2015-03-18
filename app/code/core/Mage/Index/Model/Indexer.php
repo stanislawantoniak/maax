@@ -353,12 +353,12 @@ class Mage_Index_Model_Indexer
         $checkLocks = $method != 'register';
         $processed = array();
         Mage::log($this->getProcessesCollection()->getSize(), null, 'attributes.log');
-//        foreach ($this->getProcessesCollection() as $process) {
-//            $code = $process->getIndexerCode();
-//            if (in_array($code, $processed)) {
-//                continue;
-//            }
-//            $hasLocks = false;
+        foreach ($this->getProcessesCollection() as $process) {
+            $code = $process->getIndexerCode();
+            if (in_array($code, $processed)) {
+                continue;
+            }
+            $hasLocks = false;
 //
 //            if ($process->getDepends()) {
 //                foreach ($process->getDepends() as $processCode) {
@@ -377,12 +377,12 @@ class Mage_Index_Model_Indexer
 //                    }
 //                }
 //            }
-//
-//            if (!$hasLocks) {
-//                call_user_func_array(array($process, $method), $args);
-//                $processed[] = $code;
-//            }
-//        }
+
+            if (!$hasLocks) {
+                call_user_func_array(array($process, $method), $args);
+                $processed[] = $code;
+            }
+        }
     }
 
     /**
