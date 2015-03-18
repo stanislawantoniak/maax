@@ -31,7 +31,7 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 			$this
 				->setUserId($user->getId())
 				->setToken($this->generateToken($user->getVendorId()))
-				->setCreatedAt($this->getDateModel()->gmtDate())
+				->setCreatedAt($this->getDate())
 				->save();
 		} else {
 			Mage::throwException("Cannot create session if user is not logged in");
@@ -83,14 +83,15 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	 */
 	protected function getExpirationDate() {
 		$timestamp = time() - (self::GH_API_SESSION_TIME * 60);
-		return $this->getDateModel()->gmtDate(null,$timestamp);
+		return $this->getDate($timestamp);
 	}
 
 	/**
-	 * Gets Mage date model
-	 * @return Mage_Core_Model_Date
+	 * Gets date based on timestamp or current one if timestamp is null
+	 * @param int|null $timestamp
+	 * @return bool|string
 	 */
-	protected function getDateModel() {
-		return Mage::getSingleton('core/date');
+	protected function getDate($timestamp=null) {
+		return date('Y-m-d H:i:s',$timestamp);
 	}
 }
