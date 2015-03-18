@@ -364,7 +364,7 @@ class Mage_Index_Model_Indexer
             if ($process->getDepends()) {
                 foreach ($process->getDepends() as $processCode) {
                     $dependProcess = $this->getProcessByCode($processCode);
-                    Mage::log('depend process code: '.$dependProcess, null, 'attributes_log.log');
+
                     if ($dependProcess && !in_array($processCode, $processed)) {
                         if ($checkLocks && $dependProcess->isLocked()) {
                             $hasLocks = true;
@@ -379,7 +379,7 @@ class Mage_Index_Model_Indexer
                     }
                 }
             }
-
+            Mage::log(print_r($processed, true), null, 'attributes_log.log');
             if (!$hasLocks) {
                 call_user_func_array(array($process, $method), $args);
                 $processed[] = $code;
