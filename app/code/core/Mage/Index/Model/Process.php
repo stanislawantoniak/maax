@@ -278,12 +278,13 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         $this->_getResource()->updateProcessStartDate($this);
         $this->_setEventNamespace($event);
         $isError = false;
-//
-//        try {
-//            $this->getIndexer()->processEvent($event);
-//        } catch (Exception $e) {
-//            $isError = true;
-//        }
+
+        try {
+            Mage::log('$this->getIndexer()->processEvent()', null, 'attributes.log');
+            //$this->getIndexer()->processEvent($event);
+        } catch (Exception $e) {
+            $isError = true;
+        }
         $event->resetData();
         $this->_resetEventNamespace($event);
         $this->_getResource()->updateProcessEndDate($this);
