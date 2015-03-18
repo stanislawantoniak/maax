@@ -353,18 +353,18 @@ class Mage_Index_Model_Indexer
         $checkLocks = $method != 'register';
         $processed = array();
         foreach ($this->getProcessesCollection() as $process) {
-            Mage::log($process, null, 'attributes_log.log');
             $code = $process->getIndexerCode();
-            Mage::log($code, null, 'attributes_log.log');
+            Mage::log('process code: '.$code, null, 'attributes_log.log');
             if (in_array($code, $processed)) {
                 continue;
             }
             $hasLocks = false;
             Mage::log('$process->getDepends()', null, 'attributes_log.log');
-            Mage::log($process->getDepends(), null, 'attributes_log.log');
+
             if ($process->getDepends()) {
                 foreach ($process->getDepends() as $processCode) {
                     $dependProcess = $this->getProcessByCode($processCode);
+                    Mage::log('depend process code: '.$dependProcess, null, 'attributes_log.log');
                     if ($dependProcess && !in_array($processCode, $processed)) {
                         if ($checkLocks && $dependProcess->isLocked()) {
                             $hasLocks = true;
