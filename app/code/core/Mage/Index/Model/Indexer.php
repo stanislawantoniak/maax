@@ -216,21 +216,24 @@ class Mage_Index_Model_Indexer
             $this->_currentEvent = array($entity, $type);
             $this->_changeKeyStatus(false);
         }
-
+        Mage::log('beginTransaction', null, 'attributes_log.log');
         $resourceModel->beginTransaction();
         $this->_allowTableChanges = false;
         try {
+            Mage::log('_runAll', null, 'attributes_log.log');
             $this->_runAll('indexEvents', array($entity, $type));
             $resourceModel->commit();
         } catch (Exception $e) {
             $resourceModel->rollBack();
             throw $e;
         }
+        Mage::log('$allowTableChanges', null, 'attributes_log.log');
         if ($allowTableChanges) {
             $this->_allowTableChanges = true;
             $this->_changeKeyStatus(true);
             $this->_currentEvent = null;
         }
+        Mage::log('end_index_events', null, 'attributes_log.log');
         Mage::dispatchEvent('end_index_events' . $this->_getEventTypeName($entity, $type));
         return $this;
     }
