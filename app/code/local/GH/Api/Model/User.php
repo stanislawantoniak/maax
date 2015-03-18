@@ -21,6 +21,10 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	protected $isLoggedIn = false;
 	protected $session;
 
+	protected function _construct() {
+		$this->_init('ghapi/user');
+	}
+
 	/**
 	 * Creates new api user for vendor
 	 * @param int $vendorId

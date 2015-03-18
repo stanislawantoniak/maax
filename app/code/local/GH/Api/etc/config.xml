@@ -17,7 +17,7 @@
 				<resourceModel>ghapi_resource</resourceModel>
 			</ghapi>
 			<ghapi_resource>
-				<class>Zolago_Payment_Model_Resource</class>
+				<class>GH_Api_Model_Resource</class>
 				<entities>
 					<user>
 						<table>gh_api_user</table>

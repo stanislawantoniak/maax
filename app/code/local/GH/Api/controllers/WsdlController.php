@@ -10,4 +10,11 @@ class GH_Api_WsdlController extends Mage_Core_Controller_Front_Action {
         $this->getResponse()	
             ->setHeader('Content-type','text/xml',true);
     }
+
+	public function testAction() {
+		/** @var GH_Api_Model_User $user */
+		$user = Mage::getModel('ghapi/user');
+		$user->createUser(2,'testtest123');
+		var_dump($user->getData());
+	}
 }

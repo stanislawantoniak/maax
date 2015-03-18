@@ -16,6 +16,11 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	const GH_API_SESSION_TOKEN_ALGO = 'sha256';
 	const GH_API_SESSION_TIME = 60; //session time in minutes
 
+	protected function _construct() {
+		$this->_init('ghapi/session');
+	}
+
+
 	/**
 	 * @param GH_Api_Model_User $user
 	 * @return GH_Api_Model_Session
