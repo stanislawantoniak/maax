@@ -1,6 +1,5 @@
 <?php
 class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
-	const GH_API_MESSAGES = '';
 	const GH_API_MESSAGE_NEW_ORDER = 'newOrder';
 	const GH_API_MESSAGE_CANCELLED_ORDER = 'cancelledOrder';
 	const GH_API_MESSAGE_PAYMENT_DATA_CHANGED = 'paymentDataChanged';
