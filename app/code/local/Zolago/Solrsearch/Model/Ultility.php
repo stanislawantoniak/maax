@@ -153,7 +153,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		$rows = $resourceModel->getFlatProducts($storeId, $allIds, array(
 			Zolago_Solrsearch_Model_Resource_Improve::JOIN_PRICE => true,
-			Zolago_Solrsearch_Model_Resource_Improve::JOIN_STOCK => true,
+			Zolago_Solrsearch_Model_Resource_Improve::JOIN_STOCK => false,
 			Zolago_Solrsearch_Model_Resource_Improve::JOIN_URL => true,
 		));
 		
