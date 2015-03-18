@@ -71,7 +71,7 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 		/** @var GH_Api_Model_Session $session */
 		$session =  $this->getCollection()
 			->addFieldToFilter('token',$token)
-			->addFieldToFilter('created_at',$this->getExpirationDate())
+			->addFieldToFilter('created_at',array('gt' => $this->getExpirationDate()))
 			->getFirstItem();
 		$this->setData($session->getData());
 		return $this;
