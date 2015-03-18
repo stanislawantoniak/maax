@@ -20,10 +20,10 @@ if (!empty($sliders) || !empty($boxes)): ?>
 							<a href="<?php echo $slide['url']; ?>">
 						<?php endif; ?>
 						<?php if($i == 1): ?>
-							<img src="<?php echo Mage::getBaseUrl('media') . $this->getImageResizePath($sliderType) . $slide['path']; ?>"
+							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $slide['path']; ?>"
 						         class="hidden-xs" />
 						<?php else: ?>
-							<img src="<?php echo Mage::getBaseUrl('media') . $this->getImageResizeMobilePath($sliderType) . $slide['path']; ?>"
+							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $slide['path']; ?>"
 						         class="visible-xs" />
 						<?php endif; ?>
 						<?php if(!empty($slide['url'])): ?>
@@ -65,7 +65,7 @@ if (!empty($sliders) || !empty($boxes)): ?>
                                 <?php if(!empty($b['url'])): ?>
                                 <a href="<?php echo $b['url']; ?>">
                                     <?php endif; ?>
-                                    <img src="<?php echo Mage::getBaseUrl('media')  . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
+                                    <img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
                                     <?php if(!empty($b['url'])): ?>
                                 </a>
                             <?php endif; ?>

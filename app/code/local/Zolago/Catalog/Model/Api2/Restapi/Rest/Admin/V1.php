@@ -50,7 +50,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     protected function _create($data)
     {
-
         $json = json_encode($data);
 
         if (!empty($data)) {
