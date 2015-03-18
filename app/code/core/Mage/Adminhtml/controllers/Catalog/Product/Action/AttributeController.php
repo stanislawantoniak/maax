@@ -120,7 +120,7 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                 $stockItem = Mage::getModel('cataloginventory/stock_item');
                 $stockItem->setProcessIndexEvents(false);
                 $stockItemSaved = false;
-
+Mage::log($this->_getHelper()->getProductIds(), null, 'attributes.log');
                 foreach ($this->_getHelper()->getProductIds() as $productId) {
                     $stockItem->setData(array());
                     $stockItem->loadByProduct($productId)
@@ -162,9 +162,9 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                 /**
                  * @deprecated since 1.3.2.2
                  */
-//                Mage::dispatchEvent('catalog_product_to_website_change', array(
-//                    'products' => $productIds
-//                ));
+                Mage::dispatchEvent('catalog_product_to_website_change', array(
+                    'products' => $productIds
+                ));
 
                 $notice = Mage::getConfig()->getNode('adminhtml/messages/website_chnaged_indexers/label');
                 if ($notice) {
