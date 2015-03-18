@@ -190,7 +190,7 @@ class Unirgy_Dropship_Model_Stock_Item extends Mage_CatalogInventory_Model_Stock
     public function verifyNotification($qty = null)
     {
         $result = parent::verifyNotification($qty);
-        Mage::dispatchEvent('udropship_stock_item_verifyNotification', array('item'=>$this, '$qty'=>$qty, 'vars'=>array('result'=>&$result)));
+        //Mage::dispatchEvent('udropship_stock_item_verifyNotification', array('item'=>$this, '$qty'=>$qty, 'vars'=>array('result'=>&$result)));
         return $result;
     }
 
