@@ -372,7 +372,6 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
 
     public function cataloginventory_stock_item_save_before($observer)
     {
-        Mage::log('cataloginventory_stock_item_save_before', null, 'attributes_log.log');
         return;
         // NOT USED
         $item = $observer->getEvent()->getItem();

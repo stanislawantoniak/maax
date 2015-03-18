@@ -205,7 +205,7 @@ class Mage_Index_Model_Indexer
      * @return  Mage_Index_Model_Indexer
      */
     public function indexEvents($entity=null, $type=null)
-    {
+    {Mage::log('indexEvents function', null, 'attributes_log.log');
         Mage::dispatchEvent('start_index_events' . $this->_getEventTypeName($entity, $type));
 
         /** @var $resourceModel Mage_Index_Model_Resource_Process */
