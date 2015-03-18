@@ -298,27 +298,27 @@ class Unirgy_Dropship_Helper_Catalog extends Mage_Core_Helper_Abstract
 
     public function reindexPids($pIds)
     {
-        $indexer = Mage::getSingleton('index/indexer');
-        $pAction = Mage::getModel('catalog/product_action');
-        $idxEvent = Mage::getModel('index/event')
-            ->setEntity(Mage_Catalog_Model_Product::ENTITY)
-            ->setType(Mage_Index_Model_Event::TYPE_MASS_ACTION)
-            ->setDataObject($pAction);
-        /* hook to cheat index process to be executed */
-        $pAction->setWebsiteIds(array(0));
-        $pAction->setProductIds($pIds);
-        foreach (array(
-            'cataloginventory_stock','catalog_product_attribute','catalog_product_price',
-            'tag_summary','catalog_category_product','udropship_vendor_product_assoc'
-        ) as $idxKey
-        ) {
-            $indexer->getProcessByCode($idxKey)->register($idxEvent)->processEvent($idxEvent);
-        }
-        Mage::getSingleton('catalogsearch/fulltext')->rebuildIndex(null, $pIds);
-        foreach ($pIds as $pId) {
-            Mage::getSingleton('catalog/product_flat_indexer')->updateProduct($pId);
-            Mage::getSingleton('catalog/url')->refreshProductRewrite($pId);
-        }
+//        $indexer = Mage::getSingleton('index/indexer');
+//        $pAction = Mage::getModel('catalog/product_action');
+//        $idxEvent = Mage::getModel('index/event')
+//            ->setEntity(Mage_Catalog_Model_Product::ENTITY)
+//            ->setType(Mage_Index_Model_Event::TYPE_MASS_ACTION)
+//            ->setDataObject($pAction);
+//        /* hook to cheat index process to be executed */
+//        $pAction->setWebsiteIds(array(0));
+//        $pAction->setProductIds($pIds);
+//        foreach (array(
+//            'cataloginventory_stock','catalog_product_attribute','catalog_product_price',
+//            'tag_summary','catalog_category_product','udropship_vendor_product_assoc'
+//        ) as $idxKey
+//        ) {
+//            $indexer->getProcessByCode($idxKey)->register($idxEvent)->processEvent($idxEvent);
+//        }
+//        Mage::getSingleton('catalogsearch/fulltext')->rebuildIndex(null, $pIds);
+//        foreach ($pIds as $pId) {
+//            Mage::getSingleton('catalog/product_flat_indexer')->updateProduct($pId);
+//            Mage::getSingleton('catalog/url')->refreshProductRewrite($pId);
+//        }
     }
 
     public function getWebsiteValues($hash=false, $selector=true)
