@@ -100,7 +100,6 @@ class Unirgy_Dropship_Model_Indexer_VendorProductAssoc extends Mage_Index_Model_
 
     protected function _processEvent(Mage_Index_Model_Event $event)
     {
-        Mage::log('_processEvent  Unirgy_Dropship_Model_Indexer_VendorProductAssoc', null, 'attributes.log');
         $data = $event->getNewData();
         if (!empty($data['udreindex_product_ids'])) {
             $this->_getResource()->reindexProducts($data['udreindex_product_ids']);
