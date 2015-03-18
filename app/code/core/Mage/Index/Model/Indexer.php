@@ -367,7 +367,7 @@ class Mage_Index_Model_Indexer
                         if ($checkLocks && $dependProcess->isLocked()) {
                             $hasLocks = true;
                         } else {
-                            //call_user_func_array(array($dependProcess, $method), $args);
+                            call_user_func_array(array($dependProcess, $method), $args);
                             if ($checkLocks && $dependProcess->getMode() == Mage_Index_Model_Process::MODE_MANUAL) {
                                 $hasLocks = true;
                             } else {
