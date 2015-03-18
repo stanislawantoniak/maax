@@ -383,7 +383,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         while ($event = $eventsCollection->fetchItem()) {
             try {
                 Mage::log('_processEventsCollection processEvent  !!!!! ', null, 'attributes.log');
-//                $this->processEvent($event);
+                $this->processEvent($event);
 //                if (!$skipUnmatched) {
 //                    $eventProcessIds = $event->getProcessIds();
 //                    if (!isset($eventProcessIds[$this->getId()])) {
@@ -394,7 +394,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
                 $event->addProcessId($this->getId(), self::EVENT_STATUS_ERROR);
             }
             Mage::log('_processEventsCollection save  !!!!! ', null, 'attributes.log');
-//            $event->save();
+            $event->save();
         }
         return $this;
     }
