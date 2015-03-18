@@ -354,10 +354,10 @@ class Mage_Index_Model_Indexer
         $processed = array();
         Mage::log($this->getProcessesCollection()->getSize(), null, 'attributes.log');
         foreach ($this->getProcessesCollection() as $process) {
-//            $code = $process->getIndexerCode();
-//            if (in_array($code, $processed)) {
-//                continue;
-//            }
+            $code = $process->getIndexerCode();
+            if (in_array($code, $processed)) {
+                continue;
+            }
 //            $hasLocks = false;
 //
 //            if ($process->getDepends()) {
