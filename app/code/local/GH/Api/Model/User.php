@@ -172,7 +172,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	 */
 	public function generateApiKey($vendor_id) {
 		$string = mt_rand(1000,2000).microtime().$vendor_id;
-		$data = shuffle($string);
+		$data = str_shuffle($string);
 		return hash(self::GH_API_USER_API_KEY_ALGO,$data);
 	}
 
