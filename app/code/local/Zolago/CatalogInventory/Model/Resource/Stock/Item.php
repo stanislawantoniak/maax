@@ -37,22 +37,22 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
      */
     public function saveCatalogInventoryStockItem($insertData)
     {
-//        $this->beginTransaction();
-//        try {
-//            $stockId = $this->getStockId();
-//
-//            $insert = sprintf(
-//                "INSERT INTO %s (product_id,qty,is_in_stock,stock_id) VALUES %s "
-//                . " ON DUPLICATE KEY UPDATE qty=VALUES(qty),is_in_stock=VALUES(is_in_stock),stock_id=%s",
-//                $this->getMainTable(), $insertData, $stockId
-//            );
-//
-//            $this->_getWriteAdapter()->query($insert);
-//            $this->_getWriteAdapter()->commit();
-//        } catch (Exception $e) {
-//            $this->rollBack();
-//            throw $e;
-//        }
+        $this->beginTransaction();
+        try {
+            $stockId = $this->getStockId();
+
+            $insert = sprintf(
+                "INSERT INTO %s (product_id,qty,is_in_stock,stock_id) VALUES %s "
+                . " ON DUPLICATE KEY UPDATE qty=VALUES(qty),is_in_stock=VALUES(is_in_stock),stock_id=%s",
+                $this->getMainTable(), $insertData, $stockId
+            );
+
+            $this->_getWriteAdapter()->query($insert);
+            $this->_getWriteAdapter()->commit();
+        } catch (Exception $e) {
+            $this->rollBack();
+            throw $e;
+        }
 
         return $this;
     }
