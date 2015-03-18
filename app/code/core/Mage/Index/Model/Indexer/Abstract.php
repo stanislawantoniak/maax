@@ -99,7 +99,9 @@ abstract class Mage_Index_Model_Indexer_Abstract extends Mage_Core_Model_Abstrac
      */
     public function processEvent(Mage_Index_Model_Event $event)
     {
+        Mage::log('processEvent(Mage_Index_Model_Event $event)', null, 'attributes.log');
         if ($this->matchEvent($event)) {
+            Mage::log('$this->_processEvent($event)', null, 'attributes.log');
             $this->_processEvent($event);
         }
         return $this;

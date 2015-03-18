@@ -266,6 +266,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
      */
     public function processEvent(Mage_Index_Model_Event $event)
     {
+        Mage::log('processEvent !!!!! ', null, 'attributes.log');
         if (!$this->matchEvent($event)) {
             return $this;
         }
@@ -279,6 +280,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         $isError = false;
 
         try {
+            Mage::log('$this->getIndexer()->processEvent()', null, 'attributes.log');
             $this->getIndexer()->processEvent($event);
         } catch (Exception $e) {
             $isError = true;
@@ -326,7 +328,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
      * @return  Mage_Index_Model_Process
      */
     public function indexEvents($entity=null, $type=null)
-    {
+    {Mage::log('process indexEvents!!!!!!!   ', null, 'attributes.log');
         /**
          * Check if process indexer can match entity code and action type
          */
@@ -356,7 +358,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
             if ($type !== null) {
                 $eventsCollection->addTypeFilter($type);
             }
-
+            Mage::log('process indexEvents!!!!!!!   _processEventsCollection', null, 'attributes.log');
             $this->_processEventsCollection($eventsCollection);
             $this->unlock();
         } catch (Exception $e) {
@@ -377,10 +379,12 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         Mage_Index_Model_Resource_Event_Collection $eventsCollection,
         $skipUnmatched = true
     ) {
+        Mage::log('_processEventsCollection !!!!! ', null, 'attributes.log');
         // We can't reload the collection because of transaction
         /** @var $event Mage_Index_Model_Event */
         while ($event = $eventsCollection->fetchItem()) {
             try {
+                Mage::log('_processEventsCollection processEvent  !!!!! ', null, 'attributes.log');
                 $this->processEvent($event);
                 if (!$skipUnmatched) {
                     $eventProcessIds = $event->getProcessIds();
@@ -391,6 +395,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
             } catch (Exception $e) {
                 $event->addProcessId($this->getId(), self::EVENT_STATUS_ERROR);
             }
+            Mage::log('_processEventsCollection save  !!!!! ', null, 'attributes.log');
             $event->save();
         }
         return $this;
