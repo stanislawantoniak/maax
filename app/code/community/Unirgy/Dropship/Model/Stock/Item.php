@@ -60,21 +60,21 @@ class Unirgy_Dropship_Model_Stock_Item extends Mage_CatalogInventory_Model_Stock
     public function getIsInStock()
     {
         $result = $this->getAlwaysInStock() || parent::getIsInStock();
-        //Mage::dispatchEvent('udropship_stock_item_getIsInStock', array('item'=>$this, 'vars'=>array('result'=>&$result)));
+        Mage::dispatchEvent('udropship_stock_item_getIsInStock', array('item'=>$this, 'vars'=>array('result'=>&$result)));
         return $result;
     }
 
     public function checkQty($qty)
     {
         $result = $this->getAlwaysInStock() || parent::checkQty($qty);
-        //Mage::dispatchEvent('udropship_stock_item_checkQty', array('item'=>$this, 'vars'=>array('result'=>&$result), 'qty'=>$qty));
+        Mage::dispatchEvent('udropship_stock_item_checkQty', array('item'=>$this, 'vars'=>array('result'=>&$result), 'qty'=>$qty));
         return $result;
     }
 
     public function getQty()
     {
         $qty = $this->getData('qty');#$this->getAlwaysInStock() ? 999999999 : $this->getData('qty');
-        //Mage::dispatchEvent('udropship_stock_item_getQty', array('item'=>$this, 'vars'=>array('qty'=>&$qty)));
+        Mage::dispatchEvent('udropship_stock_item_getQty', array('item'=>$this, 'vars'=>array('qty'=>&$qty)));
         return $qty;
     }
 
@@ -92,7 +92,7 @@ class Unirgy_Dropship_Model_Stock_Item extends Mage_CatalogInventory_Model_Stock
                     : (int) Mage::getStoreConfigFlag(self::XML_PATH_BACKORDERS);
             }
         }
-        //Mage::dispatchEvent('udropship_stock_item_getBackorders', array('item'=>$this, 'vars'=>array('backorders'=>&$backorders)));
+        Mage::dispatchEvent('udropship_stock_item_getBackorders', array('item'=>$this, 'vars'=>array('backorders'=>&$backorders)));
         return $backorders;
     }
 
@@ -158,7 +158,7 @@ class Unirgy_Dropship_Model_Stock_Item extends Mage_CatalogInventory_Model_Stock
         if ($this->getAlwaysInStock()) {
             $result->setItemBackorders(0);
         }
-        //Mage::dispatchEvent('udropship_stock_item_checkQuoteItemQty', array('item'=>$this, 'vars'=>array('result'=>&$result)));
+        Mage::dispatchEvent('udropship_stock_item_checkQuoteItemQty', array('item'=>$this, 'vars'=>array('result'=>&$result)));
         return $result;
     }
 
@@ -177,20 +177,20 @@ class Unirgy_Dropship_Model_Stock_Item extends Mage_CatalogInventory_Model_Stock
     {
         parent::_beforeSave();
 
-        //Mage::dispatchEvent('udropship_stock_item_save_before', array('item' => $this));
+        Mage::dispatchEvent('udropship_stock_item_save_before', array('item' => $this));
     }
 
     public function verifyStock($qty = null)
     {
         $result = parent::verifyStock($qty);
-        //Mage::dispatchEvent('udropship_stock_item_verifyStock', array('item'=>$this, 'qty'=>$qty, 'vars'=>array('result'=>&$result)));
+        Mage::dispatchEvent('udropship_stock_item_verifyStock', array('item'=>$this, 'qty'=>$qty, 'vars'=>array('result'=>&$result)));
         return $result;
     }
 
     public function verifyNotification($qty = null)
     {
         $result = parent::verifyNotification($qty);
-        //Mage::dispatchEvent('udropship_stock_item_verifyNotification', array('item'=>$this, '$qty'=>$qty, 'vars'=>array('result'=>&$result)));
+        Mage::dispatchEvent('udropship_stock_item_verifyNotification', array('item'=>$this, '$qty'=>$qty, 'vars'=>array('result'=>&$result)));
         return $result;
     }
 
