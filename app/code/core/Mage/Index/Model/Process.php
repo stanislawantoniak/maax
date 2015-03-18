@@ -326,7 +326,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
      * @return  Mage_Index_Model_Process
      */
     public function indexEvents($entity=null, $type=null)
-    {
+    {Mage::log('process indexEvents!!!!!!!   ', null, 'attributes.log');
         /**
          * Check if process indexer can match entity code and action type
          */
