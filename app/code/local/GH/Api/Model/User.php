@@ -201,7 +201,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	 * Gets session variable
 	 * @return GH_Api_Model_Session
 	 */
-	protected function getSession() {
+	public function getSession() {
 		if(is_null($this->session)) {
 			$this->setSession($this->getSessionModel());
 		}

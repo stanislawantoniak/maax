@@ -17,8 +17,13 @@ class GH_Api_WsdlController extends Mage_Core_Controller_Front_Action {
 		try {
 			$user->createUser(3, 'testtest123');
 		} catch(Exception $e) {
-			echo $e->getMessage()."\n";
+			echo $e->getMessage()."\n\n\n";
 		}
+
+
+		$user->loginUser(3,'testtest123','e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+		echo "Is logged in: ".($user->isLoggedIn() ? 'yes' : 'no');
 		var_dump($user->getData());
+		var_dump($user->getSession());
 	}
 }
