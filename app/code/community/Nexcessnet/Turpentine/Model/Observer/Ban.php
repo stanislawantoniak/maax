@@ -110,6 +110,7 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
      * @return null
      */
     public function banProductPageCacheCheckStock( $eventObject ) {
+        Mage::log('banProductPageCacheCheckStock', null, 'attributes_log.log');
         if( Mage::helper( 'turpentine/varnish' )->getVarnishEnabled() ) {
             $item = $eventObject->getItem();
             if( $item->getStockStatusChangedAutomatically() ||

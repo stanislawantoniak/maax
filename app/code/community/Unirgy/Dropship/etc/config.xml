@@ -344,15 +344,15 @@
                     </udropship>
                 </observers>
             </catalog_product_collection_load_after>
-            <!--<cataloginventory_stock_item_save_before>-->
-                <!--<observers>-->
-                    <!--<udropship>-->
-                        <!--<type>singleton</type>-->
-                        <!--<class>udropship/observer</class>-->
-                        <!--<method>cataloginventory_stock_item_save_before</method>-->
-                    <!--</udropship>-->
-                <!--</observers>-->
-            <!--</cataloginventory_stock_item_save_before>-->
+            <cataloginventory_stock_item_save_before>
+                <observers>
+                    <udropship>
+                        <type>singleton</type>
+                        <class>udropship/observer</class>
+                        <method>cataloginventory_stock_item_save_before</method>
+                    </udropship>
+                </observers>
+            </cataloginventory_stock_item_save_before>
 
             <sales_order_save_after>
                 <observers>

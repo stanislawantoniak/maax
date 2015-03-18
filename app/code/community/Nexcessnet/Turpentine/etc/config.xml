@@ -266,14 +266,14 @@
                     </turpentine_varnish_review_save_after>
                 </observers>
             </review_save_after>
-            <!--<cataloginventory_stock_item_save_after>-->
-                <!--<observers>-->
-                    <!--<turpentine_varnish_cataloginventory_stock_item_save_after>-->
-                        <!--<class>turpentine/observer_ban</class>-->
-                        <!--<method>banProductPageCacheCheckStock</method>-->
-                    <!--</turpentine_varnish_cataloginventory_stock_item_save_after>-->
-                <!--</observers>-->
-             <!--</cataloginventory_stock_item_save_after>-->
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <turpentine_varnish_cataloginventory_stock_item_save_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banProductPageCacheCheckStock</method>
+                    </turpentine_varnish_cataloginventory_stock_item_save_after>
+                </observers>
+             </cataloginventory_stock_item_save_after>
             <catalog_category_save_commit_after>
                 <observers>
                     <turpentine_varnish_catalog_category_save_commit_after>
