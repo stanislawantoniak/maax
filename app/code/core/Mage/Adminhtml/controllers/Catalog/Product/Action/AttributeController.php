@@ -120,7 +120,7 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                 $stockItem = Mage::getModel('cataloginventory/stock_item');
                 $stockItem->setProcessIndexEvents(false);
                 $stockItemSaved = false;
-Mage::log($this->_getHelper()->getProductIds(), null, 'attributes.log');
+
                 foreach ($this->_getHelper()->getProductIds() as $productId) {
                     $stockItem->setData(array());
                     $stockItem->loadByProduct($productId)
