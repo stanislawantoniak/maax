@@ -383,7 +383,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         while ($event = $eventsCollection->fetchItem()) {
             try {
                 Mage::log('_processEventsCollection processEvent  !!!!! ', null, 'attributes.log');
-                $this->processEvent($event);
+//                $this->processEvent($event);
 //                if (!$skipUnmatched) {
 //                    $eventProcessIds = $event->getProcessIds();
 //                    if (!isset($eventProcessIds[$this->getId()])) {
