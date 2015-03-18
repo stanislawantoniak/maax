@@ -136,7 +136,6 @@ class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
      * @param   Mage_Index_Model_Event $event
      */
     protected function _processEvent(Mage_Index_Model_Event $event) {
-        Mage::log('$this->_processEvent($event)  Mana_Db_Model_Entity_Indexer', null, 'attributes.log');
         $this->process($event->getNewData());
     }
 

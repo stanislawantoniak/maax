@@ -140,7 +140,6 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                 }
 
                 if ($stockItemSaved) {
-                    Mage::log('indexEvents', null, 'attributes_log.log');
                     Mage::getSingleton('index/indexer')->indexEvents(
                         Mage_CatalogInventory_Model_Stock_Item::ENTITY,
                         Mage_Index_Model_Event::TYPE_SAVE
