@@ -330,39 +330,39 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         /**
          * Check if process indexer can match entity code and action type
          */
-//        if ($entity !== null && $type !== null) {
-//            if (!$this->getIndexer()->matchEntityAndType($entity, $type)) {
-//                return $this;
-//            }
-//        }
-//
-//        if ($this->getMode() == self::MODE_MANUAL) {
-//            return $this;
-//        }
-//
-//        if ($this->isLocked()) {
-//            return $this;
-//        }
-//
-//        $this->lock();
-//        try {
-//            /**
-//             * Prepare events collection
-//             */
-//            $eventsCollection = $this->getUnprocessedEventsCollection();
-//            if ($entity !== null) {
-//                $eventsCollection->addEntityFilter($entity);
-//            }
-//            if ($type !== null) {
-//                $eventsCollection->addTypeFilter($type);
-//            }
-//
-//            $this->_processEventsCollection($eventsCollection);
-//            $this->unlock();
-//        } catch (Exception $e) {
-//            $this->unlock();
-//            throw $e;
-//        }
+        if ($entity !== null && $type !== null) {
+            if (!$this->getIndexer()->matchEntityAndType($entity, $type)) {
+                return $this;
+            }
+        }
+
+        if ($this->getMode() == self::MODE_MANUAL) {
+            return $this;
+        }
+
+        if ($this->isLocked()) {
+            return $this;
+        }
+
+        $this->lock();
+        try {
+            /**
+             * Prepare events collection
+             */
+            $eventsCollection = $this->getUnprocessedEventsCollection();
+            if ($entity !== null) {
+                $eventsCollection->addEntityFilter($entity);
+            }
+            if ($type !== null) {
+                $eventsCollection->addTypeFilter($type);
+            }
+            Mage::log('process indexEvents!!!!!!!   _processEventsCollection', null, 'attributes.log');
+            //$this->_processEventsCollection($eventsCollection);
+            $this->unlock();
+        } catch (Exception $e) {
+            $this->unlock();
+            throw $e;
+        }
         return $this;
     }
 
