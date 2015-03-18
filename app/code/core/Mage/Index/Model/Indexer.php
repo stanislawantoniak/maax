@@ -223,6 +223,7 @@ class Mage_Index_Model_Indexer
             Mage::log('_runAll', null, 'attributes_log.log');
             $this->_runAll('indexEvents', array($entity, $type));
             $resourceModel->commit();
+            Mage::log('commit', null, 'attributes_log.log');
         } catch (Exception $e) {
             $resourceModel->rollBack();
             throw $e;
