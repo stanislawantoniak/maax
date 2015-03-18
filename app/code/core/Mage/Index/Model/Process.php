@@ -284,10 +284,10 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
 //        } catch (Exception $e) {
 //            $isError = true;
 //        }
-//        $event->resetData();
-//        $this->_resetEventNamespace($event);
-//        $this->_getResource()->updateProcessEndDate($this);
-//        $event->addProcessId($this->getId(), $isError ? self::EVENT_STATUS_ERROR : self::EVENT_STATUS_DONE);
+        $event->resetData();
+        $this->_resetEventNamespace($event);
+        $this->_getResource()->updateProcessEndDate($this);
+        $event->addProcessId($this->getId(), $isError ? self::EVENT_STATUS_ERROR : self::EVENT_STATUS_DONE);
 
         return $this;
     }
