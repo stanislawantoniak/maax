@@ -14,7 +14,11 @@ class GH_Api_WsdlController extends Mage_Core_Controller_Front_Action {
 	public function testAction() {
 		/** @var GH_Api_Model_User $user */
 		$user = Mage::getModel('ghapi/user');
-		$user->createUser(2,'testtest123');
+		try {
+			$user->createUser(3, 'testtest123');
+		} catch(Exception $e) {
+			echo $e->getMessage()."\n";
+		}
 		var_dump($user->getData());
 	}
 }

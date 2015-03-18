@@ -35,7 +35,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	public function createUser($vendorId,$password) {
 		if($this->apiUserExists($vendorId)) {
 			Mage::throwException('User already exists');
-		} elseif($this->validatePassword($password)) {
+		} elseif(!$this->validatePassword($password)) {
 			Mage::throwException('Password is too short');
 		}
 
