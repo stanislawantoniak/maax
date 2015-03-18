@@ -359,24 +359,24 @@ class Mage_Index_Model_Indexer
                 continue;
             }
             $hasLocks = false;
-//
-//            if ($process->getDepends()) {
-//                foreach ($process->getDepends() as $processCode) {
-//                    $dependProcess = $this->getProcessByCode($processCode);
-//                    if ($dependProcess && !in_array($processCode, $processed)) {
-//                        if ($checkLocks && $dependProcess->isLocked()) {
-//                            $hasLocks = true;
-//                        } else {
-//                            call_user_func_array(array($dependProcess, $method), $args);
-//                            if ($checkLocks && $dependProcess->getMode() == Mage_Index_Model_Process::MODE_MANUAL) {
-//                                $hasLocks = true;
-//                            } else {
-//                                $processed[] = $processCode;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+
+            if ($process->getDepends()) {
+                foreach ($process->getDepends() as $processCode) {
+                    $dependProcess = $this->getProcessByCode($processCode);
+                    if ($dependProcess && !in_array($processCode, $processed)) {
+                        if ($checkLocks && $dependProcess->isLocked()) {
+                            $hasLocks = true;
+                        } else {
+                            call_user_func_array(array($dependProcess, $method), $args);
+                            if ($checkLocks && $dependProcess->getMode() == Mage_Index_Model_Process::MODE_MANUAL) {
+                                $hasLocks = true;
+                            } else {
+                                $processed[] = $processCode;
+                            }
+                        }
+                    }
+                }
+            }
             Mage::log('$process   '.$process, null, 'attributes.log');
             Mage::log('$method   '.$method, null, 'attributes.log');
 //            if (!$hasLocks) {
