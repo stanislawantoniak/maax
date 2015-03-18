@@ -352,37 +352,37 @@ class Mage_Index_Model_Indexer
     {
         $checkLocks = $method != 'register';
         $processed = array();
-        Mage::log(print_r($this->getProcessesCollection(), true), null, 'attributes.log');
-        foreach ($this->getProcessesCollection() as $process) {
-            $code = $process->getIndexerCode();
-            if (in_array($code, $processed)) {
-                continue;
-            }
-            $hasLocks = false;
-
-            if ($process->getDepends()) {
-                foreach ($process->getDepends() as $processCode) {
-                    $dependProcess = $this->getProcessByCode($processCode);
-                    if ($dependProcess && !in_array($processCode, $processed)) {
-                        if ($checkLocks && $dependProcess->isLocked()) {
-                            $hasLocks = true;
-                        } else {
-                            call_user_func_array(array($dependProcess, $method), $args);
-                            if ($checkLocks && $dependProcess->getMode() == Mage_Index_Model_Process::MODE_MANUAL) {
-                                $hasLocks = true;
-                            } else {
-                                $processed[] = $processCode;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!$hasLocks) {
-                call_user_func_array(array($process, $method), $args);
-                $processed[] = $code;
-            }
-        }
+        Mage::log($this->getProcessesCollection()->getSize(), null, 'attributes.log');
+//        foreach ($this->getProcessesCollection() as $process) {
+//            $code = $process->getIndexerCode();
+//            if (in_array($code, $processed)) {
+//                continue;
+//            }
+//            $hasLocks = false;
+//
+//            if ($process->getDepends()) {
+//                foreach ($process->getDepends() as $processCode) {
+//                    $dependProcess = $this->getProcessByCode($processCode);
+//                    if ($dependProcess && !in_array($processCode, $processed)) {
+//                        if ($checkLocks && $dependProcess->isLocked()) {
+//                            $hasLocks = true;
+//                        } else {
+//                            call_user_func_array(array($dependProcess, $method), $args);
+//                            if ($checkLocks && $dependProcess->getMode() == Mage_Index_Model_Process::MODE_MANUAL) {
+//                                $hasLocks = true;
+//                            } else {
+//                                $processed[] = $processCode;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (!$hasLocks) {
+//                call_user_func_array(array($process, $method), $args);
+//                $processed[] = $code;
+//            }
+//        }
     }
 
     /**
