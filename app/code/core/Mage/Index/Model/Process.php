@@ -266,27 +266,28 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
      */
     public function processEvent(Mage_Index_Model_Event $event)
     {
-        if (!$this->matchEvent($event)) {
-            return $this;
-        }
-        if ($this->getMode() == self::MODE_MANUAL) {
-            $this->changeStatus(self::STATUS_REQUIRE_REINDEX);
-            return $this;
-        }
-
-        $this->_getResource()->updateProcessStartDate($this);
-        $this->_setEventNamespace($event);
-        $isError = false;
-
-        try {
-            $this->getIndexer()->processEvent($event);
-        } catch (Exception $e) {
-            $isError = true;
-        }
-        $event->resetData();
-        $this->_resetEventNamespace($event);
-        $this->_getResource()->updateProcessEndDate($this);
-        $event->addProcessId($this->getId(), $isError ? self::EVENT_STATUS_ERROR : self::EVENT_STATUS_DONE);
+        Mage::log('processEvent !!!!! ', null, 'attributes.log');
+//        if (!$this->matchEvent($event)) {
+//            return $this;
+//        }
+//        if ($this->getMode() == self::MODE_MANUAL) {
+//            $this->changeStatus(self::STATUS_REQUIRE_REINDEX);
+//            return $this;
+//        }
+//
+//        $this->_getResource()->updateProcessStartDate($this);
+//        $this->_setEventNamespace($event);
+//        $isError = false;
+//
+//        try {
+//            $this->getIndexer()->processEvent($event);
+//        } catch (Exception $e) {
+//            $isError = true;
+//        }
+//        $event->resetData();
+//        $this->_resetEventNamespace($event);
+//        $this->_getResource()->updateProcessEndDate($this);
+//        $event->addProcessId($this->getId(), $isError ? self::EVENT_STATUS_ERROR : self::EVENT_STATUS_DONE);
 
         return $this;
     }
@@ -383,13 +384,13 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         while ($event = $eventsCollection->fetchItem()) {
             try {
                 Mage::log('_processEventsCollection processEvent  !!!!! ', null, 'attributes.log');
-//                $this->processEvent($event);
-//                if (!$skipUnmatched) {
-//                    $eventProcessIds = $event->getProcessIds();
-//                    if (!isset($eventProcessIds[$this->getId()])) {
-//                        $event->addProcessId($this->getId(), null);
-//                    }
-//                }
+                $this->processEvent($event);
+                if (!$skipUnmatched) {
+                    $eventProcessIds = $event->getProcessIds();
+                    if (!isset($eventProcessIds[$this->getId()])) {
+                        $event->addProcessId($this->getId(), null);
+                    }
+                }
             } catch (Exception $e) {
                 $event->addProcessId($this->getId(), self::EVENT_STATUS_ERROR);
             }
