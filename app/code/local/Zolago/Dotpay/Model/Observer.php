@@ -18,7 +18,7 @@ class Zolago_Dotpay_Model_Observer {
 
 		$transactionsToCancel = $client->getDotpayTransactionsToCancel();
 		foreach($transactionsToCancel as $transaction) {
-			$order = Mage::getModel("sales/order")->loadById($transaction->getOrderId());
+			$order = Mage::getModel("sales/order")->loadByIncrementId($transaction->getOrderId());
 			if($order->getId()) {
 				$client->updateTransaction($order, $transaction->getTxnId(), Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
 			}
