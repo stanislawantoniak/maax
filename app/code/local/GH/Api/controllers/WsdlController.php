@@ -15,14 +15,15 @@ class GH_Api_WsdlController extends Mage_Core_Controller_Front_Action {
 		/** @var GH_Api_Model_User $user */
 		$user = Mage::getModel('ghapi/user');
 		try {
-			$user->createUser(3, 'testtest123');
-		} catch(Exception $e) {
-			echo $e->getMessage()."\n\n\n";
-		}
+			//$user->createUser(3, 'testtest123');
+
 
 
 		//$user->loginUser(3,'testtest123','e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
-		$user->loginBySessionToken('0bef8a1f31a2f91265163a53b4788977dafd3cf7e3144ade3b1704cbf804312a');
+		$user->loginBySessionToken('3078f9a845bc3b80b59d4102fdd49b3921da7c1675b4ff2173d59a03af44fc8c');
+		} catch(Exception $e) {
+			echo $e->getMessage()."\n\n\n";
+		}
 		echo "Is logged in: ".($user->isLoggedIn() ? 'yes' : 'no');
 		var_dump($user->getData());
 		var_dump($user->getSession());
