@@ -378,10 +378,10 @@ class Mage_Index_Model_Indexer
                 }
             }
 
-            if (!$hasLocks) {
-                call_user_func_array(array($process, $method), $args);
-                $processed[] = $code;
-            }
+//            if (!$hasLocks) {
+//                call_user_func_array(array($process, $method), $args);
+//                $processed[] = $code;
+//            }
         }
     }
 
