@@ -357,7 +357,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
                 $eventsCollection->addTypeFilter($type);
             }
             Mage::log('process indexEvents!!!!!!!   _processEventsCollection', null, 'attributes.log');
-            //$this->_processEventsCollection($eventsCollection);
+            $this->_processEventsCollection($eventsCollection);
             $this->unlock();
         } catch (Exception $e) {
             $this->unlock();
@@ -377,6 +377,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
         Mage_Index_Model_Resource_Event_Collection $eventsCollection,
         $skipUnmatched = true
     ) {
+        Mage::log('_processEventsCollection !!!!! ', null, 'attributes.log');
         // We can't reload the collection because of transaction
         /** @var $event Mage_Index_Model_Event */
         while ($event = $eventsCollection->fetchItem()) {
