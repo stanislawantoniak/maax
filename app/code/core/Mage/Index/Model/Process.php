@@ -281,7 +281,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
 
         try {
             Mage::log('$this->getIndexer()->processEvent()', null, 'attributes.log');
-            //$this->getIndexer()->processEvent($event);
+            $this->getIndexer()->processEvent($event);
         } catch (Exception $e) {
             $isError = true;
         }
