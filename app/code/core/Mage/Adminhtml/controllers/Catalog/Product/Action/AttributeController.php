@@ -75,7 +75,6 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
 
         try {
             if ($attributesData) {
-                Mage::log('$attributesData', null, 'attributes_log.log');
                 $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
                 $storeId    = $this->_getHelper()->getSelectedStoreId();
 
@@ -117,7 +116,6 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                     ->updateAttributes($this->_getHelper()->getProductIds(), $attributesData, $storeId);
             }
             if ($inventoryData) {
-                Mage::log('$inventoryData', null, 'attributes_log.log');
                 /** @var $stockItem Mage_CatalogInventory_Model_Stock_Item */
                 $stockItem = Mage::getModel('cataloginventory/stock_item');
                 $stockItem->setProcessIndexEvents(false);
@@ -135,11 +133,9 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                             $stockDataChanged = true;
                         }
                     }
-                    Mage::log('$stockDataChanged', null, 'attributes_log.log');
                     if ($stockDataChanged) {
                         $stockItem->save();
                         $stockItemSaved = true;
-                        Mage::log('$stockItemSaved', null, 'attributes_log.log');
                     }
                 }
 
@@ -153,7 +149,6 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
             }
 
             if ($websiteAddData || $websiteRemoveData) {
-                Mage::log('$websiteAddData || $websiteRemoveData', null, 'attributes_log.log');
                 /* @var $actionModel Mage_Catalog_Model_Product_Action */
                 $actionModel = Mage::getSingleton('catalog/product_action');
                 $productIds  = $this->_getHelper()->getProductIds();
