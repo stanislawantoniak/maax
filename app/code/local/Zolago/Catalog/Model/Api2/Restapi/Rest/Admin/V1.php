@@ -50,7 +50,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     protected function _create($data)
     {
-
+        Mage::log($data, null, 'attributes_log.log');
         $json = json_encode($data);
 
         if (!empty($data)) {
