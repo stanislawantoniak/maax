@@ -102,14 +102,14 @@ class Unirgy_Dropship_Model_Indexer_VendorProductAssoc extends Mage_Index_Model_
     {
         Mage::log('_processEvent  Unirgy_Dropship_Model_Indexer_VendorProductAssoc', null, 'attributes.log');
         $data = $event->getNewData();
-//        if (!empty($data['udreindex_product_ids'])) {
-//            $this->_getResource()->reindexProducts($data['udreindex_product_ids']);
-//        }
-//        if (!empty($data['udreindex_vendor_ids'])) {
-//            $this->_getResource()->reindexVendors($data['udreindex_vendor_ids']);
-//        }
-//        if (empty($data['catalog_product_price_skip_call_event_handler'])) {
-//            $this->callEventHandler($event);
-//        }
+        if (!empty($data['udreindex_product_ids'])) {
+            $this->_getResource()->reindexProducts($data['udreindex_product_ids']);
+        }
+        if (!empty($data['udreindex_vendor_ids'])) {
+            $this->_getResource()->reindexVendors($data['udreindex_vendor_ids']);
+        }
+        if (empty($data['catalog_product_price_skip_call_event_handler'])) {
+            $this->callEventHandler($event);
+        }
     }
 }
