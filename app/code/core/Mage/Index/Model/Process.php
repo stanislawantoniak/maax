@@ -267,17 +267,17 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
     public function processEvent(Mage_Index_Model_Event $event)
     {
         Mage::log('processEvent !!!!! ', null, 'attributes.log');
-//        if (!$this->matchEvent($event)) {
-//            return $this;
-//        }
-//        if ($this->getMode() == self::MODE_MANUAL) {
-//            $this->changeStatus(self::STATUS_REQUIRE_REINDEX);
-//            return $this;
-//        }
-//
-//        $this->_getResource()->updateProcessStartDate($this);
-//        $this->_setEventNamespace($event);
-//        $isError = false;
+        if (!$this->matchEvent($event)) {
+            return $this;
+        }
+        if ($this->getMode() == self::MODE_MANUAL) {
+            $this->changeStatus(self::STATUS_REQUIRE_REINDEX);
+            return $this;
+        }
+
+        $this->_getResource()->updateProcessStartDate($this);
+        $this->_setEventNamespace($event);
+        $isError = false;
 //
 //        try {
 //            $this->getIndexer()->processEvent($event);
