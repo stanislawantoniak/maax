@@ -1,19 +1,46 @@
 <?xml version="1.0"?>
 <config>
-  <modules>
-    <GH_Api>
-      <version>0.0.1</version>
-    </GH_Api>
-  </modules>
-  <global>
-    <resources>
-      <ghapi_setup>
-        <setup>
-          <module>GH_Api</module>
-        </setup>
-      </ghapi_setup>
-    </resources>
-  </global>
+	<modules>
+		<GH_Api>
+			<version>0.0.1</version>
+		</GH_Api>
+	</modules>
+	<global>
+		<helpers>
+			<ghapi>
+				<class>GH_Api_Helper</class>
+			</ghapi>
+		</helpers>
+		<models>
+			<ghapi>
+				<class>GH_Api_Model</class>
+				<resourceModel>ghapi_resource</resourceModel>
+			</ghapi>
+			<ghapi_resource>
+				<class>Zolago_Payment_Model_Resource</class>
+				<entities>
+					<user>
+						<table>gh_api_user</table>
+					</user>
+					<session>
+						<table>gh_api_session</table>
+					</session>
+				</entities>
+			</ghapi_resource>
+		</models>
+		<blocks>
+		    <ghapi>
+		        <class>GH_Api_Block</class>
+		    </ghapi>
+		</blocks>
+		<resources>
+			<ghapi_setup>
+				<setup>
+					<module>GH_Api</module>
+				</setup>
+			</ghapi_setup>
+		</resources>
+	</global>
   <frontend>
     <routers>
       <ghapi>
@@ -27,6 +54,7 @@
     <layout>
         <updates>
             <ghapi>
+                <file>ghapi.xml</file> 
             </ghapi>
         </updates>
     </layout>
