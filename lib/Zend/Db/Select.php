@@ -774,6 +774,7 @@ class Zend_Db_Select
                 if (is_string($_correlationName)) {
                     // We assume the key is the correlation name and value is the table name
                     $tableName = $_tableName;
+                    Mage::log($_correlationName, null, 'join.log');
                     $correlationName = $_correlationName;
                 } else {
                     // We assume just an array of identifiers, with no correlation name
