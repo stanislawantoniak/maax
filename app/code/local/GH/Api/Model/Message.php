@@ -29,7 +29,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * no new messages with same po_increment_id, same message text and status new exists
 	 * if message with same message text and po_increment_id but its status is read then it adds a new one
 	 * if message with same message text, po_increment_id and status new exist then only update updated_at field
-	 * @param Unirgy_Dropship_Model_Po $po
+	 * @param $po
 	 * @param string $message
 	 * @return GH_Api_Model_Message
 	 */
@@ -39,6 +39,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		} elseif(!($po instanceof Unirgy_DropshipPo_Model_Po)) {
 			Mage::throwException('Message could not be added because of wrong PO object');
 		} else {
+            $this->unsetData();
 			$helper = $this->getHelper();
 			$messages = $this
 				->getCollection()
