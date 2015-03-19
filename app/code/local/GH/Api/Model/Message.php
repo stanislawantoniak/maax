@@ -34,7 +34,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @return GH_Api_Model_Message
 	 */
 	public function addMessage($po,$message) {
-		if(!$this->validateMessage($message)) {
+        if(!$this->validateMessage($message)) {
 			$this->throwWrongMessageException();
 		} elseif(!($po instanceof Unirgy_DropshipPo_Model_Po)) {
 			Mage::throwException('Message could not be added because of wrong PO object');
