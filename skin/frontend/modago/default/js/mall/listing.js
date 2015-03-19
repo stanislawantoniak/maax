@@ -1433,6 +1433,7 @@ Mall.listing = {
 		var self = Mall.listing;
 		self.getFilters().show();
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
+		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
 		self.triggerResize();
 	},
@@ -1441,6 +1442,7 @@ Mall.listing = {
 		var self = Mall.listing;
 		self.getFilters().hide();
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
+		jQuery('#sort-by').css('pointer-events','auto'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.hideMobileFiltersOverlay();
 		self.triggerResize();
 	},
