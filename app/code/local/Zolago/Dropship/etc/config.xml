@@ -129,6 +129,13 @@
                         <fieldset>integration</fieldset>
                         <position>2</position>
                     </can_ask>
+                    <ghapi_vendor_access_allow>
+                        <label>GH API Access</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>1</position>
+                    </ghapi_vendor_access_allow>
                     <sequence>
                         <label>Sequence</label>
                         <note>Vendor on main page in customized sequence</note>
