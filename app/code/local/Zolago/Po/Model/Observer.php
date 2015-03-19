@@ -473,4 +473,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         }
     }
     //}}}
+    public function poSaveNew($observer) {
+        $queue = Mage::getSingleton('ghapi/message');        
+        $po = $observer->getPo();
+        if ($po) {
+            $queue->addMessage($po,GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER);
+        }
+    }
 }

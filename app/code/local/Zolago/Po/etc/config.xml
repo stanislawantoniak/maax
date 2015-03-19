@@ -69,10 +69,18 @@
 				<observers>
 					<zolagopo>
 						<class>zolagopo/observer</class>
-						<method>updatePoStatusByAllocation</method>
+                        <method>updatePoStatusByAllocation</method>
 					</zolagopo>
 				</observers>
 			</zolagopo_po_save_after>
+			<zolagopo_po_save_new>
+				<observers>
+					<zolagopo>
+						<class>zolagopo/observer</class>
+                        <method>poSaveNew</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_save_new>
             <zolagopayment_allocate_overpayment_save_after>
                 <observers>
                     <zolagopo>
