@@ -11,7 +11,8 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return bool|string
 	 */
 	public function getDate($timestamp=null) {
-		return date('Y-m-d H:i:s',$timestamp);
+        $timestamp = is_null($timestamp) ? time() : $timestamp;
+        return date('Y-m-d H:i:s',$timestamp);
 	}
 
 	/**

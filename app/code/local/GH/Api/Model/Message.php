@@ -21,7 +21,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 
 	protected function _construct()
 	{
-		$this->_init('ghapi/session');
+		$this->_init('ghapi/message');
 	}
 
 	/**
@@ -29,16 +29,17 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * no new messages with same po_increment_id, same message text and status new exists
 	 * if message with same message text and po_increment_id but its status is read then it adds a new one
 	 * if message with same message text, po_increment_id and status new exist then only update updated_at field
-	 * @param Unirgy_Dropship_Model_Po $po
+	 * @param $po
 	 * @param string $message
 	 * @return GH_Api_Model_Message
 	 */
-	public function addMessage(Unirgy_Dropship_Model_Po $po,$message) {
-		if(!$this->validateMessage($message)) {
+	public function addMessage($po,$message) {
+        if(!$this->validateMessage($message)) {
 			$this->throwWrongMessageException();
-		} elseif(!($po instanceof Unirgy_Dropship_Model_Po)) {
+		} elseif(!($po instanceof Unirgy_DropshipPo_Model_Po)) {
 			Mage::throwException('Message could not be added because of wrong PO object');
 		} else {
+            $this->unsetData();
 			$helper = $this->getHelper();
 			$messages = $this
 				->getCollection()
@@ -48,7 +49,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 
 			if(!$messages->count()) {
 				$this
-					->setVendorId($po->getVendorId())
+					->setVendorId($po->getVendor()->getId())
 					->setPoIncrementId($po->getIncrementId())
 					->setMessage($message)
 					->setUpdatedAt($helper->getDate())

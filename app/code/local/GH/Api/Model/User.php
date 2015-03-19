@@ -130,6 +130,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 				return true;
 			}
 		}
+        Mage::throwException('Invalid vendor id');
 		return false;
 	}
 

@@ -31,7 +31,7 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 			$this
 				->setUserId($user->getId())
 				->setToken($this->generateToken($user->getVendorId()))
-				->setCreatedAt($this->getDate())
+				->setCreatedAt($this->getHelper()->getDate())
 				->save();
 		} else {
 			Mage::throwException("Cannot create session if user is not logged in");
