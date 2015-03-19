@@ -47,6 +47,13 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 		return $this;
 	}
 
+    public function updateUserPassword($password,$vendorId){
+        $this
+            ->setPassword($this->hashPassword($password,$vendorId))
+            ->save();
+        return $this;
+    }
+
 	/**
 	 * logins user by user data, creates session and returns session object
 	 * @param int $vendorId
@@ -127,6 +134,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 		return false;
 	}
 
+
 	/**
 	 * Checks if api user for this vendor already exists
 	 * @param int $vendorId
@@ -138,7 +146,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 			$user = Mage::getModel('ghapi/user');
 			$user->loadByVendorId($vendorId);
 			if($user->getId()) {
-				return true;
+				return $user;
 			}
 		}
 		return false;

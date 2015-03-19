@@ -1,26 +1,73 @@
 <?php /* @var $this GH_Api_Block_Dropship_Settings */ ?>
 <?php $_helper = Mage::helper("ghapi"); ?>
 
-<div class="container">
-    <div class="page-heading row">
-        <div class="col-lg-6">
-            <h3>
-                <?php echo $_helper->__("GH Api Settings");?>
-            </h3>
-        </div>
+<?php
 
+$_session = Mage::getSingleton('udropship/session');
+$_vendor = $_session->getVendor();
+$_ghApiVendorUser = $this->getGhApiVendorUser();
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $_helper->__("GH API Settings");?></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="ghapi_vendor_settiongs" class="form-horizontal" method="post" action="/udropship/ghapi/save">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo $_helper->__("API Login Data"); ?></h4>
+                    </div>
+                    <div class="widget-content">
+
+                        <div class="form-group">
+                            <label for="ghapi_vendor_id" class="col-md-3 control-label">
+                                <?php echo $_helper->__("Vendor ID"); ?>
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="col-md-9">
+                                <input id="vendor_name" name="ghapi_vendor_id" value="<?php echo $_vendor->getExternalId(); ?>" readonly type="text" class="form-control" style="width:20%; min-width:50px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ghapi_vendor_api_key" class="col-md-3 control-label">
+                                <?php echo $_helper->__("API Key"); ?>
+                            </label>
+
+                            <div class="col-md-9">
+                                <input id="ghapi_vendor_api_key" name="ghapi_vendor_api_key" value="<?php echo $_ghApiVendorUser->getApiKey(); ?>" type="text" readonly class="form-control" size="10">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ghapi_vendor_password" class="col-md-3 control-label">
+                                <?php echo $_helper->__("API Password"); ?>
+                            </label>
+
+                            <div class="col-md-9">
+                                <input id="ghapi_vendor_password" name="ghapi_vendor_password" value="" type="password" class="form-control" size="10">
+                                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Minimum Length - 8 characters</p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;Leave empty for no change</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="form-actions">
+                    <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                        <span><span><?php echo $this->__('Save'); ?></span></span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div class="container">
-    <form id="ghapi-vendor-settings" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
-        <?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
-        <?php echo $this->getForm()->toHtml();?>
-
-        <div class="form-actions">
-            <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
-        </div>
-
-    </form>
-</div>
 
