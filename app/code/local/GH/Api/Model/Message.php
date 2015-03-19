@@ -18,18 +18,6 @@
  * @method GH_Api_Model_Message setUpdatedAt(string $updatedAt)
  */
 class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
-	const GH_API_MESSAGE_NEW_ORDER = 'newOrder';
-	const GH_API_MESSAGE_CANCELLED_ORDER = 'cancelledOrder';
-	const GH_API_MESSAGE_PAYMENT_DATA_CHANGED = 'paymentDataChanged';
-	const GH_API_MESSAGE_ITEMS_CHANGED = 'itemsChanged';
-	const GH_API_MESSAGE_DELIVERY_DATA_CHANGED = 'deliveryDataChanged';
-	const GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED = 'invoiceAddressChanged';
-	const GH_API_MESSAGE_STATUS_CHANGED = 'statusChanged';
-
-	const GH_API_MESSAGE_STATUS_NEW = 0;
-	const GH_API_MESSAGE_STATUS_READ = 1;
-
-	const GH_API_MESSAGE_MAX_BATCH = 100;
 
 	protected function _construct()
 	{
@@ -56,7 +44,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 				->getCollection()
 				->filterByPoIncrementId($po->getIncrementId())
 				->filterByMessage($message)
-				->filterByStatus(self::GH_API_MESSAGE_STATUS_NEW);
+				->filterByStatus(GH_Api_Model_System_Source_Message_Status::GH_API_MESSAGE_STATUS_NEW);
 
 			if(!$messages->count()) {
 				$this
@@ -83,13 +71,13 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 */
 	protected function validateMessage($message) {
 		if(
-			$message == self::GH_API_MESSAGE_NEW_ORDER ||
-			$message == self::GH_API_MESSAGE_CANCELLED_ORDER ||
-			$message == self::GH_API_MESSAGE_PAYMENT_DATA_CHANGED ||
-			$message == self::GH_API_MESSAGE_ITEMS_CHANGED ||
-			$message == self::GH_API_MESSAGE_DELIVERY_DATA_CHANGED ||
-			$message == self::GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED ||
-			$message == self::GH_API_MESSAGE_STATUS_CHANGED
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER ||
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_CANCELLED_ORDER ||
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED ||
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_ITEMS_CHANGED ||
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_DELIVERY_DATA_CHANGED ||
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED ||
+			$message == GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_STATUS_CHANGED
 		) {
 			return true;
 		}
@@ -117,7 +105,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 			$messages
 				->filterByIds($messagesIds)
 				->filterByVendorId($user->getVendorId())
-				->filterByStatus(self::GH_API_MESSAGE_STATUS_READ);
+				->filterByStatus(GH_Api_Model_System_Source_Message_Status::GH_API_MESSAGE_STATUS_READ);
 
 			if($messages->count()) {
 				$validatedMessagesIds = array();
@@ -181,7 +169,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 				/** @var GH_Api_Model_Message $message */
 
 				//collect ids to set as read
-				if($message->getStatus() == self::GH_API_MESSAGE_STATUS_NEW) {
+				if($message->getStatus() == GH_Api_Model_System_Source_Message_Status::GH_API_MESSAGE_STATUS_NEW) {
 					$messageIdsToSetAsRead[] = $message->getId();
 				}
 

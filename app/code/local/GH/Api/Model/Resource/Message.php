@@ -25,7 +25,7 @@ class GH_Api_Model_Resource_Message extends Mage_Core_Model_Resource_Db_Abstract
 		$write = $this->_getWriteAdapter();
 		$write->update(
 			$this->getMessageTable(),
-			array('status'=>GH_Api_Model_Message::GH_API_MESSAGE_STATUS_READ),
+			array('status'=>GH_Api_Model_System_Source_Message_Status::GH_API_MESSAGE_STATUS_READ),
 			$this->getWhereInClause($data)
 		);
 	}
