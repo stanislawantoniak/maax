@@ -48,7 +48,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 
 			if(!$messages->count()) {
 				$this
-					->setVendorId($po->getVendorId())
+					->setVendorId($po->getVendor()->getId())
 					->setPoIncrementId($po->getIncrementId())
 					->setMessage($message)
 					->setUpdatedAt($helper->getDate())
