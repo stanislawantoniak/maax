@@ -59,7 +59,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 	    $messages = $request->messageIdList;
 
 	    /** @var GH_Api_Model_Message $model */
-	    $model = Mage::getModel('ghapi/message');
+	    $model = $this->getMessageModel();
 		try {
 			$status = $model->confirmMessages($token, $messages);
 			$message = 'ok';
