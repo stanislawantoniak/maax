@@ -83,15 +83,14 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	 */
 	protected function getExpirationDate() {
 		$timestamp = time() - (self::GH_API_SESSION_TIME * 60);
-		return $this->getDate($timestamp);
+		return $this->getHelper()->getDate($timestamp);
 	}
 
 	/**
-	 * Gets date based on timestamp or current one if timestamp is null
-	 * @param int|null $timestamp
-	 * @return bool|string
+	 * Gets main GH Api helper
+	 * @return GH_Api_Helper_Data
 	 */
-	protected function getDate($timestamp=null) {
-		return date('Y-m-d H:i:s',$timestamp);
+	protected function getHelper() {
+		return Mage::helper('ghapi');
 	}
 }
