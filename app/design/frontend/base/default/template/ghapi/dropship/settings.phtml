@@ -1,0 +1,26 @@
+<?php /* @var $this GH_Api_Block_Dropship_Settings */ ?>
+<?php $_helper = Mage::helper("ghapi"); ?>
+
+<div class="container">
+    <div class="page-heading row">
+        <div class="col-lg-6">
+            <h3>
+                <?php echo $_helper->__("GH Api Settings");?>
+            </h3>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <form id="ghapi-vendor-settings" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+        <?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+        <?php echo $this->getForm()->toHtml();?>
+
+        <div class="form-actions">
+            <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
+        </div>
+
+    </form>
+</div>
+

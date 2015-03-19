@@ -53,6 +53,13 @@
           <frontName>ghapi</frontName>
         </args>
       </ghapi>
+        <udropship>
+            <args>
+                <modules>
+                    <GH_Api before="Unirgy_Dropship">GH_Api_Dropship</GH_Api>
+                </modules>
+            </args>
+        </udropship>
     </routers>
     <layout>
         <updates>

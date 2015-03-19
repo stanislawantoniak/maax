@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout>
+    <udropship_ghapi_index>
+        <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <reference name="content">
+            <block name="ghapi_dropship_settings" type="ghapi/dropship_settings" template="ghapi/dropship/settings.phtml"/>
+        </reference>
+    </udropship_ghapi_index>
+</layout>
