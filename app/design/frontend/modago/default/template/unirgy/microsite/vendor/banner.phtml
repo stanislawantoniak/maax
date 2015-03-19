@@ -65,7 +65,7 @@ if (!empty($sliders) || !empty($boxes)): ?>
                                 <?php if(!empty($b['url'])): ?>
                                 <a href="<?php echo $b['url']; ?>">
                                     <?php endif; ?>
-                                    <img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
+                                    <img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $b['path']; ?>" alt="">
                                     <?php if(!empty($b['url'])): ?>
                                 </a>
                             <?php endif; ?>

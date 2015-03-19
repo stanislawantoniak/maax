@@ -128,7 +128,7 @@ jQuery.validator.addMethod("imageSize", function(value, element,param) {
     var F = element.files;
     if(jQuery.type(F[0]) !=="undefined"){
         result = 0;
-        console.log(F[0].size);
+        //console.log(F[0].size);
         if (jQuery.type(F[0]) !=="undefined" && F[0].size <= (param * 1000)) {
             result = 1;
         }
