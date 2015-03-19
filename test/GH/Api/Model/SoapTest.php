@@ -2,7 +2,7 @@
 /**
  * soap tests
  */
-class GH_Api_Model_SoapTest extends Zolago_TestCase {
+class GH_Api_Model_SoapTest {
     protected $_client;
     protected function _getClient() {
         if (is_null($this->_client)) {
@@ -26,6 +26,14 @@ class GH_Api_Model_SoapTest extends Zolago_TestCase {
         $params->webApiKey = "api";
         var_dump($client->doLogin($params));
     }
+	public function doLogin($vendorId,$password,$apiKey) {
+		$client = $this->_getClient();
+		$params = new StdClass();
+		$params->vendorId = $vendorId;
+		$params->password = $password;
+		$params->webApiKey = $apiKey;
+		var_dump($client->doLogin($params));
+	}
     public function testGetChangeOrderMessage() {
         $client = $this->_getClient();
         $params = new StdClass();
@@ -36,11 +44,19 @@ class GH_Api_Model_SoapTest extends Zolago_TestCase {
             var_dump($client->__getFunctions());
             var_dump($client->getChangeOrderMessage($params));
         } catch (Exception $xt) {
-            var_Dump($client->__getLastRequest());
+            var_dump($client->__getLastRequest());
             var_dump($client->__getLastResponse());
         }
         
     }
+	public function getChangeOrderMessage($token,$batch,$type=null) {
+		$client = $this->_getClient();
+		$params = new StdClass();
+		$params->sessionToken = $token;
+		$params->messageBatchSize = $batch;
+		$params->messageType = $type;
+		var_dump($client->getChangeOrderMessage($params));
+	}
     public function testSetChangeOrderMessageConfirmation() {
         $client = $this->_getClient();
         $obj = new StdClass();
@@ -50,8 +66,15 @@ class GH_Api_Model_SoapTest extends Zolago_TestCase {
         try {    
             var_dump($client->setChangeOrderMessageConfirmation($obj));
         } catch (Exception $xt) {
-            var_Dump($client->__getLastRequest());
+            var_dump($client->__getLastRequest());
             var_dump($client->__getLastResponse());
         }
     }
+	public function setChangeOrderMessageConfirmation($token,$messages) {
+		$client = $this->_getClient();
+		$obj = new StdClass();
+		$obj->messageIdList = $messages;
+		$obj->sessionToken = $token;
+		var_dump($client->setChangeOrderMessageConfirmation($obj));
+	}
 }

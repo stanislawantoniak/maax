@@ -238,4 +238,37 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 		return $this;
 	}
 
+	/**
+	 * @param int $vendorId
+	 * @param string $password
+	 * @return bool
+	 */
+	public function changePassword($vendorId,$password) {
+		try {
+			$this
+				->loadByVendorId($vendorId)
+				->setPassword($this->hashPassword($password, $vendorId))
+				->save();
+		} catch(Exception $e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param int $vendorId
+	 * @return bool
+	 */
+	public function generateNewApiKey($vendorId) {
+		try {
+			$this
+				->loadByVendorId($vendorId)
+				->setPassword($this->generateApiKey($vendorId))
+				->save();
+		} catch(Exception $e) {
+			return false;
+		}
+		return true;
+	}
+
 }
