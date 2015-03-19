@@ -85,7 +85,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	}
 
 	/**
-	 * Confirms user messages, selects from db only ids that user is eglible to delete
+	 * Confirms user messages, selects from db only ids that user is allowed to delete
 	 * by vendor_id and status
 	 * @param string $token
 	 * @param array $messages
