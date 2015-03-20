@@ -476,8 +476,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     public function ghapiAddMessageNewOrder($observer) {
         $queue = Mage::getSingleton('ghapi/message');        
         $po = $observer->getPo();
-        if ($po) {
-            $queue->addMessage($po,GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER);
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+
+        if ($ghapiAccess) {
+            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER);
         }
     }
 
@@ -494,7 +497,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $vendor = $po->getVendor();
         $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
-        if ($po && $ghapiAccess) {
+        if ($ghapiAccess) {
             if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_CANCELED) {
                 $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_CANCELLED_ORDER;
             } else {
@@ -512,8 +515,12 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     public function ghapiAddMessageItemsChanged($observer) {
         $queue = Mage::getSingleton('ghapi/message');
         $po    = $observer->getPo();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
-        $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_ITEMS_CHANGED);
+        if ($ghapiAccess) {
+            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_ITEMS_CHANGED);
+        }
     }
 
     /**
@@ -525,11 +532,15 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $queue = Mage::getSingleton('ghapi/message');
         $po    = $observer->getPo();
         $type  = $observer->getType();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
-        if ($type == Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
-            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_DELIVERY_DATA_CHANGED);
-        } elseif ($type == Mage_Sales_Model_Order_Address::TYPE_BILLING) {
-            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED);
+        if ($ghapiAccess) {
+            if ($type == Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_DELIVERY_DATA_CHANGED);
+            } elseif ($type == Mage_Sales_Model_Order_Address::TYPE_BILLING) {
+                $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED);
+            }
         }
     }
 
@@ -545,11 +556,28 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $newPo = $observer->getNewPo();
 
         if ($po) {
-            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            $vendor = $po->getVendor();
+            $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+            if ($ghapiAccess) {
+                $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            }
+
         } elseif ($oldPo && $newPo) {
             // By allocateOverpayment
-            $queue->addMessage($oldPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
-            $queue->addMessage($newPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+
+            // For vendor from old PO
+            $vendorForOld = $oldPo->getVendor();
+            $ghapiAccessForOld = $vendorForOld->getData('ghapi_vendor_access_allow');
+            if ($ghapiAccessForOld) {
+                $queue->addMessage($oldPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            }
+
+            // For vendor from new PO
+            $vendorForNew = $newPo->getVendor();
+            $ghapiAccessForNew = $vendorForNew->getData('ghapi_vendor_access_allow');
+            if ($ghapiAccessForNew) {
+                $queue->addMessage($newPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            }
         }
     }
 }
