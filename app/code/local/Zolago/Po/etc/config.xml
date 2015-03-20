@@ -85,7 +85,7 @@
 				<observers>
 					<zolagopo>
 						<class>zolagopo/observer</class>
-                        <method>poSaveNew</method>
+                        <method>ghapiAddMessageNewOrder</method>
 					</zolagopo>
 				</observers>
 			</zolagopo_po_save_new>

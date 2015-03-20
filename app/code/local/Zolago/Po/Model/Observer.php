@@ -473,7 +473,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         }
     }
 
-    public function poSaveNew($observer) {
+    public function ghapiAddMessageNewOrder($observer) {
         $queue = Mage::getSingleton('ghapi/message');        
         $po = $observer->getPo();
         if ($po) {
