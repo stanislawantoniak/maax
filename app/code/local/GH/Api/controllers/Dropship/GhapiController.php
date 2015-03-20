@@ -24,7 +24,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         $vendorApiUser = $ghApiUser->loadByVendorId($vendorId);
 
         // If Edit
-        if (is_null($vendorApiUser->getUserId()) || !($vendor->getExternalId() == $vendorApiUser->getVendorId())) {
+        if (is_null($vendorApiUser->getUserId()) || !($vendor->getVendorId() == $vendorApiUser->getVendorId())) {
             throw new Mage_Core_Exception($helper->__("It is not your settings"));
         }
 
