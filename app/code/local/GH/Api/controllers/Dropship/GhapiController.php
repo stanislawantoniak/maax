@@ -31,7 +31,6 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         if (!empty($ghapiVendorPassword)) {
             //update password
             $password = $ghApiUser->updateUserPassword($ghapiVendorPassword, $vendorId);
-            $this->_getSession()->addSuccess($helper->__('API Password saved'));
         }
 
         $postData = $this->getRequest()->getPost();
@@ -48,6 +47,8 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         $vendor->setData('ghapi_message_order_status_changes', isset($postData['ghapi_message_order_status_changes']) ? 1 : 0);
 
         $vendor->save();
+
+        $this->_getSession()->addSuccess($helper->__('GH API Settings has been saved'));
 
         return $this->_redirectReferer();
     }
