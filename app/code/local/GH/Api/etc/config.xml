@@ -68,6 +68,15 @@
             </ghapi>
         </updates>
     </layout>
+      <translate>
+          <modules>
+              <GH_Api>
+                  <files>
+                      <default>GH_Api.csv</default>
+                  </files>
+              </GH_Api>
+          </modules>
+      </translate>
   </frontend>
     <adminhtml>
         <translate>
