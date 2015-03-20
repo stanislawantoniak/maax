@@ -3,18 +3,31 @@
 class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_Abstract {
 
 	public function indexAction() {
-		$this->_renderPage(null, 'ghapi');
-	}
+
+        // FIX for ACL - GH API Access
+        $vendor = $this->_getSession()->getVendor();
+        if ($vendor->getData('ghapi_vendor_access_allow')) {
+            $this->_renderPage(null, 'ghapi');
+        } else {
+            return $this->_forward('dashboard');
+        }
+
+    }
 
 
     public function saveAction()
     {
+        // FIX for ACL - GH API Access
+        $vendor = $this->_getSession()->getVendor();
+        if (!$vendor->getData('ghapi_vendor_access_allow')) {
+            return $this->_forward('dashboard');
+        }
+
         $helper = Mage::helper('ghapi');
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
 
-        $vendor = $this->_getSession()->getVendor();
         $vendorId = (int)$vendor->getVendorId();
 
         $ghapiVendorPassword = $this->getRequest()->getPost('ghapi_vendor_password');
