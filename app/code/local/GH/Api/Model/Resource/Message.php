@@ -44,6 +44,6 @@ class GH_Api_Model_Resource_Message extends Mage_Core_Model_Resource_Db_Abstract
 	 * @return string
 	 */
 	protected function getWhereInClause(array $data) {
-		return "WHERE `".$this->getIdFieldName()."` IN (".implode(",",$data).")";
+		return "`".$this->getIdFieldName()."` IN (".implode(",",$data).")";
 	}
 }

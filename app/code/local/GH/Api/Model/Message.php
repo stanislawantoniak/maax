@@ -184,12 +184,14 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 
 			try {
 				//set collected messages as read
-				$this->getResource()->setMessagesAsRead($messageIdsToSetAsRead);
+                if(count($messageIdsToSetAsRead)) {
+				    $this->getResource()->setMessagesAsRead($messageIdsToSetAsRead);
+                }
 
 				//and return them
 				return $messagesToReturn;
 			} catch(Exception $e) {
-				Mage::throwException("DB Error occurred while setting messages as read (error: ".$e->getMessage().")");
+				Mage::throwException("DB Error occurred while setting messages as read");
 			}
 		}
 
