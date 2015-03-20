@@ -129,13 +129,7 @@
                         <fieldset>integration</fieldset>
                         <position>2</position>
                     </can_ask>
-                    <ghapi_vendor_access_allow>
-                        <label>GH API Access</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>1</position>
-                    </ghapi_vendor_access_allow>
+
                     <sequence>
                         <label>Sequence</label>
                         <note>Vendor on main page in customized sequence</note>
@@ -224,6 +218,73 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
+
+
+                    <!--GH API-->
+                    <ghapi_vendor_access_allow>
+                        <label>GH API Access</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>1</position>
+                    </ghapi_vendor_access_allow>
+
+                    <ghapi_message_new_order>
+                        <label>Pojawiło się nowe zamówienie do realizacji.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_new_order>
+                    <ghapi_message_order_canceled>
+                        <label>Zamówienie zostało anulowane.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_canceled>
+                    <ghapi_message_order_payment_changes>
+                        <label>Zmieniła się metoda płatności w zamówienia lub/i zmieniła się się płatność do zamówienia.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_payment_changes>
+                    <ghapi_message_order_product_changes>
+                        <label>Zmieniły się produkty lub koszt dostawy w zamówieniu. Produkty mogły być usunięte, dodane, zmieniona cena, ilość, rabat.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_product_changes>
+                    <ghapi_message_order_shipping_changes>
+                        <label>Zmieniła się metoda dostawy lub/i adres dostawy.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_shipping_changes>
+                    <ghapi_message_order_invoice_changes>
+                        <label>Zmieniły się dane do faktury lub/i informacja czy faktura jest wymagana.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_invoice_changes>
+                    <ghapi_message_order_status_changes>
+                        <label>Zmienił się status zamówienia.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_status_changes>
                     
 					<!-- DHL -->
                 	<use_dhl>
