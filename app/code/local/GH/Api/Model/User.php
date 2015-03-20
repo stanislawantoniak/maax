@@ -151,7 +151,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	/**
 	 * Checks if api user for this vendor already exists
 	 * @param int $vendorId
-	 * @return bool
+	 * @return bool|GH_Api_Model_User
 	 */
 	protected function apiUserExists($vendorId) {
 		if($this->validateVendorId($vendorId)) {
