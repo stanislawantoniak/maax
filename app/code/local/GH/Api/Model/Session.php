@@ -34,7 +34,7 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 				->setCreatedAt($this->getHelper()->getDate())
 				->save();
 		} else {
-			Mage::throwException("Cannot create session if user is not logged in");
+			Mage::throwException("error_session_user_not_logged_in");
 		}
 		return $this;
 	}

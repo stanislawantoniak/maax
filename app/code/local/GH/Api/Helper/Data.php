@@ -20,7 +20,15 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @throws Mage_Core_Exception
 	 */
 	public function throwUserNotLoggedInException() {
-		Mage::throwException('User is not logged in');
+		Mage::throwException('error_user_not_logged_in');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	public function throwDbError() {
+		Mage::throwException('error_db_error');
 	}
 
 	/**

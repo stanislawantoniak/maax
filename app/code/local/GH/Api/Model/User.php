@@ -63,22 +63,26 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	 * @throws Mage_Core_Exception
 	 */
 	public function loginUser($vendorId,$password,$apiKey) {
-		if($this->getSession()->getId()) {
-			Mage::throwException('User already logged in');
-		} elseif($this->validatePassword($password) && $this->validateApiKey($apiKey) && $this->apiUserExists($vendorId)) {
+		if(!$this->getSession()->getId() &&
+			$this->validatePassword($password) &&
+			$this->validateApiKey($apiKey) &&
+			$this->apiUserExists($vendorId))
+		{
 			$password = $this->hashPassword($password,$vendorId);
 			$this->loadByVendorId($vendorId);
-			if($this->getPassword() == $password && $this->getApiKey() == $apiKey) {
+			if($this->getPassword() != $password) {
+				$this->throwPasswordError();
+			} elseif($this->getApiKey() != $apiKey) {
+				$this->throwApiKeyError();
+			} else {
 				$this->setIsLoggedIn();
 				$session = $this->getSessionModel()->createSession($this);
 				if(!$session->getId()) {
-					Mage::throwException('Session creation error');
+					Mage::throwException('error_session_creation');
 				} else {
 					$this->setSession($session);
 				}
 			}
-		} else {
-			Mage::throwException('Invalid login data');
 		}
 		return $this;
 	}
@@ -96,7 +100,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 			$this->setIsLoggedIn();
 			$this->setSession($session);
 		} else {
-			Mage::throwException('Invalid or expired session token');
+			Mage::throwException('error_session_token_invalid');
 		}
 		return $this;
 	}
@@ -130,8 +134,16 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 				return true;
 			}
 		}
-        Mage::throwException('Invalid vendor id');
+        $this->throwVendorError();
 		return false;
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwVendorError() {
+		Mage::throwException('error_vendor_inactive');
 	}
 
 
@@ -161,6 +173,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 		if(is_string($password) && strlen($password) >= self::GH_API_USER_PASSWORD_LENGTH) {
 			return true;
 		}
+		$this->throwPasswordError();
 		return false;
 	}
 
@@ -172,6 +185,14 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 	 */
 	protected function hashPassword($password,$vendorId) {
 		return hash(self::GH_API_USER_PASSWORD_HASH_ALGO,$password.$vendorId);
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwPasswordError() {
+		Mage::throwException('error_password_invalid');
 	}
 
 	/**
@@ -194,7 +215,16 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 		if(is_string($apiKey) && strlen($apiKey) == self::GH_API_USER_API_KEY_LENGTH) {
 			return true;
 		}
+		$this->throwApiKeyError();
 		return false;
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwApiKeyError() {
+		Mage::throwException('error_webapikey_invalid');
 	}
 
 
