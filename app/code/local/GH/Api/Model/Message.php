@@ -201,7 +201,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @return int
 	 */
 	protected function getMaxMessageBatchSize() {
-		return 100; //todo: add config for this
+		return Mage::getStoreConfig('ghapi_options/ghapi_messages/ghapi_message_batch_size');
 	}
 
 	protected function throwWrongMessageException() {
