@@ -741,7 +741,6 @@ Mall.Slick = {
 		},
 		attachEvents: function() {
 			var self = this;
-			console.log('attaching events');
 			if(!self.eventsAttached) {
 				self.eventsAttached = true;
 				jQuery(window).resize(function () {
