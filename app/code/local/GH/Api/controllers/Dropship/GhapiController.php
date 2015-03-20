@@ -9,7 +9,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         if ($vendor->getData('ghapi_vendor_access_allow')) {
             $this->_renderPage(null, 'ghapi');
         } else {
-            return $this->_forward('dashboard');
+            return $this->_redirect('udropship/vendor/dashboard');
         }
 
     }
@@ -20,7 +20,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         // FIX for ACL - GH API Access
         $vendor = $this->_getSession()->getVendor();
         if (!$vendor->getData('ghapi_vendor_access_allow')) {
-            return $this->_forward('dashboard');
+            return $this->_redirect('udropship/vendor/dashboard');
         }
 
         $helper = Mage::helper('ghapi');
