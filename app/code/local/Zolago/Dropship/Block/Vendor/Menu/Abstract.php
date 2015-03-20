@@ -246,7 +246,13 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/sizetable')
 			);
 		}
-        if($this->isModuleActive('ghapi') && $this->isAllowed("ghapi")){
+
+        ;
+        if(
+            $this->isModuleActive('ghapi')
+            && $this->isAllowed("ghapi")
+        && ($this->getSession()->getVendor()->getGhapiVendorAccessAllow() == 1)
+        ){
             $groupOne[] = array(
                 "active" => $this->isActive("ghapi"),
                 "icon"	 => "icon-dashboard",
