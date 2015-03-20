@@ -98,4 +98,11 @@
             </udropship_adminhtml_vendor_edit_prepare_form>
         </events>
     </adminhtml>
+    <default>
+        <ghapi_options>
+            <ghapi_messages>
+                <ghapi_message_batch_size>100</ghapi_message_batch_size>
+            </ghapi_messages>
+        </ghapi_options>
+    </default>
 </config>

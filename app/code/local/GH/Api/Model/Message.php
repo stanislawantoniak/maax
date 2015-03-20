@@ -35,7 +35,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 */
 	public function addMessage($po,$message) {
         if(!$this->validateMessage($message)) {
-			$this->throwWrongMessageException();
+			return false;
 		} elseif(!($po instanceof Unirgy_DropshipPo_Model_Po)) {
 			Mage::throwException('Message could not be added because of wrong PO object');
 		} else {
@@ -82,6 +82,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		) {
 			return true;
 		}
+		$this->throwWrongMessageException();
 		return false;
 	}
 
@@ -95,37 +96,96 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	public function confirmMessages($token, array $messages) {
 		$user = $this->getUserByToken($token);
 
+		//first check if all provided ids are numbers
 		$messagesIds = array();
+		$notNumericMessagesIds = array();
 		foreach($messages as $messageId) {
 			if(is_numeric($messageId)) {
-				$messagesIds[] = $messageId;
+				$messagesIds[] = $messageId; //collect correct messagesIds
+			} else {
+				$notNumericMessagesIds[] = $messageId; //collect invalid messagesIds
 			}
 		}
-		if(count($messagesIds)) {
-			$messages = $this->getCollection();
-			$messages
-				->filterByIds($messagesIds)
-				->filterByVendorId($user->getVendorId())
-				->filterByStatus(GH_Api_Model_System_Source_Message_Status::GH_API_MESSAGE_STATUS_READ);
+		$messagesIdsCount = count($messagesIds);
+		$notNumericMessagesIdsCount = count($notNumericMessagesIds);
 
-			if($messages->count()) {
-				$validatedMessagesIds = array();
-				foreach($messages as $key=>$message) {
+		if($notNumericMessagesIdsCount) { //if there are not number ids in input data
+			$this->throwMessageIdNotNumericError($notNumericMessagesIds);
+		} elseif(!$messagesIdsCount) { //if there are no ids in input data
+			$this->throwMessageIdEmptyError();
+		} else {
+			$messagesCollection = $this->getCollection();
+			$messagesCollection->filterByIds($messagesIds); //get messages by inputed ids
+
+			$messagesCollectionCount = $messagesCollection->count();
+
+			if(!$messagesCollectionCount) { //if there are no messages in db
+				$this->throwMessageIdWrongError($messagesIds);
+			} else {
+				$invalidVendorMessagesIds = array();
+				$invalidStatusMessagesIds = array();
+				$messagesIdsToDelete = array();
+				foreach($messagesCollection as $message) {
 					/** @var GH_Api_Model_Message $message */
-					$validatedMessagesIds[] = $message->getId();
+					if($message->getVendorId() != $user->getVendorId()) { //messages for another vendors
+						$invalidVendorMessagesIds[] = $message->getId();
+					} elseif($message->getStatus() != GH_Api_Model_System_Source_Message_Status::GH_API_MESSAGE_STATUS_READ) { //not read messages
+						$invalidStatusMessagesIds[] = $message->getId();
+					} else { //good messages
+						$messagesIdsToDelete[] = $message->getId();
+					}
 				}
-				try {
-					$this->getResource()->deleteMessages($validatedMessagesIds);
-					return true;
-				} catch(Exception $e) {
-					Mage::throwException("DB Error occurred while removing messages (error: ".$e->getMessage().")");
+				if(count($invalidVendorMessagesIds)) { //throw error if user provided messages ids that are not his
+					$this->throwMessageIdWrongError($invalidVendorMessagesIds);
+				} elseif(count($invalidStatusMessagesIds)) { //throw error if user tried to confirm not read messages
+					$this->throwMessageIdStatusInvalidError($invalidStatusMessagesIds);
+				} else { //confirm messages
+					try {
+						$this->getResource()->deleteMessages($messagesIdsToDelete);
+						return true;
+					} catch(Exception $e) {
+						$this->getHelper()->throwDbError(); //throw db error
+					}
 				}
 			}
-
 		}
 		return false;
 	}
 
+	/**
+	 * @param array $messagesIds
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwMessageIdNotNumericError(array $messagesIds) {
+		Mage::throwException('error_message_id_not_numeric ('.implode(',',$messagesIds).')');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwMessageIdEmptyError() {
+		Mage::throwException('error_message_id_empty');
+	}
+
+	/**
+	 * @param array $messagesIds
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwMessageIdWrongError(array $messagesIds = array()) {
+		$ids = count($messagesIds) ? ' ('.implode(',',$messagesIds).')' : '';
+		Mage::throwException('error_message_id_wrong',$ids);
+	}
+
+	/**
+	 * @param array $messagesIds
+	 * @throws Mage_Core_Exception
+	 */
+	protected function throwMessageIdStatusInvalidError(array $messagesIds) {
+		Mage::throwException('error_message_not_read ('.implode(',',$messagesIds).')');
+	}
 
 	/**
 	 * @param $token
@@ -157,7 +217,6 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 			if($this->validateMessage($message)) {
 				$messages->filterByMessage($message);
 			} else {
-				$this->throwWrongMessageException();
 				return array();
 			}
 		}
@@ -191,7 +250,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 				//and return them
 				return $messagesToReturn;
 			} catch(Exception $e) {
-				Mage::throwException("DB Error occurred while setting messages as read");
+				$this->getHelper()->throwDbError();
 			}
 		}
 
@@ -203,9 +262,13 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @return int
 	 */
 	protected function getMaxMessageBatchSize() {
-		return 100; //todo: add config for this
+		return Mage::getStoreConfig('ghapi_options/ghapi_messages/ghapi_message_batch_size');
 	}
 
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
 	protected function throwWrongMessageException() {
 		Mage::throwException('Wrong message type');
 	}

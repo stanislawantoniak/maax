@@ -246,12 +246,18 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/sizetable')
 			);
 		}
-        if($this->isModuleActive('ghapi') && $this->isAllowed("ghapi")){
+
+
+        if (
+            $this->isModuleActive('ghapi')
+            && $this->isAllowed("udropship/ghapi")
+            && ($this->getSession()->getVendor()->getGhapiVendorAccessAllow() == 1)
+        ) {
             $groupOne[] = array(
                 "active" => $this->isActive("ghapi"),
-                "icon"	 => "icon-dashboard",
-                "label"	 => $this->__('GH API'),
-                "url"	 => $this->getUrl('udropship/ghapi')
+                "icon" => "icon-dashboard",
+                "label" => $this->__('GH API'),
+                "url" => $this->getUrl('udropship/ghapi')
             );
         }
 
@@ -385,6 +391,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	 * @return bool
 	 */
 	public function isAllowed($resource) {
+        Mage::log($resource);
 		return $this->getSession()->isAllowed($resource);
 	}
 	
