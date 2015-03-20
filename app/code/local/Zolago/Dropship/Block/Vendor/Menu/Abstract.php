@@ -248,16 +248,16 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		}
 
         ;
-        if(
+        if (
             $this->isModuleActive('ghapi')
             && $this->isAllowed("ghapi")
-        && ($this->getSession()->getVendor()->getGhapiVendorAccessAllow() == 1)
-        ){
+            && ($this->getSession()->getVendor()->getGhapiVendorAccessAllow() == 1)
+        ) {
             $groupOne[] = array(
                 "active" => $this->isActive("ghapi"),
-                "icon"	 => "icon-dashboard",
-                "label"	 => $this->__('GH API'),
-                "url"	 => $this->getUrl('udropship/ghapi')
+                "icon" => "icon-dashboard",
+                "label" => $this->__('GH API'),
+                "url" => $this->getUrl('udropship/ghapi')
             );
         }
 
