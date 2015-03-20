@@ -177,16 +177,17 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$facets = array();
 		$ids = array();
 		foreach($this->_categories as $row){
+		    $catId = $row['category_id'];
 			// Facetes
 			if(!isset($facets[$row['product_id']])){
 				$facets[$row['product_id']] = array();
 			}
-			$facets[$row['product_id']][] = $row['name'] . "/" . $row['category_id'];
+			$facets[$row['product_id']][$catId] = $row['name'] . "/" . $row['category_id'];
 			// Ids
 			if(!isset($ids[$row['product_id']])){
 				$ids[$row['product_id']] = array();
 			}
-			$ids[$row['product_id']][] = $row['category_id'];
+			$ids[$row['product_id']][$catId] = $row['category_id'];
 		}
 		
 		// Assign categories to product
@@ -194,6 +195,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			if($item = $collection->getItemById($productId)){
 				if(isset($facets[$productId])){
 					// Set faces
+					$facets[$productId] = array_values($facets[$productId]);
 					if($asFacet){
 						$item->setCategoryFacet($facets[$productId]);
 						$item->setCategoryText($facets[$productId]);
@@ -218,7 +220,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 					$item->setCategoryPath($facets[$productId]);
 				}
 				// Finally set categoru ids
-				$item->setCategoryId($prodcutCategoryIds);
+				$item->setCategoryId(array_values($prodcutCategoryIds));
 			}
 		}
 		
