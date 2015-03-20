@@ -7,4 +7,7 @@ class GH_Api_Model_Resource_Session_Collection extends Mage_Core_Model_Resource_
 		$this->_init('ghapi/session');
 	}
 
+    public function filterByUserId($userId) {
+        return $this->addFieldToFilter('user_id', $userId);
+    }
 }

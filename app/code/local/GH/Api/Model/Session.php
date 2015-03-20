@@ -93,4 +93,28 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	protected function getHelper() {
 		return Mage::helper('ghapi');
 	}
+
+    /**
+     * Removing expired sessions
+     * If userId added removing only for specific user
+     *
+     * @param null|int $userId
+     */
+    public function removeExpiredSessions($userId = null) {
+        /** @var GH_Api_Model_Resource_Session_Collection $coll */
+        $coll = $this->getCollection();
+        if (!empty($userId)) {
+            $coll->filterByUserId($userId);
+        }
+        $coll->addFieldToFilter('created_at',
+            array(
+                'lt' => $this->getExpirationDate()
+            )
+        );
+        $data = $coll->getAllIds();
+
+        /** @var GH_Api_Model_Resource_Session $res */
+        $res = $this->getResource();
+        $res->removeExpiredSessions($data);
+    }
 }

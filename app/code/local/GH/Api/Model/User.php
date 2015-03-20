@@ -75,12 +75,13 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 			} elseif($this->getApiKey() != $apiKey) {
 				$this->throwApiKeyError();
 			} else {
-				$this->setIsLoggedIn();
-				$session = $this->getSessionModel()->createSession($this);
+                $this->setIsLoggedIn();
+                $session = $this->getSessionModel()->createSession($this);
 				if(!$session->getId()) {
 					Mage::throwException('error_session_creation');
 				} else {
 					$this->setSession($session);
+                    $session->removeExpiredSessions($session->getUserId());
 				}
 			}
 		}
