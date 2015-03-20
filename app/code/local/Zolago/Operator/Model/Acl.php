@@ -165,7 +165,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PAYMENT_OPERATOR, self::RES_PAYMENT_OPERATOR);
 
         // Build ACL Rules - GH API Access
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        if ($vendor->getData('ghapi_vendor_access_allow')) {
+            $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+        } else {
+            $this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+        }
 
 	}
 	
