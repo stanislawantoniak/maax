@@ -1,9 +1,10 @@
 <?php
+/** @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner */
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $sliders = $this->getSliders();
-if($sliders):
-    ?>
+
+if($sliders): ?>
 <div class="row">
 	<?php if($sliders): ?>
 		<section id="topSlider">
@@ -51,35 +52,39 @@ if($sliders):
 		</section>
 	<?php endif; ?>
 </div>
-            <?php endif; ?>
-
+<?php endif; ?>
 <?php $boxes = $this->getBoxes(); ?>
-	<?php if ($boxes) : ?>
-<div class="row">
-    <div class="container-fluid small-banners">
-        <div class="row">
-            <?php foreach($boxes as $n => $box): ?>
-                <?php $boxe = empty($box['banner_image'])? array():unserialize($box['banner_image']) ?>
-                <?php if(!empty($boxe)): ?>
-                    <?php foreach($boxe as $i => $b): ?>
-                        <div class="col-xs-6 col-sm-3 tight-padding clear-left-nth">
-                            <?php if(!empty($b['url'])): ?>
-                            <a href="<?php echo $b['url']; ?>">
-                                <?php endif; ?>
-                                <img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $b['path']; ?>" alt="" class="border1px-rd2-img-gray margin-10-top img-responsive">
-                                <?php if(!empty($b['url'])): ?>
-                            </a>
-                        <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                    <?php unset($i); ?>
-                    <?php unset($b); ?>
-                    <?php unset($caption); ?>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</div>
-            <?php endif; ?>
+<?php if ($boxes) : ?>
+	<div class="row">
+		<section id="boxesSlider">
+			<?php foreach($boxes as $n => $box): ?>
+				<?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
+				<?php if(!empty($boxe)): ?>
+					<?php foreach($boxe as $i => $b): ?>
+						<?php $imagePath = rtrim(Mage::getBaseUrl('media'),'/') . $b['path']; ?>
+						<?php $imageSize = $this->getImageSize($b['path']) ?>
+						<?php if(is_array($imageSize)): ?>
+							<div class="boxesSlide">
+								<?php if(!empty($b['url'])): ?>
+									<a href="<?php echo $b['url']; ?>">
+								<?php endif; ?>
+										<div class="boxesSlideIn"
+										     style="background-image: url('<?php echo $imagePath; ?>')"
+										     data-height="<?php echo $this->getImageSize($b['path'])[1]; ?>">
+										</div>
+								<?php if(!empty($b['url'])): ?>
+									</a>
+								<?php endif; ?>
+							</div>
+						<?php endif; ?>
+					<?php endforeach; ?>
+					<?php unset($i); ?>
+					<?php unset($b); ?>
+					<?php unset($caption); ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</section>
+	</div>
+<?php endif; ?>
 
 

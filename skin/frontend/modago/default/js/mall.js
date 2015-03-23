@@ -627,8 +627,25 @@ Mall.rwdCarousel = {
     }
 };
 
+Mall.Breakpoint = {
+	xs: 480,
+	sm: 768,
+	md: 992,
+	lg: 1200
+};
+
+Mall.isMobile = function() {
+	return window.innerWidth < Mall.Breakpoint.sm;
+};
+
 // http://kenwheeler.github.io/slick/
 Mall.Slick = {
+	breakpoints: {
+		xs: 480,
+		sm: 768,
+		md: 992,
+		lg: 1200
+	},
 	events: {
 		afterChange: 'afterChange',
 		beforeChange: 'beforeChange',
@@ -640,9 +657,14 @@ Mall.Slick = {
 	},
 	init: function() {
 		Mall.Slick.top.init();
+		Mall.Slick.boxes.init();
 	},
-	isAutoplay: function() {
-		return jQuery(window).width() > 767;
+	sliderAvailable: function(sliderId) {
+		return jQuery(sliderId).length > 0;
+	},
+	unslick: function(slickChild) {
+		slickChild.slider = false;
+		jQuery(slickChild.sliderId).slick('unslick');
 	},
 	top: {
 		slider: false,
@@ -657,20 +679,20 @@ Mall.Slick = {
 			var self = this;
 			if(self.slider === false && self.sliderAvailable()) {
 				self.slider = jQuery(self.sliderId);
-				if(Mall.Slick.isAutoplay()) {
+				if(!Mall.isMobile()) {
 					self.options.autoplay = true;
 				}
-				self.slick = self.slider.slick(self.options);
+				self.slider.slick(self.options);
 				self.attachEvents();
 			}
 		},
 		sliderAvailable: function() {
 			var self = this;
-			return jQuery(self.sliderId).length > 0;
+			return Mall.Slick.sliderAvailable(self.sliderId);
 		},
 		attachEvents: function() {
 			var self = this;
-			if(Mall.Slick.isAutoplay()) {
+			if(!Mall.isMobile()) {
 				jQuery(window).scroll(function () {
 					if (self.inViewport()) {
 						self.slider.slick('slickPlay');
@@ -685,6 +707,97 @@ Mall.Slick = {
 			var sliderOffset = self.slider.offset().top,
 				windowOffset = jQuery(window).scrollTop();
 			return windowOffset < sliderOffset;
+		}
+	},
+	boxes: {
+		boxWidth: 280,
+		boxHeight: 323,
+		boxImageHeight: false,
+		slider: false,
+		sliderId: '#boxesSlider',
+		slideClass: '.boxesSlideIn',
+		options: {
+			slidesToShow: 4,
+			slidesToScroll: 4,
+			speed: 500,
+			dots: false,
+			arrows: false
+		},
+		eventsAttached: false,
+		init: function() {
+			var self = this;
+			if(self.slider === false && self.sliderAvailable()) {
+				self.slider = jQuery(self.sliderId);
+				self.slider.slick(self.options);
+				self.attachEvents()
+			}
+		},
+		getBoxHeight: function() {
+			var self = this;
+			if(self.boxImageHeight === false) {
+				var height = 0;
+				jQuery(self.slideClass).each(function() {
+					var currentSlideHeight = jQuery(this).data('height');
+					height = currentSlideHeight < self.boxHeight && currentSlideHeight > height ? currentSlideHeight : height;
+				});
+				self.boxImageHeight = height && height < self.boxHeight ? height : self.boxHeight;
+			}
+			return self.boxImageHeight;
+		},
+		sliderAvailable: function() {
+			var self = this;
+			return Mall.Slick.sliderAvailable(self.sliderId);
+		},
+		isSlick: function() {
+			return Mall.Slick.boxes.slider !== false ? Mall.Slick.boxes.slider.hasClass('slick-slider') : false;
+		},
+		attachEvents: function() {
+			var self = this;
+			if(!self.eventsAttached) {
+				self.eventsAttached = true;
+				jQuery(window).resize(function () {
+					if(Mall.isMobile()) {
+						if(Mall.Slick.boxes.isSlick()) {
+							Mall.Slick.boxes.slider.slick("unslick");
+							Mall.Slick.boxes.slider = false;
+						}
+						Mall.Slick.boxes.resizeBoxesMobile();
+					} else {
+						Mall.Slick.boxes.init();
+					}
+
+				});
+				Mall.Slick.boxes.slider
+					.on(
+						Mall.Slick.events.setPosition+' '+Mall.Slick.events.init+' ',
+						Mall.Slick.boxes.resizeBoxes
+					);
+				jQuery(document).ready(function() {
+					Mall.Slick.boxes.resizeBoxesMobile();
+				});
+			}
+		},
+		resizeBoxes: function() {
+			if(Mall.Slick.boxes.isSlick()) {
+				var width = Mall.Slick.boxes.slider.find('.slick-track').width(),
+					boxWidth = (width - (4 * 10)) / 4,
+					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.boxWidth);
+
+				boxWidth = boxWidth >= Mall.Slick.boxes.boxWidth ? Mall.Slick.boxes.boxWidth : boxWidth;
+				boxHeight = boxHeight >= Mall.Slick.boxes.getBoxHeight() ? Mall.Slick.boxes.getBoxHeight() : boxHeight;
+
+				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({'width': boxWidth + 'px', 'height': boxHeight + 'px'});
+			}
+		},
+		resizeBoxesMobile: function() {
+			if(!Mall.Slick.boxes.isSlick()) {
+				var parent = jQuery(Mall.Slick.boxes.sliderId),
+					width = parent.width(),
+					boxWidth = (width - (3*10)) / 2,
+					boxHeight = boxWidth * (Mall.Slick.boxes.boxHeight / Mall.Slick.boxes.boxWidth);
+
+				jQuery(Mall.Slick.boxes.sliderId).find(Mall.Slick.boxes.slideClass).css({'width': boxWidth+'px', 'height': boxHeight+'px'});
+			}
 		}
 	}
 };
@@ -705,7 +818,7 @@ Mall.Cart = {
         jQuery("#num_discount_voucher").val("");
         Mall.Cart.applyCoupon();
     }
-}
+};
 
 Mall.product = {
     _size_table_template: "",

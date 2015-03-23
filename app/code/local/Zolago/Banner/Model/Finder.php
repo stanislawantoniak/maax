@@ -20,6 +20,7 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 	 *      banner_show - string (required)
 	 *		type - string (required)
 	 *		slots - int (required)
+	 * @return array
 	 */
 	public function request($request) {
 		

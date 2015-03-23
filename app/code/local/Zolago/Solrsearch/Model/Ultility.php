@@ -166,7 +166,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			$item->setId($row['entity_id']);
 			$finalCollection->addItem($item);
 		}
-		Mage::log("Base collection " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Base collection " . $this->_formatTime($this->getMicrotime()-$time));
 		
 
 		
@@ -178,7 +178,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		$resourceModel->loadAttributesData($finalCollection, $attibutes, $finalCollection->getAllIds(), $storeId);
 		
-		Mage::log("Attributes load from EAV " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Attributes load from EAV " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		////////////////////////////////////////////////////////////////////////
 		// Add tax percents
@@ -187,7 +187,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		$dataModel->addTaxPercents($finalCollection, $storeId);
 		
-		Mage::log("Add tax percents " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Add tax percents " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		
 		////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		$time = $this->getMicrotime();
 		$resourceModel->loadCategoryData($finalCollection, $storeId);
 		
-		Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		
 		////////////////////////////////////////////////////////////////////////
@@ -213,7 +213,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		);
 		
 		
-		Mage::log("Extending configurable with child data " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Extending configurable with child data " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		
 		////////////////////////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 				$dataModel->processFinalItemData($item);
 			}
 		}
-		Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		
 		/**
@@ -354,7 +354,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		/* @var $resourceModel Zolago_Solrsearch_Model_Resource_Improve */
 		
 		$storeId = $collection->getStoreId();
-		Mage::log("Start");
+		//Mage::log("Start");
 		
 	   
 		//$collecitonIds = array_keys($collection->getItems());
@@ -385,7 +385,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		//));
 		
 		$allIds = $collecitonIds;
-		Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		// Final collection is a set with all types of products
 		$finalCollection = Mage::getModel("zolagosolrsearch/improve_collection");
@@ -403,14 +403,14 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 				$this->getSolrUsedAttributes(), $finalCollection);
 				
 		
-		Mage::log("Stop " . $finalCollection->count() . " = " . count($allIds));
+		//Mage::log("Stop " . $finalCollection->count() . " = " . count($allIds));
 		
 		// DEV: log 10 item
 		$fetchedProducts = 0;
 		$index = 1;
 		$documents = "{";
 		
-		Mage::log("Collection " . count($collecitonIds));
+		//Mage::log("Collection " . count($collecitonIds));
 		
 		foreach($collecitonIds as $id){
 			/* @var $item Varien_Object */
@@ -431,10 +431,10 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		$jsonData = trim($documents,",").'}';
 		
 		
-		Mage::log("Time processed:" . $this->_formatTime($this->getMicrotime()-$mainTime));
-		Mage::log("Inout collection prods: " . count($collecitonIds));
-		Mage::log("Count configurable childs: " . count($this->_configurableChildIdsFlat));
-		Mage::log("Count grouped childs: " . count($this->_groupedChildIdsFlat));
+		//Mage::log("Time processed:" . $this->_formatTime($this->getMicrotime()-$mainTime));
+		//Mage::log("Inout collection prods: " . count($collecitonIds));
+		//Mage::log("Count configurable childs: " . count($this->_configurableChildIdsFlat));
+		//Mage::log("Count grouped childs: " . count($this->_groupedChildIdsFlat));
 		
 		
 		
