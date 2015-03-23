@@ -137,6 +137,11 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         $ids = $this->getArg('ids');
         $ids = explode(',', $ids);
 
+
+        foreach ($ids as $id => $value) {
+            $ids[$id] = (int)$value;
+        }
+
         $api->setChangeOrderMessageConfirmation($token, $ids);
     }
     public function setChangeOrderMessageConfirmationActionHelp() {
