@@ -144,7 +144,6 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$notNumericMessagesIdsCount = count($notNumericMessagesIds);
 
 		if($notNumericMessagesIdsCount) { //if there are not number ids in input data
-			Mage::log($notNumericMessagesIds,null,"api.log");
 			$this->throwMessageIdNotNumericError($notNumericMessagesIds);
 		} elseif(!$messagesIdsCount) { //if there are no ids in input data
 			$this->throwMessageIdEmptyError();
@@ -214,7 +213,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 */
 	protected function throwMessageIdWrongError(array $messagesIds = array()) {
 		$ids = count($messagesIds) ? ' ('.implode(',',$messagesIds).')' : '';
-		Mage::throwException('error_message_id_wrong',$ids);
+		Mage::throwException('error_message_id_wrong'.$ids);
 	}
 
 	/**
