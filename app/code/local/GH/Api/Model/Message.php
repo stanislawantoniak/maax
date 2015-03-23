@@ -169,7 +169,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 						$messagesIdsToDelete[] = $message->getId();
 					}
 				}
-				$idsCheck = array_diff($messagesIdsToDelete,$messagesIds);
+				$idsCheck = array_diff($messagesIds, $messagesIdsToDelete);
 				if(count($idsCheck)) {
 					$this->throwMessageIdWrongError($idsCheck);
 				} elseif(count($invalidVendorMessagesIds)) { //throw error if user provided messages ids that are not his
