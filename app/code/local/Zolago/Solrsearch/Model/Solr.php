@@ -199,14 +199,17 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					$filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
 
 					//Check category is anchor
-					if ($_category->getIsAnchor()) {
-						$childrenIds = $_category->getAllChildren(true);
-						if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-							if (!isset($standardFilterQuery['category_id'])){
-								$filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
-							}
-						}
-					}
+//					if ($_category->getIsAnchor()) {
+//                        /** @var Mage_Catalog_Model_Resource_Category $res */
+//                        $res = $_category->getResource();
+//						$childrenIds = $res->getChildren($_category, false);
+//
+//						if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
+//							if (!isset($standardFilterQuery['category_id'])){
+//								$filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
+//							}
+//						}
+//					}
 				}
             };
         }

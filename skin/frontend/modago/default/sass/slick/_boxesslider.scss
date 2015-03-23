@@ -1,0 +1,28 @@
+#boxesSlider {
+	margin-top: 25px;
+	text-align: center;
+	.boxesSlide {
+		background-color: #FFF;
+		display: inline-block;
+		vertical-align: middle;
+		float: none;
+		margin: 0 5px;
+		border: 1px solid #dbdbdb;
+		.boxesSlideIn {
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: center center;
+			background-color: #FFFFFF;
+			@include max-screen($screen-sm-max) {
+				width: 50%;
+			}
+		}
+		@include max-screen($screen-sm-max) {
+			vertical-align: top;
+			&:nth-child(1) {
+				margin-bottom: 10px;
+			}
+		}
+	}
+
+}

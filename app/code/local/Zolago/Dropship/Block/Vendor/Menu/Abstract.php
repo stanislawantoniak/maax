@@ -193,12 +193,6 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		
 		$groupOne = array();
 		if($this->isAllowed("udropship/vendor/preferences")){
-//			$groupOne[] = array(
-//				"active" => $this->isActive("preferences"),
-//				"icon"	 => "icon-cog",
-//				"label"	 => $this->__('Preferences'),
-//				"url"	 => $this->getUrl('udropship/vendor/preferences')
-//			);
 
             if(!$this->isOperatorMode()){
                 $groupOne[] = array(
@@ -254,16 +248,19 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		}
 
 
-        /*		
-		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
-			$groupOne[] = array(
-				"active" => $this->isActive("tiership_rates"),
-				"icon"	 => "icon-envelope",
-				"label"	 => $this->__('Shipping Rates'),
-				"url"	 => $this->getUrl('udtiership/vendor/rates')
-			);
-		}
-		*/
+        if (
+            $this->isModuleActive('ghapi')
+            && $this->isAllowed("udropship/ghapi")
+            && ($this->getSession()->getVendor()->getGhapiVendorAccessAllow() == 1)
+        ) {
+            $groupOne[] = array(
+                "active" => $this->isActive("ghapi"),
+                "icon" => "icon-dashboard",
+                "label" => $this->__('GH API'),
+                "url" => $this->getUrl('udropship/ghapi')
+            );
+        }
+
 		$grouped = $this->_processGroups($groupOne);
 
 		if(count($grouped)){
@@ -278,7 +275,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                         "zolagosizetable",
                         "info",
                         "shipping",
-                        "rma"
+                        "rma",
+                        "ghapi"
                     )
                 ),
                 "icon" => "icon-wrench",
@@ -393,6 +391,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	 * @return bool
 	 */
 	public function isAllowed($resource) {
+        Mage::log($resource);
 		return $this->getSession()->isAllowed($resource);
 	}
 	

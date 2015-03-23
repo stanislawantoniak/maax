@@ -235,4 +235,18 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
 
     }
+
+	public function getImageSize($imagePath) {
+		$image = getcwd().'/media'.$imagePath;
+		if(file_exists($image)) {
+			try {
+				return getimagesize($image);
+			} catch(Exception $e) {
+				//do nothing
+			}
+		} else {
+			return $image;
+		}
+		return false;
+	}
 } 
