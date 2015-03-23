@@ -711,8 +711,7 @@ Mall.Slick = {
 	},
 	boxes: {
 		boxWidth: 280,
-		boxHeight: 323,
-		boxImageHeight: false,
+		boxHeight: false,
 		slider: false,
 		sliderId: '#boxesSlider',
 		slideClass: '.boxesSlideIn',
@@ -732,17 +731,20 @@ Mall.Slick = {
 				self.attachEvents()
 			}
 		},
+		getBoxWidth: function() {
+			return this.boxWidth;
+		},
 		getBoxHeight: function() {
 			var self = this;
-			if(self.boxImageHeight === false) {
+			if(self.boxHeight === false) {
 				var height = 0;
 				jQuery(self.slideClass).each(function() {
 					var currentSlideHeight = jQuery(this).data('height');
-					height = currentSlideHeight < self.boxHeight && currentSlideHeight > height ? currentSlideHeight : height;
+					height = currentSlideHeight > height ? currentSlideHeight : height;
 				});
-				self.boxImageHeight = height && height < self.boxHeight ? height : self.boxHeight;
+				self.boxHeight = height;
 			}
-			return self.boxImageHeight;
+			return self.boxHeight;
 		},
 		sliderAvailable: function() {
 			var self = this;
