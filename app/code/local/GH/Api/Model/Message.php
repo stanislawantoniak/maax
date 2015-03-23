@@ -232,7 +232,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$user = $this->getUserByToken($token);
 
 		//check if batch is correct
-		if(!is_numeric($batchSize) || $batchSize > $this->getMaxMessageBatchSize() || $batchSize < 1) {
+		if(!is_numeric($batchSize) && ($batchSize > $this->getMaxMessageBatchSize() || $batchSize < 1)) {
 			Mage::throwException('error_message_batchsize_invalid');
 		}
 
