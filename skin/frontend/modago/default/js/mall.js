@@ -710,8 +710,7 @@ Mall.Slick = {
 		}
 	},
 	boxes: {
-		boxWidth: false,
-		boxHeight: false,
+		boxRatio: false,
 		slider: false,
 		sliderId: '#boxesSlider',
 		slideClass: '.boxesSlideIn',
@@ -768,6 +767,21 @@ Mall.Slick = {
 			}
 			return self.boxHeight;
 		},
+		getBoxRatio: function() {
+			var self = this;
+			if(self.boxRatio === false) {
+				var ratio = 999;
+				jQuery(self.slideClass).each(function() {
+					var currentSlideWidth = jQuery(this).data('width'),
+						currentSlideHeight = jQuery(this).data('height'),
+						currentSlideRatio = currentSlideWidth / currentSlideHeight;
+					console.log(currentSlideRatio);
+					ratio = currentSlideRatio < ratio ? currentSlideRatio : ratio;
+				});
+				self.boxRatio = ratio;
+			}
+			return self.boxRatio;
+		},
 		sliderAvailable: function() {
 			var self = this;
 			return Mall.Slick.sliderAvailable(self.sliderId);
@@ -802,12 +816,9 @@ Mall.Slick = {
 		resizeBoxes: function() {
 			if(Mall.Slick.boxes.isSlick()) {
 				var width = Mall.Slick.boxes.slider.find('.slick-track').width(),
-					boxesAmount = Mall.Slick.boxes.options.slidesToShow,
+					boxesAmount = Mall.Slick.boxes.getBoxesAmount(),
 					boxWidth = (width - (boxesAmount * 10)) / boxesAmount,
-					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.getBoxWidth());
-
-				boxWidth = boxWidth >= Mall.Slick.boxes.getBoxWidth() ? Mall.Slick.boxes.getBoxWidth() : boxWidth;
-				boxHeight = boxHeight >= Mall.Slick.boxes.getBoxHeight() ? Mall.Slick.boxes.getBoxHeight() : boxHeight;
+					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
 				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({'width': boxWidth + 'px', 'height': boxHeight + 'px'});
 			}
@@ -817,7 +828,7 @@ Mall.Slick = {
 				var parent = jQuery(Mall.Slick.boxes.sliderId),
 					width = parent.width(),
 					boxWidth = (width - (3*10)) / 2,
-					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.getBoxWidth());
+					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
 				jQuery(Mall.Slick.boxes.sliderId).find(Mall.Slick.boxes.slideClass).css({'width': boxWidth+'px', 'height': boxHeight+'px'});
 			}
