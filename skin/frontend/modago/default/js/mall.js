@@ -710,7 +710,7 @@ Mall.Slick = {
 		}
 	},
 	boxes: {
-		boxWidth: 280,
+		boxWidth: false,
 		boxHeight: false,
 		slider: false,
 		sliderId: '#boxesSlider',
@@ -732,7 +732,16 @@ Mall.Slick = {
 			}
 		},
 		getBoxWidth: function() {
-			return this.boxWidth;
+			var self = this;
+			if(self.boxWidth === false) {
+				var width = 0;
+				jQuery(self.slideClass).each(function() {
+					var currentSlideWidth = jQuery(this).data('width');
+					width = currentSlideWidth > width ? currentSlideWidth : width;
+				});
+				self.boxWidth = width;
+			}
+			return self.boxWidth;
 		},
 		getBoxHeight: function() {
 			var self = this;
@@ -783,9 +792,9 @@ Mall.Slick = {
 			if(Mall.Slick.boxes.isSlick()) {
 				var width = Mall.Slick.boxes.slider.find('.slick-track').width(),
 					boxWidth = (width - (4 * 10)) / 4,
-					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.boxWidth);
+					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.getBoxWidth());
 
-				boxWidth = boxWidth >= Mall.Slick.boxes.boxWidth ? Mall.Slick.boxes.boxWidth : boxWidth;
+				boxWidth = boxWidth >= Mall.Slick.boxes.getBoxWidth() ? Mall.Slick.boxes.getBoxWidth() : boxWidth;
 				boxHeight = boxHeight >= Mall.Slick.boxes.getBoxHeight() ? Mall.Slick.boxes.getBoxHeight() : boxHeight;
 
 				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({'width': boxWidth + 'px', 'height': boxHeight + 'px'});
@@ -796,7 +805,7 @@ Mall.Slick = {
 				var parent = jQuery(Mall.Slick.boxes.sliderId),
 					width = parent.width(),
 					boxWidth = (width - (3*10)) / 2,
-					boxHeight = boxWidth * (Mall.Slick.boxes.boxHeight / Mall.Slick.boxes.boxWidth);
+					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.getBoxWidth());
 
 				jQuery(Mall.Slick.boxes.sliderId).find(Mall.Slick.boxes.slideClass).css({'width': boxWidth+'px', 'height': boxHeight+'px'});
 			}
