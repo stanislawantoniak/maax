@@ -144,6 +144,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$notNumericMessagesIdsCount = count($notNumericMessagesIds);
 
 		if($notNumericMessagesIdsCount) { //if there are not number ids in input data
+			Mage::log($notNumericMessagesIds,null,"api.log");
 			$this->throwMessageIdNotNumericError($notNumericMessagesIds);
 		} elseif(!$messagesIdsCount) { //if there are no ids in input data
 			$this->throwMessageIdEmptyError();
