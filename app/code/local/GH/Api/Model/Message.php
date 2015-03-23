@@ -169,7 +169,10 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 						$messagesIdsToDelete[] = $message->getId();
 					}
 				}
-				if(count($invalidVendorMessagesIds)) { //throw error if user provided messages ids that are not his
+				$idsCheck = array_diff($messagesIdsToDelete,$messagesIds);
+				if(count($idsCheck)) {
+					$this->throwMessageIdWrongError($idsCheck);
+				} elseif(count($invalidVendorMessagesIds)) { //throw error if user provided messages ids that are not his
 					$this->throwMessageIdWrongError($invalidVendorMessagesIds);
 				} elseif(count($invalidStatusMessagesIds)) { //throw error if user tried to confirm not read messages
 					$this->throwMessageIdStatusInvalidError($invalidStatusMessagesIds);

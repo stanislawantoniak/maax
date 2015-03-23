@@ -56,7 +56,7 @@ if($sliders): ?>
 <?php $boxes = $this->getBoxes(); ?>
 <?php if ($boxes) : ?>
 	<div class="row">
-		<section id="boxesSlider">
+		<section id="boxesSlider" data-boxes-amount="4">
 			<?php foreach($boxes as $n => $box): ?>
 				<?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
 				<?php if(!empty($boxe)): ?>

@@ -715,9 +715,10 @@ Mall.Slick = {
 		slider: false,
 		sliderId: '#boxesSlider',
 		slideClass: '.boxesSlideIn',
+		boxesAmount: jQuery('#boxesSlider').data('boxesAmount'),
 		options: {
-			slidesToShow: 4,
-			slidesToScroll: 4,
+			slidesToShow: jQuery('#boxesSlider').data('boxesAmount') ? jQuery('#boxesSlider').data('boxesAmount') : 4,
+			slidesToScroll: jQuery('#boxesSlider').data('boxesAmount') ? jQuery('#boxesSlider').data('boxesAmount') : 4,
 			speed: 500,
 			dots: false,
 			arrows: false
@@ -762,36 +763,34 @@ Mall.Slick = {
 		isSlick: function() {
 			return Mall.Slick.boxes.slider !== false ? Mall.Slick.boxes.slider.hasClass('slick-slider') : false;
 		},
+		handleSlider: function() {
+			if(Mall.isMobile()) {
+				if(Mall.Slick.boxes.isSlick()) {
+					Mall.Slick.boxes.slider.slick("unslick");
+					Mall.Slick.boxes.slider = false;
+				}
+				Mall.Slick.boxes.resizeBoxesMobile();
+			} else {
+				Mall.Slick.boxes.init();
+			}
+		},
 		attachEvents: function() {
 			var self = this;
 			if(!self.eventsAttached) {
 				self.eventsAttached = true;
-				jQuery(window).resize(function () {
-					if(Mall.isMobile()) {
-						if(Mall.Slick.boxes.isSlick()) {
-							Mall.Slick.boxes.slider.slick("unslick");
-							Mall.Slick.boxes.slider = false;
-						}
-						Mall.Slick.boxes.resizeBoxesMobile();
-					} else {
-						Mall.Slick.boxes.init();
-					}
-
-				});
+				jQuery(window).resize(Mall.Slick.boxes.handleSlider);
+				jQuery(document).ready(Mall.Slick.boxes.handleSlider);
 				Mall.Slick.boxes.slider
 					.on(
-						Mall.Slick.events.setPosition+' '+Mall.Slick.events.init+' ',
+						Mall.Slick.events.setPosition+' '+Mall.Slick.events.init,
 						Mall.Slick.boxes.resizeBoxes
 					);
-				jQuery(document).ready(function() {
-					Mall.Slick.boxes.resizeBoxesMobile();
-				});
 			}
 		},
 		resizeBoxes: function() {
 			if(Mall.Slick.boxes.isSlick()) {
 				var width = Mall.Slick.boxes.slider.find('.slick-track').width(),
-					boxWidth = (width - (4 * 10)) / 4,
+					boxWidth = (width - (Mall.Slick.boxes.boxesAmount * 10)) / Mall.Slick.boxes.boxesAmount,
 					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.getBoxWidth());
 
 				boxWidth = boxWidth >= Mall.Slick.boxes.getBoxWidth() ? Mall.Slick.boxes.getBoxWidth() : boxWidth;
