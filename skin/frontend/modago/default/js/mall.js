@@ -715,10 +715,10 @@ Mall.Slick = {
 		slider: false,
 		sliderId: '#boxesSlider',
 		slideClass: '.boxesSlideIn',
-		boxesAmount: jQuery('#boxesSlider').data('boxesAmount'),
+		boxesAmount: false,
 		options: {
-			slidesToShow: jQuery('#boxesSlider').data('boxesAmount') ? jQuery('#boxesSlider').data('boxesAmount') : 4,
-			slidesToScroll: jQuery('#boxesSlider').data('boxesAmount') ? jQuery('#boxesSlider').data('boxesAmount') : 4,
+			slidesToShow: false,
+			slidesToScroll: false,
 			speed: 500,
 			dots: false,
 			arrows: false
@@ -726,11 +726,23 @@ Mall.Slick = {
 		eventsAttached: false,
 		init: function() {
 			var self = this;
+
 			if(self.slider === false && self.sliderAvailable()) {
 				self.slider = jQuery(self.sliderId);
+				self.options.slidesToShow = self.options.slidesToScroll = self.getBoxesAmount();
 				self.slider.slick(self.options);
 				self.attachEvents()
 			}
+		},
+		getBoxesAmount: function() {
+			var self = this,
+				amount = self.slider.data('boxesAmount');
+			if(self.slider !== false && amount) {
+				self.boxesAmount = amount;
+			} else {
+				self.boxesAmount = 4;
+			}
+			return self.boxesAmount;
 		},
 		getBoxWidth: function() {
 			var self = this;
@@ -790,7 +802,8 @@ Mall.Slick = {
 		resizeBoxes: function() {
 			if(Mall.Slick.boxes.isSlick()) {
 				var width = Mall.Slick.boxes.slider.find('.slick-track').width(),
-					boxWidth = (width - (Mall.Slick.boxes.boxesAmount * 10)) / Mall.Slick.boxes.boxesAmount,
+					boxesAmount = Mall.Slick.boxes.options.slidesToShow,
+					boxWidth = (width - (boxesAmount * 10)) / boxesAmount,
 					boxHeight = boxWidth * (Mall.Slick.boxes.getBoxHeight() / Mall.Slick.boxes.getBoxWidth());
 
 				boxWidth = boxWidth >= Mall.Slick.boxes.getBoxWidth() ? Mall.Slick.boxes.getBoxWidth() : boxWidth;
