@@ -118,13 +118,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         $type = $this->getArg('type');
 
         if (empty($type)) {
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER);
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_CANCELLED_ORDER);
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_ITEMS_CHANGED);
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_DELIVERY_DATA_CHANGED);
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED);
-            $api->getChangeOrderMessage($token, $size, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_STATUS_CHANGED);
+            $api->getChangeOrderMessage($token, $size, null);
         } else {
             $api->getChangeOrderMessage($token, $size, $type);
         }
