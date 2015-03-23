@@ -1,0 +1,149 @@
+<definitions name="GHApi"
+   targetNamespace="<?php echo $this->getTargetNamespace();?>"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="<?php echo $this->getTns(); ?>"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+  	<xsd:schema targetNamespace="<?php echo $this->getTargetNamespace();?>">
+		<xsd:complexType name="loginRequest">
+			<xsd:all>
+				<xsd:element name="vendorId" type="xsd:int"/>
+				<xsd:element name="password" type="xsd:string"/>
+				<xsd:element name="webApiKey" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="loginResponse">
+			<xsd:all>
+				<xsd:element name="token" type="xsd:string"/>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="changeOrderMessageRequest">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="messageBatchSize" type="xsd:int"/>
+				<xsd:element name="messageType" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="changeOrderMessageResponse">
+			<xsd:all>
+				<xsd:element name="list" type="tns:messageList"/>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="tns:message">
+			<xsd:all>
+				<xsd:element name="messageId" type="xsd:int"/>
+				<xsd:element name="messageType" type="xsd:string"/>
+				<xsd:element name="orderId" type="xsd:string"/>
+			</xsd:all>		
+		</xsd:complexType>
+		<xsd:complexType name="tns:messageList">
+			<xsd:sequence>
+				<xsd:element name="message" type="tns:message" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:complexType name="tns:messageIdList">
+			<xsd:sequence>
+				<xsd:element name="messageId" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:complexType name="confirmationMessageRequest">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="messageIdList" type="tns:messageIdList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="confirmationMessageResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:schema>
+  </types>
+  <message name="doLoginRequest">
+      <part name="loginParameters" type="tns:loginRequest"/>
+  </message>	
+  <message name="doLoginResponse">
+      <part name="response" type="tns:loginResponse"/>
+  </message>	
+  <message name="getChangeOrderMessageRequest">
+      <part name="getChangeOrderMessageParameters" type="tns:changeOrderMessageRequest"/>
+  </message>	
+  <message name="getChangeOrderMessageResponse">
+      <part name="response" type="tns:changeOrderMessageResponse"/>
+  </message>	
+  <message name="setChangeOrderMessageConfirmationRequest">
+      <part name="setChangeOrderMessageConfirmationParameters" type="tns:confirmationMessageRequest"/>
+  </message>	
+  <message name="setChangeOrderMessageConfirmationResponse">
+      <part name="response" type="tns:confirmationMessageResponse"/>
+  </message>	
+  <portType name="GHApi_PortType">
+      <operation name="doLogin">
+         <input message="tns:doLoginRequest"/>
+         <output message="tns:doLoginResponse"/>
+      </operation>
+      <operation name="getChangeOrderMessage">
+         <input message="tns:getChangeOrderMessageRequest"/>
+         <output message="tns:getChangeOrderMessageResponse"/>
+      </operation>
+      <operation name="setChangeOrderMessageConfirmation">
+         <input message="tns:setChangeOrderMessageConfirmationRequest"/>
+         <output message="tns:setChangeOrderMessageConfirmationResponse"/>
+      </operation>
+  </portType>
+  <binding name="GHApi_Binding" type="tns:GHApi_PortType">
+      <soap:binding style="document"
+         transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="doLogin">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>doLogin"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="encoded"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="encoded"/>
+         </output>
+      </operation>
+      <operation name="getChangeOrderMessage">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>getChangeOrderMessage"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="encoded"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="encoded"/>
+         </output>
+      </operation>
+      <operation name="setChangeOrderMessageConfirmation">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>setChangeOrderMessageConfirmation"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="encoded"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="encoded"/>
+         </output>
+      </operation>
+  </binding>
+  <service name="GHApi_Service">
+	  <port binding="tns:GHApi_Binding" name="GHApi_Port">
+         <soap:address
+            location="<?php echo $this->getWsUrl();?>" />
+      </port>
+  </service>
+</definitions>
