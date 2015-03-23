@@ -69,7 +69,8 @@ if($sliders): ?>
 									<a href="<?php echo $b['url']; ?>">
 								<?php endif; ?>
 										<div class="boxesSlideIn"
-										     style="background-image: url('<?php echo $imagePath; ?>');">
+										     style="background-image: url('<?php echo $imagePath; ?>')"
+										     data-height="<?php echo $this->getImageSize($b['path'])[1]; ?>">
 										</div>
 								<?php if(!empty($b['url'])): ?>
 									</a>
