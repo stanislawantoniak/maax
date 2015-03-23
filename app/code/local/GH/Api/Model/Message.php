@@ -232,10 +232,8 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$user = $this->getUserByToken($token);
 
 		//check if batch is correct
-		if(is_numeric($batchSize) && $batchSize > 0) {
-			$batchSize = $batchSize > $this->getMaxMessageBatchSize() ? $this->getMaxMessageBatchSize() : $batchSize;
-		} else {
-			Mage::throwException('Provided batch size is not correct');
+		if(!(is_numeric($batchSize) && $batchSize <= $this->getMaxMessageBatchSize() && $batchSize)) {
+			Mage::throwException('error_message_batchsize_invalid');
 		}
 
 		//get messages collection
@@ -247,7 +245,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$messages->getSelect()->limit($batchSize);
 
 		//set filter by message
-		if(!is_null($message)) {
+		if(!is_null($message) && $message) {
 			if($this->validateMessage($message)) {
 				$messages->filterByMessage($message);
 			} else {
