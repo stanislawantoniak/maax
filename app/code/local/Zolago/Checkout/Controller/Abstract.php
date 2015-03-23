@@ -155,6 +155,9 @@ abstract class Zolago_Checkout_Controller_Abstract
 		if(is_array($billing)){
 			$billingResponse = $onepage->saveBilling($billing, $billingAddressId);
 			if(isset($billingResponse['error']) && $billingResponse['error']==1){
+			    if (!is_array($billingResponse['message'])) {
+			        $billingResponse['message'] = array($billingResponse['message']);    
+			    }
 				throw new Mage_Core_Exception(implode("\n", $billingResponse['message']));
 			}
 		}
