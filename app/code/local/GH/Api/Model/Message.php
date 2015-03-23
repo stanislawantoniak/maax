@@ -247,7 +247,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$messages->getSelect()->limit($batchSize);
 
 		//set filter by message
-		if(!is_null($message)) {
+		if(!is_null($message) && $message) {
 			if($this->validateMessage($message)) {
 				$messages->filterByMessage($message);
 			} else {
