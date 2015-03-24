@@ -716,8 +716,8 @@ Mall.Slick = {
 		slideClass: '.boxesSlideIn',
 		boxesAmount: false,
 		options: {
-			slidesToShow: false,
-			slidesToScroll: false,
+			slidesToShow: false, //configured in init below
+			slidesToScroll: false, //configured in init below
 			speed: 500,
 			dots: false,
 			arrows: false
@@ -743,40 +743,13 @@ Mall.Slick = {
 			}
 			return self.boxesAmount;
 		},
-		getBoxWidth: function() {
-			var self = this;
-			if(self.boxWidth === false) {
-				var width = 0;
-				jQuery(self.slideClass).each(function() {
-					var currentSlideWidth = jQuery(this).data('width');
-					width = currentSlideWidth > width ? currentSlideWidth : width;
-				});
-				self.boxWidth = width;
-			}
-			return self.boxWidth;
-		},
-		getBoxHeight: function() {
-			var self = this;
-			if(self.boxHeight === false) {
-				var height = 0;
-				jQuery(self.slideClass).each(function() {
-					var currentSlideHeight = jQuery(this).data('height');
-					height = currentSlideHeight > height ? currentSlideHeight : height;
-				});
-				self.boxHeight = height;
-			}
-			return self.boxHeight;
-		},
 		getBoxRatio: function() {
 			var self = this;
 			if(self.boxRatio === false) {
 				var ratio = 999;
 				jQuery(self.slideClass).each(function() {
-					var currentSlideWidth = jQuery(this).data('width'),
-						currentSlideHeight = jQuery(this).data('height'),
-						currentSlideRatio = currentSlideWidth / currentSlideHeight;
-					console.log(currentSlideRatio);
-					ratio = currentSlideRatio < ratio ? currentSlideRatio : ratio;
+					var currentSlideRatio = jQuery(this).data('ratio');
+					ratio = currentSlideRatio && currentSlideRatio < ratio ? currentSlideRatio : ratio;
 				});
 				self.boxRatio = ratio;
 			}
@@ -815,22 +788,27 @@ Mall.Slick = {
 		},
 		resizeBoxes: function() {
 			if(Mall.Slick.boxes.isSlick()) {
-				var width = Mall.Slick.boxes.slider.find('.slick-track').width(),
+				var width = jQuery(Mall.Slick.boxes.sliderId).width(),
 					boxesAmount = Mall.Slick.boxes.getBoxesAmount(),
 					boxWidth = (width - (boxesAmount * 10)) / boxesAmount,
 					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
-				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({'width': boxWidth + 'px', 'height': boxHeight + 'px'});
+				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
+					'width': boxWidth+'px',
+					'height': boxHeight+'px'});
 			}
 		},
 		resizeBoxesMobile: function() {
 			if(!Mall.Slick.boxes.isSlick()) {
-				var parent = jQuery(Mall.Slick.boxes.sliderId),
-					width = parent.width(),
+				var slider = jQuery(Mall.Slick.boxes.sliderId),
+					width = slider.width(),
 					boxWidth = (width - (3*10)) / 2,
 					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
-				jQuery(Mall.Slick.boxes.sliderId).find(Mall.Slick.boxes.slideClass).css({'width': boxWidth+'px', 'height': boxHeight+'px'});
+				slider.find(Mall.Slick.boxes.slideClass).css({
+					'width': boxWidth+'px',
+					'height': boxHeight+'px'
+				});
 			}
 		}
 	}

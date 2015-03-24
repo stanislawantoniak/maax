@@ -53,33 +53,32 @@ if (!empty($sliders) || !empty($boxes)): ?>
 		<?php unset($caption); ?>
 		</section>
 	<?php endif; ?>
-    <?php if ($boxes) : ?>
-		<?php
-		$boxesCount = 0;
-		foreach($boxes as $box) {
-			$boxesCount += empty($box['banner_image']) ? 0 : 1;
-		}
-		$boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
-		?>
+    <?php if ($boxes) :
+	    $boxesCount = 0;
+	    foreach($boxes as $box) {
+		    $boxesCount += empty($box['banner_image']) ? 0 : 1;
+	    }
+	    $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
+	    ?>
 	    <section id="boxesSlider" data-boxes-amount="<?php echo $boxesCount; ?>">
 		    <?php foreach($boxes as $n => $box): ?>
 			    <?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
 			    <?php if(!empty($boxe)): ?>
 				    <?php foreach($boxe as $i => $b): ?>
-					    <?php $imagePath = rtrim(Mage::getBaseUrl('media'),'/') . $b['path']; ?>
-					    <?php $imageSize = $this->getImageSize($b['path']) ?>
-					    <?php if(is_array($imageSize)): ?>
+					    <?php $path = $b['path']; ?>
+					    <?php if($this->imageExists($path)): ?>
 						    <div class="boxesSlide">
 							    <?php if(!empty($b['url'])): ?>
-									<a href="<?php echo $b['url']; ?>">
-								<?php endif; ?>
+							    <a href="<?php echo $b['url']; ?>">
+								    <?php endif; ?>
+								    <?php $imageSize = $this->getImageSize($path); ?>
 								    <div class="boxesSlideIn"
-								         style="background-image: url('<?php echo $imagePath; ?>')"
-								         data-ratio="<?php echo $this->getImageRatio($b['path']); ?>">
+								         style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
+								         data-ratio="<?php echo $this->getImageRatio($path); ?>">
 								    </div>
-						        <?php if(!empty($b['url'])): ?>
-									</a>
-						        <?php endif; ?>
+								    <?php if(!empty($b['url'])): ?>
+							    </a>
+						    <?php endif; ?>
 						    </div>
 					    <?php endif; ?>
 				    <?php endforeach; ?>
