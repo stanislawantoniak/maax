@@ -6,7 +6,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 	public function indexAction()
 	{
 		$data = $this->getRequest()->getPost();
-
+		Mage::log('START',null,'dotpay.api');
 		Mage::log($data,null,'dotpay.api');
 
 		if(isset($data['control'])) {
