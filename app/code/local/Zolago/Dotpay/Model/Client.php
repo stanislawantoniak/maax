@@ -74,6 +74,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @return bool
 	 */
 	public function validateData($data) {
+
 		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
 		//isset for all because response not always gives all data
 		$signature =
@@ -95,7 +96,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			(isset($data['p_email']) ? $data['p_email'] : '') .
 			(isset($data['channel']) ? $data['channel'] : '');
 
-		Mage::log("STRING TO GENERATE SIGNATURE: ".$signature);
+		Mage::log("STRING TO GENERATE SIGNATURE: ".$signature,null,'dotpay.api');
 		$signature = hash('sha256', $signature);
 
 		Mage::log("GENERATED SIGNATURE:",null,'dotpay.api');
