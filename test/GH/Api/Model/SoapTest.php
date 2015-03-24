@@ -77,4 +77,27 @@ class GH_Api_Model_SoapTest {
 		$obj->sessionToken = $token;
 		var_dump($client->setChangeOrderMessageConfirmation($obj));
 	}
+    public function getOrdersByID($token, $orderIds) {
+        $client = $this->_getClient();
+        $obj = new StdClass();
+        $obj->sessionToken = $token;
+        $obj->orderIds = $orderIds;
+        var_dump($client->getOrdersByID($obj));
+    }
+    public function setOrderAsCollected($token, $orderIds) {
+        $client = $this->_getClient();
+        $obj = new StdClass();
+        $obj->sessionToken = $token;
+        $obj->orderIds = $orderIds;
+        var_dump($client->setOrderAsCollected($obj));
+    }
+    public function setOrderShipment($token, $dateShipped, $courier, $shipmentTrackingNumber) {
+        $client = $this->_getClient();
+        $obj = new StdClass();
+        $obj->sessionToken = $token;
+        $obj->dateShipped  = $dateShipped;
+        $obj->courier      = $courier;
+        $obj->shipmentTrackingNumber = $shipmentTrackingNumber;
+        var_dump($client->setOrderShipment($obj));
+    }
 }

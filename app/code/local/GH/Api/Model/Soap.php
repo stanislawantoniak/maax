@@ -72,12 +72,12 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $obj->status = $status;
         return $obj;
     }
+
     /**
      * login handler
      * @param stdClass $loginParameters
      * @return stdClass
      */
-
     public function doLogin($loginParameters) {
         $vendorId = $loginParameters->vendorId;
         $password = $loginParameters->password;
@@ -98,6 +98,95 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $obj->token = '';
         }
         return $obj;
+    }
+
+    /**
+     * Show PO for given increment id (or ids)
+     *
+     * @param $getOrdersByIDParameters
+     * @return StdClass
+     */
+    public function getOrdersByID($getOrdersByIDParameters) {
+        $request  = $getOrdersByIDParameters;
+        $token    = $request->sessionToken;
+        $orderIds = $request->orderIds;
+
+        $model    = Mage::getModel('zolagopo/po');
+
+        try {
+            //todo
+
+            $message = 'ok';
+            $status = true;
+        } catch(Exception $e) {
+            //todo
+            $message = $e->getMessage();
+            $status = false;
+        }
+
+        $obj = new StdClass();
+        //todo
+        $obj->message = $message;
+        $obj->status = $status;
+        return $obj;
+    }
+
+    /**
+     * Set collected status
+     *
+     * @param $setOrderAsCollectedParameters
+     * @return StdClass
+     */
+    public function setOrderAsCollected($setOrderAsCollectedParameters) {
+        $request  = $setOrderAsCollectedParameters;
+        $token    = $request->sessionToken;
+        $orderIds = $request->orderIds;
+
+        $model    = Mage::getModel('zolagopo/po');
+
+        try {
+            //todo
+
+            $message = 'ok';
+            $status = true;
+        } catch(Exception $e) {
+            //todo
+            $message = $e->getMessage();
+            $status = false;
+        }
+
+        $obj = new StdClass();
+        //todo
+        $obj->message = $message;
+        $obj->status = $status;
+        return $obj;
+    }
+
+    public function setOrderShipment($setOrderShipmentParameters) {
+        $request  = $setOrderShipmentParameters;
+        $token    = $request->sessionToken;
+        $orderIds = $request->orderIds;
+        $courier  = $request->courier;
+        $dateShipped = $request->dateShipped;
+        $shipmentTrackingNumber = $request->shipmentTrackingNumber;
+
+        try {
+            //todo
+
+            $message = 'ok';
+            $status = true;
+        } catch(Exception $e) {
+            //todo
+            $message = $e->getMessage();
+            $status = false;
+        }
+
+        $obj = new StdClass();
+        //todo
+        $obj->message = $message;
+        $obj->status = $status;
+        return $obj;
+
     }
 
 	/**
