@@ -11,7 +11,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 		$order = Mage::getModel('sales/order');
 		$order->loadByIncrementId($data['control']);
 		if (!$order->getId()) {
-			Mage::log('wrong order',null,'dotpay.log');
+			Mage::log('WRONG ORDER',null,'dotpay.log');
 			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
 		}
 
@@ -20,12 +20,14 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 
 		if (!($order->getOrderCurrencyCode() == $data['operation_original_currency']
 			&& round($order->getGrandTotal(), 2) == $data['operation_original_amount'])) {
-			Mage::log('wrong currency',null,'dotpay.log');
+			Mage::log('WORNG CURRENCY',null,'dotpay.log');
 			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
 		}
 
 		//Save transaction
 		$transaction = $client->saveTransactionFromPing($order,$data);
+		Mage::log('TRANSACTION OBJECT:',null,'dotpay.log');
+		Mage::log($transaction,null,'dotpay.log');
 		if($transaction !== false) {
 			if ($data['operation_status'] == Zolago_Dotpay_Model_Client::DOTPAY_OPERATION_STATUS_COMPLETED) {
 				$order->addStatusHistoryComment(
