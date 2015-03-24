@@ -46,6 +46,9 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @return bool|int
 	 */
 	public function saveTransactionFromPing($order,$data) {
+		Mage::log("POST DATA:",null,'dotpay.log');
+		Mage::log($data,null,'dotpay.log');
+		Mage::log("RESULT OF VALIDATION: ".($this->validateData($data) ? "OK" : "BAD"),null,'dotpay.log');
 		if($this->validateData($data)) { //first validation
 			$status = $this->getOperationStatus($data['operation_status']); //then get status
 			$type = $this->getOperationType($data['operation_type']); //and get type
