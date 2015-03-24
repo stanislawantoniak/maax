@@ -161,7 +161,7 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 			if($user->getId()) {
 				return $user;
 			}
-			$this->throwVendorError();
+			//$this->throwVendorError();
 		}
 		return false;
 	}
