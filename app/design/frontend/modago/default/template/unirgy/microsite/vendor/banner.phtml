@@ -71,17 +71,15 @@ if (!empty($sliders) || !empty($boxes)): ?>
 					    <?php if(is_array($imageSize)): ?>
 						    <div class="boxesSlide">
 							    <?php if(!empty($b['url'])): ?>
-							    <a href="<?php echo $b['url']; ?>">
-								    <?php endif; ?>
-								    <?php $imageSize = $this->getImageSize($b['path']); ?>
+									<a href="<?php echo $b['url']; ?>">
+								<?php endif; ?>
 								    <div class="boxesSlideIn"
 								         style="background-image: url('<?php echo $imagePath; ?>')"
-								         data-width="<?php echo $imageSize[0]; ?>"
-								         data-height="<?php echo $imageSize[1]; ?>">
+								         data-ratio="<?php echo $this->getImageRatio($b['path']); ?>">
 								    </div>
-								    <?php if(!empty($b['url'])): ?>
-							    </a>
-						    <?php endif; ?>
+						        <?php if(!empty($b['url'])): ?>
+									</a>
+						        <?php endif; ?>
 						    </div>
 					    <?php endif; ?>
 				    <?php endforeach; ?>
