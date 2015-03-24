@@ -5,7 +5,6 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 {
 	public function indexAction()
 	{
-		die('TEST');
 		$data = $this->getRequest()->getPost();
 
 		/** @var Mage_Sales_Model_Order $order */
