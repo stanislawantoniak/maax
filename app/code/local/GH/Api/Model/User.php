@@ -84,6 +84,8 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
                     $session->removeExpiredSessions($session->getUserId());
 				}
 			}
+		} else {
+			$this->throwVendorError();
 		}
 		return $this;
 	}
@@ -161,7 +163,6 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 			if($user->getId()) {
 				return $user;
 			}
-			//$this->throwVendorError();
 		}
 		return false;
 	}
