@@ -14,6 +14,8 @@ abstract class Zolago_Payment_Model_Client {
 	 * @param string $txnType
 	 * @param array $data
 	 * @param string $comment
+	 * @param null|int $parentTrId
+	 * @param null|string $parentTxnId
 	 * @return bool|int
 	 * @throws Exception
 	 */
@@ -51,7 +53,7 @@ abstract class Zolago_Payment_Model_Client {
                     ->setIsClosed($this->getIsClosedByStatus($status))
                     ->setTxnStatus($status);
             } else {
-                $transaction = false; //because transaction with this txn_id is already closed
+                return $transaction->getId(); //because transaction with this txn_id is already closed
             }
 
             if ($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
