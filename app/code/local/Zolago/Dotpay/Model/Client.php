@@ -46,13 +46,10 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @return bool|int
 	 */
 	public function saveTransactionFromPing($order,$data) {
-		Mage::log("TRYING TO VALIDATE...",null,'dotpay.api');
 		if($this->validateData($data)) { //first validation
-			Mage::log("AWESOME!",null,'dotpay.api');
 			$status = $this->getOperationStatus($data['operation_status']); //then get status
 			$type = $this->getOperationType($data['operation_type']); //and get type
 			if($status && $type) { //if they're correct
-				Mage::log("SAVING TRANSACTION",null,'dotpay.api');
 				return parent::saveTransaction( //trigger parent action
 					$order,
 					$data['operation_amount'],
@@ -61,10 +58,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$type,
 					$data);
 			}
-		} else {
-			Mage::log("FUCKIN' FAIL...",null,'dotpay.api');
 		}
-		Mage::log("SOMETHING WENT FUCKIN' WRONG BEFORE THIS LINE",null,'dotpay.api');
 		return false; //if not return false
 	}
 
@@ -96,11 +90,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			(isset($data['p_email']) ? $data['p_email'] : '') .
 			(isset($data['channel']) ? $data['channel'] : '');
 
-		Mage::log("STRING TO GENERATE SIGNATURE: ".$signature,null,'dotpay.api');
 		$signature = hash('sha256', $signature);
-
-		Mage::log("GENERATED SIGNATURE:",null,'dotpay.api');
-		Mage::log($signature,null,'dotpay.api');
 		return $signature == $data['signature'];
 	}
 
