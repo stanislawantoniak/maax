@@ -7,6 +7,9 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 	{
 		$data = $this->getRequest()->getPost();
 
+		Mage::log('DATA:', null, 'dotpay.log');
+		Mage::log($data, null, 'dotpay.log');
+
 		if(isset($data['control'])) {
 			/** @var Mage_Sales_Model_Order $order */
 			$order = Mage::getModel('sales/order');
@@ -19,13 +22,15 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
 		}
 
-		if(isset($data['operation_original_currency']) && isset($data['operation_original_amount']))
-		if (!($order->getOrderCurrencyCode() == $data['operation_original_currency']
-			&& round($order->getGrandTotal(), 2) == $data['operation_original_amount'])) {
-			Mage::log('WORNG CURRENCY:',null,'dotpay.log');
-			Mage::log('1ST CHECK:'.($order->getOrderCurrencyCode() != $data['operation_original_currency'] ? 'FAILED' : 'OK'),null,'dotpay.log');
-			Mage::log('2ND CHECK:'.(round($order->getGrandTotal(), 2) == $data['operation_original_amount'] ? 'FAILED' : 'OK'),null,'dotpay.log');
-			die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
+		if(isset($data['operation_original_currency']) && isset($data['operation_original_amount'])) {
+			if (!($order->getOrderCurrencyCode() == $data['operation_original_currency']
+				&& round($order->getGrandTotal(), 2) == $data['operation_original_amount'])
+			) {
+				Mage::log('WORNG CURRENCY:', null, 'dotpay.log');
+				Mage::log('1ST CHECK:' . ($order->getOrderCurrencyCode() != $data['operation_original_currency'] ? 'FAILED' : 'OK'), null, 'dotpay.log');
+				Mage::log('2ND CHECK:' . (round($order->getGrandTotal(), 2) == $data['operation_original_amount'] ? 'FAILED' : 'OK'), null, 'dotpay.log');
+				die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
+			}
 		}
 
 		/** @var Zolago_Dotpay_Model_Client $client */
