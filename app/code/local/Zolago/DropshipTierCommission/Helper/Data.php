@@ -90,7 +90,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     }
                 }
                 $item->setCommissionPercent($locale->getNumber($commission));
-                $item->save();
+                //$item->save();
             }
         }
     }
