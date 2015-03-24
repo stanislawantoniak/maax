@@ -44,6 +44,7 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 				Mage::log("TRANSACTION IS FALSE",null,'dotpay.api');
 			}
 		}
+		Mage::log("DATA CONTROL IS NOT SET");
 		die(Zolago_Dotpay_Model_Client::DOTPAY_STATUS_ERROR);
 	}
 }
