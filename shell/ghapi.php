@@ -151,7 +151,9 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         $model = Mage::getModel('zolagopo/po');
         $vendor = Mage::getModel('udropship/vendor')->load($vId);
 
-        var_dump($model->ghapiGetOrdersByIncrementIds($ids, $vendor));
+        $data = $model->ghapiGetOrdersByIncrementIds($ids, $vendor);
+        Mage::log($data, null, 'mylog.log');
+        var_dump($data);
     }
     public function getOrdersByIDTestActionHelp() {
         return "use ex: php shell/ghapi.php -action getOrdersByIDTest -vid 5 ids 100000059-1";

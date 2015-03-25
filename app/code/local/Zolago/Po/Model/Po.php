@@ -812,8 +812,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      */
     public function ghapiGetOrdersByIncrementIds($ids, $vendor) {
 
-        $hlpCore = Mage::helper('core');
-
         if (is_numeric($ids)) $ids = array($ids);
         if (!is_array($ids)) return array();
         if (!$vendor->getId()) return array();
@@ -821,7 +819,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         /** @var Zolago_Po_Model_Resource_Po_Collection $coll */
         $coll = Mage::getResourceModel('zolagopo/po_collection');
         $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
-        //$coll->addFieldToFilter('entity_id', $ids);
         $coll->addFieldToFilter('increment_id', $ids);
         $coll->joinAggregatedNames();
         $coll->addPosData("external_id");
@@ -837,11 +834,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             $list[$i]['order_date'] = $po->getCreatedAt();
             $list[$i]['order_max_shipping_date'] = $po->getMaxShippingDate();
             $list[$i]['order_status'] = $po->getStatusModel()->ghapiOrderStatus($po);
-            $list[$i]['order_total'] = $po->getFormattedGrandTotalInclTax();
+            $list[$i]['order_total'] = $po->getGrandTotalInclTax();
             $list[$i]['payment_method'] = $po->ghapiPaymentMethod();
-            $list[$i]['order_due_amount'] = $hlpCore->currencyByStore(abs($po->getDebtAmount(), $po->getStore(), true, false));
+            $list[$i]['order_due_amount'] = abs($po->getDebtAmount());
             $list[$i]['delivery_method'] = 'standard_courier'; // todo when inpost added
-
             $list[$i]['shipment_tracking_number'] = $po->getAggregatedName();
             $list[$i]['pos_id'] = $po->getExternalId();
 
@@ -855,7 +851,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
                 $list[$i]['invoice_data']['invoice_address']['invoice_street']       = $ba->getStreet()[0];
                 $list[$i]['invoice_data']['invoice_address']['invoice_city']         = $ba->getCity();
                 $list[$i]['invoice_data']['invoice_address']['invoice_zip_code']     = $ba->getPostcode();
-                $list[$i]['invoice_data']['invoice_address']['invoice_country']      = $ba->getCountryId(); //for example PL
+                $list[$i]['invoice_data']['invoice_address']['invoice_country']      = $ba->getCountryId();
                 $list[$i]['invoice_data']['invoice_address']['invoice_tax_id']       = $ba->getVatId();
 //                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
             }
@@ -875,38 +871,24 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             foreach ($po->getItemsCollection() as $item) {
                 /** @var Zolago_Po_Model_Po_Item $item */
                 if (!$item->isDeleted() && !$item->getParentItemId()) {
-                    $list[$i]['order_items'][$j]['is_delivery_item'] = 0;
-                    $list[$i]['order_items'][$j]['item_sku'] = $item->getFinalSku();
-                    $list[$i]['order_items'][$j]['item_name'] = $item->getName();
-                    $list[$i]['order_items'][$j]['item_qty'] = $item->getQty();
-                    // item_value_before_discount
-                    $value = round(($item->getPriceInclTax()) * $item->getQty(), 4);
-                    $itemValueBeforeDiscount = $hlpCore->currencyByStore($value, $po->getStore(), true, false);
-                    $list[$i]['order_items'][$j]['item_value_before_discount'] = $itemValueBeforeDiscount;
-                    // item_discount
-                    $list[$i]['order_items'][$j]['item_discount'] = $hlpCore->currencyByStore($item->getDiscount(), $po->getStore(), true, false);
-                    //item_value_after_discount
-                    $value = round(($item->getPriceInclTax() - $item->getDiscount()) * $item->getQty(), 4);
-                    $itemValueAfterDiscount = $hlpCore->currencyByStore($value, $po->getStore(), true, false);
-                    $list[$i]['order_items'][$j]['item_value_after_discount'] = $itemValueAfterDiscount;
-
+                    $list[$i]['order_items'][$j]['is_delivery_item']           = 0;
+                    $list[$i]['order_items'][$j]['item_sku']                   = $item->getFinalSku();
+                    $list[$i]['order_items'][$j]['item_name']                  = $item->getName();
+                    $list[$i]['order_items'][$j]['item_qty']                   = $item->getQty();
+                    $list[$i]['order_items'][$j]['item_value_before_discount'] = $item->getPriceInclTax() * $item->getQty();
+                    $list[$i]['order_items'][$j]['item_discount']              = $item->getDiscount() * $item->getQty();
+                    $list[$i]['order_items'][$j]['item_value_after_discount']  = ($item->getPriceInclTax() - $item->getDiscount()) * $item->getQty();
                     $j++;
                 }
             }
             // Shipping cost
-            $list[$i]['order_items'][$j]['is_delivery_item'] = 1;
-            $list[$i]['order_items'][$j]['item_sku']         = '';
-            $list[$i]['order_items'][$j]['item_name']        = '';
-            $list[$i]['order_items'][$j]['item_qty']         = 1;
-            // Shipping cost value_before_discount
-            $itemValueBeforeDiscount = $hlpCore->currencyByStore($po->getBaseShippingAmountIncl(), $po->getStore(), true, false);
-            $list[$i]['order_items'][$j]['item_value_before_discount'] = $itemValueBeforeDiscount;
-            // Shipping cost discount
-            $list[$i]['order_items'][$j]['item_discount'] = $hlpCore->currencyByStore($po->getShippingDiscountIncl(), $po->getStore(), true, false);
-            // Shipping cost after_discount
-            $itemValueAfterDiscount = $hlpCore->currencyByStore($po->getShippingAmountIncl(), $po->getStore(), true, false);
-            $list[$i]['order_items'][$j]['item_value_after_discount'] = $itemValueAfterDiscount;
-            
+            $list[$i]['order_items'][$j]['is_delivery_item']           = 1;
+            $list[$i]['order_items'][$j]['item_sku']                   = '';
+            $list[$i]['order_items'][$j]['item_name']                  = '';
+            $list[$i]['order_items'][$j]['item_qty']                   = 1;
+            $list[$i]['order_items'][$j]['item_value_before_discount'] = $po->getBaseShippingAmountIncl();
+            $list[$i]['order_items'][$j]['item_discount']              = $po->getShippingDiscountIncl();
+            $list[$i]['order_items'][$j]['item_value_after_discount']  = $po->getShippingAmountIncl();
             $i++;
         }
 
