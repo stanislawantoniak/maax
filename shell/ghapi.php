@@ -4,6 +4,14 @@ require_once 'abstract.php';
 
 class Gh_Api_Shell extends Mage_Shell_Abstract {
 
+    public function __construct()
+    {
+        ini_set('xdebug.var_display_max_depth', 8);
+        ini_set('xdebug.var_display_max_children', 256);
+        ini_set('xdebug.var_display_max_data', 5000);
+        return parent::__construct();
+    }
+
     /**
      * Run script
      *
