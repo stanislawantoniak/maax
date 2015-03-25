@@ -19,8 +19,9 @@
 		}
 		@include max-screen($screen-sm-max) {
 			vertical-align: top;
-			&:nth-child(1) {
-				margin-bottom: 10px;
+			margin-bottom: 10px;
+			&:nth-last-child(2), &:last-child {
+				margin-bottom: 0;
 			}
 		}
 	}

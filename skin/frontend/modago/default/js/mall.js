@@ -1231,11 +1231,28 @@ jQuery(window).resize(function() {
 	positionToggleSearch();
 });
 
+Mall.Footer = {
+	footerId: '#footer',
+	footerMargin: 20,
+	containerId: '#sb-site',
+	init: function() {
+		var self = this;
+		self.setContainerPadding();
+		jQuery(window).resize(self.setContainerPadding);
+	},
+	setContainerPadding: function() {
+		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
+		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
+	}
+};
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
 
 	Mall.Slick.init();
+
+	Mall.Footer.init();
 
 	jQuery(".header_top").headroom({
 		offset: 60
@@ -1289,21 +1306,7 @@ jQuery(document).ready(function() {
 
     });
 
-//    jQuery("#product-listing-sort-control").selectbox({
-//        onOpen: function (inst) {
-////            initScrollBarFilterStyle();
-//        },
-//
-//        onChange: function(value, inst) {
-//            location.href = value;
-//        }
-//    });
-    //#######################
-    //## SIZE-BOX -> SELECTBOX
-    //#######################
-/*	jQuery(".size-box select").selectpicker({
-		mobile: Mall.getIsBrowserMobile()
-	});*/
+
     jQuery(".size-box select").selectBoxIt({
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',

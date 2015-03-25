@@ -825,7 +825,7 @@ Mall.listing = {
                 ratio = itemHeight / itemWidth;
                 height = parseInt(ratio * colWidth);
                 if(height) {
-                    jQuery(this).css('height', height);
+                    jQuery(this).css('height', height+'px');
                 } else {
                     jQuery(this).css('height','');
                 }
@@ -1682,14 +1682,13 @@ Mall.listing = {
 	},
 
 	setMainSectionHeight: function() {
-		var mainSection = jQuery('section#main');
+		var mainSection = jQuery('section#main'),
+			height = '';
 		if(!this.isDisplayMobile()) {
 			var filters = Mall.listing.getFilters();
-			mainSection.css('min-height', (filters.height() + 50) + 'px');
-			jQuery(window).trigger("scroll"); //footer fix
-		} else {
-			mainSection.css('min-height', '');
+			height = (filters.height() + 50) + 'px';
 		}
+		mainSection.css('min-height',height);
 	},
 
 	isDisplayMobile: function() {
