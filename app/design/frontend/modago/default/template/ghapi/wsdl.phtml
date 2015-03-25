@@ -1,73 +1,86 @@
 <definitions name="GHApi"
-   targetNamespace="<?php echo $this->getTargetNamespace();?>"
    xmlns="http://schemas.xmlsoap.org/wsdl/"
-   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
    xmlns:tns="<?php echo $this->getTns(); ?>"
-   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+   targetNamespace="<?php echo $this->getTargetNamespace();?>"
+  >
   <types>
   	<xsd:schema targetNamespace="<?php echo $this->getTargetNamespace();?>">
-		<xsd:complexType name="loginRequest">
-			<xsd:all>
-				<xsd:element name="vendorId" type="xsd:int"/>
-				<xsd:element name="password" type="xsd:string"/>
-				<xsd:element name="webApiKey" type="xsd:string"/>
-			</xsd:all>
-		</xsd:complexType>
-		<xsd:complexType name="loginResponse">
+		<xsd:element name="doLogin">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="vendorId" type="xsd:int"/>
+					<xsd:element name="password" type="xsd:string"/>
+					<xsd:element name="webApiKey" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+		<xsd:complexType name="doLoginResponse">
 			<xsd:all>
 				<xsd:element name="token" type="xsd:string"/>
 				<xsd:element name="message" type="xsd:string"/>
 				<xsd:element name="status" type="xsd:boolean"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="changeOrderMessageRequest">
-			<xsd:all>
-				<xsd:element name="sessionToken" type="xsd:string"/>
-				<xsd:element name="messageBatchSize" type="xsd:int"/>
-				<xsd:element name="messageType" type="xsd:string" nillable="true"/>
-			</xsd:all>
-		</xsd:complexType>
-		<xsd:complexType name="changeOrderMessageResponse">
+		<xsd:element name="getChangeOrderMessage">
+			<xsd:complexType>
+				<xsd:all>
+					<xsd:element name="sessionToken" type="xsd:string"/>
+					<xsd:element name="messageBatchSize" type="xsd:int"/>
+					<xsd:element name="messageType" type="xsd:string" nillable="true"/>
+				</xsd:all>
+  			</xsd:complexType>
+		</xsd:element>
+			<xsd:complexType name="setChangeOrderMessageConfirmation">
+				<xsd:all>
+					<xsd:element name="sessionToken" type="xsd:string"/>
+					<xsd:element name="messageID" type="tns:messageIDList"/>
+				</xsd:all>
+			</xsd:complexType>
+		<xsd:complexType name="getChangeOrderMessageResponse">
 			<xsd:all>
 				<xsd:element name="list" type="tns:messageList"/>
 				<xsd:element name="message" type="xsd:string"/>
 				<xsd:element name="status" type="xsd:boolean"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="tns:message">
-			<xsd:all>
-				<xsd:element name="messageId" type="xsd:int"/>
-				<xsd:element name="messageType" type="xsd:string"/>
-				<xsd:element name="orderId" type="xsd:string"/>
-			</xsd:all>		
-		</xsd:complexType>
-		<xsd:complexType name="tns:messageList">
+			<xsd:complexType name="messageItem">
+				<xsd:all>
+					<xsd:element name="messageID" type="xsd:int"/>
+					<xsd:element name="messageType" type="xsd:string"/>
+					<xsd:element name="orderID" type="xsd:string"/>
+				</xsd:all>		
+			</xsd:complexType>
+		<xsd:complexType name="messageList">
 			<xsd:sequence>
-				<xsd:element name="message" type="tns:message" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="message" type="tns:messageItem" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
-		<xsd:complexType name="tns:messageIdList">
+		<xsd:complexType name="messageIDList">
 			<xsd:sequence>
-				<xsd:element name="messageId" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="ID" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
-		<xsd:complexType name="tns:orderIDList">
+		<xsd:complexType name="orderIDList">
 			<xsd:sequence>
-				<xsd:element name="orderIDItem" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+				<xsd:element name="ID" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
-		<xsd:complexType name="tns:orderList">
+		<xsd:complexType name="orderList">
 			<xsd:sequence>
 				<xsd:element name="order" type="tns:order" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
-		<xsd:complexType name="tns:orderItemList">
+		<xsd:complexType name="orderItemList">
 			<xsd:sequence>
 				<xsd:element name="item" type="tns:orderItem" minOccurs="1" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
 
-		<xsd:complexType name="tns:orderItem">
+		<xsd:complexType name="orderItem">
 			<xsd:all>
 				<xsd:element name="is_delivery_item" type="xsd:int"/>
 				<xsd:element name="item_sku" type="xsd:string"/>
@@ -79,7 +92,7 @@
 			</xsd:all>		
 		</xsd:complexType>
 
-		<xsd:complexType name="tns:order">
+		<xsd:complexType name="order">
 			<xsd:all>
 				<xsd:element name="vendor_id" type="xsd:int"/>
 				<xsd:element name="vendor_name" type="xsd:string"/>
@@ -136,25 +149,25 @@
 				<xsd:element name="invoice_tax_id" type="xsd:string" nillable="true"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="confirmationMessageRequest">
-			<xsd:all>
-				<xsd:element name="sessionToken" type="xsd:string"/>
-				<xsd:element name="messageIdList" type="tns:messageIdList"/>
-			</xsd:all>
-		</xsd:complexType>
-		<xsd:complexType name="orderIDRequest">
+		<xsd:complexType name="getOrdersByID">
 			<xsd:all>
 				<xsd:element name="sessionToken" type="xsd:string"/>
 				<xsd:element name="orderID" type="tns:orderIDList"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="simpleResponse">
+		<xsd:complexType name="setOrderAsCollected">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="orderID" type="tns:orderIDList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="statusResponse">
 			<xsd:all>
 				<xsd:element name="message" type="xsd:string"/>
 				<xsd:element name="status" type="xsd:boolean"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="shipmentRequest">
+		<xsd:complexType name="setOrderShipment">
 			<xsd:all>
 				<xsd:element name="sessionToken" type="xsd:string"/>
 				<xsd:element name="orderID" type="xsd:string"/>
@@ -163,7 +176,7 @@
 				<xsd:element name="shipmentTrackingNumber" type="xsd:string"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="getOrdersResponse">
+		<xsd:complexType name="getOrdersByIDResponse">
 			<xsd:all>
 				<xsd:element name="message" type="xsd:string"/>
 				<xsd:element name="status" type="xsd:boolean"/>
@@ -173,40 +186,40 @@
 	</xsd:schema>
   </types>
   <message name="doLoginRequest">
-      <part name="loginParameters" type="tns:loginRequest"/>
+      <part name="doLogin" type="tns:doLogin"/>
   </message>	
   <message name="doLoginResponse">
-      <part name="loginResponse" type="tns:loginResponse"/>
+      <part name="doLoginResponse" type="tns:doLoginResponse"/>
   </message>	
   <message name="getChangeOrderMessageRequest">
-      <part name="getChangeOrderMessageParameters" type="tns:changeOrderMessageRequest"/>
+      <part name="getChangeOrderMessage" type="tns:getChangeOrderMessage"/>
   </message>	
   <message name="getChangeOrderMessageResponse">
-      <part name="getMessageResponse" type="tns:changeOrderMessageResponse"/>
+      <part name="getChangeOrderMessageResponse" type="tns:getChangeOrderMessageResponse"/>
   </message>	
   <message name="setChangeOrderMessageConfirmationRequest">
-      <part name="setChangeOrderMessageConfirmationParameters" type="tns:confirmationMessageRequest"/>
+      <part name="setChangeOrderMessageConfirmation" type="tns:setChangeOrderMessageConfirmation"/>
   </message>	
   <message name="setChangeOrderMessageConfirmationResponse">
-      <part name="confirmMessageResponse" type="tns:simpleResponse"/>
+      <part name="setChangeOrderMessageConfirmationResponse" type="tns:statusResponse"/>
   </message>	
   <message name="setOrderAsCollectedRequest">
-      <part name="setOrderAsCollectedRequestParameters" type="tns:orderIDRequest"/>
+      <part name="setOrderAsCollected" type="tns:setOrderAsCollected"/>
   </message>	
   <message name="setOrderAsCollectedResponse">
-      <part name="setCollectedResponse" type="tns:simpleResponse"/>
+      <part name="setOrderAsCollectedResponse" type="tns:setOrderAsCollectedResponse"/>
   </message>	
   <message name="getOrdersByIDRequest">
-      <part name="getOrdersByIDRequestParameters" type="tns:orderIDRequest"/>
+      <part name="getOrdersByID" type="tns:getOrdersByID"/>
   </message>	
   <message name="getOrdersByIDResponse">
-      <part name="getOrderIDResponse" type="tns:getOrdersResponse"/>
+      <part name="getOrdersByIDResponse" type="tns:getOrdersByIDResponse"/>
   </message>	
   <message name="setOrderShipmentRequest">
-      <part name="setOrderShipmentRequestParameters" type="tns:shipmentRequest"/>
+      <part name="setOrderShipment" type="tns:setOrderShipment"/>
   </message>	
   <message name="setOrderShipmentResponse">
-      <part name="setShipmentResponse" type="tns:simpleResponse"/>
+      <part name="setOrderShipmentResponse" type="tns:statusResponse"/>
   </message>	
   <portType name="GHApi_PortType">
       <operation name="doLogin">
@@ -242,12 +255,12 @@
          <input>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </input>
          <output>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </output>
       </operation>
       <operation name="getChangeOrderMessage">	
@@ -255,12 +268,12 @@
          <input>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </input>
          <output>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </output>
       </operation>
       <operation name="setChangeOrderMessageConfirmation">	
@@ -268,12 +281,12 @@
          <input>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </input>
          <output>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </output>
       </operation>
       <operation name="getOrdersByID">	
@@ -281,12 +294,12 @@
          <input>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </input>
          <output>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </output>
       </operation>
       <operation name="setOrderAsCollected">	
@@ -294,12 +307,12 @@
          <input>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </input>
          <output>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </output>
       </operation>
       <operation name="setOrderShipment">	
@@ -307,12 +320,12 @@
          <input>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </input>
          <output>
             <soap:body
                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-               use="encoded"/>
+               use="literal"/>
          </output>
       </operation>
   </binding>

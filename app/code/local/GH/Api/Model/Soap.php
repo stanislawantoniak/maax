@@ -15,7 +15,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $request = $changeOrderMessageParameters;
         $token = $request->sessionToken;
         $batchSize = $request->messageBatchSize;
-        $messageType = $request->messageType;
+        $messageType = empty($request->messageType)? null:$request->messageType;
 
         $model = $this->getMessageModel();
 
@@ -38,7 +38,6 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $message = $e->getMessage();
             $status = false;
         }
-
         $obj = new StdClass();
         $obj->list = $list;
         $obj->message = $message;
@@ -56,16 +55,23 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $request = $setChangeOrderMessageConfirmationParameters;
 
         $token = $request->sessionToken;
-        $messages = $request->messageIdList;
-
-        /** @var GH_Api_Model_Message $model */
-        $model = $this->getMessageModel();
-        try {
-            $status = $model->confirmMessages($token, $messages);
-            $message = 'ok';
-        } catch(Exception $e) {
+        if (!isset($request->messageID->ID)) {            
+            $message = Mage::helper('ghapi')->__('Message ID list empty');
             $status = false;
-            $message = $e->getMessage();
+        } else {
+            $messages = $request->messageID->ID;
+            if (!is_array($messages)) {
+                $messages = array($messages);
+            }
+            /** @var GH_Api_Model_Message $model */
+            $model = $this->getMessageModel();
+            try {
+                $status = $model->confirmMessages($token, $messages);
+                $message = 'ok';
+            } catch(Exception $e) {
+                $status = false;
+                $message = $e->getMessage();
+            }
         }
         $obj = new StdClass();
         $obj->message = $message;
@@ -110,15 +116,17 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     public function getOrdersByID($getOrdersByIDRequestParameters) {
         $request  = $getOrdersByIDRequestParameters;
         $token    = $request->sessionToken;
-        $orderIds = $request->orderID;
-
-        $model    = Mage::getModel('zolagopo/po');
-
         $obj = new StdClass();
+        
         try {
+            if (!isset($request->orderID->ID)) {
+                Mage::throwException('Order ID list empty');
+            }
+            $orderIds = $request->orderID->ID;
+
+            $model    = Mage::getModel('zolagopo/po');
+
             //todo
-            $obj->status = true;
-            $obj->message = print_R($getOrdersByIDRequestParameters,1);
             $order = new StdClass();
             $order->vendor_id = 5;
             $order->vendor_name = 'vendor jakiś';
@@ -140,7 +148,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $invoiceAddress->invoice_company_name = 'companyname';
             $invoiceAddress->invoice_street = 'street';
             $invoiceAddress->invoice_city = 'city';
-            $invoiceAddress->invoice_zipcode = 'zipcode';
+            $invoiceAddress->invoice_zip_code = 'zipcode';
             $invoiceAddress->invoice_country = 'polska';
             $invoiceAddress->invoice_tax_id = '34534434353';
             $invoice->invoice_address = $invoiceAddress;
@@ -153,23 +161,21 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $deliveryAddress->delivery_company_name = 'companyname';
             $deliveryAddress->delivery_street = 'street';
             $deliveryAddress->delivery_city = 'city';
-            $deliveryAddress->delivery_zipcode = 'zipcode';
+            $deliveryAddress->delivery_zip_code = 'zipcode';
             $deliveryAddress->delivery_country = 'polska';
             $deliveryAddress->phone = '88888888';
             $delivery->delivery_address = $deliveryAddress;
             $order->delivery_data = $delivery;
             $orderItem = new StdClass();
-            $orderItem->is_delivery_item = 0;
+            $orderItem->is_delivery_item = 1;
             $orderItem->item_sku = 'skkku';
             $orderItem->item_name = 'name';
             $orderItem->item_qty = 555;
             $orderItem->item_value_before_discount = 234.32;
             $orderItem->item_discount = 24.32;
             $orderItem->item_value_after_discount = 11.11;
-            $item = new StdClass();
-            $item->item = $orderItem;
-            $order->order_items = array ($item,$item,$item);
-            $obj->orderList = array($order,$order);
+            $order->order_items = array ($orderItem,clone($orderItem),clone($orderItem));
+            $obj->orderList = array($order,clone($order));
 
             $message = 'ok';
             $status = true;
@@ -194,11 +200,18 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     public function setOrderAsCollected($setOrderAsCollectedRequestParameters) {
         $request  = $setOrderAsCollectedRequestParameters;
         $token    = $request->sessionToken;
-        $orderIds = $request->orderID;
 
-        $model    = Mage::getModel('zolagopo/po');
 
         try {
+            if (!isset($request->orderID->ID)) {
+                Mage::throwException(Mage::helper('ghapi')->__('Order ID list empty'));
+            }            
+            $orderIds = $request->orderID->ID;
+            if (!is_array($orderIds)) {
+                $orderIds = array($orderIds);
+            }
+            $model    = Mage::getModel('zolagopo/po');
+            
             //todo
 
             $message = 'ok';
