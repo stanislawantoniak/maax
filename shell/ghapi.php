@@ -143,7 +143,31 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         return "use ex: php shell/ghapi.php -action setChangeOrderMessageConfirmation -token xoxo -ids 12,13,15";
     }
 
+    public function getOrdersByIDTestAction() {
+        $ids = $this->getArg('ids');
+        $ids = explode(',', $ids);
+        $vId = $this->getArg('vid');
+        /** @var Zolago_Po_Model_Po $model */
+        $model = Mage::getModel('zolagopo/po');
+        $vendor = Mage::getModel('udropship/vendor')->load($vId);
 
+        var_dump($model->ghapiGetOrdersByIncrementIds($ids, $vendor));
+    }
+    public function getOrdersByIDTestActionHelp() {
+        return "use ex: php shell/ghapi.php -action getOrdersByIDTest -vid 5 ids 100000059-1";
+    }
+
+    public function getOrdersByIDAction() {
+        $token = $this->getArg('token');
+        $ids = $this->getArg('ids');
+        $ids = explode(',', $ids);
+        $api = new GH_Api_Model_SoapTest();
+
+        $api->getOrdersByID($token, $ids);
+    }
+    public function getOrdersByIDActionHelp() {
+        return "use ex: php shell/ghapi.php -action getOrdersByID -token xoxo ids 100000059-1";
+    }
 }
 
 $shell = new Gh_Api_Shell();

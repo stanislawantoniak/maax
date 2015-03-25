@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Zolago_Po_Model_Po
+ * @method string getMaxShippingDate()
+ * @method string getGrandTotalInclTax()
+ */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
@@ -580,6 +585,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     public function isPaymentDotpay() {
        return $this->getOrder()->isPaymentDotpay();
     }
+
+    public function isCC() {
+        return $this->getOrder()->isCC();
+    }
+
+    public function isGateway() {
+        return $this->getOrder()->isGateway();
+    }
    
    /**
     * @see isPaymentCheckOnDelivery()
@@ -790,6 +803,135 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             Mage::helper("udtiercom")->processPo($this);
         }
         return $this;
+    }
+
+    /**
+     * @param $ids int|array
+     * @param $vendor Zolago_Dropship_Model_Vendor
+     * @return array
+     */
+    public function ghapiGetOrdersByIncrementIds($ids, $vendor) {
+
+        $hlpCore = Mage::helper('core');
+
+        if (is_numeric($ids)) $ids = array($ids);
+        if (!is_array($ids)) return array();
+        if (!$vendor->getId()) return array();
+
+        /** @var Zolago_Po_Model_Resource_Po_Collection $coll */
+        $coll = Mage::getResourceModel('zolagopo/po_collection');
+        $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
+        //$coll->addFieldToFilter('entity_id', $ids);
+        $coll->addFieldToFilter('increment_id', $ids);
+        $coll->joinAggregatedNames();
+        $coll->addPosData("external_id");
+
+        $list = array();
+        $i = 0;
+        foreach ($coll as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+
+            $list[$i]['vendor_id'] = $vendor->getId();
+            $list[$i]['vendor_name'] = $vendor->getVendorName();
+            $list[$i]['order_id'] = $po->getIncrementId();
+            $list[$i]['order_date'] = $po->getCreatedAt();
+            $list[$i]['order_max_shipping_date'] = $po->getMaxShippingDate();
+            $list[$i]['order_status'] = $po->getStatusModel()->ghapiOrderStatus($po);
+            $list[$i]['order_total'] = $po->getFormattedGrandTotalInclTax();
+            $list[$i]['payment_method'] = $po->ghapiPaymentMethod();
+            $list[$i]['order_due_amount'] = $hlpCore->currencyByStore(abs($po->getDebtAmount(), $po->getStore(), true, false));
+            $list[$i]['delivery_method'] = 'standard_courier'; // todo when inpost added
+
+            $list[$i]['shipment_tracking_number'] = $po->getAggregatedName();
+            $list[$i]['pos_id'] = $po->getExternalId();
+
+            $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
+            if ($list[$i]['invoice_data']['invoice_required']) {
+                /** @var Zolago_Sales_Model_Order_Address $ba */
+                $ba = $po->getBillingAddress();
+                $list[$i]['invoice_data']['invoice_address']['invoice_first_name']   = $ba->getFirstname();
+                $list[$i]['invoice_data']['invoice_address']['invoice_last_name']    = $ba->getLastname();
+                $list[$i]['invoice_data']['invoice_address']['invoice_company_name'] = $ba->getCompany();
+                $list[$i]['invoice_data']['invoice_address']['invoice_street']       = $ba->getStreet()[0];
+                $list[$i]['invoice_data']['invoice_address']['invoice_city']         = $ba->getCity();
+                $list[$i]['invoice_data']['invoice_address']['invoice_zip_code']     = $ba->getPostcode();
+                $list[$i]['invoice_data']['invoice_address']['invoice_country']      = $ba->getCountryId(); //for example PL
+                $list[$i]['invoice_data']['invoice_address']['invoice_tax_id']       = $ba->getVatId();
+//                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
+            }
+
+            $list[$i]['delivery_data']['inpost_locker_id'] = ''; // todo when inpost added
+            $sa = $po->getShippingAddress();
+            $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
+            $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
+            $list[$i]['delivery_data']['delivery_address']['delivery_company_name'] = $sa->getCompany();
+            $list[$i]['delivery_data']['delivery_address']['delivery_street']       = $sa->getStreet()[0];
+            $list[$i]['delivery_data']['delivery_address']['delivery_city']         = $sa->getCity();
+            $list[$i]['delivery_data']['delivery_address']['delivery_zip_code']     = $sa->getPostcode();
+            $list[$i]['delivery_data']['delivery_address']['delivery_country']      = $sa->getCountryId();
+            $list[$i]['delivery_data']['delivery_address']['phone']                 = $sa->getTelephone();
+
+            $j = 0;
+            foreach ($po->getItemsCollection() as $item) {
+                /** @var Zolago_Po_Model_Po_Item $item */
+                if (!$item->isDeleted() && !$item->getParentItemId()) {
+                    $list[$i]['order_items'][$j]['is_delivery_item'] = 0;
+                    $list[$i]['order_items'][$j]['item_sku'] = $item->getFinalSku();
+                    $list[$i]['order_items'][$j]['item_name'] = $item->getName();
+                    $list[$i]['order_items'][$j]['item_qty'] = $item->getQty();
+                    // item_value_before_discount
+                    $value = round(($item->getPriceInclTax()) * $item->getQty(), 4);
+                    $itemValueBeforeDiscount = $hlpCore->currencyByStore($value, $po->getStore(), true, false);
+                    $list[$i]['order_items'][$j]['item_value_before_discount'] = $itemValueBeforeDiscount;
+                    // item_discount
+                    $list[$i]['order_items'][$j]['item_discount'] = $hlpCore->currencyByStore($item->getDiscount(), $po->getStore(), true, false);
+                    //item_value_after_discount
+                    $value = round(($item->getPriceInclTax() - $item->getDiscount()) * $item->getQty(), 4);
+                    $itemValueAfterDiscount = $hlpCore->currencyByStore($value, $po->getStore(), true, false);
+                    $list[$i]['order_items'][$j]['item_value_after_discount'] = $itemValueAfterDiscount;
+
+                    $j++;
+                }
+            }
+            // Shipping cost
+            $list[$i]['order_items'][$j]['is_delivery_item'] = 1;
+            $list[$i]['order_items'][$j]['item_sku']         = '';
+            $list[$i]['order_items'][$j]['item_name']        = '';
+            $list[$i]['order_items'][$j]['item_qty']         = 1;
+            // Shipping cost value_before_discount
+            $itemValueBeforeDiscount = $hlpCore->currencyByStore($po->getBaseShippingAmountIncl(), $po->getStore(), true, false);
+            $list[$i]['order_items'][$j]['item_value_before_discount'] = $itemValueBeforeDiscount;
+            // Shipping cost discount
+            $list[$i]['order_items'][$j]['item_discount'] = $hlpCore->currencyByStore($po->getShippingDiscountIncl(), $po->getStore(), true, false);
+            // Shipping cost after_discount
+            $itemValueAfterDiscount = $hlpCore->currencyByStore($po->getShippingAmountIncl(), $po->getStore(), true, false);
+            $list[$i]['order_items'][$j]['item_value_after_discount'] = $itemValueAfterDiscount;
+            
+            $i++;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Get payment_method for GH API
+     *
+     * @return string
+     */
+    public function ghapiPaymentMethod() {
+        if ($this->isCC()) {
+            return 'credit_card';
+        }
+        if ($this->isGateway()) {
+            return 'online_bank_transfer';
+        }
+        if ($this->isPaymentBanktransfer()) {
+            return 'bank_transfer';
+        }
+        if ($this->isCod()) {
+            return 'cash_on_delivery';
+        }
+        return '';
     }
 
 }
