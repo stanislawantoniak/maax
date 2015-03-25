@@ -210,16 +210,6 @@ body {
 #sb-site, .sb-site {
 	min-height: 100%;
 	position: relative;
-	padding-bottom: 155px; //footer height 135px + margin 20px
-	@include max-screen($screen-md-max) {
-		padding-bottom: 301px; //footer height 281px + margin 20px
-	}
-	@include max-screen($screen-sm-max) {
-		padding-bottom: 150px;
-	}
-	@include  max-screen($screen-xs-max) {
-		padding-bottom: 250px;
-	}
 }
 #footer {
 	position: absolute;
