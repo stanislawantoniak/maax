@@ -95,7 +95,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
     /**
      * testing soap getChangeOrderMessage funciton
      * @param GH_Api_Block_Dropship_Answer $block
-     * @return 
+     * @return void
      */
      protected function _prepareGetChangeOrderMessage($block) {
          $client   = $this->_getClient($block);
@@ -110,7 +110,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
      * preparing test for similar actions
      * @param GH_Api_Block_Dropship_Answer $block
      * @param string $name function name
-     * @return 
+     * @return void
      */
     protected function _prepareListAction($block,$name) {
          $client   = $this->_getClient($block);
@@ -125,7 +125,13 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
          $client->$name($token,$listArray);
     }
 
-    public function _prepareSetOrderAsCollected($block,$name) {
+    /**
+     * Preparing test for setOrderAsCollected
+     *
+     * @param GH_Api_Block_Dropship_Answer $block
+     * @return void
+     */
+    public function _prepareSetOrderAsCollected($block) {
         $client   = $this->_getClient($block);
         $request  = $this->getRequest();
         $token    = $request->get('token');
@@ -140,8 +146,25 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
     }
 
     /**
+     * Preparing test for SetOrderShipment
+     *
+     * @param GH_Api_Block_Dropship_Answer $block
+     * @return void
+     */
+    public function _prepareSetOrderShipment($block) {
+        $client   = $this->_getClient($block);
+        $request  = $this->getRequest();
+        $token    = $request->get('token');
+        $orderID  = $request->get('orderID');
+        $dateShipped  = $request->get('dateShipped');
+        $courier  = $request->get('courier');
+        $shipmentTrackingNumber = $request->get('shipmentTrackingNumber');
+        $client->setOrderShipment($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber);
+    }
+
+    /**
      * ajax functon from testing soap
-     * @return 
+     * @return void
      */
      public function testAction() {
          $this->loadLayout();
@@ -161,7 +184,10 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                  $this->_prepareListAction($block,'getOrdersByID');
                  break;
              case 'setOrderAsCollected':
-                 $this->_prepareSetOrderAsCollected($block,'setOrderAsCollected');
+                 $this->_prepareSetOrderAsCollected($block);
+                 break;
+             case 'setOrderShipment':
+                 $this->_prepareSetOrderShipment($block);
                  break;
              default:
                  $block->setSoapRequest('error');

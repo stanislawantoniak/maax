@@ -75,6 +75,16 @@ jQuery(function ($) {
 		params.list = $('#soap_collected_list').val();
 		doSoapAjax(params);
 	});
+    $(document).on('click','#set_shipment_action',function () {
+        var params = {};
+        params.action = 'setOrderShipment';
+        params.token = $('#soap_collected_token').val();
+        params.orderID = $('#soap_collected_order_id').val();
+        params.dateShipped = $('#soap_collected_date_shipped').val();
+        params.shipmentTrackingNumber = $('#soap_collected_shipment_tracking_number').val();
+        params.courier = $('#soap_collected_courier').val();
+        doSoapAjax(params);
+    });
  		
 });
 </script>

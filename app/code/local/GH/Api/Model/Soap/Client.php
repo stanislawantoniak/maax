@@ -74,11 +74,27 @@ class GH_Api_Model_Soap_Client  {
          $this->_query('getOrdersByID',$obj);
      }
 
+    /**
+     * Test for setOrderAsCollected
+     * @param string $token
+     * @param array $list
+     * @return void
+     */
     public function setOrderAsCollected($token, $list) {
         $obj = new StdClass();
         $obj->sessionToken = trim($token);
         $obj->orderID = $list;
         $this->_query('setOrderAsCollected', $obj);
+    }
+
+    public function setOrderShipment($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber) {
+        $obj = new StdClass();
+        $obj->sessionToken = trim($token);
+        $obj->orderID = $orderID;
+        $obj->dateShipped = $dateShipped;
+        $obj->courier = $courier;
+        $obj->shipmentTrackingNumber = $shipmentTrackingNumber;
+        $this->_query('setOrderShipment', $obj);
     }
 
     /**
