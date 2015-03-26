@@ -65,6 +65,66 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 
         return $this->_redirectReferer();
     }
+    
+    
+    /**
+     * return test soap client
+     * @param GH_Api_Block_Dropship_Answer $block
+     * @return 
+     */
+    protected function _getClient($block) {
+        $client = Mage::getModel('ghapi/soap_client');
+        $client->setBlock($block);
+        return $client;
+    }
+    /**
+     * testing soap login funciton
+     * @param GH_Api_Block_Dropship_Answer $block
+     * @return 
+     */
+     protected function _prepareDoLogin($block) {
+         $client   = $this->_getClient($block);
+         $request  = $this->getRequest();
+         $vendorId = $request->get('vendorId');
+         $password = $request->get('password');
+         $apiKey   = $request->get('apiKey');
+         $client->doLogin($vendorId,$password,$apiKey);
+     }
+    /**
+     * testing soap getChangeOrderMessage funciton
+     * @param GH_Api_Block_Dropship_Answer $block
+     * @return 
+     */
+     protected function _prepareGetChangeOrderMessage($block) {
+         $client   = $this->_getClient($block);
+         $request  = $this->getRequest();
+         $token = $request->get('token');
+         $size = $request->get('size');
+         $type  = $request->get('type',null);
+         $client->getChangeOrderMessage($token,$size,$type);
+     }
+    /**
+     * ajax functon from testing soap
+     * @return 
+     */
+     public function testAction() {
+         $this->loadLayout();
+         $block = $this->getLayout()->createBlock('ghapi/dropship_answer')->setTemplate('ghapi/dropship/soap/ajaxAnswer.phtml');
+         $action = $this->getRequest()->getPost('action');
+         switch ($action) {
+             case 'doLogin':
+                 $this->_prepareDoLogin($block);
+                 break;
+             case 'getChangeOrderMessage':
+                 $this->_prepareGetChangeOrderMessage($block);
+                 break;
+             default:
+                 $block->setSoapRequest('error');
+                 $block->setSoapResponse('error');
+                 break;
+         }
+         echo $block->toHtml();
+     }
 }
 
 
