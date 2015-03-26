@@ -1020,7 +1020,7 @@ jQuery.noConflict();
 			}
 		});
 
-		$(document).mouseup(function(e) {
+		 $(document).mouseup(function(e) {
 			var container = $(".sb-slidebar");
 			if(container.is(":visible")){
 
@@ -1032,20 +1032,6 @@ jQuery.noConflict();
 					if(Mall.listing != undefined) {
 						Mall.listing.positionFilters();
 					}
-				}
-			}
-		});
-
-		$(document).on('mouseup touchend', function (e){
-			var container = $(".fb-slidebar");
-			if(container.is(":visible")){
-
-				if (!container.is(e.target) && container.has(e.target).length === 0) {
-					e.preventDefault();
-					$('#sb-site').removeClass('open');
-					$('.fb-slidebar').removeClass('open');
-					$('body').removeClass('noscroll');
-					$('body').find('.noscroll').remove();
 				}
 			}
 		});
