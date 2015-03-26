@@ -26,7 +26,7 @@ class GH_Api_Model_Soap_Client  {
         $obj = new StdClass();
         $obj->vendorId = $vendorId;
         $obj->password = $password;
-        $obj->webApiKey = $apiKey;
+        $obj->webApiKey = trim($apiKey);
         $this->_query('doLogin',$obj);
     }
     
@@ -39,11 +39,37 @@ class GH_Api_Model_Soap_Client  {
      */
      public function getChangeOrderMessage($token,$batchSize,$messageType) {
          $obj = new StdClass();
-         $obj->sessionToken = $token;
+         $obj->sessionToken = trim($token);
          $obj->messageBatchSize = $batchSize;
          $obj->messageType = $messageType;
          $this->_query('getChangeOrderMessage',$obj);
      }
+    /**
+     * test for setChangeOrderMessageConfirmation
+     * @param string $token
+     * @param array $list
+     * @return 
+     */
+     public function setChangeOrderMessageConfirmation($token,$list) {
+         $obj = new StdClass();
+         $obj->sessionToken = trim($token);
+         $obj->messageID = $list;
+         $this->_query('setChangeOrderMessageConfirmation',$obj);
+     }
+
+    /**
+     * test for getOrdersByID
+     * @param string $token
+     * @param array $list
+     * @return 
+     */
+     public function getOrdersByID($token,$list) {
+         $obj = new StdClass();
+         $obj->sessionToken = trim($token);
+         $obj->orderID = $list;
+         $this->_query('getOrdersByID',$obj);
+     }
+
 
     /**
      * xml formatter

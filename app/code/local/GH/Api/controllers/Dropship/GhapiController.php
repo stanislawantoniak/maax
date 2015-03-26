@@ -103,6 +103,25 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
          $type  = $request->get('type',null);
          $client->getChangeOrderMessage($token,$size,$type);
      }
+     
+    /**
+     * preparing test for similar actions
+     * @param GH_Api_Block_Dropship_Answer $block
+     * @param string $name function name
+     * @return 
+     */
+    protected function _prepareListAction($block,$name) {
+         $client   = $this->_getClient($block);
+         $request  = $this->getRequest();
+         $token = $request->get('token');
+         $list  = $request->get('list');
+         if ($list) {
+             $listArray = explode(',',$list);
+         } else {
+             $listArray = null;
+         }
+         $client->$name($token,$listArray);
+    }
     /**
      * ajax functon from testing soap
      * @return 
@@ -117,6 +136,15 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                  break;
              case 'getChangeOrderMessage':
                  $this->_prepareGetChangeOrderMessage($block);
+                 break;
+             case 'setChangeOrderMessageConfirmation':
+                 $this->_prepareListAction($block,'setChangeOrderMessageConfirmation');
+                 break;
+             case 'getOrdersByID':
+                 $this->_prepareListAction($block,'getOrdersByID');
+                 break;
+             case 'getOrderAsCollected':
+                 $this->_prepareListAction($block,'setOrderAsCollected');
                  break;
              default:
                  $block->setSoapRequest('error');

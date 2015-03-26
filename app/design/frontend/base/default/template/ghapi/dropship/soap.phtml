@@ -54,6 +54,27 @@ jQuery(function ($) {
 		params.messageType	= $('#soap_message_type').val();
 		doSoapAjax(params);
 	});
+	$(document).on('click','#confirm_message_action',function () {
+		var params = {};
+		params.action = 'setChangeOrderMessageConfirmation';
+		params.token = $('#soap_confirmation_token').val();
+		params.list = $('#soap_confirm_list').val();
+		doSoapAjax(params);
+	});
+	$(document).on('click','#get_orders_action',function () {
+		var params = {};
+		params.action = 'getOrdersByID';
+		params.token = $('#soap_order_token').val();
+		params.list = $('#soap_order_list').val();
+		doSoapAjax(params);
+	});
+	$(document).on('click','#set_collected_action',function () {
+		var params = {};
+		params.action = 'setOrderAsCollected';
+		params.token = $('#soap_collected_token').val();
+		params.list = $('#soap_collected_list').val();
+		doSoapAjax(params);
+	});
  		
 });
 </script>
