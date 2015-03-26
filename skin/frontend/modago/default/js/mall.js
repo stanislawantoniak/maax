@@ -550,8 +550,8 @@ var Mall = {
                 e.preventDefault();
             }
         });
-    },
-}
+    }
+};
 
 
 Mall.i18nValidation = {
@@ -629,6 +629,7 @@ Mall.rwdCarousel = {
 
 Mall.Breakpoint = {
 	xs: 480,
+	xssm: 600,
 	sm: 768,
 	md: 992,
 	lg: 1200
@@ -640,12 +641,6 @@ Mall.isMobile = function() {
 
 // http://kenwheeler.github.io/slick/
 Mall.Slick = {
-	breakpoints: {
-		xs: 480,
-		sm: 768,
-		md: 992,
-		lg: 1200
-	},
 	events: {
 		afterChange: 'afterChange',
 		beforeChange: 'beforeChange',
@@ -676,35 +671,35 @@ Mall.Slick = {
 			adaptiveHeight: true
 		},
 		init: function() {
-			var self = this;
-			if(self.slider === false && self.sliderAvailable()) {
-				self.slider = jQuery(self.sliderId);
+			var _ = this;
+			if(_.slider === false && _.sliderAvailable()) {
+				_.slider = jQuery(_.sliderId);
 				if(!Mall.isMobile()) {
-					self.options.autoplay = true;
+					_.options.autoplay = true;
 				}
-				self.slider.slick(self.options);
-				self.attachEvents();
+				_.slider.slick(_.options);
+				_.attachEvents();
 			}
 		},
 		sliderAvailable: function() {
-			var self = this;
-			return Mall.Slick.sliderAvailable(self.sliderId);
+			var _ = this;
+			return Mall.Slick.sliderAvailable(_.sliderId);
 		},
 		attachEvents: function() {
-			var self = this;
+			var _ = this;
 			if(!Mall.isMobile()) {
 				jQuery(window).scroll(function () {
-					if (self.inViewport()) {
-						self.slider.slick('slickPlay');
+					if (_.inViewport()) {
+						_.slider.slick('slickPlay');
 					} else {
-						self.slider.slick('slickPause');
+						_.slider.slick('slickPause');
 					}
 				});
 			}
 		},
 		inViewport: function() {
-			var self = this;
-			var sliderOffset = self.slider.offset().top,
+			var _ = this;
+			var sliderOffset = _.slider.offset().top,
 				windowOffset = jQuery(window).scrollTop();
 			return windowOffset < sliderOffset;
 		}
@@ -720,96 +715,142 @@ Mall.Slick = {
 			slidesToScroll: false, //configured in init below
 			speed: 500,
 			dots: false,
-			arrows: false
+			arrows: true,
+			prevArrow: '<div class="boxesArrow boxesArrowPrev"><i class="fa fa-chevron-left"></i></div>',
+			nextArrow: '<div class="boxesArrow boxesArrowNext"><i class="fa fa-chevron-right"></i></div>',
+			responsive: [
+				{
+					breakpoint: Mall.Breakpoint.sm,
+					settings: {
+						slidesToShow: false,
+						slidesToScroll: false
+					}
+				},
+				{
+					breakpoint: Mall.Breakpoint.xssm,
+					settings: {
+						slidesToShow: false,
+						slidesToScroll: false
+					}
+				},
+				{
+					breakpoint: Mall.Breakpoint.xs,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1,
+						adaptiveHeight: true
+					}
+				}
+			]
 		},
 		eventsAttached: false,
 		init: function() {
-			var self = this;
+			var _ = this;
 
-			if(self.slider === false && self.sliderAvailable()) {
-				self.slider = jQuery(self.sliderId);
-				self.options.slidesToShow = self.options.slidesToScroll = self.getBoxesAmount();
-				self.slider.slick(self.options);
-				self.attachEvents()
+			if(_.slider === false && _.sliderAvailable()) {
+				_.slider = jQuery(_.sliderId);
+				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
+				_.options.responsive[0].settings.slidesToShow =
+					_.options.responsive[0].settings.slidesToScroll =
+						(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 3);
+				_.options.responsive[1].settings.slidesToShow =
+					_.options.responsive[1].settings.slidesToScroll =
+						(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
+					_.attachEvents();
+				_.slider.slick(_.options);
 			}
 		},
 		getBoxesAmount: function() {
-			var self = this,
-				amount = self.slider.data('boxesAmount');
-			if(self.slider !== false && amount) {
-				self.boxesAmount = amount;
+			var _ = this;
+			var amount = _.slider.data('boxesAmount');
+			if(_.slider !== false && amount) {
+				_.boxesAmount = amount;
 			} else {
-				self.boxesAmount = 4;
+				_.boxesAmount = 4;
 			}
-			return self.boxesAmount;
+			return _.boxesAmount;
+		},
+		getResponsiveBoxesAmount: function() {
+			var _ = this;
+			if(Mall.isMobile()) {
+				var ww = jQuery(window).width();
+				if(ww < Mall.Breakpoint.xs) {
+					return 1;
+				} else if(ww < Mall.Breakpoint.xssm) {
+					return _.options.responsive[1].settings.slidesToShow;
+				} else {
+					return _.options.responsive[0].settings.slidesToShow;
+				}
+			} else {
+				return _.getBoxesAmount();
+			}
 		},
 		getBoxRatio: function() {
-			var self = this;
-			if(self.boxRatio === false) {
+			var _ = this;
+			if(_.boxRatio === false) {
 				var ratio = 999;
-				jQuery(self.slideClass).each(function() {
+				jQuery(_.slideClass).each(function() {
 					var currentSlideRatio = jQuery(this).data('ratio');
 					ratio = currentSlideRatio && currentSlideRatio < ratio ? currentSlideRatio : ratio;
 				});
-				self.boxRatio = ratio;
+				_.boxRatio = ratio;
 			}
-			return self.boxRatio;
+			return _.boxRatio;
 		},
 		sliderAvailable: function() {
-			var self = this;
-			return Mall.Slick.sliderAvailable(self.sliderId);
+			var _ = this;
+			return Mall.Slick.sliderAvailable(_.sliderId);
 		},
 		isSlick: function() {
 			return Mall.Slick.boxes.slider !== false ? Mall.Slick.boxes.slider.hasClass('slick-slider') : false;
 		},
-		handleSlider: function() {
-			if(Mall.isMobile()) {
-				if(Mall.Slick.boxes.isSlick()) {
-					Mall.Slick.boxes.slider.slick("unslick");
-					Mall.Slick.boxes.slider = false;
-				}
-				Mall.Slick.boxes.resizeBoxesMobile();
-			} else {
-				Mall.Slick.boxes.init();
-			}
-		},
 		attachEvents: function() {
-			var self = this;
-			if(!self.eventsAttached) {
-				self.eventsAttached = true;
-				jQuery(window).resize(Mall.Slick.boxes.handleSlider);
-				jQuery(document).ready(Mall.Slick.boxes.handleSlider);
+			var _ = this;
+			if(!_.eventsAttached) {
+				_.eventsAttached = true;
 				Mall.Slick.boxes.slider
 					.on(
-						Mall.Slick.events.setPosition+' '+Mall.Slick.events.init,
+						Mall.Slick.events.setPosition + ' ' + Mall.Slick.events.init,
 						Mall.Slick.boxes.resizeBoxes
 					);
 			}
 		},
 		resizeBoxes: function() {
 			if(Mall.Slick.boxes.isSlick()) {
-				var width = jQuery(Mall.Slick.boxes.sliderId).width(),
-					boxesAmount = Mall.Slick.boxes.getBoxesAmount(),
-					boxWidth = (width - (boxesAmount * 10)) / boxesAmount,
-					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+				var boxesAmount = Mall.Slick.boxes.getResponsiveBoxesAmount(),
+					width = jQuery(Mall.Slick.boxes.sliderId).width();
+				if(boxesAmount > 1) {
+					console.log(boxesAmount);
+					var boxWidth = (width - ((boxesAmount) * 7)) / boxesAmount,
+						boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
-				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
-					'width': boxWidth+'px',
-					'height': boxHeight+'px'});
+					Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
+						'width': boxWidth + 'px',
+						'height': boxHeight + 'px',
+						'margin-right': false
+					});
+				} else {
+					Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).each(function() {
+						var box = jQuery(this);
+						var height = width / box.data('ratio');
+						box.css({
+							'width': (width - 2)+'px',
+							'height': height+'px',
+							'margin-right': 1+'px'
+						});
+					});
+				}
+				Mall.Slick.boxes.positionArrows();
 			}
 		},
-		resizeBoxesMobile: function() {
-			if(!Mall.Slick.boxes.isSlick()) {
-				var slider = jQuery(Mall.Slick.boxes.sliderId),
-					width = slider.width(),
-					boxWidth = (width - (3*10)) / 2,
-					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+		positionArrows: function() {
+			var _ = this,
+				height = _.slider.height(),
+				arrows = jQuery('.boxesArrow').find('i'),
+				arrowsHeight = arrows.height(),
+				top = (height - arrowsHeight) / 2;
 
-				slider.find(Mall.Slick.boxes.slideClass).css({
-					'width': boxWidth+'px',
-					'height': boxHeight+'px'
-				});
-			}
+			arrows.css('margin-top',top+'px');
 		}
 	}
 };
@@ -1236,9 +1277,9 @@ Mall.Footer = {
 	footerMargin: 20,
 	containerId: '#sb-site',
 	init: function() {
-		var self = this;
-		self.setContainerPadding();
-		jQuery(window).resize(self.setContainerPadding);
+		var _ = this;
+		_.setContainerPadding();
+		jQuery(window).resize(_.setContainerPadding);
 	},
 	setContainerPadding: function() {
 		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;

@@ -1717,7 +1717,7 @@ Mall.listing = {
 
 		//filters slide up/down
 		jQuery(document).delegate(filtersId+' h3','click',function(e) {
-			e.preventDefault();
+			//e.preventDefault();
 			var me = jQuery(this);
 			self._doRollSection(
 				me.parent(),
@@ -1737,7 +1737,7 @@ Mall.listing = {
 
 		// filters show more btn
 		jQuery(document).delegate(filtersId+' .showmore-filters','click',function(e) {
-			e.preventDefault();
+			//e.preventDefault();
 			var me = jQuery(this);
 			self._doShowMore(
 				me.parents('.section'),
@@ -1748,7 +1748,7 @@ Mall.listing = {
 
 		// show/hide clear button on filter select/unselect
 		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
-			e.preventDefault();
+			//e.preventDefault();
 			var me = jQuery(this).parents('.section'),
 				button = me.find('.action.clear');
 			if(me.find(":checkbox:checked").length) {
@@ -1764,7 +1764,7 @@ Mall.listing = {
 		var clearBtnSelector = filtersId+' .action.clear a';
 		if(self.getPushStateSupport()) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
-				e.preventDefault();
+				//e.preventDefault();
 				var me = jQuery(this);
 				self.removeSingleFilterType(me);
 				me.parent().addClass(hiddenClass);

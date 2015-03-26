@@ -6,51 +6,49 @@ $sliders = $this->getSliders();
 
 if($sliders): ?>
 <div class="row">
-	<?php if($sliders): ?>
-		<section id="topSlider">
-			<?php foreach($sliders as $slider): ?>
-				<?php $slides = !empty($slider['banner_image']) ? unserialize($slider['banner_image']) : array(); ?>
-				<?php $captions = !empty($slider['banner_caption'])? unserialize($slider['banner_caption']) : array(); ?>
-				<div class="topSlide">
-					<div class="topSlideImages">
-						<?php foreach($slides as $i => $slide): ?>
-							<?php if(!empty($slide['url'])): ?>
-								<a href="<?php echo $slide['url']; ?>">
+	<section id="topSlider">
+		<?php foreach($sliders as $slider): ?>
+			<?php $slides = !empty($slider['banner_image']) ? unserialize($slider['banner_image']) : array(); ?>
+			<?php $captions = !empty($slider['banner_caption'])? unserialize($slider['banner_caption']) : array(); ?>
+			<div class="topSlide">
+				<div class="topSlideImages">
+					<?php foreach($slides as $i => $slide): ?>
+						<?php if(!empty($slide['url'])): ?>
+							<a href="<?php echo $slide['url']; ?>">
+						<?php endif; ?>
+						<?php if($i == 1): ?>
+							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $slide['path']; ?>"
+							     class="hidden-xs" />
+						<?php else: ?>
+							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $slide['path']; ?>"
+							     class="visible-xs" />
+						<?php endif; ?>
+						<?php if(!empty($slide['url'])): ?>
+							</a>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</div>
+				<div class="topSlideCaptions">
+					<?php foreach($captions as $i => $caption): ?>
+						<?php if($caption['text']): ?>
+							<?php if($caption['url']): ?>
+								<a href="<?php echo $caption['url']; ?>">
 							<?php endif; ?>
-							<?php if($i == 1): ?>
-								<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $slide['path']; ?>"
-								     class="hidden-xs" />
-							<?php else: ?>
-								<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $slide['path']; ?>"
-								     class="visible-xs" />
-							<?php endif; ?>
-							<?php if(!empty($slide['url'])): ?>
+							<span><?php echo $caption['text']; ?> <i class="fa fa-caret-right"></i></span>
+							<?php if($caption['url']): ?>
 								</a>
 							<?php endif; ?>
-						<?php endforeach; ?>
-					</div>
-					<div class="topSlideCaptions">
-						<?php foreach($captions as $i => $caption): ?>
-							<?php if($caption['text']): ?>
-								<?php if($caption['url']): ?>
-									<a href="<?php echo $caption['url']; ?>">
-								<?php endif; ?>
-								<span><?php echo $caption['text']; ?> <i class="fa fa-caret-right"></i></span>
-								<?php if($caption['url']): ?>
-									</a>
-								<?php endif; ?>
-								<?php if(isset($captions[$i+1])): ?>
-									<br />
-								<?php endif; ?>
+							<?php if(isset($captions[$i+1])): ?>
+								<br />
 							<?php endif; ?>
-						<?php endforeach; ?>
-					</div>
+						<?php endif; ?>
+					<?php endforeach; ?>
 				</div>
-			<?php endforeach; ?>
-			<?php unset($slide); ?>
-			<?php unset($caption); ?>
-		</section>
-	<?php endif; ?>
+			</div>
+		<?php endforeach; ?>
+		<?php unset($slide); ?>
+		<?php unset($caption); ?>
+	</section>
 </div>
 <?php endif; ?>
 <?php $boxes = $this->getBoxes(); ?>
@@ -61,6 +59,7 @@ if($sliders): ?>
 	}
 	$boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
 	?>
+<div class="row">
 	<section id="boxesSlider" data-boxes-amount="<?php echo $boxesCount; ?>">
 		<?php foreach($boxes as $n => $box): ?>
 			<?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
@@ -89,4 +88,5 @@ if($sliders): ?>
 			<?php endif; ?>
 		<?php endforeach; ?>
 	</section>
+</div>
 <?php endif; ?>
