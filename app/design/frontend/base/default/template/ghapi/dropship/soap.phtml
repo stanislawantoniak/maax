@@ -69,8 +69,8 @@ jQuery(function ($) {
     //--getChangeOrderMessage
 
     //setChangeOrderMessageConfirmation
-    jQuery('#confirm_message_action').click(function(){getChangeOrderMessage(); });
-    jQuery('#soap_confirmation_token, #soap_confirm_list').keypress(function (e) { if (e.which == 13) { getChangeOrderMessage(); return false;} });
+    jQuery('#confirmation_message_action').click(function(){getChangeOrderMessage(); });
+    jQuery('#soap_confirmation_token, #soap_confirmation_order_list').keypress(function (e) { if (e.which == 13) { getChangeOrderMessage(); return false;} });
 
     function setChangeOrderMessageConfirmation(){
         var params = {};
@@ -96,7 +96,7 @@ jQuery(function ($) {
 
     //setOrderAsCollected
     jQuery('#set_collected_action').click(function(){setOrderAsCollected(); });
-    jQuery('#soap_collected_token, #soap_collected_list').keypress(function (e) { if (e.which == 13) { setOrderAsCollected(); return false;} });
+    jQuery('#soap_collected_token, #soap_collected_order_list').keypress(function (e) { if (e.which == 13) { setOrderAsCollected(); return false;} });
 
     function setOrderAsCollected(){
         var params = {};
@@ -118,7 +118,7 @@ jQuery(function ($) {
         params.orderID = jQuery('#soap_shipment_order_id').val();
         params.dateShipped = jQuery('#soap_shipment_date_shipped').val();
         params.shipmentTrackingNumber = jQuery('#soap_shipment_shipment_tracking_number').val();
-        params.courier = jQuery('#soap_collected_courier').val();
+        params.courier = jQuery('#soap_shipment_courier').val();
         doSoapAjax(params);
     }
     //--setOrderShipment

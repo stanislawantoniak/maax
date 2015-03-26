@@ -11,6 +11,8 @@ $_helper = Mage::helper('ghapi');
 <pre>
 	<code class="language-markup" id="soap_response" style="max-height:360px"><?php echo $this->getSoapResponse();?></code>
 </pre>
+<?php if ($this->getToken()): ?>
 <script>
     jQuery('.ghapi-token').val('<?php echo $this->getToken(); ?>');
 </script>
+<?php endif; ?>
