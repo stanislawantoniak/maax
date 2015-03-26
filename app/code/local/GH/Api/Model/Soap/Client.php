@@ -123,15 +123,18 @@ class GH_Api_Model_Soap_Client  {
      */
     protected function _query($name,$parameters) {
         $client = new SoapClient(Mage::helper('ghapi')->getWsdlTestUrl(),array('trace'=>true));
+        $data = array();
         try {
-        
-            $client->$name($parameters);
+            $data = $client->$name($parameters);
         } catch (Exception $xt) {
             Mage::logException($xt);
         }
         if ($this->block) {
             $this->block->setSoapRequest($this->_format($client->__getLastRequest()));
             $this->block->setSoapResponse($this->_format($client->__getLastResponse()));
+            if (isset($data->token)) {
+                $this->block->setToken($data->token);
+            }
         }
     }
 
