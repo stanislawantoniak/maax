@@ -1,0 +1,59 @@
+<?php $_helper = Mage::helper("ghapi"); ?>
+<div class="row">
+	<div class="col-md-12">
+		<form class="form-horizontal">
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_login');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_message');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_confirmation');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_orders');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_collected');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_shipment');?>
+			<?php //echo $this->getChildHtml('ghapi_dropship_soap_reservation');?>
+			<div id="soap_ajax_answer">
+				<strong><?php echo $_helper->__('SOAP Request');?></strong>
+				<pre>
+					<code class="language-markup" id="soap_request">
+					</code>
+				</pre>
+				<strong><?php echo $_helper->__('SOAP Response');?></strong>
+				<pre>
+					<code class="language-markup" id="soap_response">
+				</code>
+				</pre>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+jQuery(function ($) {
+	function doSoapAjax(params) {
+		$.ajax({
+			url: 'test',
+			method: 'POST',
+			data: params,
+			success: function(answer) {
+				$('#soap_ajax_answer').html(answer);	
+				Prism.highlightAll();
+			}
+		});
+	};
+	$(document).on('click','#do_login_action',function () {
+		var params = {};
+		params.action = 'doLogin';
+		params.vendorId = $('#soap_login_vendor_id').val();
+		params.password = $('#soap_login_password').val();
+		params.apiKey	= $('#soap_login_api_key').val();
+		doSoapAjax(params);
+	});
+	$(document).on('click','#get_message_action',function () {
+		var params = {};
+		params.action = 'getChangeOrderMessage';
+		params.token = $('#soap_message_token').val();
+		params.size = $('#soap_message_size').val();
+		params.messageType	= $('#soap_message_type').val();
+		doSoapAjax(params);
+	});
+ 		
+});
+</script>

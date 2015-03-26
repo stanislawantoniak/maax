@@ -1,0 +1,9 @@
+<?php $_helper = Mage::helper('ghapi'); ?>
+<strong><?php echo $_helper->__('SOAP Request');?></strong>
+<pre>
+	<code class="language-markup" id="soap_request"><?php echo $this->getSoapRequest();?></code>
+</pre>
+<strong><?php echo $_helper->__('SOAP Response');?></strong>
+<pre>
+	<code class="language-markup" id="soap_response"><?php echo $this->getSoapResponse();?></code>
+</pre>

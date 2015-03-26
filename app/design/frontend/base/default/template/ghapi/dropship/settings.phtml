@@ -8,14 +8,7 @@ $_vendor = $_session->getVendor();
 
 $_ghApiVendorUser = $this->getGhApiVendorUser();
 ?>
-<div class="container">
-    <!--=== Page Header ===-->
-    <div class="page-header">
-        <div class="page-title">
-            <h3><?php echo $_helper->__("GH API Settings");?></h3>
-        </div>
-    </div>
-    <div class="row">
+	<div class="row">
         <div class="col-md-12">
             <form id="ghapi_vendor_settiongs" class="form-horizontal" method="post" action="/udropship/ghapi/save">
                 <div class="widget box">
@@ -138,9 +131,9 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                         <span><span><?php echo $this->__('Save'); ?></span></span>
                     </button>
                 </div>
+			</div>
             </form>
         </div>
     </div>
-</div>
 
 

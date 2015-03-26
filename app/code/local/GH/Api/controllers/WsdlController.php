@@ -10,4 +10,7 @@ class GH_Api_WsdlController extends Mage_Core_Controller_Front_Action {
         $this->getResponse()	
             ->setHeader('Content-type','text/xml',true);
     }
+    public function testAction() {
+        $this->indexAction();
+    }
 }

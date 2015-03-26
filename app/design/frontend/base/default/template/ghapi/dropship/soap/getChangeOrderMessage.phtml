@@ -1,0 +1,49 @@
+<?php $_helper = Mage::helper("ghapi"); ?>
+<div class="widget box widget-closed">
+	<div class="widget-header">
+		<h4><i class="icon-plus"></i> <?php echo $_helper->__("Function %s","getChangeOrderMessage"); ?></h4>
+
+		<div class="toolbar no-padding">
+			<div class="btn-group">
+				<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
+			</div>
+		</div>
+	</div>
+	<div class="widget-content" style="padding: 10px 15px">		
+    	<div class="form-group">
+        	<label for="soap_message_token" class="col-md-3 control-label">
+            	<?php echo $_helper->__("Token"); ?>
+            </label>
+            <div class="col-md-9">
+            	<input id="soap_message_token" name="ghapi_soap_token" value="" type="text" class="form-control" size="10">
+            </div>
+        </div>
+    	<div class="form-group">
+        	<label for="soap_message_size" class="col-md-3 control-label">
+            	<?php echo $_helper->__("Batch size"); ?>
+            </label>
+            <div class="col-md-9">
+            	<input id="soap_message_size" name="ghapi_soap_message_size" value="" type="text" class="form-control" style="width:20%; min-width:50px;">
+            </div>
+        </div>
+    	<div class="form-group">
+        	<label for="soap_message_type" class="col-md-3 control-label">
+            	<?php echo $_helper->__("Message type"); ?>
+            </label>
+            <div class="col-md-9">
+            	<input id="soap_message_type" name="ghapi_soap_message_type" value="" type="text" class="form-control" size="10">
+                                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('List of available types:'); ?> 
+								<code>newOrder, cancelledOrder, paymentDataChanged, itemsChanged,deliveryDataChanged, invoiceDataChanged, statusChanged</code></p>
+
+            </div>
+        </div>
+		<div class="form-group">
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-9">
+				<button id="get_message_action" type="button" class="btn btn-primary"><?php echo $_helper->__('Send');?></button>
+			</div>
+		</div>
+
+	</div>
+</div>
