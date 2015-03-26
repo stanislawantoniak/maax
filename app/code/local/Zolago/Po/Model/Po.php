@@ -4,6 +4,7 @@
  * Class Zolago_Po_Model_Po
  * @method string getMaxShippingDate()
  * @method string getGrandTotalInclTax()
+ * @method string getIncrementId()
  */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
@@ -833,7 +834,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             $list[$i]['order_id'] = $po->getIncrementId();
             $list[$i]['order_date'] = $po->getCreatedAt();
             $list[$i]['order_max_shipping_date'] = $po->getMaxShippingDate();
-            $list[$i]['order_status'] = $po->getStatusModel()->ghapiOrderStatus($po);
+            $list[$i]['order_status'] = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
             $list[$i]['order_total'] = $po->getGrandTotalInclTax();
             $list[$i]['payment_method'] = $po->ghapiPaymentMethod();
             $list[$i]['order_due_amount'] = abs($po->getDebtAmount());
@@ -916,4 +917,21 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         return '';
     }
 
+    /**
+     * Return collection of PO for given Vendor
+     * and array of ids (increment_id)
+     *
+     * @param $ids
+     * @param $vendor
+     * @return Zolago_Po_Model_Resource_Po_Collection
+     */
+    public function getVendorPoCollectionByIncrementId($ids, $vendor) {
+        /** @var Zolago_Po_Model_Resource_Po_Collection $coll */
+        $coll = Mage::getResourceModel('zolagopo/po_collection');
+        if ($vendor->getId()) {
+            $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
+        }
+        $coll->addFieldToFilter('increment_id', array("in" => $ids));
+        return $coll;
+    }
 }

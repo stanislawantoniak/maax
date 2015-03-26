@@ -168,7 +168,7 @@ class Zolago_Po_Model_Po_Status
 			$this->_processStatus($po, $status);
 		}
 	}
-	
+
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 */
@@ -446,33 +446,30 @@ class Zolago_Po_Model_Po_Status
     /**
      * Mapping statuses to GH API statuses
      *
-     * @param $po Zolago_Po_Model_Po
+     * @param $status string
      * @return string
      */
-    public function ghapiOrderStatus($po) {
-        $status = '';
-        if ($po->getId()) {
-            switch ($po->getUdropshipStatus()) {
-                case Zolago_Po_Model_Source::UDPO_STATUS_ACK:
-                case Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD:
-                case Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER:
-                    return 'pending';
-                case Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT:
-                    return 'pending_payment';
-                case Zolago_Po_Model_Source::UDPO_STATUS_PENDING:
-                case Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED:
-                case Zolago_Po_Model_Source::UDPO_STATUS_READY:
-                    return 'ready';
-                case Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED:
-                    return 'shipped ';
-                case Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED:
-                    return 'delivered';
-                case Zolago_Po_Model_Source::UDPO_STATUS_CANCELED:
-                    return 'cancelled';
-                case Zolago_Po_Model_Source::UDPO_STATUS_RETURNED:
-                    return 'returned';
-            }
+    public function ghapiOrderStatus($status) {
+        switch ($status) {
+            case Zolago_Po_Model_Source::UDPO_STATUS_ACK:
+            case Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD:
+            case Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER:
+                return 'pending';
+            case Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT:
+                return 'pending_payment';
+            case Zolago_Po_Model_Source::UDPO_STATUS_PENDING:
+            case Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED:
+            case Zolago_Po_Model_Source::UDPO_STATUS_READY:
+                return 'ready';
+            case Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED:
+                return 'shipped ';
+            case Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED:
+                return 'delivered';
+            case Zolago_Po_Model_Source::UDPO_STATUS_CANCELED:
+                return 'cancelled';
+            case Zolago_Po_Model_Source::UDPO_STATUS_RETURNED:
+                return 'returned';
         }
-        return $status;
+        return '';
     }
 }
