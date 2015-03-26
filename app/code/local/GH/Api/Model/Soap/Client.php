@@ -7,21 +7,23 @@ class GH_Api_Model_Soap_Client  {
     protected $block;
 
     /**
-     * set answer renderer
+     * Set answer renderer
+     *
      * @param GH_Api_Block_Dropship_Answer $block
-     * @return
+     * @return void
      */
     public function setBlock($block) {
         $this->block = $block;
     }
+
     /**
-     * test for doLogin
+     * Test for doLogin
+     *
      * @param int $vendorId
      * @param string $password
      * @param string $apiKey
-     * @return
+     * @return void
      */
-
     public function doLogin($vendorId,$password,$apiKey) {
         $obj = new StdClass();
         $obj->vendorId = $vendorId;
@@ -31,11 +33,12 @@ class GH_Api_Model_Soap_Client  {
     }
     
     /**
-     * test for getChangeOrderMessage
+     * Test for getChangeOrderMessage
+     *
      * @param string $token
      * @param int $batchSize
      * @param string $messageType
-     * @return 
+     * @return void
      */
      public function getChangeOrderMessage($token,$batchSize,$messageType) {
          $obj = new StdClass();
@@ -44,11 +47,12 @@ class GH_Api_Model_Soap_Client  {
          $obj->messageType = $messageType;
          $this->_query('getChangeOrderMessage',$obj);
      }
+
     /**
-     * test for setChangeOrderMessageConfirmation
+     * Test for setChangeOrderMessageConfirmation
      * @param string $token
      * @param array $list
-     * @return 
+     * @return void
      */
      public function setChangeOrderMessageConfirmation($token,$list) {
          $obj = new StdClass();
@@ -58,10 +62,10 @@ class GH_Api_Model_Soap_Client  {
      }
 
     /**
-     * test for getOrdersByID
+     * Test for getOrdersByID
      * @param string $token
      * @param array $list
-     * @return 
+     * @return void
      */
      public function getOrdersByID($token,$list) {
          $obj = new StdClass();
@@ -70,6 +74,12 @@ class GH_Api_Model_Soap_Client  {
          $this->_query('getOrdersByID',$obj);
      }
 
+    public function setOrderAsCollected($token, $list) {
+        $obj = new StdClass();
+        $obj->sessionToken = trim($token);
+        $obj->orderID = $list;
+        $this->_query('setOrderAsCollected', $obj);
+    }
 
     /**
      * xml formatter
@@ -88,11 +98,12 @@ class GH_Api_Model_Soap_Client  {
         }
 
     }
+
     /**
      * soap query
      * @param string $name
      * @param stdClass $parameters
-     * @return
+     * @return void
      */
     protected function _query($name,$parameters) {
         $client = new SoapClient(Mage::helper('ghapi')->getWsdlTestUrl(),array('trace'=>true));

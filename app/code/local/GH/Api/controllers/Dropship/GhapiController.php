@@ -65,22 +65,24 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 
         return $this->_redirectReferer();
     }
-    
-    
+
     /**
-     * return test soap client
+     * Return test soap client
+     *
      * @param GH_Api_Block_Dropship_Answer $block
-     * @return 
+     * @return false|Mage_Core_Model_Abstract|GH_Api_Model_Soap_Client
      */
     protected function _getClient($block) {
         $client = Mage::getModel('ghapi/soap_client');
         $client->setBlock($block);
         return $client;
     }
+
     /**
-     * testing soap login funciton
+     * Testing soap login funciton
+     *
      * @param GH_Api_Block_Dropship_Answer $block
-     * @return 
+     * @return void
      */
      protected function _prepareDoLogin($block) {
          $client   = $this->_getClient($block);
@@ -122,6 +124,21 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
          }
          $client->$name($token,$listArray);
     }
+
+    public function _prepareSetOrderAsCollected($block,$name) {
+        $client   = $this->_getClient($block);
+        $request  = $this->getRequest();
+        $token    = $request->get('token');
+        $list  = $request->get('list');
+        if ($list) {
+            $listArray = explode(',',$list);
+        } else {
+            $listArray = null;
+        }
+
+        $client->setOrderAsCollected($token,$listArray);
+    }
+
     /**
      * ajax functon from testing soap
      * @return 
@@ -143,8 +160,8 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
              case 'getOrdersByID':
                  $this->_prepareListAction($block,'getOrdersByID');
                  break;
-             case 'getOrderAsCollected':
-                 $this->_prepareListAction($block,'setOrderAsCollected');
+             case 'setOrderAsCollected':
+                 $this->_prepareSetOrderAsCollected($block,'setOrderAsCollected');
                  break;
              default:
                  $block->setSoapRequest('error');
