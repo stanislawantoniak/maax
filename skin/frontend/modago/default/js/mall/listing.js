@@ -1656,6 +1656,9 @@ Mall.listing = {
 	positionFilters: function() {
 		var self = Mall.listing;
 		var filters = self.getFilters();
+		if(!filters.length) {
+			return;
+		}
 		if(this.isDisplayMobile()) {
 			filters
 				.removeClass(self.getFiltersClassDesktop())

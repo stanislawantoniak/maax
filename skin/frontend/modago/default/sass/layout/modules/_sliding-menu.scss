@@ -119,7 +119,7 @@ html.sb-static .sb-slidebar,
 
 .sb-slidebar.sb-active {
 	display: block; /* Makes Slidebars visibile when open. Changed from visibility to display to allow -webkit-overflow-scrolling. */
-	z-index: 1;
+	z-index: 1100; // 1000 is header z-index
 }
 
 .sb-slidebar.sb-style-overlay {
@@ -208,19 +208,19 @@ html.sb-static .sb-slidebar,
 		width: 288px;;
 	}
 }
-
-/* ---------------
+/*
+*//* ---------------
  * 004 - Animation
- */
+ *//*
 
 .sb-slide, #sb-site, .sb-site, .sb-slidebar {
 	-webkit-transition: -webkit-transform 400ms ease;
 	   -moz-transition: -moz-transform 400ms ease;
 	     -o-transition: -o-transform 400ms ease;
 	        transition: transform 400ms ease;
-	-webkit-transition-property: -webkit-transform, left, right; /* Add left/right for Android < 4.4. */
-	-webkit-backface-visibility: hidden; /* Prevents flickering. This is non essential, and you may remove it if your having problems with fixed background images in Chrome. */
-}
+	-webkit-transition-property: -webkit-transform, left, right; *//* Add left/right for Android < 4.4. *//*
+	-webkit-backface-visibility: hidden; *//* Prevents flickering. This is non essential, and you may remove it if your having problems with fixed background images in Chrome. *//*
+}*/
 
 /* --------------------
  * 005 - Helper Classes

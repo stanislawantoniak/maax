@@ -23,6 +23,13 @@ body {
 			top: 0 !important;
 		}
 	}
+	&.sb-open > header {
+		margin-left: 288px;
+		width: 100%;
+		.header_top {
+			left: 288px;
+		}
+	}
 }
 .header_top {
     position:fixed;
@@ -30,8 +37,7 @@ body {
     left:0px;
     width: 100%;
     z-index: 1000;
-    -webkit-transform: translateZ(0);
-    
+
     > .container-fluid {
         position:relative;
     }
@@ -94,7 +100,7 @@ body {
     .block_toggle_menu {
          float: left;
          @include sprite-dimensions($allMap, ico_menu);
-         margin-right: 3.74149659863946%;
+         margin-right: 3.74%;
          @include max-screen($screen-sm-max) {
             height:18px;
             width:17px;

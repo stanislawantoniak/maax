@@ -11,46 +11,44 @@
 <!--[if lt IE 9]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
+<?php echo $this->getChildHtml('after_body_start') ?>
+<?php echo $this->getChildHtml('header') ?>
 <div id="sb-site" class="sb-site fb-site">
-    <?php echo $this->getChildHtml('after_body_start') ?>
 
     <?php echo $this->getChildHtml('global_notices') ?>
 
-    <?php echo $this->getChildHtml('header') ?>
-
     <div class="container-fluid">
-
-
         <div class="row">
             <div class="col-sm-12">
                 <?php /* echo  $this->getChildHtml('global_messages') */ ?>
                 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
             </div>
         </div>
-
     </div>
 
+	<?php $breadcrumbs = $this->getChildHtml('breadcrumbs'); ?>
     <section id="main" class="<?php echo $this->getElementClass(); ?>">
+	    <?php if($breadcrumbs): ?>
         <header id="header-main">
             <div class="container-fluid">
                 <div class="row hidden-xs">
                     <div id="breadcrumbs" class="col-sm-12">
-                        <?php echo $this->getChildHtml('breadcrumbs') ?>
+                        <?php echo $breadcrumbs; ?>
                     </div>
                 </div>
             </div>
         </header>
-
+	    <?php endif; ?>
         <?php echo $this->getChildHtml('content') ?>
     </section>
 
     <?php echo $this->getChildHtml('footer') ?>
     <?php echo $this->getChildHtml('global_cookie_notice') ?>
-    <?php echo $this->getChildHtml('before_body_end') ?>
 
     <?php echo $this->getAbsoluteFooter() ?>
 
 </div>
+<?php echo $this->getChildHtml('before_body_end') ?>
 
 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-sliding-left')->toHtml(); ?>
 </body>
