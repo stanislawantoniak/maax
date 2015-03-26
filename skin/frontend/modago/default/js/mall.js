@@ -820,7 +820,6 @@ Mall.Slick = {
 				var boxesAmount = Mall.Slick.boxes.getResponsiveBoxesAmount(),
 					width = jQuery(Mall.Slick.boxes.sliderId).width();
 				if(boxesAmount > 1) {
-					console.log(boxesAmount);
 					var boxWidth = (width - ((boxesAmount) * 7)) / boxesAmount,
 						boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
