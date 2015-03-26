@@ -5,16 +5,12 @@
 <?php if($crumbs && is_array($crumbs) || $this->getCanShowBrandshop()): ?>
 	<?php if($this->getCanShowBrandshop()):?>
 		<div class="pull-right  hidden-xs brandshop-breadcrumps">
-			<a href="<?php echo $this->getBrandshopUrl();?>">
-                <?php echo $this->__("Go to %s home page", $vendor->getVendorName());?>
-            </a>
+			<a href="<?php echo $this->getBrandshopUrl();?>"><?php echo $this->escapeHtml($this->__("Go to %s home page", $vendor->getVendorName()));?></a>
 		</div>
 	<?php endif;?>
     <?php if($this->getCanShowStandardVendor()):?>
         <div class="pull-right  hidden-xs brandshop-breadcrumps">
-            <a href="<?php echo $this->getStandardVendorUrl();?>">
-                <?php echo $this->__("Go to %s home page", $vendor->getVendorName());?>
-            </a>
+            <a href="<?php echo $this->getStandardVendorUrl();?>"><?php echo $this->escapeHtml($this->__("Go to %s home page", $vendor->getVendorName()));?></a>
         </div>
     <?php endif;?>
 
