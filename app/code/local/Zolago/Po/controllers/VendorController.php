@@ -167,10 +167,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         if(count($notVaildPos['vendor']) || count($notVaildPos['status'])) {
             foreach($notVaildPos['vendor'] as $po) {
-                $this->_getSession()->addError($hlp->__("Order #%s is not vaild", $po->getIncrementId()));
+                $this->_getSession()->addError($hlp->__("Order #%s is not valid", $po->getIncrementId()));
             }
             foreach($notVaildPos['status'] as $po) {
-                $this->_getSession()->addError($hlp->__("Order #%s has invaild status", $po->getIncrementId()));
+                $this->_getSession()->addError($hlp->__("Order #%s has invalid status", $po->getIncrementId()));
             }
         }
         elseif($count) {
@@ -1034,7 +1034,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             if(!$udpo->getStatusModel()->isShippingAvailable($udpo)) {
                 throw new Mage_Core_Exception(
-                    Mage::helper("zolagopo")->__("Shipment cannot be created with this stauts.")
+                    Mage::helper("zolagopo")->__("Shipment cannot be created with this status.")
                 );
             }
 
