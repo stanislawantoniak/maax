@@ -169,21 +169,28 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 						$messagesIdsToDelete[] = $message->getId();
 					}
 				}
-				$idsCheck = array_diff($messagesIds, $messagesIdsToDelete);
-				if(count($idsCheck)) {
-					$this->throwMessageIdWrongError($idsCheck);
-				} elseif(count($invalidVendorMessagesIds)) { //throw error if user provided messages ids that are not his
+
+                if(count($invalidStatusMessagesIds)) { //throw error if user tried to confirm not read messages
+                    $this->throwMessageIdStatusInvalidError($invalidStatusMessagesIds);
+                }
+                if(count($invalidVendorMessagesIds)) { //throw error if user provided messages ids that are not his
 					$this->throwMessageIdWrongError($invalidVendorMessagesIds);
-				} elseif(count($invalidStatusMessagesIds)) { //throw error if user tried to confirm not read messages
-					$this->throwMessageIdStatusInvalidError($invalidStatusMessagesIds);
-				} else { //confirm messages
-					try {
-						$this->getResource()->deleteMessages($messagesIdsToDelete);
-						return true;
-					} catch(Exception $e) {
-						$this->getHelper()->throwDbError(); //throw db error
-					}
 				}
+                $idsCheck = array_diff($messagesIds, $messagesIdsToDelete);
+                if(count($idsCheck)) {
+                    // throw error if there is still deference between ids to confirm (deleting in DB)
+                    // and collected ids gets from collection
+                    $this->throwMessageIdWrongError($idsCheck);
+                }
+
+				//confirm messages
+                try {
+                    $this->getResource()->deleteMessages($messagesIdsToDelete);
+                    return true;
+                } catch(Exception $e) {
+                    $this->getHelper()->throwDbError(); //throw db error
+                }
+
 			}
 		}
 		return false;
