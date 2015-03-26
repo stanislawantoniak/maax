@@ -204,7 +204,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
     }
 
     public function setOrderShipmentActionHelp() {
-        return 'use ex: php shell/ghapi.php -action setOrderShipment -token xoxo id 100000059-1 -date "2015-03-25 15:21:12" -courier dhl|ups -number 123';
+        return 'use ex: php shell/ghapi.php -action setOrderShipment -token xoxo id 100000057-1 -date "2015-03-30 15:21:12" -courier dhl -number 123';
     }
 }
 

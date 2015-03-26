@@ -286,17 +286,27 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
      * @return StdClass
      */
     public function setOrderShipment($setOrderShipmentRequestParameters) {
+        /** @var Zolago_Po_Model_Po $model */
         $request  = $setOrderShipmentRequestParameters;
         $token    = $request->sessionToken;
-        $orderId  = $request->orderID;
         $courier  = $request->courier;
         $dateShipped = $request->dateShipped;
         $shipmentTrackingNumber = $request->shipmentTrackingNumber;
 
         try {
-            if (!isset($request->orderID->ID)) {
+            if (!isset($request->orderID)) {
                 $this->throwOrderIDListEmpty();
             }
+            $user = $this->getUserByToken($token);
+            $orderId  = $request->orderID;
+            $model = Mage::getModel('zolagopo/po');
+            $po = $model->load($orderId, 'increment_id');
+            if(!$model->getStatusModel()->isShippingAvailable($po)) {
+                $this->throwOrderInvalidStatusError(array($orderId));
+            }
+            $courierCode = $this->getCourierCode($courier);
+
+
 
 
             $message = 'ok';
@@ -361,7 +371,29 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         Mage::throwException('error_order_invalid_status'.$ids);
     }
 
+    /**
+     * @throws Mage_Core_Exception
+     */
     protected function throwOrderIDListEmpty() {
         Mage::throwException('Order ID list empty');
+    }
+
+    /**
+     * @throws Mage_Core_Exception
+     */
+    protected function throwWrongCourierName() {
+        Mage::throwException('Wrong courier name');
+    }
+
+    public function getCourierCode($courier) {
+        $_courier = strtolower($courier);
+        switch ($_courier) {
+            case 'dhl':
+                return Orba_Shipping_Model_Carrier_Dhl::CODE;
+            case 'ups':
+                return Orba_Shipping_Model_Carrier_Ups::CODE;
+        }
+
+        $this->throwWrongCourierName();
     }
 }
