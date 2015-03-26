@@ -1248,7 +1248,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     public function startPackingAction() {
         try {
             $udpo = $this->_registerPo();
-            $udpo->getStatusModel()->processStartPacking($udpo);
+            $udpo->getStatusModel()->processStartPacking($udpo, false, true);
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Packing started"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());

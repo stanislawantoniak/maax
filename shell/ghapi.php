@@ -49,7 +49,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
                 $help .= '    -action ' . substr($method, 0, -6);
                 $helpMethod = $method.'Help';
                 if (method_exists($this, $helpMethod)) {
-                    $help .= $this->$helpMethod();
+                    $help .= $this->$helpMethod()."\n";
                 }
                 $help .= "\n";
             }
@@ -177,6 +177,19 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
     }
     public function getOrdersByIDActionHelp() {
         return "use ex: php shell/ghapi.php -action getOrdersByID -token xoxo ids 100000059-1";
+    }
+
+    public function setOrderAsCollectedAction() {
+        $token = $this->getArg('token');
+        $ids = $this->getArg('ids');
+        $ids = explode(',', $ids);
+        $api = new GH_Api_Model_SoapTest();
+
+        $api->setOrderAsCollected($token, $ids);
+    }
+
+    public function setOrderAsCollectedActionHelp() {
+        return "use ex: php shell/ghapi.php -action setOrderAsCollected -token xoxo ids 100000059-1";
     }
 }
 

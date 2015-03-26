@@ -266,3 +266,4 @@
 "Invaild zip code","Niepoprawny kod pocztowy"
 "Order #%s is not valid","Zamówienie #%s nie jest poprawne"
 "Order #%s has invalid status","Zamówienie #%s ma nieprawidłowy status"
+"Invalid status for this operation.","Nieprawidłowy status dla tej operacji"

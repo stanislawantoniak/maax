@@ -473,6 +473,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         }
     }
 
+    /**
+     * Adding message NEW_ORDER to GH_API queue
+     *
+     * @param $observer
+     */
     public function ghapiAddMessageNewOrder($observer) {
         $queue = Mage::getSingleton('ghapi/message');        
         $po = $observer->getPo();
@@ -497,13 +502,21 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $vendor = $po->getVendor();
         $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
-        if ($ghapiAccess) {
-            if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_CANCELED) {
-                $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_CANCELLED_ORDER;
-            } else {
-                $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_STATUS_CHANGED;
+        /** @var Zolago_Po_Model_Po_Status $modelPoStatus */
+        $modelPoStatus = Mage::getSingleton('zolagopo/po_status');
+        $ghapiOldStatus = $modelPoStatus->ghapiOrderStatus($oldStatus);
+        $ghapiNewStatus = $modelPoStatus->ghapiOrderStatus($newStatus);
+
+        if ($ghapiNewStatus != $ghapiOldStatus) {
+            // Inform only when status change for GH API getOrdersByID->order_status
+            if ($ghapiAccess) {
+                if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_CANCELED) {
+                    $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_CANCELLED_ORDER;
+                } else {
+                    $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_STATUS_CHANGED;
+                }
+                $queue->addMessage($po, $msg);
             }
-            $queue->addMessage($po, $msg);
         }
     }
 

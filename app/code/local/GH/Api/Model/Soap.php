@@ -224,13 +224,14 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     /**
      * Set collected status
      *
-     * @param $setOrderAsCollectedParameters
+     * @param $setOrderAsCollectedRequestParameters
      * @return StdClass
      */
     public function setOrderAsCollected($setOrderAsCollectedRequestParameters) {
+        /** @var Zolago_Po_Model_Po $model */
+        /** @var Zolago_Po_Helper_Data $hlpPo */
         $request  = $setOrderAsCollectedRequestParameters;
         $token    = $request->sessionToken;
-
 
         try {
             if (!isset($request->orderID->ID)) {
@@ -240,20 +241,39 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             if (!is_array($orderIds)) {
                 $orderIds = array($orderIds);
             }
-            $model    = Mage::getModel('zolagopo/po');
-            
-            //todo
+            $user = $this->getUserByToken($token);
+            $vendor = Mage::getModel('udropship/vendor')->load($user->getVendorId());
+            $model = Mage::getModel('zolagopo/po');
+            $hlpPo = Mage::helper('zolagopo');
+            $coll = $model->getVendorPoCollectionByIncrementId($orderIds, $vendor);
+
+            // START Checking if ids are correct
+            $checkList = $hlpPo->massCheckIsStartPackingAvailable($coll);
+            if (count($checkList)) {
+                $this->throwOrderInvalidStatusError($checkList);
+            }
+            $allDataIds = array();
+            foreach ($coll as $po) {
+                /** @var Zolago_Po_Model_Po $po */
+                $allDataIds[] = $po->getIncrementId();
+            }
+            if (count($orderIds) != $coll->count()) {
+                $idsCheck = array_diff($orderIds, $allDataIds);
+                $this->throwOrderIdWrongError($idsCheck);
+            }
+            // END Checking if ids are correct
+
+            // Finally if no errors start masss processing
+            $hlpPo->massProcessStartPacking($coll);
 
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
-            //todo
             $message = $e->getMessage();
             $status = false;
         }
 
         $obj = new StdClass();
-        //todo
         $obj->message = $message;
         $obj->status = $status;
         return $obj;
@@ -323,5 +343,14 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     protected function throwOrderIdWrongError(array $ids = array()) {
         $ids = count($ids) ? ' ('.implode(',',$ids).')' : '';
         Mage::throwException('error_order_id_wrong'.$ids);
+    }
+
+    /**
+     * @param array $ids
+     * @throws Mage_Core_Exception
+     */
+    protected function throwOrderInvalidStatusError(array $ids = array()) {
+        $ids = count($ids) ? ' ('.implode(',',$ids).')' : '';
+        Mage::throwException('error_order_invalid_status'.$ids);
     }
 }

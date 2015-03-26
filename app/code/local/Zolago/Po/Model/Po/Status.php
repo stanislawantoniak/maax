@@ -169,14 +169,19 @@ class Zolago_Po_Model_Po_Status
 		}
 	}
 
-	/**
-	 * @param Zolago_Po_Model_Po $po
-	 */
-	public function processStartPacking(Zolago_Po_Model_Po $po, $force = false) {
-		if($this->isStartPackingAvailable($po) || $force){
-			$this->_processStatus($po, self::STATUS_EXPORTED);
-		}
-	}
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $force
+     * @param bool $throwError
+     * @throws Mage_Core_Exception
+     */
+    public function processStartPacking(Zolago_Po_Model_Po $po, $force = false, $throwError = false) {
+        if($this->isStartPackingAvailable($po) || $force){
+            $this->_processStatus($po, self::STATUS_EXPORTED);
+        } elseif($throwError) {
+            Mage::throwException(Mage::helper('ghapi')->__('Invalid status for this operation.'));
+        }
+    }
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
