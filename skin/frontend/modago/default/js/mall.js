@@ -627,8 +627,25 @@ Mall.rwdCarousel = {
     }
 };
 
+Mall.Breakpoint = {
+	xs: 480,
+	sm: 768,
+	md: 992,
+	lg: 1200
+};
+
+Mall.isMobile = function() {
+	return window.innerWidth < Mall.Breakpoint.sm;
+};
+
 // http://kenwheeler.github.io/slick/
 Mall.Slick = {
+	breakpoints: {
+		xs: 480,
+		sm: 768,
+		md: 992,
+		lg: 1200
+	},
 	events: {
 		afterChange: 'afterChange',
 		beforeChange: 'beforeChange',
@@ -640,9 +657,14 @@ Mall.Slick = {
 	},
 	init: function() {
 		Mall.Slick.top.init();
+		Mall.Slick.boxes.init();
 	},
-	isAutoplay: function() {
-		return jQuery(window).width() > 767;
+	sliderAvailable: function(sliderId) {
+		return jQuery(sliderId).length > 0;
+	},
+	unslick: function(slickChild) {
+		slickChild.slider = false;
+		jQuery(slickChild.sliderId).slick('unslick');
 	},
 	top: {
 		slider: false,
@@ -657,20 +679,20 @@ Mall.Slick = {
 			var self = this;
 			if(self.slider === false && self.sliderAvailable()) {
 				self.slider = jQuery(self.sliderId);
-				if(Mall.Slick.isAutoplay()) {
+				if(!Mall.isMobile()) {
 					self.options.autoplay = true;
 				}
-				self.slick = self.slider.slick(self.options);
+				self.slider.slick(self.options);
 				self.attachEvents();
 			}
 		},
 		sliderAvailable: function() {
 			var self = this;
-			return jQuery(self.sliderId).length > 0;
+			return Mall.Slick.sliderAvailable(self.sliderId);
 		},
 		attachEvents: function() {
 			var self = this;
-			if(Mall.Slick.isAutoplay()) {
+			if(!Mall.isMobile()) {
 				jQuery(window).scroll(function () {
 					if (self.inViewport()) {
 						self.slider.slick('slickPlay');
@@ -685,6 +707,109 @@ Mall.Slick = {
 			var sliderOffset = self.slider.offset().top,
 				windowOffset = jQuery(window).scrollTop();
 			return windowOffset < sliderOffset;
+		}
+	},
+	boxes: {
+		boxRatio: false,
+		slider: false,
+		sliderId: '#boxesSlider',
+		slideClass: '.boxesSlideIn',
+		boxesAmount: false,
+		options: {
+			slidesToShow: false, //configured in init below
+			slidesToScroll: false, //configured in init below
+			speed: 500,
+			dots: false,
+			arrows: false
+		},
+		eventsAttached: false,
+		init: function() {
+			var self = this;
+
+			if(self.slider === false && self.sliderAvailable()) {
+				self.slider = jQuery(self.sliderId);
+				self.options.slidesToShow = self.options.slidesToScroll = self.getBoxesAmount();
+				self.slider.slick(self.options);
+				self.attachEvents()
+			}
+		},
+		getBoxesAmount: function() {
+			var self = this,
+				amount = self.slider.data('boxesAmount');
+			if(self.slider !== false && amount) {
+				self.boxesAmount = amount;
+			} else {
+				self.boxesAmount = 4;
+			}
+			return self.boxesAmount;
+		},
+		getBoxRatio: function() {
+			var self = this;
+			if(self.boxRatio === false) {
+				var ratio = 999;
+				jQuery(self.slideClass).each(function() {
+					var currentSlideRatio = jQuery(this).data('ratio');
+					ratio = currentSlideRatio && currentSlideRatio < ratio ? currentSlideRatio : ratio;
+				});
+				self.boxRatio = ratio;
+			}
+			return self.boxRatio;
+		},
+		sliderAvailable: function() {
+			var self = this;
+			return Mall.Slick.sliderAvailable(self.sliderId);
+		},
+		isSlick: function() {
+			return Mall.Slick.boxes.slider !== false ? Mall.Slick.boxes.slider.hasClass('slick-slider') : false;
+		},
+		handleSlider: function() {
+			if(Mall.isMobile()) {
+				if(Mall.Slick.boxes.isSlick()) {
+					Mall.Slick.boxes.slider.slick("unslick");
+					Mall.Slick.boxes.slider = false;
+				}
+				Mall.Slick.boxes.resizeBoxesMobile();
+			} else {
+				Mall.Slick.boxes.init();
+			}
+		},
+		attachEvents: function() {
+			var self = this;
+			if(!self.eventsAttached) {
+				self.eventsAttached = true;
+				jQuery(window).resize(Mall.Slick.boxes.handleSlider);
+				jQuery(document).ready(Mall.Slick.boxes.handleSlider);
+				Mall.Slick.boxes.slider
+					.on(
+						Mall.Slick.events.setPosition+' '+Mall.Slick.events.init,
+						Mall.Slick.boxes.resizeBoxes
+					);
+			}
+		},
+		resizeBoxes: function() {
+			if(Mall.Slick.boxes.isSlick()) {
+				var width = jQuery(Mall.Slick.boxes.sliderId).width(),
+					boxesAmount = Mall.Slick.boxes.getBoxesAmount(),
+					boxWidth = (width - (boxesAmount * 10)) / boxesAmount,
+					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+
+				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
+					'width': boxWidth+'px',
+					'height': boxHeight+'px'});
+			}
+		},
+		resizeBoxesMobile: function() {
+			if(!Mall.Slick.boxes.isSlick()) {
+				var slider = jQuery(Mall.Slick.boxes.sliderId),
+					width = slider.width(),
+					boxWidth = (width - (3*10)) / 2,
+					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+
+				slider.find(Mall.Slick.boxes.slideClass).css({
+					'width': boxWidth+'px',
+					'height': boxHeight+'px'
+				});
+			}
 		}
 	}
 };
@@ -705,7 +830,7 @@ Mall.Cart = {
         jQuery("#num_discount_voucher").val("");
         Mall.Cart.applyCoupon();
     }
-}
+};
 
 Mall.product = {
     _size_table_template: "",
@@ -1106,11 +1231,28 @@ jQuery(window).resize(function() {
 	positionToggleSearch();
 });
 
+Mall.Footer = {
+	footerId: '#footer',
+	footerMargin: 20,
+	containerId: '#sb-site',
+	init: function() {
+		var self = this;
+		self.setContainerPadding();
+		jQuery(window).resize(self.setContainerPadding);
+	},
+	setContainerPadding: function() {
+		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
+		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
+	}
+};
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
 
 	Mall.Slick.init();
+
+	Mall.Footer.init();
 
 	jQuery(".header_top").headroom({
 		offset: 60
@@ -1164,21 +1306,7 @@ jQuery(document).ready(function() {
 
     });
 
-//    jQuery("#product-listing-sort-control").selectbox({
-//        onOpen: function (inst) {
-////            initScrollBarFilterStyle();
-//        },
-//
-//        onChange: function(value, inst) {
-//            location.href = value;
-//        }
-//    });
-    //#######################
-    //## SIZE-BOX -> SELECTBOX
-    //#######################
-/*	jQuery(".size-box select").selectpicker({
-		mobile: Mall.getIsBrowserMobile()
-	});*/
+
     jQuery(".size-box select").selectBoxIt({
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',

@@ -825,7 +825,7 @@ Mall.listing = {
                 ratio = itemHeight / itemWidth;
                 height = parseInt(ratio * colWidth);
                 if(height) {
-                    jQuery(this).css('height', height);
+                    jQuery(this).css('height', height+'px');
                 } else {
                     jQuery(this).css('height','');
                 }
@@ -1433,6 +1433,7 @@ Mall.listing = {
 		var self = Mall.listing;
 		self.getFilters().show();
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
+		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
 		self.triggerResize();
 	},
@@ -1441,6 +1442,7 @@ Mall.listing = {
 		var self = Mall.listing;
 		self.getFilters().hide();
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
+		jQuery('#sort-by').css('pointer-events','auto'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.hideMobileFiltersOverlay();
 		self.triggerResize();
 	},
@@ -1680,14 +1682,13 @@ Mall.listing = {
 	},
 
 	setMainSectionHeight: function() {
-		var mainSection = jQuery('section#main');
+		var mainSection = jQuery('section#main'),
+			height = '';
 		if(!this.isDisplayMobile()) {
 			var filters = Mall.listing.getFilters();
-			mainSection.css('min-height', (filters.height() + 50) + 'px');
-			jQuery(window).trigger("scroll"); //footer fix
-		} else {
-			mainSection.css('min-height', '');
+			height = (filters.height() + 50) + 'px';
 		}
+		mainSection.css('min-height',height);
 	},
 
 	isDisplayMobile: function() {

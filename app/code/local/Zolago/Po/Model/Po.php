@@ -715,7 +715,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 
 	public function save() {
+		$new = $this->isObjectNew();
 		$return = parent::save();
+		if ($new) {
+    		Mage::dispatchEvent("zolagopo_po_save_new",array('po'=>$this));
+		}
 		Mage::dispatchEvent("zolagopo_po_save_after",array('po'=>$this));
 		return $return;
 	}

@@ -53,32 +53,41 @@ if (!empty($sliders) || !empty($boxes)): ?>
 		<?php unset($caption); ?>
 		</section>
 	<?php endif; ?>
-	<?php if ($boxes) : ?>
-            <section class="block-promoted-banners">
-                <div id="rwd-banners" class="rwdCarousel">
-                    <div class="rwd-carousel rwd-theme">
-                    <?php foreach($boxes as $n => $box): ?>
-                        <?php $boxe = empty($box['banner_image'])? array():unserialize($box['banner_image']) ?>
-                        <?php if(!empty($boxe)): ?>
-                        <?php foreach($boxe as $i => $b): ?>
-                            <div class="item border-gray-1x ">
-                                <?php if(!empty($b['url'])): ?>
-                                <a href="<?php echo $b['url']; ?>">
-                                    <?php endif; ?>
-                                    <img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
-                                    <?php if(!empty($b['url'])): ?>
-                                </a>
-                            <?php endif; ?>
-                            </div>
-                        <?php endforeach; ?>
-                        <?php unset($i); ?>
-                        <?php unset($b); ?>
-                        <?php unset($caption); ?>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                    </div>
-                </div>
-            </section>
-            <?php endif; ?>
+    <?php if ($boxes) :
+	    $boxesCount = 0;
+	    foreach($boxes as $box) {
+		    $boxesCount += empty($box['banner_image']) ? 0 : 1;
+	    }
+	    $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
+	    ?>
+	    <section id="boxesSlider" data-boxes-amount="<?php echo $boxesCount; ?>">
+		    <?php foreach($boxes as $n => $box): ?>
+			    <?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
+			    <?php if(!empty($boxe)): ?>
+				    <?php foreach($boxe as $i => $b): ?>
+					    <?php $path = $b['path']; ?>
+					    <?php if($this->imageExists($path)): ?>
+						    <div class="boxesSlide">
+							    <?php if(!empty($b['url'])): ?>
+							    <a href="<?php echo $b['url']; ?>">
+								    <?php endif; ?>
+								    <?php $imageSize = $this->getImageSize($path); ?>
+								    <div class="boxesSlideIn"
+								         style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
+								         data-ratio="<?php echo $this->getImageRatio($path); ?>">
+								    </div>
+								    <?php if(!empty($b['url'])): ?>
+							    </a>
+						    <?php endif; ?>
+						    </div>
+					    <?php endif; ?>
+				    <?php endforeach; ?>
+				    <?php unset($i); ?>
+				    <?php unset($b); ?>
+				    <?php unset($caption); ?>
+			    <?php endif; ?>
+		    <?php endforeach; ?>
+	    </section>
+    <?php endif; ?>
     </div>
 <?php endif;?>

@@ -229,10 +229,36 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         }
         catch(Exception $e)
         {
-            Mage::log('No banner image', Zend_Log::ALERT);
-
+            //Mage::log('No banner image', Zend_Log::ALERT);
         }
-
-
     }
-} 
+
+	public function imageExists($imagePath) {
+		$image = getcwd().'/media'.$imagePath;
+		return file_exists($image);
+	}
+
+	public function getImageSize($imagePath) {
+		$image = getcwd().'/media'.$imagePath;
+		if(file_exists($image)) {
+			try {
+				return getimagesize($image);
+			} catch(Exception $e) {
+				//do nothing
+			}
+		}
+		return false;
+	}
+
+	public function getImageRatio($imagePath) {
+		$data = $this->getImageSize($imagePath);
+		if(is_array($data)) {
+			return $data[0] / $data[1];
+		}
+		return 0;
+	}
+
+	public function getImageUrl($imagePath) {
+		return rtrim(Mage::getBaseUrl('media'),'/') . $imagePath;
+	}
+}
