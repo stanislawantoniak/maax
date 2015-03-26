@@ -162,6 +162,17 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         $client->setOrderShipment($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber);
     }
 
+    public function _prepareSetOrderReservation($block) {
+        $client   = $this->_getClient($block);
+        $request  = $this->getRequest();
+        $token    = $request->get('token');
+        $orderID  = $request->get('orderID');
+        $reservationStatus  = $request->get('reservationStatus');
+        $reservationMessage = $request->get('reservationMessage');
+
+        $client->setOrderReservation($token, $orderID, $reservationStatus, $reservationMessage);
+    }
+
     /**
      * ajax functon from testing soap
      * @return void
@@ -188,6 +199,9 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                  break;
              case 'setOrderShipment':
                  $this->_prepareSetOrderShipment($block);
+                 break;
+             case 'setOrderReservation':
+                 $this->_prepareSetOrderReservation($block);
                  break;
              default:
                  $block->setSoapRequest('error');

@@ -87,6 +87,16 @@ class GH_Api_Model_Soap_Client  {
         $this->_query('setOrderAsCollected', $obj);
     }
 
+    /**
+     * Test for setOrderShipment
+     *
+     * @param string $token
+     * @param string $orderID
+     * @param string $dateShipped
+     * @param string $courier
+     * @param string $shipmentTrackingNumber
+     * @return void
+     */
     public function setOrderShipment($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber) {
         $obj = new StdClass();
         $obj->sessionToken = trim($token);
@@ -97,6 +107,23 @@ class GH_Api_Model_Soap_Client  {
         $this->_query('setOrderShipment', $obj);
     }
 
+    /**
+     * Test for setOrderReservation
+     *
+     * @param string $token
+     * @param string $orderID
+     * @param string $reservationStatus
+     * @param string $reservationMessage
+     * @return void
+     */
+    public function setOrderReservation($token, $orderID, $reservationStatus, $reservationMessage) {
+//        $obj = new StdClass();
+//        $obj->sessionToken = trim($token);
+//        $obj->orderID = $orderID;
+//        $obj->reservationStatus = $reservationStatus;
+//        $obj->reservationMessage = $reservationMessage;
+//        $this->_query('setOrderReservation', $obj);
+    }
     /**
      * xml formatter
      * @param string $xml
