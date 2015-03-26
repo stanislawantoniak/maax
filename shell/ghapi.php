@@ -191,6 +191,21 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
     public function setOrderAsCollectedActionHelp() {
         return "use ex: php shell/ghapi.php -action setOrderAsCollected -token xoxo ids 100000059-1";
     }
+
+    public function setOrderShipmentAction() {
+        $token = $this->getArg('token');
+        $orderId = $this->getArg('id');
+        $dateShipped = $this->getArg('date');
+        $courier = $this->getArg('courier');
+        $shipmentTrackingNumber = $this->getArg('number');
+        $api = new GH_Api_Model_SoapTest();
+
+        $api->setOrderShipment($token, $orderId, $dateShipped, $courier,$shipmentTrackingNumber);
+    }
+
+    public function setOrderShipmentActionHelp() {
+        return 'use ex: php shell/ghapi.php -action setOrderShipment -token xoxo id 100000059-1 -date "2015-03-25 15:21:12" -courier dhl|ups -number 123';
+    }
 }
 
 $shell = new Gh_Api_Shell();

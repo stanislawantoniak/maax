@@ -53,26 +53,26 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
      */
     public function setChangeOrderMessageConfirmation($setChangeOrderMessageConfirmationParameters) {
         $request = $setChangeOrderMessageConfirmationParameters;
-
         $token = $request->sessionToken;
-        if (!isset($request->messageID->ID)) {            
-            $message = Mage::helper('ghapi')->__('Message ID list empty');
-            $status = false;
-        } else {
+
+        try {
+            if (!isset($request->messageID->ID)) {
+                $this->throwOrderIDListEmpty();
+            }
             $messages = $request->messageID->ID;
             if (!is_array($messages)) {
                 $messages = array($messages);
             }
             /** @var GH_Api_Model_Message $model */
             $model = $this->getMessageModel();
-            try {
-                $status = $model->confirmMessages($token, $messages);
-                $message = 'ok';
-            } catch(Exception $e) {
-                $status = false;
-                $message = $e->getMessage();
-            }
+
+            $status = $model->confirmMessages($token, $messages);
+            $message = 'ok';
+        } catch(Exception $e) {
+            $status = false;
+            $message = $e->getMessage();
         }
+
         $obj = new StdClass();
         $obj->message = $message;
         $obj->status = $status;
@@ -120,7 +120,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         
         try {
             if (!isset($request->orderID->ID)) {
-                Mage::throwException('Order ID list empty');
+                $this->throwOrderIDListEmpty();
             }
             $orderIds = $request->orderID->ID;
             if (!is_array($orderIds)) {
@@ -235,7 +235,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         try {
             if (!isset($request->orderID->ID)) {
-                Mage::throwException(Mage::helper('ghapi')->__('Order ID list empty'));
+                $this->throwOrderIDListEmpty();
             }            
             $orderIds = $request->orderID->ID;
             if (!is_array($orderIds)) {
@@ -279,27 +279,34 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         return $obj;
     }
 
+    /**
+     * Set order shipment
+     *
+     * @param $setOrderShipmentRequestParameters
+     * @return StdClass
+     */
     public function setOrderShipment($setOrderShipmentRequestParameters) {
         $request  = $setOrderShipmentRequestParameters;
         $token    = $request->sessionToken;
-        $orderId = $request->orderID;
+        $orderId  = $request->orderID;
         $courier  = $request->courier;
         $dateShipped = $request->dateShipped;
         $shipmentTrackingNumber = $request->shipmentTrackingNumber;
 
         try {
-            //todo
+            if (!isset($request->orderID->ID)) {
+                $this->throwOrderIDListEmpty();
+            }
+
 
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
-            //todo
             $message = $e->getMessage();
             $status = false;
         }
 
         $obj = new StdClass();
-        //todo
         $obj->message = $message;
         $obj->status = $status;
         return $obj;
@@ -352,5 +359,9 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     protected function throwOrderInvalidStatusError(array $ids = array()) {
         $ids = count($ids) ? ' ('.implode(',',$ids).')' : '';
         Mage::throwException('error_order_invalid_status'.$ids);
+    }
+
+    protected function throwOrderIDListEmpty() {
+        Mage::throwException('Order ID list empty');
     }
 }
