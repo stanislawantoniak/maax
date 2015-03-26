@@ -310,4 +310,22 @@ class Zolago_Po_Model_Resource_Po_Collection
         }
         return $this;
     }
+
+    /**
+     * Add POS data to collection
+     *
+     * @param string $cols
+     * @return $this
+     */
+    public function addPosData($cols = '*') {
+        $select = $this->getSelect();
+
+        $select->joinLeft(
+            array("zolagopos"=>$this->getTable('zolagopos/pos')),
+            "zolagopos.pos_id = main_table.default_pos_id",
+            array($cols)
+        );
+
+        return $this;
+    }
 }

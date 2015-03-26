@@ -4,6 +4,14 @@ require_once 'abstract.php';
 
 class Gh_Api_Shell extends Mage_Shell_Abstract {
 
+    public function __construct()
+    {
+        ini_set('xdebug.var_display_max_depth', 8);
+        ini_set('xdebug.var_display_max_children', 256);
+        ini_set('xdebug.var_display_max_data', 5000);
+        return parent::__construct();
+    }
+
     /**
      * Run script
      *
@@ -41,7 +49,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
                 $help .= '    -action ' . substr($method, 0, -6);
                 $helpMethod = $method.'Help';
                 if (method_exists($this, $helpMethod)) {
-                    $help .= $this->$helpMethod();
+                    $help .= $this->$helpMethod()."\n";
                 }
                 $help .= "\n";
             }
@@ -143,7 +151,61 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         return "use ex: php shell/ghapi.php -action setChangeOrderMessageConfirmation -token xoxo -ids 12,13,15";
     }
 
+    public function getOrdersByIDTestAction() {
+        $ids = $this->getArg('ids');
+        $ids = explode(',', $ids);
+        $vId = $this->getArg('vid');
+        /** @var Zolago_Po_Model_Po $model */
+        $model = Mage::getModel('zolagopo/po');
+        $vendor = Mage::getModel('udropship/vendor')->load($vId);
 
+        $data = $model->ghapiGetOrdersByIncrementIds($ids, $vendor);
+        Mage::log($data, null, 'mylog.log');
+        var_dump($data);
+    }
+    public function getOrdersByIDTestActionHelp() {
+        return "use ex: php shell/ghapi.php -action getOrdersByIDTest -vid 5 ids 100000059-1";
+    }
+
+    public function getOrdersByIDAction() {
+        $token = $this->getArg('token');
+        $ids = $this->getArg('ids');
+        $ids = explode(',', $ids);
+        $api = new GH_Api_Model_SoapTest();
+
+        $api->getOrdersByID($token, $ids);
+    }
+    public function getOrdersByIDActionHelp() {
+        return "use ex: php shell/ghapi.php -action getOrdersByID -token xoxo ids 100000059-1";
+    }
+
+    public function setOrderAsCollectedAction() {
+        $token = $this->getArg('token');
+        $ids = $this->getArg('ids');
+        $ids = explode(',', $ids);
+        $api = new GH_Api_Model_SoapTest();
+
+        $api->setOrderAsCollected($token, $ids);
+    }
+
+    public function setOrderAsCollectedActionHelp() {
+        return "use ex: php shell/ghapi.php -action setOrderAsCollected -token xoxo ids 100000059-1";
+    }
+
+    public function setOrderShipmentAction() {
+        $token = $this->getArg('token');
+        $orderId = $this->getArg('id');
+        $dateShipped = $this->getArg('date');
+        $courier = $this->getArg('courier');
+        $shipmentTrackingNumber = $this->getArg('number');
+        $api = new GH_Api_Model_SoapTest();
+
+        $api->setOrderShipment($token, $orderId, $dateShipped, $courier,$shipmentTrackingNumber);
+    }
+
+    public function setOrderShipmentActionHelp() {
+        return 'use ex: php shell/ghapi.php -action setOrderShipment -token xoxo id 100000059-1 -date "2015-03-25 15:21:12" -courier dhl|ups -number 123';
+    }
 }
 
 $shell = new Gh_Api_Shell();

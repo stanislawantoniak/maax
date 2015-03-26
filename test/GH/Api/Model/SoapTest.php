@@ -81,20 +81,21 @@ class GH_Api_Model_SoapTest {
         $client = $this->_getClient();
         $obj = new StdClass();
         $obj->sessionToken = $token;
-        $obj->orderIds = $orderIds;
+        $obj->orderID = $orderIds;
         var_dump($client->getOrdersByID($obj));
     }
     public function setOrderAsCollected($token, $orderIds) {
         $client = $this->_getClient();
         $obj = new StdClass();
         $obj->sessionToken = $token;
-        $obj->orderIds = $orderIds;
+        $obj->orderID = $orderIds;
         var_dump($client->setOrderAsCollected($obj));
     }
-    public function setOrderShipment($token, $dateShipped, $courier, $shipmentTrackingNumber) {
+    public function setOrderShipment($token, $orderId, $dateShipped, $courier, $shipmentTrackingNumber) {
         $client = $this->_getClient();
         $obj = new StdClass();
         $obj->sessionToken = $token;
+        $obj->orderID      = $orderId;
         $obj->dateShipped  = $dateShipped;
         $obj->courier      = $courier;
         $obj->shipmentTrackingNumber = $shipmentTrackingNumber;

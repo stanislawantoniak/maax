@@ -53,26 +53,26 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
      */
     public function setChangeOrderMessageConfirmation($setChangeOrderMessageConfirmationParameters) {
         $request = $setChangeOrderMessageConfirmationParameters;
-
         $token = $request->sessionToken;
-        if (!isset($request->messageID->ID)) {            
-            $message = Mage::helper('ghapi')->__('Message ID list empty');
-            $status = false;
-        } else {
+
+        try {
+            if (!isset($request->messageID->ID)) {
+                $this->throwOrderIDListEmpty();
+            }
             $messages = $request->messageID->ID;
             if (!is_array($messages)) {
                 $messages = array($messages);
             }
             /** @var GH_Api_Model_Message $model */
             $model = $this->getMessageModel();
-            try {
-                $status = $model->confirmMessages($token, $messages);
-                $message = 'ok';
-            } catch(Exception $e) {
-                $status = false;
-                $message = $e->getMessage();
-            }
+
+            $status = $model->confirmMessages($token, $messages);
+            $message = 'ok';
+        } catch(Exception $e) {
+            $status = false;
+            $message = $e->getMessage();
         }
+
         $obj = new StdClass();
         $obj->message = $message;
         $obj->status = $status;
@@ -120,72 +120,102 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         
         try {
             if (!isset($request->orderID->ID)) {
-                Mage::throwException('Order ID list empty');
+                $this->throwOrderIDListEmpty();
             }
             $orderIds = $request->orderID->ID;
-
+            if (!is_array($orderIds)) {
+                $orderIds = array($orderIds);
+            }
+            /** @var Zolago_Po_Model_Po $model */
             $model    = Mage::getModel('zolagopo/po');
+            $user = $this->getUserByToken($token);
+            $vendor = Mage::getModel('udropship/vendor')->load($user->getVendorId());
+            $allData = $model->ghapiGetOrdersByIncrementIds($orderIds, $vendor);
 
-            //todo
-            $order = new StdClass();
-            $order->vendor_id = 5;
-            $order->vendor_name = 'vendor jakiś';
-            $order->order_id = '34334';
-            $order->order_date = '13213123232123';
-            $order->order_max_shipping_date = 'ddd';
-            $order->order_status = 'pending';
-            $order->order_total = 15.3;
-            $order->payment_method = 'cash_on_delivery';
-            $order->order_due_amount = 3234.23;
-            $order->delivery_method = 'standard_courier';
-            $order->shipment_tracking_number = 'track 323423423423';
-            $order->pos_id = 'posid --adf';
-            $invoice = new StdClass();
-            $invoice->invoice_required = 1;
-            $invoiceAddress = new StdClass();
-            $invoiceAddress->invoice_first_name = 'firstname';
-            $invoiceAddress->invoice_last_name = 'lastname';
-            $invoiceAddress->invoice_company_name = 'companyname';
-            $invoiceAddress->invoice_street = 'street';
-            $invoiceAddress->invoice_city = 'city';
-            $invoiceAddress->invoice_zip_code = 'zipcode';
-            $invoiceAddress->invoice_country = 'polska';
-            $invoiceAddress->invoice_tax_id = '34534434353';
-            $invoice->invoice_address = $invoiceAddress;
-            $order->invoice_data = $invoice;
-            $delivery = new StdClass();
-            $delivery->inpost_locker_id = 'inpost dadfadfadsf';
-            $deliveryAddress = new StdClass();
-            $deliveryAddress->delivery_first_name = 'firstname';
-            $deliveryAddress->delivery_last_name = 'lastname';
-            $deliveryAddress->delivery_company_name = 'companyname';
-            $deliveryAddress->delivery_street = 'street';
-            $deliveryAddress->delivery_city = 'city';
-            $deliveryAddress->delivery_zip_code = 'zipcode';
-            $deliveryAddress->delivery_country = 'polska';
-            $deliveryAddress->phone = '88888888';
-            $delivery->delivery_address = $deliveryAddress;
-            $order->delivery_data = $delivery;
-            $orderItem = new StdClass();
-            $orderItem->is_delivery_item = 1;
-            $orderItem->item_sku = 'skkku';
-            $orderItem->item_name = 'name';
-            $orderItem->item_qty = 555;
-            $orderItem->item_value_before_discount = 234.32;
-            $orderItem->item_discount = 24.32;
-            $orderItem->item_value_after_discount = 11.11;
-            $order->order_items = array ($orderItem,clone($orderItem),clone($orderItem));
-            $obj->orderList = array($order,clone($order));
+            // Checking if ids are correct
+            $allDataIds = array();
+            foreach ($allData as $po) {
+                $allDataIds[] = $po['order_id'];
+            }
+            if (count($orderIds) != count($allData)) {
+                $idsCheck = array_diff($orderIds, $allDataIds);
+                $this->throwOrderIdWrongError($idsCheck);
+            }
+
+            // Collecting orderList
+            $poList = array();
+            foreach ($allData as $data) {
+
+                $order = new StdClass();
+                $order->vendor_id = $data['vendor_id'];
+                $order->vendor_name = $data['vendor_name'];
+                $order->order_id = $data['order_id'];
+                $order->order_date = $data['order_date'];
+                $order->order_max_shipping_date = $data['order_max_shipping_date'];
+                $order->order_status = $data['order_status'];
+                $order->order_total = $data['order_total'];
+                $order->payment_method = $data['payment_method'];
+                $order->order_due_amount = $data['order_due_amount'];
+                $order->delivery_method = $data['delivery_method'];
+                $order->shipment_tracking_number = $data['shipment_tracking_number'];
+                $order->pos_id = $data['pos_id'];
+
+                $invoice = new StdClass();
+                $invoice->invoice_required = $data['invoice_data']['invoice_required'];
+                if ($invoice->invoice_required) {
+                    $invoiceAddress = new StdClass();
+                    $invoiceAddress->invoice_first_name = $data['invoice_required']['invoice_address']['invoice_first_name'];
+                    $invoiceAddress->invoice_last_name = $data['invoice_required']['invoice_address']['invoice_last_name'];
+                    $invoiceAddress->invoice_company_name = $data['invoice_required']['invoice_address']['invoice_company_name'];
+                    $invoiceAddress->invoice_street = $data['invoice_required']['invoice_address']['invoice_street'];
+                    $invoiceAddress->invoice_city = $data['invoice_required']['invoice_address']['invoice_city'];
+                    $invoiceAddress->invoice_zip_code = $data['invoice_required']['invoice_address']['invoice_zip_code'];
+                    $invoiceAddress->invoice_country = $data['invoice_required']['invoice_address']['invoice_country'];
+                    $invoiceAddress->invoice_tax_id = $data['invoice_required']['invoice_address']['invoice_tax_id'];
+                    $invoice->invoice_address = $invoiceAddress;
+                }
+                $order->invoice_data = $invoice;
+
+                $delivery = new StdClass();
+                $delivery->inpost_locker_id = $data['delivery_data']['inpost_locker_id'];
+                $deliveryAddress = new StdClass();
+                $deliveryAddress->delivery_first_name = $data['delivery_data']['delivery_address']['delivery_first_name'];
+                $deliveryAddress->delivery_last_name = $data['delivery_data']['delivery_address']['delivery_last_name'];
+                $deliveryAddress->delivery_company_name = $data['delivery_data']['delivery_address']['delivery_company_name'];
+                $deliveryAddress->delivery_street = $data['delivery_data']['delivery_address']['delivery_street'];
+                $deliveryAddress->delivery_city = $data['delivery_data']['delivery_address']['delivery_city'];
+                $deliveryAddress->delivery_zip_code = $data['delivery_data']['delivery_address']['delivery_zip_code'];
+                $deliveryAddress->delivery_country = $data['delivery_data']['delivery_address']['delivery_country'];
+                $deliveryAddress->phone = $data['delivery_data']['delivery_address']['phone'];
+                $delivery->delivery_address = $deliveryAddress;
+                $order->delivery_data = $delivery;
+
+                $items = array();
+                foreach ($data['order_items'] as $item) {
+                    $orderItem = new StdClass();
+                    $orderItem->is_delivery_item = $item['is_delivery_item'];
+                    $orderItem->item_sku = $item['item_sku'];
+                    $orderItem->item_name = $item['item_name'];
+                    $orderItem->item_qty = $item['item_qty'];
+                    $orderItem->item_value_before_discount = $item['item_value_before_discount'];
+                    $orderItem->item_discount = $item['item_discount'];
+                    $orderItem->item_value_after_discount = $item['item_value_after_discount'];
+                    $items[] = $orderItem;
+                }
+
+                $order->order_items = $items;
+                $poList[] = $order;
+            }
+            $obj->orderList = $poList;
 
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
-            //todo
+            $obj->orderList = array();
             $message = $e->getMessage();
             $status = false;
         }
 
-        //todo
         $obj->message = $message;
         $obj->status = $status;
         return $obj;
@@ -194,62 +224,89 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     /**
      * Set collected status
      *
-     * @param $setOrderAsCollectedParameters
+     * @param $setOrderAsCollectedRequestParameters
      * @return StdClass
      */
     public function setOrderAsCollected($setOrderAsCollectedRequestParameters) {
+        /** @var Zolago_Po_Model_Po $model */
+        /** @var Zolago_Po_Helper_Data $hlpPo */
         $request  = $setOrderAsCollectedRequestParameters;
         $token    = $request->sessionToken;
 
-
         try {
             if (!isset($request->orderID->ID)) {
-                Mage::throwException(Mage::helper('ghapi')->__('Order ID list empty'));
+                $this->throwOrderIDListEmpty();
             }            
             $orderIds = $request->orderID->ID;
             if (!is_array($orderIds)) {
                 $orderIds = array($orderIds);
             }
-            $model    = Mage::getModel('zolagopo/po');
-            
-            //todo
+            $user = $this->getUserByToken($token);
+            $vendor = Mage::getModel('udropship/vendor')->load($user->getVendorId());
+            $model = Mage::getModel('zolagopo/po');
+            $hlpPo = Mage::helper('zolagopo');
+            $coll = $model->getVendorPoCollectionByIncrementId($orderIds, $vendor);
+
+            // START Checking if ids are correct
+            $checkList = $hlpPo->massCheckIsStartPackingAvailable($coll);
+            if (count($checkList)) {
+                $this->throwOrderInvalidStatusError($checkList);
+            }
+            $allDataIds = array();
+            foreach ($coll as $po) {
+                /** @var Zolago_Po_Model_Po $po */
+                $allDataIds[] = $po->getIncrementId();
+            }
+            if (count($orderIds) != $coll->count()) {
+                $idsCheck = array_diff($orderIds, $allDataIds);
+                $this->throwOrderIdWrongError($idsCheck);
+            }
+            // END Checking if ids are correct
+
+            // Finally if no errors start masss processing
+            $hlpPo->massProcessStartPacking($coll);
 
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
-            //todo
             $message = $e->getMessage();
             $status = false;
         }
 
         $obj = new StdClass();
-        //todo
         $obj->message = $message;
         $obj->status = $status;
         return $obj;
     }
 
+    /**
+     * Set order shipment
+     *
+     * @param $setOrderShipmentRequestParameters
+     * @return StdClass
+     */
     public function setOrderShipment($setOrderShipmentRequestParameters) {
         $request  = $setOrderShipmentRequestParameters;
         $token    = $request->sessionToken;
-        $orderId = $request->orderID;
+        $orderId  = $request->orderID;
         $courier  = $request->courier;
         $dateShipped = $request->dateShipped;
         $shipmentTrackingNumber = $request->shipmentTrackingNumber;
 
         try {
-            //todo
+            if (!isset($request->orderID->ID)) {
+                $this->throwOrderIDListEmpty();
+            }
+
 
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
-            //todo
             $message = $e->getMessage();
             $status = false;
         }
 
         $obj = new StdClass();
-        //todo
         $obj->message = $message;
         $obj->status = $status;
         return $obj;
@@ -270,4 +327,41 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         return Mage::getModel('ghapi/user');
     }
 
+    /**
+     * @param string $token
+     * @return GH_Api_Model_User
+     */
+    protected function getUserByToken($token) {
+        return $this->getHelper()->getUserByToken($token);
+    }
+
+    /**
+     * Gets main GH Api helper
+     * @return GH_Api_Helper_Data
+     */
+    protected function getHelper() {
+        return Mage::helper('ghapi');
+    }
+
+    /**
+     * @param array $ids
+     * @throws Mage_Core_Exception
+     */
+    protected function throwOrderIdWrongError(array $ids = array()) {
+        $ids = count($ids) ? ' ('.implode(',',$ids).')' : '';
+        Mage::throwException('error_order_id_wrong'.$ids);
+    }
+
+    /**
+     * @param array $ids
+     * @throws Mage_Core_Exception
+     */
+    protected function throwOrderInvalidStatusError(array $ids = array()) {
+        $ids = count($ids) ? ' ('.implode(',',$ids).')' : '';
+        Mage::throwException('error_order_invalid_status'.$ids);
+    }
+
+    protected function throwOrderIDListEmpty() {
+        Mage::throwException('Order ID list empty');
+    }
 }
