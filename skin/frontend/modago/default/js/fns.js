@@ -1396,6 +1396,7 @@ jQuery.noConflict();
 				$(this).closest('ul').remove();
 				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
+                $('#nav_desc a').removeClass('active');
 				if(jQuery('body').hasClass('filter-sidebar')) {
 					Mall.listing.positionFilters();
 				}
