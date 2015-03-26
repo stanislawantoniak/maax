@@ -1,16 +1,16 @@
 <?php
 /** @var Zolago_Modago_Block_Page_Html_Breadcrumbs $this */
 ?>
+<?php  $vendor = Mage::helper("umicrosite")->getCurrentVendor(); ?>
 <?php if($crumbs && is_array($crumbs) || $this->getCanShowBrandshop()): ?>
-
 	<?php if($this->getCanShowBrandshop()):?>
 		<div class="pull-right  hidden-xs brandshop-breadcrumps">
-			<a href="<?php echo $this->getBrandshopUrl();?>"><?php echo $this->__("Go to brandshop homepage");?></a>
+			<a href="<?php echo $this->getBrandshopUrl();?>"><?php echo $this->__("Go to %s homepage", $vendor->getVendorName());?></a>
 		</div>
 	<?php endif;?>
     <?php if($this->getCanShowStandardVendor()):?>
         <div class="pull-right  hidden-xs brandshop-breadcrumps">
-            <a href="<?php echo $this->getStandardVendorUrl();?>"><?php echo $this->__("Go to vendor homepage");?></a>
+            <a href="<?php echo $this->getStandardVendorUrl();?>"><?php echo $this->__("Go to %s homepage", $vendor->getVendorName());?></a>
         </div>
     <?php endif;?>
 
