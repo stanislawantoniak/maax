@@ -73,7 +73,7 @@ class GH_Api_Model_SoapTest {
 	public function setChangeOrderMessageConfirmation($token,$messages) {
 		$client = $this->_getClient();
 		$obj = new StdClass();
-		$obj->messageIdList = $messages;
+		$obj->messageID = $messages;
 		$obj->sessionToken = $token;
 		var_dump($client->setChangeOrderMessageConfirmation($obj));
 	}

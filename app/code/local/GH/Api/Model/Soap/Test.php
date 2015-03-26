@@ -68,10 +68,11 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
     /**
      * Set collected status
      *
-     * @param $setOrderAsCollectedParameters
+     * @param $setOrderAsCollectedRequestParameters
      * @return StdClass
      */
     public function setOrderAsCollected($setOrderAsCollectedRequestParameters) {
+
         $this->_begin();
         $obj = parent::setOrderAsCollected($setOrderAsCollectedRequestParameters);
         $this->_rollback();    
@@ -79,29 +80,7 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
     }
 
     public function setOrderShipment($setOrderShipmentRequestParameters) {
-        $request  = $setOrderShipmentRequestParameters;
-        $token    = $request->sessionToken;
-        $orderId = $request->orderID;
-        $courier  = $request->courier;
-        $dateShipped = $request->dateShipped;
-        $shipmentTrackingNumber = $request->shipmentTrackingNumber;
 
-        try {
-            //todo
-
-            $message = 'ok';
-            $status = true;
-        } catch(Exception $e) {
-            //todo
-            $message = $e->getMessage();
-            $status = false;
-        }
-
-        $obj = new StdClass();
-        //todo
-        $obj->message = $message;
-        $obj->status = $status;
-        return $obj;
 
     }
 
