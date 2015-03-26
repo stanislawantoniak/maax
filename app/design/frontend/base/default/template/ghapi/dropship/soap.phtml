@@ -38,51 +38,51 @@ jQuery(function ($) {
 			}
 		});
 	};
-	$(document).on('click','#do_login_action',function () {
+	jQuery(document).on('click','#do_login_action',function () {
 		var params = {};
 		params.action = 'doLogin';
-		params.vendorId = $('#soap_login_vendor_id').val();
-		params.password = $('#soap_login_password').val();
-		params.apiKey	= $('#soap_login_api_key').val();
+		params.vendorId = jQuery('#soap_login_vendor_id').val();
+		params.password = jQuery('#soap_login_password').val();
+		params.apiKey	= jQuery('#soap_login_api_key').val();
 		doSoapAjax(params);
 	});
-	$(document).on('click','#get_message_action',function () {
+	jQuery(document).on('click','#get_message_action',function () {
 		var params = {};
 		params.action = 'getChangeOrderMessage';
-		params.token = $('#soap_message_token').val();
-		params.size = $('#soap_message_size').val();
-		params.messageType	= $('#soap_message_type').val();
+		params.token = jQuery('#soap_message_token').val();
+		params.size = jQuery('#soap_message_size').val();
+		params.messageType	= jQuery('#soap_message_type').val();
 		doSoapAjax(params);
 	});
-	$(document).on('click','#confirm_message_action',function () {
+	jQuery(document).on('click','#confirm_message_action',function () {
 		var params = {};
 		params.action = 'setChangeOrderMessageConfirmation';
-		params.token = $('#soap_confirmation_token').val();
-		params.list = $('#soap_confirm_list').val();
+		params.token = jQuery('#soap_confirmation_token').val();
+		params.list = jQuery('#soap_confirm_list').val();
 		doSoapAjax(params);
 	});
-	$(document).on('click','#get_orders_action',function () {
+	jQuery(document).on('click','#get_orders_action',function () {
 		var params = {};
 		params.action = 'getOrdersByID';
-		params.token = $('#soap_order_token').val();
-		params.list = $('#soap_order_list').val();
+		params.token = jQuery('#soap_order_token').val();
+		params.list = jQuery('#soap_order_list').val();
 		doSoapAjax(params);
 	});
-	$(document).on('click','#set_collected_action',function () {
+	jQuery(document).on('click','#set_collected_action',function () {
 		var params = {};
 		params.action = 'setOrderAsCollected';
-		params.token = $('#soap_collected_token').val();
-		params.list = $('#soap_collected_list').val();
+		params.token = jQuery('#soap_collected_token').val();
+		params.list = jQuery('#soap_collected_list').val();
 		doSoapAjax(params);
 	});
-    $(document).on('click','#set_shipment_action',function () {
+    jQuery(document).on('click','#set_shipment_action',function () {
         var params = {};
         params.action = 'setOrderShipment';
-        params.token = $('#soap_collected_token').val();
-        params.orderID = $('#soap_collected_order_id').val();
-        params.dateShipped = $('#soap_collected_date_shipped').val();
-        params.shipmentTrackingNumber = $('#soap_collected_shipment_tracking_number').val();
-        params.courier = $('#soap_collected_courier').val();
+        params.token = jQuery('#soap_shipment_token').val();
+        params.orderID = jQuery('#soap_shipment_order_id').val();
+        params.dateShipped = jQuery('#soap_shipment_date_shipped').val();
+        params.shipmentTrackingNumber = jQuery('#soap_shipment_shipment_tracking_number').val();
+        params.courier = jQuery('#soap_collected_courier').val();
         doSoapAjax(params);
     });
  		

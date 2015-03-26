@@ -102,7 +102,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
          $request  = $this->getRequest();
          $token = $request->get('token');
          $size = $request->get('size');
-         $type  = $request->get('type',null);
+         $type  = $request->get('messageType',null);
          $client->getChangeOrderMessage($token,$size,$type);
      }
      

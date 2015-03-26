@@ -15,7 +15,7 @@
             	<?php echo $_helper->__("Token"); ?>
             </label>
             <div class="col-md-9">
-            	<input id="soap_message_token" name="ghapi_soap_token" value="" type="text" class="form-control" size="10">
+            	<input id="soap_message_token" name="ghapi_soap_token" value="" type="text" class="form-control ghapi-token" size="10">
             </div>
         </div>
     	<div class="form-group">
@@ -26,17 +26,28 @@
             	<input id="soap_message_size" name="ghapi_soap_message_size" value="" type="text" class="form-control" style="width:20%; min-width:50px;">
             </div>
         </div>
-    	<div class="form-group">
-        	<label for="soap_message_type" class="col-md-3 control-label">
-            	<?php echo $_helper->__("Message type"); ?>
+        <div class="form-group">
+            <label for="soap_message_type" class="col-md-3 control-label">
+                <?php echo $_helper->__("Message type"); ?>
             </label>
             <div class="col-md-9">
-            	<input id="soap_message_type" name="ghapi_soap_message_type" value="" type="text" class="form-control" size="10">
-                                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('List of available types:'); ?> 
-								<code>newOrder, cancelledOrder, paymentDataChanged, itemsChanged,deliveryDataChanged, invoiceDataChanged, statusChanged</code></p>
-
+<!--                <input id="soap_message_type" name="ghapi_soap_message_type" value="" type="text" class="form-control" size="10">-->
+<!--                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;--><?php //echo $_helper->__('List of available types:'); ?>
+<!--                <pre style="word-break: normal;">newOrder, cancelledOrder, paymentDataChanged, itemsChanged, deliveryDataChanged, invoiceDataChanged, statusChanged</pre></p>-->
+                <select class="form-control" id="soap_message_type">
+                    <option value=""><?php echo $_helper->__('All types'); ?></option>
+                    <option value="newOrder">newOrder</option>
+                    <option value="cancelledOrder">cancelledOrder</option>
+                    <option value="paymentDataChanged">paymentDataChanged</option>
+                    <option value="itemsChanged">itemsChanged</option>
+                    <option value="deliveryDataChanged">deliveryDataChanged</option>
+                    <option value="invoiceDataChanged">invoiceDataChanged</option>
+                    <option value="statusChanged">statusChanged</option>
+                </select>
             </div>
         </div>
+
+
 		<div class="form-group">
 			<div class="col-md-3">
 			</div>
