@@ -57,7 +57,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         try {
             if (!isset($request->messageID->ID)) {
-                $this->throwOrderIDListEmpty();
+                Mage::throwException('Message ID list empty');
             }
             $messages = $request->messageID->ID;
             if (!is_array($messages)) {
@@ -147,18 +147,19 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             foreach ($allData as $data) {
 
                 $order = new StdClass();
-                $order->vendor_id = $data['vendor_id'];
-                $order->vendor_name = $data['vendor_name'];
-                $order->order_id = $data['order_id'];
-                $order->order_date = $data['order_date'];
-                $order->order_max_shipping_date = $data['order_max_shipping_date'];
-                $order->order_status = $data['order_status'];
-                $order->order_total = $data['order_total'];
-                $order->payment_method = $data['payment_method'];
-                $order->order_due_amount = $data['order_due_amount'];
-                $order->delivery_method = $data['delivery_method'];
+                $order->vendor_id                = $data['vendor_id'];
+                $order->vendor_name              = $data['vendor_name'];
+                $order->order_id                 = $data['order_id'];
+                $order->order_date               = $data['order_date'];
+                $order->order_max_shipping_date  = $data['order_max_shipping_date'];
+                $order->order_status             = $data['order_status'];
+                $order->order_total              = $data['order_total'];
+                $order->payment_method           = $data['payment_method'];
+                $order->order_due_amount         = $data['order_due_amount'];
+                $order->delivery_method          = $data['delivery_method'];
                 $order->shipment_tracking_number = $data['shipment_tracking_number'];
-                $order->pos_id = $data['pos_id'];
+                $order->pos_id                   = $data['pos_id'];
+                $order->order_currency           = $data['order_currency'];
 
                 $invoice = new StdClass();
                 $invoice->invoice_required = $data['invoice_data']['invoice_required'];
@@ -301,17 +302,41 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $orderId  = $request->orderID;
             $model = Mage::getModel('zolagopo/po');
             $po = $model->load($orderId, 'increment_id');
+            if ($user->getVendorId() != $po->getUdropshipVendor()) {
+                $this->throwOrderIdWrongError();
+            }
             if(!$model->getStatusModel()->isShippingAvailable($po)) {
                 $this->throwOrderInvalidStatusError(array($orderId));
             }
             $courierCode = $this->getCourierCode($courier);
+            
+            $manager = Mage::helper('zolagopo/shipment');
+            $manager->setNumber($shipmentTrackingNumber);
+            $manager->setCarrierData($courierCode,$courier);
+            $manager->setUdpo($po);                        
+            // save shippedData
+            if ($dateShipped) {
+                $track = $manager->getTrack();
+                $track->setShippedDate($dateShipped);
+            }
 
+            $manager->processSaveTracking();
+            $manager->invoiceShipment();
+            
+            // aggregated
+            $collection = Mage::getResourceModel('zolagopo/po_collection');
+                /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+            $collection->addFieldToFilter("entity_id", $po->getId());
 
+            $id = Mage::helper('zolagopo')->createAggregated($collection, $manager->getVendor());
 
-
+            $aggregated = Mage::getModel('zolagopo/aggregated')->load($id);
+            $aggregated->confirm();
+            
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
+            Mage::logException($e);
             $message = $e->getMessage();
             $status = false;
         }
