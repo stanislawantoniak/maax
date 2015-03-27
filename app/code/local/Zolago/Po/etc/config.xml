@@ -138,6 +138,14 @@
                     </zolagopo>
                 </observers>
             </zolagopo_po_split>
+            <zolagopo_po_split>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_split>
 
 			<zolagopo_po_shipping_cost>
 				<observers>

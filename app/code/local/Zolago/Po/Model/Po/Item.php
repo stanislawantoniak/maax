@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * Class Zolago_Po_Model_Po_Item
+ * @method string getVendorSimpleSku()
+ * @method string getName()
+ * @method float getQty()
+ */
 class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 {
 	/**

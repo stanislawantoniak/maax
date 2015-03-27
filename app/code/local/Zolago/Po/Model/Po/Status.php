@@ -168,15 +168,20 @@ class Zolago_Po_Model_Po_Status
 			$this->_processStatus($po, $status);
 		}
 	}
-	
-	/**
-	 * @param Zolago_Po_Model_Po $po
-	 */
-	public function processStartPacking(Zolago_Po_Model_Po $po, $force = false) {
-		if($this->isStartPackingAvailable($po) || $force){
-			$this->_processStatus($po, self::STATUS_EXPORTED);
-		}
-	}
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $force
+     * @param bool $throwError
+     * @throws Mage_Core_Exception
+     */
+    public function processStartPacking(Zolago_Po_Model_Po $po, $force = false, $throwError = false) {
+        if($this->isStartPackingAvailable($po) || $force){
+            $this->_processStatus($po, self::STATUS_EXPORTED);
+        } elseif($throwError) {
+            Mage::throwException(Mage::helper('ghapi')->__('Invalid status for this operation.'));
+        }
+    }
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
@@ -442,5 +447,34 @@ class Zolago_Po_Model_Po_Status
 		}
 		return false;
 	}
-   
+
+    /**
+     * Mapping statuses to GH API statuses
+     *
+     * @param $status string
+     * @return string
+     */
+    public function ghapiOrderStatus($status) {
+        switch ($status) {
+            case Zolago_Po_Model_Source::UDPO_STATUS_ACK:
+            case Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD:
+            case Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER:
+                return 'pending';
+            case Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT:
+                return 'pending_payment';
+            case Zolago_Po_Model_Source::UDPO_STATUS_PENDING:
+            case Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED:
+            case Zolago_Po_Model_Source::UDPO_STATUS_READY:
+                return 'ready';
+            case Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED:
+                return 'shipped ';
+            case Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED:
+                return 'delivered';
+            case Zolago_Po_Model_Source::UDPO_STATUS_CANCELED:
+                return 'cancelled';
+            case Zolago_Po_Model_Source::UDPO_STATUS_RETURNED:
+                return 'returned';
+        }
+        return '';
+    }
 }

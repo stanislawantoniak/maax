@@ -1,0 +1,147 @@
+<?php $_helper = Mage::helper("ghapi"); ?>
+<div class="row" id="accordion">
+	<div class="col-md-12">
+		<form class="form-horizontal">
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_login');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_message');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_confirmation');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_orders');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_collected');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_shipment');?>
+			<?php //echo $this->getChildHtml('ghapi_dropship_soap_reservation');?>
+			<div id="soap_ajax_answer">
+				<strong><?php echo $_helper->__('SOAP Request');?></strong>
+				<pre>
+					<code class="language-markup" id="soap_request">
+					</code>
+				</pre>
+				<strong><?php echo $_helper->__('SOAP Response');?></strong>
+				<pre>
+					<code class="language-markup" id="soap_response">
+				</code>
+				</pre>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+    // Simple accordion
+    jQuery('#accordion .widget-closed .widget-header').click(function(){
+        jQuery("#accordion .box:not(.widget-closed) .widget-header").not(this).click();
+    });
+    // --Simple accordion
+
+jQuery(function ($) {
+	function doSoapAjax(params) {
+        $('#soap_ajax_answer').html('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+		$.ajax({
+			url: '/udropship/ghapi/test',
+			method: 'POST',
+			data: params,
+			success: function(answer) {
+				$('#soap_ajax_answer').html(answer);	
+				Prism.highlightAll();
+			}
+		});
+	};
+
+    //doLogin
+    jQuery('#do_login_action').click(function(){doLogin(); });
+    jQuery('#soap_login_vendor_id, #soap_login_api_key, #soap_login_password').keypress(function (e) { if (e.which == 13) { doLogin(); return false;} });
+
+    function doLogin(){
+        var params = {};
+        params.action = 'doLogin';
+        params.vendorId = jQuery('#soap_login_vendor_id').val();
+        params.password = jQuery('#soap_login_password').val();
+        params.apiKey	= jQuery('#soap_login_api_key').val();
+        doSoapAjax(params);
+    }
+    //--doLogin
+
+    //getChangeOrderMessage
+    jQuery('#get_message_action').click(function(){getChangeOrderMessage(); });
+    jQuery('#soap_message_token, #soap_message_size').keypress(function (e) { if (e.which == 13) { getChangeOrderMessage(); return false;} });
+
+    function getChangeOrderMessage(){
+        var params = {};
+        params.action = 'getChangeOrderMessage';
+        params.token = jQuery('#soap_message_token').val();
+        params.size = jQuery('#soap_message_size').val();
+        params.messageType	= jQuery('#soap_message_type').val();
+        doSoapAjax(params);
+    }
+    //--getChangeOrderMessage
+
+    //setChangeOrderMessageConfirmation
+    jQuery('#confirmation_message_action').click(function(){getChangeOrderMessage(); });
+    jQuery('#soap_confirmation_token, #soap_confirmation_order_list').keypress(function (e) { if (e.which == 13) { getChangeOrderMessage(); return false;} });
+
+    function setChangeOrderMessageConfirmation(){
+        var params = {};
+        params.action = 'setChangeOrderMessageConfirmation';
+        params.token = jQuery('#soap_confirmation_token').val();
+        params.list = jQuery('#soap_confirmation_order_list').val();
+        doSoapAjax(params);
+    }
+    //--setChangeOrderMessageConfirmation
+
+    //getOrdersByID
+    jQuery('#get_orders_action').click(function(){getOrdersByID(); });
+    jQuery('#soap_order_token, #soap_order_list').keypress(function (e) { if (e.which == 13) { getOrdersByID(); return false;} });
+
+    function getOrdersByID(){
+        var params = {};
+        params.action = 'getOrdersByID';
+        params.token = jQuery('#soap_order_token').val();
+        params.list = jQuery('#soap_order_list').val();
+        doSoapAjax(params);
+    }
+    //--getOrdersByID
+
+    //setOrderAsCollected
+    jQuery('#set_collected_action').click(function(){setOrderAsCollected(); });
+    jQuery('#soap_collected_token, #soap_collected_order_list').keypress(function (e) { if (e.which == 13) { setOrderAsCollected(); return false;} });
+
+    function setOrderAsCollected(){
+        var params = {};
+        params.action = 'setOrderAsCollected';
+        params.token = jQuery('#soap_collected_token').val();
+        params.list = jQuery('#soap_collected_order_list').val();
+        doSoapAjax(params);
+    }
+    //--setOrderAsCollected
+
+    //setOrderShipment
+    jQuery('#set_shipment_action').click(function(){setOrderShipment(); });
+    jQuery('#soap_shipment_token, #soap_shipment_order_id, #soap_shipment_date_shipped, #soap_shipment_shipment_tracking_number').keypress(function (e) { if (e.which == 13) { setOrderShipment(); return false;} });
+
+    function setOrderShipment() {
+        var params = {};
+        params.action = 'setOrderShipment';
+        params.token = jQuery('#soap_shipment_token').val();
+        params.orderID = jQuery('#soap_shipment_order_id').val();
+        params.dateShipped = jQuery('#soap_shipment_date_shipped').val();
+        params.shipmentTrackingNumber = jQuery('#soap_shipment_shipment_tracking_number').val();
+        params.courier = jQuery('#soap_shipment_courier').val();
+        doSoapAjax(params);
+    }
+    //--setOrderShipment
+
+ 	//setOrderReservation
+    jQuery('#set_reservation_reservation_action').click(function(){setOrderReservation(); });
+    jQuery('#soap_reservation_token, #soap_reservation_order_id, #soap_reservation_message').keypress(function (e) { if (e.which == 13) { setOrderReservation(); return false;} });
+
+    function setOrderReservation() {
+        var params = {};
+        params.action = 'setOrderReservation';
+        params.token = jQuery('#soap_reservation_token').val();
+        params.orderID = jQuery('#soap_reservation_order_id').val();
+        params.reservationStatus = jQuery('#soap_shipment_reservation_status').val();
+        params.reservationMessage = jQuery('#soap_reservation_message').val();
+        doSoapAjax(params);
+    }
+ 	//--setOrderReservation
+});
+</script>

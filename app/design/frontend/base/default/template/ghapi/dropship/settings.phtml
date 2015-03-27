@@ -8,14 +8,7 @@ $_vendor = $_session->getVendor();
 
 $_ghApiVendorUser = $this->getGhApiVendorUser();
 ?>
-<div class="container">
-    <!--=== Page Header ===-->
-    <div class="page-header">
-        <div class="page-title">
-            <h3><?php echo $_helper->__("GH API Settings");?></h3>
-        </div>
-    </div>
-    <div class="row">
+	<div class="row">
         <div class="col-md-12">
             <form id="ghapi_vendor_settiongs" class="form-horizontal" method="post" action="/udropship/ghapi/save">
                 <div class="widget box">
@@ -40,7 +33,7 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                                 <?php echo $_helper->__("API Key"); ?>
                             </label>
 
-                            <div class="col-md-9">
+                            <div class="col-xs-12 col-md-9 col-lg-6">
                                 <input id="ghapi_vendor_api_key" name="ghapi_vendor_api_key" value="<?php echo $_ghApiVendorUser->getApiKey(); ?>" type="text" readonly class="form-control" size="10">
                             </div>
                         </div>
@@ -50,7 +43,7 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                                 <?php echo $_helper->__("API Password"); ?>
                             </label>
 
-                            <div class="col-md-9">
+                            <div class="col-xs-12 col-md-9 col-lg-6">
                                 <input id="ghapi_vendor_password" name="ghapi_vendor_password" value="" type="password" class="form-control" size="10">
                                 <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('Minimum Length - 8 characters'); ?></p>
                                 <p>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_helper->__('Leave empty for no change');?></p>
@@ -90,7 +83,7 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                                 <input id="ghapi_message_order_payment_changes" name="ghapi_message_order_payment_changes" value="<?php echo $ghapi_message_order_payment_changes; ?>" <?php if($ghapi_message_order_payment_changes == 1): ?>checked<?php endif; ?> type="checkbox">
                             </div>
                             <label for="ghapi_message_order_payment_changes" class="col-md-6 col-sm-10 col-xs-10">
-                                <?php echo $_helper->__("Zmieniła się metoda płatności w zamówienia lub/i zmieniła się się płatność do zamówienia."); ?>
+                                <?php echo $_helper->__("Zmieniła się metoda płatności w zamówieniu lub/i zmieniła się się płatność do zamówienia."); ?>
                             </label>
                         </div>
                         <div class="form-group">
@@ -138,9 +131,9 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                         <span><span><?php echo $this->__('Save'); ?></span></span>
                     </button>
                 </div>
+			</div>
             </form>
         </div>
     </div>
-</div>
 
 

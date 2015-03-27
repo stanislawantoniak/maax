@@ -1,0 +1,18 @@
+<?php
+/** @var GH_Api_Block_Dropship_Answer $this */
+$_helper = Mage::helper('ghapi');
+
+?>
+<strong><?php echo $_helper->__('SOAP Request');?></strong>
+<pre>
+	<code class="language-markup" id="soap_request"><?php echo $this->getSoapRequest();?></code>
+</pre>
+<strong><?php echo $_helper->__('SOAP Response');?></strong>
+<pre>
+	<code class="language-markup" id="soap_response" style="max-height:360px"><?php echo $this->getSoapResponse();?></code>
+</pre>
+<?php if ($this->getToken()): ?>
+<script>
+    jQuery('.ghapi-token').val('<?php echo $this->getToken(); ?>');
+</script>
+<?php endif; ?>
