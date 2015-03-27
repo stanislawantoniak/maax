@@ -615,6 +615,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $product = Mage::getModel("catalog/product")->
                    setStoreId($store->getId())->
                    load($request->getParam("product_id"));
+        //krumo($product->getData());
+        $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+        $parentId = $parentIds[0];
+        if (isset($parentId)) {
+            $productP = Mage::getModel('catalog/product')->load($parentId);
+            //krumo($productP->getData());
+        }
+
         /** @var $product Mage_Catalog_Model_Product */
 
         $price = $request->getParam("product_price");
@@ -687,43 +695,107 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $item = Mage::getModel("zolagopo/po_item");
             /* @var $item Zolago_Po_Model_Po_Item */
 
-            $itemData = array(
-                            'row_total'				=> $priceExclTax * $qty,
-                            'price'					=> $priceExclTax,
-                            'weight'				=> $product->getWeight(),
-                            'qty'					=> $qty,
-                            'qty_shipped'			=> null,
-                            'product_id'			=> $product->getId(),
-                            'order_item_id'			=> null,
-                            'additional_data'		=> null,
-                            'description'			=> null,
-                            'name'					=> $product->getName(),
-                            'sku'					=> $product->getSku(),
-                            'base_cost'				=> $product->getCost(),
-                            'qty_invoiced'			=> null,
-                            'qty_canceled'			=> null,
-                            'vendor_sku'			=> null, // add by helper
-                            'vendor_simple_sku'		=> null, // add by helper
-                            'is_virtual'			=> $product->isVirtual(),
-                            'commission_percent'	=> null, // ad by helper
-                            'transaction_fee'		=> null, // add by helper
-                            'price_incl_tax'		=> $priceInclTax,
-                            'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
-                            'discount_amount'		=> $discountAmount,
-                            'discount_percent'		=> $discountPrecent,
-                            'row_total_incl_tax'	=> $priceInclTax*$qty,
-                            'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
-                            'parent_item_id'		=> null
-                        );
 
-            $item->addData($itemData);
-            $po->addItemWithTierCommission($item);
 
             /**
-             * @todo add child of configurable item
+             * add child of configurable item
              * clone parentItem, unset order item, change & unset some data
              * set new child->setParentItem(parentItem)
              */
+            $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
+                ->getParentIdsByChild($product->getId());
+            $parentId = $parentIds[0];
+
+            if (isset($parentId)) {
+                $productParent = Mage::getModel('catalog/product')->load($parentId);
+
+                //parent
+                $itemData = array(
+                    'row_total'				=> $priceExclTax * $qty,
+                    'price'					=> $priceExclTax,
+                    'weight'				=> $product->getWeight(),
+                    'qty'					=> $qty,
+                    'qty_shipped'			=> null,
+                    'product_id'			=> $productP->getId(),
+                    'order_item_id'			=> null,
+                    'additional_data'		=> null,
+                    'description'			=> null,
+                    'name'					=> $product->getName(),
+                    'sku'					=> $product->getSku(),
+                    'base_cost'				=> $productP->getCost(),
+                    'qty_invoiced'			=> null,
+                    'qty_canceled'			=> null,
+                    'vendor_sku'			=> $productP->getSkuv(),
+                    'vendor_simple_sku'		=> $product->getSkuv(), // add by helper
+                    'is_virtual'			=> $productP->isVirtual(),
+                    'commission_percent'	=> null, // ad by helper
+                    'transaction_fee'		=> null, // add by helper
+                    'price_incl_tax'		=> $priceInclTax,
+                    'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+                    'discount_amount'		=> $discountAmount,
+                    'discount_percent'		=> $discountPrecent,
+                    'row_total_incl_tax'	=> $priceInclTax*$qty,
+                    'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
+                    'parent_item_id'		=> null
+                );
+
+                $item->addData($itemData);
+
+                $sizeCode = 'size';
+
+                $productM = Mage::getModel('catalog/product')
+                    ->setStoreId($store->getId())
+                    ->setData($sizeCode, $product->getSize());
+                $optionLabel = $product->getAttributeText($sizeCode);
+
+                $attributeInfo = Mage::getSingleton("eav/config")
+                    ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $sizeCode);
+
+
+                $productPptions = array(
+                  'attributes_info' => array(
+                      array(
+                          'label' => $attributeInfo->getStoreLabel($store->getId()),
+                          'value' => $optionLabel
+                      )
+                  )
+                );
+
+                $po->addItemWithTierCommission($item);
+
+
+                //simple
+                $child = clone $item;
+                $itemPData = array(
+                    'row_total'				=> 0,
+                    'price'					=> 0,
+                    'qty'					=> $qty,
+                    'product_id'			=> $product->getId(),
+                    'name'					=> $product->getName(),
+                    'sku'					=> $product->getSku(),
+                    'base_cost'				=> $product->getCost(),
+                    'vendor_sku'			=> $product->getSkuv(),
+                    'vendor_simple_sku'		=> null,
+                    'price_incl_tax'		=> null,
+                    'base_price_incl_tax'	=> null, // @todo use currency
+                    'row_total_incl_tax'	=> null,
+                    'base_row_total_incl_tax'=> null,
+                );
+
+                $child->addData($itemPData);
+                $child
+                    ->getOrderItem()
+                    ->setData('parent_item_id',$item->getOrderItem()->getId())
+                    ->save();
+
+                $po->addItemWithTierCommission($child);
+
+                $item
+                    ->getOrderItem()
+                    ->setProductOptions($productPptions)
+                    ->save();
+            }
+
 
             Mage::helper("udropship")->addVendorSkus($po);
 
