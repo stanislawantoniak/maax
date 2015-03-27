@@ -159,7 +159,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 $order->delivery_method          = $data['delivery_method'];
                 $order->shipment_tracking_number = $data['shipment_tracking_number'];
                 $order->pos_id                   = $data['pos_id'];
-                $order->order_currency           = $data['pos_id'];
+                $order->order_currency           = $data['order_currency'];
 
                 $invoice = new StdClass();
                 $invoice->invoice_required = $data['invoice_data']['invoice_required'];
