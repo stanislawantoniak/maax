@@ -701,7 +701,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $parentId = isset($parentIds[0]) ? $parentIds[0] : 0;
 
             if (!empty($parentId)) {
-                $productParent = Mage::getModel('catalog/product')->load($parentId);
+                $productP = Mage::getModel('catalog/product')->load($parentId);
 
                 //parent
                 $itemData = array(
