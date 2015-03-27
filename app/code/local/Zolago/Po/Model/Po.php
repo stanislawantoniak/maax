@@ -947,8 +947,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      * @return mixed
      */
     public function getShipmentTrackingNumber() {
-        /** @var Mage_Sales_Model_Order_Shipment_Track $item */
-        $item = $this->getLastNotCanceledShipment()->getTracksCollection()->setOrder("created_at", "DESC")->getFirstItem();
+        $shipment = $this->getLastNotCanceledShipment();
+        if (!is_null($shipment)) {
+            /** @var Mage_Sales_Model_Order_Shipment_Track $item */
+            $item = $shipment->getTracksCollection()->setOrder("created_at", "DESC")->getFirstItem();
+        }
         return $item->getTrackNumber();
     }
 }
