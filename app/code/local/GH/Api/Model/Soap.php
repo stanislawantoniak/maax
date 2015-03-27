@@ -57,7 +57,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         try {
             if (!isset($request->messageID->ID)) {
-                $this->throwOrderIDListEmpty();
+                Mage::throwException('Message ID list empty');
             }
             $messages = $request->messageID->ID;
             if (!is_array($messages)) {
