@@ -1,5 +1,5 @@
 <?php $_helper = Mage::helper("ghapi"); ?>
-<div class="row">
+<div class="row" id="accordion">
 	<div class="col-md-12">
 		<form class="form-horizontal">
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_login');?>
@@ -26,6 +26,12 @@
 </div>
 
 <script>
+    // Simple accordion
+    jQuery('#accordion .widget-closed .widget-header').click(function(){
+        jQuery("#accordion .box:not(.widget-closed) .widget-header").not(this).click();
+    });
+    // --Simple accordion
+
 jQuery(function ($) {
 	function doSoapAjax(params) {
         $('#soap_ajax_answer').html('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
