@@ -58,37 +58,34 @@ if($sliders): ?>
 <?php $boxes = $this->getBoxes(); ?>
 <?php if ($boxes) :
 	$boxesCount = 0;
-	foreach($boxes as $box) {
-		$boxesCount += empty($box['banner_image']) ? 0 : 1;
+	foreach ($boxes as $key => $box) {
+		$boxes[$key]['banner_image'] = empty($box['banner_image']) ? array() : unserialize($box['banner_image'])[1];
+		$boxesCount += !empty($boxes[$key]['banner_image']) && $this->imageExists($boxes[$key]['banner_image']['path']) ? 1 : 0;
 	}
 	$boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
 	?>
 <div class="row">
-	<section id="boxesSlider" data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
-		<?php foreach($boxes as $n => $box): ?>
-			<?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
-			<?php if(!empty($boxe)): ?>
-				<?php foreach($boxe as $i => $b): ?>
-					<?php $path = $b['path']; ?>
-					<?php if($this->imageExists($path)): ?>
-						<div class="boxesSlide">
-							<?php if(!empty($b['url'])): ?>
-								<a href="<?php echo $b['url']; ?>">
+	<section id="boxesSlider"
+	         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
+		<?php foreach ($boxes as $n => $box): ?>
+			<?php if (!empty($box['banner_image'])):
+				$path = $box['banner_image']['path'];
+				$url = $box['banner_image']['url'];
+				if ($this->imageExists($path)): ?>
+					<div class="boxesSlide">
+						<?php if (!empty($url)): ?>
+						<a href="<?php echo $url; ?>">
 							<?php endif; ?>
-									<?php $imageSize = $this->getImageSize($path); ?>
-									<div class="boxesSlideIn"
-									     style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
-									     data-ratio="<?php echo $this->getImageRatio($path); ?>">
-									</div>
-							<?php if(!empty($b['url'])): ?>
-								</a>
-							<?php endif; ?>
-						</div>
+							<?php $imageSize = $this->getImageSize($path); ?>
+							<div class="boxesSlideIn"
+							     style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
+							     data-ratio="<?php echo $this->getImageRatio($path); ?>">
+							</div>
+							<?php if (!empty($url)): ?>
+						</a>
 					<?php endif; ?>
-				<?php endforeach; ?>
-				<?php unset($i); ?>
-				<?php unset($b); ?>
-				<?php unset($caption); ?>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 		<?php endforeach; ?>
 	</section>
