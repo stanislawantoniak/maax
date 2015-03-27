@@ -23,12 +23,12 @@ if (!empty($sliders) || !empty($boxes)): ?>
 									<?php $imageSize = $this->getImageSize($slide['path']); ?>
 									<img src="<?php echo rtrim(Mage::getBaseUrl('media'), '/') . $slide['path']; ?>"
 									     class="hidden-xs"
-										<?php echo is_array($imageSize) ? $imageSize[2] : '' ?> />
+										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
 								<?php else: ?>
 									<?php $imageSize = $this->getImageSize($slide['path']); ?>
 									<img src="<?php echo rtrim(Mage::getBaseUrl('media'), '/') . $slide['path']; ?>"
 									     class="visible-xs"
-										<?php echo is_array($imageSize) ? $imageSize[2] : '' ?> />
+										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
 								<?php endif; ?>
 								<?php if (!empty($slide['url'])): ?>
 									</a>
