@@ -75,7 +75,7 @@ jQuery(function ($) {
     //--getChangeOrderMessage
 
     //setChangeOrderMessageConfirmation
-    jQuery('#confirmation_message_action').click(function(){getChangeOrderMessage(); });
+    jQuery('#confirmation_message_action').click(function(){setChangeOrderMessageConfirmation(); });
     jQuery('#soap_confirmation_token, #soap_confirmation_order_list').keypress(function (e) { if (e.which == 13) { getChangeOrderMessage(); return false;} });
 
     function setChangeOrderMessageConfirmation(){
