@@ -14,35 +14,36 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
      */
     protected function _processPoCommission($po)
     {
-
         $tierRates = $this->getGlobalTierComConfig();
-
 
         // Tier rates for vendor
         $vendorTierRates = $po->getUdropshipVendor() ? $this->getTiercomRates($po->getUdropshipVendor()) : array();
 
+        /** @var Zolago_Dropship_Helper_Data $hlpUd */
+        $hlpUd = Mage::helper('udropship');
+
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = $hlpUd->getVendor($po->getUdropshipVendor());
+
+        //GLOBAL default values
+        $defaultCommissionPercent = Mage::getStoreConfig('udropship/tiercom/commission_percent');
+        $defaultSaleCommissionPercent = Mage::getStoreConfig('udropship/tiercom/sale_commission_percent');
+
+        //vendor default values
+        $defaultVendorCommissionPercent = $vendor->getCommissionPercent();
+        $defaultSaleVendorCommissionPercent = $vendor->getSaleCommissionPercent();
+
         foreach ($vendorTierRates as $cat => $val) {
             if (!empty($val['value'])) {
                 $tierRates[$cat]['value'] = $val['value'];
+            } else if (!empty($defaultVendorCommissionPercent)) {
+                $tierRates[$cat]['value'] = $defaultVendorCommissionPercent;
             }
             if (!empty($val['sale_value'])) {
                 $tierRates[$cat]['sale_value'] = $val['sale_value'];
+            } else if (!empty($defaultSaleVendorCommissionPercent)) {
+                $tierRates[$cat]['sale_value'] = $vendor->getSaleCommissionPercent();
             }
-        }
-
-
-
-
-        /** @var Zolago_Dropship_Model_Vendor $vendor */
-
-        /** @var Zolago_Dropship_Helper_Data $hlpUd */
-        $hlpUd = Mage::helper('udropship');
-        $vendor = $hlpUd->getVendor($po->getUdropshipVendor());
-        if (!$defaultCommissionPercent = $vendor->getCommissionPercent()) {
-            $defaultCommissionPercent = Mage::getStoreConfig('udropship/tiercom/commission_percent');
-        }
-        if (!$defaultSaleCommissionPercent = $vendor->getSaleCommissionPercent()) {
-            $defaultSaleCommissionPercent = Mage::getStoreConfig('udropship/tiercom/sale_commission_percent');
         }
 
         $products = $po->getAllItems();
@@ -54,6 +55,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                 $allIds[] = $id;
             }
         }
+
         /// sale flag
         $saleProducts = Mage::getResourceModel('zolagocatalog/product_collection');
         $saleProducts->addIdFilter($allIds);
@@ -69,18 +71,22 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                 $product = Mage::getModel('catalog/product')->load($id);
                 $categories = $product->getCategoryIds();
                 $commission = $defaultCommissionPercent;
+
                 foreach ($categories as $catId) {
                     if (isset($tierRates[$catId])) {
-                        if (!empty($tierRates[$catId])) {
+                        if (!empty($tierRates[$catId]['value'])) {
                             $commission = $tierRates[$catId]['value'];
                         }
                     }
                 }
+
                 // override if product is in sale
                 if (!empty($saleItems[$id])) {
+                    $commission = $defaultSaleCommissionPercent;
                     if (!empty($defaultSaleCommissionPercent)) {
                         $commission = $defaultSaleCommissionPercent;
                     }
+
                     foreach ($categories as $catId) {
                         if (isset($tierRates[$catId])) {
                             if (!empty($tierRates[$catId]['sale_value'])) {
@@ -90,7 +96,6 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     }
                 }
                 $item->setCommissionPercent($locale->getNumber($commission));
-                //$item->save();
             }
         }
     }

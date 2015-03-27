@@ -620,7 +620,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$tmplItem = $order->getItemsCollection()->getFirstItem();
 		/* @var $tmplItem Mage_Sales_Model_Order_Item */
 		$store = $order->getStore();
-		
+
 		$product = Mage::getModel("catalog/product")->setStoreId($store->getId())
 				->load($poItem->getProductId());
 		/* @var $product Mage_Catalog_Model_Product */
