@@ -306,13 +306,34 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 $this->throwOrderInvalidStatusError(array($orderId));
             }
             $courierCode = $this->getCourierCode($courier);
+            
+            $manager = Mage::helper('zolagopo/shipment');
+            $manager->setNumber($shipmentTrackingNumber);
+            $manager->setCarrierData($courierCode,$courier);
+            $manager->setUdpo($po);                        
+            // save shippedData
+            if ($dateShipped) {
+                $track = $manager->getTrack();
+                $track->setShippedDate($dateShipped);
+            }
 
+            $manager->processSaveTracking();
+            $manager->invoiceShipment();
+            
+            // aggregated
+            $collection = Mage::getResourceModel('zolagopo/po_collection');
+                /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+            $collection->addFieldToFilter("entity_id", $po->getId());
 
+            $id = Mage::helper('zolagopo')->createAggregated($collection, $manager->getVendor());
 
-
+            $aggregated = Mage::getModel('zolagopo/aggregated')->load($id);
+            $aggregated->confirm();
+            
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
+            Mage::logException($e);
             $message = $e->getMessage();
             $status = false;
         }
