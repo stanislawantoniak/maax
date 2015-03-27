@@ -690,7 +690,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $item Zolago_Po_Model_Po_Item */
 
 
-
             /**
              * add child of configurable item
              * clone parentItem, unset order item, change & unset some data
@@ -700,37 +699,72 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 ->getParentIdsByChild($product->getId());
             $parentId = isset($parentIds[0]) ? $parentIds[0] : 0;
 
-            if (!empty($parentId)) {
+            if ($product->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+                && ((int)$product->getData('visibility') !== Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE)
+            ) {
+
+                $itemSData = array(
+                    'row_total' => $priceExclTax * $qty,
+                    'price' => $priceExclTax,
+                    'weight' => $product->getWeight(),
+                    'qty' => $qty,
+                    'qty_shipped' => null,
+                    'product_id' => $product->getId(),
+                    'order_item_id' => null,
+                    'additional_data' => null,
+                    'description' => null,
+                    'name' => $product->getName(),
+                    'sku' => $product->getSku(),
+                    'base_cost' => $product->getCost(),
+                    'qty_invoiced' => null,
+                    'qty_canceled' => null,
+                    'vendor_sku' => null,
+                    'vendor_simple_sku' => null, // add by helper
+                    'is_virtual' => $product->isVirtual(),
+                    'commission_percent' => null, // ad by helper
+                    'transaction_fee' => null, // add by helper
+                    'price_incl_tax' => $priceInclTax,
+                    'base_price_incl_tax' => $priceInclTax, // @todo use currency
+                    'discount_amount' => $discountAmount,
+                    'discount_percent' => $discountPrecent,
+                    'row_total_incl_tax' => $priceInclTax * $qty,
+                    'base_row_total_incl_tax' => $priceInclTax * $qty, // @todo use currency
+                    'parent_item_id' => null
+                );
+
+                $item->addData($itemSData);
+                $po->addItemWithTierCommission($item);
+            } else if (!empty($parentId)) {
                 $productP = Mage::getModel('catalog/product')->load($parentId);
 
                 //parent
                 $itemData = array(
-                    'row_total'				=> $priceExclTax * $qty,
-                    'price'					=> $priceExclTax,
-                    'weight'				=> $product->getWeight(),
-                    'qty'					=> $qty,
-                    'qty_shipped'			=> null,
-                    'product_id'			=> $productP->getId(),
-                    'order_item_id'			=> null,
-                    'additional_data'		=> null,
-                    'description'			=> null,
-                    'name'					=> $product->getName(),
-                    'sku'					=> $product->getSku(),
-                    'base_cost'				=> $productP->getCost(),
-                    'qty_invoiced'			=> null,
-                    'qty_canceled'			=> null,
-                    'vendor_sku'			=> $productP->getSkuv(),
-                    'vendor_simple_sku'		=> $product->getSkuv(), // add by helper
-                    'is_virtual'			=> $productP->isVirtual(),
-                    'commission_percent'	=> null, // ad by helper
-                    'transaction_fee'		=> null, // add by helper
-                    'price_incl_tax'		=> $priceInclTax,
-                    'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
-                    'discount_amount'		=> $discountAmount,
-                    'discount_percent'		=> $discountPrecent,
-                    'row_total_incl_tax'	=> $priceInclTax*$qty,
-                    'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
-                    'parent_item_id'		=> null
+                    'row_total' => $priceExclTax * $qty,
+                    'price' => $priceExclTax,
+                    'weight' => $product->getWeight(),
+                    'qty' => $qty,
+                    'qty_shipped' => null,
+                    'product_id' => $productP->getId(),
+                    'order_item_id' => null,
+                    'additional_data' => null,
+                    'description' => null,
+                    'name' => $product->getName(),
+                    'sku' => $product->getSku(),
+                    'base_cost' => $productP->getCost(),
+                    'qty_invoiced' => null,
+                    'qty_canceled' => null,
+                    'vendor_sku' => $productP->getSkuv(),
+                    'vendor_simple_sku' => $product->getSkuv(), // add by helper
+                    'is_virtual' => $productP->isVirtual(),
+                    'commission_percent' => null, // ad by helper
+                    'transaction_fee' => null, // add by helper
+                    'price_incl_tax' => $priceInclTax,
+                    'base_price_incl_tax' => $priceInclTax, // @todo use currency
+                    'discount_amount' => $discountAmount,
+                    'discount_percent' => $discountPrecent,
+                    'row_total_incl_tax' => $priceInclTax * $qty,
+                    'base_row_total_incl_tax' => $priceInclTax * $qty, // @todo use currency
+                    'parent_item_id' => null
                 );
 
                 $item->addData($itemData);
@@ -747,12 +781,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 
                 $productPptions = array(
-                  'attributes_info' => array(
-                      array(
-                          'label' => $attributeInfo->getStoreLabel($store->getId()),
-                          'value' => $optionLabel
-                      )
-                  )
+                    'attributes_info' => array(
+                        array(
+                            'label' => $attributeInfo->getStoreLabel($store->getId()),
+                            'value' => $optionLabel
+                        )
+                    )
                 );
 
                 $po->addItemWithTierCommission($item);
@@ -761,25 +795,25 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 //simple
                 $child = clone $item;
                 $itemPData = array(
-                    'row_total'				=> 0,
-                    'price'					=> 0,
-                    'qty'					=> $qty,
-                    'product_id'			=> $product->getId(),
-                    'name'					=> $product->getName(),
-                    'sku'					=> $product->getSku(),
-                    'base_cost'				=> $product->getCost(),
-                    'vendor_sku'			=> $product->getSkuv(),
-                    'vendor_simple_sku'		=> null,
-                    'price_incl_tax'		=> null,
-                    'base_price_incl_tax'	=> null, // @todo use currency
-                    'row_total_incl_tax'	=> null,
-                    'base_row_total_incl_tax'=> null,
+                    'row_total' => 0,
+                    'price' => 0,
+                    'qty' => $qty,
+                    'product_id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'sku' => $product->getSku(),
+                    'base_cost' => $product->getCost(),
+                    'vendor_sku' => $product->getSkuv(),
+                    'vendor_simple_sku' => null,
+                    'price_incl_tax' => null,
+                    'base_price_incl_tax' => null, // @todo use currency
+                    'row_total_incl_tax' => null,
+                    'base_row_total_incl_tax' => null,
                 );
 
                 $child->addData($itemPData);
                 $child
                     ->getOrderItem()
-                    ->setData('parent_item_id',$item->getOrderItem()->getId())
+                    ->setData('parent_item_id', $item->getOrderItem()->getId())
                     ->save();
 
                 $po->addItemWithTierCommission($child);
@@ -788,39 +822,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     ->getOrderItem()
                     ->setProductOptions($productPptions)
                     ->save();
-            } else {
-                $itemSData = array(
-                    'row_total'				=> $priceExclTax * $qty,
-                    'price'					=> $priceExclTax,
-                    'weight'				=> $product->getWeight(),
-                    'qty'					=> $qty,
-                    'qty_shipped'			=> null,
-                    'product_id'			=> $product->getId(),
-                    'order_item_id'			=> null,
-                    'additional_data'		=> null,
-                    'description'			=> null,
-                    'name'					=> $product->getName(),
-                    'sku'					=> $product->getSku(),
-                    'base_cost'				=> $product->getCost(),
-                    'qty_invoiced'			=> null,
-                    'qty_canceled'			=> null,
-                    'vendor_sku'			=> null,
-                    'vendor_simple_sku'		=> null, // add by helper
-                    'is_virtual'			=> $product->isVirtual(),
-                    'commission_percent'	=> null, // ad by helper
-                    'transaction_fee'		=> null, // add by helper
-                    'price_incl_tax'		=> $priceInclTax,
-                    'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
-                    'discount_amount'		=> $discountAmount,
-                    'discount_percent'		=> $discountPrecent,
-                    'row_total_incl_tax'	=> $priceInclTax*$qty,
-                    'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
-                    'parent_item_id'		=> null
-                );
-
-                $item->addData($itemSData);
-                $po->addItemWithTierCommission($item);
             }
+
 
             Mage::helper("udropship")->addVendorSkus($po);
 
