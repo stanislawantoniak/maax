@@ -164,7 +164,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         var_dump($data);
     }
     public function getOrdersByIDTestActionHelp() {
-        return "use ex: php shell/ghapi.php -action getOrdersByIDTest -vid 5 ids 100000059-1";
+        return "use ex: php shell/ghapi.php -action getOrdersByIDTest -vid 5 -ids 100000059-1";
     }
 
     public function getOrdersByIDAction() {
@@ -176,7 +176,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
         $api->getOrdersByID($token, $ids);
     }
     public function getOrdersByIDActionHelp() {
-        return "use ex: php shell/ghapi.php -action getOrdersByID -token xoxo ids 100000059-1";
+        return "use ex: php shell/ghapi.php -action getOrdersByID -token xoxo -ids 100000059-1";
     }
 
     public function setOrderAsCollectedAction() {
@@ -189,7 +189,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
     }
 
     public function setOrderAsCollectedActionHelp() {
-        return "use ex: php shell/ghapi.php -action setOrderAsCollected -token xoxo ids 100000059-1";
+        return "use ex: php shell/ghapi.php -action setOrderAsCollected -token xoxo -ids 100000059-1";
     }
 
     public function setOrderShipmentAction() {
@@ -204,7 +204,7 @@ class Gh_Api_Shell extends Mage_Shell_Abstract {
     }
 
     public function setOrderShipmentActionHelp() {
-        return 'use ex: php shell/ghapi.php -action setOrderShipment -token xoxo id 100000057-1 -date "2015-03-30 15:21:12" -courier dhl -number 123';
+        return 'use ex: php shell/ghapi.php -action setOrderShipment -token xoxo -id 100000057-1 -date "2015-03-30 15:21:12" -courier dhl -number 123';
     }
 }
 

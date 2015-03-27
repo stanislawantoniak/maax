@@ -35,10 +35,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
             $collection->addAttributeToFilter(array(
-                array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
-                array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
-                array("attribute"=>"name",		"like"=> '%'.$q.'%')
-            ), "left");
+                                                  array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
+                                                  array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
+                                                  array("attribute"=>"name",		"like"=> '%'.$q.'%')
+                                              ), "left");
 
             $collection->load();
 
@@ -130,9 +130,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
 
         $notVaildPos = array(
-            'vendor' => array(),
-            'status' => array()
-        );
+                           'vendor' => array(),
+                           'status' => array()
+                       );
         $count = $collection->count();
 
         foreach($collection as $po) {
@@ -142,26 +142,26 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             };
 
             switch ($action) {
-                case self::ACTION_CONFIRM_STOCK:
-                    if(!$po->getStatusModel()->isConfirmStockAvailable($po)) {
-                        $notVaildPos['status'][] = $po;
-                    }
-                    break;
-                case self::ACTION_PRINT_AGGREGATED:
-                    if(!$po->getStatusModel()->isPrintAggregatedAvailable($po)) {
-                        $notVaildPos['status'][] = $po;
-                    }
-                    break;
-                case self::ACTION_DIRECT_REALISATION:
-                    if(!$po->getStatusModel()->isDirectRealisationAvailable($po)) {
-                        $notVaildPos['status'][] = $po;
-                    }
-                    break;
-                case self::ACTION_START_PACKING:
-                    if(!$po->getStatusModel()->isStartPackingAvailable($po)) {
-                        $notVaildPos['status'][] = $po;
-                    }
-                    break;
+            case self::ACTION_CONFIRM_STOCK:
+                if(!$po->getStatusModel()->isConfirmStockAvailable($po)) {
+                    $notVaildPos['status'][] = $po;
+                }
+                break;
+            case self::ACTION_PRINT_AGGREGATED:
+                if(!$po->getStatusModel()->isPrintAggregatedAvailable($po)) {
+                    $notVaildPos['status'][] = $po;
+                }
+                break;
+            case self::ACTION_DIRECT_REALISATION:
+                if(!$po->getStatusModel()->isDirectRealisationAvailable($po)) {
+                    $notVaildPos['status'][] = $po;
+                }
+                break;
+            case self::ACTION_START_PACKING:
+                if(!$po->getStatusModel()->isStartPackingAvailable($po)) {
+                    $notVaildPos['status'][] = $po;
+                }
+                break;
             }
         }
 
@@ -188,15 +188,15 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     // All actions based on satatus
                     foreach($collection as $po) {
                         switch ($action) {
-                            case self::ACTION_CONFIRM_STOCK:
-                                $po->getStatusModel()->processConfirmStock($po);
-                                break;
-                            case self::ACTION_DIRECT_REALISATION:
-                                $po->getStatusModel()->processDirectRealisation($po);
-                                break;
-                            case self::ACTION_START_PACKING:
-                                $po->getStatusModel()->processStartPacking($po);
-                                break;
+                        case self::ACTION_CONFIRM_STOCK:
+                            $po->getStatusModel()->processConfirmStock($po);
+                            break;
+                        case self::ACTION_DIRECT_REALISATION:
+                            $po->getStatusModel()->processDirectRealisation($po);
+                            break;
+                        case self::ACTION_START_PACKING:
+                            $po->getStatusModel()->processStartPacking($po);
+                            break;
                         }
                     }
                 }
@@ -227,9 +227,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $ids = $this->_getMassIds();
         $filter = "massaction=1&udropship_status=0";
         $this->getResponse()->setRedirect(Mage::getUrl("*/*/index", array(
-            "filter" => Mage::helper("core")->urlEncode($filter),
-            "internal_po" => implode(",",$ids)
-        )));
+                                              "filter" => Mage::helper("core")->urlEncode($filter),
+                                              "internal_po" => implode(",",$ids)
+                                          )));
         return $this;
     }
 
@@ -273,7 +273,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $session = $this->_getSession();
         /* @var $session Zolago_Dropship_Model_Session */
         return $po->isAllowed($session->getVendor(),
-            $session->isOperatorMode() ? $session->getOperator() : null);
+                              $session->isOperatorMode() ? $session->getOperator() : null);
     }
 
     /**
@@ -329,11 +329,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $customerGroup Mage_Customer_Model_Group */
 
             $request = $taxCalculationModel->getRateRequest(
-                $po->getShippingAddress(),
-                $po->getBillingAddress(),
-                $customerGroup->getTaxClassId(),
-                $store
-            );
+                           $po->getShippingAddress(),
+                           $po->getBillingAddress(),
+                           $customerGroup->getTaxClassId(),
+                           $store
+                       );
 
             $shippingTaxClass = Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS, $store);
 
@@ -355,19 +355,19 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             $data = array(
-                "shipping_tax"				=> $shippingTax,
-                "base_shipping_tax"			=> $shippingTax,
-                "shipping_amount_incl"		=> $shippignInclTax,
-                "base_shipping_amount_incl"	=> $shippignInclTax
-            );
+                        "shipping_tax"				=> $shippingTax,
+                        "base_shipping_tax"			=> $shippingTax,
+                        "shipping_amount_incl"		=> $shippignInclTax,
+                        "base_shipping_amount_incl"	=> $shippignInclTax
+                    );
 
             $po->addData($data);
 
             Mage::dispatchEvent("zolagopo_po_shipping_cost", array(
-                "po"			=> $po,
-                "new_price"		=> $shippignInclTax,
-                "old_price"		=> $oldPrice,
-            ));
+                                    "po"			=> $po,
+                                    "new_price"		=> $shippignInclTax,
+                                    "old_price"		=> $oldPrice,
+                                ));
 
             $po->updateTotals(true);
 
@@ -423,9 +423,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 
             Mage::dispatchEvent("zolagopo_po_item_remove", array(
-                "po"		=> $po,
-                "item"		=> $item,
-            ));
+                                    "po"		=> $po,
+                                    "item"		=> $item,
+                                ));
 
             $item->delete();
 
@@ -553,16 +553,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             $itemData = array(
-                'row_total'				=> $finalPriceExclTax * $qty,
-                'price'					=> $priceExclTax,
-                'qty'					=> $qty,
-                'price_incl_tax'		=> $priceInclTax,
-                'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
-                'discount_amount'		=> $discountAmount,
-                'discount_percent'		=> $discountPrecent,
-                'row_total_incl_tax'	=> $priceInclTax*$qty,
-                'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
-            );
+                            'row_total'				=> $finalPriceExclTax * $qty,
+                            'price'					=> $priceExclTax,
+                            'qty'					=> $qty,
+                            'price_incl_tax'		=> $priceInclTax,
+                            'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+                            'discount_amount'		=> $discountAmount,
+                            'discount_percent'		=> $discountPrecent,
+                            'row_total_incl_tax'	=> $priceInclTax*$qty,
+                            'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
+                        );
 
             $oldItem = clone $item;
 
@@ -574,10 +574,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             Mage::dispatchEvent("zolagopo_po_item_edit", array(
-                "po"		=> $po,
-                "old_item"	=> $oldItem,
-                "new_item"	=> $item
-            ));
+                                    "po"		=> $po,
+                                    "old_item"	=> $oldItem,
+                                    "new_item"	=> $item
+                                ));
 
             $po->updateTotals(true);
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item saved"));
@@ -613,8 +613,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $request = $this->getRequest();
 
         $product = Mage::getModel("catalog/product")->
-        setStoreId($store->getId())->
-        load($request->getParam("product_id"));
+                   setStoreId($store->getId())->
+                   load($request->getParam("product_id"));
 
 
         /** @var $product Mage_Catalog_Model_Product */
@@ -690,6 +690,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $item Zolago_Po_Model_Po_Item */
 
 
+
             /**
              * add child of configurable item
              * clone parentItem, unset order item, change & unset some data
@@ -699,72 +700,37 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 ->getParentIdsByChild($product->getId());
             $parentId = isset($parentIds[0]) ? $parentIds[0] : 0;
 
-            if ($product->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
-                && ((int)$product->getData('visibility') !== Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE)
-            ) {
-
-                $itemSData = array(
-                    'row_total' => $priceExclTax * $qty,
-                    'price' => $priceExclTax,
-                    'weight' => $product->getWeight(),
-                    'qty' => $qty,
-                    'qty_shipped' => null,
-                    'product_id' => $product->getId(),
-                    'order_item_id' => null,
-                    'additional_data' => null,
-                    'description' => null,
-                    'name' => $product->getName(),
-                    'sku' => $product->getSku(),
-                    'base_cost' => $product->getCost(),
-                    'qty_invoiced' => null,
-                    'qty_canceled' => null,
-                    'vendor_sku' => null,
-                    'vendor_simple_sku' => null, // add by helper
-                    'is_virtual' => $product->isVirtual(),
-                    'commission_percent' => null, // ad by helper
-                    'transaction_fee' => null, // add by helper
-                    'price_incl_tax' => $priceInclTax,
-                    'base_price_incl_tax' => $priceInclTax, // @todo use currency
-                    'discount_amount' => $discountAmount,
-                    'discount_percent' => $discountPrecent,
-                    'row_total_incl_tax' => $priceInclTax * $qty,
-                    'base_row_total_incl_tax' => $priceInclTax * $qty, // @todo use currency
-                    'parent_item_id' => null
-                );
-
-                $item->addData($itemSData);
-                $po->addItemWithTierCommission($item);
-            } else if (!empty($parentId)) {
+            if (!empty($parentId)) {
                 $productP = Mage::getModel('catalog/product')->load($parentId);
 
                 //parent
                 $itemData = array(
-                    'row_total' => $priceExclTax * $qty,
-                    'price' => $priceExclTax,
-                    'weight' => $product->getWeight(),
-                    'qty' => $qty,
-                    'qty_shipped' => null,
-                    'product_id' => $productP->getId(),
-                    'order_item_id' => null,
-                    'additional_data' => null,
-                    'description' => null,
-                    'name' => $product->getName(),
-                    'sku' => $product->getSku(),
-                    'base_cost' => $productP->getCost(),
-                    'qty_invoiced' => null,
-                    'qty_canceled' => null,
-                    'vendor_sku' => $productP->getSkuv(),
-                    'vendor_simple_sku' => $product->getSkuv(), // add by helper
-                    'is_virtual' => $productP->isVirtual(),
-                    'commission_percent' => null, // ad by helper
-                    'transaction_fee' => null, // add by helper
-                    'price_incl_tax' => $priceInclTax,
-                    'base_price_incl_tax' => $priceInclTax, // @todo use currency
-                    'discount_amount' => $discountAmount,
-                    'discount_percent' => $discountPrecent,
-                    'row_total_incl_tax' => $priceInclTax * $qty,
-                    'base_row_total_incl_tax' => $priceInclTax * $qty, // @todo use currency
-                    'parent_item_id' => null
+                    'row_total'				=> $priceExclTax * $qty,
+                    'price'					=> $priceExclTax,
+                    'weight'				=> $product->getWeight(),
+                    'qty'					=> $qty,
+                    'qty_shipped'			=> null,
+                    'product_id'			=> $productP->getId(),
+                    'order_item_id'			=> null,
+                    'additional_data'		=> null,
+                    'description'			=> null,
+                    'name'					=> $product->getName(),
+                    'sku'					=> $product->getSku(),
+                    'base_cost'				=> $productP->getCost(),
+                    'qty_invoiced'			=> null,
+                    'qty_canceled'			=> null,
+                    'vendor_sku'			=> $productP->getSkuv(),
+                    'vendor_simple_sku'		=> $product->getSkuv(), // add by helper
+                    'is_virtual'			=> $productP->isVirtual(),
+                    'commission_percent'	=> null, // ad by helper
+                    'transaction_fee'		=> null, // add by helper
+                    'price_incl_tax'		=> $priceInclTax,
+                    'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+                    'discount_amount'		=> $discountAmount,
+                    'discount_percent'		=> $discountPrecent,
+                    'row_total_incl_tax'	=> $priceInclTax*$qty,
+                    'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
+                    'parent_item_id'		=> null
                 );
 
                 $item->addData($itemData);
@@ -781,12 +747,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 
                 $productPptions = array(
-                    'attributes_info' => array(
-                        array(
-                            'label' => $attributeInfo->getStoreLabel($store->getId()),
-                            'value' => $optionLabel
-                        )
-                    )
+                  'attributes_info' => array(
+                      array(
+                          'label' => $attributeInfo->getStoreLabel($store->getId()),
+                          'value' => $optionLabel
+                      )
+                  )
                 );
 
                 $po->addItemWithTierCommission($item);
@@ -795,25 +761,25 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 //simple
                 $child = clone $item;
                 $itemPData = array(
-                    'row_total' => 0,
-                    'price' => 0,
-                    'qty' => $qty,
-                    'product_id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'sku' => $product->getSku(),
-                    'base_cost' => $product->getCost(),
-                    'vendor_sku' => $product->getSkuv(),
-                    'vendor_simple_sku' => null,
-                    'price_incl_tax' => null,
-                    'base_price_incl_tax' => null, // @todo use currency
-                    'row_total_incl_tax' => null,
-                    'base_row_total_incl_tax' => null,
+                    'row_total'				=> 0,
+                    'price'					=> 0,
+                    'qty'					=> $qty,
+                    'product_id'			=> $product->getId(),
+                    'name'					=> $product->getName(),
+                    'sku'					=> $product->getSku(),
+                    'base_cost'				=> $product->getCost(),
+                    'vendor_sku'			=> $product->getSkuv(),
+                    'vendor_simple_sku'		=> null,
+                    'price_incl_tax'		=> null,
+                    'base_price_incl_tax'	=> null, // @todo use currency
+                    'row_total_incl_tax'	=> null,
+                    'base_row_total_incl_tax'=> null,
                 );
 
                 $child->addData($itemPData);
                 $child
                     ->getOrderItem()
-                    ->setData('parent_item_id', $item->getOrderItem()->getId())
+                    ->setData('parent_item_id',$item->getOrderItem()->getId())
                     ->save();
 
                 $po->addItemWithTierCommission($child);
@@ -822,15 +788,46 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     ->getOrderItem()
                     ->setProductOptions($productPptions)
                     ->save();
-            }
+            } else {
+                $itemSData = array(
+                    'row_total'				=> $priceExclTax * $qty,
+                    'price'					=> $priceExclTax,
+                    'weight'				=> $product->getWeight(),
+                    'qty'					=> $qty,
+                    'qty_shipped'			=> null,
+                    'product_id'			=> $product->getId(),
+                    'order_item_id'			=> null,
+                    'additional_data'		=> null,
+                    'description'			=> null,
+                    'name'					=> $product->getName(),
+                    'sku'					=> $product->getSku(),
+                    'base_cost'				=> $product->getCost(),
+                    'qty_invoiced'			=> null,
+                    'qty_canceled'			=> null,
+                    'vendor_sku'			=> null,
+                    'vendor_simple_sku'		=> null, // add by helper
+                    'is_virtual'			=> $product->isVirtual(),
+                    'commission_percent'	=> null, // ad by helper
+                    'transaction_fee'		=> null, // add by helper
+                    'price_incl_tax'		=> $priceInclTax,
+                    'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+                    'discount_amount'		=> $discountAmount,
+                    'discount_percent'		=> $discountPrecent,
+                    'row_total_incl_tax'	=> $priceInclTax*$qty,
+                    'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
+                    'parent_item_id'		=> null
+                );
 
+                $item->addData($itemSData);
+                $po->addItemWithTierCommission($item);
+            }
 
             Mage::helper("udropship")->addVendorSkus($po);
 
             Mage::dispatchEvent("zolagopo_po_item_add", array(
-                "po"		=> $po,
-                "item"		=> $item
-            ));
+                                    "po"		=> $po,
+                                    "item"		=> $item
+                                ));
 
             $po->updateTotals(true);
 
@@ -916,24 +913,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         if(!$po->getId()) {
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                "status"=>0,
-                "content"=>Mage::helper("zolagopo")->__("Wrong PO Id")
-            )));
+                                              "status"=>0,
+                                              "content"=>Mage::helper("zolagopo")->__("Wrong PO Id")
+                                          )));
             return;
         }
 
         if($po->getVendor()->getId()!=$session->getVendor()->getId()) {
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                "status"=>0,
-                "content"=>Mage::helper("zolagopo")->__("You have no access to this PO")
-            )));
+                                              "status"=>0,
+                                              "content"=>Mage::helper("zolagopo")->__("You have no access to this PO")
+                                          )));
             return;
         }
 
         $response = array(
-            "status"=>1,
-            "content"=>array()
-        );
+                        "status"=>1,
+                        "content"=>array()
+                    );
 
         try {
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
@@ -947,9 +944,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 }
 
                 Mage::dispatchEvent("zolagopo_po_address_restore", array(
-                    "po"		=> $po,
-                    "type"		=> $type
-                ));
+                                        "po"		=> $po,
+                                        "type"		=> $type
+                                    ));
 
                 $po->save();
                 $session->addSuccess(Mage::helper("zolagopo")->__("Address restored"));
@@ -973,11 +970,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 
                 Mage::dispatchEvent("zolagopo_po_address_change", array(
-                    "po"			=> $po,
-                    "new_address"	=> $newAddress,
-                    "old_address"	=> $oldAddress,
-                    "type"			=> $type
-                ));
+                                        "po"			=> $po,
+                                        "new_address"	=> $newAddress,
+                                        "old_address"	=> $oldAddress,
+                                        "type"			=> $type
+                                    ));
 
                 $po->save();
 
@@ -986,18 +983,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
         } catch(Mage_Core_Exception $e) {
             $response = array(
-                "status"	=>0,
-                "content"	=>$e->getMessage()
-            );
+                            "status"	=>0,
+                            "content"	=>$e->getMessage()
+                        );
             if(!$isAjax) {
                 $session->addError($e->getMessage());
             }
         } catch(Exception $e) {
             Mage::logException($e);
             $response = array(
-                "status"=>0,
-                "content"=>Mage::helper("zolagopo")->__("Some errors occure. Check logs.")
-            );
+                            "status"=>0,
+                            "content"=>Mage::helper("zolagopo")->__("Some errors occure. Check logs.")
+                        );
             if(!$isAjax) {
                 $session->addError(Mage::helper("zolagopo")->__("Some errors occure. Check logs."));
             }
@@ -1037,8 +1034,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $this->getResponse()->setHeader("content-type", "application/json");
 
         if($po->getId() && $pos->getId() &&
-            $po->getVendor()->getId()==$session->getVendor()->getId() &&
-            $pos->isAssignedToVendor($session->getVendor())) {
+                $po->getVendor()->getId()==$session->getVendor()->getId() &&
+                $pos->isAssignedToVendor($session->getVendor())) {
 
             $po->setDefaultPosId($pos->getId());
             $po->setDefaultPosName($pos->getName());
@@ -1049,10 +1046,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
             $po->save();
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                "status"=>1,
-                "reload"=>$reload,
-                "pos"=>$pos->getData()
-            )));
+                                              "status"=>1,
+                                              "reload"=>$reload,
+                                              "pos"=>$pos->getData()
+                                          )));
             return;
         }
 
@@ -1113,6 +1110,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $udpoHlp = Mage::helper('udpo');
         $session = $this->_getSession();
         $hlp = Mage::helper('udropship');
+        $highlight = array();
 
         try {
             $udpo = $this->_registerPo();
@@ -1123,178 +1121,69 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             Mage::logException($e);
             $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
             return $this->_redirectReferer();
-        }
-
+        }        
         if (!$id = $udpo->getId()) {
             return;
         }
-        $vendor = $hlp->getVendor($udpo->getUdropshipVendor());
-
         try {
-
-            if(!$udpo->getStatusModel()->isShippingAvailable($udpo)) {
-                throw new Mage_Core_Exception(
-                    Mage::helper("zolagopo")->__("Shipment cannot be created with this status.")
-                );
-            }
-
-            $store = $udpo->getOrder()->getStore();
-
-            $track = null;
-            $highlight = array();
-
-            $partial = $r->getParam('partial_availability');
-            $partialQty = $r->getParam('partial_qty');
-
-            $printLabel = $r->getParam('print_label');
-            $number = $r->getParam('tracking_id');
-
-            $carrier = $r->getParam('carrier');
-            $carrierTitle = $r->getParam('carrier_title');
-
-            $notifyOn = Mage::getStoreConfig('udropship/customer/notify_on', $store);
-            $pollTracking = Mage::getStoreConfig('udropship/customer/poll_tracking', $store);
-            $poAutoComplete = Mage::getStoreConfig('udropship/vendor/auto_complete_po', $store);
-            $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
-
-            $poStatusShipped = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED;
-            $poStatusDelivered = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED;
-            $poStatusCanceled = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED;
-            $poStatuses = Mage::getSingleton('udpo/source')->setPath('po_statuses')->toOptionHash();
-            $poStatus = $r->getParam('status');
-
-
-
-
-            //if ($printLabel || $number || ($partial=='ship' && $partialQty)) {
-            $partialQty = $partialQty ? $partialQty : array();
+            $manager = Mage::helper('zolagopo/shipment');            
             if ($r->getParam('use_label_shipping_amount')) {
                 $udpo->setUseLabelShippingAmount(true);
             }
             elseif ($r->getParam('shipping_amount')) {
                 $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
             }
+            
+            $poStatus = $r->getParam('status');
+            $manager->setPoStatus($poStatus);
+
+            $carrier = $r->getParam('carrier');
+            $carrierTitle = $r->getParam('carrier_title');
+            $manager->setCarrierData($carrier,$carrierTitle);            
+            
+
             $udpo->setUdpoNoSplitPoFlag(true);
+            $manager->setUdpo($udpo);
 
-            $shipment = $udpoHlp->createShipmentFromPo($udpo, $partialQty, true, true, true);
 
-            if ($shipment) {
-                $shipment->setNewShipmentFlag(true);
-                $shipment->setDeleteOnFailedLabelRequestFlag(true);
-                $shipment->setCreatedByVendorFlag(true);
-            } else {
-                Mage::throwException("Cannot create shipment");
-            }
-
-            //}
+            $shipment = $manager->getShipment();
             $number = $this->_addShipping($carrier,$udpo,$shipment);
             if (!$number) {
                 return $this->_redirectReferer();
 
             }
-            $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
-            $poStatus = $r->getParam('status');
-
-
-            $isShipped = $poStatus == $poStatusShipped || $poStatus==$poStatusDelivered || $autoComplete && ($poStatus==='' || is_null($poStatus));
-            $method = explode('_', $shipment->getUdropshipMethod(), 2);
-            $title = Mage::getStoreConfig('carriers/'.$method[0].'/title', $store);
-            $_carrier = $method[0];
-            if (!empty($carrier) && !empty($carrierTitle)) {
-                $_carrier = $carrier;
-                $title = $carrierTitle;
-            }
-            $track = Mage::getModel('sales/order_shipment_track')
-                ->setNumber($number)
-                ->setCarrierCode($_carrier)
-                ->setTitle($title);
-
-            $shipment->addTrack($track);
-
-            Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
-            Mage::helper('udropship')->addShipmentComment(
-                $shipment,
-                $this->__('%s added tracking ID %s', $vendor->getVendorName(), $number)
-            );
-            $shipment->save();
+            $manager->setNumber($number);                                    
+            $manager->processSaveTracking();
             $session->addSuccess($this->__('Tracking ID has been added'));
-
             $highlight['tracking'] = true;
 
-
-            $udpoStatuses = false;
-            if (Mage::getStoreConfig('udropship/vendor/is_restrict_udpo_status')) {
-                $udpoStatuses = Mage::getStoreConfig('udropship/vendor/restrict_udpo_status');
-                if (!is_array($udpoStatuses)) {
-                    $udpoStatuses = explode(',', $udpoStatuses);
-                }
-            }
-
-            if (!$printLabel && !is_null($poStatus) && $poStatus!=='' && $poStatus!=$udpo->getUdropshipStatus()
-                && (!$udpoStatuses || (in_array($udpo->getUdropshipStatus(), $udpoStatuses) && in_array($poStatus, $udpoStatuses)))
-            ) {
-                $oldStatus = $udpo->getUdropshipStatus();
-                $poStatusChanged = false;
+            $printLabel = $r->getParam('print_label');
+            if (!$printLabel && $manager->checkChangeStatus($printLabel)) {
                 if ($r->getParam('force_status_change_flag')) {
                     $udpo->setForceStatusChangeFlag(true);
                 }
-                if ($oldStatus==$poStatusCanceled && !$udpo->getForceStatusChangeFlag()) {
-                    Mage::throwException(Mage::helper('udpo')->__('Canceled purchase order cannot be reverted'));
-                }
-                if ($poStatus==$poStatusShipped || $poStatus==$poStatusDelivered) {
-                    foreach ($udpo->getShipmentsCollection() as $_s) {
-                        $hlp->completeShipment($_s, true, $poStatus==$poStatusDelivered);
-                    }
-                    if (isset($_s)) {
-                        $hlp->completeOrderIfShipped($_s, true);
-                    }
-                    $poStatusChanged = $udpoHlp->processPoStatusSave($udpo, $poStatus, true, $vendor);
-                }
-                elseif ($poStatus == $poStatusCanceled) {
+                // set cancel params
+                if ($poStatus == Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED) {
                     $udpo->setFullCancelFlag($r->getParam('full_cancel'));
                     $udpo->setNonshippedCancelFlag($r->getParam('nonshipped_cancel'));
-                    Mage::helper('udpo')->cancelPo($udpo, true, $vendor);
-                    $poStatusChanged = $udpoHlp->processPoStatusSave($udpo, $poStatus, true, $vendor);
                 }
-                else {
-                    $poStatusChanged = $udpoHlp->processPoStatusSave($udpo, $poStatus, true, $vendor);
-                }
-                $udpo->getCommentsCollection()->save();
-                if ($poStatusChanged) {
+                 // save new status
+                 $poStatusChanged = $manager->processSetStatus();   
+                 if ($poStatusChanged) {
                     $session->addSuccess($this->__('Purchase order status has been changed'));
                 } else {
                     $session->addError($this->__('Cannot change purchase order status'));
                 }
-            }
-
-            if (!empty($shipment) && $shipment->getNewShipmentFlag() && !$shipment->isDeleted()) {
-                $shipment->setNoInvoiceFlag(false);
-                $udpoHlp->invoiceShipment($shipment);
-            }
-
+            }            
+            $manager->invoiceShipment();
             $comment = $r->getParam('comment');
-            if ($comment || $partial=='inform' && $partialQty) {
-                if ($partialQty) {
-                    $comment .= "\n\nPartial Availability:\n";
-                    foreach ($udpo->getAllItems() as $item) {
-                        if (!array_key_exists($item->getId(), $partialQty) || '' === $partialQty[$item->getId()]) {
-                            continue;
-                        }
-                        $comment .= $this->__('%s x [%s] %s', $partialQty[$item->getId()], $item->getName(), $item->getSku())."\n";
-                    }
-                }
-
-                //$udpo->addComment($comment, false, true)->getCommentsCollection()->save();
+            if ($comment) {
+            
                 Mage::helper('udpo')->sendVendorComment($udpo, $comment);
                 $session->addSuccess($this->__('Your comment has been sent to store administrator'));
 
                 $highlight['comment'] = true;
             }
-
-            // Carrier saved
-            $udpo->setCurrentCarrier($carrier);
-            $udpo->getResource()->saveAttribute($udpo, "current_carrier");
-
             $session->setHighlight($highlight);
         } catch (Exception $e) {
             $session->addError($e->getMessage());
@@ -1459,14 +1348,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $message = $r->getParam("message");
 
             $templateParams = array(
-                "po" => $udpo,
-                "order" => $order,
-                "store" => $store,
-                "vendor" => $vendor,
-                "message" => Mage::helper('zolagocommon')->nToBr($message),
-                "use_attachments" => true,
-                "store_name" => $store->getFrontendName(),
-            );
+                                  "po" => $udpo,
+                                  "order" => $order,
+                                  "store" => $store,
+                                  "vendor" => $vendor,
+                                  "message" => Mage::helper('zolagocommon')->nToBr($message),
+                                  "use_attachments" => true,
+                                  "store_name" => $store->getFrontendName(),
+                              );
 
             $this->_sendEmailTemplate(
                 $order->getCustomerName(),
@@ -1477,10 +1366,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             );
 
             Mage::dispatchEvent("zolagopo_po_compose", array(
-                    "po"		=> $udpo,
-                    "message"	=> $message,
-                    "recipient"	=> $order->getCustomerName())
-            );
+                                    "po"		=> $udpo,
+                                    "message"	=> $message,
+                                    "recipient"	=> $order->getCustomerName())
+                               );
 
             $this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("Message sent via email")));
         } catch (Mage_Core_Exception $e) {
@@ -1513,10 +1402,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $po->getStatusModel()->processDirectRealisation($po, true);
 
             Mage::dispatchEvent("zolagopo_po_change_pos", array(
-                "po"=>$po,
-                "old_pos"=>$oldPos,
-                "new_pos"=>$pos
-            ));
+                                    "po"=>$po,
+                                    "old_pos"=>$oldPos,
+                                    "new_pos"=>$pos
+                                ));
 
             $this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("POS has been changed.")));
         } catch (Mage_Core_Exception $e) {
@@ -1566,8 +1455,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         // Set all required params and send emails
         $mailer->setSender(array(
-            'name' => Mage::getStoreConfig('trans_email/ident_support/name', $storeId),
-            'email' => Mage::getStoreConfig('trans_email/ident_support/email', $storeId)));
+                               'name' => Mage::getStoreConfig('trans_email/ident_support/name', $storeId),
+                               'email' => Mage::getStoreConfig('trans_email/ident_support/email', $storeId)));
         $mailer->setStoreId($storeId);
         $mailer->setTemplateId(Mage::getStoreConfig($template, $storeId));
         $mailer->setTemplateParams($templateParams);
