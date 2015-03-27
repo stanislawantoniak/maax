@@ -79,8 +79,17 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
         return $obj;
     }
 
+    /**
+     * Set order shipment
+     *
+     * @param $setOrderShipmentRequestParameters
+     * @return StdClass
+     */
     public function setOrderShipment($setOrderShipmentRequestParameters) {
-
+        $this->_begin();
+        $obj = parent::setOrderShipment($setOrderShipmentRequestParameters);
+        $this->_rollback();
+        return $obj;
 
     }
 
