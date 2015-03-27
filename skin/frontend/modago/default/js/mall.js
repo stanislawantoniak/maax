@@ -1287,8 +1287,9 @@ Mall.Footer = {
 		jQuery(window).resize(_.setContainerPadding);
 	},
 	setContainerPadding: function() {
-		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
-		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
+		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin,
+			headerHeight = jQuery('#header').outerHeight();
+		jQuery(Mall.Footer.containerId).css({'padding-bottom': height+'px', 'padding-top': headerHeight+'px'});
 	}
 };
 

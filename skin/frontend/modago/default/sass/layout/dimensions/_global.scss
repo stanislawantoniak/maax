@@ -1,11 +1,15 @@
-body {
-	//min-width: 380px;
-}
-#sb-site {
-	//min-width: 380px;
-}
 #header {
+	position: absolute;
 	padding-top: 57px;
+	left: 0;
+	width: 100%;
+	height: auto;
+	z-index: 1000;
+	.header-bottom {
+		position: absolute;
+		z-index: 999;
+		width: 100%;
+	}
 }
 #header-main {
 	//padding-top:35px;
