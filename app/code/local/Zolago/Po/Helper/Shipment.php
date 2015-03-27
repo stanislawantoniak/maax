@@ -212,7 +212,6 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 
         $poStatusShipped = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED;
         $poStatusDelivered = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED;
-        $poStatusCanceled = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED;
         
         $poStatus = $this->getPoStatus();        
 
@@ -244,15 +243,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * 
      * @return bool
      */
-     public function checkChangeStatus() {
-         
-        $poStatusShipped = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED;
-        $poStatusDelivered = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED;
-        $poStatusCanceled = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED;
-
-
-        $poStatuses = Mage::getSingleton('udpo/source')->setPath('po_statuses')->toOptionHash();
-
+     public function checkChangeStatus() {         
         $udpoStatuses = $this->prepareUdpoStatuses();
         $udpo = $this->getUdpo();        
         $poStatus = $this->getPoStatus();
@@ -275,8 +266,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         }
         
      }
-    /**
-    
+    /**    
      * save new status after save tracking
      * @param
      * @return
@@ -300,8 +290,6 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         $poStatus = $this->getPoStatus();
         $vendor   = $this->getVendor();
         
-
-        $poStatusChanged = false;
         switch ($poStatus) {
             case $poStatusCanceled:
                 $udpoHlp->cancelPo($udpo, true, $vendor);
