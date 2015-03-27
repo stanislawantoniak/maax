@@ -302,6 +302,9 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $orderId  = $request->orderID;
             $model = Mage::getModel('zolagopo/po');
             $po = $model->load($orderId, 'increment_id');
+            if ($user->getVendorId() != $po->getUdropshipVendor()) {
+                $this->throwOrderIdWrongError();
+            }
             if(!$model->getStatusModel()->isShippingAvailable($po)) {
                 $this->throwOrderInvalidStatusError(array($orderId));
             }
