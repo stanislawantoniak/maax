@@ -33,7 +33,7 @@
             </label>
             <div class="col-xs-12 col-md-9 col-lg-6">
                 <input id="soap_shipment_date_shipped" name="ghapi_soap_date_shipped" value="" type="text" class="form-control" size="10">
-
+                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('Date in format: Y-m-d H:i:s for example 2015-03-30 15:21:12'); ?>
             </div>
         </div>
         <div class="form-group">
@@ -53,8 +53,8 @@
 <!--                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;--><?php //echo $_helper->__('List of available types:'); ?>
 <!--                    <pre style="word-break: normal;">dhl, ups</pre></p>-->
                 <select class="form-control" id="soap_shipment_courier">
-                    <option value="dhl">dhl</option>
-                    <option value="ups">ups</option>
+                    <option value="dhl">DHL</option>
+                    <option value="ups">UPS</option>
                 </select>
             </div>
         </div>
