@@ -147,32 +147,33 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             foreach ($allData as $data) {
 
                 $order = new StdClass();
-                $order->vendor_id = $data['vendor_id'];
-                $order->vendor_name = $data['vendor_name'];
-                $order->order_id = $data['order_id'];
-                $order->order_date = $data['order_date'];
-                $order->order_max_shipping_date = $data['order_max_shipping_date'];
-                $order->order_status = $data['order_status'];
-                $order->order_total = $data['order_total'];
-                $order->payment_method = $data['payment_method'];
-                $order->order_due_amount = $data['order_due_amount'];
-                $order->delivery_method = $data['delivery_method'];
+                $order->vendor_id                = $data['vendor_id'];
+                $order->vendor_name              = $data['vendor_name'];
+                $order->order_id                 = $data['order_id'];
+                $order->order_date               = $data['order_date'];
+                $order->order_max_shipping_date  = $data['order_max_shipping_date'];
+                $order->order_status             = $data['order_status'];
+                $order->order_total              = $data['order_total'];
+                $order->payment_method           = $data['payment_method'];
+                $order->order_due_amount         = $data['order_due_amount'];
+                $order->delivery_method          = $data['delivery_method'];
                 $order->shipment_tracking_number = $data['shipment_tracking_number'];
-                $order->pos_id = $data['pos_id'];
+                $order->pos_id                   = $data['pos_id'];
+                $order->order_currency           = $data['order_currency'];
 
                 $invoice = new StdClass();
                 $invoice->invoice_required = $data['invoice_data']['invoice_required'];
                 if ($invoice->invoice_required) {
                     $invoiceAddress = new StdClass();
-                    $invoiceAddress->invoice_first_name = $data['invoice_required']['invoice_address']['invoice_first_name'];
-                    $invoiceAddress->invoice_last_name = $data['invoice_required']['invoice_address']['invoice_last_name'];
-                    $invoiceAddress->invoice_company_name = $data['invoice_required']['invoice_address']['invoice_company_name'];
-                    $invoiceAddress->invoice_street = $data['invoice_required']['invoice_address']['invoice_street'];
-                    $invoiceAddress->invoice_city = $data['invoice_required']['invoice_address']['invoice_city'];
-                    $invoiceAddress->invoice_zip_code = $data['invoice_required']['invoice_address']['invoice_zip_code'];
-                    $invoiceAddress->invoice_country = $data['invoice_required']['invoice_address']['invoice_country'];
-                    $invoiceAddress->invoice_tax_id = $data['invoice_required']['invoice_address']['invoice_tax_id'];
-                    $invoice->invoice_address = $invoiceAddress;
+                    $invoiceAddress->invoice_first_name   = $data['invoice_data']['invoice_address']['invoice_first_name'];
+                    $invoiceAddress->invoice_last_name    = $data['invoice_data']['invoice_address']['invoice_last_name'];
+                    $invoiceAddress->invoice_company_name = $data['invoice_data']['invoice_address']['invoice_company_name'];
+                    $invoiceAddress->invoice_street       = $data['invoice_data']['invoice_address']['invoice_street'];
+                    $invoiceAddress->invoice_city         = $data['invoice_data']['invoice_address']['invoice_city'];
+                    $invoiceAddress->invoice_zip_code     = $data['invoice_data']['invoice_address']['invoice_zip_code'];
+                    $invoiceAddress->invoice_country      = $data['invoice_data']['invoice_address']['invoice_country'];
+                    $invoiceAddress->invoice_tax_id       = $data['invoice_data']['invoice_address']['invoice_tax_id'];
+                    $invoice->invoice_address             = $invoiceAddress;
                 }
                 $order->invoice_data = $invoice;
 

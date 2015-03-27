@@ -253,7 +253,7 @@
                         <default>1</default>
                     </ghapi_message_order_canceled>
                     <ghapi_message_order_payment_changes>
-                        <label>Zmieniła się metoda płatności w zamówienia lub/i zmieniła się się płatność do zamówienia.</label>
+                        <label>Zmieniła się metoda płatności w zamówieniu lub/i zmieniła się się płatność do zamówienia.</label>
                         <type>select</type>
                         <source>yesno</source>
                         <fieldset>ghapi_vendor_access</fieldset>

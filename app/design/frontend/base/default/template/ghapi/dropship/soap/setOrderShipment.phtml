@@ -9,7 +9,66 @@
 			</div>
 		</div>
 	</div>
-	<div class="widget-content" style="padding: 10px 15px">		
-		content
+	<div class="widget-content" style="padding: 10px 15px">
+        <div class="form-group">
+            <label for="soap_shipment_token" class="col-md-3 control-label">
+                <?php echo $_helper->__("Token"); ?>
+            </label>
+            <div class="col-xs-12 col-md-9 col-lg-6">
+                <input id="soap_shipment_token" name="ghapi_soap_token" value="" type="text" class="form-control ghapi-token" size="10">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="soap_shipment_order_id" class="col-md-3 control-label">
+                <?php echo $_helper->__("Order ID"); ?>
+            </label>
+            <div class="col-xs-12 col-md-9 col-lg-6">
+                <input id="soap_shipment_order_id" name="ghapi_soap_order_id" value="" type="text" class="form-control" size="10">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="soap_shipment_date_shipped" class="col-md-3 control-label">
+                <?php echo $_helper->__("Date shipped"); ?>
+            </label>
+            <div class="col-xs-12 col-md-9 col-lg-6">
+                <input id="soap_shipment_date_shipped" name="ghapi_soap_date_shipped" value="" type="text" class="form-control" size="10">
+                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('Date in format: Y-m-d H:i:s for example 2015-03-30 15:21:12'); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="soap_collected_list" class="col-md-3 control-label">
+                <?php echo $_helper->__("Shipment tracking number"); ?>
+            </label>
+            <div class="col-xs-12 col-md-9 col-lg-6">
+                <input id="soap_shipment_shipment_tracking_number" name="ghapi_soap_shipment_tracking_number" value="" type="text" class="form-control" size="10">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="soap_shipment_courier" class="col-md-3 control-label">
+                <?php echo $_helper->__("Courier"); ?>
+            </label>
+            <div class="col-xs-12 col-md-9 col-lg-6">
+<!--                <input id="soap_shipment_courier" name="ghapi_soap_courier" value="" type="text" class="form-control" size="10">-->
+<!--                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;--><?php //echo $_helper->__('List of available types:'); ?>
+<!--                    <pre style="word-break: normal;">dhl, ups</pre></p>-->
+                <select class="form-control" id="soap_shipment_courier">
+                    <option value="dhl">DHL</option>
+                    <option value="ups">UPS</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-9">
+                <button id="set_shipment_action" type="button" class="btn btn-primary"><?php echo $_helper->__('Send');?></button>
+            </div>
+        </div>
 	</div>
 </div>
+
+
+
+
+
