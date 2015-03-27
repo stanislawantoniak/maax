@@ -829,18 +829,19 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         foreach ($coll as $po) {
             /** @var Zolago_Po_Model_Po $po */
 
-            $list[$i]['vendor_id'] = $vendor->getId();
-            $list[$i]['vendor_name'] = $vendor->getVendorName();
-            $list[$i]['order_id'] = $po->getIncrementId();
-            $list[$i]['order_date'] = $po->getCreatedAt();
-            $list[$i]['order_max_shipping_date'] = $po->getMaxShippingDate();
-            $list[$i]['order_status'] = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
-            $list[$i]['order_total'] = $po->getGrandTotalInclTax();
-            $list[$i]['payment_method'] = $po->ghapiPaymentMethod();
-            $list[$i]['order_due_amount'] = abs($po->getDebtAmount());
-            $list[$i]['delivery_method'] = 'standard_courier'; // todo when inpost added
+            $list[$i]['vendor_id']                = $vendor->getId();
+            $list[$i]['vendor_name']              = $vendor->getVendorName();
+            $list[$i]['order_id']                 = $po->getIncrementId();
+            $list[$i]['order_date']               = $po->getCreatedAt();
+            $list[$i]['order_max_shipping_date']  = $po->getMaxShippingDate();
+            $list[$i]['order_status']             = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
+            $list[$i]['order_total']              = $po->getGrandTotalInclTax();
+            $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
+            $list[$i]['order_due_amount']         = abs($po->getDebtAmount());
+            $list[$i]['delivery_method']          = 'standard_courier'; // todo when inpost added
             $list[$i]['shipment_tracking_number'] = $po->getAggregatedName();
-            $list[$i]['pos_id'] = $po->getExternalId();
+            $list[$i]['pos_id']                   = $po->getExternalId();
+            $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
 
             $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
             if ($list[$i]['invoice_data']['invoice_required']) {
