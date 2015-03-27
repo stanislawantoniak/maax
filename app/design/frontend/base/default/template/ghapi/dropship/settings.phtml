@@ -33,7 +33,7 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                                 <?php echo $_helper->__("API Key"); ?>
                             </label>
 
-                            <div class="col-md-9">
+                            <div class="col-xs-12 col-md-9 col-lg-6">
                                 <input id="ghapi_vendor_api_key" name="ghapi_vendor_api_key" value="<?php echo $_ghApiVendorUser->getApiKey(); ?>" type="text" readonly class="form-control" size="10">
                             </div>
                         </div>
@@ -43,7 +43,7 @@ $_ghApiVendorUser = $this->getGhApiVendorUser();
                                 <?php echo $_helper->__("API Password"); ?>
                             </label>
 
-                            <div class="col-md-9">
+                            <div class="col-xs-12 col-md-9 col-lg-6">
                                 <input id="ghapi_vendor_password" name="ghapi_vendor_password" value="" type="password" class="form-control" size="10">
                                 <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('Minimum Length - 8 characters'); ?></p>
                                 <p>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_helper->__('Leave empty for no change');?></p>
