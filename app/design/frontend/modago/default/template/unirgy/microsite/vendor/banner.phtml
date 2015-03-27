@@ -20,11 +20,15 @@ if (!empty($sliders) || !empty($boxes)): ?>
 							<a href="<?php echo $slide['url']; ?>">
 						<?php endif; ?>
 						<?php if($i == 1): ?>
+							<?php $imageSize = $this->getImageSize($slide['path']); ?>
 							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $slide['path']; ?>"
-						         class="hidden-xs" />
+							     class="hidden-xs"
+								<?php echo is_array($imageSize) ? $imageSize[2] : '' ?> />
 						<?php else: ?>
-							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/') . $slide['path']; ?>"
-						         class="visible-xs" />
+							<?php $imageSize = $this->getImageSize($slide['path']); ?>
+							<img src="<?php echo rtrim(Mage::getBaseUrl('media'),'/')  . $slide['path']; ?>"
+							     class="visible-xs"
+								<?php echo is_array($imageSize) ? $imageSize[2] : '' ?> />
 						<?php endif; ?>
 						<?php if(!empty($slide['url'])): ?>
 							</a>
@@ -60,7 +64,7 @@ if (!empty($sliders) || !empty($boxes)): ?>
 	    }
 	    $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
 	    ?>
-	    <section id="boxesSlider" data-boxes-amount="<?php echo $boxesCount; ?>">
+	    <section id="boxesSlider" data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
 		    <?php foreach($boxes as $n => $box): ?>
 			    <?php $boxe = empty($box['banner_image']) ? array() : unserialize($box['banner_image']); ?>
 			    <?php if(!empty($boxe)): ?>

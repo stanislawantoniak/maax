@@ -709,6 +709,7 @@ Mall.Slick = {
 		slider: false,
 		sliderId: '#boxesSlider',
 		slideClass: '.boxesSlideIn',
+		sliderHasArrowsClass: 'boxesSliderHasArrows',
 		boxesAmount: false,
 		options: {
 			slidesToShow: false, //configured in init below
@@ -844,12 +845,17 @@ Mall.Slick = {
 		},
 		positionArrows: function() {
 			var _ = this,
-				height = _.slider.height(),
-				arrows = jQuery('.boxesArrow').find('i'),
-				arrowsHeight = arrows.height(),
-				top = (height - arrowsHeight) / 2;
+				arrows = _.slider.find('.boxesArrow').find('i');
 
-			arrows.css('margin-top',top+'px');
+			if(arrows.length) {
+				var height = _.slider.height(),
+					arrowsHeight = arrows.height(),
+					top = (height - arrowsHeight) / 2;
+				arrows.css('margin-top',top+'px');
+				_.slider.addClass(_.sliderHasArrowsClass);
+			} else {
+				_.slider.removeClass(_.sliderHasArrowsClass);
+			}
 		}
 	}
 };
