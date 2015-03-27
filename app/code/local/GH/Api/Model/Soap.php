@@ -164,15 +164,15 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 $invoice->invoice_required = $data['invoice_data']['invoice_required'];
                 if ($invoice->invoice_required) {
                     $invoiceAddress = new StdClass();
-                    $invoiceAddress->invoice_first_name = $data['invoice_required']['invoice_address']['invoice_first_name'];
-                    $invoiceAddress->invoice_last_name = $data['invoice_required']['invoice_address']['invoice_last_name'];
-                    $invoiceAddress->invoice_company_name = $data['invoice_required']['invoice_address']['invoice_company_name'];
-                    $invoiceAddress->invoice_street = $data['invoice_required']['invoice_address']['invoice_street'];
-                    $invoiceAddress->invoice_city = $data['invoice_required']['invoice_address']['invoice_city'];
-                    $invoiceAddress->invoice_zip_code = $data['invoice_required']['invoice_address']['invoice_zip_code'];
-                    $invoiceAddress->invoice_country = $data['invoice_required']['invoice_address']['invoice_country'];
-                    $invoiceAddress->invoice_tax_id = $data['invoice_required']['invoice_address']['invoice_tax_id'];
-                    $invoice->invoice_address = $invoiceAddress;
+                    $invoiceAddress->invoice_first_name   = $data['invoice_data']['invoice_address']['invoice_first_name'];
+                    $invoiceAddress->invoice_last_name    = $data['invoice_data']['invoice_address']['invoice_last_name'];
+                    $invoiceAddress->invoice_company_name = $data['invoice_data']['invoice_address']['invoice_company_name'];
+                    $invoiceAddress->invoice_street       = $data['invoice_data']['invoice_address']['invoice_street'];
+                    $invoiceAddress->invoice_city         = $data['invoice_data']['invoice_address']['invoice_city'];
+                    $invoiceAddress->invoice_zip_code     = $data['invoice_data']['invoice_address']['invoice_zip_code'];
+                    $invoiceAddress->invoice_country      = $data['invoice_data']['invoice_address']['invoice_country'];
+                    $invoiceAddress->invoice_tax_id       = $data['invoice_data']['invoice_address']['invoice_tax_id'];
+                    $invoice->invoice_address             = $invoiceAddress;
                 }
                 $order->invoice_data = $invoice;
 
