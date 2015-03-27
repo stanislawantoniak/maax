@@ -824,16 +824,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $coll->joinAggregatedNames();
         $coll->addPosData("external_id");
 
-        $select = $coll->getSelect()->__toString();
-        Mage::log($select, null, 'mylog.log');
-
-
-
         $list = array();
         $i = 0;
         foreach ($coll as $po) {
             /** @var Zolago_Po_Model_Po $po */
-            Mage::log($po->getData(), null, 'mylog.log');
             $list[$i]['vendor_id']                = $vendor->getId();
             $list[$i]['vendor_name']              = $vendor->getVendorName();
             $list[$i]['order_id']                 = $po->getIncrementId();
@@ -948,10 +942,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      */
     public function getShipmentTrackingNumber() {
         $shipment = $this->getLastNotCanceledShipment();
-        if (!is_null($shipment)) {
+        if ($shipment instanceof Mage_Sales_Model_Order_Shipment) {
             /** @var Mage_Sales_Model_Order_Shipment_Track $item */
             $item = $shipment->getTracksCollection()->setOrder("created_at", "DESC")->getFirstItem();
+            return $item->getTrackNumber();
+        } else {
+            return '';
         }
-        return $item->getTrackNumber();
     }
 }
