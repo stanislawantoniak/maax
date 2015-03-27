@@ -821,7 +821,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $coll = Mage::getResourceModel('zolagopo/po_collection');
         $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
         $coll->addFieldToFilter('increment_id', $ids);
-        $coll->joinAggregatedNames();
         $coll->addPosData("external_id");
 
         $list = array();
