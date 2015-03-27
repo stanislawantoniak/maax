@@ -1549,8 +1549,8 @@ jQuery.noConflict();
 
 		function customDataSuccess(data){
 			var content = "";
-			if(data.content.length == 0) {
-				$("#recently-viewed.recently-viewed-cls").hide();
+			if(data.content.length != 0) {
+				$("#recently-viewed.recently-viewed-cls").show();
 			}
 
 			for(var i in data["content"]){

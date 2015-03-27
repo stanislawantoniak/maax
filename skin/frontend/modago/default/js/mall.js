@@ -1341,7 +1341,7 @@ jQuery(document).ready(function() {
         var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
         if (backdrop.length == 0) {
             jQuery('#sb-site').append('<div class="modal-backdrop fade in"></div>');
-        };
+        }
 
     });
     jQuery('#popup-after-add-to-cart').on('show.bs.modal', function (e) {
