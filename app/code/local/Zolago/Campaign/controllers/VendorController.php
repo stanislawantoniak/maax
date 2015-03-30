@@ -367,4 +367,17 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         echo $previewImage;
     }
 
+    public function testAction(){
+        $collection = Mage::getModel('udpo/po')
+            ->getCollection()
+            ->addFieldToFilter('udropship_vendor', array(
+                'in' => array(5),
+            ));
+        $poS = array();
+        foreach($collection as $item){
+            $poS[] = $item->getIncrementId();
+        }
+        echo implode(',',$poS);
+    }
+
 }
