@@ -349,11 +349,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				$currentCategory = $categoryCandidate;
 			}
 		}
-		
-		
-		$queryText = Mage::helper('solrsearch')->getParam('q');
 
-		$array['input_current_value'] = $queryText;
 		$array['select_options'] = array(array(
 			'value' => 0,
 			'text' => $this->__('Everywhere'),

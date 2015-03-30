@@ -93,3 +93,6 @@ $rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
 		</div>
 	<?php endif; ?>
 </div>
+<script>
+    Mall.setQueryText('<?php echo $helperZSS->getQueryText(); // Fix for Varnish ?>');
+</script>

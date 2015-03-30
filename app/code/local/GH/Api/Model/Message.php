@@ -243,7 +243,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 
 		//check if batch is correct
 		if(!(is_numeric($batchSize) && $batchSize <= $this->getMaxMessageBatchSize() && $batchSize)) {
-			Mage::throwException('error_message_batchsize_invalid');
+			Mage::throwException('error_message_batchsize_invalid (max: ' . $this->getMaxMessageBatchSize() . ")");
 		}
 
 		//get messages collection
