@@ -10,6 +10,7 @@ var Mall = {
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
+    _query_text: '',
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -221,6 +222,8 @@ var Mall = {
         jQuery('select[name=scat]').selectBoxIt({
             autoWidth: false
         });
+        // Update current search query text
+        jQuery(".block_search input[name=q]").val(this.getQueryText());
 		
 		// Process product context 
 
@@ -550,6 +553,14 @@ var Mall = {
                 e.preventDefault();
             }
         });
+    },
+
+    setQueryText: function(q) {
+        this._query_text = q;
+    },
+
+    getQueryText: function() {
+        return this._query_text;
     }
 };
 
