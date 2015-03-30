@@ -1338,8 +1338,7 @@ jQuery.noConflict();
 		function cloneMenu() {
 			var navSubClone = $('#nav_desc');
 			var containerCloneMenu = $('#clone_submenu .container-fluid');
-			if (navSubClone.is(':visible')) {
-
+			if (navSubClone.css('visibility') == 'visible') {
 				navSubClone.on('click', 'a', function(event) {
 					//aby w navigation mozna bylo dac klikalnego linka
 					//wystarczy dodac do anchor'a class="clickable"
