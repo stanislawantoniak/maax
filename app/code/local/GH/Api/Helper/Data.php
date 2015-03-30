@@ -19,6 +19,17 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
         return date('Y-m-d H:i:s',$timestamp);
 	}
 
+    /**
+     * @param $date
+     * @param string $format default Y-m-d H:i:s
+     * @return bool
+     */
+    function validateDate($date, $format = 'Y-m-d H:i:s')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
+    }
+
 	/**
 	 * @return void
 	 * @throws Mage_Core_Exception

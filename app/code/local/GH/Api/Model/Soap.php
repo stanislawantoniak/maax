@@ -302,6 +302,9 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $orderId  = $request->orderID;
             $model = Mage::getModel('zolagopo/po');
             $po = $model->load($orderId, 'increment_id');
+            if (!$this->getHelper()->validateDate($dateShipped)) {
+                Mage::throwException('error_wrong_datetime_format');
+            }
             if ($user->getVendorId() != $po->getUdropshipVendor()) {
                 $this->throwOrderIdWrongError();
             }
