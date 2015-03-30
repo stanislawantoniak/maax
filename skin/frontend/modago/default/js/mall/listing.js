@@ -1467,7 +1467,7 @@ Mall.listing = {
 	getMobileFiltersOverlay: function() {
 		if(!this._mobile_filters_overlay.length) {
 			var overlayId = this.getMobileFiltersOverlayId();
-			jQuery('body').append(
+			jQuery('#sb-site').append(
 				jQuery('<div id="' + overlayId + '"></div>')
 			);
 			this._mobile_filters_overlay = jQuery('#'+overlayId);
@@ -1695,7 +1695,7 @@ Mall.listing = {
 	},
 
 	isDisplayMobile: function() {
-		return jQuery('.actionViewFilter').is(':visible');
+		return Mall.isMobile();
 	},
 
 	getContentBlock: function() {
@@ -1717,7 +1717,7 @@ Mall.listing = {
 
 		//filters slide up/down
 		jQuery(document).delegate(filtersId+' h3','click',function(e) {
-			//e.preventDefault();
+			e.preventDefault();
 			var me = jQuery(this);
 			self._doRollSection(
 				me.parent(),
@@ -1737,7 +1737,7 @@ Mall.listing = {
 
 		// filters show more btn
 		jQuery(document).delegate(filtersId+' .showmore-filters','click',function(e) {
-			//e.preventDefault();
+			e.preventDefault();
 			var me = jQuery(this);
 			self._doShowMore(
 				me.parents('.section'),
@@ -1748,7 +1748,7 @@ Mall.listing = {
 
 		// show/hide clear button on filter select/unselect
 		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
-			//e.preventDefault();
+			e.preventDefault();
 			var me = jQuery(this).parents('.section'),
 				button = me.find('.action.clear');
 			if(me.find(":checkbox:checked").length) {
@@ -1764,7 +1764,7 @@ Mall.listing = {
 		var clearBtnSelector = filtersId+' .action.clear a';
 		if(self.getPushStateSupport()) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
-				//e.preventDefault();
+				e.preventDefault();
 				var me = jQuery(this);
 				self.removeSingleFilterType(me);
 				me.parent().addClass(hiddenClass);
@@ -1860,7 +1860,7 @@ Mall.listing = {
 				el.find('span').children('span').css({
 					'background-image': 'url('+srcImg+')'
 				});
-			};
+			}
 
 			el.on('mouseenter', function(){
 

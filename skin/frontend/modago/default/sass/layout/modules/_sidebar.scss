@@ -216,7 +216,7 @@
 	&.filters-mobile {
 		z-index: 1001;
 		top: 0;
-		left: 0;
+		left: -240px;
 		overflow-y: auto;
 		width: 240px;
 		display: none;
@@ -274,7 +274,7 @@ html.noscroll-filters {
 	}
 	#sb-site {
 		margin-left: 240px;
-		overflow: hidden;
+		overflow: visible;
 	}
 	header#header .header_top {
 		left: 240px;

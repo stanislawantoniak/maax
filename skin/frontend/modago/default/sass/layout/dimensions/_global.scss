@@ -1,15 +1,5 @@
 #header {
-	position: absolute;
 	padding-top: 57px;
-	left: 0;
-	width: 100%;
-	height: auto;
-	z-index: 1000;
-	.header-bottom {
-		position: absolute;
-		z-index: 999;
-		width: 100%;
-	}
 }
 #header-main {
 	//padding-top:35px;
@@ -20,18 +10,16 @@
 
 .node-type-list {
 	#header-main {
-		padding-top:0px;
-		padding-bottom: 0px;
+		padding-top:0;
+		padding-bottom: 0;
 	}
 	&.page-search {
 		#header-main {
-			padding-top:0px;
+			padding-top:0;
 			padding-bottom: 0;
 		}
 	}
 }
-
-
 
 .node-type-checkout,
 .node-type-shopping-cart,
