@@ -884,7 +884,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             // Shipping cost
             $list[$i]['order_items'][$j]['is_delivery_item']           = 1;
             $list[$i]['order_items'][$j]['item_sku']                   = '';
-            $list[$i]['order_items'][$j]['item_name']                  = '';
+            $list[$i]['order_items'][$j]['item_name']                  = Mage::helper('ghapi')->__('Delivery and package');
             $list[$i]['order_items'][$j]['item_qty']                   = 1;
             $list[$i]['order_items'][$j]['item_value_before_discount'] = $po->getBaseShippingAmountIncl();
             $list[$i]['order_items'][$j]['item_discount']              = $po->getShippingDiscountIncl();
