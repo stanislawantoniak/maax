@@ -196,7 +196,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                     $orderItem = new StdClass();
                     $orderItem->is_delivery_item = $item['is_delivery_item'];
                     $orderItem->item_sku = $item['item_sku'];
-                    $orderItem->item_name = $item['item_name'];
+                    $orderItem->item_name = (empty($item['item_name']) && $item['is_delivery_item'])? Mage::helper('ghapi')->__('Delivery and package'):$item['item_name'];
                     $orderItem->item_qty = $item['item_qty'];
                     $orderItem->item_value_before_discount = $item['item_value_before_discount'];
                     $orderItem->item_discount = $item['item_discount'];
