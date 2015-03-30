@@ -647,7 +647,11 @@ Mall.Breakpoint = {
 };
 
 Mall.isMobile = function() {
-	return window.innerWidth < Mall.Breakpoint.sm;
+	return Mall.windowWidth() < Mall.Breakpoint.sm;
+};
+
+Mall.windowWidth = function() {
+	return window.innerWidth;
 };
 
 // http://kenwheeler.github.io/slick/
@@ -785,7 +789,7 @@ Mall.Slick = {
 		getResponsiveBoxesAmount: function() {
 			var _ = this;
 			if(Mall.isMobile()) {
-				var ww = jQuery(window).width();
+				var ww = Mall.windowWidth();
 				if(ww < Mall.Breakpoint.xs) {
 					return 1;
 				} else if(ww < Mall.Breakpoint.xssm) {
@@ -1298,9 +1302,8 @@ Mall.Footer = {
 		jQuery(window).resize(_.setContainerPadding);
 	},
 	setContainerPadding: function() {
-		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin,
-			headerHeight = jQuery('#header').outerHeight();
-		jQuery(Mall.Footer.containerId).css({'padding-bottom': height+'px', 'padding-top': headerHeight+'px'});
+		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
+		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
 	}
 };
 
