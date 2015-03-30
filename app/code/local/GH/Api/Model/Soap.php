@@ -206,9 +206,10 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
                 $order->order_items = $items;
                 $poList[] = $order;
+	            //$poList[] = $this->arrayToStdClass($data);
             }
             $obj->orderList = $poList;
-
+			Mage::log($obj,null,'api2.log');
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
@@ -424,4 +425,22 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         $this->throwWrongCourierName();
     }
+
+	protected function arrayToStdClass($array) {
+		$obj = new StdClass();
+		foreach($array as $k=>$v) {
+			if(is_array($v) && isset($v[0])) {
+				foreach($v as $l=>$b) {
+					$v[$l] = $this->arrayToStdClass($b);
+				}
+				$obj->$k = $v;
+			} elseif(is_array($v) && !is_numeric($k)) {
+				$v = $this->arrayToStdClass($v);
+				$obj->$k = $v;
+			} else {
+				$obj->$k = @trim($v);
+			}
+		}
+		return $obj;
+	}
 }
