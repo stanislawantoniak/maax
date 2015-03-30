@@ -45,6 +45,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                 $tierRates[$cat]['sale_value'] = $vendor->getSaleCommissionPercent();
             }
         }
+//krumo($tierRates);
 
         $products = $po->getAllItems();
         $locale = Mage::app()->getLocale();
@@ -77,7 +78,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     //get from parent
                     $productP = Mage::getModel('catalog/product')->load($parentId);
                     $categoriesP = $productP->getCategoryIds();
-                    $commission = $defaultCommissionPercent;
+                    $commission = !empty($defaultVendorCommissionPercent) ? $defaultVendorCommissionPercent : $defaultCommissionPercent;
 
                     foreach ($categoriesP as $catPId) {
                         if (isset($tierRates[$catPId])) {
@@ -89,10 +90,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     unset($catPId);
                     // override if product is in sale
                     if (!empty($saleItems[$parentId])) {
-                        $commission = $defaultSaleCommissionPercent;
-                        if (!empty($defaultSaleCommissionPercent)) {
-                            $commission = $defaultSaleCommissionPercent;
-                        }
+                        $commission = !empty($defaultSaleVendorCommissionPercent) ? $defaultSaleVendorCommissionPercent : $defaultSaleCommissionPercent;
 
                         foreach ($categoriesP as $catPId) {
                             if (isset($tierRates[$catPId])) {
@@ -104,7 +102,8 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     }
                 } else {
                     $categoriesS = $product->getCategoryIds();
-                    $commission = $defaultCommissionPercent;
+
+                    $commission = !empty($defaultVendorCommissionPercent) ? $defaultVendorCommissionPercent : $defaultCommissionPercent;
 
                     foreach ($categoriesS as $catSId) {
                         if (isset($tierRates[$catSId])) {
@@ -113,13 +112,11 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                             }
                         }
                     }
+
                     unset($catSId);
                     // override if product is in sale
                     if (!empty($saleItems[$id])) {
-                        $commission = $defaultSaleCommissionPercent;
-                        if (!empty($defaultSaleCommissionPercent)) {
-                            $commission = $defaultSaleCommissionPercent;
-                        }
+                        $commission = !empty($defaultSaleVendorCommissionPercent) ? $defaultSaleVendorCommissionPercent : $defaultSaleCommissionPercent;
 
                         foreach ($categoriesS as $catSId) {
                             if (isset($tierRates[$catSId])) {
@@ -130,8 +127,6 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                         }
                     }
                 }
-
-//
 
                 $item->setCommissionPercent($locale->getNumber($commission));
             }
