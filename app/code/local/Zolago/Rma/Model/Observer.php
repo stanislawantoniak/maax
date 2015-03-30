@@ -84,13 +84,14 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$rma = $observer->getEvent()->getData('rma');
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$track = $observer->getEvent()->getData('track');
+		$time = Mage::getSingleton('core/date')->timestamp();
 		/* @var $track Zolago_Rma_Model_Rma_Track */
 		$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
 		$carrierCode = $track->getCarrierCode () ;
 		if (in_array($carrierCode,$allowCarriers) 
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
-				$track->setNextCheck(date('Y-m-d H:i:s', time()));
+				$track->setNextCheck(date('Y-m-d H:i:s', $time));
 				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
 				$track->save();
 		    
