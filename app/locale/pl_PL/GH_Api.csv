@@ -37,5 +37,5 @@
 "Date shipped","Data wysłania"
 "Order ID list",Lista ID zamówień"
 "Delivery and package", "Koszt dostawy"
-"Link do testing <a href='%s' target='_blank'>WSDL","Link do testowego <a href='%s' target='_blank'>WSDLa"
-"Link do production <a href='%s' target='_blank'>WSDL","Link do produkcyjnego <a href='%s' target='_blank'>WSDLa"
+"Testing WSDL", "WSDL testowy"
+"Production WSDL", "WSDL produkcyjny"
