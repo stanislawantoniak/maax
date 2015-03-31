@@ -1,7 +1,13 @@
-<?php $_helper = Mage::helper("ghapi"); ?>
+<?php
+/** @var GH_Api_Block_Dropship_Soap $this */
+/** @var GH_Api_Helper_Data $_helper */
+$_helper = Mage::helper("ghapi");
+?>
 <div class="row" id="accordion">
 	<div class="col-md-12">
 		<form class="form-horizontal">
+            <p><?php echo $_helper->__("Link do testing <a href='%s' target='_blank'>WSDL", $_helper->getWsdlTestUrl()); ?> </a></p>
+            <p><?php echo $_helper->__("Link do production <a href='%s' target='_blank'>WSDL", $_helper->getWsdlUrl()); ?> </a></p>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_login');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_message');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_confirmation');?>
