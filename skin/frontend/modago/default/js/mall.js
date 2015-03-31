@@ -223,7 +223,7 @@ var Mall = {
             autoWidth: false
         });
         // Update current search query text
-        jQuery(".block_search input[name=q]").val(this.getQueryText());
+        jQuery("#header input[name=q]").val(this.getQueryText());
 		
 		// Process product context 
 
