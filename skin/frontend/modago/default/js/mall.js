@@ -909,8 +909,6 @@ Mall.Scrolltop = {
 			currentScrollTop = jQuery(window).scrollTop(),
 			canShow = _.heightToShow <= jQuery(document).height();
 
-		console.log(_.heightToShow);
-
 		if(!_.disabled && canShow) {
 			if (_.options.showOnScroll) {
 				if (currentScrollTop < _.lastScrollTop) {
