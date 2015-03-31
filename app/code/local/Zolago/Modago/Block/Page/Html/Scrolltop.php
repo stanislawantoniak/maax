@@ -8,7 +8,12 @@ class Zolago_Modago_Block_Page_Html_Scrolltop extends Mage_Core_Block_Template {
 	const SCROLLTOP_CONFIG_PATH_HIDE_AFTER = 'design/scrolltop/hide_after';
 
 	public function isActive() {
-		return Mage::getStoreConfig(self::SCROLLTOP_CONFIG_PATH_ACTIVE);
+		$isOpera = $this->isOperaMobile();
+		return !$isOpera ? Mage::getStoreConfig(self::SCROLLTOP_CONFIG_PATH_ACTIVE) : $isOpera;
+	}
+
+	protected function isOperaMobile() {
+		return preg_match('/opera m(ob|in)i/i',$_SERVER['HTTP_USER_AGENT']);
 	}
 
 	public function getPositionRight() {
