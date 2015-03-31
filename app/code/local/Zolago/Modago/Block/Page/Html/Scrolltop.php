@@ -9,7 +9,7 @@ class Zolago_Modago_Block_Page_Html_Scrolltop extends Mage_Core_Block_Template {
 
 	public function isActive() {
 		$isOpera = $this->isOperaMobile();
-		return !$isOpera ? Mage::getStoreConfig(self::SCROLLTOP_CONFIG_PATH_ACTIVE) : $isOpera;
+		return !$isOpera ? Mage::getStoreConfig(self::SCROLLTOP_CONFIG_PATH_ACTIVE) : false;
 	}
 
 	protected function isOperaMobile() {
