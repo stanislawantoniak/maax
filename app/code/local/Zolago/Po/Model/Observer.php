@@ -479,6 +479,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
      * @param $observer
      */
     public function ghapiAddMessageNewOrder($observer) {
+        if(Mage::registry('GHAPI')) return;
         $queue = Mage::getSingleton('ghapi/message');        
         $po = $observer->getPo();
         $vendor = $po->getVendor();
@@ -495,6 +496,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
      * @param $observer
      */
     public function ghapiAddMessageCancelledOrChanged($observer) {
+        if(Mage::registry('GHAPI')) return;
         $queue = Mage::getSingleton('ghapi/message');
         $po = $observer->getPo();
         $oldStatus = $observer->getOldStatus();
@@ -526,6 +528,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
      * @param $observer
      */
     public function ghapiAddMessageItemsChanged($observer) {
+        if(Mage::registry('GHAPI')) return;
         $queue = Mage::getSingleton('ghapi/message');
         $po    = $observer->getPo();
         $vendor = $po->getVendor();
@@ -542,6 +545,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
      * @param $observer
      */
     public function ghapiAddMessageDeliveryOrInvoice($observer) {
+        if(Mage::registry('GHAPI')) return;
         $queue = Mage::getSingleton('ghapi/message');
         $po    = $observer->getPo();
         $type  = $observer->getType();
@@ -563,6 +567,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
      * @param $observer
      */
     public function ghapiAddMessagePaymentDataChanged($observer) {
+        if(Mage::registry('GHAPI')) return;
         $queue = Mage::getSingleton('ghapi/message');
         $po    = $observer->getPo();
         $oldPo = $observer->getOldPo();

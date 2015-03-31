@@ -4,7 +4,14 @@
  */
 class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
-
+    public function __construct() {
+        try {
+            Mage::register('GHAPI', true);
+        } catch(Exception $e) {
+            // Key already exist
+        }
+        return parent::__construct();
+    }
     /**
      * message list
      *
