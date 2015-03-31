@@ -47,6 +47,7 @@
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
                     <category>Zolago_Catalog_Model_Category</category>
                     <product>Zolago_Catalog_Model_Product</product>
+                    <url>Zolago_Catalog_Model_Url</url>
                 </rewrite>
 			</catalog>
             <catalog_resource>
