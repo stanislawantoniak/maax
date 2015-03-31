@@ -63,6 +63,7 @@
         <design>
             <popular_brands>
                 <popular_brands_count>16</popular_brands_count>
+                <popular_brands_config><![CDATA[{"8":2,"7":2,"6":2,"5":2,"4":2,"3":2,"2":2}]]></popular_brands_config>
             </popular_brands>
         </design>
 

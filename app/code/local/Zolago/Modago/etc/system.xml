@@ -90,6 +90,14 @@
                             <show_in_store>1</show_in_store>
                             <validate>validate-number</validate>
                         </popular_brands_count>
+                        <popular_brands_config translate="label">
+                            <label>Main page brand's config</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </popular_brands_config>
                     </fields>
                 </popular_brands>
             </groups>
