@@ -86,7 +86,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         $categoryId = $this->getCurrentCategory()->getId();
         $name = "sidebar-c{$categoryId}-wrapper";
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-
+var_dump($vendor);
         if ($vendor) {
             $vendorId = $vendor->getVendorId();
             $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
