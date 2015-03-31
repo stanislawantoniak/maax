@@ -80,10 +80,19 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         return $this->getData('cms_block_html');
 
     }
-    public function getSidebarWrapper() {
-        $category_id = $this->getCurrentCategory()->getId();
-        $name = 'sidebar-c'.$category_id.'-wrapper';
-        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml(); 
+
+    public function getSidebarWrapper()
+    {
+        $categoryId = $this->getCurrentCategory()->getId();
+        $name = "sidebar-c{$categoryId}-wrapper";
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+        if ($vendor) {
+            $vendorId = $vendor->getVendorId();
+            $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
+        }
+
+        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml();
     }
 
     public function getProductListHtml() {
