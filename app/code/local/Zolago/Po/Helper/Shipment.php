@@ -11,20 +11,21 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
     protected $_shipment;
     protected $_number;
     protected $_poStatus;
-    
-    
+
+
     /**
-     * set tracking number
+     * Set tracking number
      * @param string $number
-     * @return 
+     * @return void
      */
      public function setNumber($number) {
          $this->_number = $number;
      }
-     
+
     /**
-     * get tracking number if set
+     * Get tracking number if set
      * @return string
+     * @throws Mage_Core_Exception
      */
      public function getNumber() {
          if (empty($this->_number)) {
@@ -32,10 +33,11 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
          }
          return $this->_number;
      }
+
     /**
-     * set new PO status
+     * Set new PO status
      * @param string $poStatus
-     * @return 
+     * @return void
      */
      public function setPoStatus($poStatus) {
          $this->_poStatus = empty($poStatus)? '':$poStatus;
@@ -48,21 +50,20 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      public function getPoStatus() {
          return $this->_poStatus;
       }
-    /**
-     * set PO
-     * @param Unirgy_DropshipPo_Model_Po
-     * @return 
-     */
 
+    /**
+     * Set PO
+     * @param Unirgy_DropshipPo_Model_Po
+     * @return void
+     */
     public function setUdpo($udpo) {
         $this->_udpo = $udpo;
     }
     
     /**
-     * get PO if set
+     * Get PO if set
      * @return Unirgy_DropshipPo_Model_Po
      */
-
     public function getUdpo() {
         if (empty($this->_udpo)) {
             Mage::throwException('Po not set');
@@ -71,12 +72,11 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
     }
     
     /**
-     * set carrier params
+     * Set carrier params
      * @param string $carrier
      * @param string $title
-     * @return 
+     * @return void
      */
-
     public function setCarrierData($carrier,$title) {
         $this->_carrierData['title'] = $title;
         $this->_carrierData['name'] = $carrier;
@@ -86,7 +86,6 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * get carrier name
      * @return string
      */
-
     public function getCarrierName() {
         $data = $this->_getCarrierData();
         return $data['name'];
@@ -96,7 +95,6 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * get waybill title
      * @return string
      */
-
     public function getCarrierTitle() {
         $data = $this->_getCarrierData();
         return $data['title'];
@@ -106,7 +104,6 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * preparing carrier data
      * @return array
      */
-
     protected function _getCarrierData() {
         $carrier = $this->_carrierData['name'];
         $carrierTitle = $this->_carrierData['title'];
@@ -120,9 +117,10 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         return $this->_carrierData;
 
     }
+
     /**
-     *
-     * @return 
+     * @return Mage_Sales_Model_Order_Shipment
+     * @throws Mage_Core_Exception
      */
     public function getShipment() {
         if (empty($this->_shipment)) {
@@ -146,8 +144,8 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
     }
 
     /**
-     *
-     * @return
+     * Gets track
+     * @return Mage_Sales_Model_Order_Shipment_Track|false
      */
     public function getTrack() {
         if (empty($this->_track)) {
@@ -173,10 +171,10 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         }
         return $udpoStatuses;
     }
+
     /**
-     * connecting track to shipment     
-     * @param 
-     * @return 
+     * Connecting track to shipment
+     * @return void
      */
      public function processSaveTracking() {
          $track = $this->getTrack();
@@ -199,11 +197,9 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
          $udpo->setCurrentCarrier($carrier);
          $udpo->getResource()->saveAttribute($udpo, "current_carrier");            
      }
-     
+
     /**
-     * 
-     * @param 
-     * @return 
+     * @return bool
      */
      public function getShippedFlag() {
         $udpo = $this->getUdpo();
@@ -221,14 +217,14 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      }
      
     /**
-     * 
      * @param Unirgy_Dropship_Model_Vendor
+     * @return void
      */
      public function setVendor($vendor) {
          $this->_vendor = $vendor;
      }
+
     /**
-     * 
      * @return Unirgy_Dropship_Model_Vendor
      */
      public function getVendor() {
@@ -267,9 +263,8 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         
      }
     /**    
-     * save new status after save tracking
-     * @param
-     * @return
+     * Save new status after save tracking
+     * @return void
      */
     public function processSetStatus() {
 
@@ -309,12 +304,11 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
        $udpo->getCommentsCollection()->save();
        return $poStatusChanged;
    }                
-   
-    /**
-     * finishing save shipment
-     * @return 
-     */
 
+    /**
+     * Finishing save shipment
+     * @throws Mage_Core_Exception
+     */
    public function invoiceShipment() {
        $shipment = $this->getShipment();
        if ($shipment->getNewShipmentFlag() && !$shipment->isDeleted()) {
