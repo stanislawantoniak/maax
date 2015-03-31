@@ -280,6 +280,10 @@
                 </params>
             </action>
 		</reference>
+
+		<reference name="before_body_end">
+			<block type="zolagomodago/page_html_scrolltop" name="scrolltop" template="page/html/scrolltop.phtml" />
+		</reference>
 		<!-- remove cart link - better performance-->
 		<remove name="checkout_cart_link"/>
 		<!-- remove rest stuff -->

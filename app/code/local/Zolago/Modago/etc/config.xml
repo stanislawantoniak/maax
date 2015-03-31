@@ -64,6 +64,14 @@
             <popular_brands>
                 <popular_brands_count>16</popular_brands_count>
             </popular_brands>
+	        <scrolltop>
+		        <active>1</active>
+		        <position_right>20</position_right>
+		        <position_bottom>20</position_bottom>
+		        <percent_appears>100</percent_appears>
+		        <show_on_scroll>1</show_on_scroll>
+		        <hide_after>2000</hide_after>
+	        </scrolltop>
         </design>
 
 	</default>
