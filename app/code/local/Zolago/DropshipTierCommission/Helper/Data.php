@@ -45,6 +45,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                 $tierRates[$cat]['sale_value'] = $vendor->getSaleCommissionPercent();
             }
         }
+//krumo($tierRates);
 
         $products = $po->getAllItems();
         $locale = Mage::app()->getLocale();
