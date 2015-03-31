@@ -64,10 +64,10 @@ if (!empty($sliders) || !empty($boxes)): ?>
 				$boxes[$key]['banner_image'] = empty($box['banner_image']) ? array() : unserialize($box['banner_image'])[1];
 				$boxesCount += !empty($boxes[$key]['banner_image']) && $this->imageExists($boxes[$key]['banner_image']['path']) ? 1 : 0;
 			}
-			$boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
+			$boxesCount = $boxesCount > 3 ? 3 : $boxesCount;
 			?>
 			<section id="boxesSlider"
-			         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
+			         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 3 ? ' class="boxesSliderHasArrows"' : ''; ?>>
 				<?php foreach ($boxes as $n => $box): ?>
 					<?php if (!empty($box['banner_image'])):
 						$path = $box['banner_image']['path'];

@@ -15,18 +15,6 @@ $_helper = Mage::helper("ghapi");
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_collected');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_shipment');?>
 			<?php //echo $this->getChildHtml('ghapi_dropship_soap_reservation');?>
-			<div id="soap_ajax_answer">
-				<strong><?php echo $_helper->__('SOAP Request');?></strong>
-				<pre>
-					<code class="language-markup" id="soap_request">
-					</code>
-				</pre>
-				<strong><?php echo $_helper->__('SOAP Response');?></strong>
-				<pre>
-					<code class="language-markup" id="soap_response">
-				</code>
-				</pre>
-			</div>
 		</form>
 	</div>
 </div>
@@ -39,14 +27,14 @@ $_helper = Mage::helper("ghapi");
     // --Simple accordion
 
 jQuery(function ($) {
-	function doSoapAjax(params) {
-        $('#soap_ajax_answer').html('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+	function doSoapAjax(params,funcname) {
+        $('#soap_ajax_answer_'+funcname).html('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
 		$.ajax({
 			url: '/udropship/ghapi/test',
 			method: 'POST',
 			data: params,
 			success: function(answer) {
-				$('#soap_ajax_answer').html(answer);	
+				$('#soap_ajax_answer_'+funcname).html(answer);	
 				Prism.highlightAll();
 			}
 		});
@@ -62,7 +50,7 @@ jQuery(function ($) {
         params.vendorId = jQuery('#soap_login_vendor_id').val();
         params.password = jQuery('#soap_login_password').val();
         params.apiKey	= jQuery('#soap_login_api_key').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'login');
     }
     //--doLogin
 
@@ -76,7 +64,7 @@ jQuery(function ($) {
         params.token = jQuery('#soap_message_token').val();
         params.size = jQuery('#soap_message_size').val();
         params.messageType	= jQuery('#soap_message_type').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'message');
     }
     //--getChangeOrderMessage
 
@@ -89,7 +77,7 @@ jQuery(function ($) {
         params.action = 'setChangeOrderMessageConfirmation';
         params.token = jQuery('#soap_confirmation_token').val();
         params.list = jQuery('#soap_confirmation_order_list').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'confirm');
     }
     //--setChangeOrderMessageConfirmation
 
@@ -102,7 +90,7 @@ jQuery(function ($) {
         params.action = 'getOrdersByID';
         params.token = jQuery('#soap_order_token').val();
         params.list = jQuery('#soap_order_list').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'order');
     }
     //--getOrdersByID
 
@@ -115,7 +103,7 @@ jQuery(function ($) {
         params.action = 'setOrderAsCollected';
         params.token = jQuery('#soap_collected_token').val();
         params.list = jQuery('#soap_collected_order_list').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'collected');
     }
     //--setOrderAsCollected
 
@@ -131,7 +119,7 @@ jQuery(function ($) {
         params.dateShipped = jQuery('#soap_shipment_date_shipped').val();
         params.shipmentTrackingNumber = jQuery('#soap_shipment_shipment_tracking_number').val();
         params.courier = jQuery('#soap_shipment_courier').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'shipment');
     }
     //--setOrderShipment
 
@@ -146,7 +134,7 @@ jQuery(function ($) {
         params.orderID = jQuery('#soap_reservation_order_id').val();
         params.reservationStatus = jQuery('#soap_shipment_reservation_status').val();
         params.reservationMessage = jQuery('#soap_reservation_message').val();
-        doSoapAjax(params);
+        doSoapAjax(params,'reservation');
     }
  	//--setOrderReservation
 });

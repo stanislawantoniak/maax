@@ -10,6 +10,7 @@ var Mall = {
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
+    _query_text: '',
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -221,6 +222,8 @@ var Mall = {
         jQuery('select[name=scat]').selectBoxIt({
             autoWidth: false
         });
+        // Update current search query text
+        jQuery("#header input[name=q]").val(this.getQueryText());
 		
 		// Process product context 
 
@@ -550,6 +553,14 @@ var Mall = {
                 e.preventDefault();
             }
         });
+    },
+
+    setQueryText: function(q) {
+        this._query_text = q;
+    },
+
+    getQueryText: function() {
+        return this._query_text;
     }
 };
 
@@ -636,7 +647,11 @@ Mall.Breakpoint = {
 };
 
 Mall.isMobile = function() {
-	return window.innerWidth < Mall.Breakpoint.sm;
+	return Mall.windowWidth() < Mall.Breakpoint.sm;
+};
+
+Mall.windowWidth = function() {
+	return window.innerWidth;
 };
 
 // http://kenwheeler.github.io/slick/
@@ -774,7 +789,7 @@ Mall.Slick = {
 		getResponsiveBoxesAmount: function() {
 			var _ = this;
 			if(Mall.isMobile()) {
-				var ww = jQuery(window).width();
+				var ww = Mall.windowWidth();
 				if(ww < Mall.Breakpoint.xs) {
 					return 1;
 				} else if(ww < Mall.Breakpoint.xssm) {

@@ -69,35 +69,68 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
             if ($this->canSetCommission($item)) {
                 $id = $item->getProductId();
                 $product = Mage::getModel('catalog/product')->load($id);
-                $categories = $product->getCategoryIds();
-                $commission = $defaultCommissionPercent;
+                $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
+                    ->getParentIdsByChild($id);
+                $parentId = isset($parentIds[0]) ? $parentIds[0] : 0;
 
-                foreach ($categories as $catId) {
-                    if (isset($tierRates[$catId])) {
-                        if (!empty($tierRates[$catId]['value'])) {
-                            $commission = $tierRates[$catId]['value'];
+                if (!empty($parentId)) {
+                    //get from parent
+                    $productP = Mage::getModel('catalog/product')->load($parentId);
+                    $categoriesP = $productP->getCategoryIds();
+                    $commission = !empty($defaultVendorCommissionPercent) ? $defaultVendorCommissionPercent : $defaultCommissionPercent;
+
+                    foreach ($categoriesP as $catPId) {
+                        if (isset($tierRates[$catPId])) {
+                            if (!empty($tierRates[$catPId]['value'])) {
+                                $commission = $tierRates[$catPId]['value'];
+                            }
                         }
                     }
-                }
+                    unset($catPId);
+                    // override if product is in sale
+                    if (!empty($saleItems[$parentId])) {
+                        $commission = !empty($defaultSaleVendorCommissionPercent) ? $defaultSaleVendorCommissionPercent : $defaultSaleCommissionPercent;
 
-                // override if product is in sale
-                if (!empty($saleItems[$id])) {
-                    $commission = $defaultSaleCommissionPercent;
-                    if (!empty($defaultSaleCommissionPercent)) {
-                        $commission = $defaultSaleCommissionPercent;
+                        foreach ($categoriesP as $catPId) {
+                            if (isset($tierRates[$catPId])) {
+                                if (!empty($tierRates[$catPId]['sale_value'])) {
+                                    $commission = $tierRates[$catPId]['sale_value'];
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $categoriesS = $product->getCategoryIds();
+
+                    $commission = !empty($defaultVendorCommissionPercent) ? $defaultVendorCommissionPercent : $defaultCommissionPercent;
+
+                    foreach ($categoriesS as $catSId) {
+                        if (isset($tierRates[$catSId])) {
+                            if (!empty($tierRates[$catSId]['value'])) {
+                                $commission = $tierRates[$catSId]['value'];
+                            }
+                        }
                     }
 
-                    foreach ($categories as $catId) {
-                        if (isset($tierRates[$catId])) {
-                            if (!empty($tierRates[$catId]['sale_value'])) {
-                                $commission = $tierRates[$catId]['sale_value'];
+                    unset($catSId);
+                    // override if product is in sale
+                    if (!empty($saleItems[$id])) {
+                        $commission = !empty($defaultSaleVendorCommissionPercent) ? $defaultSaleVendorCommissionPercent : $defaultSaleCommissionPercent;
+
+                        foreach ($categoriesS as $catSId) {
+                            if (isset($tierRates[$catSId])) {
+                                if (!empty($tierRates[$catSId]['sale_value'])) {
+                                    $commission = $tierRates[$catSId]['sale_value'];
+                                }
                             }
                         }
                     }
                 }
+
                 $item->setCommissionPercent($locale->getNumber($commission));
             }
         }
+
     }
 
     /**

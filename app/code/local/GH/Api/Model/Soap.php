@@ -145,70 +145,9 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             // Collecting orderList
             $poList = array();
             foreach ($allData as $data) {
-
-                $order = new StdClass();
-                $order->vendor_id                = $data['vendor_id'];
-                $order->vendor_name              = $data['vendor_name'];
-                $order->order_id                 = $data['order_id'];
-                $order->order_date               = $data['order_date'];
-                $order->order_max_shipping_date  = $data['order_max_shipping_date'];
-                $order->order_status             = $data['order_status'];
-                $order->order_total              = $data['order_total'];
-                $order->payment_method           = $data['payment_method'];
-                $order->order_due_amount         = $data['order_due_amount'];
-                $order->delivery_method          = $data['delivery_method'];
-                $order->shipment_tracking_number = $data['shipment_tracking_number'];
-                $order->pos_id                   = $data['pos_id'];
-                $order->order_currency           = $data['order_currency'];
-
-                $invoice = new StdClass();
-                $invoice->invoice_required = $data['invoice_data']['invoice_required'];
-                if ($invoice->invoice_required) {
-                    $invoiceAddress = new StdClass();
-                    $invoiceAddress->invoice_first_name   = $data['invoice_data']['invoice_address']['invoice_first_name'];
-                    $invoiceAddress->invoice_last_name    = $data['invoice_data']['invoice_address']['invoice_last_name'];
-                    $invoiceAddress->invoice_company_name = $data['invoice_data']['invoice_address']['invoice_company_name'];
-                    $invoiceAddress->invoice_street       = $data['invoice_data']['invoice_address']['invoice_street'];
-                    $invoiceAddress->invoice_city         = $data['invoice_data']['invoice_address']['invoice_city'];
-                    $invoiceAddress->invoice_zip_code     = $data['invoice_data']['invoice_address']['invoice_zip_code'];
-                    $invoiceAddress->invoice_country      = $data['invoice_data']['invoice_address']['invoice_country'];
-                    $invoiceAddress->invoice_tax_id       = $data['invoice_data']['invoice_address']['invoice_tax_id'];
-                    $invoice->invoice_address             = $invoiceAddress;
-                }
-                $order->invoice_data = $invoice;
-
-                $delivery = new StdClass();
-                $delivery->inpost_locker_id = $data['delivery_data']['inpost_locker_id'];
-                $deliveryAddress = new StdClass();
-                $deliveryAddress->delivery_first_name = $data['delivery_data']['delivery_address']['delivery_first_name'];
-                $deliveryAddress->delivery_last_name = $data['delivery_data']['delivery_address']['delivery_last_name'];
-                $deliveryAddress->delivery_company_name = $data['delivery_data']['delivery_address']['delivery_company_name'];
-                $deliveryAddress->delivery_street = $data['delivery_data']['delivery_address']['delivery_street'];
-                $deliveryAddress->delivery_city = $data['delivery_data']['delivery_address']['delivery_city'];
-                $deliveryAddress->delivery_zip_code = $data['delivery_data']['delivery_address']['delivery_zip_code'];
-                $deliveryAddress->delivery_country = $data['delivery_data']['delivery_address']['delivery_country'];
-                $deliveryAddress->phone = $data['delivery_data']['delivery_address']['phone'];
-                $delivery->delivery_address = $deliveryAddress;
-                $order->delivery_data = $delivery;
-
-                $items = array();
-                foreach ($data['order_items'] as $item) {
-                    $orderItem = new StdClass();
-                    $orderItem->is_delivery_item = $item['is_delivery_item'];
-                    $orderItem->item_sku = $item['item_sku'];
-                    $orderItem->item_name = $item['item_name'];
-                    $orderItem->item_qty = $item['item_qty'];
-                    $orderItem->item_value_before_discount = $item['item_value_before_discount'];
-                    $orderItem->item_discount = $item['item_discount'];
-                    $orderItem->item_value_after_discount = $item['item_value_after_discount'];
-                    $items[] = $orderItem;
-                }
-
-                $order->order_items = $items;
-                $poList[] = $order;
+	            $poList[] = $this->arrayToStdClass($data);
             }
             $obj->orderList = $poList;
-
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
@@ -424,4 +363,22 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         $this->throwWrongCourierName();
     }
+
+	protected function arrayToStdClass($array) {
+		$obj = new StdClass();
+		foreach($array as $k=>$v) {
+			if(is_array($v) && isset($v[0])) {
+				foreach($v as $l=>$b) {
+					$v[$l] = $this->arrayToStdClass($b);
+				}
+				$obj->$k = $v;
+			} elseif(is_array($v) && !is_numeric($k)) {
+				$v = $this->arrayToStdClass($v);
+				$obj->$k = $v;
+			} else {
+				$obj->$k = @trim($v);
+			}
+		}
+		return $obj;
+	}
 }

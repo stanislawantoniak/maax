@@ -1,6 +1,18 @@
 <?php
 /* @var $this Zolago_Modago_Block_Home_Vendor */
 $vendors = $this->getVendorColleciton();
+
+$config = json_decode(Mage::getStoreConfig('design/popular_brands/popular_brands_config'), true);
+// Const
+// Max rows for columns calculated from css
+$cMax8 = $config[8] * 8;
+$cMax7 = $config[7] * 7;
+$cMax6 = $config[6] * 6;
+$cMax5 = $config[5] * 5;
+$cMax4 = $config[4] * 4;
+$cMax3 = $config[3] * 3;
+$cMax2 = $config[2] * 2;
+
 ?>
 
 <?php if (count($vendors) > 0) : ?>
@@ -21,7 +33,17 @@ $vendors = $this->getVendorColleciton();
 
 							<?php foreach ($vendors as $v): ?>
 								<div
-									class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item">
+									class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item
+									<?php
+                                    echo $n <= $cMax2 ? '' : 'hidden-2 ';
+                                    echo $n <= $cMax3 ? '' : 'hidden-3 ';
+                                    echo $n <= $cMax4 ? '' : 'hidden-4 ';
+                                    echo $n <= $cMax5 ? '' : 'hidden-5 ';
+                                    echo $n <= $cMax6 ? '' : 'hidden-6 ';
+                                    echo $n <= $cMax7 ? '' : 'hidden-7 ';
+                                    echo $n <= $cMax8 ? '' : 'hidden-8 ';
+                                    ?>
+									">
 									<a href="<?php echo $this->getVendorBaseUrl($v); ?>">
 										<span class="pop-shop-img-wr">
 											<img src="<?php echo $this->getVendorResizedLogoUrl($v, 100, 44); ?>" alt="">
@@ -74,7 +96,17 @@ $vendors = $this->getVendorColleciton();
 							<?php if ($makeFakeLoop): ?>
 								<?php for ($i = (count($vendors) + 1); $i <= $vendorsCount; $i++): ?>
 									<div
-										class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item">
+										class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item
+										<?php
+                                        echo $n <= $cMax2 ? '' : 'hidden-2 ';
+                                        echo $n <= $cMax3 ? '' : 'hidden-3 ';
+                                        echo $n <= $cMax4 ? '' : 'hidden-4 ';
+                                        echo $n <= $cMax5 ? '' : 'hidden-5 ';
+                                        echo $n <= $cMax6 ? '' : 'hidden-6 ';
+                                        echo $n <= $cMax7 ? '' : 'hidden-7 ';
+                                        echo $n <= $cMax8 ? '' : 'hidden-8 ';
+                                        ?>
+										">
 										<a href="<?php echo $this->getVendorBaseUrl($lastVendor); ?>">
                                         <span class="pop-shop-img-wr">
                                             <img src="<?php echo $this->getVendorResizedLogoUrl($lastVendor, 100, 44); ?>" alt="">
