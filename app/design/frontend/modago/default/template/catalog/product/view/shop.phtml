@@ -114,7 +114,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
     var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
 
     jsonConfig.useSizeboxList = useSizeboxList;
-
+    Mall.product._entity_id = <?php echo $_product->getEntityId(); ?>;
     Mall.product.productOptions(jsonConfig);
     Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
 
