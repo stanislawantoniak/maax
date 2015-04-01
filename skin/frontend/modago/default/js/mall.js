@@ -760,20 +760,32 @@ Mall.Slick = {
 			]
 		},
 		eventsAttached: false,
+		mobileUnslick: false,
 		init: function() {
 			var _ = this;
 
 			if(_.slider === false && _.sliderAvailable()) {
 				_.slider = jQuery(_.sliderId);
 				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
-				_.options.responsive[0].settings.slidesToShow =
-					_.options.responsive[0].settings.slidesToScroll =
-						(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 3);
-				_.options.responsive[1].settings.slidesToShow =
-					_.options.responsive[1].settings.slidesToScroll =
-						(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
-					_.attachEvents();
+				if(_.slider.data('boxesMobileUnslick')) {
+					_.mobileUnslick = true;
+					_.options.responsive = [
+						{
+							breakpoint: Mall.Breakpoint.sm,
+							settings: 'unslick'
+						}
+					]
+				} else {
+					_.options.responsive[0].settings.slidesToShow =
+						_.options.responsive[0].settings.slidesToScroll =
+							(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 3);
+					_.options.responsive[1].settings.slidesToShow =
+						_.options.responsive[1].settings.slidesToScroll =
+							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
+				}
+				_.attachEvents();
 				_.slider.slick(_.options);
+				_.resizeBoxes();
 			}
 		},
 		getBoxesAmount: function() {
@@ -829,6 +841,16 @@ Mall.Slick = {
 						Mall.Slick.events.setPosition + ' ' + Mall.Slick.events.init,
 						Mall.Slick.boxes.resizeBoxes
 					);
+				if(_.mobileUnslick) {
+					jQuery(window).resize(function() {
+						if(Mall.windowWidth() < Mall.Breakpoint.sm) {
+							Mall.Slick.boxes.resizeBoxesUnslicked();
+						} else {
+							Mall.Slick.boxes.slider = false;
+							Mall.Slick.boxes.init();
+						}
+					});
+				}
 			}
 		},
 		resizeBoxes: function() {
@@ -851,11 +873,26 @@ Mall.Slick = {
 						box.css({
 							'width': (width - 2)+'px',
 							'height': height+'px',
-							'margin-right': 1+'px'
+							'margin-right': 1+'px',
+							'margin-bottom': false
 						});
 					});
 				}
 				Mall.Slick.boxes.positionArrows();
+			} else {
+				Mall.Slick.boxes.resizeBoxesUnslicked();
+			}
+		},
+		resizeBoxesUnslicked: function() {
+			if(!Mall.Slick.boxes.isSlick()) {
+				Mall.Slick.boxes.positionArrows();
+				var boxWidth =  (jQuery(Mall.Slick.boxes.sliderId).width() / 2) - 10,
+					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+
+				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
+					'width': boxWidth + 'px',
+					'height': boxHeight + 'px'
+				});
 			}
 		},
 		positionArrows: function() {
