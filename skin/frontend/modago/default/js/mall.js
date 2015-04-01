@@ -1093,6 +1093,38 @@ Mall.product = {
     _options_group_template: "",
     _options: {},
     _current_product_type: "simple",
+    _entity_id: '',
+    _path_back_to_category_text: '',
+    _path_back_to_category_link: '',
+
+    init: function() {
+        if(jQuery("body").hasClass("catalog-product-view")) {
+            this.updateContextBreadcrumbs();
+        }
+    },
+
+    updateContextBreadcrumbs: function() {
+        //this._entity_id = 29549;
+        var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
+        localStorage.removeItem(this._entity_id);
+        if (contextBreadcrumbsHtml != null) {
+            sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
+        }
+        contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
+        if (contextBreadcrumbsHtml) {
+            var productHtml = jQuery('#breadcrumbs .product');
+            jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
+            this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
+            this._path_back_to_category_text = jQuery('#breadcrumbs ol li:last').text();
+
+            jQuery('#breadcrumbs ol li:last').html("<a href='" + this._path_back_to_category_link + "'>" + this._path_back_to_category_text + "</a>");
+            jQuery('#breadcrumbs ol').append(productHtml);
+
+            // Update context path back to category for mobile
+            jQuery('.path_back_to_category a').attr('href', this._path_back_to_category_link);
+            jQuery('.path_back_to_category a').text(this._path_back_to_category_text);
+        }
+    },
 
     productOptions: function(jsonOptions) {
         this._options = jsonOptions;
@@ -1505,6 +1537,8 @@ Mall.Footer = {
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
+
+    Mall.product.init();
 
 	Mall.Slick.init();
 
