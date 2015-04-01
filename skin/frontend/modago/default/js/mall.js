@@ -952,7 +952,7 @@ Mall.Slick = {
 		resizeBoxesUnslicked: function() {
 			if(!Mall.Slick.boxes.isSlick()) {
 				Mall.Slick.boxes.positionArrows();
-				var boxWidth =  (jQuery(Mall.Slick.boxes.sliderId).width() / 2) - 10,
+				var boxWidth =  (jQuery(Mall.Slick.boxes.sliderId).width() / 2) - 15,
 					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
 
 				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
