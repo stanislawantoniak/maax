@@ -52,6 +52,7 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
     </script>
     </section>
     <?php //echo $this->getCmsBlockHtml() ?>
+	<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 
 <?php elseif($this->isMixedMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>
