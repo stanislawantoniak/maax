@@ -720,6 +720,10 @@ Mall.windowWidth = function() {
 	return window.innerWidth;
 };
 
+Mall.windowHeight = function() {
+	return window.innerHeight;
+};
+
 // http://kenwheeler.github.io/slick/
 Mall.Slick = {
 	events: {
@@ -975,6 +979,91 @@ Mall.Slick = {
 				_.slider.removeClass(_.sliderHasArrowsClass);
 			}
 		}
+	}
+};
+
+Mall.Scrolltop = {
+	heightToShow: false,
+	options: { //these are set in /app/design/frontend/modago/default/template/page/html/scrolltop.phtml
+		percentAppears: 100,
+		showOnScroll: true,
+		hideAfterTime: 1000
+     },
+	lastScrollTop: 0,
+	timeout: 0,
+	scrollTop: false,
+	scrollTopId: '#scrollTop',
+	disabled: false,
+	init: function() {
+		var _ = this;
+		if(_.options !== false) {
+			_.scrollTop = jQuery(_.scrollTopId);
+			_.attachEvents();
+		}
+	},
+	attachEvents: function() {
+		var _ = this;
+		jQuery(window).on('scroll',Mall.Scrolltop.onScroll);
+		jQuery(window).on('resize',Mall.Scrolltop.setHeightToShow);
+		_.setHeightToShow();
+	},
+	onScroll: function() {
+		var _ = Mall.Scrolltop,
+			currentScrollTop = jQuery(window).scrollTop(),
+			canShow = _.heightToShow <= jQuery(document).height();
+
+		if(!_.disabled && canShow) {
+			if (_.options.showOnScroll) {
+				if (currentScrollTop < _.lastScrollTop) {
+					_.scrollTop.addClass('show');
+					_.hideDelayed();
+				} else {
+					clearTimeout(_.timeout);
+					_.scrollTop.removeClass('show');
+				}
+			} else {
+				if (currentScrollTop > _.heightToShow) {
+					_.scrollTop.addClass('show');
+				} else {
+					_.scrollTop.removeClass('show');
+				}
+			}
+		}
+		_.lastScrollTop = currentScrollTop;
+	},
+	setHeightToShow: function() {
+		var _ = Mall.Scrolltop;
+		_.heightToShow = (Mall.windowHeight() * _.options.percentAppears / 100) + Mall.windowHeight();
+	},
+	hideDelayed: function() {
+		var _ = Mall.Scrolltop;
+		_.clearTimeout();
+		_.timeout = setTimeout(_.hide, _.options.hideAfterTime);
+	},
+	clearTimeout: function() {
+		var _ = Mall.Scrolltop;
+		if(_.timeout) {
+			clearTimeout(_.timeout);
+		}
+	},
+	hide: function() {
+		Mall.Scrolltop.scrollTop.removeClass('show');
+	},
+	hopToTop: function() {
+		var _ = Mall.Scrolltop;
+		_.tempDisable();
+		jQuery('body,html').animate({
+			scrollTop: 0
+		}, 200);
+		_.clearTimeout();
+		_.hide();
+	},
+	tempDisable: function() {
+		var _ = Mall.Scrolltop;
+		_.disabled = true;
+		setTimeout(function() {
+			_.disabled = false;
+		},300);
 	}
 };
 
