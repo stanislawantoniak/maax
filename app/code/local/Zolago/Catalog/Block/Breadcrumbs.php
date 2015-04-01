@@ -164,7 +164,8 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
                     array_unshift($path, array(
 						"name" => "category" . $parentCategory->getId(),
 						"label" => $parentCategory->getName(),
-						"link" => $this->_prepareCategoryLink($category, $parentCategory, $parentId)
+						"link" => $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId),
+                        "data-link" => $link ? $link : $parentCategory->getUrl()
 					));
                 }
             }

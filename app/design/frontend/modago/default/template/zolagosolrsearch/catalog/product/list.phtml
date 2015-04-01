@@ -30,7 +30,7 @@ $_collection = $this->getCollection();
 
                         <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
-                                <a href="<?php echo $product->getCurrentUrl(); ?>">
+                                <a href="<?php echo $product->getCurrentUrl(); ?>" data-entity="<?php echo $product->getEntityId(); ?>">
                                     <figure class="img_product">
                                         <img src="<?php echo $_productImageUrl; ?>"
                                              alt="<?php $this->escapeHtml($product->getName()); ?>"

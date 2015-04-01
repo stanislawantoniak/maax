@@ -112,7 +112,8 @@ var Mall = {
             dataType: "json",
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
-				"category_id": Mall.reg.get("varnish_category_id")
+				"category_id": Mall.reg.get("varnish_category_id"),
+	            "recently_viewed": jQuery('#rwd-recently-viewed').find('.rwd-carousel').length ? 1 : 0
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -720,6 +721,10 @@ Mall.windowWidth = function() {
 	return window.innerWidth;
 };
 
+Mall.windowHeight = function() {
+	return window.innerHeight;
+};
+
 // http://kenwheeler.github.io/slick/
 Mall.Slick = {
 	events: {
@@ -978,6 +983,93 @@ Mall.Slick = {
 	}
 };
 
+Mall.Scrolltop = {
+	heightToShow: false,
+	options: { //these are set in /app/design/frontend/modago/default/template/page/html/scrolltop.phtml
+		percentAppears: 100,
+		showOnScroll: true,
+		hideAfterTime: 1000
+     },
+	lastScrollTop: 0,
+	timeout: 0,
+	scrollTop: false,
+	scrollTopId: '#scrollTop',
+	disabled: false,
+	init: function() {
+		var _ = this;
+		if(_.options !== false) {
+			_.scrollTop = jQuery(_.scrollTopId);
+			_.attachEvents();
+		}
+	},
+	attachEvents: function() {
+		var _ = this;
+		jQuery(window).on('scroll',Mall.Scrolltop.onScroll);
+		jQuery(window).on('resize',Mall.Scrolltop.setHeightToShow);
+		_.setHeightToShow();
+	},
+	onScroll: function() {
+		var _ = Mall.Scrolltop,
+			currentScrollTop = jQuery(window).scrollTop(),
+			canShow = _.heightToShow <= jQuery(document).height();
+
+		if(!_.disabled && canShow) {
+			if (_.options.showOnScroll) {
+				if (currentScrollTop == 0) {
+					_.hide();
+				} else if (currentScrollTop < _.lastScrollTop) {
+					_.scrollTop.addClass('show');
+					_.hideDelayed();
+				} else {
+					clearTimeout(_.timeout);
+					_.scrollTop.removeClass('show');
+				}
+			} else {
+				if (currentScrollTop > _.heightToShow) {
+					_.scrollTop.addClass('show');
+				} else {
+					_.scrollTop.removeClass('show');
+				}
+			}
+		}
+		_.lastScrollTop = currentScrollTop;
+	},
+	setHeightToShow: function() {
+		var _ = Mall.Scrolltop;
+		_.heightToShow = (Mall.windowHeight() * _.options.percentAppears / 100) + Mall.windowHeight();
+	},
+	hideDelayed: function() {
+		var _ = Mall.Scrolltop;
+		_.clearTimeout();
+		_.timeout = setTimeout(_.hide, _.options.hideAfterTime);
+	},
+	clearTimeout: function() {
+		var _ = Mall.Scrolltop;
+		if(_.timeout) {
+			clearTimeout(_.timeout);
+		}
+	},
+	hide: function() {
+		Mall.Scrolltop.scrollTop.removeClass('show');
+	},
+	hopToTop: function() {
+		var _ = Mall.Scrolltop;
+		_.tempDisable();
+		jQuery('body,html').animate({
+			scrollTop: 0
+		}, 200);
+		_.clearTimeout();
+		_.hide();
+	},
+	tempDisable: function() {
+		var _ = Mall.Scrolltop;
+		_.disabled = true;
+		setTimeout(function() {
+			_.disabled = false;
+		},300);
+	}
+};
+
 Mall.Cart = {
     applyCoupon: function() {
         var coupon = jQuery("#num_discount_voucher").val();
@@ -1001,6 +1093,38 @@ Mall.product = {
     _options_group_template: "",
     _options: {},
     _current_product_type: "simple",
+    _entity_id: '',
+    _path_back_to_category_text: '',
+    _path_back_to_category_link: '',
+
+    init: function() {
+        if(jQuery("body").hasClass("catalog-product-view")) {
+            this.updateContextBreadcrumbs();
+        }
+    },
+
+    updateContextBreadcrumbs: function() {
+        //this._entity_id = 29549;
+        var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
+        localStorage.removeItem(this._entity_id);
+        if (contextBreadcrumbsHtml != null) {
+            sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
+        }
+        contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
+        if (contextBreadcrumbsHtml) {
+            var productHtml = jQuery('#breadcrumbs .product');
+            jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
+            this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
+            this._path_back_to_category_text = jQuery('#breadcrumbs ol li:last').text();
+
+            jQuery('#breadcrumbs ol li:last').html("<a href='" + this._path_back_to_category_link + "'>" + this._path_back_to_category_text + "</a>");
+            jQuery('#breadcrumbs ol').append(productHtml);
+
+            // Update context path back to category for mobile
+            jQuery('.path_back_to_category a').attr('href', this._path_back_to_category_link);
+            jQuery('.path_back_to_category a').text(this._path_back_to_category_text);
+        }
+    },
 
     productOptions: function(jsonOptions) {
         this._options = jsonOptions;
@@ -1413,6 +1537,8 @@ Mall.Footer = {
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
+
+    Mall.product.init();
 
 	Mall.Slick.init();
 

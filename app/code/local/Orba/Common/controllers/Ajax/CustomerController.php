@@ -79,26 +79,29 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			);
 		}
 
-	    $recentlyViewedProducts = Mage::getSingleton('Mage_Reports_Block_Product_Viewed')->getItemsCollection();
 
-	    $recentlyViewedContent = array();
-	    if($recentlyViewedProducts->count() > 0){
+	    if($this->getRequest()->getParam('recently_viewed')) {
+		    $recentlyViewedProducts = Mage::getSingleton('Mage_Reports_Block_Product_Viewed')->getItemsCollection();
 
-		    foreach($recentlyViewedProducts as $product){
-			    /* @var $product Zolago_Catalog_Model_Product */
-			    $image = Mage::helper("zolago_image")
-				    ->init($product, 'small_image')
-				    ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
-				    ->adaptiveResize(200,312);
-			    $recentlyViewedContent[] = array(
-				    'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName() , 'name'),
-				    'image_url' => (string) $image,
-				    'redirect_url' => $product->getNoVendorContextUrl()
-			    );
+		    $recentlyViewedContent = array();
+		    if ($recentlyViewedProducts->count() > 0) {
 
+			    foreach ($recentlyViewedProducts as $product) {
+				    /* @var $product Zolago_Catalog_Model_Product */
+				    $image = Mage::helper("zolago_image")
+					    ->init($product, 'small_image')
+					    ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+					    ->adaptiveResize(200, 312);
+				    $recentlyViewedContent[] = array(
+					    'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
+					    'image_url' => (string)$image,
+					    'redirect_url' => $product->getNoVendorContextUrl()
+				    );
+
+			    }
+
+			    $content['recentlyViewed'] = $recentlyViewedContent;
 		    }
-
-		    $content['recentlyViewed'] = $recentlyViewedContent;
 	    }
 
         $result = $this->_formatSuccessContentForResponse($content);
