@@ -112,7 +112,8 @@ var Mall = {
             dataType: "json",
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
-				"category_id": Mall.reg.get("varnish_category_id")
+				"category_id": Mall.reg.get("varnish_category_id"),
+	            "recently_viewed": jQuery('#rwd-recently-viewed').find('.rwd-carousel').length ? 1 : 0
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -1014,7 +1015,9 @@ Mall.Scrolltop = {
 
 		if(!_.disabled && canShow) {
 			if (_.options.showOnScroll) {
-				if (currentScrollTop < _.lastScrollTop) {
+				if (currentScrollTop == 0) {
+					_.hide();
+				} else if (currentScrollTop < _.lastScrollTop) {
 					_.scrollTop.addClass('show');
 					_.hideDelayed();
 				} else {
