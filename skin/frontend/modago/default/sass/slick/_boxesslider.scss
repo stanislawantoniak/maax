@@ -8,8 +8,17 @@
 		display: inline-block;
 		vertical-align: top;
 		float: none;
-		margin: 0 5px 2px 0;
 		border: 1px solid #dbdbdb;
+		margin: 0 5px 2px 0;
+		&.mobile {
+			margin-bottom: 10px;
+			&:nth-child(odd) {
+				margin-right: 10px;
+			}
+			&:nth-last-child(1), &:nth-last-child(2) {
+				margin-bottom: 0;
+			}
+		}
 		.boxesSlideIn {
 			background-repeat: no-repeat;
 			background-size: contain;

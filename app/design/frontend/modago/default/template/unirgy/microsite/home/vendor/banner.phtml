@@ -65,7 +65,7 @@ if($sliders): ?>
 	$boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
 	?>
 <div class="row">
-	<section id="boxesSlider"
+	<section id="boxesSlider" data-boxes-mobile-unslick="1"
 	         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
 		<?php foreach ($boxes as $n => $box): ?>
 			<?php if (!empty($box['banner_image'])):

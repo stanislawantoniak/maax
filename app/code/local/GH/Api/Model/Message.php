@@ -34,6 +34,8 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @return GH_Api_Model_Message
 	 */
 	public function addMessage($po,$message) {
+	    if(Mage::registry('GHAPI')) return false ;	    // message not added from gh_api
+	    
         if(!$this->validateMessage($message)) {
 			return false;
 		} elseif(!$this->isNoticeMessageActive($po->getVendor(), $message)) {
@@ -242,8 +244,8 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$user = $this->getUserByToken($token);
 
 		//check if batch is correct
-		if(!(is_numeric($batchSize) && $batchSize <= $this->getMaxMessageBatchSize() && $batchSize)) {
-			Mage::throwException('error_message_batchsize_invalid (max: ' . $this->getMaxMessageBatchSize() . ")");
+		if(!(is_numeric($batchSize) && $batchSize <= $this->getMaxMessageBatchSize() && ($batchSize > 0))) {
+			Mage::throwException('error_message_batchsize_invalid (min: 1, max: ' . $this->getMaxMessageBatchSize() . ")");
 		}
 
 		//get messages collection

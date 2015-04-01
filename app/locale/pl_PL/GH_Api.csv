@@ -37,6 +37,5 @@
 "Date shipped","Data wysłania"
 "Order ID list",Lista ID zamówień"
 "Delivery and package", "Koszt dostawy"
-
-
-
+"Testing WSDL", "WSDL testowy"
+"Production WSDL", "WSDL produkcyjny"
