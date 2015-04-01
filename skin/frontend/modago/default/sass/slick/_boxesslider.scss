@@ -9,12 +9,14 @@
 		vertical-align: top;
 		float: none;
 		border: 1px solid #dbdbdb;
-		margin-bottom: 10px;
-		&:nth-child(odd) {
-			margin-right: 10px;
-		}
-		&:nth-last-child(1),&:nth-last-child(2) {
-			margin-bottom: 0;
+		&.mobile {
+			margin-bottom: 10px;
+			&:nth-child(odd) {
+				margin-right: 10px;
+			}
+			&:nth-last-child(1), &:nth-last-child(2) {
+				margin-bottom: 0;
+			}
 		}
 		.boxesSlideIn {
 			background-repeat: no-repeat;
