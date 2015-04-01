@@ -14,7 +14,6 @@
 class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	const GH_API_SESSION_TOKEN_LENGTH = 64;
 	const GH_API_SESSION_TOKEN_ALGO = 'sha256';
-	const GH_API_SESSION_TIME = 60; //session time in minutes
 
 	protected function _construct() {
 		$this->_init('ghapi/session');
@@ -82,9 +81,17 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	 * @return string
 	 */
 	protected function getExpirationDate() {
-		$timestamp = time() - (self::GH_API_SESSION_TIME * 60);
+		$timestamp = time() - ($this->getTokenSessionTime() * 60);
 		return $this->getHelper()->getDate($timestamp);
 	}
+
+    /**
+     * Gets from config token session time
+     * @return mixed
+     */
+    public function getTokenSessionTime() {
+        return Mage::getStoreConfig('ghapi_options/ghapi_general/ghapi_token_session_time');
+    }
 
 	/**
 	 * Gets main GH Api helper
