@@ -9,6 +9,7 @@
 		vertical-align: top;
 		float: none;
 		border: 1px solid #dbdbdb;
+		margin: 0 5px 2px 0;
 		&.mobile {
 			margin-bottom: 10px;
 			&:nth-child(odd) {
@@ -28,9 +29,6 @@
 	&.boxesSliderHasArrows {
 		padding-left: 40px;
 		padding-right: 40px;
-		.boxesSlide {
-			margin: 0 5px 2px 0 !important;
-		}
 		.boxesArrow {
 			display: block;
 			color: $color-gray1;
