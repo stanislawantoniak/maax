@@ -57,7 +57,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         try {
             if (!isset($request->messageID->ID)) {
-                Mage::throwException('Message ID list empty');
+                Mage::throwException('error_message_id_list_empty');
             }
             $messages = $request->messageID->ID;
             if (!is_array($messages)) {
@@ -342,14 +342,14 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
      * @throws Mage_Core_Exception
      */
     protected function throwOrderIDListEmpty() {
-        Mage::throwException('Order ID list empty');
+        Mage::throwException('error_order_id_list_empty');
     }
 
     /**
      * @throws Mage_Core_Exception
      */
     protected function throwWrongCourierName() {
-        Mage::throwException('Wrong courier name');
+        Mage::throwException('error_wrong_courier_name');
     }
 
     public function getCourierCode($courier) {
