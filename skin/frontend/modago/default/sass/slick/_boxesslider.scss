@@ -28,6 +28,12 @@
 		padding-right: 40px;
 		.boxesSlide {
 			margin: 0 5px 2px 0 !important;
+			&:nth-child(odd) {
+				margin-right: 5px;
+			}
+			&:nth-last-child(1),&:nth-last-child(2) {
+				margin-bottom: 2px;
+			}
 		}
 		.boxesArrow {
 			display: block;
