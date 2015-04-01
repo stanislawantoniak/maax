@@ -931,7 +931,7 @@ Mall.Slick = {
 						'width': boxWidth + 'px',
 						'height': boxHeight + 'px',
 						'margin-right': false
-					}).parent().removeClass('mobile');
+					}).parents('.boxesSlide').removeClass('mobile');
 				} else {
 					Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).each(function() {
 						var box = jQuery(this);
@@ -941,7 +941,7 @@ Mall.Slick = {
 							'height': height+'px',
 							'margin-right': 1+'px',
 							'margin-bottom': false
-						}).parent().removeClass('mobile');
+						}).parents('.boxesSlide').removeClass('mobile');
 					});
 				}
 				Mall.Slick.boxes.positionArrows();
@@ -958,7 +958,7 @@ Mall.Slick = {
 				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
 					'width': boxWidth + 'px',
 					'height': boxHeight + 'px'
-				}).parent().addClass('mobile');
+				}).parents('.boxesSlide').addClass('mobile');
 			}
 		},
 		positionArrows: function() {
