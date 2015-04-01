@@ -283,8 +283,74 @@ var Mall = {
 					append(boxAdded).
 					append(boxLoading);
 		}
+
+		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
+			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
+			if ( rwd_recently_viewed.length !=0 ) {
+
+				var recentlyViewedContent = "";
+
+				for(var i in data["content"]["recentlyViewed"]){
+					var redirect_url = data["content"]["recentlyViewed"][i].redirect_url;
+					var image_url = data["content"]["recentlyViewed"][i].image_url;
+					var title = data["content"]["recentlyViewed"][i].title;
+					recentlyViewedContent += "<a href=\""+redirect_url+"\" class=\"simple\">";
+					recentlyViewedContent += "<div class=\"box_listing_product\">";
+					recentlyViewedContent += "<figure class=\"img_product\">";
+					recentlyViewedContent += "<img src=\"" +image_url+ "\" alt=\"" +title+ "\">";
+					recentlyViewedContent += "</figure>";
+					recentlyViewedContent += "<div class=\"name_product hidden-xs\">"+title+"</div>";
+					recentlyViewedContent += "</div>";
+					recentlyViewedContent += "</a>";
+				}
+				jQuery(rwd_recently_viewed).html(recentlyViewedContent);
+				jQuery("#recently-viewed.recently-viewed-cls").show();
+
+				rwd_recently_viewed.rwdCarousel({
+					items : 7, //10 items above 1000px browser width
+					itemsDesktop : [1000,5], //5 items between 1000px and 901px
+					itemsDesktopSmall : [900,4], // betweem 900px and 601px
+					itemsTablet: [600,4], //2 items between 600 and 0
+					itemsMobile : [480,3], // itemsMobile disabled - inherit from itemsTablet option
+					pagination : false,
+					navigation: true,
+					rewindNav : false,
+					itemsScaleUp:false,
+					navigationText : false,
+					afterUpdate: function(){
+						var imgHeight = rwd_recently_viewed.find('img').height()/2;
+						var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+						rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
+						rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
+						rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
+						rwd_recently_viewed.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
+					},
+					afterInit:function(){
+						imagesLoaded( document.querySelector('#rwd-recently-viewed'), function( instance ) {
+							var imgHeight = rwd_recently_viewed.find('img').height()/2;
+							var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+							rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
+							rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
+							rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
+							rwd_recently_viewed.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
+						});
+					}
+				});
+
+				// Custom Navigation Events
+				var rwdRecentlyViewed = jQuery("#rwd-recently-viewed");
+				rwdRecentlyViewed.find(".next").click(function(){
+					rwd_recently_viewed.trigger('rwd.next');
+				});
+				rwdRecentlyViewed.find(".prev").click(function(){
+					rwd_recently_viewed.trigger('rwd.prev');
+				});
+			}
+		}
+
+	    jQuery(window).resize();
 		
-    },                               
+	},
 	
 	getFavPluralText: function(count, you){
 		var text = Mall.i18nValidation.__("people-polish-more-than-few");
