@@ -1,0 +1,73 @@
+<?php $helper = Mage::helper('zolagoadminhtml'); ?>
+<style>
+    .cms-block-help thead tr th {
+        font-size: 14px;
+    }
+    .cms-block-help tbody tr td {
+        padding-right: 20px;
+    }
+    .cms-block-help tbody tr td:first-child {
+        font-weight: bold;
+        font-style: italic;
+    }
+</style>
+<table class="cms-block-help">
+    <thead>
+    <tr>
+        <th><?php echo $helper->__('Identifier'); ?></th>
+        <th><?php echo $helper->__('Example'); ?></th>
+        <th><?php echo $helper->__('Description'); ?></th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr>
+        <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>sidebar-c{category_id}-wrapper</td>
+        <td>sidebar-c44-wrapper</td>
+        <td><?php echo $helper->__('Cms category menu (left sidebar)'); ?></td>
+    </tr>
+    <tr>
+        <td>sidebar-c{category_id}-v{vendor_id}-wrapper</td>
+        <td>sidebar-c44-v5-wrapper</td>
+        <td><?php echo $helper->__('Cms category menu for vendor (left sidebar)'); ?></td>
+    </tr>
+    <tr>
+        <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>top-bottom-header-desktop-v-{vendor_id}</td>
+        <td>top-bottom-header-desktop-v-5</td>
+        <td><?php echo $helper->__('Vendor main page header for the desktop'); ?></td>
+    </tr>
+    <tr>
+        <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>top-bottom-header-desktop-v-{vendor_id}</td>
+        <td>top-bottom-header-desktop-v-5</td>
+        <td><?php echo $helper->__('Vendor main page header for the desktop'); ?></td>
+    </tr>
+    <tr>
+        <td>top-bottom-header-mobile-v-{vendor_id}</td>
+        <td>top-bottom-header-mobile-v-5</td>
+        <td><?php echo $helper->__('Vendor main page header for the mobile'); ?></td>
+    </tr>
+    <tr>
+        <td colspan="3">&nbsp;</td>
+    </tr>
+
+    <tr>
+        <td>navigation-dropdown-c-{category_id}</td>
+        <td>navigation-dropdown-c-44</td>
+        <td><?php echo $helper->__('Dropdown navigation for the category'); ?></td>
+    </tr>
+    </tbody>
+</table>
