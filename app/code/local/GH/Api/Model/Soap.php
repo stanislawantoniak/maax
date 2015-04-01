@@ -4,7 +4,14 @@
  */
 class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
-
+    public function __construct() {
+        try {
+            Mage::register('GHAPI', true);
+        } catch(Exception $e) {
+            // Key already exist
+        }
+        return parent::__construct();
+    }
     /**
      * message list
      *
@@ -251,7 +258,8 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 $this->throwOrderInvalidStatusError(array($orderId));
             }
             $courierCode = $this->getCourierCode($courier);
-            
+
+            /** @var Zolago_Po_Helper_Shipment $manager */
             $manager = Mage::helper('zolagopo/shipment');
             $manager->setNumber($shipmentTrackingNumber);
             $manager->setCarrierData($courierCode,$courier);

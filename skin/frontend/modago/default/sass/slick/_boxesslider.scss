@@ -9,12 +9,15 @@
 		vertical-align: top;
 		float: none;
 		border: 1px solid #dbdbdb;
-		margin-bottom: 10px;
-		&:nth-child(odd) {
-			margin-right: 10px;
-		}
-		&:nth-last-child(1),&:nth-last-child(2) {
-			margin-bottom: 0;
+		margin: 0 5px 2px 0;
+		&.mobile {
+			margin-bottom: 10px;
+			&:nth-child(odd) {
+				margin-right: 10px;
+			}
+			&:nth-last-child(1), &:nth-last-child(2) {
+				margin-bottom: 0;
+			}
 		}
 		.boxesSlideIn {
 			background-repeat: no-repeat;
@@ -26,9 +29,6 @@
 	&.boxesSliderHasArrows {
 		padding-left: 40px;
 		padding-right: 40px;
-		.boxesSlide {
-			margin: 0 5px 2px 0 !important;
-		}
 		.boxesArrow {
 			display: block;
 			color: $color-gray1;

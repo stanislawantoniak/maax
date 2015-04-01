@@ -4,36 +4,7 @@ class Orba_Common_Ajax_ProductController extends Orba_Common_Controller_Ajax {
     
     const GET_ONE_EXPIRE_TIME = 900;
     const GET_MANY_EXPIRE_TIME = 900;
-    
-	/*
-	 * Get recently viewed
-	 */
-	public function get_recently_viewedAction(){
-		
-		$products = Mage::getSingleton('Mage_Reports_Block_Product_Viewed')->getItemsCollection();
-		
-		$content = array();
-		if($products->count() > 0){
-			
-			foreach($products as $product){
-				/* @var $product Zolago_Catalog_Model_Product */
-                $image = Mage::helper("zolago_image")
-                    ->init($product, 'small_image')
-                    ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
-                    ->adaptiveResize(200,312);
-				$content[] = array(
-					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName() , 'name'),
-					'image_url' => (string) $image,
-					'redirect_url' => $product->getNoVendorContextUrl()				
-				);
-				
-			}
-		}
-		
-		$result = $this->_formatSuccessContentForResponse($content);
-		$this->_setSuccessResponse($result);
-	} 
-	
+
     /*
      * Gets data of one product and set it to response body in JSON format. Available params:
      * - product_id (required if sku left blank)
