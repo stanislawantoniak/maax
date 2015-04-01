@@ -13,7 +13,7 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
      */
     public function getCategoryRequestPath($category, $parentPath)
     {
-        //Mage::log($parentPath, null, 'seoZolago.log');
+        Mage::log($parentPath, null, 'seoZolago.log');
         $storeId = $category->getStoreId();
         $idPath  = $this->generatePath('id', null, $category);
         $suffix  = $this->getCategoryUrlSuffix($storeId);
@@ -37,10 +37,13 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
         elseif ($parentPath == '/') {
             $parentPath = '';
         }
-//        $parentPath = Mage::helper('catalog/category')->getCategoryUrlPath($parentPath,
-//            true, $category->getStoreId());
-        $parentPath = '';
+        $parentPath = Mage::helper('catalog/category')->getCategoryUrlPath($parentPath,
+            true, $category->getStoreId());
+        $enabled = Mage::getStoreConfig('activo_categoryurlseo/global/enabled');
 
+        if ($enabled) {
+            $parentPath = '';
+        }
         $requestPath = $parentPath . $urlKey . $categoryUrlSuffix;
         if (isset($existingRequestPath) && $existingRequestPath == $requestPath . $suffix) {
             return $existingRequestPath;
