@@ -112,6 +112,9 @@
             <ghapi_messages>
                 <ghapi_message_batch_size>100</ghapi_message_batch_size>
             </ghapi_messages>
+            <ghapi_general>
+                <ghapi_token_session_time>60</ghapi_token_session_time>
+            </ghapi_general>
         </ghapi_options>
     </default>
 </config>

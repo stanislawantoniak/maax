@@ -34,6 +34,8 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @return GH_Api_Model_Message
 	 */
 	public function addMessage($po,$message) {
+	    if(Mage::registry('GHAPI')) return false ;	    // message not added from gh_api
+	    
         if(!$this->validateMessage($message)) {
 			return false;
 		} elseif(!$this->isNoticeMessageActive($po->getVendor(), $message)) {
