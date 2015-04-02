@@ -36,7 +36,7 @@
                 	<external_id>
                         <label>External id (Converters)</label>
                         <type>text</type>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info_moved</fieldset>
                         <position>0</position>
                     </external_id>
 				</fields>

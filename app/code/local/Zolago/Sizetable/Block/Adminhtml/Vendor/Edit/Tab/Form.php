@@ -223,8 +223,10 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
                 $fieldsets['fields'][$code] = $field;
             }
         }
-        foreach ($fieldsets['fields'] as $code => $val) {
-            $fieldset->addField($code, $val['type'], $val['params']);
+
+        $this->_addElementTypes($fieldset);
+        foreach ($fieldsets['fields'] as $k1=>$v1) {
+            $fieldset->addField($k1, $v1['type'], $v1['params']);
         }
 
         $countries = Mage::getModel('adminhtml/system_config_source_country')
