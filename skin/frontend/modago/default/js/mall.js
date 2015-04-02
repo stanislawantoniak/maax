@@ -1055,7 +1055,7 @@ Mall.Scrolltop = {
 		}
 	},
 	hide: function() {
-		Mall.Scrolltop.scrollTop.removeClass('show');
+		Mall.Scrolltop.scrollTop.removeClass('show').trigger('mouseleave mouseout');
 	},
 	hopToTop: function() {
 		var _ = Mall.Scrolltop;
