@@ -167,6 +167,7 @@ Mall.listing = {
 
 		// filters delegation - better performance than initiation of each filter event on every ajax reload
 		this.delegateFilterEvents();
+        this.delegateSaveContextForProductPage();
 
 		this.initOnpopstateEvent();
 		this.initSortEvents();
@@ -709,8 +710,9 @@ Mall.listing = {
 		}).appendTo(container);
 
 		link = jQuery("<a/>", {
-			href: product.current_url
-		}).appendTo(box);
+			href: product.current_url,
+            "data-entity" : product.entity_id
+        }).appendTo(box);
 
 		figure = jQuery("<figure/>", {
 			"class": "img_product"
@@ -2550,6 +2552,15 @@ Mall.listing = {
 		"use strict";
 		return container.find(".item").first().width();
 	},
+
+    delegateSaveContextForProductPage: function() {
+        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
+                e.preventDefault();
+                localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
+            }
+        });
+    },
 
 	/**
 	 *

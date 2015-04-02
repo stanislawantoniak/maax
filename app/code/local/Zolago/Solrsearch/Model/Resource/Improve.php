@@ -697,15 +697,14 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 
 	/**
 	 * @param Zolago_Solrsearch_Model_Catalog_Product_Collection $collection
-	 * @param type $storeId
-	 * @param type $customerGroupId
-	 * @return \Zolago_Solrsearch_Model_Resource_Improve
+	 * @param int $storeId
+	 * @param int $customerGroupId
+	 * @return Zolago_Solrsearch_Model_Resource_Improve
 	 */
 	public function loadAttributesDataForFrontend(
 			Zolago_Solrsearch_Model_Catalog_Product_Collection $collection, 
 			$storeId, $customerGroupId) {
-		
-		
+
 		$profiler = Mage::helper("zolagocommon/profiler");
 		$profiler->start();
 		
@@ -867,33 +866,33 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		
 		$mainUrls=$this->getReadConnection()->fetchPairs($select);
 
-		// Add category url
-		
-		$catUrls = array();
-		if($category && $category->getId()){
-			$select = $this->getReadConnection()->select();
-			$select->from(
-				array("url_cat"			=>	$this->getTable("core/url_rewrite")), 
-				array(
-					"product_id"			=> "url_cat.product_id", 
-					"cat_request_path"		=> "url_cat.request_path"
-				));
-			$select->where("url_cat.product_id IN (?)", $collection->getAllIds());
-			$select->where("url_cat.store_id=?", $storeId);
-			$select->where("url_cat.category_id=?",  $category->getId());
-			
-			$catUrls=$this->getReadConnection()->fetchPairs($select);
-		}
-		
 		foreach ($collection as $product){
 			$productUrl = null;
-			if(isset($catUrls[$product->getId()])){
-				$productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
-			}elseif(isset($mainUrls[$product->getId()])){
-				$productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
-			}else{
-				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
-			}
+			if(isset($mainUrls[$product->getId()])){
+                $productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
+			}elseif(empty($productUrl)){
+                // Add category url
+                $catUrls = array();
+                if($category && $category->getId()){
+                    $select = $this->getReadConnection()->select();
+                    $select->from(
+                        array("url_cat"			=>	$this->getTable("core/url_rewrite")),
+                        array(
+                            "product_id"			=> "url_cat.product_id",
+                            "cat_request_path"		=> "url_cat.request_path"
+                        ));
+                    $select->where("url_cat.product_id IN (?)", $collection->getAllIds());
+                    $select->where("url_cat.store_id=?", $storeId);
+                    $select->where("url_cat.category_id=?",  $category->getId());
+
+                    $catUrls=$this->getReadConnection()->fetchPairs($select);
+                }
+                if (isset($catUrls[$product->getId()])) {
+                    $productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
+                }else{
+                    $productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
+                }
+            }
 			$product->setCurrentUrl($productUrl);
 		}
 		

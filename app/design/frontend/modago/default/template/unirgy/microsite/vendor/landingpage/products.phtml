@@ -30,6 +30,7 @@ $_collection = $this->getCollection();
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($product->getName()); ?>
                                     </div>
+                                </a>
                                     <div class="price clearfix">
                                         <div class="col-price">
                                             <?php if ($product->getStrikeoutPrice() != $product->getFinalPrice()) : ?>
@@ -82,7 +83,7 @@ $_collection = $this->getCollection();
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
-                                </a>
+
                             </div>
                         </div>
                     <?php endforeach; ?>

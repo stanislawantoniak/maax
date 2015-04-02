@@ -8,21 +8,22 @@ $categories = $this->getMainCategoriesForSlidingMenu();
 ?>
 <?php if(count($categories) > 0) : ?>
     <li>
-        <a href="#" class="sb-toggle-submenu">
-            <?php echo $this->__('Kategorie'); ?>: <span class="sb-caret"></span>
+        <a class="sb-toggle-submenu">
+	        <img src="<?php echo $this->getSkinUrl("images/svg/categories.svg"); ?>" class="hamburger-ico ico-label"><?php echo $this->__('Categories'); ?>
         </a>
         <ul class="sb-submenu">
             <?php foreach ($categories as $cat) : ?>
             <li>
-                <a href="<?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '#' : $cat['url'] ?>" class="<?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'sb-toggle-submenu' : ''; ?>">
-                    <?php echo $this->escapeHtml($cat['name']); ?>
+                <a  <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '' : 'href="'.$cat['url'].'"' ?>
+                    <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'class="sb-toggle-submenu"' : ''; ?>>
+                    <span class="sb-submenu-title"><?php echo $this->escapeHtml($cat['name']); ?></span>
                 </a>
                 <?php if(isset($cat['has_dropdown']) && $cat['has_dropdown']) : ?>
                 <ul>
                     <?php foreach ($cat['has_dropdown'] as $child) : ?>
                     <li>
                         <a href="<?php echo $child['url']; ?>">
-                            <?php echo $this->escapeHtml($child['name']); ?>
+                            <span class="sb-subsubmenu-title"><?php echo $this->escapeHtml($child['name']); ?></span>
                         </a>
                     </li>
                     <?php endforeach; ?>

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.4.22</version>
+            <version>0.5</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
@@ -65,6 +65,14 @@
                 <popular_brands_count>16</popular_brands_count>
                 <popular_brands_config><![CDATA[{"8":2,"7":2,"6":2,"5":2,"4":2,"3":2,"2":2}]]></popular_brands_config>
             </popular_brands>
+	        <scrolltop>
+		        <active>1</active>
+		        <position_right>20</position_right>
+		        <position_bottom>20</position_bottom>
+		        <percent_appears>100</percent_appears>
+		        <show_on_scroll>1</show_on_scroll>
+		        <hide_after>2000</hide_after>
+	        </scrolltop>
         </design>
 
 	</default>
