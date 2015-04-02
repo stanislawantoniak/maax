@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_DropshipVacation>
+            <version>0.0.1</version>
+        </Zolago_DropshipVacation>
+    </modules>
+    <global>
+        <models>
+            <zolagoudvacation>
+                <class>Zolago_DropshipVacation_Model</class>
+            </zolagoudvacation>
+            <udvacation>
+                <rewrite>
+                    <observer>Zolago_DropshipVacation_Model_Observer</observer>
+                </rewrite>
+            </udvacation>
+        </models>
+    </global>
+    <adminhtml>
+        <events>
+            <zolago_adminhtml_vendor_edit_custom_prepare_form_fieldset_vendor_info>
+                <observers>
+                    <udvacation>
+                        <class>udvacation/observer</class>
+                        <method>zolago_adminhtml_vendor_edit_custom_prepare_form_fieldset_vendor_info</method>
+                    </udvacation>
+                </observers>
+            </zolago_adminhtml_vendor_edit_custom_prepare_form_fieldset_vendor_info>
+        </events>
+    </adminhtml>
+</config>

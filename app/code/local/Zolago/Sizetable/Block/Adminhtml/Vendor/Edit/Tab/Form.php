@@ -88,23 +88,6 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
             ));
         }
 
-        $fieldset->addField('carrier_code', 'select', array(
-            'name'      => 'carrier_code',
-            'label'     => $hlp->__('Preferred Carrier'),
-            'class'     => 'required-entry',
-            'required'  => true,
-            'options'   => Mage::getSingleton('udropship/source')->setPath('carriers')->toOptionHash(true),
-        ));
-
-        $fieldset->addField('use_rates_fallback', 'select', array(
-            'name'      => 'use_rates_fallback',
-            'label'     => $hlp->__('Use Rates Fallback Chain'),
-            'class'     => 'required-entry',
-            'required'  => true,
-            'options'   => Mage::getSingleton('udropship/source')->setPath('yesno')->toOptionHash(true),
-            'note'      => $hlp->__('Will try to find available estimate rate for dropship shipping methods in order <br>1. Estimate Carrier <br>2. Override Carrier <br>3. Default Carrier'),
-        ));
-
         $fieldset->addField('email', 'text', array(
             'name'      => 'email',
             'label'     => $hlp->__('Vendor Email'),
@@ -137,13 +120,6 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
             'label'     => $hlp->__('Vendor Fax'),
         ));
 
-        $templates = Mage::getSingleton('adminhtml/system_config_source_email_template')->toOptionArray();
-        $templates[0]['label'] = $hlp->__('Use Default Configuration');
-        $fieldset->addField('email_template', 'select', array(
-            'name'      => 'email_template',
-            'label'     => $hlp->__('Notification Template'),
-            'values'   => $templates,
-        ));
 
         $fieldset->addField('vendor_shipping', 'hidden', array(
             'name' => 'vendor_shipping',
