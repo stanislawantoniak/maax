@@ -43,7 +43,7 @@ class Zolago_Adminhtml_Block_Cms_Block_Edit_Form extends Mage_Adminhtml_Block_Cm
         ));
 
         $fieldset->addField('help_text', 'help_label', array(
-            'label'     => 'Help',
+            'label'     => Mage::helper('zolagoadminhtml')->__('Help'),
             'name'      => 'help_text',
             'readonly' => true,
             'content' => $this->getLayout()->createBlock(
