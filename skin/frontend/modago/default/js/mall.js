@@ -1025,9 +1025,10 @@ Mall.Scrolltop = {
 			currentScrollTop = jQuery(window).scrollTop(),
 			canShow = _.heightToShow <= jQuery(document).height();
 
+
 		if(!_.disabled && canShow) {
 			if (_.options.showOnScroll) {
-				if(!(currentScrollTop - _.lastScrollTop > 20)) {
+				if(currentScrollTop - _.lastScrollTop > 20) {
 					if (currentScrollTop < _.lastScrollTop && currentScrollTop != 0) {
 						_.show();
 						_.hideDelayed();
