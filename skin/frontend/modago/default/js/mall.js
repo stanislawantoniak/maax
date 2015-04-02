@@ -836,7 +836,9 @@ Mall.Slick = {
 			var _ = this;
 			_.slider = jQuery(_.sliderId);
 
-			if(!_.isSlick() && _.sliderAvailable() && !(Mall.isMobile() && _.slider.data('boxesMobileUnslick'))) {
+			_.mobileUnslick = _.slider.data('boxesMobileUnslick') ? true : false;
+
+			if(!_.isSlick() && _.sliderAvailable() && !(Mall.isMobile() && _.mobileUnslick)) {
 				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
 				if(_.slider.data('boxesMobileUnslick')) {
 					_.mobileUnslick = true;
@@ -873,7 +875,7 @@ Mall.Slick = {
 		},
 		getResponsiveBoxesAmount: function() {
 			var _ = this;
-			if(Mall.isMobile() && !_.slider.data('boxesMobileUnslick')) {
+			if(Mall.isMobile() && !_.mobileUnslick) {
 				var ww = Mall.windowWidth();
 				if(ww < Mall.Breakpoint.xs) {
 					return 1;
