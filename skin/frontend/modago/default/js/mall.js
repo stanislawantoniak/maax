@@ -854,12 +854,12 @@ Mall.Slick = {
 						_.options.responsive[1].settings.slidesToScroll =
 							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
 				}
-				_.attachEvents();
 				_.slider.slick(_.options);
 				_.resizeBoxes();
 			} else {
 				_.resizeBoxesUnslicked();
 			}
+			_.attachEvents();
 		},
 		getBoxesAmount: function() {
 			var _ = this;
