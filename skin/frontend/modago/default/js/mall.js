@@ -1011,6 +1011,13 @@ Mall.Scrolltop = {
 		var _ = this;
 		jQuery(window).on('scroll',Mall.Scrolltop.onScroll);
 		jQuery(window).on('resize',Mall.Scrolltop.setHeightToShow);
+		_.scrollTop
+			.on('touchstart mouseenter',function() {
+				_.scrollTop.addClass('hover');
+			})
+			.on('touchend mouseleave',function() {
+				_.scrollTop.removeClass('hover');
+			});
 		_.setHeightToShow();
 	},
 	onScroll: function() {
@@ -1020,14 +1027,12 @@ Mall.Scrolltop = {
 
 		if(!_.disabled && canShow) {
 			if (_.options.showOnScroll) {
-				if (currentScrollTop == 0) {
-					_.hide();
-				} else if (currentScrollTop < _.lastScrollTop) {
-					_.scrollTop.addClass('show');
+				if (currentScrollTop < _.lastScrollTop && currentScrollTop != 0) {
+					_.show();
 					_.hideDelayed();
 				} else {
 					clearTimeout(_.timeout);
-					_.scrollTop.removeClass('show');
+					_.hide();
 				}
 			} else {
 				if (currentScrollTop > _.heightToShow) {
@@ -1054,8 +1059,11 @@ Mall.Scrolltop = {
 			clearTimeout(_.timeout);
 		}
 	},
+	show: function() {
+		Mall.Scrolltop.scrollTop.addClass('show');
+	},
 	hide: function() {
-		Mall.Scrolltop.scrollTop.removeClass('show').trigger('mouseleave mouseout');
+		Mall.Scrolltop.scrollTop.removeClass('show hover');
 	},
 	hopToTop: function() {
 		var _ = Mall.Scrolltop;

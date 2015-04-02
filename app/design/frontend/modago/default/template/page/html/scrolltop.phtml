@@ -1,10 +1,10 @@
 <?php /** @var Zolago_Modago_Block_Page_Html_Scrolltop $this */ ?>
 <?php if($this->isActive()): ?>
 	<style>
-		#scrollTop {
+		#scrollTop.show {
 			right: <?php echo $this->getPositionRight(); ?>px;
 		}
-		#scrollTop.show {
+		#scrollTop {
 			bottom: <?php echo $this->getPositionBottom(); ?>px;
 		}
 	</style>
