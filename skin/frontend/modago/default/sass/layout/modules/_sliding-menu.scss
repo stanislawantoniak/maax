@@ -76,31 +76,32 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 	}
 	> header {
 		position:relative;
-		height:53px;
-		 @include max-screen($screen-sm-max) {
-		       height:41px;
-		    }
-		a:link,
-		a:visited {
+		height:57px;
+		a, a:visited {
 			display:block;
-			height:53px;
-			margin-left: 15px;
-			@include max-screen($screen-sm-max) {
-			      height:41px;
-			   }
-			i {
-				float: left;
-				margin-right: 15px;
-				
-			}
+			height:57px;
+			margin-left:15px;
 		}
 	}
 	.sb-slidebar-inner {
-		overflow-y: auto;
 		height: 100%;
+		padding-top: 57px;
+		margin-top: -57px;
 		nav {
-			padding-bottom: 30px;
+			height: 100%;
+			overflow-y: auto;
 		}
+	}
+	a {
+		cursor: pointer;
+	}
+	.hamburger-ico {
+		width: 20px;
+		height: 20px;
+		margin: 0 12px;
+	}
+	.sb-slidebar-inner > nav > ul.sb-menu > li > a.sb-toggle-submenu {
+		background-image: none;
 	}
 }
 
@@ -254,22 +255,15 @@ display: inline-block;
 }
 .sb-menu  li li {
 	}
-
-.sb-menu > li > a {
-	padding-left: 18px;
-}
 .sb-menu > li > ul > li > a {
-	margin-left:18px;
-	padding-left: 18px;
+	padding-left: 36px;
 }
 .sb-menu > li > ul > li:first-child > a {
 	border-top:none;
 }
 .sb-menu > li > ul > li > ul > li > a {
-	margin-left:39px;
-	padding-left: 18px;
-}
-.sb-menu > li > ul > li > ul > li:first-child > a {
+	padding-left: 54px;
+	font-size: 15px;
 }
 
 .sb-menu li a.sb-submenu-active + ul{

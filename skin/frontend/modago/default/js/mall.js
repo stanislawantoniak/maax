@@ -107,13 +107,14 @@ var Mall = {
     },
 
     getAccountInfo: function() {
+	    var recentlyViewed = jQuery('#rwd-recently-viewed');
         jQuery.ajax({
             cache: false,
             dataType: "json",
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
 				"category_id": Mall.reg.get("varnish_category_id"),
-	            "recently_viewed": jQuery('#rwd-recently-viewed').find('.rwd-carousel').length ? 1 : 0
+	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -834,9 +835,11 @@ Mall.Slick = {
 		mobileUnslick: false,
 		init: function() {
 			var _ = this;
+			_.slider = jQuery(_.sliderId);
 
-			if(_.slider === false && _.sliderAvailable()) {
-				_.slider = jQuery(_.sliderId);
+			_.mobileUnslick = _.slider.data('boxesMobileUnslick') ? true : false;
+
+			if(!_.isSlick() && _.sliderAvailable() && !(Mall.isMobile() && _.mobileUnslick)) {
 				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
 				if(_.slider.data('boxesMobileUnslick')) {
 					_.mobileUnslick = true;
@@ -854,10 +857,12 @@ Mall.Slick = {
 						_.options.responsive[1].settings.slidesToScroll =
 							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
 				}
-				_.attachEvents();
 				_.slider.slick(_.options);
 				_.resizeBoxes();
+			} else {
+				_.resizeBoxesUnslicked();
 			}
+			_.attachEvents();
 		},
 		getBoxesAmount: function() {
 			var _ = this;
@@ -871,7 +876,7 @@ Mall.Slick = {
 		},
 		getResponsiveBoxesAmount: function() {
 			var _ = this;
-			if(Mall.isMobile()) {
+			if(Mall.isMobile() && !_.mobileUnslick) {
 				var ww = Mall.windowWidth();
 				if(ww < Mall.Breakpoint.xs) {
 					return 1;
