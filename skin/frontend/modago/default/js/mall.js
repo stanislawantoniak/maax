@@ -835,7 +835,7 @@ Mall.Slick = {
 		init: function() {
 			var _ = this;
 
-			if(_.slider === false && _.sliderAvailable() && !(Mall.isMobile() && _.slider.data('boxesMobileUnslick'))) {
+			if(_.slider === false && _.sliderAvailable() && !(Mall.isMobile() && jQuery(_.sliderId).data('boxesMobileUnslick'))) {
 				_.slider = jQuery(_.sliderId);
 				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
 				if(_.slider.data('boxesMobileUnslick')) {
