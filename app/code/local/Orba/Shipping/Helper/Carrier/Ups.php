@@ -131,7 +131,8 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
             $repeatIn = 1;
         }
         $repeatIn = $repeatIn*60*60;
-        return date('Y-m-d H:i:s', time()+$repeatIn);
+        $time = Mage::getSingleton('core/date')->timestamp();
+        return date('Y-m-d H:i:s', $time+$repeatIn);
     }
 
     public function getUpsFileDir()
