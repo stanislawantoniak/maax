@@ -871,7 +871,7 @@ Mall.Slick = {
 		},
 		getResponsiveBoxesAmount: function() {
 			var _ = this;
-			if(Mall.isMobile()) {
+			if(Mall.isMobile() && !_.slider.data('boxesMobileUnslick')) {
 				var ww = Mall.windowWidth();
 				if(ww < Mall.Breakpoint.xs) {
 					return 1;
