@@ -13,6 +13,7 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
     protected function _prepareForm()
     {
         $vendor = Mage::registry('vendor_data');
+        $vendorData = $vendor->getData();
         $hlp = Mage::helper('udropship');
         $id = $this->getRequest()->getParam('id');
         $form = new Varien_Data_Form();
@@ -166,6 +167,66 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
             'label'     => $hlp->__('URL friendly identifier'),
         ));
 */
+
+        // Moved fields to this tab from tab preferences
+
+        $this->setDefaultMaxShippingDaysTimeNote();
+        // Filtering fields belong to vendor_info_moved
+        foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
+            if ($node->is('disabled')) {
+                continue;
+            }elseif(isset($node->fieldset) && $node->fieldset == 'vendor_info_moved') {
+
+                $type = $node->type ? (string)$node->type : 'text';
+                $field = array(
+                    'position' => (float)$node->position,
+                    'type' => $type,
+                    'params' => array(
+                        'name' => $node->name ? (string)$node->name : $code,
+                        'class' => (string)$node->class,
+                        'label' => $hlp->__((string)$node->label),
+                        'note' => $hlp->__((string)$node->note),
+                        'field_config' => $node
+                    ),
+                );
+                if ($node->name && (string)$node->name != $code && !isset($vendorData[$code])) {
+                    $vendorData[$code] = isset($vendorData[(string)$node->name]) ? $vendorData[(string)$node->name] : '';
+                }
+                if ($node->frontend_model) {
+                    $field['type'] = $code;
+                    $this->addAdditionalElementType($code, $node->frontend_model);
+                }
+                switch ($type) {
+                    case 'statement_po_type':
+                    case 'payout_po_status_type':
+                    case 'notify_lowstock':
+                    case 'select':
+                    case 'multiselect':
+                    case 'checkboxes':
+                    case 'radios':
+                        $source = Mage::getSingleton($node->source_model ? (string)$node->source_model : 'udropship/source');
+                        if (is_callable(array($source, 'setPath'))) {
+                            $source->setPath($node->source ? (string)$node->source : $code);
+                        }
+                        if (in_array($type, array('multiselect', 'checkboxes', 'radios')) || !is_callable(array($source, 'toOptionHash'))) {
+                            $field['params']['values'] = $source->toOptionArray();
+                        } else {
+                            $field['params']['options'] = $source->toOptionHash();
+                        }
+                        break;
+                    case 'date': case 'datetime':
+                    $field['params']['image'] = $this->getSkinUrl('images/grid-cal.gif');
+                    $field['params']['input_format'] = Varien_Date::DATE_INTERNAL_FORMAT;
+                    $field['params']['format'] = Varien_Date::DATE_INTERNAL_FORMAT;
+                    break;
+                }
+                $fieldsets['fields'][$code] = $field;
+            }
+        }
+        foreach ($fieldsets['fields'] as $code => $val) {
+            $fieldset->addField($code, $val['type'], $val['params']);
+        }
+
         $countries = Mage::getModel('adminhtml/system_config_source_country')
             ->toOptionArray();
         //unset($countries[0]);
@@ -350,6 +411,7 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
                 $vendor->setSendConfirmationEmail(!Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation'));
             }
             $form->setValues($vendor->getData());
+            $form->setValues($vendorData);
         }
 
         if (!$id) {
@@ -360,4 +422,45 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
         return parent::_prepareForm();
     }
 
+    protected function setDefaultMaxShippingDaysTimeNote() {
+        $hlp = Mage::helper('udropship');
+
+        $children = Mage::getConfig()->getNode('global/udropship/vendor/fields')->children();
+        foreach ($children as $code=>$node) {
+            $note = $hlp->__((string)$node->note);
+            if($code == 'max_shipping_days'){
+                $maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days');
+                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', $note . sprintf(" (Default value is: %u )", $maxShippingDays));
+            }
+            elseif($code == 'max_shipping_time'){
+                $maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time');
+                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', $note . sprintf(" (Default value is: %s)", str_replace(',', ':', $maxShippingTime)));
+            }
+        }
+    }
+
+    protected $_additionalElementTypes = null;
+    protected function _initAdditionalElementTypes()
+    {
+        if (is_null($this->_additionalElementTypes)) {
+            $this->_additionalElementTypes = array(
+                'wysiwyg' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_wysiwyg'),
+                'statement_po_type' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_statementPoType'),
+                'payout_po_status_type' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_PayoutPoStatusType'),
+                'notify_lowstock' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_notifyLowstock'),
+            );
+        }
+        return $this;
+    }
+    protected function _getAdditionalElementTypes()
+    {
+        $this->_initAdditionalElementTypes();
+        return $this->_additionalElementTypes;
+    }
+    public function addAdditionalElementType($code, $class)
+    {
+        $this->_initAdditionalElementTypes();
+        $this->_additionalElementTypes[$code] = Mage::getConfig()->getBlockClassName($class);
+        return $this;
+    }
 }

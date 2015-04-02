@@ -104,6 +104,11 @@
                         <legend>RMA Settings</legend>
                         <position>180</position>
                     </rma>
+                    <vendor_info_moved>
+                        <legend>Vendor Info</legend>
+                        <position>200</position>
+                        <hidden>true</hidden>
+                    </vendor_info_moved>
                 </fieldsets>
 
                 <fields>
