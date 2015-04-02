@@ -107,13 +107,14 @@ var Mall = {
     },
 
     getAccountInfo: function() {
+	    var recentlyViewed = jQuery('#rwd-recently-viewed');
         jQuery.ajax({
             cache: false,
             dataType: "json",
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
 				"category_id": Mall.reg.get("varnish_category_id"),
-	            "recently_viewed": jQuery('#rwd-recently-viewed').find('.rwd-carousel').length ? 1 : 0
+	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
