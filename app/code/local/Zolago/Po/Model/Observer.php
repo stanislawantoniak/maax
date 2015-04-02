@@ -446,7 +446,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                 )
             )
         );
-        $time = Mage:getSingleton('core/date')->timestamp();
+        $time = Mage::getSingleton('core/date')->timestamp();
         $order_collection->addFieldToFilter("updated_at",array("lt"=>date('Y-m-d H:i:s',$time-24*3600)));
         $cancel = array();
         foreach ($order_collection as $order) {            
