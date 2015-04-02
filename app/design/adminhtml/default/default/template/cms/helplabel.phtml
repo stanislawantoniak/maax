@@ -3,8 +3,14 @@
     .cms-block-help thead tr th {
         font-size: 14px;
     }
+    .cms-block-help tbody tr td.category {
+        color: #eb5e00;
+    }
     .cms-block-help tbody tr td {
         padding-right: 20px;
+    }
+    .cms-block-help tbody tr td:first-child:not(.category) {
+        padding-left: 10px;
     }
     .cms-block-help tbody tr td:first-child {
         font-weight: bold;
@@ -26,8 +32,39 @@
     </tr>
     </tfoot>
     <tbody>
+
     <tr>
-        <td colspan="3">&nbsp;</td>
+        <td class="category"><?php echo $helper->__('Main menu'); ?></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>navigation-dropdown-c-{category_id}</td>
+        <td>navigation-dropdown-c-44</td>
+        <td><?php echo $helper->__('Dropdown navigation for the category'); ?></td>
+    </tr>
+
+    <tr>
+        <td class="category"><?php echo $helper->__('Header'); ?></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>top-bottom-header-desktop-v-{vendor_id}</td>
+        <td>top-bottom-header-desktop-v-5</td>
+        <td><?php echo $helper->__('Vendor main page header for the desktop'); ?></td>
+    </tr>
+    <tr>
+        <td>top-bottom-header-mobile-v-{vendor_id}</td>
+        <td>top-bottom-header-mobile-v-5</td>
+        <td><?php echo $helper->__('Vendor main page header for the mobile'); ?></td>
+    </tr>
+
+
+    <tr>
+        <td class="category"><?php echo $helper->__('Left menu'); ?></td>
+        <td></td>
+        <td></td>
     </tr>
     <tr>
         <td>sidebar-c{category_id}-wrapper</td>
@@ -40,34 +77,11 @@
         <td><?php echo $helper->__('Cms category menu for vendor (left sidebar)'); ?></td>
     </tr>
     <tr>
-        <td colspan="3">&nbsp;</td>
-    </tr>
-    <tr>
-        <td>top-bottom-header-desktop-v-{vendor_id}</td>
-        <td>top-bottom-header-desktop-v-5</td>
-        <td><?php echo $helper->__('Vendor main page header for the desktop'); ?></td>
-    </tr>
-    <tr>
-        <td colspan="3">&nbsp;</td>
-    </tr>
-    <tr>
-        <td>top-bottom-header-desktop-v-{vendor_id}</td>
-        <td>top-bottom-header-desktop-v-5</td>
-        <td><?php echo $helper->__('Vendor main page header for the desktop'); ?></td>
-    </tr>
-    <tr>
-        <td>top-bottom-header-mobile-v-{vendor_id}</td>
-        <td>top-bottom-header-mobile-v-5</td>
-        <td><?php echo $helper->__('Vendor main page header for the mobile'); ?></td>
-    </tr>
-    <tr>
-        <td colspan="3">&nbsp;</td>
+        <td>category-navigation-desktop-v-{vendor_id}</td>
+        <td>category-navigation-desktop-v-5</td>
+        <td><?php echo $helper->__('Vendor main page left menu'); ?></td>
     </tr>
 
-    <tr>
-        <td>navigation-dropdown-c-{category_id}</td>
-        <td>navigation-dropdown-c-44</td>
-        <td><?php echo $helper->__('Dropdown navigation for the category'); ?></td>
-    </tr>
+
     </tbody>
 </table>

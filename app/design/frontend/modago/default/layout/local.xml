@@ -386,7 +386,7 @@
 		</reference>
 
 		<reference name="checkout.cart">
-			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+			<!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
 			<block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml">
 				<block type="cms/block" name="checkout.cart.tos" as="tos">
 					<action method="setBlockId">
@@ -513,8 +513,9 @@
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list" />
                 <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
                 <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
-	            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+	            <!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
             </block>
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
 
 	</solrbridge_solrsearch_category_view>
@@ -586,12 +587,8 @@
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
                 </block>
             </block>
-
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
-
-
-
-
     </solrsearch_index_index>
 
 	<_udprod_product_configurable>
@@ -732,6 +729,7 @@
 				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
                 <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 			</block>
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
 
 		</reference>
 	</umicrosite_index_landingpage>
@@ -1242,8 +1240,11 @@
 					<label>Log out</label>
 				</action>
             </block>
-        </reference>
 
+        </reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
 	</customer_account_index>
 
     <customer_account_privacy translate="label">
@@ -1276,6 +1277,9 @@
         <reference name="my.account.wrapper">
             <block type="zolagocustomer/privacy" name="customer_privacy" template="zolagocustomer/privacy.phtml" />
         </reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
     </customer_account_privacy>
 	
 	<zolago_modago_customer_handle>
@@ -1299,6 +1303,9 @@
 				</crumbInfo>
 			</action>
 		</reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
 	</customer_account_edit>
 
 	<customer_account_password>
@@ -1316,6 +1323,9 @@
 		<reference name="my.account.wrapper">
 			<block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml"/>
 		</reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
 	</customer_account_password>
 
 	<customer_account_login>
@@ -1384,6 +1394,9 @@
 				</block>
 			</block>
 		</reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
 	</sales_order_history>
 	
 	<sales_order_process>
@@ -1423,6 +1436,9 @@
 				<block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
 			</block>
 		</reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
 	</sales_order_process>
 	
 	<sales_order_view>
@@ -1571,6 +1587,9 @@
 				</crumbInfo>
 			</action>
 		</reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
 	</sales_rma_history>
 
 	<sales_po_rmalist>
@@ -1711,7 +1730,6 @@
     </help_contact_gallery>
 
     <newsletter_manage_index>
-
         <reference name="breadcrumbs">
             <action method="addCrumb">
                 <crumbName>newsletter</crumbName>
@@ -1731,6 +1749,9 @@
                     <!--<block_id>notification-settings-sms</block_id>-->
                 <!--</action>-->
             </block>
+        </reference>
+        <reference name="content">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </newsletter_manage_index>
 
@@ -1779,7 +1800,7 @@
                     <block type="wishlist/customer_wishlist_button" name="customer.wishlist.button.update" template="wishlist/button/update.phtml" />
                 </block>
             </block>
-
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
 
 
