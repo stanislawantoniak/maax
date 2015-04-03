@@ -171,11 +171,24 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
         // Moved fields to this tab from tab preferences
 
         $this->setDefaultMaxShippingDaysTimeNote();
+
+        $fieldsets = array();
+        foreach (Mage::getConfig()->getNode('global/udropship/vendor/fieldsets')->children() as $code => $node) {
+            if ( $code == 'marketing' || $code == 'vendor_info_moved') {
+                $fieldsets[$code] = array(
+                    'position' => (int)$node->position,
+                    'params' => array(
+                        'legend' => $hlp->__((string)$node->legend),
+                    ),
+                );
+            }
+        }
+
         // Filtering fields belong to vendor_info_moved
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
             if ($node->is('disabled')) {
                 continue;
-            }elseif(isset($node->fieldset) && $node->fieldset == 'vendor_info_moved') {
+            }elseif(isset($node->fieldset) && ($node->fieldset == 'vendor_info_moved' || $node->fieldset == 'marketing')) {
 
                 $type = $node->type ? (string)$node->type : 'text';
                 $field = array(
@@ -220,13 +233,25 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
                     $field['params']['format'] = Varien_Date::DATE_INTERNAL_FORMAT;
                     break;
                 }
-                $fieldsets['fields'][$code] = $field;
+                $fieldsets[(string)$node->fieldset]['fields'][$code] = $field;
             }
         }
 
         $this->_addElementTypes($fieldset);
-        foreach ($fieldsets['fields'] as $k1=>$v1) {
+        foreach ($fieldsets['vendor_info_moved']['fields'] as $k1=>$v1) {
             $fieldset->addField($k1, $v1['type'], $v1['params']);
+        }
+        unset($fieldsets['vendor_info_moved']);
+
+        foreach ($fieldsets as $k=>$v) {
+            if (empty($v['fields'])) {
+                continue;
+            }
+            $fieldset = $form->addFieldset($k, $v['params']);
+            $this->_addElementTypes($fieldset);
+            foreach ($v['fields'] as $k1=>$v1) {
+                $fieldset->addField($k1, $v1['type'], $v1['params']);
+            }
         }
 
         $countries = Mage::getModel('adminhtml/system_config_source_country')

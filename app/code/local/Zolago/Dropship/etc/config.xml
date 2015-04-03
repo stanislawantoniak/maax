@@ -119,6 +119,12 @@
                     <new_order_notifications>
                         <fieldset>vendor_info_moved</fieldset>
                     </new_order_notifications>
+                    <url_key>
+                        <fieldset>vendor_info_moved</fieldset>
+                    </url_key>
+                    <logo>
+                        <fieldset>vendor_info_moved</fieldset>
+                    </logo>
 
                     <sale_commission_percent>
                         <label>SALE Commission Percentage</label>
@@ -155,7 +161,7 @@
                         <label>Sequence</label>
                         <note>Vendor on main page in customized sequence</note>
                         <type>text</type>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info_moved</fieldset>
                         <position>3</position>
                     </sequence>
                     <vendor_type_label>
@@ -451,7 +457,7 @@
                 	<review_status>
                         <label>Product Review Status</label>
                         <type>select</type>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info_moved</fieldset>
 						<source_model>zolagodropship/source_review</source_model>
                         <position>800</position>
                     </review_status>					
@@ -460,7 +466,7 @@
                         <label>Label store</label>
                         <type>select</type>
 						<source_model>zolagodropship/source_store</source_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info_moved</fieldset>
 						<only_admin>1</only_admin>
                         <position>500</position>
                     </label_store>
@@ -468,7 +474,7 @@
 					<root_category>
                         <label>Root categories</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info_moved</fieldset>
 						<only_admin>1</only_admin>
                         <position>600</position>
                     </root_category>
@@ -476,7 +482,7 @@
 					<custom_design>
                         <label>Custom design</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info_moved</fieldset>
 						<only_admin>1</only_admin>
                         <position>700</position>
                     </custom_design>
@@ -570,5 +576,15 @@
 				</Zolago_Dropship>
 			</modules>
 		</translate>
+        <events>
+            <udropship_adminhtml_vendor_tabs_after>
+                <observers>
+                    <zolagodropship>
+                        <class>zolagodropship/observer</class>
+                        <method>udropship_adminhtml_vendor_tabs_after</method>
+                    </zolagodropship>
+                </observers>
+            </udropship_adminhtml_vendor_tabs_after>
+        </events>
 	</adminhtml>
 </config>

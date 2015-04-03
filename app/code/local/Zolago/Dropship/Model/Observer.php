@@ -57,4 +57,31 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
 
 		return $this;
 	}
+
+    public function udropship_adminhtml_vendor_tabs_after($observer) {
+
+        $block = $observer->getEvent()->getBlock();
+        $id    = $observer->getEvent()->getId();
+        $v     = Mage::helper('udropship')->getVendor($id);
+
+        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs
+            || !Mage::app()->getRequest()->getParam('id', 0)
+        ) {
+            return;
+        }
+
+        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+            $addressBlock = Mage::app()
+                ->getLayout()
+                ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_address', 'vendor.address')
+                ->setVendorId($v)
+                ->toHtml();
+
+            $block->addTab('address', array(
+                'label'     => Mage::helper('udropship')->__('Address'),
+                'after'     => 'form_section',
+                'content'	=> $addressBlock
+            ));
+        }
+    }
 }
