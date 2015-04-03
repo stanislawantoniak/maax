@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Couriers extends Mage_Adminhtml_Block_Widget_Form
+class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Couriers extends Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences
 {
     public function __construct()
     {
@@ -106,31 +106,6 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Couriers extends Mage_Admi
         $form->setValues($vendor->getData());
         $form->setValues($vendorData);
 
-        return parent::_prepareForm();
-    }
-
-    protected $_additionalElementTypes = null;
-    protected function _initAdditionalElementTypes()
-    {
-        if (is_null($this->_additionalElementTypes)) {
-            $this->_additionalElementTypes = array(
-                'wysiwyg' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_wysiwyg'),
-                'statement_po_type' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_statementPoType'),
-                'payout_po_status_type' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_PayoutPoStatusType'),
-                'notify_lowstock' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_notifyLowstock'),
-            );
-        }
-        return $this;
-    }
-    protected function _getAdditionalElementTypes()
-    {
-        $this->_initAdditionalElementTypes();
-        return $this->_additionalElementTypes;
-    }
-    public function addAdditionalElementType($code, $class)
-    {
-        $this->_initAdditionalElementTypes();
-        $this->_additionalElementTypes[$code] = Mage::getConfig()->getBlockClassName($class);
         return $this;
     }
 }

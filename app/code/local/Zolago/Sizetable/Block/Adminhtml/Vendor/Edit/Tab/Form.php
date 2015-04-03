@@ -2,7 +2,7 @@
 /**
  * new form fields for size table
  */
-class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences {
     public function __construct()
     {
         parent::__construct();
@@ -445,48 +445,22 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
             $bCountry->setValue($bCountryId);
         }
 
-        return parent::_prepareForm();
+        return $this;
     }
 
     protected function setDefaultMaxShippingDaysTimeNote() {
         $hlp = Mage::helper('udropship');
-
         $children = Mage::getConfig()->getNode('global/udropship/vendor/fields')->children();
         foreach ($children as $code=>$node) {
             $note = $hlp->__((string)$node->note);
             if($code == 'max_shipping_days'){
                 $maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days');
-                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', $note . sprintf(" (Default value is: %u )", $maxShippingDays));
+                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', sprintf($note, $maxShippingDays));
             }
             elseif($code == 'max_shipping_time'){
                 $maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time');
-                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', $note . sprintf(" (Default value is: %s)", str_replace(',', ':', $maxShippingTime)));
+                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', sprintf($note, str_replace(',', ':', $maxShippingTime)));
             }
         }
-    }
-
-    protected $_additionalElementTypes = null;
-    protected function _initAdditionalElementTypes()
-    {
-        if (is_null($this->_additionalElementTypes)) {
-            $this->_additionalElementTypes = array(
-                'wysiwyg' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_wysiwyg'),
-                'statement_po_type' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_statementPoType'),
-                'payout_po_status_type' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_PayoutPoStatusType'),
-                'notify_lowstock' => Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_notifyLowstock'),
-            );
-        }
-        return $this;
-    }
-    protected function _getAdditionalElementTypes()
-    {
-        $this->_initAdditionalElementTypes();
-        return $this->_additionalElementTypes;
-    }
-    public function addAdditionalElementType($code, $class)
-    {
-        $this->_initAdditionalElementTypes();
-        $this->_additionalElementTypes[$code] = Mage::getConfig()->getBlockClassName($class);
-        return $this;
     }
 }
