@@ -47,9 +47,10 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
     public function addToQueueProduct($id)
     {
         if (!empty($id)) {
+            $time = Mage::getSingleton('core/date')->timestamp();
             $this->getReadConnection()->insert(
                 $this->getTable('zolagocatalog/queue_configurable'),
-                array("insert_date" => date('Y-m-d H:i:s'), "status" => 0, "product_id" => $id)
+                array("insert_date" => date('Y-m-d H:i:s',$time), "status" => 0, "product_id" => $id)
             );
         }
         return $id;
@@ -69,9 +70,10 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
      */
     protected function _prepareData($productId)
     {
+        $time = Mage::getSingleton('core/date')->timestamp();
         $key = $this->_buildIndexKey($productId);
         $this->_dataToSave[$key] = array(
-            "insert_date" => date('Y-m-d H:i:s'),
+            "insert_date" => date('Y-m-d H:i:s',$time),
             "product_id" => $productId
         );
     }

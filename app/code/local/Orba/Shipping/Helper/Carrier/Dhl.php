@@ -179,7 +179,8 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             $repeatIn = 1;
         }
         $repeatIn = $repeatIn*60*60;
-        return date('Y-m-d H:i:s', time()+$repeatIn);
+        $time = Mage::getSingleton('core/date')->timestamp();
+        return date('Y-m-d H:i:s', $time+$repeatIn);
     }
 
     public function getDhlFileDir()
@@ -316,28 +317,6 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 return true;
             } else {
                 $ret = $this->_getDhlPostalService($zip,time());
-                /*
-                $dhlClient = Mage::getModel('orbashipping/carrier_client_dhl');
-                $login = $this->getDhlLogin();
-                $password = $this->getDhlPassword();
-                $dhlClient->setAuth($login, $password);
-                $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
-                if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
-                    $empty = new StdClass;
-                    $empty->domesticExpress9 = false;
-                    $empty->domesticExpress12 = false;
-                    $empty->deliveryEvening = false;
-                    $empty->deliverySaturday = false;
-                    $empty->exPickupFrom     = 'brak';
-                    $empty->exPickupTo       = 'brak';
-                    $empty->drPickupFrom     = 'brak';
-                    $empty->drPickupTo       = 'brak';
-                    if ($ret->getPostalCodeServicesResult == $empty) {
-                        $dhlValidZip = false;
-                    } else {
-                        $dhlValidZip = true;
-                    }
-                    */
                 if ($ret) {
                     $zipModel = Mage::getResourceModel('orbashipping/zip');
                     $zipModel->updateDhlZip($country, $zip);

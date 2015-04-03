@@ -145,7 +145,8 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 	protected function getExpirationTime() {
 		$cancel_time = Mage::getStoreConfig(self::DOTPAY_CANCEL_TIME_CONFIG_PATH);
-		return date('Y-m-d H:i:s', strtotime("-$cancel_time minutes"));
+		$time = strtotime("-$cancel_time minutes");
+		return date('Y-m-d H:i:s', Mage::getSingleton('core/date')->timestamp($time));
 	}
 
 	public function getDotpayTransactionsToUpdate() {
