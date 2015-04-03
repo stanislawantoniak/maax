@@ -228,7 +228,8 @@ var Mall = {
         jQuery("#header input[name=q]").val(this.getQueryText());
 		
 		// Process product context 
-
+        console.log(data);
+        console.log(likeBoxes.length);
 		var likeBoxes = jQuery("#product-likeboxes");
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
@@ -285,7 +286,7 @@ var Mall = {
 					append(boxAdded).
 					append(boxLoading);
 		}
-console.log(data);
+
 		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
 			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
 			if ( rwd_recently_viewed.length !=0 ) {
