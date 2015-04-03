@@ -450,9 +450,8 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml">
-
-                   </block>
+            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml"></block>
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </zolagomodago_brands_index>
 
