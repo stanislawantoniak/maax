@@ -230,8 +230,7 @@ var Mall = {
 		// Process product context 
 
 		var likeBoxes = jQuery("#product-likeboxes");
-        console.log(data.content.recentlyViewed);
-        console.log(likeBoxes.length);
+
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
 				likeText, boxAdded, boxNotAdded, boxLoading;
