@@ -48,25 +48,13 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences extends Unirgy
             ) {
                 continue;
             }
-            $type = $node->type ? (string)$node->type : 'text';
-            $field = array(
-                'position' => (float)$node->position,
-                'type' => $type,
-                'params' => array(
-                    'name' => $node->name ? (string)$node->name : $code,
-                    'class' => (string)$node->class,
-                    'label' => $hlp->__((string)$node->label),
-                    'note' => $hlp->__((string)$node->note),
-                    'field_config' => $node
-                ),
-            );
+            $field = $this->doField($node, $code);
+            $type = $field['type'];
+
             if ($node->name && (string)$node->name != $code && !isset($vendorData[$code])) {
                 $vendorData[$code] = isset($vendorData[(string)$node->name]) ? $vendorData[(string)$node->name] : '';
             }
-            if ($node->frontend_model) {
-                $field['type'] = $code;
-                $this->addAdditionalElementType($code, $node->frontend_model);
-            }
+
             switch ($type) {
                 case 'statement_po_type': case 'payout_po_status_type': case 'notify_lowstock':
                 case 'select': case 'multiselect': case 'checkboxes': case 'radios':
@@ -106,5 +94,51 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences extends Unirgy
         $form->setValues($vendorData);
 
         return $this;
+    }
+
+    public function doField($node, $code) {
+        $hlp = Mage::helper('udropship');
+        $field = array(
+            'position' => (float)$node->position,
+            'type' => $node->type ? (string)$node->type : 'text',
+            'params' => array(
+                'name' => $node->name ? (string)$node->name : $code,
+                'class' => (string)$node->class,
+                'label' => $hlp->__((string)$node->label),
+                'note' => $hlp->__((string)$node->note),
+                'field_config' => $node
+            ),
+        );
+        if ($node->frontend_model) {
+            $field['type'] = $code;
+            $this->addAdditionalElementType($code, $node->frontend_model);
+        }
+        return $field;
+    }
+
+    public function doFieldsets($filters = array()) {
+
+        $hlp = Mage::helper('udropship');
+        $fieldsets = array();
+
+        foreach (Mage::getConfig()->getNode('global/udropship/vendor/fieldsets')->children() as $code => $node) {
+            if ($node->modules && !$hlp->isModulesActive((string)$node->modules)
+                || $node->hide_modules && $hlp->isModulesActive((string)$node->hide_modules)
+                || $node->is('hidden')
+            ) {
+                continue;
+            }
+            if (in_array($code, $filters)) {
+                continue;
+            }
+
+            $fieldsets[$code] = array(
+                'position' => (int)$node->position,
+                'params' => array(
+                    'legend' => $hlp->__((string)$node->legend),
+                ),
+            );
+        }
+        return $fieldsets;
     }
 }

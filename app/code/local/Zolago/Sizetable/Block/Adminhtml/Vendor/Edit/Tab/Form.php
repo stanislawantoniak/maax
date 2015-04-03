@@ -2,7 +2,7 @@
 /**
  * new form fields for size table
  */
-class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences {
+class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences {
     public function __construct()
     {
         parent::__construct();

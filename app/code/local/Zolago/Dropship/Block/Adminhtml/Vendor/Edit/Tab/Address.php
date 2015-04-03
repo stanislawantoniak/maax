@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences
+class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences
 {
     public function __construct()
     {
@@ -36,25 +36,13 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Unirgy_Dro
                 continue;
             }elseif(isset($node->fieldset) && ($node->fieldset == 'vendor_preferences')) {
 
-                $type = $node->type ? (string)$node->type : 'text';
-                $field = array(
-                    'position' => (float)$node->position,
-                    'type' => $type,
-                    'params' => array(
-                        'name' => $node->name ? (string)$node->name : $code,
-                        'class' => (string)$node->class,
-                        'label' => $hlp->__((string)$node->label),
-                        'note' => $hlp->__((string)$node->note),
-                        'field_config' => $node
-                    ),
-                );
+                $field = $this->doField($node, $code);
+                $type = $field['type'];
+
                 if ($node->name && (string)$node->name != $code && !isset($vendorData[$code])) {
                     $vendorData[$code] = isset($vendorData[(string)$node->name]) ? $vendorData[(string)$node->name] : '';
                 }
-                if ($node->frontend_model) {
-                    $field['type'] = $code;
-                    $this->addAdditionalElementType($code, $node->frontend_model);
-                }
+
                 switch ($type) {
                     case 'statement_po_type':
                     case 'payout_po_status_type':
