@@ -228,8 +228,7 @@ var Mall = {
         jQuery("#header input[name=q]").val(this.getQueryText());
 		
 		// Process product context 
-        console.log(data);
-        console.log(likeBoxes.length);
+
 		var likeBoxes = jQuery("#product-likeboxes");
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
