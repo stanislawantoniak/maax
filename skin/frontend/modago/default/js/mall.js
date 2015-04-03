@@ -285,7 +285,7 @@ var Mall = {
 					append(boxAdded).
 					append(boxLoading);
 		}
-console.log(data.content.recentlyViewed);
+console.log(data);
 		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
 			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
 			if ( rwd_recently_viewed.length !=0 ) {
