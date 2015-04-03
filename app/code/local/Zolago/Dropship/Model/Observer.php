@@ -82,6 +82,20 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
                 'after'     => 'form_section',
                 'content'	=> $addressBlock
             ));
+
+            $couriersBlock = Mage::app()
+                ->getLayout()
+                ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_couriers', 'vendor.couriers')
+                ->setVendorId($v)
+                ->toHtml();
+
+            $block->addTab('couriers', array(
+                'label'     => Mage::helper('udropship')->__('Couriers'),
+                'after'     => 'form_section',
+                'content'	=> $couriersBlock
+            ));
+
+
         }
     }
 }

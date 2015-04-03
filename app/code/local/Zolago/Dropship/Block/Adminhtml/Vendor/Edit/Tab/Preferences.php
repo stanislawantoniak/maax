@@ -33,7 +33,11 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences extends Unirgy
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
             if ($node->fieldset == 'vendor_info_moved' ||
                 $node->fieldset == 'marketing' ||
-                $node->fieldset == 'vendor_preferences') {
+                $node->fieldset == 'vendor_preferences' ||
+                $node->fieldset == 'dhl' ||
+                $node->fieldset == 'orbaups' ||
+                $node->fieldset == 'rma'
+                ) {
                 continue;
             }
             if (empty($fieldsets[(string)$node->fieldset]) || $node->is('disabled')) {

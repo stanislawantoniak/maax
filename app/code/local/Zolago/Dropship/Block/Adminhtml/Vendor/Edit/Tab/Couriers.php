@@ -1,11 +1,11 @@
 <?php
 
-class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Mage_Adminhtml_Block_Widget_Form
+class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Couriers extends Mage_Adminhtml_Block_Widget_Form
 {
     public function __construct()
     {
         parent::__construct();
-        $this->setDestElementId('vendor_address');
+        $this->setDestElementId('vendor_couriers');
     }
 
     protected function _prepareForm()
@@ -20,7 +20,11 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Mage_Admin
 
         $fieldsets = array();
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fieldsets')->children() as $code => $node) {
-            if ( $code == 'vendor_preferences') {
+            if (
+                $code == 'dhl' ||
+                $code == 'orbaups' ||
+                $code == 'rma'
+            ) {
                 $fieldsets[$code] = array(
                     'position' => (int)$node->position,
                     'params' => array(
@@ -34,7 +38,11 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Mage_Admin
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
             if ($node->is('disabled')) {
                 continue;
-            }elseif(isset($node->fieldset) && ($node->fieldset == 'vendor_preferences')) {
+            }elseif(isset($node->fieldset) && (
+                    $node->fieldset == 'dhl' ||
+                    $node->fieldset == 'orbaups' ||
+                    $node->fieldset == 'rma'
+                )) {
 
                 $type = $node->type ? (string)$node->type : 'text';
                 $field = array(
@@ -83,14 +91,12 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Mage_Admin
             }
         }
 
-        uasort($fieldsets, array($hlp, 'usortByPosition'));
         foreach ($fieldsets as $k=>$v) {
             if (empty($v['fields'])) {
                 continue;
             }
             $fieldset = $form->addFieldset($k, $v['params']);
             $this->_addElementTypes($fieldset);
-            uasort($v['fields'], array($hlp, 'usortByPosition'));
             foreach ($v['fields'] as $k1=>$v1) {
                 $fieldset->addField($k1, $v1['type'], $v1['params']);
             }

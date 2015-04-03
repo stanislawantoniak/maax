@@ -7,7 +7,6 @@ class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminht
     {
         parent::__construct();
         $this->setDestElementId('vendor_form');
-        //$this->setTemplate('udropship/vendor/form.phtml');
     }
 
     protected function _prepareForm()
