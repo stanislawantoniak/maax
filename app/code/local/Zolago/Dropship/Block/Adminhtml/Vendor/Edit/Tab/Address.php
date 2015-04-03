@@ -18,55 +18,22 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Address extends Zolago_Dro
 
         $vendorData = $vendor->getData();
 
-        $fieldsets = array();
-        foreach (Mage::getConfig()->getNode('global/udropship/vendor/fieldsets')->children() as $code => $node) {
-            if ( $code == 'vendor_preferences') {
-                $fieldsets[$code] = array(
-                    'position' => (int)$node->position,
-                    'params' => array(
-                        'legend' => $hlp->__((string)$node->legend),
-                    ),
-                );
-            }
-        }
+        $filtersFieldsets = array('vendor_preferences');
+        $fieldsets = $this->doFieldsets($filtersFieldsets);
 
         // Filtering fields belong to vendor_info_moved
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
             if ($node->is('disabled')) {
                 continue;
-            }elseif(isset($node->fieldset) && ($node->fieldset == 'vendor_preferences')) {
+            }elseif(isset($node->fieldset) && in_array($node->fieldset, $filtersFieldsets)) {
 
                 $field = $this->doField($node, $code);
-                $type = $field['type'];
 
                 if ($node->name && (string)$node->name != $code && !isset($vendorData[$code])) {
                     $vendorData[$code] = isset($vendorData[(string)$node->name]) ? $vendorData[(string)$node->name] : '';
                 }
 
-                switch ($type) {
-                    case 'statement_po_type':
-                    case 'payout_po_status_type':
-                    case 'notify_lowstock':
-                    case 'select':
-                    case 'multiselect':
-                    case 'checkboxes':
-                    case 'radios':
-                        $source = Mage::getSingleton($node->source_model ? (string)$node->source_model : 'udropship/source');
-                        if (is_callable(array($source, 'setPath'))) {
-                            $source->setPath($node->source ? (string)$node->source : $code);
-                        }
-                        if (in_array($type, array('multiselect', 'checkboxes', 'radios')) || !is_callable(array($source, 'toOptionHash'))) {
-                            $field['params']['values'] = $source->toOptionArray();
-                        } else {
-                            $field['params']['options'] = $source->toOptionHash();
-                        }
-                        break;
-                    case 'date': case 'datetime':
-                    $field['params']['image'] = $this->getSkinUrl('images/grid-cal.gif');
-                    $field['params']['input_format'] = Varien_Date::DATE_INTERNAL_FORMAT;
-                    $field['params']['format'] = Varien_Date::DATE_INTERNAL_FORMAT;
-                    break;
-                }
+                $field = $this->processType($field, $node, $code);
                 $fieldsets[(string)$node->fieldset]['fields'][$code] = $field;
             }
         }

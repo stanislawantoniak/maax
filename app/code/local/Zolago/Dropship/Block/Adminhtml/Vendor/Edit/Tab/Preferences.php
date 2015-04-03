@@ -14,30 +14,11 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences extends Unirgy
         }
         $vendorData = $vendor->getData();
 
-        $fieldsets = array();
-        foreach (Mage::getConfig()->getNode('global/udropship/vendor/fieldsets')->children() as $code => $node) {
-            if ($node->modules && !$hlp->isModulesActive((string)$node->modules)
-                || $node->hide_modules && $hlp->isModulesActive((string)$node->hide_modules)
-                || $node->is('hidden')
-            ) {
-                continue;
-            }
-            $fieldsets[$code] = array(
-                'position' => (int)$node->position,
-                'params' => array(
-                    'legend' => $hlp->__((string)$node->legend),
-                ),
-            );
-        }
+        $dontShow = array('vendor_info_moved','marketing','vendor_preferences','dhl','orbaups','rma');
+        $fieldsets = $this->doFieldsets();
 
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
-            if ($node->fieldset == 'vendor_info_moved' ||
-                $node->fieldset == 'marketing' ||
-                $node->fieldset == 'vendor_preferences' ||
-                $node->fieldset == 'dhl' ||
-                $node->fieldset == 'orbaups' ||
-                $node->fieldset == 'rma'
-                ) {
+            if (in_array($node->fieldset, $dontShow)) {
                 continue;
             }
             if (empty($fieldsets[(string)$node->fieldset]) || $node->is('disabled')) {
@@ -49,32 +30,12 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences extends Unirgy
                 continue;
             }
             $field = $this->doField($node, $code);
-            $type = $field['type'];
 
             if ($node->name && (string)$node->name != $code && !isset($vendorData[$code])) {
                 $vendorData[$code] = isset($vendorData[(string)$node->name]) ? $vendorData[(string)$node->name] : '';
             }
 
-            switch ($type) {
-                case 'statement_po_type': case 'payout_po_status_type': case 'notify_lowstock':
-                case 'select': case 'multiselect': case 'checkboxes': case 'radios':
-                $source = Mage::getSingleton($node->source_model ? (string)$node->source_model : 'udropship/source');
-                if (is_callable(array($source, 'setPath'))) {
-                    $source->setPath($node->source ? (string)$node->source : $code);
-                }
-                if (in_array($type, array('multiselect', 'checkboxes', 'radios')) || !is_callable(array($source, 'toOptionHash'))) {
-                    $field['params']['values'] = $source->toOptionArray();
-                } else {
-                    $field['params']['options'] = $source->toOptionHash();
-                }
-                break;
-
-                case 'date': case 'datetime':
-                $field['params']['image'] = $this->getSkinUrl('images/grid-cal.gif');
-                $field['params']['input_format'] = Varien_Date::DATE_INTERNAL_FORMAT;
-                $field['params']['format'] = Varien_Date::DATE_INTERNAL_FORMAT;#Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-                break;
-            }
+            $field = $this->processType($field, $node, $code);
             $fieldsets[(string)$node->fieldset]['fields'][$code] = $field;
         }
 
@@ -128,17 +89,44 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences extends Unirgy
             ) {
                 continue;
             }
-            if (in_array($code, $filters)) {
-                continue;
+            if (in_array($code, $filters) || empty($filters)) {
+                $fieldsets[$code] = array(
+                    'position' => (int)$node->position,
+                    'params' => array(
+                        'legend' => $hlp->__((string)$node->legend),
+                    ),
+                );
             }
-
-            $fieldsets[$code] = array(
-                'position' => (int)$node->position,
-                'params' => array(
-                    'legend' => $hlp->__((string)$node->legend),
-                ),
-            );
         }
         return $fieldsets;
+    }
+
+    public function processType($field, $node, $code) {
+        $type = $field['type'];
+        switch ($type) {
+            case 'statement_po_type':
+            case 'payout_po_status_type':
+            case 'notify_lowstock':
+            case 'select':
+            case 'multiselect':
+            case 'checkboxes':
+            case 'radios':
+                $source = Mage::getSingleton($node->source_model ? (string)$node->source_model : 'udropship/source');
+                if (is_callable(array($source, 'setPath'))) {
+                    $source->setPath($node->source ? (string)$node->source : $code);
+                }
+                if (in_array($type, array('multiselect', 'checkboxes', 'radios')) || !is_callable(array($source, 'toOptionHash'))) {
+                    $field['params']['values'] = $source->toOptionArray();
+                } else {
+                    $field['params']['options'] = $source->toOptionHash();
+                }
+                break;
+            case 'date': case 'datetime':
+            $field['params']['image'] = $this->getSkinUrl('images/grid-cal.gif');
+            $field['params']['input_format'] = Varien_Date::DATE_INTERNAL_FORMAT;
+            $field['params']['format'] = Varien_Date::DATE_INTERNAL_FORMAT;
+            break;
+        }
+        return $field;
     }
 }
