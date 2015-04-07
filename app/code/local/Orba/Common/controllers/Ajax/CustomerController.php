@@ -81,7 +81,18 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 
 	    if($this->getRequest()->getParam('recently_viewed')) {
-		    $recentlyViewedProducts = Mage::getSingleton('Mage_Reports_Block_Product_Viewed')->getItemsCollection();
+            /** @var Mage_Reports_Block_Product_Viewed $singleton */
+            $singleton = Mage::getSingleton('Mage_Reports_Block_Product_Viewed');
+
+            // By persistent
+            /* @var $persistentHelper Mage_Persistent_Helper_Session */
+            $persistentHelper = Mage::helper('persistent/session');
+
+            if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
+                $customerId = $persistentHelper->getSession()->getCustomerId();
+                $singleton->setCustomerId($customerId);
+            }
+		    $recentlyViewedProducts = $singleton->getItemsCollection();
 
 		    $recentlyViewedContent = array();
 		    if ($recentlyViewedProducts->count() > 0) {
