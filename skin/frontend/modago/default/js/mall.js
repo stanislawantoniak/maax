@@ -1137,8 +1137,8 @@ Mall.product = {
             jQuery('#breadcrumbs ol').append(productHtml);
 
             // Update context path back to category for mobile
-            jQuery('.path_back_to_category a').attr('href', this._path_back_to_category_link);
-            jQuery('.path_back_to_category a').html("<i class='fa fa-angle-left'></i>" + this._path_back_to_category_text);
+            jQuery('.path_back_to_category #pbtc_link').attr('href', this._path_back_to_category_link);
+            jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>" + this._path_back_to_category_text);
         }
     },
 
