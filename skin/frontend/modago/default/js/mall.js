@@ -1028,10 +1028,10 @@ Mall.Scrolltop = {
 
 		if(!_.disabled && canShow) {
 			if (_.options.showOnScroll) {
-				if (currentScrollTop < _.lastScrollTop && currentScrollTop != 0) {
+				if (currentScrollTop < _.lastScrollTop && currentScrollTop != 0 && currentScrollTop > _.heightToShow) {
 					_.show();
 					_.hideDelayed();
-				} else if(currentScrollTop - _.lastScrollTop > 20) {
+				} else if(currentScrollTop - _.lastScrollTop > 20 || currentScrollTop < _.heightToShow) {
 					clearTimeout(_.timeout);
 					_.hide();
 				}
