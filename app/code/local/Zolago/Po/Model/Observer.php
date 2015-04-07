@@ -150,7 +150,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	 * @param Mage_Core_Model_Observer $observer
 	 */
 	public function poChangeStatus($observer) {
-        Mage::log('poChangeStatus', null, 'reservation.log');
 		/* @var $po Zolago_Po_Model_Po */
 		$po = $observer->getEvent()->getData('po');
 		if($po instanceof Zolago_Po_Model_Po && $po->getId()){
@@ -183,7 +182,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	}
 
     public function updatePoStatusByAllocation($observer){
-        Mage::log('updatePoStatusByAllocation', null, 'reservation.log');
         /* @var $po Zolago_Po_Model_Po */
         $po = $observer->getEvent()->getData('po');
         if(!$po->getId()) {
@@ -437,7 +435,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
      * cancel orders with all po canceled
      */
     public function cronCancelOrders() {
-        Mage::log('cronCancelOrders', null, 'reservation.log');
         $order_collection = Mage::getModel('sales/order')->getCollection(); 
         $order_collection->addFieldToFilter('state',	
             array('in'=>array (
@@ -532,9 +529,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 
         //Mage::log($ghapiAccess, null, 'setReservation.log');
         if(($oldStatus !== $newStatus) && ($ghapiAccess == 0)){
-            Mage::log($newStatus, null, 'setReservation.log');
+            //Mage::log($newStatus, null, 'setReservation.log');
             $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
-            Mage::log($poOpenOrder, null, 'setReservation.log');
+            //Mage::log($poOpenOrder, null, 'setReservation.log');
 
             if(in_array($newStatus, explode(',', $poOpenOrder))){
                 //set reservation=1
@@ -545,7 +542,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                 $po->setReservation(0);
                 $po->getResource()->saveAttribute($po, 'reservation');
             }
-            Mage::log('----------------', null, 'setReservation.log');
+            //Mage::log('----------------', null, 'setReservation.log');
         }
     }
     /**
