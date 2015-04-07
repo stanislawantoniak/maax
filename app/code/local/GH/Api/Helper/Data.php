@@ -14,10 +14,11 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @param int|null $timestamp
 	 * @return bool|string
 	 */
-	public function getDate($timestamp=null) {
-        $timestamp = is_null($timestamp) ? time() : $timestamp;
+    public function getDate($timestamp=null) {
+        $time = Mage::getSingleton('core/date')->timestamp();
+        $timestamp = is_null($timestamp) ? $time : $timestamp;
         return date('Y-m-d H:i:s',$timestamp);
-	}
+    }
 
     /**
      * @param $date

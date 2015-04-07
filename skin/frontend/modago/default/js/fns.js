@@ -996,42 +996,39 @@ jQuery.noConflict();
 			prevH = $(window).height();
 		});
 
-		$('#header').on('click', '.toggleMenu', function(event) {
+		$('.toggleMenu').click(function(event) {
 			event.preventDefault(); var screenWidth = $(window).width();
 			var screenHeight = $(window).height();
 			var docHeight = $(window).innerHeight();
 			$('body').toggleClass('sb-open noscroll');
 			$('#sb-site').toggleClass('open');
-			$('.sb-slidebar').toggleClass('sb-active');
+			$('.sb-slidebar').toggleClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
 			$('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
-			if(Mall.listing != undefined) {
+			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
 			}
 		});
 
-		$('.sb-slidebar').on('click', '.closeSlidebar', function(event) {
+		$('.closeSlidebar').click(function(event) {
 			event.preventDefault();
 			$('body').removeClass('sb-open noscroll');
 			$('#sb-site').removeClass('open');
-			$('.sb-slidebar').removeClass('sb-active');
+			$('.sb-slidebar').removeClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
 			$('body').find('.noscroll').remove();
-			if(Mall.listing != undefined) {
+			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
 			}
 		});
 
 		 $(document).mouseup(function(e) {
-			var container = $(".sb-slidebar");
-			if(container.is(":visible")){
-
-				if (!container.is(e.target) && container.has(e.target).length === 0) {
-					$('#sb-site').removeClass('open');
-					$('.sb-slidebar').removeClass('sb-active');
-					$('body').removeClass('sb-open noscroll');
-					$('body').find('.noscroll').remove();
-					if(Mall.listing != undefined) {
-						Mall.listing.positionFilters();
-					}
+			var container = $("body > .sb-slidebar");
+			if(container.is(":visible") && !container.is(e.target) && container.has(e.target).length === 0){
+				$('#sb-site').removeClass('open');
+				$('.sb-slidebar').removeClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
+				$('body').removeClass('sb-open noscroll');
+				$('body').find('.noscroll').remove();
+				if(typeof Mall.listing != 'undefined') {
+					Mall.listing.positionFilters();
 				}
 			}
 		});

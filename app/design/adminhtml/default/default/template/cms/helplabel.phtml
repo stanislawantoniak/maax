@@ -4,10 +4,12 @@
         font-size: 14px;
     }
     .cms-block-help tbody tr td.category {
-        color: #ff8c00;
+        color: #eb5e00;
     }
-    .cms-block-help tbody tr td:not(.category) {
+    .cms-block-help tbody tr td {
         padding-right: 20px;
+    }
+    .cms-block-help tbody tr td:first-child:not(.category) {
         padding-left: 10px;
     }
     .cms-block-help tbody tr td:first-child {
@@ -32,7 +34,7 @@
     <tbody>
 
     <tr>
-        <td class="category">Main menu</td>
+        <td class="category"><?php echo $helper->__('Main menu'); ?></td>
         <td></td>
         <td></td>
     </tr>
@@ -43,7 +45,7 @@
     </tr>
 
     <tr>
-        <td class="category">Header</td>
+        <td class="category"><?php echo $helper->__('Header'); ?></td>
         <td></td>
         <td></td>
     </tr>
@@ -60,7 +62,7 @@
 
 
     <tr>
-        <td class="category">Left sidebar</td>
+        <td class="category"><?php echo $helper->__('Left menu'); ?></td>
         <td></td>
         <td></td>
     </tr>

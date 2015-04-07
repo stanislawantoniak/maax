@@ -107,13 +107,14 @@ var Mall = {
     },
 
     getAccountInfo: function() {
+	    var recentlyViewed = jQuery('#rwd-recently-viewed');
         jQuery.ajax({
             cache: false,
             dataType: "json",
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
 				"category_id": Mall.reg.get("varnish_category_id"),
-	            "recently_viewed": jQuery('#rwd-recently-viewed').find('.rwd-carousel').length ? 1 : 0
+	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -228,7 +229,9 @@ var Mall = {
 		
 		// Process product context 
 
+
 		var likeBoxes = jQuery("#product-likeboxes");
+
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
 				likeText, boxAdded, boxNotAdded, boxLoading;
@@ -834,9 +837,11 @@ Mall.Slick = {
 		mobileUnslick: false,
 		init: function() {
 			var _ = this;
+			_.slider = jQuery(_.sliderId);
 
-			if(_.slider === false && _.sliderAvailable()) {
-				_.slider = jQuery(_.sliderId);
+			_.mobileUnslick = _.slider.data('boxesMobileUnslick') ? true : false;
+
+			if(!_.isSlick() && _.sliderAvailable() && !(Mall.isMobile() && _.mobileUnslick)) {
 				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
 				if(_.slider.data('boxesMobileUnslick')) {
 					_.mobileUnslick = true;
@@ -854,10 +859,12 @@ Mall.Slick = {
 						_.options.responsive[1].settings.slidesToScroll =
 							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
 				}
-				_.attachEvents();
 				_.slider.slick(_.options);
 				_.resizeBoxes();
+			} else {
+				_.resizeBoxesUnslicked();
 			}
+			_.attachEvents();
 		},
 		getBoxesAmount: function() {
 			var _ = this;
@@ -871,7 +878,7 @@ Mall.Slick = {
 		},
 		getResponsiveBoxesAmount: function() {
 			var _ = this;
-			if(Mall.isMobile()) {
+			if(Mall.isMobile() && !_.mobileUnslick) {
 				var ww = Mall.windowWidth();
 				if(ww < Mall.Breakpoint.xs) {
 					return 1;
@@ -1006,6 +1013,13 @@ Mall.Scrolltop = {
 		var _ = this;
 		jQuery(window).on('scroll',Mall.Scrolltop.onScroll);
 		jQuery(window).on('resize',Mall.Scrolltop.setHeightToShow);
+		_.scrollTop
+			.on('touchstart mouseenter',function() {
+				_.scrollTop.addClass('hover');
+			})
+			.on('touchend mouseleave',function() {
+				_.scrollTop.removeClass('hover');
+			});
 		_.setHeightToShow();
 	},
 	onScroll: function() {
@@ -1013,16 +1027,15 @@ Mall.Scrolltop = {
 			currentScrollTop = jQuery(window).scrollTop(),
 			canShow = _.heightToShow <= jQuery(document).height();
 
+
 		if(!_.disabled && canShow) {
 			if (_.options.showOnScroll) {
-				if (currentScrollTop == 0) {
-					_.hide();
-				} else if (currentScrollTop < _.lastScrollTop) {
-					_.scrollTop.addClass('show');
+				if (currentScrollTop < _.lastScrollTop && currentScrollTop != 0 && currentScrollTop > _.heightToShow) {
+					_.show();
 					_.hideDelayed();
-				} else {
+				} else if(currentScrollTop - _.lastScrollTop > 20 || currentScrollTop < _.heightToShow) {
 					clearTimeout(_.timeout);
-					_.scrollTop.removeClass('show');
+					_.hide();
 				}
 			} else {
 				if (currentScrollTop > _.heightToShow) {
@@ -1049,8 +1062,11 @@ Mall.Scrolltop = {
 			clearTimeout(_.timeout);
 		}
 	},
+	show: function() {
+		Mall.Scrolltop.scrollTop.addClass('show');
+	},
 	hide: function() {
-		Mall.Scrolltop.scrollTop.removeClass('show');
+		Mall.Scrolltop.scrollTop.removeClass('show hover');
 	},
 	hopToTop: function() {
 		var _ = Mall.Scrolltop;
