@@ -87,6 +87,10 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		    if ($recentlyViewedProducts->count() > 0) {
 
 			    foreach ($recentlyViewedProducts as $product) {
+                    if ($product->getId() == $productId) {
+                        // Don't show in last viewed box current product
+                        continue;
+                    }
 				    /* @var $product Zolago_Catalog_Model_Product */
 				    $image = Mage::helper("zolago_image")
 					    ->init($product, 'small_image')
