@@ -42,7 +42,7 @@ $_collection = $this->getCollection();
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($product->getName()); ?>
                                     </div>
-                                </a>
+
                                     <div class="price clearfix">
                                         <div class="col-price">
                                             <?php if ($product->getStrikeoutPrice() != $product->getFinalPrice()) : ?>
@@ -95,7 +95,7 @@ $_collection = $this->getCollection();
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
-
+                                </a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -110,12 +110,15 @@ $_collection = $this->getCollection();
     <img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
 </div>
 <?php $noAjaxLink = $this->getNoAjaxLink(); ?>
+    <?php if($noAjaxLink): ?>
 <?php foreach ($noAjaxLink as $page => $link) : ?>
     <span class="addNewPositionListWrapper" style="width:35px"><a href="<?php echo $link ?>"><?php echo $page ?></a></span>
 <?php endforeach; ?>
+    <?php else: ?>
 <div class="addNewPositionListProductWrapper">
     <a href="#" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
 </div>
+    <?php endif; ?>
 
 <script type="text/javascript">
     Mall.listing.initImagesHeight();
