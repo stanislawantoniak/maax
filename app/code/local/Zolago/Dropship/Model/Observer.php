@@ -52,8 +52,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
 		if (in_array($carrierCode,array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
-				//$track->setNextCheck(date('Y-m-d H:i:s', $time));
-            $track->setNextCheck(date('Y-m-d H:i:s', time()));
+				$track->setNextCheck(date('Y-m-d H:i:s', $time));
 				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
 		}
 

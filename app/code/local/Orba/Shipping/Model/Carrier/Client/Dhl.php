@@ -389,8 +389,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     protected function _prepareShipmentTime() {
         $time = Mage::getModel('core/date')->timestamp(time());
         $message = new StdClass;        
-        //$message->shipmentDate = empty($this->_settings['shipmentDate'])? date('Y-m-d',$time+3600*24):date('Y-m-d',strtotime($this->_settings['shipmentDate']));
-        $message->shipmentDate = empty($this->_settings['shipmentDate'])? date('Y-m-d',time()+3600*24):date('Y-m-d',strtotime($this->_settings['shipmentDate']));
+        $message->shipmentDate = empty($this->_settings['shipmentDate'])? date('Y-m-d',$time+3600*24):date('Y-m-d',strtotime($this->_settings['shipmentDate']));
         $message->shipmentStartHour = empty($this->_settings['shipmentStartHour'])? '9:00':$this->_settings['shipmentStartHour'];
         $message->shipmentEndHour = empty($this->_settings['shipmentEndHour'])? '15:00':$this->_settings['shipmentEndHour'];
         return $message;
