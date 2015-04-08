@@ -716,6 +716,10 @@ Mall.Breakpoint = {
 	lg: 1200
 };
 
+Mall.isGoogleBot = function() {
+	return jQuery('body').hasClass('googlebot');
+}
+
 Mall.isMobile = function() {
 	return Mall.windowWidth() < Mall.Breakpoint.sm;
 };
