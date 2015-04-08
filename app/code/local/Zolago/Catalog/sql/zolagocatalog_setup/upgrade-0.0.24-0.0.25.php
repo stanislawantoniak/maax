@@ -12,7 +12,7 @@ $username = (string)$config->username;
 $host = (string)$config->host;
 
 $update = "GRANT SELECT ON {$pricessizesView} TO '{$username}'@'{$host}';";
-Mage::log($update);
+
 $installer->run($update);
 
 $installer->endSetup();
