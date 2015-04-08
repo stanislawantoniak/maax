@@ -194,12 +194,12 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
         if (empty($skus)) {
             return array();
         }
-        $po_open_order = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+//        $po_open_order = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
 
-        if (empty($po_open_order)) {
-            return array();
-        }
-        $poOpenOrder = explode(',', $po_open_order);
+//        if (empty($po_open_order)) {
+//            return array();
+//        }
+        //$poOpenOrder = explode(',', $po_open_order);
 
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
@@ -224,7 +224,8 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             ->where("po.udropship_vendor=?", (int)$merchant)
             ->where("po_item.parent_item_id IS NULL")
             ->where("po_item.sku IN(?)", $skus)
-            ->where("po.udropship_status IN (?)",$poOpenOrder)
+            //->where("po.udropship_status IN (?)",$poOpenOrder)
+            ->where("po.reservation=?",1)
             ->group('po_item.sku');
         Mage::log($select->__toString(), 0);
         $result = $adapter->fetchAssoc($select);

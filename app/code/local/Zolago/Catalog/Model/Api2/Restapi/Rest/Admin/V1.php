@@ -172,9 +172,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $productIdsSkuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
-        //2. calculate stock on open orders
+        //2. calculate stock on open orders (reservation)
+
+        /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
-        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS);
+        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS); //reservation
         //Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
 
 
