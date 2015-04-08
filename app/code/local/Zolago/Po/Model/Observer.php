@@ -520,7 +520,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             }
         }
     }
-    public function setReservationFlag($observer) {
+    public function setOrderReservation($observer) {
         $po = $observer->getPo();
         $oldStatus = $observer->getOldStatus();
         $newStatus = $observer->getNewStatus();

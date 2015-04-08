@@ -279,7 +279,7 @@
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>setReservationFlag</method>
+                        <method>setOrderReservation</method>
                     </zolagopo>
                 </observers>
             </udpo_po_status_save_after>
