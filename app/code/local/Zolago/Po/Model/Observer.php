@@ -520,7 +520,27 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             }
         }
     }
+    public function setOrderReservation($observer) {
+        $po = $observer->getPo();
+        $oldStatus = $observer->getOldStatus();
+        $newStatus = $observer->getNewStatus();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
+        if(($oldStatus !== $newStatus) && ($ghapiAccess == 0)){
+            $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+
+            if(in_array($newStatus, explode(',', $poOpenOrder))){
+                //set reservation=1
+                $po->setReservation(1);
+                $po->getResource()->saveAttribute($po, 'reservation');
+            } else {
+                //set reservation=0
+                $po->setReservation(0);
+                $po->getResource()->saveAttribute($po, 'reservation');
+            }
+        }
+    }
     /**
      * Adding messages ITEMS_CHANGED to GH_API queue
      *
