@@ -120,5 +120,15 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract extends Mage_Core_Block_T
 		return $this->__("N/A");
 	}
 	
-
+    public function getProductFlagText(Zolago_Po_Model_Po_Item $item) {
+        $flag = $item->getProduct()->getData('product_flag');
+        $hlp = Mage::helper('zolagopo');
+        if ($flag == Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE) {
+            return $hlp->__("(SALE)");
+        }
+        if ($flag == Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION) {
+            return $hlp->__("(PROMOTION)");
+        }
+        return "";
+    }
 }

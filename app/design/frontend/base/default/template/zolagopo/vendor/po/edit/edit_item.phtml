@@ -35,7 +35,7 @@
 							</div>
 							<div class="col-md-5">
 								<div class="after-filed-label text-muted">
-									<?php echo $_currency;?> (<?php echo '[dev]wyprzedaz/promocja'; ?>)
+									<?php echo $_currency;?> <span id="edititem-product_flag"></span>
 								</div>
 							</div>
 						</li>
@@ -64,12 +64,15 @@
 <script type="text/javascript">
 jQuery(function($){
 	var currency = '<?php echo $_currency;?>';
+    var FLAG_SALE = '<?php echo Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE; ?>';
+    var FLAG_PROMOTION = '<?php echo Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION; ?>';
 	var form = $("#edititem-item-form");
 	var name = $("#edititem-item_name");
 	var item = $("#edititem-item_id");
 	var price = $("#edititem-item_price");
 	var qty = $("#edititem-item_qty");
 	var discount = $("#edititem-item_discount");
+    var flag = $("#edititem-product_flag");
 	var timer = null;
 	
 	var validator = form.validate({
@@ -119,12 +122,13 @@ jQuery(function($){
 	$("#editItemModal").on("show.bs.modal", function(e){
 		
 		var data = $(e.relatedTarget).data();
-		
+
 		price.val(Zolago.round(data.itemPrice));
 		discount.val(Zolago.round(data.itemDiscount));
 		qty.val(Math.round(data.itemQty))
 		item.val(data.itemId);
 		name.text(data.itemName);
+        flag.html(data.itemFlag);
 		
 		validator.resetForm();
 		precentChange();
