@@ -25,9 +25,8 @@ $poOpenOrder = $readConnection->fetchOne($query);
 if (!$poOpenOrder){
     //get default data
     $configFile = Mage::getConfig()->getModuleDir('etc', 'Zolago_Catalog').DS.'config.xml';
-    $string = file_get_contents($configFile);
-    $xml = simplexml_load_string($string, 'Varien_Simplexml_Element');
-    $poOpenOrder = (string)$xml->default->zolagocatalog->config->po_open_order;
+    $xmlObj = new Varien_Simplexml_Config($configFile);
+    $xmlData = (string)$xmlObj->getNode('default/zolagocatalog/config/po_open_order');
 }
 
 if($poOpenOrder) {
