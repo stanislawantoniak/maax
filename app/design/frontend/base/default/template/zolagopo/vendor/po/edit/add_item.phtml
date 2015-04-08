@@ -53,6 +53,12 @@ $_currency = $_po->getOrder()->getOrderCurrencyCode();
 								</div>
 							</div>
 						</li>
+                        <li class="form-group product-specified">
+                            <label for="additem-product_link" class="col-md-3 control-label"><?php echo $_hlp->__('Link to') ?></label>
+                            <div class="col-md-9" style="padding-top: 7px;">
+                                <a href="" target="_blank" id="additem-product_link"></a>
+                            </div>
+                        </li>
 					</ul>
 				</div>
 				<div class="modal-footer">
@@ -71,6 +77,7 @@ jQuery(function($){
 	var skuLabel = '<?php echo $this->getSkuAttribute()->getStoreLabel();?>';
     var FLAG_SALE = '<?php echo Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE; ?>';
     var FLAG_PROMOTION = '<?php echo Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION; ?>';
+    var baseUrl = '<?php echo Mage::getBaseUrl(); ?>';
 	var formatResult = function(item) {
 		return item.name + "<br/><small class=\"text-muted\">"+
 				skuLabel + ": " + (item[skuCode]!=undefined ? item[skuCode] : "<?php echo $this->__("N/A");?>")  +  " &middot; "+
@@ -82,6 +89,7 @@ jQuery(function($){
 	var qty = $("#additem-product_qty");
 	var discount = $("#additem-product_discount");
     var flag = $("#additem-product_flag");
+    var link = $("#additem-product_link");
 	var timer = null;
 	
 	var validator = form.validate({
@@ -122,6 +130,7 @@ jQuery(function($){
 		if(val){
 			$("#addItemModal .product-specified").removeClass("hidden");
 			price.val(Zolago.round(item.price));
+            link.html(item.name).attr('href', baseUrl + item.url_path);
             var flagTxt = '';
             if (item.product_flag == FLAG_SALE) {
                 flagTxt = 'SALE'; //TODO: tlumaczenie
