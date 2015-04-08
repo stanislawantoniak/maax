@@ -478,7 +478,7 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
                 ->limit(50);
             $sIds = $conn->fetchCol($sIdsSel);
         }
-
+        Mage::log($sIds, null, 'tracking.log');
         if (!empty($sIds)) {
             $tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
                 ->addAttributeToSelect('*')
@@ -486,7 +486,7 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
                 ->addAttributeToFilter('parent_id', array('in'=>$sIds))
                 ->addAttributeToSort('parent_id')
             ;
-
+            Mage::log($tracks, null, 'tracking.log');
             try {
                 Mage::helper('udropship')->collectTracking($tracks);
             } catch (Exception $e) {
