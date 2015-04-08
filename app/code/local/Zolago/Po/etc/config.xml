@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.18</version>
+            <version>0.0.20</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -272,6 +272,14 @@
                     <zolagopo>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageCancelledOrChanged</method>
+                    </zolagopo>
+                </observers>
+            </udpo_po_status_save_after>
+            <udpo_po_status_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>setOrderReservation</method>
                     </zolagopo>
                 </observers>
             </udpo_po_status_save_after>

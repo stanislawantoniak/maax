@@ -81,12 +81,27 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 
 	    if($this->getRequest()->getParam('recently_viewed')) {
-		    $recentlyViewedProducts = Mage::getSingleton('Mage_Reports_Block_Product_Viewed')->getItemsCollection();
+            /** @var Mage_Reports_Block_Product_Viewed $singleton */
+            $singleton = Mage::getSingleton('Mage_Reports_Block_Product_Viewed');
+
+            // By persistent
+            /* @var $persistentHelper Mage_Persistent_Helper_Session */
+            $persistentHelper = Mage::helper('persistent/session');
+
+            if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
+                $customerId = $persistentHelper->getSession()->getCustomerId();
+                $singleton->setCustomerId($customerId);
+            }
+		    $recentlyViewedProducts = $singleton->getItemsCollection();
 
 		    $recentlyViewedContent = array();
 		    if ($recentlyViewedProducts->count() > 0) {
 
 			    foreach ($recentlyViewedProducts as $product) {
+                    if ($product->getId() == $productId) {
+                        // Don't show in last viewed box current product
+                        continue;
+                    }
 				    /* @var $product Zolago_Catalog_Model_Product */
 				    $image = Mage::helper("zolago_image")
 					    ->init($product, 'small_image')
@@ -103,6 +118,16 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			    $content['recentlyViewed'] = $recentlyViewedContent;
 		    }
 	    }
+
+        /*
+         * When Varnish ON we need to add info about last viewed product
+         * for event @see app/code/core/Mage/Reports/Model/Event/Observer.php
+         * line ~124 function catalogProductView
+         */
+        /* @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel("catalog/product");
+        $product->setId($productId);
+        Mage::dispatchEvent('catalog_controller_product_view', array('product' => $product));
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);
