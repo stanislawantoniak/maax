@@ -280,3 +280,12 @@ html.noscroll-filters {
 		left: 240px;
 	}
 }
+
+html.noscroll {
+	overflow: hidden;
+	height: 100%;
+	body {
+		overflow: hidden;
+		height: 100%;
+	}
+}
