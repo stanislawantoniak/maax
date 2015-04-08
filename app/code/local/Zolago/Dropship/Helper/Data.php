@@ -205,7 +205,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 					}
 					if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
 				} catch (Exception $e) {
-                    Mage::log('_processPollTrackingFailed',null,'status.log');
 					if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
 					$this->_processPollTrackingFailed($trackIds, $e);
 					continue;
