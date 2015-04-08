@@ -860,3 +860,16 @@ jQuery.validator.addMethod('priceSource', function(value, element) {
 	
 	return this.optional(element) || !isNaN(parseFloat(checkValue));
 }, jQuery.format("The converter price of product or one of child product is not available"));
+
+/*
+ * Validate price
+ * for example valid resutl when:
+ * 999.999 false
+ * 999.99  true
+ * 999.9   true
+ * 999.    false
+ * 999     true
+ */
+jQuery.validator.addMethod('priceTwoPositionPrecision', function(value, element) {
+    return this.optional(element) || /^[0-9]{1,10}(\.[0-9]{1,2})?$/.test(value);
+}, jQuery.format("Enter valid price"));

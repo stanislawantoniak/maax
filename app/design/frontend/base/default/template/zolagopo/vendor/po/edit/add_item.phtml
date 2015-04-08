@@ -1,7 +1,9 @@
-<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Additem  */?>
-<?php $_hlp = Mage::helper("zolagopo");?>
-<?php $_po =  $this->getPo();?>
-<?php $_currency = $_po->getOrder()->getOrderCurrencyCode();?>
+<?php
+/* @var $this Zolago_Po_Block_Vendor_Po_Edit_Additem  */
+$_hlp = Mage::helper("zolagopo");
+$_po  = $this->getPo();
+$_currency = $_po->getOrder()->getOrderCurrencyCode();
+?>
 <!-- Modal add letter-->
 <div class="modal fade" id="addItemModal">
 	<div class="modal-dialog">
@@ -31,18 +33,18 @@
 						<li class="form-group product-specified">
 							<label for="additem-product_price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control pricePositive required numeric"/> 
+								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control pricePositive required numeric priceTwoPositionPrecision"/>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-5">
 								<div class="after-filed-label text-muted">
-									<?php echo $_currency;?>
+									<?php echo $_currency;?> (<?php echo '[dev]wyprzedaz/promocja'; ?>)
 								</div>
 							</div>
 						</li>
 						<li class="form-group product-specified">
 							<label for="additem-product_discount" class="col-md-3 control-label"><?php echo $_hlp->__('Discount') ?></label>
 							<div class="col-md-4">
-								<input name="product_discount" id="additem-product_discount" type="text" value="" class="form-control pricePositive numeric"/> 
+								<input name="product_discount" id="additem-product_discount" type="text" value="" class="form-control pricePositive numeric priceTwoPositionPrecision"/>
 							</div>
 							<div class="col-md-4">
 								<div class="after-filed-label text-muted">
@@ -67,7 +69,8 @@ jQuery(function($){
 	var formatSelection = function(item) { return item.name; };
 	var skuCode = '<?php echo $this->getSkuAttribute()->getAttributeCode();?>';
 	var skuLabel = '<?php echo $this->getSkuAttribute()->getStoreLabel();?>';
-	var formatResult = function(item) { 
+	var formatResult = function(item) {
+        console.log(item);
 		return item.name + "<br/><small class=\"text-muted\">"+
 				skuLabel + ": " + (item[skuCode]!=undefined ? item[skuCode] : "<?php echo $this->__("N/A");?>")  +  " &middot; "+
 				"Price: " + parseFloat(item.price) + " " + currency + "</small>"
@@ -77,6 +80,7 @@ jQuery(function($){
 	var price = $("#additem-product_price");
 	var qty = $("#additem-product_qty");
 	var discount = $("#additem-product_discount");
+    var flag = $("#product_flag");
 	var timer = null;
 	
 	var validator = form.validate({
@@ -122,8 +126,8 @@ jQuery(function($){
 	});
 	
 	var precentChange= function(){
-		var value = parseFloat(discount.val());
-		var priceValue = parseFloat(price.val());
+		var value = parseFloat(Zolago.parseForFloatWithReplace(discount));
+		var priceValue = parseFloat(Zolago.parseForFloatWithReplace(price));
 		
 		if(isNaN(value) || value<0){
 			value=0;

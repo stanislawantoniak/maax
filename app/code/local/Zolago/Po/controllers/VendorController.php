@@ -451,6 +451,58 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     }
 
     /**
+     * Gets param price and parse
+     * If no set, default value taken
+     * Note: null to float is zero
+     *
+     * @param null $default
+     * @return float
+     */
+    protected function _getParamPrice($default = null) {
+        $val = str_replace(",",".",$this->getRequest()->getParam("product_price", $default));
+        return $this->_parseForFloat($val, $default);
+    }
+
+    /**
+     * Gets param qty and parse
+     * If no set, default value taken
+     *
+     * @param int $default
+     * @return int
+     */
+    protected function _getParamQty($default = 1) {
+        return (int)$this->getRequest()->getParam("product_qty", $default);
+    }
+
+    /**
+     * Gets param discount and parse
+     * If no set, default value taken
+     *
+     * @param int $default
+     * @return mixed
+     */
+    protected function _getParamDiscount($default = 0) {
+        $val = str_replace(",",".",$this->getRequest()->getParam("product_discount", $default));
+        return $this->_parseForFloat($val, $default);
+    }
+
+    /**
+     * Gets float value from string
+     * If security problem return float from default
+     *
+     * @param string $val
+     * @param $default
+     * @return float
+     */
+    protected function _parseForFloat($val, $default) {
+        if (substr_count($val, '.') < 2) {
+            // security, from front this value always should by in format like: 999.99
+            return floatval($val);
+        }
+        return floatval($default);
+    }
+
+    /**
      * @todo move it into model
      * @return void
      */
@@ -474,9 +526,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $item = $po->getItemById($itemId);
         /* @var $item Zolago_Po_Model_Po_Item */
 
-        $price = str_replace(",",".",$request->getParam("product_price"));
-        $qty = (int)$request->getParam("product_qty", 1);
-        $discount = str_replace(",",".",$request->getParam("product_discount", 0));
+        $price    = $this->_getParamPrice();
+        $qty      = $this->_getParamQty();
+        $discount = $this->_getParamDiscount();
 
         $product = Mage::getModel("catalog/product");//
 
@@ -619,9 +671,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         /** @var $product Mage_Catalog_Model_Product */
 
-        $price = $request->getParam("product_price");
-        $qty = $request->getParam("product_qty", 1);
-        $discount = $request->getParam("product_discount", 0);
+        $price    = $this->_getParamPrice();
+        $qty      = $this->_getParamQty();
+        $discount = $this->_getParamDiscount();
 
         if(empty($discount) || $discount<0) {
             $discount = 0;

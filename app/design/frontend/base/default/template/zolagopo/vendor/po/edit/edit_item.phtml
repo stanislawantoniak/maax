@@ -25,24 +25,24 @@
 						<li class="form-group">
 							<label for="edititem-item_qty" class="col-md-3 control-label"><?php echo $_hlp->__('Qty') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="product_qty" required="required" id="edititem-item_qty" type="text" value="1" min="1" class="form-control positiveInteger required"/> 
+								<input name="product_qty" required="required" id="edititem-item_qty" type="text" value="1" min="1" class="form-control positiveInteger required"/>
 							</div>
 						</li>
 						<li class="form-group">
 							<label for="edititem-item_price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="product_price" required="required" id="edititem-item_price" type="text" value="" class="form-control pricePositive required numeric"/> 
+								<input name="product_price" required="required" id="edititem-item_price" type="text" value="" class="form-control pricePositive required numeric priceTwoPositionPrecision"/>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-5">
 								<div class="after-filed-label text-muted">
-									<?php echo $_currency;?>
+									<?php echo $_currency;?> (<?php echo '[dev]wyprzedaz/promocja'; ?>)
 								</div>
 							</div>
 						</li>
 						<li class="form-group ">
 							<label for="edititem-item_discount" class="col-md-3 control-label"><?php echo $_hlp->__('Discount') ?></label>
 							<div class="col-md-4">
-								<input name="product_discount"  id="edititem-item_discount" type="text" value="" class="form-control pricePositive numeric"/> 
+								<input name="product_discount"  id="edititem-item_discount" type="text" value="" class="form-control pricePositive numeric priceTwoPositionPrecision"/>
 							</div>
 							<div class="col-md-4">
 								<div class="after-filed-label text-muted">
@@ -72,7 +72,6 @@ jQuery(function($){
 	var discount = $("#edititem-item_discount");
 	var timer = null;
 	
-	
 	var validator = form.validate({
 		rules: {
 			"product_discount":{
@@ -83,8 +82,8 @@ jQuery(function($){
 	
 	
 	var precentChange= function(){
-		var value = parseFloat(discount.val());
-		var priceValue = parseFloat(price.val());
+		var value = parseFloat(Zolago.parseForFloatWithReplace(discount));
+		var priceValue = parseFloat(Zolago.parseForFloatWithReplace(price));
 		
 		if(isNaN(value) || value<0){
 			value=0;
