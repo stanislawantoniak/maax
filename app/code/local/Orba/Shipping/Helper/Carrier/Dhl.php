@@ -360,6 +360,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $shipmentIdMessage = '';
         $shipment		= $track->getShipment();
         $oldStatus = $track->getUdropshipStatus();
+        Mage::log(property_exists($dhlResult, 'getTrackAndTraceInfoResult')
+            , null, 'tr.log');
+        Mage::log(
+            property_exists($dhlResult->getTrackAndTraceInfoResult, 'events')
+            , null, 'tr.log');
+        Mage::log(property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')
+            , null, 'tr.log');
         if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
             //Dhl Error Scenario
             Mage::helper('orbashipping/carrier_dhl')->_log(Mage::helper('zolagopo')->__('DHL Service Error: %s', $dhlResult['error']));
