@@ -29,13 +29,15 @@
             </udmspro>
         </helpers>
 		<udropship>
-		    <vendor>
+		    <address>
 		        <fieldsets>
 		            <vendor_preferences>
-		                <legend>Additional preferences</legend>
+		                <legend>Addresses</legend>
 		                <position>80</position>
 		            </vendor_preferences>
 		        </fieldsets>
+		    </address>
+		    <vendor>
 		        <fields>
 		            <company_name>
 		                <label>Company name</label>

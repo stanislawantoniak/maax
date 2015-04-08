@@ -67,8 +67,8 @@
 					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
-					<adminhtml_vendor_edit_tab_preferences>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences</adminhtml_vendor_edit_tab_preferences>
                     <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
+                    <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
                 </rewrite>
 			</udropship>
 		</blocks>
@@ -83,14 +83,10 @@
 					<module>Zolago_Dropship</module>
 				</setup>
 			</zolagodropship_setup>
-		</resources>
+		</resources>		    
 		<udropship>
-            <vendor>
-                <fieldsets>
-                    <marketing>
-                        <legend>Marketing content</legend>
-                        <position>120</position>
-                    </marketing>
+		    <courier>
+		        <fieldsets>
                     <dhl>
                         <legend>DHL</legend>
                         <position>140</position>
@@ -99,13 +95,26 @@
                         <legend>UPS</legend>
                         <position>160</position>
                     </orbaups>
-                    <rma>
+                    <orbarma>
                         <legend>RMA Settings</legend>
                         <position>180</position>
-                    </rma>
-                </fieldsets>
-
+                    </orbarma>
+		        </fieldsets>
+		    </courier>
+            <vendor>
                 <fields>
+                    <new_order_notifications>
+                        <fieldset>vendor_info</fieldset>
+                    </new_order_notifications>
+                    <notify_by_udpo_status>
+                        <fieldset>vendor_info</fieldset>
+                    </notify_by_udpo_status>
+                    <url_key>
+                        <fieldset>custom</fieldset>
+                    </url_key>
+                    <logo>
+                        <fieldset>custom</fieldset>
+                    </logo>
                     <sale_commission_percent>
                         <label>SALE Commission Percentage</label>
                         <fieldset>statement</fieldset>
@@ -118,7 +127,7 @@
                         <type>select</type>
 						<source_model>zolagodropship/source</source_model>
                         <source>allvendorswithempty</source>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <position>0</position>
                     </super_vendor_id>
                 	<vendor_type>
@@ -126,14 +135,14 @@
                         <type>select</type>
 						<source_model>zolagodropship/source</source_model>
                         <source>vendorstype</source>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_form</fieldset>
                         <position>0</position>
                     </vendor_type>
                     <can_ask>
                         <label>Customer can ask?</label>
                         <type>select</type>
                         <source>yesno</source>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <position>2</position>
                     </can_ask>
 
@@ -141,7 +150,7 @@
                         <label>Sequence</label>
                         <note>Vendor on main page in customized sequence</note>
                         <type>text</type>
-                        <fieldset>integration</fieldset>
+                        <fieldset>custom</fieldset>
                         <position>3</position>
                     </sequence>
                     <vendor_type_label>
@@ -374,7 +383,7 @@
                     <dhl_rma>
                         <label>Use another DHL account for RMA</label>
                         <type>select</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <source>yesno</source>
 						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
 						<depend_fields>
@@ -387,7 +396,7 @@
                     <orbaups_rma>
                         <label>Use another UPS account for RMA</label>
                         <type>select</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <source>yesno</source>
 						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
 						<depend_fields>
@@ -400,44 +409,44 @@
                 	<dhl_rma_account>
                         <label>Account number</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>15</position>
                     </dhl_rma_account>
                 	<dhl_rma_login>
                         <label>DHL login</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>20</position>
                     </dhl_rma_login>
                 	<dhl_rma_password>
                         <label>DHL password</label>
                         <type>password</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>30</position>
                     </dhl_rma_password>
                 	<orbaups_rma_account>
                         <label>License key</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>35</position>
                     </orbaups_rma_account>
                 	<orbaups_rma_login>
                         <label>UPS login</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>40</position>
                     </orbaups_rma_login>
                 	<orbaups_rma_password>
                         <label>UPS password</label>
                         <type>password</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>45</position>
                     </orbaups_rma_password>
 					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>
                         <type>select</type>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<source_model>zolagodropship/source_review</source_model>
                         <position>800</position>
                     </review_status>					
@@ -446,7 +455,7 @@
                         <label>Label store</label>
                         <type>select</type>
 						<source_model>zolagodropship/source_store</source_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<only_admin>1</only_admin>
                         <position>500</position>
                     </label_store>
@@ -454,7 +463,7 @@
 					<root_category>
                         <label>Root categories</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<only_admin>1</only_admin>
                         <position>600</position>
                     </root_category>
@@ -462,7 +471,7 @@
 					<custom_design>
                         <label>Custom design</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<only_admin>1</only_admin>
                         <position>700</position>
                     </custom_design>
@@ -470,6 +479,22 @@
 			</vendor>
 		</udropship>
 		<events>
+		    <udropship_adminhtml_vendor_edit_prepare_form>
+		        <observers>
+		            <zolagodropship>
+		                <class>zolagodropship/observer</class>
+		                <method>udropship_adminhtml_vendor_edit_prepare_form</method>
+		            </zolagodropship>
+		        </observers>		        
+		    </udropship_adminhtml_vendor_edit_prepare_form>
+		    <udropship_adminhtml_vendor_tabs_after>	
+		        <observers>
+		            <zolagodropship>
+		                <class>zolagodropship/observer</class>
+		                <method>udropship_adminhtml_vendor_tabs_organize</method>
+		            </zolagodropship>
+		        </observers>
+		    </udropship_adminhtml_vendor_tabs_after>
 			<sales_order_shipment_track_save_before>
 				<observers>
 					<add_orba_shipping_data>
