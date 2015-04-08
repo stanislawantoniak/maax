@@ -229,7 +229,7 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 		    	 ($configurable ? $configurable . ", " : "") .
 				Mage::helper("zolagopo")->__("Qty") .   ": " . (int)$this->getQty() . ", " . 
 				Mage::helper("zolagopo")->__("Price") . ": " . Mage::helper("core")->currency($this->getPriceInclTax(), true, false) . ", " . 
-			    Mage::helper("zolagopo")->__("Discount").": " . Mage::helper("core")->currency($this->getProductDiscountPrice(), true, false) . ", " . 
+			    Mage::helper("zolagopo")->__("Discount").": " . Mage::helper("core")->currency($this->getDiscount(), true, false) . ", " .
 				Mage::helper("zolagopo")->__("SKU") .   ": " . $this->getFinalSku() .
 			")";
    }
