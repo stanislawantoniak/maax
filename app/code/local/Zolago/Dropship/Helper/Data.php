@@ -160,7 +160,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	 */
 	public function collectTracking($tracks)
 	{
-		$time = Mage::getSingleton('core/data')->timestamp();
+        $time = Mage::getModel('core/date')->timestamp();
 		$requests = array();
 		foreach ($tracks as $track) {
 			$cCode = $track->getCarrierCode();
@@ -205,6 +205,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 					}
 					if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
 				} catch (Exception $e) {
+                    Mage::log('_processPollTrackingFailed',null,'status.log');
 					if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
 					$this->_processPollTrackingFailed($trackIds, $e);
 					continue;

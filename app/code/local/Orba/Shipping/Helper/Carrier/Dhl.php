@@ -179,7 +179,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             $repeatIn = 1;
         }
         $repeatIn = $repeatIn*60*60;
-        $time = Mage::getSingleton('core/date')->timestamp();
+        $time = Mage::getModel('core/date')->timestamp();
         return date('Y-m-d H:i:s', $time+$repeatIn);
     }
 
