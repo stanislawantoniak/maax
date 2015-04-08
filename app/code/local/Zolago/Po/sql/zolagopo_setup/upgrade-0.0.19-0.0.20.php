@@ -22,14 +22,14 @@ $configTable = $resource->getTableName('core_config_data');
 $query = 'SELECT value FROM ' . $configTable . " WHERE path='zolagocatalog/config/po_open_order'";
 $poOpenOrder = $readConnection->fetchOne($query);
 
-if (!$poOpenOrder){
+if (!$poOpenOrder) {
     //get default data
-    $configFile = Mage::getConfig()->getModuleDir('etc', 'Zolago_Catalog').DS.'config.xml';
+    $configFile = Mage::getConfig()->getModuleDir('etc', 'Zolago_Catalog') . DS . 'config.xml';
     $xmlObj = new Varien_Simplexml_Config($configFile);
     $xmlData = (string)$xmlObj->getNode('default/zolagocatalog/config/po_open_order');
 }
 
-if($poOpenOrder) {
+if ($poOpenOrder) {
     $update = "UPDATE `{$poTable}`  SET reservation=0 WHERE `udropship_status` NOT IN ({$poOpenOrder})";
     $installer->run($update);
 }
