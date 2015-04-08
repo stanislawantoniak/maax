@@ -30,6 +30,33 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->addAttributeToSelect("name", "left");
             $collection->addAttributeToSelect("price");
             $collection->addAttributeToSelect($vendorSku, "left");
+            $collection->addAttributeToSelect('url_path', "left");
+
+            /*
+             * START: Adding product flag to know that configurable product is in SALE or PROMOTION
+             */
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attrProductFlag */
+            $attrProductFlag = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "product_flag");
+
+            $collection->getSelect()
+                ->joinLeft(
+                    array ("cpr" => $collection->getTable('catalog/product_relation'))
+                    ,"e.entity_id = cpr.child_id"
+                    ,"parent_id"
+                );
+
+            $collection->getSelect()
+                ->joinLeft(
+                    array("cpei" => 'catalog_product_entity_int'),
+                    'cpr.parent_id = cpei.entity_id AND '.
+                    '( cpei.store_id = ' . $storeId .') AND'.
+                    '( cpei.attribute_id = ' . $attrProductFlag->getAttributeId() . ')'
+                    ,'cpei.value as product_flag'
+                );
+            /*
+             * END:
+             */
+
 
             $collection->addAttributeToFilter("udropship_vendor", $po->getUdropshipVendor());
             $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
