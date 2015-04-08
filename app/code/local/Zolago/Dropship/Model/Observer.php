@@ -45,8 +45,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
      */	
 	public function addOrbaShippingData(Varien_Event_Observer $observer)
 	{
-        $time = Mage::getSingleton('core/date')->timestamp();
-	    $time = Mage::getSingleton('core/date')->timestamp();
+        $time = Mage::getModel('core/date')->timestamp(time());
         $track = $observer->getEvent()->getTrack();
 		$carrierCode = $track->getCarrierCode();
 		
