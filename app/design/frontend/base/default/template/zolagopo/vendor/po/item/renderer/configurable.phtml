@@ -6,18 +6,18 @@ $_item = $this->getItem();
 $_orderItem = $this->getItem()->getOrderItem();
 $_productFlagText = $this->getProductFlagText($_item);
 $_productUrl = Mage::getBaseUrl() . $_item->getProduct()->getData('url_path');
+$_key = $_item->getId();
+$_taxPercent     = $_orderItem->getTaxPercent();
+$_priceInclTax   = $_item->getPriceInclTax();
+$_rowPriceInclTax= $_item->getRowTotalInclTax();
+$_discountAmount = $_item->getDiscountAmount();
+$_itemDiscount   = $_item->getDiscount();
+$_discountInfo   = $_item->getDiscountInfo();
+$_finalItemPrice = $_item->getFinalItemPrice();
+$_finalRowPrice  = $_item->getFinalRowPrice();
+$_sku = $_item->getFinalSku();
 ?>
-<?php $_key = $_item->getId();?>
-<?php /* @todo move taxes and prices to PO Item */ ?>
-<?php $_taxPrecent = $_orderItem->getTaxPercent();?>
-<?php $_priceInclTax = $_item->getPriceInclTax();?>
-<?php $_rowPriceInclTax = $_item->getRowTotalInclTax();?>
-<?php $_discountAmount = $_item->getDiscountAmount(); ?>
-<?php $_itemDiscount = $_item->getDiscount(); ?>
-<?php $_discountInfo =$_item->getDiscountInfo();?>
-<?php $_finalItemPrice = $_priceInclTax - $_itemDiscount; ?>
-<?php $_finalRowPrice = $_rowPriceInclTax - $_discountAmount; ?>
-<?php $_sku = $_item->getFinalSku(); ?>
+
 <tr data-item-id="<?php echo $_item->getId();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableFormattedText($_item);?>">
 	<td class="align-center checkbox-column"><input type="checkbox"<?php if(!$this->getIsEditable()):?> disabled="disabled"<?php endif;?> name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
 	<td class="align-right"><?php echo $this->getLp();?></td>
