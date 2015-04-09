@@ -208,7 +208,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                 }
             }
         }
-        Mage::log($orderCompleted, null, 'tracking.log');
+        Mage::log((int)$orderCompleted, null, 'tracking.log');
 
         if ($orderCompleted) {
             $order->setData('state', Mage_Sales_Model_Order::STATE_COMPLETE);
