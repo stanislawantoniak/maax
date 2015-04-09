@@ -200,8 +200,10 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
             ->getCollection()
             ->addFieldToFilter('order_id', $orderId);
         $orderPoStatuses = array();
-        foreach($orderPos as $orderPo){
-            $orderPoStatuses[$orderPo->getUdropshipStatus()] = $orderPo->getUdropshipStatus();
+        if($orderPos->getSize() > 0){
+            foreach($orderPos as $orderPo){
+                $orderPoStatuses[$orderPo->getId()] = $orderPo->getUdropshipStatus();
+            }
         }
 
         Mage::log('Statuses: ', null, 'tracking.log');
