@@ -438,7 +438,7 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
     }
 
     public function cronCollectTracking()
-    {Mage::log('Unirgy:cronCollectTracking', null, 'tracking12.log');
+    {
         $statusFilter = array(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING,Unirgy_Dropship_Model_Source::TRACK_STATUS_READY,Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
         if (Mage::helper('udropship')->isSalesFlat()) {
 
