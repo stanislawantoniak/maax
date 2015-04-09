@@ -62,15 +62,15 @@
                         <label>Max shipping days</label>
 						<note>Number of days. Leave empty or enter negative number to use default value.</note>
                         <type>text</type>
-                        <fieldset>integration</fieldset>
-                        <position>0</position>
+                        <fieldset>vendor_form</fieldset>
+                        <position>1000</position>
 					</max_shipping_days>
 					<max_shipping_time>
                         <label>Max shipping time</label>
 						<note>Time after which one day will be added to Max shipping days. Enter 00:00:00 to use default value.</note>
                         <type>time</type>
-                        <fieldset>integration</fieldset>
-                        <position>1</position>
+                        <fieldset>vendor_form</fieldset>
+                        <position>1010</position>
 					</max_shipping_time>
 				</fields>
 			</vendor>
