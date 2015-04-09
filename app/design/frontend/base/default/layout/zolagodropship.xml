@@ -15,11 +15,11 @@
                     <en_US>0</en_US>
                 </name>
             </action>
-			<action method="addItem">
+			<action method="addItemLast">
 				<type>skin_js</type>
 				<name>js/plugins/validation/jquery.validate.min.js</name>
 			</action>
-			<action method="addItem">
+			<action method="addItemLast">
 				<type>skin_js</type>
 				<name>js/plugins/validation/additional-methods.js</name>
 			</action>
