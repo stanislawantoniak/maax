@@ -212,16 +212,12 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getDefaultLimit()
     {
-	    if(!Mage::helper('zolagocommon')->isGoogleBot()) {
-		    $limit = (int)Mage::getStoreConfig("zolagomodago_catalog/zolagomodago_cataloglisting/load_on_start"
+	    $limit = (int)Mage::getStoreConfig("zolagomodago_catalog/zolagomodago_cataloglisting/load_on_start"
 			    , Mage::app()->getStore());
 
 		    if ($limit === 0) {
 			    $limit = self::DEFAULT_LIMIT;
 		    }
-	    } else {
-		    $limit = 100;
-	    }
 
         return $limit;
     }
