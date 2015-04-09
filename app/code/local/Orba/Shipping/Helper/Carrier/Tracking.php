@@ -203,6 +203,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
             foreach($orderPos as $orderPo){
                 Mage::log('Po id: ' . $orderPo->getId(), null, 'tracking.log');
                 Mage::log('Status: ' . $orderPo->getUdropshipStatus(), null, 'tracking.log');
+                Mage::log('Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED: ' . Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED, null, 'tracking.log');
                 Mage::log('Eq: ' . (int)($orderPo->getUdropshipStatus() !== Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED), null, 'tracking.log');
                 if($orderPo->getUdropshipStatus() !== Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
                     $orderCompleted = false;
