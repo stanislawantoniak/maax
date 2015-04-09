@@ -51,7 +51,6 @@
 	        <udropship>
 	            <rewrite>
 	                <adminhtml_vendor_edit>Zolago_Sizetable_Block_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
-	                <adminhtml_vendor_edit_tab_form>Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form</adminhtml_vendor_edit_tab_form>
 	            </rewrite>
 	        </udropship>
 	    </blocks>
@@ -75,6 +74,14 @@
                     </zolagosizetable>
                 </observers>
             </udropship_adminhtml_vendor_tabs_after>
+            <udropship_adminhtml_vendor_edit_prepare_form>
+                <observers>
+                    <zolagosizetable>
+                        <class>zolagosizetable/observer</class>
+                        <method>udropship_adminhtml_vendor_edit_prepare_form</method>
+                    </zolagosizetable>
+                </observers>
+            </udropship_adminhtml_vendor_edit_prepare_form>
         </events>
 	</adminhtml>
 	<admin>
