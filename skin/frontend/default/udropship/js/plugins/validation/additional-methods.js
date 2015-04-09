@@ -32,7 +32,7 @@
 		return this.optional(element) || valueStripped.match(regex).length >= params[0] && valueStripped.match(regex).length <= params[1];
 	}, jQuery.validator.format(Translator.translate("Please enter between {0} and {1} words.")));
 
-}());
+
 
 jQuery.validator.addMethod("letterswithbasicpunc", function(value, element) {
 	return this.optional(element) || /^[a-z\-.,()'"\s]+$/i.test(value);
@@ -135,7 +135,8 @@ jQuery.validator.addMethod("imageSize", function(value, element,param) {
     }
 
     return result;
-}, "Image is too big");
+}, Translator.translate("Image is too big"));
+
 jQuery.validator.addMethod("postcodeWithReplace", function(value, elem, params){
 
 
@@ -773,7 +774,7 @@ jQuery.validator.addMethod("lessthat", function(value, element, param) {
 // Zip code
 jQuery.validator.addMethod('zipcodePL', function(value, element) {
   return this.optional(element) || !!value.trim().match(/^\d{2}-\d{3}$/);
-}, jQuery.format("Invaild zip code"));
+}, jQuery.format("Invalid zip code"));
 
 jQuery.validator.addMethod('postcodeWithReplace', function (value, element) {
 	var optional = this.optional(element);
@@ -877,3 +878,5 @@ jQuery.validator.addMethod('priceSource', function(value, element) {
 jQuery.validator.addMethod('priceTwoPositionPrecision', function(value, element) {
     return this.optional(element) || /^[0-9]{1,10}(\.[0-9]{1,2})?$/.test(value);
 }, jQuery.format(Translator.translate("Enter valid price")));
+
+}());

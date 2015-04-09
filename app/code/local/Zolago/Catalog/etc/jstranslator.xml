@@ -142,10 +142,4 @@
         <message>Apply to selection</message>
     </apply-to-selection>
 
-    <flag-sale translate="message" module="zolagopo">
-        <message>(SALE)</message>
-    </flag-sale>
-    <flag-promo translate="message" module="zolagopo">
-        <message>(SALE)</message>
-    </flag-promo>
 </jstranslator>
