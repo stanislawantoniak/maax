@@ -160,9 +160,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	 */
 	public function collectTracking($tracks)
 	{
-        Mage::log('tracking', null, 'tracking.log');
         $time = Mage::getModel('core/date')->timestamp();
-        Mage::log($time, null, 'tracking.log');
+
 		$requests = array();
 		foreach ($tracks as $track) {
 			$cCode = $track->getCarrierCode();

@@ -160,7 +160,7 @@ class Zolago_Po_Model_Po_Status
 		if($this->isDirectRealisationAvailable($po) || $force){
 			$po->setStockConfirm(0);
 			$po->getResource()->saveAttribute($po, "stock_confirm");
-			if($po->isGatewayPayment() && !$po->isPaid()){
+			if(!$po->isPaymentCheckOnDelivery() && !$po->isPaid()){
 				$status = self::STATUS_BACKORDER;
 			}else{
 				$status = self::STATUS_PENDING;
