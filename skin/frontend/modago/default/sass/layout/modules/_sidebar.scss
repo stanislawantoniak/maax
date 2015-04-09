@@ -215,7 +215,9 @@
 		display: none;
 	}
 	&.filters-desktop {
-		display: block !important;
+		@include min-screen($screen-md-min) {
+			display: block !important;
+		}
 	}
 	&.filters-mobile {
 		z-index: 1001;
