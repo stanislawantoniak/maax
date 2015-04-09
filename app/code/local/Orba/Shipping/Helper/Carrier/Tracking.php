@@ -172,7 +172,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			$shipmentStatus = $shipment->getUdropshipStatus();
 			switch ($shipmentStatus) {
 				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED:
-					//$this->_setOrderCompleteState($shipment); //test
+					$this->_setOrderCompleteState($shipment);
 					break;
 				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED:
 				    Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
@@ -181,7 +181,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 					break;
 			}
 		}
-		
+		Mage::log('$completeOrder: ' . $completeOrder, null, 'tracking.log');
 		if ($completeOrder) {
 			//Set Order Status based on all related shipments
 			$this->_setOrderCompleteState($sTrack->getShipment());
