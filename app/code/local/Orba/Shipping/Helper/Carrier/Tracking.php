@@ -196,34 +196,40 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 
         $orderId = $order->getId();
         Mage::log('Order id: ' . $orderId, null, 'tracking.log');
+        //To set order status COMPLETE, all PO should have status SHIPMENT_STATUS_DELIVERED
         $orderPos = Mage::getModel('udpo/po')
             ->getCollection()
             ->addFieldToFilter('order_id', $orderId);
-        $orderPoStatuses = array();
+
+        $orderCompleted = true;
+
         if($orderPos->getSize() > 0){
             foreach($orderPos as $orderPo){
-                $orderPoStatuses[$orderPo->getId()] = $orderPo->getUdropshipStatus();
+                if($orderPo->getUdropshipStatus() !== Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
+                    $orderCompleted = false;
+                }
             }
         }
 
-        Mage::log('Statuses: ', null, 'tracking.log');
-        Mage::log($orderPoStatuses, null, 'tracking.log');
+        Mage::log('$orderCompleted result from PO: '. (int)$orderCompleted, null, 'tracking.log');
 
-		$order->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
-		$order->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
-			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);					
-		$poOrderId = $shipment->getUdpoId();
-		$poOrder = Mage::getModel('udpo/po')->load($poOrderId);
-		$poOrder->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
-		$poOrder->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
-			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
-		
-		try {
-			$order->save();
-		} catch (Exception $e) {
-			Mage::logException($e);
-			return false;
-		}
+        if ($orderCompleted) {
+            $order->setData('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+            $order->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
+                ->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+            try {
+                $order->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                return false;
+            }
+        }
+
+        $poOrderId = $shipment->getUdpoId();
+        $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
+        $poOrder->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
+        $poOrder->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
+            ->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 
 		try {
 			$poOrder->save();
