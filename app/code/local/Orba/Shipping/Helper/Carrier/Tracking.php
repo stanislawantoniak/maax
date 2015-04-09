@@ -199,9 +199,15 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 
         $orderCompleted = true;
 
-        if($orderPos->getSize() > 0){
-            foreach($orderPos as $orderPo){
-                if((int)$orderPo->getUdropshipStatus() !== (int)Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
+        $completePos =array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+        );
+
+        if ($orderPos->getSize() > 0) {
+            foreach ($orderPos as $orderPo) {
+                if (!in_array((int)$orderPo->getUdropshipStatus(), $completePos)) {
                     $orderCompleted = false;
                 }
             }
