@@ -23,6 +23,13 @@
 				<type>skin_js</type>
 				<name>js/plugins/validation/additional-methods.js</name>
 			</action>
+			<action method="addLocaleJsLast">
+				<type>skin_js</type>
+				<name>
+					<pl_PL>js/plugins/validation/localization/messages_pl.js</pl_PL>
+					<en_US>0</en_US>
+				</name>
+			</action>
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/plugins/alphanum/jquery.alphanum.js</name>

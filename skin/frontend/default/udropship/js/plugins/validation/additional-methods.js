@@ -774,7 +774,7 @@ jQuery.validator.addMethod("lessthat", function(value, element, param) {
 // Zip code
 jQuery.validator.addMethod('zipcodePL', function(value, element) {
   return this.optional(element) || !!value.trim().match(/^\d{2}-\d{3}$/);
-}, jQuery.format("Invalid zip code"));
+}, jQuery.format(Translator.translate("Invalid zip code")));
 
 jQuery.validator.addMethod('postcodeWithReplace', function (value, element) {
 	var optional = this.optional(element);
