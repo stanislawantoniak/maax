@@ -151,8 +151,18 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'label_store',
             'root_category',
             'custom_design',
+            'sequence',
+            'url_key',
+            'logo',
         );        
         $this->_addFieldsToFieldset($keys,$fieldset);
+
+        $fieldset->removeField('carrier_code');
+        $fieldset->removeField('use_rates_fallback');
+        $fieldset->removeField('email_template');
+        $fieldset->removeField('vacation_mode');
+        $fieldset->removeField('vacation_end');
+
         // marketing
         $fieldset = $form->addFieldset('marketing', array(
                     'legend'=>Mage::helper('zolagodropship')->__('Marketing content')
@@ -173,6 +183,6 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'cart_slogan_two', 
         );        
         $this->_addFieldsToFieldset($keys,$fieldset);
-
+        
     }
 }

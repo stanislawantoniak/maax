@@ -103,17 +103,17 @@
 		    </courier>
             <vendor>
                 <fields>
-                    <new_order_notifications>
+                    <new_order_notifications>                    
                         <fieldset>vendor_info</fieldset>
                     </new_order_notifications>
                     <notify_by_udpo_status>
                         <fieldset>vendor_info</fieldset>
                     </notify_by_udpo_status>
                     <url_key>
-                        <fieldset>custom</fieldset>
+                        <fieldset>vendor_ifno</fieldset>
                     </url_key>
                     <logo>
-                        <fieldset>custom</fieldset>
+                        <fieldset>vendor_info</fieldset>
                     </logo>
                     <sale_commission_percent>
                         <label>SALE Commission Percentage</label>
@@ -150,7 +150,7 @@
                         <label>Sequence</label>
                         <note>Vendor on main page in customized sequence</note>
                         <type>text</type>
-                        <fieldset>custom</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <position>3</position>
                     </sequence>
                     <vendor_type_label>
@@ -572,6 +572,15 @@
 		</routers>
 	</admin>
 	<adminhtml>
+		<events>
+		    <udropship_adminhtml_vendor_edit_prepare_form>
+		        <observers>
+		            <udvacation>
+		                <type>disabled</type>
+		            </udvacation>
+		        </observers>
+		    </udropship_adminhtml_vendor_edit_prepare_form>
+        </events>
 		<translate>
 			<modules>
 				<Zolago_Dropship>
