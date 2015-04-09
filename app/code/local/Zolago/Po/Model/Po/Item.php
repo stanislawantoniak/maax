@@ -233,5 +233,8 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 				Mage::helper("zolagopo")->__("SKU") .   ": " . $this->getFinalSku() .
 			")";
    }
-   
+
+    public function getFinalRowPrice() {
+        return $this->getRowTotalInclTax() - $this->getDiscountAmount();
+    }
 }

@@ -538,9 +538,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     protected function _parseForFloat($val, $default) {
         if (substr_count($val, '.') < 2) {
             // security, from front this value always should by in format like: 999.99
-            return floatval($val);
+            return round(floatval($val), 2);
         }
-        return floatval($default);
+        return round(floatval($default), 2);
     }
 
     /**
@@ -797,7 +797,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             ) {
 
                 $itemSData = array(
-                    'row_total' => $priceExclTax * $qty,
+                    'row_total' => $finalPriceExclTax * $qty,
                     'price' => $priceExclTax,
                     'weight' => $product->getWeight(),
                     'qty' => $qty,
@@ -832,7 +832,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 //parent
                 $itemData = array(
-                    'row_total' => $priceExclTax * $qty,
+                    'row_total' => $finalPriceExclTax * $qty,
                     'price' => $priceExclTax,
                     'weight' => $product->getWeight(),
                     'qty' => $qty,
@@ -901,6 +901,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     'base_price_incl_tax' => null, // @todo use currency
                     'row_total_incl_tax' => null,
                     'base_row_total_incl_tax' => null,
+                    'discount_amount'		=> null,
+                    'discount_percent'		=> null
                 );
 
                 $child->addData($itemPData);
