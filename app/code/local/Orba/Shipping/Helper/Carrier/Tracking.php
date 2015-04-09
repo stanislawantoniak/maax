@@ -155,7 +155,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 	protected function _processOrder($_sTracks, $multiple = false)
 	{
         Mage::log('_processOrder', null, 'tracking.log');
-        Mage::log('Multiple: '. $multiple, null, 'tracking.log');
+        Mage::log('Multiple: '. (int)$multiple, null, 'tracking.log');
 		$completeOrder = true;
 		
 		if ($multiple) {
@@ -172,7 +172,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			$shipmentStatus = $shipment->getUdropshipStatus();
 			switch ($shipmentStatus) {
 				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED:
-					$this->_setOrderCompleteState($shipment);
+					//$this->_setOrderCompleteState($shipment); //test
 					break;
 				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED:
 				    Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
