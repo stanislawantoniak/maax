@@ -147,7 +147,7 @@ jQuery.validator.addMethod("postcodeWithReplace", function(value, elem, params){
     }
     return test;
 
-}, Translator.translate("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."));
+}, Translator.translate("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format."));
 
 
 
@@ -173,7 +173,7 @@ jQuery.validator.addMethod("validate-postcode", function(value, elem, params){
         return false;
     }
 
-}, Translator.translate("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."));
+}, Translator.translate("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format."));
 
 jQuery.validator.addMethod("validate-nip", function (value, elem, params) {
 

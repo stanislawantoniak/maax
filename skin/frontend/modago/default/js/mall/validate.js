@@ -132,11 +132,11 @@ Mall.validate = {
         // add customer methods
 		jQuery.validator.addMethod('validate-postcode', function () {
 				return Mall.validate.validators.postcode.apply(this, arguments);
-		}, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
+		}, jQuery.validator.format(Mall.translate.__("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.")));
 
         jQuery.validator.addMethod('validate-postcodeWithReplace', function () {
             return Mall.validate.validators.postcodeWithReplace.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
+        }, jQuery.validator.format(Mall.translate.__("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.")));
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);

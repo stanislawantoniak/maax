@@ -233,7 +233,7 @@
 "E-mail address is in invalid format or contains invalid characters. Please enter correct address.","Adres jest błędnie wpisany lub zawiera niepoprawne znaki. Popraw adres e-mail."
 "Phone number we need only to contact concerning orders for example courier delivering the shipment.","Numer telefonu potrzebujemy tylko do kontaktu dotyczącego zamówienia np. dla kuriera dostarczającego przesyłkę."
 "Zip-code should be entered in the format xx-xxx.","Kod pocztowy należy wpisać w formacie xx-xxx."
-"Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.","Niepoprawny kod pocztowy. Powinien składać się z 5 liczb, w formacie XX-XXX."
+"Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.","Niepoprawny kod pocztowy. Powinien składać się z 5 liczb, w formacie XX-XXX."
 "Enter name.","Wprowadź imię."
 "Enter last name.","Wprowadź nazwisko."
 "Enter email address.","Wprowadź adres email."
