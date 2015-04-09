@@ -154,11 +154,14 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 
 	protected function _processOrder($_sTracks, $multiple = false)
 	{
+        Mage::log('_processOrder', null, 'tracking.log');
+        Mage::log('Multiple: '. (int)$multiple, null, 'tracking.log');
 		$completeOrder = true;
 		
 		if ($multiple) {
 			//Check if all Shipments are Delivered and Update Order Status
 			foreach ($_sTracks as $sTrack) {
+                Mage::log($sTrack->getData(), null, 'tracking.log');
 				if ($sTrack->getUdropshipStatus() !== Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED) {
 					$completeOrder = false;
 				}
@@ -178,7 +181,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 					break;
 			}
 		}
-		
+		Mage::log('$completeOrder: ' . $completeOrder, null, 'tracking.log');
 		if ($completeOrder) {
 			//Set Order Status based on all related shipments
 			$this->_setOrderCompleteState($sTrack->getShipment());
