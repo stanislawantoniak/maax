@@ -532,7 +532,7 @@ Mall.listing = {
 	 */
 	loadToQueue: function () {
 
-        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems() && !Mall.isGoogleBot()) {
             var forceObject = {
                 start: this.getLoadNextStart(),
                 rows: this.getLoadNextOffset()
@@ -2426,53 +2426,55 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	placeListingFadeContainer: function() {
-        jQuery('#grid').shuffle('layout');
-        if (this.canShowLoadMoreButton()) {
-            //this.showLoadMoreButton();
-            this.showShapesListing();
+		if(!Mall.isGoogleBot()) {
+			jQuery('#grid').shuffle('layout');
+			if (this.canShowLoadMoreButton()) {
+				//this.showLoadMoreButton();
+				this.showShapesListing();
 
 
-            if (!this.getScrollLoadLock()) {
-                var gridHeight = jQuery('#grid').height();
-                var cutFromBottom = [];
-                var windowWidth = jQuery(window).width();
-                var sliceNumber = -4;
+				if (!this.getScrollLoadLock()) {
+					var gridHeight = jQuery('#grid').height();
+					var cutFromBottom = [];
+					var windowWidth = jQuery(window).width();
+					var sliceNumber = -4;
 
-                if (windowWidth < 992) {
-                    sliceNumber = -3;
-                }
-                if (windowWidth < 541) {
-                    sliceNumber = -2;
-                }
+					if (windowWidth < 992) {
+						sliceNumber = -3;
+					}
+					if (windowWidth < 541) {
+						sliceNumber = -2;
+					}
 
-                jQuery('#grid .item').slice(sliceNumber).each(function(index) {
-                    var top = jQuery(this).position().top;
-                    var elemHeight = jQuery(this).height();
-                    cutFromBottom.push(gridHeight - top - elemHeight);
-                });
-                cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
-                var newHeight = gridHeight - cutFromBottom;
+					jQuery('#grid .item').slice(sliceNumber).each(function (index) {
+						var top = jQuery(this).position().top;
+						var elemHeight = jQuery(this).height();
+						cutFromBottom.push(gridHeight - top - elemHeight);
+					});
+					cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
+					var newHeight = gridHeight - cutFromBottom;
 
-                if (cutFromBottom < 0) {
-                    return this;
-                }
+					if (cutFromBottom < 0) {
+						return this;
+					}
 
-                //magic number 1500 px
-                //to prevent jumping on top of page when
-                //browser wrong calculate height
-                if (cutFromBottom > 1500) { //
-                    return this;
-                }
+					//magic number 1500 px
+					//to prevent jumping on top of page when
+					//browser wrong calculate height
+					if (cutFromBottom > 1500) { //
+						return this;
+					}
 
-                if( (jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
-                    jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
-                }
-            }
+					if ((jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
+						jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
+					}
+				}
 
-        } else {
-            this.hideLoadMoreButton();
-            this.hideShapesListing();
-        }
+			} else {
+				this.hideLoadMoreButton();
+				this.hideShapesListing();
+			}
+		}
 
         return this;
 	},

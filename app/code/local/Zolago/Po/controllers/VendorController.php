@@ -998,7 +998,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occurred."));
             return $this->_redirectReferer();
         }
 
@@ -1057,25 +1057,59 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $oldAddress = $po->getBillingAddress();
                 }
                 $newAddress = clone $orignAddress;
-                $newAddress->addData($data);
-                if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
-                    $po->setOwnShippingAddress($newAddress);
-                } else {
-                    $po->setOwnBillingAddress($newAddress);
-                }
+
+	            //validate address data start
+	            $errors = false;
+	            $langHelper = Mage::helper("zolagopo");
+				if(!$data['firstname']) {
+					$errors = true;
+					$session->addError($langHelper->__("Invalid first name"));
+				}
+	            if(!$data['lastname']) {
+		            $errors = true;
+		            $session->addError($langHelper->__("Invalid last name"));
+	            }
+	            if(!$data['telephone']) {
+		            $errors = true;
+		            $session->addError($langHelper->__("Invalid telephone"));
+	            }
+	            if(!$data['street']) {
+		            $errors = true;
+		            $session->addError($langHelper->__("Invalid street"));
+	            }
+	            if(!$data['city']) {
+		            $errors = true;
+		            $session->addError($langHelper->__("Invalid city"));
+	            }
+	            if(!$data['postcode'] || !preg_match('/^\d{2}-\d{3}$/',$data['postcode'])) {
+		            $errors = true;
+		            $session->addError($langHelper->__("Invalid postcode"));
+	            }
+	            //validate address data end
+
+	            if($errors) {
+		            $this->_redirectReferer();
+	            } else {
+		            $newAddress->addData($data);
+		            if ($type == Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+			            $po->setOwnShippingAddress($newAddress);
+		            } else {
+			            $po->setOwnBillingAddress($newAddress);
+		            }
 
 
-                Mage::dispatchEvent("zolagopo_po_address_change", array(
-                                        "po"			=> $po,
-                                        "new_address"	=> $newAddress,
-                                        "old_address"	=> $oldAddress,
-                                        "type"			=> $type
-                                    ));
+		            Mage::dispatchEvent("zolagopo_po_address_change", array(
+			            "po" => $po,
+			            "new_address" => $newAddress,
+			            "old_address" => $oldAddress,
+			            "type" => $type
+		            ));
 
-                $po->save();
+		            $po->save();
 
-                $session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
-                $response['content']['reload']=1;
+		            $session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
+		            $response['content']['reload'] = 1;
+	            }
             }
         } catch(Mage_Core_Exception $e) {
             $response = array(

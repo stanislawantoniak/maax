@@ -141,8 +141,24 @@ jQuery(function($){
     form.validate({
         rules: {
             "postcode": {
-                zipcodePL: true
-            }
+	            postcodeWithReplace: true,
+	            required: true
+            },
+	        "firstname": {
+		        required: true
+	        },
+	        "lastname": {
+		        required: true
+	        },
+	        "telephone": {
+		        required: true
+	        },
+	        "street": {
+		        required: true
+	        },
+	        "city": {
+		        required: true
+	        }
         }
     });
 });

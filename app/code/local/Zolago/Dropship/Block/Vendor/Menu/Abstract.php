@@ -391,7 +391,6 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	 * @return bool
 	 */
 	public function isAllowed($resource) {
-        Mage::log($resource);
 		return $this->getSession()->isAllowed($resource);
 	}
 	

@@ -135,22 +135,9 @@ jQuery.validator.addMethod("imageSize", function(value, element,param) {
     }
 
     return result;
-}, Translator.translate("Image is too big"));
+}, "Image is too big");
 jQuery.validator.addMethod("postcodeWithReplace", function(value, elem, params){
 
-    var test;
-    value = value.replace(/\D/g, "");
-    if (value.length > 5) { //if there is more then 5 digit
-        test = false;
-    }
-    if (value.length == 5) {
-        if (value == "00000") {
-            test = false;
-        }
-        test = true;
-    } else {
-        test = false;
-    }
 
 
     if (test) {
@@ -786,7 +773,24 @@ jQuery.validator.addMethod("lessthat", function(value, element, param) {
 // Zip code
 jQuery.validator.addMethod('zipcodePL', function(value, element) {
   return this.optional(element) || !!value.trim().match(/^\d{2}-\d{3}$/);
-}, jQuery.format(Translator.translate("Invalid zip code")));
+}, jQuery.format("Invaild zip code"));
+
+jQuery.validator.addMethod('postcodeWithReplace', function (value, element) {
+	var optional = this.optional(element);
+	if(optional) {
+		return true;
+	}
+
+	value = value.replace(/\D/g, "");
+	var test = !(value.length != 5 || value == "00000");
+
+	if(test) {
+		var matched = value.match(/([0-9]{2})([0-9]{3})/);
+		jQuery(element).val(matched[1] + "-" + matched[2]);
+	}
+	return test;
+
+}, jQuery.validator.format(Translator.translate("Invalid zip code")));
 
 // integer
 jQuery.validator.addMethod('integer', function(value, element) {

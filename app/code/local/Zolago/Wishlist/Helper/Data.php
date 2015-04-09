@@ -98,7 +98,7 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 					$wishlist->setSharingCode($cookie);
 				}else{
 					$wishlist->generateSharingCode();
-					$this->getCookieModel()->set(self::COOKIE_NAME, $wishlist->getSharingCode());
+					$this->getCookieModel()->set(self::COOKIE_NAME, $wishlist->getSharingCode(), true);
 				}
 			}
 			
