@@ -30,11 +30,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->addAttributeToSelect("name", "left");
             $collection->addAttributeToSelect("price");
             $collection->addAttributeToSelect($vendorSku, "left");
-            $collection->addAttributeToSelect('url_path', "left");
 
-            /*
-             * START: Adding product flag to know that configurable product is in SALE or PROMOTION
-             */
+
+            // START: Adding product flag to know that configurable product is in SALE or PROMOTION
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attrProductFlag */
             $attrProductFlag = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "product_flag");
 
@@ -49,14 +47,30 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 ->joinLeft(
                     array("cpei" => 'catalog_product_entity_int'),
                     'cpr.parent_id = cpei.entity_id AND '.
-                    '( cpei.store_id = ' . $storeId .') AND'.
-                    '( cpei.attribute_id = ' . $attrProductFlag->getAttributeId() . ')'
-                    ,'cpei.value as product_flag'
+                    '( cpei.store_id = ' . $storeId .') AND '.
+                    '( cpei.attribute_id = ' . $attrProductFlag->getAttributeId() . ') '
+                    ,'cpei.value AS product_flag'
                 );
-            /*
-             * END:
-             */
+            // END
 
+
+            // START: adding url_path for configurable
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attrProductFlag */
+            $attrUrlPath = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "url_path");
+
+            $collection->getSelect()
+                ->joinLeft(
+                    array("cpev" =>'catalog_product_entity_varchar')
+                    ,'cpev.entity_id = cpr.parent_id AND '.
+                    '( cpev.store_id = ' . $storeId . ') AND '.
+                    '( cpev.attribute_id = ' . $attrUrlPath->getAttributeId() . ') '
+                    ,'cpev.value AS url_path_configurable'
+                );
+            // END
+
+            // START: adding url_path for simple
+            $collection->addAttributeToSelect('url_path', "left");
+            // END
 
             $collection->addAttributeToFilter("udropship_vendor", $po->getUdropshipVendor());
             $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
