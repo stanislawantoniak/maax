@@ -22,6 +22,15 @@
 				</zolagocommon>
 			</updates>
 		</layout>
+        <translate>
+            <modules>
+                <Zolago_Common>
+                    <files>
+                        <default>Zolago_Common.csv</default>
+                    </files>
+                </Zolago_Common>
+            </modules>
+        </translate>
 	</frontend>
     <global>
         <helpers>
@@ -66,5 +75,14 @@
                 </args>
             </adminhtml>
         </routers>
+        <translate>
+            <modules>
+                <Zolago_Common>
+                    <files>
+                        <default>Zolago_Common.csv</default>
+                    </files>
+                </Zolago_Common>
+            </modules>
+        </translate>
     </admin>
 </config>
