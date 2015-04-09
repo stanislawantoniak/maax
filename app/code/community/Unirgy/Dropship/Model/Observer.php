@@ -440,6 +440,9 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
     public function cronCollectTracking()
     {
         $statusFilter = array(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING,Unirgy_Dropship_Model_Source::TRACK_STATUS_READY,Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
+        $time = Mage::getModel('core/date')->timestamp();
+        $now = date('Y-m-d H:i:s', $time);
+
         if (Mage::helper('udropship')->isSalesFlat()) {
 
             $res  = Mage::getSingleton('core/resource');
@@ -448,7 +451,7 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
             $sIdsSel = $conn->select()->distinct()
                 ->from($res->getTableName('sales/shipment_track'), array('parent_id'))
                 ->where('udropship_status in (?)', $statusFilter)
-                ->where('next_check<=?', now())
+                ->where('next_check<=?', $now)
                 ->limit(50);
             $sIds = $conn->fetchCol($sIdsSel);
 
@@ -474,7 +477,7 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
                     .$conn->quoteInto(' and nc.attribute_id=?', $nextCheckAttr->getId()),
                     array())
                 ->where('us.value in (?)', $statusFilter)
-                ->where('nc.value<=?', now())
+                ->where('nc.value<=?', $now)
                 ->limit(50);
             $sIds = $conn->fetchCol($sIdsSel);
         }
@@ -501,7 +504,7 @@ class Unirgy_Dropship_Model_Observer extends Varien_Object
         }
 
         if (0<Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit')) {
-            $limit = date('Y-m-d H:i:s', time()-24*60*60*Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit'));
+            $limit = date('Y-m-d H:i:s', $time-24*60*60*Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit'));
 
             $tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
                 ->addAttributeToSelect('*')
