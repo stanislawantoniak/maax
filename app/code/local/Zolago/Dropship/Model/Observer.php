@@ -80,7 +80,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
                 ->limit(50);
             $sIds = $conn->fetchCol($sIdsSel);
         }
-        Mage::log($sIdsSel->__toString(), null, 'tracking12.log');
+
         if (!empty($sIds)) {
             $tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
                 ->addAttributeToSelect('*')
@@ -88,7 +88,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer{
                 ->addAttributeToFilter('parent_id', array('in'=>$sIds))
                 ->addAttributeToSort('parent_id')
             ;
-            Mage::log($tracks, null, 'tracking12.log');
+
             try {
                 Mage::helper('udropship')->collectTracking($tracks);
             } catch (Exception $e) {
