@@ -73,18 +73,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom extends Mage_Adminh
                                 'name'      => 'custom_data_combined',
                                 'label'     => $hlp->__('Custom Data'),
                                 'style'     => 'height:500px',
-                                'note'      => $this->__("
-                                        Enter custom data for this vendor.<br/>
-                                        Each part should start with:<br/>
-                                        <pre>===== part_name =====</pre><br/>
-                                        Parts can be referenced from product template like this:
-                                        <xmp>
-                                        <?php echo Mage::helper('udropship')
-                                        ->getVendor(\$_product)
-                                        ->getData('part_name')?>
-                                        </xmp>
-                                        "
-                                                        ),
+                                'note'      => $this->__("Enter custom data for this vendor.<br/>Each part should start with:<br/><pre>===== part_name =====</pre><br/>Parts can be referenced from product template like this:<xmp><?php echo Mage::helper('udropship')</xmp><br/><xmp>  ->getVendor(\$_product)</xmp><br/><xmp>  ->getData('part_name')?></xmp>"),
                             ));
         if ($vendor) {
             $form->setValues($vendor->getData());
