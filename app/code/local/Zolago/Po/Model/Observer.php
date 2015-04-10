@@ -563,7 +563,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                 $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
             }
 
-
+Mage::log($orderStatusChange, null, 'order.log');
             if (!empty($orderStatusChange)) {
                 $order->setData('state', $orderStatusChange['state']);
                 $order->setStatus($orderStatusChange['state'])
