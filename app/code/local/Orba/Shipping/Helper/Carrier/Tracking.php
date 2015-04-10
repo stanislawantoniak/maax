@@ -177,7 +177,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                         return false;
                     }
                 }
-                $this->_setOrderState($sTrack->getShipment());
+                //$this->_setOrderState($sTrack->getShipment());
 			}
 		} else {
             $sTrack = $_sTracks;
@@ -200,7 +200,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                     return false;
                 }
             }
-            $this->_setOrderState($sTrack->getShipment());
+            //$this->_setOrderState($sTrack->getShipment());
 		}
 
 
