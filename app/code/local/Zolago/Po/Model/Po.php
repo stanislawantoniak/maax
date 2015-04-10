@@ -955,6 +955,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const GH_API_RESERVATION_STATUS_OK = 'ok';
 	const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';
 
+	/**
+	 * GH Api method to set reservation flag on PO object
+	 * @param string $reservationStatus
+	 * @param string|bool $reservationMessage
+	 * @return $this
+	 */
 	public function ghApiSetOrderReservation($reservationStatus,$reservationMessage=false) {
 		$reservationStatus = trim(strtolower($reservationStatus));
 		$save = false;
@@ -994,14 +1000,42 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		return $this;
 	}
 
+	/**
+	 * GH Api method to set reservation flag on multiple pos that has been confirmed as read
+	 * @param array $posIds
+	 * @return $this
+	 */
+	public function ghApiSetOrdersReservationAfterRead($posIds) {
+		foreach($posIds as $poId) {
+			$this
+				->load($poId)
+				->setReservation(0)
+				->save();
+		}
+		$this->unsetData();
+		return $this;
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
 	protected function throwWrongReservationStatusError() {
 		Mage::throwException('error_reservation_status_invalid');
 	}
 
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
 	protected function throwCannotChangePoStatusError() {
 		Mage::throwException('error_order_status_change');
 	}
 
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
 	protected function throwWrongReservationMessageError() {
 		Mage::throwException('error_reservation_message_invalid');
 	}

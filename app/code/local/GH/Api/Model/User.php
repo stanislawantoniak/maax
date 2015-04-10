@@ -313,4 +313,16 @@ class GH_Api_Model_User extends Mage_Core_Model_Abstract {
 		return true;
 	}
 
+	/**
+	 * @return Zolago_Dropship_Model_Vendor
+	 */
+	public function getVendor() {
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = Mage::getModel('udropship/vendor');
+		if($this->getVendorId()) {
+			$vendor->load($this->getVendorId());
+		}
+		return $vendor;
+	}
+
 }
