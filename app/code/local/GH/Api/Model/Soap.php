@@ -304,9 +304,8 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 		try {
 			$user = $this->getUserByToken($token);
 
-			/** @var Zolago_Po_Model_Po $model */
-			$model = Mage::getModel('zolagopo/po');
-			$po = $model->load($request->orderID, 'increment_id');
+			/** @var Zolago_Po_Model_Po $po */
+			$po = Mage::getModel('zolagopo/po')->load($request->orderID, 'increment_id');
 
 			if ($user->getVendorId() != $po->getUdropshipVendor()) {
 				$this->throwOrderIdWrongError();

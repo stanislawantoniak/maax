@@ -698,9 +698,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 					foreach($sameEmail as $po){
 						$oldAlert = (int)$po->getAlert();
-						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
-							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
-						}
+						$oldAlert|=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 						$po->setAlert($oldAlert);
 						$po->getResource()->saveAttribute($po, "alert");
 					}
@@ -964,10 +962,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	public function ghApiSetOrderReservation($reservationStatus,$reservationMessage=false) {
 		$reservationStatus = trim(strtolower($reservationStatus));
 		$save = false;
+		$alert = $this->getAlert();
 		switch($reservationStatus) {
 
 			case self::GH_API_RESERVATION_STATUS_OK:
 				$this->setReservation(0);
+				$alert &= ~ Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
 				$save = true;
 				break;
 
@@ -983,7 +983,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$this->throwCannotChangePoStatusError();
 				} else {
 					$statusModel->changeStatus($this, $statusModel::STATUS_ONHOLD);
-					$this->setAlert("No products reservation in vendor system");
+					$alert |= Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
 					$save = true;
 				}
 				break;
@@ -995,6 +995,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$this->addComment($reservationMessage,false,true);
 		}
 		if($save) {
+			$this->setAlert($alert);
 			$this->save();
 		}
 		return $this;
