@@ -159,6 +159,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 		if ($multiple) {
 			//Check if all Shipments are Delivered and Update Order Status
 			foreach ($_sTracks as $sTrack) {
+
 				if ($sTrack->getUdropshipStatus() !== Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED) {
 					$completeOrder = false;
 				}
@@ -178,7 +179,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 					break;
 			}
 		}
-		
+
 		if ($completeOrder) {
 			//Set Order Status based on all related shipments
 			$this->_setOrderCompleteState($sTrack->getShipment());
@@ -190,21 +191,45 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 	protected function _setOrderCompleteState($shipment)
 	{
 		$order = $shipment->getOrder();
-		$order->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
-		$order->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
-			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);					
-		$poOrderId = $shipment->getUdpoId();
-		$poOrder = Mage::getModel('udpo/po')->load($poOrderId);
-		$poOrder->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
-		$poOrder->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
-			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
-		
-		try {
-			$order->save();
-		} catch (Exception $e) {
-			Mage::logException($e);
-			return false;
-		}
+        $orderId = $order->getId();
+        //To set order status COMPLETE, all PO should have status SHIPMENT_STATUS_DELIVERED
+        $orderPos = Mage::getModel('udpo/po')
+            ->getCollection()
+            ->addFieldToFilter('order_id', $orderId);
+
+        $orderCompleted = true;
+
+        $completePos =array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+        );
+
+        if ($orderPos->getSize() > 0) {
+            foreach ($orderPos as $orderPo) {
+                if (!in_array((int)$orderPo->getUdropshipStatus(), $completePos)) {
+                    $orderCompleted = false;
+                }
+            }
+        }
+
+        if ($orderCompleted) {
+            $order->setData('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+            $order->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
+                ->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+            try {
+                $order->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                return false;
+            }
+        }
+
+        $poOrderId = $shipment->getUdpoId();
+        $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
+        $poOrder->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
+        $poOrder->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
+            ->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 
 		try {
 			$poOrder->save();

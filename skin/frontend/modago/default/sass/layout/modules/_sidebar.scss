@@ -209,9 +209,15 @@
 }
 
 #solr_search_facets {
+	top: 300px;
 	position: absolute;
+	@include max-screen($screen-sm-max) {
+		display: none;
+	}
 	&.filters-desktop {
-		display: block !important;
+		@include min-screen($screen-md-min) {
+			display: block !important;
+		}
 	}
 	&.filters-mobile {
 		z-index: 1001;

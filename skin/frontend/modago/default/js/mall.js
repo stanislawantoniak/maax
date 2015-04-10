@@ -1124,7 +1124,6 @@ Mall.product = {
     },
 
     updateContextBreadcrumbs: function() {
-        //this._entity_id = 29549;
         var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
         localStorage.removeItem(this._entity_id);
         if (contextBreadcrumbsHtml != null) {
