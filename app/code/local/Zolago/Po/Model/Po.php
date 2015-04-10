@@ -949,4 +949,60 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             return '';
         }
     }
+
+
+
+	const GH_API_RESERVATION_STATUS_OK = 'ok';
+	const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';
+
+	public function ghApiSetOrderReservation($reservationStatus,$reservationMessage=false) {
+		$reservationStatus = trim(strtolower($reservationStatus));
+		$save = false;
+		switch($reservationStatus) {
+
+			case self::GH_API_RESERVATION_STATUS_OK:
+				$this->setReservation(0);
+				$save = true;
+				break;
+
+			case self::GH_API_RESERVATION_STATUS_PROBLEM:
+				$statusModel = $this->getStatusModel();
+
+				if(!$reservationMessage) {
+					$this->throwWrongReservationMessageError();
+				}
+
+				if(!$statusModel->isManulaStatusAvailable($this) ||
+					!in_array($statusModel::STATUS_ONHOLD, array_keys($statusModel->getAvailableStatuses($this)))) {
+					$this->throwCannotChangePoStatusError();
+				} else {
+					$statusModel->changeStatus($this, $statusModel::STATUS_ONHOLD);
+					$this->setAlert("No products reservation in vendor system");
+					$save = true;
+				}
+				break;
+
+			default:
+				$this->throwWrongReservationStatusError();
+		}
+		if($reservationMessage) {
+			$this->addComment($reservationMessage,false,true);
+		}
+		if($save) {
+			$this->save();
+		}
+		return $this;
+	}
+
+	protected function throwWrongReservationStatusError() {
+		Mage::throwException('error_reservation_status_invalid');
+	}
+
+	protected function throwCannotChangePoStatusError() {
+		Mage::throwException('error_order_status_change');
+	}
+
+	protected function throwWrongReservationMessageError() {
+		Mage::throwException('error_reservation_message_invalid');
+	}
 }
