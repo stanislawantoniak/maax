@@ -526,7 +526,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $newStatus = $observer->getNewStatus();
         $order = $po->getOrder();
         $orderId = $order->getId();
-        //if new status is canceled
+
         if($oldStatus !== $newStatus){
             $orderPos = Mage::getModel('udpo/po')
                 ->getCollection()
