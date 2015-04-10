@@ -527,7 +527,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $vendor = $po->getVendor();
         $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
-        if(($oldStatus !== $newStatus) && ($ghapiAccess == 0)){
+        if($oldStatus !== $newStatus){
             $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
 
             if(in_array($newStatus, explode(',', $poOpenOrder))){
