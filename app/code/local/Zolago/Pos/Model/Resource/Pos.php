@@ -193,9 +193,6 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
     {
         $vendor = Mage::getModel('udropship/vendor')->load($merchant);
 
-        if($vendor && $vendor->getGhapiVendorAccessAllow() == 1){
-            return array();
-        }
         if (empty($skus)) {
             return array();
         }
