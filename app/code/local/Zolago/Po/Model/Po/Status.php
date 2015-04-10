@@ -403,41 +403,6 @@ class Zolago_Po_Model_Po_Status
             $allocModel->createOverpayment($po);
         }
 
-        //if new status is canceled
-        if((int)$newStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED){
-            $order = $po->getOrder();
-            $orderId = $order->getId();
-
-            $orderPos = Mage::getModel('udpo/po')
-                ->getCollection()
-                ->addFieldToFilter('order_id', $orderId);
-
-            $cancelPos =array(
-                Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
-            );
-            $poStatuses = array();
-            if ($orderPos->getSize() > 0) {
-                foreach ($orderPos as $orderPo) {
-                    $poStatuses[] = (int)$orderPo->getUdropshipStatus();
-                }
-            }
-
-            $diffCancelStatuses = array_diff($poStatuses,$cancelPos);
-
-            if(empty($diffCancelStatuses)){
-
-                $order->setData('state', Mage_Sales_Model_Order::STATE_CANCELED);
-                $order->setStatus(Mage_Sales_Model_Order::STATE_CANCELED)
-                    ->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED);
-                try {
-                    $order->save();
-                } catch (Exception $e) {
-                    Mage::logException($e);
-                    return false;
-                }
-            }
-        }
-
 	}
 
 	/**
