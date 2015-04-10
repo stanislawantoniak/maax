@@ -253,7 +253,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
             $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
         }
 
-        Mage::log($orderStatusChange, null, 'order.log');
+        //Mage::log($orderStatusChange, null, 'order.log');
         if (!empty($orderStatusChange)) {
             $order->setData('state', $orderStatusChange['state']);
             $order->setStatus($orderStatusChange['state'])
