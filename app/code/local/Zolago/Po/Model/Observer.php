@@ -548,15 +548,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                     $poStatuses[] = (int)$orderPo->getUdropshipStatus();
                 }
             }
-            Mage::log($poStatuses, null, 'order.log');
 
             $diffCompleteStatuses = array_diff($poStatuses,$completePos);
-            Mage::log('$diffCompleteStatuses', null, 'order.log');
-            Mage::log($diffCompleteStatuses, null, 'order.log');
 
             $diffCancelStatuses = array_diff($poStatuses,$cancelPos);
-            Mage::log('$diffCancelStatuses', null, 'order.log');
-            Mage::log($diffCancelStatuses, null, 'order.log');
+
 
             if(empty($diffCompleteStatuses)){
                 $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
@@ -566,8 +562,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                 $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
                 $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
             }
-            Mage::log('$orderStatusChange', null, 'order.log');
-            Mage::log($orderStatusChange, null, 'order.log');
+
 
             if (!empty($orderStatusChange)) {
                 $order->setData('state', $orderStatusChange['state']);
