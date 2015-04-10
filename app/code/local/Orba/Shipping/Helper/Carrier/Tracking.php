@@ -177,7 +177,6 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                         return false;
                     }
                 }
-                //$this->_setOrderState($sTrack->getShipment());
 			}
 		} else {
             $sTrack = $_sTracks;
@@ -200,7 +199,6 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                     return false;
                 }
             }
-            //$this->_setOrderState($sTrack->getShipment());
 		}
 
 
@@ -208,57 +206,6 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 		return $this;
 	}
 
-    protected function _setOrderState($shipment){
-        $order = $shipment->getOrder();
-        $orderId = $order->getId();
-        //To set order status COMPLETE, all PO should have status SHIPMENT_STATUS_DELIVERED or SHIPMENT_STATUS_CANCELED
-        //or SHIPMENT_STATUS_RETURNED
-        $orderPos = Mage::getModel('udpo/po')
-            ->getCollection()
-            ->addFieldToFilter('order_id', $orderId);
-
-        $orderStatusChange= array();
-
-        $completePos =array(
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
-        );
-        $cancelPos =array(
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
-        );
-        $poStatuses = array();
-        if ($orderPos->getSize() > 0) {
-            foreach ($orderPos as $orderPo) {
-                $poStatuses[] = (int)$orderPo->getUdropshipStatus();
-            }
-        }
-
-        $diffCompleteStatuses = array_diff($poStatuses,$completePos);
-
-        $diffCancelStatuses = array_diff($poStatuses,$cancelPos);
-
-        if(empty($diffCompleteStatuses)){
-            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
-            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED;
-        }
-        if(empty($diffCancelStatuses)){
-            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
-            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
-        }
-
-        if (!empty($orderStatusChange)) {
-            $order->setData('state', $orderStatusChange['state']);
-            $order->setStatus($orderStatusChange['state'])
-                ->setUdropshipStatus($orderStatusChange['udropship_status']);
-            try {
-                $order->save();
-            } catch (Exception $e) {
-                Mage::logException($e);
-                return false;
-            }
-        }
-    }
 
 	protected function _setOrderCompleteState($shipment)
 	{
