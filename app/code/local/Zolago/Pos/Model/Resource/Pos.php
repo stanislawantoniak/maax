@@ -191,6 +191,8 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function calculateStockOpenOrders($merchant, $skus)
     {
+        $vendor = Mage::getModel('udropship/vendor')->load($merchant);
+
         if (empty($skus)) {
             return array();
         }
