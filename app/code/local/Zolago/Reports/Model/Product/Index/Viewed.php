@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @method Zolago_Reports_Model_Resource_Product_Index_Viewed _getResource()
+ * Class Zolago_Reports_Model_Product_Index_Viewed
+ */
 class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Product_Index_Viewed
 {
+    public function _construct() {
+        parent::_construct();
+    }
+
     /**
      * Gets sharing code
      *
@@ -9,11 +17,14 @@ class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Produ
      */
     public function getSharingCode() {
         if ($this->hasData('sharing_code')) {
-            return $this->getData('sharing_code');
+            $sc = $this->getData('sharing_code');
+        } elseif (Mage::registry('sharing_code')) {
+            $sc = Mage::registry('sharing_code');
+            $this->setData('sharing_code', $sc);
+        } else {
+            $sc = Mage::helper('zolagowishlist')->getWishlist()->getData('sharing_code');
         }
-        /** @var Mage_Wishlist_Model_Wishlist $wishlist */
-        $wishlist = Mage::helper('zolagowishlist')->getWishlist();
-        return $wishlist->getData('sharing_code');
+        return $sc;
     }
 
     /**
@@ -28,12 +39,6 @@ class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Produ
         if (!$this->hasSharingCode()) {
             $this->setSharingCode($this->getSharingCode());
         }
-        if (!$this->hasCustomerId()) {
-            $this->setCustomerId($this->getCustomerId());
-        }
-        if (!$this->hasStoreId()) {
-            $this->setStoreId($this->getStoreId());
-        }
         if (!$this->hasAddedAt()) {
             $time = Mage::getSingleton('core/data')->timestamp();
             $this->setAddedAt(date('Y-m-d H:i:s', $time));
@@ -41,30 +46,4 @@ class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Produ
 
         return $this;
     }
-
-    /**
-     * On customer login merge sharing_code (old visitor)/customer index
-     *
-     * @return Zolago_Reports_Model_Product_Index_Viewed
-     */
-    public function updateCustomerFromVisitor()
-    {
-        // todo
-        $this->_getResource()->updateCustomerFromVisitor($this);
-        return $this;
-    }
-
-    /**
-     * Purge sharing_code (old visitor) data by customer (logout)
-     *
-     * @return Zolago_Reports_Model_Product_Index_Viewed
-     */
-    public function purgeVisitorByCustomer()
-    {
-        // todo
-        $this->_getResource()->purgeVisitorByCustomer($this);
-        return $this;
-    }
-
-
 }

@@ -48,14 +48,13 @@ class Zolago_Reports_Model_Event_Observer extends Mage_Reports_Model_Event_Obser
     public function ajaxAddLastViewed(Varien_Event_Observer $observer)
     {
         $productId = $observer->getEvent()->getProduct()->getId();
-
-        Mage::getModel('reports/product_index_viewed')
-            ->setProductId($productId)
-            ->save()
-            ->calculate();
-
-        return $this->_event(Mage_Reports_Model_Event::EVENT_PRODUCT_VIEW, $productId);
+        if ($productId) {
+            Mage::getModel('reports/product_index_viewed')
+                ->setProductId($productId)
+                ->save()
+                ->calculate();
+            return $this->_event(Mage_Reports_Model_Event::EVENT_PRODUCT_VIEW, $productId);
+        }
     }
-
 
 }

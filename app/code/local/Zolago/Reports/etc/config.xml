@@ -16,6 +16,7 @@
             </reports>
             <reports_resource>
                 <rewrite>
+                    <product_index_viewed>Zolago_Reports_Model_Resource_Product_Index_Viewed</product_index_viewed>
                     <product_index_viewed_collection>Zolago_Reports_Model_Resource_Product_Index_Viewed_Collection</product_index_viewed_collection>
                 </rewrite>
             </reports_resource>
