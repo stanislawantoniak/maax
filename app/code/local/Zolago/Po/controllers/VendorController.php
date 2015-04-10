@@ -31,6 +31,47 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->addAttributeToSelect("price");
             $collection->addAttributeToSelect($vendorSku, "left");
 
+
+            // START: Adding product flag to know that configurable product is in SALE or PROMOTION
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attrProductFlag */
+            $attrProductFlag = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "product_flag");
+
+            $collection->getSelect()
+                ->joinLeft(
+                    array ("cpr" => $collection->getTable('catalog/product_relation'))
+                    ,"e.entity_id = cpr.child_id"
+                    ,"parent_id"
+                );
+
+            $collection->getSelect()
+                ->joinLeft(
+                    array("cpei" => 'catalog_product_entity_int'),
+                    'cpr.parent_id = cpei.entity_id AND '.
+                    '( cpei.store_id = ' . $storeId .') AND '.
+                    '( cpei.attribute_id = ' . $attrProductFlag->getAttributeId() . ') '
+                    ,'cpei.value AS product_flag'
+                );
+            // END
+
+
+            // START: adding url_path for configurable
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attrProductFlag */
+            $attrUrlPath = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "url_path");
+
+            $collection->getSelect()
+                ->joinLeft(
+                    array("cpev" =>'catalog_product_entity_varchar')
+                    ,'cpev.entity_id = cpr.parent_id AND '.
+                    '( cpev.store_id = ' . $storeId . ') AND '.
+                    '( cpev.attribute_id = ' . $attrUrlPath->getAttributeId() . ') '
+                    ,'cpev.value AS url_path_configurable'
+                );
+            // END
+
+            // START: adding url_path for simple
+            $collection->addAttributeToSelect('url_path', "left");
+            // END
+
             $collection->addAttributeToFilter("udropship_vendor", $po->getUdropshipVendor());
             $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
@@ -451,6 +492,58 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     }
 
     /**
+     * Gets param price and parse
+     * If no set, default value taken
+     * Note: null to float is zero
+     *
+     * @param null $default
+     * @return float
+     */
+    protected function _getParamPrice($default = null) {
+        $val = str_replace(",",".",$this->getRequest()->getParam("product_price", $default));
+        return $this->_parseForFloat($val, $default);
+    }
+
+    /**
+     * Gets param qty and parse
+     * If no set, default value taken
+     *
+     * @param int $default
+     * @return int
+     */
+    protected function _getParamQty($default = 1) {
+        return (int)$this->getRequest()->getParam("product_qty", $default);
+    }
+
+    /**
+     * Gets param discount and parse
+     * If no set, default value taken
+     *
+     * @param int $default
+     * @return mixed
+     */
+    protected function _getParamDiscount($default = 0) {
+        $val = str_replace(",",".",$this->getRequest()->getParam("product_discount", $default));
+        return $this->_parseForFloat($val, $default);
+    }
+
+    /**
+     * Gets float value from string
+     * If security problem return float from default
+     *
+     * @param string $val
+     * @param $default
+     * @return float
+     */
+    protected function _parseForFloat($val, $default) {
+        if (substr_count($val, '.') < 2) {
+            // security, from front this value always should by in format like: 999.99
+            return round(floatval($val), 2);
+        }
+        return round(floatval($default), 2);
+    }
+
+    /**
      * @todo move it into model
      * @return void
      */
@@ -474,9 +567,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $item = $po->getItemById($itemId);
         /* @var $item Zolago_Po_Model_Po_Item */
 
-        $price = str_replace(",",".",$request->getParam("product_price"));
-        $qty = (int)$request->getParam("product_qty", 1);
-        $discount = str_replace(",",".",$request->getParam("product_discount", 0));
+        $price    = $this->_getParamPrice();
+        $qty      = $this->_getParamQty();
+        $discount = $this->_getParamDiscount();
 
         $product = Mage::getModel("catalog/product");//
 
@@ -619,9 +712,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         /** @var $product Mage_Catalog_Model_Product */
 
-        $price = $request->getParam("product_price");
-        $qty = $request->getParam("product_qty", 1);
-        $discount = $request->getParam("product_discount", 0);
+        $price    = $this->_getParamPrice();
+        $qty      = $this->_getParamQty();
+        $discount = $this->_getParamDiscount();
 
         if(empty($discount) || $discount<0) {
             $discount = 0;
@@ -704,7 +797,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             ) {
 
                 $itemSData = array(
-                    'row_total' => $priceExclTax * $qty,
+                    'row_total' => $finalPriceExclTax * $qty,
                     'price' => $priceExclTax,
                     'weight' => $product->getWeight(),
                     'qty' => $qty,
@@ -739,7 +832,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 //parent
                 $itemData = array(
-                    'row_total' => $priceExclTax * $qty,
+                    'row_total' => $finalPriceExclTax * $qty,
                     'price' => $priceExclTax,
                     'weight' => $product->getWeight(),
                     'qty' => $qty,
@@ -808,6 +901,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     'base_price_incl_tax' => null, // @todo use currency
                     'row_total_incl_tax' => null,
                     'base_row_total_incl_tax' => null,
+                    'discount_amount'		=> null,
+                    'discount_percent'		=> null
                 );
 
                 $child->addData($itemPData);

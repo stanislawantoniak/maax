@@ -79,6 +79,7 @@ var App = function($) {
 							//$noty.close();
 							if(self.data("ok-url")){
 								document.location.replace(self.data("ok-url"));
+                                $(this).attr('disabled', true)
 							}
 						}
 					}, {
