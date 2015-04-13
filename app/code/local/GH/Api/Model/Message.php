@@ -131,6 +131,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 */
 	public function confirmMessages($token, array $messages) {
 		$user = $this->getUserByToken($token);
+		$vendor = $user->getVendor();
 
 		//first check if all provided ids are numbers
 		$messagesIds = array();
@@ -185,6 +186,16 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
                     $this->throwMessageIdWrongError($idsCheck);
                 }
 
+				//set reservation flag to 0 if config says so
+				if($vendor->getData('ghapi_reservation_disabled')) {
+					$posToChange = $this->getPosIdsByNewOrderMessages($messagesIdsToDelete);
+					if(count($posToChange)) {
+						/** @var Zolago_Po_Model_Po $poModel */
+						$poModel = Mage::getModel('zolagopo/po');
+						$poModel->ghApiSetOrdersReservationAfterRead($posToChange);
+					}
+				}
+
 				//confirm messages
                 try {
                     $this->getResource()->deleteMessages($messagesIdsToDelete);
@@ -196,6 +207,22 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param array $messagesIds
+	 * @return array
+	 */
+	protected function getPosIdsByNewOrderMessages($messagesIds) {
+		$messagesCollection = $this->getCollection();
+		$messagesCollection->filterByIds($messagesIds);
+		$messagesCollection->filterByMessage(GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER);
+		$posIds = array();
+		/** @var GH_Api_Model_Message $message */
+		foreach($messagesCollection as $message) {
+			$posIds[] = $message->getPoIncrementId();
+		}
+		return $posIds;
 	}
 
 	/**

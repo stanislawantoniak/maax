@@ -184,6 +184,14 @@
 				<xsd:element name="orderList" type="tns:orderList" nillable="true"/>	
 			</xsd:all>
 		</xsd:complexType>
+	    <xsd:complexType name="setOrderReservation">
+		    <xsd:all>
+			    <xsd:element name="sessionToken" type="xsd:string"/>
+			    <xsd:element name="orderID" type="xsd:string"/>
+			    <xsd:element name="reservationStatus" type="xsd:string"/>
+			    <xsd:element name="reservationMessage" type="xsd:string"/>
+		    </xsd:all>
+	    </xsd:complexType>
 	</xsd:schema>
   </types>
   <message name="doLoginRequest">
@@ -221,7 +229,13 @@
   </message>	
   <message name="setOrderShipmentResponse">
       <part name="setOrderShipmentResponse" type="tns:statusResponse"/>
-  </message>	
+  </message>
+  <message name="setOrderReservationRequest">
+	  <part name="setOrderReservationRequest" type="tns:setOrderReservation"/>
+  </message>
+  <message name="setOrderReservationResponse">
+	  <part name="setOrderReservationResponse" type="tns:statusResponse"/>
+  </message>
   <portType name="GHApi_PortType">
       <operation name="doLogin">
          <input message="tns:doLoginRequest"/>
@@ -247,6 +261,10 @@
          <input message="tns:getOrdersByIDRequest"/>
          <output message="tns:getOrdersByIDResponse"/>
       </operation>
+	  <operation name="setOrderReservation">
+		  <input message="tns:setOrderReservationRequest"/>
+		  <output message="tns:setOrderReservationResponse"/>
+	  </operation>
   </portType>
   <binding name="GHApi_Binding" type="tns:GHApi_PortType">
       <soap:binding style="document"
@@ -329,6 +347,19 @@
                use="literal"/>
          </output>
       </operation>
+	  <operation name="setOrderReservation">
+		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>setOrderReservation"/>
+		  <input>
+		  <soap:body
+			  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+			  use="literal"/>
+		  </input>
+		  <output>
+			  <soap:body
+				  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+				  use="literal"/>
+		  </output>
+	  </operation>
   </binding>
   <service name="GHApi_Service">
 	  <port binding="tns:GHApi_Binding" name="GHApi_Port">
