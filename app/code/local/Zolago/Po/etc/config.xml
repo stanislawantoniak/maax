@@ -277,20 +277,18 @@
             </udpo_po_status_save_after>
             <udpo_po_status_save_after>
                 <observers>
-                    <udpo>
-                        <type>singleton</type>
+                    <zolagopo>
                         <class>zolagopo/observer</class>
                         <method>setOrderReservation</method>
-                    </udpo>
+                    </zolagopo>
                 </observers>
             </udpo_po_status_save_after>
             <udpo_po_status_save_after>
                 <observers>
-                    <udpo>
-                        <type>singleton</type>
+                    <zolagopo>
                         <class>zolagopo/observer</class>
                         <method>setOrderState</method>
-                    </udpo>
+                    </zolagopo>
                 </observers>
             </udpo_po_status_save_after>
 			<udpo_po_shipment_save_before>
