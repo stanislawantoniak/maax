@@ -163,7 +163,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                 $poOrderId = $shipment->getUdpoId();
 
                 /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
-                $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
+                $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
 
                 if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
                     Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
