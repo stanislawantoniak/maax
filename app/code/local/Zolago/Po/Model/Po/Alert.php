@@ -18,7 +18,7 @@ class Zolago_Po_Model_Po_Alert
 				return "There is another order from the same customer. Click the %s to see the customer order.";
 			break;
 			case self::ALERT_GH_API_RESERVATION_PROBLEM:
-				return "Products reservations in vendor system could not be made";
+				return "Products reservations in vendor's system could not be made";
 				break;
 		}
 		return "";
