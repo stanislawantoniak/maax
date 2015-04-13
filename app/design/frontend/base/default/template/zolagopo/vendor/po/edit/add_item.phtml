@@ -33,7 +33,7 @@ $_currency = $_po->getOrder()->getOrderCurrencyCode();
 						<li class="form-group product-specified">
 							<label for="additem-product_price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control pricePositive required numeric priceTwoPositionPrecision"/>
+								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control pricePositive required numeric priceTwoPositionPrecision priceNoZeros"/>
 							</div>
 							<div class="col-md-5">
 								<div class="after-filed-label text-muted">
