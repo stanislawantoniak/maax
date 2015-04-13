@@ -521,6 +521,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         }
     }
     public function setOrderState($observer) {
+        Mage::log('setOrderState ', null, 'rma.log');
         $po = $observer->getPo();
             Mage::getModel('udpo/po')
                 ->setOrderState($po);
