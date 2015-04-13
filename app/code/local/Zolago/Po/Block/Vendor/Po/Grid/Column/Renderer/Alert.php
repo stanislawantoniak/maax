@@ -25,6 +25,6 @@ class Zolago_Po_Block_Vendor_Po_Grid_Column_Renderer_Alert
 				);
 			}
 		}
-		return implode("<br/>", $return);
+		return implode("<br/><br/>", $return);
 	}
 }
