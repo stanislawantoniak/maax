@@ -160,14 +160,16 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 			foreach ($_sTracks as $sTrack) {
                 $shipment = $sTrack->getShipment();
                 $shipmentStatus = (int)$shipment->getUdropshipStatus();
+                $poOrderId = $shipment->getUdpoId();
+
+                /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
+                $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
+
                 if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
                     Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
                 }
                 if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
-                    $poOrderId = $shipment->getUdpoId();
 
-                    /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
-                    $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
                     $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 
                     try {
@@ -177,19 +179,21 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                         return false;
                     }
                 }
+                $this->_setOrderState($poOrder);
 			}
 		} else {
             $sTrack = $_sTracks;
             $shipment = $sTrack->getShipment();
             $shipmentStatus = (int)$shipment->getUdropshipStatus();
+            $poOrderId = $shipment->getUdpoId();
+
+            /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
+            $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
             if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
                 Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
             }
             if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
-                $poOrderId = $shipment->getUdpoId();
 
-                /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
-                $poOrder = Mage::getModel('udpo/po')->load($poOrderId);
                 $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 
                 try {
@@ -199,11 +203,18 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                     return false;
                 }
             }
+            $this->_setOrderState($poOrder);
 		}
 
 
 
 		return $this;
 	}
+
+    private function _setOrderState($po)
+    {
+        Mage::getModel('udpo/po')
+            ->setOrderState($po);
+    }
 
 }
