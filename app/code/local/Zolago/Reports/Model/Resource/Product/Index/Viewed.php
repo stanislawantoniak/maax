@@ -25,28 +25,68 @@ class Zolago_Reports_Model_Resource_Product_Index_Viewed extends Mage_Reports_Mo
         $adapter = $this->_getWriteAdapter();
         $select  = $adapter->select()
             ->from($this->getMainTable())
-            ->where('sharing_code = ?', $object->getSharingCode())
+            ->where( 'sharing_code = ?', $object->getSharingCode())
             ->orWhere('customer_id = ?', $object->getCustomerId());
 
         $rowAll = $select->query()->fetchAll();
-        Mage::log($rowAll, null, 'mylog.log');
 
-        $rowsUser    = array();
-        $rowsVisitor = array();
-        $commonPart  = array();
-
+        // Help array
+        $allRowsByProdId = array();
         foreach ($rowAll as $row) {
-            if (!is_null($row['customer_id'])) {
-                $rowsUser[] = $row;
-                continue;
-            }
-            if (!is_null($row['sharing_code'])) {
-                $rowsVisitor[] = $row;
-                continue;
+            $allRowsByProdId[$row['product_id']][] = $row ;
+        }
+
+        // Ids (index_id) to remove because DB index can't duplicate
+        $idsToRemove = array();
+        // Records that need to be updated (newer date added_at)
+        $rowsToUpdateAddedAt = array();
+
+        foreach ($allRowsByProdId as $row) {
+            if (count($row) > 1) {
+                $newDate0 = DateTime::createFromFormat('Y-m-d H:i:s', $row[0]['added_at']);
+                $newDate1 = DateTime::createFromFormat('Y-m-d H:i:s', $row[1]['added_at']);
+                $newestDate = $newDate0 > $newDate1 ? $newDate0 : $newDate1;
+                foreach ($row as $r) {
+                    if (is_null($r['customer_id'])) {
+                        $idsToRemove[] = $r['index_id'];
+                    } else {
+                        if (DateTime::createFromFormat('Y-m-d H:i:s', $r['added_at']) < $newestDate) {
+                            $rowsToUpdateAddedAt[$r['index_id']] = $r;
+                            $rowsToUpdateAddedAt[$r['index_id']]['added_at'] = $newestDate->format('Y-m-d H:i:s');
+                        }
+                    }
+                }
             }
         }
 
-        //todo
+        // Removing from DB
+        if (!empty($idsToRemove)) {
+            $adapter->delete($this->getMainTable(), 'index_id IN (' .implode(",",$idsToRemove).")");
+        }
+
+        // Transfer info from visitor to customer
+        $adapter->update(
+            $this->getMainTable()
+            ,array(
+                'customer_id'   => $object->getCustomerId(),
+                'sharing_code'  => null
+            )
+            ,"sharing_code = '" . $object->getSharingCode() ."'"
+        );
+
+        // Updating date added_at
+        foreach ($rowsToUpdateAddedAt as $key => $row) {
+            $adapter->update(
+                $this->getMainTable()
+                ,array(
+                    'customer_id'   => $object->getCustomerId(),
+                    'store_id'      => $object->getStoreId(),
+                    'added_at'      => $row['added_at']
+                )
+                ,'index_id = ' . $key
+            );
+        }
+
         return $this;
     }
 }
