@@ -259,6 +259,7 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_change_pos>
+
 			<udpo_po_status_save_after>
 				<observers>
 					<zolagopo>
@@ -275,22 +276,32 @@
                     </zolagopo>
                 </observers>
             </udpo_po_status_save_after>
+
+            <udpo_po_status_save_after>
+                <observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
+                </observers>
+            </udpo_po_status_save_after>
             <udpo_po_status_save_after>
                 <observers>
                     <zolagopo>
-                        <model>zolagopo/observer</model>
+                        <class>zolagopo/observer</class>
                         <method>setOrderReservation</method>
                     </zolagopo>
                 </observers>
             </udpo_po_status_save_after>
-            <udpo_po_status_save_after>
+            <udpo_po_save_after>
                 <observers>
                     <zolagopo>
-                        <model>zolagopo/observer</model>
-                        <method>setOrderState</method>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderReservationOnSave</method>
                     </zolagopo>
                 </observers>
-            </udpo_po_status_save_after>
+            </udpo_po_save_after>
 			<udpo_po_shipment_save_before>
 				<observers>
 					<poShipmentSaveBefore>

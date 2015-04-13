@@ -522,35 +522,45 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     }
     public function setOrderState($observer) {
         $po = $observer->getPo();
-
-        $oldStatus = $observer->getOldStatus();
-        $newStatus = $observer->getNewStatus();
-
-        if($oldStatus !== $newStatus){
             Mage::getModel('udpo/po')
                 ->setOrderState($po);
-        }
     }
-    public function setOrderReservation($observer) {
+    public function setOrderReservationOnSave($observer)
+    {
         $po = $observer->getPo();
-        $oldStatus = $observer->getOldStatus();
-        $newStatus = $observer->getNewStatus();
-        $vendor = $po->getVendor();
-        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
-
-        if($oldStatus !== $newStatus){
-            $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
-
-            if(in_array($newStatus, explode(',', $poOpenOrder))){
-                //set reservation=1
-                $po->setReservation(1);
-                $po->getResource()->saveAttribute($po, 'reservation');
-            } else {
-                //set reservation=0
-                $po->setReservation(0);
-                $po->getResource()->saveAttribute($po, 'reservation');
-            }
+        $newStatus = (int)$po->getUdropshipStatus();
+        $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+        //Mage::log($newStatus, null, 'setOrderReservationOnSave.log');
+        //Mage::log($poOpenOrder, null, 'setOrderReservationOnSave.log');
+        if (in_array($newStatus, explode(',', $poOpenOrder))) {
+            //set reservation=1
+            $po->setReservation(1);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        } else {
+            //set reservation=0
+            $po->setReservation(0);
+            $po->getResource()->saveAttribute($po, 'reservation');
         }
+
+    }
+    public function setOrderReservation($observer)
+    {
+        $po = $observer->getPo();
+
+        $newStatus = $observer->getNewStatus();
+        $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+        //Mage::log($newStatus, null, 'setOrderReservation.log');
+        //Mage::log($poOpenOrder, null, 'setOrderReservation.log');
+        if (in_array($newStatus, explode(',', $poOpenOrder))) {
+            //set reservation=1
+            $po->setReservation(1);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        } else {
+            //set reservation=0
+            $po->setReservation(0);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        }
+
     }
     /**
      * Adding messages ITEMS_CHANGED to GH_API queue

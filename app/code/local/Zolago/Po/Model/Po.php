@@ -698,9 +698,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 					foreach($sameEmail as $po){
 						$oldAlert = (int)$po->getAlert();
-						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
-							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
-						}
+						$oldAlert|=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 						$po->setAlert($oldAlert);
 						$po->getResource()->saveAttribute($po, "alert");
 					}
@@ -949,6 +947,99 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             return '';
         }
     }
+
+
+
+	const GH_API_RESERVATION_STATUS_OK = 'ok';
+	const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';
+
+	/**
+	 * GH Api method to set reservation flag on PO object
+	 * @param string $reservationStatus
+	 * @param string|bool $reservationMessage
+	 * @return $this
+	 */
+	public function ghApiSetOrderReservation($reservationStatus,$reservationMessage=false) {
+		$reservationStatus = trim(strtolower($reservationStatus));
+		$save = false;
+		$alert = $this->getAlert();
+		switch($reservationStatus) {
+
+			case self::GH_API_RESERVATION_STATUS_OK:
+				$this->setReservation(0);
+				$alert &= ~ Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
+				$save = true;
+				break;
+
+			case self::GH_API_RESERVATION_STATUS_PROBLEM:
+				$statusModel = $this->getStatusModel();
+
+				if(!$reservationMessage) {
+					$this->throwWrongReservationMessageError();
+				}
+
+				if(!$statusModel->isManulaStatusAvailable($this) ||
+					!in_array($statusModel::STATUS_ONHOLD, array_keys($statusModel->getAvailableStatuses($this)))) {
+					$this->throwCannotChangePoStatusError();
+				} else {
+					$statusModel->changeStatus($this, $statusModel::STATUS_ONHOLD);
+					$alert |= Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
+					$save = true;
+				}
+				break;
+
+			default:
+				$this->throwWrongReservationStatusError();
+		}
+		if($reservationMessage) {
+			$this->addComment($reservationMessage,false,true);
+		}
+		if($save) {
+			$this->setAlert($alert);
+			$this->save();
+		}
+		return $this;
+	}
+
+	/**
+	 * GH Api method to set reservation flag on multiple pos that has been confirmed as read
+	 * @param array $posIds
+	 * @return $this
+	 */
+	public function ghApiSetOrdersReservationAfterRead($posIds) {
+		foreach($posIds as $poId) {
+			$this
+				->loadByIncrementId($poId)
+				->setReservation(0)
+				->save();
+		}
+		$this->unsetData();
+		return $this;
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwWrongReservationStatusError() {
+		Mage::throwException('error_reservation_status_invalid');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwCannotChangePoStatusError() {
+		Mage::throwException('error_order_status_change');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwWrongReservationMessageError() {
+		Mage::throwException('error_reservation_message_invalid');
+	}
 
 
     /**
