@@ -1050,7 +1050,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     {
         $order = $po->getOrder();
         $orderId = $order->getId();
-
+Mage::log($orderId, null, 'setOrderState.log');
 
         $orderPos = Mage::getModel('udpo/po')
             ->getCollection()
