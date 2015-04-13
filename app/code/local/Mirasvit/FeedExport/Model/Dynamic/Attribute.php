@@ -38,9 +38,11 @@ class Mirasvit_FeedExport_Model_Dynamic_Attribute extends Mage_Core_Model_Abstra
             $valid = true;
             if (isset($condition['attribute'])) {
                 foreach ($condition['attribute'] as $indx => $attrCode) {
+                    if ($attrCode == 'campaign_regular_id') {
+                        
+                    }
                     $attrPattern = '{'.$attrCode.'}';
                     $attrValue = $patternModel->getPatternValue($attrPattern, 'product', $product);
-
                     $options = $this->getOptions($attrCode);
 
                     if (isset($options[$condition['value'][$indx]])) {
@@ -48,10 +50,11 @@ class Mirasvit_FeedExport_Model_Dynamic_Attribute extends Mage_Core_Model_Abstra
                     }
 
                     $validator = Mage::getModel('feedexport/dynamic_attribute_validator');
-                    $validator->setValue($condition['value'][$indx])
+                    // $validator->setValue($condition['value'][$indx])
+                    $validator->setValue(trim($condition['value'][$indx]))
                         ->setOperator($condition['condition'][$indx]);
 
-                    if (!$validator->validateAttribute($attrValue)) {
+                    if (!$validator->validateAttribute(trim($attrValue))) {
                         $valid = false;
                     }
                 }
@@ -88,6 +91,7 @@ class Mirasvit_FeedExport_Model_Dynamic_Attribute extends Mage_Core_Model_Abstra
                 $options = $attribute->getSource()->getAllOptions(false);
                 foreach ($options as $key => $value) {
                     $result[$value['value']] = $value['label'];
+                    // $result[trim($value['value'])] = trim($value['label']);
                 }
             }
             self::$_attr[$code] = $result;
