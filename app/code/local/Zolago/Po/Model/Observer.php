@@ -530,8 +530,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $po = $observer->getPo();
         $newStatus = (int)$po->getUdropshipStatus();
         $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
-        //Mage::log($newStatus, null, 'setOrderReservationOnSave.log');
-        //Mage::log($poOpenOrder, null, 'setOrderReservationOnSave.log');
+        Mage::log($newStatus, null, 'setOrderReservationOnSave.log');
+        Mage::log($poOpenOrder, null, 'setOrderReservationOnSave.log');
         if (in_array($newStatus, explode(',', $poOpenOrder))) {
             //set reservation=1
             $po->setReservation(1);
@@ -549,8 +549,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 
         $newStatus = $observer->getNewStatus();
         $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
-        //Mage::log($newStatus, null, 'setOrderReservation.log');
-        //Mage::log($poOpenOrder, null, 'setOrderReservation.log');
+        Mage::log($newStatus, null, 'setOrderReservation.log');
+        Mage::log($poOpenOrder, null, 'setOrderReservation.log');
         if (in_array($newStatus, explode(',', $poOpenOrder))) {
             //set reservation=1
             $po->setReservation(1);
