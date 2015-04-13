@@ -143,41 +143,41 @@ class Zolago_Reports_Model_Resource_Product_Index_Viewed extends Mage_Reports_Mo
         return $this;
     }
 
-//    /**
-//     * Add information about product ids to visitor/customer
-//     *
-//     *
-//     * @param Varien_Object|Mage_Reports_Model_Product_Index_Abstract $object
-//     * @param array $productIds
-//     * @return Mage_Reports_Model_Resource_Product_Index_Abstract
-//     */
-//    public function registerIds(Varien_Object $object, $productIds)
-//    {
-//        $row = array(
-//            'visitor_id'    => $object->getVisitorId(),
-//            'customer_id'   => $object->getCustomerId(),
-//            'store_id'      => $object->getStoreId(),
-//        );
-//        $addedAt    = Varien_Date::toTimestamp(true);
-//        $data = array();
-//        foreach ($productIds as $productId) {
-//            $productId = (int) $productId;
-//            if ($productId) {
-//                $row['product_id'] = $productId;
-//                $row['added_at']   = Varien_Date::formatDate($addedAt);
-//                $data[] = $row;
-//            }
-//            $addedAt -= ($addedAt > 0) ? 1 : 0;
-//        }
-//
-//        $matchFields = array('product_id', 'store_id');
-//        foreach ($data as $row) {
-//            Mage::getResourceHelper('reports')->mergeVisitorProductIndex(
-//                $this->getMainTable(),
-//                $row,
-//                $matchFields
-//            );
-//        }
-//        return $this;
-//    }
+    /**
+     * Add information about product ids to visitor/customer
+     *
+     *
+     * @param Varien_Object|Zolago_Reports_Model_Product_Index_Viewed $object
+     * @param array $productIds
+     * @return Zolago_Reports_Model_Resource_Product_Index_Viewed
+     */
+    public function registerIds(Varien_Object $object, $productIds)
+    {
+        $row = array(
+            'sharing_code'    => $object->getSharingCode(),
+            'customer_id'   => $object->getCustomerId(),
+            'store_id'      => $object->getStoreId(),
+        );
+        $addedAt = date('Y-m-d H:i:s', Mage::getSingleton('core/data')->timestamp());
+        $data = array();
+        foreach ($productIds as $productId) {
+            $productId = (int) $productId;
+            if ($productId) {
+                $row['product_id'] = $productId;
+                $row['added_at']   = $addedAt->format('Y-m-d H:i:s');
+                $data[] = $row;
+            }
+            $addedAt -= ($addedAt > 0) ? 1 : 0;
+        }
+
+        $matchFields = array('product_id', 'store_id');
+        foreach ($data as $row) {
+            Mage::getResourceHelper('reports')->mergeVisitorProductIndex(
+                $this->getMainTable(),
+                $row,
+                $matchFields
+            );
+        }
+        return $this;
+    }
 }
