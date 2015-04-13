@@ -286,7 +286,6 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {
-            Mage::logException($e);
             $message = $e->getMessage();
             $status = false;
         }
@@ -298,6 +297,34 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
     }
 
+	public function setOrderReservation($setOrderReservationRequest) {
+		$request = $setOrderReservationRequest;
+		$token = $request->sessionToken;
+
+		try {
+			$user = $this->getUserByToken($token);
+
+			/** @var Zolago_Po_Model_Po $po */
+			$po = Mage::getModel('zolagopo/po')->load($request->orderID, 'increment_id');
+
+			if ($user->getVendorId() != $po->getUdropshipVendor()) {
+				$this->throwOrderIdWrongError();
+			}
+
+			$po->ghApiSetOrderReservation($request->reservationStatus, $request->reservationMessage);
+
+			$message = 'ok';
+			$status = true;
+		} catch(Exception $e) {
+			$message = $e->getMessage();
+			$status = false;
+		}
+
+		$obj = new StdClass();
+		$obj->message = $message;
+		$obj->status = $status;
+		return $obj;
+	}
     /**
      * @return GH_Api_Model_Message
      */
