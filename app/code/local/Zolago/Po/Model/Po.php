@@ -1047,7 +1047,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      * @return bool
      */
     public function setOrderState(Zolago_Po_Model_Po $po)
-    {Mage::log('setOrderState', null,'setOrderState.log');
+    {Mage::log('setOrderState', null,'rma.log');
         $order = $po->getOrder();
         $orderId = $order->getId();
         Mage::log('$orderId ' . $orderId, null, 'rma.log');
@@ -1072,7 +1072,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
                 $poStatuses[] = (int)$orderPo->getUdropshipStatus();
             }
         }
-
+        Mage::log($poStatuses, null,'rma.log');
         $diffCompleteStatuses = array_diff($poStatuses, $completePos);
 
         $diffCancelStatuses = array_diff($poStatuses, $cancelPos);
