@@ -160,8 +160,8 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		        $po->addComment($_comment,false,true);
 		        $po->saveComments();
 
-                Mage::getModel('udpo/po')
-                    ->setOrderState($po);
+//                Mage::getModel('udpo/po')
+//                    ->setOrderState($po);
 		    }
 		}
 		/*$this->_logEvent(

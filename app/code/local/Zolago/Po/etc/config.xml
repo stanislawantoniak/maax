@@ -286,6 +286,14 @@
                     </udpo>
                 </observers>
             </udpo_po_status_save_after>
+            <udpo_po_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </zolagopo>
+                </observers>
+            </udpo_po_save_after>
             <udpo_po_status_save_after>
                 <observers>
                     <zolagopo>
