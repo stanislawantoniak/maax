@@ -298,7 +298,7 @@
                 <observers>
                     <zolagopo>
                         <class>zolagopo/observer</class>
-                        <method>setOrderReservation</method>
+                        <method>setOrderReservationOnSave</method>
                     </zolagopo>
                 </observers>
             </udpo_po_save_after>
