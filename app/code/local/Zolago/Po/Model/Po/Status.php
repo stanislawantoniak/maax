@@ -102,7 +102,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function processConfirmRelease(Zolago_Po_Model_Po $po) {
 		if($this->isConfirmReleaseAvailable($po)){
-			if($po->isGatewayPayment() && !$po->isPaid()){
+			if(!$po->isCod() && !$po->isPaid()){
 				$status = self::STATUS_BACKORDER;
 			}else{
 				$status = self::STATUS_PENDING;
@@ -122,7 +122,7 @@ class Zolago_Po_Model_Po_Status
 		if($this->isConfirmStockAvailable($po)){
 			$po->setStockConfirm(1);
 			$po->getResource()->saveAttribute($po, "stock_confirm");
-			if($po->isGatewayPayment() && !$po->isPaid()){
+			if(!$po->isCod() && !$po->isPaid()){
 				$status = self::STATUS_PAYMENT;
 			}else{
 				$status = self::STATUS_PENDING;
