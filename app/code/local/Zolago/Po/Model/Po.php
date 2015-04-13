@@ -1009,7 +1009,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	public function ghApiSetOrdersReservationAfterRead($posIds) {
 		foreach($posIds as $poId) {
 			$this
-				->load($poId)
+				->loadByIncrementId($poId)
 				->setReservation(0)
 				->save();
 		}
@@ -1050,7 +1050,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     {
         $order = $po->getOrder();
         $orderId = $order->getId();
-Mage::log($orderId, null, 'setOrderState.log');
+
 
         $orderPos = Mage::getModel('udpo/po')
             ->getCollection()

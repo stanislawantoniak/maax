@@ -1071,7 +1071,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		            $errors = true;
 		            $session->addError($langHelper->__("Invalid last name"));
 	            }
-	            if(!$data['telephone']) {
+	            if(!$data['telephone'] && $type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
 		            $errors = true;
 		            $session->addError($langHelper->__("Invalid telephone"));
 	            }

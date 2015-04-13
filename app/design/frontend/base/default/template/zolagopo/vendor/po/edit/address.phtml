@@ -119,48 +119,74 @@
 		</form>
 	</div>
 </div>
-<?php if($this->isBilling()):?>
 <script type="text/javascript">
-jQuery(function($){
-	var form = $("#<?php echo $_type;?>-address-form");
-	form.find(".sales-document").change(function(){
-		var dependsFileds = form.find(".invoice-data");
-		if($(this).val()==1 && $(this).is(":checked")){
-			dependsFileds.show();
-		}else{
-			dependsFileds.hide();
-		}
-	}).filter(":checked").change();
-});
-</script>
-<?php else:?>
-
-<script type="text/javascript">
-jQuery(function($){
-	var form = $("#<?php echo $_type;?>-address-form");
-    form.validate({
-        rules: {
-            "postcode": {
-	            postcodeWithReplace: true,
-	            required: true
-            },
-	        "firstname": {
-		        required: true
-	        },
-	        "lastname": {
-		        required: true
-	        },
-	        "telephone": {
-		        required: true
-	        },
-	        "street": {
-		        required: true
-	        },
-	        "city": {
-		        required: true
+	jQuery(function($){
+	<?php if($this->isBilling()):?>
+		var form = $("#<?php echo $_type;?>-address-form"),
+			checkboxClass = ".sales-document",
+			checkbox = form.find(checkboxClass),
+			checked = form.find(checkboxClass+':checked'),
+			invoiceForPo = checked.val() ? true : false;
+		checkbox.change(function(){
+			var dependsFields = form.find(".invoice-data");
+			if($(this).val()==1 && $(this).is(":checked")){
+				dependsFields.show();
+				invoiceForPo = true;
+			}else{
+				dependsFields.hide();
+				invoiceForPo = false;
+			}
+		}).filter(":checked").change();
+		form.validate({
+			rules: {
+				"postcode": {
+					postcodeWithReplace: true,
+					required: true
+				},
+				"firstname": {
+					required: true
+				},
+				"lastname": {
+					required: true
+				},
+				"street": {
+					required: true
+				},
+				"city": {
+					required: true
+				}
+			}
+		});
+	<?php else:?>
+		var form = $("#<?php echo $_type;?>-address-form");
+	    form.validate({
+	        rules: {
+	            "postcode": {
+		            postcodeWithReplace: true,
+		            required: true
+	            },
+		        "firstname": {
+			        required: true
+		        },
+		        "lastname": {
+			        required: true
+		        },
+		        "telephone": {
+			        required: true
+		        },
+		        "street": {
+			        required: true
+		        },
+		        "city": {
+			        required: true
+		        }
 	        }
-        }
-    });
-});
+	    });
+	<?php endif;?>
+
+		form.find('button[name=restore]').click(function() {
+			form.validate().settings.ignore = "*";
+			form.submit();
+		});
+	});
 </script>
-<?php endif;?>
