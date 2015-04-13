@@ -6,7 +6,7 @@ class Zolago_Reports_Model_Resource_Product_Index_Viewed extends Mage_Reports_Mo
      * Update Customer from visitor (Customer logged in)
      *
      * @param Mage_Reports_Model_Product_Index_Abstract $object
-     * @return Mage_Reports_Model_Resource_Product_Index_Abstract
+     * @return Zolago_Reports_Model_Resource_Product_Index_Viewed
      */
     public function updateCustomerFromVisitor(Mage_Reports_Model_Product_Index_Abstract $object)
     {
@@ -89,4 +89,95 @@ class Zolago_Reports_Model_Resource_Product_Index_Viewed extends Mage_Reports_Mo
 
         return $this;
     }
+
+    /**
+     * Purge visitor data by customer (logout)
+     *
+     * @param Mage_Reports_Model_Product_Index_Abstract $object
+     * @return Zolago_Reports_Model_Resource_Product_Index_Viewed
+     */
+    public function purgeVisitorByCustomer(Mage_Reports_Model_Product_Index_Abstract $object)
+    {
+        return $this;
+    }
+
+    /**
+     * Save Product Index data (forced save)
+     *
+     * @param Mage_Core_Model_Abstract|Mage_Reports_Model_Product_Index_Abstract $object
+     * @return Zolago_Reports_Model_Resource_Product_Index_Viewed
+     */
+    public function save(Mage_Core_Model_Abstract $object)
+    {
+        return parent::save($object);
+    }
+
+    /**
+     * Clean index (visitor)
+     *
+     * @return Mage_Reports_Model_Resource_Product_Index_Abstract
+     */
+    public function clean()
+    {
+        while (true) {
+            $select = $this->_getReadAdapter()->select()
+                ->from(array('main_table' => $this->getMainTable()), array($this->getIdFieldName()))
+                ->joinLeft(
+                    array('wishlist' => $this->getTable('wishlist/wishlist')),
+                    'main_table.sharing_code = wishlist.sharing_code',
+                    array())
+                ->where('main_table.sharing_code IS NOT NULL')
+                ->where('wishlist.sharing_code IS NULL')
+                ->limit(100);
+            $indexIds = $this->_getReadAdapter()->fetchCol($select);
+
+            if (!$indexIds) {
+                break;
+            }
+
+            $this->_getWriteAdapter()->delete(
+                $this->getMainTable(),
+                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . ' IN(?)', $indexIds)
+            );
+        }
+        return $this;
+    }
+
+//    /**
+//     * Add information about product ids to visitor/customer
+//     *
+//     *
+//     * @param Varien_Object|Mage_Reports_Model_Product_Index_Abstract $object
+//     * @param array $productIds
+//     * @return Mage_Reports_Model_Resource_Product_Index_Abstract
+//     */
+//    public function registerIds(Varien_Object $object, $productIds)
+//    {
+//        $row = array(
+//            'visitor_id'    => $object->getVisitorId(),
+//            'customer_id'   => $object->getCustomerId(),
+//            'store_id'      => $object->getStoreId(),
+//        );
+//        $addedAt    = Varien_Date::toTimestamp(true);
+//        $data = array();
+//        foreach ($productIds as $productId) {
+//            $productId = (int) $productId;
+//            if ($productId) {
+//                $row['product_id'] = $productId;
+//                $row['added_at']   = Varien_Date::formatDate($addedAt);
+//                $data[] = $row;
+//            }
+//            $addedAt -= ($addedAt > 0) ? 1 : 0;
+//        }
+//
+//        $matchFields = array('product_id', 'store_id');
+//        foreach ($data as $row) {
+//            Mage::getResourceHelper('reports')->mergeVisitorProductIndex(
+//                $this->getMainTable(),
+//                $row,
+//                $matchFields
+//            );
+//        }
+//        return $this;
+//    }
 }
