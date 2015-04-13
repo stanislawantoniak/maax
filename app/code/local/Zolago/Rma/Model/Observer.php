@@ -148,9 +148,9 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		    $oldStatus = $po->getUdropshipStatus();
             Mage::log('$oldStatus ' . $oldStatus, null, 'rma.log');
 		    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_RETURNED) {
-                Mage::log('setUdropshipStatus ' . $oldStatus, null, 'rma.log');
+                Mage::log('setUdropshipStatus ' . Zolago_Po_Model_Po_Status::STATUS_RETURNED, null, 'rma.log');
 		        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_RETURNED);
-                Mage::log($newStatus, null, 'setOrderReservation.log');
+                Mage::log($newStatus, null, 'rma.log');
 		        $helper = Mage::helper('udpo');
                 $_comment = $helper->__("[PO status changed from '%s' to '%s']",
                             $helper->getPoStatusName($oldStatus),
