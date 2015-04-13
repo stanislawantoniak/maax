@@ -220,7 +220,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$posIds = array();
 		/** @var GH_Api_Model_Message $message */
 		foreach($messagesCollection as $message) {
-			$posIds[] = $message->getId();
+			$posIds[] = $message->getPoIncrementId();
 		}
 		return $posIds;
 	}
