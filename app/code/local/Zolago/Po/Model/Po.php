@@ -956,7 +956,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
      * @return bool
      */
     public function setOrderState(Zolago_Po_Model_Po $po)
-    {
+    {Mage::log('setOrderState', null,'setOrderState.log');
         $order = $po->getOrder();
         $orderId = $order->getId();
 

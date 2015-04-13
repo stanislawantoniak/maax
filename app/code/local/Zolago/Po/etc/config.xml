@@ -286,10 +286,11 @@
             </udpo_po_status_save_after>
             <udpo_po_status_save_after>
                 <observers>
-                    <zolagopo>
-                        <model>zolagopo/observer</model>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
                         <method>setOrderState</method>
-                    </zolagopo>
+                    </udpo>
                 </observers>
             </udpo_po_status_save_after>
 			<udpo_po_shipment_save_before>

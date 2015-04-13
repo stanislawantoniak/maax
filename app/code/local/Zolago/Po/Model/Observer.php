@@ -522,14 +522,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     }
     public function setOrderState($observer) {
         $po = $observer->getPo();
-
-        $oldStatus = $observer->getOldStatus();
-        $newStatus = $observer->getNewStatus();
-
-        if($oldStatus !== $newStatus){
             Mage::getModel('udpo/po')
                 ->setOrderState($po);
-        }
     }
 
     public function setOrderReservation($observer)
