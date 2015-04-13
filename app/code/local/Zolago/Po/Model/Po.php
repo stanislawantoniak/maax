@@ -949,4 +949,65 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             return '';
         }
     }
+
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @return bool
+     */
+    public function setOrderState(Zolago_Po_Model_Po $po)
+    {
+        $order = $po->getOrder();
+        $orderId = $order->getId();
+
+
+        $orderPos = Mage::getModel('udpo/po')
+            ->getCollection()
+            ->addFieldToFilter('order_id', $orderId);
+
+        $orderStatusChange = array();
+
+        $completePos = array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+        );
+        $cancelPos = array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
+        );
+        $poStatuses = array();
+        if ($orderPos->getSize() > 0) {
+            foreach ($orderPos as $orderPo) {
+                $poStatuses[] = (int)$orderPo->getUdropshipStatus();
+            }
+        }
+
+        $diffCompleteStatuses = array_diff($poStatuses, $completePos);
+
+        $diffCancelStatuses = array_diff($poStatuses, $cancelPos);
+
+
+        if (empty($diffCompleteStatuses)) {
+            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
+            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED;
+        }
+        if (empty($diffCancelStatuses)) {
+            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
+            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
+        }
+
+        //Mage::log($orderStatusChange, null, 'order.log');
+        if (!empty($orderStatusChange)) {
+            $order->setData('state', $orderStatusChange['state']);
+            $order->setStatus($orderStatusChange['state'])
+                ->setUdropshipStatus($orderStatusChange['udropship_status']);
+            try {
+                $order->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                return false;
+            }
+        }
+
+    }
 }
