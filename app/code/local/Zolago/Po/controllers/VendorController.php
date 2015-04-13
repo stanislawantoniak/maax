@@ -1412,8 +1412,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             $newStatus = $this->getRequest()->getParam('status');
 
-
-
             if(!in_array($newStatus, array_keys($statusModel->getAvailableStatuses($udpo)))) {
                 throw new Mage_Core_Exception(
                     Mage::helper("zolagopo")->__("Requested status is wrong")

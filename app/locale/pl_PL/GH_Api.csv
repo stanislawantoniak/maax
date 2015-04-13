@@ -41,3 +41,5 @@
 "Production WSDL", "WSDL produkcyjny"
 "Yes", "Tak"
 "No", "Nie"
+"Don't reserve products' stocks after downloading order by API.","Po pobraniu zamówienia przez API przestań rezerwować zapas w systemie galerii."
+"Products reservations","Rezerwacja produktów"

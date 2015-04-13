@@ -6,15 +6,24 @@ class Zolago_Po_Block_Vendor_Po_Grid_Column_Renderer_Alert
 	public function render(Varien_Object $row) {
 		$value = (int)$row->getData($this->getColumn()->getIndex());
 		$return = array();
-		
-		if(($value & Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO) /*&& !$row->isFinished()*/){
-			$filter = "customer_fullname=".  $row->getData("customer_email") . "&udropship_status=";;
-			$link = $this->getUrl("udpo/vendor/index", array("filter"=>Mage::helper('core')->urlEncode($filter)));
-			
-			$return[] = $this->__(
-					Zolago_Po_Model_Po_Alert::getAlertText(Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO), 
-					'<a href="'.$link.'">' . $this->__("link") . '</a>'
-			);
+
+		/** @var Zolago_Po_Model_Po_Alert $alertModel */
+		$alertModel = Mage::getModel("zolagopo/po_alert");
+
+		foreach($alertModel->getAllOptions() as $alertBit=>$text) {
+			if($value & $alertBit) {
+				$link = false;
+				switch($alertBit) {
+					case $alertModel::ALERT_SAME_EMAIL_PO:
+						$filter = "customer_fullname=".  $row->getData("customer_email") . "&udropship_status=";;
+						$link = $this->getUrl("udpo/vendor/index", array("filter"=>Mage::helper('core')->urlEncode($filter)));
+						break;
+				}
+				$return[] = $this->__(
+					$alertModel->getAlertText($alertBit),
+					($link ? '<a href="'.$link.'">' . $this->__("link") . '</a>' : null)
+				);
+			}
 		}
 		return implode("<br/>", $return);
 	}

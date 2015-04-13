@@ -246,6 +246,15 @@
                         <position>1</position>
                     </ghapi_vendor_access_allow>
 
+	                <ghapi_reservation_disabled translate="label">
+		                <label>Don't reserve products' stocks after downloading order by API.</label>
+		                <type>select</type>
+		                <source>yesno</source>
+		                <fieldset>ghapi_vendor_access</fieldset>
+		                <position>2</position>
+		                <default>0</default>
+	                </ghapi_reservation_disabled>
+
                     <ghapi_message_new_order>
                         <label>Pojawiło się nowe zamówienie do realizacji.</label>
                         <type>select</type>

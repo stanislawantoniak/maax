@@ -28,7 +28,6 @@ class Zolago_Common_Block_Page_Html_Head extends Mage_Page_Block_Html_Head {
 
 	public function addItemLast($type, $name, $params=null, $if=null, $cond=null)
 	{
-		Mage::log($name.' | '.$type,null,'mylog.log');
 		if ($type==='skin_css' && empty($params)) {
 			$params = 'media="all"';
 		}
