@@ -158,13 +158,13 @@ class Zolago_Reports_Model_Resource_Product_Index_Viewed extends Mage_Reports_Mo
             'customer_id'   => $object->getCustomerId(),
             'store_id'      => $object->getStoreId(),
         );
-        $addedAt = date('Y-m-d H:i:s', Mage::getSingleton('core/data')->timestamp());
+        $addedAt = Mage::getSingleton('core/data')->timestamp();
         $data = array();
         foreach ($productIds as $productId) {
             $productId = (int) $productId;
             if ($productId) {
                 $row['product_id'] = $productId;
-                $row['added_at']   = $addedAt->format('Y-m-d H:i:s');
+                $row['added_at']   = date('Y-m-d H:i:s', $addedAt)->format('Y-m-d H:i:s');
                 $data[] = $row;
             }
             $addedAt -= ($addedAt > 0) ? 1 : 0;

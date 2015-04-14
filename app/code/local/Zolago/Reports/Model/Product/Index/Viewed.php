@@ -34,7 +34,6 @@ class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Produ
      */
     protected function _beforeSave()
     {
-        parent::_beforeSave();
 
         if (!$this->hasSharingCode()) {
             $this->setSharingCode($this->getSharingCode());
@@ -44,6 +43,6 @@ class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Produ
             $this->setAddedAt(date('Y-m-d H:i:s', $time));
         }
 
-        return $this;
+        return parent::_beforeSave();
     }
 }
