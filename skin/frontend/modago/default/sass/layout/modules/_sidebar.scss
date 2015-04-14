@@ -211,11 +211,9 @@
 #solr_search_facets {
 	top: 300px;
 	position: absolute;
-	@include max-screen($screen-sm-max) {
-		display: none;
-	}
+	display: none;
 	&.filters-desktop {
-		@include min-screen($screen-md-min) {
+		@include min-screen($screen-sm-min) {
 			display: block !important;
 		}
 	}
