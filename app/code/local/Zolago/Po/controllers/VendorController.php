@@ -46,10 +46,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->getSelect()
                 ->joinLeft(
                     array("cpei" => 'catalog_product_entity_int'),
-                    'cpr.parent_id = cpei.entity_id AND '.
-                    '( cpei.store_id = ' . $storeId .') AND '.
-                    '( cpei.attribute_id = ' . $attrProductFlag->getAttributeId() . ') '
-                    ,'cpei.value AS product_flag'
+                    'cpr.parent_id = cpei.entity_id'
+                    .' AND ( cpei.store_id = ' . $storeId .') '
+                    .' AND ( cpei.attribute_id = ' . $attrProductFlag->getAttributeId() . ')'
+                    ,array(
+                        'product_flag' => 'cpei.value'
+                    )
                 );
             // END
 

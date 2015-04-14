@@ -879,4 +879,8 @@ jQuery.validator.addMethod('priceTwoPositionPrecision', function(value, element)
     return this.optional(element) || /^[0-9]{1,10}(\.[0-9]{1,2})?$/.test(value);
 }, jQuery.format(Translator.translate("Enter valid price")));
 
+
+    jQuery.validator.addMethod('priceNoZeros', function(value, element) {
+        return this.optional(element) || !/^0{1,10}(\.[0]{1,2})?$/.test(value);
+    }, jQuery.format(Translator.translate("Enter valid price")));
 }());
