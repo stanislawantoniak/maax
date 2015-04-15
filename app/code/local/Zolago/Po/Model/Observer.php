@@ -528,6 +528,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     }
     public function setOrderReservationOnSave($observer)
     {
+	    if(Mage::registry('GHAPI') === true) {
+		    return;
+	    }
         $po = $observer->getPo();
         $newStatus = (int)$po->getUdropshipStatus();
         $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
