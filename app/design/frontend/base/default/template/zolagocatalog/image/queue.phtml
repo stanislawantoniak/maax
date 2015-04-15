@@ -1,74 +1,93 @@
-<div style="float:left">
-<div class="widget">
-    <div id="control-battons">
-    <div>
-    <div>
-			<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>
-    </div>
-    <div>
-			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
-    </div>
-    <div>
-			<a class="btn-notification btn btn-primary" href="#dialog_by_name" data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>" data-placement="top" 
-			    data-layout="top" data-type="confirm" data-modal="true" data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>
-    </div>
-    <div>
-			<a class="btn btn-primary" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>
-	</div>
-    <div>
-			<button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help');?> <i class="icon-question-sign"></i></button>
-    </div>
-    <div>
-        <div class="input-group" style="width:179px">
-			<input type="text" class="form-control input-width-medium" id="input_search"/>
-			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button>
+<div>
+    <div class="widget">
+        <div id="control-battons">
+            <div>
+                <div>
+                    <button class="btn btn-primary"
+                            id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue'); ?></button>
+                </div>
+                <div>
+                    <button class="btn btn-primary"
+                            id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete'); ?></button>
+                </div>
+                <div>
+                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"
+                       data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?>"
+                       data-placement="top"
+                       data-layout="top" data-type="confirm" data-modal="true"
+                       data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?></a>
+                </div>
+                <div>
+                    <a class="btn btn-primary" href="#dialog_by_csv"
+                       data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV'); ?></a>
+                </div>
+                <div>
+                    <button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help'); ?> <i
+                            class="icon-question-sign"></i></button>
+                </div>
+                <div>
+                    <div class="input-group" style="width:179px">
+                        <input type="text" class="form-control input-width-medium" id="input_search"/>
+                        <button class="btn btn-primary input-group-btn" id="search_button" type="button"><i
+                                class="icon-search"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-	</div>
+    <div class="clearbr"></div>
+    <div id="uploader_wrapper" class="widget-content">
+        <div id="uploader"></div>
+        <div id="elf"></div>
     </div>
-    </div>
-	<div class="clearbr"></div>
-	<div id="uploader_wrapper" class="widget-content"><div id="uploader"></div><div id="elf"></div></div>
 </div>
 <div id="dialog_by_csv" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <strong><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></strong>
-        </div>
-        <div class="modal-body">
-            <div id="map_upload">
-            <div class="col-md-12">
-            <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file');?>
-            <form id="map_form" action="<?php  echo Mage::getUrl("udprod/vendor_image/csvmap");?>" method="post" enctype="multipart/form-data" name="csv_form">
-            <input type="file" name="csv_file" id="map_csv_file">
-            <br/>
-            <div class="col-md-12 align-right">
-                <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
-                <button id="map_csv_button" class="btn btn-primary" type="submit"><?php echo Mage::helper('zolagocatalog')->__('Process');?></button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong><?php echo Mage::helper('zolagocatalog')->__('Map by CSV'); ?></strong>
             </div>
-            </form>
-            </div>
-            <div id="map_process_upload" style="display:none">
-            <div class="col-md-12">
-            <?php echo Mage::helper('zolagocatalog')->__('Please wait ...');?>
-            </div>
-            <br/>
-            <div class="progress progress-striped active">
-                <div class="progress-bar progress-bar-success" id="map_progress_bar" style="width:100%"></div>
-            </div>
-            <br/>
-            <div class="col-md-12">
-                <button id="map_break_button" class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
-            </div>
-            </div>
-            <div id="map_success" style="display:none">
-            <?php echo Mage::helper('zolagocatalog')->__('Finished!');?>                
+            <div class="modal-body">
+                <div id="map_upload">
+                    <div class="col-md-12">
+                        <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file'); ?>
+                        <form id="map_form" action="<?php echo Mage::getUrl("udprod/vendor_image/csvmap"); ?>"
+                              method="post" enctype="multipart/form-data" name="csv_form">
+                            <input type="file" name="csv_file" id="map_csv_file">
+                            <br/>
+
+                            <div class="col-md-12 align-right">
+                                <button class="btn btn-default" data-dismiss="modal"
+                                        type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+                                <button id="map_csv_button" class="btn btn-primary"
+                                        type="submit"><?php echo Mage::helper('zolagocatalog')->__('Process'); ?></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="map_process_upload" style="display:none">
+                        <div class="col-md-12">
+                            <?php echo Mage::helper('zolagocatalog')->__('Please wait ...'); ?>
+                        </div>
+                        <br/>
+
+                        <div class="progress progress-striped active">
+                            <div class="progress-bar progress-bar-success" id="map_progress_bar"
+                                 style="width:100%"></div>
+                        </div>
+                        <br/>
+
+                        <div class="col-md-12">
+                            <button id="map_break_button" class="btn btn-default" data-dismiss="modal"
+                                    type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+                        </div>
+                    </div>
+                    <div id="map_success" style="display:none">
+                        <?php echo Mage::helper('zolagocatalog')->__('Finished!'); ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
 
 <script type="text/javascript">
 var elf = null;

@@ -19,15 +19,22 @@
             <li class="" style="float:left;">
                 <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add');?></a>
             </li>
+            <li class="" style="float:left;">
+                <a data-toggle="tab" href="#tab_1_3"><?php echo Mage::helper('zolagocatalog')->__('Help');?></a>
+            </li>
 
         </ul>
         <div class="tab-content">
             <div id="tab_1_1" class="tab-pane active">
                 <?php echo $this->getChildHtml("image_list");?>
             </div>
+            <div id="tab_1_3" class="tab-pane">
+                <?php echo $this->getChildHtml("image_help");?>
+            </div>
             <div id="tab_1_2" class="tab-pane">
                 <?php echo $this->getChildHtml("image_queue");?>
             </div>
+
         </div>
     </div>
 </div>

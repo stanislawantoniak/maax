@@ -73,7 +73,7 @@ class Zolago_Catalog_Vendor_ImageController
                 $header = $file[0];
                 unset($file[0]);
                 if (!preg_match('/^sku;file;order;label$/',trim($header))) {
-                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file header'));
+                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Please upload CSV file'));
                 } else {
                     foreach ($file as $number=>$line) {
                         if (trim($line) &&
