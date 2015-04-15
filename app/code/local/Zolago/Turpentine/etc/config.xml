@@ -56,6 +56,15 @@
                 </observers>
             </zolagocatalog_converter_stock_complete>
 
+            <!-- After vendor change price manual from vendor portal grid (modal price window) -->
+            <vendor_manual_save_price_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </vendor_manual_save_price_after>
 
         </events>
 	</global>
