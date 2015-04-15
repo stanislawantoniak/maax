@@ -257,7 +257,8 @@ define([
 					return null;
 				}
 				return value;
-			}
+			},
+            html: true
 		});
 		
 	};
