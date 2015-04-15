@@ -158,7 +158,7 @@ class Zolago_Reports_Model_Resource_Product_Index_Viewed extends Mage_Reports_Mo
             'customer_id'   => $object->getCustomerId(),
             'store_id'      => $object->getStoreId(),
         );
-        $addedAt = Mage::getSingleton('core/data')->timestamp();
+        $addedAt = Mage::getSingleton('core/date')->timestamp();
         $data = array();
         foreach ($productIds as $productId) {
             $productId = (int) $productId;

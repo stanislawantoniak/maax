@@ -39,7 +39,7 @@ class Zolago_Reports_Model_Product_Index_Viewed extends Mage_Reports_Model_Produ
             $this->setSharingCode($this->getSharingCode());
         }
         if (!$this->hasAddedAt()) {
-            $time = Mage::getSingleton('core/data')->timestamp();
+            $time = Mage::getSingleton('core/date')->timestamp();
             $this->setAddedAt(date('Y-m-d H:i:s', $time));
         }
 
