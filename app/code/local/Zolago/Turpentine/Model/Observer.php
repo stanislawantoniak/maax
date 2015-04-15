@@ -10,4 +10,15 @@ class Zolago_Turpentine_Model_Observer {
 	public function productView(Varien_Event_Observer $observer) {
 		Mage::register('turpentine_nocache_flag', 0); // allow to cache
 	}
+
+    /**
+     * Handle caching for help pages
+     * @todo remove after full cache ready
+     * @area: frontend
+     * @event: help_controller_index_index
+     * @param Varien_Event_Observer $observer
+     */
+    public function helpViews(Varien_Event_Observer $observer) {
+        Mage::register('turpentine_nocache_flag', 0); // allow to cache
+    }
 }

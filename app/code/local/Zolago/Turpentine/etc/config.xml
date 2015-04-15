@@ -78,6 +78,25 @@
                     </zolago_turpentine_product_view>
                 </observers>
 			</catalog_controller_product_view>
+
+            <help_controller_index>
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </help_controller_index>
+
+            <faq_controller_index>
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </faq_controller_index>
+
 		</events>	
     </frontend>
 </config>
