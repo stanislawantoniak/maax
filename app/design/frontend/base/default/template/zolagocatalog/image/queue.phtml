@@ -69,45 +69,7 @@
     </div>
 </div>
 </div>
-<?php /*
-<div id="dialog_by_name" class="modal fade" style="display:none" aria-hidden="true" title="Map by name">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></h4>
-        </div>
-        <div class="modal-body">
-            <div id="map_confirm">
-            <div class="col-md-12">
-         <?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>
-            </div>
-            <br/>
-            <div class="col-md-12">
-                <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
-                <button id="map_process_button" class="btn btn-primary" type="button"><?php echo Mage::helper('zolagocatalog')->__('Process');?></button>
-            </div>
-            </div>
-            <div id="map_process" style="display:none">
-            <div class="col-md-12">
-            <?php echo Mage::helper('zolagocatalog')->__('Please wait ...');?>
-            </div>
-            <br/>
-            <div class="progress progress-striped active">
-                <div class="progress-bar progress-bar-success" id="map_progress_bar" style="width:100%"></div>
-            </div>
-            <br/>
-            <div class="col-md-12">
-                <button id="map_break_button" class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
-            </div>
-            </div>
-            <div id="map_success" style="display:none">
-            <?php echo Mage::helper('zolagocatalog')->__('Finished!');?>                
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-*/ ?>
+
 <script type="text/javascript">
 var elf = null;
 var plup = null;
@@ -135,6 +97,16 @@ function init_uploader() {
 
 		flash_swf_url : '../../js/Moxie.swf',
 		silverlight_xap_url : '../../js/Moxie.xap',
+        init : {
+            FilesAdded: function(up, files) {
+                up.start();
+            },
+            UploadComplete: function(up, files) {
+                jQuery.each(files, function(i, file) {
+                    // Do stuff with the file. There will only be one file as it uploaded straight after adding!
+                });
+            }
+        },
 		preinit: {
 			UploadFile: function() {
 				elf.sync();	
