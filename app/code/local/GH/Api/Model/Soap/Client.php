@@ -117,12 +117,12 @@ class GH_Api_Model_Soap_Client  {
      * @return void
      */
     public function setOrderReservation($token, $orderID, $reservationStatus, $reservationMessage) {
-//        $obj = new StdClass();
-//        $obj->sessionToken = trim($token);
-//        $obj->orderID = $orderID;
-//        $obj->reservationStatus = $reservationStatus;
-//        $obj->reservationMessage = $reservationMessage;
-//        $this->_query('setOrderReservation', $obj);
+        $obj = new StdClass();
+        $obj->sessionToken = trim($token);
+        $obj->orderID = $orderID;
+        $obj->reservationStatus = $reservationStatus;
+        $obj->reservationMessage = $reservationMessage;
+        $this->_query('setOrderReservation', $obj);
     }
     /**
      * xml formatter

@@ -48,6 +48,8 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 
         $postData = $this->getRequest()->getPost();
 
+	    $vendor->setData('ghapi_reservation_disabled', isset($postData['ghapi_reservation_disabled']) ? 1 : 0);
+
         $vendor->setData('ghapi_message_new_order', isset($postData['ghapi_message_new_order']) ? 1 : 0);
         $vendor->setData('ghapi_message_order_canceled', isset($postData['ghapi_message_order_canceled']) ? 1 : 0);
 

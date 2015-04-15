@@ -997,39 +997,40 @@ jQuery.noConflict();
 		});
 
 		$('.toggleMenu').click(function(event) {
-			event.preventDefault(); var screenWidth = $(window).width();
-			var screenHeight = $(window).height();
-			var docHeight = $(window).innerHeight();
-			$('body').toggleClass('sb-open noscroll');
-			$('#sb-site').toggleClass('open');
-			$('.sb-slidebar').toggleClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
-			$('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+			event.preventDefault();
+			var screenHeight = $(window).height(),
+				body = $('body'),
+				htmlBody = $('html,body');
+			body.addClass('sb-open');
+			htmlBody.addClass('noscroll');
+			$('#sb-site').addClass('open');
+			$('.sb-slidebar').addClass('sb-active');
+			body.append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
 			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
 			}
 		});
 
-		$('.closeSlidebar').click(function(event) {
+		closeHamburgerMenu = function(event) {
 			event.preventDefault();
-			$('body').removeClass('sb-open noscroll');
+			var body = $('body'),
+				htmlBody = $('html,body');
+			body.removeClass('sb-open');
+			htmlBody.removeClass('noscroll');
 			$('#sb-site').removeClass('open');
 			$('.sb-slidebar').removeClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
-			$('body').find('.noscroll').remove();
+			body.find('.noscroll').remove();
 			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
 			}
-		});
+		};
+
+		$('.closeSlidebar').click(closeHamburgerMenu);
 
 		 $(document).mouseup(function(e) {
 			var container = $("body > .sb-slidebar");
 			if(container.is(":visible") && !container.is(e.target) && container.has(e.target).length === 0){
-				$('#sb-site').removeClass('open');
-				$('.sb-slidebar').removeClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
-				$('body').removeClass('sb-open noscroll');
-				$('body').find('.noscroll').remove();
-				if(typeof Mall.listing != 'undefined') {
-					Mall.listing.positionFilters();
-				}
+				closeHamburgerMenu(e);
 			}
 		});
 

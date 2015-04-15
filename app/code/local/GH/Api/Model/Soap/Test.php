@@ -90,8 +90,14 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
         $obj = parent::setOrderShipment($setOrderShipmentRequestParameters);
         $this->_rollback();
         return $obj;
-
     }
+
+	public function setOrderReservation($setOrderReservationRequestParameters) {
+		$this->_begin();
+		$obj = parent::setOrderReservation($setOrderReservationRequestParameters);
+		$this->_rollback();
+		return $obj;
+	}
 
     /**
      * @return GH_Api_Model_Message

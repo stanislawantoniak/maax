@@ -102,7 +102,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function processConfirmRelease(Zolago_Po_Model_Po $po) {
 		if($this->isConfirmReleaseAvailable($po)){
-			if($po->isGatewayPayment() && !$po->isPaid()){
+			if(!$po->isCod() && !$po->isPaid()){
 				$status = self::STATUS_BACKORDER;
 			}else{
 				$status = self::STATUS_PENDING;
@@ -122,7 +122,7 @@ class Zolago_Po_Model_Po_Status
 		if($this->isConfirmStockAvailable($po)){
 			$po->setStockConfirm(1);
 			$po->getResource()->saveAttribute($po, "stock_confirm");
-			if($po->isGatewayPayment() && !$po->isPaid()){
+			if(!$po->isCod() && !$po->isPaid()){
 				$status = self::STATUS_PAYMENT;
 			}else{
 				$status = self::STATUS_PENDING;
@@ -160,7 +160,7 @@ class Zolago_Po_Model_Po_Status
 		if($this->isDirectRealisationAvailable($po) || $force){
 			$po->setStockConfirm(0);
 			$po->getResource()->saveAttribute($po, "stock_confirm");
-			if($po->isGatewayPayment() && !$po->isPaid()){
+			if(!$po->isPaymentCheckOnDelivery() && !$po->isPaid()){
 				$status = self::STATUS_BACKORDER;
 			}else{
 				$status = self::STATUS_PENDING;
@@ -390,6 +390,7 @@ class Zolago_Po_Model_Po_Status
 	 * @param string $newStatus
 	 */
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
+
 		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
 		$hlp = Mage::helper("udpo");
 		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
@@ -401,6 +402,7 @@ class Zolago_Po_Model_Po_Status
             $allocModel = Mage::getModel("zolagopayment/allocation");
             $allocModel->createOverpayment($po);
         }
+
 	}
 
 	/**

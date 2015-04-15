@@ -24,5 +24,17 @@
                 </rewrite>
             </udtiercom>
         </blocks>
-    </global>
+
+    </global>    
+    <adminhtml>
+		<translate>
+			<modules>
+				<Zolago_DropshipTierCommission>
+					<files>
+						<default>Zolago_DropshipTierCommission.csv</default>
+					</files>
+				</Zolago_DropshipTierCommission>
+			</modules>
+		</translate>    
+    </adminhtml>
 </config>

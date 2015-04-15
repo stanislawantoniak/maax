@@ -698,9 +698,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 					foreach($sameEmail as $po){
 						$oldAlert = (int)$po->getAlert();
-						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
-							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
-						}
+						$oldAlert|=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 						$po->setAlert($oldAlert);
 						$po->getResource()->saveAttribute($po, "alert");
 					}
@@ -948,5 +946,159 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         } else {
             return '';
         }
+    }
+
+
+
+	const GH_API_RESERVATION_STATUS_OK = 'ok';
+	const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';
+
+	/**
+	 * GH Api method to set reservation flag on PO object
+	 * @param string $reservationStatus
+	 * @param string|bool $reservationMessage
+	 * @return $this
+	 */
+	public function ghApiSetOrderReservation($reservationStatus,$reservationMessage=false) {
+		$reservationStatus = trim(strtolower($reservationStatus));
+		$save = false;
+		$alert = $this->getAlert();
+		switch($reservationStatus) {
+
+			case self::GH_API_RESERVATION_STATUS_OK:
+				$this->setReservation(0);
+				$alert &= ~ Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
+				$save = true;
+				break;
+
+			case self::GH_API_RESERVATION_STATUS_PROBLEM:
+				$statusModel = $this->getStatusModel();
+
+				if(!$reservationMessage) {
+					$this->throwWrongReservationMessageError();
+				}
+
+				if(!$statusModel->isManulaStatusAvailable($this) ||
+					!in_array($statusModel::STATUS_ONHOLD, array_keys($statusModel->getAvailableStatuses($this)))) {
+					$this->throwCannotChangePoStatusError();
+				} else {
+					$statusModel->changeStatus($this, $statusModel::STATUS_ONHOLD);
+					$alert |= Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
+					$save = true;
+				}
+				break;
+
+			default:
+				$this->throwWrongReservationStatusError();
+		}
+		if($reservationMessage) {
+			$this->addComment($reservationMessage,false,true);
+		}
+		if($save) {
+			$this->setAlert($alert);
+			$this->save();
+		}
+		return $this;
+	}
+
+	/**
+	 * GH Api method to set reservation flag on multiple pos that has been confirmed as read
+	 * @param array $posIds
+	 * @return $this
+	 */
+	public function ghApiSetOrdersReservationAfterRead($posIds) {
+		foreach($posIds as $poId) {
+			$this
+				->loadByIncrementId($poId)
+				->setReservation(0)
+				->save();
+		}
+		$this->unsetData();
+		return $this;
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwWrongReservationStatusError() {
+		Mage::throwException('error_reservation_status_invalid');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwCannotChangePoStatusError() {
+		Mage::throwException('error_order_status_change');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwWrongReservationMessageError() {
+		Mage::throwException('error_reservation_message_invalid');
+	}
+
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @return bool
+     */
+    public function setOrderState(Zolago_Po_Model_Po $po)
+    {
+        $order = $po->getOrder();
+        $orderId = $order->getId();
+
+
+        $orderPos = Mage::getModel('udpo/po')
+            ->getCollection()
+            ->addFieldToFilter('order_id', $orderId);
+
+        $orderStatusChange = array();
+
+        $completePos = array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+        );
+        $cancelPos = array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
+        );
+        $poStatuses = array();
+        if ($orderPos->getSize() > 0) {
+            foreach ($orderPos as $orderPo) {
+                $poStatuses[] = (int)$orderPo->getUdropshipStatus();
+            }
+        }
+
+        $diffCompleteStatuses = array_diff($poStatuses, $completePos);
+
+        $diffCancelStatuses = array_diff($poStatuses, $cancelPos);
+
+
+        if (empty($diffCompleteStatuses)) {
+            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
+            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED;
+        }
+        if (empty($diffCancelStatuses)) {
+            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
+            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
+        }
+
+        //Mage::log($orderStatusChange, null, 'order.log');
+        if (!empty($orderStatusChange)) {
+            $order->setData('state', $orderStatusChange['state']);
+            $order->setStatus($orderStatusChange['state'])
+                ->setUdropshipStatus($orderStatusChange['udropship_status']);
+            try {
+                $order->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                return false;
+            }
+        }
+
     }
 }

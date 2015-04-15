@@ -42,6 +42,14 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->addBodyClass('vendor-top-bottom-header');
         }
 
+		if ($this->helper('catalog/category')->canUseCanonicalTag()) {
+			$this->getLayout()->getBlock('head')->addLinkRel('canonical', $this->getCurrentCategory()->getUrl());
+		}
+
+		if($this->helper('zolagocommon')->isGoogleBot()) {
+			$this->getLayout()->getBlock('root')->addBodyClass('googlebot');
+		}
+
 		return parent::_prepareLayout();
 	}
 	

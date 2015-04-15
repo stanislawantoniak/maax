@@ -154,65 +154,67 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 
 	protected function _processOrder($_sTracks, $multiple = false)
 	{
-		$completeOrder = true;
-		
+
 		if ($multiple) {
 			//Check if all Shipments are Delivered and Update Order Status
 			foreach ($_sTracks as $sTrack) {
-				if ($sTrack->getUdropshipStatus() !== Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED) {
-					$completeOrder = false;
-				}
+                $shipment = $sTrack->getShipment();
+                $shipmentStatus = (int)$shipment->getUdropshipStatus();
+                $poOrderId = $shipment->getUdpoId();
+
+                /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
+                $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
+
+                if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
+                    Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
+                }
+                if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
+
+                    $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+
+                    try {
+                        $poOrder->save();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                        return false;
+                    }
+                }
+                $this->_setOrderState($poOrder);
 			}
 		} else {
-			$sTrack = $_sTracks;
-			$shipment = $sTrack->getShipment();
-			$shipmentStatus = $shipment->getUdropshipStatus();
-			switch ($shipmentStatus) {
-				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED:
-					$this->_setOrderCompleteState($shipment);
-					break;
-				case Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED:
-				    Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
-				default:
-					$completeOrder = false;
-					break;
-			}
-		}
-		
-		if ($completeOrder) {
-			//Set Order Status based on all related shipments
-			$this->_setOrderCompleteState($sTrack->getShipment());
-		}
-		
-		return $this;
-	}
-	
-	protected function _setOrderCompleteState($shipment)
-	{
-		$order = $shipment->getOrder();
-		$order->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
-		$order->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
-			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);					
-		$poOrderId = $shipment->getUdpoId();
-		$poOrder = Mage::getModel('udpo/po')->load($poOrderId);
-		$poOrder->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
-		$poOrder->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
-			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
-		
-		try {
-			$order->save();
-		} catch (Exception $e) {
-			Mage::logException($e);
-			return false;
+            $sTrack = $_sTracks;
+            $shipment = $sTrack->getShipment();
+            $shipmentStatus = (int)$shipment->getUdropshipStatus();
+            $poOrderId = $shipment->getUdpoId();
+
+            /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
+            $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
+            if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
+                Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
+            }
+            if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
+
+                $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+
+                try {
+                    $poOrder->save();
+                } catch (Exception $e) {
+                    Mage::logException($e);
+                    return false;
+                }
+            }
+            $this->_setOrderState($poOrder);
 		}
 
-		try {
-			$poOrder->save();
-		} catch (Exception $e) {
-			Mage::logException($e);
-			return false;
-		}
+
+
+		return $this;
 	}
-	
+
+    private function _setOrderState($po)
+    {
+        Mage::getModel('udpo/po')
+            ->setOrderState($po);
+    }
 
 }

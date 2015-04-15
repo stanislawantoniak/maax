@@ -209,9 +209,13 @@
 }
 
 #solr_search_facets {
+	top: 300px;
 	position: absolute;
+	display: none;
 	&.filters-desktop {
-		display: block !important;
+		@include min-screen($screen-sm-min) {
+			display: block !important;
+		}
 	}
 	&.filters-mobile {
 		z-index: 1001;
@@ -278,5 +282,14 @@ html.noscroll-filters {
 	}
 	header#header .header_top {
 		left: 240px;
+	}
+}
+
+html.noscroll {
+	overflow: hidden;
+	height: 100%;
+	body {
+		overflow: hidden;
+		height: 100%;
 	}
 }
