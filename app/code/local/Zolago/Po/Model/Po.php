@@ -963,12 +963,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$reservationStatus = trim(strtolower($reservationStatus));
 		$save = false;
 		$alert = $this->getAlert();
+		$messagePre = "";
 		switch($reservationStatus) {
 
 			case self::GH_API_RESERVATION_STATUS_OK:
 				$this->setReservation(0);
 				$alert &= ~ Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
 				$save = true;
+				$messagePre = Mage::helper('ghapi')->__("Reservation in vendor's system successful");
 				break;
 
 			case self::GH_API_RESERVATION_STATUS_PROBLEM:
@@ -985,15 +987,16 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$statusModel->changeStatus($this, $statusModel::STATUS_ONHOLD);
 					$alert |= Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
 					$save = true;
+					$messagePre = Mage::helper('ghapi')->__("Problem with reservation in vendor's system");
 				}
+
 				break;
 
 			default:
 				$this->throwWrongReservationStatusError();
 		}
-		if($reservationMessage) {
-			$this->addComment($reservationMessage,false,true);
-		}
+
+		$this->addComment($messagePre.($reservationMessage ? ": ".$reservationMessage : ""),false,true);
 		if($save) {
 			$this->setAlert($alert);
 			$this->save();
