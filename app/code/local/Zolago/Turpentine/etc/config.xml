@@ -107,6 +107,15 @@
                 </observers>
             </help_controller_contact>
 
+            <cms_controller_page>
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </cms_controller_page>
+
 		</events>
     </frontend>
 </config>
