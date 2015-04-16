@@ -28,7 +28,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     public function setPath($path) {
         $this->_path = $path;
     }
-    protected function _getFileList() {
+    public function _getFileList() {
         $list = array();
         $dir = dir($this->_path);
         while (false !== ($entry = $dir->read())) {
@@ -52,7 +52,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $this->_file = $file;
     }
     public function mapByFile() {
+        $response = array();
         $count = 0;
+        $message = "";
         $storeid = 0;
         $file = $this->_file;
         $importlist = array();
@@ -65,6 +67,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $pidList = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            Mage::log($skuv);
             $pid = $item->getData('entity_id');
             if (!$skuv) {
                 continue;
@@ -74,7 +77,10 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                 // found file
                 foreach ($importlist[$skuv] as $filename) {
                     $imagefile=$this->_copyImageFile($filename[1]);
-                    if($imagefile!==false)
+
+                    if(!$imagefile){
+                        $message[] = "File: <b>" . $filename[1] . "</b> not found among uploaded";
+                    } else
                     {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
@@ -82,6 +88,8 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                             @unlink($this->_path.'/'.$filename[1]);
                             $updateFlag = true;
                             $count ++;
+                        } else {
+                            $message[] = "An error occured while adding image <b>" . $filename[1] . "</b> to gallery";
                         }
                     }
                 }
@@ -94,7 +102,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $this->_savePid($pidList);
         }
-        return $count;
+        $response['count'] = $count;
+        $response['message'] = $message;
+        return $response;
     }
     public function getPidList() {
         return $this->_pidList;
@@ -109,14 +119,16 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
 
     }
-    public function mapByName() {
+    public function mapByName($list) {
         $count = 0;
-        $list = $this->_getFileList();
         $storeid = 0;
         $pidList = array();
+
+
         foreach ($this->_collection as $item) {
             $updateFlag = false;
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            Mage::log($skuv, null, 'mapByName.log');
             $pid = $item->getData('entity_id');
             $label = $item->getData('name');
             if (!$skuv) {

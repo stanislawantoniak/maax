@@ -31,7 +31,7 @@ class Zolago_Catalog_Vendor_ImageController
         }
         return $vendorId;
     }
-    protected function _makeRedirect($pidList) {
+    protected function _makeRedirect($pidList, $fragment = false) {
         $extends = '';
         if ($pidList) {
             $extends = '/filter/'.
@@ -39,24 +39,45 @@ class Zolago_Catalog_Vendor_ImageController
                 '/internal_image/'.implode(',',$pidList).'/';
                 
         }
-        header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends));
+        if($fragment){
+            header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends , array('_fragment' => $fragment)));
+        } else {
+            header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends));
+        }
+
         exit();
         
     }
-    protected function _prepareMapper() {
-        $path = $this->_getPath();
+    protected function _prepareMapper($skuvS = array()) {
+        /* @var $mapper  Zolago_Catalog_Model_Mapper */
         $mapper = Mage::getModel('zolagocatalog/mapper');
         $mapper->setPath($this->_getPath());
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
+        if(!empty($skuvS)){
+            $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
+        }
         $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
         $collection->addAttributeToSelect('name');
         $mapper->setCollection($collection);
         return $mapper;
     }
     public function namemapAction() {
-        $mapper = $this->_prepareMapper();
-        $result = $mapper->mapByName();
+        /* @var $mapperModel  Zolago_Catalog_Model_Mapper */
+        $mapperModel = Mage::getModel('zolagocatalog/mapper');
+        $mapperModel->setPath($this->_getPath());
+        $list = $mapperModel->_getFileList();
+
+        $skuvS = array();
+        if(!empty($list)){
+            foreach($list as $imageFile){
+                $skuvS[] = explode('.', $imageFile)[0];
+            }
+        }
+
+        /* @var $mapper    Zolago_Catalog_Model_Mapper  */
+        $mapper = $this->_prepareMapper($skuvS);
+        $result = $mapper->mapByName($list);
         $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$result));
         $pidList = $mapper->getPidList();
         $this->_makeRedirect($pidList);        
@@ -71,9 +92,10 @@ class Zolago_Catalog_Vendor_ImageController
                 // check file
                 $check = true;
                 $header = $file[0];
+                Mage::log($header, null, 'mass_image.log');
                 unset($file[0]);
                 if (!preg_match('/^sku;file;order;label$/',trim($header))) {
-                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Please upload CSV file'));
+                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('CSV file first line should contain sku;file;order;label'));
                 } else {
                     foreach ($file as $number=>$line) {
                         if (trim($line) &&
@@ -85,11 +107,29 @@ class Zolago_Catalog_Vendor_ImageController
                     if (!$check) {
                         $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file format. Error at line ').' '.($number+1).':'.$line);
                     } else {
-                        $mapper = $this->_prepareMapper();
+                        $importList = $this->_createImportListFromFile($file);
+                        $skuvS = array_keys($importList);
+
+                        /* @var $mapper  Zolago_Catalog_Model_Mapper */
+                        $mapper = $this->_prepareMapper($skuvS);
                         $mapper->setFile($file);
-                        $count = $mapper->mapByFile();
-                        $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$count));
-                        $pidList = $mapper->getPidList();
+                        $response  = $mapper->mapByFile($importList);
+                        $count = $response['count'];
+                        $message = $response['message'];
+
+                        if($count > 0){
+                            if(!empty($message))
+                                $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ' . implode('<br/> ', $message))));
+
+                            $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
+
+                            $pidList = $mapper->getPidList();
+                        } else {
+                            $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0.<br /> ' . implode('<br/> ', $message))));
+                            $this->_makeRedirect(false, 'tab_1_2');
+
+                        }
+
                     }
                 }
             }
@@ -98,6 +138,22 @@ class Zolago_Catalog_Vendor_ImageController
         }
         $this->_makeRedirect($pidList);
     }
+
+    protected function _createImportListFromFile($file)
+    {
+        $importList = array();
+        if (!$file) {
+            return $importList;
+        }
+        foreach ($file as $line) {
+            if (trim($line)) {
+                $tmp = explode(';', $line);
+                $importList[$tmp[0]][] = $tmp;
+            }
+        }
+        return $importList;
+    }
+
     public function queueAction() {
         $this->_renderPage(null, 'udprod_image');
     }
