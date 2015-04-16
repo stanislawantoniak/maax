@@ -3,8 +3,19 @@ jQuery.noConflict();
 (function( $ ) {
 	$(function() {
 
+		$('#question-form-mobile,#question-form').submit(function () {
+			if ($(this).valid()) {
+				addFormSpinner($(this));
+			}
+		});
 
-		var tableFooterGroup = $('.table-footer-group');
+		function addFormSpinner(form) {
+			var submitButton = form.find('button[type=submit]');
+			submitButton.prop("disabled", true);
+			submitButton.find('i').addClass('fa fa-spinner fa-spin');
+		}
+
+				var tableFooterGroup = $('.table-footer-group');
 		tableFooterGroup.on('click', '.deliver_info', function(e){
 			var _w = $(window).innerWidth();
 			if (_w <=767) {
