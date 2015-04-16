@@ -33,6 +33,7 @@
 				display:inline-block;
 				width:100px;
 				float:left;
+				line-height: 23px;
 			}
 			div {
 				@include inline-block;
@@ -43,6 +44,10 @@
 				@include inline-block;
 				float:left;
 			}
+		}
+		img {
+			width: 22px;
+			height: 22px;
 		}
 	}
 	.rating_note {

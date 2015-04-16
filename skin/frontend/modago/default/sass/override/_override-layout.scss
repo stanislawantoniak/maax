@@ -177,6 +177,10 @@
       span.note {
         margin-right: 5px;
         float: left;
+        img {
+	        width: 22px;
+	        height: 22px;
+        }
         &+span {
           font-size: 11px;
           color:#646464;

@@ -243,6 +243,12 @@ section {
 					display:block;
 					span {
 						position:static;
+						display: inline-block;
+						vertical-align: middle;
+					}
+					img {
+						width: 22px;
+						height: 22px;
 					}
 				}
 			}

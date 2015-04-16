@@ -3,34 +3,34 @@ var Config = {
 		recentlyViewed : '/orbacommon/ajax_product/get_recently_viewed',
 		ajaxLoader : '/skin/frontend/modago/default/images/ajax-loader.gif',
 		averageRating : {
-			averageRatingPath 		: '/skin/frontend/modago/default/images/raty',
-			averageRatingStarOff 	: 'star-off-big-custom.png',
-			averageRatingStarOn 	: 'star-on-big-custom.png',
-			averageRatingStarHalf 	: 'star-half-big-custom.png'
+			averageRatingPath 		: '/skin/frontend/modago/default/images/svg',
+			averageRatingStarOff 	: 'star_no.svg',
+			averageRatingStarOn 	: 'star_yes.svg',
+			averageRatingStarHalf 	: 'star_half.svg'
 		},
 		ratyNote : {
-			ratyNotePath 		: '/skin/frontend/modago/default/images/raty',
-			ratyNoteStarOff 	: 'star-off-custom.png',
-			ratyNoteStarOn 		: 'star-on-custom.png'
-			//ratyNoteStarHalf 	: 'star-half-custom.png'
+			ratyNotePath 		: '/skin/frontend/modago/default/images/svg',
+			ratyNoteStarOff 	: 'star_no.svg',
+			ratyNoteStarOn 		: 'star_yes.svg'
+			//ratyNoteStarHalf 	: 'star_half.svg'
 		},
 		ratings : {
-			ratingsPath 		: '/skin/frontend/modago/default/images/raty',
-			ratingsStarOff 		: 'star-off-custom.png',
-			ratingsStarOn 		: 'star-on-custom.png'
-			//ratingsStarHalf 	: 'star-half-custom.png'
+			ratingsPath 		: '/skin/frontend/modago/default/images/svg',
+			ratingsStarOff 		: 'star_no.svg',
+			ratingsStarOn 		: 'star_yes.svg'
+			//ratingsStarHalf 	: 'star_half.svg'
 		},
 		commentRating : {
-			commentRatingPath 			: '/skin/frontend/modago/default/images/raty',
-			commentRatingStarOff 		: 'star-off-custom.png',
-			commentRatingStarOn 		: 'star-on-custom.png'
-			//commentRatingStarHalf 		: 'star-half-custom.png'
+			commentRatingPath 			: '/skin/frontend/modago/default/images/svg',
+			commentRatingStarOff 		: 'star_no.svg',
+			commentRatingStarOn 		: 'star_yes.svg'
+			//commentRatingStarHalf 		: 'star_half.svg'
 		},
 		averageNoteClient : {
-			averageNoteClientPath 			: '/skin/frontend/modago/default/images/raty',
-			averageNoteClientStarOff 		: 'star-small-off.png',
-			averageNoteClientStarOn 		: 'star-small.png'
-			//averageNoteClientStarHalf 		: 'star--small-half-custom.png'
+			averageNoteClientPath 			: '/skin/frontend/modago/default/images/svg',
+			averageNoteClientStarOff 		: 'star_no.svg',
+			averageNoteClientStarOn 		: 'star_yes.svg'
+			//averageNoteClientStarHalf 		: 'star_half.svg'
 		},
         heartLike: "/skin/frontend/modago/default/images/heart.png",
         heartLiked: "/skin/frontend/modago/default/images/heart-like.png"
