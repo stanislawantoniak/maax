@@ -77,8 +77,21 @@ class Zolago_Catalog_Vendor_ImageController
 
         /* @var $mapper    Zolago_Catalog_Model_Mapper  */
         $mapper = $this->_prepareMapper($skuvS);
-        $result = $mapper->mapByName($list);
-        $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$result));
+        $response = $mapper->mapByName($list);
+        $count = $response['count'];
+        $message = $response['message'];
+
+        if($count > 0){
+            if(!empty($message))
+                $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ' . implode('<br/> ', $message))));
+
+            $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
+
+        } else {
+            if(!empty($message))
+                $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0.<br /> ' . implode('<br/> ', $message))));
+            $this->_makeRedirect(false, 'tab_1_2');
+        }
         $pidList = $mapper->getPidList();
         $this->_makeRedirect($pidList);        
     }
@@ -92,7 +105,7 @@ class Zolago_Catalog_Vendor_ImageController
                 // check file
                 $check = true;
                 $header = $file[0];
-                Mage::log($header, null, 'mass_image.log');
+
                 unset($file[0]);
                 if (!preg_match('/^sku;file;order;label$/',trim($header))) {
                     $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('CSV file first line should contain sku;file;order;label'));
@@ -122,12 +135,11 @@ class Zolago_Catalog_Vendor_ImageController
                                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ' . implode('<br/> ', $message))));
 
                             $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
-
                             $pidList = $mapper->getPidList();
+
                         } else {
                             $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0.<br /> ' . implode('<br/> ', $message))));
                             $this->_makeRedirect(false, 'tab_1_2');
-
                         }
 
                     }

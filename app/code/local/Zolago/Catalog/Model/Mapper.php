@@ -67,7 +67,6 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $pidList = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
-            Mage::log($skuv);
             $pid = $item->getData('entity_id');
             if (!$skuv) {
                 continue;
@@ -120,11 +119,16 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
     }
     public function mapByName($list) {
+        $response = array();
+
         $count = 0;
+        $message = "";
+
         $storeid = 0;
         $pidList = array();
-
-
+        if ($this->_collection->getSize() ==0){
+            $message[] = "Images for mapping by name not found among uploaded";
+        }
         foreach ($this->_collection as $item) {
             $updateFlag = false;
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
@@ -137,14 +141,18 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             foreach ($list as $file) {
                 if (!strncmp($skuv,$file,strlen($skuv))) {
                     $imagefile=$this->_copyImageFile($file);
-                    if($imagefile!==false)
+                    if(!$imagefile)
                     {
+                        $message[] = "File: <b>" . $file . "</b> not found among uploaded";
+                    } else {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
                             // remove image from upload area
                             @unlink($this->_path.'/'.$file);
                             $count ++;
                             $updateFlag = true;
+                        } else {
+                            $message[] = "An error occured while adding image <b>" . $file . "</b> to gallery";
                         }
                     }
 
@@ -158,7 +166,10 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $this->_savePid($pidList);
         }
-        return $count;
+        $response['count'] = $count;
+        $response['message'] = $message;
+
+        return $response;
 
     }
     /**
