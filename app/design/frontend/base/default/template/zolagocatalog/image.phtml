@@ -38,3 +38,10 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.need-to-check').css({"opacity": "0.5"}).tooltip({
+            title: "<?php echo Mage::helper("zolagocatalog")->__("Gallery to check"); ?>"
+        });
+    })
+</script>

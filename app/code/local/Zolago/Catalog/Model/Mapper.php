@@ -128,7 +128,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         foreach ($this->_collection as $item) {
             $updateFlag = false;
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
-            Mage::log($skuv, null, 'mapByName.log');
+
             $pid = $item->getData('entity_id');
             $label = $item->getData('name');
             if (!$skuv) {
