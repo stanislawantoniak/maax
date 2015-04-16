@@ -191,7 +191,11 @@
 			<block name="image" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    
 			    <block name="image_queue" type="zolagocatalog/vendor_image_queue" template="zolagocatalog/image/queue.phtml"/>
 			    <block name="image_list" type="zolagocatalog/vendor_image_list" template="zolagocatalog/image/list.phtml"/>
-                <block name="image_help" type="zolagocatalog/vendor_image_list" template="zolagocatalog/image/help.phtml"/>
+                <block type="cms/block" name="image_help">
+                    <action method="setBlockId">
+                        <block_id>vendor-portal-mass-images-help</block_id>
+                    </action>
+                </block>
 			</block>
 		</reference>
 	</udprod_vendor_image_index>

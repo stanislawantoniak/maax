@@ -417,3 +417,9 @@ table.foot-empty-cells tfoot td:empty {
 .table tbody tr[title^=http] td {
 	cursor: pointer;
 }
+
+
+
+.mass-images-help {
+    margin: 20px 10px;
+}
