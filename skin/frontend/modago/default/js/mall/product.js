@@ -429,6 +429,18 @@ Mall.product = {
 
 			_.formElement.validate(validationOptions);
 			_._formValidation = true;
+
+			_.reviewSummaryTableElement.find('img').click(function() {
+				var isOk = true;
+				_.formElement.find('input[name^="ratings["]').each(function() {
+					if(!jQuery(this).val() || !isOk) {
+						isOk = false;
+					}
+				});
+				if(isOk) {
+					_.formElement.find('[name=stars]').valid();
+				}
+			});
 		}
 	}
 };

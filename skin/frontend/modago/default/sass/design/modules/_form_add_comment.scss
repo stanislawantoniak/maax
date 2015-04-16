@@ -42,7 +42,6 @@
 		width:22px;
 		@include max-screen($screen-sm-max) {
 			width: 30px;
-			margin-right: 5px;
 		}
 	}
 }
