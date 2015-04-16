@@ -97,6 +97,16 @@
                 </observers>
             </faq_controller_index>
 
-		</events>	
+            <help_controller_contact>
+                <!-- Contact with Vendor and Gallery -->
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </help_controller_contact>
+
+		</events>
     </frontend>
 </config>

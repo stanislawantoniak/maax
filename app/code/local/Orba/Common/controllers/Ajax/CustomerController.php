@@ -124,10 +124,12 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
          * for event @see app/code/core/Mage/Reports/Model/Event/Observer.php
          * line ~124 function catalogProductView
          */
-        /* @var $product Mage_Catalog_Model_Product */
-        $product = Mage::getModel("catalog/product");
-        $product->setId($productId);
-        Mage::dispatchEvent('catalog_controller_product_view', array('product' => $product));
+        if ($productId) {
+            /* @var $product Mage_Catalog_Model_Product */
+            $product = Mage::getModel("catalog/product");
+            $product->setId($productId);
+            Mage::dispatchEvent('catalog_controller_product_view', array('product' => $product));
+        }
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);

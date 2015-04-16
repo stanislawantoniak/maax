@@ -28,11 +28,8 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
 
         $customer = $cSess->getCustomer();
 
-        $error = false;
         if (!empty($data)) {
-            $session = empty($question['product_id'])
-                ? Mage::getSingleton('udqa/session')
-                : Mage::getSingleton('catalog/session');
+            $session = Mage::getSingleton('catalog/session');
             unset($question['question_id']);
             $qModel   = Mage::getModel('udqa/question')
                 ->setData($question)
@@ -50,13 +47,11 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
                     $session->addSuccess($this->__('Your question has been accepted for moderation.'));
                 }
                 catch (Exception $e) {
-                    $error = true;
                     $this->_saveFormData($data);
                     $session->addError($this->__('Unable to post the question.'));
                 }
             }
             else {
-                $error = true;
                 $this->_saveFormData($data);
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
