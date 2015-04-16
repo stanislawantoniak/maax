@@ -1,5 +1,5 @@
 <?php
-class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
+class Zolago_Dhl_Model_DhlAcceptTest extends ZolagoDb_TestCase {
 	
 	public function testRma() {
 //	    $helper = Mage::helper('zolagorma');

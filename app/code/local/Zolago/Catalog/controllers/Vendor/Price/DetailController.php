@@ -183,7 +183,18 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 					setHeader("content-type", "text/plain");
 			return;
 		}
-		
+
+        // Varnish & Turpentine
+        $productsToReindex = array_merge(array($productId), $affectedIds);
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->addFieldToFilter('entity_id', array( 'in' => $productsToReindex));
+
+        Mage::dispatchEvent(
+            "vendor_manual_save_price_after",
+            array("products" => $coll)
+        );
+
 		$this->_forward("get", "vendor_price", "udprod");
 	}
 	
