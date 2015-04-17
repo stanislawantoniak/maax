@@ -492,7 +492,8 @@
 		</reference>
 
         <reference name="header">
-            <block type="zolagosolrsearch/category_vendor_header" name="zolagosolrsearch_category_vendor_header" template="zolagosolrsearch/category/vendor/header.phtml" />
+            <block type="zolagosolrsearch/category_vendor_header" name="zolagosolrsearch_category_vendor_header_mobile" template="zolagosolrsearch/category/vendor/header/mobile.phtml" />
+            <block type="zolagosolrsearch/category_vendor_header" name="zolagosolrsearch_category_vendor_header_desktop" template="zolagosolrsearch/category/vendor/header/desktop.phtml" />
         </reference>
 
 		<reference name="before_body_end">
