@@ -103,7 +103,6 @@
 "From file", "Z pliku"
 "Change", "Zmień"
 "Selected","Operacje na zaznaczonych"
-
 "Mass prices", "Zarządzanie cenami"
 "Mass price", "Zarządzanie cenami"
 "Manage prices and stocks", "Zarządzaj cenami i stanami magazynowymi"
@@ -155,3 +154,12 @@
 "of %s","of %s"
 "Additional filters","Filtry dodatkowe"
 "Please upload CSV file","Proszę załadować plik CSV"
+"File:","Plik:"
+"not found among uploaded","nie znaleziony wśród wgranych plików"
+"An error occured while adding image","Wystąpił błąd podczas dodawania pliku graficznego"
+"to gallery","do galerii"
+"Images for mapping by name not found corresponding names in uploaded files","Mapowania po nazwach nie znalazło odpowiednich nazw zdjęć wśród wgranych plików"
+"Errors: ","Błędy:"
+"Processed images: 0","Przetworzonych zdjęć: 0"
+"CSV file first line should contain: sku;file;order;label","Plik CSV w pierwszej linii powinień zawierać: sku;file;order;label"
+

@@ -52,6 +52,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $this->_file = $file;
     }
     public function mapByFile() {
+        $hlp = Mage::helper('zolagocatalog');
         $response = array();
         $count = 0;
         $message = "";
@@ -78,7 +79,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                     $imagefile=$this->_copyImageFile($filename[1]);
 
                     if(!$imagefile){
-                        $message[] = "File: <b>" . $filename[1] . "</b> not found among uploaded";
+                        $message[] = $hlp->__("File:")." <b>" . $filename[1] . "</b> " . $hlp->__("not found among uploaded");
                     } else
                     {
                         //add to gallery
@@ -88,7 +89,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                             $updateFlag = true;
                             $count ++;
                         } else {
-                            $message[] = "An error occured while adding image <b>" . $filename[1] . "</b> to gallery";
+                            $message[] = $hlp->__("An error occured while adding image")." <b>" . $filename[1] . "</b> ".$hlp->__("to gallery");
                         }
                     }
                 }
@@ -119,6 +120,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
     }
     public function mapByName($list) {
+        $hlp = Mage::helper('zolagocatalog');
         $response = array();
 
         $count = 0;
@@ -127,7 +129,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $storeid = 0;
         $pidList = array();
         if ($this->_collection->getSize() ==0){
-            $message[] = "Images for mapping by name not found among uploaded";
+            $message[] = $hlp->__("Images for mapping by name not found corresponding names in uploaded files");
         }
         foreach ($this->_collection as $item) {
             $updateFlag = false;
@@ -143,7 +145,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                     $imagefile=$this->_copyImageFile($file);
                     if(!$imagefile)
                     {
-                        $message[] = "File: <b>" . $file . "</b> not found among uploaded";
+                        $message[] = $hlp->__("File:")." <b>" . $file . "</b> ".$hlp->__("not found among uploaded");
                     } else {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
@@ -152,7 +154,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                             $count ++;
                             $updateFlag = true;
                         } else {
-                            $message[] = "An error occured while adding image <b>" . $file . "</b> to gallery";
+                            $message[] = $hlp->__("An error occured while adding image")." <b>" . $file . "</b> ".$hlp->__("to gallery");
                         }
                     }
 
