@@ -72,7 +72,7 @@ require_once $mageFilename;
 if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE']) && filter_var($_SERVER['MAGE_IS_DEVELOPER_MODE'], FILTER_VALIDATE_BOOLEAN)) {
     Mage::setIsDeveloperMode(true);
 	Varien_Profiler::enable();
-	#ini_set('display_errors', 1);
+	ini_set('display_errors', 1);
 }
 
 // Enable profiler
