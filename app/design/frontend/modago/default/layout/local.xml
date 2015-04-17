@@ -491,6 +491,10 @@
 			</action>
 		</reference>
 
+        <reference name="header">
+            <block type="zolagosolrsearch/category_vendor_header" name="zolagosolrsearch_category_vendor_header" template="zolagosolrsearch/category/vendor/header.phtml" />
+        </reference>
+
 		<reference name="before_body_end">
 			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
 				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
