@@ -437,7 +437,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	}
 	
 	protected function _handleRestPut() {
-		
+
 		$reposnse = $this->getResponse();
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
 		$storeId = 0;
@@ -450,7 +450,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
-					$attributeData[$attribute] = $data[$attribute];
+					$attributeData[$attribute] = ($attribute == "description" || $attribute == "short_description") ? Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]) : $data[$attribute];
 				}
 			}
 			if($attributeData){
