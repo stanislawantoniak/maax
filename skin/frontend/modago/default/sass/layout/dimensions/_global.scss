@@ -2,9 +2,16 @@
 	padding-top: 57px;
 
 }
-.is-content-mode.vendor-top-bottom-header {
-  .headers {
-    margin-bottom: 17px;
+.catalog-category-view.is-content-mode {
+  &.vendor-top-bottom-header {
+    .headers {
+      margin-bottom: 17px;
+    }
+  }
+  @media (max-width: $screen-xs-max) {
+    .headers {
+      margin-bottom: 17px;
+    }
   }
 }
 #header-main {
