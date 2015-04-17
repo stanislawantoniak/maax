@@ -52,7 +52,10 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 			return $wishlist;
 	}
 	
-	
+	public function getRawSharingCode() {
+        return $this->getCookieModel()->get(self::COOKIE_NAME);
+    }
+
 	/**
 	 * Get avaiable wishlist
 	 * @return Mage_Wishlist_Model_Wishlist
