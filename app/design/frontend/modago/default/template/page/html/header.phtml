@@ -12,8 +12,11 @@ $_baseUrl = Mage::getUrl("/", array("_no_vendor"=>true));
 ?>
 
 <header id="header">
-<?php echo $this->getChildHtml('zolagosolrsearch_category_vendor_header');?>
-<?php echo $this->getChildHtml('header_menu');?>
+    <div class="headers">
+        <?php echo $this->getChildHtml('zolagosolrsearch_category_vendor_header_mobile'); ?>
+        <?php echo $this->getChildHtml('header_menu'); ?>
+        <?php echo $this->getChildHtml('zolagosolrsearch_category_vendor_header_desktop'); ?>
+    </div>
 <div class="header_top">
     <div class="container-fluid clearfix">
         <div class="col-xs-12">

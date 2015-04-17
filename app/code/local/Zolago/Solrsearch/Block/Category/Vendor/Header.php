@@ -12,4 +12,14 @@ class Zolago_Solrsearch_Block_Category_Vendor_Header extends Zolago_Solrsearch_B
 
     }
 
+    public function getDesktopVendorHeader()
+    {
+        if($this->isContentMode()){
+            return $this->getDesktopVendorHeaderPanel();
+        } else {
+            return '';
+        }
+
+    }
+
 }
