@@ -1,5 +1,5 @@
 <?php
-class Zolago_Solrsearch_Block_Category_Vendor_Header extends Zolago_Solrsearch_Block_Category_View {
+class Zolago_Solrsearch_Block_Category_Header extends Zolago_Solrsearch_Block_Category_View {
 
 
     public function getMobileVendorHeader()

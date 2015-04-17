@@ -2,18 +2,7 @@
 	padding-top: 57px;
 
 }
-.catalog-category-view.is-content-mode {
-  &.vendor-top-bottom-header {
-    .headers {
-      margin-bottom: 17px;
-    }
-  }
-  @media (max-width: $screen-xs-max) {
-    .headers {
-      margin-bottom: 17px;
-    }
-  }
-}
+
 #header-main {
 	padding-top:15px;
 	padding-bottom: 15px;
@@ -30,6 +19,11 @@
 			padding-bottom: 0;
 		}
 	}
+}
+.is-content-mode {
+  #header-main {
+    padding-top:0;
+  }
 }
 
 .node-type-checkout,

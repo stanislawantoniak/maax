@@ -6,7 +6,6 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 
 
 <?php if($this->isContentMode()): ?>
-
     <?php if(!($vendor && $vendor->getId())): ?>
         <div id="breadcrumbs-header" class="container-fluid">
             <div class="row">
@@ -41,9 +40,6 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
             </div>
         </section>
     <?php endif; ?>
-    <script type="text/javascript">
-        jQuery(".wrapp-section").removeClass("bg-w");
-    </script>
     </section>
     <?php //echo $this->getCmsBlockHtml() ?>
 	<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
