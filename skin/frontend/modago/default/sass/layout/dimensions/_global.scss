@@ -41,7 +41,11 @@
     padding-top:0;
     padding-bottom:10px;
   }
-
+  #header {
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 10px;
+    }
+}
 
 }
 

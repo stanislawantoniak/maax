@@ -114,18 +114,18 @@
         padding-left: 20px;
       }
     }
+    .header-panel {
+      @media (max-width: $screen-xs-max){
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+    }
   }
 }
 #header-main {
     .wrapp-section {
         border: none;
     }
-  .header-panel {
-    @media (max-width: $screen-xs-max){
-      padding-left: 0px;
-      padding-right: 0px;
-    }
-  }
   #category-header-left {
     width: 195px;
     float: left;
