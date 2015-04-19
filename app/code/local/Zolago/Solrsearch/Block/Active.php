@@ -18,5 +18,12 @@ class Zolago_Solrsearch_Block_Active extends Zolago_Solrsearch_Block_Faces
 		}
 		return parent::getItemId($attributeCode, $item);
 	}
-	
+    public function isContentMode() {
+        $category = $this->getCurrentCategory();
+        $res = false;
+        if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
+            $res = true;
+        }
+        return $res;
+    }
 }

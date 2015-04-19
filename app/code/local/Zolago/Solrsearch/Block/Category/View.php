@@ -58,12 +58,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         $res = false;
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
-           /* if ($category->getIsAnchor()) {
-                $state = Mage::getSingleton('catalog/layer')->getState();
-                if ($state && $state->getFilters()) {
-                    $res = false;
-                }
-            }*/
         }
         return $res;
     }
