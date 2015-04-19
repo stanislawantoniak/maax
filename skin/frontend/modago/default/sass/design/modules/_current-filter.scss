@@ -102,7 +102,19 @@
   padding-top: 0px;
 }
 .is-content-mode {
-
+  #header-main {
+    #category-header-left {
+      @media (max-width: $screen-xs-max){
+        padding-left: 20px;
+      }
+    }
+    #category-header-right {
+      position: relative;
+      @media (max-width: $screen-xs-max){
+        padding-left: 20px;
+      }
+    }
+  }
 }
 #header-main {
     .wrapp-section {
@@ -122,16 +134,11 @@
     @media (max-width: $screen-xs-max){
       width: 100%;
       border-bottom: solid 2px #F2F1F0;
-      padding-left: 20px;
     }
   }
 
   #category-header-right {
     position: relative;
-    @media (max-width: $screen-xs-max){
-      padding-left: 20px;
-    }
-
 
     @media (min-width: $screen-sm-min) {
       margin-left: 215px;
