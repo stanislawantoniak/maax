@@ -340,16 +340,42 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
         if ($pidList) {
             $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+
             foreach ($pidList as $pid) {
-				/**
-				 * @todo full product load not required;
-				 * use mass action save
-				 */
+                /**
+                 * @todo full product load not required;
+                 * use mass action save
+                 */
                 $_product = Mage::getModel('catalog/product')->load($pid);
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+
+
+                $sql2 = "
+UPDATE
+  catalog_product_entity_media_gallery AS mg,
+  catalog_product_entity_media_gallery_value AS mgv,
+  catalog_product_entity_varchar AS ev
+SET
+  ev.value = mg.value
+WHERE mg.value_id = mgv.value_id
+  AND mg.entity_id = ev.entity_id
+  AND ev.attribute_id IN (85, 86, 87)
+  AND  POSITION=
+  (SELECT
+    MIN(gv.position)
+  FROM
+    catalog_product_entity_media_gallery AS g
+    INNER JOIN `catalog_product_entity_media_gallery_value` AS gv
+      ON gv.value_id = g.value_id
+  WHERE g.entity_id = {$pid})
+  AND mg.entity_id = {$pid} ;
+";
+
+                $writeConnection->query($sql2);
             }
-            $writeConnection = $resource->getConnection('core_write');
+
 
             $tg=$resource->getTableName('catalog_product_entity_media_gallery');
             $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
@@ -359,15 +385,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                    ' WHERE g.entity_id in (%s)';
             $writeConnection->query(sprintf($sql,$list));
 
-            $sql2 = "UPDATE catalog_product_entity_media_gallery AS mg,
-       catalog_product_entity_media_gallery_value AS mgv,
-       catalog_product_entity_varchar AS ev
-SET ev.value = mg.value
-WHERE  mg.value_id = mgv.value_id
-AND mg.entity_id = ev.entity_id
-AND ev.attribute_id IN (85,86,87)
-AND mgv.position = 1 AND mg.entity_id IN (%s);";
-            $writeConnection->query(sprintf($sql2,$list));
+
 
 
             //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
