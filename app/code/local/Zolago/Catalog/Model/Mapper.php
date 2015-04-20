@@ -392,6 +392,8 @@ WHERE mg.value_id = mgv.value_id
 
             //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
         }
+
+        Mage::getModel('catalog/product_image')->clearCache();
     }
 
 }
