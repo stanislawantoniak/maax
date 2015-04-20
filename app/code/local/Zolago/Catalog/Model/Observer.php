@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Class Zolago_Catalog_Model_Observer
  *

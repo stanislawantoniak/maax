@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Zolago_Faq>
+            <version>0.0.1</version>
+        </Zolago_Faq>
+    </modules>
+    <frontend>
+        <routers>
+            <faq>
+                <args>
+                    <modules>
+                        <Zolago_Faq before="Inic_Faq">Zolago_Faq</Zolago_Faq>
+                    </modules>
+                </args>
+            </faq>
+        </routers>
+    </frontend>
+</config>

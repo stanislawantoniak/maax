@@ -7,7 +7,7 @@ define('TEST_PASSWORD','testtest123');
 class Automatic_Selenium_GeneralTest extends ZolagoSelenium_TestCase {
     public function setUp() {
         $host = $this->getHost();
-        $this->setBrowser('*googlechrome');
+        $this->setBrowser('*chrome');
         $this->setBrowserUrl($host);
         $this->setSleep(1);
 
