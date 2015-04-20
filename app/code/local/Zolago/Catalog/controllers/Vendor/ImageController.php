@@ -82,9 +82,10 @@ class Zolago_Catalog_Vendor_ImageController
         $message = $response['message'];
 
         if($count > 0){
+            Mage::getModel('catalog/product_image')->clearCache();
             if(!empty($message))
                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)));
-            Mage::getModel('catalog/product_image')->clearCache();
+
             $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
 
         } else {
