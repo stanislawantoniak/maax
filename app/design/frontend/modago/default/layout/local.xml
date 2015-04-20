@@ -496,8 +496,6 @@
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
                 <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
-            <block type="zolagosolrsearch/category_header" name="zolagosolrsearch_category_header_mobile" template="zolagosolrsearch/category/header/mobile.phtml" />
-            <block type="zolagosolrsearch/category_header" name="zolagosolrsearch_category_header_desktop" template="zolagosolrsearch/category/header/desktop.phtml" />
         </reference>
 
 		<reference name="before_body_end">
