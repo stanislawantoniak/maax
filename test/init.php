@@ -67,7 +67,8 @@ class ZolagoDb_TestCase extends Zolago_TestCase{
 
 class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     public function getHost() {
-        $host = Mage::app()->getStore(null)->getConfig('web/unsecure/base_url');
+        $host =
+        Mage::app()->getStore(null)->getConfig('web/unsecure/base_url');
         return $host;
     }
     public function __construct() {
