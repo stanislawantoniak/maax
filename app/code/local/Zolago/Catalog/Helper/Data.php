@@ -65,4 +65,27 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
 
+    function secureInvisibleContent( $text )
+    {
+        $text = preg_replace(
+            array(
+                // Remove invisible content
+                '@<head[^>]*?>.*?</head>@siu',
+                '@<style[^>]*?>.*?</style>@siu',
+                '@<script[^>]*?.*?</script>@siu',
+                '@<object[^>]*?.*?</object>@siu',
+                '@<embed[^>]*?.*?</embed>@siu',
+                '@<applet[^>]*?.*?</applet>@siu',
+                '@<noframes[^>]*?.*?</noframes>@siu',
+                '@<noscript[^>]*?.*?</noscript>@siu',
+                '@<noembed[^>]*?.*?</noembed>@siu'
+            ),
+            array(
+                '', '', '', '', '', '', '', '', ''
+            ),
+            $text );
+        return $text;
+    }
+
+
 }

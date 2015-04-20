@@ -8,7 +8,7 @@
 		height: 29px;
 		padding:0 0 0 15px
 	}
-	
+
 	.title {
 		.topHint {
 			right: -175px !important;
@@ -43,12 +43,14 @@
 .review-summary-table {
 	width:300px;
 	border:none;
-	
-	th {
-		width:100px;
+
+	th, td {
 		padding:4px 8px 4px 0px!important;
 	}
-	td {
-		padding:4px 8px 4px 0px!important;
+}
+
+#review-form {
+	@include max-screen(369px) {
+		margin: 0 -15px;
 	}
 }

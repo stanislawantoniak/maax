@@ -29,7 +29,19 @@
 		text-align: left;
 		border:none!important;
 	}
-	th {
+	tbody tr th {
+		font-family: $fontRegular;
 		font-weight: normal;
+		width: 90px;
+		line-height: 25px;
+		@include max-screen($screen-sm-max) {
+			line-height: 30px;
+		}
+	}
+	img[src$='.svg'] {
+		width:22px;
+		@include max-screen($screen-sm-max) {
+			width: 30px;
+		}
 	}
 }

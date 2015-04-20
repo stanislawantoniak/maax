@@ -61,7 +61,11 @@ class Zolago_Wishlist_Model_Observer {
 		/* @var $wishlist Mage_Wishlist_Model_Wishlist */
 		$cookieWishlist = Mage::helper("wishlist")->getCookieWishlist();
 		/* @var $cookieWishlist Mage_Wishlist_Model_Wishlist */
-		
+
+        $sharingCode = Mage::helper("wishlist")->getRawSharingCode();
+        Mage::unregister('sharing_code');
+        Mage::register('sharing_code', $sharingCode, true);
+
 		if($cookieWishlist->getId()){
 			// Move all items from cookie to custoemr wishlist
 			$cookieItems = $cookieWishlist->getItemCollection();

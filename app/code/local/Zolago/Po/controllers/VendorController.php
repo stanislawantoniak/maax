@@ -55,6 +55,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 );
             // END
 
+            // START: Adding product flag to know that simple product is in SALE or PROMOTION
+            $collection->getSelect()
+                ->joinLeft(
+                    array("cpei2" => 'catalog_product_entity_int'),
+                    'e.entity_id = cpei2.entity_id'
+                    .' AND ( cpei2.store_id = ' . $storeId .') '
+                    .' AND ( cpei2.attribute_id = ' . $attrProductFlag->getAttributeId() . ')'
+                    ,array(
+                        'product_flag_simple' => 'cpei2.value'
+                    )
+                );
+            // END
 
             // START: adding url_path for configurable
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attrProductFlag */
@@ -88,6 +100,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collArray = array_values($collection->toArray());
         }
 
+        foreach ($collArray as $key => $val) {
+            if (!is_numeric($collArray[$key]['product_flag'])) {
+                $collArray[$key]['product_flag'] = $collArray[$key]['product_flag_simple'];
+            }
+        }
 
         $this->getResponse()->setHeader('content-type', 'application/json');
         $this->getResponse()->setBody(Zend_Json::encode($collArray));

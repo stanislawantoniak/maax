@@ -8,12 +8,6 @@
 $categoryCollection = $this->getCategoryCollection();
 if ($this->getCategoryLabel() || count($categoryCollection)) : ?>
 <nav id="navCategory" class="visible-xs">
-    <?php if($this->getCategoryLabel()) : ?>
-        <h3><?php echo $this->getCategoryLabel(); ?></h3>
-        <a href="<?php echo $this->getMoveUpUrl(); ?>" class="backToCategory">
-            przejdź wyżej <i class="fa fa-angle-up"></i>
-        </a>
-    <?php endif; ?>
     <?php if(count($categoryCollection)) : ?>
     <ul id="nav_category_mobile" class="navigation" role="navigation">
         <?php foreach ($categoryCollection as $cat) : ?>

@@ -34,10 +34,13 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
     protected function _getPath() {
         if (is_null($this->_path)) {
             $category = Mage::helper('catalog')->getCategory();
-            if (!$category ||
-                $category->getId() == $this->_getRootCategoryId()) {
+
+            if (
+                !$category
+                //|| $category->getId() == $this->_getRootCategoryId()
+            ) {
                 $category = $this->_getDefaultCategory(
-					$this->_getProduct(), 
+					$this->_getProduct(),
 					$this->_getRootCategoryId()
 				);
             }
@@ -155,9 +158,9 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             // Remove root category
             array_pop($pathIds);
             foreach($pathIds as $parentId) {
-                if ($parentId == $rootId) {
-                    break; // we are in root
-                }
+//                if ($parentId == $rootId) {
+//                    break; // we are in root
+//                }
                 if(isset($parents[$parentId]) && $parents[$parentId]
                         instanceof Mage_Catalog_Model_Category) {
                     $parentCategory = $parents[$parentId];
