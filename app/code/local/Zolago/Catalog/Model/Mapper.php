@@ -337,6 +337,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     }
     public function checkGallery($list) {
         $pidList = explode(',',$list);
+
         if ($pidList) {
             $resource = Mage::getSingleton('core/resource');
             foreach ($pidList as $pid) {
@@ -348,14 +349,28 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
             }
+            $writeConnection = $resource->getConnection('core_write');
+
             $tg=$resource->getTableName('catalog_product_entity_media_gallery');
             $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
             $sql = 'UPDATE '.$tgv.' as gv '.
                    ' INNER JOIN '.$tg.' as g ON g.value_id = gv.value_id '.
                    ' SET gv.disabled = 0 '.
                    ' WHERE g.entity_id in (%s)';
-            $writeConnection = $resource->getConnection('core_write');
             $writeConnection->query(sprintf($sql,$list));
+
+            $sql2 = "UPDATE catalog_product_entity_media_gallery AS mg,
+       catalog_product_entity_media_gallery_value AS mgv,
+       catalog_product_entity_varchar AS ev
+SET ev.value = mg.value
+WHERE  mg.value_id = mgv.value_id
+AND mg.entity_id = ev.entity_id
+AND ev.attribute_id IN (85,86,87)
+AND mgv.position = 1 AND mg.entity_id IN (%s);";
+            $writeConnection->query(sprintf($sql2,$list));
+
+
+            //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
         }
     }
 
