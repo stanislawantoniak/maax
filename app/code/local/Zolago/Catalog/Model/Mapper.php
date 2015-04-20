@@ -362,15 +362,17 @@ SET
 WHERE mg.value_id = mgv.value_id
   AND mg.entity_id = ev.entity_id
   AND ev.attribute_id IN (85, 86, 87)
-  AND  POSITION=
+  AND mgv.value_id =
   (SELECT
-    MIN(gv.position)
+    a.value_id
   FROM
-    catalog_product_entity_media_gallery AS g
-    INNER JOIN `catalog_product_entity_media_gallery_value` AS gv
-      ON gv.value_id = g.value_id
-  WHERE g.entity_id = {$pid})
-  AND mg.entity_id = {$pid} ;
+    `catalog_product_entity_media_gallery` a
+    INNER JOIN catalog_product_entity_media_gallery_value b
+      ON b.value_id = a.value_id
+  WHERE a.entity_id = ev.entity_id
+  ORDER BY b.position
+  LIMIT 1)
+  AND mg.entity_id IN ({$pid});
 ";
 
                 $writeConnection->query($sql2);
