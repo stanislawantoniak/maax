@@ -13,10 +13,6 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     protected $_collection;
 
     protected $_pidList;
-    /**
-     * csv file
-     */
-    protected $_file;
 
     protected function _construct() {
         $this->_init('zolagocatalog/mapper');
@@ -48,24 +44,14 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $dir->close();
         return $list;
     }
-    public function setFile($file) {
-        $this->_file = $file;
-    }
-    public function mapByFile() {
+    public function mapByFile($importlist) {
         $hlp = Mage::helper('zolagocatalog');
         $response = array();
         $count = 0;
         $message = "";
         $storeid = 0;
-        $file = $this->_file;
-        $importlist = array();
-        foreach ($file as $line) {
-            if (trim($line)) {
-                $tmp = explode(';',$line);
-                $importlist[$tmp[0]][] = $tmp;
-            }
-        }
         $pidList = array();
+        $toDelete = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
             $pid = $item->getData('entity_id');
@@ -85,7 +71,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
                             // remove image from upload area
-                            @unlink($this->_path.'/'.$filename[1]);
+                            $toDelete[] =  $this->_path.'/'.$filename[1];
                             $updateFlag = true;
                             $count ++;
                         } else {
@@ -101,6 +87,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         }
         if ($pidList) {
             $this->_savePid($pidList);
+        }
+        foreach ($toDelete as $file) {
+            @unlink($file);
         }
         $response['count'] = $count;
         $response['message'] = $message;
