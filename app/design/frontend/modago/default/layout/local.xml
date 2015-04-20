@@ -247,9 +247,9 @@
 
 		<reference name="header">
 			<!-- <block type="page/html_header" name="header" as="header" template="page/html/header.phtml"> -->
-			<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
-                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
-			</block>
+			<!--<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">-->
+                <!--<block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />-->
+			<!--</block>-->
 			<block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml"/>
 			<block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
 			<block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
@@ -491,13 +491,6 @@
 			</action>
 		</reference>
 
-        <reference name="header">
-            <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
-                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
-            </block>
-        </reference>
-
 		<reference name="before_body_end">
 			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
 				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
@@ -506,12 +499,19 @@
 		</reference>
 
         <reference name="content">
+            <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header_m" template="zolagosolrsearch/catalog/product/list/header/mobile/category.phtml" as="solrsearch_result_title">
+                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+            </block>
 
-            <!--<block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">-->
-                <!--<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>-->
-                <!--<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>-->
-            <!--</block>-->
+            <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
+                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+            </block>
+            <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
 
+                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+            </block>
 
             <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar"/>
             <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
