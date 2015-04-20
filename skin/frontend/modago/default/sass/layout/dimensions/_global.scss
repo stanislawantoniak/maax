@@ -47,7 +47,9 @@
       padding-bottom:10px;
     }
   }
-
+  ol.breadcrumb {
+    margin: 20px 0 0 !important;
+  }
 }
 
 .node-type-checkout,
