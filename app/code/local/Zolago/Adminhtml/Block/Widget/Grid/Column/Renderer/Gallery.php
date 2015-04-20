@@ -6,7 +6,6 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
 
     public function render(Varien_Object $row)
     {
-        Mage::getModel('catalog/product_image')->clearCache();
         $out = '';
         $product = Mage::getModel('zolagocatalog/product')->load($row->getEntityId());
         $catalogHelper = $this->helper('catalog/image');
