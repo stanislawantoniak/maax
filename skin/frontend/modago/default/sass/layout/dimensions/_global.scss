@@ -1,9 +1,9 @@
 #header {
 	padding-top: 57px;
+
 }
+
 #header-main {
-	//padding-top:35px;
-	//padding-bottom: 35px;
 	padding-top:15px;
 	padding-bottom: 15px;
 }
@@ -19,6 +19,34 @@
 			padding-bottom: 0;
 		}
 	}
+}
+.is-content-mode {
+  .header_bottom {
+    background: none;
+    background-color: #ffffff;
+    #navCategory {
+      margin-top: 0px;
+      #nav_category_mobile {
+        > li {
+          > a:link,
+          > a:visited {
+            border-top: none;
+            border-bottom:1px solid #dedce1;
+          }
+        }
+      }
+    }
+  }
+  #header-main {
+    padding-top:0;
+    padding-bottom:10px;
+  }
+  #header {
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 10px;
+    }
+}
+
 }
 
 .node-type-checkout,

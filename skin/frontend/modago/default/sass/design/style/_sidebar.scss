@@ -23,6 +23,9 @@
 			background:$color-accent;
 		}
 	}
+    .no-pointer {
+        cursor: default;
+    }
 	dl {
 		dt {
 			text-transform: uppercase;
@@ -41,7 +44,16 @@
 	.action.clear {
 		text-align: center;
 	}
-
+    .bigger-left{
+        dl{
+            dd {
+                padding: 0px 5px 0px 8px;
+            }
+        }
+    }
+    .no-margin {
+        margin: 0px 0px 0px 0px;
+    }
 }
 
 .current-filter {

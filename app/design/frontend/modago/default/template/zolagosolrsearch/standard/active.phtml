@@ -3,7 +3,7 @@
 $q = array();
 $filterQuery = $this->getFilterQuery();
 ?>
-
+<?php if(!$this->isContentMode()): ?>
 <div id="active-filters">
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
@@ -74,3 +74,4 @@ $filterQuery = $this->getFilterQuery();
         </div>
     </div>
 </div>
+<?php endif; ?>
