@@ -84,16 +84,17 @@ class Zolago_Catalog_Vendor_ImageController
         if($count > 0){
             if(!empty($message))
                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)));
-
+            Mage::getModel('catalog/product_image')->clearCache();
             $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
 
         } else {
             if(!empty($message))
                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0') .'<br /> ' . implode('<br/> ', $message)));
+
             $this->_makeRedirect(false, 'tab_1_2');
         }
         $pidList = $mapper->getPidList();
-        Mage::getModel('catalog/product_image')->clearCache();
+
         $this->_makeRedirect($pidList);        
     }
     public function csvmapAction() {
