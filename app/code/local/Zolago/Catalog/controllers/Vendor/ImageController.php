@@ -8,6 +8,7 @@ class Zolago_Catalog_Vendor_ImageController
 
     public function indexAction() {
         Mage::register('as_frontend', true);// Tell block class to use regular URL's
+        Mage::getModel('catalog/product_image')->clearCache();
         $this->_renderPage(array('default','formkey','adminhtml_head'), 'udprod_image');
     }
     public function check_galleryAction() {
