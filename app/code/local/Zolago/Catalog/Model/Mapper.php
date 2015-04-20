@@ -128,6 +128,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
         $storeid = 0;
         $pidList = array();
+
         if ($this->_collection->getSize() ==0){
             $message[] = $hlp->__("Images for mapping by name not found corresponding names in uploaded files");
         }
@@ -143,6 +144,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             foreach ($list as $file) {
                 if (!strncmp($skuv,$file,strlen($skuv))) {
                     $imagefile=$this->_copyImageFile($file);
+
                     if(!$imagefile)
                     {
                         $message[] = $hlp->__("File:")." <b>" . $file . "</b> ".$hlp->__("not found among uploaded");
@@ -264,7 +266,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             $sql="INSERT INTO $tgv
                  (value_id,store_id,position,disabled,label)
                  VALUES ('%d','%d','%d','%d','%s')
-                 ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`)";
+                 ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`),disabled=1";
             $insert = sprintf($sql,$vid,$storeid,$pos,1,$imglabel);
 
             $writeConnection = $resource->getConnection('core_write');
@@ -392,8 +394,8 @@ WHERE mg.value_id = mgv.value_id
 
             //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
         }
-
         Mage::getModel('catalog/product_image')->clearCache();
+
     }
 
 }

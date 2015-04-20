@@ -93,6 +93,7 @@ class Zolago_Catalog_Vendor_ImageController
             $this->_makeRedirect(false, 'tab_1_2');
         }
         $pidList = $mapper->getPidList();
+        Mage::getModel('catalog/product_image')->clearCache();
         $this->_makeRedirect($pidList);        
     }
     public function csvmapAction() {
@@ -148,6 +149,7 @@ class Zolago_Catalog_Vendor_ImageController
         } else {
             $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Cant upload file'));
         }
+        Mage::getModel('catalog/product_image')->clearCache();
         $this->_makeRedirect($pidList);
     }
 
