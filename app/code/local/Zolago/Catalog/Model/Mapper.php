@@ -130,6 +130,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             if (!$skuv) {
                 continue;
             }
+            //var_export($list);
             foreach ($list as $file) {
                 if (!strncmp($skuv,$file,strlen($skuv))) {
                     $imagefile=$this->_copyImageFile($file);
@@ -161,6 +162,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         }
         $response['count'] = $count;
         $response['message'] = $message;
+        $response['pid'] = $pidList;
 
         return $response;
 

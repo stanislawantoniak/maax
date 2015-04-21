@@ -108,18 +108,22 @@ class Zolago_Catalog_Vendor_ImageController
             $result['status'] = 0;
             $result['message'] = array('count' => 0,'message'=>Mage::helper('zolagocatalog')->__('Nothing to map'));
         }
-        var_export($result);
+        //var_export($result);
         $skuvS = array();
 
         foreach ($data as $imageFile) {
             $skuvS[] = trim(explode('.', $imageFile)[0]);
         }
-        var_export($skuvS);
+        //var_export($skuvS);
         /* @var $mapper    Zolago_Catalog_Model_Mapper  */
         $mapper = $this->_prepareMapper($skuvS);
         $response = $mapper->mapByName($data);
         $result['status'] = 1;
-        $result['message'] = array('count' => $response['count'],'message'=> $response['message']);
+        $result['message'] = array(
+            'count' => $response['count'],
+            'message'=> $response['message'],
+            'pid' => $response['pid']
+        );
         var_export($result);
     }
 

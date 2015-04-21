@@ -8,6 +8,24 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
     const SPECIAL_LABELS_NEW_DELIMITER	= ' | ';
 
     /**
+     * Logs a message to /var/log/zolagocatalog.log
+     *
+     * @param string $message
+     */
+    public function log($message = '') {
+        Mage::log($message, null, 'zolagocatalog.log');
+    }
+
+    /**
+     * Converts timestamp to GMT date
+     *
+     * @param int $time
+     * @return string
+     */
+    public function timestampToGmtDate($time) {
+        return gmdate('D, d M Y H:i:s', $time) . ' GMT';
+    }
+    /**
      * get id-sku associated array
      * @return array
      */
