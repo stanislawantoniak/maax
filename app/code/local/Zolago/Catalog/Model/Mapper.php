@@ -340,20 +340,21 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     public function checkGallery($list) {
         $pidList = explode(',',$list);
 
-        $productEntityId = 4;
+        if ($pidList) {
+            $productEntityId = 4;
 
-        $attributeImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'image')->getAttributeId();
-        $attributeSmallImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'small_image')->getAttributeId();
-        $attributeThumbnail = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'thumbnail')->getAttributeId();
+            $attributeImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'image')->getAttributeId();
+            $attributeSmallImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'small_image')->getAttributeId();
+            $attributeThumbnail = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'thumbnail')->getAttributeId();
 
 
-        $resource = Mage::getSingleton('core/resource');
-        $writeConnection = $resource->getConnection('core_write');
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
 
-        $tg=$resource->getTableName('catalog_product_entity_media_gallery');
-        $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
+            $tg=$resource->getTableName('catalog_product_entity_media_gallery');
+            $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
 
-        $sql1 = "
+            $sql1 = "
         SELECT
           gallery.`entity_id` AS product_id,
           gallery.`value` AS image_path,
@@ -365,17 +366,16 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         WHERE gallery.`entity_id` IN ({$list})
         GROUP BY gallery.`entity_id`
             ";
-        $query1 = $writeConnection->query($sql1);
-        $minPositions = $query1->fetchAll();
+            $query1 = $writeConnection->query($sql1);
+            $minPositions = $query1->fetchAll();
 
-        $minPositionsData = array();
-        if(!empty($minPositions)){
-            foreach($minPositions as $minPosition){
-                $minPositionsData[$minPosition['product_id']] = $minPosition['sort_order'];
+            $minPositionsData = array();
+            if(!empty($minPositions)){
+                foreach($minPositions as $minPosition){
+                    $minPositionsData[$minPosition['product_id']] = $minPosition['sort_order'];
+                }
             }
-        }
-
-        if ($pidList) {
+            $sendProductToIndexAndSolr = array();
             foreach ($pidList as $pid) {
                 /**
                  * @todo full product load not required;
@@ -384,6 +384,10 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                 $_product = Mage::getModel('catalog/product')->load($pid);
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+
+                if($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED){
+                    $sendProductToIndexAndSolr[] = $pid;
+                }
 
                 //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
                 $minPosition = isset($minPositionsData[$pid]) ? (int)$minPositionsData[$pid] : 0;
@@ -416,11 +420,11 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
             $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
             /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-            $indexer->reindexEntities($pidList);
+            $indexer->reindexEntities($sendProductToIndexAndSolr);
             Mage::dispatchEvent(
                 "catalog_converter_price_update_after",
                 array(
-                    "product_ids" => $pidList
+                    "product_ids" => $sendProductToIndexAndSolr
                 )
             );
         }
