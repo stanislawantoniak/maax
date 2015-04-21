@@ -127,7 +127,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             /* @var $product Mage_Catalog_Model_Product */
             $product = Mage::getModel("catalog/product");
             $product->setId($productId);
-            Mage::dispatchEvent('catalog_controller_product_view', array('product' => $product));
+            Mage::dispatchEvent('ajax_get_account_information_after', array('product' => $product));
         }
 
         $result = $this->_formatSuccessContentForResponse($content);
