@@ -340,10 +340,42 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     public function checkGallery($list) {
         $pidList = explode(',',$list);
 
-        if ($pidList) {
-            $resource = Mage::getSingleton('core/resource');
-            $writeConnection = $resource->getConnection('core_write');
+        $productEntityId = 4;
 
+        $attributeImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'image')->getAttributeId();
+        $attributeSmallImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'small_image')->getAttributeId();
+        $attributeThumbnail = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'thumbnail')->getAttributeId();
+
+
+        $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');
+
+        $tg=$resource->getTableName('catalog_product_entity_media_gallery');
+        $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        $sql1 = "
+        SELECT
+          gallery.`entity_id` AS product_id,
+          gallery.`value` AS image_path,
+          MIN(gallery_value.`position`) AS sort_order
+        FROM
+          {$tg} gallery
+          JOIN {$tgv} AS gallery_value
+            ON gallery.`value_id` = gallery_value.`value_id`
+        WHERE gallery.`entity_id` IN ({$list})
+        GROUP BY gallery.`entity_id`
+            ";
+        $query1 = $writeConnection->query($sql1);
+        $minPositions = $query1->fetchAll();
+
+        $minPositionsData = array();
+        if(!empty($minPositions)){
+            foreach($minPositions as $minPosition){
+                $minPositionsData[$minPosition['product_id']] = $minPosition['sort_order'];
+            }
+        }
+
+        if ($pidList) {
             foreach ($pidList as $pid) {
                 /**
                  * @todo full product load not required;
@@ -353,36 +385,27 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
 
-
+                //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
+                $minPosition = isset($minPositionsData[$pid]) ? (int)$minPositionsData[$pid] : 0;
                 $sql2 = "
-UPDATE
-  catalog_product_entity_media_gallery AS mg,
-  catalog_product_entity_media_gallery_value AS mgv,
-  catalog_product_entity_varchar AS ev
-SET
-  ev.value = mg.value
-WHERE mg.value_id = mgv.value_id
-  AND mg.entity_id = ev.entity_id
-  AND ev.attribute_id IN (85, 86, 87)
-  AND mgv.value_id =
-  (SELECT
-    a.value_id
-  FROM
-    `catalog_product_entity_media_gallery` a
-    INNER JOIN catalog_product_entity_media_gallery_value b
-      ON b.value_id = a.value_id
-  WHERE a.entity_id = ev.entity_id
-  ORDER BY b.position
-  LIMIT 1)
-  AND mg.entity_id IN ({$pid});
-";
+                UPDATE
+                  catalog_product_entity_media_gallery AS mg,
+                  catalog_product_entity_media_gallery_value AS mgv,
+                  catalog_product_entity_varchar AS ev
+                SET
+                  ev.value = mg.value
+                WHERE mg.value_id = mgv.value_id
+                  AND mg.entity_id = ev.entity_id
+                  AND ev.attribute_id IN ({$attributeImage}, {$attributeSmallImage}, {$attributeThumbnail})
+                  AND mgv.POSITION = {$minPosition}
+                  AND mg.entity_id IN ({$pid});
+                ";
 
                 $writeConnection->query($sql2);
             }
 
 
-            $tg=$resource->getTableName('catalog_product_entity_media_gallery');
-            $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
+
             $sql = 'UPDATE '.$tgv.' as gv '.
                    ' INNER JOIN '.$tg.' as g ON g.value_id = gv.value_id '.
                    ' SET gv.disabled = 0 '.
@@ -391,8 +414,15 @@ WHERE mg.value_id = mgv.value_id
 
 
 
-
-            //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
+            $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+            /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+            $indexer->reindexEntities($pidList);
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $pidList
+                )
+            );
         }
 
     }
