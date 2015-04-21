@@ -117,6 +117,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
         $storeid = 0;
         $pidList = array();
+
         if ($this->_collection->getSize() ==0){
             $message[] = $hlp->__("Images for mapping by name not found corresponding names in uploaded files");
         }
@@ -132,6 +133,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             foreach ($list as $file) {
                 if (!strncmp($skuv,$file,strlen($skuv))) {
                     $imagefile=$this->_copyImageFile($file);
+
                     if(!$imagefile)
                     {
                         $message[] = $hlp->__("File:")." <b>" . $file . "</b> ".$hlp->__("not found among uploaded");
@@ -253,7 +255,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             $sql="INSERT INTO $tgv
                  (value_id,store_id,position,disabled,label)
                  VALUES ('%d','%d','%d','%d','%s')
-                 ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`)";
+                 ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`),disabled=1";
             $insert = sprintf($sql,$vid,$storeid,$pos,1,$imglabel);
 
             $writeConnection = $resource->getConnection('core_write');
@@ -326,26 +328,62 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     }
     public function checkGallery($list) {
         $pidList = explode(',',$list);
+
         if ($pidList) {
             $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+
             foreach ($pidList as $pid) {
-				/**
-				 * @todo full product load not required;
-				 * use mass action save
-				 */
+                /**
+                 * @todo full product load not required;
+                 * use mass action save
+                 */
                 $_product = Mage::getModel('catalog/product')->load($pid);
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+
+
+                $sql2 = "
+UPDATE
+  catalog_product_entity_media_gallery AS mg,
+  catalog_product_entity_media_gallery_value AS mgv,
+  catalog_product_entity_varchar AS ev
+SET
+  ev.value = mg.value
+WHERE mg.value_id = mgv.value_id
+  AND mg.entity_id = ev.entity_id
+  AND ev.attribute_id IN (85, 86, 87)
+  AND mgv.value_id =
+  (SELECT
+    a.value_id
+  FROM
+    `catalog_product_entity_media_gallery` a
+    INNER JOIN catalog_product_entity_media_gallery_value b
+      ON b.value_id = a.value_id
+  WHERE a.entity_id = ev.entity_id
+  ORDER BY b.position
+  LIMIT 1)
+  AND mg.entity_id IN ({$pid});
+";
+
+                $writeConnection->query($sql2);
             }
+
+
             $tg=$resource->getTableName('catalog_product_entity_media_gallery');
             $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
             $sql = 'UPDATE '.$tgv.' as gv '.
                    ' INNER JOIN '.$tg.' as g ON g.value_id = gv.value_id '.
                    ' SET gv.disabled = 0 '.
                    ' WHERE g.entity_id in (%s)';
-            $writeConnection = $resource->getConnection('core_write');
             $writeConnection->query(sprintf($sql,$list));
+
+
+
+
+            //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
         }
+
     }
 
 }

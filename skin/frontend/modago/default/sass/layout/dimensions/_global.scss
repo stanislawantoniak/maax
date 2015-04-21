@@ -24,6 +24,9 @@
   .header_bottom {
     background: none;
     background-color: #ffffff;
+    @media (max-width: $screen-sm) {
+      margin-bottom: 10px;
+    }
     #navCategory {
       margin-top: 0px;
       #nav_category_mobile {
@@ -40,13 +43,13 @@
   #header-main {
     padding-top:0;
     padding-bottom:10px;
-  }
-  #header {
-    @media (max-width: $screen-xs-max) {
-      margin-bottom: 10px;
+    @media (max-width: $screen-xs) {
+      padding-bottom:10px;
     }
-}
-
+  }
+  ol.breadcrumb {
+    margin: 20px 0 0 !important;
+  }
 }
 
 .node-type-checkout,

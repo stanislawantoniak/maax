@@ -81,7 +81,8 @@ class Zolago_Catalog_Vendor_ImageController
         $count = $response['count'];
         $message = $response['message'];
 
-        if($count > 0) {
+        if($count > 0){
+            Mage::getModel('catalog/product_image')->clearCache();
             if(!empty($message))
                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)));
 
@@ -90,6 +91,7 @@ class Zolago_Catalog_Vendor_ImageController
         } else {
             if(!empty($message))
                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0') .'<br /> ' . implode('<br/> ', $message)));
+
             $this->_makeRedirect(false, 'tab_1_2');
         }
         $pidList = $mapper->getPidList();
@@ -141,6 +143,7 @@ class Zolago_Catalog_Vendor_ImageController
         } catch (Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         }
+        Mage::getModel('catalog/product_image')->clearCache();
         $this->_makeRedirect($pidList);
     }
 
