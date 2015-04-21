@@ -141,7 +141,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
                             // remove image from upload area
-                            @unlink($this->_path.'/'.$file);
+                            //@unlink($this->_path.'/'.$file);
                             $count ++;
                             $updateFlag = true;
                         } else {

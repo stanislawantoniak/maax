@@ -1,5 +1,9 @@
+<?php $_helper = Mage::helper('zolagocatalog'); ?>
+
+
 <div>
     <div class="widget">
+
         <div id="control-battons">
             <div>
                 <div>
@@ -11,11 +15,16 @@
                             id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete'); ?></button>
                 </div>
                 <div>
-                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"
-                       data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?>"
-                       data-placement="top"
-                       data-layout="top" data-type="confirm" data-modal="true"
-                       data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?></a>
+<!--                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"-->
+<!--                       data-text="--><?php //echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?><!--"-->
+<!--                       data-placement="top"-->
+<!--                       data-layout="top" data-type="confirm" data-modal="true"-->
+<!--                       data-ok-url="--><?php //echo Mage::getUrl('udprod/vendor_image/namemap'); ?><!--">-->
+<!--                        --><?php //echo Mage::helper('zolagocatalog')->__('Map by name'); ?>
+<!--                    </a>-->
+                    <a class="btn btn-primary" id="map-by-name" href="" >
+                        <?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?>
+                    </a>
                 </div>
                 <div>
                     <a class="btn btn-primary" href="#dialog_by_csv"
@@ -33,6 +42,12 @@
         </div>
     </div>
     <div class="clearbr"></div>
+    <div class="progress" style="margin-top: 20px;">
+        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+             aria-valuemin="0" aria-valuemax="100" style="width:0%">
+            <span class="sr-only">0% Complete</span>
+        </div>
+    </div>
     <div id="uploader_wrapper" class="widget-content">
         <div id="uploader"></div>
         <div id="elf"></div>
@@ -61,6 +76,7 @@
                             </div>
                         </form>
                     </div>
+
                     <div id="map_process_upload" style="display:none">
                         <div class="col-md-12">
                             <?php echo Mage::helper('zolagocatalog')->__('Please wait ...'); ?>
@@ -223,7 +239,187 @@ jQuery().ready(function() {
 	jQuery('#map_csv_button').click(function() {
         return beforeSubmit();
     });
+
+
+
+    var mapByNameBatchSize = 3;
+    jQuery("#map-by-name").click(function(e){
+        e.preventDefault();
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+        console.log(selectedImages);
+        console.log(selectedImages.length);
+        if(selectedImages.length > 0){
+            //map by name
+            var FilesToMap = [];
+            jQuery(selectedImages).each(function(i,val){
+                var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
+                FilesToMap.push(fileName);
+            })
+            console.log(FilesToMap);
+            console.log(FilesToMap.length);
+            var chunks = [];
+            if(FilesToMap.length <= mapByNameBatchSize){
+                chunks.push(FilesToMap);
+            } else {
+                chunks = array_chunk(FilesToMap, mapByNameBatchSize);
+            }
+            console.log("-------------------------");
+            console.log(chunks);
+            console.log("-------------------------");
+            var step = 0;
+            var percentageOfDone = 0;
+            console.log(chunks[step]);
+            var dataToSend = chunks[step];
+
+
+
+//                jQuery.ajax({
+//                    method: "POST",
+//                    url: '<?php //echo Mage::getUrl('udprod/vendor_image/mapByName'); ?>//',
+//                    data: {data: dataToSend}
+//                }).done(function (response) {
+//                    console.log(response);
+//                    if(response.status = 1){
+//                        //count percentageOfDone
+//                        percentageOfDone = (parseInt(mapByNameBatchSize) * 100) / parseInt(FilesToMap.length);
+//                        console.log(percentageOfDone);
+//                        jQuery(".progress-bar").css({"width": percentageOfDone+"%"});
+//
+//                        if(percentageOfDone < 100){
+//                            step = step+1;
+//                            console.log(step);
+//                        }
+//
+//                        //load again
+//                    }
+//                });
+
+
+
+            jQuery(chunks).each(function(n,chunk){
+                console.log(chunk);
+                //make ajax mapping
+                jQuery.ajaxQueue({
+                    url: '<?php echo Mage::getUrl('udprod/vendor_image/mapByName'); ?>',
+                    data: {data: dataToSend},
+                    type: "POST",
+                    success: function(response) {
+                        percentageOfDone = (parseInt(mapByNameBatchSize * (n+1)) * 100) / parseInt(FilesToMap.length);
+                        console.log(percentageOfDone);
+                        jQuery(".progress-bar").css({"width": percentageOfDone + "%"});
+                    }
+                });
+            })
+        } else {
+            noty({
+                text: "<?php echo $_helper->__('Select images for mapping please'); ?>",
+                type: 'error',
+                timeout: 2000
+            });
+        }
+    })
+
+
+
+
+
+
+//    jQuery("#map-by-name").click(function(e){
+//        e.preventDefault();
+//                var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+//        console.log(selectedImages);
+//        console.log(selectedImages.length);
+//
+//        jQuery("#items li").each(function(idx) {
+//            // Queue up an ajax request
+//            jQuery.ajaxQueue({
+//                url: '<?php //echo Mage::getUrl('udprod/vendor_image/mapByName'); ?>//',
+//                data: {
+//                    html: "[" + idx + "] " + jQuery(this).html()
+//                },
+//                type: "POST",
+//                success: function(data) {
+//                    // Write to #output
+//                    jQuery("#output").append(jQuery("<li>", {
+//                        html: data
+//                    }));
+//                }
+//            });
+//        });
+//    })
+
+
 });
+
+
+
+
+
+var ajaxQueue = jQuery({});
+
+jQuery.ajaxQueue = function(ajaxOpts) {
+    // Hold the original complete function
+    var oldComplete = ajaxOpts.complete;
+
+    // Queue our ajax request
+    ajaxQueue.queue(function(next) {
+        // Create a complete callback to invoke the next event in the queue
+        ajaxOpts.complete = function() {
+            // Invoke the original complete if it was there
+            if (oldComplete) {
+                oldComplete.apply(this, arguments);
+            }
+
+            // Run the next query in the queue
+            next();
+        };
+
+        // Run the query
+        jQuery.ajax(ajaxOpts);
+    });
+};
+function array_chunk (input, size, preserve_keys) {
+
+    var x, p = '', i = 0, c = -1, l = input.length || 0, n = [];
+
+    if (size < 1) {
+        return null;
+    }
+
+    if (Object.prototype.toString.call(input) === '[object Array]') {
+        if (preserve_keys) {
+            while (i < l) {
+                (x = i % size) ? n[c][i] = input[i] : n[++c] = {}, n[c][i] = input[i];
+                i++;
+            }
+        }
+        else {
+            while (i < l) {
+                (x = i % size) ? n[c][x] = input[i] : n[++c] = [input[i]];
+                i++;
+            }
+        }
+    }
+    else {
+        if (preserve_keys) {
+            for (p in input) {
+                if (input.hasOwnProperty(p)) {
+                    (x = i % size) ? n[c][p] = input[p] : n[++c] = {}, n[c][p] = input[p];
+                    i++;
+                }
+            }
+        }
+        else {
+            for (p in input) {
+                if (input.hasOwnProperty(p)) {
+                    (x = i % size) ? n[c][x] = input[p] : n[++c] = [input[p]];
+                    i++;
+                }
+            }
+        }
+    }
+    return n;
+}
 </script>
 
 
