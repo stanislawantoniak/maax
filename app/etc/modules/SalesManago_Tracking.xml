@@ -2,7 +2,7 @@
 <config>
     <modules>
         <SalesManago_Tracking>
-            <active>false</active>
+            <active>true</active>
             <codePool>community</codePool>
         </SalesManago_Tracking>
     </modules>
