@@ -261,24 +261,12 @@
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items" template="page/html/header/bottom.category.items.phtml"/>
 			<block type="zolagomodago/catalog_category" name="page.header.bottom.category.items.mobile" template="page/html/header/bottom.category.items.mobile.phtml"/>
 			<!-- </block> -->
-			<!-- Varnish cache esi public block-->
-			<action method="setEsiOptions">
-                <params>
-                    <access>public</access>
-                </params>
-            </action>
 		</reference>
 
 		<reference name="footer">
 			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
 				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
 			</block>
-			<!-- Varnish cache esi public block-->
-			<action method="setEsiOptions">
-                <params>
-                    <access>public</access>
-                </params>
-            </action>
 		</reference>
 
 		<reference name="before_body_end">
