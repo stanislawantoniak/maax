@@ -123,6 +123,7 @@ var Mall = {
                 Mall.buildAccountInfo(data, status);
             },
             url: "/orbacommon/ajax_customer/get_account_information"
+            ,type: "POST"
         });
     },
     getIsBrowserMobile: function(){
