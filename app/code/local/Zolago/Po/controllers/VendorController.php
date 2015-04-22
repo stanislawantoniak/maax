@@ -846,6 +846,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 $item->addData($itemSData);
                 $po->addItemWithTierCommission($item);
+                Mage::register('vendor_add_item_to_po_before', true, true);
             } else if (!empty($parentId)) {
                 $productP = Mage::getModel('catalog/product')->load($parentId);
 
@@ -923,6 +924,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     'discount_amount'		=> null,
                     'discount_percent'		=> null
                 );
+
+                Mage::register('vendor_add_item_to_po_before', true, true);
 
                 $child->addData($itemPData);
                 $child
