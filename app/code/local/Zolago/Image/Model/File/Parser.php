@@ -69,7 +69,33 @@ class Zolago_Image_Model_File_Parser extends Mage_Core_Model_Abstract {
 
     }
 
-    
+    /**
+     * prepare sku import list
+     *
+     * @param string $file
+     * @return array
+     */
+
+    public function createImportListChunk($file, $offset = 0, $limit = 0)
+    {
+        $data = array();
+        $importList = array();
+
+        $data['total_count'] = 0;
+        $data['list'] = $importList;
+
+        if (!$file) {
+            return $data;
+        }
+        $fullImportList = $this->createImportListFromFile($file);
+
+        if (!empty($limit) || !empty($offset)){
+            $importList = array_slice($fullImportList, $offset * $limit , $limit);
+        }
+        $data['total_count'] = count($fullImportList);
+        $data['list'] = $importList;
+        return $data;
+    }
     /**
      * prepare sku import list  
      *

@@ -513,7 +513,6 @@
                 <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
-
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
                 <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>

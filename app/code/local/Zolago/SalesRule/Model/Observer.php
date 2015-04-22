@@ -76,7 +76,11 @@ class Zolago_SalesRule_Model_Observer {
 		$item = $observer->getEvent()->getPoItem();
 		/* @var $item Unirgy_DropshipPo_Model_Po_Item */
 		if($item->isObjectNew()){
-			$item->setDoUpdateDiscountInfo(true);
+            if (Mage::registry('vendor_add_item_to_po_before')) {
+                $item->setDoResetDiscountInfo(true);
+            } else {
+                $item->setDoUpdateDiscountInfo(true);
+            }
 		}elseif($this->_hasDiscountChanged($item)){
 			$item->setDoResetDiscountInfo(true);
 		}

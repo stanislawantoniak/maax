@@ -97,9 +97,42 @@ class Zolago_Catalog_Vendor_ImageController
         $pidList = $mapper->getPidList();
         $this->_makeRedirect($pidList);
     }
+
+
+    public function mapByNameAction()
+    {
+        $data = $this->getRequest()->getPost('data', array());
+        var_export($data);
+        $result = array();
+        if (empty($data)) {
+            $result['status'] = 0;
+            $result['message'] = array('count' => 0,'message'=>Mage::helper('zolagocatalog')->__('Nothing to map'));
+        }
+        //var_export($result);
+        $skuvS = array();
+
+        foreach ($data as $imageFile) {
+            $skuvS[] = trim(explode('.', $imageFile)[0]);
+        }
+        //var_export($skuvS);
+        /* @var $mapper    Zolago_Catalog_Model_Mapper  */
+        $mapper = $this->_prepareMapper($skuvS);
+        $response = $mapper->mapByName($data);
+        $result['status'] = 1;
+        $result['message'] = array(
+            'count' => $response['count'],
+            'message'=> $response['message'],
+            'pid' => $response['pid']
+        );
+        var_export($result);
+    }
+
+
+
     public function csvmapAction() {
         $pidList = array();
         try {
+
             if (empty($_FILES['csv_file'])) {
                 Mage::throwException(Mage::helper('zolagocatalog')->__('Cant upload file'));
             }

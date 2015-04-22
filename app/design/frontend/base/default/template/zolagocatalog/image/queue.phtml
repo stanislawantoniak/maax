@@ -1,5 +1,9 @@
+<?php $_helper = Mage::helper('zolagocatalog'); ?>
+
+
 <div>
     <div class="widget">
+
         <div id="control-battons">
             <div>
                 <div>
@@ -11,14 +15,19 @@
                             id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete'); ?></button>
                 </div>
                 <div>
-                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"
-                       data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?>"
-                       data-placement="top"
-                       data-layout="top" data-type="confirm" data-modal="true"
-                       data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?></a>
+<!--                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"-->
+<!--                       data-text="--><?php //echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?><!--"-->
+<!--                       data-placement="top"-->
+<!--                       data-layout="top" data-type="confirm" data-modal="true"-->
+<!--                       data-ok-url="--><?php //echo Mage::getUrl('udprod/vendor_image/namemap'); ?><!--">-->
+<!--                        --><?php //echo Mage::helper('zolagocatalog')->__('Map by name'); ?>
+<!--                    </a>-->
+                    <a class="btn btn-primary" id="map-by-name" href="" >
+                        <?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?>
+                    </a>
                 </div>
                 <div>
-                    <a class="btn btn-primary" href="#dialog_by_csv"
+                    <a class="btn btn-primary" id="dialog_by_csv_trigger" href="#dialog_by_csv"
                        data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV'); ?></a>
                 </div>
 
@@ -33,6 +42,7 @@
         </div>
     </div>
     <div class="clearbr"></div>
+
     <div id="uploader_wrapper" class="widget-content">
         <div id="uploader"></div>
         <div id="elf"></div>
@@ -50,6 +60,8 @@
                         <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file'); ?>
                         <form id="map_form" action="<?php echo Mage::getUrl("udprod/vendor_image/csvmap"); ?>"
                               method="post" enctype="multipart/form-data" name="csv_form">
+                            <input type="hidden" name="csv_file_limit" value="" />
+                            <input type="hidden" name="csv_file_offset" value=""/>
                             <input type="file" name="csv_file" id="map_csv_file">
                             <br/>
 
@@ -61,16 +73,14 @@
                             </div>
                         </form>
                     </div>
+
                     <div id="map_process_upload" style="display:none">
                         <div class="col-md-12">
                             <?php echo Mage::helper('zolagocatalog')->__('Please wait ...'); ?>
                         </div>
                         <br/>
 
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-success" id="map_progress_bar"
-                                 style="width:100%"></div>
-                        </div>
+
                         <br/>
 
                         <div class="col-md-12">
@@ -85,7 +95,9 @@
             </div>
         </div>
     </div>
-
+<style type="text/css">
+    #vendor-loading.with-progress { background-image: none;}
+</style>
 <script type="text/javascript">
 var elf = null;
 var plup = null;
@@ -180,7 +192,6 @@ jQuery.get('<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>',function
 function beforeSubmit() {
     var filename = jQuery('#map_csv_file').val();
     if (!filename) {
-        alert('No file');
         return false;
     } 
     return true;
@@ -220,10 +231,306 @@ jQuery().ready(function() {
 	    jQuery('#map_process').hide();
 	});
 	show_filebrowser();
-	jQuery('#map_csv_button').click(function() {
-        return beforeSubmit();
+
+
+
+    var mapByCSVOffset = 0;
+    var mapByCSVBatchSize = 3;
+    jQuery("a#dialog_by_csv_trigger, #map_csv_button").click(function(){
+        jQuery("#map_form input[name='csv_file_limit']").val(mapByCSVBatchSize);
+        jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset);
+    })
+    jQuery('#map_form').submit(function (e) {
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
+        e.preventDefault();
+        var percentageOfDone = 0;
+        var form = this;
+        if (!beforeSubmit()) {
+            noty({
+                text: "<?php echo $_helper->__('Please select file'); ?>",
+                type: 'error',
+                timeout: 4000
+            });
+            return false;
+        }
+        var pidList = [];
+        var url = '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV'); ?>';
+
+        startLoading();
+        jQuery.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                if (response.status == 0) {
+                    stopLoading();
+                    jQuery(".progress-bar").css({"width": "0%"}).text("");
+                    noty({
+                        text: response.message.message,
+                        type: 'error',
+                        timeout: 8000
+                    });
+                }
+                if (response.status == 1) {
+                    pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+
+                    var totalCount = response.message.total_count;
+                    percentageOfDone = (parseInt(mapByCSVBatchSize * 1) * 100) / parseInt(totalCount);
+
+                    jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+
+                    if (mapByCSVBatchSize >= totalCount) {
+                        makeRedirect(pidList);
+                    }
+
+                    var steps = (parseInt(totalCount) / mapByCSVBatchSize) - 1;
+                    jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset + 1);
+
+                    for (var i = 1; i <= steps; i++) {
+                        //make
+                        //console.log("make next step ajax");
+
+                        var data;
+                        data = new FormData();
+                        data.append('csv_file', jQuery( '#map_csv_file' )[0].files[0] );
+                        data.append('csv_file_limit', mapByCSVBatchSize);
+                        data.append('csv_file_offset', i);
+                        jQuery.ajaxQueue({
+                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV'); ?>',
+                            data: data,
+                            processData: false,
+                            contentType: false,
+                            type: "POST",
+                            success: function (response) {
+                                if (response.status == 0) {
+                                    stopLoading();
+                                    jQuery(".progress-bar").css({"width": "0%"}).text("");
+                                    noty({
+                                        text: response.message.message,
+                                        type: 'error',
+                                        timeout: 4000
+                                    });
+                                }
+
+
+                                if (response.status == 1) {
+                                    var currentOffset = parseInt(jQuery("#map_form input[name='csv_file_offset']").val());
+                                    var iteration = currentOffset + 1;
+                                    pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+                                    percentageOfDone = (parseInt(mapByCSVBatchSize * iteration) * 100) / parseInt(totalCount);
+
+
+                                    if (percentageOfDone >= 100) {
+                                        jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                                        makeRedirect(pidList);
+                                    } else {
+                                        jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                                    }
+                                    jQuery("#map_form input[name='csv_file_offset']").val(iteration);
+                                    //console.log(iteration);
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+        })
+
     });
+
+    var makeRedirect = function(pidList){
+        jQuery.ajax({
+            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
+            data: {data: pidList},
+            type: "POST",
+            success: function(redirectLink) {
+                stopLoading();
+                jQuery("#dialog_by_csv").modal("hide");
+                window.location = redirectLink;
+            }
+        });
+    }
+
+
+    var mapByNameBatchSize = 3;
+    jQuery("#map-by-name").click(function(e){
+        e.preventDefault();
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+
+        if(selectedImages.length > 0){
+            startLoading();
+            //map by name
+            var FilesToMap = [];
+            jQuery(selectedImages).each(function(i,val){
+                var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
+                FilesToMap.push(fileName);
+            })
+
+            var chunks = [];
+            if(FilesToMap.length <= mapByNameBatchSize){
+                chunks.push(FilesToMap);
+            } else {
+                chunks = array_chunk(FilesToMap, mapByNameBatchSize);
+            }
+
+            var percentageOfDone = 0;
+            var pidList = [];
+            jQuery(chunks).each(function(n,chunk){
+
+                //make ajax mapping
+                jQuery.ajaxQueue({
+                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName'); ?>',
+                    data: {data: chunk},
+                    type: "POST",
+                    success: function(response) {
+                        if(response.status == 0){
+                            stopLoading();
+                            jQuery(".progress-bar").css({"width": "0%"}).text("");
+                            noty({
+                                text: response.message.message,
+                                type: 'error',
+                                timeout: 4000
+                            });
+                        }
+                        if(response.status == 1){
+                            pidList = jQuery.merge( jQuery.merge( [], pidList ), response.message.pid );
+                            percentageOfDone = (parseInt(mapByNameBatchSize * (n+1)) * 100) / parseInt(FilesToMap.length);
+
+                            if(percentageOfDone >= 100){
+                                jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                                jQuery.ajax({
+                                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
+                                    data: {data: pidList},
+                                    type: "POST",
+                                    success: function(redirectLink) {
+                                        stopLoading();
+                                        window.location = redirectLink;
+                                    }
+                                })
+                            } else {
+                                jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                            }
+                        }
+
+
+                    }
+                });
+            })
+        } else {
+            noty({
+                text: "<?php echo $_helper->__('Please select images for mapping'); ?>",
+                type: 'error',
+                timeout: 2000
+            });
+        }
+
+    })
+
+
+
 });
+
+var startLoading = function(showProgress){
+    if(typeof showProgress === "undefined"){
+        showProgress = true;
+    }
+    var loader = jQuery("#vendor-loading");
+    if(!loader.length){
+        loader = jQuery("<div>").attr({
+            "id": "vendor-loading"
+        }).click(function(){
+            return false;
+        }).hide().appendTo("body");
+    }
+
+    if(showProgress){
+        loader.addClass("with-progress");
+    }else{
+        loader.removeClass("with-progress");
+    }
+    loader.html('    <div class="progress progress-striped" style="margin: auto;position: relative;top: 50%;width: 70%;">' +
+    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" ' +
+    'aria-valuemin="0" aria-valuemax="100" style="width:0%;font-weight: bold;">0%</div>' +
+    '</div>');
+    loader.show();
+}
+
+var stopLoading =  function(){
+    jQuery("#vendor-loading").fadeOut();
+}
+
+
+
+var ajaxQueue = jQuery({});
+
+jQuery.ajaxQueue = function(ajaxOpts) {
+    // Hold the original complete function
+    var oldComplete = ajaxOpts.complete;
+
+    // Queue our ajax request
+    ajaxQueue.queue(function(next) {
+        // Create a complete callback to invoke the next event in the queue
+        ajaxOpts.complete = function() {
+            // Invoke the original complete if it was there
+            if (oldComplete) {
+                oldComplete.apply(this, arguments);
+            }
+
+            // Run the next query in the queue
+            next();
+        };
+
+        // Run the query
+        jQuery.ajax(ajaxOpts);
+    });
+};
+function array_chunk (input, size, preserve_keys) {
+
+    var x, p = '', i = 0, c = -1, l = input.length || 0, n = [];
+
+    if (size < 1) {
+        return null;
+    }
+
+    if (Object.prototype.toString.call(input) === '[object Array]') {
+        if (preserve_keys) {
+            while (i < l) {
+                (x = i % size) ? n[c][i] = input[i] : n[++c] = {}, n[c][i] = input[i];
+                i++;
+            }
+        }
+        else {
+            while (i < l) {
+                (x = i % size) ? n[c][x] = input[i] : n[++c] = [input[i]];
+                i++;
+            }
+        }
+    }
+    else {
+        if (preserve_keys) {
+            for (p in input) {
+                if (input.hasOwnProperty(p)) {
+                    (x = i % size) ? n[c][p] = input[p] : n[++c] = {}, n[c][p] = input[p];
+                    i++;
+                }
+            }
+        }
+        else {
+            for (p in input) {
+                if (input.hasOwnProperty(p)) {
+                    (x = i % size) ? n[c][x] = input[p] : n[++c] = [input[p]];
+                    i++;
+                }
+            }
+        }
+    }
+    return n;
+}
 </script>
 
 
