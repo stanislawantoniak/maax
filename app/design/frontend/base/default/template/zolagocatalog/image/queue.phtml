@@ -262,43 +262,49 @@ jQuery().ready(function() {
             var percentageOfDone = 0;
             var pidList = [];
             jQuery(chunks).each(function(n,chunk){
-                console.log(chunk);
+
                 //make ajax mapping
                 jQuery.ajaxQueue({
                     url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName'); ?>',
                     data: {data: chunk},
                     type: "POST",
                     success: function(response) {
-                        //console.log(response.message.pid);
-                        //pidList.push(response.message.pid);
-                        pidList = jQuery.merge( jQuery.merge( [], pidList ), response.message.pid );
-                        percentageOfDone = (parseInt(mapByNameBatchSize * (n+1)) * 100) / parseInt(FilesToMap.length);
-                        console.log(percentageOfDone);
-
-                        if(percentageOfDone >= 100){
-                            console.log(pidList);
-                            jQuery(".progress-bar").css({"width": "100%"}).text("100%");
-                            jQuery.ajax({
-                                url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
-                                data: {data: pidList},
-                                type: "POST",
-                                success: function(redirectLink) {
-                                    console.log(redirectLink);
-                                    stopLoading();
-                                    jQuery(".progress-bar").css({"width": "0%"}).text("");
-                                    //window.location = redirectLink;
-                                }
-                            })
-                        } else {
-                            jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                        if(response.status == 0){
+                            stopLoading();
+                            jQuery(".progress-bar").css({"width": "0%"}).text("");
+                            noty({
+                                text: response.message.message,
+                                type: 'error',
+                                timeout: 4000
+                            });
                         }
+                        if(response.status == 1){
+                            pidList = jQuery.merge( jQuery.merge( [], pidList ), response.message.pid );
+                            percentageOfDone = (parseInt(mapByNameBatchSize * (n+1)) * 100) / parseInt(FilesToMap.length);
+
+                            if(percentageOfDone >= 100){
+                                jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                                jQuery.ajax({
+                                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
+                                    data: {data: pidList},
+                                    type: "POST",
+                                    success: function(redirectLink) {
+                                        stopLoading();
+                                        window.location = redirectLink;
+                                    }
+                                })
+                            } else {
+                                jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                            }
+                        }
+
 
                     }
                 });
             })
         } else {
             noty({
-                text: "<?php echo $_helper->__('Select images for mapping please'); ?>",
+                text: "<?php echo $_helper->__('Please select images for mapping'); ?>",
                 type: 'error',
                 timeout: 2000
             });

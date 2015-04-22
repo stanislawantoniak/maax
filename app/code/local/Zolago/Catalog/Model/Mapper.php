@@ -119,7 +119,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $pidList = array();
 
         if ($this->_collection->getSize() ==0){
-            $message[] = $hlp->__("Images for mapping by name not found corresponding names in uploaded files");
+            $message[] = $hlp->__("Sorry, no matches found for the selected images");
         }
         foreach ($this->_collection as $item) {
             $updateFlag = false;

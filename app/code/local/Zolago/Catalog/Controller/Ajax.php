@@ -93,7 +93,7 @@ class Zolago_Catalog_Controller_Ajax extends Unirgy_Dropship_Controller_VendorAb
         }
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
-    
+
     /**
      * Generates basic success response
      * 

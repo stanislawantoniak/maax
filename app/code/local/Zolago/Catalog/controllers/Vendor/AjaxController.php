@@ -21,30 +21,37 @@ class Zolago_Catalog_Vendor_AjaxController
     public function mapByNameAction()
     {
         $data = $this->getRequest()->getPost('data', array());
-        //var_export($data);
+
         $content = array();
         if (empty($data)) {
             $content['status'] = 0;
             $content['message'] = array('count' => 0,'message'=>Mage::helper('zolagocatalog')->__('Nothing to map'));
         }
-        //var_export($content);
+
         $skuvS = array();
 
         foreach ($data as $imageFile) {
             $skuvS[] = trim(explode('.', $imageFile)[0]);
         }
-//        var_export($skuvS);
+
         /* @var $mapper    Zolago_Catalog_Model_Mapper  */
         $mapper = $this->_prepareMapper($skuvS);
         $response = $mapper->mapByName($data);
-        $content['status'] = 1;
-        $content['message'] = array(
-            'count' => $response['count'],
-            'message'=> $response['message'],
-            'pid' => $response['pid']
-        );
-        //var_export($content);
+        if($response['count'] <= 0){
+            $content['status'] = 0;
+            $content['message'] = array(
+                'count' => 0,
+                'message'=> $response['message']
+            );
 
+        } else {
+            $content['status'] = 1;
+            $content['message'] = array(
+                'count' => $response['count'],
+                'message'=> $response['message'],
+                'pid' => $response['pid']
+            );
+        }
         //$result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($content);
     }

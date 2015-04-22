@@ -158,7 +158,7 @@
 "not found among uploaded","nie znaleziony wśród wgranych plików"
 "An error occured while adding image","Wystąpił błąd podczas dodawania pliku graficznego"
 "to gallery","do galerii"
-"Images for mapping by name not found corresponding names in uploaded files","Mapowania po nazwach nie znalazło odpowiednich nazw zdjęć wśród wgranych plików"
+"Sorry, no matches found for the selected images","Mapowania po nazwach nie znalazło odpowiednich nazw zdjęć wśród wgranych plików"
 "Errors: ","Błędy:"
 "Processed images: 0","Przetworzonych zdjęć: 0"
 "Processed images: %s ", "Przetworzonych zdjęć: %s "
@@ -166,3 +166,4 @@
 "Wrong file format. Error at line %d - field %s: %s", "Błędny format pliku. Błąd w linii %d - pole %s: %s"
 "Cant upload file", "Nie można załadować pliku"
 "Cant read file", "Nie można czytać z pliku"
+"Please select images for mapping","Please select images for mapping"
