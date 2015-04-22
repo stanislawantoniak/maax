@@ -113,7 +113,12 @@ define([
 			grid._updateHeaderCheckboxes();
 		},
 		_saveError: function(response){
-			alert(response.responseJSON);
+			var modal=jQuery('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">\
+			<div class="modal-dialog"><div class="modal-content"><div class="modal-body">' 
+			+ response.responseJSON + 
+			'</div><div class="modal-footer"><button class="btn btn-default" data-dismiss="modal">'+Translator.translate('Close')+'</button></div></div></div></div>');
+			modal.modal('show');
+			modal.show();
 		},
 		_getRequestData: function(){
 			var obj = {
