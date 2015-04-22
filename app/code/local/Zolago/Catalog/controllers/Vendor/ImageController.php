@@ -132,6 +132,7 @@ class Zolago_Catalog_Vendor_ImageController
     public function csvmapAction() {
         $pidList = array();
         try {
+
             if (empty($_FILES['csv_file'])) {
                 Mage::throwException(Mage::helper('zolagocatalog')->__('Cant upload file'));
             }

@@ -27,7 +27,7 @@
                     </a>
                 </div>
                 <div>
-                    <a class="btn btn-primary" href="#dialog_by_csv"
+                    <a class="btn btn-primary" id="dialog_by_csv_trigger" href="#dialog_by_csv"
                        data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV'); ?></a>
                 </div>
 
@@ -60,6 +60,8 @@
                         <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file'); ?>
                         <form id="map_form" action="<?php echo Mage::getUrl("udprod/vendor_image/csvmap"); ?>"
                               method="post" enctype="multipart/form-data" name="csv_form">
+                            <input type="hidden" name="csv_file_limit" value="" />
+                            <input type="hidden" name="csv_file_offset" value=""/>
                             <input type="file" name="csv_file" id="map_csv_file">
                             <br/>
 
@@ -190,7 +192,6 @@ jQuery.get('<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>',function
 function beforeSubmit() {
     var filename = jQuery('#map_csv_file').val();
     if (!filename) {
-        alert('No file');
         return false;
     } 
     return true;
@@ -230,15 +231,133 @@ jQuery().ready(function() {
 	    jQuery('#map_process').hide();
 	});
 	show_filebrowser();
-	jQuery('#map_csv_button').click(function() {
-        return beforeSubmit();
+
+
+
+    var mapByCSVOffset = 0;
+    var mapByCSVBatchSize = 3;
+    jQuery("a#dialog_by_csv_trigger, #map_csv_button").click(function(){
+        jQuery("#map_form input[name='csv_file_limit']").val(mapByCSVBatchSize);
+        jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset);
+    })
+    jQuery('#map_form').submit(function (e) {
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
+        e.preventDefault();
+        var percentageOfDone = 0;
+        var form = this;
+        if (!beforeSubmit()) {
+            noty({
+                text: "<?php echo $_helper->__('Please select file'); ?>",
+                type: 'error',
+                timeout: 4000
+            });
+            return false;
+        }
+        var pidList = [];
+        var url = '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV'); ?>';
+
+        startLoading();
+        jQuery.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                if (response.status == 0) {
+                    stopLoading();
+                    jQuery(".progress-bar").css({"width": "0%"}).text("");
+                    noty({
+                        text: response.message.message,
+                        type: 'error',
+                        timeout: 8000
+                    });
+                }
+                if (response.status == 1) {
+                    pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+
+                    var totalCount = response.message.total_count;
+                    percentageOfDone = (parseInt(mapByCSVBatchSize * 1) * 100) / parseInt(totalCount);
+
+                    jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+
+                    if (mapByCSVBatchSize >= totalCount) {
+                        makeRedirect(pidList);
+                    }
+
+                    var steps = (parseInt(totalCount) / mapByCSVBatchSize) - 1;
+                    jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset + 1);
+
+                    for (var i = 1; i <= steps; i++) {
+                        //make
+                        //console.log("make next step ajax");
+
+                        var data;
+                        data = new FormData();
+                        data.append('csv_file', jQuery( '#map_csv_file' )[0].files[0] );
+                        data.append('csv_file_limit', mapByCSVBatchSize);
+                        data.append('csv_file_offset', i);
+                        jQuery.ajaxQueue({
+                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV'); ?>',
+                            data: data,
+                            processData: false,
+                            contentType: false,
+                            type: "POST",
+                            success: function (response) {
+                                if (response.status == 0) {
+                                    stopLoading();
+                                    jQuery(".progress-bar").css({"width": "0%"}).text("");
+                                    noty({
+                                        text: response.message.message,
+                                        type: 'error',
+                                        timeout: 4000
+                                    });
+                                }
+
+
+                                if (response.status == 1) {
+                                    var currentOffset = parseInt(jQuery("#map_form input[name='csv_file_offset']").val());
+                                    var iteration = currentOffset + 1;
+                                    pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+                                    percentageOfDone = (parseInt(mapByCSVBatchSize * iteration) * 100) / parseInt(totalCount);
+
+
+                                    if (percentageOfDone >= 100) {
+                                        jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                                        makeRedirect(pidList);
+                                    } else {
+                                        jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                                    }
+                                    jQuery("#map_form input[name='csv_file_offset']").val(iteration);
+                                    //console.log(iteration);
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+        })
+
     });
 
+    var makeRedirect = function(pidList){
+        jQuery.ajax({
+            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
+            data: {data: pidList},
+            type: "POST",
+            success: function(redirectLink) {
+                stopLoading();
+                jQuery("#dialog_by_csv").modal("hide");
+                window.location = redirectLink;
+            }
+        });
+    }
 
 
     var mapByNameBatchSize = 3;
     jQuery("#map-by-name").click(function(e){
-
         e.preventDefault();
         jQuery(".progress-bar").css({"width": "0%"}).text("");
         var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
