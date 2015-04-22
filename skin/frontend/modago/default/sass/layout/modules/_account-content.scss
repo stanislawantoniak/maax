@@ -104,12 +104,6 @@
       visibility: hidden;
       display: none;
     }
-
-    @media (max-width: $screen-sm-max) {
-      .my-wishlist {
-        margin-top: -3px;
-      }
-    }
   }
 
   #wishlist-items-col {
