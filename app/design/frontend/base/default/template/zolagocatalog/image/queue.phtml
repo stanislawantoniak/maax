@@ -95,6 +95,48 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="dialog_by_name" class="modal fade" style="display:none" aria-hidden="true" title="Map by Name" data-validfiles="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong><?php echo Mage::helper('zolagocatalog')->__('Map by Name'); ?></strong>
+            </div>
+            <div class="modal-body">
+                <div id="map_upload">
+                    <div class="col-md-12">
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Analized'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_name_analized"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Valid'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_name_valid" style="color:#008000;"></div>
+                        </div>
+                        <br/><br/><br/><br/>
+
+
+                        <div class="col-md-12 align-right">
+                            <button class="btn btn-default" data-dismiss="modal"
+                                    type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+                            <a id="map_name_button" class="btn btn-primary" href="">
+                                <?php echo Mage::helper('zolagocatalog')->__('Start Map by Name'); ?>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <style type="text/css">
     #vendor-loading.with-progress { background-image: none;}
 </style>
@@ -350,77 +392,19 @@ jQuery().ready(function() {
             success: function(redirectLink) {
                 stopLoading();
                 jQuery("#dialog_by_csv").modal("hide");
-                window.location = redirectLink;
+                //window.location = redirectLink;
             }
         });
     }
 
 
     var mapByNameBatchSize = 3;
-    jQuery("#map-by-name").click(function(e){
+
+    jQuery("#map-by-name").click(function (e) {
         e.preventDefault();
-        jQuery(".progress-bar").css({"width": "0%"}).text("");
         var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
-
-        if(selectedImages.length > 0){
-            startLoading();
-            //map by name
-            var FilesToMap = [];
-            jQuery(selectedImages).each(function(i,val){
-                var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
-                FilesToMap.push(fileName);
-            })
-
-            var chunks = [];
-            if(FilesToMap.length <= mapByNameBatchSize){
-                chunks.push(FilesToMap);
-            } else {
-                chunks = array_chunk(FilesToMap, mapByNameBatchSize);
-            }
-
-            var percentageOfDone = 0;
-            var pidList = [];
-            jQuery(chunks).each(function(n,chunk){
-
-                //make ajax mapping
-                jQuery.ajaxQueue({
-                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName',array('_forced_secure'=>true)); ?>',
-                    data: {data: chunk},
-                    type: "POST",
-                    success: function(response) {
-                        if(response.status == 0){
-                            stopLoading();
-                            jQuery(".progress-bar").css({"width": "0%"}).text("");
-                            noty({
-                                text: response.message.message,
-                                type: 'error',
-                                timeout: 4000
-                            });
-                        }
-                        if(response.status == 1){
-                            pidList = jQuery.merge( jQuery.merge( [], pidList ), response.message.pid );
-                            percentageOfDone = (parseInt(mapByNameBatchSize * (n+1)) * 100) / parseInt(FilesToMap.length);
-
-                            if(percentageOfDone >= 100){
-                                jQuery(".progress-bar").css({"width": "100%"}).text("100%");
-                                jQuery.ajax({
-                                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
-                                    data: {data: pidList},
-                                    type: "POST",
-                                    success: function(redirectLink) {
-                                        stopLoading();
-                                        window.location = redirectLink;
-                                    }
-                                })
-                            } else {
-                                jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
-                            }
-                        }
-
-
-                    }
-                });
-            })
+        if (selectedImages.length > 0) {
+            analizeSelectedImages();
         } else {
             noty({
                 text: "<?php echo $_helper->__('Please select images for mapping'); ?>",
@@ -428,6 +412,112 @@ jQuery().ready(function() {
                 timeout: 2000
             });
         }
+    })
+
+
+    var analizeSelectedImages = function () {
+        var FilesToMap = [];
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+        jQuery(selectedImages).each(function (i, val) {
+            var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
+            FilesToMap.push(fileName);
+        });
+
+        jQuery.ajax({
+            type: "POST",
+            url:" <?php echo Mage::getUrl('udprod/vendor_ajax/analizeImages',array('_forced_secure'=>true)); ?>",
+            data: {data: FilesToMap},
+            success: function (response) {
+                var modal = jQuery("#dialog_by_name");
+                modal.find("#map_name_analized").text(response.total);
+                modal.find("#map_name_valid").text(response.matches);
+                if(response.matches < 1){
+                    jQuery('#map_name_button').hide();
+                } else {
+                    jQuery('#map_name_button').show();
+                }
+                jQuery("#dialog_by_name").data("validfiles", response.list).modal("show");
+            }
+        })
+    }
+
+
+    jQuery("#map_name_button").click(function (e) {
+        e.preventDefault();
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+
+        if (selectedImages.length <= 0) {
+            noty({
+                text: "<?php echo $_helper->__('Please select images for mapping'); ?>",
+                type: 'error',
+                timeout: 2000
+            });
+            return false;
+        }
+        startLoading();
+        //map by name
+        var FilesToMap = [];
+        var validFiles = jQuery("#dialog_by_name").data("validfiles");
+
+        jQuery.each(validFiles, function (i, fileNames) {
+            jQuery.each(fileNames, function (i, fileName) {
+                //console.log(fileName);
+                FilesToMap.push(fileName);
+            })
+        })
+
+        var chunks = [];
+        if (FilesToMap.length <= mapByNameBatchSize) {
+            chunks.push(FilesToMap);
+        } else {
+            chunks = array_chunk(FilesToMap, mapByNameBatchSize);
+        }
+
+        var percentageOfDone = 0;
+        var pidList = [];
+        jQuery(chunks).each(function (n, chunk) {
+
+            //make ajax mapping
+            jQuery.ajaxQueue({
+                url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName',array('_forced_secure'=>true)); ?>',
+                data: {data: chunk},
+                type: "POST",
+                success: function (response) {
+                    if (response.status == 0) {
+                        stopLoading();
+                        jQuery(".progress-bar").css({"width": "0%"}).text("");
+                        noty({
+                            text: response.message.message,
+                            type: 'error',
+                            timeout: 4000
+                        });
+                    }
+                    if (response.status == 1) {
+                        pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+                        percentageOfDone = (parseInt(mapByNameBatchSize * (n + 1)) * 100) / parseInt(FilesToMap.length);
+
+                        if (percentageOfDone >= 100) {
+                            jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                            jQuery.ajax({
+                                url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
+                                data: {data: pidList},
+                                type: "POST",
+                                success: function (redirectLink) {
+                                    stopLoading();
+                                    window.location = redirectLink;
+                                }
+                            })
+                        } else {
+                            jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                        }
+                    }
+
+
+                }
+            });
+        })
+
 
     })
 
@@ -450,13 +540,14 @@ var startLoading = function(showProgress){
 
     if(showProgress){
         loader.addClass("with-progress");
+        loader.html('    <div class="progress progress-striped" style="background-color: #add8e6; border: 1px solid #72bfe6;margin: auto;position: relative;top: 50%;width: 70%;">' +
+        '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" ' +
+        'aria-valuemin="0" aria-valuemax="100" style="width:0%;font-weight: bold;">0%</div>' +
+        '</div>');
     }else{
         loader.removeClass("with-progress");
     }
-    loader.html('    <div class="progress progress-striped" style="margin: auto;position: relative;top: 50%;width: 70%;">' +
-    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" ' +
-    'aria-valuemin="0" aria-valuemax="100" style="width:0%;font-weight: bold;">0%</div>' +
-    '</div>');
+
     loader.show();
 }
 
@@ -535,5 +626,5 @@ function array_chunk (input, size, preserve_keys) {
 
 
 
-</div>
+
 </div>

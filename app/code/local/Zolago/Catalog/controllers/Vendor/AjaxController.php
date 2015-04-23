@@ -17,6 +17,17 @@ class Zolago_Catalog_Vendor_AjaxController
     }
 
 
+    protected function _getSkuvSFromFileArray($data)
+    {
+        $skuvS = array();
+        if (!empty($data)) {
+            foreach ($data as $imageFile) {
+                $skuvS[trim(explode('.', $imageFile)[0])][] = $imageFile;
+            }
+        }
+        return $skuvS;
+
+    }
 
     public function mapByNameAction()
     {
@@ -65,9 +76,6 @@ class Zolago_Catalog_Vendor_AjaxController
 
         $limit = $this->getRequest()->getPost('csv_file_limit', 0);
         $offset = $this->getRequest()->getPost('csv_file_offset', 0);
-        Mage::log($limit, null, 'map_csv.log');
-        Mage::log($offset, null, 'map_csv.log');
-        Mage::log('-------------------', null, 'map_csv.log');
 
         $pidList = array();
         if (empty($_FILES['csv_file'])) {
@@ -137,6 +145,34 @@ class Zolago_Catalog_Vendor_AjaxController
 
     }
 
+    public function analizeImagesAction(){
+        $data = $this->getRequest()->getPost('data', array());
+        $selectedImagesCount = count($data);
+        $skuvS = $this->_getSkuvSFromFileArray($data);
+
+        /* @var $mapper    Zolago_Catalog_Model_Mapper  */
+        $collectionForMapping = $this->_getCollectionForMapping(array_keys($skuvS));
+        $collectionSize = $collectionForMapping->getSize();
+
+        $filesValid = array();
+        $matches = 0;
+        if($collectionSize > 0){
+            foreach($collectionForMapping as $collectionItem){
+                if(isset($skuvS[$collectionItem->getSkuv()])){
+                    $matches = $matches + count($skuvS[$collectionItem->getSkuv()]);
+                    $filesValid[$collectionItem->getSkuv()] = $skuvS[$collectionItem->getSkuv()];
+                }
+            }
+        }
+
+        $response = array(
+            'total' => $selectedImagesCount,
+            'matches' => $matches,
+            'list' => $filesValid
+        );
+        $this->_setSuccessResponse($response);
+    }
+
     public function makeRedirectAction(){
         $pidList = $this->getRequest()->getPost('data', array());
         //var_export($pidList);
@@ -150,19 +186,26 @@ class Zolago_Catalog_Vendor_AjaxController
         return $path;
     }
 
-    protected function _prepareMapper($skuvS = array()) {
-        //var_export($this->_getVendorId());
+    protected function _getCollectionForMapping($skuvS){
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         /* @var $mapper  Zolago_Catalog_Model_Mapper */
         $mapper = Mage::getModel('zolagocatalog/mapper');
         $mapper->setPath($this->_getPath());
-        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
-        if(!empty($skuvS)) {
-            $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
-        }
+        $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
         $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
         $collection->addAttributeToSelect('name');
 
+        //echo $collection->getSelect();
+        return $collection;
+    }
+
+
+    protected function _prepareMapper($skuvS = array()) {
+        /* @var $mapper  Zolago_Catalog_Model_Mapper */
+        $mapper = Mage::getModel('zolagocatalog/mapper');
+        $mapper->setPath($this->_getPath());
+        $collection = $this->_getCollectionForMapping($skuvS);
         $mapper->setCollection($collection);
         return $mapper;
     }
