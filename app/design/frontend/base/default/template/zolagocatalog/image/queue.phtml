@@ -254,7 +254,7 @@ jQuery().ready(function() {
             return false;
         }
         var pidList = [];
-        var url = '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV'); ?>';
+        var url = '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV',array('_forced_secure'=>true)); ?>';
 
         startLoading();
         jQuery.ajax({
@@ -299,7 +299,7 @@ jQuery().ready(function() {
                         data.append('csv_file_limit', mapByCSVBatchSize);
                         data.append('csv_file_offset', i);
                         jQuery.ajaxQueue({
-                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV', array('_secure' => true)); ?>',
+                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV',array('_forced_secure'=>true)); ?>',
                             data: data,
                             processData: false,
                             contentType: false,
