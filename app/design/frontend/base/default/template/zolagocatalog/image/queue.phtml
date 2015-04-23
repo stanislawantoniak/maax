@@ -286,7 +286,7 @@ jQuery().ready(function() {
         jQuery(".progress-bar").css({"width": "0%"}).text("");
         e.preventDefault();
         var percentageOfDone = 0;
-        var form = this;
+
         if (!beforeSubmit()) {
             noty({
                 text: "<?php echo $_helper->__('Please select file'); ?>",
@@ -297,7 +297,7 @@ jQuery().ready(function() {
         }
         var pidList = [];
         var url = '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV',array('_forced_secure'=>true)); ?>';
-
+        jQuery("#dialog_by_csv").modal("hide");
         startLoading();
         jQuery.ajax({
             type: "POST",
@@ -306,7 +306,6 @@ jQuery().ready(function() {
             processData: false,
             contentType: false,
             success: function (response) {
-
                 if (response.status == 0) {
                     stopLoading();
                     jQuery(".progress-bar").css({"width": "0%"}).text("");
@@ -372,7 +371,6 @@ jQuery().ready(function() {
                                         jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
                                     }
                                     jQuery("#map_form input[name='csv_file_offset']").val(iteration);
-                                    //console.log(iteration);
                                 }
                             }
                         });
@@ -392,7 +390,7 @@ jQuery().ready(function() {
             success: function(redirectLink) {
                 stopLoading();
                 jQuery("#dialog_by_csv").modal("hide");
-                //window.location = redirectLink;
+                window.location = redirectLink;
             }
         });
     }
