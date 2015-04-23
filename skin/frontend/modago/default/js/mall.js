@@ -1273,12 +1273,35 @@ Mall.Footer = {
 	}
 };
 
+Mall.Navigation = {
+    currentCategoryId: '',
+    highligted: false,
+
+    init: function() {
+        var self = this;
+        jQuery("#navigation a[data-catids]").each(function(index, value){
+            //console.log(jQuery(this).attr('data-catids').split(','));
+            if (!self.highligted) {
+                var arr = jQuery(this).attr('data-catids').split(',');
+                for (i = 0; i < arr.length; i++) {
+                    if (self.currentCategoryId == arr[i]) {
+                        //jQuery(this).addClass('forceActive'); //todo
+                        jQuery(this).css('background', 'red');
+                        self.highligted = true;
+                        break;
+                    }
+                }
+            }
+        });
+    }
+};
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
 
 	Mall.Slick.init();
-
+    Mall.Navigation.init();
 	Mall.Footer.init();
 
 	jQuery(".header_top").headroom({
