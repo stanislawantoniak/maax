@@ -1,8 +1,9 @@
 <?php
 
 class Zolago_Catalog_Vendor_ProductController 
-	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
+    	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
 	
+    const ERROR_LIST_LEN = 10;
 	/**
 	 * Index
 	 */
@@ -68,7 +69,7 @@ class Zolago_Catalog_Vendor_ProductController
 				case "disable":
 				case "confirm":
 					if($method=="confirm"){
-						$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
+						$this->_validateProductAttributes($ids, $attributeSetId, $storeId);						
 						$status = Mage::helper('zolagodropship')->getProductStatusForVendor(
 							$this->_getSession()->getVendor()
 						);
@@ -85,12 +86,9 @@ class Zolago_Catalog_Vendor_ProductController
 					);
 				break;
 				default:
-					Mage::throwException("Invaild mass method");
+				    Mage::throwException("Invaild mass method");
 			
 			}
-		} catch (Mage_Core_Exception $ex) {
-			$this->getResponse()->setHttpResponseCode(500);
-			$response = $ex->getMessage();
 		} catch (Exception $ex) {
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
@@ -170,35 +168,27 @@ class Zolago_Catalog_Vendor_ProductController
 		$collection->addAttributeToSelect('image');
 		
 		foreach ($collection as $product) {
-			$imageValidation		= $this->_validateBaseImage($product);
-			$attributeValidation	= $this->_validateRequiredAttributes($product, $storeId);
-			if (!$imageValidation || count($attributeValidation) > 0) {
-				$errorProducts[$product->getId()]['name']		= $product->getName();
-				$errorProducts[$product->getId()]['image']		= $imageValidation;
-				$errorProducts[$product->getId()]['missing']	= implode(", ", $attributeValidation);
+		    if ($imageValidation = $this->_validateBaseImage($product)) {
+		        $errorProducts[] = sprintf('%s: %s',$product->getName(),$imageValidation);
+		    }
+			if ($attributeValidation = $this->_validateRequiredAttributes($product, $storeId)) {
+			    $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Empty required attributes (%s)',$product->getName(),implode(',',$attributeValidation));
+			}
+			if ($emptyValidation = $this->_validateEmptyImage($product)) {
+			    $errorProducts[] = sprintf('%s: %s',$product->getName(),implode(',',$emptyValidation));
 			}
 		}
-		
-		$logArray = array();
-		foreach($errorProducts as $error){
-			if(count($logArray)>10){
-				break;
-			}
-			$log = array();
-			if(!$error['image']){
-				$log[] = $this->__('No base image');
-			}
-			if($error['missing']){
-				$log[] = $error['missing'];
-			}
-			$logArray[] = $error['name'] . ": " . implode(",", $log);
-		}
-		
-		$errorProductCount = count($errorProducts);
-		if ($errorProductCount>0) {
+				
+        $countErrorProducts = count($errorProducts);
+        
+		if ($countErrorProducts) {
+		    if ($countErrorProducts > self::ERROR_LIST_LEN) {
+		        $errorProducts = array_slice($errorProducts,0,self::ERROR_LIST_LEN);
+		        $errorProducts[] = '...';
+		    }    
 			throw new Mage_Core_Exception(
-				$this->__('%d selected product has empty required attribute(s) and/or is missing a base image:', $errorProductCount) . "\n" .
-				implode("\n", $logArray)
+				'<div class="alert alert-danger">'.Mage::helper('zolagocatalog')->__('Discovered %d validation problems:', $countErrorProducts) . "</div>" .
+				implode("<br/>", $errorProducts)
 			);	
 		}
 	}
@@ -246,16 +236,33 @@ class Zolago_Catalog_Vendor_ProductController
 	
 	/**
 	 * @param type $product
-	 * @return boolean
+	 * @return text
 	 */
 	protected function _validateBaseImage($product) 
 	{
 		$validateImage = true;
 		$baseImage = $product->getImage();
 		if (empty($baseImage) || $baseImage == 'no_selection') {
-			$validateImage = false;
-		}
-		
-		return $validateImage;		
+		    return Mage::helper('zolagocatalog')->__('No base image');
+		}		
+		return null;
 	}	
+	
+    /**     
+     * @param type $product
+     * @return array
+     */
+     protected function _validateEmptyImage($product) {
+         $errors = array();
+         $product->load('media_gallery');
+         $gallery = $product->getMediaGalleryImages();
+         foreach ($gallery as $image) {
+             $path = $image->getPath();
+             if (!@getimagesize($path)) {
+                 $errors[] = Mage::helper('zolagocatalog')->__('Wrong image file format %s',$image->getFile());
+             }
+         }
+         return $errors;
+     }
+
 }
