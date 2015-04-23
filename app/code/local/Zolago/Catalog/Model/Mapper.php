@@ -133,16 +133,16 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             if (!$skuv) {
                 continue;
             }
-            //var_export($list);
-            foreach ($list as $file) {
-                if (!strncmp($skuv,$file,strlen($skuv))) {
-                    $imagefile=$this->_copyImageFile($file);
 
+            foreach ($list as $file) {
+                if (!strncmp(trim($skuv),trim($file),strlen($skuv))) {
+                    $imagefile=$this->_copyImageFile($file);
                     if(!$imagefile)
                     {
                         $message[] = $hlp->__("File:")." <b>" . $file . "</b> ".$hlp->__("not found among uploaded");
                     } else {
                         //add to gallery
+
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
                             // remove image from upload area
                             @unlink($this->_path.'/'.$file);
