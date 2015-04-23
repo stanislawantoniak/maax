@@ -335,7 +335,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $pidList = explode(',',$list);
 
         if ($pidList) {
-            $productEntityId = 4;
+            $productEntityId = Mage::getModel('catalog/product')->getResource()->getTypeId();
 
             $attributeImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'image')->getAttributeId();
             $attributeSmallImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'small_image')->getAttributeId();
