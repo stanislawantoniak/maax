@@ -357,10 +357,11 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
           {$tg} gallery
           JOIN {$tgv} AS gallery_value
             ON gallery.`value_id` = gallery_value.`value_id`
-        WHERE gallery.`entity_id` IN ({$list})
+        WHERE gallery.`entity_id` IN (%s)
         GROUP BY gallery.`entity_id`
             ";
-            $query1 = $writeConnection->query($sql1);
+
+            $query1 = $writeConnection->query(sprintf($sql1,$list));
             $minPositions = $query1->fetchAll();
 
             $minPositionsData = array();
@@ -396,10 +397,10 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                   AND mg.entity_id = ev.entity_id
                   AND ev.attribute_id IN ({$attributeImage}, {$attributeSmallImage}, {$attributeThumbnail})
                   AND mgv.POSITION = {$minPosition}
-                  AND mg.entity_id IN ({$pid});
+                  AND mg.entity_id IN (%s);
                 ";
 
-                $writeConnection->query($sql2);
+                $writeConnection->query(sprintf($sql2,$pid));
             }
 
 
