@@ -51,7 +51,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $message = "";
         $storeid = 0;
         $pidList = array();
-        $pidS = array();
+
         $toDelete = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
@@ -59,7 +59,6 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             if (!$skuv) {
                 continue;
             }
-            $pidS[] = $pid;
             $updateFlag = false;
             if (!empty($importlist[$skuv])) {
                 // found file
@@ -95,7 +94,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         }
         $response['count'] = $count;
         $response['message'] = $message;
-        $response['pid'] = $pidS;
+        $response['pid'] = $pidList;
         return $response;
     }
     public function getPidList() {

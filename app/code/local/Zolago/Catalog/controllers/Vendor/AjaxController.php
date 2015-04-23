@@ -99,12 +99,12 @@ class Zolago_Catalog_Vendor_AjaxController
         $parser->checkCsvFile($file);
         $importListData = $parser->createImportListChunk($file, $offset, $limit);
 
-        if(!empty($importListData)){
-            if(empty($importListData['list'])){
+        if (!empty($importListData)) {
+            if (empty($importListData['list'])) {
                 $content['status'] = 0;
                 $content['message'] = array(
                     'count' => 0,
-                    'message'=> Mage::helper('zolagocatalog')->__('Nothing to map')
+                    'message' => Mage::helper('zolagocatalog')->__('Nothing to map')
                 );
                 $this->_setSuccessResponse($content);
             }
@@ -113,30 +113,16 @@ class Zolago_Catalog_Vendor_AjaxController
 
             /* @var $mapper  Zolago_Catalog_Model_Mapper */
             $mapper = $this->_prepareMapper($skuvS);
-            $response  = $mapper->mapByFile($importList);
+            $response = $mapper->mapByFile($importList);
             $count = $response['count'];
             $message = $response['message'];
-
-            if($count <= 0){
-                $out = Mage::helper('zolagocatalog')->__('Processed images: 0');
-                if (is_array($message)) {
-                    $out .= '<br/>'.implode('<br/>',$message);
-                }
-                $content['status'] = 0;
-                $content['message'] = array(
-                    'count' => 0,
-                    'message'=> $out
-                );
-
-            } else {
-                $content['status'] = 1;
-                $content['message'] = array(
-                    'total_count' => $importListData['total_count'],
-                    'count' => $count,
-                    'message'=> (!empty($message)) ? sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)) : "",
-                    'pid' => $response['pid']
-                );
-            }
+            $content['status'] = 1;
+            $content['message'] = array(
+                'total_count' => $importListData['total_count'],
+                'count' => $count,
+                'message' => (!empty($message)) ? sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)) : "",
+                'pid' => $response['pid']
+            );
         }
 
 
@@ -174,8 +160,16 @@ class Zolago_Catalog_Vendor_AjaxController
     }
 
     public function makeRedirectAction(){
+        //clear browser cache
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Content-Type: application/xml; charset=utf-8");
+
+        //clear product image cache
+        Mage::getModel('catalog/product_image')->clearCache();
+
+        //make redirect
         $pidList = $this->getRequest()->getPost('data', array());
-        //var_export($pidList);
         $this->_getRedirectPath($pidList);
     }
 
@@ -195,8 +189,6 @@ class Zolago_Catalog_Vendor_AjaxController
         $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
         $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
         $collection->addAttributeToSelect('name');
-
-        //echo $collection->getSelect();
         return $collection;
     }
 

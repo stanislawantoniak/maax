@@ -78,10 +78,7 @@
                         <div class="col-md-12">
                             <?php echo Mage::helper('zolagocatalog')->__('Please wait ...'); ?>
                         </div>
-                        <br/>
-
-
-                        <br/>
+                        <br/><br/>
 
                         <div class="col-md-12">
                             <button id="map_break_button" class="btn btn-default" data-dismiss="modal"
@@ -132,6 +129,46 @@
 
                     </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="dialog_by_csv_result" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV Result" data-pidlist="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong><?php echo Mage::helper('zolagocatalog')->__('Map by CSV Result'); ?></strong>
+            </div>
+            <div class="modal-body">
+                <div id="map_upload">
+                    <div class="col-md-12">
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Total rows in the CSV file'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_csv_analized"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Mapped Images'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_csv_valid" style="color:#008000;"></div>
+                        </div>
+                        <br/><br/><br/><br/>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 align-right">
+                    <button class="btn btn-default" data-dismiss="modal"
+                            type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+                    <a id="map_csv_result_check_gallery" class="btn btn-primary"
+                            type="submit"><?php echo Mage::helper('zolagocatalog')->__('Check Gallery'); ?></a>
                 </div>
             </div>
         </div>
@@ -283,8 +320,8 @@ jQuery().ready(function() {
         jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset);
     })
     jQuery('#map_form').submit(function (e) {
-        jQuery(".progress-bar").css({"width": "0%"}).text("");
         e.preventDefault();
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
         var percentageOfDone = 0;
 
         if (!beforeSubmit()) {
@@ -306,28 +343,23 @@ jQuery().ready(function() {
             processData: false,
             contentType: false,
             success: function (response) {
-                if (response.status == 0) {
-                    stopLoading();
-                    jQuery(".progress-bar").css({"width": "0%"}).text("");
-                    noty({
-                        text: response.message.message,
-                        type: 'error',
-                        timeout: 8000
-                    });
-                }
                 if (response.status == 1) {
+                    jQuery("#dialog_by_csv_result #map_csv_analized").text(response.message.total_count);
+                    jQuery("#dialog_by_csv_result #map_csv_valid").text(response.message.count);
                     pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
 
                     var totalCount = response.message.total_count;
                     percentageOfDone = (parseInt(mapByCSVBatchSize * 1) * 100) / parseInt(totalCount);
-
                     jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
 
                     if (mapByCSVBatchSize >= totalCount) {
-                        makeRedirect(pidList);
+                        jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                        jQuery("#dialog_by_csv_result").modal("show");
+                        jQuery("#dialog_by_csv_result").data('pidlist',pidList);
+                        stopLoading();
                     }
 
-                    var steps = (parseInt(totalCount) / mapByCSVBatchSize) - 1;
+                    var steps = Math.ceil(parseInt(totalCount) / parseInt(mapByCSVBatchSize)) - 1;
                     jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset + 1);
 
                     for (var i = 1; i <= steps; i++) {
@@ -346,27 +378,19 @@ jQuery().ready(function() {
                             contentType: false,
                             type: "POST",
                             success: function (response) {
-                                if (response.status == 0) {
-                                    stopLoading();
-                                    jQuery(".progress-bar").css({"width": "0%"}).text("");
-                                    noty({
-                                        text: response.message.message,
-                                        type: 'error',
-                                        timeout: 4000
-                                    });
-                                }
-
-
                                 if (response.status == 1) {
                                     var currentOffset = parseInt(jQuery("#map_form input[name='csv_file_offset']").val());
                                     var iteration = currentOffset + 1;
                                     pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
                                     percentageOfDone = (parseInt(mapByCSVBatchSize * iteration) * 100) / parseInt(totalCount);
-
+                                    var n = parseInt(jQuery("#dialog_by_csv_result #map_csv_valid").text());
+                                    jQuery("#dialog_by_csv_result #map_csv_valid").text(n + parseInt(response.message.count));
 
                                     if (percentageOfDone >= 100) {
                                         jQuery(".progress-bar").css({"width": "100%"}).text("100%");
-                                        makeRedirect(pidList);
+                                        jQuery("#dialog_by_csv_result").modal("show");
+                                        jQuery("#dialog_by_csv_result").data('pidlist',pidList);
+                                        stopLoading();
                                     } else {
                                         jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
                                     }
@@ -374,6 +398,7 @@ jQuery().ready(function() {
                                 }
                             }
                         });
+                        console.log(pidList);
 
                     }
                 }
@@ -381,6 +406,12 @@ jQuery().ready(function() {
         })
 
     });
+
+    jQuery("#map_csv_result_check_gallery").click(function(e){
+        e.preventDefault();
+        var pidList = jQuery("#dialog_by_csv_result").data('pidlist');
+        makeRedirect(pidList);
+    })
 
     var makeRedirect = function(pidList){
         jQuery.ajax({
