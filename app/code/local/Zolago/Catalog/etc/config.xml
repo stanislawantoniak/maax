@@ -12,12 +12,17 @@
                 <po_open_order>0,11,9,5,4,3,11</po_open_order>
             </config>
         </zolagocatalog>
-		
 		<cataloginventory>
 			<options>
 				<include_not_salable>1</include_not_salable>
             </options>
 		</cataloginventory>
+        <udropship>
+            <vendor>
+                <vendor_mass_image_batch_size_byname>10</vendor_mass_image_batch_size_byname>
+                <vendor_mass_image_batch_size_bycsv>10</vendor_mass_image_batch_size_bycsv>
+            </vendor>
+        </udropship>
     </default>
     <global>
         <models>

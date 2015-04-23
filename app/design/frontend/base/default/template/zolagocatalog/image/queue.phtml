@@ -314,7 +314,8 @@ jQuery().ready(function() {
 
 
     var mapByCSVOffset = 0;
-    var mapByCSVBatchSize = 3;
+    <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_bycsv'); ?>
+    var mapByCSVBatchSize = "<?php echo $mapByNameBatchSize; ?>";
     jQuery("a#dialog_by_csv_trigger, #map_csv_button").click(function(){
         jQuery("#map_form input[name='csv_file_limit']").val(mapByCSVBatchSize);
         jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset);
@@ -398,7 +399,7 @@ jQuery().ready(function() {
                                 }
                             }
                         });
-                        console.log(pidList);
+                        //console.log(pidList);
 
                     }
                 }
@@ -426,8 +427,8 @@ jQuery().ready(function() {
         });
     }
 
-
-    var mapByNameBatchSize = 3;
+    <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_byname'); ?>
+    var mapByNameBatchSize = "<?php echo $mapByNameBatchSize; ?>";
 
     jQuery("#map-by-name").click(function (e) {
         e.preventDefault();
