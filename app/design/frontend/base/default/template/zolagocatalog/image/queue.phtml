@@ -299,7 +299,7 @@ jQuery().ready(function() {
                         data.append('csv_file_limit', mapByCSVBatchSize);
                         data.append('csv_file_offset', i);
                         jQuery.ajaxQueue({
-                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV'); ?>',
+                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV', array('_secure' => true)); ?>',
                             data: data,
                             processData: false,
                             contentType: false,
@@ -344,7 +344,7 @@ jQuery().ready(function() {
 
     var makeRedirect = function(pidList){
         jQuery.ajax({
-            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
+            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect', array('_secure' => true)); ?>',
             data: {data: pidList},
             type: "POST",
             success: function(redirectLink) {
@@ -384,7 +384,7 @@ jQuery().ready(function() {
 
                 //make ajax mapping
                 jQuery.ajaxQueue({
-                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName'); ?>',
+                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName', array('_secure' => true)); ?>',
                     data: {data: chunk},
                     type: "POST",
                     success: function(response) {
@@ -404,7 +404,7 @@ jQuery().ready(function() {
                             if(percentageOfDone >= 100){
                                 jQuery(".progress-bar").css({"width": "100%"}).text("100%");
                                 jQuery.ajax({
-                                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect'); ?>',
+                                    url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect', array('_secure' => true)); ?>',
                                     data: {data: pidList},
                                     type: "POST",
                                     success: function(redirectLink) {
