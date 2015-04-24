@@ -34,7 +34,7 @@
         <reference name="header">
             <action method="setEsiOptions">
                 <params>
-                    <scope>page</scope>
+                    <scope>global</scope>
                     <access>public</access> <!--we don't need cache per customer, all data loaded by ajax-->
                     <ttl>3600</ttl> <!--1h-->
                 </params>
