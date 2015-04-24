@@ -356,6 +356,8 @@ jQuery().ready(function() {
                         jQuery(".progress-bar").css({"width": "100%"}).text("100%");
                         if(response.message.count == 0){
                             jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
+                        } else {
+                            jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").show();
                         }
                         jQuery("#dialog_by_csv_result").modal("show");
                         jQuery("#dialog_by_csv_result").data('pidlist',pidList);
@@ -391,6 +393,8 @@ jQuery().ready(function() {
                                         jQuery(".progress-bar").css({"width": "100%"}).text("100%");
                                         if(response.message.count == 0){
                                             jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
+                                        } else {
+                                            jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").show();
                                         }
                                         jQuery("#dialog_by_csv_result").modal("show");
                                         jQuery("#dialog_by_csv_result").data('pidlist',pidList);
