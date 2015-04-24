@@ -353,15 +353,7 @@ jQuery().ready(function() {
                     jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
 
                     if (mapByCSVBatchSize >= totalCount) {
-                        jQuery(".progress-bar").css({"width": "100%"}).text("100%");
-                        if(response.message.count == 0){
-                            jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
-                        } else {
-                            jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").show();
-                        }
-                        jQuery("#dialog_by_csv_result").modal("show");
-                        jQuery("#dialog_by_csv_result").data('pidlist',pidList);
-                        stopLoading();
+                        showCSVResultModal(response.message.count,pidList);
                     }
 
                     var steps = Math.ceil(parseInt(totalCount) / parseInt(mapByCSVBatchSize)) - 1;
@@ -390,15 +382,7 @@ jQuery().ready(function() {
                                     jQuery("#dialog_by_csv_result #map_csv_valid").text(n + parseInt(response.message.count));
 
                                     if (percentageOfDone >= 100) {
-                                        jQuery(".progress-bar").css({"width": "100%"}).text("100%");
-                                        if(response.message.count == 0){
-                                            jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
-                                        } else {
-                                            jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").show();
-                                        }
-                                        jQuery("#dialog_by_csv_result").modal("show");
-                                        jQuery("#dialog_by_csv_result").data('pidlist',pidList);
-                                        stopLoading();
+                                        showCSVResultModal(response.message.count,pidList);
                                     } else {
                                         jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
                                     }
@@ -411,29 +395,13 @@ jQuery().ready(function() {
             }
         })
     });
-
     jQuery("#map_csv_result_check_gallery").click(function(e){
         e.preventDefault();
         var pidList = jQuery("#dialog_by_csv_result").data('pidlist');
         makeRedirect(pidList);
     })
-
-    var makeRedirect = function(pidList){
-        jQuery.ajax({
-            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
-            data: {data: pidList},
-            type: "POST",
-            success: function(redirectLink) {
-                stopLoading();
-                jQuery("#dialog_by_csv").modal("hide");
-                window.location = redirectLink;
-            }
-        });
-    }
-
     <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_byname'); ?>
     var mapByNameBatchSize = "<?php echo $mapByNameBatchSize; ?>";
-
     jQuery("#map-by-name").click(function (e) {
         e.preventDefault();
         var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
@@ -447,34 +415,6 @@ jQuery().ready(function() {
             });
         }
     })
-
-
-    var analizeSelectedImages = function () {
-        var FilesToMap = [];
-        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
-        jQuery(selectedImages).each(function (i, val) {
-            var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
-            FilesToMap.push(fileName);
-        });
-        jQuery.ajax({
-            type: "POST",
-            url:" <?php echo Mage::getUrl('udprod/vendor_ajax/analizeImages',array('_forced_secure'=>true)); ?>",
-            data: {data: FilesToMap},
-            success: function (response) {
-                var modal = jQuery("#dialog_by_name");
-                modal.find("#map_name_analized").text(response.total);
-                modal.find("#map_name_valid").text(response.matches);
-                if(response.matches < 1){
-                    jQuery('#map_name_button').hide();
-                } else {
-                    jQuery('#map_name_button').show();
-                }
-                jQuery("#dialog_by_name").data("validfiles", response.list).modal("show");
-            }
-        })
-    }
-
-
     jQuery("#map_name_button").click(function (e) {
         e.preventDefault();
         jQuery(".progress-bar").css({"width": "0%"}).text("");
@@ -547,6 +487,56 @@ jQuery().ready(function() {
         })
     })
 });
+
+var analizeSelectedImages = function () {
+    var FilesToMap = [];
+    var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+    jQuery(selectedImages).each(function (i, val) {
+        var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
+        FilesToMap.push(fileName);
+    });
+    jQuery.ajax({
+        type: "POST",
+        url:" <?php echo Mage::getUrl('udprod/vendor_ajax/analizeImages',array('_forced_secure'=>true)); ?>",
+        data: {data: FilesToMap},
+        success: function (response) {
+            var modal = jQuery("#dialog_by_name");
+            modal.find("#map_name_analized").text(response.total);
+            modal.find("#map_name_valid").text(response.matches);
+            if(response.matches < 1){
+                jQuery('#map_name_button').hide();
+            } else {
+                jQuery('#map_name_button').show();
+            }
+            jQuery("#dialog_by_name").data("validfiles", response.list).modal("show");
+        }
+    })
+}
+
+var showCSVResultModal = function(processed,pidList){
+    jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+    if(processed == 0){
+        jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
+    } else {
+        jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").show();
+    }
+    jQuery("#dialog_by_csv_result").modal("show");
+    jQuery("#dialog_by_csv_result").data('pidlist',pidList);
+    stopLoading();
+}
+
+var makeRedirect = function(pidList){
+    jQuery.ajax({
+        url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
+        data: {data: pidList},
+        type: "POST",
+        success: function(redirectLink) {
+            stopLoading();
+            jQuery("#dialog_by_csv").modal("hide");
+            window.location = redirectLink;
+        }
+    });
+}
 
 var startLoading = function(showProgress){
     if(typeof showProgress === "undefined"){
