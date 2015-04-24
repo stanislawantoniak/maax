@@ -205,7 +205,15 @@
     margin-left: -15px;
   }
 }
-
+.is-content-mode {
+  #header-main {
+    #category-header-vendor-box {
+      @media (max-width: $screen-xs-max){
+        min-height: 60px;
+      }
+    }
+  }
+}
 .catalog-category-view {
     .breadcrumb {
       background-attachment: scroll;
