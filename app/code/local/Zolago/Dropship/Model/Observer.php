@@ -192,6 +192,13 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
                                'after'     => 'form_section',
                                'content'	=> $courierBlock
                            ));
+
+            $block->addTab('brandshop_section', array(
+                               'label'     => Mage::helper('zolagodropship')->__('Brandshop settings'),
+                               'class'	   => 'ajax',
+                               'after'     => 'form_section',
+                               'url'	=> $block->getUrl('udropshipadmin/adminhtml_vendor/brandshopSettings',array('_current' => true)),
+                           ));
         }
     }
     protected function _overrideConfigData() {
