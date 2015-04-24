@@ -1,6 +1,6 @@
 <?php
 
-class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catalog_Block_Product_View_Description
+class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_DropshipVendorAskQuestion_Block_Product_Question
 {
     public function getFormAction()
     {
@@ -43,7 +43,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
 	public function getVendorsList() {
         /** @var Zolago_Dropship_Model_Source $modelUds */
         $modelUds = Mage::getSingleton('zolagodropship/source');
-		$vendors = $modelUds->getCanAskVendors();
+		$vendors = $modelUds->getCanAskBrandshops();
         $local = $this->getLocalVendorId();
         $v = array();
         foreach ($vendors as $vendor) {
