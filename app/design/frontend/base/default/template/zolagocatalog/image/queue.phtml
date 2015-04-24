@@ -363,9 +363,7 @@ jQuery().ready(function() {
                     jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset + 1);
 
                     for (var i = 1; i <= steps; i++) {
-                        //make
-                        //console.log("make next step ajax");
-
+                        //make next step ajax
                         var data;
                         data = new FormData();
                         data.append('csv_file', jQuery( '#map_csv_file' )[0].files[0] );
@@ -398,14 +396,10 @@ jQuery().ready(function() {
                                 }
                             }
                         });
-                        //console.log(pidList);
-
                     }
                 }
-            },
-
+            }
         })
-
     });
 
     jQuery("#map_csv_result_check_gallery").click(function(e){
@@ -452,7 +446,6 @@ jQuery().ready(function() {
             var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
             FilesToMap.push(fileName);
         });
-
         jQuery.ajax({
             type: "POST",
             url:" <?php echo Mage::getUrl('udprod/vendor_ajax/analizeImages',array('_forced_secure'=>true)); ?>",
@@ -492,11 +485,9 @@ jQuery().ready(function() {
 
         jQuery.each(validFiles, function (i, fileNames) {
             jQuery.each(fileNames, function (i, fileName) {
-                //console.log(fileName);
                 FilesToMap.push(fileName);
             })
         })
-
         var chunks = [];
         if (FilesToMap.length <= mapByNameBatchSize) {
             chunks.push(FilesToMap);
@@ -507,7 +498,6 @@ jQuery().ready(function() {
         var percentageOfDone = 0;
         var pidList = [];
         jQuery(chunks).each(function (n, chunk) {
-
             //make ajax mapping
             jQuery.ajaxQueue({
                 url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName',array('_forced_secure'=>true)); ?>',
@@ -542,17 +532,10 @@ jQuery().ready(function() {
                             jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
                         }
                     }
-
-
                 }
             });
         })
-
-
     })
-
-
-
 });
 
 var startLoading = function(showProgress){
