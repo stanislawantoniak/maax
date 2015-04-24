@@ -94,6 +94,8 @@ class Zolago_Image_Model_File_Parser extends Mage_Core_Model_Abstract {
         }
         $data['total_count'] = count($fullImportList);
         $data['list'] = $importList;
+        $data['full_list'] = $fullImportList;
+
         return $data;
     }
     /**

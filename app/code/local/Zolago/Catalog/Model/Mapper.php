@@ -44,7 +44,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $dir->close();
         return $list;
     }
-    public function mapByFile($importlist) {
+    public function mapByFile($importlist, $removeImages = false, $fullList = array()) {
         $hlp = Mage::helper('zolagocatalog');
         $response = array();
         $count = 0;
@@ -72,7 +72,8 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
                             // remove image from upload area
-                            $toDelete[] =  $this->_path.'/'.$filename[1];
+                            //$toDelete[] =  $this->_path.'/'.$filename[1];
+
                             $updateFlag = true;
                             $count ++;
                         } else {
@@ -89,8 +90,26 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $this->_savePid($pidList);
         }
-        foreach ($toDelete as $file) {
-            //@unlink($file);
+
+        $path = $this->_path;
+        if ($removeImages) {
+            if (!empty($fullList)) {
+                foreach ($fullList as $fullListItem) {
+                    if (!empty($fullListItem)) {
+                        foreach ($fullListItem as $filename) {
+                            if (isset($filename[1])) {
+                                $toDelete[] = $path . '/' . $filename[1];
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($toDelete) {
+                foreach ($toDelete as $file) {
+                    @unlink($file);
+                }
+            }
         }
         $response['count'] = $count;
         $response['message'] = $message;

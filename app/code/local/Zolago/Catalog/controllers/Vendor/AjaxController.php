@@ -77,7 +77,6 @@ class Zolago_Catalog_Vendor_AjaxController
         $limit = $this->getRequest()->getPost('csv_file_limit', 0);
         $offset = $this->getRequest()->getPost('csv_file_offset', 0);
 
-        $pidList = array();
         if (empty($_FILES['csv_file'])) {
             $content['message'] = Mage::helper('zolagocatalog')->__('Cant upload file');
             $this->_setSuccessResponse($content);
@@ -109,6 +108,13 @@ class Zolago_Catalog_Vendor_AjaxController
         }
 
         $importListData = $parser->createImportListChunk($file, $offset, $limit);
+        //define if files should be removed
+        $removeFiles = false;
+        $lastStep = ceil($importListData['total_count'] / $limit) - 1;
+        if($lastStep == $offset){
+            $removeFiles = true;
+        }
+
 
         if (!empty($importListData)) {
             if (empty($importListData['list'])) {
@@ -120,11 +126,13 @@ class Zolago_Catalog_Vendor_AjaxController
                 $this->_setSuccessResponse($content);
             }
             $importList = $importListData['list'];
+
+
             $skuvS = array_keys($importList);
 
             /* @var $mapper  Zolago_Catalog_Model_Mapper */
             $mapper = $this->_prepareMapper($skuvS);
-            $response = $mapper->mapByFile($importList);
+            $response = $mapper->mapByFile($importList, true, $importListData['full_list']);
             $count = $response['count'];
             $message = $response['message'];
             $content['status'] = 1;
