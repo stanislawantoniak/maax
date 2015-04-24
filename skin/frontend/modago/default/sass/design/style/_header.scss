@@ -30,7 +30,8 @@
     border-bottom:1px solid #dddce1;
      #nav_desc {
         &.navigation > li > a:hover,
-        &.navigation > li > a.active  {
+        &.navigation > li > a.active,
+        &.navigation > li > a.forceActive {
             background:none;
             &:before {
                 background:#73f2ba;
