@@ -101,22 +101,7 @@
 .solrsearch-index-index #header-main {
   padding-top: 0px;
 }
-.is-content-mode {
-  #header-main {
-    #category-header-left {
-      @media (max-width: $screen-xs-max){
-        padding-left: 20px;
-      }
-    }
-    #category-header-right {
-      position: relative;
-      @media (max-width: $screen-xs-max){
-        padding-left: 20px;
-      }
-    }
 
-  }
-}
 #header-main {
     .wrapp-section {
         border: none;

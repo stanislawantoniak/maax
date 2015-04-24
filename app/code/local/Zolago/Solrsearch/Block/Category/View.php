@@ -3,10 +3,29 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     public function _construct() {
         parent::_construct();
+
         $this->setTemplate("zolagosolrsearch/category/view.phtml");
     }
 	
 	protected function _prepareLayout() {
+        parent::_prepareLayout();
+
+        if ($headBlock = $this->getLayout()->getBlock('head')) {
+            $category = $this->getCurrentCategory();
+            if ($title = $category->getMetaTitle()) {
+                $headBlock->setTitle($title);
+            }
+            if ($description = $category->getMetaDescription()) {
+                $headBlock->setDescription($description);
+            }
+            if ($keywords = $category->getMetaKeywords()) {
+                $headBlock->setKeywords($keywords);
+            }
+            if ($this->helper('catalog/category')->canUseCanonicalTag()) {
+                $headBlock->addLinkRel('canonical', $category->getUrl());
+            }
+        }
+
 		if($this->isContentMode()){
 			$this->getLayout()->getBlock('content')->
 					//unsetChild('solrsearch_result_title')->

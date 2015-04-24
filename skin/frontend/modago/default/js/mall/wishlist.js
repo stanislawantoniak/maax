@@ -399,7 +399,7 @@ Mall.wishlist = {
                     "class": "like liked",
                     "data-idproduct": id,
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
-                    onclick: "Mall.wishlist.removeFromSmallBlock(this);"
+                    onclick: "Mall.wishlist.removeFromSmallBlock(this);return false;"
                 });
 
 	            likeCount = jQuery("<span/>", {
@@ -472,7 +472,7 @@ Mall.wishlist = {
                     "class": "like",
                     "data-idproduct": id,
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
-                    onclick: "Mall.wishlist.addFromSmallBlock(this);"
+                    onclick: "Mall.wishlist.addFromSmallBlock(this);return false;"
                 });
 
 	            likeCount = jQuery("<span/>", {

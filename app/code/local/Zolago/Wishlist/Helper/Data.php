@@ -165,6 +165,22 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
         
         return (bool)$coll->count();
     }
+
+    /**
+     * Gets only collection of products that is in wishlist for selected products
+     *
+     * @param $productsIds array
+     * @return Mage_Wishlist_Model_Resource_Item_Collection|Object
+     */
+    public function checkProductsBelongsToMyWishlist($productsIds) {
+        $coll = Mage::getResourceModel("wishlist/item_collection");
+        /* @var $coll Mage_Wishlist_Model_Resource_Item_Collection */
+        if (!empty($productsIds)) {
+            $coll->addWishlistFilter($this->getWishlist());
+            $coll->addFieldToFilter("product_id", array('in' => $productsIds));
+        }
+        return $coll;
+    }
     
     /**
      * @param int $customerId

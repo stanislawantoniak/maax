@@ -115,6 +115,9 @@ var Mall = {
 				"product_id": Mall.reg.get("varnish_product_id"),
 				"category_id": Mall.reg.get("varnish_category_id"),
 	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
+                ,"crosssell_ids": jQuery('#complementary_product .like').map(function() {
+                    return jQuery(this).attr("data-idproduct");
+                }).get()
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -227,7 +230,7 @@ var Mall = {
         });
         // Update current search query text
         jQuery("#header input[name=q]").val(this.getQueryText());
-		
+
 		// Process product context 
 
 
@@ -288,6 +291,23 @@ var Mall = {
 					append(boxAdded).
 					append(boxLoading);
 		}
+
+        // Crosssell in_my_wishlist update for Varnish
+        if (data.content.hasOwnProperty('crosssell')) {
+            var c = data.content.crosssell;
+            for (i = 0; i < c.length; i++) {
+                if (c[i].in_my_wishlist) {
+                    jQuery("#complementary_product .like[data-idproduct='" + c[i].entity_id + "']")
+                        .addClass(' liked ')
+                        .attr('data-status', 1)
+                        .attr('onclick', 'Mall.wishlist.removeFromSmallBlock(this);return false;');
+                    if (p = Mall.wishlist.getProduct(c[i].entity_id)) {
+                        p.in_your_wishlist = "true";
+                    }
+                }
+            }
+        }
+
 
 		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
 			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
