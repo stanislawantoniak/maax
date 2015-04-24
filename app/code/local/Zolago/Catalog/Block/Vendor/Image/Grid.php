@@ -87,7 +87,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('image');
-		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/massaction.phtml");
+		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/vendor_image/massaction.phtml");
 
 		
 		$this->getMassactionBlock()->addItem('check_gallery', array(
