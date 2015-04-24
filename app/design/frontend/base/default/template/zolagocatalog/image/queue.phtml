@@ -599,7 +599,7 @@ jQuery.ajaxQueue = function(ajaxOpts) {
         jQuery.ajax(ajaxOpts);
     });
 };
-function array_chunk (input, size, preserve_keys) {
+var array_chunk = function(input, size, preserve_keys) {
 
     var x, p = '', i = 0, c = -1, l = input.length || 0, n = [];
 
@@ -642,8 +642,4 @@ function array_chunk (input, size, preserve_keys) {
     return n;
 }
 </script>
-
-
-
-
 </div>
