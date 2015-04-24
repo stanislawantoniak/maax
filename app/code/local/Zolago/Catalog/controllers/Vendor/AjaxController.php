@@ -92,11 +92,22 @@ class Zolago_Catalog_Vendor_AjaxController
 
         unset($file[0]);
 
-        //var_export($header);
         /* @var $parser Zolago_Image_Model_File_Parser */
         $parser = Mage::getModel('zolago_image/file_parser');
-        $parser->parseHeaderColumns(trim($header));
-        $parser->checkCsvFile($file);
+
+        try {
+            $parser->parseHeaderColumns(trim($header));
+        } catch (Exception $e) {
+            $this->_processException($e);
+            return;
+        }
+        try {
+            $parser->checkCsvFile($file);
+        } catch (Exception $e) {
+            $this->_processException($e);
+            return;
+        }
+
         $importListData = $parser->createImportListChunk($file, $offset, $limit);
 
         if (!empty($importListData)) {

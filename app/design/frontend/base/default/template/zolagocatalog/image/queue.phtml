@@ -261,13 +261,7 @@ function show_filebrowser() {
 		func = 'show_uploader';
 		elf.show();
 }
-function map_by_name() {
-jQuery.get('<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>',function(data) {
-    jQuery('#dialog_by_name').hide();
-    alert('<?php echo Mage::helper('zolagocatalog')->__('Operation finished. Mapped images:')?>'+data);
-    window.location.href = '<?php  echo Mage::getUrl("udprod/vendor_image");?>';
-});
-}
+
 function beforeSubmit() {
     var filename = jQuery('#map_csv_file').val();
     if (!filename) {
@@ -300,11 +294,7 @@ jQuery().ready(function() {
 	jQuery('#delete_button').click(function() {
 		elf.exec('rm');
 	});
-	jQuery('#map_process_button').click(function() {
-	    jQuery('#map_confirm').hide();
-	    jQuery('#map_process').show();
-	    map_by_name();
-	});
+
 	jQuery('#map_break_button').click(function() {	 
 	    jQuery('#map_confirm').show();
 	    jQuery('#map_process').hide();
@@ -344,6 +334,15 @@ jQuery().ready(function() {
             processData: false,
             contentType: false,
             success: function (response) {
+                if (response.status == 0) {
+                    stopLoading();
+                    jQuery(".progress-bar").css({"width": "0%"}).text("");
+                    noty({
+                        text: response.message,
+                        type: 'error',
+                        timeout: 4000
+                    });
+                }
                 if (response.status == 1) {
                     jQuery("#dialog_by_csv_result #map_csv_analized").text(response.message.total_count);
                     jQuery("#dialog_by_csv_result #map_csv_valid").text(response.message.count);
@@ -403,7 +402,8 @@ jQuery().ready(function() {
 
                     }
                 }
-            }
+            },
+
         })
 
     });
