@@ -69,6 +69,13 @@
         </events>
 	</global>
 	<frontend>
+        <layout>
+            <updates>
+                <turpentine_esi module="turpentine">
+                    <file>zolago_turpentine_esi.xml</file>
+                </turpentine_esi>
+            </updates>
+        </layout>
 		<events>
 			<catalog_controller_product_view>
 				<observers>
