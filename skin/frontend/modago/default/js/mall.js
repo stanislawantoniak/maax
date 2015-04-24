@@ -1298,7 +1298,6 @@ jQuery(document).ready(function() {
     Mall.i18nValidation.apply();
 
 	Mall.Slick.init();
-
 	Mall.Footer.init();
 
 	jQuery(".header_top").headroom({
