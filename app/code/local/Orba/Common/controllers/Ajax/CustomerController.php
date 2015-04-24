@@ -61,13 +61,12 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
         );
 		//$profiler->log("Rest");
 		
-		// Load product context data
-		
+		// Load product context data & crosssell wishlist info
 		if($productId=$this->getRequest()->getParam("product_id")){
 			$product = Mage::getModel("catalog/product");
 			/* @var $product Mage_Catalog_Model_Product */
 			$product->setId($productId);
-			
+
 			// Load wishlist count
 			$wishlistCount = $product->getResource()->getAttributeRawValue(
 					$productId, "wishlist_count", Mage::app()->getStore()->getId());
@@ -77,7 +76,23 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 				"in_my_wishlist" => Mage::helper('zolagowishlist')->productBelongsToMyWishlist($product),
 				"wishlist_count" => (int)$wishlistCount
 			);
+
+            // Varnish cache html crosssell products
+            // so info about that products is in wishlist need to be updated
+            $crosssellProducts  = $this->getRequest()->getParam("crosssell_ids");
+            if (!empty($crosssellProducts)) {
+
+                $productsInWishList = Mage::helper('zolagowishlist')->checkProductsBelongsToMyWishlist($crosssellProducts);
+                $cs = array();
+                foreach ($productsInWishList as $prod) {
+                    $id = $prod->getProduct()->getData('entity_id');
+                    $cs[$id]['in_my_wishlist'] = 1;
+                    $cs[$id]['entity_id']      = $id;
+                }
+                $content['crosssell'] = array_values($cs);
+            }
 		}
+
 
 
 	    if($this->getRequest()->getParam('recently_viewed')) {
