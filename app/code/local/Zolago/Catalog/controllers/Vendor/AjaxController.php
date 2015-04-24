@@ -132,7 +132,7 @@ class Zolago_Catalog_Vendor_AjaxController
 
             /* @var $mapper  Zolago_Catalog_Model_Mapper */
             $mapper = $this->_prepareMapper($skuvS);
-            $response = $mapper->mapByFile($importList, true, $importListData['full_list']);
+            $response = $mapper->mapByFile($importList, $removeFiles, $importListData['full_list']);
             $count = $response['count'];
             $message = $response['message'];
             $content['status'] = 1;
