@@ -20,4 +20,4 @@ $action  = $request->getActionName();
         <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-' . $cat['category_id'])->toHtml(); ?>
     </li>
 <?php endforeach; ?>
-<script>Mall.Navigation.currentCategoryId = '<?php echo Mage::registry('current_category') ? Mage::registry('current_category')->getId() : "$module/$name/$action";?>';</script>
+<script>Mall.Navigation.currentCategoryId.push('<?php echo Mage::registry('current_category') ? Mage::registry('current_category')->getId() : "$module/$name/$action";?>');</script>
