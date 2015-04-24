@@ -56,7 +56,7 @@ class Zolago_Catalog_Controller_Ajax extends Unirgy_Dropship_Controller_VendorAb
         $this->_logError($this->getRequest(), $e->getMessage());
         $result = array(
             'status' => 0,
-            'message' => $this->__($message),
+            'message'=>array('message' => $this->__($message)),
         );
         $this->getResponse()
                 ->clearHeaders()

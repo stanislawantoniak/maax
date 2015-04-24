@@ -338,7 +338,7 @@ jQuery().ready(function() {
                     stopLoading();
                     jQuery(".progress-bar").css({"width": "0%"}).text("");
                     noty({
-                        text: response.message,
+                        text: response.message.message,
                         type: 'error',
                         timeout: 4000
                     });
