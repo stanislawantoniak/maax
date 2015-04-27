@@ -10,6 +10,11 @@
 			<zolagoudqa>
 				<class>Zolago_DropshipVendorAskQuestion_Block</class>
 			</zolagoudqa>
+			<udqa>
+			    <rewrite>
+			        <product_question>Zolago_DropshipVendorAskQuestion_Block_Product_Question</product_question>
+			    </rewrite>
+			</udqa>
 		</blocks>
         <models>
             <udqa>
