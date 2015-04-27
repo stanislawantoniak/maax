@@ -379,8 +379,18 @@ jQuery().ready(function() {
 		}
 	});
 	jQuery('#delete_button').click(function() {
-		elf.exec('rm');
-        jQuery('#delete_button').attr('disabled',true);
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+        if (selectedImages.length > 0) {
+            elf.exec('rm');
+            jQuery('#delete_button').attr('disabled',true);
+        } else {
+            noty({
+                text: "<?php echo $_helper->__('Please select images to remove'); ?>",
+                type: 'error',
+                timeout: 2000
+            });
+        }
+
 	});
 
 
