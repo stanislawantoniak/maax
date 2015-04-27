@@ -31,15 +31,6 @@
             <block type="turpentine/notices" template="turpentine/notices.phtml" name="turpentine_notices" />
         </reference>
 
-        <reference name="header">
-            <action method="setEsiOptions">
-                <params>
-                    <scope>page</scope>
-                    <access>public</access> <!--we don't need cache per customer, all data loaded by ajax-->
-                    <ttl>3600</ttl> <!--1h-->
-                </params>
-            </action>
-        </reference>
         <!-- This block is inside of the header block on mage EE, so it could
         be commented out for EE stores for a small performance increase -->
         <reference name="cart_sidebar">
