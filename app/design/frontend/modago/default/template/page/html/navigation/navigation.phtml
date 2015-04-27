@@ -2,9 +2,7 @@
 /** @var $this Mage_Core_Block_Template */
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-/** @var Zolago_Solrsearch_Helper_Data $helper */
-$helperSolrSearch = Mage::helper("zolagosolrsearch");
-$category = $helperSolrSearch->getCurrentCategory();
+$category = Mage::registry('current_category');
 $isCheckout = $this->getIsCheckout();
 
 if (!$isCheckout) { ?>

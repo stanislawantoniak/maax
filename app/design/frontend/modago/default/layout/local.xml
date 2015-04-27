@@ -253,6 +253,9 @@
             <block type="core/template" name="page.header.navigation" as="page.header.navigation" template="page/html/navigation/navigation.phtml">
                 <action method="setEsiOptions">
                     <params>
+                        <registry_keys>
+                            <current_category/>
+                        </registry_keys>
                         <scope>page</scope>
                         <access>public</access>
                         <ttl>3600</ttl> <!--1h-->
