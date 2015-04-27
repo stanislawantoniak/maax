@@ -32,8 +32,8 @@ var Config = {
 			averageNoteClientStarOn 		: 'star_yes.svg'
 			//averageNoteClientStarHalf 		: 'star_half.svg'
 		},
-        heartLike: "/skin/frontend/modago/default/images/heart.png",
-        heartLiked: "/skin/frontend/modago/default/images/heart-like.png"
+        heartLike: "/skin/frontend/modago/default/images/svg/unlike.svg",
+        heartLiked: "/skin/frontend/modago/default/images/svg/like.svg"
 	},
     url: {
         customer_email_exists: window.location.protocol + "//"

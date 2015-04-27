@@ -1,12 +1,14 @@
 <?php
 
-class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catalog_Block_Product_View_Description
+class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_DropshipVendorAskQuestion_Block_Product_Question
 {
     public function getFormAction()
     {
         return $this->getUrl('udqa/customer/post');
     }
-    public function getVendors()
+
+/*	todo: check if it's needed
+ *     public function getVendors()
     {
         $product = $this->getProduct();
         $simpleProducts = array();
@@ -36,4 +38,30 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
         }
         return $this;
     }
+*/
+
+	public function getVendorsList() {
+        /** @var Zolago_Dropship_Model_Source $modelUds */
+        $modelUds = Mage::getSingleton('zolagodropship/source');
+		$vendors = $modelUds->getCanAskBrandshops();
+        $local = $this->getLocalVendorId();
+        $v = array();
+        foreach ($vendors as $vendor) {
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $v[$vendor->getVendorId()] = $vendor->getVendorName();
+        }
+		unset($v[$local]);
+		return $v;
+	}
+
+	public function getLocalVendorId() {
+        /** @var Zolago_Dropship_Helper_Data $hlp */
+        $hlp = Mage::helper('udropship/data');
+		return $hlp->getLocalVendorId();
+	}
+
+	public function isGallery()
+	{
+		return in_array('help_contact_gallery', $this->getLayout()->getUpdate()->getHandles());
+	}
 }

@@ -796,12 +796,16 @@ Mall.listing = {
 		jQuery("<img/>", {
 			src: Config.path.heartLike,
 			"class": "img-01",
+			width: 22,
+			height: 22,
 			alt: ""
 		}).appendTo(likeIco);
 
 		jQuery("<img/>", {
 			src: Config.path.heartLiked,
 			alt: "",
+			width: 22,
+			height: 22,
 			"class": "img-02"
 		}).appendTo(likeIco);
 
