@@ -232,24 +232,24 @@ $_currentLocale = Mage::app()->getLocale()->getLocaleCode();
                     text   : 'confirmRm',
                     accept : {
                         label    : 'btnRm',
-                        callback : function() {
-                            fm.lockfiles({files : files});
+                        callback: function () {
+                            fm.lockfiles({files: files});
                             fm.request({
-                                data   : {cmd  : 'rm', targets : files},
-                                notify : {type : 'rm', cnt : cnt},
-                                preventFail : true
+                                data: {cmd: 'rm', targets: files},
+                                notify: {type: 'rm', cnt: cnt},
+                                preventFail: true
                             })
-                                .fail(function(error) {
+                                .fail(function (error) {
                                     dfrd.reject(error);
                                 })
-                                .done(function(data) {
+                                .done(function (data) {
                                     dfrd.done(data);
                                     goroot && fm.exec('open', goroot)
                                 }
-                            ).always(function() {
-                                    fm.unlockfiles({files : files});
+                            ).always(function () {
+                                    fm.unlockfiles({files: files});
                                 });
-                            jQuery('#delete_button').attr('disabled',false);
+                            jQuery('#delete_button').attr('disabled', false);
                         }
                     },
                     cancel : {
