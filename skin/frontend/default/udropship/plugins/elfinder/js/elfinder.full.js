@@ -10971,11 +10971,12 @@ elFinder.prototype.commands.rm = function() {
 						).always(function() {
 							fm.unlockfiles({files : files});
 						});
+                        jQuery('#delete_button').attr('disabled',false);
 					}
 				},
 				cancel : {
 					label    : 'btnCancel',
-					callback : function() { dfrd.reject(); }
+					callback : function() { dfrd.reject();jQuery('#delete_button').attr('disabled',false); }
 				}
 			});
 		}
