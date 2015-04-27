@@ -1,4 +1,9 @@
-<?php $_helper = Mage::helper('zolagocatalog'); ?>
+<?php $_helper = Mage::helper('zolagocatalog');
+
+$_currentLocale = Mage::app()->getLocale()->getLocaleCode();
+
+
+?>
 
 
 <div>
@@ -240,9 +245,10 @@ function show_uploader() {
 		jQuery('#uploader_browse').click();
 }
 function init_filebrowser() {
+
 		elf = jQuery('#elf').elfinder({
 			url : '<?php echo Mage::getUrl('udprod/vendor_image/connector');?>',  // connector URL (REQUIRED)
-			lang: '<?php echo $this->localeCode ?>',             // language (OPTIONAL)
+			lang: '<?php echo explode("_",$_currentLocale)[0]; ?>',             // language (OPTIONAL)
 			contextmenu : {
 				navbar : ['open', 'rm', '|', 'info'],
 				cwd    : ['reload', 'info'],
@@ -251,7 +257,7 @@ function init_filebrowser() {
 				                    ]
 			},
 			ui     : [],
-		}).elfinder('instance');	
+		}).elfinder('instance');
 }
 function show_filebrowser() {
 		plup.hide();
@@ -292,7 +298,9 @@ jQuery().ready(function() {
 		}
 	});
 	jQuery('#delete_button').click(function() {
+        console.log(elf);
 		elf.exec('rm');
+        //jQuery('#delete_button').attr('disabled',true);
 	});
 
 	jQuery('#map_break_button').click(function() {	 
@@ -300,6 +308,11 @@ jQuery().ready(function() {
 	    jQuery('#map_process').hide();
 	});
 	show_filebrowser();
+
+    jQuery("html.gecko.ff31.linux body.tundra.udprod-vendor_image-index.udropship-vendor.breakpoint-1200 div#container.fixed-header div#content div.container div.tabbable.tabbabble-custom div.tab-content div#tab_1_2.tab-pane.active div div#uploader_wrapper.widget-content div#elf.ui-helper-reset.ui-helper-clearfix.ui-widget.ui-widget-content.ui-corner-all.elfinder.elfinder-ltr.ui-resizable.elfinder-disabled div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.std42-dialog.elfinder-dialog.elfinder-dialog-confirm.elfinder-dialog-active div.ui-helper-clearfix.ui-dialog-buttonpane.ui-widget-content div.ui-dialog-buttonset button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only").click(function(){
+        console.log(jQuery(".ui-dialog-buttonset .ui-button").text());
+    })
+
 
 
 
