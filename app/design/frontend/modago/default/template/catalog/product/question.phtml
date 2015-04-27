@@ -40,10 +40,10 @@ $_helper = Mage::helper('zolagoudqa');
 				<?php if(!is_array($vendors)): ?>
 					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
 				<?php else: ?>
-					<li class="wide">
+					<li class="wide" id="brandshop_select">
 						<div class="form-group select-box-it-select-container">
-                            <select name="question[vendor_id]" id="vendor_id" class="form-control required-entry select-box-it-select" required>
-                                    <option value=""><?php echo $_helper->__('Select vendor'); ?></option>
+                            <select name="question[brandshop_id]" id="brandshop_id" class="form-control required-entry select-box-it-select" required>
+                                    <option value=""><?php echo $_helper->__('Select brandshop'); ?></option>
                                 <?php foreach($vendors as $id=>$name): ?>
                                     <option value="<?php echo $id; ?>" ><?php echo $name; ?></option>
                                 <?php endforeach; ?>
@@ -108,12 +108,12 @@ $_helper = Mage::helper('zolagoudqa');
 </script>
 <script>
     jQuery(document).ready(function() {
-        var vidselectid = '#vendor_id';
-        var vidselect =  jQuery(vidselectid),
+        var brandselectid = '#brandshop_id';
+        var brandselect =  jQuery(brandselectid),
             questionform =  jQuery("#question-form");
 
 
-        vidselect.selectBoxIt({
+        brandselect.selectBoxIt({
             autoWidth: false
         });
         var validationOptions = jQuery.extend({}, Mall.validate.getDefaultValidationOptions(), {
@@ -123,11 +123,40 @@ $_helper = Mage::helper('zolagoudqa');
             }
         });
 
+        function getVendors(value) {
+            jQuery(".ajax_content").remove(); 
+            if (value) {
+                jQuery.ajax({
+                    url: "/orbacommon/ajax_vendor/can_ask",
+                    data: {
+                        "brandshop_id":value,
+                    },
+                    success: function(data) {
+                        jQuery("#brandshop_select").after(data);                        
+                        var vidselect = jQuery("#vendor_id");
+                        vidselect.selectBoxIt({
+                            autoWidth: false
+                        });
+                        vidselect.on("change",function() {
+                            questionform.validate(validationOptions).element("#vendor_id");
+                        });
+                        
+                    },
+                    error: function(response) {
+                        alert(response);
+                    },
+                    type: "POST"
+                });
+            }
+        };
         questionform.validate(validationOptions);
 
         // this is required to trigger validation on select change
-        vidselect.on("change", function() {
-            questionform.validate(validationOptions).element(vidselectid);
+        brandselect.on("change", function() {
+            questionform.validate(validationOptions).element(brandselectid);
+            var value = brandselect.val();
+            getVendors(value);
         });
+        getVendors(brandselect.val());
     });
 </script>
