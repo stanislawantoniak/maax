@@ -1,5 +1,9 @@
+<?php $_helper = Mage::helper('zolagocatalog'); ?>
+
+
 <div>
     <div class="widget">
+
         <div id="control-battons">
             <div>
                 <div>
@@ -11,14 +15,19 @@
                             id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete'); ?></button>
                 </div>
                 <div>
-                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"
-                       data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?>"
-                       data-placement="top"
-                       data-layout="top" data-type="confirm" data-modal="true"
-                       data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?></a>
+<!--                    <a class="btn-notification btn btn-primary" href="#dialog_by_name"-->
+<!--                       data-text="--><?php //echo Mage::helper('zolagocatalog')->__('Are you sure?'); ?><!--"-->
+<!--                       data-placement="top"-->
+<!--                       data-layout="top" data-type="confirm" data-modal="true"-->
+<!--                       data-ok-url="--><?php //echo Mage::getUrl('udprod/vendor_image/namemap'); ?><!--">-->
+<!--                        --><?php //echo Mage::helper('zolagocatalog')->__('Map by name'); ?>
+<!--                    </a>-->
+                    <a class="btn btn-primary" id="map-by-name" href="" >
+                        <?php echo Mage::helper('zolagocatalog')->__('Map by name'); ?>
+                    </a>
                 </div>
                 <div>
-                    <a class="btn btn-primary" href="#dialog_by_csv"
+                    <a class="btn btn-primary" id="dialog_by_csv_trigger" href="#dialog_by_csv"
                        data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV'); ?></a>
                 </div>
 
@@ -33,6 +42,7 @@
         </div>
     </div>
     <div class="clearbr"></div>
+
     <div id="uploader_wrapper" class="widget-content">
         <div id="uploader"></div>
         <div id="elf"></div>
@@ -50,6 +60,8 @@
                         <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file'); ?>
                         <form id="map_form" action="<?php echo Mage::getUrl("udprod/vendor_image/csvmap"); ?>"
                               method="post" enctype="multipart/form-data" name="csv_form">
+                            <input type="hidden" name="csv_file_limit" value="" />
+                            <input type="hidden" name="csv_file_offset" value=""/>
                             <input type="file" name="csv_file" id="map_csv_file">
                             <br/>
 
@@ -61,17 +73,12 @@
                             </div>
                         </form>
                     </div>
+
                     <div id="map_process_upload" style="display:none">
                         <div class="col-md-12">
                             <?php echo Mage::helper('zolagocatalog')->__('Please wait ...'); ?>
                         </div>
-                        <br/>
-
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-success" id="map_progress_bar"
-                                 style="width:100%"></div>
-                        </div>
-                        <br/>
+                        <br/><br/>
 
                         <div class="col-md-12">
                             <button id="map_break_button" class="btn btn-default" data-dismiss="modal"
@@ -85,7 +92,91 @@
             </div>
         </div>
     </div>
+</div>
 
+<div id="dialog_by_name" class="modal fade" style="display:none" aria-hidden="true" title="Map by Name" data-validfiles="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong><?php echo Mage::helper('zolagocatalog')->__('Map by Name'); ?></strong>
+            </div>
+            <div class="modal-body">
+                <div id="map_upload">
+                    <div class="col-md-12">
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Analized'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_name_analized"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Valid'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_name_valid" style="color:#008000;"></div>
+                        </div>
+                        <br/><br/><br/><br/>
+
+
+                        <div class="col-md-12 align-right">
+                            <button class="btn btn-default" data-dismiss="modal"
+                                    type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+                            <a id="map_name_button" class="btn btn-primary" href="">
+                                <?php echo Mage::helper('zolagocatalog')->__('Start Map by Name'); ?>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="dialog_by_csv_result" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV Result" data-pidlist="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong><?php echo Mage::helper('zolagocatalog')->__('Map by CSV Result'); ?></strong>
+            </div>
+            <div class="modal-body">
+                <div id="map_upload">
+                    <div class="col-md-12">
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Total rows in the CSV file'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_csv_analized"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo Mage::helper('zolagocatalog')->__('Mapped Images'); ?>
+                            </div>
+                            <div class="col-md-6" id="map_csv_valid" style="color:#008000;"></div>
+                        </div>
+                        <br/><br/><br/><br/>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 align-right">
+                    <button class="btn btn-default" data-dismiss="modal"
+                            type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+                    <a id="map_csv_result_check_gallery" class="btn btn-primary"
+                            type="submit"><?php echo Mage::helper('zolagocatalog')->__('Check Gallery'); ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    #vendor-loading.with-progress { background-image: none;}
+</style>
 <script type="text/javascript">
 var elf = null;
 var plup = null;
@@ -170,17 +261,10 @@ function show_filebrowser() {
 		func = 'show_uploader';
 		elf.show();
 }
-function map_by_name() {
-jQuery.get('<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>',function(data) {
-    jQuery('#dialog_by_name').hide();
-    alert('<?php echo Mage::helper('zolagocatalog')->__('Operation finished. Mapped images:')?>'+data);
-    window.location.href = '<?php  echo Mage::getUrl("udprod/vendor_image");?>';
-});
-}
+
 function beforeSubmit() {
     var filename = jQuery('#map_csv_file').val();
     if (!filename) {
-        alert('No file');
         return false;
     } 
     return true;
@@ -210,23 +294,358 @@ jQuery().ready(function() {
 	jQuery('#delete_button').click(function() {
 		elf.exec('rm');
 	});
-	jQuery('#map_process_button').click(function() {
-	    jQuery('#map_confirm').hide();
-	    jQuery('#map_process').show();
-	    map_by_name();
-	});
+
 	jQuery('#map_break_button').click(function() {	 
 	    jQuery('#map_confirm').show();
 	    jQuery('#map_process').hide();
 	});
 	show_filebrowser();
-	jQuery('#map_csv_button').click(function() {
-        return beforeSubmit();
+
+
+
+    var mapByCSVOffset = 0;
+    <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_bycsv'); ?>
+    var mapByCSVBatchSize = "<?php echo $mapByNameBatchSize; ?>";
+    jQuery("a#dialog_by_csv_trigger, #map_csv_button").click(function(){
+        jQuery("#map_form input[name='csv_file_limit']").val(mapByCSVBatchSize);
+        jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset);
+    })
+    jQuery('#map_form').submit(function (e) {
+        e.preventDefault();
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
+        var percentageOfDone = 0;
+
+        if (!beforeSubmit()) {
+            noty({
+                text: "<?php echo $_helper->__('Please select file'); ?>",
+                type: 'error',
+                timeout: 4000
+            });
+            return false;
+        }
+        var pidList = [];
+        var url = '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV',array('_forced_secure'=>true)); ?>';
+        jQuery("#dialog_by_csv").modal("hide");
+        startLoading();
+        jQuery.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status == 0) {
+                    stopLoading();
+                    jQuery(".progress-bar").css({"width": "0%"}).text("");
+                    noty({
+                        text: response.message.message,
+                        type: 'error',
+                        timeout: 4000
+                    });
+                }
+                if (response.status == 1) {
+                    jQuery("#dialog_by_csv_result #map_csv_analized").text(response.message.total_count);
+                    jQuery("#dialog_by_csv_result #map_csv_valid").text(response.message.count);
+                    pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+
+                    var totalCount = response.message.total_count;
+                    percentageOfDone = (parseInt(mapByCSVBatchSize * 1) * 100) / parseInt(totalCount);
+                    jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+
+                    if (mapByCSVBatchSize >= totalCount) {
+                        showCSVResultModal(response.message.count,pidList);
+                    }
+
+                    var steps = Math.ceil(parseInt(totalCount) / parseInt(mapByCSVBatchSize)) - 1;
+                    jQuery("#map_form input[name='csv_file_offset']").val(mapByCSVOffset + 1);
+
+                    for (var i = 1; i <= steps; i++) {
+                        //make next step ajax
+                        var data;
+                        data = new FormData();
+                        data.append('csv_file', jQuery( '#map_csv_file' )[0].files[0] );
+                        data.append('csv_file_limit', mapByCSVBatchSize);
+                        data.append('csv_file_offset', i);
+                        jQuery.ajaxQueue({
+                            url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByCSV',array('_forced_secure'=>true)); ?>',
+                            data: data,
+                            processData: false,
+                            contentType: false,
+                            type: "POST",
+                            success: function (response) {
+                                if (response.status == 1) {
+                                    var currentOffset = parseInt(jQuery("#map_form input[name='csv_file_offset']").val());
+                                    var iteration = currentOffset + 1;
+                                    pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+                                    percentageOfDone = (parseInt(mapByCSVBatchSize * iteration) * 100) / parseInt(totalCount);
+                                    var n = parseInt(jQuery("#dialog_by_csv_result #map_csv_valid").text());
+                                    jQuery("#dialog_by_csv_result #map_csv_valid").text(n + parseInt(response.message.count));
+
+                                    if (percentageOfDone >= 100) {
+                                        showCSVResultModal(response.message.count,pidList);
+                                    } else {
+                                        jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                                    }
+                                    jQuery("#map_form input[name='csv_file_offset']").val(iteration);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        })
     });
+    jQuery("#map_csv_result_check_gallery").click(function(e){
+        e.preventDefault();
+        var pidList = jQuery("#dialog_by_csv_result").data('pidlist');
+        makeRedirect(pidList);
+    })
+    <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_byname'); ?>
+    var mapByNameBatchSize = "<?php echo $mapByNameBatchSize; ?>";
+    jQuery("#map-by-name").click(function (e) {
+        e.preventDefault();
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+        if (selectedImages.length > 0) {
+            analizeSelectedImages();
+        } else {
+            noty({
+                text: "<?php echo $_helper->__('Please select images for mapping'); ?>",
+                type: 'error',
+                timeout: 2000
+            });
+        }
+    })
+    jQuery("#map_name_button").click(function (e) {
+        e.preventDefault();
+        jQuery(".progress-bar").css({"width": "0%"}).text("");
+        var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+
+        if (selectedImages.length <= 0) {
+            noty({
+                text: "<?php echo $_helper->__('Please select images for mapping'); ?>",
+                type: 'error',
+                timeout: 2000
+            });
+            return false;
+        }
+        jQuery("#dialog_by_name").modal('hide');
+        startLoading();
+        //map by name
+        var FilesToMap = [];
+        var validFiles = jQuery("#dialog_by_name").data("validfiles");
+
+        jQuery.each(validFiles, function (i, fileNames) {
+            jQuery.each(fileNames, function (i, fileName) {
+                FilesToMap.push(fileName);
+            })
+        })
+        var chunks = [];
+        if (FilesToMap.length <= mapByNameBatchSize) {
+            chunks.push(FilesToMap);
+        } else {
+            chunks = array_chunk(FilesToMap, mapByNameBatchSize);
+        }
+
+        var percentageOfDone = 0;
+        var pidList = [];
+        jQuery(chunks).each(function (n, chunk) {
+            //make ajax mapping
+            jQuery.ajaxQueue({
+                url: '<?php echo Mage::getUrl('udprod/vendor_ajax/mapByName',array('_forced_secure'=>true)); ?>',
+                data: {data: chunk},
+                type: "POST",
+                success: function (response) {
+                    if (response.status == 0) {
+                        stopLoading();
+                        jQuery(".progress-bar").css({"width": "0%"}).text("");
+                        noty({
+                            text: response.message.message,
+                            type: 'error',
+                            timeout: 4000
+                        });
+                    }
+                    if (response.status == 1) {
+                        pidList = jQuery.merge(jQuery.merge([], pidList), response.message.pid);
+                        percentageOfDone = (parseInt(mapByNameBatchSize * (n + 1)) * 100) / parseInt(FilesToMap.length);
+
+                        if (percentageOfDone >= 100) {
+                            jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+                            makeRedirect(pidList);
+                        } else {
+                            jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
+                        }
+                    }
+                }
+            });
+        })
+    })
 });
+
+var analizeSelectedImages = function () {
+    var FilesToMap = [];
+    var selectedImages = jQuery(".ui-helper-clearfix .ui-selected");
+    jQuery(selectedImages).each(function (i, val) {
+        var fileName = jQuery(val).find(".elfinder-cwd-filename").text();
+        FilesToMap.push(fileName);
+    });
+    jQuery.ajax({
+        type: "POST",
+        url:" <?php echo Mage::getUrl('udprod/vendor_ajax/analizeImages',array('_forced_secure'=>true)); ?>",
+        data: {data: FilesToMap},
+        success: function (response) {
+            var modal = jQuery("#dialog_by_name");
+            modal.find("#map_name_analized").text(response.total);
+            modal.find("#map_name_valid").text(response.matches);
+            if(response.matches < 1){
+                jQuery('#map_name_button').hide();
+            } else {
+                jQuery('#map_name_button').show();
+            }
+            jQuery("#dialog_by_name").data("validfiles", response.list).modal("show");
+        }
+    })
+}
+
+var showCSVResultModal = function(processed,pidList){
+    jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+    if(processed == 0){
+        jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
+    } else {
+        jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").show();
+    }
+    jQuery("#dialog_by_csv_result").modal("show");
+    jQuery("#dialog_by_csv_result").data('pidlist',pidList);
+    stopLoading();
+}
+
+var makeRedirect = function (pidList) {
+    jQuery.ajax({
+        url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
+        data: {data: pidList},
+        type: "POST",
+        success: function (redirectLink) {
+            stopLoading();
+            jQuery("#dialog_by_csv").modal("hide");
+
+            var f = document.createElement("form");
+            f.setAttribute('method', "post");
+            f.setAttribute('action', redirectLink);
+            f.setAttribute('name', 'redirectCheckGallery');
+
+            var i = document.createElement("input"); //input element, hidden
+            i.setAttribute('type', "hidden");
+            i.setAttribute('name', "internal_image");
+            i.setAttribute('value', pidList);
+
+            f.appendChild(i);
+            jQuery('body').append(f);
+
+            document.forms['redirectCheckGallery'].submit();
+        }
+    });
+}
+
+var startLoading = function(showProgress){
+    if(typeof showProgress === "undefined"){
+        showProgress = true;
+    }
+    var loader = jQuery("#vendor-loading");
+    if(!loader.length){
+        loader = jQuery("<div>").attr({
+            "id": "vendor-loading"
+        }).click(function(){
+            return false;
+        }).hide().appendTo("body");
+    }
+
+    if(showProgress){
+        loader.addClass("with-progress");
+        loader.html('<div class="progress-container" style="text-align:center;margin: auto;position: relative;top: 35%;width: 70%;">' +
+        '<h3>' +
+        "<?php echo $_helper->__('Do not close the browser window'); ?>" +
+        '</h3>' +
+        '<div class="progress progress-striped" style="background-color: #add8e6; border: 1px solid #72bfe6;margin: auto;">' +
+        '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" ' +
+        'aria-valuemin="0" aria-valuemax="100" style="width:0%;font-weight: bold;">0%</div>' +
+        '</div>' +
+        '</div>');
+    }else{
+        loader.removeClass("with-progress");
+    }
+
+    loader.show();
+}
+
+var stopLoading =  function(){
+    jQuery("#vendor-loading").fadeOut();
+}
+
+
+
+var ajaxQueue = jQuery({});
+
+jQuery.ajaxQueue = function(ajaxOpts) {
+    // Hold the original complete function
+    var oldComplete = ajaxOpts.complete;
+
+    // Queue our ajax request
+    ajaxQueue.queue(function(next) {
+        // Create a complete callback to invoke the next event in the queue
+        ajaxOpts.complete = function() {
+            // Invoke the original complete if it was there
+            if (oldComplete) {
+                oldComplete.apply(this, arguments);
+            }
+
+            // Run the next query in the queue
+            next();
+        };
+
+        // Run the query
+        jQuery.ajax(ajaxOpts);
+    });
+};
+var array_chunk = function(input, size, preserve_keys) {
+
+    var x, p = '', i = 0, c = -1, l = input.length || 0, n = [];
+
+    if (size < 1) {
+        return null;
+    }
+
+    if (Object.prototype.toString.call(input) === '[object Array]') {
+        if (preserve_keys) {
+            while (i < l) {
+                (x = i % size) ? n[c][i] = input[i] : n[++c] = {}, n[c][i] = input[i];
+                i++;
+            }
+        }
+        else {
+            while (i < l) {
+                (x = i % size) ? n[c][x] = input[i] : n[++c] = [input[i]];
+                i++;
+            }
+        }
+    }
+    else {
+        if (preserve_keys) {
+            for (p in input) {
+                if (input.hasOwnProperty(p)) {
+                    (x = i % size) ? n[c][p] = input[p] : n[++c] = {}, n[c][p] = input[p];
+                    i++;
+                }
+            }
+        }
+        else {
+            for (p in input) {
+                if (input.hasOwnProperty(p)) {
+                    (x = i % size) ? n[c][x] = input[p] : n[++c] = [input[p]];
+                    i++;
+                }
+            }
+        }
+    }
+    return n;
+}
 </script>
-
-
-
-</div>
 </div>

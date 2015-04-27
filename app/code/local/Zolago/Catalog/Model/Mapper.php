@@ -13,10 +13,6 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     protected $_collection;
 
     protected $_pidList;
-    /**
-     * csv file
-     */
-    protected $_file;
 
     protected function _construct() {
         $this->_init('zolagocatalog/mapper');
@@ -48,24 +44,15 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $dir->close();
         return $list;
     }
-    public function setFile($file) {
-        $this->_file = $file;
-    }
-    public function mapByFile() {
+    public function mapByFile($importlist, $removeImages = false, $fullList = array()) {
         $hlp = Mage::helper('zolagocatalog');
         $response = array();
         $count = 0;
         $message = "";
         $storeid = 0;
-        $file = $this->_file;
-        $importlist = array();
-        foreach ($file as $line) {
-            if (trim($line)) {
-                $tmp = explode(';',$line);
-                $importlist[$tmp[0]][] = $tmp;
-            }
-        }
         $pidList = array();
+
+        $toDelete = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
             $pid = $item->getData('entity_id');
@@ -85,7 +72,8 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
                             // remove image from upload area
-                            @unlink($this->_path.'/'.$filename[1]);
+                            //$toDelete[] =  $this->_path.'/'.$filename[1];
+
                             $updateFlag = true;
                             $count ++;
                         } else {
@@ -102,8 +90,30 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $this->_savePid($pidList);
         }
+
+        $path = $this->_path;
+        if ($removeImages) {
+            if (!empty($fullList)) {
+                foreach ($fullList as $fullListItem) {
+                    if (!empty($fullListItem)) {
+                        foreach ($fullListItem as $filename) {
+                            if (isset($filename[1])) {
+                                $toDelete[] = $path . '/' . $filename[1];
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($toDelete) {
+                foreach ($toDelete as $file) {
+                    @unlink($file);
+                }
+            }
+        }
         $response['count'] = $count;
         $response['message'] = $message;
+        $response['pid'] = $pidList;
         return $response;
     }
     public function getPidList() {
@@ -130,7 +140,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $pidList = array();
 
         if ($this->_collection->getSize() ==0){
-            $message[] = $hlp->__("Images for mapping by name not found corresponding names in uploaded files");
+            $message[] = $hlp->__("Sorry, no matches found for the selected images");
         }
         foreach ($this->_collection as $item) {
             $updateFlag = false;
@@ -141,22 +151,23 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             if (!$skuv) {
                 continue;
             }
-            foreach ($list as $file) {
-                if (!strncmp($skuv,$file,strlen($skuv))) {
-                    $imagefile=$this->_copyImageFile($file);
 
+            foreach ($list as $file) {
+                if (!strncmp(trim($skuv),trim($file),strlen($skuv))) {
+                    $imagefile=$this->_copyImageFile($file);
                     if(!$imagefile)
                     {
                         $message[] = $hlp->__("File:")." <b>" . $file . "</b> ".$hlp->__("not found among uploaded");
                     } else {
                         //add to gallery
+
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
                             // remove image from upload area
                             @unlink($this->_path.'/'.$file);
                             $count ++;
                             $updateFlag = true;
                         } else {
-                            $message[] = $hlp->__("An error occured while adding image")." <b>" . $file . "</b> ".$hlp->__("to gallery");
+                            $message[] = $hlp->__("An error occurred while adding image")." <b>" . $file . "</b> ".$hlp->__("to gallery");
                         }
                     }
 
@@ -172,6 +183,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         }
         $response['count'] = $count;
         $response['message'] = $message;
+        $response['pid'] = $pidList;
 
         return $response;
 
@@ -341,7 +353,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $pidList = explode(',',$list);
 
         if ($pidList) {
-            $productEntityId = 4;
+            $productEntityId = Mage::getModel('catalog/product')->getResource()->getTypeId();
 
             $attributeImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'image')->getAttributeId();
             $attributeSmallImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'small_image')->getAttributeId();
@@ -363,10 +375,11 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
           {$tg} gallery
           JOIN {$tgv} AS gallery_value
             ON gallery.`value_id` = gallery_value.`value_id`
-        WHERE gallery.`entity_id` IN ({$list})
+        WHERE gallery.`entity_id` IN (%s)
         GROUP BY gallery.`entity_id`
             ";
-            $query1 = $writeConnection->query($sql1);
+
+            $query1 = $writeConnection->query(sprintf($sql1,$list));
             $minPositions = $query1->fetchAll();
 
             $minPositionsData = array();
@@ -402,10 +415,10 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                   AND mg.entity_id = ev.entity_id
                   AND ev.attribute_id IN ({$attributeImage}, {$attributeSmallImage}, {$attributeThumbnail})
                   AND mgv.POSITION = {$minPosition}
-                  AND mg.entity_id IN ({$pid});
+                  AND mg.entity_id IN (%s);
                 ";
 
-                $writeConnection->query($sql2);
+                $writeConnection->query(sprintf($sql2,$pid));
             }
 
 

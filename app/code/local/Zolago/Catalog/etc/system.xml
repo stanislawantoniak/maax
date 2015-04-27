@@ -50,5 +50,33 @@
 				</options>
 			</groups>
 		</cataloginventory>
+        <udropship>
+            <groups>
+                <vendor>
+                    <fields>
+                        <vendor_mass_image_batch_size_byname translate="label comment">
+                            <label>Mass Image: Map by Name Batch Size</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <validate>validate-number</validate>
+                            <!--<comment><![CDATA[NOTE: ]]></comment>-->
+                        </vendor_mass_image_batch_size_byname>
+                        <vendor_mass_image_batch_size_bycsv translate="label comment">
+                            <label>Mass Image: Map by CSV Batch Size</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>701</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <validate>validate-number</validate>
+                            <!--<comment><![CDATA[NOTE: ]]></comment>-->
+                        </vendor_mass_image_batch_size_bycsv>
+                    </fields>
+                </vendor>
+            </groups>
+        </udropship>
     </sections>
 </config>
