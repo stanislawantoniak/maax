@@ -800,9 +800,11 @@
 			<remove name="page.header.bottom.category.items"/>
 			<remove name="page.header.bottom.category.items.mobile"/>
 		</reference>
-		<reference name="footer">
-			
-		</reference>
+        <reference name="page.header.navigation">
+            <action method="setIsCheckout">
+                <value>1</value>
+            </action>
+        </reference>
 	</checkout_updater>
 	
 	<checkout_singlepage_index>
