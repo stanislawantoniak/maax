@@ -17,7 +17,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
                 $thUrl = $catalogHelper->init($product, 'thumbnail', $_image->getFile())->resize(100);
 
                 if($_image['disabled']) {
-                    $img = "<div class='mass-thumb-image need-to-check'><img src='" . $thUrl . "' /></div>";
+                    $img = "<div class='mass-thumb-image need-to-check'><img src='" . $thUrl .'?'.time(). "' /></div>";
                 } else {
                     $img = "<div class='mass-thumb-image'><img src='" . $thUrl . "' /></div>";
                 }
