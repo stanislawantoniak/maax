@@ -47,6 +47,7 @@
 "Gallery to check", "Galeria do zatwierdzenia"
 "Image to check", "Zdjęcie do zatwierdzenia"
 "Check gallery", "Zatwierdź galerię"
+"Check Gallery", "Zatwierdź galerię"
 "Name", "Nazwa"
 "Price", "Cena"
 "From", "Od"
@@ -172,6 +173,11 @@
 "Wrong image file format %s", "Błędny format pliku obrazka %s"
 "Please select images for mapping","Zaznacz obrazki do mapowania"
 "Do not close the browser window","Nie przerywaj procesu"
-"Start Map by name","Start Map by name"
-"Analyzed images","Analyzed images"
-"Valid images","Valid images"
+"Start Map by name","Rozpoczęcie mapowania"
+"Analyzed images","Analizowanych obrazków"
+"Valid images","Poprawnych obrazków"
+"Map by CSV Result", "Podsumowanie mapowania z pliku CSV"
+"Total rows in the CSV file", "Liczba pozycji w pliku CSV"
+"Mapped Images", "Zmapowanych obrazów"
+
+
