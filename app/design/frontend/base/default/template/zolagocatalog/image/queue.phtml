@@ -470,15 +470,7 @@ jQuery().ready(function() {
 
                         if (percentageOfDone >= 100) {
                             jQuery(".progress-bar").css({"width": "100%"}).text("100%");
-                            jQuery.ajax({
-                                url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
-                                data: {data: pidList},
-                                type: "POST",
-                                success: function (redirectLink) {
-                                    stopLoading();
-                                    window.location = redirectLink;
-                                }
-                            })
+                            makeRedirect(pidList);
                         } else {
                             jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
                         }
@@ -526,15 +518,29 @@ var showCSVResultModal = function(processed,pidList){
     stopLoading();
 }
 
-var makeRedirect = function(pidList){
+var makeRedirect = function (pidList) {
     jQuery.ajax({
         url: '<?php echo Mage::getUrl('udprod/vendor_ajax/makeRedirect',array('_forced_secure'=>true)); ?>',
         data: {data: pidList},
         type: "POST",
-        success: function(redirectLink) {
+        success: function (redirectLink) {
             stopLoading();
             jQuery("#dialog_by_csv").modal("hide");
-            window.location = redirectLink;
+
+            var f = document.createElement("form");
+            f.setAttribute('method', "post");
+            f.setAttribute('action', redirectLink);
+            f.setAttribute('name', 'redirectCheckGallery');
+
+            var i = document.createElement("input"); //input element, hidden
+            i.setAttribute('type', "hidden");
+            i.setAttribute('name', "internal_image");
+            i.setAttribute('value', pidList);
+
+            f.appendChild(i);
+            jQuery('body').append(f);
+
+            document.forms['redirectCheckGallery'].submit();
         }
     });
 }

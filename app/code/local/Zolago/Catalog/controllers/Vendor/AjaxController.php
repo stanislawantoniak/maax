@@ -182,13 +182,15 @@ class Zolago_Catalog_Vendor_AjaxController
         //clear browser cache
         header("Cache-Control: no-cache, must-revalidate");
         header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-        header("Content-Type: application/xml; charset=utf-8");
 
         //clear product image cache
         Mage::getModel('catalog/product_image')->clearCache();
 
         //make redirect
         $pidList = $this->getRequest()->getPost('data', array());
+        //var_dump($pidList);
+
+
         $this->_getRedirectPath($pidList);
     }
 
@@ -225,8 +227,9 @@ class Zolago_Catalog_Vendor_AjaxController
         $extends = '';
         if ($pidList) {
             $extends = '/filter/'.
-                base64_encode('massaction=1').
-                '/internal_image/'.implode(',',$pidList).'/';
+                base64_encode('massaction=1')
+//                .'/internal_image/'.implode(',',$pidList).'/'
+            ;
 
         }
         echo Mage::getUrl("udprod/vendor_image/".$extends);
