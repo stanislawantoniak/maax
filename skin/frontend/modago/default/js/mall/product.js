@@ -34,6 +34,19 @@ Mall.product = {
 			// Update context path back to category for mobile
 			jQuery('.path_back_to_category #pbtc_link').attr('href', this._path_back_to_category_link);
 			jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>" + this._path_back_to_category_text);
+
+            // Update info about highlighted navigation
+            Mall.Navigation.destroy();
+            Mall.Navigation.currentCategoryId = [];
+            jQuery('#breadcrumbs ol li').each(function( index ) {
+                var id = jQuery( this ).attr('data-catid');
+                if (id !== undefined){
+                    if (id.length) {
+                        Mall.Navigation.currentCategoryId.push(id);
+                    }
+                }
+            });
+            Mall.Navigation.init();
 		}
 	},
 

@@ -14,21 +14,24 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMainCategories()
     {
-		Varien_Profiler::start("todo: Load main categories");
-        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-        $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
+        $rootCatId  = Mage::app()->getStore()->getRootCategoryId();
+        /** @var Zolago_Catalog_Model_Category $ccModel */
+        $ccModel    = Mage::getModel('catalog/category');
+        /** @var Varien_Data_Tree_Node_Collection $categories */
+        $categories = $ccModel->getCategories($rootCatId);
+
         $catTree = array();
-        foreach ($categories as $categoryData) {
-            $catId = (int)$categoryData->getId();
-            $cat = Mage::getModel('catalog/category')->load($catId);
+        foreach ($categories as $cat) {
+            /** @var Varien_Data_Tree_Node $cat */
+            $catId   = (int)$cat->getId();
             $catTree[$catId] = array(
-				'name' => $categoryData->getName(),
-				'url' => rtrim(Mage::getUrl($cat->getUrlPath()), "/"),
+				'name'        => $cat->getName(),
+				'url'         => rtrim(Mage::getUrl($cat->getRequestPath()), "/"),
 				'category_id' => $catId,
-				'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml()
+				'dropdown'    => $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml(),
+                'ids'         => implode(',', $ccModel->getResource()->getChildren($ccModel->load($catId), true))
 			);
         }
-		Varien_Profiler::stop("todo: Load main categories");
         return $catTree;
     }
 
