@@ -380,6 +380,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             ";
 
             $query1 = $writeConnection->query(sprintf($sql1,$list));
+
             $minPositions = $query1->fetchAll();
 
             $minPositionsData = array();
@@ -388,6 +389,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                     $minPositionsData[$minPosition['product_id']] = $minPosition['sort_order'];
                 }
             }
+
             $sendProductToIndexAndSolr = array();
             foreach ($pidList as $pid) {
                 /**
@@ -404,23 +406,25 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
                 //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
                 $minPosition = isset($minPositionsData[$pid]) ? (int)$minPositionsData[$pid] : 0;
-                $sql2 = "
-                UPDATE
-                  catalog_product_entity_media_gallery AS mg,
-                  catalog_product_entity_media_gallery_value AS mgv,
-                  catalog_product_entity_varchar AS ev
-                SET
-                  ev.value = mg.value
-                WHERE mg.value_id = mgv.value_id
-                  AND mg.entity_id = ev.entity_id
+
+                $sqlI = "INSERT IGNORE INTO `catalog_product_entity_varchar`   (entity_type_id, attribute_id,store_id,entity_id)
+                VALUES ({$productEntityId},{$attributeImage},0,%s) , ({$productEntityId},{$attributeSmallImage},0,%s),({$productEntityId},{$attributeThumbnail},0,%s);";
+
+                $writeConnection->query(sprintf($sqlI,$pid,$pid,$pid));
+
+                $sql2 = "UPDATE catalog_product_entity_media_gallery AS mg,
+                catalog_product_entity_media_gallery_value AS mgv,
+                catalog_product_entity_varchar AS ev
+                SET ev.value = mg.value
+                WHERE  mg.value_id = mgv.value_id
+                AND mg.entity_id = ev.entity_id
                   AND ev.attribute_id IN ({$attributeImage}, {$attributeSmallImage}, {$attributeThumbnail})
-                  AND mgv.POSITION = {$minPosition}
-                  AND mg.entity_id IN (%s);
+                  AND mgv.position = {$minPosition}
+                  AND mg.entity_id=%s;
                 ";
 
                 $writeConnection->query(sprintf($sql2,$pid));
             }
-
 
 
             $sql = 'UPDATE '.$tgv.' as gv '.

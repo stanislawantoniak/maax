@@ -13,6 +13,7 @@ class Zolago_Catalog_Vendor_ImageController
     public function check_galleryAction() {
         $list = $this->getRequest()->getParam('image',array());
         $products = explode(',',$list);
+        /* @var $mapper  Zolago_Catalog_Model_Mapper */
         $mapper = Mage::getModel('zolagocatalog/mapper');
         $mapper->checkGallery($list);
 
