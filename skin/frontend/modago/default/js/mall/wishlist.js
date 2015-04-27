@@ -413,16 +413,16 @@ Mall.wishlist = {
                 jQuery("<img/>", {
                     "class": "img-01",
                     src: Config.path.heartLike,
-	                width: 22,
-	                height: 22,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
                 jQuery("<img/>", {
                     "class": "img-02",
                     src: Config.path.heartLiked,
-	                width: 22,
-	                height: 22,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
@@ -492,16 +492,16 @@ Mall.wishlist = {
                 jQuery("<img/>", {
                     "class": "img-01",
                     src: Config.path.heartLike,
-	                width: 22,
-	                height: 22,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
                 jQuery("<img/>", {
                     "class": "img-02",
                     src: Config.path.heartLiked,
-	                width: 22,
-	                height: 22,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
