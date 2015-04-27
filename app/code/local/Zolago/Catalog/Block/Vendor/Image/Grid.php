@@ -34,9 +34,8 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 	
 	
 	public function getFilterValueByIndex($index) {
-        Mage::log('getFilterValueByIndex',null,'filter.log');
 		$param = Mage::app()->getRequest()->getParam($this->getVarNameFilter());
-        Mage::log($param,null,'filter.log');
+
 		if($param){
 			$param = $this->helper('adminhtml')->prepareFilterString($param);
 			if(isset($param[$index])){
@@ -46,7 +45,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		return null;
 	}
 	public function getFilterValueByColumn($columnId) {
-        Mage::log('getFilterValueByColumn',null,'filter.log');
+
 		$index = $this->getColumn($columnId)->getIndex();
 		return $this->getFilterValueByIndex($index);
 	}
