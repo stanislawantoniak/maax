@@ -266,6 +266,7 @@ $_currentLocale = Mage::app()->getLocale()->getLocaleCode();
 var elf = null;
 var plup = null;
 var func = 'show_filebrowser';
+
 function init_uploader() {
 	plup = jQuery("#uploader").pluploadQueue({
 		// General settings
@@ -382,18 +383,19 @@ jQuery().ready(function() {
         jQuery('#delete_button').attr('disabled',true);
 	});
 
+
 	jQuery('#map_break_button').click(function() {	 
 	    jQuery('#map_confirm').show();
 	    jQuery('#map_process').hide();
 	});
 	show_filebrowser();
 
-    jQuery("html.gecko.ff31.linux body.tundra.udprod-vendor_image-index.udropship-vendor.breakpoint-1200 div#container.fixed-header div#content div.container div.tabbable.tabbabble-custom div.tab-content div#tab_1_2.tab-pane.active div div#uploader_wrapper.widget-content div#elf.ui-helper-reset.ui-helper-clearfix.ui-widget.ui-widget-content.ui-corner-all.elfinder.elfinder-ltr.ui-resizable.elfinder-disabled div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.std42-dialog.elfinder-dialog.elfinder-dialog-confirm.elfinder-dialog-active div.ui-helper-clearfix.ui-dialog-buttonpane.ui-widget-content div.ui-dialog-buttonset button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only").click(function(){
-        console.log(jQuery(".ui-dialog-buttonset .ui-button").text());
-    })
 
 
-
+    jQuery('#dialog_by_csv_result button[data-dismiss=modal]').click(function(e){
+        e.preventDefault();
+        elf.exec('reload');
+    });
 
     var mapByCSVOffset = 0;
     <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_bycsv'); ?>
@@ -445,7 +447,7 @@ jQuery().ready(function() {
                     jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
 
                     if (mapByCSVBatchSize >= totalCount) {
-                        showCSVResultModal(response.message.count,pidList);
+                        showCSVResultModal(pidList);
                     }
 
                     var steps = Math.ceil(parseInt(totalCount) / parseInt(mapByCSVBatchSize)) - 1;
@@ -474,7 +476,7 @@ jQuery().ready(function() {
                                     jQuery("#dialog_by_csv_result #map_csv_valid").text(n + parseInt(response.message.count));
 
                                     if (percentageOfDone >= 100) {
-                                        showCSVResultModal(response.message.count,pidList);
+                                        showCSVResultModal(pidList);
                                     } else {
                                         jQuery(".progress-bar").css({"width": percentageOfDone + "%"}).text(Math.round(percentageOfDone) + " %");
                                     }
@@ -598,8 +600,9 @@ var analizeSelectedImages = function () {
     })
 }
 
-var showCSVResultModal = function(processed,pidList){
+var showCSVResultModal = function(pidList){
     jQuery(".progress-bar").css({"width": "100%"}).text("100%");
+    var processed = parseInt(jQuery("#dialog_by_csv_result #map_csv_valid").text());
     if(processed == 0){
         jQuery("#dialog_by_csv_result #map_csv_result_check_gallery").hide();
     } else {
