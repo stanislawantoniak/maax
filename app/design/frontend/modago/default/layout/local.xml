@@ -249,16 +249,32 @@
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
 		</reference>
 
-		<reference name="header">
-			<block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
-			<block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
-			<block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml"/>
-            <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
+        <reference name="header">
+            <block type="core/template" name="page.header.navigation" as="page.header.navigation" template="page/html/navigation/navigation.phtml">
+                <action method="setEsiOptions">
+                    <params>
+                        <scope>page</scope>
+                        <access>public</access>
+                        <ttl>3600</ttl> <!--1h-->
+                    </params>
+                </action>
+            </block>
+            <block type="page/html_header" name="page.header.inside.wrapper" as="page.header.inside.wrapper" template="page/html/header/inside.wrapper.phtml">
+                <action method="setEsiOptions">
+                    <params>
+                        <scope>global</scope>
+                        <access>public</access>
+                        <ttl>3600</ttl> <!--1h-->
+                    </params>
+                </action>
+                <block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
+                <block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
+                <block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml"/>
+                <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
+                <block type="zolagomodago/checkout_onepage_progress" name="page.header.progress" template="checkout/onepage/progress.phtml"/>
+            </block>
 		</reference>
 
-        <reference name="content">
-            <block type="core/template" name="movedNavigation" template="page/html/navigation/navigation.phtml"/>
-        </reference>
 
 		<reference name="footer">
 			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
@@ -783,7 +799,6 @@
 			<remove name="page.header.bottom.menu"/>
 			<remove name="page.header.bottom.category.items"/>
 			<remove name="page.header.bottom.category.items.mobile"/>
-			<block type="zolagomodago/checkout_onepage_progress" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
 		</reference>
 		<reference name="footer">
 			

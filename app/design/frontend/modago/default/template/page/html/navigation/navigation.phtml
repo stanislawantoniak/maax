@@ -5,21 +5,23 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 /** @var Zolago_Solrsearch_Helper_Data $helper */
 $helperSolrSearch = Mage::helper("zolagosolrsearch");
 $category = $helperSolrSearch->getCurrentCategory();
-?>
 
-<div id="movedNavigation">
-    <div class="headers">
-        <?php
-        if ($vendor && $vendor->isBrandshop()) {
-            //when vendor(brandshop) show navigation only on the cms categories
-            if($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
-                echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-            }
-        } else {
-            echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-        }
-        ?>
-    </div>
-</div>
-
-
+if ($rootBlock = $this->getLayout()->getBlock("root")) {
+    if (!$rootBlock->getIsCheckout()) { ?>
+        <div id="movedNavigation">
+            <div class="headers">
+                <?php
+                if ($vendor && $vendor->isBrandshop()) {
+                    //when vendor(brandshop) show navigation only on the cms categories
+                    if ($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
+                        echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+                    }
+                } else {
+                    echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+                }
+                ?>
+            </div>
+        </div>
+    <?php
+    }
+}
