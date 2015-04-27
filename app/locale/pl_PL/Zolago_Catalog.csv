@@ -152,7 +152,7 @@
 "Time in minutes","Czas w minutach"
 "Choose size first","Najpierw wybierz rozmiar"
 "temporary absence product","chwilowy brak produktu"
-"of %s","of %s"
+"of %s","z %s"
 "Additional filters","Filtry dodatkowe"
 "Please upload CSV file","Proszę załadować plik CSV"
 "File:","Plik:"
@@ -179,5 +179,4 @@
 "Map by CSV Result", "Podsumowanie mapowania z pliku CSV"
 "Total rows in the CSV file", "Liczba pozycji w pliku CSV"
 "Mapped Images", "Zmapowanych obrazów"
-
-
+"Please select images to remove", "Wybierz obrazki do usunięcia"
