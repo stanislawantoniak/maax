@@ -6,14 +6,12 @@ class SalesManago_Tracking_Model_Observer {
     }
 	
     public function customer_login($observer) {
-        Mage::log("customer_login",null,"salesmanago.log");
-
 		$customer = $observer->getCustomer()->getData();
-        Mage::log($customer,null,"salesmanago.log");
+
         if(is_array($customer) && !empty($customer)){
             if(!isset($customer['salesmanago_contact_id']) || empty($customer['salesmanago_contact_id'])){
                 $data = $this->_getHelper()->_setCustomerData($customer);
-                Mage::log($data,null,"salesmanago.log");
+
                 $r = $this->_getHelper()->salesmanagoContactSync($data);
 
 
