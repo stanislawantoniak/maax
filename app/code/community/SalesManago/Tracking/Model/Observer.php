@@ -13,10 +13,10 @@ class SalesManago_Tracking_Model_Observer {
         if(is_array($customer) && !empty($customer)){
             if(!isset($customer['salesmanago_contact_id']) || empty($customer['salesmanago_contact_id'])){
                 $data = $this->_getHelper()->_setCustomerData($customer);
-				
-                $r = $this->_getHelper()->salesmanagoContactSync($data);
-                Mage::log($r,null,"salesmanago.log");
                 Mage::log($data,null,"salesmanago.log");
+                $r = $this->_getHelper()->salesmanagoContactSync($data);
+
+
 				if($r==false || (isset($r['success']) && $r['success']==false)){
 					$data['status'] = 0;
 					$data['action'] = 2; //logowanie
