@@ -26,6 +26,9 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
                 </div>
                 <div id="content-main">
                     <?php echo $this->getChildHtml('vendor.banner'); ?>
+	                <div id="vendor-products">
+		                <?php echo $this->getChildHtml('vendor-products'); ?>
+	                </div>
                 </div>
             </div>
         </div>
