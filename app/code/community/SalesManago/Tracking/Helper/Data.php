@@ -127,8 +127,7 @@ class SalesManago_Tracking_Helper_Data extends Mage_Core_Helper_Abstract{
 		}
 
 		$json = json_encode($data_to_json);
-		$result = $this->_doPostRequest('https://'.$endPoint.'/api/contact/upsert', $json);		
-		
+		$result = $this->_doPostRequest('https://'.$endPoint.'/api/contact/upsert', $json);
 		$r = json_decode($result, true);
 		
         return $r;
