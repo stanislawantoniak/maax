@@ -6,14 +6,17 @@ class SalesManago_Tracking_Model_Observer {
     }
 	
     public function customer_login($observer) {
+        Mage::log("customer_login",null,"salesmanago.log");
+
 		$customer = $observer->getCustomer()->getData();
-		
+        Mage::log($customer,null,"salesmanago.log");
         if(is_array($customer) && !empty($customer)){
             if(!isset($customer['salesmanago_contact_id']) || empty($customer['salesmanago_contact_id'])){
                 $data = $this->_getHelper()->_setCustomerData($customer);
 				
                 $r = $this->_getHelper()->salesmanagoContactSync($data);
-				
+                Mage::log($r,null,"salesmanago.log");
+                Mage::log($data,null,"salesmanago.log");
 				if($r==false || (isset($r['success']) && $r['success']==false)){
 					$data['status'] = 0;
 					$data['action'] = 2; //logowanie
@@ -57,7 +60,7 @@ class SalesManago_Tracking_Model_Observer {
 	}
 	
     /*
-    * Dodanie zdarzenia addContactExtEvent na podsumowaniu zamówienia z typem PURCHASE
+    * Dodanie zdarzenia addContactExtEvent na podsumowaniu zamï¿½wienia z typem PURCHASE
     */
 	public function checkout_onepage_controller_success_action($observer){
 		
