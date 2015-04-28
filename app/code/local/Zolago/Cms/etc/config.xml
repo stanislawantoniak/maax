@@ -25,10 +25,10 @@
     <frontend>
         <routers>
             <cms>
-                <use>standard</use>
                 <args>
-                    <module>Zolago_Cms</module>
-                    <frontName>cms</frontName>
+                    <modules>
+                        <Zolago_Cms before="Mage_Cms">Zolago_Cms</Zolago_Cms>
+                    </modules>
                 </args>
             </cms>
         </routers>
