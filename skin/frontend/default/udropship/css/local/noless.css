@@ -484,3 +484,19 @@
 #vendor_contact .control-label {
     text-align: right;
 }
+
+#rmaRefundItems tr {
+	cursor: pointer;
+}
+#rmaRefundItems tr:hover td {
+	background-color: #f5f5f5;
+}
+#rmaRefundItems td {
+	vertical-align: middle;
+}
+#rmaRefundItems input[type=text] {
+	width: 75px;
+}
+#rmaRefundForm .has-error {
+	color: #b94a48;
+}

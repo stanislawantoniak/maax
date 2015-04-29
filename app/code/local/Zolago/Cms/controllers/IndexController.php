@@ -1,6 +1,6 @@
 <?php
-require_once Mage::getModuleDir('controllers', "Mage_Cms") . DS . "PageController.php";
-class Zolago_Cms_PageController extends Mage_Cms_PageController
+require_once Mage::getModuleDir('controllers', "Mage_Cms") . DS . "IndexController.php";
+class Zolago_Cms_IndexController extends Mage_Cms_IndexController
 {
     public function preDispatch() {
         $out =  parent::preDispatch();
