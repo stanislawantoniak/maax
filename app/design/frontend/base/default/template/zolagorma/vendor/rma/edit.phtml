@@ -73,10 +73,10 @@ jQuery(document).ready(function() {
 						<dd>
 							<div class="btn-group" id="status-holder"> 
 								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
-									<?php echo $this->escapeHtml('Not paid');?> <span class="caret"></span> 
+									<?php echo $_helper->__('Not paid');?> <span class="caret"></span>
 								</button> 
 								<ul class="dropdown-menu"> 
-									<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getRmaUrl("directPayment");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_helper->__("You are about to direct payment. Are you sure?");?>" data-modal="true" href="#"><?php echo $_helper->__("Make payment");?> [dev]</a></li> 								
+									<li><a href="#" data-toggle="modal" data-target="#refundModal"><?php echo $_helper->__("Make refund");?></a></li>
 								</ul> 
 							</div>
 						</dd> 
@@ -344,6 +344,16 @@ jQuery(document).ready(function() {
  *	Shippign address modal
  *******************************************************************************/
 	echo $this->getChild("vendor_rma_edit_shipping")->toHtml();
+?>
+
+<?php
+/*******************************************************************************
+ *	Make refund modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_rma_edit_refund")
+		->setRma($_rma)
+		->setRmaHelper($_helper)
+		->toHtml();
 ?>
 <?php  /*
 <div class="container">
