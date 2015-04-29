@@ -1,5 +1,6 @@
 <?php
-require_once Mage::getModuleDir('controllers', 'Mage_Newsletter') . "/SubscriberController.php";
+
+require_once Mage::getModuleDir('controllers', 'SalesManago_Tracking') . DS . "Newsletter". DS ."SubscriberController.php";
 
 class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberController
 {
@@ -65,5 +66,43 @@ class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberC
         } else {
             $this->_redirectUrl(Mage::getBaseUrl());
         }
+    }
+
+
+    public function sm_newsletter_unsubscribeAction(){
+        $email = $this->getRequest()->getParam('email');
+        $key = $this->getRequest()->getParam('key');
+        $result = array();
+
+        $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+        $sha1 = sha1($email.$apiSecret);
+
+        if (isset($email) && isset($key) && isset($sha1) && filter_var($email, FILTER_VALIDATE_EMAIL) && $key==$sha1){
+            try {
+                $status = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->isSubscribed();
+                if($status){
+                    Mage::getModel('newsletter/subscriber')->loadByEmail($email)->unsubscribe();
+                    $result['success'] = true;
+                    $result['message'] = 'Email succesfully unsubscribed';
+                } else{
+                    $result['success'] = false;
+                    $result['message'] = 'Email already unsubscribed';
+                }
+            }
+            catch (Mage_Core_Exception $e) {
+                $result['success'] = false;
+                $result['message'] = 'General error';
+            }
+            catch (Exception $e) {
+                $result['success'] = false;
+                $result['message'] = 'General error';
+            }
+        } else{
+            $result['success'] = false;
+            $result['message'] = 'Validation failed';
+        }
+
+        $json = json_encode($result);
+        return $json;
     }
 }

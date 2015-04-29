@@ -124,7 +124,7 @@ class Licentia_Fidelitas_Model_Egoi extends Varien_Object {
 
         if (isset($result['error'])) {
             Mage::log(serialize($additionalData), 2, 'fidelitas-egoi.log');
-            throw new Mage_Core_Exception(Mage::helper('fidelitas')->__($result['error']));
+            //throw new Mage_Core_Exception(Mage::helper('fidelitas')->__($result['error']));
         }
 
         return $this;
@@ -233,7 +233,7 @@ class Licentia_Fidelitas_Model_Egoi extends Varien_Object {
                 ->getSubscriberData()
                 ->getData();
 
-        if (is_array($result) && $result[0]['subscriber']['STATUS'] == 1) {
+        if (is_array($result) && isset($result[0]['subscriber']) && $result[0]['subscriber']['STATUS'] == 1) {
             return $this->processServiceResult($this->_client->editSubscriber($this->getDataKey()));
         }
 
