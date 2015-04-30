@@ -250,33 +250,28 @@
 		</reference>
 
         <reference name="header">
-            <block type="core/template" name="page.header.navigation" as="page.header.navigation" template="page/html/navigation/navigation.phtml">
-                <action method="setEsiOptions">
-                    <params>
-                        <registry_keys>
-                            <current_category/>
-                        </registry_keys>
-                        <scope>page</scope>
-                        <access>public</access>
-                        <ttl>3600</ttl> <!--1h-->
-                    </params>
-                </action>
+            <!-- <block type="page/html_header" name="header" as="header" template="page/html/header.phtml"> -->
+            <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
+            <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
-            <block type="page/html_header" name="page.header.inside.wrapper" as="page.header.inside.wrapper" template="page/html/header/inside.wrapper.phtml">
-                <action method="setEsiOptions">
-                    <params>
-                        <scope>global</scope>
-                        <access>public</access>
-                        <ttl>3600</ttl> <!--1h-->
-                    </params>
-                </action>
-                <block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
-                <block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
-                <block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml"/>
-                <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
-                <block type="zolagomodago/checkout_onepage_progress" name="page.header.progress" template="checkout/onepage/progress.phtml"/>
+            <block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml"/>
+            <block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
+            <block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
+            <block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml">
             </block>
-		</reference>
+
+            <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
+            <block type="zolagomodago/page_header_bottommenu" name="page.header.bottom.menu" template="page/html/header/bottom.menu.phtml"/>
+            <block type="zolagomodago/catalog_category" name="page.header.bottom.category.items" template="page/html/header/bottom.category.items.phtml"/>
+            <block type="zolagomodago/catalog_category" name="page.header.bottom.category.items.mobile" template="page/html/header/bottom.category.items.mobile.phtml"/>
+            <!-- </block> -->
+            <!-- Varnish cache esi public block-->
+            <action method="setEsiOptions">
+                <params>
+                    <access>public</access>
+                </params>
+            </action>
+        </reference>
 
 
 		<reference name="footer">
@@ -511,6 +506,9 @@
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header_m" template="zolagosolrsearch/catalog/product/list/header/mobile/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
                 <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+            </block>
+            <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
+                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>

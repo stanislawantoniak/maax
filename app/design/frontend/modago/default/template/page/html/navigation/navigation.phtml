@@ -1,24 +1,24 @@
 <?php
-/** @var $this Mage_Core_Block_Template */
-/** @var Zolago_Dropship_Model_Vendor $vendor */
-$vendor = Mage::helper('umicrosite')->getCurrentVendor();
-$category = Mage::registry('current_category');
-$isCheckout = $this->getIsCheckout();
-
-if (!$isCheckout) { ?>
-    <div id="movedNavigation">
-        <div class="headers">
-            <?php
-            if ($vendor && $vendor->isBrandshop()) {
-                //when vendor(brandshop) show navigation only on the cms categories
-                if ($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
-                    echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-                }
-            } else {
-                echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-            }
-            ?>
-        </div>
-    </div>
+///** @var $this Mage_Core_Block_Template */
+///** @var Zolago_Dropship_Model_Vendor $vendor */
+//$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+//$category = Mage::registry('current_category');
+//$isCheckout = $this->getIsCheckout();
+//
+//if (!$isCheckout) { ?>
+<!--    <div id="movedNavigation">-->
+<!--        <div class="headers">-->
+<!--            --><?php
+//            if ($vendor && $vendor->isBrandshop()) {
+//                //when vendor(brandshop) show navigation only on the cms categories
+//                if ($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
+//                    echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+//                }
+//            } else {
+//                echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+//            }
+//            ?>
+<!--        </div>-->
+<!--    </div>-->
 <?php
-}
+//}
