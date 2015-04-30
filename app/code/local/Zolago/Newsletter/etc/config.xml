@@ -10,7 +10,7 @@
 			<newsletter>
 				<args>
 					<modules>
-						<Zolago_Newsletter before="Mage_Newsletter">Zolago_Newsletter</Zolago_Newsletter>
+						<Zolago_Newsletter before="SalesManago_Tracking">Zolago_Newsletter</Zolago_Newsletter>
 					</modules>
 				</args>
 			</newsletter>
