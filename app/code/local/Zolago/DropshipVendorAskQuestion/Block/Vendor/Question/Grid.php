@@ -62,7 +62,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 
         if (Zend_Validate::is($value, 'EmailAddress')) {
             // overridden behavior
-            $field = 'customer_email';
+            $field = 'main_table.customer_email';
         }
 
         if ($field && isset($cond)) {

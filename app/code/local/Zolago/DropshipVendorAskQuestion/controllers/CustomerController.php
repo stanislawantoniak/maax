@@ -23,7 +23,7 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
 		if(isset($question['shipment_id']) && empty($question['shipment_id'])){
 			unset($question['shipment_id']);
 		}
-		$question['po_id'] = $question['order_id'];
+		$question['po_id'] = empty($question['order_id'])? null:$question['order_id'];
 
         $cSess = Mage::getSingleton('customer/session');
         
