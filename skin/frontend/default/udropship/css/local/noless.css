@@ -484,3 +484,6 @@
 #vendor_contact .control-label {
     text-align: right;
 }
+#edit-question .form-group div.col-md-10 {
+	padding-top: 7px;
+}

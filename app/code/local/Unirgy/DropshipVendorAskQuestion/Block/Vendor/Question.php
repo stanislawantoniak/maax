@@ -86,12 +86,12 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'is_top'=>true,
         ));
 
-        if ($data->getShipmentId()) {
-            $fieldset->addField('shipment_id', 'note', array(
-                'name' => 'shipment_id',
-                'label' => $this->__('SHIPMENT'),
-				'class'	=> 'note',
-                'text' => '<a href="'.$this->getShipmentUrl($data).'">'.$this->__('#%s for order #%s', $data->getShipmentIncrementId(), $data->getOrderIncrementId()).'</a>',
+        if ($data->getPoId()) {
+            $fieldset->addField('increment_id', 'note', array(
+                'name' => 'increment_id',
+                'label' => $this->__('Order id'),
+                'style' => 'padding-top:7px',
+                'text' => $this->getOrderLink($data),
                 'is_wide'=>true,
                 'is_top'=>true,
             ));
@@ -148,7 +148,19 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
         
         $this->_prepareFieldsetColumns($fieldset);
     }
-
+    public function getOrderLink($question) {
+        $order = Mage::getModel('udropship/po')->
+            load($question->getPoId());
+        $template = '<a href="%s">%s</a>';
+        if ($order->getIncrementId()) {
+            $url =  Mage::getUrl("udpo/vendor/edit",array("id"=>$question->getPoId()));
+            $out = sprintf($template,$url,$order->getIncrementId());
+        } else {
+            $out = sprintf($template,Mage::getUrl("udpo/vendor"),Mage::helper('zolagocommon')->__('Order list'));
+        }
+        
+        return $out;
+    }
     public function getShipmentUrl($question)
     {
 		$shipping = Mage::getModel("sales/order_shipment")->
