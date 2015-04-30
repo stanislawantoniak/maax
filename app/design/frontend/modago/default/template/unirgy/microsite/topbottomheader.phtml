@@ -11,14 +11,12 @@ $vendorCanAsk = $vendor->getCanAsk();
 ?>
 
 
-
-<div class="top_bottom  bg-w clearfix hidden-xs">
+<div class="top_bottom  bg-w clearfix hidden-xs vendor-header-wrapper-desktop">
     <?php echo $this->getDesktopVendorHeaderPanel(); ?>
 </div>
 
 
-<?php if(!empty($messagesBlock)): ?>
-<div class="top_bottom clearfix hidden-xs">
+<div class="clearfix hidden-xs messages-block-desktop">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12" style="">
@@ -27,26 +25,23 @@ $vendorCanAsk = $vendor->getCanAsk();
         </div>
     </div>
 </div>
-<?php endif; ?>
 
-
-<div class="top_bottom  bg-w visible-xs clearfix">
+<div class="top_bottom  bg-w visible-xs clearfix vendor-header-wrapper-mobile">
     <!--mobile part-->
     <?php echo $this->getMobileVendorHeaderPanel(); ?>
 </div>
 
 
-<?php if(!empty($messagesBlock)): ?>
-<div class="top_bottom  visible-xs clearfix">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12" style="">
-                    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-                </div>
+<div class="visible-xs clearfix messages-block-mobile">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" style="">
+                <?php echo $messagesBlock; ?>
             </div>
         </div>
+    </div>
 </div>
-<?php endif; ?>
+
 
     <div class="top_bottom  bg-w visible-xs clearfix">
         <div id="shop_navigation" class="col-sm-12">
@@ -83,10 +78,3 @@ $vendorCanAsk = $vendor->getCanAsk();
 
 </div>
 <!--mobile part end-->
-
-<script>
-    <?php /* Messges are twice time **/ ?>
-    jQuery(document).ready(function () {
-        jQuery('ul.messages').first().remove();
-    });
-</script>
