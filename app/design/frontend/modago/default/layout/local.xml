@@ -251,9 +251,9 @@
 
         <reference name="header">
             <!-- <block type="page/html_header" name="header" as="header" template="page/html/header.phtml"> -->
-            <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
-            <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
-            </block>
+            <!--<block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">-->
+                <!--<block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />-->
+            <!--</block>-->
             <block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml"/>
             <block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
             <block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
@@ -272,7 +272,11 @@
                 </params>
             </action>
         </reference>
-
+        <reference name="before_content">
+            <block type="core/template"  name="header_menu" template="page/html/header/header_menu.phtml">
+                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+            </block>
+        </reference>
 
 		<reference name="footer">
 			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
@@ -489,7 +493,7 @@
 				<script>js/mall/listing.js</script>
 			</action>
 		</reference>
-        <reference name="header">
+        <reference name="before_content">
             <action method="unsetChild">
                 <alias>header_menu</alias>
             </action>

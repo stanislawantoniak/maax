@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-
+    <?php echo $this->getChildHtml('before_content') ?>
 	<?php $breadcrumbs = $this->getChildHtml('breadcrumbs'); ?>
     <section id="main" class="<?php echo $this->getElementClass(); ?>">
 	    <?php if($breadcrumbs): ?>
