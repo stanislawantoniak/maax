@@ -1307,6 +1307,13 @@ jQuery(document).ready(function() {
 	initToggleSearch();
     Mall.disableSearchNoQuery();
 
+    //hack for vendor main page (turpentine shows global messages only one time)
+    if(jQuery(".page-messages-block ul.messages").length > 0){
+        var messages = jQuery(".page-messages-block ul.messages").clone();
+        console.log(messages);
+        jQuery(".messages-block-mobile .col-sm-12, .messages-block-desktop .col-sm-12").html(messages);
+    }
+
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
         var curentUL = jQuery(this).closest('ul');
