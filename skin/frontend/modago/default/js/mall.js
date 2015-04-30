@@ -1310,7 +1310,6 @@ jQuery(document).ready(function() {
     //hack for vendor main page (turpentine shows global messages only one time)
     if(jQuery(".page-messages-block ul.messages").length > 0){
         var messages = jQuery(".page-messages-block ul.messages").clone();
-        console.log(messages);
         jQuery(".messages-block-mobile .col-sm-12, .messages-block-desktop .col-sm-12").html(messages);
     }
 
