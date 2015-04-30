@@ -42,7 +42,7 @@ $_hlp = $this->getRmaHelper();
 							/** @var Mage_Core_Helper_Data $coreHlp */
 							$coreHlp = Mage::helper('core');
 							$itemsIds[] = $_item->getId();
-							$paidNum = $_item->getPoItem()->getRowTotalInclTax();
+							$paidNum = $_item->getPoItem()->getFinalItemPrice();
 							$paid = $coreHlp->currency($paidNum, true, false);
 							$paidAmount = $this->getPriceValue($paidNum);
 							?>
