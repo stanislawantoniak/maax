@@ -17,10 +17,18 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$collection = Mage::getModel('udqa/question')->getCollection();
 		/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
 		$collection->
-				joinShipments()->
 				joinProducts()->
 				joinVendors();
-		
+				
+		$collection->getSelect()->joinLeft(array(
+		    'udropship_po' => $collection->getTable('udpo/po')),
+		    'main_table.po_id = udropship_po.entity_id',
+		    array(
+		        'increment_id' => 'udropship_po.increment_id',
+		        
+            )
+        );
+		    
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		/* @var $vendor Zolago_Dropship_Model_Vendor */
 		$vendorsIds = $vendor->getChildVendorIds();
@@ -90,12 +98,18 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("Product"),
 		));
-
 		$this->addColumn("product_sku", array(
 			"type"		=>	"text",
 			"index"		=>	"product_sku",
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("SKU"),
+		));
+
+		$this->addColumn("order_id", array(
+			"type"		=>	"text",
+			"index"		=>	"increment_id",
+			"class"		=>  "form-controll",
+			"header"	=>	$_helper->__("Order ID"),
 		));
 		
 		$this->addColumn("question_date", array(

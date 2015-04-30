@@ -1,4 +1,4 @@
-﻿"Customer new question confirmation", "Potwierdzenie wysłania zapytania do sklepu"
+"Customer new question confirmation", "Potwierdzenie wysłania zapytania do sklepu"
 "This field is required","To pole jest wymagane - prosimy o wprowadzenie wartości."
 "Order","Kolejność"
 "Action","Akcja"
@@ -14,7 +14,5 @@
 "Your Question","Twoje pytanie"
 "Select vendor","Wybierz sprzedawcę"
 "This field is required.","To pole jest wymagane"
-
-
-
-
+"Order id", "ID zamówienia"
+"Unable to post the question.", "Nie można wysłać zapytania"

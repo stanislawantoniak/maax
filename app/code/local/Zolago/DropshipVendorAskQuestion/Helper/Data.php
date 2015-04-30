@@ -39,6 +39,12 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 
             $answerText = $question->getData('answer_text');
             $question->setData('answer_text',Mage::helper('zolagocommon')->nToBr($answerText));
+            
+            $incrementId = '';
+            if ($poId = $question->getPoId()) {
+                $order = Mage::getModel('udropship/po')->load($poId);
+                $incrementId = $order->getIncrementId();
+            }
 
             $templateParams = array(
                 'store' => $store,
@@ -52,7 +58,8 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                 'question' => $question,
                 'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
                 'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
-                "use_attachments" => true
+                "use_attachments" => true,
+                'increment_id' => $incrementId,
             );
 
 		    $helper = Mage::helper("zolagocommon");
@@ -100,6 +107,13 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
             $superVendorAgents = $vendorM->getSuperVendorHelpdeskAgentEmails($vendorId);
             $vendorAgents = $vendorM->getVendorHelpdeskAgentEmails($vendorId);
 
+            $incrementId = '';
+            if ($poId = $question->getPoId()) {
+                $order = Mage::getModel('udropship/po')->load($poId);
+                $incrementId = $order->getIncrementId();
+            }
+
+
             $emails += $superVendorAgents;
             $emails += $vendorAgents;
             unset($superVendorAgents);
@@ -116,7 +130,8 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                     'question'           => $question,
                     'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
                     'show_vendor_info'   => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
-	                'use_attachments'    => true
+	                'use_attachments'    => true,
+	                'increment_id'		 => $incrementId,
                 );
 
 	            /** @var Zolago_Common_Helper_Data $mailer */
