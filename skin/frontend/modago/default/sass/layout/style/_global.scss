@@ -48,11 +48,27 @@ div.noscroll {
 		}
 	}
 }
-
+.node-type-page-shop {
+  .vendor-header-wrapper-desktop, .vendor-header-wrapper-mobile {
+    margin-bottom: 17px;
+  }
+}
+.umicrosite-index-landingpage {
+  .page-messages-block {
+    display: none;
+  }
+  .messages-block-mobile ul.messages {
+    margin-top: -17px;
+  }
+  .messages-block-desktop ul.messages {
+    margin-bottom: 17px;
+    margin-top: -17px;
+  }
+}
 .node-type-page-shop, .vendor-top-bottom-header {
 	.top_bottom {
 		margin-top:0px;
-        margin-bottom: 17px;
+//        margin-bottom: 17px;
 	}
 	.blockCarouselTop {
 		@media (max-width: $screen-xs-max) {

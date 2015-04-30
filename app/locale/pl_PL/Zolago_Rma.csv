@@ -159,4 +159,10 @@
 "Number","Numer"
 "You are about to direct payment. Are you sure?","Czy na pewno chcesz wykonać zwrot gotówki?"
 "Other error contact admin","Nieoczekiwany błąd. Skontaktuj się z administratorem aplikacji."
-
+"Not paid","Nieopłacono"
+"Paid","Zapłacono"
+"Make refund","Utwórz zwrot"
+"Make RMA refund","Tworzenie zwrotu płatności do RMA"
+"Refund amount","Kwota do zwrotu"
+"Refunded","Zwrócono"
+"Select at least one product to refund","Wybierz przynajmniej jeden produkt do zwrotu"

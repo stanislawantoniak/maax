@@ -65,6 +65,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
                 $item = $this->_convertor->itemToRmaItem($poItem);
                 $item->setQty(1); // only 1 by line
                 $item->setItemCondition($conditions[$itemId][$packId]);
+	            $item->setCommissionPercent($poItems[$itemId]->getCommissionPercent());
                 $vId = $poItem->getUdropshipVendor();                
                 $rmaItems[$vId][] = $item;
                 if (empty($totalQtys[$vId])) {
