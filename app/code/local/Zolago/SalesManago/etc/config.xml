@@ -28,6 +28,13 @@
                     </zolago_salesmanago_observer>
                 </observers>
             </newsletter_subscriber_save_after>
+            <newsletter_subscriber_save_before>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>disabled</type>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </newsletter_subscriber_save_before>
         </events>
     </frontend>
     <global>
