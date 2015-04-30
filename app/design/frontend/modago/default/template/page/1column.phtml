@@ -18,6 +18,7 @@
 
     <?php echo $this->getChildHtml('global_notices') ?>
 
+    <?php echo $this->getChildHtml('before_content') ?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
@@ -26,7 +27,6 @@
             </div>
         </div>
     </div>
-
 	<?php $breadcrumbs = $this->getChildHtml('breadcrumbs'); ?>
     <section id="main" class="<?php echo $this->getElementClass(); ?>">
 	    <?php if($breadcrumbs): ?>
