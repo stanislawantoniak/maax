@@ -34,8 +34,12 @@
           > a:link,
           > a:visited {
             border-top: none;
-//            border-bottom:1px solid #dedce1;
             border-top:1px solid #dedce1;
+          }
+        }
+        > li:first-child {
+          > a {
+            border-top: medium none;
           }
         }
       }
