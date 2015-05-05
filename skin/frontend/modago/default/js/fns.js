@@ -912,7 +912,16 @@ jQuery.noConflict();
 		};
 
 		$('.closeSlidebar').click(closeHamburgerMenu);
-
+        jQuery(".closeSlidebar").swipe( {
+            //Generic swipe handler for all directions
+            swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+                if(direction == "left"){
+                    closeHamburgerMenu(event);
+                }
+            },
+            //Default is 75px, set to 0 for demo so any distance triggers swipe
+            threshold:0
+        });
 		 $(document).mouseup(function(e) {
 			var container = $("body > .sb-slidebar");
 			if(container.is(":visible") && !container.is(e.target) && container.has(e.target).length === 0){
