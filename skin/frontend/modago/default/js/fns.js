@@ -912,7 +912,7 @@ jQuery.noConflict();
 		};
 
 		$('.closeSlidebar').click(closeHamburgerMenu);
-        jQuery(".closeSlidebar").swipe( {
+        jQuery(".sb-slidebar").swipe( {
             //Generic swipe handler for all directions
             swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
                 if(direction == "left"){
