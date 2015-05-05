@@ -58,12 +58,11 @@
             </salesmanago>
         </blocks>
         <helpers>
-            <salesmanago>
+            <zolagosalesmanago>
                 <class>Zolago_SalesManago_Tracking_Helper</class>
-            </salesmanago>
+            </zolagosalesmanago>
             <tracking>
                 <rewrite>
-                    <data>Zolago_SalesManago_Helper_Data</data>
                     <data>Zolago_SalesManago_Helper_Data</data>
                 </rewrite>
             </tracking>
