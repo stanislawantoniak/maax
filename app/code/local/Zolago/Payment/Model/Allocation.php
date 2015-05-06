@@ -181,18 +181,29 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         return false;
     }
 
-	public function createOverpayment($po) {
+	public function createOverpayment($po,$commentMoved="Moved to overpayment",$commentCreated="Created overpayment") {
 
 		$po = $this->getPo($po);
 		if($po->getId()) { //check if po exists and
-			$poGrandTotal = $po->getGrandTotalInclTax();
             if (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
                 $poGrandTotal = 0;
+            } else {
+	            $poGrandTotal = $po->getGrandTotalInclTax();
             }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
-				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
+
+				//rma returned value getting:
+				/** @var Zolago_Rma_Model_Rma $rmaModel */
+				$rmaModel = Mage::getModel('zolargorma');
+				$rmas = $rmaModel->loadByPoId($po->getId());
+				$rmaReturnedValue = 0;
+				foreach($rmas as $rma) {
+					$rmaReturnedValue += $rma->getReturnedValue();
+				}
+
+				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal + $rmaReturnedValue;
 				$payments = $this->getPoPayments($po,true); //get all po payments
 				$allocations = array();
 				if($payments) { //if there are any then
@@ -218,7 +229,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT,
 								'operator_id'       => $operatorId,
 								'created_at'        => $createdAt,
-								'comment'           => $helper->__("Moved to overpayment"),
+								'comment'           => $helper->__($commentMoved),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat()
@@ -232,7 +243,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'allocation_type'   => self::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY,
 								'operator_id'       => $operatorId,
 								'created_at'        => $createdAt,
-								'comment'           => $helper->__("Created overpayment"),
+								'comment'           => $helper->__($commentCreated),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat()

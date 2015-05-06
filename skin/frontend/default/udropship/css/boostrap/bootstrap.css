@@ -5735,7 +5735,7 @@ body.modal-open,
     padding-bottom: 30px;
   }
   .modal-dialog.wide {
-	  width: 800px;
+	  width: 950px;
   }
   .modal-content {
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
