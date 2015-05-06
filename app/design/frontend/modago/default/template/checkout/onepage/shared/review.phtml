@@ -2,7 +2,7 @@
 <?php $_helper = Mage::helper("zolagocheckout"); ?>
 <?php $_totalDiscount = $this->getTotalDiscount()?>
 <?php $_coupon = $this->getCoupon();?>
-<?php $checkoutOrderDeactivate = Mage::getStoreConfig('checkout/options/checkout_order_deactivate'); ?>
+<?php $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 <div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
 	<?php $_items = $this->getItems(); ?>
@@ -87,7 +87,11 @@
 					<a href="#"  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
 				</div>
 				<div class="col-md-3 col-sm-6" col-lg-2">
-					<button class="button button-primary large link pull-right <?php if($checkoutOrderDeactivate): ?> disabled <?php endif; ?>"  <?php if($checkoutOrderDeactivate): ?> disabled <?php endif; ?> id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
+                    <?php if($checkoutOrderDeactivate): ?>
+                        <a class="button button-primary large link pull-right disabled "><?php echo $_helper->__('Order now and pay'); ?></a>
+                        <?php else: ?>
+                        <button class="button button-primary large link pull-right disabled "  id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
+                    <?php endif; ?>
 				</div>
 			</div>
 
