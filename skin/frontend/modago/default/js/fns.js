@@ -922,24 +922,16 @@ jQuery.noConflict();
 
 
 // Slidebars Submenus
-        jQuery("aside.sb-slidebar").swipe( {
+        jQuery(".sb-slidebar").swipe( {
             //Generic swipe handler for all directions
-            swipe:function(event, direction) {
+            swipeLeft:function(event, direction) {
                 console.log(direction);
-                if(direction == "left"){
-                    closeHamburgerMenu(event);
-                }
+                closeHamburgerMenu(event);
             },
             //Default is 75px, set to 0 for demo so any distance triggers swipe
-            threshold:0
+            threshold:5
         });
-        jQuery('aside.sb-slidebar').on('dragstart', 'a', function (e) {
-            e.preventDefault();
-            var mousedown = jQuery.Event('mousedown');
-            mousedown.pageX = e.originalEvent.pageX;
-            mousedown.pageY = e.originalEvent.pageY;
-            jQuery('aside.sb-slidebar').trigger(mousedown);
-        });
+
 		$('.sb-toggle-submenu').off('click').on('click', function() {
 			$submenu = $(this).parent().children('.sb-submenu');
 			$(this).add($submenu).toggleClass('sb-submenu-active'); // Toggle active class.
