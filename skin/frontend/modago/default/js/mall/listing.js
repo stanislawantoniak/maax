@@ -1325,7 +1325,7 @@ Mall.listing = {
 		this.initActiveEvents();
 		this.initListingLinksEvents();
         this.initImagesHeight();
-        jQuery("#solr_search_facets, #solr_search_facets .section, #solr_search_facets .section a").swipe({
+        jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
             swipeLeft:function(event, direction) {
                 console.log(direction);
                 Mall.listing.closeMobileFilters();
@@ -3053,7 +3053,7 @@ jQuery(document).ready(function () {
         jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
     });
 
-    jQuery("#solr_search_facets, #solr_search_facets .section, #solr_search_facets .section a").swipe({
+    jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
         swipeLeft:function(event, direction) {
             console.log(direction);
             Mall.listing.closeMobileFilters();
