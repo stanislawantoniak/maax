@@ -209,7 +209,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
 
-				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal + $rmaReturnedValue;
+				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
 
 				Mage::log('overpayment amount: '.$overpaymentAmount,null,'allocations.log');
 				$payments = $this->getPoPayments($po,true); //get all po payments
