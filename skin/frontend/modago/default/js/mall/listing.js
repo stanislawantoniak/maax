@@ -3044,7 +3044,7 @@ jQuery(document).ready(function () {
         jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
     });
 
-    jQuery("#solr_search_facets dd a").swipe( {
+    jQuery("#solr_search_facets").swipe( {
         //Generic swipe handler for all directions
         swipeLeft:function(event, direction) {
             console.log(direction);
@@ -3052,7 +3052,7 @@ jQuery(document).ready(function () {
         },
         excludedElements: "label, button, input, select, textarea, .noSwipe",
         //Default is 75px, set to 0 for demo so any distance triggers swipe
-        threshold:0
+        threshold: 5
     });
     jQuery('body').click(function (e) {
 
