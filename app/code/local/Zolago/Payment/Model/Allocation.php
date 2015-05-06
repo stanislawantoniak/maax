@@ -188,22 +188,24 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
             if (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
                 $poGrandTotal = 0;
             } else {
-	            $poGrandTotal = $po->getGrandTotalInclTax();
+	            //rma returned value getting:
+	            /** @var Zolago_Rma_Model_Rma $rmaModel */
+	            $rmaModel = Mage::getModel('zolagorma/rma');
+	            $rmas = $rmaModel->loadByPoId($po->getId());
+	            $rmaReturnedValue = 0;
+	            foreach($rmas as $rma) {
+		            $rmaReturnedValue += $rma->getReturnedValue();
+	            }
+
+	            $poGrandTotal = $po->getGrandTotalInclTax() - $rmaReturnedValue;
             }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
 
-				//rma returned value getting:
-				/** @var Zolago_Rma_Model_Rma $rmaModel */
-				$rmaModel = Mage::getModel('zolagorma/rma');
-				$rmas = $rmaModel->loadByPoId($po->getId());
-				$rmaReturnedValue = 0;
-				foreach($rmas as $rma) {
-					$rmaReturnedValue += $rma->getReturnedValue();
-				}
-
 				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal + $rmaReturnedValue;
+
+				Mage::log('overpayment amount: '.$overpaymentAmount,null,'allocations.log');
 				$payments = $this->getPoPayments($po,true); //get all po payments
 				$allocations = array();
 				if($payments) { //if there are any then
