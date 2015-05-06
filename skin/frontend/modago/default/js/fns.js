@@ -922,7 +922,7 @@ jQuery.noConflict();
 
 
 // Slidebars Submenus
-        jQuery(".sb-slidebar, .sb-slidebar ul li a").swipe( {
+        jQuery(".sb-slidebar").swipe( {
             //Generic swipe handler for all directions
             swipeLeft:function(event, direction) {
                 console.log(direction);
