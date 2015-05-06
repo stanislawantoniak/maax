@@ -58,7 +58,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						if (isset($data['returnValues'][$id]) &&
 							$data['returnValues'][$id] <= $maxValue) {
 
-							$validItems[] = $rmaItem->setReturnedValue($data['returnValues'][$id])->save();
+							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
 							$returnAmount += $data['returnValues'][$id];
 						} else {
 							$invalidItems[] = $rmaItem->getName() . " (" . $rmaItem->getVendorSimpleSku() . ")";

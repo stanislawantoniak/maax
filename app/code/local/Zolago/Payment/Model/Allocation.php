@@ -195,8 +195,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$rmaReturnedValue += $rma->getReturnedValue();
 			}
 
-			Mage::log("value to return: ".$rmaReturnedValue,null,'allocations.log');
-
 			if($rmaReturnedValue) {
 				$poGrandTotal = $po->getGrandTotalInclTax() - $rmaReturnedValue;
 			} elseif (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
@@ -205,13 +203,11 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	            $poGrandTotal = $po->getGrandTotalInclTax();
             }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
-			Mage::log($poAllocationSum,null,'allocations.log');
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
 
 				$overpaymentAmount = $finalOverpaymentAmount = $poAllocationSum - $poGrandTotal;
 
-				Mage::log('overpayment amount: '.$overpaymentAmount,null,'allocations.log');
 				$payments = $this->getPoPayments($po,true); //get all po payments
 				$allocations = array();
 				if($payments) { //if there are any then
@@ -260,7 +256,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
-					Mage::log($allocations,null,'allocations.log');
 					$this->restoreLocale();
 					$r = $this->appendMultipleAllocations($allocations);
                     if ($r) {
