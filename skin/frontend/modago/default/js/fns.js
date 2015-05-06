@@ -944,7 +944,7 @@ jQuery.noConflict();
         //    threshold:0
         //});
 
-		$('.sb-toggle-submenu').off('click').on('click', function() {
+		$('.sb-toggle-submenu').on('click', function() {
 			$submenu = $(this).parent().children('.sb-submenu');
 			$(this).add($submenu).toggleClass('sb-submenu-active'); // Toggle active class.
 
