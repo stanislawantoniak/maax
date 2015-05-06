@@ -252,6 +252,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							break;
 						}
 					}
+					Mage::log($allocations,null,'allocations.log');
 					$this->restoreLocale();
 					$r = $this->appendMultipleAllocations($allocations);
                     if ($r) {
