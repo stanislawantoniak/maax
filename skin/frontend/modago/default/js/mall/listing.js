@@ -3045,11 +3045,11 @@ jQuery(document).ready(function () {
     });
     jQuery("#solr_search_facets").swipe( {
         //Generic swipe handler for all directions
-        swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-            if(direction == "left"){
-                Mall.listing.closeMobileFilters();
-            }
+        swipeLeft:function(event, direction) {
+            console.log(direction);
+            Mall.listing.closeMobileFilters();
         },
+        excludedElements: "",
         //Default is 75px, set to 0 for demo so any distance triggers swipe
         threshold:0
     });
