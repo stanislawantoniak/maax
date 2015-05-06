@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<GH_Rewrite>
+			<version>0.0.1</version>
+		</GH_Rewrite>
+	</modules>
+	<global>
+		<helpers>
+			<ghrewrite>
+				<class>GH_Rewrite_Helper</class>
+			</ghrewrite>
+		</helpers>
+		<models>
+			<ghrewrite>
+				<class>GH_Rewrite_Model</class>
+				<resourceModel>ghrewrite_resource</resourceModel>
+			</ghrewrite>
+			<ghrewrite_resource>
+				<class>GH_Rewrite_Model_Resource</class>
+				<entities>
+					<url>
+						<table>gh_url_rewrite</table>
+					</url>
+				</entities>
+			</ghrewrite_resource>
+		</models>
+		<resources>
+			<ghrewrite_setup>
+				<setup>
+					<module>GH_Rewrite</module>
+				</setup>
+			</ghrewrite_setup>
+		</resources>
+	</global>
+</config>
