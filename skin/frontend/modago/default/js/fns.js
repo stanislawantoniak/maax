@@ -927,9 +927,9 @@ jQuery.noConflict();
             swipeLeft:function(event) {
                 closeHamburgerMenu(event);
             },
-            swipeStatus:function(event, phase) {
-                return false;
-            },
+            //swipeStatus:function(event, phase) {
+            //    return false;
+            //},
             excludedElements: "label, button, input, select, textarea, .noSwipe",
             //Default is 75px, set to 0 for demo so any distance triggers swipe
             threshold: 5
