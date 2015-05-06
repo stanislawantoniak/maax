@@ -70,9 +70,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 				if (count($validItems) && $returnAmount > 0) {
 
-					$rma->setReturnedValue($returnAmount)->save();
+					$rma->setReturnedValue($rma->getReturnedValue()+$returnAmount)->save();
 
-					if($rma->getPo()->isCod()) {
+					if(!$rma->getPo()->isCod()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
 						$allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
