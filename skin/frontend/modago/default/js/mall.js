@@ -1299,16 +1299,9 @@ jQuery(document).ready(function() {
 
 	Mall.Slick.init();
 	Mall.Footer.init();
-    jQuery(".sb-slidebar").swipe( {
-        //Generic swipe handler for all directions
-        swipe:function(event, direction) {
-            if(direction == "left"){
-                closeHamburgerMenu(event);
-            }
-        },
-        //Default is 75px, set to 0 for demo so any distance triggers swipe
-        threshold:0
-    });
+
+
+
 	jQuery(".header_top").headroom({
 		offset: 60
 	});
