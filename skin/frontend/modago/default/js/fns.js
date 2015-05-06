@@ -924,9 +924,11 @@ jQuery.noConflict();
 // Slidebars Submenus
         jQuery(".sb-slidebar ul li a").swipe( {
             //Generic swipe handler for all directions
-            swipeLeft:function(event, direction) {
-                console.log(direction);
+            swipeLeft:function(event) {
                 closeHamburgerMenu(event);
+            },
+            swipeStatus:function(event, phase) {
+                return false;
             },
             excludedElements: "label, button, input, select, textarea, .noSwipe",
             //Default is 75px, set to 0 for demo so any distance triggers swipe

@@ -1327,7 +1327,7 @@ Mall.listing = {
         this.initImagesHeight();
         jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
             swipeLeft:function(event, direction) {
-                console.log(direction);
+
                 Mall.listing.closeMobileFilters();
             },
             excludedElements: "label, button, input, select, textarea, .noSwipe",
@@ -3055,7 +3055,6 @@ jQuery(document).ready(function () {
 
     jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
         swipeLeft:function(event, direction) {
-            console.log(direction);
             Mall.listing.closeMobileFilters();
         },
         excludedElements: "label, button, input, select, textarea, .noSwipe",
