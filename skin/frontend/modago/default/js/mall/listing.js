@@ -3044,7 +3044,7 @@ jQuery(document).ready(function () {
         jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
     });
 
-    jQuery("#solr_search_facets,#solr_search_facets dd a").swipe( {
+    jQuery("#solr_search_facets dd a").swipe( {
         //Generic swipe handler for all directions
         swipeLeft:function(event, direction) {
             console.log(direction);
