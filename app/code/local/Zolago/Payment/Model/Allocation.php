@@ -203,6 +203,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	            $poGrandTotal = $po->getGrandTotalInclTax();
             }
 			$poAllocationSum = $this->getSumOfAllocations($po->getId());
+			Mage::log($poAllocationSum,null,'allocations.log');
 			if($poGrandTotal < $poAllocationSum) { //if there is overpayment
 				$operatorId = $this->getOperatorId();
 
