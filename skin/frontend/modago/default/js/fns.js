@@ -931,17 +931,17 @@ jQuery.noConflict();
             //Default is 75px, set to 0 for demo so any distance triggers swipe
             threshold:5
         });
-        //console.log(jQuery.fn.swipe.defaults.excludedElements);
-        //jQuery(".sb-slidebar ul li a").swipe( {
-        //    //Generic swipe handler for all directions
-        //    swipeLeft:function(event, direction) {
-        //        console.log(direction);
-        //        closeHamburgerMenu(event);
-        //    },
-        //    excludedElements: "label, button, input, select, textarea, .noSwipe",
-        //    //Default is 75px, set to 0 for demo so any distance triggers swipe
-        //    threshold:0
-        //});
+        console.log(jQuery.fn.swipe.defaults.excludedElements);
+        jQuery(".sb-slidebar ul li a").swipe( {
+            //Generic swipe handler for all directions
+            swipeLeft:function(event, direction) {
+                console.log(direction);
+                closeHamburgerMenu(event);
+            },
+            excludedElements: "label, button, input, select, textarea, .noSwipe",
+            //Default is 75px, set to 0 for demo so any distance triggers swipe
+            threshold:0
+        });
 
 		$('.sb-toggle-submenu').off('click').on('click', function() {
 			$submenu = $(this).parent().children('.sb-submenu');
