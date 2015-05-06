@@ -3049,7 +3049,7 @@ jQuery(document).ready(function () {
             console.log(direction);
             Mall.listing.closeMobileFilters();
         },
-        excludedElements: "",
+        excludedElements: "label, button, input, select, textarea, .noSwipe",
         //Default is 75px, set to 0 for demo so any distance triggers swipe
         threshold:0
     });
