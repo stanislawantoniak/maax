@@ -114,14 +114,15 @@ Mall.listing = {
 	_ajaxCache: {},
 
 	/**
-	 * Cache for ajax request
-	 */
-	_ajaxQueueCache: {},
-
-	/**
 	 * @type Array
 	 */
 	_init_products: [],
+
+    /**
+     * Current loaded products
+     * @type Array
+     */
+    _allLoadedProducts: [],
 
 	/**
 	 * @type Boolean
@@ -161,6 +162,7 @@ Mall.listing = {
 
 		// fill cache from static contents - not modified by js
 		this._rediscoverCache();
+        this.injectCache();
 
 		// Init thinks
 		this.initFilterEvents();
@@ -203,35 +205,85 @@ Mall.listing = {
 		return this;
 	},
 
-	getInitProducts: function(products){
+	getInitProducts: function(){
 		return this._init_products;
 	},
 
+    setAllLoadedProducts: function(products) {
+        this._allLoadedProducts = products;
+        return this;
+    },
+
+    getAllLoadedProducts: function() {
+        return this._allLoadedProducts;
+    },
+
 	/**
-	 * Preparce response object based on static html data
+	 * Prepare response object based on static html data
 	 * @returns {undefined}
 	 */
 	_rediscoverCache: function(){
-		var content = {
-				filters: this.getFilters().prop("outerHTML"),
-				active: this.getActive().prop("outerHTML"),
-				toolbar: this.getToolbar().prop("outerHTML"),
-				header: this.getHeader().prop("outerHTML"),
-				total: this.getTotal(),
-				rows: this.getCurrentVisibleItems(),
-				query: this.getQuery(),
-				sort: this.getSort(),
-				dir: this.getDir(),
-				products: this.getInitProducts()
-			},
-			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
-
+        var cacheJson    = localStorage.getItem('listingCache');
+        var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
+        var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
+        var content      = {};
+        if (listingCache.hasOwnProperty(ajaxKey)) {
+            content = listingCache[ajaxKey].content;
+            if (content.rows < (this.getAllLoadedProducts().length + this.getInitProducts().length)) {
+                content = {
+                    filters: this.getFilters().prop("outerHTML"),
+                    active: this.getActive().prop("outerHTML"),
+                    toolbar: this.getToolbar().prop("outerHTML"),
+                    header: this.getHeader().prop("outerHTML"),
+                    total: this.getTotal(),
+                    rows: this.getCurrentVisibleItems(),
+                    query: this.getQuery(),
+                    sort: this.getSort(),
+                    dir: this.getDir(),
+                    products: this.getInitProducts().concat(this.getAllLoadedProducts())
+                };
+            }
+        } else {
+            content = {
+                filters: this.getFilters().prop("outerHTML"),
+                active: this.getActive().prop("outerHTML"),
+                toolbar: this.getToolbar().prop("outerHTML"),
+                header: this.getHeader().prop("outerHTML"),
+                total: this.getTotal(),
+                rows: this.getCurrentVisibleItems(),
+                query: this.getQuery(),
+                sort: this.getSort(),
+                dir: this.getDir(),
+                products: this.getInitProducts()
+            };
+        }
 		// Bind to cache
 		this._ajaxCache[ajaxKey] = {
 			status: 1,
 			content: content
 		};
+        this.setTotal(this._ajaxCache[ajaxKey].content.total);
+        this.setCurrentVisibleItems(this._ajaxCache[ajaxKey].content.rows);
+
+        localStorage.setItem('listingCache', JSON.stringify(this._ajaxCache));
+        localStorage.setItem('listingCacheRows', this._ajaxCache[ajaxKey].content.rows);
 	},
+
+    injectCache: function() {
+        var cacheJson    = localStorage.getItem('listingCache');
+        var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
+        var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
+        var content      = {};
+        if (listingCache.hasOwnProperty(ajaxKey)) {
+            content = listingCache[ajaxKey].content;
+            this.setTotal(this._ajaxCache[ajaxKey].content.total);
+            this.setCurrentVisibleItems(this._ajaxCache[ajaxKey].content.rows);
+            this.rebuildContents(content);
+        } else {
+            // Nothing to do
+        }
+        return this;
+    },
 
 	resetForm: function(){
         if(this.getFilters().find("form").length) {
@@ -476,6 +528,8 @@ Mall.listing = {
 				Mall.listing.getScrollLoadOffset()
 				, Mall.listing.getProductQueue().length));
 
+        Mall.listing._rediscoverCache();
+
 		// remove lock from queue
 		Mall.listing.removeLockFromQueue();
 		// load next part of images
@@ -625,6 +679,8 @@ Mall.listing = {
 					Mall.listing.appendFromQueue();
 					Mall.listing.setAutoappend(false);
 				}
+                Mall.listing.setAllLoadedProducts(Mall.listing.getAllLoadedProducts().concat(data.content.products));
+                Mall.listing._rediscoverCache();
 				// build wishlist collection
 				//jQuery.each(data.content.products, function (index, item) {
 				//	"use strict";
@@ -2714,6 +2770,7 @@ Mall.listing = {
 	 * Determines if browser supports history.pushState
 	 */
 	getPushStateSupport: function() {
+        //return false;
 		return window.history.pushState ? true : false;
 	},
 
