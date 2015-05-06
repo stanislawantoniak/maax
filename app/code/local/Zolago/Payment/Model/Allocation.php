@@ -195,6 +195,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				$rmaReturnedValue += $rma->getReturnedValue();
 			}
 
+			Mage::log("value to return: ".$rmaReturnedValue,null,'allocations.log');
+
 			if($rmaReturnedValue) {
 				$poGrandTotal = $po->getGrandTotalInclTax() - $rmaReturnedValue;
 			} elseif (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
