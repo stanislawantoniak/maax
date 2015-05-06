@@ -144,7 +144,7 @@ $_collection = $this->getCollection();
     var grid = jQuery('#grid'),
         sizer = jQuery(grid).find('.shuffle__sizer');
 
-    grid.shuffle({throttleTime: 400, speed: 0, supported: false });
+    grid.shuffle({throttleTime: 1000, speed: 0, easing: 'linear' });
     grid.shuffle('update');
     setTimeout(function(){grid.shuffle('update');}, 500);//sometimes with pushstate
 

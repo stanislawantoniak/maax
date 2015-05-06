@@ -1325,6 +1325,15 @@ Mall.listing = {
 		this.initActiveEvents();
 		this.initListingLinksEvents();
         this.initImagesHeight();
+        jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
+            swipeLeft:function(event, direction) {
+
+                Mall.listing.closeMobileFilters();
+            },
+            excludedElements: "label, button, input, select, textarea, .noSwipe",
+            //Default is 75px, set to 0 for demo so any distance triggers swipe
+            threshold: 5
+        });
 	},
 
 	replaceProducts: function(data){
@@ -3042,6 +3051,15 @@ jQuery(document).ready(function () {
 	"use strict";
     jQuery('#toggleSearch').click(function(){
         jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
+    });
+
+    jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
+        swipeLeft:function(event, direction) {
+            Mall.listing.closeMobileFilters();
+        },
+        excludedElements: "label, button, input, select, textarea, .noSwipe",
+        //Default is 75px, set to 0 for demo so any distance triggers swipe
+        threshold: 5
     });
     jQuery('body').click(function (e) {
 
