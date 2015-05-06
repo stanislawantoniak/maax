@@ -196,7 +196,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 				//rma returned value getting:
 				/** @var Zolago_Rma_Model_Rma $rmaModel */
-				$rmaModel = Mage::getModel('zolargorma');
+				$rmaModel = Mage::getModel('zolagorma/rma');
 				$rmas = $rmaModel->loadByPoId($po->getId());
 				$rmaReturnedValue = 0;
 				foreach($rmas as $rma) {

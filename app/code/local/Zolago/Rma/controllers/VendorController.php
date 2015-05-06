@@ -72,10 +72,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 					$rma->setReturnedValue($returnAmount)->save();
 
-					/** @var Zolago_Payment_Model_Allocation $allocationModel */
-					$allocationModel = Mage::getModel('zolagopayment/allocation');
-					$allocationModel->createOverpayment($rma->getPo(),"Moved to overpayment by RMA refund","Created overpayment by RMA refund");
+					if($rma->getPo()->isCod()) {
+						/** @var Zolago_Payment_Model_Allocation $allocationModel */
+						$allocationModel = Mage::getModel('zolagopayment/allocation');
+						$allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+					}
 
+					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$returnAmount));
 				} elseif (count($invalidItems)) {
 					Mage::throwException($hlp->__("There was an error while processing this items:") . "<br />" . implode('<br />', $invalidItems));
 				} else {
@@ -86,7 +89,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 			} else {
 				Mage::throwException($hlp->__("Cannot create RMA refund because of wrong RMA status"));
 			}
-			$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$returnAmount));
 		} catch(Mage_Core_Exception $e) {
 			$connection->rollBack();
 			$this->_getSession()->addError($e->getMessage());
