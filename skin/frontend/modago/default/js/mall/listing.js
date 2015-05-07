@@ -185,8 +185,8 @@ Mall.listing = {
 		this.loadProductsOnScroll();
 
 		// load additional products to queue after page is loaded
-		this.setAutoappend(true);
-		this.loadToQueue();
+		//this.setAutoappend(true);
+		//this.loadToQueue();
 		this.setLoadMoreLabel();
 
 	},
@@ -223,24 +223,32 @@ Mall.listing = {
 	 * @returns {undefined}
 	 */
 	_rediscoverCache: function(){
+        console.log('_rediscoverCache');
         var cacheJson    = localStorage.getItem('listingCache');
         var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
         var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
         var content      = {};
         if (listingCache.hasOwnProperty(ajaxKey)) {
             content = listingCache[ajaxKey].content;
-            if (content.rows < (this.getAllLoadedProducts().length + this.getInitProducts().length)) {
+            if (content.products.length <= jQuery('#grid .item').length) {
+                var products = [];
+                var currentProducts = this.getInitProducts().concat(this.getAllLoadedProducts());
+                if (content.products.length >= currentProducts.length) {
+                    products = content.products;
+                } else {
+                    products = currentProducts;
+                }
                 content = {
                     filters: this.getFilters().prop("outerHTML"),
                     active: this.getActive().prop("outerHTML"),
                     toolbar: this.getToolbar().prop("outerHTML"),
                     header: this.getHeader().prop("outerHTML"),
                     total: this.getTotal(),
-                    rows: this.getCurrentVisibleItems(),
+                    rows: jQuery('#grid .item').length,
                     query: this.getQuery(),
                     sort: this.getSort(),
                     dir: this.getDir(),
-                    products: this.getInitProducts().concat(this.getAllLoadedProducts())
+                    products: products
                 };
             }
         } else {
@@ -267,6 +275,7 @@ Mall.listing = {
 
         localStorage.setItem('listingCache', JSON.stringify(this._ajaxCache));
         localStorage.setItem('listingCacheRows', this._ajaxCache[ajaxKey].content.rows);
+        localStorage.setItem('listingCacheProducts', this._ajaxCache[ajaxKey].content.products.length);
 	},
 
     injectCache: function() {
@@ -278,6 +287,11 @@ Mall.listing = {
             content = listingCache[ajaxKey].content;
             this.setTotal(this._ajaxCache[ajaxKey].content.total);
             this.setCurrentVisibleItems(this._ajaxCache[ajaxKey].content.rows);
+            this.setAllLoadedProducts(
+                this._ajaxCache[ajaxKey].content.products.slice(
+                    this.getInitProducts().length
+                    ,this._ajaxCache[ajaxKey].content.products.length
+                ));
             this.rebuildContents(content);
         } else {
             // Nothing to do
@@ -449,6 +463,7 @@ Mall.listing = {
 			Mall.listing.addToVisibleItems(data.content.rows);
 			Mall.listing.setTotal(data.content.total);
 			Mall.listing.placeListingFadeContainer();
+            Mall.listing._rediscoverCache();
 		} else {
 			// do something to inform customer that something went wrong
 			console.log("Something went wrong, try again");
@@ -484,6 +499,11 @@ Mall.listing = {
 	loadProductsOnScroll: function () {
 		// detect if this is good time for showing next part of products
 		jQuery(window).scroll(function () {
+            console.log(jQuery(window).scrollTop() - (jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()));
+            //console.log('scrolltop ' + jQuery(window).scrollTop() + ' ? ' + (jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()));
+            //console.log('doc height ' + jQuery(document).height());
+            //console.log('win height ' +jQuery(window).height() );
+            //console.log('ofset ' +Mall.listing.getScrollBottomOffset());
 			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
 				if (!Mall.listing.getScrollLoadLock()
 					&& Mall.listing.getProductQueue().length > 0
@@ -935,21 +955,6 @@ Mall.listing = {
 			var textLike = 'Usunięte z ulubionych';
 			jQuery(this).find('.toolLike').show().text(textLike);
 		});
-	},
-
-	/**
-	 * Return whether loading more products is possible,
-	 * in addition hide show more button and shape listing.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	canLoadMoreProducts: function() {
-		if(this._current_visible_items >= this._current_total) {
-			this.hideLoadMoreButton()
-				.hideShapesListing();
-		}
-
-		return this;
 	},
 
 	/**
@@ -1406,7 +1411,7 @@ Mall.listing = {
 
 		this.setLoadNextStart(this.getCurrentVisibleItems());
 		this.reloadListingItemsAfterPageLoad();
-		this.loadProductsOnScroll();
+		//this.loadProductsOnScroll();
 
 		// Init list
 		this.setAutoappend(true);
