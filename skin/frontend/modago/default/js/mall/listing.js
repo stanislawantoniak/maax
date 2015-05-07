@@ -77,6 +77,12 @@ Mall.listing = {
 	 */
 	_scroll_load_bottom_offset: 2500,
 
+    /**
+     * When we injectCache (back from product page or refresh page) browser scroll to last know position on view
+     * This is ugly fix for loading products on scroll after injectCache done to block loading in wrong time (~rendering page etc)
+     */
+    _skipLoadProductsOnScroll: 0,
+
 	/**
 	 * Queue for preloaded products.
 	 */
@@ -279,6 +285,7 @@ Mall.listing = {
 	},
 
     injectCache: function() {
+        console.log('injectCache START');
         var cacheJson    = localStorage.getItem('listingCache');
         var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
         var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
@@ -292,10 +299,12 @@ Mall.listing = {
                     this.getInitProducts().length
                     ,this._ajaxCache[ajaxKey].content.products.length
                 ));
+            this.setSkipLoadProductsOnScroll(3);
             this.rebuildContents(content);
         } else {
             // Nothing to do
         }
+        console.log('injectCache END');
         return this;
     },
 
@@ -500,10 +509,12 @@ Mall.listing = {
 		// detect if this is good time for showing next part of products
 		jQuery(window).scroll(function () {
             console.log(jQuery(window).scrollTop() - (jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()));
-            //console.log('scrolltop ' + jQuery(window).scrollTop() + ' ? ' + (jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()));
-            //console.log('doc height ' + jQuery(document).height());
-            //console.log('win height ' +jQuery(window).height() );
-            //console.log('ofset ' +Mall.listing.getScrollBottomOffset());
+            var slpos = Mall.listing.getSkipLoadProductsOnScroll();
+            if (slpos) {
+                Mall.listing.setSkipLoadProductsOnScroll(slpos - 1);
+                console.log('skipped loadProductsOnScroll: ' + slpos);
+                return this;
+            }
 			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
 				if (!Mall.listing.getScrollLoadLock()
 					&& Mall.listing.getProductQueue().length > 0
@@ -516,6 +527,15 @@ Mall.listing = {
 
 		return this;
 	},
+
+    getSkipLoadProductsOnScroll: function() {
+        return this._skipLoadProductsOnScroll;
+    },
+
+    setSkipLoadProductsOnScroll: function(value) {
+        this._skipLoadProductsOnScroll = value;
+        return this;
+    },
 
 	/**
 	 * Appends products from queue to listing.
@@ -732,6 +752,7 @@ Mall.listing = {
 		var items = jQuery();
 		var _item;
         var grid = jQuery('#grid');
+        console.log(new Date().getTime());
 		jQuery.each(products, function(index, item) {
 			_item = Mall.listing.createProductEntity(item);
             grid.append(_item);
@@ -742,8 +763,11 @@ Mall.listing = {
                 in_your_wishlist: item.in_my_wishlist ? true : false
             });
 		});
+        console.log(new Date().getTime());
 
         grid.shuffle('appended', items);
+
+        console.log(new Date().getTime());
 
 		// attach events
         this.likePriceView();
@@ -1414,8 +1438,8 @@ Mall.listing = {
 		//this.loadProductsOnScroll();
 
 		// Init list
-		this.setAutoappend(true);
-		this.loadToQueue();
+		//this.setAutoappend(true);
+		//this.loadToQueue();
 		this.setLoadMoreLabel();
 	},
 
