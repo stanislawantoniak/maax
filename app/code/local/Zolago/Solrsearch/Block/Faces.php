@@ -221,7 +221,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	}
 	
 	public function getRemoveAllUrl(){
-		return  Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
+        $queryData =  $this->_parseRemoveAllUrl();
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+		    $url = Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
+        }
+        return $url;
 	}
 	
 	/**
@@ -429,7 +435,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 	public function getRemoveAllFacesUrl($key)
 	{
-		return Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllFacesUrl($key));
+        $queryData =  $this->_parseRemoveAllFacesUrl($key);
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+    		$url = Mage::getUrl($this->getUrlRoute(), $queryData);
+        }
+        return $url;
 	}
 
 	public function _parseRemoveAllFacesUrl($key)
@@ -1057,6 +1069,15 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $rewrite->setStoreId(Mage::app()->getStore()->getId());
             $rewrite->setCategoryId($id);
             $url = $rewrite->loadByRequestPathForFilters($id,$rawUrl);    	    
+            if ($url) {
+                // add other parameters
+                $params = isset($queryData['_query'])? $queryData['_query']:null;
+                if ($params) {
+                    unset($params['fq']);
+                    $query = http_build_query($params);
+                    $url .= '?'.$query;
+                }
+            }
 	    }
 	    return $url;
 	}
