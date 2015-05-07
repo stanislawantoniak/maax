@@ -63,28 +63,47 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function getDefaultCategory($product, $rootId) {
 		/* @var $product Mage_Catalog_Model_Product */
-		
+
 		if(!$product){
 			return null;
 		}
-		
+
         $category = null;
         // if no category, try to get category from product
 		
 		$catIds = $product->getCategoryIds();
-		$collection = Mage::getResourceModel('catalog/category_collection');
-		/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+		$collection = $this->getProductCategoriesCollection($catIds, $rootId);
 
-		$collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
-		$collection->addAttributeToFilter("is_active", 1);
-		$collection->addPathFilter("/$rootId/");
-		// Get first category
 		if($collection->count()) {
+            // Get first category
 			$category = $collection->getFirstItem();
+            foreach($collection as $collectionItem){
+                // Get first basic category if exist
+                if($collectionItem->getData("basic_category")){
+                    $category = $collectionItem;
+                    break;
+                }
+            }
 		}
 		
         return $category;
 	}
+
+    /**
+     * @param $catIds
+     * @param $rootId
+     * @return Mage_Catalog_Model_Resource_Category_Collection|Object
+     * @throws Mage_Core_Exception
+     */
+    public function getProductCategoriesCollection($catIds, $rootId){
+        $collection = Mage::getResourceModel('catalog/category_collection');
+        /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+        $collection->addAttributeToSelect("basic_category");
+        $collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+        $collection->addAttributeToFilter("is_active", 1);
+        $collection->addPathFilter("/$rootId/");
+        return $collection;
+    }
 	
 	/*
 	 * @return int
