@@ -1300,12 +1300,26 @@ jQuery(document).ready(function() {
 	Mall.Slick.init();
 	Mall.Footer.init();
 
+
+
 	jQuery(".header_top").headroom({
 		offset: 60
 	});
 
 	initToggleSearch();
     Mall.disableSearchNoQuery();
+
+    // Slidebars Submenus
+    jQuery(".sb-slidebar ul li a").swipe( {
+        //Generic swipe handler for all directions
+        swipeLeft:function(event) {
+            closeHamburgerMenu(event);
+        },
+        triggerOnTouchEnd: false,
+        excludedElements: "label, button, input, select, textarea, .noSwipe",
+        //Default is 75px, set to 0 for demo so any distance triggers swipe
+        threshold: 5
+    });
 
     //hack for vendor main page (turpentine shows global messages only one time)
     if(jQuery(".page-messages-block ul.messages").length > 0){

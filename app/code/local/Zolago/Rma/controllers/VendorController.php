@@ -34,6 +34,72 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
         return $this->_redirect("*/*");
     }
+
+	public function makeRefundAction() {
+		$data = $this->getRequest()->getPost();
+		/** @var Zolago_Rma_Helper_Data $rmaHelper */
+		$hlp = Mage::helper("zolagorma");
+		$connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+		/* @var $connection Varien_Db_Adapter_Interface */
+		$connection->beginTransaction();
+
+		try {
+			$rma = $this->_registerRma();
+			if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
+				$invalidItems = array();
+				$validItems = array();
+				$returnAmount = 0;
+
+				foreach ($data['rmaItems'] as $id => $val) {
+					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
+					$rmaItem = $rma->getItemById($id);
+					if ($rmaItem->getId()) {
+						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						if (isset($data['returnValues'][$id]) &&
+							$data['returnValues'][$id] <= $maxValue) {
+
+							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
+							$returnAmount += $data['returnValues'][$id];
+						} else {
+							$invalidItems[] = $rmaItem->getName() . " (" . $rmaItem->getVendorSimpleSku() . ")";
+						}
+					} else {
+						$invalidItems[] = $hlp->__("Invalid RMA item ID:") . " " . $id;
+					}
+				}
+
+				if (count($validItems) && $returnAmount > 0) {
+
+					$rma->setReturnedValue($rma->getReturnedValue()+$returnAmount)->save();
+
+					if(!$rma->getPo()->isCod()) {
+						/** @var Zolago_Payment_Model_Allocation $allocationModel */
+						$allocationModel = Mage::getModel('zolagopayment/allocation');
+						$allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+					}
+
+					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$returnAmount));
+				} elseif (count($invalidItems)) {
+					Mage::throwException($hlp->__("There was an error while processing this items:") . "<br />" . implode('<br />', $invalidItems));
+				} else {
+					Mage::throwException($hlp->__("No items to refund"));
+				}
+
+				$connection->commit();
+			} else {
+				Mage::throwException($hlp->__("Cannot create RMA refund because of wrong RMA status"));
+			}
+		} catch(Mage_Core_Exception $e) {
+			$connection->rollBack();
+			$this->_getSession()->addError($e->getMessage());
+		} catch(Exception $e) {
+			$connection->rollBack();
+			Mage::logException($e);
+			$this->_getSession()->addError($hlp->__("Other error. Check logs."));
+		}
+
+		return $this->_redirectReferer();
+	}
     
     /**
      * Print DHL waybill

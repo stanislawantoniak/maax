@@ -36,6 +36,14 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	public function getRmaStatusName() {
 		return $this->getStatusObject()->getTitle();
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getRmaStatusCode() {
+		return $this->getStatusObject()->getCode();
+	}
+
 	/**
 	 * @return Varien_Object
 	 */
@@ -325,4 +333,43 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
         }
         return '';
     }
+
+	/**
+	 * @return float
+	 */
+	public function getRmaRefundAmount() {
+		if(!isset($this->_refundAmount)) {
+			$_items = $this->getAllItems();
+			$amount = 0;
+			foreach ($_items as $item) {
+				$amount += $item->getReturnedValue();
+			}
+			$this->_refundAmount = $amount;
+		}
+		return $this->_refundAmount;
+	}
+
+
+	public function getRmaRefundAmountMax() {
+		if(!isset($this->_refundAmountMax)) {
+			$_items = $this->getAllItems();
+			$amount = 0;
+			foreach($_items as $item) {
+				$amount += $item->getPoItem()->getFinalItemPrice();
+			}
+			$this->_refundAmountMax = $amount;
+		}
+		return $this->_refundAmountMax;
+	}
+
+	/**
+	 * @param int $poId
+	 * @return Zolago_Rma_Model_Resource_Rma_Collection
+	 */
+	public function loadByPoId($poId) {
+		$ids = $this->getCollection()
+			->addAttributeToFilter('udpo_id', $poId);
+
+		return $ids;
+	}
 }

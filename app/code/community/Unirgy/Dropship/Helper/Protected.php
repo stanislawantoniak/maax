@@ -18,14 +18,14 @@ class Unirgy_Dropship_Helper_Protected
 			return true;
 		}
 
-		if( $module != "Unirgy_Dropship" || Mage::getconfig()->getNode("modules/Unirgy_SimpleLicense") )
+		if( $module != "Unirgy_Dropship" || Mage::getConfig()->getNode("modules/Unirgy_SimpleLicense") )
 		{
 			$key = "VN29643YBOFNSD86R2VOEWYEIF" . microtime(true);
 			Unirgy_SimpleLicense_Helper_Protected::obfuscate($key);
-			$hash = Unirgy_SimpleLicense_Helper_Protected::validatemodulelicense($module);
+			$hash = Unirgy_SimpleLicense_Helper_Protected::validateModuleLicense($module);
 			if( sha1($key . $module) !== $hash )
 			{
-				Mage::throwexception("Invalid response from validation method");
+				Mage::throwException("Invalid response from validation method");
 			}
 
 			$_licenseIsValid[$module] = true;
@@ -34,12 +34,12 @@ class Unirgy_Dropship_Helper_Protected
 
 		if( !ioncube_license_matches_server() )
 		{
-			Mage::throwexception("Invalid ionCube license for Unirgy_Dropship. Allowed servers: " . ioncube_licensed_servers());
+			Mage::throwException("Invalid ionCube license for Unirgy_Dropship. Allowed servers: " . ioncube_licensed_servers());
 		}
 
 		if( ioncube_license_has_expired() )
 		{
-			Mage::throwexception("ionCube license for Unirgy_Dropship has expired");
+			Mage::throwException("ionCube license for Unirgy_Dropship has expired");
 		}
 
 		$_licenseIsValid[$module] = true;
@@ -48,18 +48,18 @@ class Unirgy_Dropship_Helper_Protected
 
 	public function prepareQuoteItems($items)
 	{
-		self::validatelicense("Unirgy_Dropship");
+		self::validateLicense("Unirgy_Dropship");
 		if( !$this->startAddressPreparation($items) )
 		{
 			return $this;
 		}
 
-		Mage::dispatchevent("udropship_prepare_quote_items_before", array( "items" => $items ));
+		Mage::dispatchEvent("udropship_prepare_quote_items_before", array( "items" => $items ));
 		$this->applyDefaultVendorIds($items);
 		$this->applyStockAvailability($items);
 		Mage::helper("udropship/item")->initBaseCosts($items);
 		$this->fixQuoteItemsWeight($items);
-		Mage::dispatchevent("udropship_prepare_quote_items_after", array( "items" => $items ));
+		Mage::dispatchEvent("udropship_prepare_quote_items_after", array( "items" => $items ));
 		return $this;
 	}
 
@@ -104,7 +104,7 @@ class Unirgy_Dropship_Helper_Protected
 
 	public function fixQuoteItemsWeight($items)
 	{
-		self::validatelicense("Unirgy_Dropship");
+		self::validateLicense("Unirgy_Dropship");
 		foreach( $items as $addressItem )
 		{
 			$item = $addressItem;
@@ -151,15 +151,17 @@ class Unirgy_Dropship_Helper_Protected
 	{
 		$iHlp = Mage::helper("udropship/item");
 		$localVendorId = Mage::helper("udropship")->getLocalVendorId();
+
 		foreach( $items as $item )
 		{
 			$product = $item->getProduct();
 			if( !$product || !$product->getUdropshipVendor() )
 			{
-				$product = Mage::getmodel("catalog/product")->load($item->getProductId());
+				$product = Mage::getModel("catalog/product")->load($item->getProductId());
 			}
 
 			$iHlp->setUdropshipVendor($item, $product->getUdropshipVendor() ? $product->getUdropshipVendor() : $localVendorId);
+
 			if( $item->getParentItem() )
 			{
 				$iHlp->setUdropshipVendor($item->getParentItem(), $item->getUdropshipVendor());
@@ -183,7 +185,7 @@ class Unirgy_Dropship_Helper_Protected
 			$quote = $item->getQuote();
 			break;
 		}
-		if( $quote && Mage::getstoreconfigflag("udropship/stock/split_bundle_by_vendors") && $this->_allowReorginizeQuote )
+		if( $quote && Mage::getStoreConfigFlag("udropship/stock/split_bundle_by_vendors") && $this->_allowReorginizeQuote )
 		{
 			$this->_splitBundleByVendors($quote);
 		}
@@ -257,7 +259,7 @@ class Unirgy_Dropship_Helper_Protected
 
 					foreach( $optionsByVendor as $opts )
 					{
-						$__prod = Mage::getmodel("catalog/product")->setStoreId($quote->getStoreId())->load($item->getProductId());
+						$__prod = Mage::getModel("catalog/product")->setStoreId($quote->getStoreId())->load($item->getProductId());
 						$_buyRequest = $buyRequest;
 						$_buyRequest["bundle_option"] = $opts;
 						if( is_array($buyRequest["bundle_option_qty"]) )
@@ -308,20 +310,20 @@ class Unirgy_Dropship_Helper_Protected
 		Mage::register("reassignApplyStockAvailability", $isReassign, 1);
 		if( $isReassign )
 		{
-			Mage::register("reassignSkipStockCheck", Mage::getstoreconfigflag("udropship/stock/reassign_skip_stockcheck", $this->_store), 1);
+			Mage::register("reassignSkipStockCheck", Mage::getStoreConfigFlag("udropship/stock/reassign_skip_stockcheck", $this->_store), 1);
 		}
 
 		try
 		{
-			$config = Mage::getconfig()->getNode("global/udropship/availability_methods");
+			$config = Mage::getConfig()->getNode("global/udropship/availability_methods");
 			if( $isReassign )
 			{
-				$method = Mage::getstoreconfig("udropship/stock/reassign_availability", $this->_store);
+				$method = Mage::getStoreConfig("udropship/stock/reassign_availability", $this->_store);
 			}
 
 			if( empty($method) )
 			{
-				$method = Mage::getstoreconfig("udropship/stock/availability", $this->_store);
+				$method = Mage::getStoreConfig("udropship/stock/availability", $this->_store);
 			}
 
 			if( !$config->$method || $config->$method->is("disabled") )
@@ -332,11 +334,11 @@ class Unirgy_Dropship_Helper_Protected
 				return $this;
 			}
 
-			$cb = explode("::", (bool) $config->$method->callback);
-			$cb[0] = Mage::getsingleton($cb[0]);
+			$cb = explode("::",$config->$method->callback);
+			$cb[0] = Mage::getSingleton($cb[0]);
 			if( empty($cb[0]) || empty($cb[1]) || !is_callable($cb) )
 			{
-				Mage::throwexception(Mage::helper("udropship")->__("Invalid stock availability method callback: %s, %s", $method, (bool) $config->$method->callback));
+				Mage::throwException(Mage::helper("udropship")->__("Invalid stock availability method callback: %s, %s", $method, $config->$method->callback));
 			}
 
 			call_user_func($cb, $items);
@@ -356,12 +358,12 @@ class Unirgy_Dropship_Helper_Protected
 	public function getMinPackageWeight()
 	{
 		$locale = Mage::app()->getLocale();
-		return $locale->getNumber(Mage::getstoreconfig("carriers/udropship/min_package_weight", $this->_store));
+		return $locale->getNumber(Mage::getStoreConfig("carriers/udropship/min_package_weight", $this->_store));
 	}
 
 	public function getRequestsByVendor($items, $request)
 	{
-		self::validatelicense("Unirgy_Dropship");
+		self::validateLicense("Unirgy_Dropship");
 		$hlp = Mage::helper("udropship");
 		$iHlp = Mage::helper("udropship/item");
 		$localVendorId = $hlp->getLocalVendorId($this->_storeId);
@@ -380,7 +382,7 @@ class Unirgy_Dropship_Helper_Protected
 		{
 			$r["package_weight"] = max($r["package_weight"], $this->getMinPackageWeight());
 			$r["free_method_weight"] = max($r["free_method_weight"], 0);
-			$reqOrig = Mage::getmodel("shipping/rate_request")->setData($request->getData())->addData($r);
+			$reqOrig = Mage::getModel("shipping/rate_request")->setData($request->getData())->addData($r);
 			$requests[$r["vendor_id"]][$r["carrier_code"]] = $reqOrig;
 			$crGroups = array();
 			foreach( $reqOrig->getAllItems() as $rItem )
@@ -585,7 +587,7 @@ class Unirgy_Dropship_Helper_Protected
 
 	public function collectVendorCarrierRates($request)
 	{
-		Mage::dispatchevent("udropship_collect_vendor_rates_before", array( "request" => $request ));
+		Mage::dispatchEvent("udropship_collect_vendor_rates_before", array( "request" => $request ));
 		$cCode = $request->getCarrierCode();
 		$store = $this->_store;
 		$v = Mage::helper("udropship")->getVendor($request->getVendorId());
@@ -614,7 +616,7 @@ class Unirgy_Dropship_Helper_Protected
 		}
 		else
 		{
-			$result = Mage::getmodel("shipping/shipping")->collectCarrierRates($cCode, $request)->getResult();
+			$result = Mage::getModel("shipping/shipping")->collectCarrierRates($cCode, $request)->getResult();
 		}
 
 		foreach( $result->getAllRates() as $rate )
@@ -625,7 +627,7 @@ class Unirgy_Dropship_Helper_Protected
 		{
 			$store->setConfig($k, $v);
 		}
-		Mage::dispatchevent("udropship_collect_vendor_rates_after", array( "request" => $request, "result" => $result ));
+		Mage::dispatchEvent("udropship_collect_vendor_rates_after", array( "request" => $request, "result" => $result ));
 		return $result;
 	}
 
@@ -679,7 +681,7 @@ class Unirgy_Dropship_Helper_Protected
 						$itemsGroupedFlags[$item->getId()] += $crgQty;
 						if( $item->getQty() < $itemsGroupedFlags[$item->getId()] )
 						{
-							Mage::throwexception(Mage::helper("udropship")->__("Grouped Rates Calculation: qty constraint failed for item (%s [SKU: %s])", $item->getName(), $item->getSku()));
+							Mage::throwException(Mage::helper("udropship")->__("Grouped Rates Calculation: qty constraint failed for item (%s [SKU: %s])", $item->getName(), $item->getSku()));
 						}
 
 					}
@@ -735,7 +737,7 @@ class Unirgy_Dropship_Helper_Protected
 				$store->setConfig("" . "carriers/" . $cCode . "/handling_fee", $handlingsByGroup[$groupId]);
 			}
 
-			$__request = Mage::getmodel("shipping/rate_request")->setData($request->getData())->addData($group);
+			$__request = Mage::getModel("shipping/rate_request")->setData($request->getData())->addData($group);
 			if( ($processedGID = array_search($group, $processedGroups, true)) && (empty($handlingsByGroup) || $handlingsByGroup[$groupId] == $handlingsByGroup[$processedGID]) )
 			{
 				$groupedResults[$groupId] = $groupedResults[$processedGID];
@@ -743,7 +745,7 @@ class Unirgy_Dropship_Helper_Protected
 			else
 			{
 				$this->_applyRequestDivider($__request);
-				$groupedResults[$groupId] = Mage::getmodel("shipping/shipping")->collectCarrierRates($cCode, $__request)->getResult();
+				$groupedResults[$groupId] = Mage::getModel("shipping/shipping")->collectCarrierRates($cCode, $__request)->getResult();
 				$this->_revertRequestDivider($__request);
 				$processedGroups[$groupId] = $group;
 			}
@@ -769,7 +771,7 @@ class Unirgy_Dropship_Helper_Protected
 
 			}
 		}
-		$result = Mage::getmodel("shipping/rate_result");
+		$result = Mage::getModel("shipping/rate_result");
 		foreach( $resultsByCode as $code => $ratesByGroup )
 		{
 			if( count($ratesByGroup) == count($groupedRequests) )
@@ -806,8 +808,8 @@ class Unirgy_Dropship_Helper_Protected
 			$this->_store = Mage::app()->getStore($this->_storeId);
 		}
 
-		$result = Mage::getmodel("shipping/rate_result");
-		$error = Mage::getmodel("shipping/rate_result_error");
+		$result = Mage::getModel("shipping/rate_result");
+		$error = Mage::getModel("shipping/rate_result_error");
 		$error->setCarrier($carrierCode);
 		$error->setCarrierTitle($this->_store->getConfig("carriers/udropship/title"));
 		$defMessage = $this->_store->getConfig("carriers/udropship/specificerrmsg");
@@ -881,7 +883,7 @@ class Unirgy_Dropship_Helper_Protected
 	public function sales_order_save_after($observer)
 	{
 		$order = $observer->getEvent()->getOrder();
-		$enableVirtual = Mage::getstoreconfig("udropship/misc/enable_virtual", $order->getStoreId());
+		$enableVirtual = Mage::getStoreConfig("udropship/misc/enable_virtual", $order->getStoreId());
 		if( Mage::helper("udropship")->isUdpoActive() )
 		{
 			$enableVirtual = true;
@@ -894,8 +896,8 @@ class Unirgy_Dropship_Helper_Protected
 			return NULL;
 		}
 
-		$rHlp = Mage::getresourcesingleton("udropship/helper");
-		$oUdStatus = Mage::getstoreconfigflag("udropship/admin/for_update_split_check") ? $rHlp->loadModelFieldForUpdate($order, "udropship_status") : $rHlp->loadModelField($order, "udropship_status");
+		$rHlp = Mage::getResourceSingleton("udropship/helper");
+		$oUdStatus = Mage::getStoreConfigFlag("udropship/admin/for_update_split_check") ? $rHlp->loadModelFieldForUpdate($order, "udropship_status") : $rHlp->loadModelField($order, "udropship_status");
 		if( $order->getUdropshipStatus() == Unirgy_Dropship_Model_Source::ORDER_STATUS_PENDING && $oUdStatus != Unirgy_Dropship_Model_Source::ORDER_STATUS_PENDING )
 		{
 			$order->setUdropshipStatus($oUdStatus);
@@ -917,7 +919,7 @@ class Unirgy_Dropship_Helper_Protected
 			}
 
 			$this->_setHasMultipleVendors($order);
-			$statuses = explode(",", Mage::getstoreconfig("udropship/vendor/make_available_to_dropship", $order->getStoreId()));
+			$statuses = explode(",", Mage::getStoreConfig("udropship/vendor/make_available_to_dropship", $order->getStoreId()));
 			if( !in_array($order->getStatus(), $statuses) )
 			{
 				return NULL;
@@ -957,7 +959,7 @@ class Unirgy_Dropship_Helper_Protected
 		if( $shippingMethod[0] == "googlecheckout" )
 		{
 			$updated = false;
-			$title = Mage::getstoreconfig("carriers/udropship/title");
+			$title = Mage::getStoreConfig("carriers/udropship/title");
 			$descr = $order->getShippingDescription();
 			if( preg_match("#(?:^| - )" . preg_quote($title) . " - (.*)\$#", $descr, $match) )
 			{
@@ -971,14 +973,14 @@ class Unirgy_Dropship_Helper_Protected
 
 				foreach( $tries as $_try )
 				{
-					$shipping = Mage::getmodel("udropship/shipping")->load($_try, "shipping_title");
+					$shipping = Mage::getModel("udropship/shipping")->load($_try, "shipping_title");
 					if( $shipping->getId() )
 					{
 						$shippingMethod[1] = $shipping->getShippingCode();
 						$newSM = "udropship_" . $shipping->getShippingCode();
 						if( !empty($_dummy[1]) )
 						{
-							$carrierNames = Mage::getsingleton("udropship/source")->getCarriers();
+							$carrierNames = Mage::getSingleton("udropship/source")->getCarriers();
 							$carrierNamesRev = array_flip($carrierNames);
 							$__dummy = explode(" - ", $_dummy[1]);
 							if( !empty($__dummy[1]) && !empty($carrierNamesRev[$__dummy[0]]) )
@@ -1078,8 +1080,8 @@ class Unirgy_Dropship_Helper_Protected
 	public function splitOrderToShipments($order, $qtys = array(  ))
 	{
 		$hlp = Mage::helper("udropship");
-		$convertor = Mage::getmodel("sales/convert_order");
-		$enableVirtual = Mage::getstoreconfig("udropship/misc/enable_virtual", $order->getStoreId());
+		$convertor = Mage::getModel("sales/convert_order");
+		$enableVirtual = Mage::getStoreConfig("udropship/misc/enable_virtual", $order->getStoreId());
 		$shippingMethod = explode("_", $order->getShippingMethod(), 2);
 		$vendorRates = $this->getOrderVendorRates($order);
 		$items = $order->getAllItems();
@@ -1151,7 +1153,7 @@ class Unirgy_Dropship_Helper_Protected
 				$vendor = $hlp->getVendor($vId);
 				if( empty($shipments[$udpoKey]) )
 				{
-					$shipmentStatus = (int) Mage::getstoreconfig("udropship/vendor/default_shipment_status", $order->getStoreId());
+					$shipmentStatus = (int) Mage::getStoreConfig("udropship/vendor/default_shipment_status", $order->getStoreId());
 					if( "999" != $vendor->getData("initial_shipment_status") )
 					{
 						$shipmentStatus = $vendor->getData("initial_shipment_status");
@@ -1206,7 +1208,7 @@ class Unirgy_Dropship_Helper_Protected
 								$carrierCode = $__vs["carrier_code"];
 								$methodCode = !empty($__vs["method_code"]) ? $__vs["method_code"] : $curShipping->getSystemMethods($__vs["carrier_code"]);
 								$carrierMethods = Mage::helper("udropship")->getCarrierMethods($carrierCode);
-								$shipments[$udpoKey]->setUdropshipMethod($carrierCode . "_" . $methodCode)->setUdropshipMethodDescription(Mage::getstoreconfig("carriers/" . $carrierCode . "/title", $order->getStoreId()) . " - " . $carrierMethods[$methodCode]);
+								$shipments[$udpoKey]->setUdropshipMethod($carrierCode . "_" . $methodCode)->setUdropshipMethodDescription(Mage::getStoreConfig("carriers/" . $carrierCode . "/title", $order->getStoreId()) . " - " . $carrierMethods[$methodCode]);
 								break;
 							}
 							$curShipping->resetProfile();
@@ -1300,7 +1302,7 @@ class Unirgy_Dropship_Helper_Protected
 				$shipments[$udpoKey]->setTransactionFee($vendor->getTransactionFee());
 			}
 		}
-		Mage::dispatchevent("udropship_order_save_before", array( "order" => $order, "shipments" => $shipments ));
+		Mage::dispatchEvent("udropship_order_save_before", array( "order" => $order, "shipments" => $shipments ));
 		$order->setUdropshipStatus(Unirgy_Dropship_Model_Source::ORDER_STATUS_NOTIFIED);
 		$udpoSplitWeights = array();
 		foreach( $shipments as $_vUdpoKey => $_vUdpo )
@@ -1315,7 +1317,7 @@ class Unirgy_Dropship_Helper_Protected
 			$udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"]["weights"][$_vUdpoKey] = $weight;
 			$udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"]["total_weight"] += $weight;
 		}
-		$transaction = Mage::getmodel("core/resource_transaction");
+		$transaction = Mage::getModel("core/resource_transaction");
 		foreach( $shipments as $udpoKey => $shipment )
 		{
 			Mage::helper("udropship")->addVendorSkus($shipment);
@@ -1335,7 +1337,7 @@ class Unirgy_Dropship_Helper_Protected
 		}
 		$transaction->addObject($order)->save();
 		$order->setUdropshipOrderSplitFlag(true);
-		Mage::dispatchevent("udropship_order_save_after", array( "order" => $order, "shipments" => $shipments ));
+		Mage::dispatchEvent("udropship_order_save_after", array( "order" => $order, "shipments" => $shipments ));
 		foreach( $shipments as $shipment )
 		{
 			$hlp->sendVendorNotification($shipment);
