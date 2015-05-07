@@ -325,7 +325,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
     public function getRemoveFacesUrl($key,$value)
     {
-		return Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveFacesUrl($key, $value));
+        $queryData =  $this->_parseRemoveFacesUrl($key, $value);
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+    		$url =  Mage::getUrl($this->getUrlRoute(), $queryData);
+        }
+        return $url;
 	}
 	
 	public function getRemoveFacesJson($key,$value) {
@@ -370,6 +376,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                             }
                         }
                     }
+                    
                 }
             }
 
@@ -382,7 +389,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 }
             }
         }
-		
+        // clear filters
+        if (!empty($finalParams['fq'])) {
+            foreach ($finalParams['fq'] as $filter=>&$values) {
+                if (is_array($values)) {
+                    $values = array_values($values);
+                }
+            }
+        }
         $urlParams = array();
         $urlParams['_current']  = false;
         $urlParams['_escape']   = true;
@@ -1010,9 +1024,42 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
     public function getFacesUrl($params=array(), $paramss = NULL)
     {
-        return Mage::getUrl($this->getUrlRoute(), $this->_parseQueryData($params, $paramss));
+        $queryData = $this->_parseQueryData($params, $paramss);
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+            $url =  Mage::getUrl($this->getUrlRoute(), $queryData);
+        }
+        return $url;
 	}
 	
+	
+	
+    /**
+     * raw url without redirects, with filters only
+     */
+
+	public function getRedirectUrl($queryData) {
+	    $url = null;
+	    if ($this->getListModel()->isCategoryMode()) {	        
+    	    $params = Mage::app()->getRequest()->getParams();
+    	    $category = $this->getListModel()->getCurrentCategory();
+    	    $path = $this->getUrlRoute();
+    	    $id = $category->getId();
+    	    if (!empty($queryData['_query']['fq'])) { // only filters
+    	        $tmp = $queryData['_query']['fq'];
+    	        $query = http_build_query(array('fq'=>$tmp),'','&');
+    	    } else {
+    	        $query = '';
+    	    }
+    	    $rawUrl = urldecode($path.DS.'id'.DS.$id.'?'.$query);    	    
+            $rewrite = Mage::getModel('core/url_rewrite');
+            $rewrite->setStoreId(Mage::app()->getStore()->getId());
+            $rewrite->setCategoryId($id);
+            $url = $rewrite->loadByRequestPathForFilters($id,$rawUrl);    	    
+	    }
+	    return $url;
+	}
 	/**
 	 * @param array $params params to be set
 	 * @param array $paramss current params (if not set will take current params from current request)
@@ -1031,8 +1078,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $_solrDataArray = $this->getSolrData();
 
 		$paramss = Mage::app()->getRequest()->getParams();
-		
-		$finalParams = array();
+    	$finalParams = array();
 		
 		$finalParams = array_merge($paramss, $params);
 		

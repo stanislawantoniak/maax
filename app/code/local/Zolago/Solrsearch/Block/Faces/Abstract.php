@@ -148,10 +148,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	public function getItemUrl($item) {
 
         /** @var $this Zolago_Solrsearch_Block_Faces_Abstract */
-		$face_key = $this->getAttributeCode();
-        $facetUrl = $this->getFacesUrl(array('fq' => array($face_key => $item)));
+		$face_key = $this->getAttributeCode();        
 		if($this->isItemActive($item)){
-			 $facetUrl = $this->getRemoveFacesUrl($face_key, $item);
+            $facetUrl = $this->getRemoveFacesUrl($face_key, $item);
+		} else {
+            $facetUrl = $this->getFacesUrl(array('fq' => array($face_key => array($item))));
 		}
 		return $facetUrl;
 	}

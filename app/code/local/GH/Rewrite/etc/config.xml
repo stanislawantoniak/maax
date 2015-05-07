@@ -12,6 +12,17 @@
 			</ghrewrite>
 		</helpers>
 		<models>
+		    <core>
+		        <rewrite>
+		            <url_rewrite_request>GH_Rewrite_Model_Rewrite_Request</url_rewrite_request>
+		            <url_rewrite>GH_Rewrite_Model_Rewrite</url_rewrite>
+		        </rewrite>
+		    </core>
+		    <core_resource>
+		        <rewrite>
+		            <url_rewrite>GH_Rewrite_Model_Resource_Rewrite</url_rewrite>
+		        </rewrite>
+		    </core_resource>
 			<ghrewrite>
 				<class>GH_Rewrite_Model</class>
 				<resourceModel>ghrewrite_resource</resourceModel>
