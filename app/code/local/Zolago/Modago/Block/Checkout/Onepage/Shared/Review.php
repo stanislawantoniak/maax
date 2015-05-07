@@ -91,6 +91,10 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
         $this->_calculateTotal($items);
         return $items;
     }
+
+    public function isCheckOutBlocked(){
+        return Mage::getStoreConfig('checkout/options/checkout_order_deactivate');
+    }
     
     
     //{{{ 

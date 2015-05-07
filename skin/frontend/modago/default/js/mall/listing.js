@@ -703,7 +703,7 @@ Mall.listing = {
 			style;
 
 		container = jQuery("<div/>", {
-			"class": "item col-phone col-xs-4 col-sm-4 col-md-4 col-lg-4 size14"
+			"class": "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
 		});
 		box = jQuery("<div/>", {
 			"class": "box_listing_product"
