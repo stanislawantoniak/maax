@@ -100,7 +100,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
      * @return false|Mage_Catalog_Model_Product
      */
     public function initProduct($productId, $controller, $params = null)
-    {
+    {Mage::log("Zolago::initProduct", null, "cat.log");
         // Prepare data for routine
         if (!$params) {
             $params = new Varien_Object();
