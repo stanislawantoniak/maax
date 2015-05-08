@@ -193,7 +193,7 @@ Mall.listing = {
 
 		// load additional products to queue after page is loaded
 		//this.setAutoappend(true);
-		//this.loadToQueue();
+		this.loadToQueue();
 		this.setLoadMoreLabel();
         //this.initShuffle();
         if (this.canShowLoadMoreButton()) {
