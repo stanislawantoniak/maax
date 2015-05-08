@@ -344,13 +344,19 @@ Mall.listing = {
         return this;
     },
 
+    clearListingSessionCache: function() {
+        if (!sessionStorage.getItem('listingForceUseCache')) {
+            sessionStorage.removeItem('listingCache');
+            sessionStorage.removeItem('listingCacheRows');
+            sessionStorage.removeItem('listingCacheProducts');
+            Mall.listing._rediscoverCache();
+        }
+    },
+
     initInjectCacheLogic: function() {
         jQuery(window).on( "unload", function() {
-            if (!sessionStorage.getItem('listingForceUseCache')) {
-                sessionStorage.removeItem('listingCache');
-                sessionStorage.removeItem('listingCacheRows');
-                sessionStorage.removeItem('listingCacheProducts');
-            }
+            Mall.listing.clearListingSessionCache();
+
         });
     },
 
@@ -1157,6 +1163,7 @@ Mall.listing = {
 		if(!window.onpopstate) {
 			var self = this;
 			window.onpopstate = function() {
+                Mall.listing.clearListingSessionCache();
 				//uncheck all filters
 				jQuery("input[type=checkbox]").prop('checked', false);
 				//check url for selected filters
@@ -1362,7 +1369,7 @@ Mall.listing = {
 
 		// Init list
 		//this.setAutoappend(true);
-		//this.loadToQueue();
+		this.loadToQueue();
 		this.setLoadMoreLabel();
 	},
 
