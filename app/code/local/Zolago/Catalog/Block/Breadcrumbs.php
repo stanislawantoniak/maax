@@ -32,7 +32,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @return array
      */
     protected function _getPath() {
-        Mage::log("_getPath", null, "cat.log");
         if (is_null($this->_path)) {
             /* @var $catalogHelper Mage_Catalog_Helper_Data */
             $catalogHelper = Mage::helper('catalog');
@@ -63,7 +62,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
             $this->_path = $path;
         }
-        Mage::log("----------", null, "cat.log");
+
         return $this->_path;
     }
     /**
@@ -248,8 +247,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @return
      */
     protected function _getBlock() {
-        Mage::log("_getBlock", null, "cat.log");
-        Mage::log("is_null".(int)is_null($this->_breadcrumbBlock), null, "cat.log");
+
         if (is_null($this->_breadcrumbBlock)) {
             if (!($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs'))) {
                 $breadcrumbsBlock = $this->getLayout()->createBlock('page/html_breadcrumbs', 'breadcrumbs');
@@ -266,12 +264,11 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _prepareLayout()
     {
-        Mage::log("bc_prepared", null, "cat.log");
+
         if(Mage::registry("bc_prepared")) {
-            Mage::log("bc_prepared: yes", null, "cat.log");
             return $this;
         }
-        Mage::log("bc_prepared: no", null, "cat.log");
+
         $this->_prepareListingBreadcrumb();
 
         $title = array();
