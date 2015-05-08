@@ -373,7 +373,7 @@ var Mall = {
 			}
 		}
 
-	    jQuery(window).resize();
+	    //jQuery(window).resize();
 		
 	},
 	

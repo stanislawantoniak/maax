@@ -156,7 +156,7 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-        this.initShuffle();
+        //this.initShuffle();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -192,9 +192,13 @@ Mall.listing = {
 		this.loadProductsOnScroll();
 
 		// load additional products to queue after page is loaded
-		//this.setAutoappend(true);
-		//this.loadToQueue();
+		this.setAutoappend(true);
+		this.loadToQueue();
 		this.setLoadMoreLabel();
+        this.initShuffle();
+        if (this.canShowLoadMoreButton()) {
+            this.showLoadMoreButton();
+        }
 	},
 
     initShuffle: function() {
@@ -202,14 +206,13 @@ Mall.listing = {
             sizer = jQuery(grid).find('.shuffle__sizer');
 
         jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
-        grid.shuffle('update');
 
         jQuery(grid).on('layout.shuffle', function() {
             Mall.listing.likePriceView();
         });
 
         jQuery(window).on('appendToListEnd', function() {
-            //grid.shuffle('layout');
+            jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
 
             Mall.listing.hideLoadMoreButton();
             if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
@@ -769,25 +772,22 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	appendToList: function (products) {
-        //jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
         var grid = jQuery('#grid');
-        var eachItemsHtml = '';
-        var all = [];
+        var eachItemsHtml = [];
 		jQuery.each(products, function(index, item) {
-            eachItemsHtml += Mall.listing.createProductEntityImprove(item);
+            eachItemsHtml.push( Mall.listing.createProductEntityImprove(item));
             Mall.wishlist.addProduct({
                 id: item.entity_id,
                 wishlist_count: item.wishlist_count,
                 in_your_wishlist: item.in_my_wishlist ? true : false
             });
 		});
-        var iii = jQuery(eachItemsHtml);
         grid.append(eachItemsHtml);
-        //grid.shuffle('appended', iii);
+        //grid.shuffle('appended', eachItemsHtml);
 		// attach events
-        this.likePriceView();
-		this.preprocessProducts();
-		this.attachEventsToProducts();
+        //this.likePriceView();
+        //this.preprocessProducts();
+        //this.attachEventsToProducts();
 
         jQuery(window).trigger('appendToListEnd');
 
@@ -940,7 +940,7 @@ Mall.listing = {
 
         if (product.listing_resized_image_info !== null) {
             var ratio = product.listing_resized_image_info.height / product.listing_resized_image_info.width;
-            var colWidth = 194;//jQuery('#grid .item:eq(0) figure').width();
+            var colWidth = jQuery('#grid .item:eq(0) figure').width();
             var _height = parseInt(ratio * colWidth);
             if (_height) {
                 style = "height: " + _height +'px;';
