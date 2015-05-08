@@ -172,6 +172,10 @@ Mall.listing = {
         if (sessionStorage.getItem('listingForceUseCache')) {
             sessionStorage.removeItem('listingForceUseCache');
             this.injectCache();
+        } else {
+            // load additional products to queue after page is loaded
+            //this.setAutoappend(true);
+            this.loadToQueue();
         }
 
 		// Init thinks
@@ -195,11 +199,7 @@ Mall.listing = {
 		this.reloadListingItemsAfterPageLoad();
 		this.loadProductsOnScroll();
 
-		// load additional products to queue after page is loaded
-		//this.setAutoappend(true);
-		this.loadToQueue();
 		this.setLoadMoreLabel();
-        //this.initShuffle();
         if (this.canShowLoadMoreButton()) {
             Mall.listing.placeListingFadeContainer();
             this.showLoadMoreButton();
