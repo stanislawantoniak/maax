@@ -193,7 +193,7 @@ Mall.listing = {
 
 		// load additional products to queue after page is loaded
 		//this.setAutoappend(true);
-		//this.loadToQueue();
+		this.loadToQueue();
 		this.setLoadMoreLabel();
         //this.initShuffle();
         if (this.canShowLoadMoreButton()) {
@@ -260,7 +260,7 @@ Mall.listing = {
         var content      = {};
         var select = this.getSortSelect();
         var needToFixSelectBoxIt = false;
-        if (select.find('.selectboxit-container').length) {
+        if (jQuery('#sort-bySelectBoxItContainer').length) {
             needToFixSelectBoxIt = true;
             select.selectBoxIt('destroy');
         }
