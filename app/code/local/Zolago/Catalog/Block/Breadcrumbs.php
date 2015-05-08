@@ -37,11 +37,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             /* @var $catalogHelper Mage_Catalog_Helper_Data */
             $catalogHelper = Mage::helper('catalog');
             $category = $catalogHelper->getCategory();
-            Mage::log($category->getData(), null, "cat.log");
+
             $refererUrl = $this->getRequest()->getServer("HTTP_REFERER");
             $params = explode("&", $refererUrl);
-            Mage::log($refererUrl, null, "cat.log");
-            Mage::log($params, null, "cat.log");
+
             if (
                 !$category
                 || $category->getId() == $this->_getRootCategoryId()
