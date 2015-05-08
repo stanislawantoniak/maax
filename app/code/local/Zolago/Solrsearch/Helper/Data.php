@@ -138,22 +138,21 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach ($listModel->getCollection() as $product) {
 			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
-			$_productData = $product->getData();
 
-			$_product[0] = $_productData['entity_id'];
-			$_product[1] = $_productData['name'];
-			$_product[2] = $_productData['current_url'];
+			$_product[0] = $product->getId();
+			$_product[1] = $product->getName();
+			$_product[2] = $product->getCurrentUrl();
 			$_product[3] = $product->getStrikeoutPrice();
-			$_product[4] = $_productData['final_price'];
-			$_product[5] = $_productData['wishlist_count'];
-			$_product[6] = $_productData['in_my_wishlist'];
-
+			$_product[4] = $product->getFinalPrice();
+			$_product[5] = $product->getWishlistCount();
+			$_product[6] = $product->getInMyWishlist();
 			$_product[7] = (string) $product->getListingResizedImageUrl();
-
 			$imageSizes = $product->getListingResizedImageInfo();
-			$_product[8] = !is_null($imageSizes) ? $imageSizes["height"] /  $imageSizes["width"]  : 1;
+			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] /  $imageSizes["width"]),2)  : 1;
 
-			$_product[9] = (string) $product->getManufacturerLogoUrl();
+
+
+			$_product[9] = $product->getManufacturerLogoUrl();
 
 			$products[] = $_product;
 		}
