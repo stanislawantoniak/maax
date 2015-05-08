@@ -250,7 +250,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _getBlock() {
         Mage::log("_getBlock", null, "cat.log");
-        Mage::log($this->_breadcrumbBlock, null, "cat.log");
+        Mage::log("is_null".(int)is_null($this->_breadcrumbBlock), null, "cat.log");
         if (is_null($this->_breadcrumbBlock)) {
             if (!($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs'))) {
                 $breadcrumbsBlock = $this->getLayout()->createBlock('page/html_breadcrumbs', 'breadcrumbs');
