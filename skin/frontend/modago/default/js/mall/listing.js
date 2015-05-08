@@ -260,7 +260,7 @@ Mall.listing = {
         var content      = {};
         var select = this.getSortSelect();
         var needToFixSelectBoxIt = false;
-        if (select.find('.selectboxit-container').length) {
+        if (jQuery('#sort-bySelectBoxItContainer').length) {
             needToFixSelectBoxIt = true;
             select.selectBoxIt('destroy');
         }
