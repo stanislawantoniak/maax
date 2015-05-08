@@ -372,9 +372,6 @@ var Mall = {
 				});
 			}
 		}
-
-	    //jQuery(window).resize();
-		
 	},
 	
 	getFavPluralText: function(count, you){

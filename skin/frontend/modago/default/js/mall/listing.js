@@ -156,7 +156,7 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-        //this.initShuffle();
+        this.initShuffle();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -192,10 +192,10 @@ Mall.listing = {
 		this.loadProductsOnScroll();
 
 		// load additional products to queue after page is loaded
-		this.setAutoappend(true);
-		this.loadToQueue();
+		//this.setAutoappend(true);
+		//this.loadToQueue();
 		this.setLoadMoreLabel();
-        this.initShuffle();
+        //this.initShuffle();
         if (this.canShowLoadMoreButton()) {
             this.showLoadMoreButton();
         }
@@ -212,15 +212,12 @@ Mall.listing = {
         });
 
         jQuery(window).on('appendToListEnd', function() {
-            jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
-
             Mall.listing.hideLoadMoreButton();
             if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
                 if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
                     Mall.listing.showLoadMoreButton();
                 }
             }
-
             Mall.listing.placeListingFadeContainer();
         });
     },
@@ -598,6 +595,9 @@ Mall.listing = {
 		// load next part of images
 		Mall.listing.loadPartImagesFromQueue();
 
+        if (this.canShowLoadMoreButton()) {
+            this.showLoadMoreButton();
+        }
 		return this;
 	},
 
@@ -769,7 +769,7 @@ Mall.listing = {
 	 * Returns array of appended products - html nodes.
 	 *
 	 * @param products
-	 * @returns {string}
+	 * @returns Array
 	 */
 	appendToList: function (products) {
         var grid = jQuery('#grid');
@@ -783,11 +783,11 @@ Mall.listing = {
             });
 		});
         grid.append(eachItemsHtml);
-        //grid.shuffle('appended', eachItemsHtml);
+        grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 		// attach events
-        //this.likePriceView();
-        //this.preprocessProducts();
-        //this.attachEventsToProducts();
+        this.likePriceView();
+        this.preprocessProducts();
+        this.attachEventsToProducts();
 
         jQuery(window).trigger('appendToListEnd');
 
