@@ -141,23 +141,32 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 			$_product[0] = $product->getId();
 			$_product[1] = $product->getName();
-			$_product[2] = $product->getCurrentUrl();
+			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
 			$_product[3] = $product->getStrikeoutPrice();
 			$_product[4] = $product->getFinalPrice();
 			$_product[5] = $product->getWishlistCount();
 			$_product[6] = $product->getInMyWishlist();
-			$_product[7] = (string) $product->getListingResizedImageUrl();
+			$_product[7] = $this->_prepareListingResizedImageUrl($product->getListingResizedImageUrl());
 			$imageSizes = $product->getListingResizedImageInfo();
-			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] /  $imageSizes["width"]),2)  : 1;
-
-
-
-			$_product[9] = $product->getManufacturerLogoUrl();
+			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] / $imageSizes["width"]),2) : 1;
+			$_product[9] = $this->_prepareManufacturerLogoUrl($product->getManufacturerLogoUrl());
 
 			$products[] = $_product;
 		}
 
 		return $products;
+	}
+
+	protected function _prepareCurrentUrl($url) {
+		return str_replace(Mage::getBaseUrl(),"/",$url);
+	}
+
+	protected function _prepareListingResizedImageUrl($url) {
+		return str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/product/cache/","",$url);
+	}
+
+	protected function _prepareManufacturerLogoUrl($url) {
+		return str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."m-image/","",$url);
 	}
 
 	/**

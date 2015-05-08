@@ -1290,6 +1290,14 @@ Mall.Footer = {
 	}
 };
 
+Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
+	Mall.baseUrl = baseUrl;
+	Mall.baseUrlNoVendor = baseUrlNoVendor;
+	Mall.mediaUrl = Mall.baseUrlNoVendor + "media/";
+	Mall.productImagesUrl = Mall.mediaUrl + "catalog/product/cache/";
+	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
+};
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();

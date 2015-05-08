@@ -707,7 +707,7 @@ Mall.listing = {
 		// load images
 		if (part.length > 0) {
 			jQuery.each(part, function (index, item) {
-				Mall.listing.loadImageInBackground(item.listing_resized_image_url);
+				Mall.listing.loadImageInBackground(item[7]);
 			});
 		}
 
@@ -743,7 +743,7 @@ Mall.listing = {
 	loadImageInBackground: function (url) {
 		"use strict";
 		var image = new Image ();
-		image.src = url;
+		image.src = Mall.productImagesUrl + url;
 		image.onLoad = function () {
 		};
 
@@ -847,9 +847,9 @@ Mall.listing = {
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
-                        "<img src='" + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
+                        "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+
-                    "<div class='logo_manufacturer' style='background-image:url(" + product[9] +")' ></div>"+
+                    "<div class='logo_manufacturer' style='background-image:url(" + Mall.manufacturerImagesUrl + product[9] +")' ></div>"+
                     "<div class='name_product'>" + product[1] + "</div>"+
                 "</a>"+
                 "<div class='price clearfix'>"+

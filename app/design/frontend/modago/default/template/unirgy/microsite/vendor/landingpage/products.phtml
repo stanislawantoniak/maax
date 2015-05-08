@@ -104,6 +104,8 @@ $_collection = $this->getCollection();
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
 
+    Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>","<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+
     <?php foreach ($_collection as $product): ?>
     Mall.wishlist.addProduct({
         id: <?php echo $product->getId(); ?>,
