@@ -39,14 +39,24 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$products = $this->_getProducts($listModel);
 
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
-			"header"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml(),
-			"toolbar"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml(),
-			"filters"		=> $layout->createBlock("zolagomodago/solrsearch_faces")->toHtml(),
-			"active"		=> $layout->createBlock("zolagosolrsearch/active")->toHtml()
+			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
+			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
+			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
+			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml())
 		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);
 		$this->_setSuccessResponse($result);
+	}
+
+	/**
+	 * clean ups html from excess of newlines, whitespaces and tabs
+	 * @param $string
+	 * @return string
+	 */
+	protected function _cleanUpHtml($string) {
+		$string = preg_replace('/\s*$^\s*/m', "\n", $string);
+		return preg_replace('/[ \t]+/', ' ', $string);
 	}
 	
 	/**

@@ -31,13 +31,11 @@ $_collection = $this->getCollection();
                         <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
                                 <a href="<?php echo $product->getCurrentUrl(); ?>" data-entity="<?php echo $product->getEntityId(); ?>">
-                                    <figure class="img_product">
-                                        <img src="<?php echo $_productImageUrl; ?>"
-                                             alt="<?php $this->escapeHtml($product->getName()); ?>"
-                                             class="img-responsive"
-                                             data-width="<?php echo $_productImageInfo['width']; ?>"
-                                             data-height="<?php echo $_productImageInfo['height']; ?>"/>
-                                    </figure>
+	                                <figure class="img_product" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
+		                                <img src="<?php echo $_productImageUrl; ?>"
+		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
+		                                     class="img-responsive" />
+	                                </figure>
 	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($product->getName()); ?>
@@ -121,7 +119,6 @@ $_collection = $this->getCollection();
     <?php endif; ?>
 
 <script type="text/javascript">
-    Mall.listing.initImagesHeight();
     Mall.listing.setQuery("<?php echo Mage::helper('catalogsearch')->getQueryText(); ?>");
     Mall.listing.setInitProducts(<?php echo $this->getJsonProducts(); ?>);
     Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
@@ -160,7 +157,6 @@ $_collection = $this->getCollection();
 
     jQuery(window).resize(function() {
         Mall.listing.placeListingFadeContainer();
-        Mall.listing.removeImagesHeight();
     });
 
     jQuery('a.addNewPositionListProduct').click(function( event){

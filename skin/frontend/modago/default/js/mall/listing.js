@@ -161,9 +161,6 @@ Mall.listing = {
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
 
-        //do stufs with images height
-        this.initImagesHeight();
-
 		// Reset form
 		this.resetForm();
 
@@ -824,76 +821,36 @@ Mall.listing = {
      */
     createProductEntityImprove: function(product) {
 
-        var style = "height: " + (parseInt(product[8] * 234)) +'px;',
-	        oldPrice = '';
-
-        if(product[3] != product[4]) {
-            oldPrice = "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>"
-        }
-
-        var likeClass = "like",
-	        likeText = "<span></span>",
+        var oldPrice = product[3] != product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
+	        likeClass = "like" + (product[6] ? " liked" : ""),
+	        likeText = (product[6] ? "<span>Ty + </span>" : "<span></span>") + (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ",
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
-        if(product[6]) {
-            likeClass += " liked";
-            likeText = "<span>Ty + </span>";
-        }
-        likeText += (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ";
 
-        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'> \
-            <div class='box_listing_product'> \
-                <a href='" + product[2] +"' data-entity='" + product[0] +"'> \
-                    <figure class='img_product'> \
-                        <img src='" + product[7] + "' \
-                            alt='" + product[1] + "' \
-                            style='"+style+"' \
-                            class='img-responsive'> \
-                    </figure> \
-                    <div class='logo_manufacturer' style='background-image:url(" + product[9] +")' ></div> \
-                    <div class='name_product'>" + product[1] + "</div> \
-                </a> \
-                <div class='price clearfix'> \
-                    <div class='col-price'> " + oldPrice + " \
-                        <span>" + (number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span> \
-                    </div> \
-                    <div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' \
-                        onclick='"+likeOnClick+"'><span \
-                        class='like_count'>" + likeText + "</span><span class='icoLike'> \
-                    <img src='" + Config.path.heartLike +"' class='img-01' \
-                        style='width: 18px; height: 18px;'> \
-                    <img src='" + Config.path.heartLiked + "' \
-                        class='img-02' \
-                        style='width: 18px; height: 18px;'></span> \
-                        <div class='toolLike'></div> \
-                    </div>\
-                </div>\
-            </div>\
-        </div>";
+
+        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+            "<div class='box_listing_product'>"+
+                "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
+                    "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
+                        "<img src='" + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
+                    "</figure>"+
+                    "<div class='logo_manufacturer' style='background-image:url(" + product[9] +")' ></div>"+
+                    "<div class='name_product'>" + product[1] + "</div>"+
+                "</a>"+
+                "<div class='price clearfix'>"+
+                    "<div class='col-price'>" + oldPrice +
+                        "<span>" + (number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
+                    "</div>"+
+                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' onclick='"+likeOnClick+"'>"+
+	                    "<span class='like_count'>" + likeText + "</span><span class='icoLike'>"+
+                    "<img src='" + Config.path.heartLike +"' class='img-01' style='width: 18px; height: 18px;' />"+
+                    "<img src='" + Config.path.heartLiked + "' class='img-02' style='width: 18px; height: 18px;'></span>"+
+                        "<div class='toolLike'></div>"+
+                    "</div>"+
+                "</div>"+
+            "</div>"+
+        "</div>";
 
         return item;
-    },
-
-    initImagesHeight : function() {
-        var items = jQuery('#grid .item figure');
-        var ratio = 1.5;
-        var itemWidth = 0;
-        var itemHeight = 0;
-        var height = 0;
-        var colWidth = jQuery(items).first().width();
-
-        jQuery(jQuery(items).find('img')).each(function(index) {
-            itemHeight = parseInt(jQuery(this).attr('data-height'));
-            itemWidth = parseInt(jQuery(this).attr('data-width'));
-            if(!isNaN(itemHeight)) {
-                ratio = itemHeight / itemWidth;
-                height = parseInt(ratio * colWidth);
-                if(height) {
-                    jQuery(this).css('height', height+'px');
-                } else {
-                    jQuery(this).css('height','');
-                }
-            }
-        });
     },
 
 	/**
@@ -1366,7 +1323,6 @@ Mall.listing = {
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
-        this.initImagesHeight();
         jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
             swipeLeft:function(event, direction) {
 
@@ -3089,12 +3045,7 @@ Mall.listing = {
 		this._load_next_offset = offset;
 
 		return this;
-	},
-
-    removeImagesHeight: function() {
-        var imgs = jQuery('#grid .item figure img[style*=height]');
-        jQuery(imgs).css('height', '');
-    }
+	}
 };
 
 jQuery(document).ready(function () {
