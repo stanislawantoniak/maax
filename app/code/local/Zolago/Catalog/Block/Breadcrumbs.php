@@ -32,17 +32,21 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @return array
      */
     protected function _getPath() {
+        Mage::log("_getPath", null, "cat.log");
         if (is_null($this->_path)) {
             /* @var $catalogHelper Mage_Catalog_Helper_Data */
             $catalogHelper = Mage::helper('catalog');
             $category = $catalogHelper->getCategory();
-//            $refererUrl = $this->getRequest()->getServer("HTTP_REFERER");
-//            $params = explode("&", $refererUrl);
+            Mage::log($category->getData(), null, "cat.log");
+            $refererUrl = $this->getRequest()->getServer("HTTP_REFERER");
+            $params = explode("&", $refererUrl);
+            Mage::log($refererUrl, null, "cat.log");
+            Mage::log($params, null, "cat.log");
             if (
                 !$category
                 || $category->getId() == $this->_getRootCategoryId()
 //                || (Mage::registry('current_product') && !$refererUrl)
-//                || (Mage::registry('current_product') && (int)strpos($refererUrl,"search/index/index") > 0 && !in_array("scat=".$category->getId(), $params))
+                || (Mage::registry('current_product') && (int)strpos($refererUrl,"search/index/index") > 0 && !in_array("scat=".$category->getId(), $params))
             ) {
                 $category = $this->_getDefaultCategory(
 					$this->_getProduct(),
