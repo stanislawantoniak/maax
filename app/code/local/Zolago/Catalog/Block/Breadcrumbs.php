@@ -64,6 +64,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
             $this->_path = $path;
         }
+        Mage::log("----------", null, "cat.log");
         return $this->_path;
     }
     /**
@@ -264,9 +265,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _prepareLayout()
     {
+        Mage::log("bc_prepared", null, "cat.log");
         if(Mage::registry("bc_prepared")) {
+            Mage::log("bc_prepared: yes", null, "cat.log");
             return $this;
         }
+        Mage::log("bc_prepared: no", null, "cat.log");
         $this->_prepareListingBreadcrumb();
 
         $title = array();
