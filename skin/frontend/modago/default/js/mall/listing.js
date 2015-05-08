@@ -254,10 +254,16 @@ Mall.listing = {
 	 * @returns {undefined}
 	 */
 	_rediscoverCache: function(){
-        var cacheJson    = localStorage.getItem('listingCache');
+        var cacheJson    = sessionStorage.getItem('listingCache');
         var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
         var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
         var content      = {};
+        var select = this.getSortSelect();
+        var needToFixSelectBoxIt = false;
+        if (select.find('.selectboxit-container').length) {
+            needToFixSelectBoxIt = true;
+            select.selectBoxIt('destroy');
+        }
         if (listingCache.hasOwnProperty(ajaxKey)) {
             content = listingCache[ajaxKey].content;
             if (content.products.length <= jQuery('#grid .item').length) {
@@ -295,6 +301,11 @@ Mall.listing = {
                 products: this.getInitProducts()
             };
         }
+        if (needToFixSelectBoxIt) {
+            select.selectBoxIt({
+                autoWidth: false
+            });
+        }
 		// Bind to cache
 		this._ajaxCache[ajaxKey] = {
 			status: 1,
@@ -303,13 +314,13 @@ Mall.listing = {
         this.setTotal(this._ajaxCache[ajaxKey].content.total);
         this.setCurrentVisibleItems(this._ajaxCache[ajaxKey].content.rows);
 
-        localStorage.setItem('listingCache', JSON.stringify(this._ajaxCache));
-        localStorage.setItem('listingCacheRows', this._ajaxCache[ajaxKey].content.rows);
-        localStorage.setItem('listingCacheProducts', this._ajaxCache[ajaxKey].content.products.length);
+        sessionStorage.setItem('listingCache', JSON.stringify(this._ajaxCache));
+        sessionStorage.setItem('listingCacheRows', this._ajaxCache[ajaxKey].content.rows);
+        sessionStorage.setItem('listingCacheProducts', this._ajaxCache[ajaxKey].content.products.length);
 	},
 
     injectCache: function() {
-        var cacheJson    = localStorage.getItem('listingCache');
+        var cacheJson    = sessionStorage.getItem('listingCache');
         var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
         var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
         var content      = {};
