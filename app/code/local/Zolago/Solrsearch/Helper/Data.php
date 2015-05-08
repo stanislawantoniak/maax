@@ -138,15 +138,23 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach ($listModel->getCollection() as $product) {
 			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
-			$_product = $product->getData();
-			$_product['listing_resized_image_url'] = (string) $product->getListingResizedImageUrl();
-			$_product['listing_resized_image_info'] = $product->getListingResizedImageInfo();
-			$_product['udropship_vendor_logo_url'] = (string) $product->getUdropshipVendorLogoUrl();
-			$_product['manufacturer_logo_url'] = (string) $product->getManufacturerLogoUrl();
-			$_product['is_discounted'] = (int) $product->isDiscounted();
-			$_product['price'] = (float) $product->getStrikeoutPrice();
-			$_product['final_price'] = (float) $product->getFinalPrice();
-			$_product['currency'] = (string) $product->getCurrency();
+			$_productData = $product->getData();
+
+			$_product[0] = $_productData['entity_id'];
+			$_product[1] = $_productData['name'];
+			$_product[2] = $_productData['current_url'];
+			$_product[3] = $product->getStrikeoutPrice();
+			$_product[4] = $_productData['final_price'];
+			$_product[5] = $_productData['wishlist_count'];
+			$_product[6] = $_productData['in_my_wishlist'];
+
+			$_product[7] = (string) $product->getListingResizedImageUrl();
+
+			$imageSizes = $product->getListingResizedImageInfo();
+			$_product[8] = !is_null($imageSizes) ? $imageSizes["height"] /  $imageSizes["width"]  : 1;
+
+			$_product[9] = (string) $product->getManufacturerLogoUrl();
+
 			$products[] = $_product;
 		}
 

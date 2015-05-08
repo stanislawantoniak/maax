@@ -86,7 +86,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		//$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
-		//$profiler->start();		
+		//$profiler->start();
+
+		/** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
+		$_solrHelper = Mage::helper("zolagosolrsearch");
+
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
 			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
@@ -94,7 +98,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"query"			=> '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
-			"products"		=> Mage::helper("zolagosolrsearch")->prepareAjaxProducts($listModel),
+			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
 		);
 	}
 	
