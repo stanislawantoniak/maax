@@ -48,7 +48,7 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        sessionStorage.removeItem(this._entity_id);
+        //sessionStorage.removeItem(this._entity_id);
 
 	},
 
