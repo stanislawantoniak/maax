@@ -2570,10 +2570,17 @@ Mall.listing = {
 
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            console.log(jQuery('ol.breadcrumb').attr('data-search'));
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
+                localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", "");
             }
+            if (jQuery('ol.breadcrumb').attr('data-search') == "1") {
+                e.preventDefault();
+                localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", window.location.search);
+            }
+
         });
     },
 
