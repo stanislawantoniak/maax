@@ -280,7 +280,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
      * @return false|Mage_Catalog_Model_Product
      */
     public function initProduct($productId, $controller, $params = null)
-    {Mage::log("Mage::initProduct", null, "cat.log");
+    {
         // Prepare data for routine
         if (!$params) {
             $params = new Varien_Object();
