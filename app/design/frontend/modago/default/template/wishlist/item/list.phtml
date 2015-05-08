@@ -107,7 +107,7 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
     var grid = jQuery('#grid'),
         sizer = jQuery(grid).find('.shuffle__sizer');
 
-    grid.shuffle({throttleTime: 500});
+    grid.shuffle({throttleTime: 800, speed: 0, supported: false });
     grid.shuffle('update');
 
     jQuery(grid).on('layout.shuffle', function() {

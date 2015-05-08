@@ -156,6 +156,7 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+        this.initShuffle();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -194,8 +195,32 @@ Mall.listing = {
 		//this.setAutoappend(true);
 		//this.loadToQueue();
 		this.setLoadMoreLabel();
-
 	},
+
+    initShuffle: function() {
+        var grid = jQuery('#grid'),
+            sizer = jQuery(grid).find('.shuffle__sizer');
+
+        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
+        grid.shuffle('update');
+
+        jQuery(grid).on('layout.shuffle', function() {
+            Mall.listing.likePriceView();
+        });
+
+        jQuery(window).on('appendToListEnd', function() {
+            //grid.shuffle('layout');
+
+            Mall.listing.hideLoadMoreButton();
+            if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
+                if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
+                    Mall.listing.showLoadMoreButton();
+                }
+            }
+
+            Mall.listing.placeListingFadeContainer();
+        });
+    },
 
     /**
      * hide btn filter product if no products/no sidebar (search for example)
@@ -229,7 +254,6 @@ Mall.listing = {
 	 * @returns {undefined}
 	 */
 	_rediscoverCache: function(){
-        console.log('_rediscoverCache');
         var cacheJson    = localStorage.getItem('listingCache');
         var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
         var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
@@ -285,7 +309,6 @@ Mall.listing = {
 	},
 
     injectCache: function() {
-        console.log('injectCache START');
         var cacheJson    = localStorage.getItem('listingCache');
         var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
         var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
@@ -304,7 +327,6 @@ Mall.listing = {
         } else {
             // Nothing to do
         }
-        console.log('injectCache END');
         return this;
     },
 
@@ -508,11 +530,9 @@ Mall.listing = {
 	loadProductsOnScroll: function () {
 		// detect if this is good time for showing next part of products
 		jQuery(window).scroll(function () {
-            console.log(jQuery(window).scrollTop() - (jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()));
             var slpos = Mall.listing.getSkipLoadProductsOnScroll();
             if (slpos) {
                 Mall.listing.setSkipLoadProductsOnScroll(slpos - 1);
-                console.log('skipped loadProductsOnScroll: ' + slpos);
                 return this;
             }
 			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
@@ -746,39 +766,32 @@ Mall.listing = {
 	 * Returns array of appended products - html nodes.
 	 *
 	 * @param products
-	 * @returns {Array}
+	 * @returns {string}
 	 */
 	appendToList: function (products) {
-		var items = jQuery();
-		var _item;
+        //jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
         var grid = jQuery('#grid');
-        console.log(new Date().getTime());
+        var eachItemsHtml = '';
+        var all = [];
 		jQuery.each(products, function(index, item) {
-			_item = Mall.listing.createProductEntity(item);
-            grid.append(_item);
-            items = items.add(_item);
+            eachItemsHtml += Mall.listing.createProductEntityImprove(item);
             Mall.wishlist.addProduct({
                 id: item.entity_id,
                 wishlist_count: item.wishlist_count,
                 in_your_wishlist: item.in_my_wishlist ? true : false
             });
 		});
-        console.log(new Date().getTime());
-
-        grid.shuffle('appended', items);
-
-        console.log(new Date().getTime());
-
+        var iii = jQuery(eachItemsHtml);
+        grid.append(eachItemsHtml);
+        //grid.shuffle('appended', iii);
 		// attach events
         this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
 
-        setTimeout(function() {
-            jQuery(window).trigger('appendToListEnd');
-        }, 250);
+        jQuery(window).trigger('appendToListEnd');
 
-		return items;
+		return eachItemsHtml;
 	},
 
 
@@ -820,7 +833,7 @@ Mall.listing = {
 
 		if (product.listing_resized_image_info !== null) {
             var ratio = product.listing_resized_image_info.height / product.listing_resized_image_info.width;
-            var colWidth = jQuery('#grid .item:eq(0) figure').width();
+            var colWidth = 194;//jQuery('#grid .item:eq(0) figure').width();
             var _height = parseInt(ratio * colWidth);
             if (_height) {
                 style = "height: " + _height +'px;';
@@ -915,6 +928,72 @@ Mall.listing = {
 
 		return container;
 	},
+
+    /**
+     * Creates single product container for listing.
+     * Improved:
+     * It's 4 times faster manually vs creating it by jQuery("element" , {...}).appendTo(parentElement)
+     * @param product
+     * @returns {string}
+     */
+    createProductEntityImprove: function(product) {
+
+        if (product.listing_resized_image_info !== null) {
+            var ratio = product.listing_resized_image_info.height / product.listing_resized_image_info.width;
+            var colWidth = 194;//jQuery('#grid .item:eq(0) figure').width();
+            var _height = parseInt(ratio * colWidth);
+            if (_height) {
+                style = "height: " + _height +'px;';
+            } else {
+                style = '';
+            }
+        }
+        var oldPrice = '';
+        if(product.price != product.final_price) {
+            oldPrice = "<span class='old'>" + number_format(product.price, 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency) +"</span>"
+        }
+
+        var likeClass = "like";
+        var likeText = "<span></span>";
+        var likeOnClick = product.in_my_wishlist ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
+        if(product.in_my_wishlist) {
+            likeClass += " liked";
+            likeText = "<span>Ty + </span>";
+        }
+        likeText += (parseInt(product.wishlist_count, 10) > 0 ? (product.wishlist_count > 99) ? "99+ " : product.wishlist_count : "") + " ";
+
+        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'> \
+            <div class='box_listing_product'> \
+                <a href='" + product.current_url +"' data-entity='" + product.entity_id +"'> \
+                    <figure class='img_product'> \
+                        <img src='" + product.listing_resized_image_url + "' \
+                            alt='" + product.name + "' \
+                            style='"+style+"' \
+                            class='img-responsive'> \
+                    </figure> \
+                    <div class='logo_manufacturer' style='background-image:url(" + product.manufacturer_logo_url +")' ></div> \
+                    <div class='name_product'>" + product.name + "</div> \
+                </a> \
+                <div class='price clearfix'> \
+                    <div class='col-price'> " + oldPrice + " \
+                        <span>" + (number_format(product.final_price, 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span> \
+                    </div> \
+                    <div class='"+likeClass+"' data-idproduct='"+product.entity_id+"' data-status='"+product.in_my_wishlist+"' \
+                        onclick='"+likeOnClick+"'><span \
+                        class='like_count'>" + likeText + "</span><span class='icoLike'> \
+                    <img src='" + Config.path.heartLike +"' class='img-01' \
+                        style='width: 18px; height: 18px;'> \
+                    <img src='" + Config.path.heartLiked + "' \
+                        class='img-02' \
+                        style='width: 18px; height: 18px;'></span> \
+                        <div class='toolLike'></div> \
+                    </div>\
+                </div>\
+            </div>\
+        </div>";
+
+        return item;
+    },
 
     initImagesHeight : function() {
         var items = jQuery('#grid .item figure');
@@ -2525,7 +2604,7 @@ Mall.listing = {
 	 */
 	placeListingFadeContainer: function() {
 		if(!Mall.isGoogleBot()) {
-			jQuery('#grid').shuffle('layout');
+			//jQuery('#grid').shuffle('layout');
 			if (this.canShowLoadMoreButton()) {
 				//this.showLoadMoreButton();
 				this.showShapesListing();

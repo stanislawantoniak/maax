@@ -141,17 +141,6 @@ $_collection = $this->getCollection();
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
 
-    var grid = jQuery('#grid'),
-        sizer = jQuery(grid).find('.shuffle__sizer');
-
-    grid.shuffle({throttleTime: 1000, speed: 0, easing: 'linear' });
-    grid.shuffle('update');
-    setTimeout(function(){grid.shuffle('update');}, 500);//sometimes with pushstate
-
-    jQuery(grid).on('layout.shuffle', function() {
-        Mall.listing.likePriceView();
-    });
-
     <?php foreach ($_collection as $product): ?>
     Mall.wishlist.addProduct({
         id: <?php echo $product->getId(); ?>,
@@ -167,19 +156,6 @@ $_collection = $this->getCollection();
         } else {
             Mall.wishlist.addFromSmallBlock(this);
         }
-    });
-
-    jQuery(window).on('appendToListEnd', function() {
-        grid.shuffle('update');
-
-        Mall.listing.hideLoadMoreButton();
-        if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
-            if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
-                Mall.listing.showLoadMoreButton();
-            }
-        }
-
-        Mall.listing.placeListingFadeContainer();
     });
 
     jQuery(window).resize(function() {
