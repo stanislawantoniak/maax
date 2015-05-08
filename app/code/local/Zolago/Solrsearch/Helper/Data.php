@@ -62,6 +62,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return type
 	 */
 	public function getDefaultCategory($product, $rootId) {
+
 		/* @var $product Mage_Catalog_Model_Product */
 
 		if(!$product){
@@ -72,6 +73,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
         // if no category, try to get category from product
 		
 		$catIds = $product->getCategoryIds();
+        Zend_Debug::dump($catIds); echo "----------------";
 		$collection = $this->getProductCategoriesCollection($catIds, $rootId);
 
 		if($collection->count()) {
@@ -79,6 +81,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$category = $collection->getFirstItem();
             foreach($collection as $collectionItem){
                 Mage::log($collectionItem->getData(), null, "cat.log");
+                Zend_Debug::dump($collectionItem->getData());
                 // Get first basic category if exist
                 if($collectionItem->getData("basic_category")){
                     $category = $collectionItem;
@@ -86,7 +89,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
                 }
             }
 		}
-		
+        Zend_Debug::dump($category->getData());echo "----------------";
         return $category;
 	}
 
