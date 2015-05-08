@@ -174,8 +174,9 @@ Mall.listing = {
             //this.setAutoappend(true);
             this.loadToQueue();
         }
+        this.initInjectCacheLogic();
 
-		// Init thinks
+        // Init thinks
 		this.initFilterEvents();
 
 		// filters delegation - better performance than initiation of each filter event on every ajax reload
@@ -341,6 +342,16 @@ Mall.listing = {
             // Nothing to do
         }
         return this;
+    },
+
+    initInjectCacheLogic: function() {
+        jQuery(window).on( "unload", function() {
+            if (!sessionStorage.getItem('listingForceUseCache')) {
+                sessionStorage.removeItem('listingCache');
+                sessionStorage.removeItem('listingCacheRows');
+                sessionStorage.removeItem('listingCacheProducts');
+            }
+        });
     },
 
 	resetForm: function(){
@@ -550,8 +561,7 @@ Mall.listing = {
             }
 			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
 				if (!Mall.listing.getScrollLoadLock()
-					&& Mall.listing.getProductQueue().length > 0
-					&& !Mall.listing.getScrollLoadLock()) {
+					&& Mall.listing.getProductQueue().length > 0) {
 					Mall.listing.setQueueLoadLock();
 					Mall.listing.appendFromQueue();
 				}
