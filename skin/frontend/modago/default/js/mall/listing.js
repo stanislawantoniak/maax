@@ -169,7 +169,10 @@ Mall.listing = {
 
 		// fill cache from static contents - not modified by js
 		this._rediscoverCache();
-        this.injectCache();
+        if (sessionStorage.getItem('listingForceUseCache')) {
+            sessionStorage.removeItem('listingForceUseCache');
+            this.injectCache();
+        }
 
 		// Init thinks
 		this.initFilterEvents();
@@ -177,6 +180,7 @@ Mall.listing = {
 		// filters delegation - better performance than initiation of each filter event on every ajax reload
 		this.delegateFilterEvents();
         this.delegateSaveContextForProductPage();
+        this.delegateSaveUseChacheForBackFromProductPage();
 
 		this.initOnpopstateEvent();
 		this.initSortEvents();
@@ -197,6 +201,7 @@ Mall.listing = {
 		this.setLoadMoreLabel();
         //this.initShuffle();
         if (this.canShowLoadMoreButton()) {
+            Mall.listing.placeListingFadeContainer();
             this.showLoadMoreButton();
         }
 	},
@@ -2611,6 +2616,13 @@ Mall.listing = {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
             }
+        });
+    },
+
+    delegateSaveUseChacheForBackFromProductPage: function() {
+        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            e.preventDefault();
+            sessionStorage.setItem('listingForceUseCache', 1);
         });
     },
 
