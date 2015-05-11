@@ -2567,11 +2567,11 @@ Mall.listing = {
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
                 localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", "");
             }
-            if (jQuery('ol.breadcrumb').attr('data-search') == "1") {
-                e.preventDefault();
-                localStorage.setItem(jQuery(this).attr("data-entity") + "_search_params", window.location.search);
-
-            }
+            //if (jQuery('ol.breadcrumb').attr('data-search') == "1") {
+            //    e.preventDefault();
+            //    localStorage.setItem(jQuery(this).attr("data-entity") + "_search_params", window.location.search);
+            //
+            //}
 
         });
     },
