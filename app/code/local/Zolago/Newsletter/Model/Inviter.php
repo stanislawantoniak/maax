@@ -118,7 +118,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			if ($status == self::STATUS_SUBSCRIBED) {
                 Mage::log("_isEmailSuitableForInvitation function: 1");
 				return false;
-			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
+			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0 || $status == self::STATUS_NOT_ACTIVE) {
 				$this->_setSubscriberId($sid);
 				$confirm_code = $subscription->getSubscriberConfirmCode();
 				if(!$confirm_code) {
@@ -136,7 +136,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				}
                 Mage::log("_isEmailSuitableForInvitation function: 2");
 				return true;
-            } elseif($status == self::STATUS_NOT_ACTIVE) {
+
 			} else {
                 Mage::log("_isEmailSuitableForInvitation function: 3");
 				return false;
