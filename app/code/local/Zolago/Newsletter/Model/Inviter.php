@@ -55,30 +55,23 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 * @return bool
 	 */
 	public function sendInvitationEmail($email) {
-        Mage::log("sendInvitationEmail function", null, "salesmanago.log");
-        Mage::log("sendInvitationEmail _getInvitationEmailTemplateId: " . $this->_getInvitationEmailTemplateId(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail _getInvitationEmailSender: " .$this->_getInvitationEmailSender(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail return false? " . (int)($this->getImportMode()
-                || !$this->_getInvitationEmailTemplateId()
-                || !$this->_getInvitationEmailSender()), null, "salesmanago.log");
 		if (
 			$this->getImportMode()
 			|| !$this->_getInvitationEmailTemplateId()
 			|| !$this->_getInvitationEmailSender()
 		) {
-            Mage::log("sendInvitationEmail function return false!!!", null, "salesmanago.log");
+
 			return false;
 		}
 
-        Mage::log("sendInvitationEmail function _isInvitationEmailEnabled: " . $this->_isInvitationEmailEnabled(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail function validateEmail: " . $this->validateEmail($email), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: " . $this->_isEmailSuitableForInvitation($email), null, "salesmanago.log");
-		if ($this->_isInvitationEmailEnabled()
+        if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
-			&& $this->_isEmailSuitableForInvitation($email)) {
+			&& $this->_isEmailSuitableForInvitation($email)
+        ) {
+
 			/** @var Zolago_Common_Helper_Data $helper */
 			$helper = Mage::helper("zolagocommon");
-            Mage::log("sendInvitationEmail function sendEmailTemplate", null, "salesmanago.log");
+
 			return $helper->sendEmailTemplate(
 				$email,
 				'',
@@ -120,6 +113,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
+
 				return false;
 			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
 				$this->_setSubscriberId($sid);
@@ -137,11 +131,14 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				if($save) {
 					$subscription->save();
 				}
+
 				return true;
 			} else {
+
 				return false;
 			}
 		} else {
+
 			return $this->_addInactiveSubscriber($email);
 		}
 	}
