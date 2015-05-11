@@ -17,18 +17,37 @@ Mall.product = {
 
 	updateContextBreadcrumbs: function() {
         var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
-
+        var searchParams = localStorage.getItem(this._entity_id+"_search_params");
         localStorage.removeItem(this._entity_id);
-
+        localStorage.removeItem(this._entity_id+"_search_params");
         if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
         }
-
+        if (searchParams != null) {
+            sessionStorage.setItem(this._entity_id + "_search_params", searchParams);
+        }
         contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
+        console.log(contextBreadcrumbsHtml);
+        var scat;
+        if (searchParams) {
+            var urlParams;
+            var match,
+                pl = /\+/g,  // Regex for replacing addition symbol with a space
+                search = /([^&=]+)=?([^&]*)/g,
+                decode = function (s) {
+                    return decodeURIComponent(s.replace(pl, " "));
+                },
+                query = searchParams.substring(1);
+            urlParams = {};
+            while (match = search.exec(query))
+                urlParams[decode(match[1])] = decode(match[2]);
+            scat = urlParams["scat"];
+            console.log(scat); console.log(contextBreadcrumbsHtml && scat !== "0");
+        }
 
 
 
-        if (contextBreadcrumbsHtml) {
+        if (contextBreadcrumbsHtml && scat !== "0") {
 			var productHtml = jQuery('#breadcrumbs .product');
 			jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
 			this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
@@ -54,7 +73,7 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        sessionStorage.removeItem(this._entity_id);
+        //sessionStorage.removeItem(this._entity_id);
 
 	},
 
