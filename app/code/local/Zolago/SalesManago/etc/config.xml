@@ -22,16 +22,16 @@
             <newsletter_subscriber_save_after>
                 <observers>
                     <zolago_salesmanago_observer>
-                        <type>disabled</type>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>newsletter_subscriber_save_after</method>
                     </zolago_salesmanago_observer>
                 </observers>
             </newsletter_subscriber_save_after>
             <newsletter_subscriber_save_before>
                 <observers>
                     <salesmanago_tracking_observer>
-                        <type>singleton</type>
-                        <class>SalesManago_Tracking_Model_Observer</class>
-                        <method>newsletter_subscriber_save_before</method>
+                        <type>disabled</type>
                     </salesmanago_tracking_observer>
                 </observers>
             </newsletter_subscriber_save_before>
