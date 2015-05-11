@@ -47,7 +47,7 @@ Mall.product = {
 
 
 
-        if (contextBreadcrumbsHtml && scat !== "0") {
+        if (contextBreadcrumbsHtml) {
 			var productHtml = jQuery('#breadcrumbs .product');
 			jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
 			this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
@@ -73,7 +73,7 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        //sessionStorage.removeItem(this._entity_id);
+        sessionStorage.removeItem(this._entity_id);
 
 	},
 
