@@ -17,7 +17,7 @@
 				            <option value="<?php echo $option['value'].'||'.$option['dir']; ?>"
 				                    data-sort="<?php echo $option['value']; ?>"
 				                    data-dir="<?php echo $option['dir']; ?>"
-				                    data-url="<?php echo $this->getSortUrl($option); ?>"
+				                    data-url="<?php echo $this->getRewriteUrl($option); ?>"
 				                    <?php if ($option['value'] === $this->getCurrentOrder() && $option['dir'] == $this->getCurrentDir()): ?>
 					                selected
 					                <?php endif; ?>>

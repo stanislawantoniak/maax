@@ -364,8 +364,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
         foreach ($key as $item)
         {
-			if($item=="price" && $this->getRequest()->getParam('slider')){
-				$finalParams['slider']=null;
+			if($item=="price") {
+			    if ($this->getRequest()->getParam('slider')) {
+    				$finalParams['slider']=null;
+                }
 			}
             if (isset($finalParams['fq'][$item]) && !is_array($finalParams['fq'][$item]) && !empty($finalParams['fq'][$item])) {
                 unset($finalParams['fq'][$item]);
@@ -402,6 +404,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     $values = array_values($values);
                 }
             }
+            ksort($finalParams['fq']);
         }
         $urlParams = array();
         $urlParams['_current']  = false;
@@ -471,6 +474,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			}
 		}
 		
+		if (isset($finalParams['fq'])) {
+		    ksort($finalParams['fq']);
+		}
 		$urlParams = array();
 		$urlParams['_current']  = false;
 		$urlParams['_escape']   = true;
@@ -1058,26 +1064,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     	    $category = $this->getListModel()->getCurrentCategory();
     	    $path = $this->getUrlRoute();
     	    $id = $category->getId();
-    	    if (!empty($queryData['_query']['fq'])) { // only filters
-    	        $tmp = $queryData['_query']['fq'];
-    	        $query = http_build_query(array('fq'=>$tmp),'','&');
-    	    } else {
-    	        $query = '';
-    	    }
-    	    $rawUrl = urldecode($path.DS.'id'.DS.$id.'?'.$query);    	    
-            $rewrite = Mage::getModel('core/url_rewrite');
-            $rewrite->setStoreId(Mage::app()->getStore()->getId());
-            $rewrite->setCategoryId($id);
-            $url = $rewrite->loadByRequestPathForFilters($id,$rawUrl);    	    
-            if ($url) {
-                // add other parameters
-                $params = isset($queryData['_query'])? $queryData['_query']:null;
-                if ($params) {
-                    unset($params['fq']);
-                    $query = http_build_query($params);
-                    $url .= '?'.$query;
-                }
-            }
+  	        $tmp = $queryData['_query'];
+    	    $url = Mage::helper('ghrewrite')->prepareRewriteUrl($path,$id,$tmp);
 	    }
 	    return $url;
 	}
@@ -1118,7 +1106,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     $finalParams = array_merge_recursive($params, $paramss);
                 }
             }
-
             if ($key == 'fq') {
                 foreach ($item as $k=>$v) {
                     if (isset($paramss[$key][$k]) && $v == $paramss[$key][$k]) {
@@ -1153,6 +1140,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             if(isset($finalParams['fq']['category_id']) && is_array($finalParams['fq']['category_id'])) {
                 $finalParams['fq']['category_id'] = array_unique($finalParams['fq']['category_id']);
             }
+            ksort($finalParams['fq']);
         }
 
         if(isset($finalParams['Szukaj_x'])) {
