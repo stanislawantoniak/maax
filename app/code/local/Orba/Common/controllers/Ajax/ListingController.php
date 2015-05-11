@@ -69,7 +69,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$products=$this->_getProducts($listModel);
 		
 		$result = $this->_formatSuccessContentForResponse($products);
-		
+
 		$this->_setSuccessResponse($result);
 	}
 	

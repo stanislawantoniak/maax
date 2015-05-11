@@ -540,6 +540,7 @@ Mall.wishlist = {
 	_prev_window_width: '',
 
     likePriceView: function(){
+	    return;
 	    if(this._prev_window_width != jQuery(window).width()) {
 		    jQuery('#items-product').find('.price').each(function () {
 			    var self = jQuery(this),

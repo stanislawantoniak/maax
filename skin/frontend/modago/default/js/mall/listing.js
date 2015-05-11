@@ -78,12 +78,6 @@ Mall.listing = {
 	_scroll_load_bottom_offset: 2500,
 
     /**
-     * When we injectCache (back from product page or refresh page) browser scroll to last know position on view
-     * This is ugly fix for loading products on scroll after injectCache done to block loading in wrong time (~rendering page etc)
-     */
-    _skipLoadProductsOnScroll: 0,
-
-	/**
 	 * Queue for preloaded products.
 	 */
 	_product_queue: [],
@@ -120,15 +114,14 @@ Mall.listing = {
 	_ajaxCache: {},
 
 	/**
-	 * @type Array
+	 * Cache for ajax request
 	 */
-	_init_products: [],
+	_ajaxQueueCache: {},
 
     /**
-     * Current loaded products
      * @type Array
      */
-    _allLoadedProducts: [],
+	_init_products: [],
 
 	/**
 	 * @type Boolean
@@ -156,33 +149,23 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-        this.initShuffle();
+		this.initShuffle();
 
-        //hide btn filter product if no products (search for example)
-        this.processActionViewFilter();
+		//hide btn filter product if no products (search for example)
+		this.processActionViewFilter();
 
 		// Reset form
 		this.resetForm();
 
 		// fill cache from static contents - not modified by js
 		this._rediscoverCache();
-        if (sessionStorage.getItem('listingForceUseCache')) {
-            sessionStorage.removeItem('listingForceUseCache');
-            this.injectCache();
-        } else {
-            // load additional products to queue after page is loaded
-            //this.setAutoappend(true);
-            this.loadToQueue();
-        }
-        this.initInjectCacheLogic();
 
-        // Init thinks
+		// Init thinks
 		this.initFilterEvents();
 
 		// filters delegation - better performance than initiation of each filter event on every ajax reload
 		this.delegateFilterEvents();
-        this.delegateSaveContextForProductPage();
-        this.delegateSaveUseChacheForBackFromProductPage();
+		this.delegateSaveContextForProductPage();
 
 		this.initOnpopstateEvent();
 		this.initSortEvents();
@@ -197,11 +180,11 @@ Mall.listing = {
 		this.reloadListingItemsAfterPageLoad();
 		this.loadProductsOnScroll();
 
+		// load additional products to queue after page is loaded
+		this.setAutoappend(true);
+		this.loadToQueue();
 		this.setLoadMoreLabel();
-        if (this.canShowLoadMoreButton()) {
-            Mall.listing.placeListingFadeContainer();
-            this.showLoadMoreButton();
-        }
+
 	},
 
     initShuffle: function() {
@@ -243,122 +226,31 @@ Mall.listing = {
 		return this._init_products;
 	},
 
-    setAllLoadedProducts: function(products) {
-        this._allLoadedProducts = products;
-        return this;
-    },
-
-    getAllLoadedProducts: function() {
-        return this._allLoadedProducts;
-    },
-
 	/**
 	 * Prepare response object based on static html data
 	 * @returns {undefined}
 	 */
 	_rediscoverCache: function(){
-        var cacheJson    = sessionStorage.getItem('listingCache');
-        var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
-        var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
-        var content      = {};
-        var select = this.getSortSelect();
-        var needToFixSelectBoxIt = false;
-        if (jQuery('#sort-bySelectBoxItContainer').length) {
-            needToFixSelectBoxIt = true;
-            select.selectBoxIt('destroy');
-        }
-        if (listingCache.hasOwnProperty(ajaxKey)) {
-            content = listingCache[ajaxKey].content;
-            if (content.products.length <= jQuery('#grid .item').length) {
-                var products = [];
-                var currentProducts = this.getInitProducts().concat(this.getAllLoadedProducts());
-                if (content.products.length >= currentProducts.length) {
-                    products = content.products;
-                } else {
-                    products = currentProducts;
-                }
-                content = {
+		var content = {
                     filters: this.getFilters().prop("outerHTML"),
                     active: this.getActive().prop("outerHTML"),
                     toolbar: this.getToolbar().prop("outerHTML"),
                     header: this.getHeader().prop("outerHTML"),
                     total: this.getTotal(),
-                    rows: jQuery('#grid .item').length,
-                    query: this.getQuery(),
-                    sort: this.getSort(),
-                    dir: this.getDir(),
-                    products: products
-                };
-            }
-        } else {
-            content = {
-                filters: this.getFilters().prop("outerHTML"),
-                active: this.getActive().prop("outerHTML"),
-                toolbar: this.getToolbar().prop("outerHTML"),
-                header: this.getHeader().prop("outerHTML"),
-                total: this.getTotal(),
                 rows: this.getCurrentVisibleItems(),
                 query: this.getQuery(),
                 sort: this.getSort(),
                 dir: this.getDir(),
                 products: this.getInitProducts()
-            };
-        }
-        if (needToFixSelectBoxIt) {
-            select.selectBoxIt({
-                autoWidth: false
-            });
-        }
+			},
+			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
+
 		// Bind to cache
 		this._ajaxCache[ajaxKey] = {
 			status: 1,
 			content: content
 		};
-        this.setTotal(this._ajaxCache[ajaxKey].content.total);
-        this.setCurrentVisibleItems(this._ajaxCache[ajaxKey].content.rows);
-
-        sessionStorage.setItem('listingCache', JSON.stringify(this._ajaxCache));
-        sessionStorage.setItem('listingCacheRows', this._ajaxCache[ajaxKey].content.rows);
-        sessionStorage.setItem('listingCacheProducts', this._ajaxCache[ajaxKey].content.products.length);
 	},
-
-    injectCache: function() {
-        var cacheJson    = sessionStorage.getItem('listingCache');
-        var listingCache = JSON.parse(cacheJson != null ? cacheJson : "{}");
-        var ajaxKey      = this._buildAjaxKey(this.getQueryParamsAsArray());
-        var content      = {};
-        if (listingCache.hasOwnProperty(ajaxKey)) {
-            content = listingCache[ajaxKey].content;
-            this.setTotal(this._ajaxCache[ajaxKey].content.total);
-            this.setCurrentVisibleItems(this._ajaxCache[ajaxKey].content.rows);
-            this.setAllLoadedProducts(
-                this._ajaxCache[ajaxKey].content.products.slice(
-                    this.getInitProducts().length
-                    ,this._ajaxCache[ajaxKey].content.products.length
-                ));
-            this.setSkipLoadProductsOnScroll(3);
-            this.rebuildContents(content);
-        } else {
-            // Nothing to do
-        }
-        return this;
-    },
-
-    clearListingSessionCache: function() {
-        if (!sessionStorage.getItem('listingForceUseCache')) {
-            sessionStorage.removeItem('listingCache');
-            sessionStorage.removeItem('listingCacheRows');
-            sessionStorage.removeItem('listingCacheProducts');
-            Mall.listing._rediscoverCache();
-        }
-    },
-
-    initInjectCacheLogic: function() {
-        jQuery(window).on( "unload", function() {
-            Mall.listing.clearListingSessionCache();
-
-        });
-    },
 
 	resetForm: function(){
         if(this.getFilters().find("form").length) {
@@ -524,7 +416,6 @@ Mall.listing = {
 			Mall.listing.addToVisibleItems(data.content.rows);
 			Mall.listing.setTotal(data.content.total);
 			Mall.listing.placeListingFadeContainer();
-            Mall.listing._rediscoverCache();
 		} else {
 			// do something to inform customer that something went wrong
 			console.log("Something went wrong, try again");
@@ -560,14 +451,10 @@ Mall.listing = {
 	loadProductsOnScroll: function () {
 		// detect if this is good time for showing next part of products
 		jQuery(window).scroll(function () {
-            var slpos = Mall.listing.getSkipLoadProductsOnScroll();
-            if (slpos) {
-                Mall.listing.setSkipLoadProductsOnScroll(slpos - 1);
-                return this;
-            }
 			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
 				if (!Mall.listing.getScrollLoadLock()
-					&& Mall.listing.getProductQueue().length > 0) {
+					&& Mall.listing.getProductQueue().length > 0
+					&& !Mall.listing.getScrollLoadLock()) {
 					Mall.listing.setQueueLoadLock();
 					Mall.listing.appendFromQueue();
 				}
@@ -576,15 +463,6 @@ Mall.listing = {
 
 		return this;
 	},
-
-    getSkipLoadProductsOnScroll: function() {
-        return this._skipLoadProductsOnScroll;
-    },
-
-    setSkipLoadProductsOnScroll: function(value) {
-        this._skipLoadProductsOnScroll = value;
-        return this;
-    },
 
 	/**
 	 * Appends products from queue to listing.
@@ -617,16 +495,11 @@ Mall.listing = {
 				Mall.listing.getScrollLoadOffset()
 				, Mall.listing.getProductQueue().length));
 
-        Mall.listing._rediscoverCache();
-
 		// remove lock from queue
 		Mall.listing.removeLockFromQueue();
 		// load next part of images
 		Mall.listing.loadPartImagesFromQueue();
 
-        if (this.canShowLoadMoreButton()) {
-            this.showLoadMoreButton();
-        }
 		return this;
 	},
 
@@ -771,8 +644,6 @@ Mall.listing = {
 					Mall.listing.appendFromQueue();
 					Mall.listing.setAutoappend(false);
 				}
-                Mall.listing.setAllLoadedProducts(Mall.listing.getAllLoadedProducts().concat(data.content.products));
-                Mall.listing._rediscoverCache();
 			} else {
 				// @todo hide buttons etc
 				Mall.listing.removeLockFromQueue(); // this is dummy expression
@@ -909,6 +780,21 @@ Mall.listing = {
 			var textLike = 'Usunięte z ulubionych';
 			jQuery(this).find('.toolLike').show().text(textLike);
 		});
+	},
+
+	/**
+	 * Return whether loading more products is possible,
+	 * in addition hide show more button and shape listing.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	canLoadMoreProducts: function() {
+		if(this._current_visible_items >= this._current_total) {
+			this.hideLoadMoreButton()
+				.hideShapesListing();
+		}
+
+		return this;
 	},
 
 	/**
@@ -1365,10 +1251,10 @@ Mall.listing = {
 
 		this.setLoadNextStart(this.getCurrentVisibleItems());
 		this.reloadListingItemsAfterPageLoad();
-		//this.loadProductsOnScroll();
+		this.loadProductsOnScroll();
 
 		// Init list
-		//this.setAutoappend(true);
+		this.setAutoappend(true);
 		this.loadToQueue();
 		this.setLoadMoreLabel();
 	},
@@ -2455,7 +2341,7 @@ Mall.listing = {
 	 */
 	placeListingFadeContainer: function() {
 		if(!Mall.isGoogleBot()) {
-			//jQuery('#grid').shuffle('layout');
+			jQuery('#grid').shuffle('layout');
 			if (this.canShowLoadMoreButton()) {
 				//this.showLoadMoreButton();
 				this.showShapesListing();
@@ -2585,20 +2471,10 @@ Mall.listing = {
 
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
-            console.log(jQuery('ol.breadcrumb').attr('data-search'));
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
-                localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", "");
             }
-
-        });
-    },
-
-    delegateSaveUseChacheForBackFromProductPage: function() {
-        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
-            e.preventDefault();
-            sessionStorage.setItem('listingForceUseCache', 1);
         });
     },
 
@@ -2748,7 +2624,6 @@ Mall.listing = {
 	 * Determines if browser supports history.pushState
 	 */
 	getPushStateSupport: function() {
-        //return false;
 		return window.history.pushState ? true : false;
 	},
 
