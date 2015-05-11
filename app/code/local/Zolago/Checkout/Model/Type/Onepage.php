@@ -75,6 +75,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			$agreements = $this->_checkoutSession->getAgreements(true);
             /** @var Zolago_Newsletter_Model_Inviter $model */
             $model = Mage::getModel('zolagonewsletter/inviter');
+            Mage::log("sendInvitationEmail", null, "salesmanago.log");
+            Mage::log((int)$agreements['agreement_newsletter'], null, "salesmanago.log");
 			if(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 1) {
                 $model->addSubscriber($this->getQuote()->getCustomerEmail(),Zolago_Newsletter_Model_Subscriber::STATUS_UNCONFIRMED);
 			} elseif(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 0) {
