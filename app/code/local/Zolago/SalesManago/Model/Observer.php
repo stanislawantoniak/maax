@@ -9,7 +9,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
         if(is_array($customer) && !empty($customer)){
             $data = $this->_getHelper()->_setCustomerData($customer);
 
-            $r = Mage::helepr("zolagosalesmanago")->salesmanagoContactSync($data, true);
+            $r = Mage::helper("zolagosalesmanago")->salesmanagoContactSync($data, true);
 
             if($r==false || (isset($r['success']) && $r['success']==false)){
                 $data['status'] = 0;
