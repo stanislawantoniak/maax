@@ -27,7 +27,7 @@ Mall.product = {
             sessionStorage.setItem(this._entity_id + "_search_params", searchParams);
         }
         contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
-        console.log(contextBreadcrumbsHtml);
+
         var scat;
         if (searchParams) {
             var urlParams;
@@ -42,10 +42,7 @@ Mall.product = {
             while (match = search.exec(query))
                 urlParams[decode(match[1])] = decode(match[2]);
             scat = urlParams["scat"];
-            console.log(scat); console.log(contextBreadcrumbsHtml && scat !== "0");
         }
-
-
 
         if (contextBreadcrumbsHtml && scat !== "0") {
 			var productHtml = jQuery('#breadcrumbs .product');
