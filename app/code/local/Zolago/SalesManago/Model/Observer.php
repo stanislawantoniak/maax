@@ -63,7 +63,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 'sha' => sha1($apiKey . $clientId . $apiSecret),
                 'owner' => $ownerEmail,
             );
-
+            Mage::log($data['subscriber_status'], null, "salesmanago.log");
             if ($data['subscriber_status'] == "1") {
                 $data_to_json['forceOptIn'] = true;
                 $data_to_json['forceOptOut'] = false;
