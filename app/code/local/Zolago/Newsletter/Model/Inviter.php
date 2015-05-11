@@ -66,23 +66,18 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			|| !$this->_getInvitationEmailTemplateId()
 			|| !$this->_getInvitationEmailSender()
 		) {
-            Mage::log("sendInvitationEmail function return false!!!", null, "salesmanago.log");
+
 			return false;
 		}
-
-        Mage::log("sendInvitationEmail function _isInvitationEmailEnabled: " . $this->_isInvitationEmailEnabled(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail function validateEmail: " . $this->validateEmail($email), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: " . (int)$this->_isEmailSuitableForInvitation($email), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail function if send email: " . (int)($this->_isInvitationEmailEnabled() && $this->validateEmail($email) && $this->_isEmailSuitableForInvitation($email)), null, "salesmanago.log");
 
         if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
 			&& $this->_isEmailSuitableForInvitation($email)
         ) {
-            Mage::log("sendInvitationEmail function sendEmailTemplate1", null, "salesmanago.log");
+
 			/** @var Zolago_Common_Helper_Data $helper */
 			$helper = Mage::helper("zolagocommon");
-            Mage::log("sendInvitationEmail function sendEmailTemplate2", null, "salesmanago.log");
+
 			return $helper->sendEmailTemplate(
 				$email,
 				'',
