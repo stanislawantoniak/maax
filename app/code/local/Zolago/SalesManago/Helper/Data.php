@@ -57,4 +57,26 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
 
         return $r;
     }
+    public function _setCustomerData($customer){
+        Mage::log("Zolago_SalesManago_Helper_Data _setCustomerData", null, "salesmanago.log");
+        $data = array();
+        $subscription_status = 0;
+
+        //nie trzeba sprawdzac, bo customer zawsze ma email i id
+        $data['customerEmail'] = $customer['email'];
+        $data['entity_id'] = $customer['entity_id'];
+
+        $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($customer['email']);
+        $subscription_status = $subscriber->isSubscribed();
+
+        if(isset($customer['firstname']) && isset($customer['lastname'])){
+            $data['name'] = $customer['firstname'].' '.$customer['lastname'];
+        }
+
+        if($subscription_status == 1){
+            $data['is_subscribed'] = true;
+        }
+
+        return $data;
+    }
 }
