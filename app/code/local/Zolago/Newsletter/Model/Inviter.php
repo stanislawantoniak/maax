@@ -136,6 +136,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				}
                 Mage::log("_isEmailSuitableForInvitation function: 2");
 				return true;
+            } elseif($status == self::STATUS_NOT_ACTIVE) {
 			} else {
                 Mage::log("_isEmailSuitableForInvitation function: 3");
 				return false;
