@@ -72,12 +72,12 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 
         Mage::log("sendInvitationEmail function _isInvitationEmailEnabled: " . $this->_isInvitationEmailEnabled(), null, "salesmanago.log");
         Mage::log("sendInvitationEmail function validateEmail: " . $this->validateEmail($email), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: " . $this->_isEmailSuitableForInvitation($email), null, "salesmanago.log");
+        Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: " . (int)$this->_isEmailSuitableForInvitation($email), null, "salesmanago.log");
         Mage::log("sendInvitationEmail function if send email: " . (int)($this->_isInvitationEmailEnabled() && $this->validateEmail($email) && $this->_isEmailSuitableForInvitation($email)), null, "salesmanago.log");
 
         if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
-			//&& $this->_isEmailSuitableForInvitation($email)
+			&& $this->_isEmailSuitableForInvitation($email)
         ) {
             Mage::log("sendInvitationEmail function sendEmailTemplate1", null, "salesmanago.log");
 			/** @var Zolago_Common_Helper_Data $helper */
@@ -124,6 +124,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
+                Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 1", null, "salesmanago.log");
 				return false;
 			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
 				$this->_setSubscriberId($sid);
@@ -141,11 +142,14 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				if($save) {
 					$subscription->save();
 				}
+                Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 2", null, "salesmanago.log");
 				return true;
 			} else {
+                Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 3", null, "salesmanago.log");
 				return false;
 			}
 		} else {
+            Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 4 _addInactiveSubscriber", null, "salesmanago.log");
 			return $this->_addInactiveSubscriber($email);
 		}
 	}
