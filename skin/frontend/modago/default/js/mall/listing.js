@@ -191,7 +191,7 @@ Mall.listing = {
         var grid = jQuery('#grid'),
             sizer = jQuery(grid).find('.shuffle__sizer');
 
-        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, supported: false });
+        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
 
         jQuery(grid).on('layout.shuffle', function() {
             Mall.listing.likePriceView();
