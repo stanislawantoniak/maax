@@ -80,7 +80,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
             // Get first category
 			$category = $collection->getFirstItem();
             foreach($collection as $collectionItem){
-
+Mage::log($collectionItem->getData());
                 // Get first basic category if exist
                 if($collectionItem->getData("basic_category")){
                     $category = $collectionItem;
