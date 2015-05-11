@@ -70,6 +70,34 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		$result = $this->_formatSuccessContentForResponse($products);
 
+		$currentCategory = Mage::registry('current_category')->getId();
+		$customerSession = Mage::getSingleton('customer/session');
+		$prevCategory = $customerSession->getData('currentProductsCategory');
+		$prevProducts = $customerSession->getData('currentProducts');
+
+		if($currentCategory != $prevCategory ||
+			is_null($prevProducts) ||
+			!isset($prevProducts['dir']) || $prevProducts['dir'] != $products['dir'] ||
+			!isset($prevProducts['sort']) || $prevProducts['sort'] != $products['sort'] ||
+			!isset($prevProducts['query']) || $prevProducts['query'] != $products['query'] ||
+			!isset($prevProducts['total']) || $prevProducts['total'] != $products['total'])
+		{ //clear products if user is looking at another category, changed sorting or search query
+			Mage::log("session cleared",null,'sessionClear.log');
+			$customerSession->unsetData('currentProductsCategory')->unsetData('currentProducts');
+		}
+
+		if(is_null($customerSession->getData('currentProductsCategory'))) {
+			$customerSession->setData('currentProductsCategory', $currentCategory);
+			$customerSession->setData('currentProducts', $products);
+		} elseif($prevProducts['start'] < $products['start']) {
+			$newProducts = $products;
+			$newProducts['products'] = array_merge($prevProducts['products'],$newProducts['products']);
+			$customerSession->setData('currentProducts',$newProducts);
+		}
+
+		Mage::log($customerSession->getData('currentProductsCategory'),null,'currentCategory.log');
+		Mage::log($customerSession->getData('currentProducts'),null,'currentProducts.log');
+
 		$this->_setSuccessResponse($result);
 	}
 	

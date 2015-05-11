@@ -687,8 +687,6 @@ Mall.listing = {
 
     /**
      * Creates single product container for listing.
-     * Improved:
-     * It's 4 times faster manually vs creating it by jQuery("element" , {...}).appendTo(parentElement)
      *
      * ALERT:
      * product is no longer an object, now it's array with numeric indexes:
@@ -2342,7 +2340,7 @@ Mall.listing = {
 		if(!Mall.isGoogleBot()) {
 			jQuery('#grid').shuffle('layout');
 			if (this.canShowLoadMoreButton()) {
-				//this.showLoadMoreButton();
+				this.showLoadMoreButton();
 				this.showShapesListing();
 
 
