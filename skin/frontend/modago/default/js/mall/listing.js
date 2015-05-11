@@ -2565,7 +2565,6 @@ Mall.listing = {
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
-                localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", "");
             }
         });
     },
