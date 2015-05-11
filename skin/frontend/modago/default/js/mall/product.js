@@ -17,9 +17,9 @@ Mall.product = {
 
 	updateContextBreadcrumbs: function() {
         var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
-        //var searchParams = localStorage.getItem(this._entity_id+"_search_params");
+        var searchParams = localStorage.getItem(this._entity_id+"_search_params");
         localStorage.removeItem(this._entity_id);
-        //localStorage.removeItem(this._entity_id+"_search_params");
+        localStorage.removeItem(this._entity_id+"_search_params");
         if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
         }
@@ -47,7 +47,7 @@ Mall.product = {
 
 
 
-        if (contextBreadcrumbsHtml) {
+        if (contextBreadcrumbsHtml && scat !== "0") {
 			var productHtml = jQuery('#breadcrumbs .product');
 			jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
 			this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
