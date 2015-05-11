@@ -3,7 +3,7 @@
 class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Observer {
 
     public function customer_register_success($observer) {
-        Mage::log("Zolago_SalesManago_Helper_Data customer_register_success", null, "salesmanago.log");
+
         $customer = $observer->getCustomer()->getData();
 
         if(is_array($customer) && !empty($customer)){
