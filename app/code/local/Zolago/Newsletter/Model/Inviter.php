@@ -113,6 +113,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		$save = false;
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
+            Mage::log("_isEmailSuitableForInvitation function getSubscriberStatus: " . (int)$status);
 			if ($status == self::STATUS_SUBSCRIBED) {
                 Mage::log("_isEmailSuitableForInvitation function: 1");
 				return false;
