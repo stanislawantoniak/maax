@@ -19,15 +19,16 @@ class Zolago_Catalog_Model_Observer
 		/* @var $product Mage_Catalog_Model_Products */
 		
 		// No category id
-		if(!$product->getCategory()){
+		//if(!$product->getCategory()){
 			$rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
 			$category = Mage::helper("zolagosolrsearch")->getDefaultCategory($product, $rootId);
 			/* @var $category Mage_Catalog_Model_Category */
 			if($category && $category->getId()){
 				$product->setCategory($category);
-				Mage::register('current_category', $category);
+                Mage::unregister('current_category');
+                Mage::register('current_category', $category);
 			}	
-		}
+		//}
 	}
 	
     public function addColumnWidthField(Varien_Event_Observer $observer)

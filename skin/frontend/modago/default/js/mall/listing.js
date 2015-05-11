@@ -1338,15 +1338,6 @@ Mall.listing = {
 		this.initActiveEvents();
 		this.initListingLinksEvents();
         this.initImagesHeight();
-        jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
-            swipeLeft:function(event, direction) {
-
-                Mall.listing.closeMobileFilters();
-            },
-            excludedElements: "label, button, input, select, textarea, .noSwipe",
-            //Default is 75px, set to 0 for demo so any distance triggers swipe
-            threshold: 5
-        });
 	},
 
 	replaceProducts: function(data){
@@ -2588,10 +2579,13 @@ Mall.listing = {
 
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            console.log(jQuery('ol.breadcrumb').attr('data-search'));
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
+                localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", "");
             }
+
         });
     },
 
@@ -3071,14 +3065,6 @@ jQuery(document).ready(function () {
         jQuery('#sort-criteria .selectboxit-container').css('pointer-events', 'none');
     });
 
-    jQuery("#solr_search_facets, #solr_search_facets .section a").swipe({
-        swipeLeft:function(event, direction) {
-            Mall.listing.closeMobileFilters();
-        },
-        excludedElements: "label, button, input, select, textarea, .noSwipe",
-        //Default is 75px, set to 0 for demo so any distance triggers swipe
-        threshold: 5
-    });
     jQuery('body').click(function (e) {
 
         if(jQuery(e.target).parents("#dropdown-search").length>0){

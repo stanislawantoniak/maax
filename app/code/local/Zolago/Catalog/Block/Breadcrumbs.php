@@ -33,11 +33,18 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _getPath() {
         if (is_null($this->_path)) {
-            $category = Mage::helper('catalog')->getCategory();
+            /* @var $catalogHelper Mage_Catalog_Helper_Data */
+            $catalogHelper = Mage::helper('catalog');
+            $category = $catalogHelper->getCategory();
+
+            $refererUrl = $this->getRequest()->getServer("HTTP_REFERER");
+            $params = explode("&", $refererUrl);
 
             if (
                 !$category
                 || $category->getId() == $this->_getRootCategoryId()
+//                || (Mage::registry('current_product') && !$refererUrl)
+                || (Mage::registry('current_product') && (int)strpos($refererUrl,"search/index/index") > 0 && !in_array("scat=".$category->getId(), $params))
             ) {
                 $category = $this->_getDefaultCategory(
 					$this->_getProduct(),
@@ -55,6 +62,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
             $this->_path = $path;
         }
+
         return $this->_path;
     }
     /**
@@ -239,6 +247,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @return
      */
     protected function _getBlock() {
+
         if (is_null($this->_breadcrumbBlock)) {
             if (!($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs'))) {
                 $breadcrumbsBlock = $this->getLayout()->createBlock('page/html_breadcrumbs', 'breadcrumbs');
@@ -255,9 +264,11 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _prepareLayout()
     {
+
         if(Mage::registry("bc_prepared")) {
             return $this;
         }
+
         $this->_prepareListingBreadcrumb();
 
         $title = array();

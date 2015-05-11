@@ -1,5 +1,5 @@
 #header {
-	padding-top: 57px;
+	padding-top: 56px;
 
 }
 
@@ -22,9 +22,9 @@
 }
 .is-content-mode {
   .header_bottom {
-    background: none;
-    background-color: #ffffff;
     @media (max-width: $screen-sm) {
+      background: none; 
+      background-color: #ffffff; 
       margin-bottom: 10px;
     }
     #navCategory {
