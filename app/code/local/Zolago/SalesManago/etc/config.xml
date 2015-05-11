@@ -59,7 +59,7 @@
         </blocks>
         <helpers>
             <zolagosalesmanago>
-                <class>Zolago_SalesManago_Tracking_Helper</class>
+                <class>Zolago_SalesManago_Helper</class>
             </zolagosalesmanago>
             <tracking>
                 <rewrite>
