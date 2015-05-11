@@ -60,14 +60,18 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			|| !$this->_getInvitationEmailTemplateId()
 			|| !$this->_getInvitationEmailSender()
 		) {
+
 			return false;
 		}
-
-		if ($this->_isInvitationEmailEnabled()
+        Mage::log("sendInvitationEmail");
+        if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
-			&& $this->_isEmailSuitableForInvitation($email)) {
+			&& $this->_isEmailSuitableForInvitation($email)
+        ) {
+
 			/** @var Zolago_Common_Helper_Data $helper */
 			$helper = Mage::helper("zolagocommon");
+
 			return $helper->sendEmailTemplate(
 				$email,
 				'',
@@ -102,13 +106,17 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 */
 	protected function _isEmailSuitableForInvitation($email) {
 		/** @var Mage_Newsletter_Model_Subscriber $model */
+        Mage::log("_isEmailSuitableForInvitation function");
 		$model = Mage::getModel("newsletter/subscriber");
 		$subscription = $model->loadByEmail($email);
 		$sid = $subscription->getId();
+        Mage::log($subscription->getData());
 		$save = false;
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
+            Mage::log("_isEmailSuitableForInvitation function getSubscriberStatus: " . (int)$status);
 			if ($status == self::STATUS_SUBSCRIBED) {
+                Mage::log("_isEmailSuitableForInvitation function: 1");
 				return false;
 			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
 				$this->_setSubscriberId($sid);
@@ -126,11 +134,14 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				if($save) {
 					$subscription->save();
 				}
+                Mage::log("_isEmailSuitableForInvitation function: 2");
 				return true;
 			} else {
+                Mage::log("_isEmailSuitableForInvitation function: 3");
 				return false;
 			}
 		} else {
+            Mage::log("_isEmailSuitableForInvitation function: 4");
 			return $this->_addInactiveSubscriber($email);
 		}
 	}

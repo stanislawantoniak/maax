@@ -6,6 +6,7 @@ class SalesManago_Tracking_Model_Observer {
     }
 	
     public function customer_login($observer) {
+
 		$customer = $observer->getCustomer()->getData();
 
         if(is_array($customer) && !empty($customer)){
