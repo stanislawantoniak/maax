@@ -372,9 +372,6 @@ var Mall = {
 				});
 			}
 		}
-
-	    jQuery(window).resize();
-		
 	},
 	
 	getFavPluralText: function(count, you){
@@ -1291,6 +1288,14 @@ Mall.Footer = {
 		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
 		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
 	}
+};
+
+Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
+	Mall.baseUrl = baseUrl;
+	Mall.baseUrlNoVendor = baseUrlNoVendor;
+	Mall.mediaUrl = Mall.baseUrlNoVendor + "media/";
+	Mall.productImagesUrl = Mall.mediaUrl + "catalog/product/cache/";
+	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
 };
 
 jQuery(document).ready(function() {
