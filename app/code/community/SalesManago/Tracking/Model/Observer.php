@@ -6,6 +6,7 @@ class SalesManago_Tracking_Model_Observer {
     }
 	
     public function customer_login($observer) {
+        Mage::log("SalesManago_Tracking_Model_Observer customer_login", null, "salesmanago.log");
 		$customer = $observer->getCustomer()->getData();
 
         if(is_array($customer) && !empty($customer)){
