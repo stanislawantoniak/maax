@@ -465,6 +465,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 				$customer->setIsJustRegistered(true);
 				$customer->save();
 				$this->_dispatchRegisterSuccess($customer);
+                Mage::log("_successProcessRegistration");
 				$this->_successProcessRegistration($customer);
 				return;
 			} else {
