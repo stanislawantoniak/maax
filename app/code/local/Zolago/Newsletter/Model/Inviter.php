@@ -110,6 +110,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		$model = Mage::getModel("newsletter/subscriber");
 		$subscription = $model->loadByEmail($email);
 		$sid = $subscription->getId();
+        Mage::log($subscription->getData());
 		$save = false;
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
