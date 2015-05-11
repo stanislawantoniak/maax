@@ -55,12 +55,6 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 * @return bool
 	 */
 	public function sendInvitationEmail($email) {
-        Mage::log("sendInvitationEmail function", null, "salesmanago.log");
-        Mage::log("sendInvitationEmail _getInvitationEmailTemplateId: " . $this->_getInvitationEmailTemplateId(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail _getInvitationEmailSender: " .$this->_getInvitationEmailSender(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail return false? " . (int)($this->getImportMode()
-                || !$this->_getInvitationEmailTemplateId()
-                || !$this->_getInvitationEmailSender()), null, "salesmanago.log");
 		if (
 			$this->getImportMode()
 			|| !$this->_getInvitationEmailTemplateId()
@@ -119,7 +113,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
 			if ($status == self::STATUS_SUBSCRIBED) {
-                Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 1", null, "salesmanago.log");
+
 				return false;
 			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
 				$this->_setSubscriberId($sid);
@@ -137,14 +131,14 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				if($save) {
 					$subscription->save();
 				}
-                Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 2", null, "salesmanago.log");
+
 				return true;
 			} else {
-                Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 3", null, "salesmanago.log");
+
 				return false;
 			}
 		} else {
-            Mage::log("sendInvitationEmail function _isEmailSuitableForInvitation: 4 _addInactiveSubscriber", null, "salesmanago.log");
+
 			return $this->_addInactiveSubscriber($email);
 		}
 	}
