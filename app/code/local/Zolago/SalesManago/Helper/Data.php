@@ -35,7 +35,8 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
         if (isset($data['name']) && !empty($data['name'])) {
             $data_to_json['contact']['name'] = $data['name'];
         }
-        Mage::log("Zolago_SalesManago_Helper_Data isset is_subscribed" . (int)isset($data['is_subscribed']), null, "salesmanago.log");
+        Mage::log("Zolago_SalesManago_Helper_Data isset is_subscribed " . (int)!isset($data['is_subscribed']), null, "salesmanago.log");
+        Mage::log($data, null, "salesmanago.log");
         if ($register || !isset($data['is_subscribed'])) {
             $data_to_json['forceOptIn'] = false;
             $data_to_json['forceOptOut'] = true;
