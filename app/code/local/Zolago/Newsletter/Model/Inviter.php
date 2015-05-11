@@ -56,9 +56,9 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 */
 	public function sendInvitationEmail($email) {
         Mage::log("sendInvitationEmail function", null, "salesmanago.log");
-        Mage::log("sendInvitationEmail _getInvitationEmailTemplateId" . $this->_getInvitationEmailTemplateId(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail _getInvitationEmailSender" .$this->_getInvitationEmailSender(), null, "salesmanago.log");
-        Mage::log("sendInvitationEmail return false " . (bool)($this->getImportMode()
+        Mage::log("sendInvitationEmail _getInvitationEmailTemplateId: " . $this->_getInvitationEmailTemplateId(), null, "salesmanago.log");
+        Mage::log("sendInvitationEmail _getInvitationEmailSender: " .$this->_getInvitationEmailSender(), null, "salesmanago.log");
+        Mage::log("sendInvitationEmail return false? " . (int)($this->getImportMode()
                 || !$this->_getInvitationEmailTemplateId()
                 || !$this->_getInvitationEmailSender()), null, "salesmanago.log");
 		if (
@@ -66,6 +66,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			|| !$this->_getInvitationEmailTemplateId()
 			|| !$this->_getInvitationEmailSender()
 		) {
+            Mage::log("sendInvitationEmail function return false!!!", null, "salesmanago.log");
 			return false;
 		}
 
