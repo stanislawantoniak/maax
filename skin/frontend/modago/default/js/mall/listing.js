@@ -232,11 +232,11 @@ Mall.listing = {
 	 */
 	_rediscoverCache: function(){
 		var content = {
-                    filters: this.getFilters().prop("outerHTML"),
-                    active: this.getActive().prop("outerHTML"),
-                    toolbar: this.getToolbar().prop("outerHTML"),
-                    header: this.getHeader().prop("outerHTML"),
-                    total: this.getTotal(),
+                filters: this.getFilters().prop("outerHTML"),
+                active: this.getActive().prop("outerHTML"),
+                toolbar: this.getToolbar().prop("outerHTML"),
+                header: this.getHeader().prop("outerHTML"),
+                total: this.getTotal(),
                 rows: this.getCurrentVisibleItems(),
                 query: this.getQuery(),
                 sort: this.getSort(),
@@ -1049,7 +1049,6 @@ Mall.listing = {
 		if(!window.onpopstate) {
 			var self = this;
 			window.onpopstate = function() {
-                Mall.listing.clearListingSessionCache();
 				//uncheck all filters
 				jQuery("input[type=checkbox]").prop('checked', false);
 				//check url for selected filters
