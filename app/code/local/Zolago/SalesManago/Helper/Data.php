@@ -11,8 +11,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
      * @return mixed
      */
     public function salesmanagoContactSync($data, $register = false)
-    {Mage::log("Zolago_SalesManago_Helper_Data", null, "salesmanago.log");
-        Mage::log("Zolago_SalesManago_Helper_Data register ". (int)$register, null, "salesmanago.log");
+    {
         $clientId = Mage::getStoreConfig('salesmanago_tracking/general/client_id');
         $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
         $ownerEmail = Mage::getStoreConfig('salesmanago_tracking/general/email');
@@ -35,8 +34,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
         if (isset($data['name']) && !empty($data['name'])) {
             $data_to_json['contact']['name'] = $data['name'];
         }
-        Mage::log("Zolago_SalesManago_Helper_Data isset is_subscribed " . (int)!isset($data['is_subscribed']), null, "salesmanago.log");
-        Mage::log($data, null, "salesmanago.log");
+
         if ($register || !isset($data['is_subscribed'])) {
             $data_to_json['forceOptIn'] = false;
             $data_to_json['forceOptOut'] = true;
@@ -58,7 +56,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
         return $r;
     }
     public function _setCustomerData($customer){
-        Mage::log("Zolago_SalesManago_Helper_Data _setCustomerData", null, "salesmanago.log");
+
         $data = array();
         $subscription_status = 0;
 
@@ -68,6 +66,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
 
         $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($customer['email']);
         $subscription_status = $subscriber->isSubscribed();
+        Mage::log("subscription_status: ".$subscription_status);
 
         if(isset($customer['firstname']) && isset($customer['lastname'])){
             $data['name'] = $customer['firstname'].' '.$customer['lastname'];
