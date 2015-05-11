@@ -91,6 +91,7 @@ class SalesManago_Tracking_Helper_Data extends Mage_Core_Helper_Abstract{
     * oraz dla uzytkownika robiacego zakupy bez rejestracji
     */
 	public function salesmanagoContactSync($data){
+        Mage::log("SalesManago_Tracking_Helper_Data", null, "salesmanago.log");
 		$clientId = Mage::getStoreConfig('salesmanago_tracking/general/client_id');
 		$apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
 		$ownerEmail = Mage::getStoreConfig('salesmanago_tracking/general/email');
