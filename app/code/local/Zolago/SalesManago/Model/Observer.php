@@ -31,7 +31,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 
 
     public function newsletter_subscriber_save_after($observer){
-
+        Mage::log("Zolago_SalesManago_Model_Observer:newsletter_subscriber_save_after", null, "salesmanago.log");
         $request        = Mage::app()->getRequest();
         $moduleName     = $request->getModuleName();
         $controllerName = $request->getControllerName();

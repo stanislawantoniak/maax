@@ -141,6 +141,7 @@ class SalesManago_Tracking_Model_Observer {
 	}
 	
 	public function newsletter_subscriber_save_before($observer){
+        Mage::log("SalesManago_Tracking_Model_Observer:newsletter_subscriber_save_before", null, "salesmanago.log");
 		$request        = Mage::app()->getRequest();
 		$moduleName     = $request->getModuleName();
 		$controllerName = $request->getControllerName();
