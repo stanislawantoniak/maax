@@ -12,6 +12,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
      */
     public function salesmanagoContactSync($data, $register = false)
     {Mage::log("Zolago_SalesManago_Helper_Data", null, "salesmanago.log");
+        Mage::log("Zolago_SalesManago_Helper_Data register ". (int)$register, null, "salesmanago.log");
         $clientId = Mage::getStoreConfig('salesmanago_tracking/general/client_id');
         $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
         $ownerEmail = Mage::getStoreConfig('salesmanago_tracking/general/email');
