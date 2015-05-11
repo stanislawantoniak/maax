@@ -23,27 +23,27 @@ Mall.product = {
         if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
         }
-        //if (searchParams != null) {
-        //    sessionStorage.setItem(this._entity_id + "_search_params", searchParams);
-        //}
+        if (searchParams != null) {
+            sessionStorage.setItem(this._entity_id + "_search_params", searchParams);
+        }
         contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
         console.log(contextBreadcrumbsHtml);
-        //var scat;
-        //if (searchParams) {
-        //    var urlParams;
-        //    var match,
-        //        pl = /\+/g,  // Regex for replacing addition symbol with a space
-        //        search = /([^&=]+)=?([^&]*)/g,
-        //        decode = function (s) {
-        //            return decodeURIComponent(s.replace(pl, " "));
-        //        },
-        //        query = searchParams.substring(1);
-        //    urlParams = {};
-        //    while (match = search.exec(query))
-        //        urlParams[decode(match[1])] = decode(match[2]);
-        //    scat = urlParams["scat"];
-        //    console.log(scat); console.log(contextBreadcrumbsHtml && scat !== "0");
-        //}
+        var scat;
+        if (searchParams) {
+            var urlParams;
+            var match,
+                pl = /\+/g,  // Regex for replacing addition symbol with a space
+                search = /([^&=]+)=?([^&]*)/g,
+                decode = function (s) {
+                    return decodeURIComponent(s.replace(pl, " "));
+                },
+                query = searchParams.substring(1);
+            urlParams = {};
+            while (match = search.exec(query))
+                urlParams[decode(match[1])] = decode(match[2]);
+            scat = urlParams["scat"];
+            console.log(scat); console.log(contextBreadcrumbsHtml && scat !== "0");
+        }
 
 
 
@@ -73,7 +73,7 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        sessionStorage.removeItem(this._entity_id);
+        //sessionStorage.removeItem(this._entity_id);
 
 	},
 
