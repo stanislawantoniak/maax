@@ -45,6 +45,8 @@ abstract class Zolago_Turpentine_Model_Varnish_Configurator_Abstract extends Nex
 			$out[] = $cat->getUrlPath();
 		}
 
+		Mage::log($out,null,'varnishCat.log');
+
 		return $out;
 	}
 }
