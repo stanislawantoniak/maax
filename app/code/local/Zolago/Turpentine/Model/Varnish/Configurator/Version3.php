@@ -1,6 +1,6 @@
 <?php
 class Zolago_Turpentine_Model_Varnish_Configurator_Version3
-    extends Zolago_Turpentine_Model_Varnish_Configurator_Abstract {
+    extends Nexcessnet_Turpentine_Model_Varnish_Configurator_Version3 {
 	
 	/**
 	 * Use custom file
@@ -21,6 +21,22 @@ class Zolago_Turpentine_Model_Varnish_Configurator_Version3
         $vars['esi_private_ttl'] = 
 				Mage::helper( 'turpentine/esi' )->getSystemCookieLifeTime();
         return $vars;
+	}
+
+	protected function _getCategoryUrlExcludes() {
+		$categories = Mage::getModel('catalog/category')
+			->getCollection()
+			->addAttributeToSelect('*');
+
+		$out = array();
+		foreach($categories as $cat) {
+			/** @var $cat Zolago_Catalog_Model_Category */
+			$out[] = $cat->getUrlPath();
+		}
+
+		Mage::log($out,null,'varnishCat.log');
+
+		return implode('|',$out);
 	}
 
 }
