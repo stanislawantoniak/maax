@@ -180,8 +180,6 @@ Mall.listing = {
 		this.reloadListingItemsAfterPageLoad();
 		this.loadProductsOnScroll();
 
-		console.log(this.getCurrentVisibleItems());
-
 		// load additional products to queue after page is loaded
 		if(this.getCurrentVisibleItems() < 100) {
 			this.setAutoappend(true);
@@ -191,7 +189,6 @@ Mall.listing = {
 				this.showLoadMoreButton();
 			}
 			this.showShapesListing();
-			this.showListingOverlay();
 		}
 		this.setLoadMoreLabel();
 
@@ -201,11 +198,21 @@ Mall.listing = {
         var grid = jQuery('#grid'),
             sizer = jQuery(grid).find('.shuffle__sizer');
 
-        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+        jQuery(grid)
+	        .on('layout.shuffle', function() {
+		        console.log('layout.shuffle');
+		        Mall.listing.hideListingOverlay();
+                Mall.listing.likePriceView();
+            })
+	        .on('loading.shuffle',function() {
+		        console.log('loading.shuffle')
+	        })
+	        .on('done.shuffle', function() {
+		        console.log('done.shuffle');
+		        Mall.listing.hideListingOverlay();
+	        });
 
-        jQuery(grid).on('layout.shuffle', function() {
-            Mall.listing.likePriceView();
-        });
+	    jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
 
         jQuery(window).on('appendToListEnd', function() {
             Mall.listing.hideLoadMoreButton();
@@ -498,7 +505,7 @@ Mall.listing = {
 			self.placeListingFadeContainer();
 		});
 
-		//Mall.listing.addToVisibleItems(products.length);
+		Mall.listing.addToVisibleItems(products.length);
 
 		Mall.listing.setProductQueue(
 			Mall.listing.getProductQueue().slice(
@@ -827,16 +834,20 @@ jQuery.each(products, function(index, item) {
 		return this;
 	},
 
-	_listing_overlay_id: 'listing-overlay',
+	_listing_overlay_class: 'listing-overlay',
+
+	getListingOverlay: function() {
+		return jQuery('.'+ this._listing_overlay_class);
+	},
+
 	showListingOverlay: function() {
 		var _ = this;
-		if(!jQuery('#'+_._listing_overlay_id).length) {
-			jQuery('#grid').append('<div id="'+ _._listing_overlay_id+'"></div>');
-		}
-		var listingOverlay = jQuery('#'+ _._listing_overlay_id),
-			contentMain = jQuery('#content-main'),
-			width = contentMain.width();
-		return listingOverlay.show();
+		return _.getListingOverlay().show();
+	},
+
+	hideListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().hide();
 	},
 
 	/**
@@ -1220,7 +1231,7 @@ jQuery.each(products, function(index, item) {
 		/**
 		 * @todo handle error
 		 */
-
+		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
 		if(this.getMobileFiltersOverlay().is(":visible")) {
@@ -2351,8 +2362,8 @@ jQuery.each(products, function(index, item) {
 	 */
 	placeListingFadeContainer: function() {
 		if(!Mall.isGoogleBot()) {
-			jQuery('#grid').shuffle('layout');
-			if (this.canShowLoadMoreButton()) {
+			if (this.canShowLoadMoreButton())
+			{
 				this.showLoadMoreButton();
 				this.showShapesListing();
 
@@ -2969,7 +2980,9 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
-        jQuery(window).resize(Mall.listing.updateFilters);
+        jQuery(window).resize(function() {
+	        Mall.listing.updateFilters();
+        });
     } else {
         Mall.listing.initShuffle();
     }

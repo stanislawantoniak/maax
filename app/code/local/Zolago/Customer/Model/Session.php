@@ -16,10 +16,7 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 	 *
 	 * @param array $products
 	 */
-	public function addProductsToCache($products=null) {
-		if(is_null($products)) {
-			$products = $this->_getProducts(Mage::getSingleton("zolagosolrsearch/catalog_product_list"));
-		}
+	public function addProductsToCache($products) {
 
 		$this->_clearProductsCache($products);
 
@@ -43,11 +40,18 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 		return $this->getData(self::CURRENT_PRODUCTS);
 	}
 
+	protected function _getCurrentProducts() {
+		return $this->_getProducts(Mage::getSingleton("zolagosolrsearch/catalog_product_list"));
+	}
+
 	protected function _clearProductsCache($products) {
 		$newCategory = Mage::registry('current_category')->getId();
 		$prevCategory = $this->getData(self::CURRENT_PRODUCTS_CATEGORY);
 		$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
 		$prevProductsExpire = $this->getData(self::CURRENT_PRODUCTS_EXPIRE);
+
+		Mage::log('prevCate: '.$prevCategory.' | newCate: '.$newCategory,null,'categories.log');
+		Mage::log('prevtotal: '.$prevProducts['total'].' | newTotal: '.$products['total'],null,'totals.log');
 
 		if($newCategory != $prevCategory ||
 			is_null($prevProducts) ||
@@ -58,6 +62,7 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 			!isset($prevProducts['query']) || $prevProducts['query'] != $products['query'] ||
 			!isset($prevProducts['total']) || $prevProducts['total'] != $products['total'])
 		{ //clear products if user is looking at another category, changed sorting or search query
+			Mage::log('productsCacheCleared',null,'productsCacheCleared.log');
 			$this->unsetData(self::CURRENT_PRODUCTS_CATEGORY)->unsetData(self::CURRENT_PRODUCTS)->unsetData(self::CURRENT_PRODUCTS_EXPIRE);
 		}
 		return $this;
@@ -69,7 +74,9 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 	}
 
 	public function getProductsCache() {
-		return $this->getData(self::CURRENT_PRODUCTS) ? $this->getData(self::CURRENT_PRODUCTS) : $this->addProductsToCache();
+		$currentProducts = $this->_getCurrentProducts();
+		$this->_clearProductsCache($currentProducts);
+		return $this->getData(self::CURRENT_PRODUCTS) ? $this->getData(self::CURRENT_PRODUCTS) : $this->addProductsToCache($currentProducts);
 	}
 
 	/**
@@ -98,26 +105,16 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 		/** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
 		$_solrHelper = Mage::helper("zolagosolrsearch");
 
+		$query = str_replace('*','',$this->_getSolrParam($listModel, 'q'));
+
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
 			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
 			"rows"			=> (int)$this->_getSolrParam($listModel, 'rows'),
-			"query"			=> '',// $this->_getSolrParam($listModel, 'q'),
+			"query"			=> $query,
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
 			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
 		);
-	}
-
-	protected function _initCategory() {
-		$categoryId = $this->getRequest()->getParam("scat", 0);
-		$catModel = null;
-		if($categoryId){
-			$catModel = Mage::getModel("catalog/category")->load($categoryId);
-		}
-		if(!$catModel || !$catModel->getId()){
-			$catModel = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
-		}
-		Mage::register("current_category", $catModel);
 	}
 }
