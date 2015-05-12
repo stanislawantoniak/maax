@@ -180,9 +180,19 @@ Mall.listing = {
 		this.reloadListingItemsAfterPageLoad();
 		this.loadProductsOnScroll();
 
+		console.log(this.getCurrentVisibleItems());
+
 		// load additional products to queue after page is loaded
-		this.setAutoappend(true);
-		this.loadToQueue();
+		if(this.getCurrentVisibleItems() < 100) {
+			this.setAutoappend(true);
+			this.loadToQueue();
+		} else {
+			if (this.canShowLoadMoreButton()) {
+				this.showLoadMoreButton();
+			}
+			this.showShapesListing();
+			this.showListingOverlay();
+		}
 		this.setLoadMoreLabel();
 
 	},
@@ -488,7 +498,7 @@ Mall.listing = {
 			self.placeListingFadeContainer();
 		});
 
-		Mall.listing.addToVisibleItems(products.length);
+		//Mall.listing.addToVisibleItems(products.length);
 
 		Mall.listing.setProductQueue(
 			Mall.listing.getProductQueue().slice(
@@ -815,6 +825,18 @@ jQuery.each(products, function(index, item) {
 		jQuery("#items-product").find(".shapes_listing").show();
 
 		return this;
+	},
+
+	_listing_overlay_id: 'listing-overlay',
+	showListingOverlay: function() {
+		var _ = this;
+		if(!jQuery('#'+_._listing_overlay_id).length) {
+			jQuery('#grid').append('<div id="'+ _._listing_overlay_id+'"></div>');
+		}
+		var listingOverlay = jQuery('#'+ _._listing_overlay_id),
+			contentMain = jQuery('#content-main'),
+			width = contentMain.width();
+		return listingOverlay.show();
 	},
 
 	/**

@@ -9,7 +9,11 @@
  */
 /** @var $product Zolago_Solrsearch_Model_Catalog_Product */
 $_productImageUrl = '';
-$_collection = $this->getCollection();
+
+/** @var Zolago_Customer_Model_Session $customerSession */
+$customerSession = Mage::getSingleton('zolagocustomer/session');
+$_cache = $customerSession->getProductsCache();
+$_products = $_cache['products'];
 
 ?>
 
@@ -24,32 +28,44 @@ $_collection = $this->getCollection();
             <div class="row">
                 <div id="grid" class="shuffle--container shuffle--fluid">
                     <!-- START LIST PRODUCT -->
-                    <?php foreach ($_collection as $product): ?>
-                        <?php $_productImageUrl = $product->getListingResizedImageUrl(); ?>
-                        <?php $_productImageInfo = $product->getListingResizedImageInfo(); ?>
+                    <?php foreach ($_products as $product): ?>
+	                    <?php
+	                    /**
+	                     * product[0] = id
+	                     * product[1] = name
+	                     * product[2] = url
+	                     * product[3] = price
+	                     * product[4] = final_price
+	                     * product[5] = wishlist_count
+	                     * product[6] = in_my_wishlist
+	                     * product[7] = image_url
+	                     * product[8] = image_ratio
+	                     * product[9] = manufacturer_logo_url
+	                     */
+	                    ?>
 
                         <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
-                                <a href="<?php echo $product->getCurrentUrl(); ?>" data-entity="<?php echo $product->getEntityId(); ?>">
-	                                <figure class="img_product" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
-		                                <img src="<?php echo $_productImageUrl; ?>"
-		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
+                                <a href="<?php echo $product[2]; ?>" data-entity="<?php echo $product[0]; ?>">
+	                                <figure class="img_product" style="padding-bottom: <?php echo $product[8]; ?>%">
+		                                <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/product/cache/".$product[7]; ?>"
+		                                     alt="<?php echo $product[1]; ?>"
 		                                     class="img-responsive" />
 	                                </figure>
-	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."m-image/".$product[9] ?>)"></div>
                                     <div class="name_product">
-                                        <?php echo $this->escapeHtml($product->getName()); ?>
+                                        <?php echo $product[1]; ?>
                                     </div>
 
                                     <div class="price clearfix">
                                         <div class="col-price">
-                                            <?php if ($product->getStrikeoutPrice() != $product->getFinalPrice()) : ?>
+                                            <?php if ($product[3] != $product[4]) : ?>
                                                 <span class="old">
-                                                    <?php echo $this->helper('core')->currency($product->getStrikeoutPrice(), true, false); ?>
+                                                    <?php echo $this->helper('core')->currency($product[3], true, false); ?>
                                                 </span>
                                             <?php endif; ?>
                                             <span>
-                                                <?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?>
+                                                <?php echo $this->helper('core')->currency($product[4], true, false); ?>
                                             </span>
                                         </div>
                                         <?php
@@ -57,24 +73,24 @@ $_collection = $this->getCollection();
                                         $wishlistCount = "";
                                         $inMyWishlist = "";
                                         $plusSign = "";
-                                        if ($product->getWishlistCount() - 1 > 0) {
-                                            $wishlistCount = $product->getWishlistCount();
-                                            if ($product->getInMyWishlist()) {
+                                        if ($product[5] - 1 > 0) {
+                                            $wishlistCount = $product[5];
+                                            if ($product[6]) {
                                                 $wishlistCount -= 1;
                                             }
                                         }
 
-                                        if ($product->getInMyWishlist()) {
+                                        if ($product[6]) {
                                             $inMyWishlist = $this->__("You");
-                                            if ($product->getWishlistCount() > 1) {
+                                            if ($product[5] > 1) {
                                                 $plusSign = " + ";
                                             }
                                         }
 
                                         ?>
-                                        <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
-                                             data-idproduct="<?php echo $product->getId(); ?>"
-                                             data-status="<?php echo (int)$product->getInMyWishlist(); ?>">
+                                        <div class="like <?php if ($product[6]): ?>liked<?php endif; ?>"
+                                             data-idproduct="<?php echo $product[0]; ?>"
+                                             data-status="<?php echo (int)$product[6]; ?>">
                                             <span class="like_count">
                                                 <span>
                                                     <?php echo $inMyWishlist; ?>
@@ -120,13 +136,13 @@ $_collection = $this->getCollection();
 
 <script type="text/javascript">
     Mall.listing.setQuery("<?php echo Mage::helper('catalogsearch')->getQueryText(); ?>");
-    Mall.listing.setInitProducts(<?php echo $this->getJsonProducts(); ?>);
+    Mall.listing.setInitProducts(<?php echo $this->getJsonProducts($_products); ?>);
     Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
     Mall.listing.setScrollLoadOffset(<?php echo (int) $this->getAppendWhenScroll(); ?>);
     Mall.listing.setPixelsBeforeAppend(<?php echo (int) $this->getPixelsBeforeAppend(); ?>);
 
     Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
-    Mall.listing.addToVisibleItems(<?php echo count($this->getCollection()); ?>);
+    Mall.listing.addToVisibleItems(<?php echo count($_products); ?>);
     Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
     Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
     Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
@@ -140,22 +156,13 @@ $_collection = $this->getCollection();
 
     Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>","<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
 
-    <?php foreach ($_collection as $product): ?>
+    <?php foreach ($_products as $product): ?>
     Mall.wishlist.addProduct({
-        id: <?php echo $product->getId(); ?>,
-        wishlist_count: <?php echo (int)$product->getWishlistCount(); ?>,
-        in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
+        id: <?php echo $product[0]; ?>,
+        wishlist_count: <?php echo (int)$product[5]; ?>,
+        in_your_wishlist: <?php echo $product[6] ? "true" : "false"; ?>
     });
     <?php endforeach; ?>
-
-    jQuery('#grid .like').click(function() {
-        var inMyWishlisy = parseInt(jQuery(this).attr('data-status'));
-        if (inMyWishlisy) {
-            Mall.wishlist.removeFromSmallBlock(this);
-        } else {
-            Mall.wishlist.addFromSmallBlock(this);
-        }
-    });
 
     jQuery(window).resize(function() {
         Mall.listing.placeListingFadeContainer();
