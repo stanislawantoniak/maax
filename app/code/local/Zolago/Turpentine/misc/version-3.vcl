@@ -295,7 +295,7 @@ sub vcl_fetch {
             unset beresp.http.Cache-Control;
             unset beresp.http.Expires;
 
-            if (req.url !~ "{{url_base_regex}}(?:{{url_excludes}})") {
+            if (req.url !~ "{{url_base_regex}}(?:{{url_category_nopragma}})") {
                 unset beresp.http.Pragma;
             }
 

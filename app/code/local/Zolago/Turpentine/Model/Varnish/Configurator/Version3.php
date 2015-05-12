@@ -20,6 +20,7 @@ class Zolago_Turpentine_Model_Varnish_Configurator_Version3
 		// Override esi private ttl - is real magento cookie time - always!
         $vars['esi_private_ttl'] = 
 				Mage::helper( 'turpentine/esi' )->getSystemCookieLifeTime();
+		$vars['url_category_nopragma'] = $this->_getCategoryUrlExcludes();
         return $vars;
 	}
 
