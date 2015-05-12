@@ -35,8 +35,6 @@ class Zolago_Turpentine_Model_Varnish_Configurator_Version3
 			$out[] = $cat->getUrlPath();
 		}
 
-		Mage::log($out,null,'varnishCat.log');
-
 		return implode('|',$out);
 	}
 
