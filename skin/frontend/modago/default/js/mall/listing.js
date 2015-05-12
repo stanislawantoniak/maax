@@ -2948,5 +2948,7 @@ jQuery(document).ready(function () {
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
         jQuery(window).resize(Mall.listing.updateFilters);
+    } else {
+        Mall.listing.initShuffle();
     }
 });
