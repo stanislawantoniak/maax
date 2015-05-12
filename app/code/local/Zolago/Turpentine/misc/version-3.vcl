@@ -295,7 +295,7 @@ sub vcl_fetch {
             unset beresp.http.Cache-Control;
             unset beresp.http.Expires;
 
-			if(req.url !~ "^/(catalog\/category)/.*$"){
+			if(req.url !~ "catalog/category/view/id"){
                 unset beresp.http.Pragma;
             }
             unset beresp.http.Cache;
