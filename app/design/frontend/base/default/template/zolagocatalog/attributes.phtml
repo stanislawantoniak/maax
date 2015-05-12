@@ -1,0 +1,82 @@
+<?php $_helper = Mage::helper("zolagocatalog"); ?>
+
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $_helper->__("Attributes");?></h3>
+        </div>
+    </div>
+    <div class="row">    
+    <div class="col-md-12">
+        <div class="widget box">
+            <div class="widget-header">
+                <h4><?php echo $_helper->__('Attribute preview'); ?></h4>
+            </div>
+            <div class="widget-content">
+                <form class="form-group">
+                    <div class="row">
+                    <label class="col-md-2 control-label" for="attribute_set_select"><?php echo $_helper->__('Attribute set'); ?></label>
+                    <div class="col-md-10">
+                        <select id="attribute_set_select" class="col-md-12 select_select2">
+                            <option value="0"><?php echo $_helper->__('-- choose attribute set --'); ?></option>
+                            <?php foreach ($this->_getAttributeSetList() as $id=>$item) : ?>
+                                <option value="<?php echo $id; ?>"><?php echo $item;?></option>
+                            <?php endforeach; ?>
+                        </select>   
+                    </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                    <label class="col-md-2 control-label" for="attribute_select"><?php echo $_helper->__('Attributes'); ?></label>
+                    <div class="col-md-10">
+                        <select id="attribute_select" class="col-md-12 form-control" size="13">
+                        </select>   
+                    </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                    <label class="col-md-2 control-label" for="attribute_select"><?php echo $_helper->__('Attribute values'); ?></label>
+                    <div class="col-md-10">
+                        <select id="attribute_value_select" class="col-md-12 form-control" size="13">
+                        </select>   
+                    </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-10">
+                        <button class="btn btn-primary"><?php echo $_helper->__('Suggest new value'); ?></button>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function() {
+    jQuery(".select_select2").select2();
+    jQuery("#attribute_set_select").change(function() {
+        // clear selects
+        jQuery('#attribute_value_select').html('');
+        jQuery('#attribute_select').html('');
+        // load attributes by jquery
+        var params = {};
+        params.attribute_set = jQuery(this).val();
+        jQuery.ajax({            
+            url: '/udprod/vendor_attributes/get_attributes',
+            method: 'POST',
+            data: params,
+            success: function(answer) {
+                jQuery('#attribute_select').html(answer);
+            }
+        });    
+    });
+});
+</script>
+
+
