@@ -16,13 +16,17 @@ Mall.product = {
 	},
 
 	updateContextBreadcrumbs: function() {
-		var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
-		localStorage.removeItem(this._entity_id);
-		if (contextBreadcrumbsHtml != null) {
+        var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
+
+        localStorage.removeItem(this._entity_id);
+
+        if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
-		}
-		contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
-		if (contextBreadcrumbsHtml) {
+        }
+        contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
+
+
+        if (contextBreadcrumbsHtml) {
 			var productHtml = jQuery('#breadcrumbs .product');
 			jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
 			this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
@@ -48,7 +52,7 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        //sessionStorage.removeItem(this._entity_id);
+        sessionStorage.removeItem(this._entity_id);
 
 	},
 

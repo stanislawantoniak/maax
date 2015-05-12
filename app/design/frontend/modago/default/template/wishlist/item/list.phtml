@@ -103,6 +103,8 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
     Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
     Mall.translate.add("You", "<?php echo $this->__("You"); ?>");
 
+    Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>","<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+
     var grid = jQuery('#grid'),
         sizer = jQuery(grid).find('.shuffle__sizer');
 

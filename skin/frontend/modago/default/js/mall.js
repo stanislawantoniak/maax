@@ -1290,6 +1290,14 @@ Mall.Footer = {
 	}
 };
 
+Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
+	Mall.baseUrl = baseUrl;
+	Mall.baseUrlNoVendor = baseUrlNoVendor;
+	Mall.mediaUrl = Mall.baseUrlNoVendor + "media/";
+	Mall.productImagesUrl = Mall.mediaUrl + "catalog/product/cache/";
+	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
+};
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -1306,15 +1314,18 @@ jQuery(document).ready(function() {
 	initToggleSearch();
     Mall.disableSearchNoQuery();
 
-    // Slidebars Submenus
-    jQuery(".sb-slidebar ul li a").swipe( {
-        //Generic swipe handler for all directions
+    // Close  by swipe: Slidebars Submenus and mobile filters in listing
+    jQuery(window).swipe( {
         swipeLeft:function(event) {
-            closeHamburgerMenu(event);
+            if (jQuery('body').hasClass('sb-open')) {
+                closeHamburgerMenu(event);
+            }
+            if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
+                Mall.listing.closeMobileFilters();
+            }
         },
-        triggerOnTouchEnd: false,
+        triggerOnTouchEnd: true,
         excludedElements: "label, button, input, select, textarea, .noSwipe",
-        //Default is 75px, set to 0 for demo so any distance triggers swipe
         threshold: 5
     });
 

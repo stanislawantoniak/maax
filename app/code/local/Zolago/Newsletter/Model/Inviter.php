@@ -60,14 +60,18 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			|| !$this->_getInvitationEmailTemplateId()
 			|| !$this->_getInvitationEmailSender()
 		) {
+
 			return false;
 		}
 
-		if ($this->_isInvitationEmailEnabled()
+        if ($this->_isInvitationEmailEnabled()
 			&& $this->validateEmail($email)
-			&& $this->_isEmailSuitableForInvitation($email)) {
+			&& $this->_isEmailSuitableForInvitation($email)
+        ) {
+
 			/** @var Zolago_Common_Helper_Data $helper */
 			$helper = Mage::helper("zolagocommon");
+
 			return $helper->sendEmailTemplate(
 				$email,
 				'',
@@ -102,15 +106,19 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 */
 	protected function _isEmailSuitableForInvitation($email) {
 		/** @var Mage_Newsletter_Model_Subscriber $model */
+
 		$model = Mage::getModel("newsletter/subscriber");
 		$subscription = $model->loadByEmail($email);
 		$sid = $subscription->getId();
+
 		$save = false;
 		if ($sid) {
 			$status = $subscription->getSubscriberStatus();
+
 			if ($status == self::STATUS_SUBSCRIBED) {
+
 				return false;
-			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
+			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0 || $status == self::STATUS_NOT_ACTIVE) {
 				$this->_setSubscriberId($sid);
 				$confirm_code = $subscription->getSubscriberConfirmCode();
 				if(!$confirm_code) {
@@ -126,11 +134,15 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				if($save) {
 					$subscription->save();
 				}
+                ;
 				return true;
+
 			} else {
+
 				return false;
 			}
 		} else {
+
 			return $this->_addInactiveSubscriber($email);
 		}
 	}

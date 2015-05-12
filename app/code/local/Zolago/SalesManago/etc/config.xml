@@ -19,6 +19,13 @@
                     </zolago_salesmanago_observer>
                 </observers>
             </customer_register_success>
+            <newsletter_subscriber_save_before>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>disabled</type>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </newsletter_subscriber_save_before>
             <newsletter_subscriber_save_after>
                 <observers>
                     <zolago_salesmanago_observer>
@@ -28,13 +35,7 @@
                     </zolago_salesmanago_observer>
                 </observers>
             </newsletter_subscriber_save_after>
-            <newsletter_subscriber_save_before>
-                <observers>
-                    <salesmanago_tracking_observer>
-                        <type>disabled</type>
-                    </salesmanago_tracking_observer>
-                </observers>
-            </newsletter_subscriber_save_before>
+
         </events>
     </frontend>
     <global>
@@ -59,7 +60,7 @@
         </blocks>
         <helpers>
             <zolagosalesmanago>
-                <class>Zolago_SalesManago_Tracking_Helper</class>
+                <class>Zolago_SalesManago_Helper</class>
             </zolagosalesmanago>
             <tracking>
                 <rewrite>
@@ -67,6 +68,22 @@
                 </rewrite>
             </tracking>
         </helpers>
+        <events>
+            <customer_register_success>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>disabled</type>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </customer_register_success>
+            <newsletter_subscriber_save_before>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>disabled</type>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </newsletter_subscriber_save_before>
+        </events>
         <resources>
             <salesmanago>
                 <setup>
