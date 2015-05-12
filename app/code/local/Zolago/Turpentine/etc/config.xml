@@ -17,6 +17,7 @@
 					<varnish_admin>Zolago_Turpentine_Model_Varnish_Admin</varnish_admin>
 					<observer_varnish>Zolago_Turpentine_Model_Observer_Varnish</observer_varnish>
                     <observer_ban>Zolago_Turpentine_Model_Observer_Ban</observer_ban>
+					<varnish_configurator_abstract>Zolago_Turpentine_Model_Varnish_Configurator_Abstract</varnish_configurator_abstract>
 				</rewrite>
 			</turpentine>
 		</models>

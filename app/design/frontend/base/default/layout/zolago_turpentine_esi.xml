@@ -159,10 +159,6 @@
         -->
     </catalog_product_compare_index>
 
-	<catalog_category_view>
-		<turpentine_cache_flag value="0"/>
-	</catalog_category_view>
-
     <!-- Checkout -->
 
     <!-- We cache the checkout cart page on a per-client basis -->
