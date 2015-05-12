@@ -292,15 +292,14 @@ sub vcl_fetch {
                 unset beresp.http.Set-Cookie;
             }
             # we'll set our own cache headers if we need them
-            unset beresp.http.Cache-Control;
 
             if (req.url !~ "{{url_base_regex}}(?:{{url_category_nopragma}})") {
+                unset beresp.http.Cache-Control;
                 unset beresp.http.Pragma;
                 unset beresp.http.Expires;
+                unset beresp.http.Cache;
+                unset beresp.http.Age;
             }
-
-            unset beresp.http.Cache;
-            unset beresp.http.Age;
 
             if (beresp.http.X-Turpentine-Esi == "1") {
                 set beresp.do_esi = true;
