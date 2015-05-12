@@ -23,9 +23,6 @@ Mall.product = {
         if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
         }
-        if (searchParams != null) {
-            sessionStorage.setItem(this._entity_id + "_search_params", searchParams);
-        }
         contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
 
 
