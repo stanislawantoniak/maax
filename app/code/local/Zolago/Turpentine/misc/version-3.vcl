@@ -294,7 +294,10 @@ sub vcl_fetch {
             # we'll set our own cache headers if we need them
             unset beresp.http.Cache-Control;
             unset beresp.http.Expires;
-            # unset beresp.http.Pragma;
+
+			if(req.url !~ "^/(catalog\/category)/.*$"){
+                unset beresp.http.Pragma;
+            }
             unset beresp.http.Cache;
             unset beresp.http.Age;
 
