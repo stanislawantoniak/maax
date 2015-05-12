@@ -1,6 +1,6 @@
 <?php
 class Zolago_Turpentine_Model_Varnish_Configurator_Version3
-    extends Nexcessnet_Turpentine_Model_Varnish_Configurator_Version3 {
+    extends Zolago_Turpentine_Model_Varnish_Configurator_Abstract {
 	
 	/**
 	 * Use custom file

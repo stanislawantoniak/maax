@@ -21,6 +21,10 @@
 
 abstract class Zolago_Turpentine_Model_Varnish_Configurator_Abstract extends Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
 
+	public function generate($doClean=true) {
+		return;
+	}
+
 	/**
 	 * Format the URL exclusions for insertion in a regex. Admin frontname and
 	 * API are automatically added.
