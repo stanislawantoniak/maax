@@ -14,7 +14,6 @@
                 <h4><?php echo $_helper->__('Attribute preview'); ?></h4>
             </div>
             <div class="widget-content">
-                <form class="form-group">
                     <div class="row">
                     <label class="col-md-2 control-label" for="attribute_set_select"><?php echo $_helper->__('Attribute set'); ?></label>
                     <div class="col-md-10">
@@ -38,8 +37,10 @@
                     <div class="row">
                     <label class="col-md-2 control-label" for="attribute_select"><?php echo $_helper->__('Attribute values'); ?></label>
                     <div class="col-md-10">
-                        <select id="attribute_value_select" class="col-md-12 form-control" size="13">
-                        </select>   
+                    <div class="widget box">
+                        <div class="widget-content" id="attribute_values" style="height:200px;overflow-y:auto">
+                        </div>
+                    </div>
                     </div>
                     </div>
                     <br/>
@@ -47,10 +48,9 @@
                     <div class="col-md-2">
                     </div>
                     <div class="col-md-10">
-                        <button class="btn btn-primary"><?php echo $_helper->__('Suggest new value'); ?></button>
+                        <button type="button" class="btn btn-primary"><?php echo $_helper->__('Suggest new value'); ?></button>
                     </div>
                     </div>
-                </form>
             </div>
         </div>
         
@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
     jQuery(".select_select2").select2();
     jQuery("#attribute_set_select").change(function() {
         // clear selects
-        jQuery('#attribute_value_select').html('');
+        jQuery('#attribute_values').html('');
         jQuery('#attribute_select').html('');
         // load attributes by jquery
         var params = {};
@@ -73,6 +73,19 @@ jQuery(document).ready(function() {
             data: params,
             success: function(answer) {
                 jQuery('#attribute_select').html(answer);
+            }
+        });    
+    });
+    jQuery('#attribute_select').change(function() {
+        jQuery('#attribute_values').html('');
+        var params = {} ;
+        params.attribute = jQuery(this).val();
+        jQuery.ajax({            
+            url: '/udprod/vendor_attributes/get_values',
+            method: 'POST',
+            data: params,
+            success: function(answer) {
+                jQuery('#attribute_values').html(answer);
             }
         });    
     });
