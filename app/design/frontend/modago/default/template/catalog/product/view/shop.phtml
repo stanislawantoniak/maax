@@ -38,7 +38,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
             <input type="hidden" name="related_product" id="related-products-field" value="" />
         </div>
 
-        <div class="product-name"><h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1></div>
+        <div class="product-name"><h1 itemprop="name"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1></div>
         <p class="short-description hidden-xs">
             <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
         </p>
