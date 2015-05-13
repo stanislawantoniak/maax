@@ -1,89 +1,89 @@
-<?php //004a2
-if(extension_loaded('bcompiler')&&file_exists(__FILE__.'b')){return(require(__FILE__.'b'));}if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='/ioncube/ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if((@$__id[1])==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl'))@dl($__ln);}else{die('The file '.__FILE__." is corrupted. Ensure that you use binary mode when transferring files with FTP and disable the 'TAR smart cr/lf feature' if using WinZIP\n");}if(function_exists('_il_exec')){return _il_exec();}die('The file <b>'.__FILE__.'</b> has been encoded with the <a href="http://www.ioncube.com">ionCube PHP Encoder</a> and requires the free '.basename($__ln).' <a href="http://www.ioncube.com/loader_download/">ionCube PHP Loader</a> to be installed.');
+<?php
 
-?>
-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
-yy3lAsYiBTXlwtC5//YbgS6BDm==
+class Unirgy_DropshipPayout_Helper_Protected
+{
+	public function payoutPay($payout) {
+		Unirgy_Dropship_Helper_Protected::validateLicense("Unirgy_DropshipPayout");
+		try {
+			$ptHlp = Mage::helper("udpayout");
+			if ($payout->getPayoutStatus() == Unirgy_DropshipPayout_Model_Payout::STATUS_PAID) {
+				Mage::throwException($ptHlp->__("This payout already paid"));
+			}
+
+			if ($payout->getPayoutStatus() == Unirgy_DropshipPayout_Model_Payout::STATUS_CANCELED) {
+				Mage::throwException($ptHlp->__("This payout is canceled"));
+			}
+
+			if ($payout->getPayoutStatus() == Unirgy_DropshipPayout_Model_Payout::STATUS_PAYPAL_IPN) {
+				Mage::throwException($ptHlp->__("This payout wait paypal IPN"));
+			}
+
+			if ($payout->getTotalDue() <= 0) {
+				Mage::throwException($ptHlp->__("Payout \"total due\" must be positive"));
+			}
+
+			if (!$payout->getPayoutMethod()) {
+				Mage::throwException($ptHlp->__("Empty payout method"));
+			}
+
+			$pmNode = Mage::getConfig()->getNode("global/udropship/payout/method/" . $payout->getPayoutMethod());
+			if (!$pmNode) {
+				Mage::throwException($ptHlp->__("Unknown payout method: '%s'", $payout->getPayoutMethod()));
+			}
+
+			$methodClass = $pmNode->getClassName();
+			if (!class_exists($methodClass)) {
+				Mage::throwException($ptHlp->__("Can't find payout method class"));
+			}
+
+			$method = new $methodClass();
+			$method->pay($payout);
+			$payout->save();
+		} catch (Exception $e) {
+			$payout->addMessage($e->getMessage(), Unirgy_DropshipPayout_Model_Payout::STATUS_ERROR)->save();
+			throw $e;
+		}
+	}
+
+	public function sales_order_shipment_save_after($po) {
+		Unirgy_Dropship_Helper_Protected::validateLicense("Unirgy_DropshipPayout");
+		$vendor = Mage::helper("udropship")->getVendor($po->getUdropshipVendor());
+		$ptPoStatuses = $vendor->getPayoutPoStatus();
+		if (!is_array($ptPoStatuses)) {
+			$ptPoStatuses = explode(",", $ptPoStatuses);
+		}
+
+		if ($vendor->getPayoutType() == "auto" && $vendor->getStatementPoType() == "shipment" && !$po->hasUdropshipPayoutStatus() && in_array($po->getUdropshipStatus(), $ptPoStatuses)) {
+			try {
+				Unirgy_DropshipPayout_Model_Payout::processPos(array($po), $vendor->getStatementSubtotalBase());
+				$payout = Mage::helper("udpayout")->createPayout($vendor)->addPo($po)->finishPayout()->pay();
+				$po->setUdropshipPayoutStatus($payout->getPayoutStatus());
+				$po->getResource()->saveAttribute($po, "udropship_payout_status");
+			} catch (Exception $e) {
+				Mage::logException($e);
+			}
+		}
+	}
+
+	public function udpo_po_save_after($po) {
+		Unirgy_Dropship_Helper_Protected::validateLicense("Unirgy_DropshipPayout");
+		$vendor = Mage::helper("udropship")->getVendor($po->getUdropshipVendor());
+		$ptPoStatuses = $vendor->getPayoutPoStatus();
+		if (!is_array($ptPoStatuses)) {
+			$ptPoStatuses = explode(",", $ptPoStatuses);
+		}
+
+		if ($vendor->getPayoutType() == "auto" && $vendor->getStatementPoType() == "po" && !$po->hasUdropshipPayoutStatus() && in_array($po->getUdropshipStatus(), $ptPoStatuses)) {
+			try {
+				Unirgy_DropshipPayout_Model_Payout::processPos(array($po), $vendor->getStatementSubtotalBase());
+				$payout = Mage::helper("udpayout")->createPayout($vendor)->addPo($po)->finishPayout()->pay();
+				$po->setUdropshipPayoutStatus($payout->getPayoutStatus());
+				$po->getResource()->saveAttribute($po, "udropship_payout_status");
+			} catch (Exception $e) {
+				Mage::logException($e);
+			}
+		}
+	}
+}
+
+

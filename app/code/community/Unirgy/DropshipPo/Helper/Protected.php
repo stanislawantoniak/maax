@@ -1,354 +1,285 @@
-<?php //004a2
-if(extension_loaded('bcompiler')&&file_exists(__FILE__.'b')){return(require(__FILE__.'b'));}if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='/ioncube/ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if((@$__id[1])==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl'))@dl($__ln);}else{die('The file '.__FILE__." is corrupted. Ensure that you use binary mode when transferring files with FTP and disable the 'TAR smart cr/lf feature' if using WinZIP\n");}if(function_exists('_il_exec')){return _il_exec();}die('The file <b>'.__FILE__.'</b> has been encoded with the <a href="http://www.ioncube.com">ionCube PHP Encoder</a> and requires the free '.basename($__ln).' <a href="http://www.ioncube.com/loader_download/">ionCube PHP Loader</a> to be installed.');
+<?php
 
-?>
-4+oV50DQYL07Jd9debGSSqyqfcjHd/uwERfrhOh4xO3d44B3ov1DcG9mcA/XDpUFOQDJl+Rxjnio
-yV7ebrMJtMPGKXxC7+zxKp9c0NG1JSBv1HawrpZt5NvMLCxAF/S67UIe4jjXAYYXswN3iALsphZ3
-+rGRC+Tj4j7WjzS4DkKZ0oY9bQ38771ukaSBAcfsNxkQToz7br84hVUqEallKji/MAEcdDSin9aW
-KZZkjed7SHXGs1WrxaCX+VNEOgD4qVPJIJH5+bEiRAPDkhfw+/jZT1S48QfYMkdN7NUu9lqoAj1i
-Ij5EJXs+bKiRH4neNEjI/rbk1TJF3kjY7EFyZpTbqRCzhVIYWsFrMnRw/+ONU5+Vgs4VGNDBqP6J
-+PwkUOZOsMP3YWQsqAAzKan1eIUMtPdo3Dgqo/7OxCIs4otKDPJ64TPx+hIkpRRZoUMIh9hKNrGi
-alTesWyDhFczYafeQJB+a4CHQLdlRA75jdsysg4RhCd1sil0QDRncebCY5zSIiQa6lW5do6aAJSB
-2q8waRyfBdY5nkENAXR6YABiibQPIwxfbp9IPb5VL0AigtUkmBpIs4mdw6TspARliJzNK3GutsNQ
-Ul2QSGxeq7HUvkWkDwKKoAMWOW1h4M2UzwIKiLuG3GNbnTnHw1jyo5DCp4V/d68pKmYRF+aHXnGD
-0ijLECT+LwsjCL8Vmh+eSTdC7bq7MpcexNO0LV7qAM8MVjtDVJKXVB3F5sDi5pQ8GrK+yUq8+/rf
-BG3HmHodYCUqXpixMpKXscCD+cZEyNwbdh8f6BEUA6m0/jy4GH5Z0/ewTXagnS6sTNKqVZfb9n9P
-4PgkZSd/vTyqHEnDR6z3fup7AyeJeukg+HdHIIqSv1nz73+zSFuuus8N1CyGOcssQGm7s2fcIarn
-r9n+r5OleCfmUw90v7a/mAJrxnJysTLuW8cGxwtTNUlVKF1d2o1CmEtD4w5fgBazCKtjlwrw6Mkc
-0MH7xy8eRUDPwkiIFWeuJAnL4RjOEtM8rZ9J98VIenPyNBXT3THq+ml9SKlQQ/PoMsG3VV4z286L
-zmi5LCnpUKxYzq6vjht4f/xVts1UilMx5xIZjJiifxkQjGuVEu9Ug/SM9jFEHpZ8r7DFcg/+r/oD
-iDoZhYxOlEP3ZfE9eCJ8hQc0/jkLnGtDoUeztc6X3+YfG8B8SuVDM0UYQd8ClTZS6OcEGuwUTvBO
-+IWRppFvu22VusHrP22MFOG5ZEPR79v37G4um9V0NP/YX1LQxS31dJXEJpZcpkzCfAsRcNyroIyr
-VLJjCreY9R9YVar5kbTIZ90aRBux+rH+AiYGe90IvQUNvOAWSmwD0gFRWcmuXcPLzfPtLeeCwPvY
-OToVN4F5thEGpMrPwIAcs0VfjqMwuBLVVTnWruSL6+RmwzHs+d1ZSHMVXofBgqZzGHW+651JCqjt
-flVqbIuD20T92z3zwNNWDuNveB2YqXgfbynpgE7209L4VRpH30NxAs8Q1AAUDXeeso4ozN+V/IJ5
-TMy6/BhuwQLmU7rCrWn7eMGPc28fefKJmOdemgEcPrpNOk3H0M39JqBRQUgYwH188s/SEsLhbHhq
-CnsrpDIVxaafrLm3hHEcpRD+djOsJVNufn8L8DQAHk0qOVBcbtWFCbDbXxTgfQ7RJrAow/N/qMFe
-TR4n7smDignSx7iLtKHysYMJONqo0NiIgp//XbMrhWJ5WX87hPWaGlhCRbqfymc67lxVhfYzo2oZ
-FM3jhorH6eDaNl4sgzdEfsmgtOi4o7/sMvCA66BAl2uV0uCwxEC68jpO8w5WXtWIW33cWmb3b88s
-whye/v0G24uwYpICxof9jgZnXxGl2XwRErHOLMcIpX4/zFlTWyJaJlkMKR+ou7uaC5CbYNCtA9NR
-zF6Qfz/zuUwv25rQxNkOSE6z1R9DHZBL6SQotxb2IfLZUYlwlhjrYVRXDqNUh73uVIVUAymfRLap
-EbUKD4RSB1HGdCnMwk+SaBP8pqv8eOhYQIy0ec7fceck2Rat81NgFOwWR/jXDWOzvWqL3Id0MJ2E
-E/ACzKC9CeO0QsOW5DvOq71miDs/d/OF7cqH9R6rHxC3Yqa6+HLNiKsnID3lqtkPItIcvvJX23zg
-2PTxpYn2oNGX0sn2TjqEckwSBdxHjPvejPOxcDrmmee84fDh9BekrndjV91s6ai8Iric48b9QJeP
-JiQ9UtZrkK1ftVmqFKG9HxLPtBoWCFujmzE2ARDuHyghPqINCRJbZP5rUwH28XmWTdr/aGl2i9tT
-+emKK092POYDbKs4k2uG6c2Qjcv1G2dhH1gaHgRYuDitvH8L7KlfTmwMvu9nhvHZRITmW85o0ibk
-8OBQBqDR+ei5bwBbJTM+1i3l+ZQe9lBOqmPlho29LGnC/vTWGNJ5AWC4zCjM+B4qoQ6P+UKeEKph
-eyurGmi6A4EI8mhSM+EYzw7OLPYnWXRJePyvhEJwvdkuYtQQR1KzCQhJypkJVRxF2lmNWI+7Ut72
-TfdzCsOLvaogG9XqiarWYRBP8G2GKOQaf+nYUDlWu4+WUSjqt6C1VWadX4oGrTXKCWSaG4NT31Ux
-4Dp2hUJlZA74jXb6RV0KcEsWVlPJOZltMR0buPm7blKHwBDprJI8AsuvZ+TK1RnrWYPzfT86marl
-leShj1DNfH2C1RbnmqDtTN7Qu34/Q0ZxcyMoe55dMU9HWM2gE6VW5AlNDoInRdtFThLIbU5T/UW6
-CPJc0rR/+sXNjJMsRBDz3DGFeg+V1uZ55EohkGjfcwPWEc2TiU8/eRHjjfCz9z9p0HM6xYjIg4fZ
-ycBE0OcWWdUBrGs13pW2+cIvWubZQJhAiUaGN1WbjS6xLyMIhq2o2ju79353CrPgl5lGHDjwevNB
-OjK03Ka2GZvzbLuGiNWKbrIiSnYWRMX+fWH+Op9Obn1E8+9H/ZfoJwO2og+lNb2Rsfk1Mu8WOHOI
-6eLGpoD0jgOOjYzKvv+PzvDd3B9mSXKiG5PypZyNuYwtBzrYo3OlhOlcrcUR2fYTwc32xSNAkwv4
-1HjgwB9IYD6WxJGQecZX2MIcb9Ba3wTU6niI6I57EiXO9lzalRpMvuEUAJQh2HLCstTQ9S1zBuR9
-CXIiVC0CYxhIuZxPLABAI0F9m628MgREmqe1kKOk4nBaCEePvkTZtjRyy+4LkXmVRoYxlfSnbx9m
-tUkPL6jC/qMHp+ukty7uHeW3TUQE6u0appX497CKWnfMW8bZ5ABfn9UjtvDnHADafXQpW2AZYjj1
-7antfZeA4o0E6m/ISgoY5IcpVHcUIR3ZY6Keaz6s0KDsD15Ocfxt2dzz3YvK5BuX5WObToXmdrhn
-j6pU2s0fQwAZOCnpT2DV6UvTKzfAbeYUmh/d45JZtbOmRVZyKQm2uA7P5/y8iysQ7kWjd3kqK6Fd
-fn+KZEqq/zqTE4T78SCvh+S0IpMly2kDAHRPjTYYQ3CDzAzuMIf3Ttkps4XUAqW8oXqiC/fNyFqv
-1/KauMJK2qb9CfgkMn4VGzlz9cICEnMi7pcfSH9QBdUqpvPu4A40iynV/6AqVt798YvTiHKMUIks
-hS+V1tXZm44c7rV+cTwCS3Oad986vgp/fxAT3lS0KnA6m0qAhMal2Mf00TL9JOqN0kHHSVcxiauY
-4Xroljsz0zEne7uT9VYv0GcDQRnq2dffEjTWlQR3nrs7JjMckputpBqEEUQDqUbP23YRJsrnx/XS
-ZH/gghNXtFkTlAkxqP4CSDrr4lQY2Xm5kJtBfZFru4lJW2ni0qZnDzzUO6WxPT3Dxnh1p/bbCno9
-jdVvLSw2fnWi7JU8vbHpljGsLlOZ54NBHOf1XkyV+nSSdZg2NLOoWFitV2eO/5VtJTJryCv9PRsL
-C++5u3FaVt3Db7NkrINk1vBkxIn8NUoTjxu3LNnxZ8e7aYbgm1SYvzSZYvbKq1shQEL3OxSXmmPl
-ggw5tWjHLp2oAFnb1HZpK4I+Vgr0cTzyyKNalHgPrtbXbJY5stLhVm39KkH2xjqo+sfHC0kwkQ6v
-30yNaeW3y8KJSLUL79vAGKoJyoa2KeNU2SAPH984JzikX+t8cz504B88f2g/OvW4kOTZ2RBWOJwW
-slC5hCtBse3qINlqrGtMN+XLDI9DZjl0fUmVmWw9wyfQTUDXku2sNKfxDVoxbcqsOS4cMObvnav3
-JnpNEKM80+vR+y968oumLZ48SBbb24EatIgniIeh8j+GwtZIFIT2+BOTYpKuIe/s0pC/O3j2pFLL
-UMdCrYyszQ33DQK0n09z8WoacYw97XqDBcN0lNSZkwwSZA9dsfs1UNNRDBEgj9wJUI0Dv8M52eyP
-2eJbiqqM/WH8cbZYq/d5qaZIXNsGfhKoUMn61mWUkBfTh5s5Syeo6Vpv0b9tyQaltR3usYYxfLZT
-3h/ptupXPUX6riWdlZITbToCyRaBV2vLmPHX1q/npJ9tZKk2AJRWrzrGsPmOAt5OGR2LQv0xqxms
-W4LUN9NMHgD1SyXVpu5HW0K7f2w7TzGGSIV/TY7ub7QOudtJ1mbIg8uUijmDLt717QLRYWfYaSRj
-wfofEfyzebiS5xbnFnPTASa6AMUbJsX5D1GxrMW11/7sNAbFo18AEVqBqUKZs66t9boQEa7WcVZl
-dDYlybxoC70IVR5Crw58Cx5BmXdzn7OVGf48hGJqJ4MFAdbsArXxGLoF5g6yjpaA1wJ6RE5viyxe
-paKDPiqHsFL0bYFfgnFmfUTbspfZJiotYlkfzzCdr7F/ZNRiDPrKj9y/kzqwXKLGIlTDCCabu6vD
-ZSM97dKGe2CzNUx5cY9wnwBiG3b2j1e19mBAN606vqixU4AiHiITsy9drR6Ws+jCToNjkGCN3O/i
-7eRX8OeonM0z56CUB5rFO5t5dm+UJIeXbjUt/2nFcPWol5f/HvSQSFDO3f8l+vKDuKCArDd3bv40
-1pNDt3Z6pLbh9dFWW5guEIENvpf7sBiHjl3WA/6YHWLw2dlnFW93LG6m3ZW51v0HIZw9TjCEoL0h
-YeIBiyy0/G9KluJCrUhZDP7vsNVsk47yVcAjHVDavyU9VuLHehldwudrNzAWUTFTXlmfbyi73SNY
-IV03D6RQixgAKATpRVdvOuJsQMqlBZQdYZZ9YBk7b08AvkXjQAGH/Xvatmq1iBT59HhBPHclX1gp
-C5FAAjcI/eyoKoypISz20UeMppzIXHaCvMBRIn829+o0yWXk8JXxlnnWFzfZ0uLbrhj9/PjDqaM+
-Uvq8i2WoAMKLXe1e5zVxxkZlqOf/2ldgh5lewjFwZiPPXYB9yOOMsPybSsqt/2FWLiYwlBHDYcVL
-bKQ9c2tqUAdXWYu1X1oaUT4Pm8RsVL4N7JbxXiuzuyWzKyiU7OFXu9hcCzMDsx47eaqFtprfsudH
-A+JUZjyAhS0vOd8DePpbT9dynApbw+/AQUb2ufFfDWo0qq0h36cSjkhuBL4eXKdChcGJD65WwniS
-4baYEIRy/XHbSddC8IBsfZh1I5F1VdubGpWYAFNYu+BidMbxk7oy0Aw6SR+saOIBUsUTZ93dUtLh
-mTC+oUJWl9fY+4+29nVMpPotTl7ggCNw8/56BSy/6wKkvtvD9NAHgOaBqyOYuYMiTY/CG888NrRj
-6vum0bctXlr8jqrDoxS05KMurJAyiVR0MBpJRu6YkU0PPNInbmmzvPB8z1lya7C0OT09HVKJmIXt
-7WMQIn0OfeXYuaUqDJt7Y8xHtLaCnHwZhp7/dEwkIL4K4jgBrBHZ98rjsFox5KnykOrYdnJAUdgb
-4AtWBn1s/CDJzAVnhJbXzUF2ySOoaAbUufZ3GhsGc1D7mIhsKOZQCXyhCUMkAmdq7vQr/xSST6IQ
-x3cxe+laAiPRd7DzeoTB7rzib1sL4afRmBgOfau3zNPZdKwPH5jyfNcv/gk4h2XlG2+E4PIDCh6/
-+PWKrrrCoV2baqtmhNDH3S/4nkdXfAfc6rb7jFdA20jfDEA51oa9lGZWRlcAuXgEEXPvG+eda9Bu
-TSyV5qsFvs7yvuvyhZjQfTAt9IYj/sAuciOhaeCIg+bGU4ARArvbIahG7DrCziTOcXQL0yVgJton
-ftmGtjBoXVw7dIxcm/iP4PQz2vaO5KEcR2GWI/RGVIE+VR2MX08ogTYeGc73NL5596pG43BgV19H
-wEQtuIlmTSDze8ensLAyRFXsPue5aMkTafA5bBCeq1mUUOKTi3UJO3Fq78bcQPO0cjJh/QftZZzx
-hlKQDwXbZv3Yywb7u82EChkMORUvDspIAei2siiHb1yiXhS/+XP5gfJA1HqqQOXsQIuTrOoLmBdu
-DHUZ0Q8hVn0un8ddO39NAQxN03ebc5sRjzB2ELcOOUgYdFTU72YEe9/eb4nfjTWqLDG9Qad0cJf1
-UG73m7d8a3jx02XSn3e4if/pJmrYZ0Xi4Hj+RTmnpHHSSClXKvShLLvsVvh1m5sNO30EexR5q+d+
-rQTTgbwm5zgRYX4rObvKgG7G1nI/QtYP7pOMK6zis0lJSySGOng+q5a1UtJNB5aFFn4Wpq8f3r92
-+Ami/6AUEO83/vkm1ZdXVoHGHo75sCUyu4fK2eR6vYD2yQRwOpa+adhxRHgHHJ6zsXT8AG785dX3
-eMJdHCSfNOSTwxgp8rNHZF2ml2ywqBE9WFIsRnoAJ1p+2L9QHYUgoEPfXpHqJVgW/coTqM2Y5iu5
-bMG4nfdAgvn2Q00vS/sxr+A/tEghvU/VIO5SXRNdPeQyLQpfRwqku002M7M4rqShjc7y+tESp70I
-Gyw7hiBqc3Q3FTNYvBG9GXnuB6Hz5u6lKgbYHaZHsHoLcsF8msUcxJCtpl78WI/5E86FmfC/YX59
-FSHqE/ERSaUhTnhU9I7hY6RCFnrUao4K/Xz2IBRFgj3X2Ei71r8T1kTFnfjln3RTVuzjfoAW1+LQ
-5Qi2iAcSgobVI12I716prW/ESsvoaxQyhB/TmLL/71swEV7RNbG/xBstXyzG036t3/iZlNq/6WdB
-RwNBTn6BhAdcWVk0wM9lWmtFOUzOV78FQBt6kKW40+sLgTmgy065spLUlCaeAxd4uFAFIqDZ6FT9
-Anp2vtullsk7Ru3hMK9KUH4t+gZe1jqztadECTNyl8EooPZMaf4FPRTA7LWpbnkBOND1pktYbwL4
-fGEuaeXG9f6GXsWCs8Nl7XDyzB91HzYHiamj+dBrDgjDqwPx1XQGCn8PkLMgMyliTfag24yOoevx
-l+pnnJL4hMwogNvXpA37KAq9KQcH94lByK37dnbihM6js1Po5E856Ujiic/UFqf8eqrRAnbnXjEa
-nDH9X9GHHWUasBYXWu7MvrBxuUs8AEg0lHERIIo/j5cluCsWfhOemcstYQt0o+Ht1V/mjXfRs9tA
-RXwwTA75uCYCFNRbDfiU0r/gnWkyXw0K683gDn1TqFTVsj8zaC8TH547u3bM9CWr106RzLVUi6u0
-wWdfl7qUqKzdma872WdkwHyXWv0wAr7phazGrBB+tNXeOILOLWPk31zw4Lti/8I6NYzfGtydeQGm
-LYilHnLMXNterOx1zb9745LrxSzjCYEFL7Z3l5DoNATq8tS4A/oD/ZH5nWXYbrqfISLYyMAl0Zfb
-THh2XDnfBKtf4ik5v1ow6/ks78SVy5cQDCTe67hQO7B7Y/5A6TdCMckxdXiZKI4tE3jC+91Qu372
-VSekNwD4CME9ktqnuLLcA8X98o4VxMvCoLqAC22VW4/wlUO4fAe2EVRcT0XsfcVIG0kA1zjKt2A3
-4oC3Wftp3H93OIQT5qz+IXkv2uae0KWF/r6Dl5KFQ/8EMSj3IwCWd4irYyEQbNKlO3ZiixI7tQC1
-0NXso7laj94A3DkN2YFT14icEW5Ni6cXTZZYAlNQe1GodWUKBKkBGXWJhTQ6wBLPA2yPRd1jRbrC
-Okm/M7Y9NJjpRRqntKwM5QjNFILVrzWrp1Z8+v7KdscQeRsTdt8dm8HdaDZ+mrYX/DRwnivU/+2G
-/yXChtkjiKTTgtzo12KlAha7Y7Rt11cXnrQFxFBpBh82Wz6+YU49rb2ypr59NP+/3/kFvt4QZEi0
-I9BhJBJ9X2VsUXOphKIIdLcl3VbbYFqLlMMZkvq9aXGgC1G73x1q80MCCi7pGeGkKtm/EwhHSh0S
-tNHV+9f0OtdsAmtI2zNi58a170tLm+b3+ecyLF7Q23SldDv/JyNZ+BQU1KMlVf2f83JA++tYCm50
-cs3Q0lvtKsJsdA52oW2LYrf0cA53neawNnG/XInVRSoboJLtCJebmdTA1uwzZ+ZOi5UR5dbzvNxh
-Qq2Vw446POcDuA7K3jfTRiVq1Cyuxz8BIEQFFiiv8gWWRTufR8Feemrzdew/tMW3LPu9YHMV/pcO
-gDn/kl7C1wqUJId+/m+FJeMMPS/oW9bXG632Kq53sEGfOKHLEl1GFaHWctijo+gy2bsmUgc6ydx+
-26v9Cdgl1O81QsQxroYE6pkBkRShnCgO4C84LWnMRJAHqvXKddNmKdp+iZAY7o7ZiqGIFYWmE9yY
-AZrjfsMgI6Q5Kq9W4LW3ErP/3J7N5n/xfhltBEo9rseXiSKhJoiOWcCrlLB8TMDxJYRX8vE+3Eg1
-380aXuvwPIITHx9vopCtveevmc8JZzTWRPb3Myw76ZsW/iVveo66Fyh5PjqJ/y6j5Tm2tVHNFjCG
-zFCRnUG60hKa33KzIWQrgmLTvjHvq5cTvnLEY7o0TpclDawJ++TB2VcFAr2RNw2DOoAy0Mfoqovs
-w3dXz7X12namJLT9yGg5lGAc3e5XQ5pbMAp15OL33elsvfvUtfvb5PQFLQGuQay7gGKcx1LKmJye
-7DOYNlwgxgPIBso/M+ZFiyWlk9Ic58ik6yMXsvvZZYx6FIdY/owr4RJIG1lgPJryj3CAtN492Vu2
-t0ng7yxLudyciksglHbQdIHDYo1BZoSTyNbSVNzfFHOX5kB5ANf1Vy+MQ8t08RHjfmbC+x+nZ1GQ
-5bALUjnKrLn3Qyq6vmg9l1CfnfdlUnntmvGQEsZJ3APpgT+dL91Boeu4RhNzboRCD1/QkXLhhQeH
-zrcJroFLFu8/BcPMj/ruH1H6B8RRC8QkaesMSK/zN95lEfX7wGVGdNwTNJM8aBFOXUcsIcRagd4K
-jWA7Rbwxi5/1Yaz4WxupIUCMGBgugfLhJej12CIIrp7zPc4FYenkTJ6LSnyeuuRrVdO6Jng//Qb5
-cpeJMnh6byT2bp0aUXglwIuFhCN5YcP4EuSYgUxA/8qFA9RnOBA4NZ6ztfZ+tk2EJK6Tpu2XlO26
-NCecjiBzEBltMXYJupUHpEHRnbXqti56A6yzSIMXqszt1UiQWFguUpzUeQwg62U+MlyFo9f8UFKr
-VVK7PP2ymkhUvSyDXadmKTAeoiP3z+ndBScCgW2Mu8Ieihx0v2sYDlrA2p7jzXpH71tH83XTqza/
-y180Nq3uteL6vFjrTnbbJRh1/xAy2pgM9zmaVsisGoaMxxBmDsM8roxKlYiwdKL44vPsPBroC34M
-SQ+CN4vK78RjHiMOrXf4IHgW0aB247JXe4jcD3iLwTm0D8C0H9SZC4gIxFCdpO5Ls4iQdrw8Q32n
-mRXlg1I78Yqoafkbj2UC3QUP9NbyIpZevVGMa5dRsui9HgEpXRRTzQecJHuOQ1ejq7WuhCubiJaO
-X/AOYwWq0pLITz83iu+JKhkspOS60UM6RrtzRdg45OKer7T2gofblYoNUctnYcpQNCL9mW00d7fo
-ZKHEhntJ4KDQ9K7/xsUerFYgPAwzEts9a/6w0/6mJHezp4BXiCw7Uj/OACSijMuMDDHObcvaIGCv
-imJ5G8TNv3/4xjKVhoWu3/0tQVNo/WVlbeHau9PCW5GWV2p4joLxNvp1kQ7VBsRU5eeO4uptEHeF
-ozcqSrFtKqJ+G8fsUXqmEAw5v4xSJbE8IGbV3E0IgB+6LQgl7fAeLzDCu5eHT9xSKN0s0puoTDr2
-1x0LU7+7UFlJHxqBj6d9x6yzhtaXbNewmv6Vs5bGQyPBWSdOLaSqabR/4sRjIFud6Gn3doENlYRt
-HxdwdTjH6FXVZopuCGfMGcWhnz9fwipv23HwRE/gPFxxcWG/VRSzLOBmpcTnNmJNQ0rtUqv1NHs8
-b3AV9x2XoThOCi9DWlIfY4s6TH1oEuv6Xu63vq+WEUuCaD4eWA1JueJDUSxV6bcScziNkDlCwHhA
-EhV1tN5/GqV0+WtRoHohuPIYuSh7fqQ6Mx9GYxcSXiINwuFWKsTBj5X7ioS2iJ0KQ0X8mG7dw75I
-I812i81N+EwqFx/BMPHvGY6+ex0WsPPf6yHHyj69eVKGGM0CIXSFgi8juG/NboeFXVY8xoVEnL6K
-/PNSHdRdwDhmObZcbpW+Yq6T0VdTbdNUQmlFHF+Skd579PtmvUH+e39LS2R2jZX4tffJ8SDj2qBr
-RK/vJQaSKHJ4ex5pzaWOhPdlRgTZ7zV7P7nxR/z0RxE/Ym9ChD28VQs9ItdV8bKnXiXsyKlyYnSi
-M05dlIFYdsUJfkPW/XwXrbbDvShoI+inUzXF9z+Iz0d9GfAcerLMKR5+Pzzsd7VNb9nzgAJvjKA6
-kk+ovz9xqmDDj4Wn67qKnfBvuuHzO6LbLBqfww3q7jdagbvXhUA5FQDz+rr4sAxcar5tD4X75x1M
-1DShUEaUYAzaLZ1Exlxr/9ir5v9whsgsCTOnfrXVei4T3GBntTDXnFuj3KwVpT/UeuEvUVaQ3sq0
-5pNtxTkk6KJwHZeqbWmI/qjGxyGL9GAJWB8pny9bnKbhXX2Q1X+uN0qJDkv5svvozDI5T1PvwG7K
-dGebxe98guCCNG8TMnHXxXEjshYjjzLPGghzTTL7sfNxfy6M07xCF/AOGX8VXgJtriQRSqzPXfDd
-P4Pr7qZjj8EwU1uRxPlqrqXDgoPN9HSVwkQ60yoKLzbUM3XJr+SWLRLNqxoyoid7bq+snhYsO6pL
-uNrROqm3gf7ve6jE63IlIW/n4g3skdYI4l1x+DtgBVTVzeYW6aiFU2hfS0yhf3tOUlaNp3h95ssJ
-S6uVWDxsFnYfei7QUjk2WLHGtP6jz7f7FnGwHzQG9zqCB7TMtnfjpuQIat/+lrdYQMYra3/gq9X9
-lfIzNutvUMU8TINt7In05YurxqMw1wBVOvDwPbGOP9Cs8L8vMNMmjeTy2jDrvumRBD2eMVVC3CH7
-4Q8iJQxlOEYNCg6QhipHHQZMe5kJeKfhzkOMlFU1DygaLiaYvNtqXqJb8aeYHz3YG0sE0ZE31Dj4
-1+TgNO4kt+2miqWRknwZ2UK0K2m+xLFxj56Bmcv6xq9Vl5BTjNRgzx4+iU6cCtISoRncCiqhzAx1
-nB/nXsHmpk1QrrDf9H8B52VI0sgbaFFu6Wu/1xqVp+1aK9G0kvA0NE7uV56P05h2DXrkGFZEna7D
-hsv+e3Rguq/uf7+BmSmYMIHtKz73Q0uaDYtgLqT4Xn+hJdq7pOh4a2e/P2aevaR6drWDTElWklfo
-B7GiXZW5mzfg0W9XGB4cVopp67BhNEexEE0JqfVoxS6OnoD29A0AH8pzy/TO3QAAWe0IBec/9bWW
-AZwLukOD/fqriWO68krlE9TGz0kUKqw7ZDYQxK/C0gMMLXLBdAZwEPII55rsb5Dr+JALkQSsQhll
-oh459ypNw0HKgX8Qe2FN0Il7wWdVR/g5xwgfDxxmKVR8jMgj+OatUIppSzurt6QV4Qmj8ZIXZxan
-VfI89COO+Di66sMtHlEGKX66QHiMVa2jEgESiye9j7drbx7oHaxvNvJbQpM4LN04u17/vyYVRfaR
-TwcuRUnz7foAP/3nqQR+tDg/kza9/JMDIwhhJcCQHUjyEcv+ICqrE3PGW+vxG9fLlrs87Zzfgavt
-p9E/Qy445jZXC+VMW0NVB1oJsb1VkiKCFgmTuCwpAtZK3yAgzEvhb+wRR4hVRjqLgY5xSbP9p5XD
-sP30AHZA7Cb9332lsgaleK5D2BU5kSDZ7j/QeNUg/VPJTCQ2/Am0VFS/kZLlWDz5rGcoKDCfmK1E
-pwS/Z7y3+lJjLaegPGglvZ1idvhyP1mk2EB7GMUB0vwL2gBEu7ImJF1CGdVjerJIiHHCgHsNy153
-1DKVtnBwq7lQMEi3gMj4D3Z78zHB4BEOx6Va6UimniGgdbqk9KuDrkL66ktj2NgD58mBEZ7SaCQV
-CvoVpz6ns+mQFgaDxhj0jEXNWNudMKYosr/Nc+1DbN0HVwtoV2E1HnUNB860Wga3w+wFVOzKa+k5
-2R6IbjZcctLpD+iLQN8amCZZYTPZFmfoAYTxd9BRtYRsH6LtLs70IBIeIGVc+mldme7eyy9K6wl1
-f7rQlBylwlqlj7E6Y/pvuMHfIa/NtgSDSHYb0DFWq91xS3UH/SNQv6JLor3lGngFVNyrq4irJuNO
-fAfJDAxHajnG7gDfHeJzNaRYZvlEFW/HZdXd1gxyKOlhaCPV4mdClv8RRM/nTCVBDDIiuRN7wZHF
-7rNr5VT8Bg+50YoP8KZgd5V8aYUWtNJgl0/7xnCRRFZFUqzfRxjVj8/SNrU5Duudq6vryne/7naa
-w5NmtcENW32wL4Ux0TTrTVSvpX6j4wZrmpqwArINIOGnA1O1U8rftoipJcLOkoYT+TNvC1bpnArk
-KTuTEmMq7olFYD+hFI3kbyJzExoVuzBXqqAUZyTXTKWMMIrsqKFU0DjNnuvJxd8C02DU1Q70/m16
-aqp7RqRR8vi5rjJ+f4farHXQwkRyoMznSeZ/IP/X6BmwkHJ/6x9UPBXdfp99YfHLxOwPP2hBymEP
-EPgurrrDLn7mSU6mFel66PadM6D7GrWM1t3X2MJqeYyYiJquKC0Tx05exf1Z6544jkebfbHzPy4p
-ZB5VP9Hu4n4T/GDQgnNK+5i/u/48l2H9Fytjq8m/t5mVlfUTIId6aWOtlSv5b389hHE7+UcEq27K
-WT4BlTfG7BWeLdoEC7qfE2Tz39KoXlZyWpQXbbWb61Ln4pOM5QpIg8mhOotkf0FSckKODXVT+DO8
-gNEAJk+tr5gOM7bHSvfsLe+eSL34TmHlcS3BG3tXiaaLN/+5t4eayey9k7BihDIMI8P01RbLzcsg
-MiQ+J5ZO6iTlUjUvORiZeaY4o4cNufagw6uZ0FB6kIhBYRYJ/1AgMot6qTAxcduzANPj1DlCvp4q
-NTZMWfdlqUO9MtuB7mTrDddViydLnTyBpsUsxqZt5HPm9vKlrqQUewpyLeXKL88xYkWFZto0IOhG
-KC9wcfkS//581jvkTPSFTM4Y983z9E16zYxp+XLF5P7igqLH5lKSKN4r/C/hDrAf21Ae5gm72Fd+
-PRnFn+r+avvury+6Fa/gEgale9NzAOwRE1Y0UWKcZvaE5BsEiDCDCXIjt7TUzBIrRV5cBH1N2w9P
-soP9yGKWoTsc7Thnx0o11RKafWBIOzgOmDfgI+n+G6ds70ECQMXKk00d0fqX8CgmPJyjCRhaXics
-VMDH7fFTVSTtcJcK4oVUxstghLBWmSY7XuEyujuDSenq6EvGh2XIvseH5lFpkKI4dwiOzg9Np7BI
-BUFV7mRD8AMHMGn6OarcNWS7R5R6nu9gBDJYIgHznIqYNiCQmhF6K5LHkJTnTwd0rRH3J1kXt+tk
-Vq1NjIv3AqtYNGlWno5oY8nW1fgANt+OdOo71g7dIJzF0lUZDw98NlTuLghrQ/qZgTIrOvz1rvlL
-rrMnnIZaeEyijY2SCv5gYOpa2rjScIDW4fUvlkX91e8/a49s6RmZwUQthBYGBRwt0bx7K3KvqqKY
-WnGwNVd6Gw6sfGrvQkwXUvr8cQPeJ7ngcb2rx6c4mC21gzxXRr1Pzokc9/+o2/B12YBN4ZYLJiTz
-Lkoh81Af/IJROAuWTwkaF/DFoZTa3Kbyqh2YxqBRg/g/vqnwJgZ0+If0FKaO3gFAsFd240f2iuGs
-RBGjaEsWhncqoctvspUUqDNN0bpPAV06bxODiKiXqToZhs084wv38CElIYZXlKOHAEPBNeZab63k
-NAAArKk1pfTJ856KVOjkkord0oAjGnyfij39eipdofeAiZv+vJymbJ4+85YXDjjRTX2f8dsPhFHO
-haE53FPzQs9W7yF8nqe55MZyJ3k196n59HUPEroohjYYwjQ0HtD8gWL5e0qIrJCozuOdTDvpS1SR
-EB+AT2w+KgvQyR/Zl+ajopKoIwk/qKTGK/oK2zv95A26iigEQUu3gqmhvKLAQKQjcJyIGlnx6lyZ
-+9KYWIBpjT0pIigrf0WMlCP9cZHndFFhEcoW1UgpHr6Fm3sDWN2/7d2MadCX118qP6x73ansxEs9
-N0EXbGOw/U6t1FI/ppVxeVkrX/Mc2yDYCRpFj/D60yNv2WtFAlog/lDv+Gd1Hzt2/lqWAIMKXSgU
-M7I2NSQj9507fGOS4Naw1WJLrna+FgFq+FgxaX+7Ec3vlYg0BBdbejste1JAO8QnZ42p7JwObWnN
-JEcc8n0zDje1lQ/OnzQgPOrQYshqwlvTtP1hDerTyGINTFPGCfWUonplh4bs15hfrVBTMlRWFk7X
-hi+knweWSC/2PwnWjH5TzKB9Exw1fjO2jE8U3gtdDRnbQa+KxhSr8p8ddgeLy84c2pwnhS7R8EsF
-+u9llnm2Kg/qjEl2UgkUwHSuAbtBT3tSvWXe+QF0xatBOkPANqtaAlE4PcGNZ1i+D9BHgqSqLdoZ
-I9vi2UNNsuRY1dgL0I/npmz8QTD0CKd3OZa/f47WCAracvYKCgjsFnuE/Uazjl6sOS3aqmh6JGq3
-epIiT4CUI47/Tepeo7SRSrLE38+8X0tSquFrZHvZbLZHgyaRfY1VCJgLwCSjuEyqJB3LJAXbOWdn
-G8wB445g3qrEcYTrqSmc9+dVnO1cq1wt2q4BRf2at7B857UzAnsTvixrYFa7ozbD9g7GnfJDfHSa
-8mG+RnAhkoRQPLW7vciN7WH3iJ9mSx5d+uQxKJ6cI/lDCUQHEmOx2ZAXo/R/kj22L8luwMuhXbIU
-ZLkIfR5JDXw4DYXrbp/DnOsmbe1Ed2ulX0Wxi8IiiWsyNKXMCntvtLJF95cnfcqvdP/DqHP9MK4K
-26xSORFkH9CSqAJxeXnzC0CstSQ7Hxf7SHUINBDAZ546iR/D8yB2wO6pZNSm7kDWdSJzUefN09O7
-5BiVQ0C2cup7mtJChCVlY8qBIe8ABCNeI8uc5lK7ietc+CStuoXFVwgeoA2adx25jBM54mgL+by0
-GT5tL3UBsBqebhx67vIZXKllLc7f9wz3yi8t/7qYBlo6kmE7HbsRLexjubHTR2iGsQ1e3K2vsUXw
-BzAkoyr4r79THneD7HScDZQoOZWeh7orZv/ynGVBO0mLl4BEiLkCJmrt+qKptVMDXWHycEloXgbQ
-iRiT2TtNXEU+jmI6l+yK6bw6/n2XAXBcwsrgNMYIRXnERyO0aM0eZ1KgmyuXKo+BvNZWvsSvfp2+
-6TiC81TFOy2h5IVFrqCqPpj8hQgRiXiKAUgDYrD6LKoUFgxP4J07pgZqTxKvufEK385Id2uoe93z
-El0HRbUl7e1UVifLyOdIoqMLXdlVnvnERvl8bAa4GWjzZUUgPH9megnLiw77S2HqRd9lYanYgYNI
-S0vNIGONZLhT7M0J4AbcLM779KrsgT4Lu3JXq6IJG2lk4acuRdIC4G7cLf+iHTY0Kr5/ob+JgUhM
-fAHfId8L6vpAQ2fAeNuNJLhOwyiBTQx/2AcdnAjDzkEOkMNzTfP7aTzpg+GGyJblpw09tADjaUXz
-grMiyM56dlsMRtzxe84Q+/fA+TrLEQi68gwFxwXIwe2fk9mP6rBAr1WBGsG+TaWBUaNZBnyYMMt8
-hbiX63VY3XjoJkOYxSSeeZWtNVgeLKXCGEM5AliOxEDuyQGc0lqh84J+oX9AgiSdJ7dIuAGBza3y
-1mvoTRAfvNYuE6heR/CRsSHx71Tg1XC/P0+MB01aWFV6c8BjNr3gHqfYbH7pHEZIdjqB7BrpCfxs
-mBD6BfKqMZ5vCjA++ByFNq74p0PzzPlvwqrhs+sxTSBai7NbvqBgLRwdIXc+3FX1in76N1/gHYCB
-YEtZW0oSUvVkFfnw8VQrAaA07sjDxsm/JlCskyN1WNDfpDYdnqx/U+IHaGXdbVWEqPhd0EdFMx1/
-5BQPBMLuDIJ6VsonMD0dZk0V8DOdURdhMhyUnvPjOxgi/MRWLmNF2fCEa0Kbp9JDO5axQNop3ZAW
-da1GJlmQTR87Eywnc42LhHHt7CLcJ851NZVEpmha6AiBcuGKEwSsI4hMKyujM82P3VwMdKddCmGe
-8enQaMbO2tPJnk+hoQbWCJSi17LGNjTf5lVkVywDiFyUk1/4yTFLCs3WE27f0JRgZYrchAxv4DPX
-PxCGDPcvV7lwf9gSxfxz8ty8/p4Po8GlhpUr9AObcLod2uG1L4Gp30GaNMqqxPkERo/0dKx2guib
-KFFphYnE/PQD7DC54ecEDBLcHV3Ghug4iM6970y42ongZtDU4kChdsH8YMAUv1JcSbUFJrfPyS5N
-yg4j9LW4MrhA0dGt3H2HMX2ee3+JpalC91YWhdDa8Bg7AIlSOIgjDVrcw+EWlslUJkjZuBkNfXDn
-bhBmopG0cIu3AsfNeDA/QIJCn2U5SSvD4sHWLrho4RIlXCY6J0geh4wpKEwTV8fA9g0x/uGjCTH5
-8f64q+ku+S/aCej43xAQyowFsfMlvk+hTa7tJTU32usfWUMRUyQYkHMS9AbbsEohhkmux0mtBKhP
-QHt3n4sGxNwctqrDdlW/HfjykAvndEb6eq4TNOZPVgz5KhR6szDbUCoGgG1m6JeaJnoFM/DOW1gy
-4y3Vx3HcZwh4hmY+XQpKRyHAW5w03G8IJu+N8niEkskOccBkA1XHZk8pquYXvS30Bzgd2iLk0QRw
-oCm9kvH8Exse6K8BLA5djmhew0sw+YfGRErrzfeWCJNiEwiAvcrN+0TvuXwLOt/djZ7EKbGcziyZ
-DDlRkk08nYAo09sOldzaw5dU2sIlVsF/irx82dX+OFURYbZc2UuUxZ2XMv21yzrxtp835RWHsEUM
-DARxExvtL+6t//jjoLonGq08oBbj73HDvpB9bCDq50VCXqQtTYac79mbslIbSmq5gtX9XUvDgZi0
-ve4Xw0nHQIQYvyFlaidPcfWdRLBB6O6xT0i5iGjkWQrdwSznMri7/h2qSU0YJ/19ZAIlWrohIhCU
-DGTl+F9Pld60w9IMJ8aNkfxpz2dNdhqUeiRi68QSrCWa1B2WLXYSr0LDTdaoncBb7EMwYJ5LnwFn
-XoEOLov2eXD9noBHKAhXY3dwHAAkVNBfUeDavS78Aw8kim+V9UVPTchhOm2ILqbRNwmAQSG7wErA
-fmkEyn1QeOUVK9iixLDRsV/Y9bHUsmM89lmzsZqTnjn+s2hoiVkOTbd7nQ4IXbeoLQUOR1wW2f/S
-HZrDMyDPG67yokvFyI0qVrXRROm4wbPZktn/e8iWvRKzL8dQ+/zoCQX4tWwRpkS69No77Pf6Kxyh
-RKwyQoyZBPZ441mj7OgX5pNCzRe6Ibmi0q2/vxNp6WvWJ8W0HQIJiJGFvN2gbHuQ0Ln+hZVjE0qK
-Pq/32usKUG5rfjNmqIS6mP055P3OYVasEgmeJ30RaDnJSVdb8VFrmqj0C82fQfjDJxU7leRWj0zN
-mPnemC6kjW1wsCil1emOw2RvDT3FtZvvJQ1FALAPNhxQt4m7LWWgKCrsC1+kCRYj5xPri56eB1v9
-kFEliVg0zFkQRbm1ZyjXKJP7DVlllR+3DUzpgDq55zauc4YXZQDfXPXoucj3LnWFd0jRzkHaZdeT
-lpec/4Y+r5hKtnlAsc5s5izNvyjvX+ler2Wi/Jfk/c5GziuPUbn2RO4TB8Cm/8j4u1Z/eyDel4k2
-OS2DUndv94te9EA8JiY4WM0P6Xma9TbNt18Yng6vqCilSkGE1SHTNjP2EsGjvNKuqTOuluGkmFJI
-gUQxc3fF9zBPRPZ10mToccIfrcunlF7amdYkPopm7mNv2V3QM+lLl4fKbqDHDHUiB0chLuqgSdvM
-AO+OVmR/o20dYw5v2I01LO7KMYg3+bF0nvQt2kdaCE2r7kr0g4MnlfgPgOB8hxnyEeaWrJvlVSVI
-QloFzc/dTvjdzL4t7R4PiEInahnGe2qmCrMzbQqsXKbAUSvD1Dsbc6VzC+/lW15J5JFTVK6edm8Q
-Cpl2yDNOcIDx4V+KYEj80l57/OYCJuVW/l9p8jNZx2QvNdHMVx6QJrgfQi96IqSUH3rQPcd1xaZ4
-uR4hV66eeE39eZkXBuQCRUF+8Hcf5Y7j4fh3rP9Kidzt0hNp/yr3N0odvpSchP+ckP3YIB8ku1M+
-l7QEsAMrDEbwXtwQ9nf6a6Hn+sEtCN+CuFgSydOfWSfaOrFV4FaorvLiCQS0s6nXiI7F4e+6l6DG
-bm/BoengzzQ/YBndHIgCqCN7r2Moz1jGqZafsZPgnOdERXmT2raLqMoLr0bxQB5EO+WwlRdxlbDL
-qwMdGuEcCZkHZqvl5G47fNHhWcHyaWX8Zezsm3sAgSpJNZ4U+VVZgd3CbHeK3jRluyTSNoY69EE3
-xbBr7MUEidFh/cW1kuW3Mcu5Lt39dCS+Po6+PK7TNW4NjX8GQVOFkMGgnXld7AO1jdwc/OIYvU0C
-ewYyWKRdi9qTEIRZdfGVweg7HfabcMwdxH2NwAXEDsKeNSS2SbfOTBqjpQ6UXeOsqxFbl+BYXlYq
-sULcNI38xzThvk5HIKZ/q3s5DQDoALipl/lX4el1UX0QQ9KM42iAjN+WRVotUDcZ2lcM4gzSyTde
-ugYk8H8R9hpncbGdi5/7pKBMnBi8itw4hgRh1rfRy1LiWFCSlerBJiahrZBiC1qnICQ9S8IGuiSp
-fN1bjom/lsZSVzvlh0GTKEk/RSrJihAkRdyZL1KCjVYdev0i94yPjiRlZqFgbiBfMVzqgC3Pz2qv
-FREdYiN0tpbNA8zt26kAUsRVQgFXi9JkL8TUHipubHIu7kfM6op10A7WszJ/s62zqp1KhqpYSVBo
-l7dlJsz2SoW7AdfZ0IJdwBCaRucnm+QTbvTcCdPBFgnaY0J/C0nsrFBjDVyQPHl2cqT/iZUBOlB+
-OmoS5mEOdbSVMEW6px2K6UB7tc8mWfJGIP/pFRf5T/YrPs3oewHMnYZ7GxB09GyGdjMxkdK66QBi
-yFI5mroD2eBvx40zN/NezHy1M3qEH/B+qFXzpVdDHVkpE4PfPl9EGw/Ri5iaXTLZ4Of0yhDQuKeD
-G23YIu5EgBTL7zvfDE9PvWtT/NXMEtN5GgtsIwZiXEtvx90zFqiXfx/zPwazO/73UjwPMELas85a
-2206X37HNUrXI7wwBw++RkhMiGecpl3J6c8iLQnpTDbP20MAgrO92+n/9ecanArnxTn5ei9IFu47
-XjCFEKdaVu6YzuYsV+b9jJ8m94uAgtZqSN6u4VXaT4TAvf0GuffhXAENdjZGHZNnl2QpLcYqsREx
-j10sRC4Nbf3LeSFk0jjK8B8Maw0te1+9u/tdhuJHGUXgCYB6vbw/lUue0+LoLibEmVBVf2OCW0KQ
-vlqBJxFJZdxCFYg+m8FcVEgjjy/4oY/51c8A6h13blQuAX9i/hBHW/KW9reja1Sj1Cob7ZRo8om0
-EFYOm8QpLT0tl+sj2rpkrlN8RO/368NMmTU9ap59qWn+rT7MbyKUVm6miq2NU44x9JPViWu8/LPQ
-m0eZACpJksZG/slDuqba3RtnlGwPhXSiVS4KYfiaUqNIq243JUBAB458tFEEwMlpEMdqrB57ggId
-50jfRWyUMP8QW+ywIgVrGE60TY+797k+P/q63l0CUizBx1L77dkHKNkdp9HklMMVdtUIaq6EtnED
-ycY4/KOYUAlWUfz4kTOSEptG/n79T9QTAAduLjTG2nynNWOeHjsQZPl2vB59MhGIoWyw1U0b4ue8
-yw+ZPvSl7Q62K/wLCBoLVzKGgVjsJMCvyKDMw1Od9GekzUzpkUCSTcPp1601NWBv7LuBXI/jkkm5
-AJ20A79S1tW6VKjUAFlriuUWIXVUqwivjmvSv/67NK8Vbu2mKTrXzQ7R2vDslzR/ywZ3r6e3Nd6i
-I9M+PEvEY+DC2mMyA2YgsT+n9/BUS7jZw5NekhjLhYSDneWh1AY/AtYQvtfQ2B34kY2jGv0bC927
-wuqPs3QSkZVh4+PXqVfQGgcXOBWj6ZGW3o6LgCNQ/Q8hK051Ovzl5+PK+6WvmD8bGt2ZKay8X4Nh
-C1nCXAQml0u8nRKArsTYaXIhcmsG+hOz0V2XGVPoHG+Gdss3+J5cZcO5cQ3dmmE1PxP3hpr1bYkt
-cjBBCRIxOvvHVzuZaO5AXDH50ffduDSNKuH/uRZ07elEDdN4UoxMXX3Ae9+ptfO5Yr37Kt1cOt/n
-pao9mZ3qOkVvzatVp6DTxFIaxqZErSo6JlHZLWKuiqMxVpC+5PdIzq9KLDOM3vkzWoxDWx5p/x9t
-QLTkrw+mdMEJ0/vgt/+1B9R44Mp3juDP+wOjePyAfXN7UjteNIasq4jSYuvvBpMyMEQO8YdIBrOg
-9rmP83dkyxQ/o59+PiZCtF4/b4vb4OSUbPWX12FyM4ibTcg7vwTTFT07p9llTKYR40Fx0EvnuKyC
-YQzH8U9+A/2j12uZGlGBnel7TE3y+z1vdqpnwxZMI9anQR9t/DfDNr61rsPEJXGQ37HQWKV6qBhE
-W5hQK2Jkiz1/ob7Dkn+HT/9GQTwQ26k++O/wJLE3hcgsK5By/FNyOoZncGXH3Ce/+0U0+crbjI6I
-WWWgVQx0TRk0qkHja7d0nrx9tODcp6KH3bP7TV7JJBq6kx2wpH/hGLMjY/CqB58xwiLKZEmuuO89
-selxNWEv8yWiiVBzNwA+TcMhS/BeD4YJivQLbKJg6henoeD2YIaeiK+MLJItv+uNbQwfPqji9nPw
-rRb+VQHDVAmwUqi831BNnRDhUFEBw5nRVwX6Laz85s9fxbTxhTpKjY+uB9Yufq/ioI+4Qx6pOF3p
-XnZ+ydr/rFBpkgimaVKqx/Sky6hfNZsnQs+SJj74XrogSnMFrhKQqy4/zuQn5iUupqbsOM8kfrph
-87XtTyFDqBsRwyXVCvuId43ttXgJ7H0/7QjUTVVhXwcvODC5RBObd7t0wZs74QQmGjt2oiNb2fND
-Bo38b2sCIU46PEKWH77bUI2zdSrv63qzDbP8x4hrJyM0heyWESlh2nIq+aZukSZdlIiFL8pkMZ37
-dqDQO6e1nQC7YruG7QEMquQiVNzhkO0dUYe00prKajENSJ0JjL+80qDGqmDPaHwfpOSIZME/m6Mi
-buwZaQnuTre9+sXxp8aZIRNamIzAYJ8tQKuxeDVivLtTaIo44fjPcpC6veX43xQJ6vN1B9fCyMqP
-lrl/O20Rhu5J7tx3/F5hpasSWl8SXEwpA3KzKn1xBtj3CTKJEdZq66KsYG0wMI2SgAEuvbybtI+d
-EdZR6GGAHzvvzAuCBfbxc7i/4TzarQ6Qvsq6u3aJZOqrdI/BG/zJueHaxMTaphbTU+8NjkpO1zCZ
-8HaT/xbGTmrHXTORij+wJGogCIOFyRah4ZrIc/w5dxAQ7m/YL5WtAspZiR8EKafmtG9bcBedoWcP
-6sKPodMxMWEBo7MiByYaIuXpmAaS3bEpQ9A3GDSmwQR0XaSVTeYogXR1o+ao0b+7jTfTbe80OOKX
-JZLBr/PL0ZvI/qKIiJkRJPUlUKlw0barAnESvJ3rHRyGyZ5rR3x5YPN7Tcm5mo5pQWkEMkR+aW4/
-ch1SejxjI4w/gqYBsPJhqkbR4S0KtH9mQGwoY3zJS9kdfwlZql+K6hJHbZgWaN17hSgYgupASPk9
-6hCfeUf4V1HybCMHGPqvoWJpyhFJ3pU015daU+MVTRoNsAjZYE3Vff2+uRzMxUZdd88ONoPDVRwi
-Cuij8G+o9A9hwnCE6RgvzBxxiYHJUO+PZk0D9iscDgEXlTba/Nv6N/q7hd/hkIrUnyzG9aEcnFCf
-t4bUNTOqvVLwCtpLiRojeHlru9XykpPJfHyT1sQXiokEtQTMy8OEE+2rXsMS6LuMPioos42Kp4LD
-9+BLdoJmPRs7iIdPTfvYgvwUeXDmK/QCtpY5N6lkYz7h3vRfAWBCSQNq243p3Knm0f2QqDtoFU5H
-6iA6GXqSnhjGbvqYZR6pnxADwl1MNTPR+7CvdjR2J5h4r5IpUAXTzseeYFrF2dn3DobO4TEtoATB
-QGNTqcu5fFEOqi2UwGPD5I1Yr5Xv/5vLUdwj8sA4L4SpgPVrVjKS5R+j+2FlnhJJq0GhscahwXA9
-yn1Z/FUBNhLJD9cp0xwCCP6ydP05jOFgdSyvOszIVdipUnnE6oL3atc31XkejXHWf6VgNvgPM4Ra
-N5eM6rwFFcTwDg8fPKjd6bhXEMhFNKnci+FhNrqEG7M7AnvhRpLnep7CCYw6/pF3cqNYPeaoZDgu
-deBFGoSdIvUQmo0e3uzD3iOGX1gcEcXFpf5vR+0qhBnAH6v4is9yGA2FO4lSn25nkq/PNeFJaAJy
-rhcUEkox4xkb29JdhZixmYqSp0lwWcTJJZBaYjvMX3XjL5W+H0Y4lPoKHL9DhD/uVyY6bhMg8N65
-Y7lC7nh0YyRsSjAi67tQVDY/nEAWwoDq1x+meQJInM1GkfDbPlE6+ApcPmEBNPDC8x39+4PI3Evy
-VED33bkVGKWV/NkQNlSKhmNCakVI243kqHAYTl3LrS6b7bm0jQ8iDiut2VSJKxE2NxR4yRQXMXm0
-q5Ggj3aaQJtZmF9JmUkghwFCHWQufWYsf/vS9y1HTltlLoSMhtYUsFPaa8x0k02IW6yeLp4BRViC
-mbuZxlx2xEOS/lLO46MuNwX/gLMT+85Pez+SofKfClmvzBWG8kVBE8saTZj4VTGfBoI6Y0tXiY//
-WN9V1Ls+wOEzsKmcahILvOiOL8wO8yqt/fotcYj35H9eLHxgZTEP2A1WT7I4ewiVarJMiFWXKoH1
-Bkr/OlC/t/is6yIaNPZEwbgf9R0ARCe/N6TG0XdQzLOwEuWAXrCSmtq5A2T7Cfn7+nu7xZ9RIvzR
-C29V6zpXDHxb4oGJO5v7NK5hq3s1FU651vhpROhsC0Nyoi+Khy+OfOgOWaJ47Lf4sIdlNRM8Pshu
-rHR/VUqe7eqZNrwd8nQD3kEk1qeOPTMJ3ml1iK1kNfp6Fe82ZWNzdRXGwF4cGx6/vjE3FwcoGkRg
-+LDCl/7c6MfUwmyjOgG4b1iLCQmzkacQLTimU1nRUh1VdkvpmLqFh8jB+BL+Z9NlTsWdVkCw5qhE
-c9mz5yj7Mfl0AW+vx4PCP37ll+/x6ZuENwk+dIjBNg6+qMePi4MKmvfgSaGeBM240R8MjuIy79jq
-DbDGXSDCzHgQRuR6JlavIBFHWSjgOPu9Vsk8aoNkjuC/0dOPM76UL106VHx4GhuQJTSmLRfMn9Px
-RK/0INjo/CEG+fsBCqjhyvScbwNxHdbpyJ0C8r+mPJI2j5UPQ61RgAHM030IWssEo0WTq5GekVXt
-MT+/5oAYY8JEBflDEVCb3QG0Bk44X9gry+KWlFo5PA70eO1hF/nN3YcxU/JIDgGmNbcSfSvLzua5
-2jtOaaKlKBScH7oneZIXeyb7OvwgeXM4klRM5WfgeJLIq/kE7Yl1Qru8OIZK70HMnGG3OrYfQSvU
-Yh90NKawjj8MbDYzD/dlckCSWDhFXfP7kZ/1xoCbJHfR6dcBdOevFU6EsZAwhbOLRIOdyU24LLQh
-uQb+MxU90DxAs2yYjPViJ8lyvEnuD1Dksg4X2V1suE1+1GoMo9We9noU5tAGdSfcXJLSC0nxAI9M
-QJe6vtXtz27xr70ov9J2E9BkEbtc56MQOa/s4XOE7GiaQo5VMUh5v5dX8/z5fvKvZz2DWmVQoRTj
-jbWtWysFgnYA/BEI6B9jVi3DaYYnCbd921Roxj/CIrwyiG/0LvnPqp+dHeNOy0jLJnUzw6y8SOLk
-09klir8GwaMEFHEB3XabuvAySNnMJT5sZiQl9kDdFwQWI/wjrS91gs79p67r2IP0l68Q347dCmn6
-bd48bvk4j8WuW9fKi/GLL3DnFPtX10bmHK4FH+wBZuVGNLWpfgop6iz/IcuxBZeVOGlYsEoF6uVt
-QzCvUGHTEvT246GpPX6JCZkX7lgDC6kW32KhqoYWcQvKK5GEbIgVALzNFxh4A15MNONxO8nvVLwo
-wZvd2hDaRWit8bzdpCt6V1H8rRI31wPqUndBUhIjWqQElUTPlR0jwnnde6BLOpXaZDguqw+8Vgfu
-2M5lOnwdMscbyIsRxlYpFl+mCNhpQTVt6z6RnYzoY5bZJMZvP5z3gayqvrVadnK7bK7yo4TFRsiu
-SWFcUTmlMRpm6w5jJbTSYjDoBdu7q95gXVgpfS+pv9F0l7pM9xQcsO5Yv1Q5bo9folDI4rcKOeL2
-CyeQmG5QxmrYK7w6fyJVXPeAD5IX59JCxmxEYmCsoC8CYq4+Bkjh1Ivl8sJyiNOaik+6VeAp9HFJ
-xe03Y1zVFYBcATJ/MhT5DjOeXn0E6jpoFMa1e9km50bzODhj1DI1daIabZfUcw9fwdYWc8l6eJce
-z4JVtXwAoleBZxdA5Bp5m0b7BhIxLQ/L1RfMmR1R/LolCVEOP8m0BuGKZpbZDiobuQqKo95B4nMy
-92ars2s0H+1sYlUpzhUPl/2SZ4AzZz3golcDACxMGmKGHHXc/BbDBG5Dq8CL4AiQYLpGH2mYcSzu
-ETcczFrk9rzieslP710zc/z/k8lT13RNtbpjyeWlb9hueI2i9Li3ySIaoNsZwga285yFc+jV9JGM
-V3yVDOaDc8UuhZYodVJLYen0uce/6C8Gb4ijdC+AUC9HzxPukmTKERe6ytPBaEJ0rgtknNLy9V2Z
-Z2+JaNhTm1vRaLl8SpYlQofUazFYnAwHHkh55qTmeqX2RPGmASGz4lcFc80Y9QwGzYKSXumiEuOF
-+LPmbvgSfPkMfPfj23izkLArGvWsMZ7/bjhbbAJZAulDdXUu5bPTEzHmLoaUSadop4IOz+UY8s0P
-rIK+pQUORQXWPdm8gtJ+LbsCmP1wlz50TD38hmwRc2QhEkk5TxHmj2G29Xnpb+NDHDSm8MlR+MUu
-j/1xCvyxYqUUTCm7GieZv/cFH65fS4cxZ1xtWKmnijP5G4vtCCZwa+oADY5w0d2tJL7PiIkYob65
-V9zRJfKF59GdjWUFA6coe15et0fsWUL7iGyBrn3o18g8PcP6UAtOAMdM4op8ACrl1Rx60vwOnvej
-qGG1W1UeNb1tanlpmX4vgudBtGhXYjcnNKxaZWHHFl1g3JvH5Bdo/CAemcVz5w7Bj6TWSLgj05iE
-2AI5NKYVpnEXtuW5U8Jy1dHfltagR2GG+yaF4dTnRuuaFINmQDtS/b44SzrOz+DSx6bLgQvZtZLa
-N2Kdx6IFBpyN4vdln+dz5htY55+9L3WLM4cqlIkHNqvV0d761SeOzSnwdBtgSu+2mmL2sE8Z1wAW
-fDX8lQnDiOF9Ie7qkpirpJ1iHpLqehJUCdTYQejpRhkp+cJha4bGc+jDCnrrtqsZb2R2iCuVoGHi
-u6ewNailRgW+32tvsdAE43546+LHHnyVyaIcvD8X0giEHMUuH6F/D6U88um686q9j0E19qnSFQ7F
-AFEesDAc2CP81gfiV2MoeS2WKl2jO2LZrqLNlquGG3w5oDU77BXTchuDHBFUZfvj3lZ5fQ5U4b7Y
-/aIU+NU0XJvtR3t5lMfSvss34AaoK6mIN5p3JJsge3aMQvL8fsYG+II+5gpOcwQsqNB8eSqPY+ft
-tKcJpQ8O0KBLrVu0VjIzYC10wre9n90mUN6cRXzflZWGJeFSieVlbp9Te0lufrRQCLSnEET7WNx9
-In8abO3PvuMANF07iBnP0CKha2r6TEu+mG0IGANo5DwogXzBna8UmrhReYBumjd3eCFPVy0XtM5d
-W9czaNNhzBjjfSWaL/92qrp8eCuZqvcazefs3VRsSR60rsFHunnYKwojy3OctG+zJ2W0ctzW+Dvf
-q9aIgI0dctHOG/FhMk9YeWi6gE11mWcwA4pBe3Yb+h1AoN2agTWKg5SV92aiWF0QCpM+Ga0QHYNk
-Ut/32VqlaM6KZXPTubPNY9tGZb5XlSJ8tuuujP9RqMUKS6ZxaUq7PzSF4Pgv1wEpqRd6dmZ5VcaK
-QImzqsyaN/ewew/azW0ArF3TL72Rzl3eiX9uKqsmS7gXCyy3kHw2eIsez1nhN2qY/aAGzqdjGRs0
-6jT2R/bEsocsIvkoZm3Lb4o/MsShURKtWE5O+RCSIY2gjutnEXEvlQdUpeufZ5sKupBCB2vAKlyL
-i9qIG4F0jp7ElaEbFggq/XkTNsxx52Lq6QCT2Foh60M21xUL7Q6/780/yZX7fx4owx5gwNZxLIbr
-Cv0c0PJIc9sl1AFDqZLGA9thyEZg/eLYI7wNxZ1xqNT0+I87ISavv/LoKaVXK7B5q4ZZuNJUQ6iq
-OGpKj4XT31ij+i61jnMOFJbxrBe5k30FuV/1Vyxw/NiCcW4J/eIYOWMI4hn3+gZF8GNmWqdXXAnl
-0sFk
+class Unirgy_DropshipPo_Helper_Protected
+{
+	public function splitOrderToPos($order, $qtys = array(), $comment = "")
+	{
+		Unirgy_Dropship_Helper_Protected::validateLicense("Unirgy_DropshipPo");
+		if (!Mage::helper("udropship")->isActive($order->getStore())) {
+			return false;
+		}
+
+		if (($postOrderData = Mage::app()->getRequest()->getPost("order")) && !empty($postOrderData["noautopo_flag"])) {
+			$order->setData("noautopo_flag", $postOrderData["noautopo_flag"])->getResource()->saveAttribute($order, "noautopo_flag");
+		}
+
+		if ($order->getData("noautopo_flag") && !$order->getIsManualPoFlag()) {
+			return false;
+		}
+
+		$hlp = Mage::helper("udropship");
+		$hlpd = Mage::helper("udropship/protected");
+		$poHlp = Mage::helper("udpo");
+		$shippingMethod = Mage::helper("udropship")->explodeOrderShippingMethod($order);
+		if ($order->hasUdpoVendorRates()) {
+			$vendorRates = $order->getUdpoVendorRates();
+		} else {
+			$vendorRates = $hlpd->getOrderVendorRates($order);
+		}
+
+		$poHlp->initOrderUdposCollection($order);
+		$udpoIndex = $order->getUdposCollection()->count();
+		$items = $order->getAllItems();
+		$shipping = $hlp->getShippingMethods();
+		$udpoIncrement = Mage::getStoreConfig("udropship/purchase_order/po_increment_type", $order->getStoreId());
+		$udpos = array();
+		$isVirtual = array();
+		$udpoNoSplitWeights = array();
+		$canPoItemFlags = array();
+		foreach ($items as $orderItem) {
+			$canPoItemFlags[$orderItem->getId()] = $poHlp->canPoItem($orderItem, $qtys);
+		}
+		$orderToPoItemMap = array();
+		foreach ($items as $orderItem) {
+			if (empty($canPoItemFlags[$orderItem->getId()])) {
+				continue;
+			}
+
+			$vIds = array();
+			if ($orderItem->getHasChildren()) {
+				$children = $orderItem->getChildrenItems() ? $orderItem->getChildrenItems() : $orderItem->getChildren();
+				foreach ($children as $child) {
+					if ($child->hasUdpoUdropshipVendor()) {
+						$_vId = $child->getUdpoUdropshipVendor();
+					} else {
+						$_vId = $child->getUdropshipVendor();
+					}
+
+					$udpoKey = $_vId;
+					if (!$order->getUdpoNoSplitPoFlag()) {
+						if (Mage::helper("udropship")->isSeparatePo($child) && $orderItem->isShipSeparately()) {
+							$udpoKey .= "-" . ($child->getUdpoSeqNumber() ? $child->getUdpoSeqNumber() : $child->getId());
+						} else {
+							if (Mage::helper("udropship")->isSeparatePo($orderItem)) {
+								$udpoKey .= "-" . ($orderItem->getUdpoSeqNumber() ? $orderItem->getUdpoSeqNumber() : $orderItem->getId());
+							}
+						}
+					}
+
+					$vIds[$udpoKey] = $_vId;
+				}
+			} else {
+				if ($orderItem->hasUdpoUdropshipVendor()) {
+					$_vId = $orderItem->getUdpoUdropshipVendor();
+				} else {
+					$_vId = $orderItem->getUdropshipVendor();
+				}
+
+				$udpoKey = $_vId;
+				if (!$order->getUdpoNoSplitPoFlag()) {
+					$oiParent = $orderItem->getParentItem();
+					if (Mage::helper("udropship")->isSeparatePo($orderItem) && (!$oiParent || $oiParent->isShipSeparately())) {
+						$udpoKey .= "-" . ($orderItem->getUdpoSeqNumber() ? $orderItem->getUdpoSeqNumber() : $orderItem->getId());
+					} else {
+						if ($oiParent && Mage::helper("udropship")->isSeparatePo($oiParent)) {
+							$udpoKey .= "-" . ($oiParent->getUdpoSeqNumber() ? $oiParent->getUdpoSeqNumber() : $oiParent->getId());
+						}
+					}
+				}
+
+				$vIds[$udpoKey] = $_vId;
+			}
+
+			foreach ($vIds as $udpoKey => $vId) {
+				$vendor = $hlp->getVendor($vId);
+				if (!isset($isVirtual[$udpoKey])) {
+					$isVirtual[$udpoKey] = true;
+				}
+
+				if (!$orderItem->getIsVirtual()) {
+					$isVirtual[$udpoKey] = false;
+				}
+
+				if (empty($udpos[$udpoKey])) {
+					$udpoStatus = (int)Mage::getStoreConfig("udropship/purchase_order/default_po_status", $order->getStoreId());
+					if ("999" != $vendor->getData("initial_po_status")) {
+						$udpoStatus = $vendor->getData("initial_po_status");
+					}
+
+					$udpos[$udpoKey] = $poHlp
+						->toUdpo($order)
+						->setUdropshipVendor($vId)
+						->setUdropshipStatus($udpoStatus)
+						->setTotalQty(0)
+						->setShippingAmount(0)
+						->setBaseShippingAmount(0)
+						->setShippingAmountIncl(0)
+						->setBaseShippingAmountIncl(0)
+						->setShippingTax(0)
+						->setBaseShippingTax(0)
+						->setIsManual($order->getIsManualPoFlag());
+					
+					if ($udpoIncrement == Unirgy_DropshipPo_Model_Source::UDPO_INCREMENT_ORDER_BASED) {
+						$udpoIndex++;
+						$udpos[$udpoKey]->setIncrementId(sprintf("%s-%s", $order->getIncrementId(), $udpoIndex));
+					}
+
+					if (!empty($vendorRates[$vId]) ||
+						!empty($vendorRates[$udpoKey]) ||
+						!empty($vendorRates[$vId]["rates_by_seq_number"][$orderItem->getUdpoSeqNumber()]))
+					{
+						if (!empty($vendorRates[$udpoKey]) && $udpoKey != $vId) {
+							$udpoNoSplitWeights[$vId . "-"] = true;
+							$v = $vendorRates[$udpoKey];
+						} else {
+							if (!empty($vendorRates[$vId]["rates_by_seq_number"][$orderItem->getUdpoSeqNumber()])) {
+								$udpoNoSplitWeights[$vId . "-"] = true;
+								$v = $vendorRates[$vId]["rates_by_seq_number"][$orderItem->getUdpoSeqNumber()];
+							} else {
+								$v = $vendorRates[$vId];
+							}
+						}
+
+						$_orderRate = 0 < $order->getBaseToOrderRate() ? $order->getBaseToOrderRate() : 1;
+						$_um = !empty($v["udpo_method"]) ? $v["udpo_method"] : $v["code"];
+						$_umd = !empty($v["udpo_method"]) ? !empty($v["udpo_method_name"]) ? $v["udpo_method_name"] : $v["udpo_method"] : !empty($v["carrier_title"]) ? $v["carrier_title"] . " - " . $v["method_title"] : $v["code"];
+						$__shipPrice = isset($v["price_excl"]) ? $v["price_excl"] : $v["price"];
+						if (!($__shipPriceIncl = $v["price_incl"])) {
+							$__shipPriceIncl = $__shipPrice;
+						}
+
+						$__shipPriceTax = $v["tax"];
+						$udpos[$udpoKey]->setShippingAmount(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPrice))->setBaseShippingAmount($__shipPrice)->setShippingAmountIncl(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPriceIncl))->setBaseShippingAmountIncl($__shipPriceIncl)->setShippingTax(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPriceTax))->setBaseShippingTax($__shipPriceTax)->setUdropshipMethod($_um)->setUdropshipMethodDescription($_umd);
+					} else {
+						$vShipping = $vendor->getShippingMethods();
+						$uMethod = explode("_", $order->getShippingMethod(), 2);
+						$uMethodCode = !empty($uMethod[1]) ? $uMethod[1] : "";
+						$curShipping = $shipping->getItemByColumnValue("shipping_code", $uMethodCode);
+						if ($curShipping && isset($vShipping[$curShipping->getId()])) {
+							$curShipping->useProfile($vendor);
+							foreach ($vShipping[$curShipping->getId()] as $__vs) {
+								$carrierCode = $__vs["carrier_code"];
+								$methodCode = !empty($__vs["method_code"]) ? $__vs["method_code"] : $curShipping->getSystemMethods($__vs["carrier_code"]);
+								$carrierMethods = Mage::helper("udropship")->getCarrierMethods($carrierCode);
+								$udpos[$udpoKey]->setUdropshipMethod($carrierCode . "_" . $methodCode)->setUdropshipMethodDescription(Mage::getStoreConfig("carriers/" . $carrierCode . "/title", $order->getStoreId()) . " - " . $carrierMethods[$methodCode]);
+								break;
+							}
+							$curShipping->resetProfile();
+						}
+					}
+				}
+
+				if ($orderItem->isDummy(true)) {
+					if ($_parentItem = $orderItem->getParentItem()) {
+						$qty = $orderItem->getQtyOrdered() / $_parentItem->getQtyOrdered();
+					} else {
+						$qty = 1;
+					}
+
+				} else {
+					if (isset($qtys[$orderItem->getId()])) {
+						$qty = $qtys[$orderItem->getId()];
+					} else {
+						$qty = $poHlp->getOrderItemQtyToUdpo($orderItem);
+					}
+				}
+
+				$item = $poHlp->itemToUdpoItem($orderItem)->setQty($qty);
+				$orderToPoItemMap[$orderItem->getId() . "-" . $udpoKey] = $item;
+				if (!$orderItem->getHasChildren() || $orderItem->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+					if (0.001 < abs($orderItem->getUdpoBaseCost())) {
+						$item->setBaseCost($orderItem->getUdpoBaseCost());
+					} else {
+						if (abs($orderItem->getBaseCost()) < 0.001) {
+							$item->setBaseCost($orderItem->getBasePrice());
+						}
+					}
+				}
+
+				$orderItem->setQtyUdpo($orderItem->getQtyUdpo() + $item->getQty());
+				$udpos[$udpoKey]->addItem($item);
+				$_totQty = $item->getQty();
+				if (($_parentItem = $orderItem->getParentItem()) && isset($orderToPoItemMap[$_parentItem->getId() . "-" . $udpoKey])) {
+					$_totQty *= $orderToPoItemMap[$_parentItem->getId() . "-" . $udpoKey]->getQty();
+				}
+
+				if (!$orderItem->isDummy(true)) {
+					$qtyOrdered = $orderItem->getQtyOrdered();
+					$_rowDivider = $_totQty / (0 < $qtyOrdered ? $qtyOrdered : 1);
+					$iTax = $orderItem->getBaseTaxAmount() * (0 < $_rowDivider ? $_rowDivider : 1);
+					$iDiscount = $orderItem->getBaseDiscountAmount() * (0 < $_rowDivider ? $_rowDivider : 1);
+					$udpos[$udpoKey]->setBaseTaxAmount($udpos[$udpoKey]->getBaseTaxAmount() + $iTax)->setBaseDiscountAmount($udpos[$udpoKey]->getBaseDiscountAmount() + $iDiscount)->setBaseTotalValue($udpos[$udpoKey]->getBaseTotalValue() + $orderItem->getBasePrice() * $_totQty)->setTotalValue($udpos[$udpoKey]->getTotalValue() + $orderItem->getPrice() * $_totQty)->setTotalQty($udpos[$udpoKey]->getTotalQty() + $_totQty);
+				}
+
+				if ($orderItem->getParentItem()) {
+					$weightType = $orderItem->getParentItem()->getProductOptionByCode("weight_type");
+					if (null !== $weightType && !$weightType) {
+						$udpos[$udpoKey]->setTotalWeight($udpos[$udpoKey]->getTotalWeight() + $orderItem->getWeight() * $_totQty);
+					}
+				} else {
+					$weightType = $orderItem->getProductOptionByCode("weight_type");
+					if (null === $weightType || $weightType) {
+						$udpos[$udpoKey]->setTotalWeight($udpos[$udpoKey]->getTotalWeight() + $orderItem->getWeight() * $_totQty);
+					}
+				}
+
+				if (!$orderItem->getHasChildren()) {
+					$udpos[$udpoKey]->setTotalCost($udpos[$udpoKey]->getTotalCost() + $item->getBaseCost() * $_totQty);
+				}
+				$udpos[$udpoKey]->setCommissionPercent($vendor->getCommissionPercent());
+				$udpos[$udpoKey]->setTransactionFee($vendor->getTransactionFee());
+			}
+		}
+		Mage::dispatchEvent("udpo_order_save_before", array("order" => $order, "udpos" => $udpos));
+		$order->setUdropshipStatus(Unirgy_Dropship_Model_Source::ORDER_STATUS_NOTIFIED);
+		$udpoSplitWeights = array();
+		foreach ($udpos as $_vUdpoKey => $_vUdpo) {
+			if (empty($udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"])) {
+				$udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"]["weights"] = array();
+				$udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"]["total_weight"] = 0;
+			}
+			$weight = 0 < $_vUdpo->getTotalWeight() ? $_vUdpo->getTotalWeight() : 0.001;
+			$udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"]["weights"][$_vUdpoKey] = $weight;
+			$udpoSplitWeights[$_vUdpo->getUdropshipVendor() . "-"]["total_weight"] += $weight;
+		}
+		$transaction = Mage::getModel("core/resource_transaction");
+		foreach ($udpos as $udpoKey => $udpo) {
+			$udpo->setIsVirtual($isVirtual[$udpoKey]);
+			if ($isVirtual[$udpoKey]) {
+				$vUdpoStatus = (int)Mage::getStoreConfig("udropship/purchase_order/default_virtual_po_status", $order->getStoreId());
+				if ("999" != $vendor->getData("initial_virtual_po_status")) {
+					$vUdpoStatus = $vendor->getData("initial_virtual_po_status");
+				}
+				$udpo->setUdropshipStatus($vUdpoStatus);
+			}
+
+			Mage::helper("udropship")->addVendorSkus($udpo);
+			if (empty($udpoNoSplitWeights[$udpo->getUdropshipVendor() . "-"]) &&
+				!empty($udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey]) &&
+				1 < count($udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"]))
+			{
+				$_splitWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey];
+				$_totalWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["total_weight"];
+				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
+				$udpo->setBaseShippingAmount(($udpo->getBaseShippingAmount() * $_splitWeight) / $_totalWeight);
+				$udpo->setShippingAmountIncl(($udpo->getShippingAmountIncl() * $_splitWeight) / $_totalWeight);
+				$udpo->setBaseShippingAmountIncl(($udpo->getBaseShippingAmountIncl() * $_splitWeight) / $_totalWeight);
+				$udpo->setShippingTax(($udpo->getShippingTax() * $_splitWeight) / $_totalWeight);
+				$udpo->setBaseShippingTax(($udpo->getBaseShippingTax() * $_splitWeight) / $_totalWeight);
+			}
+			$order->getUdposCollection()->addItem($udpo);
+			$transaction->addObject($udpo);
+		}
+		$order->setLastCreatedUdpos($udpos);
+		$transaction->addObject($order->setData("___dummy", 1))->save();
+		$order->setUdropshipOrderSplitFlag(true);
+		Mage::dispatchEvent("udpo_order_save_after", array("order" => $order, "udpos" => $udpos));
+		foreach ($udpos as $udpo) {
+			$poHlp->sendVendorNotification($udpo, $comment);
+		}
+		$hlp->processQueue();
+		return count($udpos);
+	}
+}
+
+

@@ -1,92 +1,73 @@
-<?php //004a2
-if(extension_loaded('bcompiler')&&file_exists(__FILE__.'b')){return(require(__FILE__.'b'));}if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='/ioncube/ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if((@$__id[1])==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl'))@dl($__ln);}else{die('The file '.__FILE__." is corrupted. Ensure that you use binary mode when transferring files with FTP and disable the 'TAR smart cr/lf feature' if using WinZIP\n");}if(function_exists('_il_exec')){return _il_exec();}die('The file <b>'.__FILE__.'</b> has been encoded with the <a href="http://www.ioncube.com">ionCube PHP Encoder</a> and requires the free '.basename($__ln).' <a href="http://www.ioncube.com/loader_download/">ionCube PHP Loader</a> to be installed.');
+<?php
 
-?>
-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
-X/WkunbNH4pUnZ4kURZZ6owr
+class Unirgy_DropshipMicrositePro_Helper_Protected
+{
+	protected $_registrationFields = NULL;
+
+	protected function _initRegistrationFields() {
+		Unirgy_Dropship_Helper_Protected::validateLicense("Unirgy_DropshipMicrositePro");
+		if (null === $this->_registrationFields) {
+			$hlp = Mage::helper("udropship");
+			$sHlp = Mage::helper("udmspro");
+			foreach (Mage::getConfig()->getNode("global/udropship/vendor/fields")->children() as $code => $node) {
+				if ($node->is("disabled")) {
+					continue;
+				}
+
+				$name = $node->name ? (string)$node->name : $code;
+				$type = $node->reg_type ? (string)$node->reg_type : $node->type ? (string)$node->type : "text";
+				if (in_array($type, array("multiselect", "checkboxes"))) {
+					$name .= "[]";
+				}
+
+				$field = array("id" => $name, "type" => $type, "name" => $name, "label" => $hlp->__($node->reg_label ? (string)$node->reg_label : (string)$node->label), "note" => $hlp->__((string)$node->note), "field_config" => $node, "required" => (int)$node->reg_required, "class" => (string)$node->reg_class);
+				if ($node->frontend_model || $node->reg_frontend_model) {
+					$field["type"] = $code;
+					$field["input_renderer"] = Mage::getConfig()->getBlockClassName((string)($node->reg_frontend_model ? $node->reg_frontend_model : $node->frontend_model));
+				}
+
+				switch ($type) {
+					case "statement_po_type":
+					case "payout_po_status_type":
+					case "notify_lowstock":
+					case "select":
+					case "multiselect":
+					case "checkboxes":
+					case "radios":
+						$srcModel = $node->reg_source_model ? (string)$node->reg_source_model : $node->source_model ? (string)$node->source_model : "udropship/source";
+						$field["source_model"] = $srcModel;
+						$field["source"] = $node->source ? (string)$node->source : $code;
+						$source = Mage::getSingleton($srcModel);
+						if (is_callable(array($source, "setPath"))) {
+							$source->setPath($node->source ? (string)$node->source : $code);
+						}
+
+						if (in_array($type, array("multiselect", "checkboxes", "radios")) || !is_callable(array($source, "toOptionHash"))) {
+							$field["values"] = $source->toOptionArray((int)$node->reg_use_selector);
+						} else {
+							$field["options"] = $source->toOptionHash((int)$node->reg_use_selector);
+						}
+
+						break;
+					case "date":
+					case "datetime":
+						$field["image"] = $sHlp->getSkinUrl("images/grid-cal.gif");
+						$field["input_format"] = Varien_Date::DATE_INTERNAL_FORMAT;
+						$field["format"] = Varien_Date::DATE_INTERNAL_FORMAT;
+				}
+				$this->_registrationFields[$code] = $field;
+			}
+			if (empty($this->_registrationFields["comments"])) {
+				$this->_registrationFields["comments"] = array("id" => "comments", "type" => "textarea", "name" => "comments", "label" => $hlp->__("Comments"));
+			}
+		}
+		return $this;
+	}
+
+	public function getRegistrationField($code) {
+		$this->_initRegistrationFields();
+		return !empty($this->_registrationFields[$code]) ? $this->_registrationFields[$code] : false;
+	}
+}
+
+

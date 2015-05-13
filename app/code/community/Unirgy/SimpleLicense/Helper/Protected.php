@@ -1,288 +1,301 @@
-<?php //004a2
-if(extension_loaded('bcompiler')&&file_exists(__FILE__.'b')){return(require(__FILE__.'b'));}if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='/ioncube/ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if((@$__id[1])==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl'))@dl($__ln);}else{die('The file '.__FILE__." is corrupted. Ensure that you use binary mode when transferring files with FTP and disable the 'TAR smart cr/lf feature' if using WinZIP\n");}if(function_exists('_il_exec')){return _il_exec();}die('The file <b>'.__FILE__.'</b> has been encoded with the <a href="http://www.ioncube.com">ionCube PHP Encoder</a> and requires the free '.basename($__ln).' <a href="http://www.ioncube.com/loader_download/">ionCube PHP Loader</a> to be installed.');
+<?php
 
-?>
-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
-TmwBRLTzwrELhHmqJzzS7BacxHzO
+final class Unirgy_SimpleLicense_Helper_Protected
+{
+	private static $_macRegExp = "/([0-9a-f]{2}[:-][0-9a-f]{2}[:-][0-9a-f]{2}[:-][0-9a-f]{2}[:-][0-9a-f]{2}[:-][0-9a-f]{2})/i";
+	private static $_licenseApiUrl = "https://secure.unirgy.com/simple/client_api/";
+	private static $_s = "2OOxGXdd0vGTPk7!kmN\$";
+	private static $_obfuscateKey = NULL;
+
+	private static function callApi($action, $data)
+	{
+		$curl = curl_init();
+		$uSimpleLicVersion = Mage::app()->getConfig()->getNode("modules/Unirgy_SimpleLicense/version");
+		$url = self::$_licenseApiUrl . $action . "?uslv=" . $uSimpleLicVersion;
+		if (!empty($data["license_key"])) {
+			$url .= "&l=" . $data["license_key"];
+		}
+
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+		curl_setopt($curl, CURLOPT_HEADER, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, (string)Mage::getStoreConfigFlag("usimpleup/general/verify_ssl"));
+		$response = curl_exec($curl);
+		$result = array("curl_error" => "", "http_code" => "", "header" => "", "body" => "");
+		if ($error = curl_error($curl)) {
+			$result["curl_error"] = $error;
+			return $result;
+		}
+
+		$result["http_code"] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		$headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+		$result["header"] = substr($response, 0, $headerSize);
+		$result["body"] = substr($response, $headerSize);
+		curl_close($curl);
+
+		Mage::log($data, null, 'apicall.log');
+		return $result;
+	}
+
+	private static function serverMACs()
+	{
+		$macs = array();
+		$output = array();
+		if (!function_exists("exec")) {
+			Mage::log("exec() seems to be disabled, cannot check mac address", Zend_Log::ERR, "unirgy.log", true);
+			return $macs;
+		}
+
+		if (strpos(strtolower(PHP_OS), "win") === 0) {
+			exec("ipconfig /all | find \"Physical Address\"", $output);
+		} else {
+			exec("/sbin/ifconfig -a | grep -E \"HWaddr|ether\"", $output);
+		}
+
+		foreach ($output as $line) {
+			if (preg_match(self::$_macRegExp, $line, $m)) {
+				$macs[] = strtoupper($m[1]);
+			}
+
+		}
+		return $macs;
+	}
+
+	private static function licenseSignatureString($d)
+	{
+		if (is_object($d)) {
+			$d = $d->getData();
+		}
+		return str_replace("\r\n", "\n", (!empty($d["license_key"]) ? $d["license_key"] : "") . "|" . (!empty($d["license_status"]) ? $d["license_status"] : "") . "|" . (!empty($d["products"]) ? $d["products"] : "") . "|" . (!empty($d["server_restriction"]) ? $d["server_restriction"] : "") . "|" . (!empty($d["server_restriction1"]) ? $d["server_restriction1"] : "") . "|" . (!empty($d["server_restriction2"]) ? $d["server_restriction2"] : "") . "|" . (!empty($d["license_expire"]) ? $d["license_expire"] : "") . "|" . (!empty($d["upgrade_expire"]) ? $d["upgrade_expire"] : ""));
+	}
+
+	private static function licenseSignature($d)
+	{
+		return empty($d) ? "" : sha1(self::$_s . "|" . self::licenseSignatureString($d));
+	}
+
+	public static function sendServerInfo()
+	{
+		$licenses = Mage::getModel("usimplelic/license")->getCollection();
+		$keys = array();
+		foreach ($licenses as $license) {
+			$keys[] = $license->getLicenseKey();
+		}
+		$data = array("license_keys" => join("\n", $keys), "ioncube_version" => ioncube_loader_version(), "server_data" => ioncube_server_data(), "mac_addresses" => Zend_Json::encode(self::serverMACs()), "http_host" => $_SERVER["HTTP_HOST"], "server_name" => $_SERVER["SERVER_NAME"], "server_addr" => $_SERVER["SERVER_ADDR"], "host_ip" => gethostbyname(php_uname("n")));
+		$result = self::callApi("server_info/", $data);
+		return $result;
+	}
+
+	public static function retrieveLicense($key, $installModules = false)
+	{
+		$license = is_object($key) ? $key : Mage::getModel("usimplelic/license")->load($key, "license_key");
+		$key = $license->getLicenseKey() ? $license->getLicenseKey() : $key;
+		$data = array("license_key" => $key, "license" => Zend_Json::encode($license->getData()), "signature" => self::licenseSignature($license), "signature_string" => self::licenseSignatureString($license), "server_data" => ioncube_server_data());
+		$result = self::callApi("license/", $data);
+		if ($result["curl_error"]) {
+			$error = "Unirgy_SimpleLicense connection error while retrieving license: " . $result["curl_error"];
+			if (!$license->getId()) {
+				throw new Unirgy_SimpleLicense_Exception($error);
+			}
+			$license->setLastStatus("curl_error")->setLastError($result["curl_error"])->setRetryNum($license->getRetryNum() + 1)->save();
+			Mage::log($error);
+			return false;
+		}
+
+		if ($result["http_code"] != 200) {
+			$error = "Unirgy_SimpleLicense http error while retrieving license: " . $result["http_code"];
+			if (!$license->getId()) {
+				throw new Unirgy_SimpleLicense_Exception($error);
+			}
+			$license->setLastStatus("http_error")->setLastError($result["http_code"] . ": " . $result["body"])->setRetryNum($license->getRetryNum() + 1)->save();
+			Mage::log($error);
+			return false;
+		}
+
+		if (empty($result["body"])) {
+			$data = NULL;
+		} else {
+			try {
+				$json = trim($result["body"]);
+				if ($json[0] === "{" || $json[0] === "[") {
+					$data = Zend_Json::decode($json);
+				} else {
+					$data = NULL;
+				}
+			} catch (Exception $e) {
+				if ($e->getMessage() == "Decoding failed: Syntax error") {
+					$data = NULL;
+				} else {
+					$data = NULL;
+				}
+			}
+		}
+
+		if (!$data) {
+			$error = "Unirgy_SimpleLicense decoding error while retrieving license: <xmp>" . $result["body"] . "</xmp>";
+			if (!$license->getId()) {
+				throw new Unirgy_SimpleLicense_Exception($error);
+			}
+			$license->setLastStatus("body_error")->setLastError($result["headers"] . "\n\n" . $result["body"])->setRetryNum($license->getRetryNum() + 1)->save();
+			Mage::log($error);
+			return false;
+		}
+
+		if ($data["status"] == "error") {
+			$error = $key . ": " . $data["message"];
+			if ($license->getId()) {
+				$license->setLastStatus("status_error")->setLastError($error)->setRetryNum($license->getRetryNum() + 1)->save();
+				Mage::log($error);
+			}
+			throw new Unirgy_SimpleLicense_Exception($error);
+		}
+
+		$license->addData(array("license_key" => $key, "license_status" => $data["license_status"], "last_checked" => now(), "last_status" => $data["status"], "retry_num" => 0, "products" => join("\n", array_keys($data["modules"])), "server_restriction" => $data["server_restriction"], "server_restriction1" => $data["server_restriction1"], "server_restriction2" => $data["server_restriction2"], "license_expire" => $data["license_expire"], "upgrade_expire" => $data["upgrade_expire"], "server_info" => $data["server_info"]))->setSignature(self::licenseSignature($license))->save();
+		if (!empty($data["modules"])) {
+			$uris = array();
+			foreach ($data["modules"] as $name => $m) {
+				if (!$name) {
+					continue;
+				}
+
+				$module = Mage::getModel("usimpleup/module")->load($name, "module_name");
+				if (!$module) {
+					continue;
+				}
+
+				$module->addData(array("module_name" => $name, "download_uri" => $m["download_uri"], "last_checked" => now(), "remote_version" => $m["remote_version"], "license_key" => $license->license_key))->save();
+				$uris[] = $m["download_uri"];
+			}
+			if ($installModules) {
+				Mage::helper("usimpleup")->checkUpdates();
+				Mage::helper("usimpleup")->installModules($uris, Mage::app()->getRequest()->getPost("ftp_password"));
+			}
+		}
+	}
+
+	public static function validateLicenseServer($server, $license)
+	{
+		if (!($server = trim($server))) {
+			return false;
+		}
+
+		if ($server[0] === "{" && preg_match(self::$_macRegExp, $server, $m)) {
+			$mac = strtoupper($m[1]);
+			return stripos($license->server_info, $server) !== false || in_array($mac, self::serverMACs());
+		}
+
+		explode("@", $server);
+		list($domain, $ip) = explode("@", $server) + array(1 => "");
+		if (!($domain === "" || $domain === "*")) {
+			$re = "#^" . str_replace("\\*", ".*", preg_quote($domain)) . "\$#i";
+			if (!(preg_match($re, $_SERVER["SERVER_NAME"]) || preg_match($re, $_SERVER["HTTP_HOST"]))) {
+				return false;
+			}
+		}
+
+		if (!($ip === "" || $ip === "*")) {
+			$re = "#^" . str_replace("\\*", ".*", preg_quote($ip)) . "\$#i";
+			$servADD = $_SERVER["SERVER_ADDR"];
+			$intIP = gethostbyname(php_uname("n"));
+			if (!preg_match($re, $servADD) && !preg_match($re, $intIP)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static function validateLicense($key)
+	{
+		$license = is_object($key) ? $key : Mage::getModel("usimplelic/license")->load($key, "license_key");
+		if (!$license->getId()) {
+			throw new Unirgy_SimpleLicense_Exception("License record is not found: " . $key);
+		}
+
+		$key = $license->license_key;
+		if (!Mage::app()->loadCache("ulicense_" . $key) && (!$license->getAuxChecksum() || 2147483647 - $license->getAuxChecksum() < time() - 86400)) {
+			Mage::app()->saveCache("1", "ulicense_" . $key, array("ulicense"), 86400);
+			$license->setAuxChecksum(2147483647 - time())->save();
+			self::retrieveLicense($license->getLicenseKey());
+		}
+
+		$expires = $license->getLicenseExpire();
+		if ($expires && strtotime($expires) < time() && $license->getLicenseStatus() != "expired") {
+			$license->setLicenseStatus("expired")->setSignature(self::licenseSignature($license))->save();
+		}
+
+		$errors = array("inactive" => "The license is not active", "expired" => "The license has expired", "invalid" => "The license is not valid for the current server");
+		if (!empty($errors[$license->getLicenseStatus()])) {
+			throw new Unirgy_SimpleLicense_Exception($errors[$license->getLicenseStatus()] . ": " . $license->getLicenseKey());
+		}
+
+		if (PHP_SAPI !== "cli" && ($license->getServerRestriction() || $license->getServerRestriction1() || $license->getServerRestriction2())) {
+			$found = false;
+			if ($license->getServerRestriction()) {
+				$servers = explode("\n", $license->getServerRestriction());
+				foreach ($servers as $server) {
+					if (self::validateLicenseServer($server, $license)) {
+						$found = true;
+						break;
+					}
+				}
+			}
+
+			if (!$found && $license->getServerRestriction1()) {
+				$servers = explode("\n", $license->getServerRestriction1());
+				$found = false;
+				foreach ($servers as $server) {
+					if (self::validateLicenseServer($server, $license)) {
+						$found = true;
+						break;
+					}
+				}
+				if ($found && $license->getServerRestriction2()) {
+					$servers = explode("\n", $license->getServerRestriction2());
+					$found = false;
+					foreach ($servers as $server) {
+						if (self::validateLicenseServer($server, $license)) {
+							$found = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if (!$found) {
+				$msg = $errors["invalid"] . ": " . $license->getLicenseKey() . " ";
+				$msg .= "SERVER_NAME: " . (!empty($_SERVER["SERVER_NAME"]) ? $_SERVER["SERVER_NAME"] : "null") . "; ";
+				$msg .= "HTTP_HOST: " . (!empty($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"] : "null") . "; ";
+				$msg .= "SERVER_ADDR: " . (!empty($_SERVER["SERVER_ADDR"]) ? $_SERVER["SERVER_ADDR"] : "null") . "; ";
+				$msg .= "INT_ADDR: " . gethostbyname(php_uname("n")) . "; ";
+				throw new Unirgy_SimpleLicense_Exception($msg);
+			}
+		}
+
+		return $license;
+	}
+
+	public static function obfuscate($key)
+	{
+		self::$_obfuscateKey = $key;
+	}
+
+	public static function validateModuleLicense($name)
+	{
+		$module = is_object($name) ? $name : Mage::getModel("usimpleup/module")->load($name, "module_name");
+		if (!$module->getId()) {
+			throw new Unirgy_SimpleLicense_Exception("Module record not found: " . (is_object($name) ? $name->getModuleName() : $name));
+		}
+
+		$license = self::validateLicense($module->getLicenseKey());
+		$licenseProducts = explode("\n", $license->getProducts());
+		if (!in_array($name, $licenseProducts)) {
+			throw new Unirgy_SimpleLicense_Exception("Module " . $module->getModuleName() . " is not covered by license: " . $module->getLicenseKey());
+		}
+
+		return self::$_obfuscateKey ? sha1(self::$_obfuscateKey . $module->getModuleName()) : true;
+	}
+}
