@@ -44,12 +44,14 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
         </p>
 
         <?php if ($_product->getCanShowPrice() !== false): ?>
+            <?php $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode(); ?>
             <div class="price-box-bundle">
-                <div class="price-box">
+                <div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer" >
+                    <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>" />
                     <p class="price">
                         <span class="price-label"><?php echo $this->__("price"); ?>:</span>
                         <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
-                        <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getFinalPrice(), true, false)); ?><?php endif; ?></span>
+                        <span class="price" itemprop="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getFinalPrice(), true, false)); ?><?php endif; ?></span>
                     </p>
                 </div>
                 <ul>
@@ -88,6 +90,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                     <div class="col-xs-6" id="product-likeboxes">
 
                     </div>
+
                     <?php if ($isSalable): ?>
                         <div class="col-xs-6 text-right">
                             <button class="btn button button-primary ico addBasket"
