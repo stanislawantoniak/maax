@@ -85,18 +85,22 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						$this->_throwRefundTooMuchAmountException();
 					}
 
-					if(!$rma->getPo()->isCod()) {
+					if(!$po->isCod()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$result = $allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
 						if($result === false) {
 							$this->_throwRefundTooMuchAmountException();
 						}
 					}
-                    $_returnAmount = $rma->getPo()->getCurrencyFormattedAmount($returnAmount);
+                    $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
+					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
+					$po->saveComments();
+					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+					$rma->saveComments();
 				} elseif (count($invalidItems)) {
-					Mage::throwException($hlp->__("There was an error while processing this items:") . "<br />" . implode('<br />', $invalidItems));
+					Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
 				} else {
 					Mage::throwException($hlp->__("No items to refund"));
 				}
