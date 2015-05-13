@@ -53,6 +53,7 @@
                     <category>Zolago_Catalog_Model_Category</category>
                     <product>Zolago_Catalog_Model_Product</product>
                     <url>Zolago_Catalog_Model_Url</url>
+                    <category>Zolago_Catalog_Model_Category</category>
                 </rewrite>
 			</catalog>
             <catalog_resource>
