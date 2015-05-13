@@ -168,7 +168,7 @@
 "Remains","Pozostało"
 "Select at least one product to refund","Wybierz przynajmniej jeden produkt do zwrotu"
 "Invalid RMA item ID:","Nieprawidłowe ID produktu RMA:"
-"There was an error while processing this items:","Wystąpił błąd podczas przetwarzania następujących produktów:"
+"There was an error while processing those items:","Wystąpił błąd podczas przetwarzania następujących produktów:"
 "No items to refund","Brak produktów do zwrotu"
 "Cannot create RMA refund because of wrong RMA status","Nie można utworzyć zwrotu, ponieważ RMA ma nieprawidłowy status"
 "RMA refund successful! Amount refunded %s","Utworzono zwrot RMA na kwotę: %s"
