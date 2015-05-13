@@ -53,7 +53,7 @@
         <div class="item">
             <div>
                 <a href="#" data-flags="<?php echo $_zolagoCatalogBlock->getProductFlagLabel(); ?>">
-                    <span itemprop="image"><img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(319); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"></span>
+                    <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(319); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" itemprop="image"  />
                     <span class="view_lupa"></span>
                 </a>
             </div>
