@@ -184,6 +184,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	public function createOverpayment($po,$commentMoved="Moved to overpayment",$commentCreated="Created overpayment") {
 
 		$po = $this->getPo($po);
+		$helper = Mage::helper("zolagopayment");
 		if($po->getId()) { //check if po exists and
 
 			//rma returned value getting:
@@ -197,6 +198,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 			if($rmaReturnedValue) {
 				$poGrandTotal = $po->getGrandTotalInclTax() - $rmaReturnedValue;
+				if($poGrandTotal < 0) {
+					return false;
+				}
 			} elseif (in_array($po->getUdropshipStatus(), array(Zolago_Po_Model_Po_Status::STATUS_CANCELED, Zolago_Po_Model_Po_Status::STATUS_RETURNED))) {
                 $poGrandTotal = 0;
             } else {
@@ -213,7 +217,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				if($payments) { //if there are any then
 					$createdAt = Mage::getSingleton('core/date')->gmtDate();
 					$this->setLocaleByPo($po);
-					$helper = Mage::helper("zolagopayment");
 
 					foreach($payments as $payment) {
 						if($overpaymentAmount > 0) { //if there is any overpayment then try to allocate it from payment
