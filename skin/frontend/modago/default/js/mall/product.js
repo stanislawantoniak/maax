@@ -58,7 +58,7 @@ Mall.product = {
             jQuery("ol.breadcrumb li.home").after(searchBreadcrumb);
             //mobile
             var mobileLink = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").attr("href");
-            var mobileLabel = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").text();
+            var mobileLabel = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").html();
 
             jQuery('.path_back_to_category #pbtc_link').attr('href', mobileLink);
             jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>  " + mobileLabel);

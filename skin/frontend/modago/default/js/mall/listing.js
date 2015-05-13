@@ -2471,7 +2471,7 @@ jQuery.each(products, function(index, item) {
                     var li = jQuery(val);
                     var link = jQuery(val).data("link");
                     var catid = jQuery(val).data("catid");
-                    var text = jQuery(val).find("a").text();
+                    var text = jQuery(val).find("a").html();
 
                     searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
                     +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
