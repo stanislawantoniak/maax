@@ -123,6 +123,11 @@ Mall.listing = {
 	 */
 	_init_products: [],
 
+    /**
+     * Current (first) visible on screen item
+     */
+    _firstOnScreenItem: null,
+
 	/**
 	 * @type Boolean
 	 * Determines if history state should not be pushed
@@ -150,6 +155,8 @@ Mall.listing = {
 	 */
 	init: function () {
 		this.initShuffle();
+
+        this.delegateSavePosition();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -729,7 +736,7 @@ Mall.listing = {
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
 
 
-        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+        var item = "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
@@ -2401,7 +2408,9 @@ Mall.listing = {
 					}
 
 					if ((jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
+                        jQuery('#grid').shuffle('disable');
 						jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
+                        jQuery('#grid').shuffle('enable');
 					}
 				}
 
@@ -2497,6 +2506,69 @@ Mall.listing = {
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
             }
         });
+    },
+
+    delegateSavePosition: function() {
+
+        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            e.preventDefault();
+            Mall.listing.setFirstOnScreenItem(jQuery(this).closest(".item"));
+        });
+
+        jQuery(window).on('Mall.onScrollEnd', function() {
+            Mall.listing.getFirstOnScreenItem();
+        });
+
+        jQuery(window).on('Mall.onResizeEnd', function() {
+            if (Mall.listing._firstOnScreenItem != null && !jQuery(Mall.listing._firstOnScreenItem).isOnScreen(0.5, 0.7)) {
+                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+            }
+        });
+
+        jQuery(window).on('done.shuffle', function() {
+            var windowWidth = jQuery(window).width();
+            if (windowWidth != sessionStorage.getItem("windowWidth")) {
+                if (!Mall.listing._firstOnScreenItem) {
+                    var itemId = sessionStorage.getItem('firstOnScreenItemId');
+                    if (itemId) {
+                        Mall.listing._firstOnScreenItem = jQuery(itemId);
+                    }
+                }
+                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+            }
+        });
+    },
+
+    getFirstOnScreenItem: function() {
+        var grid = jQuery('#grid');
+        var visibleItems = grid.find('.item:in-viewport');
+        var item = null;
+        for (var i = 0; i < visibleItems.length ; i++) {
+            if (jQuery(visibleItems[i]).isOnScreen(0.5,0.7)) {
+                Mall.listing.setFirstOnScreenItem(visibleItems[i]);
+                break;
+            }
+        }
+        return Mall.listing._firstOnScreenItem;
+    },
+
+    setFirstOnScreenItem: function(item) {
+        Mall.listing._firstOnScreenItem = item;
+        sessionStorage.setItem('firstOnScreenItemId', '#'+jQuery(item).attr('id'));
+        sessionStorage.setItem("windowWidth", jQuery(window).width());
+    },
+
+    scrollToItem: function(item) {
+        if (item != null && !jQuery(item).isOnScreen(0.5, 0.7)) {
+            jQuery('body').animate({
+                scrollTop: jQuery(item).offset().top - 60 // headroom
+            }, 100);
+            setTimeout(function(){Mall.listing.hideHeaderHeadroom();}, 150);
+        }
+    },
+
+    hideHeaderHeadroom: function() {
+        jQuery('#header').find('.header_top').addClass('headroom--unpinned').removeClass('headroom--pinned');
     },
 
 	/**
