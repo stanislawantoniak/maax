@@ -51,7 +51,7 @@ Mall.product = {
         }
 
         if(searchBreadcrumb){
-            jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product)").each(function(i,val){
+            jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product)").each(function(i,val){
                 jQuery(val).remove();
             });
             //desktop
