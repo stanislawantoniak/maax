@@ -61,7 +61,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
         );
 		//$profiler->log("Rest");
 		
-		// Load product context data & crosssell wishlist info
+		// Load product context data & crosssell wishlist info & ask vendor form customer info
 		if($productId=$this->getRequest()->getParam("product_id")){
 			$product = Mage::getModel("catalog/product");
 			/* @var $product Mage_Catalog_Model_Product */
@@ -90,6 +90,17 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
                     $cs[$id]['entity_id']      = $id;
                 }
                 $content['crosssell'] = array_values($cs);
+            }
+
+            // Customer info for contact form in product page
+            if (Mage::helper('customer')->isLoggedIn()) {
+                /* @var $coreHelper Mage_Core_Helper_Data */
+                $coreHelper = Mage::helper('core');
+                /** @var Mage_Customer_Model_Session $session */
+                $session = Mage::getSingleton('customer/session');
+
+                $content['customer_name']  = $coreHelper->escapeHtml($session->getCustomer()->getName());
+                $content['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
             }
 		}
 
