@@ -207,15 +207,10 @@ Mall.listing = {
 
         jQuery(grid)
 	        .on('layout.shuffle', function() {
-		        console.log('layout.shuffle');
 		        Mall.listing.hideListingOverlay();
                 Mall.listing.likePriceView();
             })
-	        .on('loading.shuffle',function() {
-		        console.log('loading.shuffle')
-	        })
 	        .on('done.shuffle', function() {
-		        console.log('done.shuffle');
 		        Mall.listing.hideListingOverlay();
 	        });
 
