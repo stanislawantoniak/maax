@@ -95,7 +95,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					}
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
-					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount));
+					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
 					$po->saveComments();
 					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
 					$rma->saveComments();
