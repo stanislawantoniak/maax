@@ -49,6 +49,15 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				$invalidItems = array();
 				$validItems = array();
 				$returnAmount = 0;
+				$po = $rma->getPo();
+
+				/** @var Zolago_Rma_Model_Rma $rmaModel */
+				$rmaModel = Mage::getModel('zolagorma/rma');
+				$rmas = $rmaModel->loadByPoId($po->getId());
+				$alreadyReturnedAmount = 0;
+				foreach($rmas as $rma) {
+					$alreadyReturnedAmount += $rma->getReturnedValue();
+				}
 
 				foreach ($data['rmaItems'] as $id => $val) {
 					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
@@ -70,12 +79,19 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 				if (count($validItems) && $returnAmount > 0) {
 
-					$rma->setReturnedValue($rma->getReturnedValue()+$returnAmount)->save();
+					if(($rma->getReturnedValue() + $returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
+						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
+					} else {
+						$this->_throwRefundTooMuchAmountException();
+					}
 
 					if(!$rma->getPo()->isCod()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						$result = $allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						if($result === false) {
+							$this->_throwRefundTooMuchAmountException();
+						}
 					}
                     $_returnAmount = $rma->getPo()->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
@@ -99,6 +115,10 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		}
 
 		return $this->_redirectReferer();
+	}
+
+	protected function _throwRefundTooMuchAmountException() {
+		Mage::throwException(Mage::helper("zolagorma")->__("Refund could not be created - not enough money left in PO"));
 	}
     
     /**
