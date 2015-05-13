@@ -171,6 +171,7 @@
 		    <udprod_vendor_product>/udprod/vendor_product/</udprod_vendor_product>
 		    <udprod_vendor_image>/udprod/vendor_image/</udprod_vendor_image>
 		    <udprod_vendor_price>/udprod/vendor_price/</udprod_vendor_price>
+		    <udprod_vendor_attributes>/udprod/vendor_attributes/</udprod_vendor_attributes>
 		</secure_url>
     </frontend>
     <adminhtml>
