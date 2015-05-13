@@ -17,26 +17,23 @@ Mall.product = {
 
 	updateContextBreadcrumbs: function() {
         var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
-        //var scat = localStorage.getItem("scat");
+
         var searchBreadcrumb = localStorage.getItem(this._entity_id+"_search_breadcrumb");
 
         localStorage.removeItem(this._entity_id);
-        //localStorage.removeItem("scat");
+
         localStorage.removeItem(this._entity_id+"_search_breadcrumb");
 
         if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
         }
-        //if (scat != null) {
-        //    sessionStorage.setItem("scat", scat);
-        //}
+
         if (searchBreadcrumb != null) {
             sessionStorage.setItem(this._entity_id+"_search_breadcrumb", searchBreadcrumb);
         }
         contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
-        //scat = sessionStorage.getItem("scat");
+
         searchBreadcrumb = sessionStorage.getItem(this._entity_id+"_search_breadcrumb");
-        console.log(contextBreadcrumbsHtml,  searchBreadcrumb);
 
 
         if (contextBreadcrumbsHtml) {
@@ -55,9 +52,16 @@ Mall.product = {
 
         if(searchBreadcrumb){
             jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product)").each(function(i,val){
-                jQuery(val).hide();
+                jQuery(val).remove();
             });
+            //desktop
             jQuery("ol.breadcrumb li.home").after(searchBreadcrumb);
+            //mobile
+            var mobileLink = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product):last").find("a").attr("href");
+            var mobileLabel = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product):last").find("a").text();
+
+            jQuery('.path_back_to_category #pbtc_link').attr('href', mobileLink);
+            jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>  " + mobileLabel);
         }
 
 
@@ -73,8 +77,8 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        sessionStorage.removeItem(this._entity_id);
-        sessionStorage.removeItem(this._entity_id+"_search_breadcrumb");
+        //sessionStorage.removeItem(this._entity_id);
+        //sessionStorage.removeItem(this._entity_id+"_search_breadcrumb");
 
 	},
 

@@ -2472,12 +2472,12 @@ jQuery.each(products, function(index, item) {
                     var link = jQuery(val).data("link");
                     var catid = jQuery(val).data("catid");
                     var text = jQuery(val).find("a").text();
-                    //console.log(link);
+
                     searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
                     +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
                     +'</li>';
                 });
-                console.log(searchBreadcrumb);
+
                 localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
             }
 
