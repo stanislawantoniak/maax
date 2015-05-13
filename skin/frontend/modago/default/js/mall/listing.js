@@ -2457,6 +2457,7 @@ jQuery.each(products, function(index, item) {
 		return container.find(".item").first().width();
 	},
 
+
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
