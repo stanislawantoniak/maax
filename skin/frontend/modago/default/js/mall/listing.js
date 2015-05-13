@@ -682,7 +682,7 @@ Mall.listing = {
 	appendToList: function (products) {
         var grid = jQuery('#grid');
 		        var eachItemsHtml = [];
-jQuery.each(products, function(index, item) {
+		jQuery.each(products, function(index, item) {
             eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
             Mall.wishlist.addProduct({
                 id: item[0],
