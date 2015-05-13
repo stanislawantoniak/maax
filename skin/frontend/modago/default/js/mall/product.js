@@ -77,8 +77,8 @@ Mall.product = {
             }
         });
         Mall.Navigation.init();
-        //sessionStorage.removeItem(this._entity_id);
-        //sessionStorage.removeItem(this._entity_id+"_search_breadcrumb");
+        sessionStorage.removeItem(this._entity_id);
+        sessionStorage.removeItem(this._entity_id+"_search_breadcrumb");
 
 	},
 
