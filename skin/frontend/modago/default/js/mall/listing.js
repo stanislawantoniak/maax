@@ -2463,6 +2463,23 @@ jQuery.each(products, function(index, item) {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
             }
+            if (jQuery('ol.breadcrumb').attr('data-search') == "1") {
+                e.preventDefault();
+                var searchBreadcrumb = "";
+                jQuery("ol.breadcrumb li:not(.home,.search,.vendor)").each(function(i,val){
+                    var li = jQuery(val);
+                    var link = jQuery(val).data("link");
+                    var catid = jQuery(val).data("catid");
+                    var text = jQuery(val).find("a").text();
+                    //console.log(link);
+                    searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
+                    +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
+                    +'</li>';
+                });
+                console.log(searchBreadcrumb);
+                localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
+            }
+
         });
     },
 
