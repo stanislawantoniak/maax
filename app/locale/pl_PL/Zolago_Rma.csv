@@ -173,3 +173,5 @@
 "Cannot create RMA refund because of wrong RMA status","Nie można utworzyć zwrotu, ponieważ RMA ma nieprawidłowy status"
 "RMA refund successful! Amount refunded %s","Utworzono zwrot RMA na kwotę: %s"
 "Refund could not be created - not enough money left in PO","Nie udało się utworzyć zwrotu - jego kwota jest większa niż pozostała ilośc środków w PO"
+"Created refund (RMA id: %s). Amount: %s","Utworzono zwrot (RMA id: %s) na kwotę %s"
+"Created RMA refund. Amount: %s","Utworzono zwrot RMA na kwotę %s"
