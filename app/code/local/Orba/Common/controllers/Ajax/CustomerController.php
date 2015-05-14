@@ -102,6 +102,13 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
                 $content['customer_name']  = $coreHelper->escapeHtml($session->getCustomer()->getName());
                 $content['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
             }
+            // And populate data question form if error
+            $dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
+            if ($dataPopulate) {
+                $content['data_populate']['customer_name']  = isset($dataPopulate['customer_name'])  ? $dataPopulate['customer_name']  : false;
+                $content['data_populate']['customer_email'] = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
+                $content['data_populate']['question_text']  = isset($dataPopulate['question_text'])  ? $dataPopulate['question_text']  : false;
+            }
 		}
 
 

@@ -74,6 +74,24 @@
                             <validate>validate-number</validate>
                             <!--<comment><![CDATA[NOTE: ]]></comment>-->
                         </vendor_mass_image_batch_size_bycsv>
+                        <ask_attribute_email_template>
+                            <label>Ask New Attribute Value Email template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </ask_attribute_email_template>
+                        <ask_attribute_email_cc_store>
+                            <label>Ask New Attribute Value Email</label>
+                            <comment>Email address to the person responsible for new attribute</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>46</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </ask_attribute_email_cc_store>
                     </fields>
                 </vendor>
             </groups>

@@ -187,9 +187,15 @@
 "Attributes", "Atrybuty"
 "Attribute values", "Wartości atrybutów"
 "Attribute preview", "Przegląd atrybutów"
-"Suggest new value", "Sugestia nowej wartości"
+"Ask about new value", "Poproś o wprowadzenie nowej wartości"
 "-- choose attribute set --", "-- wybierz kategorię atrybutów --"
 "-- none --", "-- brak --"
 "required", "wymagane"
 "not required", "nie wymagane"
+"Send", "Wyślij"
+"For attribute %s value %s was suggested","Dla atrybutu %s zasugerowano wartość %s"
+"Ask New Attribute Value Email template","Szablon email dla sugestii nowej wartości atrybutu"
+"Ask New Attribute Value Email","Email sugestii nowej wartości atrybutu"
+"Email address to the person responsible for new attribute","Adres email osoby odpowiedzialnej za nowe atrybuty"
+
 

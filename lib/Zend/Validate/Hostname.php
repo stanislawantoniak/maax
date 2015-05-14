@@ -522,7 +522,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
 		        ? iconv_get_encoding('internal_encoding')
 		        : ini_get('default_charset');
 	        if (PHP_VERSION_ID < 50600) {
-                iconv_set_encoding('internal_encoding', 'UTF-8');
+		        iconv_set_encoding('internal_encoding', 'UTF-8');
 	        } else {
 		        ini_set('default_charset', 'UTF-8');
 	        }
