@@ -185,8 +185,15 @@ Mall.listing = {
 		this.loadProductsOnScroll();
 
 		// load additional products to queue after page is loaded
-		this.setAutoappend(true);
-		this.loadToQueue();
+		if(this.getCurrentVisibleItems() < 100) {
+			this.setAutoappend(true);
+			this.loadToQueue();
+		} else {
+			if (this.canShowLoadMoreButton()) {
+				this.showLoadMoreButton();
+			}
+			this.showShapesListing();
+		}
 		this.setLoadMoreLabel();
 
 	},
@@ -195,11 +202,21 @@ Mall.listing = {
         var grid = jQuery('#grid'),
             sizer = jQuery(grid).find('.shuffle__sizer');
 
-        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+        jQuery(grid)
+	        .on('layout.shuffle', function() {
+		        console.log('layout.shuffle');
+		        Mall.listing.hideListingOverlay();
+                Mall.listing.likePriceView();
+            })
+	        .on('loading.shuffle',function() {
+		        console.log('loading.shuffle')
+	        })
+	        .on('done.shuffle', function() {
+		        console.log('done.shuffle');
+		        Mall.listing.hideListingOverlay();
+	        });
 
-        jQuery(grid).on('layout.shuffle', function() {
-            Mall.listing.likePriceView();
-        });
+	    jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
 
         jQuery(window).on('appendToListEnd', function() {
             Mall.listing.hideLoadMoreButton();
@@ -669,7 +686,7 @@ Mall.listing = {
 	appendToList: function (products) {
         var grid = jQuery('#grid');
 		        var eachItemsHtml = [];
-jQuery.each(products, function(index, item) {
+		jQuery.each(products, function(index, item) {
             eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
             Mall.wishlist.addProduct({
                 id: item[0],
@@ -819,6 +836,22 @@ jQuery.each(products, function(index, item) {
 		jQuery("#items-product").find(".shapes_listing").show();
 
 		return this;
+	},
+
+	_listing_overlay_class: 'listing-overlay',
+
+	getListingOverlay: function() {
+		return jQuery('.'+ this._listing_overlay_class);
+	},
+
+	showListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().show();
+	},
+
+	hideListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().hide();
 	},
 
 	/**
@@ -1211,7 +1244,7 @@ jQuery.each(products, function(index, item) {
 		/**
 		 * @todo handle error
 		 */
-
+		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
 		if(this.getMobileFiltersOverlay().is(":visible")) {
@@ -2347,8 +2380,8 @@ jQuery.each(products, function(index, item) {
 	 */
 	placeListingFadeContainer: function() {
 		if(!Mall.isGoogleBot()) {
-			jQuery('#grid').shuffle('layout');
-			if (this.canShowLoadMoreButton()) {
+			if (this.canShowLoadMoreButton())
+			{
 				this.showLoadMoreButton();
 				this.showShapesListing();
 
@@ -2983,7 +3016,9 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
-        jQuery(window).resize(Mall.listing.updateFilters);
+        jQuery(window).resize(function() {
+	        Mall.listing.updateFilters();
+        });
     } else {
         Mall.listing.initShuffle();
     }
