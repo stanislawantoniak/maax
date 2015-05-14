@@ -457,7 +457,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
         if(!Mage::registry('current_rma')) {
 	        Mage::log('getting rma from link',null,'rmaGet.log');
-            $rma = Mage::getModel("urma/rma");
+            $rma = Mage::getModel("zolagorma/rma");
             if($this->getRequest()->getParam('id')) {
                 $rma->load($this->getRequest()->getParam('id'));
             }
