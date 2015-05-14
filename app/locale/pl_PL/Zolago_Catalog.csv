@@ -187,9 +187,11 @@
 "Attributes", "Atrybuty"
 "Attribute values", "Wartości atrybutów"
 "Attribute preview", "Przegląd atrybutów"
-"Suggest new value", "Sugestia nowej wartości"
+"Ask about new value", "Poproś o wprowadzenie nowej wartości"
 "-- choose attribute set --", "-- wybierz kategorię atrybutów --"
 "-- none --", "-- brak --"
 "required", "wymagane"
 "not required", "nie wymagane"
+"Send", "Wyślij"
+
 

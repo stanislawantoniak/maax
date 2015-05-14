@@ -48,7 +48,7 @@
                     <div class="col-md-2">
                     </div>
                     <div class="col-md-10">
-                        <button type="button" class="btn btn-primary"><?php echo $_helper->__('Suggest new value'); ?></button>
+                        <a class="btn btn-primary" disabled id="ask_button" href="#askModal" data-toggle="modal"><?php echo $_helper->__('Ask about new value'); ?></a>
                     </div>
                     </div>
             </div>
@@ -57,13 +57,43 @@
     </div>
     </div>
 </div>
+<div id="askModal" class="modal fade" style="display:none" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <?php echo $_helper->__('Ask about new value'); ?>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <label class="col-md-2 control-label" for="send_attribute_label"><?php echo $_helper->__('Attribute');?></label>
+                <div class="col-md-10" id="send_attribute_label">
+                    
+                </div>
+                </div>
+                <div class="row">
+                <label class="col-md-2 control-label" for="send_attribute_value"><?php echo $_helper->__('New value');?></label>
+                <div class="col-md-10" id="send_attribute_label">
+                    <input type="text" class="form-control" id="new_attribute_value"/>
+                </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo $_helper->__('Cancel'); ?></button>
+                <button id="send_ask_value" disabled class="btn btn-primary" type="button"><?php echo $_helper->__('Send'); ?></button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+var selectedAttrId = 0;
 jQuery(document).ready(function() {
     jQuery(".select_select2").select2();
     jQuery("#attribute_set_select").change(function() {
         // clear selects
         jQuery('#attribute_values').html('');
-        jQuery('#attribute_select').html('');
+        jQuery('#attribute_select').html('<option style="color:#aaaaaa"><?php echo $_helper->__("Loading...");?></option>');
+        selectedAttrId = 0;
+        toggleButton(false);
         // load attributes by jquery
         var params = {};
         params.attribute_set = jQuery(this).val();
@@ -78,18 +108,92 @@ jQuery(document).ready(function() {
     });
     jQuery('#attribute_select').change(function() {
         jQuery('#attribute_values').html('');
+        selectedAttrId = 0;
         var params = {} ;
+        var attrId = jQuery(this).val();
+        toggleButton(false);
+        if (attrId == 0) {
+            return;
+        }
+        jQuery('#attribute_values').html('<span style="color:#aaaaaa"><?php echo $_helper->__("Loading...");?></span>');
         params.attribute = jQuery(this).val();
         jQuery.ajax({            
             url: '/udprod/vendor_attributes/get_values',
             method: 'POST',
             data: params,
             success: function(answer) {
+                selectedAttrId = attrId;
+                var text = jQuery("#attribute_select" ).find(":selected").text();
+                jQuery('#send_attribute_label').html(text);
+                toggleButton(true);
                 jQuery('#attribute_values').html(answer);
             }
-        });    
+        });            
+    });
+    jQuery('#send_ask_value').click(function() {
+        var text = jQuery('#new_attribute_value').val();
+        sendAskValue(text);
+        
+    });
+    jQuery('#new_attribute_value').keyup(function(event) {
+        if (checkNotEmpty() == true) {
+            if (event.which == 13) {
+                sendAskValue(jQuery(this).val());
+            }
+        }
     });
 });
+function checkNotEmpty() {
+    obj = jQuery('#new_attribute_value');
+    var text = jQuery(obj).val();
+    if (text.length > 0) {
+        jQuery('#send_ask_value').attr('disabled',false);        
+        return true;
+    } else {
+        jQuery('#send_ask_value').attr('disabled',true);
+        return false;
+    }        
+}
+function toggleButton(flag) {
+    if (flag) {
+        jQuery('#ask_button').attr('disabled',false);
+    } else {
+        selectedAttrId = 0;
+        jQuery('#new_attribute_value').val('');
+        checkNotEmpty();
+        jQuery('#send_attribute_label').html('');
+        jQuery('#ask_button').attr('disabled',true);
+    }
+}
+function sendAskValue(text) {
+        var params = {};
+        params.attrId = selectedAttrId;
+        params.value = text; 
+        jQuery.ajax({
+            url:'/udprod/vendor_attributes/ask_value',
+            method: 'POST',
+            data: params,
+            success: function(answer) {
+                jQuery('#new_attribute_value').val('');
+                checkNotEmpty();
+                noty({
+                    text:answer,
+                    type:'success',
+                    timeout: 4000,
+                });                
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                noty({
+                    text:'<?php echo $_helper->__("Error");?>:'+xhr.status+' '+thrownError,
+                    type:'error',
+                    timeout: 4000,
+                });                
+            }
+        });
+        // after ajax
+        jQuery('#askModal').modal('hide');
+
+}
 </script>
 
 

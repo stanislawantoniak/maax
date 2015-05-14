@@ -95,6 +95,7 @@
         <update handle="bootstrap" />
 
         <update handle="forms" />
+        <update handle="noty" />
 		<reference name="head">
 			<action method="addItem">
 				<type>skin_js</type>

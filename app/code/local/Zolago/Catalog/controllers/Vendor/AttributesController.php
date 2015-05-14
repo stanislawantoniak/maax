@@ -5,6 +5,11 @@
 class Zolago_Catalog_Vendor_AttributesController 
     	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
 	
+	
+    /**
+     * store assigned to vendor
+     */
+
     protected function _getStore() {
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         return $vendor->getLabelStore();
@@ -16,6 +21,11 @@ class Zolago_Catalog_Vendor_AttributesController
 		$this->_renderPage(null, 'udprod_product');
     }
     
+    
+    /**
+     * attributes list by attribute set
+     */
+
     public function get_attributesAction() {
         $attributeSetId = $this->getRequest()->getParam('attribute_set');
         $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
@@ -38,6 +48,9 @@ class Zolago_Catalog_Vendor_AttributesController
         asort($list);
         $out = '';
         foreach ($list as $key=>$item) {
+            if ($item['type'] == 'text') {
+                $key = 0;
+            }
             $out .= '<option value="'.$key.'">'.$item['label'].' ['.$_helper->__($item['type']).', '.$_helper->__($item['required']).']</option>';
         }
         if (!$out) {
@@ -46,6 +59,11 @@ class Zolago_Catalog_Vendor_AttributesController
         echo $out;
         die();
     }	
+    
+    /**
+     * attribute values list
+     */
+
     public function get_valuesAction() {
         $storeId = $this->_getStore();
         $attributeId = $this->getRequest()->getParam('attribute');
@@ -65,5 +83,17 @@ class Zolago_Catalog_Vendor_AttributesController
         }        
         echo $out;
         die();
+    }
+    
+    /**
+     * suggestion new attribute value
+     */
+
+    public function ask_valueAction() {
+        $template = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_template');
+        $attrId = $this->getRequest()->getParam('attrId');
+        $value = $this->getRequest()->getParam('value');
+        echo $template.' '.$attrId.' '.$value;
+        // todo
     }
 }
