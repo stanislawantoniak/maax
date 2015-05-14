@@ -372,6 +372,11 @@ var Mall = {
 				});
 			}
 		}
+
+        // Customer info for contact form in product page
+        if (data.content.logged_in && data.content.customer_email) {
+            Mall.product.updateQuestionFormForLoggedIn(data.content.customer_name, data.content.customer_email);
+        }
 	},
 	
 	getFavPluralText: function(count, you){

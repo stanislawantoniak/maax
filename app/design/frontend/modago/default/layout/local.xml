@@ -644,10 +644,10 @@
 			<block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
 			<block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
 				<block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
-				<block name="udqa.product.question.mobile" type="udqa/product_question" template="catalog/product/question-mobile.phtml"/>
+				<block name="udqa.product.question.mobile.product" type="udqa/product_question" template="catalog/product/question-product-mobile.phtml"/>
 			</block>
 			<block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
-			<block name="udqa.product.question" type="udqa/product_question"/>
+			<block name="udqa.product.question.product" type="udqa/product_question" template="catalog/product/question-product.phtml"/>
 			<block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
 				<block name="product.review.form" type="zolagomodago/review_form"/>
 			</block>
