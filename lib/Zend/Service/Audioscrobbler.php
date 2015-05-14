@@ -71,9 +71,9 @@ class Zend_Service_Audioscrobbler
 
 	    //changes copied from newest version of Zend Framework 1.12.11
 	    if (PHP_VERSION_ID < 50600) {
-		    iconv_set_encoding('output_encoding', 'UTF-8');
-		    iconv_set_encoding('input_encoding', 'UTF-8');
-		    iconv_set_encoding('internal_encoding', 'UTF-8');
+            iconv_set_encoding('output_encoding', 'UTF-8');
+            iconv_set_encoding('input_encoding', 'UTF-8');
+            iconv_set_encoding('internal_encoding', 'UTF-8');
 	    } else {
 		    ini_set('output_encoding', 'UTF-8');
 		    ini_set('input_encoding', 'UTF-8');

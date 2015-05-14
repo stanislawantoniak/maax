@@ -623,7 +623,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
 
 	        //changes copied from newest version of Zend Framework 1.12.11
 	        if (PHP_VERSION_ID < 50600) {
-		        iconv_set_encoding('internal_encoding', $origenc);
+                iconv_set_encoding('internal_encoding', $origenc);
 	        } else {
 		        ini_set('default_charset', $origenc);
 	        }
