@@ -78,7 +78,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
                 return $shippingAddress;
             }
        }
-       return self::getShippinAddress();
+       return self::getShippingAddress();
    }
 
     public function getShippingAddress()
