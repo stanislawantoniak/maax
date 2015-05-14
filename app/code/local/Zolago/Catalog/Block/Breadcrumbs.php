@@ -177,7 +177,8 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
                         "id"        => $parentCategory->getId(),
 						"label"     => $parentCategory->getName(),
 						"link"      => $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId),
-                        "data-link" => $parentCategory->getUrl()
+                        "data-link" => $parentCategory->getUrl(),
+                        'categorylongname' => $parentCategory->getLongName()
 					));
                 }
             }

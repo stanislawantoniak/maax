@@ -329,6 +329,15 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"icon"		=> "icon-euro"
 			);
 		}
+		// Attributes preview
+		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed("udprod/vendor_mass")){
+			$groupOne[] = array(
+				"active"	=> $this->isActive("udprod_product"),
+				"label"		=> $this->__('Attribute preview'),
+				"url"		=> $this->getUrl('udprod/vendor_attributes'),
+				"icon"		=> "icon-tags"
+			);
+		}
 
 		$grouped = $this->_processGroups($groupOne, $groupTwo);
 		

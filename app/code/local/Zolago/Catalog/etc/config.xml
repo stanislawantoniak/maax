@@ -53,6 +53,7 @@
                     <category>Zolago_Catalog_Model_Category</category>
                     <product>Zolago_Catalog_Model_Product</product>
                     <url>Zolago_Catalog_Model_Url</url>
+                    <category>Zolago_Catalog_Model_Category</category>
                 </rewrite>
 			</catalog>
             <catalog_resource>
@@ -170,6 +171,7 @@
 		    <udprod_vendor_product>/udprod/vendor_product/</udprod_vendor_product>
 		    <udprod_vendor_image>/udprod/vendor_image/</udprod_vendor_image>
 		    <udprod_vendor_price>/udprod/vendor_price/</udprod_vendor_price>
+		    <udprod_vendor_attributes>/udprod/vendor_attributes/</udprod_vendor_attributes>
 		</secure_url>
     </frontend>
     <adminhtml>

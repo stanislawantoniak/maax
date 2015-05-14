@@ -82,14 +82,14 @@ Mall.product = {
         }
 
         if(searchBreadcrumb){
-            jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product)").each(function(i,val){
+            jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product)").each(function(i,val){
                 jQuery(val).remove();
             });
             //desktop
             jQuery("ol.breadcrumb li.home").after(searchBreadcrumb);
             //mobile
-            var mobileLink = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product):last").find("a").attr("href");
-            var mobileLabel = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.home,.product):last").find("a").text();
+            var mobileLink = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").attr("href");
+            var mobileLabel = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").html();
 
             jQuery('.path_back_to_category #pbtc_link').attr('href', mobileLink);
             jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>  " + mobileLabel);
