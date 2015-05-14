@@ -449,7 +449,12 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
      * @throws Mage_Core_Exception
      */
     protected function _registerRma() {
+	    if(is_object(Mage::registry('current_rma')) && Mage::registry('current_rma')->getId() != $this->getRequest()->getParam('id')) {
+		    Mage::unregister('current_rma');
+	    }
+
         if(!Mage::registry('current_rma')) {
+	        Mage::log('getting rma from link',null,'rmaGet.log');
             $rma = Mage::getModel("urma/rma");
             if($this->getRequest()->getParam('id')) {
                 $rma->load($this->getRequest()->getParam('id'));
