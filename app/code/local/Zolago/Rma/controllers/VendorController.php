@@ -45,6 +45,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 		try {
 			$rma = $this->_registerRma();
+			Mage::log($rma->getId(),null,'rmaId.log');
 			if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
 				$invalidItems = array();
 				$validItems = array();
@@ -64,8 +65,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					ob_start();
 					var_dump($id);
 					$result = ob_get_clean();
-					Mage::log($result,null,'rma.log');
-					Mage::log($rma->getData(),null,'rmaData.log');
 					$rmaItem = $rma->getItemById($id);
 					if (/*is_object($rmaItem) && */$rmaItem->getId()) {
 						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
@@ -461,7 +460,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 	    /** @var Zolago_Rma_Model_Rma $rma */
 	    $rma = Mage::getModel("zolagorma/rma");
-		$rma->load($this->getRequest()->getParam('id'));
+		$rma->load($id);
 
 	    if(!$this->_validateRma($rma)) {
 		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__('Rma not found'));
@@ -469,21 +468,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		    Mage::register('current_rma', $rma);
 		    return Mage::registry('current_rma');
 	    }
-
-
-        if(!Mage::registry('current_rma')) {
-	        Mage::log('getting rma from link',null,'rmaGet.log');
-	        /** @var Zolago_Rma_Model_Rma $rma */
-            $rma = Mage::getModel("zolagorma/rma");
-            if($this->getRequest()->getParam('id')) {
-                $rma->load($this->getRequest()->getParam('id'));
-            }
-            if(!$this->_validateRma($rma)) {
-                throw new Mage_Core_Exception(Mage::helper('zolagorma')->__('Rma not found'));
-            }
-            Mage::register('current_rma', $rma);
-        }
-        return Mage::registry('current_rma');
     }
 
     /**
