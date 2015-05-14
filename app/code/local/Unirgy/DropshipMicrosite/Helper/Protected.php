@@ -100,7 +100,7 @@ class Unirgy_DropshipMicrosite_Helper_Protected
 			$host = $httpHost;
 			$hostArr = explode(".", trim($host, "."));
 			$i = sizeof($hostArr) - $level;			
-			$vUrlKey = $hostArr[$i];
+			$vUrlKey = isset($hostArr[$i])? $hostArr[$i]:null;
 		}
 
 		if (empty($level) || empty($vUrlKey)) {
