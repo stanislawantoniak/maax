@@ -15,15 +15,39 @@ Mall.product = {
 		}
 	},
 
+    /**
+     * Update contact form in product page from not logged in state to logged in state
+     * @param name
+     * @param email
+     */
+    updateQuestionFormForLoggedIn: function(name, email){
+        var form       = jQuery('#question-form');
+        var formMobile = jQuery('#question-form-mobile');
+        form.find('#question-form-customer-name').html( "<input type='hidden' name='question[customer_name]'  value='"+name+"' />");
+        form.find('#question-form-customer-email').html("<input type='hidden' name='question[customer_email]' value='"+email+"' />");
+        formMobile.find('#question-form-mobile-customer-name').html( "<input type='hidden' name='question[customer_name]'  value='"+name+"' />");
+        formMobile.find('#question-form-mobile-customer-email').html("<input type='hidden' name='question[customer_email]' value='"+email+"' />");
+    },
+
 	updateContextBreadcrumbs: function() {
         var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
 
+        var searchBreadcrumb = localStorage.getItem(this._entity_id+"_search_breadcrumb");
+
         localStorage.removeItem(this._entity_id);
+
+        localStorage.removeItem(this._entity_id+"_search_breadcrumb");
 
         if (contextBreadcrumbsHtml != null) {
 			sessionStorage.setItem(this._entity_id, contextBreadcrumbsHtml);
         }
+
+        if (searchBreadcrumb != null) {
+            sessionStorage.setItem(this._entity_id+"_search_breadcrumb", searchBreadcrumb);
+        }
         contextBreadcrumbsHtml = sessionStorage.getItem(this._entity_id);
+
+        searchBreadcrumb = sessionStorage.getItem(this._entity_id+"_search_breadcrumb");
 
 
         if (contextBreadcrumbsHtml) {
@@ -40,6 +64,21 @@ Mall.product = {
 			jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>" + this._path_back_to_category_text);
         }
 
+        if(searchBreadcrumb){
+            jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product)").each(function(i,val){
+                jQuery(val).remove();
+            });
+            //desktop
+            jQuery("ol.breadcrumb li.home").after(searchBreadcrumb);
+            //mobile
+            var mobileLink = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").attr("href");
+            var mobileLabel = jQuery("ol.breadcrumb li:not(.home,.search,.vendor,.product):last").find("a").html();
+
+            jQuery('.path_back_to_category #pbtc_link').attr('href', mobileLink);
+            jQuery('.path_back_to_category #pbtc_link').html("<i class='fa fa-angle-left'></i>  " + mobileLabel);
+        }
+
+
         // Update info about highlighted navigation
         Mall.Navigation.destroy();
         Mall.Navigation.currentCategoryId = [];
@@ -53,6 +92,7 @@ Mall.product = {
         });
         Mall.Navigation.init();
         sessionStorage.removeItem(this._entity_id);
+        sessionStorage.removeItem(this._entity_id+"_search_breadcrumb");
 
 	},
 

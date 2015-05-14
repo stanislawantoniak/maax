@@ -194,6 +194,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                         $data[$attribute->getAttributeCode()] = array(
                             'label' => $attribute->getStoreLabel(),
                             'value' => ($attribute->getFrontendInput() == "multiselect") ? explode(",", $value) : $value,
+                            'code' => $attribute->getAttributeCode(),
                             'attribute_order' => $attribute->getColumnAttributeOrder(),
                             'default_order' => $counter,
                         );

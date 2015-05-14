@@ -2457,12 +2457,30 @@ jQuery.each(products, function(index, item) {
 		return container.find(".item").first().width();
 	},
 
+
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
             }
+            if (jQuery('ol.breadcrumb').attr('data-search') == "1") {
+                e.preventDefault();
+                var searchBreadcrumb = "";
+                jQuery("ol.breadcrumb li:not(.home,.search,.vendor)").each(function(i,val){
+                    var li = jQuery(val);
+                    var link = jQuery(val).data("link");
+                    var catid = jQuery(val).data("catid");
+                    var text = jQuery(val).find("a").html();
+
+                    searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
+                    +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
+                    +'</li>';
+                });
+
+                localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
+            }
+
         });
     },
 
