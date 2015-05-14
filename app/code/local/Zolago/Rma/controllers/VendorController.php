@@ -45,7 +45,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 		try {
 			$rma = $this->_registerRma();
-			Mage::log($rma->getId(),null,'rmaId.log');
 			if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
 				$invalidItems = array();
 				$validItems = array();
@@ -62,11 +61,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 				foreach ($data['rmaItems'] as $id => $val) {
 					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
-					ob_start();
-					var_dump($id);
-					$result = ob_get_clean();
 					$rmaItem = $rma->getItemById($id);
-					if (/*is_object($rmaItem) && */$rmaItem->getId()) {
+					if (is_object($rmaItem) && $rmaItem->getId()) {
 						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
 						if (isset($data['returnValues'][$id]) &&
 							$data['returnValues'][$id] <= $maxValue) {
@@ -81,7 +77,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				}
 
 				if (count($validItems) && $returnAmount > 0) {
-
 					if(($returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
 						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
 					} else {
