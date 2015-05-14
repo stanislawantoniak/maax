@@ -55,8 +55,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				$rmaModel = Mage::getModel('zolagorma/rma');
 				$rmas = $rmaModel->loadByPoId($po->getId());
 				$alreadyReturnedAmount = 0;
-				foreach($rmas as $rma) {
-					$alreadyReturnedAmount += $rma->getReturnedValue();
+				foreach($rmas as $singleRma) {
+					$alreadyReturnedAmount += $singleRma->getReturnedValue();
 				}
 
 				foreach ($data['rmaItems'] as $id => $val) {
