@@ -20,7 +20,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
             <?php if (!$producer && !empty($brandShopId)): ?>
                 <figure>
                     <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
-                        <img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
+                        <span itemprop="logo"><img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>"></span>
                     </a>
                 </figure>
                 <div class="seller">
@@ -96,7 +96,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <?php echo $this->getChildHtml('udqa.product.question.mobile'); ?>
+                            <?php echo $this->getChildHtml('udqa.product.question.mobile.product'); ?>
                         </div>
                     </div>
                 </div>

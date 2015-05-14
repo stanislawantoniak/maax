@@ -172,7 +172,7 @@ class SalesManago_Tracking_Helper_Data extends Mage_Core_Helper_Abstract{
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data)));
 		
 		$result = curl_exec($ch);
-		
+        Mage::log($result, null, "salesmanago.log");
 		if(curl_errno($ch) > 0){
 			if(curl_errno($ch)==28){
 				Mage::log("TIMEOUT ERROR NO: " . curl_errno($ch));

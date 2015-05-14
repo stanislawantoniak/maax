@@ -5,7 +5,7 @@
             <active>true</active>
             <codePool>local</codePool>
             <depends>
-                <SalesManago_Tracking/>
+                <SalesManago_Tracking />
             </depends>
         </Zolago_SalesManago>
     </modules>

@@ -58,7 +58,7 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 	 * @return string|null
 	 */
 	public function getManufacturerLogoUrl() {
-        /** @var $_helper Zolago_Solrsearch_Helper_Data*/
+        /** @var $_helper Zolago_Catalog_Helper_Product */
         $_helper = Mage::helper("zolagocatalog/product");
         return $_helper->getManufacturerLogoUrl($this);
 	}
