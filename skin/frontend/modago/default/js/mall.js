@@ -1295,6 +1295,32 @@ Mall.Footer = {
 	}
 };
 
+Mall.CustomEvents = {
+    _timeoutForScroll: undefined,
+    _timeoutForResize: undefined,
+    _time: 300,
+
+    init: function(time) {
+        this._time = time;
+
+        // Event: Mall.onScrollEnd
+        jQuery(window).scroll(function() {
+            clearTimeout(Mall.listing._timeoutForScroll);
+            Mall.listing._timeoutForScroll = setTimeout(function() {
+                jQuery(window).trigger('Mall.onScrollEnd');
+            }, Mall.CustomEvents._time);
+        });
+
+        // Event: Mall.onResizeEnd
+        jQuery(window).on('resize', function() {
+            clearTimeout(Mall.listing._timeoutForResize);
+            Mall.listing._timeoutForResize = setTimeout(function() {
+                jQuery(window).trigger('Mall.onResizeEnd');
+            },  Mall.CustomEvents._time);
+        });
+    }
+};
+
 Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
 	Mall.baseUrl = baseUrl;
 	Mall.baseUrlNoVendor = baseUrlNoVendor;
@@ -1304,6 +1330,7 @@ Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
 };
 
 jQuery(document).ready(function() {
+    Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
 
