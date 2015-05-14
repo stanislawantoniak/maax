@@ -149,12 +149,10 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+		this.initShuffle();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
-
-        //do stufs with images height
-        this.initImagesHeight();
 
 		// Reset form
 		this.resetForm();
@@ -189,6 +187,27 @@ Mall.listing = {
 
 	},
 
+    initShuffle: function() {
+        var grid = jQuery('#grid'),
+            sizer = jQuery(grid).find('.shuffle__sizer');
+
+        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+
+        jQuery(grid).on('layout.shuffle', function() {
+            Mall.listing.likePriceView();
+        });
+
+        jQuery(window).on('appendToListEnd', function() {
+            Mall.listing.hideLoadMoreButton();
+            if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
+                if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
+                    Mall.listing.showLoadMoreButton();
+                }
+            }
+            Mall.listing.placeListingFadeContainer();
+        });
+    },
+
     /**
      * hide btn filter product if no products/no sidebar (search for example)
      */
@@ -203,12 +222,12 @@ Mall.listing = {
 		return this;
 	},
 
-	getInitProducts: function(products){
+	getInitProducts: function(){
 		return this._init_products;
 	},
 
 	/**
-	 * Preparce response object based on static html data
+	 * Prepare response object based on static html data
 	 * @returns {undefined}
 	 */
 	_rediscoverCache: function(){
@@ -561,7 +580,7 @@ Mall.listing = {
 		// load images
 		if (part.length > 0) {
 			jQuery.each(part, function (index, item) {
-				Mall.listing.loadImageInBackground(item.listing_resized_image_url);
+				Mall.listing.loadImageInBackground(item[7]);
 			});
 		}
 
@@ -597,7 +616,7 @@ Mall.listing = {
 	loadImageInBackground: function (url) {
 		"use strict";
 		var image = new Image ();
-		image.src = url;
+		image.src = Mall.productImagesUrl + url;
 		image.onLoad = function () {
 		};
 
@@ -625,15 +644,6 @@ Mall.listing = {
 					Mall.listing.appendFromQueue();
 					Mall.listing.setAutoappend(false);
 				}
-				// build wishlist collection
-				//jQuery.each(data.content.products, function (index, item) {
-				//	"use strict";
-				//	Mall.wishlist.addProduct({
-				//		id: item.entity_id,
-				//		wishlist_count: item.wishlist_count,
-				//		in_your_wishlist: item.in_my_wishlist ? true : false
-				//	});
-				//});
 			} else {
 				// @todo hide buttons etc
 				Mall.listing.removeLockFromQueue(); // this is dummy expression
@@ -650,193 +660,82 @@ Mall.listing = {
 	 * Returns array of appended products - html nodes.
 	 *
 	 * @param products
-	 * @returns {Array}
+	 * @returns Array
 	 */
 	appendToList: function (products) {
-		var items = jQuery();
-		var _item;
         var grid = jQuery('#grid');
-		jQuery.each(products, function(index, item) {
-			_item = Mall.listing.createProductEntity(item);
-            grid.append(_item);
-            items = items.add(_item);
+		        var eachItemsHtml = [];
+jQuery.each(products, function(index, item) {
+            eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
             Mall.wishlist.addProduct({
-                id: item.entity_id,
-                wishlist_count: item.wishlist_count,
-                in_your_wishlist: item.in_my_wishlist ? true : false
-            });
+                id: item[0],
+                       wishlist_count: item[5],
+                in_your_wishlist: item[6] ? true : false
+                    });
 		});
-
-        grid.shuffle('appended', items);
-
+        grid.append(eachItemsHtml);
+        grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 		// attach events
         this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
 
-        setTimeout(function() {
             jQuery(window).trigger('appendToListEnd');
-        }, 250);
 
-		return items;
+		return eachItemsHtml;
 	},
-
 
 	/**
 	 * Creates single product container for listing.
-	 *
+     *
+     * ALERT:
+     * product is no longer an object, now it's array with numeric indexes:
+     * product[0] = id
+     * product[1] = name
+     * product[2] = url
+     * product[3] = price
+     * product[4] = final_price
+     * product[5] = wishlist_count
+     * product[6] = in_my_wishlist
+     * product[7] = image_url
+     * product[8] = image_ratio
+     * product[9] = manufacturer_logo_url
+     *
 	 * @param product
-	 * @returns {*}
+     * @returns {string}
 	 */
-	createProductEntity: function(product) {
-		var container,
-			box,
-			link,
-			figure,
-			vendor,
-			priceBox,
-			colPrice,
-			likeClass,
-			likeText,
-			like,
-			likeIco,
-			style;
+    createProductEntityImprove: function(product) {
 
-		container = jQuery("<div/>", {
-			"class": "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
-		});
-		box = jQuery("<div/>", {
-			"class": "box_listing_product"
-		}).appendTo(container);
+        var oldPrice = product[3] != product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
+	        likeClass = "like" + (product[6] ? " liked" : ""),
+	        likeText = (product[6] ? "<span>Ty + </span>" : "<span></span>") + (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ",
+	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
 
-		link = jQuery("<a/>", {
-			href: product.current_url,
-            "data-entity" : product.entity_id
-        }).appendTo(box);
 
-		figure = jQuery("<figure/>", {
-			"class": "img_product"
-		}).appendTo(link);
+        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+            "<div class='box_listing_product'>"+
+                "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
+                    "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
+                        "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
+                    "</figure>"+
+                    "<div class='logo_manufacturer' style='background-image:url(" + Mall.manufacturerImagesUrl + product[9] +")' ></div>"+
+                    "<div class='name_product'>" + product[1] + "</div>"+
+                "</a>"+
+                "<div class='price clearfix'>"+
+                    "<div class='col-price'>" + oldPrice +
+                        "<span>" + (number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
+                    "</div>"+
+                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' onclick='"+likeOnClick+"'>"+
+	                    "<span class='like_count'>" + likeText + "</span><span class='icoLike'>"+
+                    "<img src='" + Config.path.heartLike +"' class='img-01' style='width: 18px; height: 18px;' />"+
+                    "<img src='" + Config.path.heartLiked + "' class='img-02' style='width: 18px; height: 18px;'></span>"+
+                        "<div class='toolLike'></div>"+
+                    "</div>"+
+                "</div>"+
+            "</div>"+
+        "</div>";
 
-		if (product.listing_resized_image_info !== null) {
-            var ratio = product.listing_resized_image_info.height / product.listing_resized_image_info.width;
-            var colWidth = jQuery('#grid .item:eq(0) figure').width();
-            var _height = parseInt(ratio * colWidth);
-            if (_height) {
-                style = "height: " + _height +'px;';
-            } else {
-                style = '';
-            }
-
-		}
-		jQuery("<img/>", {
-			src: product.listing_resized_image_url,
-			alt: product.name,
-			style: style,
-			"class": "img-responsive"
-		}).appendTo(figure);
-
-		vendor = jQuery("<div/>", {
-			"class": "logo_manufacturer",
-			"style": "background-image:url("+ product.manufacturer_logo_url +")"
-		}).appendTo(link);
-
-		jQuery("<div/>", {
-			"class": "name_product",
-			html: product.name
-		}).appendTo(link);
-
-		//priceBox = jQuery("<div/>", {
-		//	"class": "price clearfix"
-		//}).appendTo(link);
-        priceBox = jQuery("<div/>", {
-            "class": "price clearfix"
-        }).insertAfter(link);
-
-		colPrice = jQuery("<div/>", {
-			"class": "col-price"
-		}).appendTo(priceBox);
-
-		if(product.price != product.final_price) {
-			jQuery("<span/>", {
-				"class": "old",
-				html: number_format(product.price, 2, ",", " ") + " "
-				+ Mall.getCurrencyBasedOnCode(product.currency)
-			}).appendTo(colPrice);
-		}
-		jQuery("<span/>", {
-			html: number_format(product.final_price, 2, ",", " ") + " "
-			+ Mall.getCurrencyBasedOnCode(product.currency)
-		}).appendTo(colPrice);
-
-		likeClass = "like";
-		likeText = "<span></span>";
-		if(product.in_my_wishlist) {
-			likeClass += " liked";
-			likeText = "<span>Ty + </span>";
-		}
-		like = jQuery("<div/>", {
-			"class": likeClass,
-			"data-idproduct": product.entity_id,
-			"data-status": product.in_my_wishlist,
-			onclick: product.in_my_wishlist
-				? "Mall.wishlist.removeFromSmallBlock(this);"
-				: "Mall.wishlist.addFromSmallBlock(this);"
-		}).appendTo(priceBox);
-
-		jQuery("<span/>", {
-			"class": "like_count",
-			html: likeText + (parseInt(product.wishlist_count, 10) > 0 ? (product.wishlist_count > 99) ? "99+ " : product.wishlist_count : "") + " "
-		}).appendTo(like);
-
-		likeIco = jQuery("<span/>", {
-			"class": "icoLike"
-		}).appendTo(like);
-
-		jQuery("<img/>", {
-			src: Config.path.heartLike,
-			"class": "img-01",
-			width: 18,
-			height: 18,
-			alt: ""
-		}).appendTo(likeIco);
-
-		jQuery("<img/>", {
-			src: Config.path.heartLiked,
-			alt: "",
-			width: 18,
-			height: 18,
-			"class": "img-02"
-		}).appendTo(likeIco);
-
-		jQuery("<div/>", {
-			"class": "toolLike"
-		}).appendTo(like);
-
-		return container;
-	},
-
-    initImagesHeight : function() {
-        var items = jQuery('#grid .item figure');
-        var ratio = 1.5;
-        var itemWidth = 0;
-        var itemHeight = 0;
-        var height = 0;
-        var colWidth = jQuery(items).first().width();
-
-        jQuery(jQuery(items).find('img')).each(function(index) {
-            itemHeight = parseInt(jQuery(this).attr('data-height'));
-            itemWidth = parseInt(jQuery(this).attr('data-width'));
-            if(!isNaN(itemHeight)) {
-                ratio = itemHeight / itemWidth;
-                height = parseInt(ratio * colWidth);
-                if(height) {
-                    jQuery(this).css('height', height+'px');
-                } else {
-                    jQuery(this).css('height','');
-                }
-            }
-        });
+        return item;
     },
 
 	/**
@@ -1324,7 +1223,6 @@ Mall.listing = {
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
-        this.initImagesHeight();
 	},
 
 	replaceProducts: function(data){
@@ -2433,7 +2331,7 @@ Mall.listing = {
 		if(!Mall.isGoogleBot()) {
 			jQuery('#grid').shuffle('layout');
 			if (this.canShowLoadMoreButton()) {
-				//this.showLoadMoreButton();
+				this.showLoadMoreButton();
 				this.showShapesListing();
 
 
@@ -2559,13 +2457,28 @@ Mall.listing = {
 		return container.find(".item").first().width();
 	},
 
+
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
-            console.log(jQuery('ol.breadcrumb').attr('data-search'));
             if (jQuery('ol.breadcrumb').attr('data-search') == "0") {
                 e.preventDefault();
                 localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header ol').html());
-                localStorage.setItem(jQuery(this).attr("data-entity")+ "_search_params", "");
+            }
+            if (jQuery('ol.breadcrumb').attr('data-search') == "1") {
+                e.preventDefault();
+                var searchBreadcrumb = "";
+                jQuery("ol.breadcrumb li:not(.home,.search,.vendor)").each(function(i,val){
+                    var li = jQuery(val);
+                    var link = jQuery(val).data("link");
+                    var catid = jQuery(val).data("catid");
+                    var text = jQuery(val).find("a").html();
+
+                    searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
+                    +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
+                    +'</li>';
+                });
+
+                localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
             }
 
         });
@@ -3033,11 +2946,6 @@ Mall.listing = {
 		this._load_next_offset = offset;
 
 		return this;
-	},
-
-    removeImagesHeight: function() {
-        var imgs = jQuery('#grid .item figure img[style*=height]');
-        jQuery(imgs).css('height', '');
     }
 };
 
@@ -3058,5 +2966,7 @@ jQuery(document).ready(function () {
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
         jQuery(window).resize(Mall.listing.updateFilters);
+    } else {
+        Mall.listing.initShuffle();
     }
 });

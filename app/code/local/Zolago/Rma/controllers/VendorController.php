@@ -49,15 +49,23 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				$invalidItems = array();
 				$validItems = array();
 				$returnAmount = 0;
+				$po = $rma->getPo();
+
+				/** @var Zolago_Rma_Model_Rma $rmaModel */
+				$rmaModel = Mage::getModel('zolagorma/rma');
+				$rmas = $rmaModel->loadByPoId($po->getId());
+				$alreadyReturnedAmount = 0;
+				foreach($rmas as $singleRma) {
+					$alreadyReturnedAmount += $singleRma->getReturnedValue();
+				}
 
 				foreach ($data['rmaItems'] as $id => $val) {
 					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
 					$rmaItem = $rma->getItemById($id);
-					if ($rmaItem->getId()) {
+					if (is_object($rmaItem) && $rmaItem->getId()) {
 						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
 						if (isset($data['returnValues'][$id]) &&
 							$data['returnValues'][$id] <= $maxValue) {
-
 							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
 							$returnAmount += $data['returnValues'][$id];
 						} else {
@@ -69,18 +77,28 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				}
 
 				if (count($validItems) && $returnAmount > 0) {
+					if(($returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
+						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
+					} else {
+						$this->_throwRefundTooMuchAmountException();
+					}
 
-					$rma->setReturnedValue($rma->getReturnedValue()+$returnAmount)->save();
-
-					if(!$rma->getPo()->isCod()) {
+					if(!$po->isCod()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$allocationModel->createOverpayment($rma->getPo(), "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						if($result === false) {
+							$this->_throwRefundTooMuchAmountException();
+						}
 					}
-                    $_returnAmount = $rma->getPo()->getCurrencyFormattedAmount($returnAmount);
+                    $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
+					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
+					$po->saveComments();
+					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+					$rma->saveComments();
 				} elseif (count($invalidItems)) {
-					Mage::throwException($hlp->__("There was an error while processing this items:") . "<br />" . implode('<br />', $invalidItems));
+					Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
 				} else {
 					Mage::throwException($hlp->__("No items to refund"));
 				}
@@ -99,6 +117,10 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		}
 
 		return $this->_redirectReferer();
+	}
+
+	protected function _throwRefundTooMuchAmountException() {
+		Mage::throwException(Mage::helper("zolagorma")->__("Refund could not be created - not enough money left in PO"));
 	}
     
     /**
@@ -421,17 +443,26 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
      * @throws Mage_Core_Exception
      */
     protected function _registerRma() {
-        if(!Mage::registry('current_rma')) {
-            $rma = Mage::getModel("urma/rma");
-            if($this->getRequest()->getParam('id')) {
-                $rma->load($this->getRequest()->getParam('id'));
-            }
-            if(!$this->_validateRma($rma)) {
-                throw new Mage_Core_Exception(Mage::helper('zolagorma')->__('Rma not found'));
-            }
-            Mage::register('current_rma', $rma);
-        }
-        return Mage::registry('current_rma');
+	    $id = is_numeric($this->getRequest()->getParam('id')) ? $this->getRequest()->getParam('id') : false;
+
+	    if($id !== false &&
+		    Mage::registry('current_rma') instanceof Zolago_Rma_Model_Rma &&
+		    Mage::registry('current_rma')->getId() == $id) {
+		    return Mage::registry('current_rma');
+	    } else {
+		    Mage::unregister('current_rma');
+	    }
+
+	    /** @var Zolago_Rma_Model_Rma $rma */
+	    $rma = Mage::getModel("zolagorma/rma");
+		$rma->load($id);
+
+	    if(!$this->_validateRma($rma)) {
+		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__('Rma not found'));
+	    } else {
+		    Mage::register('current_rma', $rma);
+		    return Mage::registry('current_rma');
+	    }
     }
 
     /**

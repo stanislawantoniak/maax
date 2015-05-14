@@ -1,0 +1,209 @@
+<?php
+/**
+ * controller for attributes preview
+ */
+class Zolago_Catalog_Vendor_AttributesController 
+    	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
+
+    /**
+     * @return Zolago_Dropship_Model_Session
+     */
+    protected function _getUdropSession() {
+        return Mage::getSingleton('udropship/session');
+    }
+
+    /**
+     * @return null|Zolago_Operator_Model_Operator
+     */
+    protected function _getOperator() {
+        $session = $this->_getUdropSession();
+        if($session->isOperatorMode()) {
+            return $session->getOperator();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Vendor from udropship session
+     * @return Zolago_Dropship_Model_Vendor
+     */
+	protected function _getVendor() {
+        return $this->_getUdropSession()->getVendor();
+    }
+
+    /**
+     * store assigned to vendor
+     * @return string
+     */
+    protected function _getStore() {
+        $vendor = $this->_getVendor();
+        return $vendor->getLabelStore();
+    }
+	/**
+	 * Index
+	 */
+	public function indexAction() {
+		$this->_renderPage(null, 'udprod_product');
+    }
+    
+    
+    /**
+     * attributes list by attribute set
+     */
+    public function get_attributesAction() {
+        $attributeSetId = $this->getRequest()->getParam('attribute_set');
+        $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
+        ->addFieldToFilter("grid_permission", array("in"=>array(
+            Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
+            Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
+        )))
+        ->setAttributeSetFilter($attributeSetId)
+        ->getItems();
+        $_helper = Mage::helper('zolagocatalog');
+        $list = array();
+        $storeId = $this->_getStore();
+        foreach ($attributes as $item) {
+            $list[$item->getId()] = array (
+                'label' => $item->getStoreLabel($storeId),
+                'type' => $item->getFrontendInput(),
+                'required' => $item->getIsRequired()? 'required':'not required',
+                );
+        }
+        asort($list);
+        $out = '';
+        foreach ($list as $key=>$item) {
+            if ($item['type'] == 'text') {
+                $key = 0;
+            }
+            $out .= '<option value="'.$key.'">'.$item['label'].' ['.$_helper->__($item['type']).', '.$_helper->__($item['required']).']</option>';
+        }
+        if (!$out) {
+            $out = '<option value="0">'.Mage::helper('zolagocatalog')->__('-- none --').'</option>';
+        }
+        echo $out;
+        die();
+    }	
+    
+    /**
+     * attribute values list
+     */
+    public function get_valuesAction() {
+        $storeId = $this->_getStore();
+        $attributeId = $this->getRequest()->getParam('attribute');
+       $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+       $collection = $attribute ->setStoreId($storeId)->getSource()->getAllOptions(false); 
+        $list = array();
+        foreach ($collection as $item) {
+            $list[] = $item['label'];
+        }
+        sort($list);
+        $out = '';
+        foreach ($list as $item) {
+            $out .= $item.'<br/>';
+        }            
+        if (!$out) {
+            $out = Mage::helper('zolagocatalog')->__('-- none --');
+        }        
+        echo $out;
+        die();
+    }
+    
+    /**
+     * suggestion new attribute value
+     */
+    public function ask_valueAction() {
+
+        /* @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = Mage::helper('core');
+
+        $attributeId = $this->getRequest()->getParam('attrId');
+        $value     = $coreHelper->escapeHtml($this->getRequest()->getParam('value'));
+        $storeId   = $this->_getStore();
+        $store     = Mage::app()->getStore($storeId);
+        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+        $label     = $attribute->getStoreLabel($storeId);
+
+        $operator = $this->_getOperator();
+        $vendor   = $this->_getVendor();
+        if ($operator) {
+            $userEmail = $operator->getEmail();
+            $userName  = $operator->getFullname();
+        } else {
+            $userEmail = $vendor->getEmail();
+            $userName  = $vendor->getVendorName();
+        }
+
+        $storeEmail  = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_cc_store', $store);
+        $storeName   = $store->getFrontendName();
+        $template    = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_template', $store);
+
+        $data['attributeName']  = $label;
+        $data['attributeValue'] = $value;
+
+        $this->sendEmailTemplate(
+            $userEmail,
+            $userName,
+            $storeEmail,
+            $storeName,
+            $template,
+            $data,
+            $storeId,
+            null
+        );
+
+        echo Mage::helper('zolagocatalog')->__('For attribute %s value %s was suggested', $label, $value);
+        die();
+    }
+
+    /**
+     * Send email to current vendor(operator) and to store
+     *
+     * @param $userEmail
+     * @param $userName
+     * @param $storeEmail
+     * @param null $storeName
+     * @param $template
+     * @param array $templateParams
+     * @param bool $storeId
+     * @param null $sender
+     * @return Mage_Core_Model_Email_Template_Mailer
+     */
+    private function sendEmailTemplate($userEmail, $userName, $storeEmail, $storeName = null, $template, array $templateParams = array(), $storeId = true, $sender = null) {
+
+        $store = Mage::app()->getStore($storeId);
+        $storeId = $store->getId();
+        $hlp = Mage::helper('udropship');
+        $hlp->setDesignStore($store);
+        $templateParams['use_attachments'] = true;// Logo
+
+        if(is_null($sender)){
+            $sender = $store->getConfig('udropship/vendor/vendor_email_identity');
+        }
+
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+        $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
+
+        /** @var Mage_Core_Model_Email_Info $emailInfoVendor */
+        $emailInfoVendor = Mage::getModel('core/email_info');
+        $emailInfoVendor->addTo($userEmail, $userName);
+        $mailer->addEmailInfo($emailInfoVendor);
+
+        /** @var Mage_Core_Model_Email_Info $emailInfoStore */
+        $emailInfoStore = Mage::getModel('core/email_info');
+        if ($storeEmail) {
+            $emailInfoStore->addTo($storeEmail, $storeName);
+            $mailer->addEmailInfo($emailInfoStore);
+        }
+
+        // Set all required params and send emails
+        $mailer->setSender($sender);
+        $mailer->setStoreId($storeId);
+        $mailer->setTemplateId($template);
+        $mailer->setTemplateParams($templateParams);
+
+        $r = $mailer->send();
+        $hlp->setDesignStore();
+        return $r;
+    }
+}

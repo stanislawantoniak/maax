@@ -300,8 +300,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		$groupOne = array();
 		$groupTwo = array();
 		
-		// Mass edit
-		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed("udprod/vendor_mass")){
+		// Mass edit (zarzadzenie opisami produktow)
+		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_UDPROD_VENDOR_MASS)){
 			$groupOne[] = array(
 				"active" => $this->isActive("udprod_product"),
 				"label"	 => $this->__('Mass Actions'),
@@ -310,8 +310,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			);
 		}
 		
-		// Mass image
-		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed("udprod/vendor_image")){
+		// Mass image (zarzadzanie zdjeciami)
+		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_UDPROD_VENDOR_IMAGE)){
 			$groupOne[] = array(
 				"active"	=> $this->isActive("udprod_image"),
 				"label"		=> $this->__('Mass Image'),
@@ -320,13 +320,23 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			);
 		}
 		
-		// Mass price
-		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed("udprod/vendor_price")){
+		// Mass price (zarzadzanie cenami)
+		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_UDPROD_VENDOR_PRICE)){
 			$groupOne[] = array(
 				"active"	=> $this->isActive("udprod_price"),
 				"label"		=> $this->__('Mass Price'),
 				"url"		=> $this->getUrl('udprod/vendor_price'),
 				"icon"		=> "icon-euro"
+			);
+		}
+
+		// Attributes preview (przeglad atrybutow)
+		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_UDPROD_VENDOR_ATTRIBUTES)){
+			$groupOne[] = array(
+				"active"	=> $this->isActive("udprod_product"),
+				"label"		=> $this->__('Attribute preview'),
+				"url"		=> $this->getUrl('udprod/vendor_attributes'),
+				"icon"		=> "icon-tags"
 			);
 		}
 

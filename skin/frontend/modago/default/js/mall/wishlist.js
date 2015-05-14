@@ -563,7 +563,7 @@ Mall.wishlist = {
 			    }
 		    });
 		    this._prev_window_width = jQuery(window).width();
-		    jQuery(window).resize();
+		    //jQuery(window).resize();
 	    }
     }
 };

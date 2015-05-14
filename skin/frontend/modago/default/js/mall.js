@@ -373,8 +373,14 @@ var Mall = {
 			}
 		}
 
-	    jQuery(window).resize();
-		
+        // Customer info for contact form in product page
+        if (data.content.logged_in && data.content.customer_email) {
+            Mall.product.updateQuestionFormForLoggedIn(data.content.customer_name, data.content.customer_email);
+        }
+        // When customer send question, form need to be populated when error
+        if (data.content.data_populate) {
+            Mall.product.populateQuestionForm(data.content.data_populate.customer_name, data.content.data_populate.customer_email, data.content.data_populate.question_text);
+        }
 	},
 	
 	getFavPluralText: function(count, you){
@@ -1291,6 +1297,14 @@ Mall.Footer = {
 		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
 		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
 	}
+};
+
+Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
+	Mall.baseUrl = baseUrl;
+	Mall.baseUrlNoVendor = baseUrlNoVendor;
+	Mall.mediaUrl = Mall.baseUrlNoVendor + "media/";
+	Mall.productImagesUrl = Mall.mediaUrl + "catalog/product/cache/";
+	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
 };
 
 jQuery(document).ready(function() {

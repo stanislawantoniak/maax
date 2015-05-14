@@ -83,4 +83,26 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 		}
 		return "CATEGORY_" . $field . "_" . $id . "_" . $storeId;
 	}
+
+
+
+    /**
+     * Return parent categories of current category
+     *
+     * @return array
+     */
+    public function getParentCategories()
+    {
+        $pathIds = array_reverse(explode(',', $this->getPathInStore()));
+        $categories = Mage::getResourceModel('catalog/category_collection')
+            ->setStore(Mage::app()->getStore())
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('long_name')
+            ->addAttributeToSelect('url_key')
+            ->addFieldToFilter('entity_id', array('in' => $pathIds))
+            ->addFieldToFilter('is_active', 1)
+            ->load()
+            ->getItems();
+        return $categories;
+    }
 }
