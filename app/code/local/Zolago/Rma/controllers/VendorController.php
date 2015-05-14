@@ -449,7 +449,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
      * @throws Mage_Core_Exception
      */
     protected function _registerRma() {
-	    $id = is_numeric($this->getRequest()->getId()) ? $this->getRequest()->getId() : false;
+	    $id = is_numeric($this->getRequest()->getParam('id')) ? $this->getRequest()->getParam('id') : false;
 
 	    if($id !== false &&
 		    Mage::registry('current_rma') instanceof Zolago_Rma_Model_Rma &&
