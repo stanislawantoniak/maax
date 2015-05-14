@@ -377,6 +377,10 @@ var Mall = {
         if (data.content.logged_in && data.content.customer_email) {
             Mall.product.updateQuestionFormForLoggedIn(data.content.customer_name, data.content.customer_email);
         }
+        // When customer send question, form need to be populated when error
+        if (data.content.data_populate) {
+            Mall.product.populateQuestionForm(data.content.data_populate.customer_name, data.content.data_populate.customer_email, data.content.data_populate.question_text);
+        }
 	},
 	
 	getFavPluralText: function(count, you){
