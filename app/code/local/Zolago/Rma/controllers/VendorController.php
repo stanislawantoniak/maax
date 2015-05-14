@@ -79,7 +79,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 				if (count($validItems) && $returnAmount > 0) {
 
-					if(($rma->getReturnedValue() + $returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
+					if(($returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
 						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
 					} else {
 						$this->_throwRefundTooMuchAmountException();
