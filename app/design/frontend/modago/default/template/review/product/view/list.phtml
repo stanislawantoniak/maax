@@ -101,11 +101,11 @@ switch($_reviewsCount) {
             <div class="row">
 	            <?php echo $this->getChildHtml('product.review.form'); ?>
                 <?php if($_reviewsCount > 0): ?>
-                <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                <h2 itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
                     <span itemprop="ratingValue"><?php echo $this->getAvarageRating(); ?></span>
                     <span itemprop="reviewCount"><?php echo $_reviewsCount; ?></span>
                     <span itemprop="bestRating">5</span>
-                </div>
+                </h2>
                 <?php foreach($this->getReviewsForProduct() as $review) :  ?>
                     <?php
                     $avgReview = $this->getSingleReviewAvarage($review);

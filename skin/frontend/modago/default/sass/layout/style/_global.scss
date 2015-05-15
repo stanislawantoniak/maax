@@ -86,9 +86,9 @@ div.noscroll {
 .bottom-links{
 	margin-top: 25px;
 }
-[itemprop=offers], [itemprop=isSimilarTo], [itemprop=isRelatedTo], [itemprop=aggregateRating] {
+[itemprop=offers], [itemprop=isSimilarTo], [itemprop=isRelatedTo] {
   display: initial;
 }
-[itemprop=reviewRating], [itemprop=ratingValue], [itemprop=reviewCount], [itemprop=bestRating] {
+[itemprop=aggregateRating],[itemprop=reviewRating], [itemprop=ratingValue], [itemprop=reviewCount], [itemprop=bestRating] {
   display: none;
 }
