@@ -1139,12 +1139,13 @@ Mall.listing = {
 	 * @returns {void}
 	 */
 	_pushHistoryState: function(url,data) {
+		var self = this;
 		if(!this.getNoPushstate()) {
 			url = self._getCurrentUrl();
 			var title = document.title;
 			window.history.pushState({page: title}, title, url);
 		} else {
-			this.setNoPushstate(false);
+			self.setNoPushstate(false);
 		}
 	},
 	_getCurrentUrl: function() {
@@ -2590,7 +2591,7 @@ Mall.listing = {
     },
 
     scrollToItem: function(item) {
-        if (item != null && !jQuery(item).isOnScreen(0.5, 0.7)) {
+        if (item != null && jQuery(item).length && !jQuery(item).isOnScreen(0.5, 0.7)) {
             jQuery('body').animate({
                 scrollTop: jQuery(item).offset().top - 60 // headroom
             }, 100);

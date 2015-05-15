@@ -36,7 +36,7 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
      * @return array
      */
     public function getSortUrl($option) {
-        return $this->getPagerUrl(array("sort"=>$option['value'], "dir"=>$option['dir']));
+        return $this->getPagerUrl();
     }
 
     /**
@@ -54,37 +54,48 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
     }
 
     public function getRewriteUrl($options) {
+	    /** @var GH_Rewrite_Helper_Data $rewriteHelper */
+	    $rewriteHelper = Mage::helper('ghrewrite');
+
         $request = $this->getRequest()->getParams();
         $this->_parseUrlParams($request);
         $fields = array (
-                      'sort',
-                      'dir',
                       'q',
                       'fq',
                       'scat',
                   );
         $params = array();
         foreach ($fields as $key) {
-            if (isset($request[$key])) {
+	        if (isset($request[$key])) {
                 $params[$key] = $request[$key];
             }
         }
-        if (isset($params['fq'])) {
-            ksort($params['fq']);
-        }
-        if (!empty($options['value'])) {
-            $params['sort'] = $options['value'];
+
+        if (!empty($options['sort'])) {
+            $params['sort'] = $options['sort'];
         }
         if (!empty($options['dir'])) {
             $params['dir'] = $options['dir'];
         }
+
+	    $this->_prepareUrlParams($params);
+
         $rewrite = Mage::getModel('core/url_rewrite');
         $rewrite->setStoreId(Mage::app()->getStore()->getId());
-        $route = $this->getListModel()->getCurrentUrlPath();
+        $route = $this->getListModel()->getUrl();
         $categoryId = $this->getListModel()->getCurrentCategory()->getId();
-        $url = Mage::helper('ghrewrite')->prepareRewriteUrl($route,$categoryId,$params);
+
+        $url = $rewriteHelper->prepareRewriteUrl($route,$categoryId,$params);
+
         if (!$url) {
-            $url = Mage::getUrl($route, $this->_prepareUrlParams());
+	        $rewriteHelper->sortParams($params);
+	        $rewriteHelper->clearParams($params);
+	        $route = Mage::registry('current_category')->getUrlPath();
+	        $query = http_build_query($params);
+	        $url = Mage::getBaseUrl().$route;
+	        if($query) {
+		        $url .= '?' . $query;
+	        }
         }
         return $url;
     }
@@ -101,9 +112,6 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
         $this->_parseUrlParams($paramss);
         $finalParams = $paramss;
 
-        if (isset($finalParams['fq'])) {
-            ksort($finalParams['fq']);
-        }
         $urlParams = array();
         $urlParams['_current']  = false;
         $urlParams['_escape']   = true;
@@ -111,7 +119,7 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
 
 
         if (isset($finalParams)) {
-            if ($this->getListModel()->getMode()==Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY) {
+            if ($this->getListModel()->isCategoryMode()) {
                 if (isset($finalParams['q'])) {
                     unset($finalParams['q']);
                 }
@@ -119,8 +127,10 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
                     unset($finalParams['id']);
                 }
             }
-                 
-            $urlParams['_query']    = Mage::helper('zolagosolrsearch')->processFinalParams($finalParams);
+
+	        /** @var Zolago_Solrsearch_Helper_Data $solrsearchHelper */
+	        $solrsearchHelper = Mage::helper('zolagosolrsearch');
+            $urlParams['_query'] = $solrsearchHelper->processFinalParams($finalParams);
         }
 
         if($this->getListModel()->isCategoryMode()) {
@@ -147,7 +157,11 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
                 $urlParams['q'] = $solr['responseHeader']['params']['q'];
             }
         }
-        $urlParams['_query']    = Mage::helper('zolagosolrsearch')->processFinalParams($params);
+
+	    /** @var Zolago_Solrsearch_Helper_Data $solrseachHelper */
+	    $solrseachHelper = Mage::helper('zolagosolrsearch');
+
+        $urlParams['_query'] = $solrseachHelper->processFinalParams($params);
         $url = $this->getUrl('*/*/*', $urlParams);
         return $url;
     }

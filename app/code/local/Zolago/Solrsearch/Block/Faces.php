@@ -404,7 +404,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     $values = array_values($values);
                 }
             }
-            ksort($finalParams['fq']);
         }
         $urlParams = array();
         $urlParams['_current']  = false;
@@ -473,10 +472,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}
 		}
-		
-		if (isset($finalParams['fq'])) {
-		    ksort($finalParams['fq']);
-		}
+
 		$urlParams = array();
 		$urlParams['_current']  = false;
 		$urlParams['_escape']   = true;
@@ -1065,7 +1061,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     	    $path = $this->getUrlRoute();
     	    $id = $category->getId();
   	        $tmp = $queryData['_query'];
-    	    $url = Mage::helper('ghrewrite')->prepareRewriteUrl($path,$id,$tmp);
+
+		    /** @var GH_Rewrite_Helper_Data $rewriteHelper */
+		    $rewriteHelper = Mage::helper('ghrewrite');
+    	    $url = $rewriteHelper->prepareRewriteUrl($path,$id,$tmp);
 	    }
 	    return $url;
 	}
@@ -1140,7 +1139,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             if(isset($finalParams['fq']['category_id']) && is_array($finalParams['fq']['category_id'])) {
                 $finalParams['fq']['category_id'] = array_unique($finalParams['fq']['category_id']);
             }
-            ksort($finalParams['fq']);
         }
 
         if(isset($finalParams['Szukaj_x'])) {
@@ -1186,7 +1184,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	public function processFinalParams(array $params = array()) {
         /** @var $helper Zolago_Solrsearch_Helper_Data */
         $helper =  Mage::helper("zolagosolrsearch");
-		return $helper->processFinalParams($params);
+		$params = $helper->processFinalParams($params);
+
+		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
+		$rewriteHelper = Mage::helper('ghrewrite');
+		$rewriteHelper->sortParams($params);
+
+		return $rewriteHelper->clearParams($params);
 	}
 	
 	/**
