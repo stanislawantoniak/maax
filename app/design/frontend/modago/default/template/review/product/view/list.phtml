@@ -59,7 +59,7 @@ switch($_reviewsCount) {
         <span itemprop="ratingValue"><?php echo $this->getAvarageRating(); ?></span>
         <span itemprop="reviewCount"><?php echo $_reviewsCount; ?></span>
         <span itemprop="bestRating">5</span>
-
+    </div>
     <header>
         <h2 class="title_section"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down visible-xs"></i>
         <span id="average_note_client" class="visible-xs">
@@ -138,7 +138,7 @@ switch($_reviewsCount) {
                 <?php echo $this->getChildHtml('product_review_list.toolbar'); ?>
             </div>
         </div>
-    </div>
+
     <!-- ====================== END :// COMMENTS ================================== -->
     </div>
 </section>
