@@ -193,5 +193,9 @@
 "required", "wymagane"
 "not required", "nie wymagane"
 "Send", "Wyślij"
+"For attribute %s value %s was suggested","Dla atrybutu %s zasugerowano wartość %s"
+"Ask New Attribute Value Email template","Szablon email dla sugestii nowej wartości atrybutu"
+"Ask New Attribute Value Email","Email sugestii nowej wartości atrybutu"
+"Email address to the person responsible for new attribute","Adres email osoby odpowiedzialnej za nowe atrybuty"
 
 

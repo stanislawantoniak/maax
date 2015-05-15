@@ -63,6 +63,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     // GH API Access
     const RES_GHAPI_OPERATOR						= "udropship/ghapi";
 
+    // Attribute preview
+    const RES_UDPROD_VENDOR_ATTRIBUTES              = "udprod/vendor_attributes";
 
 	// Resources as array
 	protected static $_currentResources = array(
@@ -99,10 +101,10 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage",
         // Overpayments managment
         self::RES_PAYMENT_OPERATOR                  => "Payment manage",
-
         // GH API Access
         self::RES_GHAPI_OPERATOR                    => "GH API",
-
+        // Attribute preview
+        self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview"
 	);
 	
 	// Roles as array
@@ -156,7 +158,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// Build ACL Rules - Product edit
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_IMAGE);
-		
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_ATTRIBUTES);
+
 		// Build ACL Rules - Mass Actions
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);
