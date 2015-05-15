@@ -6,12 +6,12 @@ if($itemsCount): ?>
     $attr = $_product->getResource()->getAttribute("color");
     ?>
     <?php foreach($this->getItems() as $_item) : ?>
-        <h4 itemprop="isSimilarTo" itemscope itemtype="http://schema.org/Product">
+        <h5 itemprop="isSimilarTo" itemscope itemtype="http://schema.org/Product">
             <meta itemprop="sku" content="<?php echo $_item->getSkuv(); ?>" />
             <meta itemprop="color" content="<?php echo $color_label = $attr->getSource()->getOptionText($_item->getColor()); ?>" />
             <meta itemprop="url" content="<?php echo $_item->getProductUrl(); ?>" />
-        </h4>
-    <?php endforeach; ?>
+        </h5>
+    <?php endforeach; unset($_item); ?>
 <div class="color-box-bundle">
     <div class="color-box">
         <div class="color">
