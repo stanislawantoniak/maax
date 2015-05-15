@@ -55,11 +55,6 @@ switch($_reviewsCount) {
 ?>
 
 <section id="note_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-        <span itemprop="ratingValue"><?php echo $this->getAvarageRating(); ?></span>
-        <span itemprop="reviewCount"><?php echo $_reviewsCount; ?></span>
-        <span itemprop="bestRating">5</span>
-    </div>
     <header>
         <h2 class="title_section"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down visible-xs"></i>
         <span id="average_note_client" class="visible-xs">
@@ -105,6 +100,12 @@ switch($_reviewsCount) {
         <div class="col-sm-12" id="comments">
             <div class="row">
 	            <?php echo $this->getChildHtml('product.review.form'); ?>
+                <?php if($_reviewsCount > 0): ?>
+                <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                    <span itemprop="ratingValue"><?php echo $this->getAvarageRating(); ?></span>
+                    <span itemprop="reviewCount"><?php echo $_reviewsCount; ?></span>
+                    <span itemprop="bestRating">5</span>
+                </div>
                 <?php foreach($this->getReviewsForProduct() as $review) :  ?>
                     <?php
                     $avgReview = $this->getSingleReviewAvarage($review);
@@ -135,6 +136,7 @@ switch($_reviewsCount) {
 
                     </div>
                 <?php endforeach; ?>
+                <?php endif; ?>
                 <?php echo $this->getChildHtml('product_review_list.toolbar'); ?>
             </div>
         </div>
