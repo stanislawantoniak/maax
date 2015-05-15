@@ -89,6 +89,6 @@ div.noscroll {
 [itemprop=offers], [itemprop=isSimilarTo], [itemprop=isRelatedTo], [itemprop=aggregateRating] {
   display: initial;
 }
-[itemprop=reviewRating] {
+[itemprop=reviewRating], [itemprop=ratingValue], [itemprop=reviewCount], [itemprop=bestRating] {
   display: none;
 }
