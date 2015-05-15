@@ -12,6 +12,13 @@
             
         }
 /* HEADER BOTTOM */
+.sm-to-smmd-plus-smmd {
+  #nav_desc {
+    @media (min-width: $screen-sm-to-smmd-min) and (max-width: $screen-sm-to-smmd-max) {
+      display: none !important;// .hidden-sm-to-smmd
+    }
+  }
+}
 .header_bottom {
      #nav_desc {
         &.navigation > li > a:hover,

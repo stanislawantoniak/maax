@@ -739,6 +739,7 @@ Mall.Breakpoint = {
 	xs: 480,
 	xssm: 600,
 	sm: 768,
+    smmd: 810,
 	md: 992,
 	lg: 1200
 };
@@ -748,7 +749,7 @@ Mall.isGoogleBot = function() {
 }
 
 Mall.isMobile = function() {
-	return Mall.windowWidth() < Mall.Breakpoint.sm;
+	return Mall.windowWidth() < Mall.Breakpoint.smmd;
 };
 
 Mall.windowWidth = function() {
