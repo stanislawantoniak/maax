@@ -1,5 +1,5 @@
 <?php
-
+  
 abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Block_Template
 {
 	const SEPARATOR = "separator";
