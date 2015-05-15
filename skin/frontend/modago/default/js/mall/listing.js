@@ -123,6 +123,11 @@ Mall.listing = {
 	 */
 	_init_products: [],
 
+    /**
+     * Current (first) visible on screen item
+     */
+    _firstOnScreenItem: null,
+
 	/**
 	 * @type Boolean
 	 * Determines if history state should not be pushed
@@ -150,6 +155,8 @@ Mall.listing = {
 	 */
 	init: function () {
 		this.initShuffle();
+
+        this.delegateSavePosition();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -181,8 +188,15 @@ Mall.listing = {
 		this.loadProductsOnScroll();
 
 		// load additional products to queue after page is loaded
-		this.setAutoappend(true);
-		this.loadToQueue();
+		if(this.getCurrentVisibleItems() < 100) {
+			this.setAutoappend(true);
+			this.loadToQueue();
+		} else {
+			if (this.canShowLoadMoreButton()) {
+				this.showLoadMoreButton();
+			}
+			this.showShapesListing();
+		}
 		this.setLoadMoreLabel();
 
 	},
@@ -191,11 +205,16 @@ Mall.listing = {
         var grid = jQuery('#grid'),
             sizer = jQuery(grid).find('.shuffle__sizer');
 
-        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+        jQuery(grid)
+	        .on('layout.shuffle', function() {
+		        Mall.listing.hideListingOverlay();
+                Mall.listing.likePriceView();
+            })
+	        .on('done.shuffle', function() {
+		        Mall.listing.hideListingOverlay();
+	        });
 
-        jQuery(grid).on('layout.shuffle', function() {
-            Mall.listing.likePriceView();
-        });
+	    jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
 
         jQuery(window).on('appendToListEnd', function() {
             Mall.listing.hideLoadMoreButton();
@@ -665,7 +684,7 @@ Mall.listing = {
 	appendToList: function (products) {
         var grid = jQuery('#grid');
 		        var eachItemsHtml = [];
-jQuery.each(products, function(index, item) {
+		jQuery.each(products, function(index, item) {
             eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
             Mall.wishlist.addProduct({
                 id: item[0],
@@ -712,7 +731,7 @@ jQuery.each(products, function(index, item) {
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
 
 
-        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+        var item = "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
@@ -815,6 +834,22 @@ jQuery.each(products, function(index, item) {
 		jQuery("#items-product").find(".shapes_listing").show();
 
 		return this;
+	},
+
+	_listing_overlay_class: 'listing-overlay',
+
+	getListingOverlay: function() {
+		return jQuery('.'+ this._listing_overlay_class);
+	},
+
+	showListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().show();
+	},
+
+	hideListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().hide();
 	},
 
 	/**
@@ -1198,7 +1233,7 @@ jQuery.each(products, function(index, item) {
 		/**
 		 * @todo handle error
 		 */
-
+		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
 		if(this.getMobileFiltersOverlay().is(":visible")) {
@@ -2329,8 +2364,8 @@ jQuery.each(products, function(index, item) {
 	 */
 	placeListingFadeContainer: function() {
 		if(!Mall.isGoogleBot()) {
-			jQuery('#grid').shuffle('layout');
-			if (this.canShowLoadMoreButton()) {
+			if (this.canShowLoadMoreButton())
+			{
 				this.showLoadMoreButton();
 				this.showShapesListing();
 
@@ -2368,7 +2403,9 @@ jQuery.each(products, function(index, item) {
 					}
 
 					if ((jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
+                        jQuery('#grid').shuffle('disable');
 						jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
+                        jQuery('#grid').shuffle('enable');
 					}
 				}
 
@@ -2482,6 +2519,69 @@ jQuery.each(products, function(index, item) {
             }
 
         });
+    },
+
+    delegateSavePosition: function() {
+
+        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            e.preventDefault();
+            Mall.listing.setFirstOnScreenItem(jQuery(this).closest(".item"));
+        });
+
+        jQuery(window).on('Mall.onScrollEnd', function() {
+            Mall.listing.getFirstOnScreenItem();
+        });
+
+        jQuery(window).on('Mall.onResizeEnd', function() {
+            if (Mall.listing._firstOnScreenItem != null && !jQuery(Mall.listing._firstOnScreenItem).isOnScreen(0.5, 0.7)) {
+                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+            }
+        });
+
+        jQuery(window).on('done.shuffle', function() {
+            var windowWidth = jQuery(window).width();
+            if (windowWidth != sessionStorage.getItem("windowWidth")) {
+                if (!Mall.listing._firstOnScreenItem) {
+                    var itemId = sessionStorage.getItem('firstOnScreenItemId');
+                    if (itemId) {
+                        Mall.listing._firstOnScreenItem = jQuery(itemId);
+                    }
+                }
+                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+            }
+        });
+    },
+
+    getFirstOnScreenItem: function() {
+        var grid = jQuery('#grid');
+        var visibleItems = grid.find('.item:in-viewport');
+        var item = null;
+        for (var i = 0; i < visibleItems.length ; i++) {
+            if (jQuery(visibleItems[i]).isOnScreen(0.5,0.7)) {
+                Mall.listing.setFirstOnScreenItem(visibleItems[i]);
+                break;
+            }
+        }
+        return Mall.listing._firstOnScreenItem;
+    },
+
+    setFirstOnScreenItem: function(item) {
+        Mall.listing._firstOnScreenItem = item;
+        sessionStorage.setItem('firstOnScreenItemId', '#'+jQuery(item).attr('id'));
+        sessionStorage.setItem("windowWidth", jQuery(window).width());
+    },
+
+    scrollToItem: function(item) {
+        if (item != null && !jQuery(item).isOnScreen(0.5, 0.7)) {
+            jQuery('body').animate({
+                scrollTop: jQuery(item).offset().top - 60 // headroom
+            }, 100);
+            setTimeout(function(){Mall.listing.hideHeaderHeadroom();}, 150);
+        }
+    },
+
+    hideHeaderHeadroom: function() {
+        jQuery('#header').find('.header_top').addClass('headroom--unpinned').removeClass('headroom--pinned');
     },
 
 	/**
@@ -2965,7 +3065,9 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
-        jQuery(window).resize(Mall.listing.updateFilters);
+        jQuery(window).resize(function() {
+	        Mall.listing.updateFilters();
+        });
     } else {
         Mall.listing.initShuffle();
     }

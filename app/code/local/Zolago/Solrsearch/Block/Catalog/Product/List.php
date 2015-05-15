@@ -18,9 +18,11 @@ class Zolago_Solrsearch_Block_Catalog_Product_List extends Mage_Catalog_Block_Pr
     /**
      * @return string
      */
-    public function getJsonProducts() {
+    public function getJsonProducts($products=null) {
         return Mage::helper("core")->jsonEncode(
-                   Mage::helper("zolagosolrsearch")->prepareAjaxProducts($this->getListModel())
+                   is_null($products) ?
+	                   Mage::helper("zolagosolrsearch")->prepareAjaxProducts($this->getListModel()) :
+	                   $products
                );
     }
 
