@@ -128,7 +128,16 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 
     <!--    Meta tags-->
     <?php
-    $config = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getConfig();
+    $childrenData = array();
+    $childProducts = Mage::getModel('catalog/product_type_configurable')
+        ->getUsedProducts(null, $_product);
+    foreach ($childProducts as $child) {
+        $childrenData[$child->getId()] = $child->getSkuv();
+    }
+
+    /* @var $productViewTypeConfigurableBlock Zolago_Catalog_Block_Product_View_Type_Configurable  */
+    $productViewTypeConfigurableBlock = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable');
+    $config = $productViewTypeConfigurableBlock->getConfig();
     $basePrice = $config['basePrice'];
     if (isset($config['attributes']) & !empty($config['attributes'])):
         $attributes = $config['attributes'];
@@ -137,9 +146,12 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                 $options = $attributeData['options'];
                 foreach ($options as $option):
                     ?>
-                    <h3 itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                    <h3 itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="itemprop">
                         <meta itemprop="price" content="<?php echo round(($_product->getFinalPrice() + $option['price']), 2); ?>"/>
                         <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
+
+                        <meta itemprop="mpn" content="<?php echo $childrenData[$option['products'][0]]; ?>"/>
+
                         <?php if ($option['is_salable']): ?>
                             <meta itemprop="availability" content="http://schema.org/InStock"/>
                         <?php else: ?>

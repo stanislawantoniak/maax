@@ -10,9 +10,8 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
         $strikeoutType = $currentProduct->getData('campaign_strikeout_price_type');
 		
 		$attributes = $return['attributes'];
-		
+
 		foreach($attributes as $keyAttr=>$attribute){
-//            Mage::log($attribute, null, "attributes.log");
 			if(is_array($attribute['options'])){
                 //add info about product is salable
 				foreach($attribute['options'] as $keyValue=>$value){
@@ -30,7 +29,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
                 }
 			}
 		}
-        Mage::log($return, null, "attributes.log");
+
         //if product is in campaign (promo or sale) and strikeout price type is msrp
         //the old price (strikeout price) need to be msrp, don't need delta's
         if (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
