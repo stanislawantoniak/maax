@@ -77,7 +77,8 @@
 					<product_view>Zolago_Catalog_Block_Product_View</product_view>
                     <product_view_attributes>Zolago_Catalog_Block_Product_View_Attributes</product_view_attributes>
 					<product_view_type_configurable>Zolago_Catalog_Block_Product_View_Type_Configurable</product_view_type_configurable>
-				</rewrite>
+                    <product_list_related>Zolago_Catalog_Block_Product_List_Related</product_list_related>
+                </rewrite>
 			</catalog>
         </blocks>
         <resources>
