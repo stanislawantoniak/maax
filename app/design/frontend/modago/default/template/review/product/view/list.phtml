@@ -105,19 +105,22 @@ switch($_reviewsCount) {
         <div class="col-sm-12" id="comments">
             <div class="row">
 	            <?php echo $this->getChildHtml('product.review.form'); ?>
-                <?php foreach($this->getReviewsForProduct() as $review) : ?>
+                <?php foreach($this->getReviewsForProduct() as $review) :  ?>
                     <?php
                     $avgReview = $this->getSingleReviewAvarage($review);
                     $recommend = $review->getRecommendProduct();
                     ?>
-                    <div class="comment row">
+                    <div class="comment row" itemtype="http://schema.org/Review" itemscope itemprop="review">
+                        <span itemtype="http://schema.org/Rating" itemscope itemprop="reviewRating">
+                            <span itemprop="ratingValue"><?php echo $avgReview; ?></span>
+                        </span>
                         <div class="wrapper-header col-sm-6">
                             <div class="header">
                                 <div class="comment_rating" data-number="5" data-score="<?php echo $avgReview; ?>"></div>
                                 <h3 class="title_comment"><?php echo $this->escapeHtml($review->getTitle()); ?></h3>
                             </div>
                             <div class="meta">
-                                <span class="meta-label"><?php echo Mage::helper('zolagomodago')->__("Review written"); ?></span><span class="date"> <?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user"><?php echo $review->getNickname(); ?></span>
+                                <span class="meta-label"><?php echo Mage::helper('zolagomodago')->__("Review written"); ?></span><span class="date" itemprop="datePublished"> <?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user" itemprop="author"><?php echo $review->getNickname(); ?></span>
                             </div>
 
                         </div>
@@ -126,7 +129,7 @@ switch($_reviewsCount) {
                             <?php echo (bool) $review->getRecommendProduct() ? $this->__("Recommend product") : $this->__("Not recommend product"); ?>
                                 </span></aside>
                         <?php endif; ?>
-                        <div class="body_comments col-sm-12">
+                        <div class="body_comments col-sm-12" itemprop="description">
                                 <?php echo $review->getDetailHtmlFormatted(); ?>
                         </div>
 
