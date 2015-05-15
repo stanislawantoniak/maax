@@ -41,7 +41,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                 <div class="seller producer">
                     <div class="seller-info">
                         <a href="<?php echo $this->getVendorUrl(); ?>">
-                            <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendorName()); ?>
+                            <?php echo $this->__("Seller"); ?>: <span itemprop="brand"><?php echo $this->escapeHtml($this->getVendorName()); ?></span>
                         </a>
                     </div>
                 </div>
