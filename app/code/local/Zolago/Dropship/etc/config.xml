@@ -571,6 +571,7 @@
 		    <udropship_pos>/udropship/pos/</udropship_pos>
 		    <udropship_sizetable>/udropship/sizetable/</udropship_sizetable>
 		    <udropship_vendor_settings>/udropship/vendor_settings/</udropship_vendor_settings>
+		    <udropship_ghapi>/udropship/ghapi/</udropship_ghapi>
 		</secure_url>
 	</frontend>
 	<admin>

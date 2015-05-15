@@ -63,6 +63,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     // GH API Access
     const RES_GHAPI_OPERATOR						= "udropship/ghapi";
 
+    // Attribute preview
+    const RES_UDPROD_VENDOR_ATTRIBUTES              = "udprod/vendor_attributes";
+
+    // Price management
+    const RES_UDPROD_VENDOR_PRICE                   = "udprod/vendor_price";
 
 	// Resources as array
 	protected static $_currentResources = array(
@@ -99,10 +104,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage",
         // Overpayments managment
         self::RES_PAYMENT_OPERATOR                  => "Payment manage",
-
         // GH API Access
         self::RES_GHAPI_OPERATOR                    => "GH API",
-
+        // Attribute preview
+        self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
+        // Price management
+        self::RES_UDPROD_VENDOR_PRICE               => "Price management"
 	);
 	
 	// Roles as array
@@ -152,14 +159,16 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 		// Build ACL Rules - Helpdesk
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_HELPDESK, self::RES_ASK_QUESTION);
-		
-		// Build ACL Rules - Product edit
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_IMAGE);
-		
-		// Build ACL Rules - Mass Actions
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);
+
+        // Build ACL Rules - Product operator; price edit (zarzadzanie cenami)
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_PRICE); // zarzadzanie cenami
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
+
+        // Build ACL Rules - Mass Actions (Zarządzanie opisami i zdjęciami produktów + przeglad atrybutow)
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_IMAGE);  // zarzadzanie zdjeciami produktow
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);// zarzadzanie opisami produktow
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);   // zarzadzanie opisami produktow ?
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_ATTRIBUTES); //przeglad atrybutow
 
         // Build ACL Rules - Overpayments managment
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PAYMENT_OPERATOR, self::RES_PAYMENT_OPERATOR);
