@@ -318,7 +318,7 @@ section {
 	> .container-fluid {
 		> .row {
 			> .col-sm-12 {
-				@media (max-width: $screen-xs-max) {
+				@media (max-width: $screen-sm-to-smmd-max) {
 					padding:0px;
 				 }
 			}
