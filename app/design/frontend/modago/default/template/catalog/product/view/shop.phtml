@@ -124,8 +124,39 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 </div>
 <?php /* configurable price/stock data */?>
 <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+
+    <!--    Meta tags-->
+    <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <?php
+        $config = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getConfig();
+        $basePrice = $config['basePrice'];
+        if (isset($config['attributes']) & !empty($config['attributes'])):
+            $attributes = $config['attributes'];
+            foreach ($attributes as $attributeId => $attributeData):
+                if ($attributeData['code'] == "size" && (isset($attributeData['options']) & !empty($attributeData['options']))):
+                    $options = $attributeData['options'];
+                    foreach ($options as $option):
+                        ?>
+                        <meta itemprop="price" content="<?php echo($_product->getFinalPrice() + $option['price']); ?>"/>
+                        <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
+                        <?php if ($option['is_salable']): ?>
+                        <meta itemprop="availability" content="http://schema.org/InStock"/>
+                    <?php else: ?>
+                        <meta itemprop="availability" content="http://schema.org/OutOfStock"/>
+                    <?php endif; ?>
+
+                    <?php
+                    endforeach;
+                endif;
+            endforeach;
+        endif;
+        ?>
+    </div>
+    <!--    Meta tags-->
+
 <script type="text/javascript">
     var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
+    console.log(jsonConfig);
     var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
 
     jsonConfig.useSizeboxList = useSizeboxList;

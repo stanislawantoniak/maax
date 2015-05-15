@@ -12,6 +12,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		$attributes = $return['attributes'];
 		
 		foreach($attributes as $keyAttr=>$attribute){
+//            Mage::log($attribute, null, "attributes.log");
 			if(is_array($attribute['options'])){
                 //add info about product is salable
 				foreach($attribute['options'] as $keyValue=>$value){
@@ -29,6 +30,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
                 }
 			}
 		}
+        Mage::log($return, null, "attributes.log");
         //if product is in campaign (promo or sale) and strikeout price type is msrp
         //the old price (strikeout price) need to be msrp, don't need delta's
         if (Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
@@ -54,11 +56,16 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 	 * @return array
 	 */
 	public function getJsonConfig() {
-	    if (is_null($this->_config)) {
-	        $this->_prepareConfig();
-	    }
-		return Mage::helper("core")->jsonEncode($this->_config);
+        $config = $this->getConfig();
+		return Mage::helper("core")->jsonEncode($config);
 	}
+
+    public function getConfig() {
+        if (is_null($this->_config)) {
+            $this->_prepareConfig();
+        }
+        return $this->_config;
+    }
 	
   /**
 	 * @param string $attributeId
