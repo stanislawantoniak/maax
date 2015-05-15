@@ -475,6 +475,9 @@
 			<action method="addBodyClass">
 				<value>view-menu-category</value>
 			</action>
+            <action method="addBodyClass">
+                <value>sm-to-smmd-plus-smmd</value>
+            </action>
 		</reference>
 		<reference name="head">
             <action method="addItem">
@@ -556,6 +559,9 @@
             </action>
 	        <action method="addBodyClass">
 	            <value>node-type-list</value>
+            </action>
+            <action method="addBodyClass">
+                <value>sm-to-smmd-plus-smmd</value>
             </action>
         </reference>
         <reference name="head">

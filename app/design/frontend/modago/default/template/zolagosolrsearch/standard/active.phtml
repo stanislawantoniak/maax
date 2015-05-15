@@ -43,7 +43,7 @@ $filterQuery = $this->getFilterQuery();
                                     <?php endforeach; ?>
                                 <?php endforeach; ?>
                             </dd>
-                            <dd class="action hidden-xs">
+                            <dd class="action hidden-xs hidden-sm-to-smmd">
                                 <a data-params='<?php echo $this->getRemoveAllJson(); ?>'
                                    href="<?php echo $this->getRemoveAllUrl() ?>"
                                    class="active-filters-remove button button-third"><?php echo $this->__('Clear all filters') ?></a>
@@ -55,16 +55,16 @@ $filterQuery = $this->getFilterQuery();
             <div class="row" id="filters-btn">
                 <div class="col-sm-12">
                     <dl>
-                        <dd class="visible-xs col-xs-5">
+                        <dd class="visible-xs visible-sm-to-smmd col-xs-5">
                             <div class="view_filter clearfix">
-                                <a href="#" class="actionViewFilter button button-primary medium visible-xs">
+                                <a href="#" class="actionViewFilter button button-primary medium visible-xs visible-sm-to-smmd">
                                     <i class="fa fa-chevron-right"></i>
                                     <?php echo $this->__("Filter Products"); ?>
                                 </a>
                             </div>
                         </dd>
                         <?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
-                            <dd class="action visible-xs btn-clearall-xs">
+                            <dd class="action visible-xs visible-sm-to-smmd btn-clearall-xs">
                                 <a data-params='<?php echo $this->getRemoveAllJson(); ?>'
                                    href="<?php echo $this->getRemoveAllUrl() ?>"
                                    class="active-filters-remove button button-third"><?php echo $this->__('Clear all filters') ?></a>
