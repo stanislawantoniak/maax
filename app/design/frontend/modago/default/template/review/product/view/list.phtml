@@ -55,11 +55,16 @@ switch($_reviewsCount) {
 ?>
 
 <section id="note_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+        <meta itemprop="ratingValue" content="<?php echo $this->getAvarageRating(); ?>" />
+        <meta itemprop="reviewCount" content="<?php echo $_reviewsCount; ?>" />
+        <meta itemprop="bestRating" content="5" />
+
     <header>
         <h2 class="title_section"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down visible-xs"></i>
         <span id="average_note_client" class="visible-xs">
             <span class="note" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></span>
-            <span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
+            <span>(<?php echo $_reviewsCount; ?><?php echo $_reviewsLabel; ?>)</span>
         </span>
         </h2>
 
@@ -132,4 +137,5 @@ switch($_reviewsCount) {
         </div>
     </div>
     <!-- ====================== END :// COMMENTS ================================== -->
+    </div>
 </section>
