@@ -22,22 +22,16 @@
                 </div>
                 <br/>
 
-                <div class="row">
+                <div class="row" id="accordion">
                     <div class="col-md-12">
                         <div id="attribute_select" class="col-md-12">
 
                         </div>
                     </div>
                 </div>
-                <br/>
-
-                <div class="row">
-                    <div class="col-md-2">
-                    </div>
-                    <div class="col-md-10">
-                        <a class="btn btn-primary" disabled id="ask_button" href="#askModal"
-                           data-toggle="modal"><?php echo $_helper->__('Ask about new value'); ?></a>
-                    </div>
+                <div style="display: none;">
+                    <a class="btn btn-primary ask_button" disabled id="ask_button-tmp"
+                       href="#askModal" data-toggle="modal" style="margin-top: 10px;"><?php echo $_helper->__('Ask about new value'); ?></a>
                 </div>
             </div>
         </div>
@@ -52,6 +46,7 @@
             <div class="modal-body">
                 <div class="row">
                 <label class="col-md-2 control-label" for="send_attribute_label"><?php echo $_helper->__('Attribute');?></label>
+                <input type="hidden" class="form-control" id="new_attribute_id"/>
                 <div class="col-md-10" id="send_attribute_label">
 
                 </div>
@@ -71,15 +66,15 @@
     </div>
 </div>
 <script>
-var selectedAttrId = 0;
+//var selectedAttrId = 0;
+var noneTextTranslated = '<?php echo Mage::helper('zolagocatalog')->__('-- none --'); ?>';
 jQuery(document).ready(function() {
     jQuery(".select_select2").select2();
     jQuery("#attribute_set_select").change(function() {
-        // clear selects
-        jQuery('#attribute_values').html('');
+
         jQuery('#attribute_select').html('<option style="color:#aaaaaa"><?php echo $_helper->__("Loading...");?></option>');
-        selectedAttrId = 0;
-        toggleButton(false);
+//        selectedAttrId = 0;
+//        toggleButton(false);
         // load attributes by jquery
         var params = {};
         params.attribute_set = jQuery(this).val();
@@ -88,6 +83,7 @@ jQuery(document).ready(function() {
             method: 'POST',
             data: params,
             success: function(answer) {
+                jQuery('#attribute_select').html('');
                 generateAllWidgetsBoxs(answer);
             }
         });
@@ -96,15 +92,27 @@ jQuery(document).ready(function() {
 
     jQuery('#send_ask_value').click(function() {
         var text = jQuery('#new_attribute_value').val();
-        sendAskValue(text);
+        var attrId = jQuery('#new_attribute_id').val();
+        sendAskValue(text, attrId);
 
     });
     jQuery('#new_attribute_value').keyup(function(event) {
         if (checkNotEmpty() == true) {
             if (event.which == 13) {
-                sendAskValue(jQuery(this).val());
+                sendAskValue(jQuery(this).val(),jQuery('#new_attribute_id').val());
             }
         }
+    });
+
+    jQuery(document).delegate('.widget .toolbar .widget-collapse, .widget-header','click',function(e) {
+        var widget = jQuery(this).parents(".widget");
+        toggleWidget(widget,jQuery(this));
+    });
+
+    jQuery(document).delegate('.ask_button', 'click', function(e) {
+        var elem = jQuery(this);
+        var id = elem.attr('data-attr-id');
+        jQuery('#new_attribute_id').val(id);
     });
 });
 
@@ -115,50 +123,65 @@ function generateAllWidgetsBoxs(data) {
         arr.push(eData[x]);
     }
     for(var i = 0; i < arr.length ; i++) {
-        var html = generateAttributeWidgetBox(
-             arr[i].label + ' [' + arr[i].type_translated + ', ' + arr[i].required_translated+']'
-            ,arr[i].id);
-        jQuery('#attribute_select').append(html);
-        jQuery('#attr-'+arr[i].id).on('click', function() {
-            onClickAttribute(this);
-        });
+        if (arr[i].id) {
+
+            var iconRequired = "<i class='" + (arr[i].required == 'required' ? 'icon-pencil':'icon-magic') + "'></i>";
+            var iconType     = "<i class='" +
+                (arr[i].type == 'select' ? 'icon-tag':'') +
+                (arr[i].type == 'multiselect' ? 'icon-tags':'') +
+                (arr[i].type == 'text' ? 'icon-align-left':'') +
+                "'></i>";
+            console.log(iconRequired);
+            var html = generateAttributeWidgetBox(
+                arr[i].label + ' [ ' + arr[i].type_translated + ', ' + arr[i].required_translated + ' ]',
+                arr[i].label + ' [ ' + iconType + arr[i].type_translated + ', ' + iconRequired + arr[i].required_translated + ' ]',
+                arr[i].id);
+            jQuery('#attribute_select').append(html);
+            jQuery('#attr-' + arr[i].id).on('click', function () {
+                getOnClickAttribute(this);
+                jQuery('#attr-' + jQuery(this).attr('data-id')).off();
+            });
+        } else {
+            jQuery('#attribute_select').append(noneTextTranslated);
+            break;
+        }
     }
 }
 
-function onClickAttribute(elem) {
-    console.log(elem);
+function getOnClickAttribute(elem) {
+    var askBtn = jQuery('#ask_button-tmp');
     var attrId = jQuery(elem).attr('data-id');
-    console.log(attrId);
-
-    selectedAttrId = 0;
+    var attrName = jQuery(elem).attr('data-attr-name');
+//    selectedAttrId = 0;
     var params = {} ;
-//    var attrId = jQuery(elem).val();
-    toggleButton(false);
+//    toggleButton(false);
     if (attrId == 0) {
         return;
     }
-    jQuery('#attribute_values').html('<?php echo $_helper->__("Loading...");?>');
+    jQuery('#attr-' + attrId + ' .widget-content .form-group').html('<?php echo $_helper->__("Loading...");?>');
     params.attribute = attrId;
     jQuery.ajax({
         url: '/udprod/vendor_attributes/get_values',
         method: 'POST',
         data: params,
         success: function(answer) {
-            selectedAttrId = attrId;
-            var text = jQuery("#attribute_select" ).find(":selected").text();
-            jQuery('#send_attribute_label').html(text);
-            toggleButton(true);
-            jQuery('#attribute_values').html('');
-            //todo
-            console.log(answer);
+//            selectedAttrId = attrId;
+            jQuery('#send_attribute_label').html(attrName);
+//            toggleButton(true);
+            jQuery('#attr-' + attrId + ' .widget-content .form-group').html('').html(answer);
+            jQuery(askBtn).clone()
+                .attr('id', 'ask_button-'+attrId)
+                .attr('data-attr-id', attrId)
+                .appendTo('#attr-' + attrId + ' .widget-content .form-group');
+            toggleButton(true, '#ask_button-'+attrId);
         }
     });
-};
+}
 
-function generateAttributeWidgetBox(name, id) {
-    return "<div class='widget box widget-closed' id='attr-" + id + "' data-id='" + id + "'>" +
+function generateAttributeWidgetBox(name, nameVisible, id) {
+    return "<div class='widget box widget-closed' id='attr-" + id + "' data-id='" + id + "' data-attr-name='"+name+"'>" +
                 "<div class='widget-header' style='cursor: pointer;'>" +
-                    "<h4><i class='icon-plus'></i>" + name +"</h4>" +
+                    "<h4><i class='icon-plus'></i>" + nameVisible +"</h4>" +
                     "<div class='toolbar no-padding'>" +
                         "<div class='btn-group'>" +
                             "<span class='btn btn-xs widget-collapse'><i class='icon-angle-up'></i></span>" +
@@ -166,7 +189,7 @@ function generateAttributeWidgetBox(name, id) {
                     "</div>" +
                 "</div>"+
                 "<div class='widget-content'>"+
-                    "<div class='form-group'>"+
+                    "<div class='form-group widget-content not-clickable' style='margin-bottom: 0px;'>"+
                     "</div>"+
                 "</div>"+
             "</div>";
@@ -183,20 +206,20 @@ function checkNotEmpty() {
         return false;
     }
 }
-function toggleButton(flag) {
+function toggleButton(flag, selector) {
     if (flag) {
-        jQuery('#ask_button').attr('disabled',false);
+        jQuery(selector).attr('disabled',false);
     } else {
-        selectedAttrId = 0;
+//        selectedAttrId = 0;
         jQuery('#new_attribute_value').val('');
         checkNotEmpty();
         jQuery('#send_attribute_label').html('');
-        jQuery('#ask_button').attr('disabled',true);
+        jQuery(selector).attr('disabled',true);
     }
 }
-function sendAskValue(text) {
+function sendAskValue(text, attrId) {
         var params = {};
-        params.attrId = selectedAttrId;
+        params.attrId = attrId;
         params.value = text;
         jQuery.ajax({
             url:'/udprod/vendor_attributes/ask_value',
@@ -204,18 +227,19 @@ function sendAskValue(text) {
             data: params,
             success: function(answer) {
                 jQuery('#new_attribute_value').val('');
+                jQuery('#new_attribute_id').val('');
                 checkNotEmpty();
                 noty({
                     text:answer,
                     type:'success',
-                    timeout: 4000,
+                    timeout: 4000
                 });
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 noty({
                     text:'<?php echo $_helper->__("Error");?>:'+xhr.status+' '+thrownError,
                     type:'error',
-                    timeout: 4000,
+                    timeout: 4000
                 });
             }
         });
@@ -223,6 +247,29 @@ function sendAskValue(text) {
         jQuery('#askModal').modal('hide');
 
 }
+var toggleWidget = function(widget,element) {
+    var widget_content = widget.children(".widget-content");
+    var widget_chart   = widget.children(".widget-chart");
+    var divider        = widget.children(".divider");
+
+    if (widget.hasClass('widget-closed')) {
+        // Open Widget
+        element.children('i').removeClass('icon-angle-down').addClass('icon-angle-up');
+        widget_content.slideDown(200, function() {
+            widget.removeClass('widget-closed');
+        });
+        widget_chart.slideDown(200);
+        divider.slideDown(200);
+    } else {
+        // Close Widget
+        element.children('i').removeClass('icon-angle-up').addClass('icon-angle-down');
+        widget_content.slideUp(200, function() {
+            widget.addClass('widget-closed');
+        });
+        widget_chart.slideUp(200);
+        divider.slideUp(200);
+    }
+};
 </script>
 
 
