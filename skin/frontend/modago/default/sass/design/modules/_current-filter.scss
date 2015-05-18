@@ -111,7 +111,7 @@
     float: left;
     margin-right: 20px;
 
-    @media (max-width: $screen-xs-max){
+    @media (max-width: $screen-sm-to-smmd-max){
       width: 100%;
       border-bottom: solid 2px #F2F1F0;
     }
@@ -120,7 +120,7 @@
   #category-header-right {
     position: relative;
 
-    @media (min-width: $screen-sm-min) {
+    @media (min-width: $screen-smmd-min) {
       margin-left: 215px;
       .right-wrapper:before {
         content: '';
@@ -137,7 +137,7 @@
   #category-header-vendor-box {
     min-height: 77px;
     margin-top: 20px;
-    @media (max-width: $screen-xs-max){
+    @media (max-width: $screen-sm-to-smmd-max){
       min-height: 42px;
       margin-top: 12px;
       margin-bottom: 12px;
@@ -150,7 +150,7 @@
       font-weight: normal;
       margin-right: 0px;
       padding-left: 0;
-      @media (max-width: $screen-xs-max) {
+      @media (max-width: $screen-sm-to-smmd-max) {
         padding-top: 25px;
       }
 
@@ -176,7 +176,7 @@
       width: 100%;
       position: relative;
       line-height: 72px;
-      @media (max-width: $screen-xs-max) {
+      @media (max-width: $screen-sm-to-smmd-max) {
         height: 42px;
         max-height: 42px;
       }

@@ -2552,7 +2552,7 @@ Mall.listing = {
 
         jQuery(window).on('done.shuffle', function() {
             var windowWidth = jQuery(window).width();
-            if (windowWidth != sessionStorage.getItem("windowWidth")) {
+            if (windowWidth != sessionStorage.getItem("windowWidth") || Mall.isFirefox()) {
                 if (!Mall.listing._firstOnScreenItem) {
                     var itemId = sessionStorage.getItem('firstOnScreenItemId');
                     if (itemId) {
@@ -2585,7 +2585,7 @@ Mall.listing = {
 
     scrollToItem: function(item) {
         if (item != null && jQuery(item).length && !jQuery(item).isOnScreen(0.5, 0.7)) {
-            jQuery('body').animate({
+	        jQuery('body,html').animate({
                 scrollTop: jQuery(item).offset().top - 60 // headroom
             }, 100);
             setTimeout(function(){Mall.listing.hideHeaderHeadroom();}, 150);

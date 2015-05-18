@@ -11,7 +11,7 @@
 
 // Visibility utilities
 
-@include responsive-invisibility('.visible-xs, .visible-sm, .visible-sm-to-smmd, .visible-smmd .visible-md, .visible-lg'); // OVERRIDDEN
+@include responsive-invisibility('.visible-xs, .visible-sm, .visible-sm-to-smmd, .visible-smmd, .visible-md, .visible-lg'); // OVERRIDDEN
 
 @media (max-width: $screen-xs-max) {
   @include responsive-visibility('.visible-xs');
