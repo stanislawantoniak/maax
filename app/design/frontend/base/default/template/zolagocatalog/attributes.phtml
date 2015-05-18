@@ -131,7 +131,6 @@ function generateAllWidgetsBoxs(data) {
                 (arr[i].type == 'multiselect' ? 'icon-tags':'') +
                 (arr[i].type == 'text' ? 'icon-align-left':'') +
                 "'></i>";
-            console.log(iconRequired);
             var html = generateAttributeWidgetBox(
                 arr[i].label + ' [ ' + arr[i].type_translated + ', ' + arr[i].required_translated + ' ]',
                 arr[i].label + ' [ ' + iconType + arr[i].type_translated + ', ' + iconRequired + arr[i].required_translated + ' ]',
