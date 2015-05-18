@@ -37,7 +37,7 @@
 	
 	h1 {
 		text-transform: uppercase;
-		@media (max-width: $screen-sm-min) { 
+		@media (max-width: $screen-sm-to-smmd-max) {
 			font-size: 18px;
 		 }
 	}
@@ -46,7 +46,7 @@
 	        text-transform:uppercase;
 	        line-height: 20px;
 	        font-weight:normal;
-	        @media (max-width: $screen-sm-min) { 
+	        @media (max-width: $screen-smmd-min) {
 			font-weight:normal;
 		 }
 	    }
@@ -216,4 +216,12 @@
       padding-right: 0px;
       padding-top: 0px;
     }
+}
+
+.sm-to-smmd-plus-smmd {
+  .breadcrumb {
+    @media (min-width: $screen-sm-to-smmd-min) and (max-width: $screen-sm-to-smmd-max) {
+      display: none !important; // .hidden-sm-to-smmd
+    }
+  }
 }

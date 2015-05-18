@@ -65,7 +65,7 @@
 			margin-bottom: 15px;
 		}
 		strong {
-			@media (max-width: $screen-xs-max) {
+			@media (max-width: $screen-sm-to-smmd-max) {
 				display:block;
 			}
 		}
@@ -73,11 +73,10 @@
 			.iks {
 				@media (min-width: $screen-sm-min) {
 			        position: relative;
-					top:-15px;
-					margin-top:15px;
+					top:-14px;
 		    	    padding: 0px 3px 0 3px;
 				}
-				@media (max-width: $screen-xs-max) {
+				@media (max-width: $screen-sm-to-smmd-max) {
 			        position: relative;
 					top:-4px;
 		    	    padding: 3px 5px;
