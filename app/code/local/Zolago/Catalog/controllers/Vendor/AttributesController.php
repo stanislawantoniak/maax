@@ -65,23 +65,15 @@ class Zolago_Catalog_Vendor_AttributesController
         $storeId = $this->_getStore();
         foreach ($attributes as $item) {
             $list[$item->getId()] = array (
+                'id' => $item->getId(),
                 'label' => $item->getStoreLabel($storeId),
                 'type' => $item->getFrontendInput(),
-                'required' => $item->getIsRequired()? 'required':'not required',
+                'type_translated' => $_helper->__($item->getFrontendInput()),
+                'required' => $item->getIsRequired() ? 'required':'not required',
+                'required_translated' => $_helper->__($item->getIsRequired() ? 'required':'not required'),
                 );
         }
-        asort($list);
-        $out = '';
-        foreach ($list as $key=>$item) {
-            if ($item['type'] == 'text') {
-                $key = 0;
-            }
-            $out .= '<option value="'.$key.'">'.$item['label'].' ['.$_helper->__($item['type']).', '.$_helper->__($item['required']).']</option>';
-        }
-        if (!$out) {
-            $out = '<option value="0">'.Mage::helper('zolagocatalog')->__('-- none --').'</option>';
-        }
-        echo $out;
+        echo json_encode($list);
         die();
     }	
     
