@@ -53,25 +53,36 @@ class Zolago_Catalog_Vendor_AttributesController
      */
     public function get_attributesAction() {
         $attributeSetId = $this->getRequest()->getParam('attribute_set');
-        $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
-        ->addFieldToFilter("grid_permission", array("in"=>array(
-            Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
-            Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
-        )))
-        ->setAttributeSetFilter($attributeSetId)
-        ->getItems();
+        
+        
+         $groups = Mage::getModel('eav/entity_attribute_group')
+             ->getResourceCollection()
+             ->setAttributeSetFilter($attributeSetId)
+             ->setSortOrder()
+             ->load();
         $_helper = Mage::helper('zolagocatalog');
         $list = array();
         $storeId = $this->_getStore();
-        foreach ($attributes as $item) {
-            $list[$item->getId()] = array (
-                'id' => $item->getId(),
-                'label' => $item->getStoreLabel($storeId),
-                'type' => $item->getFrontendInput(),
-                'type_translated' => $_helper->__($item->getFrontendInput()),
-                'required' => $item->getIsRequired() ? 'required':'not required',
-                'required_translated' => $_helper->__($item->getIsRequired() ? 'required':'not required'),
-                );
+        foreach ($groups as $group) {
+            $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
+            ->addFieldToFilter("grid_permission", array("in"=>array(
+                Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
+                Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
+            )))
+            ->setAttributeGroupFilter($group->getId())
+            ->getItems();                
+            foreach ($attributes as $item) {
+                if (!in_array($item->getAttributeCode(), array('description','short_description','brandshop','manufacturer'))) {
+                    $list[$item->getId()] = array (
+                        'id' => $item->getId(),
+                        'label' => $item->getStoreLabel($storeId),
+                        'type' => $item->getFrontendInput(),
+                        'type_translated' => $_helper->__($item->getFrontendInput()),
+                        'required' => $item->getIsRequired() ? 'required':'not required',
+                        'required_translated' => $_helper->__($item->getIsRequired() ? 'required':'not required'),
+                    );
+                }
+            }
         }
         echo json_encode($list);
         die();
