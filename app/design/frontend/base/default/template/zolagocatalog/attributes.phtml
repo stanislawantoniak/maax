@@ -255,7 +255,7 @@ var toggleWidget = function(widget,element) {
 
     if (widget.hasClass('widget-closed')) {
         // Open Widget
-        element.find('i').removeClass('icon-angle-down').addClass('icon-angle-up');
+        element.find('i.icon-angle-down, i.icon-angle-up').removeClass('icon-angle-down').addClass('icon-angle-up');
         widget_content.slideDown(200, function() {
             widget.removeClass('widget-closed');
         });
@@ -263,7 +263,7 @@ var toggleWidget = function(widget,element) {
         divider.slideDown(200);
     } else {
         // Close Widget
-        element.find('i').removeClass('icon-angle-up').addClass('icon-angle-down');
+        element.find('i .icon-angle-down, i .icon-angle-up').removeClass('icon-angle-up').addClass('icon-angle-down');
         widget_content.slideUp(200, function() {
             widget.addClass('widget-closed');
         });
