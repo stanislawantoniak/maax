@@ -8,7 +8,7 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 ?>
 
 <?php if(!$this->isContentMode() || $vendor): ?>
-<header id="header-main"  <?php if($this->isContentMode()): ?> class="hidden-xs" <?php endif; ?>>
+<header id="header-main"  <?php if($this->isContentMode()): ?> class="hidden-xs hidden-sm-to-smmd" <?php endif; ?>>
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div class="row">
@@ -19,7 +19,7 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
                     </div>
                     <div id="view-current-filter" >
                         <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                        <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
+                        <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                     </div>
                     <div id="active-filters-wrapper">
                         <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
@@ -45,7 +45,7 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
                             </div>
                             <div id="view-current-filter">
                                 <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                                <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
+                                <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                             </div>
                             <div id="active-filters-wrapper">
                                 <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>

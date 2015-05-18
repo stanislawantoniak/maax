@@ -325,6 +325,19 @@ section {
 		}
 	}
 }
+.sm-to-smmd-plus-smmd {
+  #main {
+    > .container-fluid {
+      > .row {
+        > .col-sm-12 {
+          @media (min-width: $screen-sm-to-smmd-min) and (max-width: $screen-sm-to-smmd-max) {
+            padding:0px;
+          }
+        }
+      }
+    }
+  }
+}
 
 #content-main {
 	> .main {
