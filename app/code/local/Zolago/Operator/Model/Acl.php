@@ -1,5 +1,5 @@
 <?php
-
+  
 class Zolago_Operator_Model_Acl extends Zend_Acl
 {
 		
