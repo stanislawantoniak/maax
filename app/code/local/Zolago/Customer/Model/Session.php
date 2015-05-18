@@ -5,7 +5,7 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 	const CURRENT_PRODUCTS_CATEGORY = 'curentProductsCategory';
 	const CURRENT_PRODUCTS = 'currentProducts';
 	const CURRENT_PRODUCTS_EXPIRE = 'currentProductsExpire';
-	const CURRENT_PRODUCTS_EXPIRE_MINUTES = 15;
+	const CURRENT_PRODUCTS_EXPIRE_MINUTES = 2880; //48h
 
     public function __construct()
     {

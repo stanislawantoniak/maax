@@ -110,7 +110,7 @@
 .sidebar-first {
 	&.node-type-list {
 		#sidebar {
-			@media (max-width: $screen-xs-max) { 
+			@media (max-width: $screen-sm-to-smmd-max) {
 				display: none;
 				position:absolute !important;
 				left:-200px;
@@ -124,7 +124,7 @@
 		#content-main {
 		margin-left: 205px; 
 		overflow: hidden;
-			@media (max-width: $screen-xs-max) {
+			@media (max-width: $screen-sm-to-smmd-max) {
 				margin-left: 0 !important;
 			}
 		}
@@ -174,7 +174,7 @@
   #sidebar{
     &.hidden-xs {
       display: block;
-      @media (min-width: $screen-sm-min) {
+      @media (min-width: $screen-smmd-min) {
         display: block;
       }
     }

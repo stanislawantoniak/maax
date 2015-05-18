@@ -36,7 +36,7 @@ $somethingIsActive = $isOptionSelected;
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->__("Price"); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
-			<?php $url = $this->getFacesUrl(array('slider'=>null, 'fq'=>array('price' => $range['value']))); ?>	
+			<?php $url = $this->getItemUrl($range['value']); ?>	
             <div class="form-group form-checkbox">
 
                 <input 
@@ -64,9 +64,11 @@ $somethingIsActive = $isOptionSelected;
             <div id="od_do" class="clearfix">
                 <div class="clearfix">
                     <div id="checkSlider" class="form-group form-checkbox">
-						<?php $url = $this->getFacesUrl(array('slider'=>1, 'fq'=>array('price' => $fromValue . " TO " . $toValue))); ?>
+                        <?php $value = $fromValue . " TO " . $toValue; ?>
+						<?php $url = $this->getItemUrl($value, array('slider'=>1, 'fq'=>array('price' => $value))); ?>
                         <input 
 							type="checkbox" 
+        					data-url="<?php echo $url;?>"
 							name="<?php echo $key; ?>" 
 							value="<?php echo ($isOptionSelected) ? $fromValue . " TO " . $toValue  : "";?>"
 							id="filter_slider" 
@@ -87,7 +89,7 @@ $somethingIsActive = $isOptionSelected;
                     </div>
                     <div class="form-action">
                         <div class="form-group">
-                            <input type="submit" class="btn black pull-right filter-price-range-submit" data-filter-type="price" value="OK"/>
+                            <input id="price_submit" type="submit" class="btn black pull-right filter-price-range-submit" data-url="<?php echo $this->getItemUrl('price',array('fq'=>array('price'=> '__min TO __max')));?>" data-filter-type="price" value="OK" />
                         </div>
                     </div>
                 </div>

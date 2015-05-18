@@ -739,16 +739,17 @@ Mall.Breakpoint = {
 	xs: 480,
 	xssm: 600,
 	sm: 768,
+    smmd: 810,
 	md: 992,
 	lg: 1200
 };
 
 Mall.isGoogleBot = function() {
 	return jQuery('body').hasClass('googlebot');
-}
+};
 
 Mall.isMobile = function() {
-	return Mall.windowWidth() < Mall.Breakpoint.sm;
+	return Mall.windowWidth() < Mall.Breakpoint.smmd;
 };
 
 Mall.windowWidth = function() {
@@ -1302,23 +1303,23 @@ Mall.Footer = {
 Mall.CustomEvents = {
     _timeoutForScroll: undefined,
     _timeoutForResize: undefined,
-    _time: 300,
+    _time: 500,
 
     init: function(time) {
         this._time = time;
 
         // Event: Mall.onScrollEnd
         jQuery(window).scroll(function() {
-            clearTimeout(Mall.listing._timeoutForScroll);
-            Mall.listing._timeoutForScroll = setTimeout(function() {
+            clearTimeout(Mall.CustomEvents._timeoutForScroll);
+	        Mall.CustomEvents._timeoutForScroll = setTimeout(function() {
                 jQuery(window).trigger('Mall.onScrollEnd');
             }, Mall.CustomEvents._time);
         });
 
         // Event: Mall.onResizeEnd
         jQuery(window).on('resize', function() {
-            clearTimeout(Mall.listing._timeoutForResize);
-            Mall.listing._timeoutForResize = setTimeout(function() {
+            clearTimeout(Mall.CustomEvents._timeoutForResize);
+	        Mall.CustomEvents._timeoutForResize = setTimeout(function() {
                 jQuery(window).trigger('Mall.onResizeEnd');
             },  Mall.CustomEvents._time);
         });
