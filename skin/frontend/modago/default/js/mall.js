@@ -1334,6 +1334,10 @@ Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
 	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
 };
 
+Mall.isFirefox = function() {
+	return jQuery.browser.mozilla === true;
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
