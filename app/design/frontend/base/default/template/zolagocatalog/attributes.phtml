@@ -121,6 +121,10 @@ jQuery(document).ready(function() {
 });
 
 function generateAllWidgetsBoxs(data) {
+    if (data == '[]') {
+        jQuery('#attribute_select').append(noneTextTranslated);
+        return;
+    }
     var eData = JSON.parse(data);
     var arr = [];
     for(var x in eData){
@@ -148,9 +152,6 @@ function generateAllWidgetsBoxs(data) {
                 getOnClickAttribute(this);
                 jQuery('#attr-' + jQuery(this).attr('data-id')).off();
             });
-        } else {
-            jQuery('#attribute_select').append(noneTextTranslated);
-            break;
         }
     }
 }

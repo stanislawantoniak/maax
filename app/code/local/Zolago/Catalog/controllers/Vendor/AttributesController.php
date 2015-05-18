@@ -73,7 +73,7 @@ class Zolago_Catalog_Vendor_AttributesController
             ->getItems();                
             foreach ($attributes as $item) {
                 if (!in_array($item->getAttributeCode(), array('description','short_description','brandshop','manufacturer'))) {
-                    $list[$item->getId()] = array (
+                    $list[] = array (
                         'id' => $item->getId(),
                         'label' => $item->getStoreLabel($storeId),
                         'type' => $item->getFrontendInput(),
