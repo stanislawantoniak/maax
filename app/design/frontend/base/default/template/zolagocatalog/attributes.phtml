@@ -31,7 +31,8 @@
                 </div>
                 <div style="display: none;">
                     <a class="btn btn-primary ask_button" disabled id="ask_button-tmp"
-                       href="#askModal" data-toggle="modal" style="margin-top: 10px;"><?php echo $_helper->__('Ask about new value'); ?></a>
+                       href="#askModal" data-toggle="modal" style="margin-top: 10px;"
+                       data-attr-id="" ><?php echo $_helper->__('Ask about new value'); ?></a>
                 </div>
             </div>
         </div>
@@ -112,7 +113,10 @@ jQuery(document).ready(function() {
     jQuery(document).delegate('.ask_button', 'click', function(e) {
         var elem = jQuery(this);
         var id = elem.attr('data-attr-id');
+        var text = jQuery('#attr-'+id).find('h4').html();
         jQuery('#new_attribute_id').val(id);
+        jQuery('#send_attribute_label').html(text);
+        jQuery('#send_attribute_label .icon-plus').remove();
     });
 });
 
@@ -125,16 +129,18 @@ function generateAllWidgetsBoxs(data) {
     for(var i = 0; i < arr.length ; i++) {
         if (arr[i].id) {
 
-            var iconRequired = "<i class='" + (arr[i].required == 'required' ? 'icon-pencil':'icon-magic') + "'></i>";
+            var iconRequired = "<i class='" + (arr[i].required == 'required' ? 'icon-pencil':'icon-magic') + "'></i> ";
             var iconType     = "<i class='" +
                 (arr[i].type == 'select' ? 'icon-tag':'') +
                 (arr[i].type == 'multiselect' ? 'icon-tags':'') +
                 (arr[i].type == 'text' ? 'icon-align-left':'') +
-                "'></i>";
+                "'></i> ";
             var html = generateAttributeWidgetBox(
                 arr[i].label + ' [ ' + arr[i].type_translated + ', ' + arr[i].required_translated + ' ]',
                 arr[i].label + ' [ ' + iconType + arr[i].type_translated + ', ' + iconRequired + arr[i].required_translated + ' ]',
-                arr[i].id);
+                arr[i].id,
+                arr[i].type,
+                arr[i].required == 'required');
             jQuery('#attribute_select').append(html);
             jQuery('#attr-' + arr[i].id).on('click', function () {
                 getOnClickAttribute(this);
@@ -150,10 +156,8 @@ function generateAllWidgetsBoxs(data) {
 function getOnClickAttribute(elem) {
     var askBtn = jQuery('#ask_button-tmp');
     var attrId = jQuery(elem).attr('data-id');
-    var attrName = jQuery(elem).attr('data-attr-name');
-//    selectedAttrId = 0;
+    var attrType = jQuery(elem).attr('data-attr-type');
     var params = {} ;
-//    toggleButton(false);
     if (attrId == 0) {
         return;
     }
@@ -164,26 +168,25 @@ function getOnClickAttribute(elem) {
         method: 'POST',
         data: params,
         success: function(answer) {
-//            selectedAttrId = attrId;
-            jQuery('#send_attribute_label').html(attrName);
-//            toggleButton(true);
             jQuery('#attr-' + attrId + ' .widget-content .form-group').html('').html(answer);
-            jQuery(askBtn).clone()
-                .attr('id', 'ask_button-'+attrId)
-                .attr('data-attr-id', attrId)
-                .appendTo('#attr-' + attrId + ' .widget-content .form-group');
-            toggleButton(true, '#ask_button-'+attrId);
+            if (attrType != 'text') {
+                jQuery(askBtn).clone()
+                    .attr('id', 'ask_button-' + attrId)
+                    .attr('data-attr-id', attrId)
+                    .appendTo('#attr-' + attrId + ' .widget-content .form-group');
+                toggleButton(true, '#ask_button-' + attrId);
+            }
         }
     });
 }
 
-function generateAttributeWidgetBox(name, nameVisible, id) {
-    return "<div class='widget box widget-closed' id='attr-" + id + "' data-id='" + id + "' data-attr-name='"+name+"'>" +
-                "<div class='widget-header' style='cursor: pointer;'>" +
-                    "<h4><i class='icon-plus'></i>" + nameVisible +"</h4>" +
+function generateAttributeWidgetBox(name, nameVisible, id, type, isRequired) {
+    return "<div class='widget box widget-closed' id='attr-" + id + "' data-id='" + id + "' data-attr-name='"+name+"' data-attr-type='"+type+"'>" +
+                "<div class='widget-header' style='" + (isRequired ? 'background-color: rgb(194, 227, 255) !important;': '') + "cursor: pointer;'>" +
+                    "<h4><i class='icon-plus'></i> " + nameVisible +"</h4>" +
                     "<div class='toolbar no-padding'>" +
                         "<div class='btn-group'>" +
-                            "<span class='btn btn-xs widget-collapse'><i class='icon-angle-up'></i></span>" +
+                            "<span class='btn btn-xs widget-collapse'><i class='icon-angle-down'></i></span>" +
                         "</div>" +
                     "</div>" +
                 "</div>"+
@@ -209,7 +212,6 @@ function toggleButton(flag, selector) {
     if (flag) {
         jQuery(selector).attr('disabled',false);
     } else {
-//        selectedAttrId = 0;
         jQuery('#new_attribute_value').val('');
         checkNotEmpty();
         jQuery('#send_attribute_label').html('');
@@ -253,7 +255,7 @@ var toggleWidget = function(widget,element) {
 
     if (widget.hasClass('widget-closed')) {
         // Open Widget
-        element.children('i').removeClass('icon-angle-down').addClass('icon-angle-up');
+        element.find('i').removeClass('icon-angle-down').addClass('icon-angle-up');
         widget_content.slideDown(200, function() {
             widget.removeClass('widget-closed');
         });
@@ -261,7 +263,7 @@ var toggleWidget = function(widget,element) {
         divider.slideDown(200);
     } else {
         // Close Widget
-        element.children('i').removeClass('icon-angle-up').addClass('icon-angle-down');
+        element.find('i').removeClass('icon-angle-up').addClass('icon-angle-down');
         widget_content.slideUp(200, function() {
             widget.addClass('widget-closed');
         });
