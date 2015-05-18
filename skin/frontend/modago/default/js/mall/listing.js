@@ -213,6 +213,7 @@ Mall.listing = {
 	        .on('layout.shuffle', function() {
 		        Mall.listing.hideListingOverlay();
                 Mall.listing.likePriceView();
+		        Mall.listing.placeListingFadeContainer();
             })
 	        .on('done.shuffle', function() {
 		        Mall.listing.hideListingOverlay();
@@ -227,7 +228,6 @@ Mall.listing = {
                     Mall.listing.showLoadMoreButton();
                 }
             }
-            Mall.listing.placeListingFadeContainer();
         });
     },
 
@@ -438,7 +438,6 @@ Mall.listing = {
 			// set current items count
 			Mall.listing.addToVisibleItems(data.content.rows);
 			Mall.listing.setTotal(data.content.total);
-			Mall.listing.placeListingFadeContainer();
 		} else {
 			// do something to inform customer that something went wrong
 			console.log("Something went wrong, try again");
@@ -495,7 +494,6 @@ Mall.listing = {
 	appendFromQueue: function () {
 		"use strict";
 		this.showLoading();
-		this.placeListingFadeContainer();
 		this.showShapesListing();
 
 		// append products to list
@@ -508,7 +506,6 @@ Mall.listing = {
 		// loading
 		inst.on("always", function () {
 			self.hideLoading();
-			self.placeListingFadeContainer();
 		});
 
 		Mall.listing.addToVisibleItems(products.length);
@@ -699,7 +696,6 @@ Mall.listing = {
         grid.append(eachItemsHtml);
         grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 		// attach events
-        this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
 
@@ -2422,9 +2418,7 @@ Mall.listing = {
 					}
 
 					if ((jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
-                        jQuery('#grid').shuffle('disable');
 						jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
-                        jQuery('#grid').shuffle('enable');
 					}
 				}
 
@@ -2468,7 +2462,6 @@ Mall.listing = {
 	*/
 	reloadListingItemsAfterPageLoad: function() {
         this.hideLoading();
-        Mall.listing.placeListingFadeContainer();
 
         if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
         	Mall.listing.hideLoadMoreButton();
