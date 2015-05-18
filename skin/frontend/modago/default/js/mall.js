@@ -377,6 +377,10 @@ var Mall = {
         if (data.content.logged_in && data.content.customer_email) {
             Mall.product.updateQuestionFormForLoggedIn(data.content.customer_name, data.content.customer_email);
         }
+        // When customer send question, form need to be populated when error
+        if (data.content.data_populate) {
+            Mall.product.populateQuestionForm(data.content.data_populate.customer_name, data.content.data_populate.customer_email, data.content.data_populate.question_text);
+        }
 	},
 	
 	getFavPluralText: function(count, you){
@@ -735,16 +739,17 @@ Mall.Breakpoint = {
 	xs: 480,
 	xssm: 600,
 	sm: 768,
+    smmd: 810,
 	md: 992,
 	lg: 1200
 };
 
 Mall.isGoogleBot = function() {
 	return jQuery('body').hasClass('googlebot');
-}
+};
 
 Mall.isMobile = function() {
-	return Mall.windowWidth() < Mall.Breakpoint.sm;
+	return Mall.windowWidth() < Mall.Breakpoint.smmd;
 };
 
 Mall.windowWidth = function() {
@@ -1295,6 +1300,32 @@ Mall.Footer = {
 	}
 };
 
+Mall.CustomEvents = {
+    _timeoutForScroll: undefined,
+    _timeoutForResize: undefined,
+    _time: 500,
+
+    init: function(time) {
+        this._time = time;
+
+        // Event: Mall.onScrollEnd
+        jQuery(window).scroll(function() {
+            clearTimeout(Mall.CustomEvents._timeoutForScroll);
+	        Mall.CustomEvents._timeoutForScroll = setTimeout(function() {
+                jQuery(window).trigger('Mall.onScrollEnd');
+            }, Mall.CustomEvents._time);
+        });
+
+        // Event: Mall.onResizeEnd
+        jQuery(window).on('resize', function() {
+            clearTimeout(Mall.CustomEvents._timeoutForResize);
+	        Mall.CustomEvents._timeoutForResize = setTimeout(function() {
+                jQuery(window).trigger('Mall.onResizeEnd');
+            },  Mall.CustomEvents._time);
+        });
+    }
+};
+
 Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
 	Mall.baseUrl = baseUrl;
 	Mall.baseUrlNoVendor = baseUrlNoVendor;
@@ -1303,7 +1334,12 @@ Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
 	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
 };
 
+Mall.isFirefox = function() {
+	return jQuery.browser.mozilla === true;
+};
+
 jQuery(document).ready(function() {
+    Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
 

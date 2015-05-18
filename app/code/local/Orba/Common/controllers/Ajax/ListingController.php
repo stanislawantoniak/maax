@@ -38,6 +38,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		// Product 
 		$products = $this->_getProducts($listModel);
 
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('zolagocustomer/session');
+		$customerSession->addProductsToCache($products);
+
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
 			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
@@ -69,6 +73,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$products=$this->_getProducts($listModel);
 		
 		$result = $this->_formatSuccessContentForResponse($products);
+
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('zolagocustomer/session');
+		$customerSession->addProductsToCache($products);
 
 		$this->_setSuccessResponse($result);
 	}

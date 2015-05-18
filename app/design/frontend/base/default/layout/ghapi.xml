@@ -5,8 +5,8 @@
         <update handle="adminhtml_head" />
         <update handle="bootstrap"/>
         <reference name="head">
-            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/prism.js</name></action>
-            <action method="addItem"><type>skin_css</type><name>../../../frontend/default/udropship/css/prism.css</name></action>
+            <action method="addItemLast"><type>skin_js</type><name>../../../frontend/default/udropship/js/prism.js</name></action>
+            <action method="addItemLast"><type>skin_css</type><name>../../../frontend/default/udropship/css/prism.css</name></action>
         </reference>                            
         <reference name="content">
             <block name="ghapi_dropship_page" type="ghapi/dropship_page" template="ghapi/dropship/page.phtml">

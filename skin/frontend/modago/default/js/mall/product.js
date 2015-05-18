@@ -29,6 +29,23 @@ Mall.product = {
         formMobile.find('#question-form-mobile-customer-email').html("<input type='hidden' name='question[customer_email]' value='"+email+"' />");
     },
 
+    /**
+     * Populate inputs fields when backend throw error (wrong email od something)
+     * @param customerName
+     * @param customerEmail
+     * @param questionText
+     */
+    populateQuestionForm: function(customerName, customerEmail, questionText){
+        var form       = jQuery('#question-form');
+        var formMobile = jQuery('#question-form-mobile');
+        form.find('#question-form-customer-name').find('input').val(customerName);
+        form.find('#question-form-customer-email').find('input').val(customerEmail);
+        form.find('#question-form-question-text').find('textarea').val(questionText);
+        formMobile.find('#question-form-mobile-customer-name').find('input').val(customerName);
+        formMobile.find('#question-form-mobile-customer-email').find('input').val(customerEmail);
+        formMobile.find('#question-form-mobile-question-text').find('textarea').val(questionText);
+    },
+
 	updateContextBreadcrumbs: function() {
         var contextBreadcrumbsHtml = localStorage.getItem(this._entity_id);
 

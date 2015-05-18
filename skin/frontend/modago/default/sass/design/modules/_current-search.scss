@@ -22,7 +22,7 @@
 .current-search {
 	h1 {
 		font-size: 24px;
-		@media (max-width: $screen-xs-max) {
+		@media (max-width: $screen-sm-to-smmd-max) {
 			font-size: 20px;
 		}
 		&+h1 {

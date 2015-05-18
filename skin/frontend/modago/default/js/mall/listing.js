@@ -123,6 +123,11 @@ Mall.listing = {
 	 */
 	_init_products: [],
 
+    /**
+     * Current (first) visible on screen item
+     */
+    _firstOnScreenItem: null,
+
 	/**
 	 * @type Boolean
 	 * Determines if history state should not be pushed
@@ -144,12 +149,18 @@ Mall.listing = {
 	 * variable that stores filters block
 	 */
 	_filters_block: '',
-
+	
+    /**
+     * clicked url
+     */
+	_current_url: '',
 	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
 		this.initShuffle();
+
+        this.delegateSavePosition();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -181,8 +192,15 @@ Mall.listing = {
 		this.loadProductsOnScroll();
 
 		// load additional products to queue after page is loaded
-		this.setAutoappend(true);
-		this.loadToQueue();
+		if(this.getCurrentVisibleItems() < 100) {
+			this.setAutoappend(true);
+			this.loadToQueue();
+		} else {
+			if (this.canShowLoadMoreButton()) {
+				this.showLoadMoreButton();
+			}
+			this.showShapesListing();
+		}
 		this.setLoadMoreLabel();
 
 	},
@@ -191,11 +209,17 @@ Mall.listing = {
         var grid = jQuery('#grid'),
             sizer = jQuery(grid).find('.shuffle__sizer');
 
-        jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+        jQuery(grid)
+	        .on('layout.shuffle', function() {
+		        Mall.listing.hideListingOverlay();
+                Mall.listing.likePriceView();
+		        Mall.listing.placeListingFadeContainer();
+            })
+	        .on('done.shuffle', function() {
+		        Mall.listing.hideListingOverlay();
+	        });
 
-        jQuery(grid).on('layout.shuffle', function() {
-            Mall.listing.likePriceView();
-        });
+	    jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
 
         jQuery(window).on('appendToListEnd', function() {
             Mall.listing.hideLoadMoreButton();
@@ -204,7 +228,6 @@ Mall.listing = {
                     Mall.listing.showLoadMoreButton();
                 }
             }
-            Mall.listing.placeListingFadeContainer();
         });
     },
 
@@ -415,7 +438,6 @@ Mall.listing = {
 			// set current items count
 			Mall.listing.addToVisibleItems(data.content.rows);
 			Mall.listing.setTotal(data.content.total);
-			Mall.listing.placeListingFadeContainer();
 		} else {
 			// do something to inform customer that something went wrong
 			console.log("Something went wrong, try again");
@@ -472,7 +494,6 @@ Mall.listing = {
 	appendFromQueue: function () {
 		"use strict";
 		this.showLoading();
-		this.placeListingFadeContainer();
 		this.showShapesListing();
 
 		// append products to list
@@ -485,7 +506,6 @@ Mall.listing = {
 		// loading
 		inst.on("always", function () {
 			self.hideLoading();
-			self.placeListingFadeContainer();
 		});
 
 		Mall.listing.addToVisibleItems(products.length);
@@ -665,7 +685,7 @@ Mall.listing = {
 	appendToList: function (products) {
         var grid = jQuery('#grid');
 		        var eachItemsHtml = [];
-jQuery.each(products, function(index, item) {
+		jQuery.each(products, function(index, item) {
             eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
             Mall.wishlist.addProduct({
                 id: item[0],
@@ -676,7 +696,6 @@ jQuery.each(products, function(index, item) {
         grid.append(eachItemsHtml);
         grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 		// attach events
-        this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
 
@@ -712,7 +731,7 @@ jQuery.each(products, function(index, item) {
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
 
 
-        var item = "<div class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+        var item = "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
@@ -817,6 +836,22 @@ jQuery.each(products, function(index, item) {
 		return this;
 	},
 
+	_listing_overlay_class: 'listing-overlay',
+
+	getListingOverlay: function() {
+		return jQuery('.'+ this._listing_overlay_class);
+	},
+
+	showListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().show();
+	},
+
+	hideListingOverlay: function() {
+		var _ = this;
+		return _.getListingOverlay().hide();
+	},
+
 	/**
 	 * Hides load more button from frontend.
 	 *
@@ -844,6 +879,7 @@ jQuery.each(products, function(index, item) {
 	 * @returns {Mall.listing}
 	 */
 	nodeChanged: function (node){
+		this._current_url = node.data('url');
 		this.reloadListing();
 		return this;
 	},
@@ -1098,16 +1134,23 @@ jQuery.each(products, function(index, item) {
 	 * @param {string} url
 	 * @returns {void}
 	 */
-	_pushHistoryState: function(data) {
+	_pushHistoryState: function(url,data) {
+		var self = this;
 		if(!this.getNoPushstate()) {
-			var url = this._getUrlNoParams() + '?' + this._buildPushStateKey(data);
+			url = self._getCurrentUrl();
 			var title = document.title;
 			window.history.pushState({page: title}, title, url);
 		} else {
-			this.setNoPushstate(false);
+			self.setNoPushstate(false);
 		}
 	},
-
+	_getCurrentUrl: function() {
+		var url = this._current_url;
+		if (url == '') {
+			url = window.location.href;
+		}
+		return url;
+	},
 	/**
 	 * @returns {void}
 	 */
@@ -1116,9 +1159,11 @@ jQuery.each(products, function(index, item) {
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data);
-
-		this._pushHistoryState(data);
-
+		var url = self._getCurrentUrl();
+		ajaxKey = decodeURIComponent(url);
+		this._pushHistoryState(ajaxKey,data);
+		this._current_url = '';
+		
 		if(this._ajaxCache[ajaxKey]){
 			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
 			return;
@@ -1198,7 +1243,7 @@ jQuery.each(products, function(index, item) {
 		/**
 		 * @todo handle error
 		 */
-
+		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
 		if(this.getMobileFiltersOverlay().is(":visible")) {
@@ -1289,6 +1334,7 @@ jQuery.each(products, function(index, item) {
 
 			active.click(function() {
 				var me = jQuery(this);
+				self._current_url = me.attr('href');
 				if(!me.parent().hasClass('query-text-iks')) {
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
@@ -1303,6 +1349,8 @@ jQuery.each(products, function(index, item) {
 			});
 
 			remove.click(function() {
+				var me = jQuery(this);
+				self._current_url = me.attr('href');
 				active.each(function() {
 					unCheckbox(jQuery(this).data('input'));
 				});
@@ -1670,6 +1718,7 @@ jQuery.each(products, function(index, item) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
 				e.preventDefault();
 				var me = jQuery(this);
+				self._current_url = me.attr('href');
 				self.removeSingleFilterType(me);
 				me.parent().addClass(hiddenClass);
 			});
@@ -1726,6 +1775,7 @@ jQuery.each(products, function(index, item) {
 		if(this.getPushStateSupport()) {
 			sortingSelect.change(function () {
 				var selected = jQuery(this).find(":selected");
+				self._current_url = selected.data('url');
 				self.setSort(selected.data('sort'));
 				self.setDir(selected.data('dir'));
 				self.reloadListing();
@@ -2083,19 +2133,17 @@ jQuery.each(products, function(index, item) {
 				stop: function(event, ui) {
                     var checkSlider = jQuery('#checkSlider').find('input');
                     if (!checkSlider.is(':checked')) {
+						
                         checkSlider.prop('checked', true).change();
                         jQuery('#filter_price').find('.action').removeClass('hidden');
-                    }
+                    } else {
+						self._current_url = self._preparePriceUrl(ui.values[0],ui.values[1]);
+					}
 					self._triggerRefresh(scope, 1, true);
 				},
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
-//					var checkSlider = jQuery('#checkSlider').find('input');
-//					if (!checkSlider.is(':checked')) {
-//						checkSlider.prop('checked', true).change();
-//						jQuery('#filter_price').find('.action').removeClass('hidden');
-//					}
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
 				}
 			});
@@ -2125,8 +2173,9 @@ jQuery.each(products, function(index, item) {
 			if (!checkSlider.is(':checked')) {
 				checkSlider.prop('checked', true).change();
 				jQuery('#filter_price').find('.action').removeClass('hidden');
+			} else {
+				self._current_url = self._preparePriceUrl(minPrice,maxPrice);
 			}
-
 			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
 			self._triggerRefresh(scope, 1, true);
 
@@ -2212,7 +2261,7 @@ jQuery.each(products, function(index, item) {
 		}
 
 		if(triggerChange){
-			if(self.getPushStateSupport()){
+			if(self.getPushStateSupport()){				
 				self.reloadListing();
 			}else{
 				self.showAjaxLoading();
@@ -2221,14 +2270,17 @@ jQuery.each(products, function(index, item) {
 		}
 
 	},
+	_preparePriceUrl: function(min,max) {	
+		var url = jQuery("#price_submit").data("url");
+		url = url.replace('__min',parseInt(min));
+		url = url.replace('__max',parseInt(max));
+		return url;
+	},
 	_transferValuesToCheckbox: function(min,max,scope){
 		this.getSliderCheckbox(scope).attr('value',
 			parseInt(min) + " TO " + parseInt(max));
-
-		var url = this._getUrlNoParams() + '?' +
-				this._buildPushStateKey(this.getQueryParamsAsArray());
-		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
-		this.getSliderCheckbox(scope).data('url', url);
+//		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
+//		this.getSliderCheckbox(scope).data('url', url);		
 	},
 	getSliderCheckbox: function(scope){
 		return jQuery('#filter_slider',scope);
@@ -2312,11 +2364,9 @@ jQuery.each(products, function(index, item) {
 	 */
 	removeSingleFilterType: function(filter) {
 		var filter = jQuery(filter);
-
 		filter.parents(".section").
 			find(":checkbox").
 			prop("checked", false);
-
 		this.reloadListing();
 
 		return this;
@@ -2329,8 +2379,8 @@ jQuery.each(products, function(index, item) {
 	 */
 	placeListingFadeContainer: function() {
 		if(!Mall.isGoogleBot()) {
-			jQuery('#grid').shuffle('layout');
-			if (this.canShowLoadMoreButton()) {
+			if (this.canShowLoadMoreButton())
+			{
 				this.showLoadMoreButton();
 				this.showShapesListing();
 
@@ -2412,7 +2462,6 @@ jQuery.each(products, function(index, item) {
 	*/
 	reloadListingItemsAfterPageLoad: function() {
         this.hideLoading();
-        Mall.listing.placeListingFadeContainer();
 
         if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
         	Mall.listing.hideLoadMoreButton();
@@ -2482,6 +2531,69 @@ jQuery.each(products, function(index, item) {
             }
 
         });
+    },
+
+    delegateSavePosition: function() {
+
+        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
+            e.preventDefault();
+            Mall.listing.setFirstOnScreenItem(jQuery(this).closest(".item"));
+        });
+
+        jQuery(window).on('Mall.onScrollEnd', function() {
+            Mall.listing.getFirstOnScreenItem();
+        });
+
+        jQuery(window).on('Mall.onResizeEnd', function() {
+            if (Mall.listing._firstOnScreenItem != null && !jQuery(Mall.listing._firstOnScreenItem).isOnScreen(0.5, 0.7)) {
+                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+            }
+        });
+
+        jQuery(window).on('done.shuffle', function() {
+            var windowWidth = jQuery(window).width();
+            if (windowWidth != sessionStorage.getItem("windowWidth") || Mall.isFirefox()) {
+                if (!Mall.listing._firstOnScreenItem) {
+                    var itemId = sessionStorage.getItem('firstOnScreenItemId');
+                    if (itemId) {
+                        Mall.listing._firstOnScreenItem = jQuery(itemId);
+                    }
+                }
+                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+            }
+        });
+    },
+
+    getFirstOnScreenItem: function() {
+        var grid = jQuery('#grid');
+        var visibleItems = grid.find('.item:in-viewport');
+        var item = null;
+        for (var i = 0; i < visibleItems.length ; i++) {
+            if (jQuery(visibleItems[i]).isOnScreen(0.5,0.7)) {
+                Mall.listing.setFirstOnScreenItem(visibleItems[i]);
+                break;
+            }
+        }
+        return Mall.listing._firstOnScreenItem;
+    },
+
+    setFirstOnScreenItem: function(item) {
+        Mall.listing._firstOnScreenItem = item;
+        sessionStorage.setItem('firstOnScreenItemId', '#'+jQuery(item).attr('id'));
+        sessionStorage.setItem("windowWidth", jQuery(window).width());
+    },
+
+    scrollToItem: function(item) {
+        if (item != null && jQuery(item).length && !jQuery(item).isOnScreen(0.5, 0.7)) {
+	        jQuery('body,html').animate({
+                scrollTop: jQuery(item).offset().top - 60 // headroom
+            }, 100);
+            setTimeout(function(){Mall.listing.hideHeaderHeadroom();}, 150);
+        }
+    },
+
+    hideHeaderHeadroom: function() {
+        jQuery('#header').find('.header_top').addClass('headroom--unpinned').removeClass('headroom--pinned');
     },
 
 	/**
@@ -2965,7 +3077,9 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
-        jQuery(window).resize(Mall.listing.updateFilters);
+        jQuery(window).resize(function() {
+	        Mall.listing.updateFilters();
+        });
     } else {
         Mall.listing.initShuffle();
     }

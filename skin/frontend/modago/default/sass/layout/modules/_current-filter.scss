@@ -45,7 +45,6 @@
 
         }
         .fa {
-          //	            position:absolute;
           right: 5px;
           top: 4px;
           margin-left: 5px;
@@ -54,11 +53,10 @@
         &.action {
           position: relative;
           top: -4px;
-          @media (max-width: $screen-xs-max) {
+          @media (max-width: $screen-sm-to-smmd-max) {
             position: absolute;
             top: 1px;
             right: 0px;
-            //		        	bottom: 11px;
           }
 
           a {
@@ -111,7 +109,7 @@
     }
 
   .btn-clearall-xs {
-    @media (max-width: $screen-xs-max) {
+    @media (max-width: $screen-sm-to-smmd-max) {
       margin-right: -10px;
     }
   }
