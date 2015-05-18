@@ -16,6 +16,7 @@ class GH_Rewrite_Model_Resource_Rewrite extends Mage_Core_Model_Resource_Url_Rew
             $list = $cache->load('filter_url_list');
             if (empty($list)) {
                 // load full table
+	            /** @var GH_Rewrite_Model_Resource_Url_Collection $collection */
                 $collection = Mage::getModel('ghrewrite/url')->getCollection();
                 $collection->joinRewriteUrl();
                 $path = array();
