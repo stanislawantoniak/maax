@@ -52,7 +52,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         $result = $this->getData('all_filter_collection');        
         return isset($result[$categoryId])? $result[$categoryId]:array();
     }
-    public function getItemUrl($item) {
+    public function getItemUrl($item,$param = array()) {
 
         $array = $this->pathToArray($item);
         $last = array_pop($array);

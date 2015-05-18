@@ -149,7 +149,11 @@ Mall.listing = {
 	 * variable that stores filters block
 	 */
 	_filters_block: '',
-
+	
+    /**
+     * clicked url
+     */
+	_current_url: '',
 	/**
 	 * Performs initialization for listing object.
 	 */
@@ -879,6 +883,7 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	nodeChanged: function (node){
+		this._current_url = node.data('url');
 		this.reloadListing();
 		return this;
 	},
@@ -1133,16 +1138,23 @@ Mall.listing = {
 	 * @param {string} url
 	 * @returns {void}
 	 */
-	_pushHistoryState: function(data) {
+	_pushHistoryState: function(url,data) {
+		var self = this;
 		if(!this.getNoPushstate()) {
-			var url = this._getUrlNoParams() + '?' + this._buildPushStateKey(data);
+			url = self._getCurrentUrl();
 			var title = document.title;
 			window.history.pushState({page: title}, title, url);
 		} else {
-			this.setNoPushstate(false);
+			self.setNoPushstate(false);
 		}
 	},
-
+	_getCurrentUrl: function() {
+		var url = this._current_url;
+		if (url == '') {
+			url = window.location.href;
+		}
+		return url;
+	},
 	/**
 	 * @returns {void}
 	 */
@@ -1151,9 +1163,11 @@ Mall.listing = {
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data);
-
-		this._pushHistoryState(data);
-
+		var url = self._getCurrentUrl();
+		ajaxKey = decodeURIComponent(url);
+		this._pushHistoryState(ajaxKey,data);
+		this._current_url = '';
+		
 		if(this._ajaxCache[ajaxKey]){
 			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
 			return;
@@ -1324,6 +1338,7 @@ Mall.listing = {
 
 			active.click(function() {
 				var me = jQuery(this);
+				self._current_url = me.attr('href');
 				if(!me.parent().hasClass('query-text-iks')) {
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
@@ -1338,6 +1353,8 @@ Mall.listing = {
 			});
 
 			remove.click(function() {
+				var me = jQuery(this);
+				self._current_url = me.attr('href');
 				active.each(function() {
 					unCheckbox(jQuery(this).data('input'));
 				});
@@ -1705,6 +1722,7 @@ Mall.listing = {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
 				e.preventDefault();
 				var me = jQuery(this);
+				self._current_url = me.attr('href');
 				self.removeSingleFilterType(me);
 				me.parent().addClass(hiddenClass);
 			});
@@ -1761,6 +1779,7 @@ Mall.listing = {
 		if(this.getPushStateSupport()) {
 			sortingSelect.change(function () {
 				var selected = jQuery(this).find(":selected");
+				self._current_url = selected.data('url');
 				self.setSort(selected.data('sort'));
 				self.setDir(selected.data('dir'));
 				self.reloadListing();
@@ -2118,19 +2137,17 @@ Mall.listing = {
 				stop: function(event, ui) {
                     var checkSlider = jQuery('#checkSlider').find('input');
                     if (!checkSlider.is(':checked')) {
+						
                         checkSlider.prop('checked', true).change();
                         jQuery('#filter_price').find('.action').removeClass('hidden');
-                    }
+                    } else {
+						self._current_url = self._preparePriceUrl(ui.values[0],ui.values[1]);
+					}
 					self._triggerRefresh(scope, 1, true);
 				},
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
-//					var checkSlider = jQuery('#checkSlider').find('input');
-//					if (!checkSlider.is(':checked')) {
-//						checkSlider.prop('checked', true).change();
-//						jQuery('#filter_price').find('.action').removeClass('hidden');
-//					}
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
 				}
 			});
@@ -2160,8 +2177,9 @@ Mall.listing = {
 			if (!checkSlider.is(':checked')) {
 				checkSlider.prop('checked', true).change();
 				jQuery('#filter_price').find('.action').removeClass('hidden');
+			} else {
+				self._current_url = self._preparePriceUrl(minPrice,maxPrice);
 			}
-
 			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
 			self._triggerRefresh(scope, 1, true);
 
@@ -2247,7 +2265,7 @@ Mall.listing = {
 		}
 
 		if(triggerChange){
-			if(self.getPushStateSupport()){
+			if(self.getPushStateSupport()){				
 				self.reloadListing();
 			}else{
 				self.showAjaxLoading();
@@ -2256,14 +2274,17 @@ Mall.listing = {
 		}
 
 	},
+	_preparePriceUrl: function(min,max) {	
+		var url = jQuery("#price_submit").data("url");
+		url = url.replace('__min',parseInt(min));
+		url = url.replace('__max',parseInt(max));
+		return url;
+	},
 	_transferValuesToCheckbox: function(min,max,scope){
 		this.getSliderCheckbox(scope).attr('value',
 			parseInt(min) + " TO " + parseInt(max));
-
-		var url = this._getUrlNoParams() + '?' +
-				this._buildPushStateKey(this.getQueryParamsAsArray());
-		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
-		this.getSliderCheckbox(scope).data('url', url);
+//		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
+//		this.getSliderCheckbox(scope).data('url', url);		
 	},
 	getSliderCheckbox: function(scope){
 		return jQuery('#filter_slider',scope);
@@ -2347,11 +2368,9 @@ Mall.listing = {
 	 */
 	removeSingleFilterType: function(filter) {
 		var filter = jQuery(filter);
-
 		filter.parents(".section").
 			find(":checkbox").
 			prop("checked", false);
-
 		this.reloadListing();
 
 		return this;
@@ -2572,7 +2591,7 @@ Mall.listing = {
     },
 
     scrollToItem: function(item) {
-        if (item != null && !jQuery(item).isOnScreen(0.5, 0.7)) {
+        if (item != null && jQuery(item).length && !jQuery(item).isOnScreen(0.5, 0.7)) {
             jQuery('body').animate({
                 scrollTop: jQuery(item).offset().top - 60 // headroom
             }, 100);

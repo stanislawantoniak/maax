@@ -99,38 +99,38 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		// Add relavance to search
 		if($this->isSearchMode()){
 			$options[] = array(
-				'value' => 'relevance',
+				'sort' => 'relevance',
 				'dir'   => 'desc',
 				'label' =>  Mage::helper("zolagosolrsearch")->__("Relevance")
 			);
 		}
 		
 		$options[] = array(
-			'value' => 'price',
+			'sort' => 'price',
 			'dir'   => 'asc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Price ascendend")
 		);
 		
 		$options[] = array(
-			'value' => 'price',
+			'sort' => 'price',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Price descendent")
 		);
 		
 		$options[] = array(
-			'value' => 'wishlist_count',
+			'sort' => 'wishlist_count',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Most popular first")
 		);
 		
 		$options[] = array(
-			'value' => 'product_rating',
+			'sort' => 'product_rating',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Best rated")
 		);
 		
 		$options[] = array(
-			'value' => 'is_new',
+			'sort' => 'is_new',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
 		);
