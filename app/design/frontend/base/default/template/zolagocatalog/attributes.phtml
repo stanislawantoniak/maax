@@ -121,6 +121,10 @@ jQuery(document).ready(function() {
 });
 
 function generateAllWidgetsBoxs(data) {
+    if (data == '[]') {
+        jQuery('#attribute_select').append(noneTextTranslated);
+        return;
+    }
     var eData = JSON.parse(data);
     var arr = [];
     for(var x in eData){
@@ -133,11 +137,13 @@ function generateAllWidgetsBoxs(data) {
             var iconType     = "<i class='" +
                 (arr[i].type == 'select' ? 'icon-tag':'') +
                 (arr[i].type == 'multiselect' ? 'icon-tags':'') +
-                (arr[i].type == 'text' ? 'icon-align-left':'') +
-                "'></i> ";
+                (arr[i].type == 'text' ? 'icon-align-left':'') + "'></i> ";
+            var visibleName = "<div class='col-sm-4' style='padding-left: 0px;'><h4><i class='icon-plus'></i>" + arr[i].label + "</h4></div>" +
+                                "<div class='col-sm-3'>" + iconType + arr[i].type_translated + "</div>" +
+                                "<div class='col-sm-3'>" + iconRequired + arr[i].required_translated + "</div>";
             var html = generateAttributeWidgetBox(
                 arr[i].label + ' [ ' + arr[i].type_translated + ', ' + arr[i].required_translated + ' ]',
-                arr[i].label + ' [ ' + iconType + arr[i].type_translated + ', ' + iconRequired + arr[i].required_translated + ' ]',
+                visibleName,
                 arr[i].id,
                 arr[i].type,
                 arr[i].required == 'required');
@@ -146,9 +152,6 @@ function generateAllWidgetsBoxs(data) {
                 getOnClickAttribute(this);
                 jQuery('#attr-' + jQuery(this).attr('data-id')).off();
             });
-        } else {
-            jQuery('#attribute_select').append(noneTextTranslated);
-            break;
         }
     }
 }
@@ -183,7 +186,7 @@ function getOnClickAttribute(elem) {
 function generateAttributeWidgetBox(name, nameVisible, id, type, isRequired) {
     return "<div class='widget box widget-closed' id='attr-" + id + "' data-id='" + id + "' data-attr-name='"+name+"' data-attr-type='"+type+"'>" +
                 "<div class='widget-header' style='" + (isRequired ? 'background-color: rgb(194, 227, 255) !important;': '') + "cursor: pointer;'>" +
-                    "<h4><i class='icon-plus'></i> " + nameVisible +"</h4>" +
+                    nameVisible +
                     "<div class='toolbar no-padding'>" +
                         "<div class='btn-group'>" +
                             "<span class='btn btn-xs widget-collapse'><i class='icon-angle-down'></i></span>" +
