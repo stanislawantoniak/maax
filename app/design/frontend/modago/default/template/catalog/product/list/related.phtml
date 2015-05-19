@@ -9,9 +9,9 @@ if($itemsCount): ?>
 <div class="color-box-bundle">
     <div class="color-box">
         <div class="color">
-            <span class="color-label"><?php echo $this->__("Other colors"); ?>:</span>
+            <h4 class="itemprop-isSimilarTo"><span class="color-label"><?php echo $this->__("Other colors"); ?>:</span></h4>
 
-            <div id="wrapper-rwd-color">
+                <div id="wrapper-rwd-color">
                 <div id="rwd-color" class="rwd-carousel <?php if($itemsCount <= 5): ?> no-size-carousel <?php endif; ?>">
                     <?php /** @var $_item Mage_Catalog_Model_Product */ ?>
                     <?php foreach($this->getItems() as $_item) : ?>

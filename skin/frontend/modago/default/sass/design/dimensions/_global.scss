@@ -51,8 +51,34 @@ section {
 	&.bg-w {
 		border-bottom: none;
 	}
-  h3.itemprop-brand {
+  .itemprop-brand {
     display: inline;
     font-size: 13px;
   }
+}
+.itemprop-isSimilarTo {
+  display: inline;
+}
+.itemprop-isRelatedTo:before {
+  background: none repeat scroll 0 0 #6fffcf;
+  content: " ";
+  display: block;
+  height: 18px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 18px;
+}
+.itemprop-isRelatedTo {
+  display: block;
+  font-family: latoregular,sans-serif;
+  font-size: 18px;
+  height: 18px;
+  line-height: 18px;
+  margin: 0 0 8px;
+  overflow: hidden;
+  padding: 0 0 0 35px;
+  position: relative;
+  text-align: left;
+  text-transform: uppercase;
 }
