@@ -158,9 +158,9 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-		this.initShuffle();
+		this.delegateSavePosition();
 
-        this.delegateSavePosition();
+		this.initShuffle();
 
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
@@ -214,21 +214,15 @@ Mall.listing = {
 		        Mall.listing.hideListingOverlay();
                 Mall.listing.likePriceView();
 		        Mall.listing.placeListingFadeContainer();
+		        if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
+			        Mall.listing.showLoadMoreButton();
+		        }
             })
 	        .on('done.shuffle', function() {
 		        Mall.listing.hideListingOverlay();
 	        });
 
 	    jQuery('#grid').shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
-
-        jQuery(window).on('appendToListEnd', function() {
-            Mall.listing.hideLoadMoreButton();
-            if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
-                if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
-                    Mall.listing.showLoadMoreButton();
-                }
-            }
-        });
     },
 
     /**
@@ -1387,7 +1381,7 @@ Mall.listing = {
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
-		self.triggerResize();
+		//self.triggerResize();
 	},
 
 	closeMobileFilters: function() {
@@ -1396,7 +1390,7 @@ Mall.listing = {
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','auto'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.hideMobileFiltersOverlay();
-		self.triggerResize();
+		//self.triggerResize();
 	},
 
 	getMobileFiltersOpenedClass: function() {
@@ -2552,19 +2546,28 @@ Mall.listing = {
 
         jQuery(window).on('done.shuffle', function() {
             var windowWidth = jQuery(window).width();
-            if (windowWidth != sessionStorage.getItem("windowWidth") || Mall.isFirefox()) {
+            //if (windowWidth != sessionStorage.getItem("windowWidth") || Mall.isFirefox()) {
                 if (!Mall.listing._firstOnScreenItem) {
                     var itemId = sessionStorage.getItem('firstOnScreenItemId');
                     if (itemId) {
                         Mall.listing._firstOnScreenItem = jQuery(itemId);
                     }
                 }
-                Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
-            }
+	            if(Mall.listing._firstOnScreenItem) {
+		            Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+	            }
+            //}
         });
     },
 
+	updateFirstOnScreenItem: false,
     getFirstOnScreenItem: function() {
+	    if(!Mall.listing._firstOnScreenItem && !Mall.listing.updateFirstOnScreenItem) {
+		    return null;
+	    } else if(!Mall.listing.updateFirstOnScreenItem) {
+		    Mall.listing.updateFirstOnScreenItem = true;
+		    return Mall.listing._firstOnScreenItem;
+	    }
         var grid = jQuery('#grid');
         var visibleItems = grid.find('.item:in-viewport');
         var item = null;
@@ -2585,10 +2588,12 @@ Mall.listing = {
 
     scrollToItem: function(item) {
         if (item != null && jQuery(item).length && !jQuery(item).isOnScreen(0.5, 0.7)) {
-	        jQuery('body,html').animate({
-                scrollTop: jQuery(item).offset().top - 60 // headroom
-            }, 100);
-            setTimeout(function(){Mall.listing.hideHeaderHeadroom();}, 150);
+	        Mall.listing.updateFirstOnScreenItem = false;
+	        var offsetTop = jQuery(item).offset().top - 60;
+	        jQuery('body,html').scrollTop(offsetTop);
+	        if(jQuery('body').scrollTop() > 275 || jQuery('html').scrollTop > 275) {
+		        Mall.listing.hideHeaderHeadroom();
+	        }
         }
     },
 
