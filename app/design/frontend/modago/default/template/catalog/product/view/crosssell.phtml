@@ -13,12 +13,6 @@
 
 ?>
 <?php if(count($this->getItems()) > 0) : ?>
-    <?php foreach($this->getItems() as $_item) : ?>
-        <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
-            <meta itemprop="sku" content="<?php echo $_item->getSkuv(); ?>" />
-            <meta itemprop="url" content="<?php echo $_item->getProductUrl(); ?>" />
-        </h5>
-    <?php endforeach; unset($_item); ?>
     <section id="complementary_product" class="section bg-w clearfix" data-mobiletoggle="true">
         <div class="block-complementary-product toggle-xs">
             <header>
@@ -29,6 +23,9 @@
                 <div class="rwd-carousel rwd-theme">
                     <?php foreach ($this->getItems() as $_item) : ?>
                         <div class="item">
+                            <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
+                                <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
+                                <meta itemprop="url" content="<?php echo $_item->getProductUrl(); ?>" />
                             <a href="<?php echo $_item->getProductUrl(); ?>">
 
                                 <div class="box_listing_product">
@@ -72,6 +69,7 @@
                                 </div>
 
                             </a>
+                            </h5>
                         </div>
 
                     <?php endforeach; ?>
