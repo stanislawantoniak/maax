@@ -19,7 +19,9 @@
         <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
             <li <?php if($_crumbInfo['link']): ?>itemscope itemtype="http://data-vocabulary.org/Breadcrumb"<?php endif; ?> data-catid="<?php echo isset($_crumbInfo['id']) ? $_crumbInfo['id'] : '' ;?>" class="<?php echo $_crumbName ?>"  data-link="<?php echo (isset($_crumbInfo['data-link']) ? $_crumbInfo['data-link'] : ""); ?>" >
             <?php if($_crumbInfo['link']): ?>
-                <a itemprop="url" href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($this->__($_crumbInfo['title'])) ?>" <?php if(isset($_crumbInfo['id']) && !empty($_crumbInfo['id'])): ?>id="<?php echo $this->escapeHtml($this->__($_crumbInfo['id'])) ?>"  <?php endif; ?>  ><span itemprop="title" style="display: none;"><?php echo isset($_crumbInfo['categorylongname']) ? $this->escapeHtml($this->__($_crumbInfo['categorylongname'])): $this->escapeHtml($this->__($_crumbInfo['label'])); ?></span><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></a>
+                <a itemprop="url" href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($this->__($_crumbInfo['title'])) ?>" <?php if(isset($_crumbInfo['id']) && !empty($_crumbInfo['id'])): ?>id="<?php echo $this->escapeHtml($this->__($_crumbInfo['id'])) ?>"  <?php endif; ?>  >
+                    <span itemprop="title"><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></span>
+                </a>
             <?php elseif($_crumbInfo['last']): ?>
                 <?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?>
             <?php else: ?>
