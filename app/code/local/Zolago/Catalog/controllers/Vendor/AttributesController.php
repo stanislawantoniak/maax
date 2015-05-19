@@ -2,8 +2,8 @@
 /**
  * controller for attributes preview
  */
-class Zolago_Catalog_Vendor_AttributesController 
-    	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
+class Zolago_Catalog_Vendor_AttributesController
+    extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
 
     /**
      * @return Zolago_Dropship_Model_Session
@@ -28,7 +28,7 @@ class Zolago_Catalog_Vendor_AttributesController
      * Vendor from udropship session
      * @return Zolago_Dropship_Model_Vendor
      */
-	protected function _getVendor() {
+    protected function _getVendor() {
         return $this->_getUdropSession()->getVendor();
     }
 
@@ -40,78 +40,84 @@ class Zolago_Catalog_Vendor_AttributesController
         $vendor = $this->_getVendor();
         return $vendor->getLabelStore();
     }
-	/**
-	 * Index
-	 */
-	public function indexAction() {
-		$this->_renderPage(null, 'udprod_product');
+    /**
+     * Index
+     */
+    public function indexAction() {
+        $this->_renderPage(null, 'udprod_product');
     }
-    
-    
+
+
     /**
      * attributes list by attribute set
      */
     public function get_attributesAction() {
         $attributeSetId = $this->getRequest()->getParam('attribute_set');
-        
-        
-         $groups = Mage::getModel('eav/entity_attribute_group')
-             ->getResourceCollection()
-             ->setAttributeSetFilter($attributeSetId)
-             ->setSortOrder()
-             ->load();
+
+
+        $groups = Mage::getModel('eav/entity_attribute_group')
+                  ->getResourceCollection()
+                  ->setAttributeSetFilter($attributeSetId)
+                  ->setSortOrder()
+                  ->load();
         $_helper = Mage::helper('zolagocatalog');
         $list = array();
         $storeId = $this->_getStore();
         foreach ($groups as $group) {
             $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
-            ->addFieldToFilter("grid_permission", array("in"=>array(
-                Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
-                Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
-            )))
-            ->setAttributeGroupFilter($group->getId())
-            ->getItems();                
+                          ->addFieldToFilter("grid_permission", array("in"=>array(
+                                                 Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
+                                                 Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
+                                             )))
+                          ->setAttributeGroupFilter($group->getId())
+                          ->getItems();
             foreach ($attributes as $item) {
                 if (!in_array($item->getAttributeCode(), array('description','short_description','brandshop','manufacturer'))) {
                     $list[] = array (
-                        'id' => $item->getId(),
-                        'label' => $item->getStoreLabel($storeId),
-                        'type' => $item->getFrontendInput(),
-                        'type_translated' => $_helper->__($item->getFrontendInput()),
-                        'required' => $item->getIsRequired() ? 'required':'not required',
-                        'required_translated' => $_helper->__($item->getIsRequired() ? 'required':'not required'),
-                    );
+                                  'id' => $item->getId(),
+                                  'label' => $item->getStoreLabel($storeId),
+                                  'type' => $item->getFrontendInput(),
+                                  'type_translated' => $_helper->__($item->getFrontendInput()),
+                                  'required' => $item->getIsRequired() ? 'required':'not required',
+                                  'required_translated' => $_helper->__($item->getIsRequired() ? 'required':'not required'),
+                              );
                 }
             }
         }
         echo json_encode($list);
         die();
-    }	
-    
+    }
+
     /**
      * attribute values list
      */
     public function get_valuesAction() {
         $storeId = $this->_getStore();
         $attributeId = $this->getRequest()->getParam('attribute');
-       $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-       $collection = $attribute ->setStoreId($storeId)->getSource()->getAllOptions(false); 
+        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+        $collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                                 ->setPositionOrder('asc')
+                                 ->setAttributeFilter($attributeId)
+                                 ->setStoreFilter()
+                                 ->load();
+
+
+
         $list = array();
         foreach ($collection as $item) {
-            $list[] = $item['label'];
+            $list[] = $item->getValue();
         }
-        sort($list);
         $out = '';
         foreach ($list as $item) {
             $out .= $item.'<br/>';
-        }            
+        }
         if (!$out) {
             $out = Mage::helper('zolagocatalog')->__('-- none --');
-        }        
+        }
         echo $out;
         die();
     }
-    
+
     /**
      * suggestion new attribute value
      */
@@ -180,7 +186,7 @@ class Zolago_Catalog_Vendor_AttributesController
         $hlp->setDesignStore($store);
         $templateParams['use_attachments'] = true;// Logo
 
-        if(is_null($sender)){
+        if(is_null($sender)) {
             $sender = $store->getConfig('udropship/vendor/vendor_email_identity');
         }
 
