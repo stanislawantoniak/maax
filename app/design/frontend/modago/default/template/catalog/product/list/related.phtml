@@ -21,9 +21,8 @@ if($itemsCount): ?>
                                 <label for="color_<?php echo $_item->getId(); ?>">
                                     <input type="radio" name="color" id="color_<?php echo $_item->getId(); ?>">
                                     <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
-                                    <meta itemprop="url" content="<?php echo $_item->getProductUrl(); ?>" />
                                     <meta itemprop="color" content="<?php echo $color_label = $attr->getSource()->getOptionText($_item->getColor()); ?>" />
-                                    <a  href="<?php echo $_item->getProductUrl(); ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(43, 54); ?>" alt="<?php echo $this->escapeHtml($_item->getName()); ?>"></a>
+                                    <a  itemprop="url" href="<?php echo $_item->getProductUrl(); ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(43, 54); ?>" alt="<?php echo $this->escapeHtml($_item->getName()); ?>"></a>
                                 </label>
                             </div>
                         </h5>
