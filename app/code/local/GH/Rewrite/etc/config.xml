@@ -80,4 +80,15 @@
             </adminhtml>
         </routers>
     </admin>
+    <adminhtml>
+        <translate>
+            <modules>
+                <GH_Rewrite>
+                    <files>
+                        <default>GH_Rewrite.csv</default>
+                    </files>
+                </GH_Rewrite>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>

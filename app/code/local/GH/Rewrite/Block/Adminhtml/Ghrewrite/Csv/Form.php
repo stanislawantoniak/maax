@@ -31,7 +31,7 @@ class GH_Rewrite_Block_Adminhtml_Ghrewrite_Csv_Form extends Mage_Adminhtml_Block
         $fieldset->addField('file', 'file', array(
             'label' => $rewriteHelper->__('CSV File'),
             'required' => false,
-            'name' => 'filename',
+            'name' => 'file',
         ));
 
         return parent::_prepareForm();
