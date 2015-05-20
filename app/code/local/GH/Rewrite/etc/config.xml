@@ -43,5 +43,21 @@
 				</setup>
 			</ghrewrite_setup>
 		</resources>
+        <blocks>
+            <ghrewrite>
+                <class>GH_Rewrite_Block</class>
+            </ghrewrite>
+        </blocks>
 	</global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ghrewrite before="Mage_Adminhtml">GH_Rewrite_Adminhtml</ghrewrite>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>
