@@ -19,7 +19,7 @@ class GH_Rewrite_Block_Adminhtml_Ghrewrite_Csv_Form extends Mage_Adminhtml_Block
 
         $form = new Varien_Data_Form(array(
                 'id'      => 'edit_form',
-                'action'  => $this->getUrl('*/*/csv/import'),
+                'action'  => $this->getUrl('ghrewrite/csv/import'),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data'
             )
