@@ -8,3 +8,4 @@
 "No file provided","Nie przesłano pliku"
 "Category with id %s does not exist","Kategoria o ID %s nie istnieje"
 "File contains invalid store or category id","Plik zawiera nieprawidłowe id sklepu lub kategorii"
+"Provided file contains duplicated lines: %s","Przesłany plik zawiera zduplikowane wartości w liniach: %s"
