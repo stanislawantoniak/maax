@@ -9,3 +9,4 @@
 "Category with id %s does not exist","Kategoria o ID %s nie istnieje"
 "File contains invalid store or category id","Plik zawiera nieprawidłowe id sklepu lub kategorii"
 "Provided file contains duplicated lines: %s","Przesłany plik zawiera zduplikowane wartości w liniach: %s"
+"File was imported successfully. Imported rewrites: %s","Plik został zaimportowany poprawnie. Dodano %s wpisów"
