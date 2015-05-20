@@ -9,6 +9,9 @@
 				  autocomplete="false"
 				  action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
 				<input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
+                <?php     $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+                //krumo($rewriteData); ?>
+                <div><h3>text_field_filter</h3></div>
                 <?php if ($this->isShoppingOptionsActive()): ?>
 						<?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
                             <?php /** @var $filterBlock Zolago_Modago_Block_Solrsearch_Faces_Category */ ?>

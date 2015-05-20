@@ -9,7 +9,14 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Header_Abstract
 	 * @return Mage_Catalog_Model_Category
 	 */
 	public function getCategory() {
-		return $this->getListModel()->getCurrentCategory();
+        $currentCategory = $this->getListModel()->getCurrentCategory();
+        $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+        if (!empty($rewriteData)) {
+            if (isset($rewriteData['category_name']) && !empty($rewriteData['category_name'])) {
+                $currentCategory->setLongName($rewriteData['category_name']);
+            }
+        }
+		return $currentCategory;
 	}
 	
 	/**
