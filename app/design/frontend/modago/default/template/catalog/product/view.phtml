@@ -150,7 +150,7 @@ if($vendorContext && $vendorContext->getId()) {
     $productDescription = str_replace($vendorName, "<h3 class='itemprop-brand'><a itemprop='brand' href='".$vendorUrl."'>".$vendorName."</a></h3>", $productDescription);
     ?>
     <div class="main">
-        <div itemprop="description"><p><?php echo $productDescription; ?></p></div>
+        <div itemprop="description"><?php echo $productDescription; ?></div>
         <?php if (!empty($attributesData)) : ?>
             <ul class="list">
                 <?php foreach ($attributesData as $attr) : ?>
