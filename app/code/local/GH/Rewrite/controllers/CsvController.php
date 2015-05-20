@@ -3,12 +3,6 @@
 class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 {
 
-	public function preDispatch()
-	{
-		//parent::preDispatch(); //disabled because right now i'm not using formkey in post (testing)
-		return $this;
-	}
-
 	public function importAction()
 	{
 		try {
@@ -16,6 +10,7 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 			$warningEmptyLines = 0;
 			if (isset($_FILES['file'])) {
 				$file = $_FILES['file'];
+
 				//validate csv mimetype
 				if (!in_array($file['type'], $this->_getCsvMimeTypes())) {
 					$this->_exception("Incorrect file type provided");
@@ -88,7 +83,7 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 												$this->_exception("Invalid filter value: %s in line %s",$filters[$i + 1],$num+1);
 											}
 										} else {
-											$this->_exception("Invalid filter type: %s in line %s",$value,$num+1);
+											$this->_exception("Invalid filter type: %s in line %s",$filterType,$num+1);
 										}
 									}
 									if (count($filtersOut)) {
@@ -114,7 +109,12 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 							$this->_getSession()->addWarning($hlp->__("Skipped %s empty lines in provided file",$warningEmptyLines));
 						}
 						//here we should have all csv rows processed to array that we can put directly in db, but we still need to check
-						//if there is no already existing rewrite with same store, category and filters combination
+						//if there is no already existing rewrite with same store, category and filters combination or if there are no duplicates in file
+
+						//check for duplicates in file
+
+
+						//check in db
 						/** @var GH_Rewrite_Model_Url $ghrewriteUrl */
 						$ghRewriteUrlModel = Mage::getModel('ghrewrite/url');
 						/** @var GH_Rewrite_Model_Resource_Url_Collection $ghrewriteUrlCollection */
@@ -202,7 +202,7 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 				return array((int)$value[0],(int)$value[1]);
 			}
 		} else {
-			$this->_exception("File contains invalid category id");
+			$this->_exception("File contains invalid store or category id");
 			return false;
 		}
 	}
