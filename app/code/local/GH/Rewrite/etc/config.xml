@@ -2,9 +2,20 @@
 <config>
 	<modules>
 		<GH_Rewrite>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</GH_Rewrite>
 	</modules>
+	<admin>
+		<routers>
+			<ghrewriteadmin>
+				<use>admin</use>
+				<args>
+					<module>GH_Rewrite</module>
+					<frontName>ghrewrite</frontName>
+				</args>
+			</ghrewriteadmin>
+		</routers>
+	</admin>
 	<global>
 		<helpers>
 			<ghrewrite>
@@ -48,6 +59,15 @@
                 <class>GH_Rewrite_Block</class>
             </ghrewrite>
         </blocks>
+		<translate>
+			<modules>
+				<GH_Rewrite>
+					<files>
+						<default>GH_Rewrite.csv</default>
+					</files>
+				</GH_Rewrite>
+			</modules>
+		</translate>
 	</global>
     <admin>
         <routers>

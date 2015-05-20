@@ -115,4 +115,22 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getListModel() {
 		return Mage::getSingleton('zolagosolrsearch/catalog_product_list');
 	}
+
+	public function getGhUrlRewriteCsvColumns() {
+		return array(
+			'store_id',
+			'category_id',
+			'title',
+			'meta_description',
+			'meta_keywords',
+			'category_name',
+			'text_field_category',
+			'text_field_filter',
+			'listing_title',
+			'url'
+		);
+	}
+
+	const GH_URL_REWRITE_HASH_ID_COLUMN = 'hash_id';
+	const GH_URL_REWRITE_FILTERS_COLUMN = 'filters';
 }
