@@ -149,7 +149,9 @@ class Zolago_Catalog_Vendor_AttributesController
 
         $data['attributeName']  = $label;
         $data['attributeValue'] = $value;
-
+        $data['vendorName'] = $vendor->getVendorName();
+        $data['userEmail'] = $userEmail;
+        $data['userName'] = $userName;
         $this->sendEmailTemplate(
             $userEmail,
             $userName,
@@ -171,6 +173,7 @@ class Zolago_Catalog_Vendor_AttributesController
      * @param $userEmail
      * @param $userName
      * @param $storeEmail
+     * @param $replyEmail
      * @param null $storeName
      * @param $template
      * @param array $templateParams
@@ -202,9 +205,10 @@ class Zolago_Catalog_Vendor_AttributesController
         $emailInfoStore = Mage::getModel('core/email_info');
         if ($storeEmail) {
             $emailInfoStore->addTo($storeEmail, $storeName);
+            $emailInfoStore->setReplyTo($userEmail,$userName);
             $mailer->addEmailInfo($emailInfoStore);
         }
-
+        
         // Set all required params and send emails
         $mailer->setSender($sender);
         $mailer->setStoreId($storeId);
