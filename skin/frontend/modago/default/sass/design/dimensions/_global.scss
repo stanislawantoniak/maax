@@ -51,7 +51,7 @@ section {
 	&.bg-w {
 		border-bottom: none;
 	}
-  .itemprop-brand {
+  h3[itemprop=brand] {
     display: inline;
     font-size: 13px;
     padding: 0;

@@ -147,7 +147,7 @@ if($vendorContext && $vendorContext->getId()) {
     $vendor = Mage::helper('udropship')->getVendor($vendor_id);
     $vendorName = $vendor->getData("vendor_name");
     $vendorUrl = Mage::helper("umicrosite")->getVendorUrl($vendor);
-    $productDescription = str_replace($vendorName, "<h3 class='itemprop-brand'><a itemprop='brand' href='".$vendorUrl."'>".$vendorName."</a></h3>", $productDescription);
+    $productDescription = str_replace($vendorName, "<h3 itemprop='brand'><a  href='".$vendorUrl."'>".$vendorName."</a></h3>", $productDescription);
     ?>
     <div class="main">
         <div itemprop="description"><?php echo $productDescription; ?></div>
