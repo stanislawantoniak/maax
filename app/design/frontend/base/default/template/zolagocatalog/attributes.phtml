@@ -241,8 +241,14 @@ function sendAskValue(text, attrId) {
                 });
             },
             error: function(xhr, ajaxOptions, thrownError) {
+                var response;
+                if (xhr.responseText != '') {
+                    response = xhr.responseText;
+                } else {
+                    response = '<?php echo $_helper->__("Error");?>:'+xhr.status+' '+thrownError;
+                }
                 noty({
-                    text:'<?php echo $_helper->__("Error");?>:'+xhr.status+' '+thrownError,
+                    text:response,
                     type:'error',
                     timeout: 4000
                 });
