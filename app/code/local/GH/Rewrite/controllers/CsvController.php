@@ -112,6 +112,19 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 						//if there is no already existing rewrite with same store, category and filters combination or if there are no duplicates in file
 
 						//check for duplicates in file
+						$ghUrlRewriteHashesReversed = array();
+						$duplicateLines = array();
+						foreach($ghUrlRewriteHashes as $line => $hash) {
+							if(!isset($ghUrlRewriteHashesReversed[$hash])) {
+								$ghUrlRewriteHashesReversed[$hash] = $line;
+							} else {
+								$duplicateLines[] = $ghUrlRewriteHashesReversed[$hash] + 1;
+								$duplicateLines[] = $line + 1;
+							}
+						}
+						if(count($duplicateLines)) { //this means that exacly same hash was calculated from more than one lines in csv - we cant allow that
+							$this->_exception("Provided file contains duplicated lines: %s",implode(', ',array_unique($duplicateLines)));
+						}
 
 
 						//check in db
