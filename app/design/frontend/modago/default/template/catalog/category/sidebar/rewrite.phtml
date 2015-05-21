@@ -1,0 +1,15 @@
+<?php
+$rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+
+$categoryWithFiltersBlock = "";
+if (!empty($rewriteData)) {
+
+    if (isset($rewriteData["text_field_category"]) && !empty($rewriteData["text_field_category"])) {
+        $categoryWithFiltersBlock = $rewriteData["text_field_category"];
+    }
+}
+?>
+
+<div class="sidebar solr_search_facets" id="category_with_filters">
+    <?php echo $categoryWithFiltersBlock; ?>
+</div>

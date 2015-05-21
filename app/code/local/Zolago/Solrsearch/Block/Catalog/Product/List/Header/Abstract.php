@@ -10,7 +10,10 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Header_Abstract
 	 */
 	public function getCategory() {
         $currentCategory = $this->getListModel()->getCurrentCategory();
-        $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+
+        /* @var $ghRewriteHelper GH_Rewrite_Helper_Data  */
+        $ghRewriteHelper = Mage::helper("ghrewrite");
+        $rewriteData = $ghRewriteHelper->getCategoryRewriteData();
         if (!empty($rewriteData)) {
             if (isset($rewriteData['category_name']) && !empty($rewriteData['category_name'])) {
                 $currentCategory->setLongName($rewriteData['category_name']);

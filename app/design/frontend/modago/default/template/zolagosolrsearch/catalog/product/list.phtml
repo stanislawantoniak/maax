@@ -15,8 +15,6 @@ $customerSession = Mage::getSingleton('zolagocustomer/session');
 $_cache = $customerSession->getProductsCache();
 $_products = $_cache['products'];
 
-$rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
-//krumo($rewriteData);
 ?>
 <div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0; top: 0; z-index: 1000000; background: url(/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat transparent;"></div>
 <section id="main" class="">
@@ -25,10 +23,8 @@ $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
 			<div class="col-sm-12">
 				<div class="listing-overlay" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 999; background: #F2F1F0;"></div>
 				<div id="content-main">
-                    <div><h1>listing_title</h1></div>
-                    <div><h5>text_field_category</h5></div>
-					<div class="container-fluid" id="items-product">
-						<div class="row">
+                    <div class="container-fluid" id="items-product">
+                        <div class="row">
 							<div class="col-xs-12 col-sm-12">
 								<div class="row">
 									<div id="grid" class="shuffle--container shuffle--fluid">

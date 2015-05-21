@@ -118,13 +118,27 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function getCategoryRewriteData()
     {
-        $path = ltrim($_SERVER["REQUEST_URI"], "/");
-        $rewrite = Mage::getModel('core/url_rewrite')->load($path, "request_path");
+        //Mage::log($_SERVER, null, "11111.log");
+        $url = $_SERVER["REQUEST_URI"];
+        if(in_array("orbacommon", explode("/", $_SERVER["REQUEST_URI"]))){
+            $url = $_SERVER["HTTP_REFERER"];
+        }
 
-        $url_rewrite_id = $rewrite->getData("url_rewrite_id");
+        $path = pathinfo($url)['basename'];
+
+        $rewrite = Mage::getModel('core/url_rewrite');
+        $collection = $rewrite->getCollection();
+        $collection->addFieldToFilter("is_system", 0);
+        $collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
+        $collection->addFieldToFilter("product_id", array('null' => true));
+        $collection->addFieldToFilter("request_path", array('like' => $path.'%'));
+        $data = $collection->getFirstItem();
+
+        $url_rewrite_id = $data->getData("url_rewrite_id");
 
         $ghUrlRewriteModel = Mage::getModel('ghrewrite/url');
         $rewriteData = $ghUrlRewriteModel->load($url_rewrite_id, "url_rewrite_id")->getData();
+
         return $rewriteData;
     }
 }

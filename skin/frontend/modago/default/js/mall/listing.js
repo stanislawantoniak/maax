@@ -379,6 +379,20 @@ Mall.listing = {
 		if(!isMobile) {
 			contentXS.hide();
 		}
+        var mallListing = Mall.listing;
+        var content = mallListing.getContentBlock();
+
+        var facetsHeight = mallListing.getFilters().height();
+        var categoryWithFilters = mallListing.getCategoryWithFilters();
+        categoryWithFilters
+            .removeClass(mallListing.getFiltersClassMobile())
+            .addClass(mallListing.getFiltersClassDesktop())
+            .css({
+                "left": content.offset().left + 15,
+                "top": (facetsHeight + content.offset().top + 15),
+                'height': ''
+            });
+
 		Mall.listing.setMainSectionHeight();
 	},
 
@@ -1263,6 +1277,11 @@ Mall.listing = {
         this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
 		this.getActive().replaceWith(jQuery(content.active));
 
+        //Category with filters
+        console.log(content);
+        var filtersBottom = jQuery(content.filters_bottom);
+        this.getCategoryWithFilters().replaceWith(filtersBottom);
+
 		// Finally product
 		this.replaceProducts(content);
 
@@ -1471,6 +1490,9 @@ Mall.listing = {
 	getFilters: function(){
 		return jQuery("#solr_search_facets");
 	},
+    getCategoryWithFilters: function(){
+        return jQuery("#category_with_filters");
+    },
 
 	/**
 	 * Return current mobile filters state. Is mobile or not.
@@ -1608,6 +1630,7 @@ Mall.listing = {
 	positionFilters: function() {
 		var self = Mall.listing;
 		var filters = self.getFilters();
+        var categoryWithFilters = self.getCategoryWithFilters();
 		if(!filters.length) {
 			return;
 		}
@@ -1620,6 +1643,14 @@ Mall.listing = {
 					left: '',
 					height: jQuery(window).height()
 				});
+            var facetsHeight = filters.height();
+            categoryWithFilters
+                .removeClass(self.getFiltersClassDesktop())
+                .addClass(self.getFiltersClassMobile())
+                .css({
+                "left": "",
+                "top": (facetsHeight  + 15)
+            });
 		} else {
 			var content = self.getContentBlock();
 			filters
@@ -1630,6 +1661,15 @@ Mall.listing = {
 					'left': content.offset().left + 15,
 					'height': ''
 				});
+            var facetsHeight = filters.height();
+            categoryWithFilters
+                .removeClass(self.getFiltersClassMobile())
+                .addClass(self.getFiltersClassDesktop())
+                .css({
+                "left": content.offset().left + 15,
+                "top": (facetsHeight + content.offset().top + 15),
+                    'height': ''
+            });
 
 		}
 		self.setMainSectionHeight();
@@ -1641,7 +1681,8 @@ Mall.listing = {
 			height = '';
 		if(!this.isDisplayMobile()) {
 			var filters = Mall.listing.getFilters();
-			height = (filters.height() + 50) + 'px';
+            var categoryWithFiltersBlock = Mall.listing.getCategoryWithFilters();
+            height = (filters.height() + categoryWithFiltersBlock.height() + 50) + 'px';
 		}
 		mainSection.css('min-height',height);
 	},
