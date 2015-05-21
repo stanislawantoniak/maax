@@ -127,7 +127,12 @@ class Zolago_Catalog_Vendor_AttributesController
         $coreHelper = Mage::helper('core');
 
         $attributeId = $this->getRequest()->getParam('attrId');
-        $value     = $coreHelper->escapeHtml($this->getRequest()->getParam('value'));
+        $value     = trim($coreHelper->escapeHtml($this->getRequest()->getParam('value')));
+        if (empty($value)) {
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->getResponse()->setBody(Mage::helper('zolagocatalog')->__('No suggested value'));
+            return;
+        }
         $storeId   = $this->_getStore();
         $store     = Mage::app()->getStore($storeId);
         $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
@@ -149,7 +154,9 @@ class Zolago_Catalog_Vendor_AttributesController
 
         $data['attributeName']  = $label;
         $data['attributeValue'] = $value;
-
+        $data['vendorName'] = $vendor->getVendorName();
+        $data['userEmail'] = $userEmail;
+        $data['userName'] = $userName;
         $this->sendEmailTemplate(
             $userEmail,
             $userName,
@@ -161,8 +168,7 @@ class Zolago_Catalog_Vendor_AttributesController
             null
         );
 
-        echo Mage::helper('zolagocatalog')->__('For attribute %s value %s was suggested', $label, $value);
-        die();
+        $this->getResponse()->setBody(Mage::helper('zolagocatalog')->__('For attribute %s value %s was suggested', $label, $value));
     }
 
     /**
@@ -171,6 +177,7 @@ class Zolago_Catalog_Vendor_AttributesController
      * @param $userEmail
      * @param $userName
      * @param $storeEmail
+     * @param $replyEmail
      * @param null $storeName
      * @param $template
      * @param array $templateParams
@@ -202,9 +209,10 @@ class Zolago_Catalog_Vendor_AttributesController
         $emailInfoStore = Mage::getModel('core/email_info');
         if ($storeEmail) {
             $emailInfoStore->addTo($storeEmail, $storeName);
+            $emailInfoStore->setReplyTo($userEmail,$userName);
             $mailer->addEmailInfo($emailInfoStore);
         }
-
+        
         // Set all required params and send emails
         $mailer->setSender($sender);
         $mailer->setStoreId($storeId);

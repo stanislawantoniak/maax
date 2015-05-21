@@ -46,16 +46,17 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                <label class="col-md-2 control-label" for="send_attribute_label"><?php echo $_helper->__('Attribute');?></label>
+                <label class="col-md-4 control-label" for="send_attribute_label"><?php echo $_helper->__('Attribute');?>:</label>
                 <input type="hidden" class="form-control" id="new_attribute_id"/>
-                <div class="col-md-10" id="send_attribute_label">
+                <div class="col-md-8" id="send_attribute_label">
 
                 </div>
                 </div>
+                <br/>
                 <div class="row">
-                <label class="col-md-2 control-label" for="send_attribute_value"><?php echo $_helper->__('New value');?></label>
-                <div class="col-md-10" id="send_attribute_value">
-                    <input type="text" class="form-control" id="new_attribute_value"/>
+                <label class="col-md-4 control-label" for="send_attribute_value"><?php echo $_helper->__('New value');?>:</label>
+                <div class="col-md-8" id="send_attribute_value">
+                    <textarea class="form-control" id="new_attribute_value"></textarea>
                 </div>
                 </div>
             </div>
@@ -240,8 +241,14 @@ function sendAskValue(text, attrId) {
                 });
             },
             error: function(xhr, ajaxOptions, thrownError) {
+                var response;
+                if (xhr.responseText != '') {
+                    response = xhr.responseText;
+                } else {
+                    response = '<?php echo $_helper->__("Error");?>:'+xhr.status+' '+thrownError;
+                }
                 noty({
-                    text:'<?php echo $_helper->__("Error");?>:'+xhr.status+' '+thrownError,
+                    text:response,
                     type:'error',
                     timeout: 4000
                 });
