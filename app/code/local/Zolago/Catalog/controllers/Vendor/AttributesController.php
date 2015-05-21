@@ -201,15 +201,16 @@ class Zolago_Catalog_Vendor_AttributesController
         $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
 
         /** @var Mage_Core_Model_Email_Info $emailInfoVendor */
-        $emailInfoVendor = Mage::getModel('core/email_info');
-        $emailInfoVendor->addTo($userEmail, $userName);
-        $mailer->addEmailInfo($emailInfoVendor);
+//        $emailInfoVendor = Mage::getModel('core/email_info');
+//        $emailInfoVendor->addTo($userEmail, $userName);
+//        $mailer->addEmailInfo($emailInfoVendor);
 
         /** @var Mage_Core_Model_Email_Info $emailInfoStore */
         $emailInfoStore = Mage::getModel('core/email_info');
         if ($storeEmail) {
             $emailInfoStore->addTo($storeEmail, $storeName);
             $emailInfoStore->setReplyTo($userEmail,$userName);
+            $emailInfoStore->addBcc($userEmail,$userName);
             $mailer->addEmailInfo($emailInfoStore);
         }
         
