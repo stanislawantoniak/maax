@@ -44,7 +44,7 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
             $emailInfo = array_pop($this->_emailInfos);
             // Handle "Bcc" recepients of the current email
             $emailTemplate->addBcc($emailInfo->getBccEmails());
-            $emailTemplate->setReplyTo($emailinfo->getReplyTo());
+            $emailTemplate->setReplyTo($emailInfo->getReplyTo());
             // Set required design parameters and delegate email sending to Mage_Core_Model_Email_Template
             $emailTemplate->setDesignConfig(array('area' => 'frontend', 'store' => $this->getStoreId()))
                 ->sendTransactional(
