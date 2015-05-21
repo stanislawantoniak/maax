@@ -226,6 +226,7 @@ function sendAskValue(text, attrId) {
         var params = {};
         params.attrId = attrId;
         params.value = text;
+		params.setId = jQuery("#attribute_set_select").val();
         jQuery.ajax({
             url:'/udprod/vendor_attributes/ask_value',
             method: 'POST',
