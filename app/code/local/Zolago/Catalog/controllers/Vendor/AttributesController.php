@@ -133,6 +133,8 @@ class Zolago_Catalog_Vendor_AttributesController
             $this->getResponse()->setBody(Mage::helper('zolagocatalog')->__('No suggested value'));
             return;
         }
+        $setId = $this->getRequest()->getParam('setId');
+        $attributeSet = Mage::getModel('eav/entity_attribute_set')->load($setId);
         $storeId   = $this->_getStore();
         $store     = Mage::app()->getStore($storeId);
         $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
@@ -151,7 +153,8 @@ class Zolago_Catalog_Vendor_AttributesController
         $storeEmail  = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_cc_store', $store);
         $storeName   = $store->getFrontendName();
         $template    = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_template', $store);
-
+        $data['attributeSetName'] = $attributeSet->getAttributeSetName();
+        $data['attributeCode'] = $attribute->getAttributeCode();
         $data['attributeName']  = $label;
         $data['attributeValue'] = $value;
         $data['vendorName'] = $vendor->getVendorName();
