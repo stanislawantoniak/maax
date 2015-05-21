@@ -133,4 +133,6 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	const GH_URL_REWRITE_HASH_ID_COLUMN = 'hash_id';
 	const GH_URL_REWRITE_FILTERS_COLUMN = 'filters';
+
+	const GH_URL_REWRITE_REDIRECTION_SUFFIX = '_redirect';
 }
