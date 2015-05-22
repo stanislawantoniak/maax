@@ -380,11 +380,11 @@ Mall.listing = {
 		if(!isMobile) {
 			contentXS.hide();
 		}
-        var mallListing = Mall.listing;
-        var content = mallListing.getContentBlock();
+        var mallListing = Mall.listing,
+	        categoryWithFilters = mallListing.getCategoryWithFilters(),
+	        facetsHeight;
+        content = mallListing.getContentBlock();
 
-        var categoryWithFilters = mallListing.getCategoryWithFilters();
-        var facetsHeight;
         if(!isMobile) {
             facetsHeight = mallListing.getFilters().height();
             categoryWithFilters
@@ -1603,9 +1603,10 @@ Mall.listing = {
 	},
 
 	positionFilters: function() {
-		var self = Mall.listing;
-		var filters = self.getFilters();
-        var categoryWithFilters = self.getCategoryWithFilters();
+		var self = Mall.listing,
+			filters = self.getFilters(),
+			categoryWithFilters = self.getCategoryWithFilters(),
+			facetsHeight;
 		if(!filters.length) {
 			return;
 		}
@@ -1618,7 +1619,7 @@ Mall.listing = {
 					left: '',
 					height: jQuery(window).height()
 				});
-            var facetsHeight = filters.find("[name=searchFacets]").height();
+            facetsHeight = filters.find("[name=searchFacets]").height();
             categoryWithFilters
                 .removeClass(self.getFiltersClassDesktop())
                 .addClass(self.getFiltersClassMobile())
@@ -1636,7 +1637,7 @@ Mall.listing = {
 					'left': content.offset().left + 15,
 					'height': ''
 				});
-            var facetsHeight = filters.height();
+            facetsHeight = filters.height();
             categoryWithFilters
                 .removeClass(self.getFiltersClassMobile())
                 .addClass(self.getFiltersClassDesktop())
