@@ -143,20 +143,12 @@ if($vendorContext && $vendorContext->getId()) {
     <?php $attributesData = $this->getAdditionalDataDetailed(true,false); ?>
     <?php
     $productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
-//
-//    $vendor = Mage::helper('udropship')->getVendor($vendor_id);
-//    $vendorName = $vendor->getData("vendor_name");
-//    $vendorUrl = Mage::helper("umicrosite")->getVendorUrl($vendor);
-//    $productDescription = str_replace($vendorName, "<h3 itemprop='brand'><a  href='".$vendorUrl."'>".$vendorName."</a></h3>", $productDescription);
-//
-//    $brandShopId = $_product->getData('brandshop');
-//    krumo($brandShopId);
-//    if($vendor_id !== $brandShopId){
-//        $brandShop = Mage::helper('udropship')->getVendor($brandShopId);
-//        $brandShopName = $brandShop->getData("vendor_name");
-//        $brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
-        //$productDescription = str_replace($brandShopName, "<h3 itemprop='brand'><a  href='".$brandShopUrl."'>".$brandShopName."</a></h3>", $productDescription);
-//    }
+
+    $brandShopProductId = $_product->getData('brandshop');
+
+    $brandShop = Mage::helper('udropship')->getVendor($brandShopProductId);
+    $brandShopName = $brandShop->getData("vendor_name");
+    $brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
 
     ?>
     <div class="main">
@@ -174,14 +166,10 @@ if($vendorContext && $vendorContext->getId()) {
                         $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
                         $vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
                         $brand = $vendorsCollection->getFirstItem();
-
                         $brandShopId = $brand->getId();
-                        $brandShop = Mage::helper('udropship')->getVendor($brandShopId);
-                        $brandShopName = $brandShop->getData("vendor_name");
-                        $brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
                         ?>
 
-                        <?php if(!empty($brandShopName)): ?>
+                        <?php if(($brandShopProductId == $brandShopId) && !empty($brandShopName)): ?>
                             <h3 itemprop="brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
                         <?php else: ?>
                         <?php echo $this->escapeHtml($attr['value']); ?>
