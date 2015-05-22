@@ -14,7 +14,6 @@ $_productImageUrl = '';
 $customerSession = Mage::getSingleton('zolagocustomer/session');
 $_cache = $customerSession->getProductsCache();
 $_products = $_cache['products'];
-Mage::log('products count: '.count($_products));
 ?>
 <div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0; top: 0; z-index: 1000000; background: url(/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat transparent;"></div>
 <section id="main" class="">

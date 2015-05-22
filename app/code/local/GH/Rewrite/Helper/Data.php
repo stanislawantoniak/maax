@@ -49,7 +49,8 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 		if(isset($params['sort']) &&
 			(
 				($params['sort'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_ORDER && $listingModel->isCategoryMode()) ||
-				($params['sort'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_ORDER && $listingModel->isSearchMode())
+				($params['sort'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_ORDER && $listingModel->isSearchMode()) ||
+				!$params['sort']
 			)
 		) {
 			unset($params['sort']);
@@ -60,7 +61,8 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 			isset($params['dir']) &&
 			(
 				($params['dir'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_DIR && $listingModel->isCategoryMode()) ||
-				($params['dir'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_DIR && $listingModel->isSearchMode())
+				($params['dir'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_DIR && $listingModel->isSearchMode()) ||
+				!$params['dir']
 			)
 		) {
 			unset($params['dir']);
@@ -76,6 +78,22 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		if(isset($params['label'])) {
 			unset($params['label']);
+		}
+
+		if(isset($params['page'])) {
+			unset($params['page']);
+		}
+
+		if(isset($params['_'])) {
+			unset($params['_']);
+		}
+
+		if(isset($params['rows'])) {
+			unset($params['rows']);
+		}
+
+		if(isset($params['start'])) {
+			unset($params['start']);
 		}
 
 		if($listingModel->isCategoryMode()) {
