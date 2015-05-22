@@ -40,9 +40,17 @@ class GH_Rewrite_Adminhtml_GhrewriteController extends Mage_Adminhtml_Controller
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
         } else {
             try {
+	            /** @var GH_Rewrite_Helper_Data $hlp */
+	            $hlp = Mage::helper('ghrewrite');
 
                 foreach ($ids as $id) {
                     $row = Mage::getModel('ghrewrite/url')->load($id);
+	                /** @var Mage_Core_Model_Resource_Url_Rewrite_Collection $rewrite */
+	                $rewrite = Mage::getModel('core/url_rewrite')->getCollection();
+	                $rewrite->addFieldToFilter('id_path',array("in"=>array($row['url'],$row['url'].$hlp::GH_URL_REWRITE_REDIRECTION_SUFFIX)));
+	                foreach($rewrite as $rewriteToRemove) {
+		                $rewriteToRemove->delete();
+	                }
                     $row->delete();
                 }
 
@@ -67,16 +75,89 @@ class GH_Rewrite_Adminhtml_GhrewriteController extends Mage_Adminhtml_Controller
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
         } else {
             try {
+	            $new = 0;
+	            $updated = 0;
+
+	            $coreUrlRewriteColumns = array(
+		            'url_rewrite_id',
+		            'store_id',
+		            'id_path',
+		            'request_path',
+		            'target_path',
+		            'is_system',
+		            'options'
+	            );
+
 
                 foreach ($ids as $id) {
-                    $row = Mage::getModel('ghrewrite/url')->load($id);
-                    //TODO refs#1134
-                    Mage::getSingleton('adminhtml/session')->addSuccess('[dev] url_id: '.$id);// remove this line
+	                $ghUrl = Mage::getModel('ghrewrite/url')->load($id);
+
+	                /** @var Zolago_Catalog_Model_Category $category */
+	                $category = Mage::getModel('zolagocatalog/category')->load($ghUrl->getCategoryId());
+
+
+	                //create http get string with filters
+	                $getFiltersString = urldecode(http_build_query(array('fq' => json_decode($ghUrl['filters'],1))));
+
+	                //create rewrite or update exiting one
+	                /** @var Mage_Core_Model_Url_Rewrite $rewrite */
+	                $rewrite = Mage::getModel('core/url_rewrite');
+	                $oldIdPath = false;
+	                if($ghUrl->getData('url_rewrite_id')) {
+		                $updated++;
+		                $rewriteOld = Mage::getModel('core/url_rewrite')->load($ghUrl->getData('url_rewrite_id'));
+		                if($rewriteOld->getId()) {
+			                $rewrite = $rewriteOld;
+			                $oldIdPath = $rewrite->getIdPath();
+		                }
+	                } else {
+		                $new++;
+	                }
+	                $rewriteTmp = array();
+	                if($rewrite->getId()) {
+		                $rewriteTmp[$coreUrlRewriteColumns[0]] = $rewrite->getId();
+	                }
+	                $rewriteTmp[$coreUrlRewriteColumns[1]] = $ghUrl['store_id'];
+	                $rewriteTmp[$coreUrlRewriteColumns[2]] = $ghUrl['url'];
+	                $rewriteTmp[$coreUrlRewriteColumns[3]] = $ghUrl['url'];
+	                $rewriteTmp[$coreUrlRewriteColumns[4]] = 'catalog/category/view/id/'.$ghUrl['category_id'].'?'.$getFiltersString;
+	                $rewriteTmp[$coreUrlRewriteColumns[5]] = 0;
+	                $rewrite->setData($rewriteTmp);
+	                $rewrite->save();
+
+	                $ghUrl->setData('url_rewrite_id',$rewrite->getId());
+	                $ghUrl->save();
+
+	                //create redirect or update existing one
+	                /** @var Mage_Core_Model_Url_Rewrite $redirect */
+	                $redirect = Mage::getModel('core/url_rewrite');
+	                if($oldIdPath) {
+		                $updated++;
+		                $redirectCollection = $redirect->getCollection()->addFieldToFilter('id_path',$oldIdPath.$rewriteHelper::GH_URL_REWRITE_REDIRECTION_SUFFIX)->load();
+		                $redirectOld = $redirectCollection->getFirstItem();
+		                if($redirectOld->getId()) {
+			                $redirect = $redirectOld;
+		                }
+	                } else {
+		                $new++;
+	                }
+	                $redirectTmp = array();
+	                if($redirect->getId()) {
+		                $redirectTmp[$coreUrlRewriteColumns[0]] = $redirect->getId();
+	                }
+	                $redirectTmp[$coreUrlRewriteColumns[1]] = $ghUrl['store_id'];
+	                $redirectTmp[$coreUrlRewriteColumns[2]] = $ghUrl['url'].$rewriteHelper::GH_URL_REWRITE_REDIRECTION_SUFFIX;
+	                $redirectTmp[$coreUrlRewriteColumns[3]] = $category->getUrlPath().'?'.$getFiltersString;
+	                $redirectTmp[$coreUrlRewriteColumns[4]] = $ghUrl['url'];
+	                $redirectTmp[$coreUrlRewriteColumns[5]] = 0;
+	                $redirectTmp[$coreUrlRewriteColumns[6]] = 'RP'; //redirect permanently (301) - read from const
+	                $redirect->setData($redirectTmp);
+	                $redirect->save();
                 }
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     $rewriteHelper->__(
-                        'Total of %d record(s) were successfully generated', count($ids)
+	                    "Total of generated rewrites: %d<br />New: %d<br />Updated: %d", $new+$updated, $new, $updated
                     )
                 );
             } catch (Exception $e) {

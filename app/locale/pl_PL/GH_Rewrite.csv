@@ -1,6 +1,6 @@
 "GH Rewrite","Przekierowania SEO GH"
 "GH URL Rewrite Management","Zarządzanie przekierowaniami SEO GH"
-"Total of %d record(s) were successfully generated","Sumarycznie wygenerowano %d przekierowań"
+"Total of generated rewrites: %d<br />New: %d<br />Updated: %d","W sumie wygenerowanych przekierowań: %d<br />Nowe: %d<br />Zaktualizowane: %d"
 "Load CSV file","Wczytaj plik CSV"
 "Are you sure?","Czy na pewno?"
 "Store ID","Store ID"

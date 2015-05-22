@@ -159,4 +159,6 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $rewriteData;
     }
+
+	const GH_URL_REWRITE_REDIRECTION_SUFFIX = '_redirect';
 }
