@@ -1251,7 +1251,6 @@ Mall.listing = {
 
         //Category with filters
         var categoryWithFilters = jQuery(content.category_with_filters);
-        console.log(content.category_with_filters);
         this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
 		// Finally product
@@ -1379,6 +1378,16 @@ Mall.listing = {
 		e.preventDefault();
 		var self = Mall.listing;
 		self.getFilters().show();
+
+        var facetsHeight = self.getFilters().find("[name=searchFacets]").height();
+        self.getCategoryWithFilters()
+            .removeClass(self.getFiltersClassDesktop())
+            .addClass(self.getFiltersClassMobile())
+            .css({
+                "left": "",
+                "top": facetsHeight
+            });
+
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
@@ -1605,10 +1614,9 @@ Mall.listing = {
 	},
 
 	positionFilters: function() {
-		var self = Mall.listing,
-			filters = self.getFilters(),
-			categoryWithFilters = self.getCategoryWithFilters(),
-			facetsHeight;
+		var self = Mall.listing;
+		var filters = self.getFilters();
+        var categoryWithFilters = self.getCategoryWithFilters();
 		if(!filters.length) {
 			return;
 		}
@@ -1621,14 +1629,16 @@ Mall.listing = {
 					left: '',
 					height: jQuery(window).height()
 				});
-            facetsHeight = filters.find("[name=searchFacets]").height();
+            var facetsHeight = filters.find("[name=searchFacets]").height();
+
             categoryWithFilters
                 .removeClass(self.getFiltersClassDesktop())
                 .addClass(self.getFiltersClassMobile())
                 .css({
                 "left": "",
-                "top": (facetsHeight)
+                "top": facetsHeight
             });
+
 		} else {
 			var content = self.getContentBlock();
 			filters
@@ -1639,7 +1649,7 @@ Mall.listing = {
 					'left': content.offset().left + 15,
 					'height': ''
 				});
-            facetsHeight = filters.height();
+            var facetsHeight = filters.height();
             categoryWithFilters
                 .removeClass(self.getFiltersClassMobile())
                 .addClass(self.getFiltersClassDesktop())
