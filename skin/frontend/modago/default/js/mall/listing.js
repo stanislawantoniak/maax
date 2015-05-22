@@ -226,7 +226,7 @@ Mall.listing = {
 				    setTimeout(function() {
 					    Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
 					    Mall.listing.hideListingOverlay();
-				    }, 200);
+				    }, 3000);
 			    } else {
 				    Mall.listing.hideListingOverlay();
 			    }
