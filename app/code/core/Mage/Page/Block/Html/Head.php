@@ -399,7 +399,6 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
      */
     public function getTitle()
     {
-        Mage::log( $this->_data, null, "hh.log");
         if (empty($this->_data['title'])) {
             $this->_data['title'] = $this->getDefaultTitle();
         }
