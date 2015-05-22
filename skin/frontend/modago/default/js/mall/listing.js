@@ -119,16 +119,6 @@ Mall.listing = {
 	_ajaxQueueCache: {},
 
 	/**
-	 * Holds current ajax history position
-	 */
-	_ajaxHistoryCurrent: 0,
-
-	/**
-	 * Holds ajax history keys to be loaded by value above
-	 */
-	_ajaxHistoryKeys: [],
-
-	/**
 	 * @type Array
 	 */
 	_init_products: [],
@@ -280,10 +270,13 @@ Mall.listing = {
 				products: this.getInitProducts(),
 				url: document.location.href
 			},
-			ajaxKey = this.getAjaxHistoryKey(this.getQueryParamsAsArray()),
+			ajaxData = this.getQueryParamsAsArray(),
+			ajaxKey = this.getAjaxHistoryKey(ajaxData),
 			title = document.title;
 
-		window.history.replaceState({title: title, ajaxKey: ajaxKey},title,document.location.href);
+		if(this.getPushStateSupport()) {
+			window.history.replaceState({title: title, ajaxKey: ajaxKey, ajaxData: ajaxData}, title, document.location.href);
+		}
 
 		// Bind to cache
 		this._ajaxCache[ajaxKey] = {
