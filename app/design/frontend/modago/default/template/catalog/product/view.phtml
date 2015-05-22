@@ -169,7 +169,7 @@ if($vendorContext && $vendorContext->getId()) {
                         $brandShopId = $brand->getId();
                         ?>
 
-                        <?php if(($brandShopProductId == $brandShopId) && !empty($brandShopName)): ?>
+                        <?php if($brandShopProductId == $brandShopId): ?>
                             <h3 itemprop="brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
                         <?php else: ?>
                         <?php echo $this->escapeHtml($attr['value']); ?>
