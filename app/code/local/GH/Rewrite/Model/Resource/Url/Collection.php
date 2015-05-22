@@ -18,5 +18,13 @@
                 array('url_rewrite.request_path','url_rewrite.target_path','main_table.category_id','url_rewrite.store_id'));
                                                                      
     }
+
+	 public function loadByHashId($hashes) {
+		 if(!is_array($hashes)){
+			 $hashes = array($hashes);
+		 }
+		 $this->addFieldToFilter("hash_id", array("in" => $hashes));
+		 return $this;
+	 }
  }
  

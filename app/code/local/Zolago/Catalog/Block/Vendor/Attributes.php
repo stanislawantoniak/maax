@@ -16,6 +16,7 @@ class Zolago_Catalog_Block_Vendor_Attributes extends Mage_Core_Block_Template
          foreach ($attributeSetCollection as $id=>$item) {
              $list[$item->getId()] = $item->getAttributeSetName();
          }
+         asort($list);
          return $list;
      }
 }
