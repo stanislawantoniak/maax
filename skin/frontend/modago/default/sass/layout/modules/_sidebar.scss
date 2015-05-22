@@ -211,9 +211,13 @@
 #category_with_filters {
   display: none;
   font-size: 14px;
-  padding: 10px;
   position: absolute;
   text-align: left;
+  .section {
+    .content {
+      display: block;
+    }
+  }
   &.filters-desktop {
     @include min-screen($screen-sm-min) {
       display: block !important;

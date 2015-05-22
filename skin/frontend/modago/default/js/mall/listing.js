@@ -1278,9 +1278,8 @@ Mall.listing = {
 		this.getActive().replaceWith(jQuery(content.active));
 
         //Category with filters
-        console.log(content);
-        var filtersBottom = jQuery(content.filters_bottom);
-        this.getCategoryWithFilters().replaceWith(filtersBottom);
+        var categoryWithFilters = jQuery(content.category_with_filters);
+        this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
 		// Finally product
 		this.replaceProducts(content);
