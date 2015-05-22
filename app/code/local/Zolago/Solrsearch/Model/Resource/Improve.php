@@ -306,24 +306,26 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 // proof of concept - TODO: REMOVE IT
 /********************************/
         
-        $newSelect = $adapter->select();
-        $newSelect->from(
-            array('category'=>$this->getTable("catalog/category")),
-            array(
-                'entity_id',
-                'path',
-            ));
         $conceptCategories = Mage::app()->getStore($storeId)->getConfig('udropship/vendor/concept_categories');
-        $newSelect->where('entity_id in (?)',$conceptCategories);
+        if ($conceptCategories) {
+            $newSelect = $adapter->select();
+            $newSelect->from(
+                array('category'=>$this->getTable("catalog/category")),
+                array(
+                    'entity_id',
+                    'path',
+                ));
+            $newSelect->where('entity_id in (?)',$conceptCategories);
         
-        $newCategories = $adapter->fetchAll($newSelect);
-        foreach ($allIds as $id) {
-            foreach ($newCategories as $row) {
-                $categories[] = array (
-                    'product_id' => $id,
-                    'category_id' => $row['entity_id'],
-                    'path' => $row['path'],
-                );
+            $newCategories = $adapter->fetchAll($newSelect);
+            foreach ($allIds as $id) {
+                foreach ($newCategories as $row) {
+                    $categories[] = array (
+                        'product_id' => $id,
+                        'category_id' => $row['entity_id'],
+                        'path' => $row['path'],
+                    );
+                }
             }
         }
         
