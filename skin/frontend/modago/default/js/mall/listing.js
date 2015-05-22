@@ -382,16 +382,29 @@ Mall.listing = {
         var mallListing = Mall.listing;
         var content = mallListing.getContentBlock();
 
-        var facetsHeight = mallListing.getFilters().height();
         var categoryWithFilters = mallListing.getCategoryWithFilters();
-        categoryWithFilters
-            .removeClass(mallListing.getFiltersClassMobile())
-            .addClass(mallListing.getFiltersClassDesktop())
-            .css({
-                "left": content.offset().left + 15,
-                "top": (facetsHeight + content.offset().top + 15),
-                'height': ''
-            });
+        var facetsHeight;
+        if(!isMobile) {
+            facetsHeight = mallListing.getFilters().height();
+            categoryWithFilters
+                .removeClass(mallListing.getFiltersClassMobile())
+                .addClass(mallListing.getFiltersClassDesktop())
+                .css({
+                    "left": content.offset().left + 15,
+                    "top": (facetsHeight + content.offset().top + 15),
+                    'height': ''
+                });
+        } else {
+            facetsHeight = mallListing.getFilters().find("[name=searchFacets]").height();
+            categoryWithFilters
+                .removeClass(mallListing.getFiltersClassDesktop())
+                .addClass(mallListing.getFiltersClassMobile())
+                .css({
+                    "left": "",
+                    "top": (facetsHeight)
+                });
+        }
+
 
 		Mall.listing.setMainSectionHeight();
 	},
@@ -1642,13 +1655,13 @@ Mall.listing = {
 					left: '',
 					height: jQuery(window).height()
 				});
-            var facetsHeight = filters.height();
+            var facetsHeight = filters.find("[name=searchFacets]").height();
             categoryWithFilters
                 .removeClass(self.getFiltersClassDesktop())
                 .addClass(self.getFiltersClassMobile())
                 .css({
                 "left": "",
-                "top": (facetsHeight  + 15)
+                "top": (facetsHeight)
             });
 		} else {
 			var content = self.getContentBlock();

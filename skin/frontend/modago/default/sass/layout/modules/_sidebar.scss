@@ -213,6 +213,7 @@
   font-size: 14px;
   position: absolute;
   text-align: left;
+  margin-top: 10px;
   .section {
     .content {
       display: block;
@@ -229,8 +230,13 @@
     left: -240px;
     overflow-y: auto;
     width: 240px;
-    display: none;
+    display: block;
+    margin-top: 0px;
+    .solr_search_facets {
+      width: 240px;
+    }
   }
+
 }
 #solr_search_facets {
 	top: 300px;
