@@ -2,6 +2,18 @@
 /** @var $this Zolago_Solrsearch_Block_Active */
 $q = array();
 $filterQuery = $this->getFilterQuery();
+$rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+$filterLabel = $this->__('Currently Shopping:');
+$categoryWithFiltersTitle = "";
+if(!empty($rewriteData)){
+    if(isset($rewriteData["text_field_filter"]) && !empty($rewriteData["text_field_filter"])){
+        $filterLabel = $rewriteData["text_field_filter"];
+    }
+    if(isset($rewriteData["listing_title"]) && !empty($rewriteData["listing_title"])){
+        $categoryWithFiltersTitle = $rewriteData["listing_title"];
+    }
+}
+
 ?>
 <?php if(!$this->isContentMode()): ?>
 <div id="active-filters">
@@ -11,7 +23,7 @@ $filterQuery = $this->getFilterQuery();
                 <div class="col-sm-12">
                     <?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
                         <dl class="clearfix" >
-                            <dt><?php echo $this->__('Currently Shopping:') ?></dt>
+                            <dt><?php echo $filterLabel; ?></dt>
                             <dd>
                                 <?php foreach ($filterQuery as $key => $values): ?>
                                     <?php foreach ($values as $v): ?>
@@ -76,6 +88,19 @@ $filterQuery = $this->getFilterQuery();
         </div>
     </div>
 </div>
+    <?php if (!empty($categoryWithFiltersTitle)): ?>
+        <div class="category-with-filters-description" style="margin-left: -15px;padding-bottom: 15px;">
+            <div class="wrapp-section bg-w">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <?php echo $categoryWithFiltersTitle; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 <?php else: ?>
     <div style="display: block;width: 100%; height:15px" class="hidden-xs"></div>
 <?php endif; ?>
