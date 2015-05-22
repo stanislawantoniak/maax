@@ -136,7 +136,6 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function getCategoryRewriteData()
     {
-        //Mage::log($_SERVER, null, "11111.log");
         $url = $_SERVER["REQUEST_URI"];
         if(in_array("orbacommon", explode("/", $_SERVER["REQUEST_URI"]))){
             $url = $_SERVER["HTTP_REFERER"];
