@@ -21,8 +21,9 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	 */
 	public function get_blocksAction() {
 		$this->_initCategory();
-		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
+
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 		
 		$layout = $this->getLayout();
 		$design = Mage::getDesign();
@@ -42,7 +43,25 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$customerSession = Mage::getSingleton('zolagocustomer/session');
 		$customerSession->addProductsToCache($products);
 
+		$params = $this->getRequest()->getParams();
+		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
+		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
+		$rewriteHelper = Mage::helper('ghrewrite');
+		$rewriteHelper->clearParams($params);
+		$rewriteHelper->sortParams($params);
+
+		/** @var Zolago_Catalog_Model_Category $category */
+		$category = Mage::registry('current_category');
+		$path = $category->getUrlPath();
+
+		$url = $rewriteHelper->prepareRewriteUrl($path,$categoryId,$params);
+		if(!$url) {
+			$query = http_build_query($params);
+			$url = Mage::getBaseUrl() . $path . ($query ? "?".$query : "");
+		}
+
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
+			"url"			=> $url,
 			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
 			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
 			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
