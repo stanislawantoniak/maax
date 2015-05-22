@@ -40,7 +40,7 @@
     ul {
       li.sort-criteria-selector {
         @include max-screen($screen-sm-to-smmd-max) {
-          margin-right: -11px;
+          margin-right: 0px;
         }
       }
     }
