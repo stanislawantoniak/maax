@@ -261,6 +261,7 @@ Mall.listing = {
 				filters: this.getFilters().prop("outerHTML"),
 				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
+                category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
 				header: this.getHeader().prop("outerHTML"),
 				total: this.getTotal(),
 				rows: this.getCurrentVisibleItems(),
@@ -1250,6 +1251,7 @@ Mall.listing = {
 
         //Category with filters
         var categoryWithFilters = jQuery(content.category_with_filters);
+        console.log(content.category_with_filters);
         this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
 		// Finally product

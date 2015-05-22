@@ -33,7 +33,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		$design->setPackageName($packageName);
 		$design->setTheme($theme ? $theme : "default");
-        		
+
 		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 		
 		// Product 
@@ -61,6 +61,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$query = http_build_query($params);
 			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
 		}
+
+        Mage::register("category_with_filters", $url);
 
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,
