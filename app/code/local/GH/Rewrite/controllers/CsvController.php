@@ -51,9 +51,9 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 							$attributeValues = array();
 							foreach($storesIds as $storeId) {
 								foreach ($attribute->setStoreId($storeId)->getSource()->getAllOptions(false) as $values) {
-									$attributeValues[] = mb_strtolower($values['label']);
+									$attributeValues[] = $values['label'];
 								}
-								$validationData[$storeId][$filter->getCategoryId()][mb_strtolower($attribute->getAttributeCode())] = $attributeValues;
+								$validationData[$storeId][$filter->getCategoryId()][$attribute->getAttributeCode()] = $attributeValues;
 							}
 						}
 
@@ -67,7 +67,7 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 									if (isset($ghUrlRewriteColumns[$i])) {
 										$ghUrlRewrite[$num][$ghUrlRewriteColumns[$i]] = ($i < 2) ? (int)$value : $value; //assign fields that are available in gh_rewrite_url table
 									} else {
-										$filters[] = mb_strtolower($value); //assign filters
+										$filters[] = $value; //assign filters
 									}
 								}
 

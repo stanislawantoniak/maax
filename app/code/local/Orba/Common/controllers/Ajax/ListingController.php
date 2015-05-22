@@ -52,12 +52,14 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
-		$path = $category->getUrlPath();
 
-		$url = $rewriteHelper->prepareRewriteUrl($path,$categoryId,$params);
-		if(!$url) {
+		$url = false;
+		if($type == "category") {
+			$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
+		}
+		if (!$url) {
 			$query = http_build_query($params);
-			$url = Mage::getBaseUrl() . $path . ($query ? "?".$query : "");
+			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
 		}
 
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
@@ -97,7 +99,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		/** @var Zolago_Customer_Model_Session $customerSession */
 		$customerSession = Mage::getSingleton('zolagocustomer/session');
 		$customerSession->addProductsToCache($products);
-Mage::log($result, null, "122121212.log");
+
 		$this->_setSuccessResponse($result);
 	}
 	
