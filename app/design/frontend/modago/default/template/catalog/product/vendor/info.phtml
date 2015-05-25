@@ -21,14 +21,16 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                 <figure>
                     <h3 id="bLogo">
                         <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
-                            <span itemprop="logo"><img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>"></span>
+                            <img itemprop="logo" src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
+                            <meta itemprop="brand" content="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>" />
                         </a>
                     </h3>
+
                 </figure>
                 <div class="seller">
                     <div class="seller-info">
                         <a class="clearfix" href="<?php echo $this->getVendorUrl(); ?>">
-                            <span ><?php echo $this->__("Seller"); ?>: <span itemprop="brand"><?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?></span></span>
+                            <span ><?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?></span>
                         </a>
                         <span><?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?></span>
                     </div>
@@ -39,13 +41,14 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     <h3 id="bLogo">
                         <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
                             <img itemprop="logo" src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
+                            <meta itemprop="brand" content="<?php echo $this->escapeHtml($this->getVendorName()); ?>" />
                         </a>
                     </h3>
                 </figure>
                 <div class="seller producer">
                     <div class="seller-info">
                         <a href="<?php echo $this->getVendorUrl(); ?>">
-                            <?php echo $this->__("Seller"); ?>: <span itemprop="brand"><?php echo $this->escapeHtml($this->getVendorName()); ?></span>
+                            <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendorName()); ?>
                         </a>
                     </div>
                 </div>
