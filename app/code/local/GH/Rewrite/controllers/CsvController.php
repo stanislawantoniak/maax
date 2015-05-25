@@ -17,9 +17,19 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 				} else {
 					$csvData = array_map("str_getcsv", file($file['tmp_name'])); //convert csv to array
 					if(is_array($csvData) && count($csvData)) { //if it's array then proceed
-						$ghUrlRewriteColumns = $hlp->getGhUrlRewriteCsvColumns();
-						$filtersColumnName = $hlp::GH_URL_REWRITE_FILTERS_COLUMN;
-						$hashIdColumnName = $hlp::GH_URL_REWRITE_HASH_ID_COLUMN;
+
+                        $ghUrlRewriteColumns = $hlp->getGhUrlRewriteCsvColumns();
+                        $filtersColumnName = $hlp::GH_URL_REWRITE_FILTERS_COLUMN;
+                        $hashIdColumnName = $hlp::GH_URL_REWRITE_HASH_ID_COLUMN;
+
+                        $collumnsValidations = $ghUrlRewriteColumns;
+                        $collumnsValidations[] = $filtersColumnName;
+
+                        if (isset($csvData[0]) && $csvData[0] == $collumnsValidations) {
+                            unset($csvData[0]);
+                        } else {
+                            Mage::throwException($this->_getHelper()->__('Wrong CSV header format. First line in file should be: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters'));
+                        }
 
 						//get all categories ids from csv alongside store_ids
 						$storesCategoriesIds = array_map(array($this,'_getCategoryIdFromArray'),$csvData);

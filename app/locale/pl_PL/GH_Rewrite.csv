@@ -34,3 +34,5 @@
 "Provided file contains duplicated lines: %s","Przesłany plik zawiera zduplikowane wartości w liniach: %s"
 "File was imported successfully. Imported rewrites: %s","Plik został zaimportowany poprawnie. Dodano %s wpisów"
 "Some other error occurred, please contact admin","Wystąpił nieznany błąd, skontaktuj się z administratorem"
+"Wrong CSV header format. First line in file should be: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters","Niepoprawny nagłówek pliku CSV. Pierwsza linia pliku powinna zawierać: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters"
+"First line in file should be: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters","Pierwsza linia pliku powinna zawierać: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters"
