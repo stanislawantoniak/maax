@@ -1648,12 +1648,14 @@ Mall.listing = {
 
 		} else {
 			var content = self.getContentBlock();
+            var leftOffset = content.offset().left + 15;
+            var topOffset = content.offset().top;
 			filters
 				.removeClass(self.getFiltersClassMobile())
 				.addClass(self.getFiltersClassDesktop())
 				.css({
-					'top': content.offset().top,
-					'left': content.offset().left + 15,
+					'top': topOffset,
+					'left': leftOffset,
 					'height': ''
 				});
             var facetsHeight = filters.height();
@@ -1661,8 +1663,8 @@ Mall.listing = {
                 .removeClass(self.getFiltersClassMobile())
                 .addClass(self.getFiltersClassDesktop())
                 .css({
-                "left": content.offset().left + 15,
-                "top": (facetsHeight + content.offset().top + 15),
+                "left": leftOffset,
+                "top": (facetsHeight + topOffset + 15),
                     'height': ''
             });
             filters.find(".category_with_filters").remove();
