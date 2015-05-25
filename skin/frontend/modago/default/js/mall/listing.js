@@ -262,7 +262,8 @@ Mall.listing = {
 				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
                 category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
-				header: this.getHeader().prop("outerHTML"),
+                header: this.getHeader().prop("outerHTML"),
+                category_head_title: jQuery("head title").html(),
 				total: this.getTotal(),
 				rows: this.getCurrentVisibleItems(),
 				query: this.getQuery(),
@@ -1253,6 +1254,10 @@ Mall.listing = {
         var categoryWithFilters = jQuery(content.category_with_filters);
         this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
+        //category_head_title
+        var category_head_title = content.category_head_title;
+        jQuery("head title").html(category_head_title);
+
 		// Finally product
 		this.replaceProducts(content);
 
@@ -1643,12 +1648,14 @@ Mall.listing = {
 
 		} else {
 			var content = self.getContentBlock();
+            var leftOffset = content.offset().left + 15;
+            var topOffset = content.offset().top;
 			filters
 				.removeClass(self.getFiltersClassMobile())
 				.addClass(self.getFiltersClassDesktop())
 				.css({
-					'top': content.offset().top,
-					'left': content.offset().left + 15,
+					'top': topOffset,
+					'left': leftOffset,
 					'height': ''
 				});
             var facetsHeight = filters.height();
@@ -1656,8 +1663,8 @@ Mall.listing = {
                 .removeClass(self.getFiltersClassMobile())
                 .addClass(self.getFiltersClassDesktop())
                 .css({
-                "left": content.offset().left + 15,
-                "top": (facetsHeight + content.offset().top + 15),
+                "left": leftOffset,
+                "top": (facetsHeight + topOffset + 15),
                     'height': ''
             });
             filters.find(".category_with_filters").remove();
@@ -1736,8 +1743,31 @@ Mall.listing = {
 				button = me.find('.action.clear');
 			if(me.find(":checkbox:checked").length) {
 				if(button.hasClass(hiddenClass)) {
+
 					button.removeClass(hiddenClass);
-				}
+
+
+                    if (!Mall.listing.isDisplayMobile()) {
+                        var content = self.getContentBlock();
+                        var leftOffset = content.offset().left + 15;
+                        var topOffset = content.offset().top;
+                        var filters = Mall.listing.getFilters();
+
+                        var facetsHeight = filters.height();
+                        Mall.listing.getCategoryWithFilters()
+                            .removeClass(Mall.listing.getFiltersClassMobile())
+                            .addClass(Mall.listing.getFiltersClassDesktop())
+                            .css({
+                                "left": leftOffset,
+                                "top": (facetsHeight + topOffset + 15),
+                                'height': ''
+                            });
+                        filters.find(".category_with_filters").remove();
+                    }
+
+
+                }
+
 			} else {
 				button.addClass(hiddenClass);
 			}
