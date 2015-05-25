@@ -158,7 +158,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
         if(in_array("orbacommon", explode("/", $_SERVER["REQUEST_URI"]))){
             $url = Mage::registry("category_with_filters");
         }
-        $path = pathinfo($url)['basename'];
+        $path = strtok(pathinfo($url)['basename'], "?");
 
         $rewrite = Mage::getModel('core/url_rewrite');
         $collection = $rewrite->getCollection();
