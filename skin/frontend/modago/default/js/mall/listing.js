@@ -262,7 +262,8 @@ Mall.listing = {
 				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
                 category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
-				header: this.getHeader().prop("outerHTML"),
+                header: this.getHeader().prop("outerHTML"),
+                category_head_title: jQuery("title").html(),
 				total: this.getTotal(),
 				rows: this.getCurrentVisibleItems(),
 				query: this.getQuery(),
@@ -1252,6 +1253,10 @@ Mall.listing = {
         //Category with filters
         var categoryWithFilters = jQuery(content.category_with_filters);
         this.getCategoryWithFilters().replaceWith(categoryWithFilters);
+
+        //category_head_title
+        var category_head_title = content.category_head_title;
+        jQuery("title").html(category_head_title);
 
 		// Finally product
 		this.replaceProducts(content);

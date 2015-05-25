@@ -64,13 +64,27 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
         Mage::register("category_with_filters", $url);
 
+        $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
+        $path = $breadcrumbs->getPathProp();
+        foreach ($path as $name => $breadcrumb) {
+            $title[] = $breadcrumb['label'];
+        }
+        $title = join($breadcrumbs->getTitleSeparator(), array_reverse($title));
+
+        $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+
+        if (!empty($rewriteData) && isset($rewriteData["title"]) && !empty($rewriteData["title"])) {
+            $title = $rewriteData["title"];
+        }
+
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,
 			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
 			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
 			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
-			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml())
+			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
+            "category_head_title" => $title
 		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);
