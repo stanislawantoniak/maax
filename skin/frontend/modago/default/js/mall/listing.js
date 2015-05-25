@@ -1743,8 +1743,38 @@ Mall.listing = {
 				button = me.find('.action.clear');
 			if(me.find(":checkbox:checked").length) {
 				if(button.hasClass(hiddenClass)) {
+
 					button.removeClass(hiddenClass);
-				}
+
+
+                    if (!Mall.listing.isDisplayMobile()) {
+                        var content = self.getContentBlock();
+                        var leftOffset = content.offset().left + 15;
+                        var topOffset = content.offset().top;
+                        var filters = Mall.listing.getFilters();
+                        filters
+                            .removeClass(Mall.listing.getFiltersClassMobile())
+                            .addClass(Mall.listing.getFiltersClassDesktop())
+                            .css({
+                                'top': topOffset,
+                                'left': leftOffset,
+                                'height': ''
+                            });
+                        var facetsHeight = filters.height();
+                        Mall.listing.getCategoryWithFilters()
+                            .removeClass(Mall.listing.getFiltersClassMobile())
+                            .addClass(Mall.listing.getFiltersClassDesktop())
+                            .css({
+                                "left": leftOffset,
+                                "top": (facetsHeight + topOffset + 15),
+                                'height': ''
+                            });
+                        filters.find(".category_with_filters").remove();
+                    }
+
+
+                }
+
 			} else {
 				button.addClass(hiddenClass);
 			}
