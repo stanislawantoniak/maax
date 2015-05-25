@@ -2530,6 +2530,8 @@ Mall.listing = {
         });
     },
 
+	beforeResizeWidth: window.innerWidth,
+
     delegateSavePosition: function() {
 
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
@@ -2542,7 +2544,9 @@ Mall.listing = {
                 Mall.listing.getFirstOnScreenItem();
             })
 	        .on('Mall.onResizeEnd', function() {
-                if (Mall.listing._firstOnScreenItem != null && !jQuery(Mall.listing._firstOnScreenItem).isOnScreen(0.5, 0.7)) {
+                if (Mall.listing._firstOnScreenItem != null &&
+	                !jQuery(Mall.listing._firstOnScreenItem).isOnScreen(0.5, 0.7) && Mall.listing.beforeResizeWidth != window.innerWidth) {
+	                Mall.listing.beforeResizeWidth = window.innerWidth;
                     Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
                 }
             });
