@@ -1629,15 +1629,17 @@ Mall.listing = {
 					left: '',
 					height: jQuery(window).height()
 				});
-            var facetsHeight = filters.find("[name=searchFacets]").height();
 
-            categoryWithFilters
-                .removeClass(self.getFiltersClassDesktop())
-                .addClass(self.getFiltersClassMobile())
-                .css({
-                "left": "",
-                "top": facetsHeight
-            });
+            var category_with_filtersHtml = categoryWithFilters.find(".solr_search_facets").html();
+            var category_with_filters = filters.find(".category_with_filters");
+
+            categoryWithFilters.hide();
+            if(category_with_filters.length > 0){
+                category_with_filters.replaceWith(category_with_filtersHtml);
+            } else {
+                filters.append(category_with_filtersHtml);
+            }
+
 
 		} else {
 			var content = self.getContentBlock();
@@ -1658,6 +1660,7 @@ Mall.listing = {
                 "top": (facetsHeight + content.offset().top + 15),
                     'height': ''
             });
+            filters.find(".category_with_filters").remove();
 
 		}
 		self.setMainSectionHeight();
