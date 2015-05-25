@@ -238,6 +238,11 @@
   }
 
 }
+.category_with_filters {
+  .content {
+    display: block !important;
+  }
+}
 #solr_search_facets {
 	top: 300px;
 	position: absolute;
