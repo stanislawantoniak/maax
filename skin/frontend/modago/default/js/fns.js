@@ -306,55 +306,7 @@ jQuery.noConflict();
 		var productGalleryBigMedia = productGallery.find("#productGalleryBigMedia");
 		var productGalleryThumbMedia = productGallery.find("#productGalleryThumbMedia");
 
-		productGalleryBigMedia.rwdCarousel({
-			singleItem : true,
-			slideSpeed : 1000,
-			navigation: true,
-			pagination:true,
-			afterAction : syncPosition,
-			responsiveRefreshRate : 200,
-			mouseDrag:false,
-			rewindNav : false,
-			itemsScaleUp:true
 
-		});
-
-		productGalleryThumbMedia.rwdCarousel({
-			items : 1,
-			pagination:false,
-			navigation: false,
-			touchDrag: false,
-			mouseDrag:false,
-			afterInit : function(el){
-				el.find(".rwd-item").eq(0).addClass("synced");
-				var productGalleryThumbMediaItem = $('#productGalleryThumbMedia .rwd-item');
-				var productGalleryThumbMediaItemLength = productGalleryThumbMediaItem.length;
-				if (productGalleryThumbMediaItemLength <= 4 ) {
-					$('#product-gallery #wrapper-productGalleryThumbMedia .up').addClass('disabled');
-					$('#product-gallery #wrapper-productGalleryThumbMedia .down').addClass('disabled');
-					//console.log(productGalleryThumbMediaItemLength)
-				}
-			}
-		});
-
-
-		function syncPosition(){
-			var current = this.currentItem;
-			$("#product-gallery #productGalleryThumbMedia")
-				.find(".rwd-item")
-				.removeClass("synced")
-				.eq(current)
-				.addClass("synced")
-			if($("#product-gallery #productGalleryThumbMedia").data("rwdCarousel") !== undefined){
-				center(current)
-			}
-		}
-
-		$("#productGalleryThumbMedia").on("click", ".rwd-item", function(e){
-			e.preventDefault();
-			var number = $(this).data("rwdItem");
-			productGalleryBigMedia.trigger("rwd.goTo",number);
-		});
 
 		$('#product-gallery #wrapper-productGalleryThumbMedia .up').addClass('disabled');
 
@@ -399,10 +351,6 @@ jQuery.noConflict();
 			}
 		});
 
-		function center(number){
-			//was doing completely nothing
-		}
-
 		flagProduct();
 		function flagProduct() {
 			var productGalleryBigMedia = $('#productGalleryBigMedia').find('.rwd-item');
@@ -415,8 +363,8 @@ jQuery.noConflict();
 		}
 
 		function flagProductGallery() {
-			var sync3 = $('#sync3').find('.rwd-item');
-			sync3.each(function(i){
+			var productGalleryBigMediaOpen = $('#productGalleryBigMediaOpen').find('.rwd-item');
+			productGalleryBigMediaOpen.each(function(i){
 				var flags3 = $(this).find('.inner-item');
 				var flag3 = flags3.data('flags');
 
@@ -442,7 +390,7 @@ jQuery.noConflict();
 		function galeriaProduktu(){
 // start
 			var lightbox = $("#lightbox");
-			var sync3 = lightbox.find("#sync3");
+			var productGalleryBigMediaOpen = lightbox.find("#productGalleryBigMediaOpen");
 			var productGalleryThumbMediaOpen = lightbox.find("#productGalleryThumbMediaOpen");
 			var wrapperproductGalleryThumbMediaOpen = $('#wrapper-productGalleryThumbMediaOpen');
 
@@ -464,7 +412,7 @@ jQuery.noConflict();
 				}
 			});
 
-			sync3.rwdCarousel({
+			productGalleryBigMediaOpen.rwdCarousel({
 				singleItem : true,
 				navigation: true,
 				pagination:true,
@@ -486,14 +434,14 @@ jQuery.noConflict();
 					var that = this;
 					that.rwdControls.prependTo(elem);
 					lightbox.find('.inner-item').css({visibility:'hidden'});
-					lightbox.find('#galeria-lightbox #sync3 .rwd-wrapper-outer').prepend('<div class="loader" style="text-align:center;"><img src="'+Config.path.ajaxLoader+'" /></div>')
-					imagesLoaded( document.querySelector('#galeria-lightbox #sync3 .rwd-item .item'), function( instance ) {
+					lightbox.find('#galeria-lightbox #productGalleryBigMediaOpen .rwd-wrapper-outer').prepend('<div class="loader" style="text-align:center;"><img src="'+Config.path.ajaxLoader+'" /></div>')
+					imagesLoaded( document.querySelector('#galeria-lightbox #productGalleryBigMediaOpen .rwd-item .item'), function( instance ) {
 
 						setTimeout(function(){
 							$('#lightbox').find('.inner-item').css({visibility:'visible'})
 						}, 500);
 
-						$('#galeria-lightbox #sync3 .rwd-item').each(function(index, el) {
+						$('#galeria-lightbox #productGalleryBigMediaOpen .rwd-item').each(function(index, el) {
 							var numberProduct = $('#productGalleryBigMedia').data("rwdCarousel").rwd.visibleItems;
 							$('#productGalleryThumbMediaOpen').find( ".rwd-item" ).eq( numberProduct ).trigger("click");
 
@@ -557,7 +505,7 @@ jQuery.noConflict();
 
 			$('.zoom_plus').on('click', function(event) {
 				event.preventDefault();
-				$('#sync3 .rwd-item').each(function(){
+				$('#productGalleryBigMediaOpen .rwd-item').each(function(){
 					var img = $(this).find('img');
 					var imgScaleWidth = parseInt(img.width());
 					var imgWidth   =    $(this).find('img').data('width');
@@ -593,7 +541,7 @@ jQuery.noConflict();
 					.addClass("synced");
 			}
 
-			$('#sync3').on('click', '.rwd-next', function(e){
+			$('#productGalleryBigMediaOpen').on('click', '.rwd-next', function(e){
 				e.preventDefault();
 
 				var current = $('#productGalleryThumbMediaOpen .rwd-item').index($('.synced'));
@@ -636,7 +584,7 @@ jQuery.noConflict();
 				var number = $(this).data("rwdItem");
 				$("#lightbox #productGalleryThumbMediaOpen").find('.rwd-item').removeClass("synced");
 				$(this).addClass("synced");
-				sync3.trigger("rwd.goTo",number);
+				productGalleryBigMediaOpen.trigger("rwd.goTo",number);
 			});
 
 			$('#lightbox #wrapper-productGalleryThumbMediaOpen .up').addClass('disabled');

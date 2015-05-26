@@ -13,7 +13,7 @@ $nImagesForCssStyle = 5; //magic number, for less then 5 items height of box is 
 
 <?php if (count($this->getGalleryImages()) > 0): ?>
 <div id="product-gallery" class="col-lg-5 col-xs-12 clearfix">
-    <div id="wrapper-sync2">
+    <div id="wrapper-productGalleryThumbMedia">
         <a href="#" class="up"><?php echo $this->__("up"); ?></a>
         <div id="productGalleryThumbMedia" class="rwd-carousel <?php echo count($this->getGalleryImages()) < $nImagesForCssStyle ? 'auto-height' : ''; ?> ">
         <?php foreach ($this->getGalleryImages() as $_image): ?>

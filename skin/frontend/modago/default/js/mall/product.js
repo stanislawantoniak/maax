@@ -13,6 +13,7 @@ Mall.product = {
 			Mall.product.setDiagonalsOnSizeSquare();
 			Mall.product.rating.init();
             Mall.product.review.init();
+            Mall.product.gallery.init();
 		}
 	},
 
@@ -519,41 +520,94 @@ Mall.product = {
 
     gallery: {
 
-        init: function() {
+        init: function () {
+            this.initBigMediaCarousel();
+            this.initThumbsCarousel();
+        },
+
+        initBigMediaCarousel: function () {
+            var productGalleryBigMedia = this.getBigMedia();
+            productGalleryBigMedia.rwdCarousel({
+                singleItem: true,
+                slideSpeed: 1000,
+                navigation: true,
+                pagination: true,
+                responsiveRefreshRate: 200,
+                mouseDrag: false,
+                rewindNav: false,
+                itemsScaleUp: true,
+                afterAction: function() {
+                    var current = this.currentItem;
+                    var thumbs  = Mall.product.gallery.getThumbs();
+                    thumbs.find(".rwd-item")
+                        .removeClass("synced")
+                        .eq(current)
+                        .addClass("synced")
+                }
+            });
+        },
+
+        initThumbsCarousel: function() {
+            var productGalleryThumbMedia = this.getThumbs();
+            productGalleryThumbMedia.rwdCarousel({
+                items : 1,
+                pagination:false,
+                navigation: false,
+                touchDrag: false,
+                mouseDrag:false,
+                afterInit : function(el) {
+                    el.find(".rwd-item").eq(0).addClass("synced");
+                    var productGalleryThumbMediaItem = Mall.product.gallery.getThumbs().find('.rwd-item');
+                    if (productGalleryThumbMediaItem.length <= 4 ) {
+                        Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
+                    }
+                }
+            });
+
+            this.getThumbs().on("click", ".rwd-item", function(e) {
+                e.preventDefault();
+                Mall.product.gallery.getBigMedia().trigger("rwd.goTo", jQuery(this).data("rwdItem"));
+            });
+        },
+
+        destroy: function () {
 
         },
 
-        destroy: function() {
+        show: function () {
 
         },
 
-        show: function() {
+        hide: function () {
 
         },
 
-        hide: function() {
+        next: function () {
 
         },
 
-        next: function() {
+        prev: function () {
 
         },
 
-        prev: function() {
-
-        },
-
-        getGallery: function() {
+        getGallery: function () {
             return jQuery("#product-gallery");
         },
 
-        getBigMedia: function() {
+        getBigMedia: function () {
             return this.getGallery().find('#productGalleryBigMedia');
         },
 
-        getThumbs: function() {
+        getThumbs: function () {
             return this.getGallery().find('#productGalleryThumbMedia');
-        }
+        },
+
+        getThumbsWrapper: function() {
+            return this.getGallery().find('#wrapper-productGalleryThumbMedia');
+        },
+
+
+
     }
 };
 
