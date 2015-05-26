@@ -303,10 +303,10 @@ jQuery.noConflict();
 		});
 
 		var productGallery = $("#product-gallery");
-		var sync1 = productGallery.find("#sync1");
+		var productGalleryBigMedia = productGallery.find("#productGalleryBigMedia");
 		var sync2 = productGallery.find("#sync2");
 
-		sync1.rwdCarousel({
+		productGalleryBigMedia.rwdCarousel({
 			singleItem : true,
 			slideSpeed : 1000,
 			navigation: true,
@@ -353,7 +353,7 @@ jQuery.noConflict();
 		$("#sync2").on("click", ".rwd-item", function(e){
 			e.preventDefault();
 			var number = $(this).data("rwdItem");
-			sync1.trigger("rwd.goTo",number);
+			productGalleryBigMedia.trigger("rwd.goTo",number);
 		});
 
 		$('#product-gallery #wrapper-sync2 .up').addClass('disabled');
@@ -405,8 +405,8 @@ jQuery.noConflict();
 
 		flagProduct();
 		function flagProduct() {
-			var sync1 = $('#sync1').find('.rwd-item');
-			sync1.each(function(i){
+			var productGalleryBigMedia = $('#productGalleryBigMedia').find('.rwd-item');
+			productGalleryBigMedia.each(function(i){
 				var flags = $(this).find('a');
 				var flag = flags.data('flags');
 				flags.append('<i class="flag '+flag+'"></i>');
@@ -494,7 +494,7 @@ jQuery.noConflict();
 						}, 500);
 
 						$('#galeria-lightbox #sync3 .rwd-item').each(function(index, el) {
-							var numberProduct = $('#sync1').data("rwdCarousel").rwd.visibleItems;
+							var numberProduct = $('#productGalleryBigMedia').data("rwdCarousel").rwd.visibleItems;
 							$('#sync4').find( ".rwd-item" ).eq( numberProduct ).trigger("click");
 
 
@@ -624,7 +624,7 @@ jQuery.noConflict();
 			$("#sync4").on("click", ".rwd-item", function(e){
 				e.preventDefault();
 				var number = $(this).data("rwdItem");
-				sync1.trigger("rwd.goTo",number);
+				productGalleryBigMedia.trigger("rwd.goTo",number);
 			});
 
 			function center(number){
@@ -685,7 +685,7 @@ jQuery.noConflict();
 // Show Top Layer - Gallery
 		$(window).on('resize', function(){
 			var widthWindow = $(window).width();
-			var lupa = $('#product-gallery #sync1').find('.view_lupa');
+			var lupa = $('#product-gallery #productGalleryBigMedia').find('.view_lupa');
 			if (widthWindow < 767) {
 				lupa.hide();
 			} else {
@@ -696,7 +696,7 @@ jQuery.noConflict();
 			showGalleryProduct();
 		}
 		function showGalleryProduct() {
-			$('#product-gallery #sync1').on('click', 'a', function(event) {
+			$('#product-gallery #productGalleryBigMedia').on('click', 'a', function(event) {
 				event.preventDefault();
 				var widthWindow = $(window).width();
 				if (widthWindow >= 767) {
