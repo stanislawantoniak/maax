@@ -19,7 +19,7 @@ section {
 			color: #000;
 			line-height: 1.5;
 		}
-		h2 {
+		h2, h4, h5 {
 			&.title_section {
 				@media (max-width: $screen-xs-max) {
 					cursor:pointer;
@@ -51,4 +51,12 @@ section {
 	&.bg-w {
 		border-bottom: none;
 	}
+  h3[itemprop=brand], h3.itemprop-brand {
+    display: inline;
+    font-size: 13px;
+    padding: 0;
+  }
+}
+.itemprop-isSimilarTo {
+  display: inline;
 }

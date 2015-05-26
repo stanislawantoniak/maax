@@ -23,7 +23,7 @@
 					height: 22px;
 				}
 			}
-			h3 {
+			h3, h5 {
 				@include inline-block;
 				padding:0px;
 				float:left;

@@ -13,23 +13,19 @@
 
 ?>
 <?php if(count($this->getItems()) > 0) : ?>
-    <?php foreach($this->getItems() as $_item) : ?>
-        <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
-            <meta itemprop="sku" content="<?php echo $_item->getSkuv(); ?>" />
-            <meta itemprop="url" content="<?php echo $_item->getProductUrl(); ?>" />
-        </h5>
-    <?php endforeach; unset($_item); ?>
     <section id="complementary_product" class="section bg-w clearfix" data-mobiletoggle="true">
         <div class="block-complementary-product toggle-xs">
             <header>
-                <h2 class="title_section"><?php echo $this->__("Complete whole collection"); ?> <i
-                        class="bullet-strzalka-up visible-xs"></i></h2>
+                <h4 class="title_section"><?php echo $this->__("Complete whole collection"); ?> <i
+                        class="bullet-strzalka-up visible-xs"></i></h4>
             </header>
             <div id="rwd-complementary-product" class="rwdCarousel">
                 <div class="rwd-carousel rwd-theme">
                     <?php foreach ($this->getItems() as $_item) : ?>
                         <div class="item">
-                            <a href="<?php echo $_item->getProductUrl(); ?>">
+                            <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
+                                <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
+                            <a href="<?php echo $_item->getProductUrl(); ?>" itemprop="url">
 
                                 <div class="box_listing_product">
                                     <figure class="img_product"><img
@@ -72,6 +68,7 @@
                                 </div>
 
                             </a>
+                            </h5>
                         </div>
 
                     <?php endforeach; ?>
