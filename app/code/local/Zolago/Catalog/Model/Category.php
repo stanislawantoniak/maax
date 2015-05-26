@@ -3,6 +3,7 @@
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {
 	
+    protected $_relatedCategory;
 	/**
 	 * @return string
 	 */
@@ -105,4 +106,39 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
             ->getItems();
         return $categories;
     }
+    
+    /**
+     * returns related category object
+     * 
+     * @return Zolago_Catalog_Model_Category
+     */
+     public function getRelatedCategory() {
+         if (is_null($this->_relatedCategory)) {
+             $related = $this->getData('related_category');
+             $category = Mage::getModel('catalog/category')->load($related);
+             if ($category->getId()) {
+                 $this->_relatedCategory = $category;
+             } else {
+                 $this->_relatedCategory = false;
+             }
+         }
+         return $this->_relatedCategory;
+     }
+    /**
+     * Return canonical link
+     *
+     * @return string
+     */
+     public function getCanonicalUrl() {
+         $canonical = $this->getData('canonical_link');
+         if (empty($canonical)) {
+             $related = $this->getRelatedCategory();
+             if ($related) {
+                $canonical = $related->getCanonicalUrl();
+             } else {
+                 $canonical = $this->getUrl();
+             }
+         }
+         return $canonical;
+     }
 }
