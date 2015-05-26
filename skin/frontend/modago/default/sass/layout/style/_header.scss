@@ -14,7 +14,7 @@
 /* HEADER BOTTOM */
 .not-content-mode.sm-to-smmd-plus-smmd, .this-is-search.sm-to-smmd-plus-smmd {
   #nav_desc {
-    @media (max-width: $screen-sm-min - 1) {
+    @media (max-width: $screen-xs-max) {
       display: none !important;
     }
   }
