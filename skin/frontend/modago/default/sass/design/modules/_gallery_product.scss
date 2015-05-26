@@ -105,7 +105,7 @@
     }
 }
 #product-gallery {
-  #productGalleryBigMedia, #sync3, #sync2, #sync4 {
+  #productGalleryBigMedia, #sync3, #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
     .item, .rwd-item{
       color: $body-bg;
       -webkit-border-radius: 3px;
@@ -115,7 +115,7 @@
       cursor: pointer;
     }
   }
-  #sync2, #sync4 {
+  #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
     .rwd-item {
       &.synced, &:hover {
         img {
@@ -212,7 +212,7 @@ body.lightbox {
     }
 
    
-    #sync2, #sync4 {
+    #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
         
         
         
