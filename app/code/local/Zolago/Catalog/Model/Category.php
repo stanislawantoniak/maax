@@ -143,23 +143,43 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
      }
      
     /**
-     * after save
-     *
+     * product ids to rebuild in solr after save
      * 
+     * @return array
      */
-     protected function _afterSave() {
-         parent::_afterSave();
+     public function getRelatedProductsToRebuild () {
          $origRelated = $this->getOrigData('related_category');
          $origProducts = $this->getOrigData('related_category_products');
          $related = $this->getData('related_category');
          $products = $this->getData('related_category_products');
-         if ($origProducts == $products == 0) {
-             return; // nothing happends
+         if ($origProducts == $products) {
+             if (!$products) {
+                 return; // nothing happends
+             } else {
+                 if ($origRelated == $related) {
+                     return; // no changes
+                 }
+             }
          }
-         if (($origRelated == $related) 
-             && ($origProducts == $products)) {
-             return ; // no changes   
+         $out = array();
+         if ($origRelated && $origProducts) {
+             $category = Mage::getModel('catalog/category')->load($origRelated);
+             if ($category->getId()) {
+                 $ids = Mage::getResourceModel('catalog/product_collection')
+                                          ->addCategoryFilter($category)
+                                          ->getAllIds();
+                 $out = array_merge($out,$ids);
+             }                                          
          }
-         
+         if ($related && $products) {             
+             $category = Mage::getModel('catalog/category')->load($related);
+             if ($category->getId()) {
+                 $ids = Mage::getResourceModel('catalog/product_collection')
+                                          ->addCategoryFilter($category)
+                                          ->getAllIds();
+                 $out = array_merge($out,$ids);
+             }
+         }
+         return array_unique($out);
      }
 }
