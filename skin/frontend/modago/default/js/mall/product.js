@@ -720,9 +720,9 @@ Mall.product = {
                 responsiveRefreshRate : 200,
                 mouseDrag:true,
                 rewindNav : false,
-                itemsScaleUp:true,
+                itemsScaleUp: false,
                 transitionStyle : "fade",
-                slideSpeed:10,
+                slideSpeed:1000,
                 afterMove: function() {
                     if(Mall.product.gallery.getLightboxInner().scrollTop()) {
                         body.animate({ scrollTop: 0 }, "slow");
@@ -814,8 +814,8 @@ Mall.product = {
             // Next
             this.getBigMediaOpen().on('click', '.rwd-next', function(e) {
                 e.preventDefault();
-                var items         = Mall.product.getThumbsOpen().find('.rwd-item');
-                var current       = items.index(Mall.product.getThumbsOpen().find('.synced'));
+                var items         = Mall.product.gallery.getThumbsOpen().find('.rwd-item');
+                var current       = items.index(Mall.product.gallery.getThumbsOpen().find('.synced'));
                 var currentLength = items.length;
                 var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
                 if(current >= 4 && current <= currentLength) {

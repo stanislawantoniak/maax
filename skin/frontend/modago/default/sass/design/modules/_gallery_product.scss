@@ -268,7 +268,7 @@ body.lightbox {
 #lightbox {
     .up,
     .down {
-        
+        color: $body-bg;
         background:#fff;
         text-indent: -999em;
         outline:none;
@@ -278,15 +278,13 @@ body.lightbox {
     }
     .up {
          &:before {
-            @include sprite($allMap, arrow_top_j);
+            @include sprite($allMap, arrow_top_j_black);
         }
-       
     }
     .down {
         &:before {
-        @include sprite($allMap,arrow_bottom_j);
+        @include sprite($allMap,arrow_bottom_j_black);
         }
-        
     }
 }
 
