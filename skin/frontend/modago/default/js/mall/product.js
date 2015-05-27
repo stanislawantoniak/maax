@@ -523,8 +523,14 @@ Mall.product = {
         init: function () {
             this.initBigMediaCarousel();
             this.initThumbsCarousel();
+            this.flagBigMedia();
+            this.flagBigMediaOpen();
+            this.initReleatedCarousel();
         },
 
+        /**
+         * Init carousel for big images
+         */
         initBigMediaCarousel: function () {
             var productGalleryBigMedia = this.getBigMedia();
             productGalleryBigMedia.rwdCarousel({
@@ -547,6 +553,9 @@ Mall.product = {
             });
         },
 
+        /**
+         * Init carousel for thumbs
+         */
         initThumbsCarousel: function() {
             var productGalleryThumbMedia = this.getThumbs();
             productGalleryThumbMedia.rwdCarousel({
@@ -568,26 +577,90 @@ Mall.product = {
                 e.preventDefault();
                 Mall.product.gallery.getBigMedia().trigger("rwd.goTo", jQuery(this).data("rwdItem"));
             });
+
+            this.getThumbsWrapper().find('.up').addClass('disabled');
+
+            this.getThumbsWrapper().on('click', '.up', function(event) {
+                event.preventDefault();
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
+                var item = thumbsWrapper.find('.rwd-item');
+                var itemHeight = item.height()+10;
+                var wrapper = thumbsWrapper.find('.rwd-wrapper');
+                var position = parseInt(wrapper.css('margin-top'));
+                var sumItem = itemHeight * (item.length-5);
+
+                wrapper.filter(':not(:animated)').animate({
+                    'margin-top': '+='+itemHeight
+                });
+
+                if (position == '-'+itemHeight) {
+                    thumbsWrapper.find('.up').addClass('disabled');
+                }
+                if (position != '-'+sumItem) {
+                    thumbsWrapper.find('.down').removeClass('disabled');
+                }
+            });
+
+            this.getThumbsWrapper().on('click', '.down', function(event) {
+                event.preventDefault();
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
+                var item = thumbsWrapper.find('.rwd-item');
+                var itemHeight = item.height()+10;
+                var wrapper = thumbsWrapper.find('.rwd-wrapper');
+                var position = parseInt(wrapper.css('margin-top'));
+                var sumItem = itemHeight * (item.length-5);
+
+                wrapper.filter(':not(:animated)').animate({
+                    'margin-top': '-='+itemHeight
+                });
+                if (position != '-'+itemHeight) {
+                    thumbsWrapper.find('.up').removeClass('disabled');
+                }
+                if (position == '-'+sumItem) {
+                    thumbsWrapper.find('.down').addClass('disabled');
+                }
+            });
+
         },
 
-        destroy: function () {
-
+        /**
+         * Add flag sale/promo image to big images
+         */
+        flagBigMedia: function() {
+            var items = this.getBigMedia().find('.rwd-item');
+            items.each(function(i) {
+                var flags = jQuery(this).find('a');
+                var flag = flags.data('flags');
+                flags.append('<i class="flag '+flag+'"></i>');
+            });
         },
 
-        show: function () {
-
+        /**
+         * add flag sale/promo image to big images when gallery open
+         */
+        flagBigMediaOpen: function() {
+            var items = this.getBigMediaOpen().find('.rwd-item');
+            items.each(function(i) {
+                var flags = jQuery(this).find('.inner-item');
+                var flag = flags.data('flags');
+                    flags.append('<i class="flag '+flag+'"></i>');
+            });
         },
 
-        hide: function () {
-
-        },
-
-        next: function () {
-
-        },
-
-        prev: function () {
-
+        /**
+         * Init carousel for product related / is similar to
+         * in this case other colors of product
+         */
+        initReleatedCarousel: function() {
+            var rwd_color = this.getReleated();
+            rwd_color.rwdCarousel({
+                items:5,
+                navigation : true,
+                pagination: false,
+                itemsScaleUp: false,
+                responsive: false,
+                rewindNav : false
+            });
         },
 
         getGallery: function () {
@@ -595,16 +668,36 @@ Mall.product = {
         },
 
         getBigMedia: function () {
-            return this.getGallery().find('#productGalleryBigMedia');
+            return jQuery('#productGalleryBigMedia');
+        },
+
+        getBigMediaOpen: function () {
+            return jQuery('#productGalleryBigMediaOpen');
         },
 
         getThumbs: function () {
-            return this.getGallery().find('#productGalleryThumbMedia');
+            return jQuery('#productGalleryThumbMedia');
+        },
+
+        getThumbsOpen: function () {
+            return jQuery('#productGalleryThumbMediaOpen');
         },
 
         getThumbsWrapper: function() {
-            return this.getGallery().find('#wrapper-productGalleryThumbMedia');
+            return jQuery('#wrapper-productGalleryThumbMedia');
         },
+
+        /**
+         * Get div product related / is similar to
+         * in this case other colors of product
+         */
+        getReleated: function() {
+            return jQuery("#rwd-color");
+        },
+
+        getReleatedWrapper: function() {
+            return jQuery('wrapper-rwd-color');
+        }
 
 
 
