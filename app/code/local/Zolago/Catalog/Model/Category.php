@@ -141,4 +141,25 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
          }
          return $canonical;
      }
+     
+    /**
+     * after save
+     *
+     * 
+     */
+     protected function _afterSave() {
+         parent::_afterSave();
+         $origRelated = $this->getOrigData('related_category');
+         $origProducts = $this->getOrigData('related_category_products');
+         $related = $this->getData('related_category');
+         $products = $this->getData('related_category_products');
+         if ($origProducts == $products == 0) {
+             return; // nothing happends
+         }
+         if (($origRelated == $related) 
+             && ($origProducts == $products)) {
+             return ; // no changes   
+         }
+         
+     }
 }
