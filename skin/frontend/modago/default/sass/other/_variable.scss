@@ -26,6 +26,14 @@ $screen-smmd-min:              $screen-smmd !default;          // 810px
 $screen-sm-to-smmd-max:        ($screen-smmd-min - 1) !default; // 809px
 $screen-smmd-max:              ($screen-md-min - 1) !default;  // 991px
 
+//== Container sizes
+//
+//## Define the maximum width of `.container` for different screen sizes.
+
+// SM-TO-SMMD
+$container-sm-to-smmd:         ((740px + $grid-gutter-width)) !default; //770
+// SMMD
+$container-smmd:               ((950px + $grid-gutter-width)) !default; //980
 
 $global-image-path: "../images";
 // #{$global-image-path}

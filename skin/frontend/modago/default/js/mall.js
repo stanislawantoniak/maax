@@ -748,8 +748,12 @@ Mall.isGoogleBot = function() {
 	return jQuery('body').hasClass('googlebot');
 };
 
-Mall.isMobile = function() {
-	return Mall.windowWidth() < Mall.Breakpoint.smmd;
+Mall.isMobile = function(breakpoint) {
+    if (breakpoint) {
+        return Mall.windowWidth() < breakpoint;
+    } else {
+        return Mall.windowWidth() < Mall.Breakpoint.sm;
+    }
 };
 
 Mall.windowWidth = function() {
@@ -1454,13 +1458,13 @@ jQuery(document).ready(function() {
     basket_dropdown();
     sales_order_details_top_resize();
 
-	jQuery(document)
+/*	jQuery(document)
 		.on('show.bs.modal', '.modal', function () {
 			jQuery('html,body').addClass('modal-open');
 		})
 		.on('hidden.bs.modal', '.modal', function () {
 			jQuery('html,body').removeClass('modal-open');
-		});
+		});*/
 
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
