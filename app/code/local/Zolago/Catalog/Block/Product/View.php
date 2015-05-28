@@ -118,6 +118,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 && isset($seo["dynamic_meta_keywords"])
                 && isset($seo["dynamic_meta_description"]))
         ) {
+
             return $seo;
         } else {
             $categoryParent = Mage::getModel('catalog/category')->load($categoryParentId);
@@ -138,9 +139,10 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 if (!isset($seo["dynamic_meta_description"]) && !empty($dynamic_meta_description)) {
                     $seo["dynamic_meta_description"] = $dynamic_meta_description;
                 }
+
             }
 
-            return $this->getDynamicMetaTags($seo, $categoryParent);
+            return $this->getDynamicMetaTagsInParents($seo, $categoryParent);
         }
     }
     /**
