@@ -206,7 +206,8 @@ Mall.listing = {
 	},
 
     initShuffle: function() {
-	    jQuery('#grid')
+	    var grid = jQuery('#grid');
+	    grid
 	        .on('layout.shuffle', function() {
 		        Mall.listing.hideListingOverlay();
                 Mall.listing.likePriceView();
@@ -216,19 +217,23 @@ Mall.listing = {
 		        }
             })
 	        .on('done.shuffle', function() {
-			    if (!Mall.listing._firstOnScreenItem) {
-				    var itemId = sessionStorage.getItem('firstOnScreenItemId');
-				    if (itemId) {
-					    Mall.listing._firstOnScreenItem = jQuery(itemId);
+			    if(!jQuery("."+Mall.listing.getFiltersClassMobile()+":visible").length) {
+				    if (!Mall.listing._firstOnScreenItem) {
+					    var itemId = sessionStorage.getItem('firstOnScreenItemId');
+					    if (itemId) {
+						    Mall.listing._firstOnScreenItem = jQuery(itemId);
+					    }
 				    }
-			    }
-			    if(Mall.listing._firstOnScreenItem) {
-				    setTimeout(function() {
-					    Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+				    if (Mall.listing._firstOnScreenItem) {
+					    setTimeout(function () {
+						    Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+						    Mall.listing.hideListingOverlay();
+					    }, 3000);
+				    } else {
 					    Mall.listing.hideListingOverlay();
-				    }, 3000);
+				    }
 			    } else {
-				    Mall.listing.hideListingOverlay();
+				    grid.shuffle('layout');
 			    }
 	        })
 	        .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
@@ -1469,7 +1474,7 @@ Mall.listing = {
 	},
 
 	getActiveLabel: function() {
-		return this.getActive().find(".active-filter-label");
+		return jQuery(".active-filter-label");
 	},
 
 	getActiveRemove: function(scope) {

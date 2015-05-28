@@ -25,10 +25,12 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
                         $collumnsValidations = $ghUrlRewriteColumns;
                         $collumnsValidations[] = $filtersColumnName;
 
-                        if (isset($csvData[0]) && $csvData[0] == $collumnsValidations) {
+						$csvHeader = isset($csvData[0]) ? array_filter($csvData[0]) : false;
+
+                        if ($csvHeader == $collumnsValidations) {
                             unset($csvData[0]);
                         } else {
-                            Mage::throwException($this->_getHelper()->__('Wrong CSV header format. First line in file should be: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters'));
+	                        $this->_exception('Wrong CSV header format. First line in file should be: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters');
                         }
 
 						//get all categories ids from csv alongside store_ids
@@ -75,9 +77,16 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 								$filters = array();
 								foreach ($row as $i => $value) {
 									if (isset($ghUrlRewriteColumns[$i])) {
-										$ghUrlRewrite[$num][$ghUrlRewriteColumns[$i]] = ($i < 2) ? (int)$value : $value; //assign fields that are available in gh_rewrite_url table
+										$ghUrlRewrite[$num][$ghUrlRewriteColumns[$i]] =
+											($i < 2) ? (int)$value :
+												($i == 9 ? mb_strtolower($value) : $value);
+												//assign fields that are available in gh_rewrite_url table
+												//for 1st 2 fields (store_id,category_id) convert them to int
+												//if field contains url () then convert it to lowercase
 									} else {
-										$filters[] = $value; //assign filters
+										if($value != '') { //skip empty columns
+											$filters[] = $value; //assign filters
+										}
 									}
 								}
 
