@@ -50,9 +50,6 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 		$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
 		$prevProductsExpire = $this->getData(self::CURRENT_PRODUCTS_EXPIRE);
 
-		Mage::log('prevCate: '.$prevCategory.' | newCate: '.$newCategory,null,'categories.log');
-		Mage::log('prevtotal: '.$prevProducts['total'].' | newTotal: '.$products['total'],null,'totals.log');
-
 		if($newCategory != $prevCategory ||
 			is_null($prevProducts) ||
 			is_null($prevProductsExpire) ||
@@ -62,7 +59,6 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 			!isset($prevProducts['query']) || $prevProducts['query'] != $products['query'] ||
 			!isset($prevProducts['total']) || $prevProducts['total'] != $products['total'])
 		{ //clear products if user is looking at another category, changed sorting or search query
-			Mage::log('productsCacheCleared',null,'productsCacheCleared.log');
 			$this->unsetData(self::CURRENT_PRODUCTS_CATEGORY)->unsetData(self::CURRENT_PRODUCTS)->unsetData(self::CURRENT_PRODUCTS_EXPIRE);
 		}
 		return $this;

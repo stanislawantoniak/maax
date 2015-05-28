@@ -127,7 +127,14 @@ class Zolago_Catalog_Vendor_AttributesController
         $coreHelper = Mage::helper('core');
 
         $attributeId = $this->getRequest()->getParam('attrId');
-        $value     = $coreHelper->escapeHtml($this->getRequest()->getParam('value'));
+        $value     = trim($coreHelper->escapeHtml($this->getRequest()->getParam('value')));
+        if (empty($value)) {
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->getResponse()->setBody(Mage::helper('zolagocatalog')->__('No suggested value'));
+            return;
+        }
+        $setId = $this->getRequest()->getParam('setId');
+        $attributeSet = Mage::getModel('eav/entity_attribute_set')->load($setId);
         $storeId   = $this->_getStore();
         $store     = Mage::app()->getStore($storeId);
         $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
@@ -146,10 +153,13 @@ class Zolago_Catalog_Vendor_AttributesController
         $storeEmail  = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_cc_store', $store);
         $storeName   = $store->getFrontendName();
         $template    = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_template', $store);
-
+        $data['attributeSetName'] = $attributeSet->getAttributeSetName();
+        $data['attributeCode'] = $attribute->getAttributeCode();
         $data['attributeName']  = $label;
         $data['attributeValue'] = $value;
-
+        $data['vendorName'] = $vendor->getVendorName();
+        $data['userEmail'] = $userEmail;
+        $data['userName'] = $userName;
         $this->sendEmailTemplate(
             $userEmail,
             $userName,
@@ -161,8 +171,7 @@ class Zolago_Catalog_Vendor_AttributesController
             null
         );
 
-        echo Mage::helper('zolagocatalog')->__('For attribute %s value %s was suggested', $label, $value);
-        die();
+        $this->getResponse()->setBody(Mage::helper('zolagocatalog')->__('For attribute %s value %s was suggested', $label, $value));
     }
 
     /**
@@ -171,6 +180,7 @@ class Zolago_Catalog_Vendor_AttributesController
      * @param $userEmail
      * @param $userName
      * @param $storeEmail
+     * @param $replyEmail
      * @param null $storeName
      * @param $template
      * @param array $templateParams
@@ -194,17 +204,19 @@ class Zolago_Catalog_Vendor_AttributesController
         $mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
 
         /** @var Mage_Core_Model_Email_Info $emailInfoVendor */
-        $emailInfoVendor = Mage::getModel('core/email_info');
-        $emailInfoVendor->addTo($userEmail, $userName);
-        $mailer->addEmailInfo($emailInfoVendor);
+//        $emailInfoVendor = Mage::getModel('core/email_info');
+//        $emailInfoVendor->addTo($userEmail, $userName);
+//        $mailer->addEmailInfo($emailInfoVendor);
 
         /** @var Mage_Core_Model_Email_Info $emailInfoStore */
         $emailInfoStore = Mage::getModel('core/email_info');
         if ($storeEmail) {
             $emailInfoStore->addTo($storeEmail, $storeName);
+            $emailInfoStore->setReplyTo($userEmail,$userName);
+            $emailInfoStore->addBcc($userEmail,$userName);
             $mailer->addEmailInfo($emailInfoStore);
         }
-
+        
         // Set all required params and send emails
         $mailer->setSender($sender);
         $mailer->setStoreId($storeId);

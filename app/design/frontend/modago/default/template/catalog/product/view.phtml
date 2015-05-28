@@ -141,17 +141,39 @@ if($vendorContext && $vendorContext->getId()) {
         <h2 class="title_section">Opis produktu <i class="bullet-strzalka-down visible-xs"></i></h2>
     </header>
     <?php $attributesData = $this->getAdditionalDataDetailed(true,false); ?>
+    <?php
+    $productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
+    $brandShopProductId = $_product->getData('brandshop');
+    ?>
     <div class="main">
-        <p><span itemprop="description"><?php echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description'); ?></span></p>
+        <div itemprop="description"><?php echo $productDescription; ?></div>
         <?php if (!empty($attributesData)) : ?>
             <ul class="list">
                 <?php foreach ($attributesData as $attr) : ?>
                 <li>
                     <strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
-                    <?php if($attr['code'] == "skuv"): ?>
-                        <span itemprop="sku"><?php echo $this->escapeHtml($attr['value']); ?></span>
-                    <?php elseif($attr['code'] == "color"): ?>
+
+                    <?php if($attr['code'] == "color"): ?>
                             <span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+                    <?php elseif($attr['code'] == "manufacturer"): ?>
+                        <?php
+                        $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+                        $vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
+                        $brand = $vendorsCollection->getFirstItem();
+
+                        $brandShopId = $brand->getId();
+                        $brandShop = Mage::helper('udropship')->getVendor($brandShopId);
+                        $brandShopName = $brandShop->getData("vendor_name");
+                        $brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
+                        ?>
+
+                        <?php if($brandShopProductId == $brandShopId): ?>
+                            <h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
+                        <?php else: ?>
+                            <?php echo $this->escapeHtml($attr['value']); ?>
+                        <?php endif; ?>
+
+
                     <?php else: ?>
 
                     <?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
@@ -233,7 +255,7 @@ if($vendorContext && $vendorContext->getId()) {
 
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="max-width: 450px;">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 	        <div class="modal-error modal-header" style="display: none;">
 		        <button type="button" class="close" data-dismiss="modal"></button>
@@ -258,7 +280,7 @@ if($vendorContext && $vendorContext->getId()) {
             <div class="modal-loaded modal-body" style="display: none;">
                 <table>
                     <tbody id="product-added">
-                    <tr>
+                    <tr id="full-width-popup-table">
                         <td class="thumb" style="width: 55px;"><img
                                 src="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(40, 50) ?>"
                                 alt=""></td>
@@ -268,19 +290,26 @@ if($vendorContext && $vendorContext->getId()) {
 
                             <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span>1</span></p></td>
 							<?php /* ensure the price in popup is correct */ ?>
-							<td class="price"></td>
+						<td class="price"></td>
+                    </tr>
+                    <tr id="small-width-popup-table">
+	                    <td></td>
+	                    <td class="price" style="padding: 0 5px;"></td>
                     </tr>
                     </tbody>
                 </table>
-                <br /><br />
-                <div class="container-fluid"><div class="row" style="text-align: center;">
-                    <div class="col-md-6" style="margin-bottom: 15px; "><a href="#" data-dismiss="modal"
-                                             class="button button-third"><?php echo $this->__("Continue shopping"); ?></a>
-                    </div>
-                    <div class="col-md-6"><a href="<?php echo Mage::getUrl('checkout/cart'); ?>"
-                                             class="button button-primary medium link"><?php echo $this->__("Go to shopping cart"); ?></a>
-                    </div>
-                </div></div>
+	            <div id="buttons-after-add-to-cart">
+		            <div class="button-after-add-to-cart" id="continue-shopping-after-add-to-cart">
+			            <a href="#" data-dismiss="modal" class="button button-third">
+				            <?php echo $this->__("Continue shopping"); ?>
+			            </a>
+		            </div>
+		            <div class="button-after-add-to-cart" id="cart-after-add-to-cart">
+			            <a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium link">
+				            <?php echo $this->__("Go to shopping cart"); ?>
+			            </a>
+		            </div>
+	            </div>
             </div>
         </div>
     </div>
