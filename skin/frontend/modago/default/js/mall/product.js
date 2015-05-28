@@ -557,13 +557,18 @@ Mall.product = {
                         .addClass("synced")
                 },
                 afterInit: function() {
-                    // Horizontal center big medias
+                    // Horizontal center big medias and Lupa always on bottom
                     var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
                     Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
                         if (jQuery(this).height() != maxHeight) {
+                            // Horizontal center big medias
                             var itemH = jQuery(this).height();
                             var marginTop = ((maxHeight - itemH) / 2);
                             jQuery(this).css('margin-top', marginTop);
+
+                            // Lupa always on bottom
+                            var bottom = marginTop - ((maxHeight/100)*2);
+                            jQuery(this).find('.view_lupa').css('bottom', '-'+bottom+'px');
                         }
                     });
                 }
