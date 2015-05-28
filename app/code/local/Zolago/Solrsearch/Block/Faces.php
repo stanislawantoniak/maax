@@ -762,7 +762,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return array(attrCode=>blockObject, ...)
      */
     protected function _getRegularFilterBlocks(array $solrData) {
-
         $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
         $facetFileds = array();
         $sorted = array();
@@ -786,7 +785,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $attrCode = $this->_extractAttributeCode($key);
             $block = null;
             $sortOrder = 0;
-
             switch ($attrCode) {
                 // Skip special facets
 				case "category_path":
@@ -807,7 +805,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             }
             // In category mode
             if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))) {
-				
                 $filter = $this->getFilterByAttribute($attrCode);
 
                 // Skip attribs with no custom filter
@@ -926,7 +923,18 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
             $collection->joinAttributeCode();
             if($this->getCurrentCategory()) {
-                $collection->addCategoryFilter($this->getCurrentCategory());
+                $category = $this->getCurrentCategory();
+                $collection->addCategoryFilter($category);
+                if (!count($collection)) {
+                    $related = $category->getRelatedCategory();
+                    if ($related) {
+                        // check related category                    
+                        $collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
+                        /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+                        $collection->joinAttributeCode();                    
+                        $collection->addCategoryFilter($related);
+                    }
+                }
             }
             $this->setData("filter_collection", $collection);
 
