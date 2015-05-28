@@ -207,31 +207,35 @@ Mall.listing = {
 	},
 
     initShuffle: function() {
-	    jQuery(document).ready(function() {
-		    jQuery('#grid')
-			    .on('layout.shuffle', function() {
-				    Mall.listing.hideListingOverlay();
-				    Mall.listing.likePriceView();
-				    Mall.listing.placeListingFadeContainer();
-				    if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
-					    Mall.listing.showLoadMoreButton();
-				    }
-			    })
-			    .on('done.shuffle', function() {
-				    if (!Mall.listing._firstOnScreenItem) {
-					    var itemId = sessionStorage.getItem('firstOnScreenItemId');
-					    if (itemId) {
-						    Mall.listing._firstOnScreenItem = jQuery(itemId);
-					    }
-				    }
-				    if(Mall.listing._firstOnScreenItem) {
-					    Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
-				    } else {
-					    Mall.listing.hideListingOverlay();
-				    }
-			    })
-			    .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
-	    });
+        jQuery(document).ready(function() {
+            jQuery('#grid')
+                .on('layout.shuffle', function() {
+                    Mall.listing.hideListingOverlay();
+                    Mall.listing.likePriceView();
+                    Mall.listing.placeListingFadeContainer();
+                    if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
+                        Mall.listing.showLoadMoreButton();
+                    }
+                })
+                .on('done.shuffle', function() {
+                    if(!jQuery("."+Mall.listing.getFiltersClassMobile()+":visible").length) {
+                        if (!Mall.listing._firstOnScreenItem) {
+                            var itemId = sessionStorage.getItem('firstOnScreenItemId');
+                            if (itemId) {
+                                Mall.listing._firstOnScreenItem = jQuery(itemId);
+                            }
+                        }
+                        if(Mall.listing._firstOnScreenItem) {
+                            Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
+                        } else {
+                            Mall.listing.hideListingOverlay();
+                        }
+                    } else {
+                        grid.shuffle('layout');
+                    }
+                })
+                .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+        });
     },
 
     /**
@@ -1468,7 +1472,7 @@ Mall.listing = {
 	},
 
 	getActiveLabel: function() {
-		return this.getActive().find(".active-filter-label");
+		return jQuery(".active-filter-label");
 	},
 
 	getActiveRemove: function(scope) {
