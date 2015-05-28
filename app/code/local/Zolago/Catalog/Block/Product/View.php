@@ -69,9 +69,11 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
 
         $catIds = $product->getCategoryIds();
+
         $collection = Mage::getResourceModel('catalog/category_collection');
         /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
         $collection->addAttributeToSelect("basic_category");
+        $collection->addAttributeToSelect("name");
         $collection->addAttributeToSelect("dynamic_meta_title");
         $collection->addAttributeToSelect("dynamic_meta_keywords");
         $collection->addAttributeToSelect("dynamic_meta_description");
@@ -143,24 +145,58 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         if(empty($seoText)){
             return $result;
         }
+        preg_match_all('#\$([a-zA-Z0-9_]+)#', $seoText, $matches, PREG_SET_ORDER);
 
-        $productModel =  Mage::getModel('catalog/product');
+        $attributesFoundInLine = array();
+        if(!empty($matches)){
+            foreach($matches as $match){
+                $attributesFoundInLine[$match[1]] = $match[1];
+            }
+        }
 
-        $colorLabel = $productModel
-            ->setColor($product->getData("color"))
-            ->getAttributeText('color');
+        if(empty($attributesFoundInLine)){
+            return $seoText;
+        }
 
-        $markaLabel = $productModel
-            ->setManufacturer($product->getData("manufacturer"))
-            ->getAttributeText('manufacturer');
+        $labels = array();
 
+        foreach ($attributesFoundInLine as $attributeCode) {
+            $label = "";
 
-        $str = array(
-            'color' => $colorLabel,
-            'marka' => $markaLabel
-        );
+            $attribute = $product->getResource()
+                ->getAttribute($attributeCode);
+            if (!$attribute) {
+                $labels[$attributeCode] = $label;
+                continue;
+            }
+            $frontend_input = $attribute->getData("frontend_input");
+
+            if ($frontend_input == "select") {
+                $label = $product
+                    ->setData($attributeCode, $product->getData($attributeCode))
+                    ->getAttributeText($attributeCode);
+            }
+            if ($frontend_input == "multiselect") {
+                $label = $product->getResource()
+                    ->getAttribute($attributeCode)
+                    ->getFrontend()
+                    ->getValue($product);
+            }
+            if ($frontend_input == "text") {
+                $label = $product->getResource()
+                    ->getAttribute($attributeCode)
+                    ->getFrontend()->getValue($product);
+            }
+
+            $labels[$attributeCode] = $label;
+            unset($label);
+            unset($attributeCode);
+            unset($attribute);
+            unset($frontend_input);
+        }
+
         $subst = array();
-        foreach($str as $code => $strItem){
+        foreach($labels as $code => $strItem){
             $subst['{$'.$code.'}'] = $strItem;
         }
 
