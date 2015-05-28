@@ -604,6 +604,7 @@ Mall.product = {
                 afterInit : function(el) {
                     el.find(".rwd-item").eq(0).addClass("synced");
                     var items = Mall.product.gallery.getThumbs().find('.rwd-item');
+                    Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
                     if (items.length <= 4 ) {
                         Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
                     }
