@@ -17,11 +17,11 @@ b, strong {
 		height: 39px;
 		width: 39px;
 		background: #000;
-		border-radius: 20px;
-		border: 3px solid #FFF;
+		border-radius: 20px !important;
+		border: 3px solid #FFF !important;
 		top: -20px;
 		right: -20px;
-		box-shadow: 0 0 3px 3px rgba(0,0,0,.6);
+		box-shadow: 0 0 3px 3px rgba(0,0,0,.6) !important;
 		&:after {
 			font-family: FontAwesome;
 			content: "\f00d";
