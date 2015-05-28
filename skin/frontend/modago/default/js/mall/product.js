@@ -563,12 +563,9 @@ Mall.product = {
                         if (jQuery(this).height() != maxHeight) {
                             // Horizontal center big medias
                             var itemH = jQuery(this).height();
-                            var marginTop = ((maxHeight - itemH) / 2);
-                            jQuery(this).css('margin-top', marginTop);
-
-                            // Lupa always on bottom
-                            var bottom = marginTop - ((maxHeight/100)*2);
-                            jQuery(this).find('.view_lupa').css('bottom', '-'+bottom+'px');
+                            var padding = ((maxHeight - itemH) / 2);
+                            jQuery(this).find('a').css('padding-top',    padding);
+                            jQuery(this).find('a').css('padding-bottom', padding);
                         }
                     });
                 }

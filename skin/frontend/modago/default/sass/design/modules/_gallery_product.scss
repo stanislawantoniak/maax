@@ -114,6 +114,11 @@
       text-align: center;
       cursor: pointer;
     }
+    .item {
+      a {
+        display: block;
+      }
+    }
   }
   #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
     .rwd-item {
