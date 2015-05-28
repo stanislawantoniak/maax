@@ -18,6 +18,8 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 
             if(isset($r['contactId']) && !empty($r['contactId'])){
                 try{
+                    //Single attribute salesmanago_contact_id without saving the entity
+                    //to avoid call Zolago_Newsletter_Model_Observer::subscribeCustomer twice
                     //$observer->getCustomer()->setData('salesmanago_contact_id', $r['contactId'])->save();
                     $observer->getCustomer()
                         ->setData('salesmanago_contact_id', $r['contactId'])
