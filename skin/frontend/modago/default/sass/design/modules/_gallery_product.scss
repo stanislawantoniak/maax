@@ -162,10 +162,10 @@
         outline:none;
     }
     .up {
-        @include sprite($allMap, arrow_top_j);
+        @include sprite($allMap, arrow_top_j_black);
     }
     .down {
-        @include sprite($allMap,arrow_bottom_j);
+        @include sprite($allMap,arrow_bottom_j_black);
     }
 }
 
