@@ -255,7 +255,7 @@ if($vendorContext && $vendorContext->getId()) {
 
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="max-width: 450px;">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 	        <div class="modal-error modal-header" style="display: none;">
 		        <button type="button" class="close" data-dismiss="modal"></button>
@@ -280,7 +280,7 @@ if($vendorContext && $vendorContext->getId()) {
             <div class="modal-loaded modal-body" style="display: none;">
                 <table>
                     <tbody id="product-added">
-                    <tr>
+                    <tr id="full-width-popup-table">
                         <td class="thumb" style="width: 55px;"><img
                                 src="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(40, 50) ?>"
                                 alt=""></td>
@@ -290,19 +290,26 @@ if($vendorContext && $vendorContext->getId()) {
 
                             <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span>1</span></p></td>
 							<?php /* ensure the price in popup is correct */ ?>
-							<td class="price"></td>
+						<td class="price"></td>
+                    </tr>
+                    <tr id="small-width-popup-table">
+	                    <td></td>
+	                    <td class="price" style="padding: 0 5px;"></td>
                     </tr>
                     </tbody>
                 </table>
-                <br /><br />
-                <div class="container-fluid"><div class="row" style="text-align: center;">
-                    <div class="col-md-6" style="margin-bottom: 15px; "><a href="#" data-dismiss="modal"
-                                             class="button button-third"><?php echo $this->__("Continue shopping"); ?></a>
-                    </div>
-                    <div class="col-md-6"><a href="<?php echo Mage::getUrl('checkout/cart'); ?>"
-                                             class="button button-primary medium link"><?php echo $this->__("Go to shopping cart"); ?></a>
-                    </div>
-                </div></div>
+	            <div id="buttons-after-add-to-cart">
+		            <div class="button-after-add-to-cart" id="continue-shopping-after-add-to-cart">
+			            <a href="#" data-dismiss="modal" class="button button-third">
+				            <?php echo $this->__("Continue shopping"); ?>
+			            </a>
+		            </div>
+		            <div class="button-after-add-to-cart" id="cart-after-add-to-cart">
+			            <a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium link">
+				            <?php echo $this->__("Go to shopping cart"); ?>
+			            </a>
+		            </div>
+	            </div>
             </div>
         </div>
     </div>

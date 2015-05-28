@@ -1646,9 +1646,15 @@ Mall.listing = {
 
 
 		} else {
-			var content = self.getContentBlock();
-            var leftOffset = content.offset().left + 15;
-            var topOffset = content.offset().top;
+			var content = self.getContentBlock(),
+				containerOffset = jQuery('#sb-site').offset(),
+				leftOffset = content.offset().left + 15,
+                topOffset = content.offset().top;
+
+			if(containerOffset.left != 0) {
+				leftOffset = leftOffset - containerOffset.left;
+			}
+
 			filters
 				.removeClass(self.getFiltersClassMobile())
 				.addClass(self.getFiltersClassDesktop())

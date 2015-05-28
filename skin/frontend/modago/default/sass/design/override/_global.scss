@@ -11,11 +11,24 @@ b, strong {
 
 .modal-content {
 	button.close {
-    background:$allMap;
-	@include sprite($allMap, btn-close);
-	@include sprite-dimensions($allMap, btn-close);
-    opacity: 1;
-    color: #fff;
-    text-shadow: none;
-}
+		opacity: 1;
+		color: #fff;
+		text-shadow: none;
+		height: 39px;
+		width: 39px;
+		background: #000;
+		border-radius: 20px;
+		border: 3px solid #FFF;
+		top: -20px;
+		right: -20px;
+		box-shadow: 0 0 3px 3px rgba(0,0,0,.6);
+		&:after {
+			font-family: FontAwesome;
+			content: "\f00d";
+			position: absolute;
+			top: 6px;
+			left: 8px;
+			color: #FFFFFF;
+		}
+	}
 }
