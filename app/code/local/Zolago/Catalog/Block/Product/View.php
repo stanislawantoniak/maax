@@ -85,53 +85,65 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $dynamic_meta_title = $cat->getData("dynamic_meta_title");
         $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
         $dynamic_meta_description = $cat->getData("dynamic_meta_description");
-        if (!empty($dynamic_meta_title) || !empty($dynamic_meta_keywords) || !empty($dynamic_meta_description)) {
-            $seo = array(
-                "dynamic_meta_title" => $dynamic_meta_title,
-                "dynamic_meta_keywords" => $dynamic_meta_keywords,
-                "dynamic_meta_description" => $dynamic_meta_description
-            );
-        } else {
-            $categoryParentId = $cat->getData("parent_id");
-            if ($categoryParentId == $rootId) {
-                return $seo;
-            }
-            $categoryParent = Mage::getModel('catalog/category')->load($categoryParentId);
-            if($categoryParent->getData("basic_category") == 1){
-                $dynamic_meta_title = $categoryParent->getData("dynamic_meta_title");
-                $dynamic_meta_keywords = $categoryParent->getData("dynamic_meta_keywords");
-                $dynamic_meta_description = $categoryParent->getData("dynamic_meta_description");
-                if (!empty($dynamic_meta_title) || !empty($dynamic_meta_keywords) || !empty($dynamic_meta_description)) {
-                    $seo = array(
-                        "dynamic_meta_title" => $dynamic_meta_title,
-                        "dynamic_meta_keywords" => $dynamic_meta_keywords,
-                        "dynamic_meta_description" => $dynamic_meta_description
-                    );
-                } else {
-                    $categoryParentLevel2Id = $categoryParent->getData("parent_id");
-                    if ($categoryParentLevel2Id == $rootId) {
-                        return $seo;
-                    }
-                    $categoryParentLevel2 = Mage::getModel('catalog/category')->load($categoryParentLevel2Id);
-                    if($categoryParentLevel2->getData("basic_category") == 1){
-                        $dynamic_meta_title = $categoryParentLevel2->getData("dynamic_meta_title");
-                        $dynamic_meta_keywords = $categoryParentLevel2->getData("dynamic_meta_keywords");
-                        $dynamic_meta_description = $categoryParentLevel2->getData("dynamic_meta_description");
-                        if (!empty($dynamic_meta_title) || !empty($dynamic_meta_keywords) || !empty($dynamic_meta_description)) {
-                            $seo = array(
-                                "dynamic_meta_title" => $dynamic_meta_title,
-                                "dynamic_meta_keywords" => $dynamic_meta_keywords,
-                                "dynamic_meta_description" => $dynamic_meta_description
-                            );
-                        }
-                    }
-                }
-            }
+        if (!empty($dynamic_meta_title)) {
+            $seo["dynamic_meta_title"] = $dynamic_meta_title;
         }
+        if (!empty($dynamic_meta_keywords)) {
+            $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
+        }
+        if (!empty($dynamic_meta_description)) {
+            $seo["dynamic_meta_description"] = $dynamic_meta_description;
+        }
+
+        if (isset($seo["dynamic_meta_title"])
+            && isset($seo["dynamic_meta_keywords"])
+            && isset($seo["dynamic_meta_description"])
+        ) {
+            return $seo;
+        }
+
+        //Go up by category tree
+        $seo = $this->getDynamicMetaTags($seo, $cat);
 
         return $seo;
     }
 
+    public function getDynamicMetaTags($seo, $category)
+    {
+        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $categoryParentId = $category->getData("parent_id");
+
+
+        if ($categoryParentId == $rootId ||
+            (isset($seo["dynamic_meta_title"])
+                && isset($seo["dynamic_meta_keywords"])
+                && isset($seo["dynamic_meta_description"]))
+        ) {
+            return $seo;
+        } else {
+            $categoryParent = Mage::getModel('catalog/category')->load($categoryParentId);
+
+            if ($categoryParent->getData("basic_category") == 1) {
+
+                $dynamic_meta_title = $categoryParent->getData("dynamic_meta_title");
+                if (!isset($seo["dynamic_meta_title"]) && !empty($dynamic_meta_title)) {
+                    $seo["dynamic_meta_title"] = $dynamic_meta_title;
+                }
+
+                $dynamic_meta_keywords = $categoryParent->getData("dynamic_meta_keywords");
+                if (!isset($seo["dynamic_meta_keywords"]) && !empty($dynamic_meta_keywords)) {
+                    $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
+                }
+
+                $dynamic_meta_description = $categoryParent->getData("dynamic_meta_description");
+                if (!isset($seo["dynamic_meta_description"]) && !empty($dynamic_meta_description)) {
+                    $seo["dynamic_meta_description"] = $dynamic_meta_description;
+                }
+            }
+
+            return $this->getDynamicMetaTags($seo, $categoryParent);
+        }
+    }
     /**
      * @param $product Zolago_Catalog_Model_Product
      * @param $seoText
