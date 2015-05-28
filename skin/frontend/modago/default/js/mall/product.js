@@ -550,16 +550,39 @@ Mall.product = {
                 rewindNav: false,
                 itemsScaleUp: true,
                 afterAction: function() {
-                    var current = this.currentItem;
                     var thumbs  = Mall.product.gallery.getThumbs();
                     thumbs.find(".rwd-item")
                         .removeClass("synced")
-                        .eq(current)
+                        .eq(this.currentItem)
                         .addClass("synced")
+                },
+                afterInit: function() {
+                    // Horizontal center big medias
+                    var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
+                    Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
+                        if (jQuery(this).height() != maxHeight) {
+                            var itemH = jQuery(this).height();
+                            var marginTop = ((maxHeight - itemH) / 2);
+                            jQuery(this).css('margin-top', marginTop);
+                        }
+                    });
                 }
             });
+        },
 
-
+        /**
+         * Find max height of big medias from rwd carousel items
+         * @returns {number}
+         */
+        findMaxHeightBigMedia: function() {
+            var items = this.getBigMedia().find('.rwd-item');
+            var maxHeight = 0;
+            items.each(function(index, elem) {
+                if(jQuery(this).height() >= maxHeight) {
+                    maxHeight = jQuery(elem).height();
+                }
+            });
+            return maxHeight;
         },
 
         /**
