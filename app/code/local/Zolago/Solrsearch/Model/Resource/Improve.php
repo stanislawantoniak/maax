@@ -293,12 +293,37 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		if($isParent!==null){
 			$select->where("category_product.is_parent=?", $isParent ? 1 : 0);
 		}
-
         // ###################################################################
         // Getting all categories ids where 'should be' product in tree hierarchy logic
         // ###################################################################
         $categories = $adapter->fetchAll($select);
-
+        // add related categories
+        $categoryRelatedCheck = array();
+        foreach ($categories as $category) {
+            $categoryRelatedCheck[$category['category_id']] = $category['category_id'];
+        }
+        $relatedCategories = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToFilter('related_category_products',1)            
+            ->addAttributeToFilter('related_category',$categoryRelatedCheck)
+            ->addAttributeToSelect('entity_id')
+            ->addAttributeToSelect('path');
+        // 
+        $categoryRelated = array();
+        foreach ($relatedCategories as $related) {
+            $categoryRelated[] = array(
+                'entity_id' => $related->getId(),
+                'path'		=> $related->getPath(),
+            );
+        }
+        foreach ($allIds as $id) {
+            foreach ($categoryRelated as $row) {
+                $categories[] = array (
+                    'product_id' 	=> $id,
+                    'category_id' 	=> $row['entity_id'],
+                    'path'			=> $row['path'],
+                );
+            }
+        }
         $idsToLoad = array();
         foreach ($categories as $idx => $value) {
             $ex = explode('/', $value['path']);
