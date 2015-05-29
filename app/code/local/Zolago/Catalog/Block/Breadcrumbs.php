@@ -258,6 +258,9 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         return $this->_breadcrumbBlock;
     }
 
+    public function getPathProp(){
+        return $this->_getPath();
+    }
     /**
      * Preparing layout
      *

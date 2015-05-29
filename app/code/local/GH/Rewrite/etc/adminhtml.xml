@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <catalog>
+            <children>
+                <ghrewrite translate="title" module="ghrewrite">
+                    <title>GH URL Rewrite Management</title>
+                    <action>adminhtml/ghrewrite/index</action>
+                    <sort_order>31</sort_order>
+                </ghrewrite>
+            </children>
+        </catalog>
+    </menu>
+</config>
