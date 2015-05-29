@@ -84,13 +84,14 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$rma = $observer->getEvent()->getData('rma');
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$track = $observer->getEvent()->getData('track');
+		$time = Mage::getSingleton('core/date')->timestamp();
 		/* @var $track Zolago_Rma_Model_Rma_Track */
 		$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
 		$carrierCode = $track->getCarrierCode () ;
 		if (in_array($carrierCode,$allowCarriers) 
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
-				$track->setNextCheck(date('Y-m-d H:i:s', time()));
+				$track->setNextCheck(date('Y-m-d H:i:s', $time));
 				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
 				$track->save();
 		    
@@ -141,11 +142,15 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 						$statusObject->getCustomerNotes() : $statusObject->getTitle())),
 			$notify
 		);
+
 		if ($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN) {
 		    $po = $rma->getPo();
 		    $oldStatus = $po->getUdropshipStatus();
+
 		    if ($oldStatus != Zolago_Po_Model_Po_Status::STATUS_RETURNED) {
+
 		        $po->setUdropshipStatus(Zolago_Po_Model_Po_Status::STATUS_RETURNED);
+
 		        $helper = Mage::helper('udpo');
                 $_comment = $helper->__("[PO status changed from '%s' to '%s']",
                             $helper->getPoStatusName($oldStatus),
@@ -154,6 +159,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		        $po->save();
 		        $po->addComment($_comment,false,true);
 		        $po->saveComments();
+
 		    }
 		}
 		/*$this->_logEvent(

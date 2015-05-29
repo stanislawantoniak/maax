@@ -5,6 +5,8 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
      // pager visible in footer
      protected $_isblockType = false;
      protected $pagerFooter = true;
+    protected $_massactionBlockName = 'zolagocatalog/widget_grid_massaction';
+
      public function __construct() {
         parent::__construct();
         $this->setId('catalog_image_grid');
@@ -33,6 +35,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 	
 	public function getFilterValueByIndex($index) {
 		$param = Mage::app()->getRequest()->getParam($this->getVarNameFilter());
+
 		if($param){
 			$param = $this->helper('adminhtml')->prepareFilterString($param);
 			if(isset($param[$index])){
@@ -42,6 +45,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		return null;
 	}
 	public function getFilterValueByColumn($columnId) {
+
 		$index = $this->getColumn($columnId)->getIndex();
 		return $this->getFilterValueByIndex($index);
 	}
@@ -87,7 +91,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('image');
-		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/massaction.phtml");
+		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/vendor_image/massaction.phtml");
 
 		
 		$this->getMassactionBlock()->addItem('check_gallery', array(

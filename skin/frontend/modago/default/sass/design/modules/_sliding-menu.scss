@@ -16,22 +16,11 @@
 	> header {
 		background:#2d2d2d;
 		
-		a:link,
-		a:visited {
-			line-height: 53px;
+		a, a:visited {
+			line-height: 57px;
 			color:#fff;
 			font-size: 14px;
-			text-transform: uppercase;
-			@include max-screen($screen-sm-max) {
-			      line-height: 41px;
-			   }
-			i {
-				font-size: 20px;
-				line-height: 53px;
-				@include max-screen($screen-sm-max) {
-			      line-height: 41px;
-			   }
-			}
+			text-decoration: underline;
 		}
 	}
 }
@@ -76,17 +65,17 @@ color: #f2f2f2;
 
 
 .sb-menu  li a.sb-toggle-submenu {
-	background: url('../images/arrow-menu-sliding-wite.png') 251px 50% no-repeat;
+	background: url('../images/arrow-menu-sliding-wite.png') 90% 50% no-repeat;
 }
 .sb-menu  li a.sb-submenu-active {
-	background: url('../images/arrow-menu-sliding-active.png') 241px 50% no-repeat;
+	background: url('../images/arrow-menu-sliding-active.png') 90% 50% no-repeat;
 }
 
 .sb-menu  li ul a.sb-toggle-submenu {
-	background: url('../images/arrow-menu-sliding-wite.png') 223px 50% no-repeat;
+	background: url('../images/arrow-menu-sliding-wite.png') 90% 50% no-repeat;
 }
 .sb-menu  li ul a.sb-submenu-active {
-	background: url('../images/arrow-menu-sliding-active.png') 223px 50% no-repeat;
+	background: url('../images/arrow-menu-sliding-active.png') 90% 50% no-repeat;
 }
 .sb-menu > li.separator,
 .sb-menu li.separator {
@@ -108,8 +97,7 @@ color: #f2f2f2;
 
 		background:#000;
 		
-		a:link,
-		a:visited {
+		a, a:visited {
 			line-height: 53px;
 			color:#fff;
 			font-size: 14px;
@@ -133,8 +121,7 @@ color: #f2f2f2;
 	
 	> header {
 		background:#2d2d2d;
-		a:link,
-		a:visited {
+		a, a:visited {
 			line-height: 53px;
 			color:#fff;
 			font-size: 14px;

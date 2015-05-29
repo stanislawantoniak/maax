@@ -3,13 +3,32 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     public function _construct() {
         parent::_construct();
+
         $this->setTemplate("zolagosolrsearch/category/view.phtml");
     }
 	
 	protected function _prepareLayout() {
+        parent::_prepareLayout();
+
+        if ($headBlock = $this->getLayout()->getBlock('head')) {
+            $category = $this->getCurrentCategory();
+            if ($title = $category->getMetaTitle()) {
+                $headBlock->setTitle($title);
+            }
+            if ($description = $category->getMetaDescription()) {
+                $headBlock->setDescription($description);
+            }
+            if ($keywords = $category->getMetaKeywords()) {
+                $headBlock->setKeywords($keywords);
+            }
+            if ($this->helper('catalog/category')->canUseCanonicalTag()) {
+                $headBlock->addLinkRel('canonical', $category->getUrl());
+            }
+        }
+
 		if($this->isContentMode()){
 			$this->getLayout()->getBlock('content')->
-					unsetChild('solrsearch_result_title')->
+					//unsetChild('solrsearch_result_title')->
 					unsetChild('solrsearch_product_list_active')->
 					unsetChild('solrsearch_product_list_toolbar');
             $this->getLayout()
@@ -17,6 +36,8 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->addBodyClass('node-type-main_categories')
                 ->addBodyClass('is-content-mode')
                 ->setTemplate('page/1column.phtml');
+
+			$this->getLayout()->getBlock('before_body_end')->unsetChild('searchfaces');
 
 
 		} elseif(!$this->isMixedMode()) {
@@ -26,6 +47,12 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->addBodyClass('filter-sidebar');
         }
 
+		if($this->isMixedMode()) {
+			$this->getLayout()
+				->getBlock('root')
+				->addBodyClass('filter-sidebar');
+		}
+
         /** @var Zolago_Dropship_Model_Vendor $vendor */
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
         if($vendor && $vendor->getId()) {
@@ -33,6 +60,14 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->getBlock('root')
                 ->addBodyClass('vendor-top-bottom-header');
         }
+
+		if ($this->helper('catalog/category')->canUseCanonicalTag()) {
+			$this->getLayout()->getBlock('head')->addLinkRel('canonical', $this->getCurrentCategory()->getUrl());
+		}
+
+		if($this->helper('zolagocommon')->isGoogleBot()) {
+			$this->getLayout()->getBlock('root')->addBodyClass('googlebot');
+		}
 
 		return parent::_prepareLayout();
 	}
@@ -42,12 +77,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         $res = false;
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
-           /* if ($category->getIsAnchor()) {
-                $state = Mage::getSingleton('catalog/layer')->getState();
-                if ($state && $state->getFilters()) {
-                    $res = false;
-                }
-            }*/
         }
         return $res;
     }
@@ -72,10 +101,19 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         return $this->getData('cms_block_html');
 
     }
-    public function getSidebarWrapper() {
-        $category_id = $this->getCurrentCategory()->getId();
-        $name = 'sidebar-c'.$category_id.'-wrapper';
-        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml(); 
+
+    public function getSidebarWrapper()
+    {
+        $categoryId = $this->getCurrentCategory()->getId();
+        $name = "sidebar-c{$categoryId}-wrapper";
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+        if ($vendor) {
+            $vendorId = $vendor->getVendorId();
+            $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
+        }
+
+        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml();
     }
 
     public function getProductListHtml() {

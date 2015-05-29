@@ -13,10 +13,6 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     protected $_collection;
 
     protected $_pidList;
-    /**
-     * csv file
-     */
-    protected $_file;
 
     protected function _construct() {
         $this->_init('zolagocatalog/mapper');
@@ -28,7 +24,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     public function setPath($path) {
         $this->_path = $path;
     }
-    protected function _getFileList() {
+    public function _getFileList() {
         $list = array();
         $dir = dir($this->_path);
         while (false !== ($entry = $dir->read())) {
@@ -48,21 +44,15 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $dir->close();
         return $list;
     }
-    public function setFile($file) {
-        $this->_file = $file;
-    }
-    public function mapByFile() {
+    public function mapByFile($importlist, $removeImages = false, $fullList = array()) {
+        $hlp = Mage::helper('zolagocatalog');
+        $response = array();
         $count = 0;
+        $message = "";
         $storeid = 0;
-        $file = $this->_file;
-        $importlist = array();
-        foreach ($file as $line) {
-            if (trim($line)) {
-                $tmp = explode(';',$line);
-                $importlist[$tmp[0]][] = $tmp;
-            }
-        }
         $pidList = array();
+
+        $toDelete = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
             $pid = $item->getData('entity_id');
@@ -74,14 +64,20 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                 // found file
                 foreach ($importlist[$skuv] as $filename) {
                     $imagefile=$this->_copyImageFile($filename[1]);
-                    if($imagefile!==false)
+
+                    if(!$imagefile){
+                        $message[] = $hlp->__("File:")." <b>" . $filename[1] . "</b> " . $hlp->__("not found among uploaded");
+                    } else
                     {
                         //add to gallery
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
                             // remove image from upload area
-                            @unlink($this->_path.'/'.$filename[1]);
+                            //$toDelete[] =  $this->_path.'/'.$filename[1];
+
                             $updateFlag = true;
                             $count ++;
+                        } else {
+                            $message[] = $hlp->__("An error occured while adding image")." <b>" . $filename[1] . "</b> ".$hlp->__("to gallery");
                         }
                     }
                 }
@@ -94,7 +90,31 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $this->_savePid($pidList);
         }
-        return $count;
+
+        $path = $this->_path;
+        if ($removeImages) {
+            if (!empty($fullList)) {
+                foreach ($fullList as $fullListItem) {
+                    if (!empty($fullListItem)) {
+                        foreach ($fullListItem as $filename) {
+                            if (isset($filename[1])) {
+                                $toDelete[] = $path . '/' . $filename[1];
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($toDelete) {
+                foreach ($toDelete as $file) {
+                    @unlink($file);
+                }
+            }
+        }
+        $response['count'] = $count;
+        $response['message'] = $message;
+        $response['pid'] = $pidList;
+        return $response;
     }
     public function getPidList() {
         return $this->_pidList;
@@ -109,30 +129,45 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
 
     }
-    public function mapByName() {
+    public function mapByName($list) {
+        $hlp = Mage::helper('zolagocatalog');
+        $response = array();
+
         $count = 0;
-        $list = $this->_getFileList();
+        $message = "";
+
         $storeid = 0;
         $pidList = array();
+
+        if ($this->_collection->getSize() ==0){
+            $message[] = $hlp->__("Sorry, no matches found for the selected images");
+        }
         foreach ($this->_collection as $item) {
             $updateFlag = false;
             $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+
             $pid = $item->getData('entity_id');
             $label = $item->getData('name');
             if (!$skuv) {
                 continue;
             }
+
             foreach ($list as $file) {
-                if (!strncmp($skuv,$file,strlen($skuv))) {
+                if (!strncmp(trim($skuv),trim($file),strlen($skuv))) {
                     $imagefile=$this->_copyImageFile($file);
-                    if($imagefile!==false)
+                    if(!$imagefile)
                     {
+                        $message[] = $hlp->__("File:")." <b>" . $file . "</b> ".$hlp->__("not found among uploaded");
+                    } else {
                         //add to gallery
+
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
                             // remove image from upload area
                             @unlink($this->_path.'/'.$file);
                             $count ++;
                             $updateFlag = true;
+                        } else {
+                            $message[] = $hlp->__("An error occurred while adding image")." <b>" . $file . "</b> ".$hlp->__("to gallery");
                         }
                     }
 
@@ -146,7 +181,11 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         if ($pidList) {
             $this->_savePid($pidList);
         }
-        return $count;
+        $response['count'] = $count;
+        $response['message'] = $message;
+        $response['pid'] = $pidList;
+
+        return $response;
 
     }
     /**
@@ -239,7 +278,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             $sql="INSERT INTO $tgv
                  (value_id,store_id,position,disabled,label)
                  VALUES ('%d','%d','%d','%d','%s')
-                 ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`)";
+                 ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`),disabled=1";
             $insert = sprintf($sql,$vid,$storeid,$pos,1,$imglabel);
 
             $writeConnection = $resource->getConnection('core_write');
@@ -312,26 +351,101 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     }
     public function checkGallery($list) {
         $pidList = explode(',',$list);
+
         if ($pidList) {
+            $productEntityId = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+            $attributeImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'image')->getAttributeId();
+            $attributeSmallImage = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'small_image')->getAttributeId();
+            $attributeThumbnail = Mage::getModel('eav/entity_attribute')->loadByCode($productEntityId, 'thumbnail')->getAttributeId();
+
+
             $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+
+            $tg=$resource->getTableName('catalog_product_entity_media_gallery');
+            $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
+
+            $sql1 = "
+        SELECT
+          gallery.`entity_id` AS product_id,
+          gallery.`value` AS image_path,
+          MIN(gallery_value.`position`) AS sort_order
+        FROM
+          {$tg} gallery
+          JOIN {$tgv} AS gallery_value
+            ON gallery.`value_id` = gallery_value.`value_id`
+        WHERE gallery.`entity_id` IN (%s)
+        GROUP BY gallery.`entity_id`
+            ";
+
+            $query1 = $writeConnection->query(sprintf($sql1,$list));
+
+            $minPositions = $query1->fetchAll();
+
+            $minPositionsData = array();
+            if(!empty($minPositions)){
+                foreach($minPositions as $minPosition){
+                    $minPositionsData[$minPosition['product_id']] = $minPosition['sort_order'];
+                }
+            }
+
+            $sendProductToIndexAndSolr = array();
             foreach ($pidList as $pid) {
-				/**
-				 * @todo full product load not required;
-				 * use mass action save
-				 */
+                /**
+                 * @todo full product load not required;
+                 * use mass action save
+                 */
                 $_product = Mage::getModel('catalog/product')->load($pid);
                 $_product->setGalleryToCheck(0);
                 $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+
+                if($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED){
+                    $sendProductToIndexAndSolr[] = $pid;
+                }
+
+                //Pierwsze wgrywane zdjęcie musi mieć ustawione dodatkowe parametry w galerii (base image, small image, thumbnail
+                $minPosition = isset($minPositionsData[$pid]) ? (int)$minPositionsData[$pid] : 0;
+
+                $sqlI = "INSERT IGNORE INTO `catalog_product_entity_varchar`   (entity_type_id, attribute_id,store_id,entity_id)
+                VALUES ({$productEntityId},{$attributeImage},0,%s) , ({$productEntityId},{$attributeSmallImage},0,%s),({$productEntityId},{$attributeThumbnail},0,%s);";
+
+                $writeConnection->query(sprintf($sqlI,$pid,$pid,$pid));
+
+                $sql2 = "UPDATE catalog_product_entity_media_gallery AS mg,
+                catalog_product_entity_media_gallery_value AS mgv,
+                catalog_product_entity_varchar AS ev
+                SET ev.value = mg.value
+                WHERE  mg.value_id = mgv.value_id
+                AND mg.entity_id = ev.entity_id
+                  AND ev.attribute_id IN ({$attributeImage}, {$attributeSmallImage}, {$attributeThumbnail})
+                  AND mgv.position = {$minPosition}
+                  AND mg.entity_id=%s;
+                ";
+
+                $writeConnection->query(sprintf($sql2,$pid));
             }
-            $tg=$resource->getTableName('catalog_product_entity_media_gallery');
-            $tgv=$resource->getTableName('catalog_product_entity_media_gallery_value');
+
+
             $sql = 'UPDATE '.$tgv.' as gv '.
                    ' INNER JOIN '.$tg.' as g ON g.value_id = gv.value_id '.
                    ' SET gv.disabled = 0 '.
                    ' WHERE g.entity_id in (%s)';
-            $writeConnection = $resource->getConnection('core_write');
             $writeConnection->query(sprintf($sql,$list));
+
+
+
+            $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+            /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+            $indexer->reindexEntities($sendProductToIndexAndSolr);
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $sendProductToIndexAndSolr
+                )
+            );
         }
+
     }
 
 }

@@ -93,7 +93,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
      * @return null|string
      */
     public function getManufacturerLogoUrl(Mage_Catalog_Model_Product $model) {
-        if($model->getData("manufacturer_logo")){
+        if($model->getData("manufacturer_logo")){            
             return Mage::getBaseUrl('media') . $model->getData("manufacturer_logo");
         }
         return null;

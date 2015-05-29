@@ -106,7 +106,29 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 	   $select->reset(Zend_Db_Select::GROUP);
 	   return $select;
    }
-   
+
+    public function addProductFlagAttributeToSelect($storeId = null) {
+        if (!empty($storeId)) {
+            $this->setStoreId($storeId);
+            $this->addStoreFilter($storeId);
+        }
+        $this->addAttributeToFilter('product_flag',Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE);
+        return $this;
+    }
+
+    public function addReversProductRelation($storeId = null) {
+        if (!empty($storeId)) {
+            $this->addStoreFilter($storeId);
+        }
+        $select = $this->getSelect();
+
+        $select->joinLeft(
+            array("product_relation" => $this->getTable('catalog/product_relation')),
+            "`e`.`entity_id` = `product_relation`.`child_id`"
+        );
+
+        return $this;
+    }
 }
 
 

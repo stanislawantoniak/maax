@@ -58,6 +58,9 @@ body {
 	@media(max-width:767px) {
 		margin: 20px 20px;
 	}
+	&.wide {
+		width: 950px;
+	}
 }
 
 .customNavigation a {top: 38%}

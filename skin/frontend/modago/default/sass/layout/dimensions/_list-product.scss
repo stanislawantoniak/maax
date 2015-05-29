@@ -20,6 +20,7 @@
 		 	img {
 		 		width:100%;
 		 		height: auto;
+			    position: absolute;
 		 	}
 		 }
 	 
@@ -51,6 +52,7 @@
 #listing-loading {
   width: 100%;
   text-align: center !important;
+  display: none;
 }
 #listing-loading > img {
   display: block;

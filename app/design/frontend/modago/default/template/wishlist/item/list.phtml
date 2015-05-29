@@ -5,6 +5,7 @@
 $_collection = $this->getItems();
 /** @var Zolago_Catalog_Helper_Product $_helper */
 $_helper = Mage::helper('zolagocatalog/product');
+$brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
 ?>
 
 <div class="container-fluid" id="items-product">
@@ -16,27 +17,15 @@ $_helper = Mage::helper('zolagocatalog/product');
                         <?php $_product = $product->getProduct(); ?>
                         <?php $_productImageUrl = $_helper->getResizedImageUrl($_product); ?>
                         <?php $_productImageInfo = $_helper->getResizedImageInfo($_product); ?>
-                        <?php
-//                        var_dump($product->getWishlistCount());
-//                        var_dump($_product->getWishlistCount());
-//                        continue;
-
-//                        var_dump($product->getInMyWishlist());
-//                        continue;
-
-                        ?>
-
-
-                        <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
+                        <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
-                                    <figure class="img_product">
-                                        <img
-                                            src="<?php echo $_productImageUrl; ?>"
-                                            alt="<?php $this->escapeHtml($_product->getName()); ?>"
-                                            class="img-responsive"/>
-                                    </figure>
-	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $product->getManufacturerLogoUrl(); ?>)"></div>
+	                                <figure class="img_product" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
+		                                <img src="<?php echo $_productImageUrl; ?>"
+		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
+		                                     class="img-responsive" />
+	                                </figure>
+	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $brandImagesList[$product->getData('brand_id')]; ?>)"></div>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
@@ -82,8 +71,10 @@ $_helper = Mage::helper('zolagocatalog/product');
 	                                            <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
                                             </span>
 	                                        <span class="icoLike">
-                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt="" onclick="return false;" />
-                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt="" onclick="return false;" />
+                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/svg/unlike.svg'); ?>"
+                                                     alt="" onclick="return false;" width="18" height="18" />
+                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/svg/like.svg'); ?>"
+                                                     alt="" onclick="return false;" width="18" height="18" />
                                             </span>
                                             <div class="toolLike"></div>
                                         </div>
@@ -112,10 +103,12 @@ $_helper = Mage::helper('zolagocatalog/product');
     Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
     Mall.translate.add("You", "<?php echo $this->__("You"); ?>");
 
+    Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>","<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+
     var grid = jQuery('#grid'),
         sizer = jQuery(grid).find('.shuffle__sizer');
 
-    grid.shuffle({throttleTime: 500});
+    grid.shuffle({throttleTime: 800, speed: 0, supported: false });
     grid.shuffle('update');
 
     jQuery(grid).on('layout.shuffle', function() {

@@ -2,7 +2,7 @@
 	border-left:1px solid #ebebeb;
 	border-right:1px solid #ebebeb;
 	background:#fff;
-	border-top: 3px solid #6fffcf;
+	border-top: 3px solid $color-accent;
 	font-family: $fontRegular;
 	font-size: 12px;
 
@@ -20,9 +20,12 @@
 		cursor:pointer;
 		white-space:nowrap;
 		&:before {
-			background:#6fffcf; 
+			background:$color-accent;
 		}
 	}
+    .no-pointer {
+        cursor: default;
+    }
 	dl {
 		dt {
 			text-transform: uppercase;
@@ -41,7 +44,16 @@
 	.action.clear {
 		text-align: center;
 	}
-
+    .bigger-left{
+        dl{
+            dd {
+                padding: 0px 5px 0px 8px;
+            }
+        }
+    }
+    .no-margin {
+        margin: 0px 0px 0px 0px;
+    }
 }
 
 .current-filter {
@@ -151,7 +163,7 @@
 				vertical-align: middle;
 				label {
 					img {
-						border:1px solid #afafaf;
+						border:1px solid $gray;
 						margin:2px;
 						width:27px;
 						height:27px;
@@ -235,7 +247,7 @@
                 vertical-align:middle;
                 cursor:pointer;
                 font-weight:normal;
-                color:#1e1e1e;
+                color:$gray-darker;
                 letter-spacing: -.5px;
                 .suffix {
 					color:#b0b0b0;
@@ -263,7 +275,7 @@
 		input[type=checkbox].css-checkbox:checked + label.css-label,
             input[type=radio].css-radio:checked + label.css-label {
 			background-position: 0 -100px;
-			color:#1e1e1e;
+			color:$gray-darker;
 		}
 
     }

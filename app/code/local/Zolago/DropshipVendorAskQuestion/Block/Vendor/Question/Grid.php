@@ -17,10 +17,18 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$collection = Mage::getModel('udqa/question')->getCollection();
 		/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
 		$collection->
-				joinShipments()->
 				joinProducts()->
 				joinVendors();
-		
+				
+		$collection->getSelect()->joinLeft(array(
+		    'udropship_po' => $collection->getTable('udpo/po')),
+		    'main_table.po_id = udropship_po.entity_id',
+		    array(
+		        'increment_id' => 'udropship_po.increment_id',
+		        
+            )
+        );
+		    
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		/* @var $vendor Zolago_Dropship_Model_Vendor */
 		$vendorsIds = $vendor->getChildVendorIds();
@@ -54,7 +62,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 
         if (Zend_Validate::is($value, 'EmailAddress')) {
             // overridden behavior
-            $field = 'customer_email';
+            $field = 'main_table.customer_email';
         }
 
         if ($field && isset($cond)) {
@@ -90,12 +98,18 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("Product"),
 		));
-
 		$this->addColumn("product_sku", array(
 			"type"		=>	"text",
 			"index"		=>	"product_sku",
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("SKU"),
+		));
+
+		$this->addColumn("order_id", array(
+			"type"		=>	"text",
+			"index"		=>	"increment_id",
+			"class"		=>  "form-controll",
+			"header"	=>	$_helper->__("Order ID"),
 		));
 		
 		$this->addColumn("question_date", array(
@@ -120,24 +134,6 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
             'filter_condition_callback' => array($this, 'filterByEmailIfValid'),
 		));
 		
-		$this->addColumn("visibility", array(
-			"type"		=>	"options",
-			"options"	=> array(
-				0 => $this->__("Private"),
-				1 => $this->__("Public")
-			),
-			"index"		=>	"visibility",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Visibility"),
-		));
-		
-		
-		$this->addColumn("order_increment_id", array(
-			"type"		=>	"text",
-			"index"		=>	"order_increment_id",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Order"),
-		));
 		
 		$this->addColumn("is_replied", array(
 			"type"		=>	"options",

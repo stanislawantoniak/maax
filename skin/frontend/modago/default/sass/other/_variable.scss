@@ -8,6 +8,25 @@
 //@screen-sxs-max:             @screen-sxs;
 //@screen-phone:               @screen-sxs-max;
 
+// NEW FOR LISTING ( FOR TABLETS )
+// NOW YOU CAN USE OLD BOOTSTRAP DEFAULT:
+// XS(480) -> XS-MAX(767) -> SM(768) -> SM-MAX(991) -> MD(992) -> MD-MAX(1199) -> LG(1200)
+//
+// AND NEW FOR LISTING
+// XS(480) -> XS-MAX(767) -> SM-TO-SMMD(768) -> SM-TO-SMMD-MAX(809) -> SMMD(810) -> SMMD-MAX(991) -> MD(992) -> MD-MAX(1199) -> LG(1200)
+
+// Small screen / tablet
+$screen-sm-to-smmd:            $screen-sm !default;                 // 768px
+$screen-sm-to-smmd-min:        $screen-sm-to-smmd;
+
+$screen-smmd:                  810px !default;
+$screen-smmd-min:              $screen-smmd !default;          // 810px
+
+// So media queries don't overlap when required, provide a maximum
+$screen-sm-to-smmd-max:        ($screen-smmd-min - 1) !default; // 809px
+$screen-smmd-max:              ($screen-md-min - 1) !default;  // 991px
+
+
 $global-image-path: "../images";
 // #{$global-image-path}
 
@@ -17,7 +36,7 @@ $icon-font-svg-id:        "glyphicons_halflingsregular" ;
 
 $body-bg:               #fff;
 
-$bc-primary : #eeedf0;
+$bc-primary : $gray-lighter;
 $bc-secondary : #d9d9d9;
 
 $panel-top: #FCFCFC;

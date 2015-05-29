@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_SalesManago>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <SalesManago_Tracking />
+            </depends>
+        </Zolago_SalesManago>
+    </modules>
+</config>

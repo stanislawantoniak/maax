@@ -38,10 +38,11 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
      * @return Varien_Object
      */
     protected function _prepareRequest() {
+            $time = Mage::getSingleton('core/date')->timestamp();
 		$request = new Varien_Object();
 		$request->setBannerShow("image");
 		$request->setStatus(1); // only active
-		$request->setDate(date('Y-m-d H:i:s')); // only not expired
+		$request->setDate(date('Y-m-d H:i:s',$time)); // only not expired
 		return $request;
     }
 
@@ -56,7 +57,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 	public function getSliders() {
 		$request = $this->_prepareRequest();
 		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);		
-		$finder = $this->getFinder();		
+		$finder = $this->getFinder();
 		return $finder->request($request);
 	}
 	
@@ -158,7 +159,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
             foreach ($imagesToScale as $type => $imagesToScaleData) {
                 switch ($type) {
                     case Zolago_Banner_Model_Banner_Type::TYPE_SLIDER:
-                        foreach ($imagesToScaleData as $sliderImageData) {
+/*                        foreach ($imagesToScaleData as $sliderImageData) {
                             foreach ($sliderImageData as $sliderImage) {
 
                                 $imageSliderPath = Mage::getBaseDir('media') . $sliderImage['path'];
@@ -166,16 +167,16 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                                 $imageSliderResizePathMobile = Mage::getBaseDir('media') . DS . $this->getImageResizeMobilePath($type) . $sliderImage['path'];
 
                                 //Desktop
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH, self::BANNER_SLIDER_HEIGHT);
+                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH);
                                 //Mobile
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH, self::BANNER_SLIDER_M_HEIGHT);
+                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH);
 
                             }
                         }
-                        unset($sliderImageData);
+                        unset($sliderImageData);*/
                         break;
                     case Zolago_Banner_Model_Banner_Type::TYPE_BOX:
-                        foreach ($imagesToScaleData as $boxImageData) {
+/*                        foreach ($imagesToScaleData as $boxImageData) {
                             foreach ($boxImageData as $boxImage) {
                                 $imageBoxPath = Mage::getBaseDir('media') . $boxImage['path'];
                                 $imageBoxResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $boxImage['path'];
@@ -183,7 +184,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                                 $this->scaleBannerImage($imageBoxPath, $imageBoxResizePath, self::BANNER_BOX_WIDTH, self::BANNER_BOX_HEIGHT);
                             }
                         }
-                        unset($sliderImageData);
+                        unset($sliderImageData);*/
                         break;
                     case Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION:
                         foreach ($imagesToScaleData as $boxImageData) {
@@ -213,24 +214,52 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         return self::BANNER_RESIZE_M_DIRECTORY . DS . $type;
     }
 
-    public function scaleBannerImage($imagePath, $imageResizePath, $width, $height)
+    public function scaleBannerImage($imagePath, $imageResizePath, $width, $height=null)
     {
         try
         {
             $image = new Varien_Image($imagePath);
-            $image->constrainOnly(false);
-            $image->keepFrame(true);
-            $image->backgroundColor(array(255, 255, 255));
+	        if(!is_null($height)) {
+		        $image->constrainOnly(false);
+		        $image->keepFrame(true);
+		        $image->backgroundColor(array(255, 255, 255));
+	        }
             $image->keepAspectRatio(true);
             $image->resize($width, $height);
             $image->save($imageResizePath);
         }
         catch(Exception $e)
         {
-            Mage::log('No banner image', Zend_Log::ALERT);
-
+            //Mage::log('No banner image', Zend_Log::ALERT);
         }
-
-
     }
-} 
+
+	public function imageExists($imagePath) {
+		$image = getcwd().'/media'.$imagePath;
+		return file_exists($image);
+	}
+
+	public function getImageSize($imagePath) {
+		$image = getcwd().'/media'.$imagePath;
+		if(file_exists($image)) {
+			try {
+				return getimagesize($image);
+			} catch(Exception $e) {
+				//do nothing
+			}
+		}
+		return false;
+	}
+
+	public function getImageRatio($imagePath) {
+		$data = $this->getImageSize($imagePath);
+		if(is_array($data)) {
+			return $data[0] / $data[1];
+		}
+		return 0;
+	}
+
+	public function getImageUrl($imagePath) {
+		return rtrim(Mage::getBaseUrl('media'),'/') . $imagePath;
+	}
+}

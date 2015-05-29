@@ -16,14 +16,16 @@
     <section id="complementary_product" class="section bg-w clearfix" data-mobiletoggle="true">
         <div class="block-complementary-product toggle-xs">
             <header>
-                <h2 class="title_section"><?php echo $this->__("Complete whole collection"); ?> <i
-                        class="bullet-strzalka-up visible-xs"></i></h2>
+                <h4 class="title_section"><?php echo $this->__("Complete whole collection"); ?> <i
+                        class="bullet-strzalka-up visible-xs"></i></h4>
             </header>
             <div id="rwd-complementary-product" class="rwdCarousel">
                 <div class="rwd-carousel rwd-theme">
                     <?php foreach ($this->getItems() as $_item) : ?>
                         <div class="item">
-                            <a href="<?php echo $_item->getProductUrl(); ?>">
+                            <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
+                                <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
+                            <a href="<?php echo $_item->getProductUrl(); ?>" itemprop="url">
 
                                 <div class="box_listing_product">
                                     <figure class="img_product"><img
@@ -46,24 +48,19 @@
                                                 <?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?>
                                             </div>
                                         </div>
-                                        <div class="like
-                                        <?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)) {echo ' liked '; } ?>"
+                                        <div class="like"
                                              data-idproduct="<?php echo $_item->getId(); ?>"
-                                             data-status="<?php echo (int) Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item); ?>"
-                                             onclick="
-                                             <?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item))
-                                             {
-                                                 echo 'Mall.wishlist.removeFromSmallBlock(this);return false;';
-                                             } else {
-                                                 echo 'Mall.wishlist.addFromSmallBlock(this);return false;';
-                                             } ?>">
+                                             data-status="0"
+                                             onclick="Mall.wishlist.addFromSmallBlock(this);return false;">
 	                                        <span class="like_count">
                                                 <span>
                                                 </span>
                                             </span>
                                             <span class="icoLike">
-                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
-                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
+                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/svg/unlike.svg'); ?>"
+                                                     alt="" width="18" height="18" />
+                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/svg/like.svg'); ?>"
+                                                     alt="" width="18" height="18" />
                                             </span>
                                             <div class="toolLike"></div>
                                         </div>
@@ -71,6 +68,7 @@
                                 </div>
 
                             </a>
+                            </h5>
                         </div>
 
                     <?php endforeach; ?>
@@ -84,7 +82,7 @@
         Mall.wishlist.addProduct({
             id: <?php echo (int) $_item->getId(); ?>,
             wishlist_count: <?php echo (int) $_item->getWishlistCount(); ?>,
-            in_your_wishlist: <?php echo Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) ? "true" : "false" ;?>
+            in_your_wishlist: "false"
         });
         <?php endforeach; ?>
         Mall.translate.add("you", "<?php echo $this->__("You"); ?>");

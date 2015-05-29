@@ -61,13 +61,12 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
         );
 		//$profiler->log("Rest");
 		
-		// Load product context data
-		
+		// Load product context data & crosssell wishlist info & ask vendor form customer info
 		if($productId=$this->getRequest()->getParam("product_id")){
 			$product = Mage::getModel("catalog/product");
 			/* @var $product Mage_Catalog_Model_Product */
 			$product->setId($productId);
-			
+
 			// Load wishlist count
 			$wishlistCount = $product->getResource()->getAttributeRawValue(
 					$productId, "wishlist_count", Mage::app()->getStore()->getId());
@@ -77,7 +76,92 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 				"in_my_wishlist" => Mage::helper('zolagowishlist')->productBelongsToMyWishlist($product),
 				"wishlist_count" => (int)$wishlistCount
 			);
+
+            // Varnish cache html crosssell products
+            // so info about that products is in wishlist need to be updated
+            $crosssellProducts  = $this->getRequest()->getParam("crosssell_ids");
+            if (!empty($crosssellProducts)) {
+
+                $productsInWishList = Mage::helper('zolagowishlist')->checkProductsBelongsToMyWishlist($crosssellProducts);
+                $cs = array();
+                foreach ($productsInWishList as $prod) {
+                    $id = $prod->getProduct()->getData('entity_id');
+                    $cs[$id]['in_my_wishlist'] = 1;
+                    $cs[$id]['entity_id']      = $id;
+                }
+                $content['crosssell'] = array_values($cs);
+            }
+
+            // Customer info for contact form in product page
+            if (Mage::helper('customer')->isLoggedIn()) {
+                /* @var $coreHelper Mage_Core_Helper_Data */
+                $coreHelper = Mage::helper('core');
+                /** @var Mage_Customer_Model_Session $session */
+                $session = Mage::getSingleton('customer/session');
+
+                $content['customer_name']  = $coreHelper->escapeHtml($session->getCustomer()->getName());
+                $content['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
+            }
+            // And populate data question form if error
+            $dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
+            if ($dataPopulate) {
+                $content['data_populate']['customer_name']  = isset($dataPopulate['customer_name'])  ? $dataPopulate['customer_name']  : false;
+                $content['data_populate']['customer_email'] = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
+                $content['data_populate']['question_text']  = isset($dataPopulate['question_text'])  ? $dataPopulate['question_text']  : false;
+            }
 		}
+
+
+
+	    if($this->getRequest()->getParam('recently_viewed')) {
+            /** @var Mage_Reports_Block_Product_Viewed $singleton */
+            $singleton = Mage::getSingleton('Mage_Reports_Block_Product_Viewed');
+
+            // By persistent
+            /* @var $persistentHelper Mage_Persistent_Helper_Session */
+            $persistentHelper = Mage::helper('persistent/session');
+
+            if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
+                $customerId = $persistentHelper->getSession()->getCustomerId();
+                $singleton->setCustomerId($customerId);
+            }
+		    $recentlyViewedProducts = $singleton->getItemsCollection();
+
+		    $recentlyViewedContent = array();
+		    if ($recentlyViewedProducts->count() > 0) {
+
+			    foreach ($recentlyViewedProducts as $product) {
+                    if ($product->getId() == $productId) {
+                        // Don't show in last viewed box current product
+                        continue;
+                    }
+				    /* @var $product Zolago_Catalog_Model_Product */
+				    $image = Mage::helper("zolago_image")
+					    ->init($product, 'small_image')
+					    ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+					    ->adaptiveResize(200, 312);
+				    $recentlyViewedContent[] = array(
+					    'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
+					    'image_url' => (string)$image,
+					    'redirect_url' => $product->getNoVendorContextUrl()
+				    );
+
+			    }
+
+			    $content['recentlyViewed'] = $recentlyViewedContent;
+		    }
+	    }
+
+        /*
+         * When Varnish ON we need to add info about last viewed product
+         * for event @see app/code/local/Zolago/Reports/Model/Event/Observer.php::ajaxAddLastViewed
+         */
+        if ($productId) {
+            /* @var $product Mage_Catalog_Model_Product */
+            $product = Mage::getModel("catalog/product");
+            $product->setId($productId);
+            Mage::dispatchEvent('ajax_get_account_information_after', array('product' => $product));
+        }
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);

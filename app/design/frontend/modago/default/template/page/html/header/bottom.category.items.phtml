@@ -1,22 +1,22 @@
 <?php
 /**
- * Author: Paweł Chyl <pawel.chyl@orba.pl>
- * Date: 09.07.2014
+ * Used in cms block: navigation-main-desktop
  */
 /** @var $this Zolago_Modago_Block_Catalog_Category */
 
 $mainCategories = $this->getMainCategories();
+
+$request = Mage::app()->getRequest();
+$module  = $request->getModuleName();
+$name    = $request->getControllerName();
+$action  = $request->getActionName();
+
 ?>
 
-<?php if(count($mainCategories) > 0) : ?>
-    <?php foreach($mainCategories as $cat) : ?>
-        <li>
-            <a href="<?php echo $cat['has_dropdown'] ? '#' : $cat['url']; ?>" class="<?php echo $cat['has_dropdown'] ? 'children' : '' ?>"><?php echo $this->escapeHtml($cat['name']); ?> <?php echo $cat['has_dropdown'] ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
-            <?php if($cat['has_dropdown']): ?>
-                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-' . $cat['category_id'])->toHtml(); ?>
-                <!-- end drop down menu -->
-            <?php endif; ?>
-        </li>
-    <?php endforeach; ?>
-
-<?php endif; ?>
+<?php foreach($mainCategories as $cat) : ?>
+    <li>
+        <a data-catids="<?php echo $cat['category_id'] .','. $cat['ids']; ?>" href="<?php echo $cat['dropdown'] ? '#' : $cat['url']; ?>" class="<?php echo $cat['dropdown'] ? 'children' : '' ?>"><?php echo $this->escapeHtml($cat['name']); ?> <?php echo $cat['dropdown'] ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-' . $cat['category_id'])->toHtml(); ?>
+    </li>
+<?php endforeach; ?>
+<script>Mall.Navigation.currentCategoryId.push('<?php echo Mage::registry('current_category') ? Mage::registry('current_category')->getId() : "$module/$name/$action";?>');</script>

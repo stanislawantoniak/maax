@@ -99,38 +99,38 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		// Add relavance to search
 		if($this->isSearchMode()){
 			$options[] = array(
-				'value' => 'relevance',
+				'sort' => 'relevance',
 				'dir'   => 'desc',
 				'label' =>  Mage::helper("zolagosolrsearch")->__("Relevance")
 			);
 		}
 		
 		$options[] = array(
-			'value' => 'price',
+			'sort' => 'price',
 			'dir'   => 'asc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Price ascendend")
 		);
 		
 		$options[] = array(
-			'value' => 'price',
+			'sort' => 'price',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Price descendent")
 		);
 		
 		$options[] = array(
-			'value' => 'wishlist_count',
+			'sort' => 'wishlist_count',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Most popular first")
 		);
 		
 		$options[] = array(
-			'value' => 'product_rating',
+			'sort' => 'product_rating',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Best rated")
 		);
 		
 		$options[] = array(
-			'value' => 'is_new',
+			'sort' => 'is_new',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
 		);
@@ -143,7 +143,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      * @return int
      */
     public function getCurrentOrder() {
-        return Mage::app()->getRequest()->getParam("sort", $this->getDefaultOrder());
+	    $sort = Mage::app()->getRequest()->getParam("sort");
+        return $sort ? $sort : $this->getDefaultOrder();
     }
 
 
@@ -212,12 +213,12 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getDefaultLimit()
     {
-        $limit = (int) Mage::getStoreConfig("zolagomodago_catalog/zolagomodago_cataloglisting/load_on_start"
-                                            , Mage::app()->getStore());
+	    $limit = (int)Mage::getStoreConfig("zolagomodago_catalog/zolagomodago_cataloglisting/load_on_start"
+			    , Mage::app()->getStore());
 
-        if ($limit === 0) {
-            $limit = self::DEFAULT_LIMIT;
-        }
+		    if ($limit === 0) {
+			    $limit = self::DEFAULT_LIMIT;
+		    }
 
         return $limit;
     }

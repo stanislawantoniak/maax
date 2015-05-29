@@ -63,13 +63,12 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		$currentCatalogAssign = $this->getCurrentCatalogAssign($filter);
 		$indexer = Mage::getSingleton("index/indexer");
 		/* @var $indexer Mage_Index_Model_Indexer */
-		
 		$affectedProductIds = array();
 		
 		if(!$productsIds){
 			$productsIds = Mage::getResourceModel("catalog/product_collection")->getAllIds();
 		}
-		
+		$categoryList = array();
 		foreach($productsIds as $productId){
 			$old = array();
 			if(isset($currentCatalogAssign[$productId])){
@@ -95,12 +94,16 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 						" AND ".
 						$this->getReadConnection()->quoteInto("category_id IN (?)", $toDelete) 
 				);
+                foreach ($toDelete as $item) {
+                    $categoryList[$item] = $item;
+                }
 			}
 			foreach($toInsert as $insertId){
 				$this->getReadConnection()->insert(
 					$this->getTable('catalog/category_product'),
 					array("product_id"=>$productId, "category_id"=>$insertId, "position"=>1)
 				);
+				$categoryList[$insertId] = $insertId;
 			}
 			
 			// Run indexer if nessesery
@@ -110,17 +113,23 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 				//$object->setAffectedCategoryIds(array_merge($toInsert, $toDelete));
 				$templateProd->setIsChangedCategories(true);
 				
-				// Process event index
-				$indexer->processEntityAction(
-						$templateProd, 
-						Mage_Catalog_Model_Product::ENTITY, 
-						Mage_Index_Model_Event::TYPE_SAVE
-				);
 				
 				$affectedProductIds[] = $productId;
 			}
 		}
-		
+        // reindex categories
+        $templateCategory = Mage::getModel("catalog/category");
+        foreach ($categoryList as $categoryId) {
+            $templateCategory->setId($categoryId);
+            $templateCategory->setIsChangedProductList(true);
+			// Process event index
+				
+    		$indexer->processEntityAction(
+					$templateCategory, 
+					Mage_Catalog_Model_Category::ENTITY, 
+					Mage_Index_Model_Event::TYPE_SAVE
+			);            
+        }
 //		$event = Mage::getModel("index/event");
 //		/* @var $newData Mage_Index_Model_Event */
 //		$newData = array("product_ids"=>$affectedProductIds);
@@ -332,6 +341,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 			$all += count($insert);
 			$this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $insert, array());
 		}
+		
 		// Commit transaction
 		$this->_getWriteAdapter()->commit();
 		$this->_resetData();

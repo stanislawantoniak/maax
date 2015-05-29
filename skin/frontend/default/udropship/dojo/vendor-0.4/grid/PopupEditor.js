@@ -68,7 +68,7 @@ define([
 			
 			if(!placementDom.length){
 				placementDom = put("div."+EDITOR_CLASS);
-				put(query("." + PLACEMENT_SCROLLER, this.grid.domNod)[0], placementDom);
+				put(query("." + PLACEMENT_SCROLLER, this.grid.domNode)[0], placementDom);
 			}else{
 				placementDom = placementDom[0];
 			}
@@ -100,7 +100,7 @@ define([
 				this.content, 
 				this._getEditorPosition(cellObj, this.content)
 			);
-	
+
 			domClass.remove(this.content, "hidden");
 			this.grid.focus(this.cell);
 			this.getField().focus();
@@ -223,7 +223,7 @@ define([
 		 */
 		canShowUseSelection: function(){
 			return this.getCheckAll() || (
-				typeof this.grid.getSelectedIds == "function" && 
+				typeof this.grid.getSelectedIds == "function" &&
 				this.grid.getSelectedIds().length > 1
 			);
 		},

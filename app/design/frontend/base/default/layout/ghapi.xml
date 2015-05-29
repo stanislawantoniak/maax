@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<layout>
+    <udropship_ghapi_index>
+        <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <reference name="head">
+            <action method="addItemLast"><type>skin_js</type><name>../../../frontend/default/udropship/js/prism.js</name></action>
+            <action method="addItemLast"><type>skin_css</type><name>../../../frontend/default/udropship/css/prism.css</name></action>
+        </reference>                            
+        <reference name="content">
+            <block name="ghapi_dropship_page" type="ghapi/dropship_page" template="ghapi/dropship/page.phtml">
+                <block name="ghapi_dropship_settings" type="ghapi/dropship_settings" template="ghapi/dropship/settings.phtml"/>                
+                <block name="ghapi_dropship_soap" type="ghapi/dropship_soap" template="ghapi/dropship/soap.phtml">                
+                    <block name="ghapi_dropship_soap_login" type="ghapi/dropship_soap" template="ghapi/dropship/soap/doLogin.phtml"/>                
+                    <block name="ghapi_dropship_soap_message" type="ghapi/dropship_soap" template="ghapi/dropship/soap/getChangeOrderMessage.phtml"/>                
+                    <block name="ghapi_dropship_soap_confirmation" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setChangeOrderMessageConfirmation.phtml"/>                
+                    <block name="ghapi_dropship_soap_orders" type="ghapi/dropship_soap" template="ghapi/dropship/soap/getOrdersByID.phtml"/>                
+                    <block name="ghapi_dropship_soap_collected" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setOrderAsCollected.phtml"/>                
+                    <block name="ghapi_dropship_soap_shipment" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setOrderShipment.phtml"/>                
+                    <block name="ghapi_dropship_soap_reservation" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setOrderReservation.phtml"/>                
+                </block>
+            </block>
+        </reference>
+    </udropship_ghapi_index>
+    <udropship_ghapi_test>
+        <block type="ghapi/dropship_answer" name="ghapi_dropship_soap_answer" template="ghapi/dropship/soap/ajaxAnswer.phtml"/>
+    </udropship_ghapi_test>
+</layout>

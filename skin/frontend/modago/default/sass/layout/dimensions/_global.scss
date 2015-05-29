@@ -1,33 +1,63 @@
-body {
-	//min-width: 380px;
-}
-#sb-site {
-	//min-width: 380px;
-}
 #header {
-	padding-top: 57px;
+	padding-top: 56px;
+
 }
+
 #header-main {
-	//padding-top:35px;
-	//padding-bottom: 35px;
 	padding-top:15px;
 	padding-bottom: 15px;
 }
 
 .node-type-list {
 	#header-main {
-		padding-top:0px;
-		padding-bottom: 0px;
+		padding-top:0;
+		padding-bottom: 0;
 	}
 	&.page-search {
 		#header-main {
-			padding-top:0px;
+			padding-top:0;
 			padding-bottom: 0;
 		}
 	}
 }
-
-
+.is-content-mode {
+  .header_bottom {
+    @media (max-width: $screen-sm) {
+      background: none; 
+      background-color: #ffffff; 
+      margin-bottom: 10px;
+    }
+    #navCategory {
+      margin-top: 0px;
+      #nav_category_mobile {
+        > li {
+          > a:link,
+          > a:visited {
+            border-top: none;
+            border-top:1px solid #dedce1;
+          }
+        }
+        > li:first-child {
+          > a {
+            border-top: 1px solid transparent;
+          }
+        }
+      }
+    }
+  }
+  #header-main {
+    padding-top:0;
+    padding-bottom:10px;
+    @media (max-width: $screen-xs) {
+      padding-bottom:10px;
+    }
+  }
+  &.vendor-top-bottom-header {
+    ol.breadcrumb {
+      margin: 20px 0 0 !important;
+    }
+  }
+}
 
 .node-type-checkout,
 .node-type-shopping-cart,
@@ -236,7 +266,7 @@ section {
 		}
 		&#note_product {
 			header {
-				h2.title_section {
+				h2.title_section, h5.title_section {
 					@media (max-width: $screen-xs-max) {
 						height: 38px;
 					}
@@ -251,6 +281,12 @@ section {
 					display:block;
 					span {
 						position:static;
+						display: inline-block;
+						vertical-align: middle;
+					}
+					img {
+						width: 22px;
+						height: 22px;
 					}
 				}
 			}
@@ -288,6 +324,19 @@ section {
 			}
 		}
 	}
+}
+.sm-to-smmd-plus-smmd {
+  #main {
+    > .container-fluid {
+      > .row {
+        > .col-sm-12 {
+          @media (min-width: $screen-sm-to-smmd-min) and (max-width: $screen-sm-to-smmd-max) {
+            padding:0px;
+          }
+        }
+      }
+    }
+  }
 }
 
 #content-main {

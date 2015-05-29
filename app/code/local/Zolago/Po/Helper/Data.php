@@ -620,7 +620,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$tmplItem = $order->getItemsCollection()->getFirstItem();
 		/* @var $tmplItem Mage_Sales_Model_Order_Item */
 		$store = $order->getStore();
-		
+
 		$product = Mage::getModel("catalog/product")->setStoreId($store->getId())
 				->load($poItem->getProductId());
 		/* @var $product Mage_Catalog_Model_Product */
@@ -762,4 +762,37 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$item->setOrder($order);
 		$order->addItem($item);
 	}
+
+    /**
+     * Mass checking for PO collection is start packing available for
+     * start packing process
+     *
+     * @param Zolago_Po_Model_Resource_Po_Collection $poCollection
+     * @return array
+     */
+    public function massCheckIsStartPackingAvailable(Zolago_Po_Model_Resource_Po_Collection $poCollection) {
+        $listNotValid = array();
+        foreach ($poCollection as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            if(!$po->getStatusModel()->isStartPackingAvailable($po)) {
+                $listNotValid[] = $po->getIncrementId();
+            }
+        }
+        return $listNotValid;
+    }
+
+    /**
+     * Mass processing of start packing process
+     *
+     * @param Zolago_Po_Model_Resource_Po_Collection $poCollection
+     * @return void
+     */
+    public function massProcessStartPacking(Zolago_Po_Model_Resource_Po_Collection $poCollection) {
+        foreach ($poCollection as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            if($po->getStatusModel()->isStartPackingAvailable($po)) {
+                $po->getStatusModel()->processStartPacking($po, false, false);
+            }
+        }
+    }
 }

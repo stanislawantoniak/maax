@@ -21,8 +21,9 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	 */
 	public function get_blocksAction() {
 		$this->_initCategory();
-		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
+
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 		
 		$layout = $this->getLayout();
 		$design = Mage::getDesign();
@@ -38,15 +39,47 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		// Product 
 		$products = $this->_getProducts($listModel);
 
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('zolagocustomer/session');
+		$customerSession->addProductsToCache($products);
+
+		$params = $this->getRequest()->getParams();
+		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
+		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
+		$rewriteHelper = Mage::helper('ghrewrite');
+		$rewriteHelper->clearParams($params);
+		$rewriteHelper->sortParams($params);
+
+		/** @var Zolago_Catalog_Model_Category $category */
+		$category = Mage::registry('current_category');
+		$path = $category->getUrlPath();
+
+		$url = $rewriteHelper->prepareRewriteUrl($path,$categoryId,$params);
+		if(!$url) {
+			$query = http_build_query($params);
+			$url = Mage::getBaseUrl() . $path . ($query ? "?".$query : "");
+		}
+
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
-			"header"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml(),
-			"toolbar"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml(),
-			"filters"		=> $layout->createBlock("zolagomodago/solrsearch_faces")->toHtml(),
-			"active"		=> $layout->createBlock("zolagosolrsearch/active")->toHtml()
+			"url"			=> $url,
+			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
+			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
+			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
+			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml())
 		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);
 		$this->_setSuccessResponse($result);
+	}
+
+	/**
+	 * clean ups html from excess of newlines, whitespaces and tabs
+	 * @param $string
+	 * @return string
+	 */
+	protected function _cleanUpHtml($string) {
+		$string = preg_replace('/\s*$^\s*/m', "\n", $string);
+		return preg_replace('/[ \t]+/', ' ', $string);
 	}
 	
 	/**
@@ -59,7 +92,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$products=$this->_getProducts($listModel);
 		
 		$result = $this->_formatSuccessContentForResponse($products);
-		
+
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('zolagocustomer/session');
+		$customerSession->addProductsToCache($products);
+
 		$this->_setSuccessResponse($result);
 	}
 	
@@ -86,7 +123,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		//$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
-		//$profiler->start();		
+		//$profiler->start();
+
+		/** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
+		$_solrHelper = Mage::helper("zolagosolrsearch");
+
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
 			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
@@ -94,7 +135,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"query"			=> '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
-			"products"		=> Mage::helper("zolagosolrsearch")->prepareAjaxProducts($listModel),
+			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
 		);
 	}
 	

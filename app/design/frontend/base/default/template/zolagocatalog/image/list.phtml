@@ -14,35 +14,117 @@
 	gridObj = <?php echo $this->getGridJsObjectName();?>;
 	var topForm = $("filter_form");
 	// create integrator
+
 	new Zolago.gridIntegrator(gridObj);
-	
-	gridObj.doFilter = (function(){
-        var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
-        var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
-        var elements = [],
-			elements2 = [];
-        for(var i in filters){
-            if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
-        }
-        for(var i in filters2){
-            if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
-        }
-		
-		var serialized = Form.serializeElements(elements);
-		var serialized2 = Form.serializeElements(elements2);
-		var params = []
-		
-		if(serialized){
-			params.push(serialized);
-		}
-		if(serialized2){
-			params.push(serialized2);
-		}
-		
-        if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
-            this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
-        }
+
+
+    	gridObj.reload = (function(){
+
+            if (!this.reloadParams) {
+                this.reloadParams = {form_key: FORM_KEY};
+            }
+            else {
+                this.reloadParams.form_key = FORM_KEY;
+            }
+            var url = url || this.url;
+            if(this.useAjax){
+                new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
+                    loaderArea: this.containerId,
+                    parameters: this.reloadParams || {},
+                    evalScripts: true,
+                    onFailure: this._processFailure.bind(this),
+                    onComplete: this.initGridAjax.bind(this),
+                    onSuccess: function(transport) {
+                        try {
+                            var responseText = transport.responseText.replace(/>\s+</g, '><');
+
+                            if (transport.responseText.isJSON()) {
+                                var response = transport.responseText.evalJSON()
+                                if (response.error) {
+                                    alert(response.message);
+                                }
+                                if(response.ajaxExpired && response.ajaxRedirect) {
+                                    setLocation(response.ajaxRedirect);
+                                }
+                            } else {
+                                /**
+                                 * For IE <= 7.
+                                 * If there are two elements, and first has name, that equals id of second.
+                                 * In this case, IE will choose one that is above
+                                 *
+                                 * @see https://prototype.lighthouseapp.com/projects/8886/tickets/994-id-selector-finds-elements-by-name-attribute-in-ie7
+                                 */
+                                var divId = $(this.containerId);
+                                if (divId.id == this.containerId) {
+                                    divId.update(responseText);
+                                } else {
+                                    $$('div[id="'+this.containerId+'"]')[0].update(responseText);
+                                }
+                            }
+                        } catch (e) {
+                            var divId = $(this.containerId);
+                            if (divId.id == this.containerId) {
+                                divId.update(responseText);
+                            } else {
+                                $$('div[id="'+this.containerId+'"]')[0].update(responseText);
+                            }
+                        }
+                    }.bind(this)
+                });
+                return;
+            }
+            else{
+                if(this.reloadParams){
+                    var f = document.createElement("form");
+                    f.setAttribute('method', "post");
+                    f.setAttribute('action', url);
+                    f.setAttribute('name', this.containerId + '_form');
+
+
+                    $H(this.reloadParams).each(function(pair){
+                        //url = this.addVarToUrl(pair.key, pair.value);
+                        var i = document.createElement("input"); //input element, hidden
+                        i.setAttribute('type', "hidden");
+                        i.setAttribute('name', pair.key);
+                        i.setAttribute('value', pair.value);
+
+                        f.appendChild(i);
+                    }.bind(this));
+                }
+
+                jQuery('body').append(f);
+                document.forms[this.containerId + '_form'].submit();
+
+            }
     }).bind(gridObj);
+
+//	gridObj.doFilter = (function(){
+//        var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+//        var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
+//        var elements = [],
+//			elements2 = [];
+//        for(var i in filters){
+//            if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+//        }
+//        for(var i in filters2){
+//            if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
+//        }
+//
+//		var serialized = Form.serializeElements(elements);
+//		var serialized2 = Form.serializeElements(elements2);
+//		var params = []
+//
+//		if(serialized){
+//			params.push(serialized);
+//		}
+//		if(serialized2){
+//			params.push(serialized2);
+//		}
+//
+//        if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
+//            this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
+//        }
+//    }).bind(gridObj);
 	
 	
 	topForm.observe("submit", function(e){

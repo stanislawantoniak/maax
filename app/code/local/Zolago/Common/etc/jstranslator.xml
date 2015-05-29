@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<jstranslator>
+    <jquery-validation-1 translate="message" module="zolagocommon">
+        <message>Please enter {0} words or less.</message>
+    </jquery-validation-1>
+	<jquery-validation-2 translate="message" module="zolagocommon">
+		<message>Please enter at least {0} words.</message>
+	</jquery-validation-2>
+	<jquery-validation-3 translate="message" module="zolagocommon">
+		<message>Please enter between {0} and {1} words.</message>
+	</jquery-validation-3>
+	<jquery-validation-4 translate="message" module="zolagocommon">
+		<message>Letters or punctuation only please</message>
+	</jquery-validation-4>
+	<jquery-validation-5 translate="message" module="zolagocommon">
+		<message>Letters, numbers, and underscores only please</message>
+	</jquery-validation-5>
+	<jquery-validation-6 translate="message" module="zolagocommon">
+		<message>Letters only please</message>
+	</jquery-validation-6>
+	<jquery-validation-7 translate="message" module="zolagocommon">
+		<message>No white space please</message>
+	</jquery-validation-7>
+	<jquery-validation-8 translate="message" module="zolagocommon">
+		<message>Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx</message>
+	</jquery-validation-8>
+	<jquery-validation-9 translate="message" module="zolagocommon">
+		<message>The specified US ZIP Code is invalid</message>
+	</jquery-validation-9>
+	<jquery-validation-10 translate="message" module="zolagocommon">
+		<message>A positive or negative non-decimal number please</message>
+	</jquery-validation-10>
+	<jquery-validation-11 translate="message" module="zolagocommon">
+		<message>Must be before corresponding end date</message>
+	</jquery-validation-11>
+	<jquery-validation-12 translate="message" module="zolagocommon">
+		<message>Must be after corresponding start date</message>
+	</jquery-validation-12>
+	<jquery-validation-13 translate="message" module="zolagocommon">
+		<message>Image is too big</message>
+	</jquery-validation-13>
+	<jquery-validation-14 translate="message" module="zolagocommon">
+		<message>Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.</message>
+	</jquery-validation-14>
+	<jquery-validation-15 translate="message" module="zolagocommon">
+		<message>Telephone number is too short. Number must contain 9 digits, without spacing.</message>
+	</jquery-validation-15>
+	<jquery-validation-16 translate="message" module="zolagocommon">
+		<message>Tax number is incorrect. Enter as a string of digits e.g. 1234567890.</message>
+	</jquery-validation-16>
+	<jquery-validation-17 translate="message" module="zolagocommon">
+		<message>Image is required</message>
+	</jquery-validation-17>
+	<jquery-validation-18 translate="message" module="zolagocommon">
+		<message>The specified vehicle identification number (VIN) is invalid.</message>
+	</jquery-validation-18>
+	<jquery-validation-19 translate="message" module="zolagocommon">
+		<message>Please enter a correct date</message>
+	</jquery-validation-19>
+	<jquery-validation-20 translate="message" module="zolagocommon">
+		<message>Please specify a valid IBAN</message>
+	</jquery-validation-20>
+	<jquery-validation-21 translate="message" module="zolagocommon">
+		<message>Please enter a correct date</message>
+	</jquery-validation-21>
+	<jquery-validation-22 translate="message" module="zolagocommon">
+		<message>Please specify a valid phone number.</message>
+	</jquery-validation-22>
+	<jquery-validation-23 translate="message" module="zolagocommon">
+		<message>Please specify a valid mobile number</message>
+	</jquery-validation-23>
+	<jquery-validation-24 translate="message" module="zolagocommon">
+		<message>Please specify a valid postal code</message>
+	</jquery-validation-24>
+	<jquery-validation-25 translate="message" module="zolagocommon">
+		<message>Please specify a valid bank account number</message>
+	</jquery-validation-25>
+	<jquery-validation-26 translate="message" module="zolagocommon">
+		<message>Please specify a valid giro account number</message>
+	</jquery-validation-26>
+	<jquery-validation-27 translate="message" module="zolagocommon">
+		<message>Please specify a valid bank or giro account number</message>
+	</jquery-validation-27>
+	<jquery-validation-28 translate="message" module="zolagocommon">
+		<message>Please enter a valid time, between 00:00 and 23:59</message>
+	</jquery-validation-28>
+	<jquery-validation-29 translate="message" module="zolagocommon">
+		<message>Please enter a valid time in 12-hour am/pm format</message>
+	</jquery-validation-29>
+	<jquery-validation-30 translate="message" module="zolagocommon">
+		<message>Please specify a valid phone number</message>
+	</jquery-validation-30>
+	<jquery-validation-31 translate="message" module="zolagocommon">
+		<message>Please specify a valid mobile number</message>
+	</jquery-validation-31>
+	<jquery-validation-32 translate="message" module="zolagocommon">
+		<message>Please specify a valid uk phone number</message>
+	</jquery-validation-32>
+	<jquery-validation-33 translate="message" module="zolagocommon">
+		<message>Please specify a valid UK postcode</message>
+	</jquery-validation-33>
+	<jquery-validation-34 translate="message" module="zolagocommon">
+		<message>Please enter at least {0} characters</message>
+	</jquery-validation-34>
+	<jquery-validation-35 translate="message" module="zolagocommon">
+		<message>Please enter a valid email address.</message>
+	</jquery-validation-35>
+	<jquery-validation-36 translate="message" module="zolagocommon">
+		<message>Please enter a valid URL.</message>
+	</jquery-validation-36>
+	<jquery-validation-37 translate="message" module="zolagocommon">
+		<message>Please enter a valid credit card number.</message>
+	</jquery-validation-37>
+	<jquery-validation-38 translate="message" module="zolagocommon">
+		<message>Please enter a valid IP v4 address.</message>
+	</jquery-validation-38>
+	<jquery-validation-39 translate="message" module="zolagocommon">
+		<message>Please enter a valid IP v6 address.</message>
+	</jquery-validation-39>
+	<jquery-validation-40 translate="message" module="zolagocommon">
+		<message>Invalid format.</message>
+	</jquery-validation-40>
+	<jquery-validation-41 translate="message" module="zolagocommon">
+		<message>Please fill at least {0} of these fields.</message>
+	</jquery-validation-41>
+	<jquery-validation-42 translate="message" module="zolagocommon">
+		<message>Please either skip these fields or fill at least {0} of them.</message>
+	</jquery-validation-42>
+	<jquery-validation-43 translate="message" module="zolagocommon">
+		<message>Please enter a value with a valid mimetype.</message>
+	</jquery-validation-43>
+	<jquery-validation-44 translate="message" module="zolagocommon">
+		<message>Please enter a value with a valid extension.</message>
+	</jquery-validation-44>
+	<jquery-validation-45 translate="message" module="zolagocommon">
+		<message>Value is greather that expected</message>
+	</jquery-validation-45>
+	<jquery-validation-46 translate="message" module="zolagocommon">
+		<message>Invalid zip code</message>
+	</jquery-validation-46>
+	<jquery-validation-47 translate="message" module="zolagocommon">
+		<message>Enter valid integer</message>
+	</jquery-validation-47>
+	<jquery-validation-48 translate="message" module="zolagocommon">
+		<message>Enter valid positive integer</message>
+	</jquery-validation-48>
+	<jquery-validation-49 translate="message" module="zolagocommon">
+		<message>Enter valid number</message>
+	</jquery-validation-49>
+	<jquery-validation-50 translate="message" module="zolagocommon">
+		<message>Enter valid price</message>
+	</jquery-validation-50>
+	<jquery-validation-51 translate="message" module="zolagocommon">
+		<message>Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'.</message>
+	</jquery-validation-51>
+	<jquery-validation-52 translate="message" module="zolagocommon">
+		<message>Url key already exists</message>
+	</jquery-validation-52>
+	<jquery-validation-53 translate="message" module="zolagocommon">
+		<message>The converter price of product or one of child product is not available</message>
+	</jquery-validation-53>
+</jstranslator>

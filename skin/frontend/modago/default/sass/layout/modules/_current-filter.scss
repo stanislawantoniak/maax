@@ -11,6 +11,7 @@
 		@media (max-width: $screen-sm-min) {
 			padding-bottom: 0px;
 			padding-top:12px;
+            width: 84%;
 		 }
 	}
 	dl {
@@ -22,45 +23,48 @@
 	        margin-right:20px;
 	        margin-bottom: 7px;
 	    }
-	    dd {
-	        margin-right:20px;
+      dd {
+        margin-right: 20px;
+        padding-left: 0px;
+        padding-right: 0;
 
-	        .label {
-	            display:block;
-	            float:left;
-	            padding:0px 6px 0 6px;
-	            min-width: 60px;
-	            display:inline-block;
-	            float:left;
-	            height:21px;
-	            margin: 0px 10px 7px 0px;
-	            position:relative;
+        .actionViewFilter {
+          min-width: 174px;
+        }
 
-	        }
-	        .fa {
-//	            position:absolute;
-	            right:5px;
-	            top:4px;
-	            margin-left:5px;
-	        }
+        .label {
+          display: block;
+          float: left;
+          padding: 0px 6px 0 6px;
+          min-width: 60px;
+          display: inline-block;
+          float: left;
+          height: 21px;
+          margin: 0px 10px 7px 0px;
+          position: relative;
 
+        }
+        .fa {
+          right: 5px;
+          top: 4px;
+          margin-left: 5px;
+        }
 
-	        &.action {
-	        	position:relative;
-	        	top:-4px;
-    	        @media (max-width: $screen-xs-max) {
-	    			position: absolute;
-	    			top:1px;
-		        	right: 0px;
-//		        	bottom: 11px;
-	    		 }
+        &.action {
+          position: relative;
+          top: -4px;
+          @media (max-width: $screen-sm-to-smmd-max) {
+            position: absolute;
+            top: 1px;
+            right: 0px;
+          }
 
-	            a {
+          a {
 
-	            }
-	        }
+          }
+        }
 
-	    }
+      }
 
 	}
 	.actionViewFilter {
@@ -69,7 +73,7 @@
 //		bottom: 10px;
 //		width:40%;
 		min-width: 205px;
-		margin-left: -15px;
+		margin-left: -21px;
         @media (max-width: $screen-xs-max) {
           min-width: initial;
         }
@@ -105,7 +109,7 @@
     }
 
   .btn-clearall-xs {
-    @media (max-width: $screen-xs-max) {
+    @media (max-width: $screen-sm-to-smmd-max) {
       margin-right: -10px;
     }
   }

@@ -186,3 +186,13 @@ Zolago.replace = function(markup, data) {
 	});
 	return markup;
 };
+
+/*
+ * Replace ',' to dot gor value of jQuery object update value of this object
+ */
+Zolago.parseForFloatWithReplace = function(obj) {
+    var val = jQuery(obj).val();
+    val = val.replace(",", ".");
+    jQuery(obj).val(val);
+    return val;
+};

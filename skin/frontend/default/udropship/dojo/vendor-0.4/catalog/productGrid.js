@@ -257,7 +257,8 @@ define([
 					return null;
 				}
 				return value;
-			}
+			},
+            html: true
 		});
 		
 	};
@@ -374,11 +375,11 @@ define([
 		var columnSets = [
 			[
 				[
-					{ selector: 'checkbox', label: "" }
+					{ selector: 'checkbox', label: "+" }
 				]
 			], [
 				[
-					
+
 				]
 			]
 		];
@@ -394,7 +395,7 @@ define([
 				childColumn = column.children[0];
 				
 				childColumn.renderHeaderCell = filter.apply(null, childColumn.renderHeaderCell);
-				
+
 				// Prepare fomratter
 				if(childColumn.options){
 					if(column.field=="status"){
@@ -533,6 +534,19 @@ define([
 		}
 		editors[field].open(cell, e);
 	}
+
+
+    var handleSelectAll = function(e){
+
+        if(Object.keys(grid.selection).length == 0){
+            //select all
+            grid.selectAll();
+        } else {
+            //deselect all
+            grid.clearSelection();
+        }
+
+    }
 	
 	on(document.body, "click", function(e){
 		var el = jQuery(e.target);
@@ -639,7 +653,7 @@ define([
 			noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
 
 			selectionMode: 'none',
-			allowSelectAll: true,
+			//allowSelectAll: true,
 			deselectOnRefresh: true,
 			
 			cellNavigation: true, /*false*/
@@ -698,6 +712,8 @@ define([
 		}
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
 		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
+
+        grid.on("th.field-0-0-0:click", handleSelectAll);
 		
 		registerMassactions(grid);
 		

@@ -19,14 +19,18 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
         <div class="col-lg-12 col-md-6 clearfix">
             <?php if (!$producer && !empty($brandShopId)): ?>
                 <figure>
-                    <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
-                        <img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
-                    </a>
+                    <h3 id="bLogo">
+                        <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
+                            <img itemprop="logo" src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
+                            <meta itemprop="brand" content="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>" />
+                        </a>
+                    </h3>
+
                 </figure>
                 <div class="seller">
                     <div class="seller-info">
                         <a class="clearfix" href="<?php echo $this->getVendorUrl(); ?>">
-                            <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?>
+                            <span ><?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?></span>
                         </a>
                         <span><?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?></span>
                     </div>
@@ -34,9 +38,12 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                 </div>
             <?php else: ?>
                 <figure>
-	                <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
-                        <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
-	                </a>
+                    <h3 id="bLogo">
+                        <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
+                            <img itemprop="logo" src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
+                            <meta itemprop="brand" content="<?php echo $this->escapeHtml($this->getVendorName()); ?>" />
+                        </a>
+                    </h3>
                 </figure>
                 <div class="seller producer">
                     <div class="seller-info">
@@ -96,7 +103,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <?php echo $this->getChildHtml('udqa.product.question.mobile'); ?>
+                            <?php echo $this->getChildHtml('udqa.product.question.mobile.product'); ?>
                         </div>
                     </div>
                 </div>
@@ -145,7 +152,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section"><?php echo $this->__("SHOP INFO"); ?></h2>
+                <h2 class="title_section"><?php echo $this->__("Seller's info"); ?></h2>
             </div>
 			
             <div class="modal-body">

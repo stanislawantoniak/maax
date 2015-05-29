@@ -177,16 +177,17 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$facets = array();
 		$ids = array();
 		foreach($this->_categories as $row){
+		    $catId = $row['category_id'];
 			// Facetes
 			if(!isset($facets[$row['product_id']])){
 				$facets[$row['product_id']] = array();
 			}
-			$facets[$row['product_id']][] = $row['name'] . "/" . $row['category_id'];
+			$facets[$row['product_id']][$catId] = $row['name'] . "/" . $row['category_id'];
 			// Ids
 			if(!isset($ids[$row['product_id']])){
 				$ids[$row['product_id']] = array();
 			}
-			$ids[$row['product_id']][] = $row['category_id'];
+			$ids[$row['product_id']][$catId] = $row['category_id'];
 		}
 		
 		// Assign categories to product
@@ -194,6 +195,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			if($item = $collection->getItemById($productId)){
 				if(isset($facets[$productId])){
 					// Set faces
+					$facets[$productId] = array_values($facets[$productId]);
 					if($asFacet){
 						$item->setCategoryFacet($facets[$productId]);
 						$item->setCategoryText($facets[$productId]);
@@ -209,11 +211,16 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						}
 						$item->setSearchText($textSearch);
 					}
-					// @todo all parent categories?
+					/*
+					 * Info:
+					 * All parent categories are calculating
+					 * @see $this->_collectCategories
+					 */
+
 					$item->setCategoryPath($facets[$productId]);
 				}
 				// Finally set categoru ids
-				$item->setCategoryId($prodcutCategoryIds);
+				$item->setCategoryId(array_values($prodcutCategoryIds));
 			}
 		}
 		
@@ -233,10 +240,10 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$treeRoot = Mage_Catalog_Model_Category::TREE_ROOT_ID;
 		
 		/* @var $config Mage_Eav_Model_Config */
-		$nameAttribute = $config->getAttribute(
-			Mage_Catalog_Model_Category::ENTITY,
-			"name"
-		);
+//		$nameAttribute = $config->getAttribute(
+//			Mage_Catalog_Model_Category::ENTITY,
+//			"name"
+//		);
 		$includeAttribute = $config->getAttribute(
 			Mage_Catalog_Model_Category::ENTITY,
 			"include_in_menu"
@@ -251,8 +258,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			array(
 				"product_id", 
 				"category_id", 
-				"cat_index_position" => "category_product.position",
-				"name"=>new Zend_Db_Expr("IF(store_value_name.value_id>0, store_value_name.value, default_value_name.value)")
+//				"cat_index_position" => "category_product.position",
+//				"name"=>new Zend_Db_Expr("IF(store_value_name.value_id>0, store_value_name.value, default_value_name.value)")
 			)
 		);
 		
@@ -264,11 +271,11 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$select->join(
 			array("category"=>$this->getTable("catalog/category")),
 			implode(" AND ", $joinCond),
-			array()
+			'path'
 		);
 		
 		// Join attributes data
-		$this->_joinAttribute($select, $nameAttribute, "category_product.category_id", $storeId);
+//		$this->_joinAttribute($select, $nameAttribute, "category_product.category_id", $storeId);
 		$this->_joinAttribute($select, $includeAttribute, "category_product.category_id", $storeId);
 		
 		// Filters
@@ -286,8 +293,56 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		if($isParent!==null){
 			$select->where("category_product.is_parent=?", $isParent ? 1 : 0);
 		}
-		
-		$this->_categories = $adapter->fetchAll($select);
+
+        // ###################################################################
+        // Getting all categories ids where 'should be' product in tree hierarchy logic
+        // ###################################################################
+        $categories = $adapter->fetchAll($select);
+
+        $idsToLoad = array();
+        foreach ($categories as $idx => $value) {
+            $ex = explode('/', $value['path']);
+
+            $categories[$idx]['cats'] = $ex; //Saving for easier processing
+
+            // Removing duplicates and removing magento tree root and store root
+            $categories[$idx]['cats'] = array_flip($categories[$idx]['cats']);
+            if(isset($categories[$idx]['cats'][$treeRoot])) unset($categories[$idx]['cats'][$treeRoot]);
+            if(isset($categories[$idx]['cats'][$rootCat]))  unset($categories[$idx]['cats'][$rootCat]);
+            $categories[$idx]['cats'] = array_flip($categories[$idx]['cats']);
+
+            // Collecting ids to load
+            foreach($ex as $item) {
+                $idsToLoad[] = $item;
+            }
+        }
+
+        // Removing duplicates and removing magento tree root and store root
+        $idsToLoad = array_flip($idsToLoad);
+        if(isset($idsToLoad[$treeRoot])) unset($idsToLoad[$treeRoot]);
+        if(isset($idsToLoad[$rootCat]))  unset($idsToLoad[$rootCat]);
+        $idsToLoad = array_flip($idsToLoad);
+
+        // Getting info about categories
+        /** @var Zolago_Catalog_Model_Category $modelCC */
+        $modelCC = Mage::getModel('catalog/category');
+        /** @var Mage_Catalog_Model_Resource_Category_Collection $coll */
+        $coll = $modelCC->getCollection();
+        $coll->addNameToResult()->addIdFilter($idsToLoad);
+
+        // Creating array for solr purpose
+        $categoriesExtend = array();
+        foreach ($categories as $cat) {
+            foreach ($cat['cats'] as $id) {
+                $categoriesExtend[] = array(
+                    'product_id' => $cat['product_id'],
+                    'name' => $coll->getItemById($id)->getName(),
+                    'category_id' => $id
+                );
+            }
+        }
+
+		$this->_categories = $categoriesExtend;
 		return $this;
 	}
 	
@@ -642,15 +697,14 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 
 	/**
 	 * @param Zolago_Solrsearch_Model_Catalog_Product_Collection $collection
-	 * @param type $storeId
-	 * @param type $customerGroupId
-	 * @return \Zolago_Solrsearch_Model_Resource_Improve
+	 * @param int $storeId
+	 * @param int $customerGroupId
+	 * @return Zolago_Solrsearch_Model_Resource_Improve
 	 */
 	public function loadAttributesDataForFrontend(
 			Zolago_Solrsearch_Model_Catalog_Product_Collection $collection, 
 			$storeId, $customerGroupId) {
-		
-		
+
 		$profiler = Mage::helper("zolagocommon/profiler");
 		$profiler->start();
 		
@@ -812,33 +866,33 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		
 		$mainUrls=$this->getReadConnection()->fetchPairs($select);
 
-		// Add category url
-		
-		$catUrls = array();
-		if($category && $category->getId()){
-			$select = $this->getReadConnection()->select();
-			$select->from(
-				array("url_cat"			=>	$this->getTable("core/url_rewrite")), 
-				array(
-					"product_id"			=> "url_cat.product_id", 
-					"cat_request_path"		=> "url_cat.request_path"
-				));
-			$select->where("url_cat.product_id IN (?)", $collection->getAllIds());
-			$select->where("url_cat.store_id=?", $storeId);
-			$select->where("url_cat.category_id=?",  $category->getId());
-			
-			$catUrls=$this->getReadConnection()->fetchPairs($select);
-		}
-		
 		foreach ($collection as $product){
 			$productUrl = null;
-			if(isset($catUrls[$product->getId()])){
-				$productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
-			}elseif(isset($mainUrls[$product->getId()])){
-				$productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
-			}else{
-				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
-			}
+			if(isset($mainUrls[$product->getId()])){
+                $productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
+			}elseif(empty($productUrl)){
+                // Add category url
+                $catUrls = array();
+                if($category && $category->getId()){
+                    $select = $this->getReadConnection()->select();
+                    $select->from(
+                        array("url_cat"			=>	$this->getTable("core/url_rewrite")),
+                        array(
+                            "product_id"			=> "url_cat.product_id",
+                            "cat_request_path"		=> "url_cat.request_path"
+                        ));
+                    $select->where("url_cat.product_id IN (?)", $collection->getAllIds());
+                    $select->where("url_cat.store_id=?", $storeId);
+                    $select->where("url_cat.category_id=?",  $category->getId());
+
+                    $catUrls=$this->getReadConnection()->fetchPairs($select);
+                }
+                if (isset($catUrls[$product->getId()])) {
+                    $productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
+                }else{
+                    $productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
+                }
+            }
 			$product->setCurrentUrl($productUrl);
 		}
 		

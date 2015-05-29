@@ -4,9 +4,7 @@ $_helper = $this->helper('wishlist');
 $_helperCustomer = $this->helper('customer');
 $backUrl = $this->getUrl('customer/account');
 /** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
-$_collection = $this->getWishlistItems();
-
-
+$_collection = $_helper->getWishlistItems();
 ?>
 
 <?php if ($this->helper('wishlist')->isAllow()) : ?>

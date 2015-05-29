@@ -1,22 +1,47 @@
 <link rel="stylesheet" media="screen and (min-width: 750px) and (max-width: 990px)" href="/skin/frontend/base/default/css/800.css" />
-<div class="tabbable tabbabble-custom">
-    <ul class="nav nav-tabs" style="margin-top:6px">
-        <li class="" style="float:right">
-            <a name="tmp"></a>
-        </li>
-        <li class="" style="float:right">
-            <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add');?></a>
-        </li>
-        <li class="active" style="float:right">
-            <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagocatalog')->__('Images');?></a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div id="tab_1_1" class="tab-pane active">
-    		<?php echo $this->getChildHtml("image_list");?>
+<?php $_helper = Mage::helper("zolagocatalog"); ?>
+
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $_helper->__("Mass Image");?></h3>
         </div>
-        <div id="tab_1_2" class="tab-pane">
-    		<?php echo $this->getChildHtml("image_queue");?>
+    </div>
+    <div class="tabbable tabbabble-custom">
+        <ul class="nav nav-tabs" style="margin-top:6px">
+            <li class="" style="float:left;">
+                <a name="tmp"></a>
+            </li>
+            <li class="active" style="float:left">
+                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagocatalog')->__('Images');?></a>
+            </li>
+            <li class="" style="float:left;">
+                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add');?></a>
+            </li>
+            <li class="" style="float:left;">
+                <a data-toggle="tab" href="#tab_1_3"><?php echo Mage::helper('zolagocatalog')->__('Help');?></a>
+            </li>
+
+        </ul>
+        <div class="tab-content">
+            <div id="tab_1_1" class="tab-pane active">
+                <?php echo $this->getChildHtml("image_list");?>
+            </div>
+            <div id="tab_1_3" class="tab-pane">
+                <?php echo $this->getChildHtml("image_help");?>
+            </div>
+            <div id="tab_1_2" class="tab-pane">
+                <?php echo $this->getChildHtml("image_queue");?>
+            </div>
+
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.need-to-check').css({"opacity": "0.5"}).tooltip({
+            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+        });
+    })
+</script>

@@ -112,7 +112,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 											
 									}
 								}
-								
+
 								$params['fq'] = array('category_id' => $ids);
 								$params['parent_cat_id'] = $parent_category->getId();
 								
@@ -221,7 +221,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	}
 	
 	public function getRemoveAllUrl(){
-		return  Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
+        $queryData =  $this->_parseRemoveAllUrl();
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+		    $url = Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllUrl());
+        }
+        return $url;
 	}
 	
 	/**
@@ -325,7 +331,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
     public function getRemoveFacesUrl($key,$value)
     {
-		return Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveFacesUrl($key, $value));
+        $queryData =  $this->_parseRemoveFacesUrl($key, $value);
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+    		$url =  Mage::getUrl($this->getUrlRoute(), $queryData);
+        }
+        return $url;
 	}
 	
 	public function getRemoveFacesJson($key,$value) {
@@ -352,8 +364,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
         foreach ($key as $item)
         {
-			if($item=="price" && $this->getRequest()->getParam('slider')){
-				$finalParams['slider']=null;
+			if($item=="price") {
+			    if ($this->getRequest()->getParam('slider')) {
+    				$finalParams['slider']=null;
+                }
 			}
             if (isset($finalParams['fq'][$item]) && !is_array($finalParams['fq'][$item]) && !empty($finalParams['fq'][$item])) {
                 unset($finalParams['fq'][$item]);
@@ -370,6 +384,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                             }
                         }
                     }
+                    
                 }
             }
 
@@ -382,7 +397,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 }
             }
         }
-		
+        // clear filters
+        if (!empty($finalParams['fq'])) {
+            foreach ($finalParams['fq'] as $filter=>&$values) {
+                if (is_array($values)) {
+                    $values = array_values($values);
+                }
+            }
+        }
         $urlParams = array();
         $urlParams['_current']  = false;
         $urlParams['_escape']   = true;
@@ -415,7 +437,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 	public function getRemoveAllFacesUrl($key)
 	{
-		return Mage::getUrl($this->getUrlRoute(), $this->_parseRemoveAllFacesUrl($key));
+        $queryData =  $this->_parseRemoveAllFacesUrl($key);
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+    		$url = Mage::getUrl($this->getUrlRoute(), $queryData);
+        }
+        return $url;
 	}
 
 	public function _parseRemoveAllFacesUrl($key)
@@ -444,7 +472,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}
 		}
-		
+
 		$urlParams = array();
 		$urlParams['_current']  = false;
 		$urlParams['_escape']   = true;
@@ -516,174 +544,59 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @param bool $show_brothers if true solr gets two querys (first about current category, second about brothers), if false is only one query
 	 * @return array
 	 */
-    protected function _processCategoryData($data,$show_brothers = true) {
+    protected function _processCategoryData($data,$show_brothers = true)
+    {
+        /** @var Zolago_Catalog_Model_Category $modelCC */
+        $modelCC = Mage::getModel('catalog/category');
+        /** @var  Mage_Catalog_Model_Resource_Category_Tree $tree */
+        $tree = $modelCC->getTreeModel()->load();
 
-		$category = NULL;
-		
-        $out = array();
-		$children = array();
-		
-		// Get all categories as array
-		// id => path
-		$all_categories = Mage::helper('zolagocatalog/category')->getPathArray();
-		
-		/** @var Zolago_Dropship_Model_Vendor $_vendor */
-		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        // Specify root and parent categories
+        $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+        // Current category
+        $category = Mage::registry('current_category');
 
-        $params = $this->getRequest()->getParams();
-		
+        // Checking is root category
+        $isRootCategory = false;
+        if (!$category && !$category->getId()) {
+            $category = $modelCC->load($rootCategoryId);
+            $isRootCategory = TRUE;
+        }
+        if ($category->getId() == $rootCategoryId) {
+            $isRootCategory = true;
+        }
 
-		// If in vendor context set vendor current category
-		if ($_vendor && $_vendor->getId()) {
-				
-				$vendor_root_category = $_vendor->rootCategory();
-			
-		}
-		// Get current category
-		// For category mode get always current category
-		// For vendor contex it is set category in admin panel or root category
-        $category = Mage::registry('vendor_current_category');
-        if(Mage::registry('current_category')){
-            $category = Mage::registry('current_category');
+        /*
+         * Convert $data to array( [category_id] => array(key, count)
+         * where key is like: Bielizna/10
+         * where count is int
+         */
+        $_data = array();
+        foreach ($data as $key => $val) {
+            $items = explode('/', $key);
+            $catId = (int)$items[count($items)-1];
+            $_data[$catId] = array('key' => $key, 'value' => $val);
         }
 
 
-		// Specify root and parent categories
-		$root_category_id = Mage::app()->getStore()->getRootCategoryId();
-		$is_root_category = FALSE;
-		if($category){
-			
-			// Display only children categories when in the vendor context
-			if ($_vendor && $_vendor->getId()) {
-				/** @var Mage_Catalog_Model_Category $vendor_root_category */
-				$vendor_root_category = $_vendor->rootCategory();
-
-                if($vendor_root_category->getId() == $category->getId()){
-					$is_root_category = TRUE;
-					$parent_category = $category;
-				}
-				else{
-					$parent_category = $category->getParentCategory();
-				}
-			}
-			else{
-			    if ($category->getId() == $root_category_id) {
-        			$category = Mage::getModel('catalog/category')->load($root_category_id);
-		        	$is_root_category = TRUE;
-			    } else {
-    				$parent_category = $category->getParentCategory();
-                }
-			}
-		}
-		else{
-			$category = Mage::getModel('catalog/category')->load($root_category_id);
-			$is_root_category = TRUE;
-		}
-		
-		// Get first level categories of current category
-        $first_level_categories = $category->getCategories($category->getId(),1);
-        foreach ($first_level_categories as $first_level_cat_tree) {
-        	
-			$first_level_cat = Mage::getModel('catalog/category')->load($first_level_cat_tree->getId());
-			$first_level_cat_key = $first_level_cat->getName() . "/" . $first_level_cat->getId();
-			
-			$children_category_ids = Mage::helper('zolagocatalog/category')->getChildrenIds($first_level_cat->getId());
-			
-			if($children_category_ids){
-				
-				$children_total = 0;
-				
-				foreach($children_category_ids as $child_cat_id){
-					
-					$children_total += $this->getCategoryCount($data, $child_cat_id);
-					
-				}
-				
-				$children[$first_level_cat_key] = $children_total;
-			}
-			else{
-				
-				$children[$first_level_cat_key] = $this->getCategoryCount($data, $first_level_cat->getId(), TRUE);
-				
-			}
-			
+        $children = array();
+        $childrenToCalc = array();
+        $categoryChildren = $tree->getChildren($category->getId(), false);
+        foreach ($categoryChildren as $id) {
+            if (isset($_data[$id])) {
+                $children[$_data[$id]['key']] = $_data[$id]['value'];
+            } else {
+                $childrenToCalc[] = $id;
+            } 
         }
 
-		// Chosen category
-		$chosen_cat_total = 0;
-		if($this->getMode()==self::MODE_CATEGORY){
-			
-	        foreach ($data as $key=>$val) {
-	        	
-				$items = explode('/',$key);
-				$cat_id = (int)$items[count($items)-1];
-				
-				if(key_exists($cat_id, $all_categories)){
-					$chosen_cat_total += (int)$val;
-				}
-	        }
-			
-		}
-		else{
-			
-			$children_category_ids = Mage::helper('zolagocatalog/category')->getChildrenIds($category->getId());
-			
-			if($children_category_ids){
-				
-				$children_total = 0;				
-				
-				foreach($children_category_ids as $child_cat_id){
-					
-					$chosen_cat_total += $this->getCategoryCount($data, $child_cat_id);
-					
-				}
-			}
-			else{
-				$chosen_cat_total = $this->getCategoryCount($data, $category->getId(), TRUE);
-			}
-		}
-		
-		$chosen_key = $category->getName() . "/" . $category->getId();	
-		
+		$chosen_key = $category->getName() . "/" . $category->getId();
 		$out[$chosen_key] = array(
-			'is_root_category' => $is_root_category,
-			'total' => $chosen_cat_total,
+			'is_root_category' => $isRootCategory,
+			'total' => isset($_data[$category->getId()]) ? $_data[$category->getId()]['value'] : array_sum($children),
 			'children' => $children
 		);
-		// Sibling categories		
-		if(!$is_root_category && $show_brothers){
-			// Get all category data from Solr		
-			$all_data = Mage::helper('zolagosolrsearch')->getAllCatgoryData($parent_category, $category);
-		
-			$siblings = $parent_category->getChildrenCategories();
-			foreach($siblings as $sibling_cat){
-				
-				$sibling_total = 0;
-				
-				// Get siblings of parent category 
-				// but not selected category
-				if($sibling_cat->getId() != $category->getId()){
-					$current_key = $sibling_cat->getName() . "/" . $sibling_cat->getId();
-					
-					$sibling_children_category_ids = Mage::helper('zolagocatalog/category')->getChildrenIds($sibling_cat->getId());
-					if($sibling_children_category_ids){
-						
-						foreach($sibling_children_category_ids as $sibling_children_category_id){
-							
-							$sibling_total += $this->getCategoryCount($all_data, $sibling_children_category_id);
-							
-						}
-					}
-					else{
-						
-						$sibling_total = $this->getCategoryCount($all_data, $sibling_cat->getId());
-						
-					}
-					$out[$current_key] = $sibling_total;
-				}
-			}
-		}
-		
+
         return $out;
     }
 	
@@ -695,7 +608,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return int
 	 */
 	public function getCategoryCount($data, $category_id, $break = FALSE){
-		
+
 		$count = 0;
 		foreach($data as $key => $value){
 								
@@ -1125,9 +1038,36 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
     public function getFacesUrl($params=array(), $paramss = NULL)
     {
-        return Mage::getUrl($this->getUrlRoute(), $this->_parseQueryData($params, $paramss));
+        $queryData = $this->_parseQueryData($params, $paramss);
+        if ($rawUrl = $this->getRedirectUrl($queryData)) {
+            $url = $rawUrl;
+        } else {
+            $url =  Mage::getUrl($this->getUrlRoute(), $queryData);
+        }
+        return $url;
 	}
 	
+	
+	
+    /**
+     * raw url without redirects, with filters only
+     */
+
+	public function getRedirectUrl($queryData) {
+	    $url = null;
+	    if ($this->getListModel()->isCategoryMode()) {	        
+    	    $params = Mage::app()->getRequest()->getParams();
+    	    $category = $this->getListModel()->getCurrentCategory();
+    	    $path = $this->getUrlRoute();
+    	    $id = $category->getId();
+  	        $tmp = $queryData['_query'];
+
+		    /** @var GH_Rewrite_Helper_Data $rewriteHelper */
+		    $rewriteHelper = Mage::helper('ghrewrite');
+    	    $url = $rewriteHelper->prepareRewriteUrl($path,$id,$tmp);
+	    }
+	    return $url;
+	}
 	/**
 	 * @param array $params params to be set
 	 * @param array $paramss current params (if not set will take current params from current request)
@@ -1146,8 +1086,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $_solrDataArray = $this->getSolrData();
 
 		$paramss = Mage::app()->getRequest()->getParams();
-		
-		$finalParams = array();
+    	$finalParams = array();
 		
 		$finalParams = array_merge($paramss, $params);
 		
@@ -1166,7 +1105,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     $finalParams = array_merge_recursive($params, $paramss);
                 }
             }
-
             if ($key == 'fq') {
                 foreach ($item as $k=>$v) {
                     if (isset($paramss[$key][$k]) && $v == $paramss[$key][$k]) {
@@ -1246,7 +1184,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	public function processFinalParams(array $params = array()) {
         /** @var $helper Zolago_Solrsearch_Helper_Data */
         $helper =  Mage::helper("zolagosolrsearch");
-		return $helper->processFinalParams($params);
+		$params = $helper->processFinalParams($params);
+
+		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
+		$rewriteHelper = Mage::helper('ghrewrite');
+		$rewriteHelper->sortParams($params);
+
+		return $rewriteHelper->clearParams($params);
 	}
 	
 	/**

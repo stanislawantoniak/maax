@@ -182,7 +182,22 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
     public function isPaymentDotpay() {
        return $this->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
     }
-   
+
+    /**
+     * @return bool
+     */
+    public function isCC() {
+        $data = $this->getPayment()->getAdditionalInformation();
+        return isset($data['is_cc']) ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGateway() {
+        $data = $this->getPayment()->getAdditionalInformation();
+        return isset($data['is_gateway']) ? true : false;
+    }
 
 
 

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.18</version>
+            <version>0.0.21</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -65,14 +65,30 @@
                     </zolagopo>
                 </observers>
             </zolagopayment_allocation_save_after>
+            <zolagopayment_allocation_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessagePaymentDataChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocation_save_after>
 			<zolagopo_po_save_after>
 				<observers>
 					<zolagopo>
 						<class>zolagopo/observer</class>
-						<method>updatePoStatusByAllocation</method>
+                        <method>updatePoStatusByAllocation</method>
 					</zolagopo>
 				</observers>
 			</zolagopo_po_save_after>
+			<zolagopo_po_save_new>
+				<observers>
+					<zolagopo>
+						<class>zolagopo/observer</class>
+                        <method>ghapiAddMessageNewOrder</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_save_new>
             <zolagopayment_allocate_overpayment_save_after>
                 <observers>
                     <zolagopo>
@@ -81,11 +97,27 @@
                     </zolagopo>
                 </observers>
             </zolagopayment_allocate_overpayment_save_after>
+            <zolagopayment_allocate_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessagePaymentDataChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_allocate_overpayment_save_after>
             <zolagopayment_create_overpayment_save_after>
                 <observers>
                     <zolagopo>
                         <class>zolagopo/observer</class>
                         <method>addOverpayComment</method>
+                    </zolagopo>
+                </observers>
+            </zolagopayment_create_overpayment_save_after>
+            <zolagopayment_create_overpayment_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>ghapiAddMessagePaymentDataChanged</method>
                     </zolagopo>
                 </observers>
             </zolagopayment_create_overpayment_save_after>
@@ -106,6 +138,14 @@
                     </zolagopo>
                 </observers>
             </zolagopo_po_split>
+            <zolagopo_po_split>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_split>
 
 			<zolagopo_po_shipping_cost>
 				<observers>
@@ -115,6 +155,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_shipping_cost>
+            <zolagopo_po_shipping_cost>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_shipping_cost>
 			<zolagopo_po_item_remove>
 				<observers>
 					<zolagopo>
@@ -123,6 +171,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_item_remove>
+            <zolagopo_po_item_remove>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_item_remove>
 			<zolagopo_po_item_edit>
 				<observers>
 					<zolagopo>
@@ -131,6 +187,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_item_edit>
+            <zolagopo_po_item_edit>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_item_edit>
 			<zolagopo_po_item_add>
 				<observers>
 					<zolagopo>
@@ -139,6 +203,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_item_add>
+            <zolagopo_po_item_add>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_item_add>
 			<zolagopo_po_address_restore>
 				<observers>
 					<zolagopo>
@@ -147,6 +219,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_address_restore>
+            <zolagopo_po_address_restore>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_address_restore>
 			<zolagopo_po_address_change>
 				<observers>
 					<zolagopo>
@@ -155,6 +235,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_address_change>
+            <zolagopo_po_address_change>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_address_change>
 			<zolagopo_po_compose>
 				<observers>
 					<zolagopo>
@@ -171,6 +259,7 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_change_pos>
+
 			<udpo_po_status_save_after>
 				<observers>
 					<zolagopo>
@@ -179,6 +268,50 @@
 					</zolagopo>
 				</observers>
 			</udpo_po_status_save_after>
+            <udpo_po_status_save_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageCancelledOrChanged</method>
+                    </zolagopo>
+                </observers>
+            </udpo_po_status_save_after>
+
+            <udpo_po_save_after>
+                <observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
+                </observers>
+            </udpo_po_save_after>
+            <udpo_po_status_save_after>
+                <observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
+                </observers>
+            </udpo_po_status_save_after>
+
+            <udpo_po_status_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderReservation</method>
+                    </zolagopo>
+                </observers>
+            </udpo_po_status_save_after>
+            <udpo_po_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderReservationOnSave</method>
+                    </zolagopo>
+                </observers>
+            </udpo_po_save_after>
 			<udpo_po_shipment_save_before>
 				<observers>
 					<poShipmentSaveBefore>

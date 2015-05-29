@@ -10,6 +10,7 @@ var Mall = {
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
+    _query_text: '',
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -106,12 +107,17 @@ var Mall = {
     },
 
     getAccountInfo: function() {
+	    var recentlyViewed = jQuery('#rwd-recently-viewed');
         jQuery.ajax({
             cache: false,
             dataType: "json",
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
-				"category_id": Mall.reg.get("varnish_category_id")
+				"category_id": Mall.reg.get("varnish_category_id"),
+	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
+                ,"crosssell_ids": jQuery('#complementary_product .like').map(function() {
+                    return jQuery(this).attr("data-idproduct");
+                }).get()
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -120,6 +126,7 @@ var Mall = {
                 Mall.buildAccountInfo(data, status);
             },
             url: "/orbacommon/ajax_customer/get_account_information"
+            ,type: "POST"
         });
     },
     getIsBrowserMobile: function(){
@@ -221,10 +228,14 @@ var Mall = {
         jQuery('select[name=scat]').selectBoxIt({
             autoWidth: false
         });
-		
+        // Update current search query text
+        jQuery("#header input[name=q]").val(this.getQueryText());
+
 		// Process product context 
 
+
 		var likeBoxes = jQuery("#product-likeboxes");
+
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
 				likeText, boxAdded, boxNotAdded, boxLoading;
@@ -280,8 +291,97 @@ var Mall = {
 					append(boxAdded).
 					append(boxLoading);
 		}
-		
-    },                               
+
+        // Crosssell in_my_wishlist update for Varnish
+        if (data.content.hasOwnProperty('crosssell')) {
+            var c = data.content.crosssell;
+            for (i = 0; i < c.length; i++) {
+                if (c[i].in_my_wishlist) {
+                    jQuery("#complementary_product .like[data-idproduct='" + c[i].entity_id + "']")
+                        .addClass(' liked ')
+                        .attr('data-status', 1)
+                        .attr('onclick', 'Mall.wishlist.removeFromSmallBlock(this);return false;');
+                    if (p = Mall.wishlist.getProduct(c[i].entity_id)) {
+                        p.in_your_wishlist = "true";
+                    }
+                }
+            }
+        }
+
+
+		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
+			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
+			if ( rwd_recently_viewed.length !=0 ) {
+
+				var recentlyViewedContent = "";
+
+				for(var i in data["content"]["recentlyViewed"]){
+					var redirect_url = data["content"]["recentlyViewed"][i].redirect_url;
+					var image_url = data["content"]["recentlyViewed"][i].image_url;
+					var title = data["content"]["recentlyViewed"][i].title;
+					recentlyViewedContent += "<a href=\""+redirect_url+"\" class=\"simple\">";
+					recentlyViewedContent += "<div class=\"box_listing_product\">";
+					recentlyViewedContent += "<figure class=\"img_product\">";
+					recentlyViewedContent += "<img src=\"" +image_url+ "\" alt=\"" +title+ "\">";
+					recentlyViewedContent += "</figure>";
+					recentlyViewedContent += "<div class=\"name_product hidden-xs\">"+title+"</div>";
+					recentlyViewedContent += "</div>";
+					recentlyViewedContent += "</a>";
+				}
+				jQuery(rwd_recently_viewed).html(recentlyViewedContent);
+				jQuery("#recently-viewed.recently-viewed-cls").show();
+
+				rwd_recently_viewed.rwdCarousel({
+					items : 7, //10 items above 1000px browser width
+					itemsDesktop : [1000,5], //5 items between 1000px and 901px
+					itemsDesktopSmall : [900,4], // betweem 900px and 601px
+					itemsTablet: [600,4], //2 items between 600 and 0
+					itemsMobile : [480,3], // itemsMobile disabled - inherit from itemsTablet option
+					pagination : false,
+					navigation: true,
+					rewindNav : false,
+					itemsScaleUp:false,
+					navigationText : false,
+					afterUpdate: function(){
+						var imgHeight = rwd_recently_viewed.find('img').height()/2;
+						var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+						rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
+						rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
+						rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
+						rwd_recently_viewed.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
+					},
+					afterInit:function(){
+						imagesLoaded( document.querySelector('#rwd-recently-viewed'), function( instance ) {
+							var imgHeight = rwd_recently_viewed.find('img').height()/2;
+							var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+							rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
+							rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
+							rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
+							rwd_recently_viewed.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
+						});
+					}
+				});
+
+				// Custom Navigation Events
+				var rwdRecentlyViewed = jQuery("#rwd-recently-viewed");
+				rwdRecentlyViewed.find(".next").click(function(){
+					rwd_recently_viewed.trigger('rwd.next');
+				});
+				rwdRecentlyViewed.find(".prev").click(function(){
+					rwd_recently_viewed.trigger('rwd.prev');
+				});
+			}
+		}
+
+        // Customer info for contact form in product page
+        if (data.content.logged_in && data.content.customer_email) {
+            Mall.product.updateQuestionFormForLoggedIn(data.content.customer_name, data.content.customer_email);
+        }
+        // When customer send question, form need to be populated when error
+        if (data.content.data_populate) {
+            Mall.product.populateQuestionForm(data.content.data_populate.customer_name, data.content.data_populate.customer_email, data.content.data_populate.question_text);
+        }
+	},
 	
 	getFavPluralText: function(count, you){
 		var text = Mall.i18nValidation.__("people-polish-more-than-few");
@@ -551,7 +651,15 @@ var Mall = {
             }
         });
     },
-}
+
+    setQueryText: function(q) {
+        this._query_text = q;
+    },
+
+    getQueryText: function() {
+        return this._query_text;
+    }
+};
 
 
 Mall.i18nValidation = {
@@ -627,6 +735,389 @@ Mall.rwdCarousel = {
     }
 };
 
+Mall.Breakpoint = {
+	xs: 480,
+	xssm: 600,
+	sm: 768,
+    smmd: 810,
+	md: 992,
+	lg: 1200
+};
+
+Mall.isGoogleBot = function() {
+	return jQuery('body').hasClass('googlebot');
+};
+
+Mall.isMobile = function() {
+	return Mall.windowWidth() < Mall.Breakpoint.smmd;
+};
+
+Mall.windowWidth = function() {
+	return window.innerWidth;
+};
+
+Mall.windowHeight = function() {
+	return window.innerHeight;
+};
+
+// http://kenwheeler.github.io/slick/
+Mall.Slick = {
+	events: {
+		afterChange: 'afterChange',
+		beforeChange: 'beforeChange',
+		edge: 'edge',
+		init: 'init',
+		reInit: 'reInit',
+		setPosition: 'setPosition',
+		swipe: 'swipe'
+	},
+	init: function() {
+		Mall.Slick.top.init();
+		Mall.Slick.boxes.init();
+	},
+	sliderAvailable: function(sliderId) {
+		return jQuery(sliderId).length > 0;
+	},
+	unslick: function(slickChild) {
+		slickChild.slider = false;
+		jQuery(slickChild.sliderId).slick('unslick');
+	},
+	top: {
+		slider: false,
+		sliderId: '#topSlider',
+		options: {
+			autoplaySpeed: 4000,
+			arrows: false,
+			dots: true,
+			adaptiveHeight: true
+		},
+		init: function() {
+			var _ = this;
+			if(_.slider === false && _.sliderAvailable()) {
+				_.slider = jQuery(_.sliderId);
+				if(!Mall.isMobile()) {
+					_.options.autoplay = true;
+				}
+				_.slider.slick(_.options);
+				_.attachEvents();
+			}
+		},
+		sliderAvailable: function() {
+			var _ = this;
+			return Mall.Slick.sliderAvailable(_.sliderId);
+		},
+		attachEvents: function() {
+			var _ = this;
+			if(!Mall.isMobile()) {
+				jQuery(window).scroll(function () {
+					if (_.inViewport()) {
+						_.slider.slick('slickPlay');
+					} else {
+						_.slider.slick('slickPause');
+					}
+				});
+			}
+		},
+		inViewport: function() {
+			var _ = this;
+			var sliderOffset = _.slider.offset().top,
+				windowOffset = jQuery(window).scrollTop();
+			return windowOffset < sliderOffset;
+		}
+	},
+	boxes: {
+		boxRatio: false,
+		slider: false,
+		sliderId: '#boxesSlider',
+		slideClass: '.boxesSlideIn',
+		sliderHasArrowsClass: 'boxesSliderHasArrows',
+		boxesAmount: false,
+		options: {
+			slidesToShow: false, //configured in init below
+			slidesToScroll: false, //configured in init below
+			speed: 500,
+			dots: false,
+			arrows: true,
+			prevArrow: '<div class="boxesArrow boxesArrowPrev"><i class="fa fa-chevron-left"></i></div>',
+			nextArrow: '<div class="boxesArrow boxesArrowNext"><i class="fa fa-chevron-right"></i></div>',
+			responsive: [
+				{
+					breakpoint: Mall.Breakpoint.sm,
+					settings: {
+						slidesToShow: false,
+						slidesToScroll: false
+					}
+				},
+				{
+					breakpoint: Mall.Breakpoint.xssm,
+					settings: {
+						slidesToShow: false,
+						slidesToScroll: false
+					}
+				},
+				{
+					breakpoint: Mall.Breakpoint.xs,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1,
+						adaptiveHeight: true
+					}
+				}
+			]
+		},
+		eventsAttached: false,
+		mobileUnslick: false,
+		init: function() {
+			var _ = this;
+			_.slider = jQuery(_.sliderId);
+
+			_.mobileUnslick = _.slider.data('boxesMobileUnslick') ? true : false;
+
+			if(!_.isSlick() && _.sliderAvailable() && !(Mall.isMobile() && _.mobileUnslick)) {
+				_.options.slidesToShow = _.options.slidesToScroll = _.getBoxesAmount();
+				if(_.slider.data('boxesMobileUnslick')) {
+					_.mobileUnslick = true;
+					_.options.responsive = [
+						{
+							breakpoint: Mall.Breakpoint.sm,
+							settings: 'unslick'
+						}
+					]
+				} else {
+					_.options.responsive[0].settings.slidesToShow =
+						_.options.responsive[0].settings.slidesToScroll =
+							(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 3);
+					_.options.responsive[1].settings.slidesToShow =
+						_.options.responsive[1].settings.slidesToScroll =
+							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
+				}
+				_.slider.slick(_.options);
+				_.resizeBoxes();
+			} else {
+				_.resizeBoxesUnslicked();
+			}
+			_.attachEvents();
+		},
+		getBoxesAmount: function() {
+			var _ = this;
+			var amount = _.slider.data('boxesAmount');
+			if(_.slider !== false && amount) {
+				_.boxesAmount = amount;
+			} else {
+				_.boxesAmount = 4;
+			}
+			return _.boxesAmount;
+		},
+		getResponsiveBoxesAmount: function() {
+			var _ = this;
+			if(Mall.isMobile() && !_.mobileUnslick) {
+				var ww = Mall.windowWidth();
+				if(ww < Mall.Breakpoint.xs) {
+					return 1;
+				} else if(ww < Mall.Breakpoint.xssm) {
+					return _.options.responsive[1].settings.slidesToShow;
+				} else {
+					return _.options.responsive[0].settings.slidesToShow;
+				}
+			} else {
+				return _.getBoxesAmount();
+			}
+		},
+		getBoxRatio: function() {
+			var _ = this;
+			if(_.boxRatio === false) {
+				var ratio = 999;
+				jQuery(_.slideClass).each(function() {
+					var currentSlideRatio = jQuery(this).data('ratio');
+					ratio = currentSlideRatio && currentSlideRatio < ratio ? currentSlideRatio : ratio;
+				});
+				_.boxRatio = ratio;
+			}
+			return _.boxRatio;
+		},
+		sliderAvailable: function() {
+			var _ = this;
+			return Mall.Slick.sliderAvailable(_.sliderId);
+		},
+		isSlick: function() {
+			return Mall.Slick.boxes.slider !== false ? Mall.Slick.boxes.slider.hasClass('slick-slider') : false;
+		},
+		attachEvents: function() {
+			var _ = this;
+			if(!_.eventsAttached) {
+				_.eventsAttached = true;
+				Mall.Slick.boxes.slider
+					.on(
+						Mall.Slick.events.setPosition + ' ' + Mall.Slick.events.init,
+						Mall.Slick.boxes.resizeBoxes
+					);
+				if(_.mobileUnslick) {
+					jQuery(window).resize(function() {
+						if(Mall.windowWidth() < Mall.Breakpoint.sm) {
+							Mall.Slick.boxes.resizeBoxesUnslicked();
+						} else {
+							Mall.Slick.boxes.slider = false;
+							Mall.Slick.boxes.init();
+						}
+					});
+				}
+			}
+		},
+		resizeBoxes: function() {
+			if(Mall.Slick.boxes.isSlick()) {
+				var boxesAmount = Mall.Slick.boxes.getResponsiveBoxesAmount(),
+					width = jQuery(Mall.Slick.boxes.sliderId).width();
+				if(boxesAmount > 1) {
+					var boxWidth = (width - ((boxesAmount) * 7)) / boxesAmount,
+						boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+
+					Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
+						'width': boxWidth + 'px',
+						'height': boxHeight + 'px',
+						'margin-right': false
+					}).parents('.boxesSlide').removeClass('mobile');
+				} else {
+					Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).each(function() {
+						var box = jQuery(this);
+						var height = width / box.data('ratio');
+						box.css({
+							'width': (width - 2)+'px',
+							'height': height+'px',
+							'margin-right': 1+'px',
+							'margin-bottom': false
+						}).parents('.boxesSlide').removeClass('mobile');
+					});
+				}
+				Mall.Slick.boxes.positionArrows();
+			} else {
+				Mall.Slick.boxes.resizeBoxesUnslicked();
+			}
+		},
+		resizeBoxesUnslicked: function() {
+			if(!Mall.Slick.boxes.isSlick()) {
+				Mall.Slick.boxes.positionArrows();
+				var boxWidth =  (jQuery(Mall.Slick.boxes.sliderId).width() / 2) - 15,
+					boxHeight = boxWidth / Mall.Slick.boxes.getBoxRatio();
+
+				Mall.Slick.boxes.slider.find(Mall.Slick.boxes.slideClass).css({
+					'width': boxWidth + 'px',
+					'height': boxHeight + 'px'
+				}).parents('.boxesSlide').addClass('mobile');
+			}
+		},
+		positionArrows: function() {
+			var _ = this,
+				arrows = _.slider.find('.boxesArrow').find('i');
+
+			if(arrows.length) {
+				var height = _.slider.height(),
+					arrowsHeight = arrows.height(),
+					top = (height - arrowsHeight) / 2;
+				arrows.css('margin-top',top+'px');
+				_.slider.addClass(_.sliderHasArrowsClass);
+			} else {
+				_.slider.removeClass(_.sliderHasArrowsClass);
+			}
+		}
+	}
+};
+
+Mall.Scrolltop = {
+	heightToShow: false,
+	options: { //these are set in /app/design/frontend/modago/default/template/page/html/scrolltop.phtml
+		percentAppears: 100,
+		showOnScroll: true,
+		hideAfterTime: 1000
+     },
+	lastScrollTop: 0,
+	timeout: 0,
+	scrollTop: false,
+	scrollTopId: '#scrollTop',
+	disabled: false,
+	init: function() {
+		var _ = this;
+		if(_.options !== false) {
+			_.scrollTop = jQuery(_.scrollTopId);
+			_.attachEvents();
+		}
+	},
+	attachEvents: function() {
+		var _ = this;
+		jQuery(window).on('scroll',Mall.Scrolltop.onScroll);
+		jQuery(window).on('resize',Mall.Scrolltop.setHeightToShow);
+		_.scrollTop
+			.on('touchstart mouseenter',function() {
+				_.scrollTop.addClass('hover');
+			})
+			.on('touchend mouseleave',function() {
+				_.scrollTop.removeClass('hover');
+			});
+		_.setHeightToShow();
+	},
+	onScroll: function() {
+		var _ = Mall.Scrolltop,
+			currentScrollTop = jQuery(window).scrollTop(),
+			canShow = _.heightToShow <= jQuery(document).height();
+
+
+		if(!_.disabled && canShow) {
+			if (_.options.showOnScroll) {
+				if (currentScrollTop < _.lastScrollTop && currentScrollTop != 0 && currentScrollTop > _.heightToShow) {
+					_.show();
+					_.hideDelayed();
+				} else if(currentScrollTop - _.lastScrollTop > 20 || currentScrollTop < _.heightToShow) {
+					clearTimeout(_.timeout);
+					_.hide();
+				}
+			} else {
+				if (currentScrollTop > _.heightToShow) {
+					_.scrollTop.addClass('show');
+				} else {
+					_.scrollTop.removeClass('show');
+				}
+			}
+		}
+		_.lastScrollTop = currentScrollTop;
+	},
+	setHeightToShow: function() {
+		var _ = Mall.Scrolltop;
+		_.heightToShow = (Mall.windowHeight() * _.options.percentAppears / 100) + Mall.windowHeight();
+	},
+	hideDelayed: function() {
+		var _ = Mall.Scrolltop;
+		_.clearTimeout();
+		_.timeout = setTimeout(_.hide, _.options.hideAfterTime);
+	},
+	clearTimeout: function() {
+		var _ = Mall.Scrolltop;
+		if(_.timeout) {
+			clearTimeout(_.timeout);
+		}
+	},
+	show: function() {
+		Mall.Scrolltop.scrollTop.addClass('show');
+	},
+	hide: function() {
+		Mall.Scrolltop.scrollTop.removeClass('show hover');
+	},
+	hopToTop: function() {
+		var _ = Mall.Scrolltop;
+		_.tempDisable();
+		jQuery('body,html').animate({
+			scrollTop: 0
+		}, 200);
+		_.clearTimeout();
+		_.hide();
+	},
+	tempDisable: function() {
+		var _ = Mall.Scrolltop;
+		_.disabled = true;
+		setTimeout(function() {
+			_.disabled = false;
+		},300);
+	}
+};
+
 Mall.Cart = {
     applyCoupon: function() {
         var coupon = jQuery("#num_discount_voucher").val();
@@ -643,256 +1134,6 @@ Mall.Cart = {
         jQuery("#num_discount_voucher").val("");
         Mall.Cart.applyCoupon();
     }
-}
-
-Mall.product = {
-    _size_table_template: "",
-    _options_group_template: "",
-    _options: {},
-    _current_product_type: "simple",
-
-    productOptions: function(jsonOptions) {
-        this._options = jsonOptions;
-        // set prices
-        this.setPrices(jsonOptions.basePrice, jsonOptions.oldPrice, jsonOptions.template);
-        if(typeof jsonOptions.attributes != "undefined") {
-
-            this.setAttributes(jsonOptions.attributes, jsonOptions.useSizeboxList);
-        }
-    },
-
-    setChooseText: function(text) {
-
-    },
-
-    setPrices: function(price, oldPrice, template) {
-        // set old price
-        var old_price_selector = jQuery(".price-box").find(".old-price");
-        var price_selector = jQuery(".price-box").find("span.price");
-        if(price != oldPrice) {
-            old_price_selector.html(template.replace("#{price}", number_format(oldPrice, "2", ",", " ")));
-        } else {
-            old_price_selector.html("");
-        }
-
-        // set price
-        price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
-    },
-
-    setAttributes: function(attributes, useSizeboxList) {
-        this.clearAttributesContainer();
-
-        jQuery.each(attributes, function(index, e) {
-            Mall.product.createOptionGroup(e, useSizeboxList);
-        });
-    },
-
-    clearAttributesContainer: function() {
-        this._size_table_template = jQuery(".size-box").find("a.view-sizing")[0].outerHTML;
-        this._size_label = jQuery('.size-box .size-label').text();
-        jQuery(".size-box").find("div.size").remove();
-    },
-
-    applyAdditionalRules: function(optionGroup, selector) {
-        if(optionGroup.code == "size") {
-            selector.append(this._size_table_template);
-        }
-    },
-
-    createOptionGroup: function(group, useSizeboxList) {
-        if(!useSizeboxList) {
-            // insert option group
-            var groupElement = jQuery("<div/>", {
-                "class": "size"
-            }).appendTo(".size-box");
-            jQuery(".size-box").append(this._options_group_template);
-            // create label group
-            jQuery("<span/>", {
-                "class": "size-label size-label-radios",
-                "html": (this._size_label + ":")
-            }).appendTo(groupElement);
-
-            // create form group for options
-            var formGroupElement = jQuery("<div/>", {
-                class: "form-group form-radio"
-            }).appendTo(groupElement);
-
-            jQuery.each(group.options, function(index, option) {
-                Mall.product.createOption(group.id, option, formGroupElement);
-            });
-            var sizesCount = jQuery('input[type=radio][id^=size_]:not(:disabled)').length;
-
-            if (sizesCount == 1) {
-                var singleInput = jQuery('input[type=radio][id^=size_]:not(:disabled)');
-                singleInput.attr('checked', true).trigger('click');
-            }
-
-            this.applyAdditionalRules(group, formGroupElement);
-        } else { //selectbox
-
-
-
-            var deskTopDevice = !Mall.getIsBrowserMobile();
-
-            //check if selectbox should be shown
-            var showSelect = false;
-            jQuery.each(group.options, function (index, option) {
-                if (option.is_salable) {
-                    showSelect = true;
-                }
-            });
-
-            if (showSelect) {
-                var labelText = jQuery('.size-label').text();
-                // insert option group
-                var groupElement = jQuery("<div/>", {
-                    "class": "size"
-                }).appendTo(".size-box");
-                jQuery(".size-box").append(this._options_group_template);
-                // create label group
-                jQuery("<span/>", {
-                    "class": "size-label col-sm-6 col-md-6 col-xs-12",
-                    "html": (this._size_label + ":")
-
-                }).appendTo(groupElement);
-
-
-                // create form group for selectbox options
-                var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
-                var formGroupElement = jQuery("<div/>", {
-                    class: "" + formGroupElementClass
-                }).appendTo(groupElement);
-
-                //create select part
-                var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
-                var formGroupElementSelect = jQuery("<select/>", {
-                    id: "select-data-id-" + group.id,
-                    class: formGroupElementSelectClass
-                }).appendTo(formGroupElement);
-
-
-                jQuery.each(group.options, function (index, option) {
-                    Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
-                });
-
-                this.applyAdditionalRules(group, formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-                if (deskTopDevice) {
-                    jQuery('div.size-box div.size a').css('position', 'relative');
-                    jQuery('div.size-box div.size a').css('top', '5px');
-                }
-            } else {
-                jQuery('div.size-box').remove();
-            }
-
-        }
-
-    },
-
-    createOption: function(id, option, groupElement) {
-        var label = jQuery("<label/>", {
-            "for": ("size_" + option.id),
-            "class": option.is_salable == false ? "no-size" : "",
-            'data-toggle': 'tooltip'
-        }).appendTo(groupElement);
-        var _options = {
-            type: "radio",
-            id: ("size_" + option.id),
-            "data-superattribute": id,
-            name: ("super_attribute["+ id +"]"),
-            value: option.id,
-            onclick: "Mall.setSuperAttribute(this);"
-        };
-
-        if(!option.is_salable) {
-            _options["disabled"] = "";
-        }
-        var optElement = jQuery("<input/>", _options).appendTo(label);
-        jQuery("<span/>", {
-            "html": option.label
-        }).appendTo(label);
-    },
-
-    createOptionSelectbox: function(id, option, groupElement){
-        if(!option.is_salable){
-            return;
-        }
-        var option = jQuery("<option/>", {
-            value: option.id,
-            html: option.label,
-            id: ("size_" + option.id),
-            "data-superattribute": id,
-            name: ("super_attribute["+ id +"]")
-        }).appendTo(groupElement);
-    },
-
-    getLabelById: function(id, superId) {
-        var label = "";
-        if(this._options && typeof this._options.attributes[superId] != "undefined") {
-            jQuery.each(this._options.attributes[superId].options, function(index, opt) {
-                if(opt.id == id) {
-                    label = opt.label;
-                }this._current_total
-            });
-        }
-
-        return label;
-    },
-
-    getTextWidth: function(elem, text, font){
-        fakeElem = jQuery('<span>').hide().appendTo(document.body);
-        fakeElem.text(text || elem.val() || elem.text()).css('font', font || elem.css('font'));
-        var width = fakeElem.width();
-        fakeElem.remove();
-        return width;
-    },
-
-    setWidthSizeSquares: function(){;
-        jQuery('.size-box label').each(function(){
-
-            var wSizeLabel = jQuery(this).find('span').text().length;
-            var wLabel = Mall.product.getTextWidth(jQuery(this).find('span')) + 10;
-            if(wSizeLabel >= 4) {
-                jQuery(this).closest('label').css({width:wLabel+ 'px'})
-                jQuery(this).closest('label').children('span').css({width:wLabel+ 'px'})
-            }
-        })
-    },
-
-    setDiagonalsOnSizeSquare: function(){
-
-        Mall.product.setWidthSizeSquares();
-
-        var elFilterSize = jQuery('.size-box-bundle .form-group label');
-        elFilterSize.each(function(){
-
-            elFilterSizeWidth = jQuery(this).width();
-            elFilterSizeHeight = jQuery(this).height();;
-            obliczaniePrzekatnej = Math.pow(elFilterSizeWidth, 2) + Math.pow(elFilterSizeHeight, 2);
-            przekatna = Math.sqrt(obliczaniePrzekatnej);
-            obliczenieWyrownania = (przekatna - elFilterSizeWidth)/2;
-            obliczenieWyrownaniaOryginal = obliczenieWyrownania + 2;
-
-            var angle = Math.tan(elFilterSizeHeight/elFilterSizeWidth);
-
-            if (elFilterSizeWidth > 31) {
-                var angle = -(angle * (180 / Math.PI));
-            } else {
-                var angle = 135;
-            }
-
-            if (jQuery(this).hasClass('no-size')) {
-                jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
-            }
-
-            jQuery(this).find('canvas').drawLine({
-                strokeStyle: '#afafaf',
-                strokeWidth: 1.5,
-                x1: -1, y1: elFilterSizeHeight-1,
-                x2: elFilterSizeWidth, y2: -1
-            });
-        });
-    }
-
 };
 
 // callbacks
@@ -1044,9 +1285,68 @@ jQuery(window).resize(function() {
 	positionToggleSearch();
 });
 
+Mall.Footer = {
+	footerId: '#footer',
+	footerMargin: 20,
+	containerId: '#sb-site',
+	init: function() {
+		var _ = this;
+		_.setContainerPadding();
+		jQuery(window).resize(_.setContainerPadding);
+	},
+	setContainerPadding: function() {
+		var height = jQuery(Mall.Footer.footerId).height() + Mall.Footer.footerMargin;
+		jQuery(Mall.Footer.containerId).css('padding-bottom', height+'px');
+	}
+};
+
+Mall.CustomEvents = {
+    _timeoutForScroll: undefined,
+    _timeoutForResize: undefined,
+    _time: 500,
+
+    init: function(time) {
+        this._time = time;
+
+        // Event: Mall.onScrollEnd
+        jQuery(window).scroll(function() {
+            clearTimeout(Mall.CustomEvents._timeoutForScroll);
+	        Mall.CustomEvents._timeoutForScroll = setTimeout(function() {
+                jQuery(window).trigger('Mall.onScrollEnd');
+            }, Mall.CustomEvents._time);
+        });
+
+        // Event: Mall.onResizeEnd
+        jQuery(window).on('resize', function() {
+            clearTimeout(Mall.CustomEvents._timeoutForResize);
+	        Mall.CustomEvents._timeoutForResize = setTimeout(function() {
+                jQuery(window).trigger('Mall.onResizeEnd');
+            },  Mall.CustomEvents._time);
+        });
+    }
+};
+
+Mall.initUrls = function(baseUrl,baseUrlNoVendor) {
+	Mall.baseUrl = baseUrl;
+	Mall.baseUrlNoVendor = baseUrlNoVendor;
+	Mall.mediaUrl = Mall.baseUrlNoVendor + "media/";
+	Mall.productImagesUrl = Mall.mediaUrl + "catalog/product/cache/";
+	Mall.manufacturerImagesUrl = Mall.mediaUrl + "m-image/";
+};
+
+Mall.isFirefox = function() {
+	return jQuery.browser.mozilla === true;
+};
+
 jQuery(document).ready(function() {
+    Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
+
+	Mall.Slick.init();
+	Mall.Footer.init();
+
+
 
 	jQuery(".header_top").headroom({
 		offset: 60
@@ -1054,6 +1354,27 @@ jQuery(document).ready(function() {
 
 	initToggleSearch();
     Mall.disableSearchNoQuery();
+
+    // Close  by swipe: Slidebars Submenus and mobile filters in listing
+    jQuery(window).swipe( {
+        swipeLeft:function(event) {
+            if (jQuery('body').hasClass('sb-open')) {
+                closeHamburgerMenu(event);
+            }
+            if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
+                Mall.listing.closeMobileFilters();
+            }
+        },
+        triggerOnTouchEnd: true,
+        excludedElements: "label, button, input, select, textarea, .noSwipe",
+        threshold: 5
+    });
+
+    //hack for vendor main page (turpentine shows global messages only one time)
+    if(jQuery(".page-messages-block ul.messages").length > 0){
+        var messages = jQuery(".page-messages-block ul.messages").clone();
+        jQuery(".messages-block-mobile .col-sm-12, .messages-block-desktop .col-sm-12").html(messages);
+    }
 
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
@@ -1089,7 +1410,7 @@ jQuery(document).ready(function() {
         var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
         if (backdrop.length == 0) {
             jQuery('#sb-site').append('<div class="modal-backdrop fade in"></div>');
-        };
+        }
 
     });
     jQuery('#popup-after-add-to-cart').on('show.bs.modal', function (e) {
@@ -1100,21 +1421,7 @@ jQuery(document).ready(function() {
 
     });
 
-//    jQuery("#product-listing-sort-control").selectbox({
-//        onOpen: function (inst) {
-////            initScrollBarFilterStyle();
-//        },
-//
-//        onChange: function(value, inst) {
-//            location.href = value;
-//        }
-//    });
-    //#######################
-    //## SIZE-BOX -> SELECTBOX
-    //#######################
-/*	jQuery(".size-box select").selectpicker({
-		mobile: Mall.getIsBrowserMobile()
-	});*/
+
     jQuery(".size-box select").selectBoxIt({
         native: Mall.getIsBrowserMobile(),
         defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
@@ -1143,8 +1450,6 @@ jQuery(document).ready(function() {
     //#######################
     //## END SIZE-BOX -> SELECTBOX
     //#######################
-
-    Mall.product.setDiagonalsOnSizeSquare();
 
     basket_dropdown();
     sales_order_details_top_resize();

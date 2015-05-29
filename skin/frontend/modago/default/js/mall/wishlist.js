@@ -399,7 +399,7 @@ Mall.wishlist = {
                     "class": "like liked",
                     "data-idproduct": id,
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
-                    onclick: "Mall.wishlist.removeFromSmallBlock(this);"
+                    onclick: "Mall.wishlist.removeFromSmallBlock(this);return false;"
                 });
 
 	            likeCount = jQuery("<span/>", {
@@ -413,12 +413,16 @@ Mall.wishlist = {
                 jQuery("<img/>", {
                     "class": "img-01",
                     src: Config.path.heartLike,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
                 jQuery("<img/>", {
                     "class": "img-02",
                     src: Config.path.heartLiked,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
@@ -472,7 +476,7 @@ Mall.wishlist = {
                     "class": "like",
                     "data-idproduct": id,
                     "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
-                    onclick: "Mall.wishlist.addFromSmallBlock(this);"
+                    onclick: "Mall.wishlist.addFromSmallBlock(this);return false;"
                 });
 
 	            likeCount = jQuery("<span/>", {
@@ -488,12 +492,16 @@ Mall.wishlist = {
                 jQuery("<img/>", {
                     "class": "img-01",
                     src: Config.path.heartLike,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
                 jQuery("<img/>", {
                     "class": "img-02",
                     src: Config.path.heartLiked,
+	                width: 18,
+	                height: 18,
                     alt: ""
                 }).appendTo(ico);
 
@@ -555,7 +563,7 @@ Mall.wishlist = {
 			    }
 		    });
 		    this._prev_window_width = jQuery(window).width();
-		    jQuery(window).resize();
+		    //jQuery(window).resize();
 	    }
     }
 };

@@ -2,6 +2,7 @@
     figure {
         &.img_product {
             margin-bottom:18px;
+	        position: relative;
                @media (max-width: $screen-xs-max) {
                 margin-bottom: 0px;
                }
@@ -38,6 +39,10 @@
             z-index: 900;
             cursor: pointer;
             .icoLike {
+	            img {
+		            width: 18px;
+		            height: 18px;
+	            }
                 .img-01 {
                    display:inline-block;
                 }

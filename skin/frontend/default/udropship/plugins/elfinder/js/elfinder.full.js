@@ -4558,7 +4558,7 @@ $.fn.elfindercontextmenu = function(fm) {
 			types = $.extend({}, fm.options.contextmenu),
 			tpl     = '<div class="elfinder-contextmenu-item"><span class="elfinder-button-icon {icon} elfinder-contextmenu-icon"/><span>{label}</span></div>',
 			item = function(label, icon, callback) {
-				return $(tpl.replace('{icon}', icon ? 'elfinder-button-icon-'+icon : '').replace('{label}', label))
+				return $(tpl.replace('{icon}', icon ? 'elfinder-button-icon-'+icon : '').replace('{label}', plupload.translate(label) || label))
 					.click(function(e) {
 						e.stopPropagation();
 						e.stopPropagation();

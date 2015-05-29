@@ -429,8 +429,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		$po->addComment("[" . $fullname . "] " . $comment, false, true);
 		$po->saveComments();
 	}
-	
-    //{{{ 
+
+
     /**
      * cancel orders with all po canceled
      */
@@ -446,7 +446,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                 )
             )
         );
-        $order_collection->addFieldToFilter("updated_at",array("lt"=>date('Y-m-d H:i:s',time()-24*3600)));
+        $time = Mage::getSingleton('core/date')->timestamp();
+        $order_collection->addFieldToFilter("updated_at",array("lt"=>date('Y-m-d H:i:s',$time-24*3600)));
         $cancel = array();
         foreach ($order_collection as $order) {            
 			$collection = Mage::getResourceModel("udpo/po_collection");
@@ -460,7 +461,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     			$collection = Mage::getResourceModel("udpo/po_collection");
 		    	/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
 	    		$collection->addFieldToFilter("order_id", $order->getId());
-                $collection->addFieldToFilter("updated_at",array('lt'=>date('Y-m-d H:i:s',time()-24*3600)));
+                $collection->addFieldToFilter("updated_at",array('lt'=>date('Y-m-d H:i:s',$time-24*3600)));
                 if (!count($collection)) {
                     $cancel[] = $order;
                 }
@@ -472,5 +473,167 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
                 ->save();
         }
     }
-    //}}}
+
+    /**
+     * Adding message NEW_ORDER to GH_API queue
+     *
+     * @param $observer
+     */
+    public function ghapiAddMessageNewOrder($observer) {
+        $queue = Mage::getSingleton('ghapi/message');        
+        $po = $observer->getPo();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+
+        if ($ghapiAccess) {
+            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER);
+        }
+    }
+
+    /**
+     * Adding messages (CANCELLED_ORDER | STATUS_CHANGED) to GH_API queue
+     *
+     * @param $observer
+     */
+    public function ghapiAddMessageCancelledOrChanged($observer) {
+        $queue = Mage::getSingleton('ghapi/message');
+        $po = $observer->getPo();
+        $oldStatus = $observer->getOldStatus();
+        $newStatus = $observer->getNewStatus();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+
+        /** @var Zolago_Po_Model_Po_Status $modelPoStatus */
+        $modelPoStatus = Mage::getSingleton('zolagopo/po_status');
+        $ghapiOldStatus = $modelPoStatus->ghapiOrderStatus($oldStatus);
+        $ghapiNewStatus = $modelPoStatus->ghapiOrderStatus($newStatus);
+
+        if ($ghapiNewStatus != $ghapiOldStatus) {
+            // Inform only when status change for GH API getOrdersByID->order_status
+            if ($ghapiAccess) {
+                if ($newStatus == Zolago_Po_Model_Po_Status::STATUS_CANCELED) {
+                    $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_CANCELLED_ORDER;
+                } else {
+                    $msg = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_STATUS_CHANGED;
+                }
+                $queue->addMessage($po, $msg);
+            }
+        }
+    }
+    public function setOrderState($observer) {
+        $po = $observer->getPo();
+            Mage::getModel('udpo/po')
+                ->setOrderState($po);
+    }
+    public function setOrderReservationOnSave($observer)
+    {
+	    if(Mage::registry('GHAPI') === true) {
+		    return;
+	    }
+        $po = $observer->getPo();
+        $newStatus = (int)$po->getUdropshipStatus();
+        $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+        //Mage::log($newStatus, null, 'setOrderReservationOnSave.log');
+        //Mage::log($poOpenOrder, null, 'setOrderReservationOnSave.log');
+        if (in_array($newStatus, explode(',', $poOpenOrder))) {
+            //set reservation=1
+            $po->setReservation(1);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        } else {
+            //set reservation=0
+            $po->setReservation(0);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        }
+
+    }
+    public function setOrderReservation($observer)
+    {
+        $po = $observer->getPo();
+
+        $newStatus = $observer->getNewStatus();
+        $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
+        if (in_array($newStatus, explode(',', $poOpenOrder))) {
+            //set reservation=1
+            $po->setReservation(1);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        } else {
+            //set reservation=0
+            $po->setReservation(0);
+            $po->getResource()->saveAttribute($po, 'reservation');
+        }
+
+    }
+    /**
+     * Adding messages ITEMS_CHANGED to GH_API queue
+     *
+     * @param $observer
+     */
+    public function ghapiAddMessageItemsChanged($observer) {
+        $queue = Mage::getSingleton('ghapi/message');
+        $po    = $observer->getPo();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+
+        if ($ghapiAccess) {
+            $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_ITEMS_CHANGED);
+        }
+    }
+
+    /**
+     * Adding messages ( DELIVERY_DATA_CHANGED | INVOICE_ADDRESS_CHANGED ) to GH_API queue
+     *
+     * @param $observer
+     */
+    public function ghapiAddMessageDeliveryOrInvoice($observer) {
+        $queue = Mage::getSingleton('ghapi/message');
+        $po    = $observer->getPo();
+        $type  = $observer->getType();
+        $vendor = $po->getVendor();
+        $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+
+        if ($ghapiAccess) {
+            if ($type == Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_DELIVERY_DATA_CHANGED);
+            } elseif ($type == Mage_Sales_Model_Order_Address::TYPE_BILLING) {
+                $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_INVOICE_ADDRESS_CHANGED);
+            }
+        }
+    }
+
+    /**
+     * Adding messages PAYMENT_DATA_CHANGED to GH_API queue
+     *
+     * @param $observer
+     */
+    public function ghapiAddMessagePaymentDataChanged($observer) {
+        $queue = Mage::getSingleton('ghapi/message');
+        $po    = $observer->getPo();
+        $oldPo = $observer->getOldPo();
+        $newPo = $observer->getNewPo();
+
+        if ($po) {
+            $vendor = $po->getVendor();
+            $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
+            if ($ghapiAccess) {
+                $queue->addMessage($po, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            }
+
+        } elseif ($oldPo && $newPo) {
+            // By allocateOverpayment
+
+            // For vendor from old PO
+            $vendorForOld = $oldPo->getVendor();
+            $ghapiAccessForOld = $vendorForOld->getData('ghapi_vendor_access_allow');
+            if ($ghapiAccessForOld) {
+                $queue->addMessage($oldPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            }
+
+            // For vendor from new PO
+            $vendorForNew = $newPo->getVendor();
+            $ghapiAccessForNew = $vendorForNew->getData('ghapi_vendor_access_allow');
+            if ($ghapiAccessForNew) {
+                $queue->addMessage($newPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
+            }
+        }
+    }
 }

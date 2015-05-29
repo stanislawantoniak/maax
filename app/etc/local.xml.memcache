@@ -1,0 +1,6 @@
+	<!-- replace     <session_save><![CDATA[files]]></session_save> -->
+    <session_save><![CDATA[memcache]]></session_save>
+    <session_save_path>
+        <![CDATA[tcp://127.0.0.1:11211?persistent=1&weight=2&timeout=10&retry_interval=10]]>
+    </session_save_path>
+    <session_cache_limiter><![CDATA[private]]></session_cache_limiter>

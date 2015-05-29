@@ -1,5 +1,12 @@
 <?php /* @var $this Zolago_Rma_Block_Vendor_Rma_Edit */ ?>
-<?php $_helper = Mage::helper("zolagorma");?>
+<?php
+/** @var Zolago_Rma_Helper_Data $_helper */
+$_helper = Mage::helper("zolagorma");
+?>
+<?php
+/** @var Mage_Core_Helper_Data $_coreHelper */
+$_coreHelper = Mage::helper("core");
+?>
 <?php $_rma = $this->getModel();?>
 <?php $_po = $_rma->getPo();?>
 <?php $_pos = $_po->getPos();?>
@@ -71,14 +78,27 @@ jQuery(document).ready(function() {
 						<dd><?php echo $this->escapeHtml($_vendor->getVendorName())?></dd> 
 						<dt><?php echo $_helper->__("Refund payment");?>:</dt>
 						<dd>
+							<?php if($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
 							<div class="btn-group" id="status-holder"> 
-								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
-									<?php echo $this->escapeHtml('Not paid');?> <span class="caret"></span> 
+								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+								<?php if($_rma->getRmaRefundAmount()): ?>
+									<?php echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false); ?>
+								<?php else: ?>
+									<?php echo $_helper->__('Not paid'); ?>
+								<?php endif; ?>
+									<span class="caret"></span>
 								</button> 
 								<ul class="dropdown-menu"> 
-									<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getRmaUrl("directPayment");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_helper->__("You are about to direct payment. Are you sure?");?>" data-modal="true" href="#"><?php echo $_helper->__("Make payment");?> [dev]</a></li> 								
+									<li><a href="#" data-toggle="modal" data-target="#refundModal"><?php echo $_helper->__("Make refund");?></a></li>
 								</ul> 
 							</div>
+							<?php else: ?>
+								<?php if($_rma->getRmaRefundAmount()):
+									 echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false);
+								else: ?>
+									<?php echo $_helper->__('Not paid');?>
+								<?php endif; ?>
+							<?php endif; ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd>
@@ -344,6 +364,16 @@ jQuery(document).ready(function() {
  *	Shippign address modal
  *******************************************************************************/
 	echo $this->getChild("vendor_rma_edit_shipping")->toHtml();
+?>
+
+<?php
+/*******************************************************************************
+ *	Make refund modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_rma_edit_refund")
+		->setRma($_rma)
+		->setRmaHelper($_helper)
+		->toHtml();
 ?>
 <?php  /*
 <div class="container">

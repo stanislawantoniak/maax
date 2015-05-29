@@ -6,3 +6,5 @@
 "Overpayment moved to %s","Nadpłata przeniesiona do %s"
 "Overpayment moved from %s","Nadpłata przeniesiona z %s"
 "Allocations overpayments created","Przydzielono nadpłatę"
+"Moved to overpayment by RMA refund","Przeniesiono na nadpłatę ze zwrotu RMA"
+"Created overpayment by RMA refund","Utworzono nadpłatę ze zwrotu RMA"

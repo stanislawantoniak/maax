@@ -17,7 +17,7 @@ div.noscroll {
 	overflow:hidden;
 	top:0px;
 	left: 288px;
-	z-index: 20;
+	z-index: 1050;
 }
 }
 
@@ -48,11 +48,30 @@ div.noscroll {
 		}
 	}
 }
-
+.node-type-page-shop {
+  .vendor-header-wrapper-desktop, .vendor-header-wrapper-mobile {
+    margin-bottom: 17px;
+  }
+  .mobile-menu-wrapper {
+    margin-bottom: 17px;
+  }
+}
+.umicrosite-index-landingpage {
+  .page-messages-block {
+    display: none;
+  }
+  .messages-block-mobile ul.messages {
+    margin-top: -17px;
+  }
+  .messages-block-desktop ul.messages {
+    margin-bottom: 17px;
+    margin-top: -17px;
+  }
+}
 .node-type-page-shop, .vendor-top-bottom-header {
 	.top_bottom {
-		margin-bottom: 17px;
 		margin-top:0px;
+//        margin-bottom: 17px;
 	}
 	.blockCarouselTop {
 		@media (max-width: $screen-xs-max) {
@@ -66,4 +85,14 @@ div.noscroll {
 
 .bottom-links{
 	margin-top: 25px;
+}
+[itemprop=offers] {
+  display: initial;
+}
+[itemprop=offers], [itemprop=isSimilarTo], [itemprop=isRelatedTo] {
+  display: block;
+  padding: 0;
+}
+[itemprop=aggregateRating],[itemprop=reviewRating], [itemprop=ratingValue], [itemprop=reviewCount], [itemprop=bestRating] {
+  display: none;
 }

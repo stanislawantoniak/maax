@@ -95,7 +95,7 @@
 		font-weight: bold;
 	}
 	.border-top {
-		border-top:1px solid #eeedf0;
+		border-top:1px solid $gray-lighter;
 		&:first-child {
 			border-top:none;
 		}
@@ -110,7 +110,7 @@
 			cursor: pointer;
 			white-space: nowrap;
 			&:before {
-				background: #6fffcf;
+				background: $color-accent;
 			}
 		}
 		h4 {
@@ -130,7 +130,7 @@
 			cursor: pointer;
 			white-space: nowrap;
 			&:before {
-				background: #6fffcf;	
+				background: $color-accent;
 			}
 		}
 		h4 {
@@ -162,7 +162,7 @@
         font-size: 14px;
         font-weight: bold;
         color: #000;
-        border-color: #eeedf0;
+        border-color: $gray-lighter;
       }
     }
 
@@ -326,7 +326,7 @@
             min-height: 60px;
             display: inline-table;
             vertical-align: middle;
-            border: 1px solid #eeedf0;
+            border: 1px solid $gray-lighter;
             padding: 5px;
             background-color: white;
             div {

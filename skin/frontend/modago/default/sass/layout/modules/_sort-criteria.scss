@@ -28,7 +28,7 @@
 				margin: 3px 0 4px;
 				width: 100%;
 			}
-			@include max-screen($screen-xs-max) {
+			@include max-screen($screen-sm-to-smmd-max) {
 				margin-right: -11px;
 			}
 		}

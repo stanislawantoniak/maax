@@ -12,4 +12,10 @@
     <cancel translate="message" module="zolagopo">
         <message>Cancel</message>
     </cancel>
+    <flag-sale translate="message" module="zolagopo">
+        <message>(SALE)</message>
+    </flag-sale>
+    <flag-promo translate="message" module="zolagopo">
+        <message>(SALE)</message>
+    </flag-promo>
 </jstranslator>

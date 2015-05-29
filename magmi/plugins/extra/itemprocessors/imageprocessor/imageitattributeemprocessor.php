@@ -368,6 +368,9 @@ class ImageAttributeItemProcessor extends Magmi_ItemProcessor
 	
 	public function saveImage($imgfile,$target)
 	{
+	    if (!@getimagesize($imgfile)) { // no image file
+	        return false;
+	    }	 
 		$result=$this->_mdh->copy($imgfile,$target);
 		return $result;		
 	}

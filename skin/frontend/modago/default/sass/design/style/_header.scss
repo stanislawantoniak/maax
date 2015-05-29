@@ -30,7 +30,8 @@
     border-bottom:1px solid #dddce1;
      #nav_desc {
         &.navigation > li > a:hover,
-        &.navigation > li > a.active  {
+        &.navigation > li > a.active,
+        &.navigation > li > a.forceActive {
             background:none;
             &:before {
                 background:#73f2ba;
@@ -102,13 +103,14 @@
             ul {
                 &.open {
                     border-top:1px solid #dedce1;
+                  padding-left:0px !important;
                 }
             }
             li {
 
                 a {
                    border-top:1px solid #f7f6f7;  
-                   line-height: 29px;
+                   line-height: 26px;
                 }
                
                 &:first-child {
@@ -181,13 +183,14 @@
             ul {
                 &.open {
                     border-top:1px solid #dedce1;
+                    padding-left: 0px;
                 }
             }
             li {
 
                 a {
                    border-top:1px solid #f7f6f7; 
-                   line-height: 29px;
+                   line-height: 26px;
 
                 }
                

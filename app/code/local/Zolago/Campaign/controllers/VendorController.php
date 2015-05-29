@@ -367,4 +367,5 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         echo $previewImage;
     }
 
+
 }

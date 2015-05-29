@@ -95,4 +95,16 @@ class Zolago_Modago_Block_Page_Html_Breadcrumbs extends Mage_Page_Block_Html_Bre
         }
         return $this->getData("standard_vendor");
     }
+
+    /**
+     * @return boolean
+     */
+    public function isSearchContext(){
+        $request = $this->getRequest();
+        return (
+            $request->getModuleName()=="search" &&
+            $request->getControllerName()=="index" &&
+            $request->getActionName()=="index"
+        );
+    }
 }

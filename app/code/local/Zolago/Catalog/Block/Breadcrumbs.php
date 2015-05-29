@@ -33,11 +33,21 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _getPath() {
         if (is_null($this->_path)) {
-            $category = Mage::helper('catalog')->getCategory();
-            if (!$category ||
-                $category->getId() == $this->_getRootCategoryId()) {
+            /* @var $catalogHelper Mage_Catalog_Helper_Data */
+            $catalogHelper = Mage::helper('catalog');
+            $category = $catalogHelper->getCategory();
+
+            $refererUrl = $this->getRequest()->getServer("HTTP_REFERER");
+            $params = explode("&", $refererUrl);
+
+            if (
+                !$category
+                || $category->getId() == $this->_getRootCategoryId()
+//                || (Mage::registry('current_product') && !$refererUrl)
+                || (Mage::registry('current_product') && (int)strpos($refererUrl,"search/index/index") > 0 && !in_array("scat=".$category->getId(), $params))
+            ) {
                 $category = $this->_getDefaultCategory(
-					$this->_getProduct(), 
+					$this->_getProduct(),
 					$this->_getRootCategoryId()
 				);
             }
@@ -52,6 +62,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
             $this->_path = $path;
         }
+
         return $this->_path;
     }
     /**
@@ -162,9 +173,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
                         instanceof Mage_Catalog_Model_Category) {
                     $parentCategory = $parents[$parentId];
                     array_unshift($path, array(
-						"name" => "category" . $parentCategory->getId(),
-						"label" => $parentCategory->getName(),
-						"link" => $this->_prepareCategoryLink($category, $parentCategory, $parentId)
+						"name"      => "category" . $parentCategory->getId(),
+                        "id"        => $parentCategory->getId(),
+						"label"     => $parentCategory->getName(),
+						"link"      => $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId),
+                        "data-link" => $parentCategory->getUrl(),
+                        'categorylongname' => $parentCategory->getLongName()
 					));
                 }
             }
@@ -202,10 +216,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 				'title'=>Mage::helper('catalog')->__('Go to Mall'),
 				'link'=>Mage::helper("zolagodropshipmicrosite")->getBaseUrl()
 			));
-            $type = $this->_getVendorTypeName($vendor->getVendorType());
+
             $breadcrumbsBlock->addCrumb('vendor', array(
-				'label'=>$type . ' ' . Mage::helper('catalog')->__($vendor->getVendorName()),
-				'title'=>Mage::helper('catalog')->__('Vendor'),
+				'label'=>Mage::helper('catalog')->__($vendor->getVendorName()),
+				'title'=>Mage::helper('catalog')->__($vendor->getVendorName()),
 				'link'=>Mage::getBaseUrl()
 			));
         } else {
@@ -234,6 +248,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @return
      */
     protected function _getBlock() {
+
         if (is_null($this->_breadcrumbBlock)) {
             if (!($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs'))) {
                 $breadcrumbsBlock = $this->getLayout()->createBlock('page/html_breadcrumbs', 'breadcrumbs');
@@ -250,9 +265,11 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _prepareLayout()
     {
+
         if(Mage::registry("bc_prepared")) {
             return $this;
         }
+
         $this->_prepareListingBreadcrumb();
 
         $title = array();

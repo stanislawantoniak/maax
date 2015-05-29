@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout>
+    <ghapi_wsdl_index>        
+        <header></header>
+        <block type="page/html" name="root" output="toHtml" template="ghapi/xml.phtml">            
+            <block type="ghapi/wsdl" name="wsdl" output="toHtml" template="ghapi/wsdl.phtml"/>
+        </block>
+    </ghapi_wsdl_index>
+    <ghapi_wsdl_test>        
+        <header></header>
+        <block type="page/html" name="root" output="toHtml" template="ghapi/xml.phtml">            
+            <block type="ghapi/wsdlTest" name="wsdl_test" output="toHtml" template="ghapi/wsdl.phtml"/>
+        </block>
+    </ghapi_wsdl_test>
+</layout>

@@ -1,0 +1,159 @@
+<?php /* @var $this GH_Api_Block_Dropship_Settings */ ?>
+<?php $_helper = Mage::helper("ghapi"); ?>
+
+<?php
+
+$_session = Mage::getSingleton('udropship/session');
+$_vendor = $_session->getVendor();
+
+$_ghApiVendorUser = $this->getGhApiVendorUser();
+?>
+	<div class="row">
+        <div class="col-md-12">
+            <form id="ghapi_vendor_settiongs" class="form-horizontal" method="post" action="/udropship/ghapi/save">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo $_helper->__("API Login Data"); ?></h4>
+                    </div>
+                    <div class="widget-content">
+
+                        <div class="form-group">
+                            <label for="ghapi_vendor_id" class="col-md-3 control-label">
+                                <?php echo $_helper->__("Partner ID"); ?>
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="col-md-9">
+                                <input id="vendor_name" name="ghapi_vendor_id" value="<?php echo $_vendor->getVendorId(); ?>" readonly type="text" class="form-control" style="width:20%; min-width:50px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ghapi_vendor_api_key" class="col-md-3 control-label">
+                                <?php echo $_helper->__("API Key"); ?>
+                            </label>
+
+                            <div class="col-xs-12 col-md-9 col-lg-6">
+                                <input id="ghapi_vendor_api_key" name="ghapi_vendor_api_key" value="<?php echo $_ghApiVendorUser->getApiKey(); ?>" type="text" readonly class="form-control" size="10">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ghapi_vendor_password" class="col-md-3 control-label">
+                                <?php echo $_helper->__("API Password"); ?>
+                            </label>
+
+                            <div class="col-xs-12 col-md-9 col-lg-6">
+                                <input id="ghapi_vendor_password" name="ghapi_vendor_password" value="" type="password" class="form-control" size="10">
+                                <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('Minimum Length - 8 characters'); ?></p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_helper->__('Leave empty for no change');?></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+	            <div class="widget box">
+		            <div class="widget-header">
+			            <h4><?php echo $_helper->__("Products reservations"); ?></h4>
+		            </div>
+		            <div class="widget-content">
+
+			            <div class="form-group">
+				            <?php $ghapi_reservation_disabled = (int)$_vendor->getData('ghapi_reservation_disabled'); ?>
+				            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+					            <input id="ghapi_reservation_disabled" name="ghapi_reservation_disabled"
+					                   value="<?php echo $ghapi_reservation_disabled; ?>"
+					                   <?php if($ghapi_reservation_disabled == 1): ?>checked<?php endif; ?>
+					                   type="checkbox">
+				            </div>
+				            <label for="ghapi_reservation_disabled" class="col-md-11 col-sm-10 col-xs-10">
+					            <?php echo $_helper->__("Don't reserve products' stocks after downloading order by API."); ?>
+				            </label>
+			            </div>
+		            </div>
+	            </div>
+
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo $_helper->__("Informuj o zmianach w zamówieniu dotyczących:"); ?></h4>
+                    </div>
+                    <div class="widget-content">
+
+                        <div class="form-group">
+                            <?php $ghapi_message_new_order = (int)$_vendor->getData('ghapi_message_new_order'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_new_order" name="ghapi_message_new_order" value="<?php echo $ghapi_message_new_order; ?>" <?php if($ghapi_message_new_order == 1): ?>checked<?php endif; ?> type="checkbox">
+                            </div>
+                            <label for="ghapi_message_new_order" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Pojawiło się nowe zamówienie do realizacji."); ?>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <?php $ghapi_message_order_canceled = (int)$_vendor->getData('ghapi_message_order_canceled'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_order_canceled" name="ghapi_message_order_canceled" value="<?php echo $ghapi_message_order_canceled; ?>" <?php if($ghapi_message_order_canceled == 1): ?>checked<?php endif; ?>  type="checkbox">
+                            </div>
+                            <label for="ghapi_message_order_canceled" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Zamówienie zostało anulowane."); ?>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <?php $ghapi_message_order_payment_changes = (int)$_vendor->getData('ghapi_message_order_payment_changes'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_order_payment_changes" name="ghapi_message_order_payment_changes" value="<?php echo $ghapi_message_order_payment_changes; ?>" <?php if($ghapi_message_order_payment_changes == 1): ?>checked<?php endif; ?> type="checkbox">
+                            </div>
+                            <label for="ghapi_message_order_payment_changes" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Zmieniła się metoda płatności w zamówieniu lub/i zmieniła się się płatność do zamówienia."); ?>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <?php $ghapi_message_order_product_changes = (int)$_vendor->getData('ghapi_message_order_product_changes'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_order_product_changes" name="ghapi_message_order_product_changes" value="<?php echo $ghapi_message_order_product_changes; ?>" <?php if($ghapi_message_order_product_changes == 1): ?>checked<?php endif; ?> type="checkbox">
+                            </div>
+                            <label for="ghapi_message_order_product_changes" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Zmieniły się produkty lub koszt dostawy w zamówieniu. Produkty mogły być usunięte, dodane, zmieniona cena, ilość, rabat."); ?>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <?php $ghapi_message_order_shipping_changes = (int)$_vendor->getData('ghapi_message_order_shipping_changes'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_order_shipping_changes" name="ghapi_message_order_shipping_changes" value="<?php echo $ghapi_message_order_shipping_changes; ?>" <?php if($ghapi_message_order_shipping_changes == 1): ?>checked<?php endif; ?> type="checkbox">
+                            </div>
+                            <label for="ghapi_message_order_shipping_changes" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Zmieniła się metoda dostawy lub/i adres dostawy."); ?>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <?php $ghapi_message_order_invoice_changes = (int)$_vendor->getData('ghapi_message_order_invoice_changes'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_order_invoice_changes" name="ghapi_message_order_invoice_changes" value="<?php echo $ghapi_message_order_invoice_changes; ?>" <?php if($ghapi_message_order_invoice_changes == 1): ?>checked<?php endif; ?> type="checkbox">
+                            </div>
+                            <label for="ghapi_message_order_invoice_changes" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Zmieniły się dane do faktury lub/i informacja czy faktura jest wymagana."); ?>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <?php $ghapi_message_order_status_changes = (int)$_vendor->getData('ghapi_message_order_status_changes'); ?>
+                            <div class="col-md-1 col-sm-1 col-xs-1 align-right">
+                                <input id="ghapi_message_order_status_changes" name="ghapi_message_order_status_changes" value="<?php echo $ghapi_message_order_status_changes; ?>" <?php if($ghapi_message_order_status_changes == 1): ?>checked<?php endif; ?> type="checkbox">
+                            </div>
+                            <label for="ghapi_message_order_status_changes" class="col-md-11 col-sm-10 col-xs-10">
+                                <?php echo $_helper->__("Zmienił się status zamówienia."); ?>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                        <span><span><?php echo $this->__('Save'); ?></span></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+

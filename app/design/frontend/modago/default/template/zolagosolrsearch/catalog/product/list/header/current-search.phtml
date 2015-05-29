@@ -61,7 +61,7 @@ $rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
 	                    </span>
                     </span>
 				<?php endif; ?>
-				<?php echo $vendor->isBrandshop() ? $helperZSS->__('in shop') : $helperZSS->__("for vendor"); ?>
+				<?php echo $helperZSS->__("in "); ?>
 				<span style="white-space:nowrap">
                     <span class="query-text uppercase"><?php echo $vendor->getVendorName(); ?></span>
 					<span class="query-text-iks">
@@ -93,3 +93,7 @@ $rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
 		</div>
 	<?php endif; ?>
 </div>
+<script>
+    Mall.setQueryText('<?php echo $helperZSS->getQueryText(); // Fix for Varnish ?>');
+    Mall.Navigation.currentCategoryId.push('<?php echo $currentCategory->getId();?>');
+</script>

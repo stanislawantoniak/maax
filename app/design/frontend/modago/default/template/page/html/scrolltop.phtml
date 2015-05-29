@@ -1,0 +1,25 @@
+<?php /** @var Zolago_Modago_Block_Page_Html_Scrolltop $this */ ?>
+<?php if($this->isActive()): ?>
+	<style>
+		#scrollTop.show {
+			right: <?php echo $this->getPositionRight(); ?>px;
+		}
+		#scrollTop {
+			bottom: <?php echo $this->getPositionBottom(); ?>px;
+		}
+	</style>
+	<div id="scrollTop"
+	     onclick="Mall.Scrolltop.hopToTop()">
+		<i class="fa fa-chevron-up"></i>
+	</div>
+	<script>
+		Mall.Scrolltop.options = {
+			percentAppears: <?php echo $this->getPercentAppears() ?>,
+			showOnScroll: <?php echo $this->showOnScroll() ? 'true' : 'false' ?>,
+			hideAfterTime: <?php echo $this->getHideAfter(); ?>
+		};
+		jQuery(document).ready(function() {
+			Mall.Scrolltop.init();
+		});
+	</script>
+<?php endif; ?>

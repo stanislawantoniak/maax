@@ -21,7 +21,7 @@ Mall.validate = {
             var isSelect2 = jQuery(element).hasClass("select-box-it-select");
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.actual( 'innerWidth' ) + 25,
-                target = isSelect2 ? elem.parent() : elem.closest("div");
+                target = isSelect2 ? elem.parent() : elem.attr('name') === 'stars' ? elem.parent() : elem.closest("div");
 
             if (elem.attr('id') === 'pass'
                 || elem.is("textarea:not(#question_text-mobile)")
@@ -31,6 +31,8 @@ Mall.validate = {
                 || isSelect2
             ) {
                 we -= 14;
+            } else if(elem.attr('name') === 'stars') {
+	            we = 190;
             }
 
             target
@@ -57,7 +59,8 @@ Mall.validate = {
 
             var elem = isSelect2 ? jQuery("#s2id_" + jQuery(element).attr("id")) : jQuery(element),
                 we = elem.innerWidth() + 25,
-                target = isSelect2 ? elem.parent() : elem.closest("div");
+	            target = isSelect2 ? elem.parent() : elem.attr('name') === 'stars' ? elem.parent() : elem.closest("div"),
+	            top = '';
 
 
 
@@ -69,6 +72,9 @@ Mall.validate = {
                 || isSelect2
             ) {
                 we -= 14;
+            } else if(elem.attr('name') === 'stars') {
+	            we = 135;
+	            top = 'margin-top:-25px'
             }
 
             target
@@ -85,14 +91,13 @@ Mall.validate = {
                 target
                     .not( ".form-checkbox" )
                     .not( ".form-radio" )
-                    .append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+                    .append('<i style="left:'+we+'px; right:auto;'+top+'" class="form-ico-checked form-control-feedback"></i>');
             }
 
             target.find('.form-ico-times').remove();
         },
 
         errorPlacement: function(error, element) {
-
             if (element.attr("type") === "checkbox" ){
                 jQuery(element).closest("div").find("span.error").remove();
                 jQuery(element).closest('div').append(error);
@@ -117,10 +122,14 @@ Mall.validate = {
 			var modal = jQuery('.modal:visible');
 			var scrollTo = modal.length
 							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
-							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight() - 35,
+							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight() - 25,
 				scrollMe = modal.length ? modal : jQuery('html, body');
 
-            scrollMe.animate({
+	        if(validator.errorList[0].element.id === 'stars') {
+				scrollTo = jQuery('#stars').parent().offset().top - Mall.getMallHeaderHeight() - 35;
+	        }
+
+            scrollMe.stop().animate({
                 scrollTop: scrollTo
             }, "slow");
         }
@@ -132,11 +141,11 @@ Mall.validate = {
         // add customer methods
 		jQuery.validator.addMethod('validate-postcode', function () {
 				return Mall.validate.validators.postcode.apply(this, arguments);
-		}, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
+		}, jQuery.validator.format(Mall.translate.__("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.")));
 
         jQuery.validator.addMethod('validate-postcodeWithReplace', function () {
             return Mall.validate.validators.postcodeWithReplace.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
+        }, jQuery.validator.format(Mall.translate.__("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.")));
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);

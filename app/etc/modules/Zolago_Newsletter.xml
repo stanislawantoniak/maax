@@ -4,6 +4,9 @@
         <Zolago_Newsletter>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <SalesManago_Tracking />
+            </depends>
         </Zolago_Newsletter>
     </modules>
 </config>

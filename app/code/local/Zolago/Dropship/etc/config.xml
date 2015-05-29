@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.4</version>
+			<version>0.0.5</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -17,6 +17,9 @@
                     <preferences>
                         <table>zolago_vendor_preferences</table>
                     </preferences>
+                    <vendor_brandshop>
+                        <table>zolago_vendor_brandshop</table>
+                    </vendor_brandshop>
                 </entities>
             </zolagodropship_resource>
 			<udropship>
@@ -29,7 +32,8 @@
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- Observer model -->
 					<observer>Zolago_Dropship_Model_Observer</observer>
-				</rewrite>
+                    <observer>Zolago_Dropship_Model_Observer</observer>
+                </rewrite>
 			</udropship>
 			<udropship_mysql4>
 				<rewrite>
@@ -67,8 +71,8 @@
 					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
-					<adminhtml_vendor_edit_tab_preferences>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences</adminhtml_vendor_edit_tab_preferences>
                     <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
+                    <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
                 </rewrite>
 			</udropship>
 		</blocks>
@@ -83,14 +87,10 @@
 					<module>Zolago_Dropship</module>
 				</setup>
 			</zolagodropship_setup>
-		</resources>
+		</resources>		    
 		<udropship>
-            <vendor>
-                <fieldsets>
-                    <marketing>
-                        <legend>Marketing content</legend>
-                        <position>120</position>
-                    </marketing>
+		    <courier>
+		        <fieldsets>
                     <dhl>
                         <legend>DHL</legend>
                         <position>140</position>
@@ -99,19 +99,39 @@
                         <legend>UPS</legend>
                         <position>160</position>
                     </orbaups>
-                    <rma>
+                    <orbarma>
                         <legend>RMA Settings</legend>
                         <position>180</position>
-                    </rma>
-                </fieldsets>
-
+                    </orbarma>
+		        </fieldsets>
+		    </courier>
+            <vendor>
                 <fields>
+                    <new_order_notifications>                    
+                        <fieldset>vendor_info</fieldset>
+                    </new_order_notifications>
+                    <notify_by_udpo_status>
+                        <fieldset>vendor_info</fieldset>
+                    </notify_by_udpo_status>
+                    <url_key>
+                        <fieldset>vendor_ifno</fieldset>
+                    </url_key>
+                    <logo>
+                        <fieldset>vendor_info</fieldset>
+                    </logo>
+                    <sale_commission_percent>
+                        <label>SALE Commission Percentage</label>
+                        <fieldset>statement</fieldset>
+                        <hide_modules>Unirgy_DropshipTierCommission</hide_modules>
+                        <position>11</position>
+                        <default>0</default>
+                    </sale_commission_percent>
                 	<super_vendor_id>
                         <label>Super vendor</label>
                         <type>select</type>
 						<source_model>zolagodropship/source</source_model>
                         <source>allvendorswithempty</source>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <position>0</position>
                     </super_vendor_id>
                 	<vendor_type>
@@ -119,61 +139,73 @@
                         <type>select</type>
 						<source_model>zolagodropship/source</source_model>
                         <source>vendorstype</source>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_form</fieldset>
                         <position>0</position>
                     </vendor_type>
-                    <vendor_type_label>
-                        <label>Vendor name prefix</label>
-                        <note>Can be empty</note>
-                        <type>text</type>
-                        <fieldset>integration</fieldset>
-                        <position>0</position>
-                    </vendor_type_label>
                     <can_ask>
                         <label>Customer can ask?</label>
                         <type>select</type>
                         <source>yesno</source>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <position>2</position>
                     </can_ask>
+
                     <sequence>
                         <label>Sequence</label>
                         <note>Vendor on main page in customized sequence</note>
                         <type>text</type>
-                        <fieldset>integration</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <position>3</position>
                     </sequence>
-                	<marketing_store_information>
-                        <label>Main store menu - marketing store information</label>
-                        <type>wysiwyg</type>
+                    <vendor_type_label>
+                        <label>Vendor name prefix</label>
+                        <note>Can be empty</note>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>9</position>
+                    </vendor_type_label>
+                    <marketing_store_information_title>
+                        <label>Vendor page - Seller information title</label>
+                        <type>text</type>
                         <fieldset>marketing</fieldset>
                         <position>10</position>
+                    </marketing_store_information_title>
+                	<marketing_store_information>
+                        <label>Vendor page - Seller information</label>
+                        <type>wysiwyg</type>
+                        <fieldset>marketing</fieldset>
+                        <position>11</position>
                     </marketing_store_information>
+                    <marketing_brand_information_title>
+                        <label>Vendor page - Brand information title</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>12</position>
+                    </marketing_brand_information_title>
+                    <marketing_brand_information>
+                        <label>Vendor page - Brand information</label>
+                        <type>wysiwyg</type>
+                        <fieldset>marketing</fieldset>
+                        <position>13</position>
+                    </marketing_brand_information>
                 	<terms_seller_information>
-                        <label>Main store menu - terms - seller information</label>
+                        <label>Product page - Seller information</label>
                         <type>wysiwyg</type>
                         <fieldset>marketing</fieldset>
                         <position>20</position>
                     </terms_seller_information>
                 	<terms_delivery_information>
-                        <label>Main store menu - terms - delivery information</label>
+                        <label>Delivery information</label>
                         <type>wysiwyg</type>
                         <fieldset>marketing</fieldset>
                         <position>30</position>
                     </terms_delivery_information>
                 	<terms_return_information>
-                        <label>Product - terms - return information</label>
+                        <label>Return information</label>
                         <type>wysiwyg</type>
                         <fieldset>marketing</fieldset>
                         <position>40</position>
                     </terms_return_information>
-                	<basket_delivery_slogan>
-                        <label>Basket - Delivery info</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>45</position>
-						<only_admin>1</only_admin>
-                    </basket_delivery_slogan>
                 	<store_delivery_headline>
                         <label>Product - store section - delivery headline</label>
                         <type>text</type>
@@ -206,6 +238,82 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
+
+
+                    <!--GH API-->
+                    <ghapi_vendor_access_allow>
+                        <label>GH API Access</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>1</position>
+                    </ghapi_vendor_access_allow>
+
+	                <ghapi_reservation_disabled translate="label">
+		                <label>Don't reserve products' stocks after downloading order by API.</label>
+		                <type>select</type>
+		                <source>yesno</source>
+		                <fieldset>ghapi_vendor_access</fieldset>
+		                <position>2</position>
+		                <default>0</default>
+	                </ghapi_reservation_disabled>
+
+                    <ghapi_message_new_order>
+                        <label>Pojawiło się nowe zamówienie do realizacji.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_new_order>
+                    <ghapi_message_order_canceled>
+                        <label>Zamówienie zostało anulowane.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_canceled>
+                    <ghapi_message_order_payment_changes>
+                        <label>Zmieniła się metoda płatności w zamówieniu lub/i zmieniła się się płatność do zamówienia.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_payment_changes>
+                    <ghapi_message_order_product_changes>
+                        <label>Zmieniły się produkty lub koszt dostawy w zamówieniu. Produkty mogły być usunięte, dodane, zmieniona cena, ilość, rabat.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_product_changes>
+                    <ghapi_message_order_shipping_changes>
+                        <label>Zmieniła się metoda dostawy lub/i adres dostawy.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_shipping_changes>
+                    <ghapi_message_order_invoice_changes>
+                        <label>Zmieniły się dane do faktury lub/i informacja czy faktura jest wymagana.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_invoice_changes>
+                    <ghapi_message_order_status_changes>
+                        <label>Zmienił się status zamówienia.</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>ghapi_vendor_access</fieldset>
+                        <position>2</position>
+                        <default>1</default>
+                    </ghapi_message_order_status_changes>
                     
 					<!-- DHL -->
                 	<use_dhl>
@@ -288,7 +396,7 @@
                     <dhl_rma>
                         <label>Use another DHL account for RMA</label>
                         <type>select</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <source>yesno</source>
 						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
 						<depend_fields>
@@ -301,7 +409,7 @@
                     <orbaups_rma>
                         <label>Use another UPS account for RMA</label>
                         <type>select</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <source>yesno</source>
 						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
 						<depend_fields>
@@ -314,44 +422,44 @@
                 	<dhl_rma_account>
                         <label>Account number</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>15</position>
                     </dhl_rma_account>
                 	<dhl_rma_login>
                         <label>DHL login</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>20</position>
                     </dhl_rma_login>
                 	<dhl_rma_password>
                         <label>DHL password</label>
                         <type>password</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>30</position>
                     </dhl_rma_password>
                 	<orbaups_rma_account>
                         <label>License key</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>35</position>
                     </orbaups_rma_account>
                 	<orbaups_rma_login>
                         <label>UPS login</label>
                         <type>text</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>40</position>
                     </orbaups_rma_login>
                 	<orbaups_rma_password>
                         <label>UPS password</label>
                         <type>password</type>
-                        <fieldset>rma</fieldset>
+                        <fieldset>orbarma</fieldset>
                         <position>45</position>
                     </orbaups_rma_password>
 					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>
                         <type>select</type>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<source_model>zolagodropship/source_review</source_model>
                         <position>800</position>
                     </review_status>					
@@ -360,7 +468,7 @@
                         <label>Label store</label>
                         <type>select</type>
 						<source_model>zolagodropship/source_store</source_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<only_admin>1</only_admin>
                         <position>500</position>
                     </label_store>
@@ -368,7 +476,7 @@
 					<root_category>
                         <label>Root categories</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<only_admin>1</only_admin>
                         <position>600</position>
                     </root_category>
@@ -376,7 +484,7 @@
 					<custom_design>
                         <label>Custom design</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
-                        <fieldset>microsite</fieldset>
+                        <fieldset>vendor_info</fieldset>
 						<only_admin>1</only_admin>
                         <position>700</position>
                     </custom_design>
@@ -384,6 +492,22 @@
 			</vendor>
 		</udropship>
 		<events>
+		    <udropship_adminhtml_vendor_edit_prepare_form>
+		        <observers>
+		            <zolagodropship>
+		                <class>zolagodropship/observer</class>
+		                <method>udropship_adminhtml_vendor_edit_prepare_form</method>
+		            </zolagodropship>
+		        </observers>		        
+		    </udropship_adminhtml_vendor_edit_prepare_form>
+		    <udropship_adminhtml_vendor_tabs_after>	
+		        <observers>
+		            <zolagodropship>
+		                <class>zolagodropship/observer</class>
+		                <method>udropship_adminhtml_vendor_tabs_organize</method>
+		            </zolagodropship>
+		        </observers>
+		    </udropship_adminhtml_vendor_tabs_after>
 			<sales_order_shipment_track_save_before>
 				<observers>
 					<add_orba_shipping_data>
@@ -447,6 +571,7 @@
 		    <udropship_pos>/udropship/pos/</udropship_pos>
 		    <udropship_sizetable>/udropship/sizetable/</udropship_sizetable>
 		    <udropship_vendor_settings>/udropship/vendor_settings/</udropship_vendor_settings>
+		    <udropship_ghapi>/udropship/ghapi/</udropship_ghapi>
 		</secure_url>
 	</frontend>
 	<admin>
@@ -454,13 +579,22 @@
 			<udropshipadmin>
 				<args>
 					<modules>
-						<zolagodropshipl before="Unirgy_Dropship_Adminhtml">Zolago_Dropship_Adminhtml</zolagodropshipl>
+						<Zolago_Dropship before="Unirgy_Dropship">Zolago_Dropship</Zolago_Dropship>
 					</modules>
 				</args>
 			</udropshipadmin>
 		</routers>
 	</admin>
 	<adminhtml>
+		<events>
+		    <udropship_adminhtml_vendor_edit_prepare_form>
+		        <observers>
+		            <udvacation>
+		                <type>disabled</type>
+		            </udvacation>
+		        </observers>
+		    </udropship_adminhtml_vendor_edit_prepare_form>
+        </events>
 		<translate>
 			<modules>
 				<Zolago_Dropship>

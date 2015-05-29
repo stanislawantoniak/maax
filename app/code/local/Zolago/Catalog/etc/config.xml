@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.24</version>
+            <version>0.0.31</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -12,12 +12,17 @@
                 <po_open_order>0,11,9,5,4,3,11</po_open_order>
             </config>
         </zolagocatalog>
-		
 		<cataloginventory>
 			<options>
 				<include_not_salable>1</include_not_salable>
             </options>
 		</cataloginventory>
+        <udropship>
+            <vendor>
+                <vendor_mass_image_batch_size_byname>10</vendor_mass_image_batch_size_byname>
+                <vendor_mass_image_batch_size_bycsv>10</vendor_mass_image_batch_size_bycsv>
+            </vendor>
+        </udropship>
     </default>
     <global>
         <models>
@@ -47,6 +52,8 @@
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
                     <category>Zolago_Catalog_Model_Category</category>
                     <product>Zolago_Catalog_Model_Product</product>
+                    <url>Zolago_Catalog_Model_Url</url>
+                    <category>Zolago_Catalog_Model_Category</category>
                 </rewrite>
 			</catalog>
             <catalog_resource>
@@ -70,7 +77,9 @@
 					<product_view>Zolago_Catalog_Block_Product_View</product_view>
                     <product_view_attributes>Zolago_Catalog_Block_Product_View_Attributes</product_view_attributes>
 					<product_view_type_configurable>Zolago_Catalog_Block_Product_View_Type_Configurable</product_view_type_configurable>
-				</rewrite>
+                    <product_list_related>Zolago_Catalog_Block_Product_List_Related</product_list_related>
+                    <product_list_crosssell>Zolago_Catalog_Block_Product_List_Crosssell</product_list_crosssell>
+                </rewrite>
 			</catalog>
         </blocks>
         <resources>
@@ -164,6 +173,7 @@
 		    <udprod_vendor_product>/udprod/vendor_product/</udprod_vendor_product>
 		    <udprod_vendor_image>/udprod/vendor_image/</udprod_vendor_image>
 		    <udprod_vendor_price>/udprod/vendor_price/</udprod_vendor_price>
+		    <udprod_vendor_attributes>/udprod/vendor_attributes/</udprod_vendor_attributes>
 		</secure_url>
     </frontend>
     <adminhtml>

@@ -160,6 +160,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	 */
 	public function collectTracking($tracks)
 	{
+		$time = Mage::getSingleton('core/date')->timestamp();
 		$requests = array();
 		foreach ($tracks as $track) {
 			$cCode = $track->getCarrierCode();
@@ -221,7 +222,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 								$repeatIn = 12;
 							}
 							$repeatIn = $repeatIn * 60 * 60;
-							$track->setNextCheck(date('Y-m-d H:i:s', time() + $repeatIn))->save();
+							$track->setNextCheck(date('Y-m-d H:i:s', $time + $repeatIn))->save();
 							if ($status == Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING) continue;
 						}
 						$track->setUdropshipStatus($status);

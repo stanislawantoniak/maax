@@ -62,29 +62,50 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return type
 	 */
 	public function getDefaultCategory($product, $rootId) {
+
 		/* @var $product Mage_Catalog_Model_Product */
-		
+
 		if(!$product){
 			return null;
 		}
-		
+
         $category = null;
         // if no category, try to get category from product
 		
 		$catIds = $product->getCategoryIds();
-		$collection = Mage::getResourceModel('catalog/category_collection');
-		/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
 
-		$collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
-		$collection->addAttributeToFilter("is_active", 1);
-		$collection->addPathFilter("/$rootId/");
-		// Get first category
+		$collection = $this->getProductCategoriesCollection($catIds, $rootId);
+
 		if($collection->count()) {
+            // Get first category
 			$category = $collection->getFirstItem();
+            foreach($collection as $collectionItem){
+                // Get first basic category if exist
+                if($collectionItem->getData("basic_category")){
+                    $category = $collectionItem;
+                    break;
+                }
+            }
 		}
-		
+
         return $category;
 	}
+
+    /**
+     * @param $catIds
+     * @param $rootId
+     * @return Mage_Catalog_Model_Resource_Category_Collection|Object
+     * @throws Mage_Core_Exception
+     */
+    public function getProductCategoriesCollection($catIds, $rootId){
+        $collection = Mage::getResourceModel('catalog/category_collection');
+        /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+        $collection->addAttributeToSelect("basic_category");
+        $collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+        $collection->addAttributeToFilter("is_active", 1);
+        $collection->addPathFilter("/$rootId/");
+        return $collection;
+    }
 	
 	/*
 	 * @return int
@@ -115,19 +136,35 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach ($listModel->getCollection() as $product) {
 			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
-			$_product = $product->getData();
-			$_product['listing_resized_image_url'] = (string) $product->getListingResizedImageUrl();
-			$_product['listing_resized_image_info'] = $product->getListingResizedImageInfo();
-			$_product['udropship_vendor_logo_url'] = (string) $product->getUdropshipVendorLogoUrl();
-			$_product['manufacturer_logo_url'] = (string) $product->getManufacturerLogoUrl();
-			$_product['is_discounted'] = (int) $product->isDiscounted();
-			$_product['price'] = (float) $product->getStrikeoutPrice();
-			$_product['final_price'] = (float) $product->getFinalPrice();
-			$_product['currency'] = (string) $product->getCurrency();
+
+			$_product[0] = $product->getId();
+			$_product[1] = $product->getName();
+			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
+			$_product[3] = $product->getStrikeoutPrice();
+			$_product[4] = $product->getFinalPrice();
+			$_product[5] = $product->getWishlistCount();
+			$_product[6] = $product->getInMyWishlist();
+			$_product[7] = $this->_prepareListingResizedImageUrl($product->getListingResizedImageUrl());
+			$imageSizes = $product->getListingResizedImageInfo();
+			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] / $imageSizes["width"]),2) : 1;
+			$_product[9] = $this->_prepareManufacturerLogoUrl($product->getManufacturerLogoUrl());
+
 			$products[] = $_product;
 		}
 
 		return $products;
+	}
+
+	protected function _prepareCurrentUrl($url) {
+		return str_replace(Mage::getBaseUrl(),"/",$url);
+	}
+
+	protected function _prepareListingResizedImageUrl($url) {
+		return str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/product/cache/","",$url);
+	}
+
+	protected function _prepareManufacturerLogoUrl($url) {
+		return str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."m-image/","",$url);
 	}
 
 	/**
@@ -349,11 +386,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				$currentCategory = $categoryCandidate;
 			}
 		}
-		
-		
-		$queryText = Mage::helper('solrsearch')->getParam('q');
 
-		$array['input_current_value'] = $queryText;
 		$array['select_options'] = array(array(
 			'value' => 0,
 			'text' => $this->__('Everywhere'),
@@ -370,7 +403,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				'value' => "{$vendorRootCategoryId}",
 				//like 'everywhere' is root category ( zero ),
 				//so when vendor is set the category is his root category
-				'text' => $_vendor->isBrandshop() ? $this->__('This brandshop') : $this->__('This vendor'),
+				'text' => $this->__('in ') . $_vendor->getVendorName(),
 				'selected' => true,
 			);
 

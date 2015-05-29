@@ -49,15 +49,17 @@
         <a href="#" class="down"><?php echo $this->__("down"); ?></a>
     </div>
     <div id="sync1" class="">
+        <?php $i = 0; ?>
     <?php foreach ($this->getGalleryImages() as $_image): ?>
         <div class="item">
             <div>
                 <a href="#" data-flags="<?php echo $_zolagoCatalogBlock->getProductFlagLabel(); ?>">
-                    <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(319); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>">
+                    <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(319); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" <?php if($i == 0): ?> itemprop="image" <?php endif; ?> />
                     <span class="view_lupa"></span>
                 </a>
             </div>
         </div>
+        <?php $i++; ?>
     <?php endforeach; ?>
     </div>
     <div class="followUs hidden-xs">

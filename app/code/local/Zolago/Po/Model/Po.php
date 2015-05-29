@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class Zolago_Po_Model_Po
+ * @method string getMaxShippingDate()
+ * @method string getGrandTotalInclTax()
+ * @method string getIncrementId()
+ */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
@@ -580,6 +586,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     public function isPaymentDotpay() {
        return $this->getOrder()->isPaymentDotpay();
     }
+
+    public function isCC() {
+        return $this->getOrder()->isCC();
+    }
+
+    public function isGateway() {
+        return $this->getOrder()->isGateway();
+    }
    
    /**
     * @see isPaymentCheckOnDelivery()
@@ -684,9 +698,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 					foreach($sameEmail as $po){
 						$oldAlert = (int)$po->getAlert();
-						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
-							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
-						}
+						$oldAlert|=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
 						$po->setAlert($oldAlert);
 						$po->getResource()->saveAttribute($po, "alert");
 					}
@@ -715,7 +727,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 
 	public function save() {
+		$new = $this->isObjectNew();
 		$return = parent::save();
+		if ($new) {
+    		Mage::dispatchEvent("zolagopo_po_save_new",array('po'=>$this));
+		}
 		Mage::dispatchEvent("zolagopo_po_save_after",array('po'=>$this));
 		return $return;
 	}
@@ -777,5 +793,314 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
                 $po->getResource()->saveAttribute($po, "customer_email");
             }
         }
+    }
+
+    public function addItemWithTierCommission(Unirgy_DropshipPo_Model_Po_Item $item)
+    {
+        $this->addItem($item);
+        if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
+            Mage::helper("udtiercom")->processPo($this);
+        }
+        return $this;
+    }
+
+    /**
+     * @param $ids int|array
+     * @param $vendor Zolago_Dropship_Model_Vendor
+     * @return array
+     */
+    public function ghapiGetOrdersByIncrementIds($ids, $vendor) {
+
+        if (is_numeric($ids)) $ids = array($ids);
+        if (!is_array($ids)) return array();
+        if (!$vendor->getId()) return array();
+
+        /** @var Zolago_Po_Model_Resource_Po_Collection $coll */
+        $coll = Mage::getResourceModel('zolagopo/po_collection');
+        $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
+        $coll->addFieldToFilter('increment_id', $ids);
+        $coll->addPosData("external_id");
+
+        $list = array();
+        $i = 0;
+        foreach ($coll as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            $list[$i]['vendor_id']                = $vendor->getId();
+            $list[$i]['vendor_name']              = $vendor->getVendorName();
+            $list[$i]['order_id']                 = $po->getIncrementId();
+            $list[$i]['order_date']               = $po->getCreatedAt();
+            $list[$i]['order_max_shipping_date']  = $po->getMaxShippingDate();
+            $list[$i]['order_status']             = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
+            $list[$i]['order_total']              = $po->getGrandTotalInclTax();
+            $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
+            $list[$i]['order_due_amount']         = abs($po->getDebtAmount());
+            $list[$i]['delivery_method']          = 'standard_courier'; // todo when inpost added
+            $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
+            $list[$i]['pos_id']                   = $po->getExternalId();
+            $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
+
+            $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
+            if ($list[$i]['invoice_data']['invoice_required']) {
+                /** @var Zolago_Sales_Model_Order_Address $ba */
+                $ba = $po->getBillingAddress();
+                $list[$i]['invoice_data']['invoice_address']['invoice_first_name']   = $ba->getFirstname();
+                $list[$i]['invoice_data']['invoice_address']['invoice_last_name']    = $ba->getLastname();
+                $list[$i]['invoice_data']['invoice_address']['invoice_company_name'] = $ba->getCompany();
+                $list[$i]['invoice_data']['invoice_address']['invoice_street']       = $ba->getStreet()[0];
+                $list[$i]['invoice_data']['invoice_address']['invoice_city']         = $ba->getCity();
+                $list[$i]['invoice_data']['invoice_address']['invoice_zip_code']     = $ba->getPostcode();
+                $list[$i]['invoice_data']['invoice_address']['invoice_country']      = $ba->getCountryId();
+                $list[$i]['invoice_data']['invoice_address']['invoice_tax_id']       = $ba->getVatId();
+//                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
+            }
+
+            $list[$i]['delivery_data']['inpost_locker_id'] = ''; // todo when inpost added
+            $sa = $po->getShippingAddress();
+            $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
+            $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
+            $list[$i]['delivery_data']['delivery_address']['delivery_company_name'] = $sa->getCompany();
+            $list[$i]['delivery_data']['delivery_address']['delivery_street']       = $sa->getStreet()[0];
+            $list[$i]['delivery_data']['delivery_address']['delivery_city']         = $sa->getCity();
+            $list[$i]['delivery_data']['delivery_address']['delivery_zip_code']     = $sa->getPostcode();
+            $list[$i]['delivery_data']['delivery_address']['delivery_country']      = $sa->getCountryId();
+            $list[$i]['delivery_data']['delivery_address']['phone']                 = $sa->getTelephone();
+
+            $j = 0;
+            foreach ($po->getItemsCollection() as $item) {
+                /** @var Zolago_Po_Model_Po_Item $item */
+                if (!$item->isDeleted() && !$item->getParentItemId()) {
+                    $list[$i]['order_items'][$j]['is_delivery_item']           = 0;
+                    $list[$i]['order_items'][$j]['item_sku']                   = $item->getFinalSku();
+                    $list[$i]['order_items'][$j]['item_name']                  = $item->getName();
+                    $list[$i]['order_items'][$j]['item_qty']                   = $item->getQty();
+                    $list[$i]['order_items'][$j]['item_value_before_discount'] = $item->getPriceInclTax() * $item->getQty();
+                    $list[$i]['order_items'][$j]['item_discount']              = $item->getDiscount() * $item->getQty();
+                    $list[$i]['order_items'][$j]['item_value_after_discount']  = ($item->getPriceInclTax() - $item->getDiscount()) * $item->getQty();
+                    $j++;
+                }
+            }
+            // Shipping cost
+            $list[$i]['order_items'][$j]['is_delivery_item']           = 1;
+            $list[$i]['order_items'][$j]['item_sku']                   = '';
+            $list[$i]['order_items'][$j]['item_name']                  = Mage::helper('ghapi')->__('Delivery and package');
+            $list[$i]['order_items'][$j]['item_qty']                   = 1;
+            $list[$i]['order_items'][$j]['item_value_before_discount'] = $po->getBaseShippingAmountIncl();
+            $list[$i]['order_items'][$j]['item_discount']              = $po->getShippingDiscountIncl();
+            $list[$i]['order_items'][$j]['item_value_after_discount']  = $po->getShippingAmountIncl();
+            $i++;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Get payment_method for GH API
+     *
+     * @return string
+     */
+    public function ghapiPaymentMethod() {
+        if ($this->isCC()) {
+            return 'credit_card';
+        }
+        if ($this->isGateway()) {
+            return 'online_bank_transfer';
+        }
+        if ($this->isPaymentBanktransfer()) {
+            return 'bank_transfer';
+        }
+        if ($this->isCod()) {
+            return 'cash_on_delivery';
+        }
+        return '';
+    }
+
+    /**
+     * Return collection of PO for given Vendor
+     * and array of ids (increment_id)
+     *
+     * @param $ids
+     * @param $vendor
+     * @return Zolago_Po_Model_Resource_Po_Collection
+     */
+    public function getVendorPoCollectionByIncrementId($ids, $vendor) {
+        /** @var Zolago_Po_Model_Resource_Po_Collection $coll */
+        $coll = Mage::getResourceModel('zolagopo/po_collection');
+        if ($vendor->getId()) {
+            $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
+        }
+        $coll->addFieldToFilter('increment_id', array("in" => $ids));
+        return $coll;
+    }
+
+    /**
+     * Get track number
+     *
+     * @return mixed
+     */
+    public function getShipmentTrackingNumber() {
+        $shipment = $this->getLastNotCanceledShipment();
+        if ($shipment instanceof Mage_Sales_Model_Order_Shipment) {
+            /** @var Mage_Sales_Model_Order_Shipment_Track $item */
+            $item = $shipment->getTracksCollection()->setOrder("created_at", "DESC")->getFirstItem();
+            return $item->getTrackNumber();
+        } else {
+            return '';
+        }
+    }
+
+
+
+	const GH_API_RESERVATION_STATUS_OK = 'ok';
+	const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';
+
+	/**
+	 * GH Api method to set reservation flag on PO object
+	 * @param string $reservationStatus
+	 * @param string|bool $reservationMessage
+	 * @return $this
+	 */
+	public function ghApiSetOrderReservation($reservationStatus,$reservationMessage=false) {
+		$reservationStatus = trim(strtolower($reservationStatus));
+		$save = false;
+		$alert = $this->getAlert();
+		$messagePre = "";
+		switch($reservationStatus) {
+
+			case self::GH_API_RESERVATION_STATUS_OK:
+				$this->setReservation(0);
+				$alert &= ~ Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
+				$save = true;
+				$messagePre = Mage::helper('ghapi')->__("Reservation in vendor's system successful");
+				break;
+
+			case self::GH_API_RESERVATION_STATUS_PROBLEM:
+				$statusModel = $this->getStatusModel();
+
+				if(!$reservationMessage) {
+					$this->throwWrongReservationMessageError();
+				}
+
+				if(!$statusModel->isManulaStatusAvailable($this) ||
+					!in_array($statusModel::STATUS_ONHOLD, array_keys($statusModel->getAvailableStatuses($this)))) {
+					$this->throwCannotChangePoStatusError();
+				} else {
+					$statusModel->changeStatus($this, $statusModel::STATUS_ONHOLD);
+					$alert |= Zolago_Po_Model_Po_Alert::ALERT_GH_API_RESERVATION_PROBLEM;
+					$save = true;
+					$messagePre = Mage::helper('ghapi')->__("Problem with reservation in vendor's system");
+				}
+
+				break;
+
+			default:
+				$this->throwWrongReservationStatusError();
+		}
+
+		$this->addComment($messagePre.($reservationMessage ? ": ".$reservationMessage : ""),false,true);
+		if($save) {
+			$this->setAlert($alert);
+			$this->save();
+		}
+		return $this;
+	}
+
+	/**
+	 * GH Api method to set reservation flag on multiple pos that has been confirmed as read
+	 * @param array $posIds
+	 * @return $this
+	 */
+	public function ghApiSetOrdersReservationAfterRead($posIds) {
+		foreach($posIds as $poId) {
+			$this->loadByIncrementId($poId)
+				->setReservation(0)
+				->save();
+		}
+		$this->unsetData();
+		return $this;
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwWrongReservationStatusError() {
+		Mage::throwException('error_reservation_status_invalid');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwCannotChangePoStatusError() {
+		Mage::throwException('error_order_status_change');
+	}
+
+	/**
+	 * @throws Mage_Core_Exception
+	 * @return void
+	 */
+	protected function throwWrongReservationMessageError() {
+		Mage::throwException('error_reservation_message_invalid');
+	}
+
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @return bool
+     */
+    public function setOrderState(Zolago_Po_Model_Po $po)
+    {
+        $order = $po->getOrder();
+        $orderId = $order->getId();
+
+
+        $orderPos = Mage::getModel('udpo/po')
+            ->getCollection()
+            ->addFieldToFilter('order_id', $orderId);
+
+        $orderStatusChange = array();
+
+        $completePos = array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+        );
+        $cancelPos = array(
+            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
+        );
+        $poStatuses = array();
+        if ($orderPos->getSize() > 0) {
+            foreach ($orderPos as $orderPo) {
+                $poStatuses[] = (int)$orderPo->getUdropshipStatus();
+            }
+        }
+
+        $diffCompleteStatuses = array_diff($poStatuses, $completePos);
+
+        $diffCancelStatuses = array_diff($poStatuses, $cancelPos);
+
+
+        if (empty($diffCompleteStatuses)) {
+            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
+            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED;
+        }
+        if (empty($diffCancelStatuses)) {
+            $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
+            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
+        }
+
+        //Mage::log($orderStatusChange, null, 'order.log');
+        if (!empty($orderStatusChange)) {
+            $order->setData('state', $orderStatusChange['state']);
+            $order->setStatus($orderStatusChange['state'])
+                ->setUdropshipStatus($orderStatusChange['udropship_status']);
+            try {
+                $order->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                return false;
+            }
+        }
+
     }
 }

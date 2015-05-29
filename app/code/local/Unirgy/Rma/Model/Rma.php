@@ -67,6 +67,20 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         return $this->getOrder()->getBillingAddress();
     }
 
+    /**
+     * return address for pickup rma 
+     * @var return Mage_Customer_Model_Address
+     */
+   public function getCourierAddress() {
+       if ($customerAddressId = $this->getData('customer_address_id')) {
+            $shippingAddress = Mage::getModel('customer/address')->load($customerAddressId);
+            if ($shippingAddress->getId()) {
+                return $shippingAddress;
+            }
+       }
+       return self::getShippingAddress();
+   }
+
     public function getShippingAddress()
     {
         return $this->getOrder()->getShippingAddress();
@@ -511,7 +525,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         $dateRmaCreateFormated = date('d.m.Y H:i', $dateTimestamp);
 
         //courier
-        $shippingAddress = $this->getShippingAddress();
+        $shippingAddress = $this->getCourierAddress();
         $shippingAddressStreet = Mage::helper('core')->escapeHtml(is_array($shippingAddress->getStreet(-1)) ? explode(" ", $shippingAddress->getStreet(-1)) : $shippingAddress->getStreet(-1));
         $weekdays = Mage::app()->getLocale()->getOptionWeekdays();
         $carrierDate = $this->getCarrierDate();

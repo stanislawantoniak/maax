@@ -1,7 +1,6 @@
 <?php
-require_once Mage::getModuleDir('controllers', 'Mage_Newsletter') . "/SubscriberController.php";
-
-class Zolago_Newsletter_SubscriberController extends Mage_Newsletter_SubscriberController
+require_once Mage::getModuleDir('controllers', 'SalesManago_Tracking') . DS . "Newsletter". DS ."SubscriberController.php";
+class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsletter_SubscriberController
 {
     public function invitationAction()
     {

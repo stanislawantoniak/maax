@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Common>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Common>
     </modules>
 	<frontend>
@@ -22,6 +22,15 @@
 				</zolagocommon>
 			</updates>
 		</layout>
+        <translate>
+            <modules>
+                <Zolago_Common>
+                    <files>
+                        <default>Zolago_Common.csv</default>
+                    </files>
+                </Zolago_Common>
+            </modules>
+        </translate>
 	</frontend>
     <global>
         <helpers>
@@ -37,6 +46,7 @@
                 <rewrite>
                     <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
                     <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
+                    <email_info>Zolago_Common_Model_Core_Email_Info</email_info>
                 </rewrite>
             </core>
         </models>
@@ -66,5 +76,14 @@
                 </args>
             </adminhtml>
         </routers>
+        <translate>
+            <modules>
+                <Zolago_Common>
+                    <files>
+                        <default>Zolago_Common.csv</default>
+                    </files>
+                </Zolago_Common>
+            </modules>
+        </translate>
     </admin>
 </config>

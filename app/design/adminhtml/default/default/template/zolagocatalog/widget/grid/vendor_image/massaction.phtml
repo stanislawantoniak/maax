@@ -1,0 +1,76 @@
+<div id="<?php echo $this->getHtmlId() ?>" class="massaction">
+    <div class="pull-left inline-form-text">
+		<?php if ($this->getUseSelectAll()):?>
+			<a class="select-all-btn" href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
+			<span class="separator">|</span>
+			<a class="unselect-all-btn" href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"><?php echo $this->__('Unselect All') ?></a>
+            <span class="separator">|</span>
+            <a class="select-all-visible-btn" href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo $this->__('Select Visible') ?></a>
+            <span class="separator">|</span>
+            <a class="unselect-all-visible-btn" href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo $this->__('Unselect Visible') ?></a>
+
+        <?php endif; ?>
+		<span class="separator">|</span>
+		<strong id="<?php echo $this->getHtmlId() ?>-count" class="items-count">0</strong> <?php echo $this->__('items selected') ?>
+    </div>
+    <div class="pull-right">
+		<div class="entry-edit">
+			<?php if ($this->getHideFormElement() !== true):?>
+			<form action="" id="<?php echo $this->getHtmlId() ?>-form" method="post" class="form-inline">
+			<?php endif ?>
+				<?php echo $this->getBlockHtml('formkey')?>
+				<div class="text-holder">
+					<label><?php echo Mage::helper('zolagodropship')->__('Actions'); ?></label>
+				</div>
+				<div class="form-group">
+					<select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation form-control">
+						<option value=""></option>
+						<?php foreach($this->getItems() as $_item): ?>
+							<option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+				<div class="form-group">
+					<span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
+					<span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
+					<span class="field-row">
+                        <?php if($this->getParentBlock()->isBlockType()): ?>
+                            <button class="btn btn-secondary scalable " type="button" title="Submit" id="mass-submit-btn"><span>Submit</span></button>
+                        <?php else: ?>
+						    <?php echo $this->getApplyButtonHtml() ?>
+<!--						<button class="scalable btn" type="button" id="filter_submit" onclick="gridObj.doFilter()">--><?php //echo Mage::helper('zolagocatalog')->__('Search');?><!--</button>-->
+                        <?php endif; ?>
+					</span>
+				</div>
+			<?php if ($this->getHideFormElement() !== true):?>
+			</form>
+			<form id="filter_form">
+			    
+			</form>
+			<?php endif ?>
+		</div>
+
+		<div class="hidden">
+			<?php foreach($this->getItems() as $_item): ?>
+				<div id="<?php echo $this->getHtmlId() ?>-item-<?php echo $_item->getId() ?>-block">
+					<?php echo $_item->getAdditionalActionBlockHtml() ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
+    </div>
+	<div class="clearfix"></div>
+</div>
+<hr/>
+
+<?php if($this->getParentBlock()->isBlockType()): ?>
+    <script type="text/javascript">
+        var gridIds = [<?php echo $this->getGridIdsJson() ?>];
+    </script>
+<?php else: ?>
+    <?php if(!$this->getParentBlock()->canDisplayContainer()): ?>
+    <script type="text/javascript">
+        <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
+    </script>
+    <?php endif; ?>
+<?php endif; ?>
+

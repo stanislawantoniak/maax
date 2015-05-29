@@ -1,9 +1,4 @@
 #help-mobile-menu {
-
-  @media (max-width: $screen-sm-min) {
-    margin-top: -32px;
-  }
-
   h1 {
     font-size: 18px;
     padding-bottom: 12px;
@@ -11,7 +6,6 @@
     text-align: center;
     text-transform: uppercase;
   }
-
 }
 
 #help-contact-msg-fix{

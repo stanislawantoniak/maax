@@ -56,10 +56,26 @@
                 </observers>
             </zolagocatalog_converter_stock_complete>
 
+            <!-- After vendor change price manual from vendor portal grid (modal price window) -->
+            <vendor_manual_save_price_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </vendor_manual_save_price_after>
 
         </events>
 	</global>
 	<frontend>
+        <layout>
+            <updates>
+                <turpentine_esi module="turpentine">
+                    <file>zolago_turpentine_esi.xml</file>
+                </turpentine_esi>
+            </updates>
+        </layout>
 		<events>
 			<catalog_controller_product_view>
 				<observers>
@@ -69,6 +85,44 @@
                     </zolago_turpentine_product_view>
                 </observers>
 			</catalog_controller_product_view>
-		</events>	
+
+            <help_controller_index>
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </help_controller_index>
+
+            <faq_controller_index>
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </faq_controller_index>
+
+            <help_controller_contact>
+                <!-- Contact with Vendor and Gallery -->
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </help_controller_contact>
+
+            <cms_controller_page>
+                <observers>
+                    <zolago_turpentine_product_view>
+                        <class>zolagoturpentine/observer</class>
+                        <method>helpViews</method>
+                    </zolago_turpentine_product_view>
+                </observers>
+            </cms_controller_page>
+
+		</events>
     </frontend>
 </config>

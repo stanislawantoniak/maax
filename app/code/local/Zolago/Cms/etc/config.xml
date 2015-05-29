@@ -22,4 +22,15 @@
 			</cms>
         </blocks>
     </global>
+    <frontend>
+        <routers>
+            <cms>
+                <args>
+                    <modules>
+                        <Zolago_Cms before="Mage_Cms">Zolago_Cms</Zolago_Cms>
+                    </modules>
+                </args>
+            </cms>
+        </routers>
+    </frontend>
 </config>

@@ -265,7 +265,38 @@
 	                    </account_number>
 					</fields>
 				</banktransfer>
+
             </groups>
         </payment>
+        <payment_refunds translate="label" module="zolagopayment">
+            <label>Payment Refunds</label>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>500</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <payment_refunds_automatic translate="label">
+                    <label>Automatic Payment Refunds Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>27</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <interval translate="label">
+                            <label>N-hours after last overpayment record is created</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </interval>
+                    </fields>
+                </payment_refunds_automatic>
+            </groups>
+        </payment_refunds>
     </sections>
 </config>
