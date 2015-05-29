@@ -63,10 +63,10 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
     public function getProductDynamicSeo($product){
         $seo = array();
-        if(!$product instanceof Zolago_Catalog_Model_Product){
+        if (!$product instanceof Zolago_Catalog_Model_Product) {
             return $seo;
         }
-
+        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $catIds = $product->getCategoryIds();
 
         $collection = Mage::getResourceModel('catalog/category_collection');
@@ -76,34 +76,38 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->addAttributeToSelect("dynamic_meta_title");
         $collection->addAttributeToSelect("dynamic_meta_keywords");
         $collection->addAttributeToSelect("dynamic_meta_description");
-        $collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+        $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
-        $collection->addAttributeToFilter("basic_category", 1);
+//        $collection->addAttributeToFilter("basic_category", 1);
+        $collection->addPathFilter("/$rootId/");
+        $collection->setOrder("basic_category", "DESC");
         $cat = $collection->getFirstItem();
 
-        $dynamic_meta_title = $cat->getData("dynamic_meta_title");
-        $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
-        $dynamic_meta_description = $cat->getData("dynamic_meta_description");
-        if (!empty($dynamic_meta_title)) {
-            $seo["dynamic_meta_title"] = $dynamic_meta_title;
-        }
-        if (!empty($dynamic_meta_keywords)) {
-            $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
-        }
-        if (!empty($dynamic_meta_description)) {
-            $seo["dynamic_meta_description"] = $dynamic_meta_description;
-        }
+        if($cat->getData("basic_category") == 1){
+            $dynamic_meta_title = $cat->getData("dynamic_meta_title");
+            $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
+            $dynamic_meta_description = $cat->getData("dynamic_meta_description");
+            if (!empty($dynamic_meta_title)) {
+                $seo["dynamic_meta_title"] = $dynamic_meta_title;
+            }
+            if (!empty($dynamic_meta_keywords)) {
+                $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
+            }
+            if (!empty($dynamic_meta_description)) {
+                $seo["dynamic_meta_description"] = $dynamic_meta_description;
+            }
 
-        if (isset($seo["dynamic_meta_title"])
-            && isset($seo["dynamic_meta_keywords"])
-            && isset($seo["dynamic_meta_description"])
-        ) {
-            return $seo;
+            if (isset($seo["dynamic_meta_title"])
+                && isset($seo["dynamic_meta_keywords"])
+                && isset($seo["dynamic_meta_description"])
+            ) {
+                return $seo;
+            }
+            //Go up by category tree
+            $seo = $this->getDynamicMetaTagsInParents($seo, $cat);
+        } else {
+            $seo = $this->getDynamicMetaTagsInParents($seo, $cat);
         }
-
-        //Go up by category tree
-        $seo = $this->getDynamicMetaTagsInParents($seo, $cat);
-
         return $seo;
     }
 
