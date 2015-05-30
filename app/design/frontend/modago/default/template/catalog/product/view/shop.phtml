@@ -188,7 +188,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 
 <script type="text/javascript">
     var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
-    console.log(jsonConfig);
+
     var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
 
     jsonConfig.useSizeboxList = useSizeboxList;
