@@ -13,23 +13,24 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $headBlock = $this->getLayout()->getBlock('head');
         if ($headBlock) {
             $product = $this->getProduct();
-
+            $seo = array();
             $title = $product->getMetaTitle();
+
             if ($title) {
                 $headBlock->setTitle($title);
+                $seo["dynamic_meta_title"] = $title;
             }
             $keyword = $product->getMetaKeyword();
             $currentCategory = Mage::registry('current_category');
             if ($keyword) {
                 $headBlock->setKeywords($keyword);
-            } elseif ($currentCategory) {
-                $headBlock->setKeywords($product->getName());
+                $seo["dynamic_meta_keywords"] = $keyword;
             }
+
             $description = $product->getMetaDescription();
             if ($description) {
                 $headBlock->setDescription( ($description) );
-            } else {
-                $headBlock->setDescription(Mage::helper('core/string')->substr($product->getDescription(), 0, 255));
+                $seo["dynamic_meta_description"] = $description;
             }
 
             if ($this->helper('catalog/product')->canUseCanonicalTag()) {
@@ -37,9 +38,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
             }
 
-
             //Dynamic seo fields
-            $seoTexts = $this->getProductDynamicSeo($product);
+            $seoTexts = $this->getProductDynamicSeo($product, $seo);
 
             $dynamic_meta_title = isset($seoTexts["dynamic_meta_title"]) ? $seoTexts["dynamic_meta_title"] : "";
             $dynamic_meta_keywords = isset($seoTexts["dynamic_meta_keywords"]) ? $seoTexts["dynamic_meta_keywords"] : "";
@@ -50,19 +50,23 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 $headBlock->setTitle($dynamic_meta_title);
             }
             $dynamic_meta_keywords = $this->getAttributesSubstitutions($product, $dynamic_meta_keywords);
-            if(!empty($dynamic_meta_keywords)){
+            if (!empty($dynamic_meta_keywords)) {
                 $headBlock->setKeywords($dynamic_meta_keywords);
+            } elseif ($currentCategory) {
+                $headBlock->setKeywords($product->getName());
             }
             $dynamic_meta_description = $this->getAttributesSubstitutions($product, $dynamic_meta_description);
             if(!empty($dynamic_meta_description)){
                 $headBlock->setDescription($dynamic_meta_description);
+            } else {
+                $headBlock->setDescription(Mage::helper('core/string')->substr($product->getDescription(), 0, 255));
             }
             //Dynamic seo fields
         }
     }
 
-    public function getProductDynamicSeo($product){
-        $seo = array();
+    public function getProductDynamicSeo($product, $seo){
+
         if (!$product instanceof Zolago_Catalog_Model_Product) {
             return $seo;
         }
@@ -81,19 +85,20 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 //        $collection->addAttributeToFilter("basic_category", 1);
         $collection->addPathFilter("/$rootId/");
         $collection->setOrder("basic_category", "DESC");
+        $collection->addAttributeToSelect("*");
         $cat = $collection->getFirstItem();
 
         if($cat->getData("basic_category") == 1){
             $dynamic_meta_title = $cat->getData("dynamic_meta_title");
             $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
             $dynamic_meta_description = $cat->getData("dynamic_meta_description");
-            if (!empty($dynamic_meta_title)) {
+            if (!empty($dynamic_meta_title) && !isset($seo["dynamic_meta_title"])) {
                 $seo["dynamic_meta_title"] = $dynamic_meta_title;
             }
-            if (!empty($dynamic_meta_keywords)) {
+            if (!empty($dynamic_meta_keywords) && !isset($seo["dynamic_meta_keywords"])) {
                 $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
             }
-            if (!empty($dynamic_meta_description)) {
+            if (!empty($dynamic_meta_description) && !isset($seo["dynamic_meta_description"])) {
                 $seo["dynamic_meta_description"] = $dynamic_meta_description;
             }
 
@@ -127,24 +132,22 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         } else {
             $categoryParent = Mage::getModel('catalog/category')->load($categoryParentId);
 
-            if ($categoryParent->getData("basic_category") == 1) {
 
-                $dynamic_meta_title = $categoryParent->getData("dynamic_meta_title");
-                if (!isset($seo["dynamic_meta_title"]) && !empty($dynamic_meta_title)) {
-                    $seo["dynamic_meta_title"] = $dynamic_meta_title;
-                }
-
-                $dynamic_meta_keywords = $categoryParent->getData("dynamic_meta_keywords");
-                if (!isset($seo["dynamic_meta_keywords"]) && !empty($dynamic_meta_keywords)) {
-                    $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
-                }
-
-                $dynamic_meta_description = $categoryParent->getData("dynamic_meta_description");
-                if (!isset($seo["dynamic_meta_description"]) && !empty($dynamic_meta_description)) {
-                    $seo["dynamic_meta_description"] = $dynamic_meta_description;
-                }
-
+            $dynamic_meta_title = $categoryParent->getData("dynamic_meta_title");
+            if (!isset($seo["dynamic_meta_title"]) && !empty($dynamic_meta_title)) {
+                $seo["dynamic_meta_title"] = $dynamic_meta_title;
             }
+
+            $dynamic_meta_keywords = $categoryParent->getData("dynamic_meta_keywords");
+            if (!isset($seo["dynamic_meta_keywords"]) && !empty($dynamic_meta_keywords)) {
+                $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
+            }
+
+            $dynamic_meta_description = $categoryParent->getData("dynamic_meta_description");
+            if (!isset($seo["dynamic_meta_description"]) && !empty($dynamic_meta_description)) {
+                $seo["dynamic_meta_description"] = $dynamic_meta_description;
+            }
+
 
             return $this->getDynamicMetaTagsInParents($seo, $categoryParent);
         }
