@@ -37,7 +37,6 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 $params = array('_ignore_category' => true);
                 $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
             }
-            Mage::log($seo, null, "dcategories.log");
 
             if(isset($seo["dynamic_meta_title"]) && isset($seo["dynamic_meta_keywords"]) && isset($seo["dynamic_meta_description"])){
                 return;
@@ -91,7 +90,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->setOrder("basic_category", "DESC");
         $collection->addAttributeToSelect("*");
         $cat = $collection->getFirstItem();
-Mage::log($cat->getData(), null, "dcategories.log");
+
         if($cat->getData("basic_category") == 1){
             $dynamic_meta_title = $cat->getData("dynamic_meta_title");
             $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
