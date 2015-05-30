@@ -37,7 +37,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 $params = array('_ignore_category' => true);
                 $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
             }
-
+            Mage::log($seo, null, "dcategories.log");
             //Dynamic seo fields
             $seoTexts = $this->getProductDynamicSeo($product, $seo);
 
