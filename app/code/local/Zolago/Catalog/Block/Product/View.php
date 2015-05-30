@@ -38,6 +38,9 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
             }
 
+            if(isset($seo["dynamic_meta_title"]) && isset($seo["dynamic_meta_keywords"]) && isset($seo["dynamic_meta_description"])){
+                return;
+            }
             //Dynamic seo fields
             $seoTexts = $this->getProductDynamicSeo($product, $seo);
 
