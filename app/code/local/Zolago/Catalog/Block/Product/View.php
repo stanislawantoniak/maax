@@ -87,7 +87,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->setOrder("basic_category", "DESC");
         $collection->addAttributeToSelect("*");
         $cat = $collection->getFirstItem();
-
+Mage::log($cat->getData());
         if($cat->getData("basic_category") == 1){
             $dynamic_meta_title = $cat->getData("dynamic_meta_title");
             $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
