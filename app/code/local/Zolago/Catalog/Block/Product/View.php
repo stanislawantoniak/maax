@@ -78,14 +78,15 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
 
         $store = Mage::app()->getStore()->getId();
-        $collection = Mage::getResourceModel('catalog/category_collection');
+        $collection = Mage::getModel('catalog/category')->setStoreId($store)
+            ->getCollection();
         /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
         $collection->addAttributeToSelect("basic_category");
         $collection->addAttributeToSelect("name");
         $collection->addAttributeToSelect("dynamic_meta_title");
         $collection->addAttributeToSelect("dynamic_meta_keywords");
         $collection->addAttributeToSelect("dynamic_meta_description");
-        //$collection->setStoreId($store);
+        $collection->setStoreId($store);
         $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
 //        $collection->addAttributeToFilter("basic_category", 1);
