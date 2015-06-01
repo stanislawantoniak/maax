@@ -568,10 +568,7 @@ Mall.product = {
 				gallery.initLocationHashEvent();
 			});
 			jQuery('#lightbox-close').click(function() {
-				htmlBody.removeClass('noscroll');
-				gallery._lighboxCalculationsEnabled = false;
-				lightbox.hide();
-				document.location.hash = '';
+				history.back();
 			});
 		    gallery.getLightboxGalleryThumbs().click(gallery.lightboxThumbClick);
 		    gallery.getLightboxGalleryThumbsImages().scroll(gallery.lightBoxCalculations);
@@ -587,7 +584,9 @@ Mall.product = {
 			    if(document.location.hash == '#gallery') {
 				    Mall.product.gallery.getBigMedia().find('a').click();
 			    } else {
-				    jQuery('#lightbox-close').click();
+					jQuery('html,body').removeClass('noscroll');
+					Mall.product.gallery._lighboxCalculationsEnabled = false;
+				    Mall.product.gallery.getLightbox().hide();
 			    }
 		    });
 	    },
