@@ -747,7 +747,7 @@ Mall.listing = {
         var oldPrice = product[3] != product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
 	        likeClass = "like" + (product[6] ? " liked" : ""),
 	        likeText = (product[6] ? "<span>Ty + </span>" : "<span></span>") + (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ",
-	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);" : "Mall.wishlist.addFromSmallBlock(this);";
+	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);return false;" : "Mall.wishlist.addFromSmallBlock(this);return false;";
 
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
@@ -780,14 +780,8 @@ Mall.listing = {
 	attachEventsToProducts: function() {
 
 		var itemProduct = jQuery('.box_listing_product'),
-			textLike,
-			itemProductId;
+			textLike;
 
-		itemProduct.on('click', '.like', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			itemProductId = jQuery(this).data('idproduct');
-		});
 		itemProduct.on('mouseenter', '.like', function(event) {
 			event.preventDefault();
 			if (jQuery(this).hasClass('liked')) {
