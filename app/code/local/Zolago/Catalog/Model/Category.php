@@ -129,14 +129,18 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
      *
      * @return string
      */
-     public function getCanonicalUrl() {
+     public function getCanonicalUrl($noVendor = false) {
          $canonical = $this->getData('canonical_link');
          if (empty($canonical)) {
              $related = $this->getRelatedCategory();
              if ($related) {
-                $canonical = $related->getCanonicalUrl();
+                $canonical = $related->getCanonicalUrl(true);
              } else {
-                 $canonical = $this->getUrl();
+                 if ($noVendor) {
+                     $canonical = $this->getNoVendorContextUrl();
+                 } else {
+                     $canonical = $this->getUrl();
+                 }
              }
          }
          return $canonical;
