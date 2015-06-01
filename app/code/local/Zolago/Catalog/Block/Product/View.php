@@ -88,6 +88,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 //        $collection->addAttributeToFilter("basic_category", 1);
         $collection->addPathFilter("/$rootId/");
         $collection->setOrder("basic_category", "DESC");
+        $collection->setOrder("position", "ASC");
         $collection->addAttributeToSelect("*");
         $cat = $collection->getFirstItem();
 
