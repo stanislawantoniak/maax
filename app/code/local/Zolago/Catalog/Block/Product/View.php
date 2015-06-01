@@ -82,7 +82,9 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
      */
     public function getProductFlagLabel()
     {
-        return Mage::helper("zolagocatalog/product")->getProductBestFlag($this->getProduct());
+	    /** @var Zolago_catalog_Helper_Product $helper */
+	    $helper = Mage::helper("zolagocatalog/product");
+        return $helper->getProductBestFlag($this->getProduct());
     }
 	
 	/**
