@@ -898,13 +898,14 @@ Mall.product = {
                 afterInit: function() {
                     // Horizontal center big medias and Lupa always on bottom
                     var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
+                    var width = parseInt(Mall.product.gallery.getBigMedia().css('width'));
                     Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
-                        if (jQuery(this).height() != maxHeight) {
-                            // Horizontal center big medias
-                            var itemH = jQuery(this).height();
-                            var padding = ((maxHeight - itemH) / 2);
-                            jQuery(this).find('a').css('padding', padding + 'px 0');
-                        }
+                        // Horizontal center big medias
+                        var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
+                        var itemH = ratio * width;
+
+                        var padding = ((maxHeight - itemH) / 2);
+                        jQuery(this).find('a').css('padding', padding + 'px 0');
                     });
 	                Mall.product.gallery.initLightbox();
                 }
@@ -916,14 +917,16 @@ Mall.product = {
          * @returns {number}
          */
         findMaxHeightBigMedia: function() {
-            var items = this.getBigMedia().find('.rwd-item');
+            var width = parseInt(Mall.product.gallery.getBigMedia().css('width'));
             var maxHeight = 0;
-            items.each(function(index, elem) {
-                if(jQuery(this).height() >= maxHeight) {
-                    maxHeight = jQuery(elem).height();
+            this.getBigMedia().find('.item img').each(function(index, elem) {
+                var ratio = parseFloat(jQuery(this).attr('data-ratio'));
+                var height = ratio * width;
+                if(height >= maxHeight) {
+                    maxHeight = height;
                 }
             });
-            return maxHeight;
+            return Math.round(maxHeight);
         },
 
         /**
