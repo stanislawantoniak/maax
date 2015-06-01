@@ -548,7 +548,7 @@ Mall.product = {
 			    lightbox = Mall.product.gallery.getLightbox(),
 			    gallery = Mall.product.gallery;
 			gallery.getBigMedia().find('a').click(function() {
-				if(Mall.windowWidth() > Mall.breakpoints.sm) {
+				if(Mall.windowWidth() > Mall.Breakpoint.sm) {
 					lightbox.show();
 					htmlBody.addClass('noscroll');
 					var currentSlide = gallery.getBigMedia().data('rwdCarousel').currentItem;
