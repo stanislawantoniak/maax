@@ -34,9 +34,15 @@ class GH_Rewrite_Block_Adminhtml_Ghrewrite_Csv_Form extends Mage_Adminhtml_Block
             'name' => 'file',
         ));
 
-        $fieldset->addField('note', 'note', array(
-            'text'     => $rewriteHelper->__('First line in file should be: store_id,category_id,title,meta_description,meta_keywords,category_name,text_field_category,text_field_filter,listing_title,url,filters'),
-        ));
+        for ($i = 1; $i < 30 ; $i++) {
+            $key = 'help-for-csv-file-in-gh-rewrite-module-line-' . $i;
+            $txt = $rewriteHelper->__($key);
+            if ($txt != $key && !empty($txt)) {
+                $fieldset->addField('note-' . $i, 'note', array(
+                    'text' => $txt
+                ));
+            }
+        }
 
         return parent::_prepareForm();
     }
