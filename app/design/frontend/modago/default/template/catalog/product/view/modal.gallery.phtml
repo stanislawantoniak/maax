@@ -17,16 +17,16 @@
 <div id="galeria-lightbox-wr" style="display: none;">
 
     <div id="galeria-lightbox" class="clearfix">
-        <div id="wrapper-sync4">
+        <div id="wrapper-productGalleryThumbMediaOpen">
             <a href="#" class="up"><?php echo $this->__("up"); ?></a>
-            <div id="sync4" class="rwd-carousel">
+            <div id="productGalleryThumbMediaOpen" class="rwd-carousel">
                 <?php foreach ($this->getGalleryImages() as $_image): ?>
                     <div class="item"><img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(67, 86); ?>" width="67" height="86" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"></div>
                 <?php endforeach; ?>
             </div>
             <a href="#" class="down"><?php echo $this->__("down"); ?></a>
         </div>
-        <div id="sync3" class="">
+        <div id="productGalleryBigMediaOpen">
             <?php foreach ($this->getGalleryImages() as $_image): ?>
                 <?php
                     $_imageInitialized = $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile());
