@@ -56,12 +56,9 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
             try {
                 $id = $r->getParam('id');
                 if ($r->getParam('vendor_brand')) {
-                    Mage::log('vendor_brand');
                     $this->_saveBrands(Zend_Json::decode($r->getParam('vendor_brand')),$id);
                 }
-                Mage::log($r);
                 if ($r->getParam('vendor_attributeset')) {
-                    Mage::log('vendor_attributes');
                     $this->_saveAttributeSet(Zend_Json::decode($r->getParam('vendor_attributeset')),$id);                    
                 }	
             } catch (Exception $e) {
