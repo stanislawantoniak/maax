@@ -95,9 +95,9 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->setOrder("level", "DESC");
         $collection->setOrder("position", "ASC");
         //$collection->addAttributeToSelect("*");
-        Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
+        //Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
         $cat = $collection->getFirstItem();
-Mage::log($cat->getData(), null, "dcat1.log");
+        //Mage::log($cat->getData(), null, "dcat1.log");
 
 
         if($cat->getData("basic_category") == 1){
