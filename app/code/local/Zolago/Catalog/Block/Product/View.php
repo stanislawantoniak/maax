@@ -82,10 +82,10 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             ->getCollection();
         /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
         $collection->addAttributeToSelect("basic_category");
-        $collection->addAttributeToSelect("name");
-        $collection->addAttributeToSelect("dynamic_meta_title");
-        $collection->addAttributeToSelect("dynamic_meta_keywords");
-        $collection->addAttributeToSelect("dynamic_meta_description");
+        //$collection->addAttributeToSelect("name");
+        $collection->addAttributeToSelect("dynamic_meta_title", true);
+        $collection->addAttributeToSelect("dynamic_meta_keywords", true);
+        $collection->addAttributeToSelect("dynamic_meta_description", true);
         $collection->setStoreId($store);
         $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
@@ -93,10 +93,11 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->addPathFilter("/$rootId/");
         $collection->setOrder("basic_category", "DESC");
         $collection->setOrder("position", "ASC");
-        $collection->addAttributeToSelect("*");
+        //$collection->addAttributeToSelect("*");
+        Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
         $cat = $collection->getFirstItem();
-Mage::log($cat->getData(), null, "dcat.log");
-        Mage::log($collection->getSelect()->__toString(), null, "dcat.log");
+Mage::log($cat->getData(), null, "dcat1.log");
+
 
         if($cat->getData("basic_category") == 1){
             $dynamic_meta_title = $cat->getData("dynamic_meta_title");
