@@ -1009,6 +1009,20 @@ form {
 	@include sprite-dimensions($allMap, view_lupa);
 }
 
+.view_lupa_plus {
+  @include inline-block;
+  background:$allMap;
+  @include sprite($allMap, view_lupa_plus);
+  @include sprite-dimensions($allMap, view_lupa_plus);
+}
+
+.view_lupa_minus {
+  @include inline-block;
+  background:$allMap;
+  @include sprite($allMap, view_lupa_minus);
+  @include sprite-dimensions($allMap, view_lupa_minus);
+}
+
 
 a.view_basket {
     float: right;   
