@@ -4,9 +4,9 @@ $stores = $this->getStores();
 $locale = Mage::app()->getLocale()->getLocaleCode();
 $sizetable = $this->getSizeTable();
 ?>
-<script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>tinymce.min.js"></script>
+<script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce',array('_secure'=> $this->getRequest()->isSecure())); ?>tinymce.min.js"></script>
 <script
-	src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>jquery.tinymce.min.js"></script>
+	src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce',array('_secure' => $this->getRequest()->isSecure())); ?>jquery.tinymce.min.js"></script>
 <script>
 	jQuery(function ($) {
 		tinymce.init({
