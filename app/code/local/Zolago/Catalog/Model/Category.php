@@ -137,10 +137,21 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
                 $canonical = $related->getCanonicalUrl(true);
              } else {
                  if ($noVendor) {
-                     $canonical = $this->getNoVendorContextUrl();
+                     $categoryUrl = $this->getNoVendorContextUrl();
                  } else {
-                     $canonical = $this->getUrl();
+                     $categoryUrl = $this->getUrl();
                  }
+                 /** @var GH_Rewrite_Helper_Data $rewriteHelper */
+                 $rewriteHelper = Mage::helper('ghrewrite');
+                 /** @var Zolago_Solrsearch_Model_Catalog_Product_List $listModel */
+                 $listModel     = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+
+                 $path          = $listModel->getCurrentUrlPath();
+                 $categoryId    = $this->getId();
+                 $queryData     = Mage::app()->getRequest()->getParams();
+                 $url           = $rewriteHelper->prepareRewriteUrl($path, $categoryId, $queryData, true);
+
+                 $canonical     = $url ? $url : $categoryUrl;
              }
          }
          return $canonical;
