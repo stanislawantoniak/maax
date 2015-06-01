@@ -548,31 +548,30 @@ Mall.product = {
 			    lightbox = Mall.product.gallery.getLightbox(),
 			    gallery = Mall.product.gallery;
 			gallery.getBigMedia().find('a').click(function() {
-				lightbox.show();
-				htmlBody.addClass('noscroll');
-				var currentSlide = gallery.getBigMedia().data('rwdCarousel').currentItem;
-				if(!gallery.lightboxInitialized()) {
-					gallery._lightboxSlickContainer = gallery.getLightboxGalleryImagesContainer();
-					gallery._lightboxSlickContainer.on('afterChange',gallery.lightboxAfterChange);
-					gallery._lightboxSlickContainer.on('beforeChange',gallery.lightboxBeforeChange);
-					gallery._lightboxSlickOptions.initialSlide = currentSlide;
-					gallery._lightboxSlickContainer.slick(gallery._lightboxSlickOptions);
-					gallery._lightboxHasSlick = true;
-				} else {
-					gallery._lightboxSlickContainer.slick('slickGoTo',currentSlide,true);
+				if(Mall.windowWidth() > Mall.Breakpoint.sm) {
+					lightbox.show();
+					htmlBody.addClass('noscroll');
+					var currentSlide = gallery.getBigMedia().data('rwdCarousel').currentItem;
+					if (!gallery.lightboxInitialized()) {
+						gallery._lightboxSlickContainer = gallery.getLightboxGalleryImagesContainer();
+						gallery._lightboxSlickContainer.on('afterChange', gallery.lightboxAfterChange);
+						gallery._lightboxSlickContainer.on('beforeChange', gallery.lightboxBeforeChange);
+						gallery._lightboxSlickOptions.initialSlide = currentSlide;
+						gallery._lightboxSlickContainer.slick(gallery._lightboxSlickOptions);
+						gallery._lightboxHasSlick = true;
+					} else {
+						gallery._lightboxSlickContainer.slick('slickGoTo', currentSlide, true);
+					}
+					gallery._lighboxCalculationsEnabled = true;
+					gallery.lightboxThumbChange();
+					gallery.lightBoxCalculations();
+					document.location.hash = '#gallery';
 				}
-				gallery._lighboxCalculationsEnabled = true;
-				gallery.lightboxThumbChange();
-				gallery.lightBoxCalculations();
-				document.location.hash = '#gallery';
-				gallery.initLocationHashEvent();
 			});
 			jQuery('#lightbox-close').click(function() {
-				htmlBody.removeClass('noscroll');
-				gallery._lighboxCalculationsEnabled = false;
-				lightbox.hide();
-				document.location.hash = '';
+				history.back();
 			});
+		    gallery.initLocationHashEvent();
 		    gallery.getLightboxGalleryThumbs().click(gallery.lightboxThumbClick);
 		    gallery.getLightboxGalleryThumbsImages().scroll(gallery.lightBoxCalculations);
 		    gallery.getLightboxGalleryThumbsUp().click(gallery.lightboxGalleryThumbsUpClick);
@@ -587,7 +586,9 @@ Mall.product = {
 			    if(document.location.hash == '#gallery') {
 				    Mall.product.gallery.getBigMedia().find('a').click();
 			    } else {
-				    jQuery('#lightbox-close').click();
+					jQuery('html,body').removeClass('noscroll');
+					Mall.product.gallery._lighboxCalculationsEnabled = false;
+				    Mall.product.gallery.getLightbox().hide();
 			    }
 		    });
 	    },
@@ -897,13 +898,14 @@ Mall.product = {
                 afterInit: function() {
                     // Horizontal center big medias and Lupa always on bottom
                     var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
+                    var width = parseInt(Mall.product.gallery.getBigMedia().css('width'));
                     Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
-                        if (jQuery(this).height() != maxHeight) {
-                            // Horizontal center big medias
-                            var itemH = jQuery(this).height();
-                            var padding = ((maxHeight - itemH) / 2);
-                            jQuery(this).find('a').css('padding', padding + 'px 0');
-                        }
+                        // Horizontal center big medias
+                        var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
+                        var itemH = ratio * width;
+
+                        var padding = ((maxHeight - itemH) / 2);
+                        jQuery(this).find('a').css('padding', padding + 'px 0');
                     });
 	                Mall.product.gallery.initLightbox();
                 }
@@ -915,14 +917,16 @@ Mall.product = {
          * @returns {number}
          */
         findMaxHeightBigMedia: function() {
-            var items = this.getBigMedia().find('.rwd-item');
+            var width = parseInt(Mall.product.gallery.getBigMedia().css('width'));
             var maxHeight = 0;
-            items.each(function(index, elem) {
-                if(jQuery(this).height() >= maxHeight) {
-                    maxHeight = jQuery(elem).height();
+            this.getBigMedia().find('.item img').each(function(index, elem) {
+                var ratio = parseFloat(jQuery(this).attr('data-ratio'));
+                var height = ratio * width;
+                if(height >= maxHeight) {
+                    maxHeight = height;
                 }
             });
-            return maxHeight;
+            return Math.round(maxHeight);
         },
 
         /**
