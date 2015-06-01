@@ -129,14 +129,18 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
      *
      * @return string
      */
-     public function getCanonicalUrl() {
+     public function getCanonicalUrl($noVendor = false) {
          $canonical = $this->getData('canonical_link');
          if (empty($canonical)) {
              $related = $this->getRelatedCategory();
              if ($related) {
-                $canonical = $related->getCanonicalUrl();
+                $canonical = $related->getCanonicalUrl(true);
              } else {
-
+                 if ($noVendor) {
+                     $categoryUrl = $this->getNoVendorContextUrl();
+                 } else {
+                     $categoryUrl = $this->getUrl();
+                 }
                  /** @var GH_Rewrite_Helper_Data $rewriteHelper */
                  $rewriteHelper = Mage::helper('ghrewrite');
                  /** @var Zolago_Solrsearch_Model_Catalog_Product_List $listModel */
@@ -147,7 +151,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
                  $queryData     = Mage::app()->getRequest()->getParams();
                  $url           = $rewriteHelper->prepareRewriteUrl($path, $categoryId, $queryData, true);
 
-                 $canonical     = $url ? $url : $this->getUrl();
+                 $canonical     = $url ? $url : $categoryUrl;
              }
          }
          return $canonical;
