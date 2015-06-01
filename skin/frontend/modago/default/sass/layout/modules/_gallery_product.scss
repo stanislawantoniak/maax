@@ -198,7 +198,7 @@
     }
 }
 #product-gallery {
-    #sync1, #sync3 {
+    #productGalleryBigMedia, #productGalleryBigMediaOpen {
         float: left;
         width: 319px;
         @media (max-width: 360px) {
@@ -217,7 +217,7 @@
         }
     }
 
-    #wrapper-sync2, #wrapper-sync4 {
+    #wrapper-productGalleryThumbMedia, #wrapper-productGalleryThumbMediaOpen {
         float: left;
         width: 80px;
         margin-left: 7px;
@@ -232,7 +232,7 @@
         height: auto!important;
       }
     }
-    #sync2, #sync4 {
+    #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
         width: 80px;
         margin-top: 10.5px;
         .rwd-wrapper-outer {

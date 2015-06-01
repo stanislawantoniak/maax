@@ -12,6 +12,8 @@ Mall.product = {
 			Mall.product.updateContextBreadcrumbs();
 			Mall.product.setDiagonalsOnSizeSquare();
 			Mall.product.rating.init();
+            Mall.product.review.init();
+            Mall.product.gallery.init();
 		}
 	},
 
@@ -121,10 +123,6 @@ Mall.product = {
 
 			this.setAttributes(jsonOptions.attributes, jsonOptions.useSizeboxList);
 		}
-	},
-
-	setChooseText: function(text) {
-
 	},
 
 	setPrices: function(price, oldPrice, template) {
@@ -1083,5 +1081,4 @@ Mall.product = {
 
 jQuery(document).ready(function() {
 	Mall.product.init();
-	Mall.product.review.init();
 });
