@@ -548,28 +548,30 @@ Mall.product = {
 			    lightbox = Mall.product.gallery.getLightbox(),
 			    gallery = Mall.product.gallery;
 			gallery.getBigMedia().find('a').click(function() {
-				lightbox.show();
-				htmlBody.addClass('noscroll');
-				var currentSlide = gallery.getBigMedia().data('rwdCarousel').currentItem;
-				if(!gallery.lightboxInitialized()) {
-					gallery._lightboxSlickContainer = gallery.getLightboxGalleryImagesContainer();
-					gallery._lightboxSlickContainer.on('afterChange',gallery.lightboxAfterChange);
-					gallery._lightboxSlickContainer.on('beforeChange',gallery.lightboxBeforeChange);
-					gallery._lightboxSlickOptions.initialSlide = currentSlide;
-					gallery._lightboxSlickContainer.slick(gallery._lightboxSlickOptions);
-					gallery._lightboxHasSlick = true;
-				} else {
-					gallery._lightboxSlickContainer.slick('slickGoTo',currentSlide,true);
+				if(Mall.windowWidth() > Mall.breakpoints.sm) {
+					lightbox.show();
+					htmlBody.addClass('noscroll');
+					var currentSlide = gallery.getBigMedia().data('rwdCarousel').currentItem;
+					if (!gallery.lightboxInitialized()) {
+						gallery._lightboxSlickContainer = gallery.getLightboxGalleryImagesContainer();
+						gallery._lightboxSlickContainer.on('afterChange', gallery.lightboxAfterChange);
+						gallery._lightboxSlickContainer.on('beforeChange', gallery.lightboxBeforeChange);
+						gallery._lightboxSlickOptions.initialSlide = currentSlide;
+						gallery._lightboxSlickContainer.slick(gallery._lightboxSlickOptions);
+						gallery._lightboxHasSlick = true;
+					} else {
+						gallery._lightboxSlickContainer.slick('slickGoTo', currentSlide, true);
+					}
+					gallery._lighboxCalculationsEnabled = true;
+					gallery.lightboxThumbChange();
+					gallery.lightBoxCalculations();
+					document.location.hash = '#gallery';
 				}
-				gallery._lighboxCalculationsEnabled = true;
-				gallery.lightboxThumbChange();
-				gallery.lightBoxCalculations();
-				document.location.hash = '#gallery';
-				gallery.initLocationHashEvent();
 			});
 			jQuery('#lightbox-close').click(function() {
 				history.back();
 			});
+		    gallery.initLocationHashEvent();
 		    gallery.getLightboxGalleryThumbs().click(gallery.lightboxThumbClick);
 		    gallery.getLightboxGalleryThumbsImages().scroll(gallery.lightBoxCalculations);
 		    gallery.getLightboxGalleryThumbsUp().click(gallery.lightboxGalleryThumbsUpClick);
