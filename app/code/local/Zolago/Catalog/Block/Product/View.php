@@ -76,6 +76,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $catIds = $product->getCategoryIds();
 
+
+        $store = Mage::app()->getStore()->getId();
         $collection = Mage::getResourceModel('catalog/category_collection');
         /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
         $collection->addAttributeToSelect("basic_category");
@@ -83,6 +85,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->addAttributeToSelect("dynamic_meta_title");
         $collection->addAttributeToSelect("dynamic_meta_keywords");
         $collection->addAttributeToSelect("dynamic_meta_description");
+        $collection->setStoreId($store);
         $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
 //        $collection->addAttributeToFilter("basic_category", 1);
