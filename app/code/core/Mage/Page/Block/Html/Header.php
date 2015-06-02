@@ -63,7 +63,7 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         return $this->getSkinUrl($this->_data['logo_src']);
     }
 
-    public function getLogoAlt()
+    public  function getLogoAlt()
     {
         if (empty($this->_data['logo_alt'])) {
             $this->_data['logo_alt'] = Mage::getStoreConfig('design/header/logo_alt');

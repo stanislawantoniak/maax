@@ -202,13 +202,6 @@ if($vendorContext && $vendorContext->getId()) {
 </div>
 </div>
 </div>
-<style>
-    .sb-site.noscroll{
-        position:fixed;
-        overflow:hidden;
-    }
-
-</style>
 
 <div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
     <div class="modal-dialog">
@@ -223,16 +216,8 @@ if($vendorContext && $vendorContext->getId()) {
         </div>
     </div>
 </div>
-<div id="lightbox" style="z-index: 1050">
-    <div id="inner-lightbox">
-        <div id="hl" class="clearfix">
-            <img src="<?php echo $this->getSkinUrl('images/logo_header_lightbox.png'); ?>" alt="<?php echo $this->getLogoAlt(); ?>" class="pull-left">
-            <button id="remove-lightbox" class="button button-third pull-right"><?php echo $this->__("Close"); ?></button>
-        </div>
 
-        <div class="bl"></div>
-    </div>
-</div>
+<?php echo $this->getChildHtml('product.info.media.modal'); ?>
 
 
 <!--zadaj pytanie sprzedajacemu-->
@@ -315,8 +300,6 @@ if($vendorContext && $vendorContext->getId()) {
     </div>
 </div>
 
-<?php echo $this->getChildHtml('product.info.media.modal'); ?>
-
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 
 <script type="text/javascript">
@@ -341,7 +324,7 @@ if($vendorContext && $vendorContext->getId()) {
     Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
 
 
-	
+
 	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
 	<?php if($_product->getCategory()):?>
 	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
