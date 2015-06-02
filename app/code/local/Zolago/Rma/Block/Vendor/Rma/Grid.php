@@ -43,6 +43,15 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"header"	=>	Mage::helper("zolagorma")->__("RMA No."),
 			"width"		=>	"100px"
 		));
+
+		$this->addColumn("udpo_increment_id", array(
+			"type"		=>	"text",
+			"align"		=>  "left",
+			"index"		=>	"udpo_increment_id",
+			"class"		=>  "form-controll",
+			"header"	=>	Mage::helper("zolagorma")->__("Order No."),
+			"width"		=>	"100px"
+		));
 		
 		$this->addColumn("created_at", array(
 			"type"		=>	"date",
