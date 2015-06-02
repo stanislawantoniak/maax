@@ -38,8 +38,8 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 				$this->getRequest()->getParams()
 		);
 		//$profiler->log("Context");
-		
-		
+
+        $layout = $this->getLayout();
         $content = array(
             'user_account_url' => Mage::getUrl('customer/account', array("_no_vendor"=>true)),
             'user_account_url_orders' => Mage::getUrl('sales/order/process', array("_no_vendor"=>true)),
@@ -57,7 +57,8 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             ),
 			'persistent' => $persistent,
 			'persistent_url' => Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true)),
-			'search' => $searchContext
+			'search' => $searchContext,
+            'salesmanago_tracking' => $this->_cleanUpHtml($layout->createBlock("tracking/layer")->toHtml())
         );
 		//$profiler->log("Rest");
 		
@@ -248,4 +249,14 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             
 		return $array;
 	}
+
+    /**
+     * clean ups html from excess of newlines, whitespaces and tabs
+     * @param $string
+     * @return string
+     */
+    protected function _cleanUpHtml($string) {
+        $string = preg_replace('/\s*$^\s*/m', "\n", $string);
+        return preg_replace('/[ \t]+/', ' ', $string);
+    }
 }

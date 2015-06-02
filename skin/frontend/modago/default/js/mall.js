@@ -424,6 +424,8 @@ var Mall = {
 		
         var desktopW = 992;
         var windowW = jQuery(window).width();
+
+        jQuery("body").append(content.salesmanago_tracking);
         if(content.logged_in){
             //on load
 
@@ -1454,13 +1456,13 @@ jQuery(document).ready(function() {
     basket_dropdown();
     sales_order_details_top_resize();
 
-	jQuery(document)
+/*	jQuery(document)
 		.on('show.bs.modal', '.modal', function () {
 			jQuery('html,body').addClass('modal-open');
 		})
 		.on('hidden.bs.modal', '.modal', function () {
 			jQuery('html,body').removeClass('modal-open');
-		});
+		});*/
 
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
