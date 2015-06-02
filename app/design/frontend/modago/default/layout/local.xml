@@ -507,6 +507,7 @@
 				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
 				<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
 			</block>
+            <block type="zolagomodago/catalog_category_rewrite" name="category_rewrite" as="categoryrewrite" />
 		</reference>
 
         <reference name="content">
@@ -587,6 +588,7 @@
 			    <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
 			    <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
 		    </block>
+            <block type="zolagomodago/catalog_category_rewrite" name="category_rewrite" as="category_rewrite" template="catalog/category/sidebar/rewrite.phtml" />
 	    </reference>
 
         <reference name="content">
