@@ -424,6 +424,8 @@ var Mall = {
 		
         var desktopW = 992;
         var windowW = jQuery(window).width();
+
+        jQuery("body").append(content.salesmanago_tracking);
         if(content.logged_in){
             //on load
 
