@@ -12,6 +12,8 @@ Mall.product = {
 			Mall.product.updateContextBreadcrumbs();
 			Mall.product.setDiagonalsOnSizeSquare();
 			Mall.product.rating.init();
+            Mall.product.review.init();
+            Mall.product.gallery.init();
 		}
 	},
 
@@ -121,10 +123,6 @@ Mall.product = {
 
 			this.setAttributes(jsonOptions.attributes, jsonOptions.useSizeboxList);
 		}
-	},
-
-	setChooseText: function(text) {
-
 	},
 
 	setPrices: function(price, oldPrice, template) {
@@ -518,10 +516,480 @@ Mall.product = {
 				}
 			});
 		}
-	}
+	},
+
+    gallery: {
+
+        init: function () {
+            // For not open
+            this.initBigMediaCarousel();
+            this.initThumbsCarousel();
+            this.flagBigMedia();
+            this.initReleatedCarousel();
+
+            // For open
+            //this.initThumbsOpenCarousel();
+            //this.initBigMediaOpenCarousel();
+            //this.flagBigMediaOpen();
+            this.initLogic();
+
+        },
+
+        /**
+         * Init carousel for big images
+         */
+        initBigMediaCarousel: function () {
+            var productGalleryBigMedia = this.getBigMedia();
+            productGalleryBigMedia.rwdCarousel({
+                singleItem: true,
+                slideSpeed: 1000,
+                navigation: true,
+                pagination: true,
+                responsiveRefreshRate: 200,
+                mouseDrag: false,
+                rewindNav: false,
+                itemsScaleUp: true,
+                afterAction: function() {
+                    var thumbs  = Mall.product.gallery.getThumbs();
+                    thumbs.find(".rwd-item")
+                        .removeClass("synced")
+                        .eq(this.currentItem)
+                        .addClass("synced")
+                },
+                afterInit: function() {
+                    // Horizontal center big medias and Lupa always on bottom
+                    var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
+                    Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
+                        if (jQuery(this).height() != maxHeight) {
+                            // Horizontal center big medias
+                            var itemH = jQuery(this).height();
+                            var padding = ((maxHeight - itemH) / 2);
+                            jQuery(this).find('a').css('padding-top',    padding);
+                            jQuery(this).find('a').css('padding-bottom', padding);
+                        }
+                    });
+                }
+            });
+        },
+
+        /**
+         * Find max height of big medias from rwd carousel items
+         * @returns {number}
+         */
+        findMaxHeightBigMedia: function() {
+            var items = this.getBigMedia().find('.rwd-item');
+            var maxHeight = 0;
+            items.each(function(index, elem) {
+                if(jQuery(this).height() >= maxHeight) {
+                    maxHeight = jQuery(elem).height();
+                }
+            });
+            return maxHeight;
+        },
+
+        /**
+         * Init carousel for thumbs
+         */
+        initThumbsCarousel: function() {
+            var productGalleryThumbMedia = this.getThumbs();
+            productGalleryThumbMedia.rwdCarousel({
+                items : 1,
+                pagination:false,
+                navigation: false,
+                touchDrag: false,
+                mouseDrag:false,
+                afterInit : function(el) {
+                    el.find(".rwd-item").eq(0).addClass("synced");
+                    var items = Mall.product.gallery.getThumbs().find('.rwd-item');
+                    Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
+                    if (items.length <= 4 ) {
+                        Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
+                    }
+                }
+            });
+
+            this.getThumbs().on("click", ".rwd-item", function(e) {
+                e.preventDefault();
+                Mall.product.gallery.getBigMedia().trigger("rwd.goTo", jQuery(this).data("rwdItem"));
+            });
+
+            this.getThumbsWrapper().on('click', '.up', function(event) {
+                event.preventDefault();
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
+                var item = thumbsWrapper.find('.rwd-item');
+                var itemHeight = item.height()+10;
+                var wrapper = thumbsWrapper.find('.rwd-wrapper');
+                var position = parseInt(wrapper.css('margin-top'));
+                var sumItem = itemHeight * (item.length-5);
+
+                wrapper.filter(':not(:animated)').animate({
+                    'margin-top': '+='+itemHeight
+                });
+
+                if (position == '-'+itemHeight) {
+                    thumbsWrapper.find('.up').addClass('disabled');
+                }
+                if (position != '-'+sumItem) {
+                    thumbsWrapper.find('.down').removeClass('disabled');
+                }
+            });
+
+            this.getThumbsWrapper().on('click', '.down', function(event) {
+                event.preventDefault();
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
+                var item = thumbsWrapper.find('.rwd-item');
+                var itemHeight = item.height()+10;
+                var wrapper = thumbsWrapper.find('.rwd-wrapper');
+                var position = parseInt(wrapper.css('margin-top'));
+                var sumItem = itemHeight * (item.length-5);
+
+                wrapper.filter(':not(:animated)').animate({
+                    'margin-top': '-='+itemHeight
+                });
+                if (position != '-'+itemHeight) {
+                    thumbsWrapper.find('.up').removeClass('disabled');
+                }
+                if (position == '-'+sumItem) {
+                    thumbsWrapper.find('.down').addClass('disabled');
+                }
+            });
+
+        },
+
+        /**
+         * Add flag sale/promo image to big images
+         */
+        flagBigMedia: function() {
+            var items = this.getBigMedia().find('.rwd-item');
+            items.each(function(i) {
+                var flags = jQuery(this).find('a');
+                var flag = flags.data('flags');
+                flags.append('<i class="flag '+flag+'"></i>');
+            });
+        },
+
+        /**
+         * add flag sale/promo image to big images when gallery open
+         */
+        flagBigMediaOpen: function() {
+            var items = this.getBigMediaOpen().find('.rwd-item');
+            items.each(function(i) {
+                var flags = jQuery(this).find('.inner-item');
+                var flag = flags.data('flags');
+                    flags.append('<i class="flag '+flag+'"></i>');
+            });
+        },
+
+        initLogic: function() {
+            // Lupa
+            jQuery(window).on('Mall.onResizeEnd', function() {
+                var widthWindow = jQuery(window).width();
+                var lupa = Mall.product.gallery.getLupa();
+                if (widthWindow < Mall.Breakpoint.sm) {
+                    lupa.hide();
+                } else {
+                    lupa.show();
+                }
+            });
+
+            // Close button
+            this.getLightbox().on('click', '#remove-lightbox', function(event) {
+                event.preventDefault();
+                jQuery(this).parents('#lightbox').hide();
+                jQuery('body').removeClass('lightbox');
+            });
+
+            this.getBigMedia().on('click', 'a', function(event) {
+                if (jQuery(window).width() >= Mall.Breakpoint.sm) {
+                    Mall.product.gallery.getLightbox().find(".bl" ).html(jQuery("#galeria-lightbox-wr").html());
+                    jQuery('#lightbox').css({display:'block'});
+                    jQuery('body').addClass('lightbox');
+                }
+
+                Mall.product.gallery.initThumbsOpenCarousel();
+                Mall.product.gallery.initBigMediaOpenCarousel();
+                Mall.product.gallery.flagBigMediaOpen();
+            });
+        },
+
+        /**
+         * Init carousel for product related / is similar to
+         * in this case other colors of product
+         */
+        initReleatedCarousel: function() {
+            var rwd_color = this.getReleated();
+            rwd_color.rwdCarousel({
+                items:5,
+                navigation : true,
+                pagination: false,
+                itemsScaleUp: false,
+                responsive: false,
+                rewindNav : false
+            });
+        },
+
+        /**
+         * Init carousel for big images for open gallery
+         */
+        initBigMediaOpenCarousel: function() {
+            this.getBigMediaOpen().rwdCarousel({
+                singleItem : true,
+                navigation: true,
+                pagination:true,
+                afterAction : function(el){
+                    Mall.product.gallery.getThumbsOpen()
+                        .find(".rwd-item")
+                        .removeClass("synced")
+                        .eq(this.currentItem)
+                        .addClass("synced");
+                },
+                responsiveRefreshRate : 200,
+                mouseDrag:true,
+                rewindNav : false,
+                itemsScaleUp: false,
+                transitionStyle : "fade",
+                slideSpeed:1000,
+                afterMove: function() {
+                    if(Mall.product.gallery.getLightboxInner().scrollTop()) {
+                        body.animate({ scrollTop: 0 }, "slow");
+                    }
+                },
+                afterInit:function(elem) {
+
+                    //TODO refactoring
+
+                    this.rwdControls.prependTo(elem);
+
+                    Mall.product.gallery.getBigMediaOpen().find('.rwd-item').each(function(index, el) {
+
+                        var lightbox = Mall.product.gallery.getLightbox();
+                        var img = jQuery(this).find('img');
+                        var windowHeight = jQuery(window).height();
+                        var hlHeight = lightbox.find('#hl').innerHeight(); // Header lightbox
+                        var contentHeight = windowHeight - hlHeight - 90;
+                        var imgWidthLoad = jQuery(this).find('img').data('width');
+                        img.css({
+                            height: contentHeight,
+                            width: 'auto'
+                        });
+                        // ustawienie szerokości contenera dla przeskalowanego zdjęcia
+                        var innerItem = img.innerWidth();
+                        var innerItemHeight = img.height();
+                        img.closest('.inner-item').css('width', innerItem);
+                        // Ukrycie button zoom
+                        if (innerItem > imgWidthLoad) {
+                            jQuery(this).find('.zoom_plus').hide();
+                            jQuery(this).find('.zoom_minus').hide();
+
+                        }
+                        lightbox.find('.rwd-buttons').width(innerItem + 'px')
+                        lightbox.find('.rwd-prev, .rwd-next').css({
+                            top: innerItemHeight / 2
+                        });
+
+                        var aImage = jQuery(this).find('img');
+                        var aImageWidth = parseInt(aImage.css('width'));
+
+                        jQuery('.zoom_minus').on('click', function (event) {
+                            var windowWidth = jQuery(window).innerWidth();
+                            img.css({
+                                height: contentHeight,
+                                width: 'auto'
+                            });
+                            if (windowWidth <= 1023) {
+                                lightbox.find('.rwd-buttons').show();
+                            }
+                            img.closest('.inner-item').css({'width': innerItem, 'margin': '0 auto'});
+                            jQuery('.rwd-buttons').width(aImageWidth);
+                            jQuery(this).closest('.rwd-wrapper').find('.rwd-item').each(function () {
+                                jQuery(this).find('.zoom_minus').addClass('full disabled').removeClass('full').addClass('disabled');
+                                jQuery(this).find('.zoom_plus').removeClass('full disabled');
+                            });
+                        });
+                    });
+                }
+            });
+
+            // Zoom
+            this.getBigMediaOpen().find('.zoom_plus').on('click', function(event) {
+                event.preventDefault();
+                Mall.product.gallery.getBigMediaOpen().find('.rwd-item').each(function(){
+                    var img = jQuery(this).find('img');
+                    var imgScaleWidth = parseInt(img.width());
+                    var imgWidth   =    jQuery(this).find('img').data('width');
+                    var divWidth   = parseInt(jQuery(this).find('.item').css("width"));
+                    jQuery(img).width(divWidth);
+                    jQuery('.rwd-buttons').width(imgScaleWidth);
+                    jQuery(img).css("height", 'auto');
+
+                    if (imgWidth < divWidth) {
+                        jQuery(img).width(imgWidth+'px'); //Set the width to the div's width
+                        jQuery(this).find('.inner-item').css({width:imgWidth,margin:'0 auto'});
+                        jQuery(img).css("height", 'auto');
+                    } else if (imgWidth >= divWidth) {
+                        jQuery(img).width('100%'); //Set the width to the div's width
+                        jQuery(this).find('.inner-item').css({width:'100%',margin:'0 auto'});
+                        jQuery(img).css("height", 'auto');
+
+                    }
+                    jQuery(this).find('.zoom_plus').addClass('full disabled');
+                    jQuery(this).find('.zoom_minus').addClass('full').removeClass('disabled');
+                })
+            });
+
+            // Next
+            this.getBigMediaOpen().on('click', '.rwd-next', function(e) {
+                e.preventDefault();
+                var items         = Mall.product.gallery.getThumbsOpen().find('.rwd-item');
+                var current       = items.index(Mall.product.gallery.getThumbsOpen().find('.synced'));
+                var currentLength = items.length;
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
+                if(current >= 4 && current <= currentLength) {
+                    Mall.product.gallery.getThumbsOpen().find(".rwd-wrapper").animate({
+                        marginTop: '-=98px'
+                    });
+                    if (current >= 4) {
+                        thumbsWrapper.find('.up').removeClass('disabled')
+                    } else {
+                        thumbsWrapper.find('.up').addClass('disabled')
+                    }
+                    if (current === currentLength - 1) {
+                        thumbsWrapper.find('.down').addClass('disabled')
+                    } else {
+                        thumbsWrapper.find('.down').removeClass('disabled')
+                    }
+                }
+            });
+        },
+
+        /**
+         * Init carousel for thumbs for open gallery
+         */
+        initThumbsOpenCarousel: function() {
+            var thumbsOpen = this.getThumbsOpen();
+            thumbsOpen.rwdCarousel({
+                items : 1,
+                pagination:false,
+                navigation: false,
+                mouseDrag:false,
+                touchDrag: false,
+                transitionStyle: "fade",
+                afterInit: function(el) {
+                    el.find(".rwd-item").eq(0).addClass("synced");
+                    var items = Mall.product.gallery.getThumbsOpen().find('.rwd-item');
+                    if (items.length <= 4 ) {
+                        Mall.product.gallery.getThumbsWrapperOpen().find('.up, .down').addClass('disabled');
+                    }
+                }
+            });
+
+            thumbsOpen.on("click", ".rwd-item", function(e) {
+                e.preventDefault();
+                var number = jQuery(this).data("rwdItem");
+
+                Mall.product.gallery.getBigMedia().trigger("rwd.goTo", number);// When you click on thumb image, under opened gallery image need to be that same
+                Mall.product.gallery.getBigMediaOpen().trigger("rwd.goTo", number);
+
+                Mall.product.gallery.getThumbsOpen().find('.rwd-item').removeClass("synced");
+                jQuery(this).addClass("synced");
+            });
+
+            this.getThumbsWrapperOpen().on('click', '.up', function(event) {
+                event.preventDefault();
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapperOpen();
+                var item = thumbsWrapper.find('.rwd-item');
+                var itemHeight = item.height()+10;
+                var position = parseInt(thumbsWrapper.find('.rwd-wrapper').css('margin-top'));
+                var wrapp = thumbsWrapper.find('.rwd-wrapper');
+                var sumItem = itemHeight * (item.length-5);
+                wrapp.filter(':not(:animated)').animate({
+                    'margin-top': '+='+itemHeight
+                });
+
+                if (position == '-'+itemHeight) {
+                    thumbsWrapper.find('.up').addClass('disabled');
+                }
+                if (position != '-'+sumItem) {
+                    thumbsWrapper.find('.down').removeClass('disabled');
+                }
+            });
+
+            this.getThumbsWrapperOpen().on('click', '.down', function(event) {
+                event.preventDefault();
+                var thumbsWrapper = Mall.product.gallery.getThumbsWrapperOpen();
+                var item = thumbsWrapper.find('.rwd-item');
+                var itemHeight = item.height()+10;
+                var position = parseInt(thumbsWrapper.find('.rwd-wrapper').css('margin-top'));
+                var wrapp = thumbsWrapper.find('.rwd-wrapper');
+                var sumItem = itemHeight * (item.length-5);
+
+                wrapp.filter(':not(:animated)').animate({
+                    'margin-top': '-='+itemHeight
+                });
+                if (position != '-'+itemHeight) {
+                    thumbsWrapper.find('.up').removeClass('disabled');
+                }
+                if (position == '-'+sumItem) {
+                    thumbsWrapper.find('.down').addClass('disabled');
+                }
+            });
+        },
+
+        getGallery: function () {
+            return jQuery("#product-gallery");
+        },
+
+        getBigMedia: function () {
+            return jQuery('#productGalleryBigMedia');
+        },
+
+        getBigMediaOpen: function () {
+            return jQuery('#productGalleryBigMediaOpen');
+        },
+
+        getThumbs: function () {
+            return jQuery('#productGalleryThumbMedia');
+        },
+
+        getThumbsOpen: function () {
+            return jQuery('#productGalleryThumbMediaOpen');
+        },
+
+        getThumbsWrapperOpen: function() {
+            return jQuery('#wrapper-productGalleryThumbMediaOpen');
+        },
+
+        getThumbsWrapper: function() {
+            return jQuery('#wrapper-productGalleryThumbMedia');
+        },
+
+        /**
+         * Get div product related / is similar to
+         * in this case other colors of product
+         */
+        getReleated: function() {
+            return jQuery("#rwd-color");
+        },
+
+        getReleatedWrapper: function() {
+            return jQuery('wrapper-rwd-color');
+        },
+
+        getLightbox: function() {
+            return jQuery("#lightbox");
+        },
+
+        getLightboxInner: function() {
+            return jQuery("#inner-lightbox");
+        },
+
+        getLupa: function() {
+            return this.getBigMedia().find('.view_lupa');
+        },
+
+    }
 };
 
 jQuery(document).ready(function() {
 	Mall.product.init();
-	Mall.product.review.init();
 });
