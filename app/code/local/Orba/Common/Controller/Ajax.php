@@ -145,5 +145,5 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
         }
         return $productId;
     }
-    
+
 }

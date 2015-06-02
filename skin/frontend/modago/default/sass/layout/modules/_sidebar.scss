@@ -208,6 +208,41 @@
   }
 }
 
+#category_with_filters {
+  display: none;
+  font-size: 14px;
+  position: absolute;
+  text-align: left;
+  margin-top: 10px;
+  .section {
+    .content {
+      display: block;
+    }
+  }
+  &.filters-desktop {
+    @include min-screen($screen-sm-min) {
+      display: block !important;
+    }
+  }
+  &.filters-mobile {
+    z-index: 1001;
+    top: 0;
+    left: -240px;
+    overflow-y: auto;
+    width: 240px;
+    display: block;
+    margin-top: 0px;
+    .solr_search_facets {
+      width: 240px;
+    }
+  }
+
+}
+.category_with_filters {
+  .content {
+    display: block !important;
+  }
+}
 #solr_search_facets {
 	top: 300px;
 	position: absolute;

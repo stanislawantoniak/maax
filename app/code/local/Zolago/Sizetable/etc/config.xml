@@ -45,14 +45,14 @@
 			</zolagosizetable_setup>
 		</resources>
 	    <blocks>
-	        <zolagosizetable>
-	            <class>Zolago_Sizetable_Block</class>
-	        </zolagosizetable>
 	        <udropship>
 	            <rewrite>
 	                <adminhtml_vendor_edit>Zolago_Sizetable_Block_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
 	            </rewrite>
 	        </udropship>
+	        <zolagosizetable>
+	            <class>Zolago_Sizetable_Block</class>
+	        </zolagosizetable>
 	    </blocks>
 	</global>
 	<adminhtml>
