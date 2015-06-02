@@ -1583,13 +1583,20 @@ Mall.listing = {
 					height: jQuery(window).height()
 				});
 		} else {
-			var content = self.getContentBlock();
+			var content = self.getContentBlock(),
+				containerOffset = jQuery('#sb-site').offset(),
+				leftOffset = content.offset().left + 15;
+
+			if(containerOffset.left != 0) {
+				leftOffset = leftOffset - containerOffset.left;
+			}
+
 			filters
 				.removeClass(self.getFiltersClassMobile())
 				.addClass(self.getFiltersClassDesktop())
 				.css({
 					'top': content.offset().top,
-					'left': content.offset().left + 15,
+					'left': leftOffset,
 					'height': ''
 				});
 
