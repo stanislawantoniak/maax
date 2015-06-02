@@ -1,0 +1,45 @@
+<?php
+/** @var Zolago_Dropship_Block_Vendor_Menu_Help $this */
+
+?>
+<div id="sidebar-help-wrapper" style="width: 0px;height: 100%;position: fixed;right: 0;background-color: #f9f9f9;">
+    <div id="sidebar-help" style="width: 500px;border-left: 4px solid #d1d1d1; height: 100%; padding: 10px;">
+        <?php echo $this->getCmsBlockHelp() ?>
+    </div>
+</div>
+
+<script>
+    var help = {
+
+        init: function () {
+            this.initButtons();
+        },
+
+        initButtons: function () {
+            this.getBtn().click(function () {
+                jQuery('.toggle-sidebar').click();
+                if (!parseInt(help.getWrapper().css('width'))) {
+                    var sng = "+"; // Show
+                } else {
+                    var sng = "-"; // Hide
+                }
+                help.getWrapper().stop().animate({
+                    width: sng + "=500"
+                }, 500);
+            });
+        },
+
+        getWrapper: function () {
+            return jQuery('#sidebar-help-wrapper');
+        },
+
+        getBtn: function () {
+            return jQuery('.help-btn');
+        }
+
+    };
+
+    jQuery(document).ready(function () {
+        help.init();
+    });
+</script>
