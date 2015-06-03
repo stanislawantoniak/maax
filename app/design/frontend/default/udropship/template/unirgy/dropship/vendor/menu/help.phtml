@@ -2,51 +2,70 @@
 /** @var Zolago_Dropship_Block_Vendor_Menu_Help $this */
 
 ?>
-<div id="sidebar-help-wrapper" style="z-index: 11111;width: 0px;height: 100%;position: fixed;right: 0;background-color: #f9f9f9;" data-keys="<?php echo $this->getKeysToString() ?>">
-    <div id="sidebar-help" style="z-index: 11112;width: 500px;border-left: 4px solid #d1d1d1; height: 100%; padding: 10px;">
-        <div class="sidebar-help-header" style="border-bottom: 1px solid #d1d1d1;padding-bottom: 10px;">
-            <div class="container-fluid">
-                <div class="pull-right">
-                    <button class="btn btn-primary" id="close-help">Zamknij pomoc</button>
-                </div>
-            </div>
-        </div>
-        <?php echo $this->getCmsBlockHelp() ?>
-    </div>
+<div id="sidebar-help-wrapper" data-keys="<?php echo $this->getKeysToString() ?>">
+	<div id="sidebar-help">
+		<div class="sidebar-help-content-container">
+			<div class="sidebar-help-content">
+				<?php echo $this->getCmsBlockHelp() ?>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
-    var help = {
+	var help = {
 
-        init: function () {
-            this.initButtons();
-        },
+		init: function () {
+			this.initButtons();
+		},
 
-        initButtons: function () {
-            this.getBtns().click(function () {
-                jQuery('.toggle-sidebar').click();
-                if (!parseInt(help.getWrapper().css('width'))) {
-                    var sng = "+"; // Show
-                } else {
-                    var sng = "-"; // Hide
-                }
-                help.getWrapper().stop().animate({
-                    width: sng + "=500"
-                }, 500);
-            });
-        },
+		sidebarWasOpened: false,
+		sidebarWidth: 500,
+		sidebarAnimationTime: 500,
 
-        getWrapper: function () {
-            return jQuery('#sidebar-help-wrapper');
-        },
+		initButtons: function () {
+			var help = this;
+			help.getBtns().click(function () {
+				var button = jQuery(this),
+					sidebarOpened = !jQuery('#container').hasClass('sidebar-closed');
+				if (!parseInt(help.getWrapper().css('width'))) { //Show
+					help.getWrapper().addClass(help.getOpenedClass());
+					button.addClass(help.getOpenedClass());
+					if(sidebarOpened) {
+						help.sidebarWasOpened = true;
+						help.toggleSidebar();
+					} else {
+						help.sidebarWasOpened = false;
+					}
+				} else { //Hide
+					help.getWrapper().removeClass(help.getOpenedClass());
+					button.removeClass(help.getOpenedClass());
+					if(!sidebarOpened && help.sidebarWasOpened) {
+						help.toggleSidebar();
+					}
+				}
+			});
+		},
 
-        getBtns: function () {
-            return jQuery('.help-btn, #close-help');
-        }
+		getWrapper: function () {
+			return jQuery('#sidebar-help-wrapper');
+		},
 
-    };
+		getBtns: function () {
+			return jQuery('.help-btn');
+		},
 
-    jQuery(document).ready(function () {
-        help.init();
-    });
+		getOpenedClass: function() {
+			return 'help-open';
+		},
+
+		toggleSidebar: function() {
+			jQuery('.toggle-sidebar').click();
+		}
+
+	};
+
+	jQuery(document).ready(function () {
+		help.init();
+	});
 </script>
