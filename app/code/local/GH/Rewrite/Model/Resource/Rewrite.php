@@ -29,7 +29,9 @@ class GH_Rewrite_Model_Resource_Rewrite extends Mage_Core_Model_Resource_Url_Rew
             $this->categoryPath = unserialize($list);
         }
         $storeId = Mage::app()->getStore()->getId();
-        return empty($this->categoryPath[$storeId][$categoryId])? null:$this->categoryPath[$storeId][$categoryId];
+	    $returnUrl = empty($this->categoryPath[$storeId][$categoryId]) ? null : $this->categoryPath[$storeId][$categoryId];
+
+        return $returnUrl;
     }
     public function loadByRequestPathForFilters($categoryId,$rawUrl) {
         if ($linkList = $this->getCategoryPath($categoryId)) {

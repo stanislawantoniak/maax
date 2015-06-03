@@ -24,6 +24,21 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             if ($this->helper('catalog/category')->canUseCanonicalTag()) {
                 $headBlock->addLinkRel('canonical', $category->getUrl());
             }
+
+            /*rewrite gh_url_rewrite*/
+            $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+            if (!empty($rewriteData)) {
+                if (isset($rewriteData['title']) && !empty($rewriteData['title'])) {
+                    $headBlock->setTitle($rewriteData['title']);
+                }
+                if (isset($rewriteData['meta_description']) && !empty($rewriteData['meta_description'])) {
+                    $headBlock->setDescription($rewriteData['meta_description']);
+                }
+                if (isset($rewriteData['meta_keywords']) && !empty($rewriteData['meta_keywords'])) {
+                    $headBlock->setKeywords($rewriteData['meta_keywords']);
+                }
+            }
+            /*rewrite gh_url_rewrite*/
         }
 
 		if($this->isContentMode()){
@@ -117,7 +132,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
     }
 
     public function getProductListHtml() {
-        return  $this->getChildHtml('searchfaces') . $this->getChildHtml('solrsearch_product_list');
+        return  $this->getChildHtml('searchfaces') . $this->getChildHtml('categoryrewrite') . $this->getChildHtml('solrsearch_product_list');
     }
 
     public function getDesktopVendorHeaderPanel()
