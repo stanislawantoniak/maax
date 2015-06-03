@@ -35,9 +35,6 @@ class Unirgy_DropshipMicrositePro_Helper_Protected
 					case "checkboxes":
 					case "radios":
 						$srcModel = $node->reg_source_model ? (string)$node->reg_source_model : $node->source_model ? (string)$node->source_model : "udropship/source";
-						if(!$srcModel) {
-							continue;
-						}
 						$field["source_model"] = $srcModel;
 						$field["source"] = $node->source ? (string)$node->source : $code;
 						$source = Mage::getSingleton($srcModel);
