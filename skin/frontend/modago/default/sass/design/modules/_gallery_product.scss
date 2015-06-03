@@ -105,32 +105,30 @@
     }
 }
 #product-gallery {
-    #sync1, #sync3 {
-        
-        .item{
-            color: #FFF;
-            -webkit-border-radius: 3px;
-            -moz-border-radius: 3px;
-            border-radius: 3px;
-            text-align: center;
-        }
+  #productGalleryBigMedia, #productGalleryBigMediaOpen, #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
+    .item, .rwd-item{
+      color: $body-bg;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      text-align: center;
+      cursor: pointer;
     }
-    #sync2, #sync4 {
-        .rwd-item{
-            color: #FFF;
-            -webkit-border-radius: 3px;
-            -moz-border-radius: 3px;
-            border-radius: 3px;
-            text-align: center;
-            cursor: pointer;
-            &.synced,
-            &:hover {
-                img {
-                    border: 1px solid #999;
-                }
-            }
-        }
+    .item {
+      a {
+        display: block;
+      }
     }
+  }
+  #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
+    .rwd-item {
+      &.synced, &:hover {
+        img {
+          border: 1px solid $color-gray4;
+        }
+      }
+    }
+  }
 }
 #product-gallery {
     .rwd-controls {
@@ -169,10 +167,10 @@
         outline:none;
     }
     .up {
-        @include sprite($allMap, arrow_top_j);
+        @include sprite($allMap, arrow_top_j_black);
     }
     .down {
-        @include sprite($allMap,arrow_bottom_j);
+        @include sprite($allMap,arrow_bottom_j_black);
     }
 }
 
@@ -208,7 +206,7 @@ body.lightbox {
 }
 
 #lightbox {
-    #sync3 {
+    #productGalleryBigMediaOpen {
         .item{
             color: #FFF;
             -webkit-border-radius: 3px;
@@ -219,7 +217,7 @@ body.lightbox {
     }
 
    
-    #sync2, #sync4 {
+    #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
         
         
         
@@ -275,7 +273,7 @@ body.lightbox {
 #lightbox {
     .up,
     .down {
-        
+        color: $body-bg;
         background:#fff;
         text-indent: -999em;
         outline:none;
@@ -285,15 +283,13 @@ body.lightbox {
     }
     .up {
          &:before {
-            @include sprite($allMap, arrow_top_j);
+            @include sprite($allMap, arrow_top_j_black);
         }
-       
     }
     .down {
         &:before {
-        @include sprite($allMap,arrow_bottom_j);
+        @include sprite($allMap,arrow_bottom_j_black);
         }
-        
     }
 }
 

@@ -266,7 +266,7 @@ section {
 		}
 		&#note_product {
 			header {
-				h2.title_section {
+				h2.title_section, h5.title_section {
 					@media (max-width: $screen-xs-max) {
 						height: 38px;
 					}

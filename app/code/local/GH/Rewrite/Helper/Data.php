@@ -30,6 +30,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
             unset($queryData['fq']);
             $query = http_build_query($queryData);
             $url = rtrim(Mage::getUrl($url),"/");
+	        $url = str_replace('/?___SID=U','?___SID=U',$url);
 	        if($query) {
 		        $url .= '?' . $query;
 	        }
@@ -49,7 +50,8 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 		if(isset($params['sort']) &&
 			(
 				($params['sort'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_ORDER && $listingModel->isCategoryMode()) ||
-				($params['sort'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_ORDER && $listingModel->isSearchMode())
+				($params['sort'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_ORDER && $listingModel->isSearchMode()) ||
+				!$params['sort']
 			)
 		) {
 			unset($params['sort']);
@@ -60,7 +62,8 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 			isset($params['dir']) &&
 			(
 				($params['dir'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_DIR && $listingModel->isCategoryMode()) ||
-				($params['dir'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_DIR && $listingModel->isSearchMode())
+				($params['dir'] == Zolago_Solrsearch_Model_Catalog_Product_List::DEFAULT_SEARCH_DIR && $listingModel->isSearchMode()) ||
+				!$params['dir']
 			)
 		) {
 			unset($params['dir']);
@@ -76,6 +79,22 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		if(isset($params['label'])) {
 			unset($params['label']);
+		}
+
+		if(isset($params['page'])) {
+			unset($params['page']);
+		}
+
+		if(isset($params['_'])) {
+			unset($params['_']);
+		}
+
+		if(isset($params['rows'])) {
+			unset($params['rows']);
+		}
+
+		if(isset($params['start'])) {
+			unset($params['start']);
 		}
 
 		if($listingModel->isCategoryMode()) {
@@ -115,4 +134,50 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getListModel() {
 		return Mage::getSingleton('zolagosolrsearch/catalog_product_list');
 	}
+
+	public function getGhUrlRewriteCsvColumns() {
+		return array(
+			'store_id',
+			'category_id',
+			'title',
+			'meta_description',
+			'meta_keywords',
+			'category_name',
+			'text_field_category',
+			'text_field_filter',
+			'listing_title',
+			'url'
+		);
+	}
+
+	const GH_URL_REWRITE_HASH_ID_COLUMN = 'hash_id';
+	const GH_URL_REWRITE_FILTERS_COLUMN = 'filters';
+
+    public function getCategoryRewriteData()
+    {
+        $url = $_SERVER["REQUEST_URI"];
+        if(in_array("orbacommon", explode("/", $_SERVER["REQUEST_URI"]))){
+            $url = Mage::registry("category_with_filters");
+        }
+        $url = str_replace(Mage::getBaseUrl() , "",$url);
+
+        $path = strtok(trim($url,"/"), "?");
+
+        $rewrite = Mage::getModel('core/url_rewrite');
+        $collection = $rewrite->getCollection();
+        $collection->addFieldToFilter("is_system", 0);
+        $collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
+        $collection->addFieldToFilter("product_id", array('null' => true));
+        $collection->addFieldToFilter("request_path", array('like' => $path.'%'));
+        $data = $collection->getFirstItem();
+
+        $url_rewrite_id = $data->getData("url_rewrite_id");
+
+        $ghUrlRewriteModel = Mage::getModel('ghrewrite/url');
+        $rewriteData = $ghUrlRewriteModel->load($url_rewrite_id, "url_rewrite_id")->getData();
+
+        return $rewriteData;
+    }
+
+	const GH_URL_REWRITE_REDIRECTION_SUFFIX = '_redirect';
 }

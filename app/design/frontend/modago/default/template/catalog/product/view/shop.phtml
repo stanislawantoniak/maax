@@ -30,6 +30,17 @@ if($_product->getTypeId() == 'configurable') { //fix for simple products
 }
 $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 ?>
+
+
+<?php
+
+$productName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+
+//$vendor = Mage::helper('udropship')->getVendor($vendor_id);
+//$vendorName = $vendor->getData("vendor_name");
+//$vendorUrl = Mage::helper("umicrosite")->getVendorUrl($vendor);
+//$productName = str_replace($vendorName, "<a itemprop='brand' href='".$vendorUrl."'>".$vendorName."</a>",$productName);
+?>
 <div id="product-shop" class="col-lg-8 col-md-12 col-sm-12 clearfix" style="overflow-x:visible;">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php echo $this->getBlockHtml('formkey') ?>
@@ -38,19 +49,27 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
             <input type="hidden" name="related_product" id="related-products-field" value="" />
         </div>
 
-        <div class="product-name"><h1 itemprop="name"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1></div>
+        <div class="product-name"><h1 itemprop="name"><?php echo $productName; ?></h1></div>
+        <meta itemprop="sku" content="<?php echo $_product->getSku() ?>" />
         <p class="short-description hidden-xs">
             <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
         </p>
 
         <?php if ($_product->getCanShowPrice() !== false): ?>
-            <?php $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode(); ?>
+            <?php
+            $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+            $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();;
+
+            ?>
             <div class="price-box-bundle">
                 <div class="price-box" >
-                    <h3 itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                        <meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>" />
+                    <p class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?>
+                            <meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>" />
+                        <?php endif; ?>
+
                         <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>" />
-                        <meta itemprop="mpn" content="<?php echo $_product->getSkuv(); ?>"/>
+                        <meta itemprop="mpn" content="<?php echo $_product->getSku(); ?>"/>
 
                         <?php if ($isSalable): ?>
                             <meta itemprop="availability" content="http://schema.org/InStock"/>
@@ -58,14 +77,10 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                             <meta itemprop="availability" content="http://schema.org/OutOfStock"/>
                         <?php endif; ?>
 
-                        <?php if($this->getProductFlagLabel() == "new"): ?>
-                            <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-                        <?php endif; ?>
-                    </h3>
-                    <p class="price">
+                        <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
                         <span class="price-label"><?php echo $this->__("price"); ?>:</span>
                         <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
-                        <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getFinalPrice(), true, false)); ?><?php endif; ?></span>
+                        <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><span itemprop="price"><?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?></span> <?php echo $currencySymbol; ?><?php endif; ?></span>
                     </p>
                 </div>
                 <ul>
@@ -73,6 +88,50 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
                     <li><?php echo $this->getStoreReturnHeadline(); ?></li>
                 </ul>
             </div>
+        <?php endif; ?>
+        <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+
+            <!--    Meta tags-->
+            <?php
+            $childrenData = array();
+            $childProducts = Mage::getModel('catalog/product_type_configurable')
+                ->getUsedProducts(null, $_product);
+            foreach ($childProducts as $child) {
+                $childrenData[$child->getId()] = $child->getSku();
+            }
+
+            /* @var $productViewTypeConfigurableBlock Zolago_Catalog_Block_Product_View_Type_Configurable  */
+            $productViewTypeConfigurableBlock = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable');
+            $config = $productViewTypeConfigurableBlock->getConfig();
+            $basePrice = $config['basePrice'];
+            if (isset($config['attributes']) & !empty($config['attributes'])):
+                $attributes = $config['attributes'];
+                foreach ($attributes as $attributeId => $attributeData):
+                    if ($attributeData['code'] == "size" && (isset($attributeData['options']) & !empty($attributeData['options']))):
+                        $options = $attributeData['options'];
+                        foreach ($options as $option):
+                            ?>
+                            <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                <meta itemprop="price" content="<?php echo round(($_product->getFinalPrice() + $option['price']), 2); ?>"/>
+                                <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
+
+                                <meta itemprop="mpn" content="<?php echo $childrenData[$option['products'][0]]; ?>"/>
+
+                                <?php if ($option['is_salable']): ?>
+                                    <meta itemprop="availability" content="http://schema.org/InStock"/>
+                                <?php else: ?>
+                                    <meta itemprop="availability" content="http://schema.org/OutOfStock"/>
+                                <?php endif; ?>
+
+                                <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
+                            </span>
+                        <?php
+                        endforeach;
+                    endif;
+                endforeach;
+            endif;
+            ?>
+            <!--    Meta tags-->
         <?php endif; ?>
 <!--        catalog.product.related-->
         <?php echo $this->getChildHtml('catalog.product.related'); ?>
@@ -127,49 +186,8 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 <?php /* configurable price/stock data */?>
 <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 
-    <!--    Meta tags-->
-    <?php
-    $childrenData = array();
-    $childProducts = Mage::getModel('catalog/product_type_configurable')
-        ->getUsedProducts(null, $_product);
-    foreach ($childProducts as $child) {
-        $childrenData[$child->getId()] = $child->getSkuv();
-    }
-
-    /* @var $productViewTypeConfigurableBlock Zolago_Catalog_Block_Product_View_Type_Configurable  */
-    $productViewTypeConfigurableBlock = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable');
-    $config = $productViewTypeConfigurableBlock->getConfig();
-    $basePrice = $config['basePrice'];
-    if (isset($config['attributes']) & !empty($config['attributes'])):
-        $attributes = $config['attributes'];
-        foreach ($attributes as $attributeId => $attributeData):
-            if ($attributeData['code'] == "size" && (isset($attributeData['options']) & !empty($attributeData['options']))):
-                $options = $attributeData['options'];
-                foreach ($options as $option):
-                    ?>
-                    <h3 itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                        <meta itemprop="price" content="<?php echo round(($_product->getFinalPrice() + $option['price']), 2); ?>"/>
-                        <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
-
-                        <meta itemprop="mpn" content="<?php echo $childrenData[$option['products'][0]]; ?>"/>
-
-                        <?php if ($option['is_salable']): ?>
-                            <meta itemprop="availability" content="http://schema.org/InStock"/>
-                        <?php else: ?>
-                            <meta itemprop="availability" content="http://schema.org/OutOfStock"/>
-                        <?php endif; ?>
-                    </h3>
-                <?php
-                endforeach;
-            endif;
-        endforeach;
-    endif;
-    ?>
-    <!--    Meta tags-->
-
 <script type="text/javascript">
     var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
-    console.log(jsonConfig);
     var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
 
     jsonConfig.useSizeboxList = useSizeboxList;

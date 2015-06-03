@@ -46,6 +46,7 @@
                 <rewrite>
                     <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
                     <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
+                    <email_info>Zolago_Common_Model_Core_Email_Info</email_info>
                 </rewrite>
             </core>
         </models>
