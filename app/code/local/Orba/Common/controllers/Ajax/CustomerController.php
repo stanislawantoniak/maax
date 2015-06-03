@@ -33,8 +33,17 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			!Mage::getSingleton('customer/session')->isLoggedIn();
 		
 		//$profiler->log("Persistent");
-		
-		$searchContext = Mage::helper('zolagosolrsearch')->getContextSelectorArray(
+	    //set registry to correctly identify current context
+	    $ajaxRefererUrlKey = 'ajax_referer_url';
+	    if(Mage::registry($ajaxRefererUrlKey)) {
+		    Mage::unregister($ajaxRefererUrlKey);
+	    }
+	    Mage::register($ajaxRefererUrlKey,$this->_getRefererUrl());
+
+
+	    /** @var Zolago_Solrsearch_Helper_Data $searchHelper */
+		$searchHelper = Mage::helper('zolagosolrsearch');
+		$searchContext = $searchHelper->getContextSelectorArray(
 				$this->getRequest()->getParams()
 		);
 		//$profiler->log("Context");
