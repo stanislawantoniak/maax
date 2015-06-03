@@ -30,7 +30,8 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
             unset($queryData['fq']);
             $query = http_build_query($queryData);
             $url = rtrim(Mage::getUrl($url),"/");
-	        if($query) {
+	        $url = str_replace('/?___SID=U','?___SID=U',$url);
+            if($query && !$forceNoQuery) {
 		        $url .= '?' . $query;
 	        }
         }
