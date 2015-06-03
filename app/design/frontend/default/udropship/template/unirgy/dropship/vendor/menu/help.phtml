@@ -23,7 +23,7 @@
         },
 
         initButtons: function () {
-            this.getBtn().click(function () {
+            this.getBtns().click(function () {
                 jQuery('.toggle-sidebar').click();
                 if (!parseInt(help.getWrapper().css('width'))) {
                     var sng = "+"; // Show
@@ -40,8 +40,8 @@
             return jQuery('#sidebar-help-wrapper');
         },
 
-        getBtn: function () {
-            return jQuery('.help-btn');
+        getBtns: function () {
+            return jQuery('.help-btn, #close-help');
         }
 
     };
