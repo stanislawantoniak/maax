@@ -399,30 +399,22 @@ h5,.h5 {
 }
 h2, h4, h5 {
 	&.title_section {
-	  padding:0px;
+	  padding: 0 10px 0 25px;
 	  position:relative;
 	  display:block;
 	  height:18px;
 	  overflow:hidden;
-	  padding-left:35px;
 	  font-size: 18px;
 	  font-family:$fontRegular;
 	  line-height: 18px;
 	  text-transform: uppercase;
-
-	  margin-left:0;
-	  margin-right:0;
-	  margin-bottom: 8px;
-	  margin-top: 0px;
+	  margin: 0 0 8px;
 	  text-align:left;
 	  @media (max-width: $screen-xs-max) {
 		font-size: 14px;
 		font-weight: normal;
 		 font-family: $fontRegular;
 	  }
-		@media(max-width: 360px) {
-			margin-left: -5px;
-		}
 	  span {
 	    position:absolute;
 	    right:12px;
@@ -441,6 +433,14 @@ h2, h4, h5 {
 			  left: 5px;
 		  }
 	  }
+	}
+}
+div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
+	height: auto;
+	&:before {
+		@media(max-width: 360px) {
+			left: 0;
+		}
 	}
 }
 /* PARAGRAF COLUMN */
@@ -1007,6 +1007,20 @@ form {
 	background:$allMap;
 	@include sprite($allMap, view_lupa);	
 	@include sprite-dimensions($allMap, view_lupa);
+}
+
+.view_lupa_plus {
+  @include inline-block;
+  background:$allMap;
+  @include sprite($allMap, view_lupa_plus);
+  @include sprite-dimensions($allMap, view_lupa_plus);
+}
+
+.view_lupa_minus {
+  @include inline-block;
+  background:$allMap;
+  @include sprite($allMap, view_lupa_minus);
+  @include sprite-dimensions($allMap, view_lupa_minus);
 }
 
 
