@@ -30,16 +30,18 @@ $_images = $this->getGalleryImages();
         <div id="productGalleryBigMedia">
             <?php $i = 0; ?>
             <?php foreach ($_images as $k => $_image): ?>
-            <div class="item">
-                <div>
-                    <a href="#" data-flags="<?php echo $_zolagoCatalogBlock->getProductFlagLabel(); ?>" onclick="return false;">
-                        <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(319); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" <?php if($i == 0): ?> itemprop="image" <?php endif; ?>
-                             data-ratio="<?php echo number_format((float)($_dimensions[$k][1] / $_dimensions[$k][0]), 4, '.', ''); ?>" />
-                        <span class="view_lupa view_lupa_plus visible-md"></span>
-                    </a>
-                </div>
-            </div>
-            <?php $i++; ?>
+                <?php if (isset($_dimensions[$k]) && is_array($_dimensions[$k]) && isset($_dimensions[$k][0], $_dimensions[$k][1])): ?>
+                    <div class="item">
+                        <div>
+                            <a href="#" data-flags="<?php echo $_zolagoCatalogBlock->getProductFlagLabel(); ?>" onclick="return false;">
+                                <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(319); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" <?php if($i == 0): ?> itemprop="image" <?php endif; ?>
+                                     data-ratio="<?php echo number_format((float)($_dimensions[$k][1] / $_dimensions[$k][0]), 4, '.', ''); ?>" />
+                                <span class="view_lupa view_lupa_plus"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <?php $i++; ?>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
         <div class="followUs hidden-xs">
