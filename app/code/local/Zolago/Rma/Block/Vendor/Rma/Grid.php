@@ -12,16 +12,23 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
     }
 	
-	protected function _prepareCollection(){
-        $collection = Mage::getResourceModel('zolagorma/rma_collection');
-        /* @var $collection Zolago_Rma_Model_Resource_Rma_Collection */
+	protected function _getFilterVendors() {
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		/* @var $vendor Zolago_Dropship_Model_Vendor */
 		$vendorsIds = $vendor->getChildVendorIds();
 		$vendorsIds[] = $vendor->getId();
-		
-		$collection->addFieldToFilter("udropship_vendor", 
-			array("in"=>  array_unique($vendorsIds)));
+		$collection = Mage::getModel('udropship/vendor')->getCollection()
+		    -> addFieldToFilter('vendor_id',array('in',$vendorsIds),'vendor_name');
+        $array = array();
+        foreach ($collection as $item) {
+            $array[$item['vendor_id']] = $item['vendor_name'];
+        }
+        return $array;
+		    
+	}
+	protected function _prepareCollection(){
+        $collection = Mage::getResourceModel('zolagorma/rma_collection');
+        /* @var $collection Zolago_Rma_Model_Resource_Rma_Collection */
 		
 		$collection->addCustomerNames();
 		$collection->addItemsData();
@@ -63,7 +70,7 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("udropship_vendor", array(
 			"type"		=>	"options",
-			"options"	=>  Mage::getSingleton('udropship/source')->setPath('vendors')->toOptionHash(),
+			"options"	=>  $this->_getFilterVendors(),
 			"align"		=>  "right",
 			"index"		=>	"udropship_vendor",
 			"class"		=>  "form-controll",
