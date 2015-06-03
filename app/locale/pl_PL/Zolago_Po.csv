@@ -279,3 +279,5 @@
 "No reservation in vendor's system","Brak rezerwacji w systemie sprzedawcy"
 "Products reservations in vendor's system could not be made","Brak rezerwacji do zamówienia w systemie sprzedawcy"
 "price is incorrect","cena jest nieprawidłowa"
+"You are not allowed to operate this order","Nie masz uprawnień do obsługi tego zamówienia"
+"Failed to get waybill","Nie udało się pobrać listu przewozowego"
