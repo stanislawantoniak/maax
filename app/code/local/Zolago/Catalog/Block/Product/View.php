@@ -1,6 +1,240 @@
 <?php
 class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 {
+
+    /**
+     * Add meta information from product to head block
+     *
+     * @return Mage_Catalog_Block_Product_View
+     */
+    protected function _prepareLayout()
+    {
+        $this->getLayout()->createBlock('catalog/breadcrumbs');
+        $headBlock = $this->getLayout()->getBlock('head');
+        if ($headBlock) {
+            $product = $this->getProduct();
+            $seo = array();
+            $title = $product->getMetaTitle();
+
+            if ($title) {
+                $headBlock->setTitle($title);
+                $seo["dynamic_meta_title"] = $title;
+            }
+            $keyword = $product->getMetaKeyword();
+            $currentCategory = Mage::registry('current_category');
+            if ($keyword) {
+                $headBlock->setKeywords($keyword);
+                $seo["dynamic_meta_keywords"] = $keyword;
+            }
+
+            $description = $product->getMetaDescription();
+            if ($description) {
+                $headBlock->setDescription( ($description) );
+                $seo["dynamic_meta_description"] = $description;
+            }
+
+            if ($this->helper('catalog/product')->canUseCanonicalTag()) {
+                $params = array('_ignore_category' => true);
+                $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
+            }
+
+            if(isset($seo["dynamic_meta_title"]) && isset($seo["dynamic_meta_keywords"]) && isset($seo["dynamic_meta_description"])){
+                return;
+            }
+            //Dynamic seo fields
+            $seoTexts = $this->getProductDynamicSeo($product, $seo);
+
+            $dynamic_meta_title = isset($seoTexts["dynamic_meta_title"]) ? $seoTexts["dynamic_meta_title"] : "";
+            $dynamic_meta_keywords = isset($seoTexts["dynamic_meta_keywords"]) ? $seoTexts["dynamic_meta_keywords"] : "";
+            $dynamic_meta_description = isset($seoTexts["dynamic_meta_description"]) ? $seoTexts["dynamic_meta_description"] : "";
+
+            $dynamic_meta_title = $this->getAttributesSubstitutions($product, $dynamic_meta_title);
+            if(!empty($dynamic_meta_title)){
+                $headBlock->setTitle($dynamic_meta_title);
+            }
+            $dynamic_meta_keywords = $this->getAttributesSubstitutions($product, $dynamic_meta_keywords);
+            if (!empty($dynamic_meta_keywords)) {
+                $headBlock->setKeywords($dynamic_meta_keywords);
+            } elseif ($currentCategory) {
+                $headBlock->setKeywords($product->getName());
+            }
+            $dynamic_meta_description = $this->getAttributesSubstitutions($product, $dynamic_meta_description);
+            if(!empty($dynamic_meta_description)){
+                $headBlock->setDescription($dynamic_meta_description);
+            } else {
+                $headBlock->setDescription(Mage::helper('core/string')->substr($product->getDescription(), 0, 255));
+            }
+            //Dynamic seo fields
+        }
+    }
+
+    public function getProductDynamicSeo($product, $seo){
+
+        if (!$product instanceof Zolago_Catalog_Model_Product) {
+            return $seo;
+        }
+        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $catIds = $product->getCategoryIds();
+
+
+        $store = Mage::app()->getStore()->getId();
+        $collection = Mage::getModel('catalog/category')->setStoreId($store)
+            ->getCollection();
+        /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+        $collection->addAttributeToSelect("basic_category");
+        //$collection->addAttributeToSelect("name");
+        $collection->addAttributeToSelect("dynamic_meta_title", true);
+        $collection->addAttributeToSelect("dynamic_meta_keywords", true);
+        $collection->addAttributeToSelect("dynamic_meta_description", true);
+        $collection->setStoreId($store);
+        $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
+        $collection->addAttributeToFilter("is_active", 1);
+//        $collection->addAttributeToFilter("basic_category", 1);
+        $collection->addPathFilter("/$rootId/");
+        $collection->setOrder("basic_category", "DESC");
+        $collection->setOrder("level", "DESC");
+        $collection->setOrder("position", "ASC");
+        //$collection->addAttributeToSelect("*");
+        //Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
+        $cat = $collection->getFirstItem();
+        //Mage::log($cat->getData(), null, "dcat1.log");
+
+
+        if($cat->getData("basic_category") == 1){
+            $dynamic_meta_title = $cat->getData("dynamic_meta_title");
+            $dynamic_meta_keywords = $cat->getData("dynamic_meta_keywords");
+            $dynamic_meta_description = $cat->getData("dynamic_meta_description");
+            if (!empty($dynamic_meta_title) && !isset($seo["dynamic_meta_title"])) {
+                $seo["dynamic_meta_title"] = $dynamic_meta_title;
+            }
+            if (!empty($dynamic_meta_keywords) && !isset($seo["dynamic_meta_keywords"])) {
+                $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
+            }
+            if (!empty($dynamic_meta_description) && !isset($seo["dynamic_meta_description"])) {
+                $seo["dynamic_meta_description"] = $dynamic_meta_description;
+            }
+
+            if (isset($seo["dynamic_meta_title"])
+                && isset($seo["dynamic_meta_keywords"])
+                && isset($seo["dynamic_meta_description"])
+            ) {
+                return $seo;
+            }
+            //Go up by category tree
+            $seo = $this->getDynamicMetaTagsInParents($seo, $cat);
+        } else {
+            $seo = $this->getDynamicMetaTagsInParents($seo, $cat);
+        }
+        return $seo;
+    }
+
+    public function getDynamicMetaTagsInParents($seo, $category)
+    {
+        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $categoryParentId = $category->getData("parent_id");
+
+
+        if ($categoryParentId == $rootId ||
+            (isset($seo["dynamic_meta_title"])
+                && isset($seo["dynamic_meta_keywords"])
+                && isset($seo["dynamic_meta_description"]))
+        ) {
+
+            return $seo;
+        } else {
+            $categoryParent = Mage::getModel('catalog/category')->load($categoryParentId);
+
+
+            $dynamic_meta_title = $categoryParent->getData("dynamic_meta_title");
+            if (!isset($seo["dynamic_meta_title"]) && !empty($dynamic_meta_title)) {
+                $seo["dynamic_meta_title"] = $dynamic_meta_title;
+            }
+
+            $dynamic_meta_keywords = $categoryParent->getData("dynamic_meta_keywords");
+            if (!isset($seo["dynamic_meta_keywords"]) && !empty($dynamic_meta_keywords)) {
+                $seo["dynamic_meta_keywords"] = $dynamic_meta_keywords;
+            }
+
+            $dynamic_meta_description = $categoryParent->getData("dynamic_meta_description");
+            if (!isset($seo["dynamic_meta_description"]) && !empty($dynamic_meta_description)) {
+                $seo["dynamic_meta_description"] = $dynamic_meta_description;
+            }
+
+
+            return $this->getDynamicMetaTagsInParents($seo, $categoryParent);
+        }
+    }
+    /**
+     * @param $product Zolago_Catalog_Model_Product
+     * @param $seoText
+     * @return string
+     */
+    public function getAttributesSubstitutions($product, $seoText){
+        $result = "";
+        if(!$product instanceof Zolago_Catalog_Model_Product){
+            return $result;
+        }
+        if(empty($seoText)){
+            return $result;
+        }
+        preg_match_all('#\$([a-zA-Z0-9_]+)#', $seoText, $matches, PREG_SET_ORDER);
+
+        $attributesFoundInLine = array();
+        if(!empty($matches)){
+            foreach($matches as $match){
+                $attributesFoundInLine[$match[1]] = $match[1];
+            }
+        }
+
+        if(empty($attributesFoundInLine)){
+            return $seoText;
+        }
+
+        $labels = array();
+
+        foreach ($attributesFoundInLine as $attributeCode) {
+            $label = "";
+
+            $attribute = $product->getResource()
+                ->getAttribute($attributeCode);
+            if (!$attribute) {
+                $labels[$attributeCode] = $label;
+                continue;
+            }
+            $frontend_input = $attribute->getData("frontend_input");
+
+            if ($frontend_input == "select") {
+                $label = $product
+                    ->setData($attributeCode, $product->getData($attributeCode))
+                    ->getAttributeText($attributeCode);
+            }
+            if ($frontend_input == "multiselect") {
+                $label = $product->getResource()
+                    ->getAttribute($attributeCode)
+                    ->getFrontend()
+                    ->getValue($product);
+            }
+            if ($frontend_input == "text") {
+                $label = $product->getResource()
+                    ->getAttribute($attributeCode)
+                    ->getFrontend()->getValue($product);
+            }
+
+            $labels[$attributeCode] = $label;
+            unset($label);
+            unset($attributeCode);
+            unset($attribute);
+            unset($frontend_input);
+        }
+
+        $subst = array();
+        foreach($labels as $code => $strItem){
+            $subst['{$'.$code.'}'] = $strItem;
+        }
+
+        return strtr($seoText, $subst);
+    }
+
 	/**
 	 * @return bool
 	 */
@@ -82,7 +316,9 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
      */
     public function getProductFlagLabel()
     {
-        return Mage::helper("zolagocatalog/product")->getProductBestFlag($this->getProduct());
+	    /** @var Zolago_catalog_Helper_Product $helper */
+	    $helper = Mage::helper("zolagocatalog/product");
+        return $helper->getProductBestFlag($this->getProduct());
     }
 	
 	/**

@@ -134,24 +134,6 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
             'filter_condition_callback' => array($this, 'filterByEmailIfValid'),
 		));
 		
-		$this->addColumn("visibility", array(
-			"type"		=>	"options",
-			"options"	=> array(
-				0 => $this->__("Private"),
-				1 => $this->__("Public")
-			),
-			"index"		=>	"visibility",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Visibility"),
-		));
-		
-		
-		$this->addColumn("order_increment_id", array(
-			"type"		=>	"text",
-			"index"		=>	"order_increment_id",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Order"),
-		));
 		
 		$this->addColumn("is_replied", array(
 			"type"		=>	"options",

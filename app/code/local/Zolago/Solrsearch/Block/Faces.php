@@ -1040,7 +1040,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     {
         $queryData = $this->_parseQueryData($params, $paramss);
         if ($rawUrl = $this->getRedirectUrl($queryData)) {
-            $url = $rawUrl;
+            $url = rtrim($rawUrl,'/');
         } else {
             $url =  Mage::getUrl($this->getUrlRoute(), $queryData);
         }

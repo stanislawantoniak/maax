@@ -76,4 +76,10 @@ class Mage_Catalog_Block_Product_View_Media extends Mage_Catalog_Block_Product_V
     {
         $this->_isGalleryDisabled = true;
     }
+
+	public function getProductFlag() {
+		/** @var Zolago_catalog_Helper_Product $helper */
+		$helper = Mage::helper("zolagocatalog/product");
+		return $helper->getProductBestFlag($this->getProduct());
+	}
 }
