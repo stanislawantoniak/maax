@@ -1,6 +1,46 @@
 <?php
 class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 {
+	protected function _prepareLayout()
+	{
+		$this->getLayout()->createBlock('catalog/breadcrumbs');
+		$headBlock = $this->getLayout()->getBlock('head');
+		if ($headBlock) {
+			$product = $this->getProduct();
+			$title = $product->getMetaTitle();
+			if ($title) {
+				$headBlock->setTitle($title);
+			}
+			$keyword = $product->getMetaKeyword();
+			$currentCategory = Mage::registry('current_category');
+			if ($keyword) {
+				$headBlock->setKeywords($keyword);
+			} elseif ($currentCategory) {
+				$headBlock->setKeywords($product->getName());
+			}
+			$description = $product->getMetaDescription();
+			if ($description) {
+				$headBlock->setDescription( ($description) );
+			} else {
+				$headBlock->setDescription(Mage::helper('core/string')->substr($product->getDescription(), 0, 255));
+			}
+			if ($this->helper('catalog/product')->canUseCanonicalTag()) {
+				$params = array('_ignore_category' => true, '_no_vendor'=> true);
+				$headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
+			}
+		}
+
+		/* @var $block Mage_Catalog_Block_Product_Price_Template */
+		$block = $this->getLayout()->getBlock('catalog_product_price_template');
+		if ($block) {
+			foreach ($block->getPriceBlockTypes() as $type => $priceBlock) {
+				$this->addPriceBlockType($type, $priceBlock['block'], $priceBlock['template']);
+			}
+		}
+
+		return $this;
+	}
+
 	/**
 	 * @return bool
 	 */
