@@ -4,6 +4,13 @@
 ?>
 <div id="sidebar-help-wrapper" style="z-index: 11111;width: 0px;height: 100%;position: fixed;right: 0;background-color: #f9f9f9;" data-keys="<?php echo $this->getKeysToString() ?>">
     <div id="sidebar-help" style="z-index: 11112;width: 500px;border-left: 4px solid #d1d1d1; height: 100%; padding: 10px;">
+        <div class="sidebar-help-header" style="border-bottom: 1px solid #d1d1d1;padding-bottom: 10px;">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <button class="btn btn-primary" id="close-help">Zamknij pomoc</button>
+                </div>
+            </div>
+        </div>
         <?php echo $this->getCmsBlockHelp() ?>
     </div>
 </div>
