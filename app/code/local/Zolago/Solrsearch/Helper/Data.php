@@ -139,7 +139,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 			$_product[0] = $product->getId();
 			$_product[1] = $product->getName();
-			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
+//			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
+            $_product[2] = $product->getCurrentUrl();
 			$_product[3] = $product->getStrikeoutPrice();
 			$_product[4] = $product->getFinalPrice();
 			$_product[5] = $product->getWishlistCount();
@@ -373,8 +374,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		/** @var $this Zolago_Solrsearch_Helper_Data */
 		/** @var Zolago_Dropship_Model_Vendor $_vendor */
 		$array = array();
-		
-		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+		/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
+		$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
+		$_vendor = $micrositeHelper->getCurrentVendor();
+
 		$currentCategory = $this->getCurrentCategory();
 		
 		// Setup varnish context
