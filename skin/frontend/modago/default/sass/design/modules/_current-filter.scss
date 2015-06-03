@@ -120,7 +120,7 @@
   #category-header-right {
     position: relative;
 
-    @media (min-width: $screen-sm-min) {
+    @media (min-width: $screen-smmd-min) {
       margin-left: 215px;
       .right-wrapper:before {
         content: '';
