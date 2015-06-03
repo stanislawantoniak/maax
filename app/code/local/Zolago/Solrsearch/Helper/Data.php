@@ -380,7 +380,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		$_vendor = $micrositeHelper->getCurrentVendor();
 
 		$currentCategory = $this->getCurrentCategory();
-		
+
 		// Setup varnish context
 		if(!$currentCategory && isset($contextData['category_id'])){
 			$categoryCandidate = Mage::getModel("catalog/category")->
@@ -401,7 +401,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		if ($_vendor && $_vendor->getId()) {
 			/** @var Zolago_DropshipMicrosite_Helper_Data $helperZDM */
 			$helperZDM = Mage::helper("zolagodropshipmicrosite");
-			$vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject()->getId();
+			$vendorRootCategoryId = $helperZDM->getVendorRootCategoryObject($_vendor)->getId();
 
 			$array['select_options'][] = array(
 				'value' => "{$vendorRootCategoryId}",
