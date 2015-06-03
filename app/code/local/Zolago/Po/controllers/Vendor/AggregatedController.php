@@ -29,7 +29,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$session = $this->_getSession();
 			/* @var $session Zolago_Dropship_Model_Session */
 			if(!$aggregated->isAllowed($this->_getVendor(), $session->isOperatorMode() ? $this->_getOperator() : null)){
-				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("It's not your object"));
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You are not allowed to operate this order"));
 			}
 			Mage::register('current_aggregated', $aggregated);
 		}

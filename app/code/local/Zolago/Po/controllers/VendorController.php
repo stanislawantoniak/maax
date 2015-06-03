@@ -125,7 +125,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $poId = $this->getRequest()->getParam("id");
             $po = Mage::getModel("udpo/po")->load($poId);
             if(!$this->_vaildPo($po)) {
-                throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("It's not your object"));
+                throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You are not allowed to operate this order"));
             }
             Mage::register("current_po", $po);
         }
