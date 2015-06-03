@@ -2,8 +2,8 @@
 /** @var Zolago_Dropship_Block_Vendor_Menu_Help $this */
 
 ?>
-<div id="sidebar-help-wrapper" style="width: 0px;height: 100%;position: fixed;right: 0;background-color: #f9f9f9;">
-    <div id="sidebar-help" style="width: 500px;border-left: 4px solid #d1d1d1; height: 100%; padding: 10px;">
+<div id="sidebar-help-wrapper" style="z-index: 11111;width: 0px;height: 100%;position: fixed;right: 0;background-color: #f9f9f9;" data-keys="<?php echo $this->getKeysToString() ?>">
+    <div id="sidebar-help" style="z-index: 11112;width: 500px;border-left: 4px solid #d1d1d1; height: 100%; padding: 10px;">
         <?php echo $this->getCmsBlockHelp() ?>
     </div>
 </div>

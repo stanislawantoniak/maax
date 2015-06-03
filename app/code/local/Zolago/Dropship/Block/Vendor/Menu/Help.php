@@ -3,13 +3,18 @@
 class Zolago_Dropship_Block_Vendor_Menu_Help extends Mage_Core_Block_Template
 {
 
-    public function getCmsBlockHelp() {
-        $lang       = $this->localeCodeToShortString(Mage::app()->getLocale()->getLocaleCode());
-        $module     = Mage::app()->getFrontController()->getRequest()->getModuleName();
-        $controller = Mage::app()->getFrontController()->getRequest()->getControllerName();
-        $action     = Mage::app()->getFrontController()->getRequest()->getActionName();
+    const PREFIX = 'udropship-help';
 
-        return '[dev]' . $module . '-' . $controller . '-' . $action . '-' . $lang . '-' . 'key'; //TODO load cms block + installers
+    public function getCmsBlockHelp() {
+        $keys = $this->getKeys();
+        $html = '';
+        foreach ($keys as $key) {
+            $_html = $this->getLayout()->createBlock('cms/block')->setBlockId($key)->toHtml();
+            if (!empty($_html)) {
+                $html = $_html;
+            }
+        }
+        return $html;
     }
 
     private function localeCodeToShortString($code) {
@@ -19,4 +24,29 @@ class Zolago_Dropship_Block_Vendor_Menu_Help extends Mage_Core_Block_Template
         );
         return isset($_localeCodeToShortString[$code]) ? $_localeCodeToShortString[$code] : null;
     }
+
+    public function getKeys() {
+        $lang       = $this->localeCodeToShortString(Mage::app()->getLocale()->getLocaleCode());
+        $module     = Mage::app()->getFrontController()->getRequest()->getModuleName();
+        $controller = Mage::app()->getFrontController()->getRequest()->getControllerName();
+        $action     = Mage::app()->getFrontController()->getRequest()->getActionName();
+
+        $arr        = array();
+        $arr[]      = $this::PREFIX.'-'.$lang; // Default
+        $arr[]      = $this::PREFIX.'-'.$lang.'-'.$module;
+        $arr[]      = $this::PREFIX.'-'.$lang.'-'.$module.'-'.$controller;
+        $arr[]      = $this::PREFIX.'-'.$lang.'-'.$module.'-'.$controller.'-'.$action;
+
+        return array_map(array($this, 'clearKeys'), $arr);
+    }
+
+    public function getKeysToString() {
+        $keys = $this->getKeys();
+        return implode(' ', $keys);
+    }
+
+    public function clearKeys($value) {
+        return str_replace('_','-', $value);
+    }
+
 }
