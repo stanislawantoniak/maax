@@ -11,7 +11,7 @@
 		<ul class="nav nav-tabs" style="margin-top:6px" id="ghapiTabs">
 			<li class="active"><a data-toggle="tab" href="#tab_1_1"><?php echo $_helper->__("Settings");?></a></li>
 			<li><a data-toggle="tab" href="#tab_1_2"><?php echo $_helper->__('Test API');?></a></li>
-			<li><a data-toggle="tab" href="#tab_1_3"><?php echo $_helper->__('Help');?></a></li>
+
 		</ul>
 	    <div class="tab-content">
 			<div id="tab_1_1" class="tab-pane active">
@@ -24,11 +24,7 @@
 					<?php echo $this->getChildHtml('ghapi_dropship_soap');?>				
 				</div>
 			</div>
-            <div id="tab_1_3" class="tab-pane">
-                <div class="container" style="margin-top:15px;paddign: 10px">
-                    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('ghapi-help')->toHtml();?>
-                </div>
-            </div>
+
 		</div>
 	</div>
 </div>
