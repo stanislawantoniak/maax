@@ -95,14 +95,10 @@
                         <model>zolagopo/observer</model>
                         <method>addAllocationComment</method>
                     </zolagopo>
-                </observers>
-            </zolagopayment_allocate_overpayment_save_after>
-            <zolagopayment_allocate_overpayment_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessagePaymentDataChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopayment_allocate_overpayment_save_after>
             <zolagopayment_create_overpayment_save_after>
@@ -111,14 +107,10 @@
                         <class>zolagopo/observer</class>
                         <method>addOverpayComment</method>
                     </zolagopo>
-                </observers>
-            </zolagopayment_create_overpayment_save_after>
-            <zolagopayment_create_overpayment_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <class>zolagopo/observer</class>
                         <method>ghapiAddMessagePaymentDataChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopayment_create_overpayment_save_after>
 
@@ -153,14 +145,10 @@
 						<model>zolagopo/observer</model>
 						<method>poShippingCost</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_shipping_cost>
-            <zolagopo_po_shipping_cost>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageItemsChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_shipping_cost>
 			<zolagopo_po_item_remove>
@@ -221,14 +209,10 @@
 						<model>zolagopo/observer</model>
 						<method>poAddressChange</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_address_change>
-            <zolagopo_po_address_change>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageDeliveryOrInvoice</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_change>
 			<zolagopo_po_compose>
