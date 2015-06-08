@@ -506,7 +506,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             }
         }
 
-        Mage::log($categoriesExtend);
 		$this->_categories = $categoriesExtend;
 		return $this;
 	}
