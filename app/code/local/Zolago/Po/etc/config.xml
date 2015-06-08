@@ -193,14 +193,10 @@
 						<model>zolagopo/observer</model>
 						<method>poAddressRestore</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_address_restore>
-            <zolagopo_po_address_restore>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageDeliveryOrInvoice</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_restore>
 			<zolagopo_po_address_change>
