@@ -34,7 +34,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             }
 
             if ($this->helper('catalog/product')->canUseCanonicalTag()) {
-                $params = array('_ignore_category' => true);
+                $params = array('_ignore_category' => true, '_no_vendor'=> true);
                 $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
             }
 
