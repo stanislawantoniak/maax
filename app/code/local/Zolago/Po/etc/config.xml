@@ -185,15 +185,11 @@
 						<model>zolagopo/observer</model>
 						<method>poItemEdit</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_item_edit>
-            <zolagopo_po_item_edit>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageItemsChanged</method>
-                    </zolagopo>
-                </observers>
+                    </zolagopo_ghapi>
+				</observers>
             </zolagopo_po_item_edit>
 			<zolagopo_po_item_add>
 				<observers>
