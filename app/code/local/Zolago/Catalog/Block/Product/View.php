@@ -134,7 +134,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $categoryParentId = $category->getData("parent_id");
         Mage::log((int)$categoryParentId, null, "metatags.log");
 
-        if ($categoryParentId == $rootId ||
+        if ((int)$categoryParentId == 0 || $categoryParentId == $rootId ||
             (isset($seo["dynamic_meta_title"])
                 && isset($seo["dynamic_meta_keywords"])
                 && isset($seo["dynamic_meta_description"]))
