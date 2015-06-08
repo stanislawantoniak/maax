@@ -454,7 +454,6 @@
 													el.button("loading");
 													$.post(el.attr("href"), function(response){
 														if(response.status){
-															//console.log(response.url);
 															document.location.replace(response.url);
 														}else{
 															noty({
@@ -465,7 +464,7 @@
 														}
 													}).fail(function(){
 														noty({
-															text: Translator.translate("Other error contact admin"),
+															text: Translator.translate("Failed to get waybill"),
 															type: 'error'
 														});
 													}).always(function(){
