@@ -25,7 +25,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDROPSHIP_VENDOR_LOGOUT				= "udropship/vendor/logout";
 	const RES_UDROPSHIP_VENDOR_PASSWORD				= "udropship/vendor/password";
 	const RES_UDROPSHIP_VENDOR_PASSWORD_POST		= "udropship/vendor/passwordPost";
-			
+	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD		= "udropship/vendor/editPassword";
+	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST   = "udropship/vendor_settings/infoPost";
+
 	// Restricted 
 	const RES_UDROPSHIP_VENDOR_PREFERENCES			= "udropship/vendor/preferences";
 	const RES_UDROPSHIP_VENDOR_PREFERENCES_POST		= "udropship/vendor/preferencesPost";
@@ -80,7 +82,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_VENDOR_PASSWORD			=> "Vendor pasword",
 		self::RES_UDROPSHIP_VENDOR_PASSWORD_POST	=> "Vendor password post",
 		self::RES_UDROPSHIP_VENDOR_PREFERENCES		=> "Vendor preferneces",
-		self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST=> "Vendor preferneces post",
+		self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST => "Vendor preferneces post",
+		self::RES_UDROPSHIP_VENDOR_EDIT_PASSWORD    => "Edit Password",
+		self::RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST=> "Edit Password post",
         // PO
 		self::RES_UDPO_VENDOR						=> "Orders",
 		self::RES_UDPO_VENDOR_AGGREGATED			=> "Dispatch refs",
@@ -144,7 +148,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_LOGOUT);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_PASSWORD);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_PASSWORD_POST);
-		
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_EDIT_PASSWORD);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST);
+
 		// Build ACL Rules - Order operator
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_ORDER_OPERATOR, self::RES_UDPO_VENDOR);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_ORDER_OPERATOR, self::RES_UDPO_VENDOR_AGGREGATED);
