@@ -19,6 +19,7 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
         if ($cart->getQuote()->getItemsCount()) {
 
             $items = $cart->getItems();
+	        $cartShouldBeSaved = false;
             foreach ($items as $item) {
                 /** @var Mage_Sales_Model_Quote_Item $item */
                 /** @var Zolago_CatalogInventory_Helper_Data $helperZCI */
@@ -74,6 +75,8 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
 
                     // now we remove item (and all children if exists)
                     $cart->removeItem($item->getItemId());
+	                //if there are any removed items set cart saving to true
+	                $cartShouldBeSaved = true;
                 }
             }
 
@@ -81,12 +84,23 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
             $helper = Mage::helper("zolagocheckout");
             $helper->fixCartShippingRates();
 
-            $cart->save();
+	        if($cartShouldBeSaved) {
+		        $cart->save();
+	        }
             //after save, items with status disabled are removed from card so we need to remove last error message
             $this->_getQuote()->removeMessageByText('error', Mage::helper('cataloginventory')->__('Some of the products are currently out of stock'));
         }
         //end fix
-        parent::indexAction();
+
+
+	    Varien_Profiler::start(__METHOD__ . 'cart_display');
+	    $this
+		    ->loadLayout()
+		    ->_initLayoutMessages('checkout/session')
+		    ->_initLayoutMessages('catalog/session')
+		    ->getLayout()->getBlock('head')->setTitle($this->__('Shopping Cart'));
+	    $this->renderLayout();
+	    Varien_Profiler::stop(__METHOD__ . 'cart_display');
     }
 
     /**
