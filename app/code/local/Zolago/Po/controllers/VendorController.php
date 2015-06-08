@@ -1056,7 +1056,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
             }
-            if(isset($data['restore']) && $data['restore']==1) {
+            /*if(isset($data['restore']) && $data['restore']==1) {
                 if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
                     $po->clearOwnShippingAddress();
                 } else {
@@ -1072,7 +1072,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $session->addSuccess(Mage::helper("zolagopo")->__("Address restored"));
                 $response['content']['reload']=1;
             }
-            elseif(isset($data['add_own']) && $data['add_own']==1) {
+            else*/if(isset($data['add_own']) && $data['add_own']==1) {
                 if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
                     $orignAddress = $po->getOrder()->getShippingAddress();
                     $oldAddress = $po->getShippingAddress();
