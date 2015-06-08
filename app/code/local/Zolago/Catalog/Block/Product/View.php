@@ -129,12 +129,13 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
     }
 
     public function getDynamicMetaTagsInParents($seo, $category)
-    {Mage::log("getDynamicMetaTagsInParents", null, "metatags.log");
+    {
         $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $categoryParentId = $category->getData("parent_id");
-        Mage::log((int)$categoryParentId, null, "metatags.log");
+        //Mage::log((int)$categoryParentId, null, "metatags.log");
 
-        if ((int)$categoryParentId == 0 || $categoryParentId == $rootId ||
+        if ((int)$categoryParentId == 0 ||
+            $categoryParentId == $rootId ||
             (isset($seo["dynamic_meta_title"])
                 && isset($seo["dynamic_meta_keywords"])
                 && isset($seo["dynamic_meta_description"]))
