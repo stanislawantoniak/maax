@@ -28,7 +28,7 @@
             </div>
             <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
             <div class="panel-body" >
-                <form class="form-horizontal" action="#" method="post" id="login-form" role="form" autocomplete="off">
+                <form class="form-horizontal" action="<?php echo $this->getUrl('udropship/vendor') ?>" method="post" id="login-form" role="form" autocomplete="off">
                     <div style="margin-bottom: 25px" class="form-group">
                         <label for="email"><?php echo $this->__('Username / Email') ?> <span class="required">*</span></label>
                         <input name="login[username]"
