@@ -1,10 +1,14 @@
 <?php
+/** @var Mage_Core_Block_Template $this */
+
+/** @var Zolago_Dropship_Helper_Data $hlp */
+$hlp = Mage::helper('zolagodropship');
+
 $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
 $_currentLocale = Mage::app()->getLocale()->getLocaleCode();
 
-$_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
 $_allowedLocale = array(
 	"pl_PL"=>array("symbol"=>$this->__("PL"), "name"=>$this->__("Polish")), 
 	"en_US"=>array("symbol"=>$this->__("EN"), "name"=>$this->__("English"))
@@ -25,7 +29,7 @@ $_allowedLocale = array(
 		<!-- Logo -->
 		<a class="navbar-brand" href="<?php echo $this->getUrl("udropship/vendor/");?>">
 			<img src="<?php echo $this->getSkinUrl('img/bootsrap/logo.png');?>" alt="logo" />
-			<strong><?php echo $this->escapeHtml($_logoHeader);?></strong>
+			<strong>Modago</strong>
 		</a>
 		<!-- /logo -->
 
@@ -84,6 +88,14 @@ $_allowedLocale = array(
 				</ul>
 			</li>
 			<!-- /Locale -->
+
+            <!-- HELP -->
+            <li>
+                <a href="#" class="help-btn" >
+                    <strong><i class="icon-question-sign" style="font-size:16px;position:relative;top:1px"></i> <?php echo $hlp->__('Help');?></strong>
+                </a>
+            </li>
+            <!-- /HELP -->
 		</ul>
         <?php else: ?>
 
