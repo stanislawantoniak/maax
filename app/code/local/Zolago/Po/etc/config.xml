@@ -169,14 +169,10 @@
 						<model>zolagopo/observer</model>
 						<method>poItemRemove</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_item_remove>
-            <zolagopo_po_item_remove>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageItemsChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_item_remove>
 			<zolagopo_po_item_edit>
@@ -197,14 +193,10 @@
 						<model>zolagopo/observer</model>
 						<method>poItemAdd</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_item_add>
-            <zolagopo_po_item_add>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageItemsChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_item_add>
 			<zolagopo_po_address_restore>
