@@ -307,6 +307,33 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         }
         return $final;
     }
+    
+    /**
+     * list of inactive categories
+     * @return array
+     */
+     protected function _getDenyCategories() {
+         $adapter = $this->getReadConnection();
+         $select = $adapter->select();
+		$attributeActive = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_category', 'is_active')->getId();
+         
+  		$select->from(
+			array("category"=>Mage::getSingleton("core/resource")->getTableName("catalog_category_entity_int")),
+			array(
+				"entity_id", 
+//				"cat_index_position" => "category_product.position",
+//				"name"=>new Zend_Db_Expr("IF(store_value_name.value_id>0, store_value_name.value, default_value_name.value)")
+			)
+		);
+		$select->where("category.attribute_id = ?", $attributeActive);
+		$select->where("category.value = 0");
+		$all = $adapter->fetchAll($select);
+		$out = array();
+		foreach ($all as $row) {
+		    $out[$row['entity_id']] = $row['entity_id'];
+		}
+		return $out;
+     }
 	/**
 	 * @param array $allIds
 	 * @param type $storeId
@@ -427,7 +454,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             if (!empty($categoryRelated[$product['category_id']])) {
                 // can be in related
                 $related = $categoryRelated[$product['category_id']];
-                Mage::log($related);
                 foreach ($related as $relatedId => $row) {
                     if (in_array($product['brandshop_id'],$row['vendors']) ||
                         in_array($product['vendor_id'],$row['vendors'])) {
@@ -442,29 +468,24 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 }
             }
         }
+        $denyCategories = $this->_getDenyCategories();
         $idsToLoad = array();
         foreach ($categories as $idx => $value) {
             $ex = explode('/', $value['path']);
-
-            $categories[$idx]['cats'] = $ex; //Saving for easier processing
-
-            // Removing duplicates and removing magento tree root and store root
-            $categories[$idx]['cats'] = array_flip($categories[$idx]['cats']);
-            if(isset($categories[$idx]['cats'][$treeRoot])) unset($categories[$idx]['cats'][$treeRoot]);
-            if(isset($categories[$idx]['cats'][$rootCat]))  unset($categories[$idx]['cats'][$rootCat]);
-            $categories[$idx]['cats'] = array_flip($categories[$idx]['cats']);
-
-            // Collecting ids to load
-            foreach($ex as $item) {
-                $idsToLoad[] = $item;
+            foreach ($ex as $catIdx) {
+                if (in_array($catIdx,$denyCategories) ||
+                    ($catIdx == $treeRoot) ||
+                    ($catIdx == $rootCat)
+                ) {
+                    continue;
+                }
+                $categories[$idx]['cats'][$catIdx] = $catIdx; //Saving for easier processing
+                $idsToLoad[] = $catIdx;
             }
         }
-
+        
         // Removing duplicates and removing magento tree root and store root
-        $idsToLoad = array_flip($idsToLoad);
-        if(isset($idsToLoad[$treeRoot])) unset($idsToLoad[$treeRoot]);
-        if(isset($idsToLoad[$rootCat]))  unset($idsToLoad[$rootCat]);
-        $idsToLoad = array_flip($idsToLoad);
+        $idsToLoad = array_unique($idsToLoad);
 
         // Getting info about categories
         /** @var Zolago_Catalog_Model_Category $modelCC */
@@ -472,7 +493,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         /** @var Mage_Catalog_Model_Resource_Category_Collection $coll */
         $coll = $modelCC->getCollection();
         $coll->addNameToResult()->addIdFilter($idsToLoad);
-
+        // todo
         // Creating array for solr purpose
         $categoriesExtend = array();
         foreach ($categories as $cat) {
