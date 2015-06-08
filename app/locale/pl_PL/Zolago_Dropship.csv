@@ -197,3 +197,5 @@
 "%s address changed (%s)", "Zmiana adresu: %s (%s)"
 "Message send to %s: %s", "Wysłano wiadomość do %s: %s"
 "Changed POS (%s&rarr;%s)", "Zmiana POS (%s&rarr;%s)"
+"Billing", "Faktura"
+"Item removed %s", "Usunięto produkt %s"
