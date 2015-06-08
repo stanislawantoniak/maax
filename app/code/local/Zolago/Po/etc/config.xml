@@ -63,14 +63,10 @@
                         <model>zolagopo/observer</model>
                         <method>updatePoStatusByAllocation</method>
                     </zolagopo>
-                </observers>
-            </zolagopayment_allocation_save_after>
-            <zolagopayment_allocation_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessagePaymentDataChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopayment_allocation_save_after>
 			<zolagopo_po_save_after>
@@ -120,22 +116,14 @@
 						<model>zolagopo/observer</model>
 						<method>poSplit</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_split>
-            <zolagopo_po_split>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_paymentsplit>
                         <model>zolagopo/observer</model>
                         <method>paymentSplit</method>
-                    </zolagopo>
-                </observers>
-            </zolagopo_po_split>
-            <zolagopo_po_split>
-                <observers>
-                    <zolagopo>
+                    </zolagopo_paymentsplit>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageItemsChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_split>
 
