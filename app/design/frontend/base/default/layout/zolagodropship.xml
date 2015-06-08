@@ -45,6 +45,7 @@
 			<block type="zolagodropship/vendor_menu_sidebar" template="unirgy/dropship/vendor/menu/sidebar.phtml" name="sidebar">
                 <block type="core/template" template="unirgy/dropship/vendor/login/footer/poig.phtml" name="poig" as="poig" />
 			</block>
+            <block type="zolagodropship/vendor_menu_help" template="unirgy/dropship/vendor/menu/help.phtml" name="help" as="help"/>
 		</reference>
 		<reference name="head">
 			<!-- frontend css -->

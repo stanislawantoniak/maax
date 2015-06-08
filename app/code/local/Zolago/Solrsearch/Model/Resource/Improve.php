@@ -8,7 +8,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	protected $_entity;
 	
 	protected $_categories = array();
-	
+	protected $_vendors = array();
+    	
 	/**
 	 * Use link as main table
 	 */
@@ -227,6 +228,85 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		return $this;
 	}
 	
+	
+    /**
+     * check if category is visible in gallery 
+     *
+     * @param array $related
+     * @return bool
+     */
+    protected function _checkIsVisible($related) {
+        $path = $related['path'];
+        $pathArray = explode('/',$path);
+        foreach ($pathArray as $id) {
+            if (!$this->_checkIsActive($id)) {
+                return false;
+            }
+        }
+        return true;
+        
+    }
+    
+    
+    /**
+     * check if category is active
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    protected function _checkIsActive($categoryId) {
+        if (empty($this->_categories[$categoryId])) {
+            $this->_categories[$categoryId] = Mage::getModel('catalog/category')->load($categoryId);
+        }
+        return $this->_categories[$categoryId]->getIsActive();
+    }
+    /**
+     * find vendors in which category is visible 
+     *
+     * @param array $related
+     * @return array
+     */
+    protected function _checkAssignedVendorsFromCategory($related,$vendorCheck) {
+        if (empty($this->_vendors)) {
+            $_helper = Mage::helper('udropship');
+            $collection = Mage::getModel('udropship/vendor')->getCollection()
+                ->addFieldToFilter('status',Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE)
+                ->addFieldToFilter('vendor_id',array('in' => array($vendorCheck)));
+            foreach ($collection as $vendor) {
+                $_helper->loadCustomData($vendor,'root_category');
+                foreach ($vendor->getRootCategory() as $categoryId) {
+                    // set vendors to categories
+                    if ($categoryId) {
+                        if (!$this->_checkIsActive($categoryId)) {
+                            continue;
+                        }
+                        if (!($assignedVendors = $this->_categories[$categoryId]->getData('assigned_vendors'))) {
+                            $assignedVendors = array();
+                        }
+                        $assignedVendors[$vendor->getId()] = $vendor->getId();
+                        $this->_categories[$categoryId]->setData('assigned_vendors',$assignedVendors);
+                    }
+                }
+                $this->_vendors[$vendor->getId()] = $vendor->getRootCategory();
+            }
+        }
+        $path = explode('/',$related['path']);
+        $path = array_reverse($path);
+        $final = array();
+        $denyVendors = array();
+        foreach ($path as $cId) {
+            if (!$this->_checkIsActive($cId)) {
+                break;
+            }
+            if (!empty($this->_categories[$cId])) {                
+                $out = $this->_categories[$cId]->getData('assigned_vendors');
+                if (is_array($out)) {
+                    $final = array_merge($final,$out);
+                }
+            }
+        }
+        return $final;
+    }
 	/**
 	 * @param array $allIds
 	 * @param type $storeId
@@ -238,7 +318,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$config = Mage::getModel("eav/config");
 		$rootCat = Mage::app()->getStore($storeId)->getRootCategoryId();
 		$treeRoot = Mage_Catalog_Model_Category::TREE_ROOT_ID;
-		
+		$attributeBrandshop = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'brandshop')->getId();
+		$attributeVendor = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'udropship_vendor')->getId();
 		/* @var $config Mage_Eav_Model_Config */
 //		$nameAttribute = $config->getAttribute(
 //			Mage_Catalog_Model_Category::ENTITY,
@@ -273,6 +354,16 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			implode(" AND ", $joinCond),
 			'path'
 		);
+		$select->join(
+		    array("brandshop"=>Mage::getSingleton("core/resource")->getTableName('catalog_product_entity_int')),
+		    $adapter->quoteInto("brandshop.entity_id = category_product.product_id AND brandshop.attribute_id = ?",$attributeBrandshop),
+		    "value as brandshop_id"
+        );
+		$select->join(
+		    array("vendor"=>Mage::getSingleton("core/resource")->getTableName('catalog_product_entity_int')),
+		    $adapter->quoteInto("vendor.entity_id = category_product.product_id AND vendor.attribute_id = ?",$attributeVendor),
+		    "value as vendor_id"
+        );
 		
 		// Join attributes data
 //		$this->_joinAttribute($select, $nameAttribute, "category_product.category_id", $storeId);
@@ -299,8 +390,11 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         $categories = $adapter->fetchAll($select);
         // add related categories
         $categoryRelatedCheck = array();
+        $vendorCheck = array();
         foreach ($categories as $category) {
             $categoryRelatedCheck[$category['category_id']] = $category['category_id'];
+            $vendorCheck[$category['vendor_id']] = $category['vendor_id'];
+            $vendorCheck[$category['brandshop_id']] = $category['brandshop_id'];
         }
         $relatedCategories = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToFilter('related_category_products',1)            
@@ -308,20 +402,44 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             ->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('path');
         // 
+        
         $categoryRelated = array();
-        foreach ($relatedCategories as $related) {
-            $categoryRelated[] = array(
-                'entity_id' => $related->getId(),
-                'path'		=> $related->getPath(),
-            );
+        foreach ($relatedCategories as $related) {            
+            // check if related category is visible in gallery
+            if (!$this->_checkIsVisible($related)) {
+                // find vendors in which related category is visible
+                if (!$vendors = $this->_checkAssignedVendorsFromCategory($related,$vendorCheck)) {
+                    // no vendors, category is invisible
+                    continue;
+                }
+            } else {
+                // visible in gallery (vendor 0)
+                $vendors = array(0 =>0);
+            }
+            $categoryRelated[$related['related_category']][$related['entity_id']] = array(
+                'path'		=> $related['path'],
+                'vendors' => $vendors,
+                
+            );            
         }
-        foreach ($allIds as $id) {
-            foreach ($categoryRelated as $row) {
-                $categories[] = array (
-                    'product_id' 	=> $id,
-                    'category_id' 	=> $row['entity_id'],
-                    'path'			=> $row['path'],
-                );
+        $tmp = $categories;
+        foreach ($tmp as $product) {
+            if (!empty($categoryRelated[$product['category_id']])) {
+                // can be in related
+                $related = $categoryRelated[$product['category_id']];
+                Mage::log($related);
+                foreach ($related as $relatedId => $row) {
+                    if (in_array($product['brandshop_id'],$row['vendors']) ||
+                        in_array($product['vendor_id'],$row['vendors'])) {
+                        $categories[] = array (
+                            'product_id' => $product['product_id'],
+                            'category_id' => $relatedId,
+                            'path' => $row['path'],
+                            'brandshop_id' => $product['brandshop_id'],
+                            'vendor_id' => $product['vendor_id'],
+                        );
+                    }
+                }
             }
         }
         $idsToLoad = array();
