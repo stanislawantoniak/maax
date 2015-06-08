@@ -41,6 +41,16 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             /*rewrite gh_url_rewrite*/
         }
 
+        if($this->isContentMode()) {
+            $this->getLayout()
+                ->getBlock('root')
+                ->addBodyClass('content-mode');
+        } else {
+            $this->getLayout()
+                ->getBlock('root')
+                ->addBodyClass('not-content-mode');
+        }
+
 		if($this->isContentMode()){
 			$this->getLayout()->getBlock('content')->
 					//unsetChild('solrsearch_result_title')->

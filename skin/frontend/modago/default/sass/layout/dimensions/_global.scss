@@ -22,7 +22,7 @@
 }
 .is-content-mode {
   .header_bottom {
-    @media (max-width: $screen-sm) {
+    @media (max-width: $screen-xs-max) {
       background: none; 
       background-color: #ffffff; 
       margin-bottom: 10px;
@@ -325,7 +325,7 @@ section {
 		}
 	}
 }
-.sm-to-smmd-plus-smmd {
+.not-content-mode.sm-to-smmd-plus-smmd, .this-is-search.sm-to-smmd-plus-smmd {
   #main {
     > .container-fluid {
       > .row {

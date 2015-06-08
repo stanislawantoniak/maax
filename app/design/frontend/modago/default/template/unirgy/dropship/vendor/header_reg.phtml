@@ -14,7 +14,6 @@ if(!empty($locale)){
 
 $currentUrl = Mage::helper('core/url')->getCurrentUrl();
 
-$_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
 $_allowedLocale = array(
     "pl_PL" => array("symbol" => $this->__("PL"), "name" => $this->__("Polish")),
     "en_US" => array("symbol" => $this->__("EN"), "name" => $this->__("English"))
@@ -27,7 +26,7 @@ $_allowedLocale = array(
         <!-- Logo -->
         <a class="navbar-brand" href="<?php echo $this->getUrl("udropship/vendor/"); ?>">
             <img src="<?php echo $this->getSkinUrl('img/bootsrap/logo.png'); ?>" alt="logo"/>
-            <strong><?php echo $this->escapeHtml($_logoHeader); ?></strong>
+            <strong>Modago</strong>
         </a>
         <!-- /logo -->
 

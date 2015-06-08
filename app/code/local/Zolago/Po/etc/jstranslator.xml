@@ -18,4 +18,7 @@
     <flag-promo translate="message" module="zolagopo">
         <message>(SALE)</message>
     </flag-promo>
+    <Failed-to-get-waybill translate="message" module="zolagopo">
+        <message>Failed to get waybill</message>
+    </Failed-to-get-waybill>
 </jstranslator>
