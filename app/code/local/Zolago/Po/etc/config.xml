@@ -230,50 +230,33 @@
 
 			<udpo_po_status_save_after>
 				<observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
 					<zolagopo>
 						<model>zolagopo/observer</model>
 						<method>poChangeStatus</method>
 					</zolagopo>
-				</observers>
-			</udpo_po_status_save_after>
-            <udpo_po_status_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageCancelledOrChanged</method>
-                    </zolagopo>
-                </observers>
-            </udpo_po_status_save_after>
-
-            <udpo_po_save_after>
-                <observers>
-                    <udpo>
-                        <type>singleton</type>
-                        <class>zolagopo/observer</class>
-                        <method>setOrderState</method>
-                    </udpo>
-                </observers>
-            </udpo_po_save_after>
-            <udpo_po_status_save_after>
-                <observers>
-                    <udpo>
-                        <type>singleton</type>
-                        <class>zolagopo/observer</class>
-                        <method>setOrderState</method>
-                    </udpo>
-                </observers>
-            </udpo_po_status_save_after>
-
-            <udpo_po_status_save_after>
-                <observers>
-                    <zolagopo>
+                    </zolagopo_ghapi>
+                    <zolagopo_ghapi_reservetion>
                         <class>zolagopo/observer</class>
                         <method>setOrderReservation</method>
-                    </zolagopo>
+                    </zolagopo_ghapi_reservetion>
                 </observers>
             </udpo_po_status_save_after>
+
             <udpo_po_save_after>
                 <observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
                     <zolagopo>
                         <class>zolagopo/observer</class>
                         <method>setOrderReservationOnSave</method>
