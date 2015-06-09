@@ -16,9 +16,9 @@
 			foreach ($transactions as $txnId) {
 				/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 				$transaction = Mage::getModel("sales/order_payment_transaction")->load($txnId);
-				if ($transaction->getData('txn_type') == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND// &&
-					//$transaction->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW &&
-					//$transaction->getData('is_closed') == "0"
+				if ($transaction->getData('txn_type') == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND &&
+					$transaction->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW &&
+					$transaction->getData('is_closed') == "0"
 				) {
 
 					$order = $transaction->getOrder();

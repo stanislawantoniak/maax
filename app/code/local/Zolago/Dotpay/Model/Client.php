@@ -288,7 +288,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	public function makeRefund($order,$transaction) {
 		/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
-			//$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
+			$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
 			$transaction->getTxnAmount() < 0) { //and amount is negative
 			$data = array(
 				'amount' => abs($transaction->getTxnAmount()),
@@ -300,7 +300,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
 						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
 						$transaction->setIsClosed(1);
-						//todo: return cash to overpayments (???)
 					}
 				} elseif(isset($response['detail']) && $response['detail'] == 'ok') {
 					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
@@ -308,7 +307,21 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 					//load parent transaction to get dotpay txn_id
 					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
-					Mage::log($parentTxn,null,'transactions.log');
+					if(isset($parentTxn['count']) && $parentTxn['count'] == 1) {
+						$transaction->setTxnId($parentTxn['results'][0]['number']);
+					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 2) {
+						foreach ($parentTxn['results'] as $parentResult) {
+							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
+								/** @var Mage_Sales_Model_Order_Payment_Transaction $transactionModel */
+								$transactionModel = Mage::getModel('sales/order_payment_transaction');
+								$transactionModel->loadByTxnId($parentResult['number']);
+								if(!$transactionModel->getId()) {
+									unset($transactionModel);
+									$transaction->setTxnId($parentResult['number']);
+								}
+							}
+						}
+					}
 				}
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
