@@ -331,19 +331,17 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 						$transaction->setTxnId($newTransactionId);
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$allocations = $allocationModel->getCollection()->addFieldToFilter('refund_transaction_id',$oldTransactionId);
+						$allocations = $allocationModel->getCollection()->addFieldToFilter('refund_transaction_id',$transaction->getId());
 						foreach($allocations as $allocation) {
 							$allocation->setData('comment',str_replace($oldTransactionId,$newTransactionId,$allocation->getComment()));
 							$allocation->save();
 						}
-
-						$transaction->setTxnId($newTransactionId);
 					}
 				}
 
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-					(isset($realResponse) && $realResponse !== false ? $realResponse : $response)
+					(isset($realResponse) && $realResponse != false ? $realResponse : $response)
 				);
 				$transaction->save();
 				return true;
