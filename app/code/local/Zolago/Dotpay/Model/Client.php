@@ -253,12 +253,16 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		return false;
 	}
 
+	public function getDotpayTransaction($txnId) {
+		return $this->dotpayCurl("operations",$txnId);
+	}
+
 	/**
 	 * @param $txnId
 	 * @return array|bool
 	 */
 	public function getDotpayTransactionUpdateFromApi($txnId) {
-		$dotpayTransaction = $this->dotpayCurl("operations",$txnId);
+		$dotpayTransaction = $this->getDotpayTransaction($txnId);
 		if(isset($dotpayTransaction['number']) && $dotpayTransaction['number'] == $txnId) {
 			return array(
 				"txnId" => $dotpayTransaction['number'],
@@ -290,10 +294,15 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
 						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
 						$transaction->setIsClosed(1);
+						//todo: return cash to overpayments (???)
 					}
 				} elseif(isset($response['detail']) && $response['detail'] == 'ok') {
 					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 					$transaction->setIsClosed(1);
+
+					//load parent transaction to get dotpay txn_id
+					$parentTxn = $this->getDotpayTransaction($transaction->getParentTxnId());
+					Mage::log($parentTxn,null,'transactions.log');
 				}
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
