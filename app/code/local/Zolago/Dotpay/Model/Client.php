@@ -253,8 +253,14 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		return false;
 	}
 
-	public function getDotpayTransaction($txnId) {
-		return $this->dotpayCurl("operations",$txnId);
+	/**
+	 *
+	 * @param $txnId
+	 * @param bool|array $params
+	 * @return bool
+	 */
+	public function getDotpayTransaction($txnId,$params=false) {
+		return $this->dotpayCurl("operations",$txnId,false,$params);
 	}
 
 	/**
@@ -284,7 +290,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
 			//$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
 			$transaction->getTxnAmount() < 0) { //and amount is negative
-			$parentTxn = $this->getDotpayTransaction($transaction->getParentTxnId());
+			$parentTxn = $this->getDotpayTransaction(false,array('related_operation'=>$transaction->getParentTxnId(),'amount'=>abs($transaction->getTxnAmount())));
 			Mage::log($parentTxn['related_operation'],null,'transactions.log');
 			$data = array(
 				'amount' => abs($transaction->getTxnAmount()),
@@ -304,7 +310,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 					//load parent transaction to get dotpay txn_id
 					$parentTxn = $this->getDotpayTransaction($transaction->getParentTxnId());
-					Mage::log($parentTxn,null,'transactions.log');
 				}
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
