@@ -28,10 +28,21 @@
 				margin: 3px 0 4px;
 				width: 100%;
 			}
-			@include max-screen($screen-sm-to-smmd-max) {
+			@include max-screen($screen-xs-max) {
 				margin-right: -11px;
 			}
 		}
 	}
 
+}
+.not-content-mode.sm-to-smmd-plus-smmd, .this-is-search.sm-to-smmd-plus-smmd {
+  #sort-criteria {
+    ul {
+      li.sort-criteria-selector {
+        @include max-screen($screen-sm-to-smmd-max) {
+          margin-right: 0px;
+        }
+      }
+    }
+  }
 }

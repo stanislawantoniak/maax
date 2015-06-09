@@ -3,6 +3,7 @@
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {
 	
+    protected $_relatedCategory;
 	/**
 	 * @return string
 	 */
@@ -105,4 +106,95 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
             ->getItems();
         return $categories;
     }
+    
+    /**
+     * returns related category object
+     * 
+     * @return Zolago_Catalog_Model_Category
+     */
+     public function getRelatedCategory() {
+         if (is_null($this->_relatedCategory)) {
+             $related = $this->getData('related_category');
+             $category = Mage::getModel('catalog/category')->load($related);
+             if ($category->getId()) {
+                 $this->_relatedCategory = $category;
+             } else {
+                 $this->_relatedCategory = false;
+             }
+         }
+         return $this->_relatedCategory;
+     }
+    /**
+     * Return canonical link
+     *
+     * @return string
+     */
+     public function getCanonicalUrl($noVendor = false) {
+         $canonical = $this->getData('canonical_link');
+         if (empty($canonical)) {
+             $related = $this->getRelatedCategory();
+             if ($related) {
+                $canonical = $related->getCanonicalUrl(true);
+             } else {
+                 if ($noVendor) {
+                     $categoryUrl = $this->getNoVendorContextUrl();
+                 } else {
+                     $categoryUrl = $this->getUrl();
+                 }
+                 /** @var GH_Rewrite_Helper_Data $rewriteHelper */
+                 $rewriteHelper = Mage::helper('ghrewrite');
+                 /** @var Zolago_Solrsearch_Model_Catalog_Product_List $listModel */
+                 $listModel     = Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+
+                 $path          = $listModel->getCurrentUrlPath();
+                 $categoryId    = $this->getId();
+                 $queryData     = Mage::app()->getRequest()->getParams();
+                 $url           = $rewriteHelper->prepareRewriteUrl($path, $categoryId, $queryData, true);
+
+                 $canonical     = $url ? $url : $categoryUrl;
+             }
+         }
+         return $canonical;
+     }
+     
+    /**
+     * product ids to rebuild in solr after save
+     * 
+     * @return array
+     */
+     public function getRelatedProductsToRebuild () {
+         $origRelated = $this->getOrigData('related_category');
+         $origProducts = $this->getOrigData('related_category_products');
+         $related = $this->getData('related_category');
+         $products = $this->getData('related_category_products');
+         if ($origProducts == $products) {
+             if (!$products) {
+                 return; // nothing happends
+             } else {
+                 if ($origRelated == $related) {
+                     return; // no changes
+                 }
+             }
+         }
+         $out = array();
+         if ($origRelated && $origProducts) {
+             $category = Mage::getModel('catalog/category')->load($origRelated);
+             if ($category->getId()) {
+                 $ids = Mage::getResourceModel('catalog/product_collection')
+                                          ->addCategoryFilter($category)
+                                          ->getAllIds();
+                 $out = array_merge($out,$ids);
+             }                                          
+         }
+         if ($related && $products) {             
+             $category = Mage::getModel('catalog/category')->load($related);
+             if ($category->getId()) {
+                 $ids = Mage::getResourceModel('catalog/product_collection')
+                                          ->addCategoryFilter($category)
+                                          ->getAllIds();
+                 $out = array_merge($out,$ids);
+             }
+         }
+         return array_unique($out);
+     }
 }
