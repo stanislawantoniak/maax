@@ -17,7 +17,11 @@ $_hlp = $this->getRmaHelper();
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">
-						<?php echo $_hlp->__("Make RMA refund");?>
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering RMA refund");?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming RMA refund"); ?>
+						<?php endif; ?>
 					</h4>
 				</div>
 				<div class="modal-body">

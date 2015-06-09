@@ -89,7 +89,15 @@ jQuery(document).ready(function() {
 									<span class="caret"></span>
 								</button> 
 								<ul class="dropdown-menu"> 
-									<li><a href="#" data-toggle="modal" data-target="#refundModal"><?php echo $_helper->__("Make refund");?></a></li>
+									<li>
+										<a href="#" data-toggle="modal" data-target="#refundModal">
+											<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+												<?php echo $this->__("Order refund"); ?>
+											<?php else: ?>
+												<?php echo $_helper->__("Confirm refund");?>
+											<?php endif; ?>
+										</a>
+									</li>
 								</ul> 
 							</div>
 							<?php else: ?>
