@@ -24,7 +24,7 @@
                 ->addBodyClass('filter-sidebar');
         }
 */
-
+        $this->getLayout()->getBlock('root')->addBodyClass('this-is-search');
         $this->getLayout()->getBlock('root')->addBodyClass('filter-sidebar');
 
         return parent::_prepareLayout();

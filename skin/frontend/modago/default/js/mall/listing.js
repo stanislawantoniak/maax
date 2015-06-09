@@ -1695,7 +1695,7 @@ Mall.listing = {
 	},
 
 	isDisplayMobile: function() {
-		return Mall.isMobile();
+		return Mall.isMobile(Mall.Breakpoint.smmd);
 	},
 
 	getContentBlock: function() {
