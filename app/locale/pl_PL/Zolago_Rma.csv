@@ -37,8 +37,8 @@
 "Enter your account number for your order refund","Podaj numer konta bankowego, na które chcesz otrzymać zwrot zapłaty"
 "Check again inserted data.","Sprawdź jeszcze raz poprawność wszystkich danych."
 "Note carrier pickup date.","Zapisz sobie termin odbioru przesyłki przez kuriera"
-"RMA Content", "Treść zgłoszenia",
-"Your address","Twój adres",
+"RMA Content", "Treść zgłoszenia"
+"Your address","Twój adres"
 "Pickup date","Termin odbioru"
 "Bank account for return","Numer konta do zwrotu"
 "Additional informations","Dodatkowe informacje"
@@ -156,8 +156,8 @@
 "RMA order number","Dotyczy zamówienia nr"
 "Your comment","Twój komentarz"
 "Vendor comment","Komentarz sklepu"
-"Filters","Filtry",
-"RMA type", "Typ RMA",
+"Filters","Filtry"
+"RMA type", "Typ RMA"
 "Returned by courier", "Nieodebrana przesyłka"
 "Number","Numer"
 "You are about to direct payment. Are you sure?","Czy na pewno chcesz wykonać zwrot gotówki?"
