@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 ﻿"Address", "Adresy"
+=======
+"Account password management","Zarządzanie hasłem do konta"
+"Password has been saved","Hasło zostało zmienione"
+"Change password","Zmień hasło"
+"Address", "Adresy"
+>>>>>>> ee0e0f73d16448f4011803e3c67f540e77f211d1
 "Couriers", "Kurierzy"
 "Tier Commissions", "Tabela prowizji"
 "Associated Products", "Przypisane produkty"
@@ -190,3 +197,13 @@
 "Brandshop settings details", "Szczegóły ustawień dla marki"
 "Select brandshop", "Wybierz markę"
 "Help","Pomoc"
+"Billing address changed (%s)", "Zmiana adresu płatnika (%s)"
+"PO Split (#%s&rarr;#%s)", "Podział zamówienia (#%s&rarr;#%s)"
+"Items of #%s:", "Produkty z #%s:"
+"Item added %s", "Dodano produkt %s"
+"Item changed %s (%s)" ,"Zmieniono produkt %s (%s)"
+"%s address changed (%s)", "Zmiana adresu: %s (%s)"
+"Message send to %s: %s", "Wysłano wiadomość do %s: %s"
+"Changed POS (%s&rarr;%s)", "Zmiana POS (%s&rarr;%s)"
+"Billing", "Faktura"
+"Item removed %s", "Usunięto produkt %s"

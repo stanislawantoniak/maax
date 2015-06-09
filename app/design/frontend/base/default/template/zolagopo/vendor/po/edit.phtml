@@ -285,7 +285,7 @@
 								</td>
 								
 								<?php if($_shippingMethod):?>
-								<td colspan="2"><?php echo $_hlp->__("Shipping");?>: <?php echo $this->escapeHtml($this->getMethodName($_shippingMethod));?></td>
+								<td colspan="2"><?php echo $_hlp->__("Shipping method");?>: <?php echo $this->escapeHtml($this->getMethodName($_shippingMethod));?></td>
 								<td class="align-right"><?php echo Mage::helper("core")->currency($_po->getBaseShippingAmountIncl(), true, false);?></td>
 								<td class="align-right"><?php echo Mage::helper("core")->currency($_po->getShippingDiscountIncl(), true, false);?></td>
 								<td class="align-right"><?php echo Mage::helper("core")->currency($_po->getShippingAmountIncl(), true, false);?></td>
@@ -327,7 +327,7 @@
 				<div class="widget-header">
 					<h4>
 						<i class=" icon-envelope"></i> 
-						<?php echo $_hlp->__("Shipping");?>
+						<?php echo $_hlp->__("Shipping address");?>
 					</h4>			
 					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
