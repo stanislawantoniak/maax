@@ -13,7 +13,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
         $rawUrl = urldecode($path.DS.'id'.DS.$categoryId.'?'.$query);
         return $rawUrl;
     }
-    public function prepareRewriteUrl($path,$categoryId,$queryData) {
+    public function prepareRewriteUrl($path,$categoryId,$queryData, $forceNoQuery = false) {
 	    $tmp = null;
         if(isset($queryData['fq'])) {
             $tmp = $queryData['fq'];
@@ -31,7 +31,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
             $query = http_build_query($queryData);
             $url = rtrim(Mage::getUrl($url),"/");
 	        $url = str_replace('/?___SID=U','?___SID=U',$url);
-	        if($query) {
+            if($query && !$forceNoQuery) {
 		        $url .= '?' . $query;
 	        }
         }
