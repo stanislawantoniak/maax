@@ -57,7 +57,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$this->_getSession()->addError($e->getMessage());
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper("zolagopo")->__("Some error occure")
+				Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
 			);
 			Mage::logException($e);
 		}
@@ -83,7 +83,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$this->_getSession()->addError($e->getMessage());
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper("zolagopo")->__("Some error occure")
+				Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
 			);
 			Mage::logException($e);
 		}
@@ -108,7 +108,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$this->_getSession()->addError($e->getMessage());
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper("zolagopo")->__("Some error occure")
+				Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
 			);
 			Mage::logException($e);
 		}
