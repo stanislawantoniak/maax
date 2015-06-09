@@ -36,7 +36,8 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
                     'po_id',
                     'po.order_id',
                     'transaction_id',
-                    'payment_transaction.txn_id'
+                    'payment_transaction.txn_id',
+	                'rma_id'
                 )
             )
             ->group(array('transaction_id'))

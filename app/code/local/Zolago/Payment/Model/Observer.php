@@ -15,8 +15,13 @@ class Zolago_Payment_Model_Observer
         if (count($collection) > 0) {
             $orderModel = Mage::getModel('sales/order');
             //make refund transactions
+	        $rmaId = false;
             foreach ($collection as $item) {
 				/** @var Zolago_Payment_Model_Allocation $item */
+
+	            if(isset($item['rma_id'])) {//indicates that refund that we're going to create contains RMA money
+		            $rmaId = $item['rma_id'];
+	            }
 
                 $amountToRefund = $item->getMaxAllocationAmount();
                 $amount = - $amountToRefund;
@@ -72,7 +77,8 @@ class Zolago_Payment_Model_Observer
 			            'customer_id' => $item->getData('customer_id'),
 			            'vendor_id' => $item->getData('vendor_id'),
 			            'is_automat' => 1,
-			            'refund_transaction_id' => $refundTransactionId
+			            'refund_transaction_id' => $refundTransactionId,
+			            'rma_id' => ($rmaId ? $rmaId : null)
 		            ));
 		            $allocation->save();
 	            } else {
