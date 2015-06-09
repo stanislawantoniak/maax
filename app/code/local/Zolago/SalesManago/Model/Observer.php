@@ -91,4 +91,63 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
             return $r;
         }
     }
+
+
+
+    /*
+* Dodanie (oraz na biezaco modyfikowanie) zdarzenia w koszyku addContactExtEvent z typem CART
+*/
+    public function add_cart_event($observer){
+        Mage::log($observer->getEvent()->getName(), null, "salesmanago.log");
+        $cartHelper = Mage::getModel('checkout/cart')->getQuote();
+        $items = $cartHelper->getAllItems();
+        $itemsNamesList = array();
+        foreach ($items as $item) {
+            array_push($itemsNamesList, $item->getProduct()->getId());
+        }
+
+
+        $clientId = Mage::getStoreConfig('salesmanago_tracking/general/client_id');
+        $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+        $ownerEmail = Mage::getStoreConfig('salesmanago_tracking/general/email');
+        $endPoint = Mage::getStoreConfig('salesmanago_tracking/general/endpoint');
+
+        $customerEmail = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
+
+        if(!empty($customerEmail)){
+            $apiKey = md5(time().$apiSecret);
+            $dateTime = new DateTime('NOW');
+
+            $data_to_json = array(
+                'apiKey' => $apiKey,
+                'clientId' => $clientId,
+                'requestTime' => time(),
+                'sha' => sha1($apiKey . $clientId . $apiSecret),
+                'owner' => $ownerEmail,
+                'contactEvent' => array(
+                    'date' => $dateTime->format('c'),
+                    'contactExtEventType' => 'CART',
+                    'products' => implode(',', $itemsNamesList),
+                ),
+            );
+
+            $eventId = Mage::getSingleton('core/session')->getEventId();
+
+            if(isset($eventId) && !empty($eventId)){
+                $data_to_json['contactEvent']['eventId'] = $eventId;
+                $json = json_encode($data_to_json);
+                $result = $this->_getHelper()->_doPostRequest('https://'.$endPoint.'/api/contact/updateContactExtEvent', $json);
+            } else{
+                $data_to_json['email'] = $customerEmail;
+                $json = json_encode($data_to_json);
+                $result = $this->_getHelper()->_doPostRequest('https://'.$endPoint.'/api/contact/addContactExtEvent', $json);
+            }
+
+            $r = json_decode($result, true);
+
+            if(!isset($eventId) && isset($r['eventId'])){
+                Mage::getSingleton('core/session')->setEventId($r['eventId']);
+            }
+        }
+    }
 }
