@@ -93,7 +93,7 @@
 "Cancel","Anuluj"
 "POS has been changed.","POS został zmieniony"
 "Total %d records found.","Znaleziono %d rekord(ów)."
-"You are about to change status from %s to %s. Are you sure?","Zamierzasz zmienić status zamówienia z <b>%s</b> na %s. Jesteś pewien?",
+"You are about to change status from %s to %s. Are you sure?","Zamierzasz zmienić status zamówienia z <b>%s</b> na %s. Jesteś pewien?"
 "Status has been changed", "Status zmieniono"
 "Proceeding will cancel the shipment. It will remove dispatch ref. Are you sure?", "Czy na pewno chcesz anulować przesyłkę i list przewozowy? Czynność usunie także zbiorówkę!"
 "Dispatch list of shipments created from %s to %s", "Potwierdzenie nadania przesyłek za okres od %s do %s"
@@ -150,7 +150,7 @@
 "Operator eCas: %s", "Operator eCas: %s"
 "Id eCas: %s", "Id eCas: %s"
 "SAP: %s", "SAP: %s"
-"Shipment count: %d", "Ilość przesyłek: %d",
+"Shipment count: %d", "Ilość przesyłek: %d"
 "Items under 31,5 kg: %d", "Elementów do 31,5 kg: %d"
 "DR items: %d", "Elementów DR: %d"
 "Customer signature" ,"Podpis klienta"
