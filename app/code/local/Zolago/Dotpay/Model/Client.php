@@ -306,9 +306,12 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$transaction->setIsClosed(1);
 
 					//load parent transaction to get dotpay txn_id
+					$oldTransactionId = $transaction->getTxnId();
+					$newTransactionId = false;
+					$realResponse = false;
 					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
 					if(isset($parentTxn['count']) && $parentTxn['count'] == 1) {
-						$transaction->setTxnId($parentTxn['results'][0]['number']);
+						$newTransactionId = $parentTxn['results'][0]['number'];
 					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 2) {
 						foreach ($parentTxn['results'] as $parentResult) {
 							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
@@ -316,16 +319,31 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 								$transactionModel = Mage::getModel('sales/order_payment_transaction');
 								$transactionModel->loadByTxnId($parentResult['number']);
 								if(!$transactionModel->getId()) {
-									unset($transactionModel);
-									$transaction->setTxnId($parentResult['number']);
+									$realResponse = $parentResult;
+									$newTransactionId = $parentTxn['results'][0]['number'];
 								}
+								unset($transactionModel);
 							}
 						}
 					}
+					//if dotpay has returned new transaction id then update it in allocations
+					if($newTransactionId) {
+						$transaction->setTxnId($newTransactionId);
+						/** @var Zolago_Payment_Model_Allocation $allocationModel */
+						$allocationModel = Mage::getModel('zolagopayment/allocation');
+						$allocations = $allocationModel->getCollection()->addFieldToFilter('refund_transaction_id',$oldTransactionId);
+						foreach($allocations as $allocation) {
+							$allocation->setData('comment',str_replace($oldTransactionId,$newTransactionId,$allocation->getComment()));
+							$allocation->save();
+						}
+
+						$transaction->setTxnId($newTransactionId);
+					}
 				}
+
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-					$response
+					(isset($realResponse) && $realResponse !== false ? $realResponse : $response)
 				);
 				$transaction->save();
 				return true;
