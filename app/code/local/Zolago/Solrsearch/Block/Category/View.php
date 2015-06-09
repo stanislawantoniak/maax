@@ -22,7 +22,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 $headBlock->setKeywords($keywords);
             }
             if ($this->helper('catalog/category')->canUseCanonicalTag()) {
-                $headBlock->addLinkRel('canonical', $category->getUrl());
+                $headBlock->addLinkRel('canonical', $category->getCanonicalUrl());
             }
 
             /*rewrite gh_url_rewrite*/
@@ -85,10 +85,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->getBlock('root')
                 ->addBodyClass('vendor-top-bottom-header');
         }
-
-		if ($this->helper('catalog/category')->canUseCanonicalTag()) {
-			$this->getLayout()->getBlock('head')->addLinkRel('canonical', $this->getCurrentCategory()->getUrl());
-		}
 
 		if($this->helper('zolagocommon')->isGoogleBot()) {
 			$this->getLayout()->getBlock('root')->addBodyClass('googlebot');

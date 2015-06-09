@@ -75,6 +75,15 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          $collection = Mage::getResourceModel('zolagocatalog/category_filter_collection');
          $collection->joinAttributeCode();
          $collection->addCategoryFilter($category);
+         if (!count($collection)) {
+             // check related category
+             $related = $category->getRelatedCategory();
+             if ($related) {
+                 $collection = Mage::getResourceModel('zolagocatalog/category_filter_collection');
+                 $collection->joinAttributeCode();
+                 $collection->addCategoryFilter($related);
+             }
+         }
          foreach ($collection as $item) {
             $facets[]  = $item->getAttributeCode().'_facet';             
          }

@@ -19,8 +19,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return true;
 	}
 	
-    
-    //{{{ 
     /**
      * 
      * @param 
@@ -29,7 +27,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      protected function _getPriceFacet() {
          return Mage::helper('zolagosolrsearch')->getPriceFacet();
      }
-    //}}}
 	
 	/**
 	 * @param stirng $facetCode
@@ -762,7 +759,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return array(attrCode=>blockObject, ...)
      */
     protected function _getRegularFilterBlocks(array $solrData) {
-
         $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
         $facetFileds = array();
         $sorted = array();
@@ -786,7 +782,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $attrCode = $this->_extractAttributeCode($key);
             $block = null;
             $sortOrder = 0;
-
             switch ($attrCode) {
                 // Skip special facets
 				case "category_path":
@@ -807,7 +802,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             }
             // In category mode
             if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))) {
-				
                 $filter = $this->getFilterByAttribute($attrCode);
 
                 // Skip attribs with no custom filter
@@ -926,7 +920,18 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
             $collection->joinAttributeCode();
             if($this->getCurrentCategory()) {
-                $collection->addCategoryFilter($this->getCurrentCategory());
+                $category = $this->getCurrentCategory();
+                $collection->addCategoryFilter($category);
+                if (!count($collection)) {
+                    $related = $category->getRelatedCategory();
+                    if ($related) {
+                        // check related category                    
+                        $collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
+                        /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+                        $collection->joinAttributeCode();                    
+                        $collection->addCategoryFilter($related);
+                    }
+                }
             }
             $this->setData("filter_collection", $collection);
 
@@ -1087,18 +1092,18 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 		$paramss = Mage::app()->getRequest()->getParams();
     	$finalParams = array();
-		
+
 		$finalParams = array_merge($paramss, $params);
-		
+
         if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
             if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
                 $paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
             }
         }
-		
+
         foreach ($params as $key=>$item) {
             $key = trim($key);
-			
+
             if( in_array($key, array('min', 'max')) ) {
                 if (isset($paramss[$key])) {
                     unset($paramss[$key]);
@@ -1124,17 +1129,17 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($finalParams['p'])) {
             $finalParams['p'] = 1;
         }
-		
+
 		if (isset($params['scat'])) {
             $finalParams['scat'] = $params['scat'];
         }
-		
+
 		if (isset($paramss['q'])){
-			
+
 			$finalParams['q'] = $paramss['q'];
-			
+
 		}
-		
+
         if (isset($finalParams['fq'])) {
             if(isset($finalParams['fq']['category_id']) && is_array($finalParams['fq']['category_id'])) {
                 $finalParams['fq']['category_id'] = array_unique($finalParams['fq']['category_id']);
@@ -1147,12 +1152,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if(isset($finalParams['Szukaj_y'])) {
             unset($finalParams['Szukaj_y']);
         }
-		
+
         $urlParams = array();
         $urlParams['_current']  = false;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
-		
+
         if (sizeof($finalParams) > 0) {
 
             if ($this->getListModel()->isCategoryMode()) {
@@ -1163,10 +1168,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     unset($finalParams['id']);
                 }
             }
-			
+
             $urlParams['_query']    = $this->processFinalParams($finalParams);
         }
-		
+
 //		if($this->getListModel()->isCategoryMode()){
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 //		}
