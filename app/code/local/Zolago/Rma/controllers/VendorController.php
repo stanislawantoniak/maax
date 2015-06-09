@@ -25,7 +25,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         if($render) {
@@ -113,7 +113,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		} catch(Exception $e) {
 			$connection->rollBack();
 			Mage::logException($e);
-			$this->_getSession()->addError($hlp->__("Other error. Check logs."));
+			$this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
 		}
 
 		return $this->_redirectReferer();
@@ -257,7 +257,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Exception $e) {
             $connection->rollBack();
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
