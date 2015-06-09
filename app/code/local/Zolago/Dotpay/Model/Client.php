@@ -290,8 +290,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
 			//$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
 			$transaction->getTxnAmount() < 0) { //and amount is negative
-			$parentTxn = $this->getDotpayTransaction(false,array('related_operation'=>$transaction->getParentTxnId(),'amount'=>abs($transaction->getTxnAmount())));
-			Mage::log($parentTxn,null,'transactions.log');
 			$data = array(
 				'amount' => abs($transaction->getTxnAmount()),
 				'comment' => 'Modago refund id: '.$transaction->getTxnId()
@@ -309,7 +307,8 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$transaction->setIsClosed(1);
 
 					//load parent transaction to get dotpay txn_id
-					$parentTxn = $this->getDotpayTransaction($transaction->getParentTxnId());
+					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
+					Mage::log($parentTxn,null,'transactions.log');
 				}
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
