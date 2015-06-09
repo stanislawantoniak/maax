@@ -26,7 +26,8 @@
         }
 /* HEADER BOTTOM */
 .header_bottom {
-    background:#fff url('../images/bg-menu.png') 0 0 repeat-x;
+//    background:#fff url('../images/bg-menu.png') 0 0 repeat-x;
+  background: #fff;
     border-bottom:1px solid #dddce1;
      #nav_desc {
         &.navigation > li > a:hover,
