@@ -1,4 +1,7 @@
-﻿"Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
+﻿"This RMA do not exist.","To RMA nie istnieje."
+"This RMA is not yours.","To RMA nie jest Twoje."
+"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
+"Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
 "Cannot add comment in this status", "Nie można dodać komentarza w tym statusie"
 "Pending courier booking","Oczekuje na zamówienie kuriera"
 "Pending courier pick up","Oczekuje na nadanie przesyłki"
@@ -34,8 +37,8 @@
 "Enter your account number for your order refund","Podaj numer konta bankowego, na które chcesz otrzymać zwrot zapłaty"
 "Check again inserted data.","Sprawdź jeszcze raz poprawność wszystkich danych."
 "Note carrier pickup date.","Zapisz sobie termin odbioru przesyłki przez kuriera"
-"RMA Content", "Treść zgłoszenia",
-"Your address","Twój adres",
+"RMA Content", "Treść zgłoszenia"
+"Your address","Twój adres"
 "Pickup date","Termin odbioru"
 "Bank account for return","Numer konta do zwrotu"
 "Additional informations","Dodatkowe informacje"
@@ -93,7 +96,7 @@
 "Your message sent","Wiadomość została wysłana"
 "Choose package","Wybór przesyłki"
 "Carrier","Kurier"
-"Shipping label added","Dodano list przewozowy"
+"Shipping label added.","Dodano list przewozowy."
 "No changes (empty comment and same status)","Nie wprowadzono zmian (nie było komentarza ani zmiany statusu)"
 "Package","Paczka"
 "Envelope","Koperta"
@@ -153,8 +156,8 @@
 "RMA order number","Dotyczy zamówienia nr"
 "Your comment","Twój komentarz"
 "Vendor comment","Komentarz sklepu"
-"Filters","Filtry",
-"RMA type", "Typ RMA",
+"Filters","Filtry"
+"RMA type", "Typ RMA"
 "Returned by courier", "Nieodebrana przesyłka"
 "Number","Numer"
 "You are about to direct payment. Are you sure?","Czy na pewno chcesz wykonać zwrot gotówki?"
@@ -175,3 +178,7 @@
 "Refund could not be created - not enough money left in PO","Nie udało się utworzyć zwrotu - jego kwota jest większa niż pozostała ilośc środków w PO"
 "Created refund (RMA id: %s). Amount: %s","Utworzono zwrot (RMA id: %s) na kwotę %s"
 "Created RMA refund. Amount: %s","Utworzono zwrot RMA na kwotę %s"
+"Order refund","Zleć zwrot"
+"Confirm refund","Potwierdź zwrot"
+"Ordering RMA refund","Zlecenie zwrotu płatności dla RMA"
+"Confirming RMA refund","Potwierdzenie zwrotu płatności do RMA"
