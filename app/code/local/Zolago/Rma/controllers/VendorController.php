@@ -458,7 +458,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		$rma->load($id);
 
         if(!$rma->getId()) {
-            throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA do not exist."));
+            throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA does not exist."));
         }
 	    if(!$this->_validateRma($rma)) {
 		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA is not yours."));
