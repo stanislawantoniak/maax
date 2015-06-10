@@ -291,7 +291,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			$payment = $order->getPayment();
 			$transaction->setOrderPaymentObject($payment);
 
-			Mage::log($payment);
+			Mage::log($payment->getData());
 
 			$transaction->setTxnId('M1577-6467');
 			$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
