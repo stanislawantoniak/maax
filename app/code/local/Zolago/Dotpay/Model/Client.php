@@ -286,9 +286,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @throws Exception
 	 */
 	public function makeRefund($order,$transaction) {
-		$payment = $order->getPayment();
-		$transaction->setOrderPaymentObject($payment);
-
 		/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 		if($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND && //if is refund
 			$transaction->getTxnStatus() == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW && //and status is new
@@ -312,16 +309,17 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$oldTransactionId = $transaction->getTxnId();
 					$newTransactionId = false;
 					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
+
 					if(isset($parentTxn['count']) && $parentTxn['count'] == 1 && isset($parentTxn['results']) && isset($parentTxn['results'][0])) {
 						$newTransactionId = $parentTxn['results'][0]['number'];
 						$response = $parentTxn['results'][0];
 					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 1 && isset($parentTxn['results'])) {
 						foreach ($parentTxn['results'] as $parentResult) {
 							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
-								/** @var Mage_Sales_Model_Order_Payment_Transaction $transactionModel */
-								$transactionModel = Mage::getModel('sales/order_payment_transaction');
-								$transactionModel->loadByTxnId($parentResult['number']);
-								if(!$transactionModel->getId()) {
+								/** @var Mage_Sales_Model_Order_Payment_Transaction $otherTransaction */
+								$otherTransaction = Mage::getModel('sales/order_payment_transaction')->load($parentResult['number']);
+								$otherTransaction->setOrderPaymentObject($otherTransaction->getOrder()->getPayment());
+								if(!$otherTransaction->getId()) {
 									$response = $parentResult;
 									$newTransactionId = $parentResult['number'];
 								}
