@@ -24,8 +24,6 @@
 					$order = $transaction->getOrder();
 					$payment = $order->getPayment();
 
-					Mage::log($order->getPayment());
-
 					$transaction->setOrderPaymentObject($payment);
 
 					//todo: if we'll add more payment providers handle refunds here
