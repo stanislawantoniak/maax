@@ -358,7 +358,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 				$amount += $item->getPoItem()->getFinalItemPrice();
 			}
 			$this->_refundAmountMax = $amount;
-		}allo
+		}
 		return $this->_refundAmountMax;
 	}
 
