@@ -18,7 +18,7 @@ class Zolago_Payment_Model_Observer
 	        $rmaId = false;
             foreach ($collection as $item) {
 				/** @var Zolago_Payment_Model_Allocation $item */
-
+				Mage::log($item,null,'refunds.log');
 	            if(isset($item['rma_id']) && !empty($item['rma_id'])) {//indicates that refund that we're going to create contains RMA money
 		            $rmaId = $item['rma_id'];
 	            }
