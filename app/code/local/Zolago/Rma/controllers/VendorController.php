@@ -355,7 +355,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
-            throw $e;
             Mage::logException($e);
             $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
