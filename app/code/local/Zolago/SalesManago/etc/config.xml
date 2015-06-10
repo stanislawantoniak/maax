@@ -37,6 +37,15 @@
             </newsletter_subscriber_save_after>
 
         </events>
+        <routers>
+            <frontend>
+                <args>
+                    <modules>
+                        <zolago_salesmanago before="SalesManago_Tracking">Zolago_SalesManago</zolago_salesmanago>
+                    </modules>
+                </args>
+            </frontend>
+        </routers>
     </frontend>
     <global>
         <models>
