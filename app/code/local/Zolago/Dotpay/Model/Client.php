@@ -300,6 +300,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
 						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
 						$transaction->setIsClosed(1);
+						$rejected = true;
 					}
 				} elseif(isset($response['detail']) && $response['detail'] == 'ok') {
 					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
@@ -344,7 +345,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$response
 				);
 				$transaction->save();
-				return true;
+				return isset($rejected) && $rejected ? false : true;
 			} catch(Exception $e) {
 				Mage::logException($e);
 			}
