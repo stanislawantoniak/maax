@@ -24,7 +24,7 @@
 					$order = $transaction->getOrder();
 					$payment = $order->getPayment();
 
-					$transaction->setOrderPaymentObject($payment);
+					//$transaction->setOrderPaymentObject($payment);
 
 					//todo: if we'll add more payment providers handle refunds here
 					switch ($payment->getMethod()) {
