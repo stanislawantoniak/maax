@@ -379,15 +379,15 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 		$refundsCollection = $allocationsModel->getCollection()
 			->addFieldToFilter('rma_id',$this->getId())
 			->addFieldToFilter('allocation_type','refund');
-		$negativeOverpaysCollection = $allocationsModel->getCollection()
+		$negativePaymentsCollection = $allocationsModel->getCollection()
 			->addFieldToFilter('rma_id',$this->getId())
-			->addFieldToFilter('allocation_type','overpay')
+			->addFieldToFilter('allocation_type','payment')
 			->addFieldToFilter('allocation_amount',array('lt'=>'0'));
 
 		$refundsAmount = $refundsCollection->getSize();
-		$negativeOverpaysAmount = $negativeOverpaysCollection->getSize();
+		$negativePaymentsAmount = $negativePaymentsCollection->getSize();
 
-		if($refundsAmount != $negativeOverpaysAmount) {
+		if($refundsAmount != $negativePaymentsAmount) {
 			return false;
 		} else {
 			$txnIds = array();
