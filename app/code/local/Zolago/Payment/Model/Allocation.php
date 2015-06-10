@@ -255,7 +255,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat(),
-								'rma_id'            => $rma_id
+								'rma_id'            => 66
 							);
 						} else {
 							break;
