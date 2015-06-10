@@ -343,6 +343,10 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
 					(isset($realResponse) && $realResponse != false ? $realResponse : $response)
 				);
+				//this is done just in case
+				$order = $transaction->getOrder();
+				$payment = $order->getPayment();
+				$transaction->setOrderPaymentObject($payment);
 				$transaction->save();
 				return true;
 			} catch(Exception $e) {
