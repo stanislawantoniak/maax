@@ -13,7 +13,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
         $configValue = Mage::getStoreConfig('payment_refunds/payment_refunds_automatic/interval');
 
         $collection = Mage::getResourceModel("zolagopayment/allocation_collection");
-        $collection->addFieldToFilter('allocation_type', Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
+        $collection->addFieldToFilter('main_table.allocation_type', Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
         $collection->getSelect()
             ->join(
                 array(
@@ -33,16 +33,16 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
                 array(
-                    'max_allocation_amount' => new Zend_Db_Expr('SUM(main_table.allocation_amount)'),
-                    'main_table.customer_id',
-                    'main_table.vendor_id',
+                    'max_allocation_amount' => new Zend_Db_Expr('SUM(allocation_amount)'),
+                    'customer_id',
+                    'vendor_id',
                     'created_at_hours_past' => new Zend_Db_Expr('(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(MAX(main_table.created_at))) /3600'),
-                    'main_table.allocation_type',
-                    'main_table.po_id',
+                    'allocation_type',
+                    'po_id',
                     'po.order_id',
-                    'main_table.transaction_id',
+                    'transaction_id',
                     'payment_transaction.txn_id',
-	                'rma_allocations.rma_id'
+	                'rma_id' => 'rma_allocations.rma_id'
                 )
             )
             ->group(array('transaction_id'))
