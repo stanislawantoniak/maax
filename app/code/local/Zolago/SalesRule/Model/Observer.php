@@ -134,6 +134,12 @@ class Zolago_SalesRule_Model_Observer {
 			"name"		=> "rule_payer",
 			"value"     => $model->getRulePayer()
 		), "name");
+		$fieldset->addField("promotion_type", "select", array(
+			"label"		=> Mage::helper("zolagosalesrule")->__("Promotion type"),
+			"values"	=> Mage::getSingleton('zolagosalesrule/promotion_type')->toOptionArray(),
+			"name"		=> "promotion_type",
+			"value"     => $model->getPromotionType()
+		), "name");
 		
 	}
 }
