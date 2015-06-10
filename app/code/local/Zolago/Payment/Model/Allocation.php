@@ -239,7 +239,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'comment'           => $helper->__($commentMoved),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
-                                'is_automat'        => $this->isAutomat()
+                                'is_automat'        => $this->isAutomat(),
+								'rma_id'            => $rma_id
 							);
 
 							//create overpayment
@@ -255,7 +256,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
                                 'is_automat'        => $this->isAutomat(),
-								'rma_id'            => 66
+								'rma_id'            => $rma_id
 							);
 						} else {
 							break;
