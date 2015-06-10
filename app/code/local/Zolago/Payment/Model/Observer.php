@@ -58,7 +58,9 @@ class Zolago_Payment_Model_Observer
 			            'comment' => $helper->__("Moved to refund"),
 			            'customer_id' => $item->getData('customer_id'),
 			            'vendor_id' => $item->getData('vendor_id'),
-			            'is_automat' => 1
+			            'is_automat' => 1,
+			            'refund_transaction_id' => $refundTransactionId,
+			            'rma_id' => ($rmaId ? $rmaId : null)
 		            ));
 		            $allocation->save();
 
