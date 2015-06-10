@@ -375,7 +375,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 
 	public function isAlreadyReturned() {
 		/** @var Zolago_Payment_Model_Allocation $allocationsModel */
-		$allocationsModel = Mage::getModel('zolagopayment/allocations');
+		$allocationsModel = Mage::getModel('zolagopayment/allocation');
 		$collection = $allocationsModel->getCollection()->addFieldToFilter('rma_id',$this->getId())->addFieldToFilter('allocation_type','refund');
 		$txnIds = array();
 		foreach($collection as $allocation) {
