@@ -15,10 +15,10 @@ $installer->getConnection()
 		$installer->getTable('zolagopayment/allocation'),
 		'rma_id',
 		array(
-			'nullable'  => true,
+			'nullable'  => false,
 			'type'      => Varien_Db_Ddl_Table::TYPE_INTEGER,
 			'comment'   => "Rma Id",
-			'default'   => null,
+			'default'   => 0,
 			'unsigned'  => true
 		)
 	);
