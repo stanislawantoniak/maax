@@ -103,7 +103,13 @@ $_hlp = $this->getRmaHelper();
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Make refund");?></button>
+					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_helper->__("Order refund"); ?>
+						<?php else: ?>
+							<?php echo $_helper->__("Confirm refund");?>
+						<?php endif; ?>
+					</button>
 				</div>
 			</div>
 		</form>
