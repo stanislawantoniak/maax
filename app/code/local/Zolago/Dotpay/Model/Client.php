@@ -316,12 +316,11 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 1 && isset($parentTxn['results'])) {
 						foreach ($parentTxn['results'] as $parentResult) {
 							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
-								/** @var Mage_Sales_Model_Order_Payment_Transaction $otherTransaction */
-								$otherTransaction = Mage::getModel('sales/order_payment_transaction')->load($parentResult['number']);
-								$otherTransaction->setOrderPaymentObject($otherTransaction->getOrder()->getPayment());
-								if(!$otherTransaction->getId()) {
+								$otherTransaction = Mage::getModel('sales/order_payment_transaction')->getCollection()->addFieldToFilter('transaction_id',$parentResult['number']);
+								if(!$otherTransaction->getSize()) {
 									$response = $parentResult;
 									$newTransactionId = $parentResult['number'];
+									break;
 								}
 								unset($transactionModel);
 							}
@@ -342,7 +341,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-					(isset($realResponse) && $realResponse != false ? $realResponse : $response)
+					$response
 				);
 				$transaction->save();
 				return true;
