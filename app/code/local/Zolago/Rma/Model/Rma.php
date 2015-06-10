@@ -387,7 +387,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 				->getCollection()
 				->addFieldToFilter('transaction_id',array('in'=>$txnIds))
 				->addFieldToFilter('txn_status','3');
-			if($transactions->getSize()) {
+			if($transactions->getSize() == count($txnIds)) {
 				return true;
 			}
 		}
