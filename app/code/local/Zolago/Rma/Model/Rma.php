@@ -376,19 +376,33 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	public function isAlreadyReturned() {
 		/** @var Zolago_Payment_Model_Allocation $allocationsModel */
 		$allocationsModel = Mage::getModel('zolagopayment/allocation');
-		$collection = $allocationsModel->getCollection()->addFieldToFilter('rma_id',$this->getId())->addFieldToFilter('allocation_type','refund');
-		$txnIds = array();
-		foreach($collection as $allocation) {
-			$txnIds[] = $allocation->getRefundTransactionId();
-		}
-		if(count($txnIds)) {
-			/** @var Mage_Sales_Model_Order_Payment_Transaction $transactions */
-			$transactions = Mage::getModel("sales/order_payment_transaction")
-				->getCollection()
-				->addFieldToFilter('transaction_id',array('in'=>$txnIds))
-				->addFieldToFilter('txn_status','3');
-			if($transactions->getSize() == count($txnIds)) {
-				return true;
+		$refundsCollection = $allocationsModel->getCollection()
+			->addFieldToFilter('rma_id',$this->getId())
+			->addFieldToFilter('allocation_type','refund');
+		$negativeOverpaysCollection = $allocationsModel->getCollection()
+			->addFieldToFilter('rma_id',$this->getId())
+			->addFieldToFilter('allocation_type','overpay')
+			->addFieldToFilter('allocation_amount',array('lt'=>'0'));
+
+		$refundsAmount = $refundsCollection->getSize();
+		$negativeOverpaysAmount = $negativeOverpaysCollection->getSize();
+
+		if($refundsAmount != $negativeOverpaysAmount) {
+			return false;
+		} else {
+			$txnIds = array();
+			foreach($refundsCollection as $allocation) {
+				$txnIds[] = $allocation->getRefundTransactionId();
+			}
+			if(count($txnIds)) {
+				/** @var Mage_Sales_Model_Order_Payment_Transaction $transactions */
+				$transactions = Mage::getModel("sales/order_payment_transaction")
+					->getCollection()
+					->addFieldToFilter('transaction_id',array('in'=>$txnIds))
+					->addFieldToFilter('txn_status','3');
+				if($transactions->getSize() == count($txnIds)) {
+					return true;
+				}
 			}
 		}
 		return false;
