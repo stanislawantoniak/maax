@@ -284,3 +284,4 @@
 "POS","POS (Punkt sprzedaży)"
 "You are not allowed to operate this order","Nie masz uprawnień do obsługi tego zamówienia"
 "Failed to get waybill","Nie udało się pobrać listu przewozowego"
+"DHL Service Error. Failed to get waybill.","Błąd serwisu DHL. Nie udało się pobrać listu przewozowego."
