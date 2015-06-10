@@ -1,0 +1,100 @@
+<?php /** @var Zolago_SalesManago_Block_Customer_Cart $this */ ?>
+<?php $customerCart = $this->getCustomerCart(); ?>
+
+<?php if (!empty($customerCart)): ?>
+    <?php $helper = Mage::helper("zolagosalesmanago"); ?>
+    <h3><?php echo $helper->__("In Your Cart"); ?></h3>
+
+
+    <?php foreach($customerCart as $vendor => $items): ?>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><?php echo $helper->__("Vendor"); ?>: <strong><?php echo $vendor; ?></strong></div>
+            <div class="panel-body">
+
+
+                <div class="tableWrapper table-cart">
+                    <!-- Thead -->
+
+                    <?php foreach ($items as $item): ?>
+                        <?php //krumo($item->getData()); ?>
+                        <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
+                        <div class="table-row clearfix">
+                            <div class="colgroup-01 clearfix">
+                                <div class="clearfix">
+                                    <figure>
+                                        <a href="<?php echo $item->getProduct()->getUrl(); ?>">
+                                            <img src="<?php echo (string)Mage::helper('catalog/image')->init($_product, 'image')->resize(53,59); ?>" alt="<?php echo $_product->getName(); ?>">
+                                        </a>
+                                    </figure>
+                                    <div class="description_checked_product">
+                                        <div class="product_name"><a href="http://modago.local/emi.html">Emi</a></div>
+
+                                        <div class="product_size">Rozmiar: 70C                                                    </div>
+                                        <div class="product_availability"><span class="icons-interjection">Ostatnie sztuki na magazynie</span></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="colgroup-02 clearfix">
+                                <div class="colgroup naglowek">
+
+                                    <div class="cena">Cena</div>
+                                    <div class="ilosc">Ilość</div>
+                                    <div class="wartosc">Wartość</div>
+                                    <div class="usun"></div>
+
+                                </div>
+                                <div class="colgroup clearfix">
+                                    <div class="usun"><a href="https://modago.local/checkout/cart/delete/id/4082/uenc/aHR0cHM6Ly9tb2RhZ28ubG9jYWwvY2hlY2tvdXQvY2FydC8,/" class="delet_product" title="Usuń element"><i class="fa-remove"></i></a></div>
+                                    <div class="col">
+
+
+
+
+
+                                        <!-- inclusive price starts here -->
+                                        <div class="cena">                                                                            <span class="cart-price">
+
+                            <span class="price">16,90&nbsp;zł</span>
+            </span>
+                                        </div>
+                                        <div class="ilosc">
+
+                                            <div class="form-group styledSelected cart-qty-field" style="width: 60px;">
+                                                <select name="cart[4082][qty]" class="form-control select-styled" onchange="jQuery('#cart-form').submit();" style="display: none;">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option selected="selected" value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select><span id="" class="selectboxit-container selectboxit-container" role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false" aria-owns=""><span id="" class="selectboxit form-control select-styled selectboxit-enabled selectboxit-btn" name="cart[4082][qty]" tabindex="0" unselectable="on"><span class="selectboxit-option-icon-container"><i id="" class="selectboxit-default-icon selectboxit-option-icon selectboxit-container" unselectable="on"></i></span><span id="" class="selectboxit-text" unselectable="on" data-val="3" aria-live="polite" style="max-width: 191px;">3</span><span id="" class="selectboxit-arrow-container" unselectable="on"><i id="" class="selectboxit-arrow selectboxit-default-arrow" unselectable="on"></i></span></span><ul class="selectboxit-options selectboxit-list" tabindex="-1" role="listbox" aria-hidden="true"><li data-id="0" data-val="1" data-disabled="false" class="selectboxit-option  selectboxit-option-first" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>1</a></li><li data-id="1" data-val="2" data-disabled="false" class="selectboxit-option" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>2</a></li><li data-id="2" data-val="3" data-disabled="false" class="selectboxit-option selectboxit-selected" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>3</a></li><li data-id="3" data-val="4" data-disabled="false" class="selectboxit-option" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>4</a></li><li data-id="4" data-val="5" data-disabled="false" class="selectboxit-option  selectboxit-option-last" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>5</a></li></ul></span>
+                                            </div>
+                                        </div>
+
+                                        <!--Sub total starts here -->
+                                        <div class="a-right" style="font-family:latoblack;padding-top:5px;">
+                                                                            <span class="cart-price">
+
+                                                                                                            <span class="price">50,70&nbsp;zł</span>
+        </span>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
+
+
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+
+
+<?php endif; ?>
+

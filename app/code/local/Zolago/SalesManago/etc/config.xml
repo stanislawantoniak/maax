@@ -63,9 +63,9 @@
             </salesmanago>
         </models>
         <blocks>
-            <salesmanago>
-                <class>Zolago_SalesManago_Tracking_Block</class>
-            </salesmanago>
+            <zolagosalesmanago>
+                <class>Zolago_SalesManago_Block</class>
+            </zolagosalesmanago>
         </blocks>
         <helpers>
             <zolagosalesmanago>
