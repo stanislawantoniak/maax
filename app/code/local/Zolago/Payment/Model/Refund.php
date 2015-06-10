@@ -37,7 +37,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
                     'po.order_id',
                     'transaction_id',
                     'payment_transaction.txn_id',
-	                'rma_id'
+	                'rma_id' => new Zend_Db_Expr('MAX(main_table.rma_id')
                 )
             )
             ->group(array('transaction_id'))
