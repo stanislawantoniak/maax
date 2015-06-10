@@ -13,7 +13,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
         $configValue = Mage::getStoreConfig('payment_refunds/payment_refunds_automatic/interval');
 
         $collection = Mage::getResourceModel("zolagopayment/allocation_collection");
-        $collection->addFieldToFilter('main_table.allocation_type', Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
+        $collection->addFieldToFilter('allocation_type', Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_OVERPAY);
         $collection->getSelect()
             ->join(
                 array(
@@ -25,27 +25,22 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
                     'payment_transaction' => 'sales_payment_transaction'),
                 'main_table.transaction_id = payment_transaction.transaction_id'
             )
-	        ->join(
-		        array(
-			        'rma_allocations' => 'zolago_payment_allocation'),
-		        '(main_table.transaction_id = rma_allocations.transaction_id && rma_allocations.rma_id IS NOT NULL)'
-	        )
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
                 array(
-                    'max_allocation_amount' => new Zend_Db_Expr('SUM(main_table.allocation_amount)'),
-                    'main_table.customer_id',
-                    'main_table.vendor_id',
+                    'max_allocation_amount' => new Zend_Db_Expr('SUM(allocation_amount)'),
+                    'customer_id',
+                    'vendor_id',
                     'created_at_hours_past' => new Zend_Db_Expr('(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(MAX(main_table.created_at))) /3600'),
-                    'main_table.allocation_type',
-                    'main_table.po_id',
+                    'allocation_type',
+                    'po_id',
                     'po.order_id',
-                    'main_table.transaction_id',
+                    'transaction_id',
                     'payment_transaction.txn_id',
-	                'rma_id' => 'rma_allocations.rma_id'
+	                'rma_id'
                 )
             )
-            ->group(array('main_table.transaction_id'))
+            ->group(array('transaction_id'))
             ->having('max_allocation_amount>0')
             ->having("created_at_hours_past >= {$configValue}");
 	    Mage::log((string)$collection->getSelect(),null,'refund_sql.log');
