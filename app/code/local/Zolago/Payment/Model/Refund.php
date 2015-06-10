@@ -43,6 +43,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
             ->group(array('transaction_id'))
             ->having('max_allocation_amount>0')
             ->having("created_at_hours_past >= {$configValue}");
+	    Mage::log((string)$collection->getSelect(),null,'refund_sql.log');
         return $collection;
     }
 }
