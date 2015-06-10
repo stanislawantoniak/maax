@@ -28,7 +28,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
 	        ->join(
 		        array(
 			        'rma_allocations' => 'zolago_payment_allocation'),
-		        '(main_table.transaction_id = rma_allocations.transaction_id && NOT_NULL rma_allocations.rma_id)'
+		        '(main_table.transaction_id = rma_allocations.transaction_id && rma_allocations.rma_id IS NOT NULL)'
 	        )
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
@@ -45,7 +45,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
 	                'rma_id' => 'rma_allocations.rma_id'
                 )
             )
-            ->group(array('transaction_id'))
+            ->group(array('main_table.transaction_id'))
             ->having('max_allocation_amount>0')
             ->having("created_at_hours_past >= {$configValue}");
 	    Mage::log((string)$collection->getSelect(),null,'refund_sql.log');
