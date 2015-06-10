@@ -319,8 +319,9 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 								$transactionModel = Mage::getModel('sales/order_payment_transaction');
 								$transactionModel->loadByTxnId($parentResult['number']);
 								if(!$transactionModel->getId()) {
+									Mage::log($parentResult,null,'dotpay_refund.log');
 									$realResponse = $parentResult;
-									$newTransactionId = $parentTxn['results'][0]['number'];
+									$newTransactionId = $parentResult['number'];
 								}
 								unset($transactionModel);
 							}
