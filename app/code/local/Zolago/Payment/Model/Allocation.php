@@ -244,7 +244,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 							);
 
 							//create overpayment
-							Mage::log("RMA ID (next log): ".$rma_id,null,'rma.log');
 							$allocations[] = array(
 								'transaction_id'    => $payment->getTransactionId(),
 								'po_id'             => $po->getId(),
