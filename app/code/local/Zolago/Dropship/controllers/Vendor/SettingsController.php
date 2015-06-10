@@ -53,46 +53,74 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
      */
     public function infoPostAction()
     {
+        /** @var Zolago_Dropship_Model_Session $session */
         $session = Mage::getSingleton('udropship/session');
+        $request = $this->getRequest();
+        $param = $request->getPost();
 
-        $r = $this->getRequest();
-
-        if ($r->isPost()) {
-            $p = $r->getPost();
-
-
+        if ($request->isPost()) {
             try {
-                $v = $session->getVendor();
-
-                foreach (
-                    array(
-                        'company_name','tax_no',
-                        'www','contact_email','contact_telephone',
-                        'executive_firstname','executive_lastname','executive_telephone','executive_telephone_mobile',
-
-                        'email', 'password',
-                        'billing_email', 'billing_street',
-                        'billing_city',
-                        'billing_zip',
-                        'administrator_firstname','administrator_lastname','administrator_telephone','administrator_telephone_mobile'
-                    ) as $f) {
-                    if (array_key_exists($f, $p)) {
-                        $v->setData($f, $p[$f]);
+                /** @var Zolago_Dropship_Model_Vendor $vendor */
+                $vendor = $session->getVendor();
+                /** @var Zolago_Operator_Model_Operator $operator */
+                $operator = $session->getOperator();
+                if ($vendor->getId() && !$operator->getId()) {
+                    foreach (
+                        array(
+                            'company_name',
+                            'tax_no',
+                            'www',
+                            'contact_email',
+                            'contact_telephone',
+                            'executive_firstname',
+                            'executive_lastname',
+                            'executive_telephone',
+                            'executive_telephone_mobile',
+                            'email',
+                            'password',
+                            'billing_email',
+                            'billing_street',
+                            'billing_city',
+                            'billing_zip',
+                            'administrator_firstname',
+                            'administrator_lastname',
+                            'administrator_telephone',
+                            'administrator_telephone_mobile'
+                        ) as $key) {
+                        if (array_key_exists($key, $param)) {
+                            $vendor->setData($key, $param[$key]);
+                        }
                     }
+
+                    Mage::dispatchEvent('udropship_vendor_preferences_save_before',
+                        array('vendor' => $vendor, 'post_data' => &$param)
+                    );
+                    $vendor->save();
+
+                } elseif($operator->getId()) {
+                    if (array_key_exists('password', $param)) {
+                        $operator->setData('password', $param['password']);
+                    } else {
+                        Mage::throwException(Mage::helper('udropship')->__("You don't send correct password"));
+                    }
+                } else {
+                    Mage::throwException(Mage::helper('udropship')->__("You can't change the password"));
                 }
 
-                Mage::dispatchEvent('udropship_vendor_preferences_save_before',
-                    array('vendor' => $v, 'post_data' => &$p)
-                );
-                $v->save();
-
-
-                $session->addSuccess($this->__('Settings has been saved'));
+                if (isset($param['onlyEditPassword'])) {
+                    $session->addSuccess(Mage::helper('udropship')->__('Password has been saved'));
+                } else {
+                    $session->addSuccess(Mage::helper('udropship')->__('Settings has been saved'));
+                }
             } catch (Exception $e) {
                 $session->addError($e->getMessage());
             }
         }
-        $this->_redirect('udropship/vendor_settings/info');
+        if (array_key_exists('redirectAfter', $param)) {
+            $this->_redirect($param['redirectAfter']);
+        } else {
+            $this->_redirect('udropship/vendor_settings/info');
+        }
     }
 
 

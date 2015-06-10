@@ -261,6 +261,16 @@
             <block type="zolagodropship/vendor_preferences" template="zolagodropship/vendor/settings/rma.phtml"/>
         </reference>
     </udropship_vendor_settings_rma>
+    <udropship_vendor_editpassword>
+        <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+        <update handle="noty"/>
+
+        <reference name="content">
+            <block type="zolagodropship/vendor_preferences" template="zolagodropship/vendor/settings/password.phtml"/>
+        </reference>
+    </udropship_vendor_editpassword>
     <!--settings-->
 
 	<udropship_vendor_shipmentinfo>
