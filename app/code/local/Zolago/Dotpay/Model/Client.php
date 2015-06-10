@@ -288,6 +288,11 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	public function makeRefund($order,$transaction) {
 		//debug start
 		try {
+			$payment = $order->getPayment();
+			$transaction->setOrderPaymentObject($payment);
+
+			Mage::log($payment);
+
 			$transaction->setTxnId('someTxnId');
 			$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 			$transaction->setIsClosed(1);
@@ -357,10 +362,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
 					(isset($realResponse) && $realResponse != false ? $realResponse : $response)
 				);
-				//this is done just in case
-				$order = $transaction->getOrder();
-				$payment = $order->getPayment();
-				$transaction->setOrderPaymentObject($payment);
 				$transaction->save();
 				return true;
 			} catch(Exception $e) {
