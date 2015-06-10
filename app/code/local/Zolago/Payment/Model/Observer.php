@@ -19,7 +19,7 @@ class Zolago_Payment_Model_Observer
             foreach ($collection as $item) {
 				/** @var Zolago_Payment_Model_Allocation $item */
 
-	            if(isset($item['rma_id'])) {//indicates that refund that we're going to create contains RMA money
+	            if(isset($item['rma_id']) && !empty($item['rma_id'])) {//indicates that refund that we're going to create contains RMA money
 		            $rmaId = $item['rma_id'];
 	            }
 
