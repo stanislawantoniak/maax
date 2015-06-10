@@ -98,7 +98,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 * Dodanie (oraz na biezaco modyfikowanie) zdarzenia w koszyku addContactExtEvent z typem CART
 */
     public function add_cart_event($observer){
-        Mage::log($observer->getEvent()->getName(), null, "salesmanago.log");
+
         $cartHelper = Mage::getModel('checkout/cart')->getQuote();
         $items = $cartHelper->getAllItems();
         $itemsNamesList = array();
