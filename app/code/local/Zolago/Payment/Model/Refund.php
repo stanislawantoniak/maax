@@ -28,7 +28,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
 	        ->join(
 		        array(
 			        'rma_allocations' => 'zolago_payment_allocation'),
-		        'main_table.transaction_id = rma_allocations.transaction_id && NOT_NULL(rma_allocations.rma_id)'
+		        '(main_table.transaction_id = rma_allocations.transaction_id && NOT_NULL rma_allocations.rma_id)'
 	        )
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
