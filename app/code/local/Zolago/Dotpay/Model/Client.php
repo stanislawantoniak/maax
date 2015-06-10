@@ -308,19 +308,18 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					//load parent transaction to get dotpay txn_id
 					$oldTransactionId = $transaction->getTxnId();
 					$newTransactionId = false;
-					$realResponse = false;
 					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
 					if(isset($parentTxn['count']) && $parentTxn['count'] == 1 && isset($parentTxn['results']) && isset($parentTxn['results'][0])) {
 						$newTransactionId = $parentTxn['results'][0]['number'];
-						$realResponse = $parentTxn['results'][0];
-					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 2 && isset($parentTxn['results'])) {
+						$response = $parentTxn['results'][0];
+					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 1 && isset($parentTxn['results'])) {
 						foreach ($parentTxn['results'] as $parentResult) {
 							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
 								/** @var Mage_Sales_Model_Order_Payment_Transaction $transactionModel */
 								$transactionModel = Mage::getModel('sales/order_payment_transaction');
 								$transactionModel->loadByTxnId($parentResult['number']);
 								if(!$transactionModel->getId()) {
-									$realResponse = $parentResult;
+									$response = $parentResult;
 									$newTransactionId = $parentResult['number'];
 								}
 								unset($transactionModel);
