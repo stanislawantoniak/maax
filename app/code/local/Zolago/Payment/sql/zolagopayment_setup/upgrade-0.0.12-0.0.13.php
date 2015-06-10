@@ -1,5 +1,4 @@
 <?php
-trans
 /**
  * zolago payment allocations table
  */
