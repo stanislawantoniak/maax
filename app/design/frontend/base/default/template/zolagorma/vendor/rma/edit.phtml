@@ -103,19 +103,19 @@ jQuery(document).ready(function() {
 							<?php else: ?>
 								<?php if($_rma->getRmaRefundAmount()):
 									 echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false);
-									if($_rma->getPo()->isPaymentDotpay()):
-										echo ' (';
-										if($_rma->isAlreadyReturned()):
-											echo $_helper->__('Return completed');
-										else:
-											echo $_helper->__('Return is processing');
-										endif;
-										echo ')';
-									endif;
 								else: ?>
 									<?php echo $_helper->__('Not paid');?>
 								<?php endif; ?>
 							<?php endif; ?>
+							<?php if($_rma->getPo()->isPaymentDotpay() && $_rma->getRmaRefundAmount()):
+								echo ' (';
+								if($_rma->isAlreadyReturned()):
+									echo $_helper->__('Return completed');
+								else:
+									echo $_helper->__('Return is processing');
+								endif;
+								echo ')';
+							endif; ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd>
