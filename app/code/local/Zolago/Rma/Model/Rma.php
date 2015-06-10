@@ -358,7 +358,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 				$amount += $item->getPoItem()->getFinalItemPrice();
 			}
 			$this->_refundAmountMax = $amount;
-		}
+		}allo
 		return $this->_refundAmountMax;
 	}
 
@@ -371,5 +371,26 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 			->addAttributeToFilter('udpo_id', $poId);
 
 		return $ids;
+	}
+
+	public function isAlreadyReturned() {
+		/** @var Zolago_Payment_Model_Allocation $allocationsModel */
+		$allocationsModel = Mage::getModel('zolagopayment/allocations');
+		$collection = $allocationsModel->getCollection()->addFieldToFilter('rma_id',$this->getId())->addFieldToFilter('allocation_type','refund');
+		$txnIds = array();
+		foreach($collection as $allocation) {
+			$txnIds[] = $allocation->getRefundTransactionId();
+		}
+		if(count($txnIds)) {
+			/** @var Mage_Sales_Model_Order_Payment_Transaction $transactions */
+			$transactions = Mage::getModel("sales/order_payment_transaction")
+				->getCollection()
+				->addFieldToFilter('transaction_id',array('in'=>$txnIds))
+				->addFieldToFilter('txn_status','3');
+			if(!$transactions->getSize()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
