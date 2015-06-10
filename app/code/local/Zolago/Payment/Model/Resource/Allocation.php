@@ -97,6 +97,7 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 	 * @param $data
 	 */
 	public function appendAllocations($data) {
+		Mage::log($data,null,'rma_data.log');
 		$writeConnection = $this->_getWriteAdapter();
 		$writeConnection->insertMultiple($this->getTable('zolagopayment/allocation'), $data);
 	}
