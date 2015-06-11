@@ -21,7 +21,7 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
             //->addFieldToFilter('parent_item_id', array('null' => true))
         ;
         $itemCollection->setQuote($quote);
-krumo($itemCollection);
+
 
 
         $children = array();
