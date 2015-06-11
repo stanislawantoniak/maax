@@ -1,4 +1,4 @@
-"Pos", "Point Of Sale"
+﻿"Pos", "Point Of Sale"
 "Create POS", "Dodaj POS"
 "Client number", "Numer klienta"
 "Phone", "Telefon"
@@ -36,5 +36,5 @@
 "Cancel","Anuluj"
 "Save","Zapisz"
 "This field is required.","To pole jest wymagane."
-
+"POS Saved","Dane POS zostały zapisane"
 
