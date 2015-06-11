@@ -11,20 +11,16 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
         $customer = Mage::getModel("customer/customer");
         $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
         $customer->loadByEmail($email);
-        Mage::log($_SERVER, null, "salesmanago.log");
-        Mage::log($_REQUEST, null, "salesmanago.log");
 
         $quote = Mage::getModel('sales/quote')
-            ->load($email,"customer_email");
-
+            ->setSharedStoreIds(array(Mage::app()->getStore()->getId()))
+            ->loadByCustomer($customer);
 
         $itemCollection = Mage::getModel('sales/quote_item')
             ->getCollection()
             //->addFieldToFilter('parent_item_id', array('null' => true))
         ;
         $itemCollection->setQuote($quote);
-
-
 
         $children = array();
         foreach ($itemCollection as $item) {
