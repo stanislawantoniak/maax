@@ -12,7 +12,7 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
         $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
         $customer->loadByEmail($email);
         Mage::log($_SERVER, null, "salesmanago.log");
-        Mage::log($_GET, null, "salesmanago.log");
+        Mage::log($_REQUEST, null, "salesmanago.log");
 
         $quote = Mage::getModel('sales/quote')
             ->load($email,"customer_email");
