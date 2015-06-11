@@ -64,6 +64,17 @@
 			</modules>
 		</translate>
     </frontend>
+	<adminhtml>
+		<translate>
+			<modules>
+				<Zolago_Payment>
+					<files>
+						<default>Zolago_Payment.csv</default>
+					</files>
+				</Zolago_Payment>
+			</modules>
+		</translate>
+	</adminhtml>
 	<admin>
 		<routers>
 			<zolagopayment>
