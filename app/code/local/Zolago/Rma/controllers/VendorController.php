@@ -172,6 +172,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             //else
             //no meter
 
+	        //don't allow to close rma if refund is still processing
+	        if($rma->getRmaRefundAmount() && $rma->getPo()->isPaymentDotpay() && !$rma->isAlreadyReturned() && $status == 'closed_accepted') {
+		        throw new Mage_Core_Exception(
+			        Mage::helper("zolagorma")->__("You can't close RMA if refund is still processing. Please try again after refund completion.")
+		        );
+	        }
+
             $messages = array();
 
             // Process status
