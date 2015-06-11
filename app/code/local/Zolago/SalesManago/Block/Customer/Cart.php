@@ -33,15 +33,18 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
                 $children[$item->getData("parent_item_id")] = $item->getProduct()->getSize();
             }
         }
+
         unset($vendorName);
         unset($item);
 
         foreach($products as $vendor => $items){
             foreach($items as $itemId => $item){
-                $item->setData("children", $children[$itemId]);
-
+                if(isset($children[$itemId])){ //for configurable products
+                    $item->setData("children_size", $children[$itemId]);
+                }
             }
         }
+
         return $products;
     }
 }

@@ -1,1 +1,145 @@
-Cart content
+<meta charset="utf-8">
+<style>
+    a:link, a:visited {
+        color: black;
+        text-decoration: none;
+    }
+    .table-cart .description_checked_product .product_name a:hover {
+        text-decoration: underline;
+    }
+    .table-cart table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    .table-cart table tr.panel-heading td {
+        background: transparent;
+        font-size: 18px;
+        color: #000000;
+        padding: 14.86px 0 20px 29.41px;
+        position: relative;
+        margin-bottom: 13px;
+        /*border: 1px solid #ddd;*/
+
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+    .table-cart table tr.panel-heading td:first-child:before {
+        content: ' ';
+        display: block;
+        width: 18px;
+        height: 18px;
+        position: absolute;
+        left: 0px;
+        top: 18px;
+         background: #6fffcf;
+    }
+    .table-cart table tr.panel-heading td:not(:first-child) {
+        padding: 0;
+        text-align: center;
+    }
+    .table-cart table tr td:not(:first-child) {
+        text-align: center;
+    }
+
+    .table-cart figure {
+        border: 1px solid #f1f1f1;
+        float: left;
+        width: 55px;
+        margin: 0 3% 0 0;
+    }
+    img {
+        vertical-align: middle;
+    }
+    .table-cart .description_checked_product {
+        position: relative;
+        padding-top: 3px;
+        min-height: 69px;
+        padding-bottom: 20px;
+        margin-left: 64px;
+    }
+    .table-cart .description_checked_product .product_name {
+        font-size: 16px;
+        color: #000;
+    }
+</style>
+<?php /** @var Zolago_SalesManago_Block_Customer_Cart $this */ ?>
+<?php $customerCart = $this->getCustomerCart(); ?>
+
+<?php if (!empty($customerCart)): ?>
+    <div class="table-cart">
+        <?php $helper = Mage::helper("zolagosalesmanago"); ?>
+        <h1><?php echo $helper->__("Twój koszyk"); ?></h1>
+        <table>
+            <?php foreach ($customerCart as $vendor => $items): ?>
+                <tr class="panel-heading">
+                    <td><?php echo $helper->__("Vendor"); ?>: <strong><?php echo $vendor; ?></strong></td>
+                    <td><?php echo $helper->__("Price"); ?></td>
+                    <td><?php echo $helper->__("Quantity"); ?></td>
+                    <td><?php echo $helper->__("Value"); ?></td>
+                </tr>
+
+                <?php foreach ($items as $item): ?>
+                    <?php //krumo($item->getData()); ?>
+                    <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
+                    <tr>
+                        <td>
+                            <figure>
+                                <a href="<?php echo $_product->getProductUrl(); ?>">
+                                    <img
+                                        src="<?php echo (string)Mage::helper('catalog/image')->init($_product, 'image')->resize(53, 69); ?>"
+                                        alt="<?php echo $this->escapeHtml($_product->getName()); ?>"/>
+                                </a>
+                            </figure>
+                            <div class="description_checked_product">
+                                <div class="product_name">
+                                    <a href="<?php echo $_product->getProductUrl(); ?>">
+                                        <?php echo $this->escapeHtml($_product->getName()); ?>
+                                    </a>
+                                </div>
+                                <?php
+                                if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):
+                                    $sizeValue = $item->getData("children_size");
+
+                                    $sizeLabel = $_product
+                                        ->setSize($sizeValue)
+                                        ->getAttributeText('size');
+                                    ?>
+                                    <div class="product_size">
+                                        <?php echo $helper->__("Rozmiar"); ?>: <?php echo $sizeLabel; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="cena">
+                                 <span class="cart-price">
+                                    <span class="price">
+                                        <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
+                                    </span>
+                                 </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="ilosc"><?php echo $item->getQty(); ?></div>
+                        </td>
+                        <td>
+                            <div class="a-right">
+                                 <span class="cart-price">
+                                    <span class="price">
+                                        <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_row_total_incl_tax")); ?>
+                                    </span>
+                                 </span>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+
+            <?php endforeach; ?>
+        </table>
+    </div>
+<?php endif; ?>
+
