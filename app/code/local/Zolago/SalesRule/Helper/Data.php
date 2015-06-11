@@ -138,4 +138,23 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
         return $error;
     }
+    
+    /**
+     * returns path to catalog with promotions images
+     * 
+     * @return string
+     */
+     public function getPromotionImagePath() {
+         $path = Mage::getBaseDir('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
+         return $path;
+     }
+    /**
+     * returns url to catalog with promotions images
+     * 
+     * @return string
+     */
+     public function getPromotionImageUrl() {
+         $path = Mage::getBaseUrl('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
+         return $path;
+     }
 }

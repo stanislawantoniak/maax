@@ -16,6 +16,16 @@ $installer->getConnection()->addColumn(
 		"default"	=> Zolago_SalesRule_Model_Promotion_Type::PROMOTION_NONE,
 	)
 );
+$installer->getConnection()->addColumn(
+	$installer->getTable('salesrule/rule'), 
+	'promo_image', 
+	array(
+		"type"		=> Varien_Db_Ddl_Table::TYPE_TEXT,
+		"length"	=> 255, 
+		"nullable"  => true,
+		"comment"	=> "Image for promotion",
+	)
+);
 
 $installer->getConnection()->addColumn(
 	$installer->getTable('salesrule/coupon'), 

@@ -2,9 +2,20 @@
 <config>
     <modules>
         <Zolago_SalesRule>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </Zolago_SalesRule>
     </modules>
+    <frontend>
+        <routers>
+            <mypromotions>	
+                <use>standard</use>
+                <args>
+                    <module>Zolago_SalesRule</module>
+                    <frontName>mypromotions</frontName>
+                </args>
+            </mypromotions>
+        </routers>
+    </frontend>
     <global>
 		<helpers>
 			<zolagosalesrule>
