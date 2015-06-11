@@ -68,6 +68,9 @@
 								</h1>
 
 								<div style="border-top:25px solid white;border-bottom:35px solid white;line-height:1.4em;margin:0;padding:0">
+									{{depend payment_type}}
+									Refund type: {{var payment_type}}<br/>
+									{{/depend}}
 									Refunded amount: {{var return_amount}}
 								</div>
 

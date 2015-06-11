@@ -94,8 +94,20 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
 					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
-					$po->saveComments();
 					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+
+					//send emails to not transactional refunds
+					if(!$po->isPaymentDotpay()) {
+						//todo: send email
+						/** @var Zolago_Payment_Helper_Data $paymentHelper */
+						$paymentHelper = Mage::helper('zolagopayment');
+						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma->getIncrementId(),$_returnAmount)) {
+							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
+							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
+						}
+					}
+
+					$po->saveComments();
 					$rma->saveComments();
 				} elseif (count($invalidItems)) {
 					Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
