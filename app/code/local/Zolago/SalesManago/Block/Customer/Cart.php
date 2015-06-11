@@ -16,11 +16,12 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
             ->setSharedStoreIds(array(Mage::app()->getStore()->getId()))
             ->loadByCustomer($customer);
 
-        $itemCollection = Mage::getModel('sales/quote_item')
-            ->getCollection()
-            //->addFieldToFilter('parent_item_id', array('null' => true))
-        ;
-        $itemCollection->setQuote($quote);
+        if ($quote) {
+            $itemCollection = $quote->getItemsCollection(false);
+        }
+        else {
+            $itemCollection = new Varien_Data_Collection();
+        }
 
         $children = array();
         foreach ($itemCollection as $item) {
