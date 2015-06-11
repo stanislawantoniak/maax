@@ -320,6 +320,7 @@
 				                <show_in_default>1</show_in_default>
 				                <show_in_website>1</show_in_website>
 				                <show_in_store>1</show_in_store>
+				                <default>refund_email_template</default>
 			                </refund_email_template>
 			                <refund_rma_email_template translate="label">
 				                <label>RMA refund email template</label>
@@ -329,6 +330,7 @@
 				                <show_in_default>1</show_in_default>
 				                <show_in_website>1</show_in_website>
 				                <show_in_store>1</show_in_store>
+				                <default>refund_rma_email_template</default>
 			                </refund_rma_email_template>
 		                </fields>
 	            </payment_refunds_emails>
