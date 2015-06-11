@@ -185,3 +185,8 @@
 "Loading...","Trwa komunikacja z serwerem..."
 "Return completed","Zwrot zakończony"
 "Return processing","Trwa przetwarzanie"
+"You can't close RMA if refund is still processing. Please try again after refund completion.","Nie możesz zamknąć RMA jeżeli zwrot jest w trakcie przetwarzania. Spróbuj ponownie po przetworzeniu zwrotu."
+"Continue closing RMA?","Czy kontynuować zamykanie RMA?"
+"You are trying to close RMA, however it does not contain any refund value. Do you want to continue?","Próbujesz zamknąć RMA do którego nie został utworzony żaden zwrot. Czy chcesz kontynuować?"
+"Email about RMA refund was sent to customer (RMA id: %s, amount: %s)","Wysłano email do klienta o zwrocie płatności RMA (id: %s, kwota: %s)"
+"Email about refund was sent to customer (Amount: %s)","Wysłano email do klienta o zwrocie płatności (kwota: %s)"
