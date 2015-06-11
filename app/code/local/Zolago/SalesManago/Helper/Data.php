@@ -41,9 +41,8 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                     ),
                 ),
                 'owner' => $ownerEmail,
+                'async' => false,
             );
-            $data_to_json = array_filter($data_to_json);
-            $data_to_json['async'] = false;
 
             if ($register || !isset($data['is_subscribed'])) {
                 $data_to_json['forceOptIn'] = false;
