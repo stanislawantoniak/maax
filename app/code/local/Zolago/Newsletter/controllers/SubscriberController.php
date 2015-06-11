@@ -65,4 +65,56 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
             $this->_redirectUrl(Mage::getBaseUrl());
         }
     }
+
+    /**
+     * After SalesManago unsubscribe subscriber
+     * system redirect to this thank you page with some marketing info about
+     * why it is better to be subscribed
+     */
+    public function sm_unsubscribe_redirectAction() {
+        $this->loadLayout()->renderLayout();
+    }
+
+
+    /**
+     * Subscribing again after SalesManago unsubscribe
+     */
+    public function subscribeAgainAction() {
+        $hlp    = Mage::helper('zolagonewsletter');
+        $email  = $this->getRequest()->getParam('email');
+        $key = $this->getRequest()->getParam('key');
+        $fromSalesManago = false;
+
+        $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
+        if($active == 1) {
+            $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+            $sha1 = sha1($email . $apiSecret);
+            if (isset($email) && isset($key) && isset($sha1) && filter_var($email, FILTER_VALIDATE_EMAIL) && $key == $sha1) {
+                $fromSalesManago = true;
+            }
+        }
+
+        if (!$this->_validateFormKey() || !$fromSalesManago) {
+            $session = Mage::getSingleton('customer/session');
+            $session->addError($hlp->__('An error occurred while saving your subscription.'));
+            return $this->_redirect('');
+        }
+        try {
+            /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+            $subscriber = Mage::getModel('newsletter/subscriber');
+            $subscriber->loadByEmail($email);
+            if ($subscriber->getId()) {
+                $subscriber->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED);
+                $subscriber->save();
+                Mage::getSingleton('customer/session')->addSuccess($hlp->__("The subscription has been saved."));
+            } else {
+                Mage::getSingleton('customer/session')->addSuccess($hlp->__('An error occurred while saving your subscription.'));
+            }
+        }
+        catch (Exception $e) {
+            Mage::logException($e);
+            Mage::getSingleton('customer/session')->addError($hlp->__('An error occurred while saving your subscription.'));
+        }
+        $this->_redirect('');
+    }
 }

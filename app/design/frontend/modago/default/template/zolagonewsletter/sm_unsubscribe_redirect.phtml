@@ -1,0 +1,21 @@
+<?php
+$email = $this->getRequest()->getParam('email');
+$key   = $this->getRequest()->getParam('key');
+?>
+
+<div id="content" class="container-fluid">
+    <div id="logIn" class="row">
+        <div id="content-main" class="">
+            <div class="col-sm-12 column-block">
+                <div class="main bg-w equalBlock col-01 <?php echo empty($key) ? 'hide-invalid-btn' : ''; ?>">
+                    <form action="<?php echo $this->getUrl("newsletter/Subscriber/subscribeAgain");?>" method="post" class="form-horizontal" >
+                        <input type="hidden" name="email" value="<?php echo $email ?>"/>
+                        <input type="hidden" name="key" value="<?php echo $key ?>"/>
+                        <?php echo $this->getChildHtml("zolagonewsletter.sm.unsubscribe.redirect.formkey");?>
+                        <?php echo $this->getChildHtml("salesmanago_unsubscribe_redirect");?>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
