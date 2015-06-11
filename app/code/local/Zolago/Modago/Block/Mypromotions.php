@@ -35,6 +35,32 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
              }
          }        
         parent::_prepareLayout();
+    }
+    public function getPromotionList() {
+        if (!$this->_customer_id) {
+            return array();
+        }
+        if (!$this->_subscribed && $this->_logged) {
+            return array();
+        }
+        $collection = Mage::getModel('salesrule/coupon')->getCollection();
+        $collection->addFieldToFilter('customer_id',$this->_customer_id);
+        $out = array();
+        $rules = array();
+        foreach ($collection as $item) {
+            $rules[$item['rule_id']] = $item['rule_id'];            
+        }
+        $rulesCollection = Mage::getModel('salesrule/rule')->getCollection();
+        $rulesCollection->addFieldToFilter('rule_id',array('in',$rules));
+        $rules = array(); // clear 
+        foreach ($rulesCollection as $rule) {
+            $rules[$rule['rule_id']] = $rule;
+        }
+        foreach ($collection as $item) {
+            $item['ruleItem'] = $rules[$item['rule_id']];
+            $out[] = $item;
+        }
+        return $out;
     }	
     /**
      * cms block 
@@ -43,5 +69,13 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
      public function getCmsBlock() {
         return $this->getLayout()->createBlock('cms/block')->setBlockId($this->_cms_block)->toHtml();
      }
+     
+     public function isLogged() {
+         return $this->_logged;
+     }
+     public function isPersistent() {
+         return $this->_persistent;
+     }
+     
 	
 } 
