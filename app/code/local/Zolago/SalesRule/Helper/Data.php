@@ -138,4 +138,47 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
         return $error;
     }
+
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function assignCouponsToSubscribers($data)
+    {
+        $subscribers = $data["subscribers"];
+        $coupons = $data["coupons"];
+        $dataToSend = $data["data_to_send"];
+
+        if (empty($subscribers) || empty($coupons)) {
+            return array("subscribers" => $subscribers, "coupons" => $coupons, "data_to_send" => $dataToSend);
+        } else {
+            $firstSubscriberId = key($subscribers);
+            $firstSubscriberEmail = $subscribers[$firstSubscriberId];
+
+            $customerCodes = array();
+
+            foreach ($coupons as $ruleId => $couponCodes) {
+                $firstCouponCode = key($couponCodes);
+                if(!empty($firstCouponCode)){
+                    $dataToSend[$firstSubscriberEmail][$ruleId] = $firstCouponCode;
+                    $customerCodes[$ruleId] = $firstCouponCode;
+
+                    $dataToSend = array_merge($dataToSend, array($firstSubscriberEmail => $customerCodes));
+                }
+
+                unset($coupons[$ruleId][$firstCouponCode]);
+            }
+            unset($subscribers[$firstSubscriberId]);
+
+            $data = array(
+                "subscribers" => $subscribers,
+                "coupons" => $coupons,
+                "data_to_send" => $dataToSend
+            );
+
+            return $this->assignCouponsToSubscribers($data);
+        }
+    }
+
 }

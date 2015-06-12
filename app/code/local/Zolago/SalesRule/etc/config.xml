@@ -87,4 +87,17 @@
 			</adminhtml_promo_quote_edit_tab_main_prepare_form>
 		</events>
 	</adminhtml>
+    <crontab>
+        <jobs>
+            <zolagosalesrule_send_subscriber_coupon_mail>
+                <schedule>
+                    <!-- Run every 1 hour -->
+                    <cron_expr>0 */1 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosalesrule/observer::sendSubscriberCouponMail</model>
+                </run>
+            </zolagosalesrule_send_subscriber_coupon_mail>
+        </jobs>
+    </crontab>
 </config>
