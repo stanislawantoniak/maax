@@ -83,18 +83,18 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
         $hlp    = Mage::helper('zolagonewsletter');
         $email  = $this->getRequest()->getParam('email');
         $key = $this->getRequest()->getParam('key');
-        $fromSalesManago = false;
+        $isValid = false;
 
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
         if($active == 1) {
             $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
             $sha1 = sha1($email . $apiSecret);
             if (isset($email) && isset($key) && isset($sha1) && filter_var($email, FILTER_VALIDATE_EMAIL) && $key == $sha1) {
-                $fromSalesManago = true;
+                $isValid = true;
             }
         }
 
-        if (!$this->_validateFormKey() || !$fromSalesManago) {
+        if (!$this->_validateFormKey() || !$isValid) {
             $session = Mage::getSingleton('customer/session');
             $session->addError($hlp->__('An error occurred while saving your subscription.'));
             return $this->_redirect('');
