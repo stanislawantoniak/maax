@@ -157,4 +157,15 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $path = Mage::getBaseUrl('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
          return $path;
      }
+     
+    /**
+     * send mail to customer with coupons_id
+     * 
+     * @param string $email
+     * @param array $ids salesrule_coupons primary keys
+     * @return bool
+     */
+     public function sendPromotionEmail($email,$ids) {
+         // todo
+     }
 }
