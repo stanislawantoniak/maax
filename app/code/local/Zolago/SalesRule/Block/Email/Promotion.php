@@ -11,15 +11,4 @@ class Zolago_SalesRule_Block_Email_Promotion extends Mage_Core_Block_Template
 	    parent::_construct();
 	}
 	
-	public function getPromotions() {
-	    $ids = $this->getIds();
-	    $collection = Mage::getModel('salesrule/coupon')->getCollection();
-	    $collection->addFieldToFilter('coupon_id',array('in' => $ids));
-	    $out = array();
-	    foreach ($collection as $item) {
-	        $item['ruleItem'] = Mage::getModel('salesrule/rule')->load($item['rule_id']);
-	        $out[] = $item;
-	    }
-	    return $out;
-	}
 } 

@@ -197,8 +197,8 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	 *
 	 * @return string
 	 */
-	public function getPromotionResizedImagePath() {
-		$path = $this->getPromotionImagePath() . DS . 'resized';
+	public function getPromotionResizedImagePath($width = 480) {
+		$path = $this->getPromotionImagePath() . DS . 'resized' . DS . $width;
 		return $path;
 	}
 
@@ -219,17 +219,14 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	 *
 	 * @return string
 	 */
-	public function getPromotionResizedImageUrl() {
-		$path = $this->getPromotionImageUrl() . DS . "resized";
+	public function getPromotionResizedImageUrl($width = 480) {
+		$path = $this->getPromotionImageUrl() . DS . 'resized' . DS . $width;
 		return $path;
 	}
 
-	public function getResizedPromotionImage($fileName,$width=480) {
-		$folderURL = $this->getPromotionImageUrl();
-		$imageURL = $folderURL . $fileName;
-
+	protected function _resizePromotionImage($fileName,$width=480) {
 		$basePath = $this->getPromotionImagePath() . DS . $fileName;
-		$newPath = $this->getPromotionResizedImagePath() . DS . $fileName;
+		$newPath = $this->getPromotionResizedImagePath($width) . DS . $fileName;
 		//if width empty then return original size image's URL
 		if ($width != '') {
 			//if image has already resized then just return URL
@@ -240,8 +237,19 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 				$imageObj->keepFrame(false);
 				$imageObj->resize($width, null);
 				$imageObj->save($newPath);
-			}
-			$resizedURL = $this->getPromotionResizedImageUrl() . DS . $fileName;
+			} 
+        }
+	}
+	
+	public function getResizedPromotionImage($fileName,$width = 480) {
+		$folderURL = $this->getPromotionImageUrl();
+		$imageURL = $folderURL . $fileName;
+
+		//if width empty then return original size image's URL
+		if ($width != '') {
+			//if image has already resized then just return URL
+			$this->_resizePromotionImage($fileName,$width);
+			$resizedURL = $this->getPromotionResizedImageUrl($width) . DS . $fileName;
 		} else {
 			$resizedURL = $imageURL;
 		}
@@ -264,6 +272,16 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 		return null;
 	}
      
+    protected function _prepareCollection($ids) {
+	    $collection = Mage::getModel('salesrule/coupon')->getCollection();
+	    $collection->addFieldToFilter('coupon_id',array('in' => $ids));
+	    $out = array();
+	    foreach ($collection as $item) {
+	        $item['ruleItem'] = Mage::getModel('salesrule/rule')->load($item['rule_id']);
+	        $out[] = $item;
+	    }
+	    return $out;
+    }
     /**
      * send mail to customer with coupons_id
      * 
@@ -279,12 +297,24 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $store = $customer->getStore();
          $template = Mage::getStoreConfig('promo/promotions_mail_settings/mail_template');
          $content = Mage::app()->getLayout()->createBlock('zolagosalesrule/email_promotion','zolagosalesrule.email.promotion');
-         $content->setIds($ids);
+         $list = $this->_prepareCollection($ids);
+         $content->setPromotions($list);
          $data = array (
              'use_attachments'=> true,
              'promotionList' => $content->toHtml(),
              'store_name' => $store->getName(),
          );
+         foreach ($list as $item) {
+             $name = $item['ruleItem']->getPromoImage();
+             if ($name) {
+                 $this->_resizePromotionImage($name,200);
+                 $data['_ATTACHMENTS'][] = array (
+                     'filename' => $this->getPromotionResizedImagePath(200).DS.$name,
+                     'id' => $name,
+                     'disposition' => 'inline',                 
+                 );
+              }
+          }
          $helper = Mage::helper('zolagocommon');
          $sender = Mage::getStoreConfig('promo/promotions_mail_settings/mail_identity');
          $helper->sendEmailTemplate(
