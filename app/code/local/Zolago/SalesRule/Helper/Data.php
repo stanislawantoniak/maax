@@ -161,11 +161,34 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
     /**
      * send mail to customer with coupons_id
      * 
-     * @param string $email
+     * @param int $customer_id
      * @param array $ids salesrule_coupons primary keys
      * @return bool
      */
-     public function sendPromotionEmail($email,$ids) {
-         // todo
+     public function sendPromotionEmail($customer_id,$ids) {
+         if (empty($ids)) {
+             return false;
+         }
+         $customer = Mage::getModel('customer/customer')->load($customer_id);
+         $store = $customer->getStore();
+         $template = Mage::getStoreConfig('promo/promotions_mail_settings/mail_template');
+         $content = Mage::app()->getLayout()->createBlock('zolagosalesrule/email_promotion','zolagosalesrule.email.promotion');
+         $content->setIds($ids);
+         $data = array (
+             'use_attachments'=> true,
+             'promotionList' => $content->toHtml(),
+             'store_name' => $store->getName(),
+         );
+         $helper = Mage::helper('zolagocommon');
+         $sender = Mage::getStoreConfig('promo/promotions_mail_settings/mail_identity');
+         $helper->sendEmailTemplate(
+             $customer->getEmail(),
+             '',
+             $template,
+             $data,
+             $store->getId(),
+             $sender
+         );
+         return true;             
      }
 }

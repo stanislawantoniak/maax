@@ -17,6 +17,11 @@
         </routers>
     </frontend>
     <global>
+        <blocks>
+            <zolagosalesrule>
+                <class>Zolago_SalesRule_Block</class>
+            </zolagosalesrule>
+        </blocks>
 		<helpers>
 			<zolagosalesrule>
 				<class>Zolago_SalesRule_Helper</class>
