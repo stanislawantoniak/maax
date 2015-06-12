@@ -35,7 +35,12 @@
                     </relation>
 				</entities>
 			 </zolagosalesrule_resource>
-		</models>
+            <salesrule_resource>
+                <rewrite>
+                    <coupon>Zolago_SalesRule_Model_Resource_Coupon</coupon>
+                </rewrite>
+            </salesrule_resource>
+        </models>
         <resources>
             <zolagosalesrule_setup>
                 <setup>

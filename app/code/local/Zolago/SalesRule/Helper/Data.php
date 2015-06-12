@@ -273,5 +273,9 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      */
      public function sendPromotionEmail($email,$ids) {
          // todo
+         if($email == "15@sharklasers.com"){
+             return false;
+         }
+         return true;
      }
 }
