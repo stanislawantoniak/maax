@@ -45,6 +45,9 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         }
         $collection = Mage::getModel('salesrule/coupon')->getCollection();
         $collection->addFieldToFilter('customer_id',$this->_customer_id);
+        $select = $collection->getSelect();
+        $select->where('expiration_date > ?',date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
+        $select->where('(main_table.times_used < main_table.usage_limit) OR (main_table.usage_limit = 0)');
         $out = array();
         $rules = array();
         foreach ($collection as $item) {
@@ -57,8 +60,10 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
             $rules[$rule['rule_id']] = $rule;
         }
         foreach ($collection as $item) {
-            $item['ruleItem'] = $rules[$item['rule_id']];
-            $out[] = $item;
+            if ($rules[$item['rule_id']]->getIsActive()) {
+                $item['ruleItem'] = $rules[$item['rule_id']];
+                $out[] = $item;
+            }
         }
         return $out;
     }	
