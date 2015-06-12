@@ -172,7 +172,7 @@ class Zolago_SalesRule_Model_Observer {
             )
             ->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
                 'salesrule_rule.rule_id = salesrule_coupon.rule_id',
-                array("code")
+                array("coupon_id","code")
             )
             ->where('salesrule_rule.is_active = ?', 1)
             ->where('customer_id IS NULL')
@@ -203,7 +203,7 @@ class Zolago_SalesRule_Model_Observer {
 
         $coupons = array();
         foreach ($result as $couponData) {
-            $coupons[$couponData['rule_id']][$couponData['code']] = $couponData['code'];
+            $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
         }
 
         //3. Assign coupons to customers
