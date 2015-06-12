@@ -15,7 +15,7 @@ $isValid = ($key == sha1($email . $apiSecret));
         <div id="content-main" class="">
             <div class="col-sm-12 column-block">
                 <div class="main bg-w equalBlock col-01 <?php echo !$isValid ? 'is-invalid' : ''; ?>">
-                    <form action="<?php echo $this->getUrl("newsletter/Subscriber/subscribeAgain");?>" method="post" class="form-horizontal" >
+                    <form action="<?php echo $this->getUrl("newsletter/subscriber/subscribeAgain");?>" method="post" class="form-horizontal" >
                         <input type="hidden" name="email" value="<?php echo $email ?>"/>
                         <input type="hidden" name="key" value="<?php echo $key ?>"/>
                         <?php echo $this->getChildHtml("zolagonewsletter.sm.unsubscribe.redirect.formkey");?>
