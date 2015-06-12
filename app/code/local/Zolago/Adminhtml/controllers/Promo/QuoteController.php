@@ -12,6 +12,7 @@ class Zolago_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Promo_QuoteC
     {
         if ($data = $this->getRequest()->getPost()) {
             try {
+	            $id = $this->getRequest()->getParam('rule_id');
                 if(isset($_FILES['promo_image']['name']) and (file_exists($_FILES['promo_image']['tmp_name']))) {
                     $uploader = new Varien_File_Uploader('promo_image');
                     $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png')); // or pdf or anything                    
@@ -21,8 +22,9 @@ class Zolago_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Promo_QuoteC
                     if (!is_dir($path)) {
                         mkdir($path);
                     }
-                    $uploader->save($path, $_FILES['promo_image']['name']);
-                    $data['promo_image'] = $_FILES['promo_image']['name'];                                  
+	                $pre = $id."_".time()."_";
+                    $uploader->save($path, $pre.$_FILES['promo_image']['name']);
+                    $data['promo_image'] = $pre.$_FILES['promo_image']['name'];
                 } else {
                     if(isset($data['promo_image']['delete']) && $data['promo_image']['delete'] == 1) {
                         $data['promo_image'] = '';
@@ -36,7 +38,6 @@ class Zolago_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Promo_QuoteC
                     'adminhtml_controller_salesrule_prepare_save',
                     array('request' => $this->getRequest()));
                 $data = $this->_filterDates($data, array('from_date', 'to_date'));
-                $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model->load($id);
                     if ($id != $model->getId()) {

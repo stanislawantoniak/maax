@@ -152,4 +152,72 @@ class Zolago_SalesRule_Model_Observer {
 
         $fieldset->addField("promo_image", "image", $param);
     }
+    /**
+     * Send new coupons to subscriber
+     */
+    public function sendSubscriberCouponMail()
+    {
+
+        //1. Coupons
+        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+
+        $query = $readConnection
+            ->select()
+            ->from(
+                array('salesrule_rule' => $resource->getTableName("salesrule/rule")),
+                array("rule_id", "name", "from_date", "to_date", "coupon_type")
+            )
+            ->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
+                'salesrule_rule.rule_id = salesrule_coupon.rule_id',
+                array("code")
+            )
+            ->where('salesrule_rule.is_active = ?', 1)
+            ->where('customer_id IS NULL')
+            ->where('salesrule_rule.to_date >= ?', date("Y-m-d H:i:s", $currentTimestamp))
+            ->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
+
+        ;
+        $result = $readConnection->fetchAll($query);
+
+        //Group coupons by rule
+        if (empty($result)) {
+            exit;
+        }
+        //2. Subscribers
+        $collection = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter("subscriber_status", Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
+            ->setPageSize(10000);
+
+        if ($collection->getSize() == 0) {
+            exit;
+        }
+        $subscribersCollection = $collection->getItems();
+        $subscribers = array();
+        foreach ($subscribersCollection as $subId => $subscriber) {
+            $subscribers[$subId] = $subscriber->getSubscriberEmail();
+        }
+
+        $coupons = array();
+        foreach ($result as $couponData) {
+            $coupons[$couponData['rule_id']][$couponData['code']] = $couponData['code'];
+        }
+
+        //3. Assign coupons to customers
+        $dataToSend = array();
+
+        $data = array(
+            "subscribers" => $subscribers,
+            "coupons" => $coupons,
+            "data_to_send" => $dataToSend
+        );
+
+        /* @var $helper Zolago_SalesRule_Helper_Data */
+        $helper = Mage::helper("zolagosalesrule");
+        $res = $helper->assignCouponsToSubscribers($data);
+        //Mage::log($res["data_to_send"], null, "coupon5.log");
+    }
 }
