@@ -38,9 +38,7 @@
         margin-bottom: 18px;
         padding: 0 8px;
     }
-    .box_listing_product .name_product a {
-        font-family: latoregular, sans-serif;
-    }
+
     .box_listing_product .price {
         color: #000000;
         font-size: 20px;
@@ -89,9 +87,7 @@
                                 <?php //krumo($item->getData()); ?>
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
-                                <a href="<?php echo $_product->getProductUrl(); ?>" style="
-                                color: black;text-decoration: none;
-                                ">
+                                <a href="<?php echo $_product->getProductUrl(); ?>">
                                     <figure class="img_product">
                                         <img
                                             src="<?php echo (string)Mage::helper('catalog/image')
@@ -103,7 +99,7 @@
                                 </a>
 
                                 <div class="name_product">
-                                    <a href="<?php echo $_product->getProductUrl(); ?>">
+                                    <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </a>
                                 </div>
