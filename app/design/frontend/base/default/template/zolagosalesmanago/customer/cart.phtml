@@ -1,18 +1,7 @@
 <?php /** @var Zolago_SalesManago_Block_Customer_Cart $this */ ?>
 <meta charset="utf-8">
 <style>
-    .bg-w {
-        background: #fff;
-        /*border-top: 1px solid #ebebeb;*/
-        /*border-bottom: 1px solid #ebebeb;*/
-    }
-    .container-fluid {
-        margin-right: auto;
-        margin-left: auto;
-        padding-left: 15px;
-        padding-right: 15px;
-        max-width: 1000px;
-    }
+
     .item {
         padding: 5px 0 0;
     }
@@ -83,7 +72,14 @@
 <?php $customerCart = $this->getCustomerCart(); ?>
 
 <?php if (!empty($customerCart)): ?>
-<div id="content" class="container-fluid bg-w">
+<div class="container-fluid bg-w" style="
+        background: #fff;
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+        max-width: 1000px;
+        ">
     <div id="items-product" class="container-fluid">
         <div>
             <?php $helper = Mage::helper("zolagosalesmanago"); ?>
