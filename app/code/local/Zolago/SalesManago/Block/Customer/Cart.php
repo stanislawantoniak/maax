@@ -25,26 +25,18 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
                 $itemCollection = new Varien_Data_Collection();
             }
 
-            $children = array();
+
             foreach ($itemCollection as $item) {
                 if($item->getData("parent_item_id") == NULL){
                     $vendorName = Mage::getModel('udropship/vendor')->load($item->getProduct()->getData("udropship_vendor"))->getVendorName();
                     $products[$vendorName][$item->getId()] = $item;
-                } else {
-                    $children[$item->getData("parent_item_id")] = $item->getProduct()->getSize();
                 }
             }
 
             unset($vendorName);
             unset($item);
 
-            foreach($products as $vendor => $items){
-                foreach($items as $itemId => $item){
-                    if(isset($children[$itemId])){ //for configurable products
-                        $item->setData("children_size", $children[$itemId]);
-                    }
-                }
-            }
+
         }
 
 
