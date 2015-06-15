@@ -384,10 +384,17 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 			->addFieldToFilter('allocation_type','payment')
 			->addFieldToFilter('allocation_amount',array('lt'=>'0'));
 
-		$refundsAmount = $refundsCollection->getSize();
-		$negativePaymentsAmount = $negativePaymentsCollection->getSize();
+		$sumRefunds = 0;
+		foreach($refundsCollection as $refund) {
+			$sumRefunds += abs($refund->getAllocationAmount());
+		}
 
-		if($refundsAmount != $negativePaymentsAmount) {
+		$sumNegativePayments = 0;
+		foreach($negativePaymentsCollection as $negativePayment) {
+			$sumNegativePayments += abs($negativePayment->getAllocationAmount());
+		}
+
+		if($sumRefunds != $sumNegativePayments) {
 			return false;
 		} else {
 			$txnIds = array();

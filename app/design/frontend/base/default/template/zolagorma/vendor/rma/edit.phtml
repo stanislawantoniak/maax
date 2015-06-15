@@ -513,7 +513,7 @@ jQuery(function($) {
 
 			fakeSubmit.click(function() {
 				noty({
-					text: "<?php $_helper->__("You can't close RMA if refund is still processing. Please try again after refund completion.") ?>",
+					text: "<?php echo $_helper->__("You can't close RMA if refund is still processing. Please try again after refund completion.") ?>",
 					type: 'error',
 					timeout: 5000
 				});
