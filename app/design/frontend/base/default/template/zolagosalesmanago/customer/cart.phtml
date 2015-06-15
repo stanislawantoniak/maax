@@ -1,7 +1,18 @@
 <?php /** @var Zolago_SalesManago_Block_Customer_Cart $this */ ?>
 
 <?php $customerCart = $this->getCustomerCart(); ?>
-
+<style type="text/css">
+    h3:before {
+        content: " ";
+        display: block;
+        height: 18px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 18px;
+        background: none repeat scroll 0 0 #6fffcf;
+    }
+</style>
 <?php if (!empty($customerCart)): ?>
 <div class="container-fluid bg-w" style="
         background: #fff;
@@ -14,7 +25,8 @@
     <div id="items-product" class="container-fluid">
         <div>
             <?php $helper = Mage::helper("zolagosalesmanago"); ?>
-            <h1><?php echo $helper->__("W koszyku czeka"); ?>:</h1>
+            <div style="padding: 10px 25px;">
+                <h3 style="display: block;margin: 0 -20px 10px;padding: 0 0 0 30px;position: relative;font-family: 'latoregular'; font-size: 20px; line-height: 20px;text-align: left;text-transform: uppercase;width: 100%;"><?php echo $helper->__("W koszyku czeka"); ?>:</h3></div>
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
