@@ -7,7 +7,7 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 <div id="content" class="container-fluid">
 	<div id="logIn" class="row">
 		<div id="content-main" class="">
-			<div class="col-sm-6 column-block">
+			<div class="col-sm-6 column-block login-column">
 				<div class="main bg-w equalBlock col-01">  
 					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form">
 						<?php echo $this->getBlockHtml('formkey'); ?>
@@ -53,7 +53,7 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 					</form>
 				</div>   
 			</div>
-			<div class="col-sm-6 column-block">
+			<div class="col-sm-6 column-block register-column">
 				<div class="main bg-w equalBlock col-02">
 					<?php echo $this->getChildHtml("form.register.continue");?>
 				</div>
