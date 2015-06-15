@@ -181,7 +181,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         return false;
     }
 
-	public function createOverpayment($po,$commentMoved="Moved to overpayment",$commentCreated="Created overpayment") {
+	public function createOverpayment($po,$commentMoved="Moved to overpayment",$commentCreated="Created overpayment",$rma_id=null) {
 
 		$po = $this->getPo($po);
 		$helper = Mage::helper("zolagopayment");
@@ -239,7 +239,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'comment'           => $helper->__($commentMoved),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
-                                'is_automat'        => $this->isAutomat()
+                                'is_automat'        => $this->isAutomat(),
+								'rma_id'            => $rma_id
 							);
 
 							//create overpayment
@@ -253,7 +254,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'comment'           => $helper->__($commentCreated),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
-                                'is_automat'        => $this->isAutomat()
+                                'is_automat'        => $this->isAutomat(),
+								'rma_id'            => $rma_id
 							);
 						} else {
 							break;
