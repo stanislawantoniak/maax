@@ -186,14 +186,20 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 				->addFieldToFilter('refund_transaction_id',$transaction->getId())
 				->addFieldToFilter('allocation_type',Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND);
 		if($collection->getSize()) {
+			$poRefundSum = 0;
+			$poId = false;
 			foreach($collection as $allocation) {
-				if($allocation->getPoId() && abs($transaction->getTxnAmount()) == abs($allocation->getAllocationAmount)) {
-					/** @var Zolago_Po_Model_Po $rma */
-					$po = Mage::getModel('zolagopo');
-					$po->load($allocation->getPoId());
-					if($po->getId()) {
-						return $po;
-					}
+				$poRefundSum += abs($allocation->getAllocationAmount());
+				if(!$poId) {
+					$poId = $allocation->getPoId();
+				}
+			}
+			if($poRefundSum == abs($transaction->getTxnAmount())) {
+				/** @var Zolago_Po_Model_Po $rma */
+				$po = Mage::getModel('zolagopo');
+				$po->load($poId);
+				if($po->getId()) {
+					return $po;
 				}
 			}
 		}
