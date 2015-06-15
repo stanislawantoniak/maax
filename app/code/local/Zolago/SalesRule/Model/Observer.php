@@ -155,9 +155,8 @@ class Zolago_SalesRule_Model_Observer {
     /**
      * Send new coupons to subscriber
      */
-    public function sendSubscriberCouponMail()
+    public static function sendSubscriberCouponMail()
     {
-
         //1. Coupons
         $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 
@@ -190,15 +189,25 @@ class Zolago_SalesRule_Model_Observer {
         $collection = Mage::getModel('newsletter/subscriber')
             ->getCollection()
             ->addFieldToFilter("subscriber_status", Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
-            ->setPageSize(10000);
+            ;
+        $collection->getSelect()
+            ->joinLeft(array("customer" => "customer_entity"),
+                "main_table.subscriber_email = customer.email",
+                array("customer_id" => "customer.entity_id")
+            )
+            ->where("main_table.store_id=customer.store_id")
+        ;
+        $collection->setPageSize(10000);
 
         if ($collection->getSize() == 0) {
             exit;
         }
         $subscribersCollection = $collection->getItems();
         $subscribers = array();
+        $subscribersCustomersId = array();
         foreach ($subscribersCollection as $subId => $subscriber) {
             $subscribers[$subId] = $subscriber->getSubscriberEmail();
+            $subscribersCustomersId[$subscriber->getSubscriberEmail()] = $subscriber->getCustomerId();
         }
 
         $coupons = array();
@@ -225,32 +234,24 @@ class Zolago_SalesRule_Model_Observer {
         $dataAssign = $res["data_to_send"];
         if (!empty($dataAssign)) {
             foreach ($dataAssign as $email => $sendData) {
-                if (!$helper->sendPromotionEmail($email, array_values($sendData))) {
-                    //if mail sending failed
-                    unset($dataAssign[$email]);
+                $customerId = isset($subscribersCustomersId[$email]) ? $subscribersCustomersId[$email] : false;
+                if($customerId){
+                    if (!$helper->sendPromotionEmail($customerId, array_values($sendData))) {
+                        //if mail sending failed
+                        unset($dataAssign[$email]);
+                    }
                 }
             }
+            unset($customerId);
         }
 
         //5. Set customer_id to salesrule_coupon table
         if (!empty($dataAssign)) {
-            $toSet = array();
-            $subscriberEmails = array_keys($dataAssign);
-            $customersCollection = Mage::getModel("customer/customer")
-                ->getCollection()
-                ->addFieldToFilter("email", array("in" => $subscriberEmails));
-
-
-            foreach($customersCollection as $customersCollectionItem){
-                $toSet[$customersCollectionItem->getEmail()] = $customersCollectionItem->getId();
-            }
-
-
             $insertData = array();
             foreach ($dataAssign as $email => $sendData) {
                 foreach($sendData as $couponId){
-                    if(isset($toSet[$email])){
-                        $insertData[] = "({$couponId},".$toSet[$email].")";
+                    if(isset($subscribersCustomersId[$email])){
+                        $insertData[] = "({$couponId},".$subscribersCustomersId[$email].")";
                     }
                 }
             }

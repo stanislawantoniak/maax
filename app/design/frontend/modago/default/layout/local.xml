@@ -453,7 +453,7 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml"></block>
+            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml" />
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </zolagomodago_brands_index>
@@ -1346,7 +1346,7 @@
 
 	<customer_account_login>
 		<reference name="customer_form_login">
-			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
+			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue" />
 		</reference>
 
 		<update handle="zolago_modago_customer_handle" />
@@ -1785,10 +1785,11 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="mypromotions.phtml"></block>
+            <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
+				<block type="customer/form_login" name="mypromotions.login" template="persistent/customer/form/login.phtml" />
+            </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
-
         
     </mypromotions_index_index>
     <wishlist_index_index>
