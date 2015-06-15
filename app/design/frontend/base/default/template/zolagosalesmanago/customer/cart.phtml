@@ -42,7 +42,7 @@
                                             src="<?php echo (string)Mage::helper('catalog/image')
                                                 ->init($_product, 'image')
                                                 ->resize(148, 222); ?>"
-                                            alt="<?php echo $this->escapeHtml($_product->getName()); ?>"/>
+                                            alt="<?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 42); ?>"/>
                                     </figure>
 
                                 </a>

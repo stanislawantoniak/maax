@@ -105,5 +105,18 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         return $text;
     }
 
-
+    /**
+     * return shorted to $n letters escaped name of product for visual purpose
+     *
+     * @param $name
+     * @param $n
+     * @return mixed|string
+     */
+    public function getShortProductName($name, $n) {
+        $productName = $this->escapeHtml($name);
+        if (strlen($productName) > 50) {
+            $productName = substr($productName, 0, $n) . '...';
+        }
+        return $productName;
+    }
 }
