@@ -1786,7 +1786,11 @@
         </reference>
         <reference name="content">
             <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
-				<block type="customer/form_login" name="mypromotions.login" template="persistent/customer/form/login.phtml" />
+				<block type="zolagomodago/promotions_login" name="mypromotions.login" template="promotions/login.phtml">
+					<block type="cms/block" name="promotions.login.header" as="login-header">
+						<action method="setBlockId"><block_id>promotions-login-header</block_id></action>
+					</block>
+				</block>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
