@@ -124,6 +124,14 @@
                     </add_column_attribute_order_field>
                 </observers>
             </adminhtml_catalog_product_attribute_edit_prepare_form>
+            <catalog_category_save_after>
+                <observers>
+                    <check_related_category_products>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>checkRelatedCategoryProducts</method>
+                    </check_related_category_products>
+                </observers>
+            </catalog_category_save_after>
         </events>
     </global>
     <frontend>

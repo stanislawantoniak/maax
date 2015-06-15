@@ -66,6 +66,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
         $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
         $path = $breadcrumbs->getPathProp();
+        $title = array();
         foreach ($path as $name => $breadcrumb) {
             $title[] = $breadcrumb['label'];
         }

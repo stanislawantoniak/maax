@@ -109,7 +109,8 @@ $_products = $_cache['products'];
 															?>
 															<div class="like <?php if ($product[6]): ?>liked<?php endif; ?>"
 															     data-idproduct="<?php echo $product[0]; ?>"
-															     data-status="<?php echo (int)$product[6]; ?>">
+															     data-status="<?php echo (int)$product[6]; ?>"
+                                                                 onclick="<?php echo $product[6] ? 'Mall.wishlist.removeFromSmallBlock(this);return false;' : 'Mall.wishlist.addFromSmallBlock(this);return false;' ;?>">
                                             <span class="like_count">
                                                 <span>
                                                     <?php echo $inMyWishlist; ?>

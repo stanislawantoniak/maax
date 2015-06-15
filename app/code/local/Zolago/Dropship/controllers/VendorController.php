@@ -57,7 +57,9 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 		return $this->_redirectReferer();
 	}
 
-
+    public function editPasswordAction() {
+        $this->_renderPage(null, 'editpassword');
+    }
 }
 
 

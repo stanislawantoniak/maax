@@ -4,6 +4,7 @@
 /** @var Zolago_Dropship_Helper_Data $hlp */
 $hlp = Mage::helper('zolagodropship');
 
+/** @var Mage_Core_Block_Template $_session */
 $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
@@ -63,6 +64,7 @@ $_allowedLocale = array(
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="<?php echo $this->getUrl('udropship/vendor/logout')?>"><i class="icon-off"></i> <?php echo $this->__('Log out')?></a></li>
+					<li><a href="<?php echo $this->getUrl('udropship/vendor/editPassword')?>"><i class="icon-wrench"></i> <?php echo Mage::helper("zolagodropship")->__('Change password')?></a></li>
 				</ul>
 			</li>
 			<!-- /user login dropdown -->

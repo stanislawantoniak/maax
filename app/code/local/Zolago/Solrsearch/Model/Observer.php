@@ -539,6 +539,17 @@ class Zolago_Solrsearch_Model_Observer {
 		    }
 	    }
 	}
+	public function checkRelatedCategoryProducts($observer) {
+	    $category = $observer->getEvent()->getCategory();
+	    $ids = $category->getRelatedProductsToRebuild();
+	    if (empty($ids)) {
+	        return;
+	    }
+	    foreach ($ids as $id) {
+	        $this->collectProduct($id);
+	    }
+	    $this->processCollectedProducts();
+	}
 	
 }
 
