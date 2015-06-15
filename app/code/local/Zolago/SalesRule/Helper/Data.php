@@ -282,9 +282,10 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	    }
 	    return $out;
     }
-    protected function _changeDesign($pack,$theme) {
+    protected function _changeDesign($area,$pack,$theme) {
 
 		Mage::getDesign()->
+		    setArea($area)->
 			setPackageName($pack)->
 			setTheme($theme);
 
@@ -305,8 +306,9 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $oldStore = Mage::app()->getStore();
          $oldPack = Mage::getDesign()->getPackageName();
  		 $oldTheme = Mage::getDesign()->getTheme('skin');
- 		 $this->_changeDesign($store->getConfig("design/package/name"), $store->getConfig("design/theme/skin"));
+ 		 $oldArea = Mage::getDesign()->getArea();
          Mage::app()->setCurrentStore($store->getId());
+ 		 $this->_changeDesign('frontend',$store->getConfig("design/package/name"), $store->getConfig("design/theme/skin"));
          $template = Mage::getStoreConfig('promo/promotions_mail_settings/mail_template');
          $content = Mage::app()->getLayout()->createBlock('zolagosalesrule/email_promotion','zolagosalesrule.email.promotion');
          $list = $this->_prepareCollection($ids);
@@ -340,7 +342,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              $sender
          );
          Mage::app()->setCurrentStore($oldStore);
-         $this->_changeDesign($oldPack,$oldTheme);
+         $this->_changeDesign($oldArea,$oldPack,$oldTheme);
          return true;             
      }
 }
