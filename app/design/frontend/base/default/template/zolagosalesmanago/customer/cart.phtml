@@ -5,7 +5,7 @@
 <?php if (!empty($customerCart)): ?>
     <style type="text/css">
         .item {
-            width: 30%;
+            width: 33%;
         }
 
         @media (max-width: 470px) {
@@ -38,7 +38,7 @@
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
-                        <div class="item" style="float: left; padding: 0 2px;width: 30%;">
+                        <div class="item" style="float: left; padding: 0 2px;width: 33%;">
                             <div class="box_listing_product"  style="background: #fff;font-size: 12px;padding: 0 0 20px 0;">
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
