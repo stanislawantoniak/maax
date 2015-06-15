@@ -4,11 +4,6 @@
 
 <?php if (!empty($customerCart)): ?>
     <style scoped>
-        .item {
-            width: 30%;
-            float: left;
-            padding: 0 2px;
-        }
         @media (max-width: 400px) {
             .item {
                 width: 45%;
@@ -31,7 +26,7 @@
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
-                        <div class="item">
+                        <div class="item" style="width: 30%; float: left; padding: 0 2px;">
                             <div class="box_listing_product"  style="
                             background: #fff;
                             font-size: 12px;
