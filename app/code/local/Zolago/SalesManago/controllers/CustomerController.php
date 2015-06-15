@@ -11,6 +11,6 @@ class Zolago_SalesManago_CustomerController extends Mage_Core_Controller_Front_A
             ->createBlock('zolagosalesmanago/customer_cart')
             ->setTemplate('zolagosalesmanago/customer/cart.phtml');
         $block->setSmcid($smCId);
-        echo $block->toHtml();
+        echo $block->toHtml();exit;
     }
 }
