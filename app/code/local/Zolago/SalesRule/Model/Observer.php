@@ -183,7 +183,7 @@ class Zolago_SalesRule_Model_Observer {
 
         //Group coupons by rule
         if (empty($result)) {
-            exit;
+            return;
         }
         //2. Subscribers
         $collection = Mage::getModel('newsletter/subscriber')
@@ -200,7 +200,7 @@ class Zolago_SalesRule_Model_Observer {
         $collection->setPageSize(10000);
 
         if ($collection->getSize() == 0) {
-            exit;
+            return;
         }
         $subscribersCollection = $collection->getItems();
         $subscribers = array();
