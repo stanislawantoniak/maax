@@ -15,6 +15,15 @@
                 </args>
             </mypromotions>
         </routers>
+        <translate>
+            <modules>
+                <Zolago_SalesRule>
+                    <files>
+                        <default>Zolago_SalesRule.csv</default>
+                    </files>
+                </Zolago_SalesRule>
+            </modules>
+        </translate>
     </frontend>
     <global>
         <blocks>
