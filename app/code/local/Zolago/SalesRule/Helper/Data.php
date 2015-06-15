@@ -282,7 +282,14 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	    }
 	    return $out;
     }
-    /**
+    protected function _changeDesign($pack,$theme) {
+
+		Mage::getDesign()->
+			setPackageName($pack)->
+			setTheme($theme);
+
+    }
+    /**    
      * send mail to customer with coupons_id
      * 
      * @param int $customer_id
@@ -296,6 +303,9 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $customer = Mage::getModel('customer/customer')->load($customer_id);
          $store = $customer->getStore();
          $oldStore = Mage::app()->getStore();
+         $oldPack = Mage::getDesign()->getPackageName();
+ 		 $oldTheme = Mage::getDesign()->getTheme('skin');
+ 		 $this->_changeDesign($store->getConfig("design/package/name"), $store->getConfig("design/theme/skin"));
          Mage::app()->setCurrentStore($store->getId());
          $template = Mage::getStoreConfig('promo/promotions_mail_settings/mail_template');
          $content = Mage::app()->getLayout()->createBlock('zolagosalesrule/email_promotion','zolagosalesrule.email.promotion');
@@ -330,6 +340,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              $sender
          );
          Mage::app()->setCurrentStore($oldStore);
+         $this->_changeDesign($oldPack,$oldTheme);
          return true;             
      }
 }
