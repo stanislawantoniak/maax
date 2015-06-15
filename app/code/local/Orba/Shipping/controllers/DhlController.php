@@ -13,7 +13,7 @@ class Orba_Shipping_DhlController extends Mage_Core_Controller_Front_Action
 		$result	= array(
 			'status'	=> false,
 			'file'		=> false,
-			'message'	=> Mage::helper('zolagopo')->__('DHL Service Error')
+			'message'	=> Mage::helper('zolagopo')->__('DHL Service Error. Failed to get waybill.')
 		);
 		$request = $this->getRequest();
 		if ($request->getParam('trackNumber')) {
