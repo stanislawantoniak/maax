@@ -22,16 +22,15 @@
                             <div class="box_listing_product"  style="
                             background: #fff;
                             font-size: 12px;
-                            padding: 0 0 0 0;
+                            padding: 0 0 10px 0;
                             ">
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
                                     <figure class="img_product" style="
                                     position: relative;
-                                    margin: 0;
+                                    margin: 0 0 18px 0;
                                     display: block;
-                                    margin-top: 18px;
                                     ">
                                         <img style="
                                                 width: 100%;
@@ -51,6 +50,8 @@
                                                                 margin-top: 18px;
                                                                 margin-bottom: 18px;
                                                                 padding: 0 8px;
+                                                                display: block;
+                                                                min-height: 28px;
                                     ">
                                     <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 35, 35); ?></a>
                                 </div>
