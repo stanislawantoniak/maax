@@ -79,12 +79,10 @@
             <?php $helper = Mage::helper("zolagosalesmanago"); ?>
             <h1><?php echo $helper->__("W koszyku czeka"); ?>:</h1>
 
-
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
                         <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3">
                             <div class="box_listing_product">
-                                <?php //krumo($item->getData()); ?>
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
@@ -110,11 +108,7 @@
                         </div>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
-
-
         </div>
-
     </div>
 </div>
 <?php endif; ?>
-
