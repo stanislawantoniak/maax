@@ -53,6 +53,9 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         foreach ($collection as $item) {
             $rules[$item['rule_id']] = $item['rule_id'];            
         }
+        if (empty($rules)) {
+            return array();
+        }
         $rulesCollection = Mage::getModel('salesrule/rule')->getCollection();
         $rulesCollection->addFieldToFilter('rule_id',array('in',$rules));
         $rules = array(); // clear 
