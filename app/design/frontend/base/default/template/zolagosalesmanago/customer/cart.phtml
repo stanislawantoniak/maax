@@ -1,68 +1,5 @@
 <?php /** @var Zolago_SalesManago_Block_Customer_Cart $this */ ?>
 
-<style>
-
-    .item {
-        padding: 5px 0 0;
-    }
-
-    #items-product .item .box_listing_product {
-        /*border: 1px solid #ebebeb;*/
-        background: #fff;
-        -webkit-transition-property: box-shadow;
-        transition-property: box-shadow;
-        -webkit-transition-duration: 0.1s;
-        transition-duration: 0.1s;
-        -moz-transition-timing-function: ease-in;
-        -o-transition-timing-function: ease-in;
-        -webkit-transition-timing-function: ease-in;
-        transition-timing-function: ease-in;
-        font-size: 12px;
-        padding: 0 0 0 0;
-    }
-    .box_listing_product figure.img_product {
-        position: relative;
-        margin: 0;
-        display: block;
-        margin-top: 18px;
-    }
-    #items-product .item figure img {
-        width: 100%;
-        height: auto;
-        vertical-align: middle;
-        border: 0;
-    }
-    .box_listing_product .name_product {
-        font-size: 12px;
-        margin-top: 18px;
-        margin-bottom: 18px;
-        padding: 0 8px;
-    }
-
-    .box_listing_product .price {
-        color: #000000;
-        font-size: 20px;
-        font-family: latoregular, sans-serif;
-        margin-bottom: 18px;
-        padding: 0 8px;
-        position: relative;
-    }
-
-    /*cols*/
-    .col-xs-4 {
-        width: 33.33333%;
-        float: left;
-    }
-    @media (min-width: 768px){
-        .col-sm-4 {
-            width: 33.33333%;
-            float: left;
-        }
-    }
-
-
-</style>
-
 <?php $customerCart = $this->getCustomerCart(); ?>
 
 <?php if (!empty($customerCart)): ?>
@@ -81,13 +18,35 @@
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
-                        <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3">
-                            <div class="box_listing_product">
+                        <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3" style="width: 33.33333%;float: left;">
+                            <div class="box_listing_product"  style="
+                            background: #fff;
+                            -webkit-transition-property: box-shadow;
+                            transition-property: box-shadow;
+                            -webkit-transition-duration: 0.1s;
+                            transition-duration: 0.1s;
+                            -moz-transition-timing-function: ease-in;
+                            -o-transition-timing-function: ease-in;
+                            -webkit-transition-timing-function: ease-in;
+                            transition-timing-function: ease-in;
+                            font-size: 12px;
+                            padding: 0 0 0 0;
+                            ">
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
-                                    <figure class="img_product">
-                                        <img
+                                    <figure class="img_product" style="
+                                    position: relative;
+                                    margin: 0;
+                                    display: block;
+                                    margin-top: 18px;
+                                    ">
+                                        <img style="
+                                                width: 100%;
+                                                height: auto;
+                                                vertical-align: middle;
+                                                border: 0;
+                                        "
                                             src="<?php echo (string)Mage::helper('catalog/image')
                                                 ->init($_product, 'image')
                                                 ->resize(148, 222); ?>"
@@ -96,13 +55,25 @@
 
                                 </a>
 
-                                <div class="name_product">
+                                <div class="name_product" style="font-size: 12px;
+                                                                margin-top: 18px;
+                                                                margin-bottom: 18px;
+                                                                padding: 0 8px;
+                                    ">
                                     <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </a>
                                 </div>
+                                <span style="color: #000000;
+                                        font-size: 20px;
+                                        font-family: latoregular, sans-serif;
+                                        margin-bottom: 18px;
+                                        padding: 0 8px;
+                                        position: relative;
+                                    ">
+                                    <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
+                                </span>
 
-                                <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
 
                             </div>
                         </div>
