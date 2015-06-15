@@ -12,12 +12,12 @@
                 width: 30%;
             }
         }
-        @media (max-width: 380px) {
+        @media (max-width: 350px) {
             .item {
                 width: 45%;
             }
         }
-        @media (max-width: 340px) {
+        @media (max-width: 320px) {
             .item {
                 width: 80%;
             }
@@ -35,11 +35,7 @@
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
                         <div class="item" style="float: left; padding: 0 2px;">
-                            <div class="box_listing_product"  style="
-                            background: #fff;
-                            font-size: 12px;
-                            padding: 0 0 10px 0;
-                            ">
+                            <div class="box_listing_product"  style="background: #fff;font-size: 12px;padding: 0 0 10px 0;">
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
