@@ -60,17 +60,14 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		$oldPack = Mage::getDesign()->getPackageName();
 		$oldTheme = Mage::getDesign()->getTheme($type);
-		$oldArea = Mage::getDesign()->getArea();
-		
+
 		Mage::getDesign()->
-			setArea('frontend')->
 			setPackageName($store->getConfig("design/package/name"))->
 			setTheme($store->getConfig("design/theme/" . $type));
 		
 		$return = Mage::getDesign()->getFilename($filename, array("_type"=>$type));
 		
 		Mage::getDesign()->
-			setArea($oldArea)->
 			setPackageName($oldPack)->
 			setTheme($type, $oldTheme);
 		

@@ -54,7 +54,7 @@
 						if($rma) { //refund is for rma
 							if($paymentHelper->sendRmaRefundEmail(
 								$email,
-								$rma->getIncrementId(),
+								$rma,
 								$amount,
 								$paymentMethod
 							)) {
@@ -72,7 +72,7 @@
 
 							if($paymentHelper->sendRefundEmail(
 								$email,
-								$order->getIncrementId(),
+								$order,
 								$amount,
 								$paymentMethod)
 							) {

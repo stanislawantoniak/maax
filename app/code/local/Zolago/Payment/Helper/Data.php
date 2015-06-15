@@ -58,32 +58,59 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         return MD5(strrev(microtime()));
     }
 
-	public function sendRmaRefundEmail($email,$rmaId,$refundAmount,$paymentType=false) {
+	/**
+	 * @param string $email
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @param float $refundAmount
+	 * @param bool|string $paymentType
+	 * @return bool
+	 */
+	public function sendRmaRefundEmail($email,$rma,$refundAmount,$paymentType=false) {
 		/** @var Zolago_Common_Helper_Data $helper */
 		$helper = Mage::helper("zolagocommon");
 
-		return $helper->sendEmailTemplate(
+		Mage::helper('udropship')->setDesignStore($rma->getPo()->getOrder()->getStore());
+
+		$return =  $helper->sendEmailTemplate(
 			$email,
 			'',
 			$this->_getRmaRefundEmailTemplateId(),
-			$this->_getRmaRefundEmailVars($rmaId,$refundAmount,$paymentType),
+			$this->_getRmaRefundEmailVars($rma->getIncrementId(),$refundAmount,$paymentType),
 			true,
 			$this->_getRefundEmailSender()
 		);
+
+		Mage::helper('udropship')->setDesignStore();
+
+		return $return;
 	}
 
-	public function sendRefundEmail($email,$orderId,$refundAmount,$paymentType=false) {
+
+	/**
+	 * @param string $email
+	 * @param Mage_Sales_Model_Order $order
+	 * @param float $refundAmount
+	 * @param bool|string $paymentType
+	 * @return Mage_Core_Model_Email_Template_Mailer
+	 */
+	public function sendRefundEmail($email,$order,$refundAmount,$paymentType=false) {
 		/** @var Zolago_Common_Helper_Data $helper */
 		$helper = Mage::helper("zolagocommon");
 
-		return $helper->sendEmailTemplate(
+		Mage::helper('udropship')->setDesignStore($order->getStore());
+
+		$return = $helper->sendEmailTemplate(
 			$email,
 			'',
 			$this->_getRefundEmailTemplateId(),
-			$this->_getRefundEmailVars($orderId,$refundAmount,$paymentType),
+			$this->_getRefundEmailVars($order->getIncrementId(),$refundAmount,$paymentType),
 			true,
 			$this->_getRefundEmailSender()
 		);
+
+		Mage::helper('udropship')->setDesignStore();
+
+		return $return;
 	}
 
 	protected function _getRefundEmailTemplateId() {

@@ -101,7 +101,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						//todo: send email
 						/** @var Zolago_Payment_Helper_Data $paymentHelper */
 						$paymentHelper = Mage::helper('zolagopayment');
-						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma->getIncrementId(),$_returnAmount)) {
+						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
 							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
 							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
 						}
