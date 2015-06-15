@@ -77,7 +77,7 @@
 								$paymentMethod)
 							) {
 								//if email has been sent then add comment
-								$po->addComment($rmaHelper->__("Email about refund was sent to customer (Amount: %s)", $amount));
+								$po->addComment($rmaHelper->__("Email about refund was sent to customer (Amount: %s)", $amount),false,true);
 								$po->saveComments();
 							}
 						}
