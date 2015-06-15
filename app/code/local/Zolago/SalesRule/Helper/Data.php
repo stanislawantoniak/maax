@@ -306,15 +306,17 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              'promotionList' => $content->toHtml(),
              'store_name' => $store->getName(),
          );
+         $addedFiles = array();
          foreach ($list as $item) {
              $name = $item['ruleItem']->getPromoImage();
-             if ($name) {
+             if ($name && !in_array($name, $addedFiles)) {
                  $this->_resizePromotionImage($name,200);
                  $data['_ATTACHMENTS'][] = array (
                      'filename' => $this->getPromotionResizedImagePath(200).DS.$name,
                      'id' => $name,
                      'disposition' => 'inline',                 
                  );
+                 $addedFiles[] = $name;
               }
           }
          $helper = Mage::helper('zolagocommon');

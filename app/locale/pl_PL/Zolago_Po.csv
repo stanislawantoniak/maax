@@ -1,4 +1,4 @@
-﻿"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
+"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
 "Lack of DHL Settings", "Brak konfiguracji DHL"
 "Custom dim.", "Paczka NST"
 "I have no Track ID", "Chcę utworzyć list przewozowy"
@@ -284,3 +284,4 @@
 "POS","POS (Punkt sprzedaży)"
 "You are not allowed to operate this order","Nie masz uprawnień do obsługi tego zamówienia"
 "Failed to get waybill","Nie udało się pobrać listu przewozowego"
+"DHL Service Error. Failed to get waybill.","Błąd serwisu DHL. Nie udało się pobrać listu przewozowego."

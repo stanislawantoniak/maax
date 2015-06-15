@@ -6,51 +6,41 @@ $helper = Mage::helper('zolagosalesrule');
 <?php echo $this->getCmsBlock(); ?>
 <?php if (($this->isLogged()) || ($this->isPersistent())): ?>
 	<?php $list = $this->getPromotionList(); ?>
-	<?php if ($list): ?>
-		<style>
-			@media(max-width: 479px) {
-				.promo_item {
-					width: 100% !important;
-				}
-			}
-		</style>
+	<?php if (count($list)): ?>
 		<section class="container-fluid">
-			<div id="promo_list" style="margin: 0 -15px">
-				<?php shuffle($list); ?>
+			<div id="promo_list">
 				<?php foreach ($list as $item): ?>
-					<div class="promo_item col-xs-6 col-sm-4 col-md-3 col-lg-3" style="padding: 10px 4px 0 4px;">
+					<div class="promo_item col-xs-6 col-sm-4 col-md-3 col-lg-3">
 						<?php $imageName = $item['ruleItem']->getPromoImage(); ?>
 						<?php if($imageName): ?>
 							<?php $imageResized = $helper->getResizedPromotionImage($imageName); ?>
 							<?php $imageInfo = $helper->getResizedPromotionImageInfo($imageName); ?>
 						<figure class="promo_img"
 						        <?php if(is_array($imageInfo) && isset($imageInfo['ratio'])): ?>
-								style="padding-bottom: <?php echo $imageInfo['ratio']; ?>%;position:relative"
+								style="padding-bottom: <?php echo $imageInfo['ratio']; ?>%;"
 								<?php endif; ?>>
 							<img src="<?php echo $imageResized; ?>"
-							     alt="<?php echo $item['ruleItem']->getName(); ?>"
-							     style="position:absolute;width:100%;top:0;left:0;"
-								>
+							     alt="<?php echo $item['ruleItem']->getName(); ?>">
 						</figure>
 						<?php endif; ?>
-						<div class="promo_info" style="background-color:#FFF; padding: 15px 10px 0 10px">
-							<h3 class="promo_name" style="padding:0">
+						<div class="promo_info">
+							<h3 class="promo_name">
 								<?php echo $item['ruleItem']->getName(); ?>
 							</h3>
 
 							<?php if ($item['ruleItem']->getDescription()): ?>
-							<div class="promo_desc" style="margin-top:15px">
+							<div class="promo_desc">
 								<?php echo $item['ruleItem']->getDescription(); ?>
 							</div>
 							<?php endif; ?>
 
 							<?php if ($this->isLogged()) : ?>
-							<div class="promo_code" style="margin-top:15px">
+							<div class="promo_code">
 								<?php echo $helper->__('Your coupon code:'); ?>
-								<textarea style="cursor:text;border:none;width:100%;font-size:1.4em;resize:none;overflow:hidden;height:50px;padding:0" readonly><?php echo $item['code']; ?></textarea>
+								<textarea readonly><?php echo $item['code']; ?></textarea>
 							</div>
 							<?php else: ?>
-							<div class="promo_code_hidden" style="margin-top:15px;padding-bottom:15px">
+							<div class="promo_code_hidden">
 								<?php echo $helper->__('Login to see your coupon code'); ?>
 							</div>
 							<?php endif; ?>
@@ -71,13 +61,5 @@ $helper = Mage::helper('zolagosalesrule');
 		</script>
 	<?php endif; ?>
 <?php else: ?>
-	<style>
-		body.mypromotions-index-index #logIn #content-main .register-column {
-			display: none;
-		}
-		body.mypromotions-index-index #logIn #content-main .login-column {
-			margin-left: 25%;
-		}
-	</style>
 	<?php echo $this->getChildHtml('mypromotions.login'); ?>
 <?php endif; ?>
