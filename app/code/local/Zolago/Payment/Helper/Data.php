@@ -196,7 +196,7 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 			}
 			if($poRefundSum == abs($transaction->getTxnAmount())) {
 				/** @var Zolago_Po_Model_Po $rma */
-				$po = Mage::getModel('zolagopo');
+				$po = Mage::getModel('zolagopo/po');
 				$po->load($poId);
 				if($po->getId()) {
 					return $po;
