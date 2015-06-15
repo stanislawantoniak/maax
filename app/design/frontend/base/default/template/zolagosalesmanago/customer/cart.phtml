@@ -3,36 +3,40 @@
 <?php $customerCart = $this->getCustomerCart(); ?>
 
 <?php if (!empty($customerCart)): ?>
-    <style scoped>
+    <style type="text/css">
         .item {
             width: 30%;
         }
-        @media (max-width: 500px) {
+        .h3-i-span {
+            padding-left: 25px;
+        }
+
+        @media (max-width: 470px) {
             .item {
-                width: 30%;
+                width: 45% !important;
             }
         }
-        @media (max-width: 350px) {
-            .item {
-                width: 45%;
-            }
-        }
+
         @media (max-width: 320px) {
             .item {
-                width: 80%;
+                width: 80% !important;
             }
         }
+        .name_product {
+            height: 34px;
+            overflow: hidden;
+        }
+
     </style>
 <div class="container-fluid bg-w" style="background: #fff; margin-right: auto; margin-left: auto;">
     <div id="items-product" class="container-fluid">
         <div>
             <?php $helper = Mage::helper("zolagosalesmanago"); ?>
             <div>
-                <h3 style="display: block;margin: 0 0 10px;padding: 0px;position: relative;font-family: 'latoregular'; font-size: 20px; line-height: 20px;text-align: left;text-transform: uppercase;width: 100%;"><i style="content: ' ';position: absolute; display: block;height: 18px;left: 0;top: 0;width: 18px;background: none repeat scroll 0 0 #6fffcf;float: left; margin-right: 5px;"></i><span style="padding-left: 25px;"><?php echo $helper->__("W koszyku czeka"); ?>:</span></h3></div>
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
-                        <div class="item" style="float: left; padding: 0 2px;">
+                        <div class="item" style="float: left; padding: 0 2px;width: 30%;">
                             <div class="box_listing_product"  style="background: #fff;font-size: 12px;padding: 0 0 10px 0;">
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
@@ -61,9 +65,11 @@
                                                                 margin-bottom: 18px;
                                                                 padding: 0 8px;
                                                                 display: block;
-                                                                min-height: 28px;
+                                                                max-height: 34px;
+                                                                overflow: hidden;
+
                                     ">
-                                    <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 32, 32); ?></a>
+                                    <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
                                 </div>
                                 <span style="color: #000000;
                                         font-size: 20px;
