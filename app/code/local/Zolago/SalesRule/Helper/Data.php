@@ -295,6 +295,8 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          }
          $customer = Mage::getModel('customer/customer')->load($customer_id);
          $store = $customer->getStore();
+         $oldStore = Mage::app()->getStore();
+         Mage::app()->setCurrentStore($store->getId());
          $template = Mage::getStoreConfig('promo/promotions_mail_settings/mail_template');
          $content = Mage::app()->getLayout()->createBlock('zolagosalesrule/email_promotion','zolagosalesrule.email.promotion');
          $list = $this->_prepareCollection($ids);
@@ -325,6 +327,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              $store->getId(),
              $sender
          );
+         Mage::app()->setCurrentStore($oldStore);
          return true;             
      }
 }
