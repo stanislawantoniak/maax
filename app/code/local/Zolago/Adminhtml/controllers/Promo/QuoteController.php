@@ -23,8 +23,9 @@ class Zolago_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Promo_QuoteC
                         mkdir($path);
                     }
 	                $pre = $id."_".time()."_";
-                    $uploader->save($path, $pre.$_FILES['promo_image']['name']);
-                    $data['promo_image'] = $pre.$_FILES['promo_image']['name'];
+                    $filename = $pre.$uploader->getCorrectFileName($_FILES['promo_image']['name']);
+                    $uploader->save($path,$filename);
+                    $data['promo_image'] = $filename;
                 } else {
                     if(isset($data['promo_image']['delete']) && $data['promo_image']['delete'] == 1) {
                         $data['promo_image'] = '';
