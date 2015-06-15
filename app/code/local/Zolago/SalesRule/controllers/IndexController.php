@@ -11,6 +11,9 @@ class Zolago_SalesRule_IndexController extends Unirgy_DropshipMicrosite_IndexCon
      */
 
     public function indexAction() {
+        $model = Mage::helper('zolagosalesrule');
+        $model->sendPromotionEmail(8,array(5,6,7,39,41));
+
         $this->loadLayout();
         $this->renderLayout();
     }
