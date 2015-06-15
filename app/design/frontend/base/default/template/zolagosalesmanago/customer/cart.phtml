@@ -6,10 +6,17 @@
     <style scoped>
         .item {
             width: 30%;
+            float: left;
+            padding: 0 2px;
         }
         @media (max-width: 400px) {
             .item {
-                width: 100%;
+                width: 45%;
+            }
+        }
+        @media (max-width: 300px) {
+            .item {
+                width: 80%;
             }
         }
     </style>
@@ -24,7 +31,7 @@
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
-                        <div class="item" style="float: left; padding: 0 2px;">
+                        <div class="item">
                             <div class="box_listing_product"  style="
                             background: #fff;
                             font-size: 12px;
