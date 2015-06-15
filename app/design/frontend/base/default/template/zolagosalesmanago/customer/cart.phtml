@@ -9,7 +9,7 @@
         margin-left: auto;
         padding-left: 15px;
         padding-right: 15px;
-        max-width: 1000px;
+        /*max-width: 1000px;*/
         ">
     <div id="items-product" class="container-fluid">
         <div>
@@ -18,17 +18,9 @@
 
                 <?php foreach ($customerCart as $vendor => $items): ?>
                     <?php foreach ($items as $item): ?>
-                        <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3" style="width: 33.33333%;float: left;">
+                        <div class="item" style="width: 33%;float: left;">
                             <div class="box_listing_product"  style="
                             background: #fff;
-                            -webkit-transition-property: box-shadow;
-                            transition-property: box-shadow;
-                            -webkit-transition-duration: 0.1s;
-                            transition-duration: 0.1s;
-                            -moz-transition-timing-function: ease-in;
-                            -o-transition-timing-function: ease-in;
-                            -webkit-transition-timing-function: ease-in;
-                            transition-timing-function: ease-in;
                             font-size: 12px;
                             padding: 0 0 0 0;
                             ">
