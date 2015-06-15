@@ -65,7 +65,6 @@
                                 <div class="name_product" style="font-size: 12px;
                                                                 margin-top: 18px;
                                                                 margin-bottom: 18px;
-                                                                padding: 0 8px;
                                                                 display: block;
                                                                 max-height: 34px;
                                                                 overflow: hidden;
@@ -74,9 +73,7 @@
                                     <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
                                 </div>
                                 <span style="color: #000000;
-                                        font-size: 20px;
-                                        font-family: latoregular, sans-serif;
-                                        padding: 0 8px;
+                                        font-size: 18px;
                                         position: relative;
                                     ">
                                     <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
