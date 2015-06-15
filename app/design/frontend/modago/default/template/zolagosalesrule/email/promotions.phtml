@@ -1,13 +1,25 @@
-<div>
+<?php
+/** @var Zolago_SalesRule_Block_Email_Promotion $this */
+/** @var Zolago_SalesRule_Helper_Data $_hlp */
+$_hlp = Mage::helper('zolagosalesrule');
+?>
+<div style="color: #000000; text-decoration: none;">
 <?php $list = $this->getPromotions(); ?>
 <?php foreach ($list as $item) : ?>
-<div>
-    <?php if ($item['ruleItem']->getPromoImage()): ?>
-    <img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>">
-    <?php endif; ?>
-    <?php echo $item['ruleItem']->getName();?>
-    <?php echo $item['ruleItem']->getDescription(); ?>
-    <?php echo $item['code']; ?>
-</div>
+    <div style="max-width: 200px;">
+        <a href="<?php echo Mage::getUrl('mypromotions'); ?>" style="text-decoration: none;">
+            <?php if ($item['ruleItem']->getPromoImage()): ?>
+                <img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>">
+            <?php endif; ?>
+
+            <div class="promo_info" style="background-color:#FFF; padding: 3px 10px 0 10px; margin-bottom: 15px; border: solid 1px rgb(243, 243, 243); border-top: none;">
+                <h3 class="promo_name" style="padding:0;color: #000000; text-decoration: none;"><?php echo $item['ruleItem']->getName();?></h3>
+                <div class="promo_desc" style="margin-top:15px;color: #000000; text-decoration: none;"><?php echo $item['ruleItem']->getDescription(); ?></div>
+                <div class="promo_code" style="margin-top:15px;color: #000000; text-decoration: none;"><?php echo $_hlp->__("Your coupon code: ");?>
+                    <div style="cursor:text;border:none;width:100%;font-size:1.4em;resize:none;overflow:hidden;padding:5px 0;color: #000000; text-decoration: none;"><?php echo $item['code']; ?></div>
+                </div>
+            </div>
+        </a>
+    </div>
 <?php endforeach; ?>
 </div>
