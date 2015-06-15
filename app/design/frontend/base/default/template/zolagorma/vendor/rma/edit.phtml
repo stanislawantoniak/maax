@@ -89,7 +89,15 @@ jQuery(document).ready(function() {
 									<span class="caret"></span>
 								</button> 
 								<ul class="dropdown-menu"> 
-									<li><a href="#" data-toggle="modal" data-target="#refundModal"><?php echo $_helper->__("Make refund");?></a></li>
+									<li>
+										<a href="#" data-toggle="modal" data-target="#refundModal">
+											<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+												<?php echo $_helper->__("Order refund"); ?>
+											<?php else: ?>
+												<?php echo $_helper->__("Confirm refund");?>
+											<?php endif; ?>
+										</a>
+									</li>
 								</ul> 
 							</div>
 							<?php else: ?>
@@ -99,6 +107,15 @@ jQuery(document).ready(function() {
 									<?php echo $_helper->__('Not paid');?>
 								<?php endif; ?>
 							<?php endif; ?>
+							<?php if($_rma->getPo()->isPaymentDotpay() && $_rma->getRmaRefundAmount()):
+								echo ' (';
+								if($_rma->isAlreadyReturned()):
+									echo $_helper->__('Return completed');
+								else:
+									echo $_helper->__('Return processing');
+								endif;
+								echo ')';
+							endif; ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd>
@@ -265,7 +282,7 @@ jQuery(document).ready(function() {
 					</h4>
 				</div>
 				<div class="widget-content">
-					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>">
+					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>" id="rmaForm">
 						<div class="form-group">
 							<label class="control-label col-md-3" for="rma-status">
 								<?php echo $_helper->__("Status");?>
@@ -294,7 +311,10 @@ jQuery(document).ready(function() {
 								</label>
 							</div>
 						</div>
-						<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+						<div class="form-actions">
+							<input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right" />
+							<div id="rmaFormFakeSubmit" class="btn btn-primary pull-right" style="display:none"><?php echo $_helper->__("Save");?></div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -384,6 +404,25 @@ jQuery(document).ready(function() {
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
 	</form>
 </div> */ ?>
+<?php if(!$_rma->getRmaRefundAmount()): ?>
+	<?php /* rma close confirm modal */ ?>
+	<div id="modal_close_rma" class="modal fade in" aria-hidden="true" title="<?php echo $_helper->__("Continue closing RMA?"); ?>" style="background-color:rgba(0,0,0,.5)">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<strong><?php echo $_helper->__("Continue closing RMA?"); ?></strong>
+				</div>
+				<div class="modal-body">
+					<?php echo $_helper->__("You are trying to close RMA, however it does not contain any refund value. Do you want to continue?"); ?>
+					<div class="align-right" style="margin-top:20px">
+						<button class="btn btn-default" data-dismiss="modal" type="button"><?php echo $_helper->__('Cancel'); ?></button>
+						<button class="btn btn-primary"><?php echo $_helper->__('Yes'); ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>
 
 <script type="text/javascript">
 jQuery(function($) {
@@ -396,6 +435,20 @@ jQuery(function($) {
         // Isnt't currentylu selected & force notify
             doNotify = !!parseInt(el.children(":selected").attr('data-notify-customer'))
                 && el.children("[selected]").attr('value') != el.val();
+
+	    <?php if(!$_rma->getRmaRefundAmount() || ($_rma->getRmaRefundAmount() && $_rma->getPo()->isPaymentDotpay() && !$_rma->isAlreadyReturned())): ?>
+	        var form = jQuery('#rmaForm'),
+		        formSubmit = form.find('input[type=submit]'),
+		        formFakeSubmit = form.find('#rmaFormFakeSubmit');
+	        if(el.val() == 'closed_accepted') {
+				formSubmit.hide();
+		        formFakeSubmit.show();
+	        } else {
+		        formSubmit.show();
+		        formFakeSubmit.hide();
+	        }
+	    <?php endif; ?>
+
         notify.prop("checked", doNotify);
         notify.prop("disabled", doNotify);
         hidden.val(doNotify ? "1" : "0");
@@ -429,22 +482,44 @@ jQuery(function($) {
     //init validations for this form
     $("form:has('#rma-notify-customer')").validate({});
 
-    var commentRecuired = function(value, elem, params){
+    var commentRequired = function(value, elem, params){
         if($("#rma-notify-customer").is(':checked')) {
-            if (value.trim().replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/gm," ").split(' ').length >= 5) { //if there is 5 words in comment ( explain )
-                return true;
-            } else {
-                return false;
-            }
+	        return value.trim().replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/gm," ").split(' ').length >= 5;
         }
-        else {
-            return true;
-        }
+        return true;
     };
 
     jQuery.validator.addMethod('commentRequired', function () {
-        return commentRecuired.apply(this, arguments);
+        return commentRequired.apply(this, arguments);
     }, "<?php echo $_helper->__("You must enter a comment containing at least 5 words"); ?>" );
+
+	<?php if(!$_rma->getRmaRefundAmount()): ?>
+		var noRefundModal = jQuery('#modal_close_rma'),
+			rmaForm = jQuery('#rmaForm'),
+			showNoRefundModal = function() {
+				noRefundModal.show();
+			},
+			hideNoRefundModal = function() {
+				noRefundModal.hide();
+			};
+		noRefundModal.find('button[data-dismiss=modal]').click(hideNoRefundModal);
+		noRefundModal.find('button.btn-primary').click(function() {
+			rmaForm.submit();
+		});
+		rmaForm.find('#rmaFormFakeSubmit').click(showNoRefundModal);
+	<?php elseif($_rma->getPo()->isPaymentDotpay() && !$_rma->isAlreadyReturned()): ?>
+		var rmaForm = jQuery('#rmaForm'),
+			fakeSubmit = rmaForm.find('#rmaFormFakeSubmit');
+
+			fakeSubmit.click(function() {
+				noty({
+					text: "<?php echo $_helper->__("You can't close RMA if refund is still processing. Please try again after refund completion.") ?>",
+					type: 'error',
+					timeout: 5000
+				});
+			});
+
+	<?php endif; ?>
 
 });
 </script>
