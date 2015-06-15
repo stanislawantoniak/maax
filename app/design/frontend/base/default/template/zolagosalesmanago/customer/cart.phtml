@@ -52,9 +52,7 @@
                                                                 margin-bottom: 18px;
                                                                 padding: 0 8px;
                                     ">
-                                    <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;">
-                                        <?php echo $this->escapeHtml($_product->getName()); ?>
-                                    </a>
+                                    <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 42); ?></a>
                                 </div>
                                 <span style="color: #000000;
                                         font-size: 20px;
