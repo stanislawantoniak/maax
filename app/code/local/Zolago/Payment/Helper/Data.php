@@ -135,7 +135,7 @@ class Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 			foreach($collection as $allocation) {
 				if($allocation->getRmaId()) {
 					/** @var Zolago_Rma_Model_Rma $rma */
-					$rma = Mage::getModel('zolagorma');
+					$rma = Mage::getModel('zolagorma/rma');
 					$rma->load($allocation->getRmaId());
 					if($rma->getId()) {
 						return $rma;
