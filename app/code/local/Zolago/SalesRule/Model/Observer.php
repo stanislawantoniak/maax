@@ -172,7 +172,7 @@ class Zolago_SalesRule_Model_Observer {
             )
             ->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
                 'salesrule_rule.rule_id = salesrule_coupon.rule_id',
-                array("code")
+                array("coupon_id","code")
             )
             ->where('salesrule_rule.is_active = ?', 1)
             ->where('customer_id IS NULL')
@@ -203,7 +203,7 @@ class Zolago_SalesRule_Model_Observer {
 
         $coupons = array();
         foreach ($result as $couponData) {
-            $coupons[$couponData['rule_id']][$couponData['code']] = $couponData['code'];
+            $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
         }
 
         //3. Assign coupons to customers
@@ -219,5 +219,49 @@ class Zolago_SalesRule_Model_Observer {
         $helper = Mage::helper("zolagosalesrule");
         $res = $helper->assignCouponsToSubscribers($data);
         //Mage::log($res["data_to_send"], null, "coupon5.log");
+
+
+        //4. Send mails
+        $dataAssign = $res["data_to_send"];
+        if (!empty($dataAssign)) {
+            foreach ($dataAssign as $email => $sendData) {
+                if (!$helper->sendPromotionEmail($email, array_values($sendData))) {
+                    //if mail sending failed
+                    unset($dataAssign[$email]);
+                }
+            }
+        }
+
+        //5. Set customer_id to salesrule_coupon table
+        if (!empty($dataAssign)) {
+            $toSet = array();
+            $subscriberEmails = array_keys($dataAssign);
+            $customersCollection = Mage::getModel("customer/customer")
+                ->getCollection()
+                ->addFieldToFilter("email", array("in" => $subscriberEmails));
+
+
+            foreach($customersCollection as $customersCollectionItem){
+                $toSet[$customersCollectionItem->getEmail()] = $customersCollectionItem->getId();
+            }
+
+
+            $insertData = array();
+            foreach ($dataAssign as $email => $sendData) {
+                foreach($sendData as $couponId){
+                    if(isset($toSet[$email])){
+                        $insertData[] = "({$couponId},".$toSet[$email].")";
+                    }
+                }
+            }
+
+            if(!empty($insertData)){
+                $insertData = implode(",", $insertData);
+                /* @var $salesCouponModel Zolago_SalesRule_Model_Resource_Coupon */
+                $salesCouponModel = Mage::getResourceModel("salesrule/coupon");
+                $salesCouponModel->bindCustomerToCoupon($insertData);
+            }
+
+        }
     }
 }

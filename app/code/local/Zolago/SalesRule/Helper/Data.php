@@ -158,16 +158,16 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
             $customerCodes = array();
 
-            foreach ($coupons as $ruleId => $couponCodes) {
-                $firstCouponCode = key($couponCodes);
-                if(!empty($firstCouponCode)){
-                    $dataToSend[$firstSubscriberEmail][$ruleId] = $firstCouponCode;
-                    $customerCodes[$ruleId] = $firstCouponCode;
+            foreach ($coupons as $ruleId => $couponIds) {
+                $firstCouponId = key($couponIds);
+                if(!empty($firstCouponId)){
+                    $dataToSend[$firstSubscriberEmail][$ruleId] = $firstCouponId;
+                    $customerCodes[$ruleId] = $firstCouponId;
 
                     $dataToSend = array_merge($dataToSend, array($firstSubscriberEmail => $customerCodes));
                 }
 
-                unset($coupons[$ruleId][$firstCouponCode]);
+                unset($coupons[$ruleId][$firstCouponId]);
             }
             unset($subscribers[$firstSubscriberId]);
 
