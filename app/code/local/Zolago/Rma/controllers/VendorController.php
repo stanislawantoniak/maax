@@ -25,7 +25,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         if($render) {
@@ -113,7 +113,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		} catch(Exception $e) {
 			$connection->rollBack();
 			Mage::logException($e);
-			$this->_getSession()->addError($hlp->__("Other error. Check logs."));
+			$this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
 		}
 
 		return $this->_redirectReferer();
@@ -257,7 +257,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Exception $e) {
             $connection->rollBack();
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -355,9 +355,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
-            throw $e;
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -432,7 +431,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $session->addError($e->getMessage());
         } catch(Exception $e) {
             Mage::logException($e);
-            $session->addError(Mage::helper("zolagorma")->__("Some errors occure. Check logs."));
+            $session->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -457,8 +456,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 	    $rma = Mage::getModel("zolagorma/rma");
 		$rma->load($id);
 
+        if(!$rma->getId()) {
+            throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA does not exist."));
+        }
 	    if(!$this->_validateRma($rma)) {
-		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__('Rma not found'));
+		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA is not yours."));
 	    } else {
 		    Mage::register('current_rma', $rma);
 		    return Mage::registry('current_rma');
@@ -466,12 +468,15 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
     }
 
     /**
-     * @return boolean
+     * Check if rma is valid. This means rma belongs to vendor or vendor children
+     * @param Zolago_Rma_Model_Rma $rma
+     * @return bool
      */
     protected function _validateRma(Zolago_Rma_Model_Rma $rma) {
         if(!$rma->getId()) {
             return false;
         }
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
 		$vendor = $this->_getSession()->getVendor();
 		$rmaVendorId = $rma->getVendor()->getId();
 	

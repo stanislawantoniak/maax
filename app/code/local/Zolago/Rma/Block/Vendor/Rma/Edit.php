@@ -8,7 +8,7 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	 */
 	public function getPoLetterUrl(Varien_Object $tracking, Zolago_Po_Model_Po $po) {
 		if($this->isLetterable($tracking)){
-			return $this->getUrl('zolagodhl/dhl/lp', array(
+			return $this->getUrl('orbashipping/dhl/lp', array(
 					'trackId'		=> $tracking->getId(), 
 					'trackNumber'	=> $tracking->getNumber(), 
 					'vId'			=> $po->getVendor()->getId(), 
