@@ -135,9 +135,6 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
         if ((int)$categoryParentId == 0 ||
             $categoryParentId == $rootId ||
-
-        if ((int)$categoryParentId == 0 ||
-            $categoryParentId == $rootId ||
             (isset($seo["dynamic_meta_title"])
                 && isset($seo["dynamic_meta_keywords"])
                 && isset($seo["dynamic_meta_description"]))
