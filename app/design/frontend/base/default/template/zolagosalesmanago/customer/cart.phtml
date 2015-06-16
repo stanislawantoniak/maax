@@ -73,10 +73,10 @@
                                     <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
                                 </div>
                                 <span style="color: #000000;
-                                        font-size: 130%;
+                                        font-size: 120%;
                                         position: relative;
                                     ">
-                                    <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
+                                    <b><?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?></b>
                                 </span>
 
 
