@@ -17,7 +17,11 @@ $_hlp = $this->getRmaHelper();
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">
-						<?php echo $_hlp->__("Make RMA refund");?>
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering RMA refund");?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming RMA refund"); ?>
+						<?php endif; ?>
 					</h4>
 				</div>
 				<div class="modal-body">
@@ -99,7 +103,13 @@ $_hlp = $this->getRmaHelper();
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Make refund");?></button>
+					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Order refund"); ?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirm refund");?>
+						<?php endif; ?>
+					</button>
 				</div>
 			</div>
 		</form>

@@ -83,10 +83,10 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						$this->_throwRefundTooMuchAmountException();
 					}
 
-					if(!$po->isCod()) {
+					if($po->isPaymentDotpay()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund",$rma->getId());
 						if($result === false) {
 							$this->_throwRefundTooMuchAmountException();
 						}
@@ -94,8 +94,20 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
 					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
-					$po->saveComments();
 					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+
+					//send emails to not transactional refunds
+					if(!$po->isPaymentDotpay()) {
+						//todo: send email
+						/** @var Zolago_Payment_Helper_Data $paymentHelper */
+						$paymentHelper = Mage::helper('zolagopayment');
+						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
+							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
+							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
+						}
+					}
+
+					$po->saveComments();
 					$rma->saveComments();
 				} elseif (count($invalidItems)) {
 					Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
@@ -171,6 +183,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             //then no meter
             //else
             //no meter
+
+	        //don't allow to close rma if refund is still processing
+	        if($rma->getRmaRefundAmount() && $rma->getPo()->isPaymentDotpay() && !$rma->isAlreadyReturned() && $status == 'closed_accepted') {
+		        throw new Mage_Core_Exception(
+			        Mage::helper("zolagorma")->__("You can't close RMA if refund is still processing. Please try again after refund completion.")
+		        );
+	        }
 
             $messages = array();
 

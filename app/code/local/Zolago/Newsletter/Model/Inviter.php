@@ -24,7 +24,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 * simple function that gets invitation email template id from system config
 	 * @return string|mixed
 	 */
-	public function _getInvitationEmailTemplateId() {
+	protected function _getInvitationEmailTemplateId() {
 		return Mage::getStoreConfig(self::INVITATION_EMAIL_TEMPLATE_XML_PATH);
 	}
 
