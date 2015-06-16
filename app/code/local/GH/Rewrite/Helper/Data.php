@@ -13,7 +13,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
         $rawUrl = urldecode($path.DS.'id'.DS.$categoryId.'?'.$query);
         return $rawUrl;
     }
-    public function prepareRewriteUrl($path,$categoryId,$queryData, $forceNoQuery = false) {
+    public function prepareRewriteUrl($path,$categoryId,$queryData) {
 	    $tmp = null;
         if(isset($queryData['fq'])) {
             $tmp = $queryData['fq'];
