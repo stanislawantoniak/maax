@@ -902,19 +902,23 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             $this->putProductsToRecalculate($campain,$products);
         }
     }
-    public function getIsProductsInValidCampaign($productsIds) {
 
+    /**
+     * Returns array of products ids if in valid campaign
+     *
+     * @param $productsIds
+     * @param null $type
+     * @return array
+     */
+    public function getIsProductsInValidCampaign($productsIds, $type = null) {
 
         $return = array();
-
         $readConnection = $this->_getReadAdapter();
         $table = $this->getTable("zolagocampaign/campaign_product");
         $select = $readConnection->select();
 
         $select->from(array("product" => $table),"product.product_id");
         $select->where("product.product_id IN(?)", $productsIds);
-
-
 
         $select->joinLeft(
             array("campaign" => $this->getTable("zolagocampaign/campaign")),
@@ -928,20 +932,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
         $select->where("campaign.status = 1");
 
-
-        try {
-            $_return = $readConnection->fetchAll($select);
-        } catch (Exception $e) {
-            Mage::throwException($e);
+        if(!empty($type)) {
+            $select->where("campaign.type IN(?)", array($type));
         }
+
+        $_return = $readConnection->fetchAll($select);
 
         foreach ($_return as $row) {
             $return[] = $row['product_id'];
         }
 
-
         return $return;
-
     }
 
     /**
