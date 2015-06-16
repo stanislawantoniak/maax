@@ -195,6 +195,10 @@ class Zolago_SalesRule_Model_Observer {
                 "main_table.subscriber_email = customer.email",
                 array("customer_id" => "customer.entity_id")
             )
+            ->joinLeft(array("coupons" => "salesrule_coupon"),
+                "main_table.coupon_id = coupons.coupon_id",
+                array("rule_id" => "coupons.rule_id")
+            )
             ->where("main_table.store_id=customer.store_id")
         ;
         $collection->setPageSize(10000);
@@ -205,14 +209,27 @@ class Zolago_SalesRule_Model_Observer {
         $subscribersCollection = $collection->getItems();
         $subscribers = array();
         $subscribersCustomersId = array();
+
+        $rulesForCustomer = array();
         foreach ($subscribersCollection as $subId => $subscriber) {
             $subscribers[$subId] = $subscriber->getSubscriberEmail();
             $subscribersCustomersId[$subscriber->getSubscriberEmail()] = $subscriber->getCustomerId();
+
+            $rulesForCustomer[$subscriber->getRuleId()][] = $subscriber->getSubscriberId();
         }
 
         $coupons = array();
         foreach ($result as $couponData) {
             $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
+        }
+
+        foreach($subscribers as $subscriberId => $subscriberEmail){
+
+            foreach($rulesForCustomer as $ruleId => $suscriberIds){
+                if(in_array($subscriberId,$suscriberIds)){
+                    unset($subscribers[$subscriberId]);
+                }
+            }
         }
 
         //3. Assign coupons to customers
