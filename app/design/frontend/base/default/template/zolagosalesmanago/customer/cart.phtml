@@ -3,33 +3,33 @@
 <?php $customerCart = $this->getCustomerCart(); ?>
 
 <?php if (!empty($customerCart)): ?>
-    <style type="text/css">
-        .item {
-            width: 31%;
-        }
-
-        @media (max-width: 470px) {
-            .item {
-                width: 45% !important;
-            }
-        }
-        @media (min-width: 480px) and (max-width: 500px) {
-            .name_product {
-                margin-bottom: 0px !important;
-            }
-        }
-        @media (max-width: 320px) {
-            .item {
-                width: 80% !important;
-            }
-
-        }
-        .name_product {
-            height: 34px;
-            overflow: hidden;
-        }
-
-    </style>
+<!--    <style type="text/css">-->
+<!--        .item {-->
+<!--            width: 31%;-->
+<!--        }-->
+<!---->
+<!--        @media (max-width: 470px) {-->
+<!--            .item {-->
+<!--                width: 45% !important;-->
+<!--            }-->
+<!--        }-->
+<!--        @media (min-width: 480px) and (max-width: 500px) {-->
+<!--            .name_product {-->
+<!--                margin-bottom: 0px !important;-->
+<!--            }-->
+<!--        }-->
+<!--        @media (max-width: 320px) {-->
+<!--            .item {-->
+<!--                width: 80% !important;-->
+<!--            }-->
+<!---->
+<!--        }-->
+<!--        .name_product {-->
+<!--            height: 34px;-->
+<!--            overflow: hidden;-->
+<!--        }-->
+<!---->
+<!--    </style>-->
 <div class="container-fluid bg-w" style="background: #fff; margin-right: auto; margin-left: auto;">
     <div id="items-product" class="container-fluid">
         <div>
@@ -48,7 +48,7 @@
                                     margin: 0 0 18px 0;
                                     display: block;
                                     ">
-                                        <img style="
+                                        <img class="sm-inline" style="
                                                 width: 100%;
                                                 height: auto;
                                                 vertical-align: middle;
@@ -73,7 +73,7 @@
                                     <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
                                 </div>
                                 <span style="color: #000000;
-                                        font-size: 1.5em;
+                                        font-size: 1.5em;font-size: 4vw;
                                         position: relative;
                                     ">
                                     <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
