@@ -6,11 +6,16 @@ class Zolago_SalesManago_CustomerController extends Mage_Core_Controller_Front_A
 
     public function cartAction()
     {
-        $email = $this->getRequest()->getParam('email');
+        header("Expires: 0");
+        header("Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0");
+        header("Pragma: no-cache");
+        header('Content-Type: text/html');
+
+        $smCId = $this->getRequest()->getParam('smcid');
         $block = $this->getLayout()
             ->createBlock('zolagosalesmanago/customer_cart')
             ->setTemplate('zolagosalesmanago/customer/cart.phtml');
-        $block->setEmail($email);
-        echo $block->toHtml();
+        $block->setSmcid($smCId);
+        echo $block->toHtml();exit;
     }
 }
