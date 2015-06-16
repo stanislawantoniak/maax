@@ -179,17 +179,29 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             return $result;
         }
         preg_match_all('#\$([a-zA-Z0-9_]+)#', $seoText, $matches, PREG_SET_ORDER);
+        preg_match_all('(\$current_date\sformat=\"([\w\-]+)\")', $seoText, $matchesOfDate, PREG_SET_ORDER);
 
         $attributesFoundInLine = array();
+        Mage::log($matches, null, "dynamicM.log");
+
         if(!empty($matches)){
             foreach($matches as $match){
                 $attributesFoundInLine[$match[1]] = $match[1];
             }
+            unset($match);
         }
-
+        $dates = array();
+        if(!empty($matchesOfDate)){
+            foreach($matchesOfDate as $match){
+                $dates[$match[1]] = $match[1];
+            }
+            unset($match);
+        }
         if(empty($attributesFoundInLine)){
             return $seoText;
         }
+
+
 
         $labels = array();
 
@@ -241,7 +253,15 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $subst = array();
         foreach($labels as $code => $strItem){
             $subst['{$'.$code.'}'] = $strItem;
+            $subst['{$'.$code.' first_letter=capital}'] = ucfirst($strItem);
         }
+        if(!empty($dates)){
+            foreach($dates as $format){
+                $subst['{$current_date format="'.$format.'"}'] = date($format);
+            }
+        }
+
+
 
         return strtr($seoText, $subst);
     }
