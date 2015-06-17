@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @method Zolago_SalesManago_Helper_Data _getHelper()
+ * Class Zolago_SalesManago_Model_Observer
+ */
 class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Observer {
 
     public function customer_register_success($observer)
