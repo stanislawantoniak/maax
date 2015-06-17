@@ -7,6 +7,7 @@ $useDhl = $_vendor->getData('use_dhl');
 $useUps = $_vendor->getData('use_orbaups');
 ?>
 <div class="container">
+    shipping
     <!--=== Page Header ===-->
     <div class="page-header">
         <div class="page-title">
@@ -74,6 +75,38 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <input id="dhl_terminal" name="dhl_terminal" value="<?php echo $_vendor->getDhlTerminal(); ?>" type="text" class="form-control" size="10">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="dhl_insurance_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_insurance_charge_amount" name="dhl_insurance_charge_amount" value="<?php echo $_vendor->getDhlInsuranceChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_insurance_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_insurance_charge_percent" name="dhl_insurance_charge_percent" value="<?php echo $_vendor->getDhlInsuranceChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_cod_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_cod_charge_amount" name="dhl_cod_charge_amount" value="<?php echo $_vendor->getDhlCodChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_cod_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_cod_charge_percent" name="dhl_cod_charge_percent" value="<?php echo $_vendor->getDhlCodChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -121,6 +154,39 @@ $useUps = $_vendor->getData('use_orbaups');
                                     <input id="orbaups_password" name="orbaups_password" value="<?php echo $_vendor->getOrbaupsPassword(); ?>" type="password" class="form-control" size="10">
                                 </div>
                             </div>
+                                <div class="form-group">
+                                    <label for="orbaups_insurance_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_insurance_charge_amount" name="orbaups_insurance_charge_amount" value="<?php echo $_vendor->getOrbaupsInsuranceChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orbaups_insurance_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_insurance_charge_percent" name="orbaups_insurance_charge_percent" value="<?php echo $_vendor->getOrbaupsInsuranceChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orbaups_cod_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_cod_charge_amount" name="orbaups_cod_charge_amount" value="<?php echo $_vendor->getOrbaupsCodChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orbaups_cod_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_cod_charge_percent" name="orbaups_cod_charge_percent" value="<?php echo $_vendor->getOrbaupsCodChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+
                         </div>
 
                     </div>
