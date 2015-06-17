@@ -22,7 +22,6 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
 
     protected function _beforeSave()
     {
-        Mage::log($this->getValue());
         if (is_array($this->getValue())) {
             $this->setData('value', $this->_serialize($this->getValue()));
         }
@@ -35,5 +34,33 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
     protected function _unserialize($value)
     {
         return Mage::helper('udropship')->unserialize($value);
+    }
+
+    public function save()
+    {
+        $value = $this->getValue(); //get the value from our config
+
+        if(!empty($value)){
+            foreach($value as $n => $valueItem){
+                //krumo($valueItem);
+
+                if(empty($valueItem['fuel_percent'])){
+                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge % can not be empty");
+                }
+                if(empty($valueItem['fuel_percent_date_from'])){
+                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date from can not be empty");
+                }
+                if(empty($valueItem['fuel_percent_date_to'])){
+                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date to can not be empty");
+                }
+                if(strtotime($valueItem['fuel_percent_date_to']) <= strtotime($valueItem['fuel_percent_date_from'])){
+                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge: Date to can not be earlier than Date from");
+                }
+            }
+        }
+//        die("test");
+
+        return parent::save();  //call original save method so whatever happened
+        //before still happens (the value saves)
     }
 }

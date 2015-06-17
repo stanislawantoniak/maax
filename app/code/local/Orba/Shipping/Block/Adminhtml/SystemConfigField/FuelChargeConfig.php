@@ -15,7 +15,8 @@ class Orba_Shipping_Block_Adminhtml_SystemConfigField_FuelChargeConfig extends M
 
     protected function _prepareLayout()
     {
-        $this->getLayout()->getBlock('head')->addItem('skin_js','../../../frontend/default/udropship/plugins/jquery-tmpl/jquery.tmpl.js');
+        $this->getLayout()->getBlock('head')->addItem('skin_css','../../../frontend/default/udropship/plugins/jquery-ui/jquery-ui-1.10.2.custom.css');
+        $this->getLayout()->getBlock('head')->addItem('skin_js','../../../frontend/default/udropship/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js');
         $this->getLayout()->getBlock('head')->addJs('orbashipping/carrier/fuelCharge.js');
 
         return parent::_prepareLayout();
@@ -65,10 +66,5 @@ class Orba_Shipping_Block_Adminhtml_SystemConfigField_FuelChargeConfig extends M
     public function getAddButtonId()
     {
         return $this->suffixId('addBtn');
-    }
-
-    public function getEditFieldsConfigSelect2Json()
-    {
-        return Mage::helper('zolagobanner')->getEditFieldsConfigSelect2Json();
     }
 }
