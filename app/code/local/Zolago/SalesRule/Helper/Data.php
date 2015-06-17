@@ -301,6 +301,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          if (empty($ids)) {
              return false;
          }
+	     Mage::log('trying to send',null,'coupons_send.log');
          $customer = Mage::getModel('customer/customer')->load($customer_id);
          $store = $customer->getStore();
          $oldStore = Mage::app()->getStore();
@@ -343,6 +344,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          );
          Mage::app()->setCurrentStore($oldStore);
          $this->_changeDesign($oldArea,$oldPack,$oldTheme);
+	     Mage::log('should be sent',null,'coupons_send.log');
          return true;             
      }
 }

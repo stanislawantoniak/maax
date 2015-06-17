@@ -254,6 +254,7 @@ class Zolago_SalesRule_Model_Observer {
                 if($customerId){
                     if (!$helper->sendPromotionEmail($customerId, array_values($sendData))) {
                         //if mail sending failed
+	                    Mage::log('could not send',null,'coupons_send.log');
                         unset($dataAssign[$email]);
                     }
                 }
