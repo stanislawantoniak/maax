@@ -180,6 +180,8 @@ class Zolago_SalesRule_Model_Observer {
         ;
         $result = $readConnection->fetchAll($query);
 
+	    Mage::log((string)$query,null,'coupons_query.log');
+
         //Group coupons by rule
         if (empty($result)) {
             return;
@@ -201,6 +203,8 @@ class Zolago_SalesRule_Model_Observer {
             ->where("main_table.store_id=customer.store_id")
         ;
         $collection->setPageSize(10000);
+
+	    Mage::log((string)$collection->getSelect(),null,'subscribers_query.log');
 
         if ($collection->getSize() == 0) {
             return;
