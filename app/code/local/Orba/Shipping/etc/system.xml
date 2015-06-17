@@ -149,6 +149,16 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>                                                                            	                        
 	                    </charge_always_for_cod>
+                        <fuel_charge translate="label">
+                            <label>Fuel charge</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>orbashipping/adminhtml_systemConfigField_FuelChargeConfig</frontend_model>
+                            <backend_model>orbashipping/system_backend_FuelChargeConfig</backend_model>
+                            <sort_order>101</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </fuel_charge>
 					</fields>
 				</orbadhl>
 				<orbaups translate="label">

@@ -6,6 +6,11 @@
     </Orba_Shipping>
   </modules>
   <global>
+      <blocks>
+          <orbashipping>
+              <class>Orba_Shipping_Block</class>
+          </orbashipping>
+      </blocks>
     <models>
       <orbashipping>
         <class>Orba_Shipping_Model</class>
