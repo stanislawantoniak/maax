@@ -150,6 +150,8 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         $coupons = $data["coupons"];
         $dataToSend = $data["data_to_send"];
 
+	    Mage::log($data);
+
         if (empty($subscribers) || empty($coupons)) {
             return array("subscribers" => $subscribers, "coupons" => $coupons, "data_to_send" => $dataToSend);
         } else {
