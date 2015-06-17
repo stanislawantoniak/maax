@@ -18,5 +18,3 @@ class Orba_Shipping_Model_System_Source_Pkgtype {
 		return $out;
 	}
 }
-
-?>

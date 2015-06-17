@@ -9,29 +9,24 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 
     public function prepareRmaSettings($request,$vendor,$rma) {
         $vendorId = $vendor->getId();
-        $settings = Mage::helper('orbashipping/carrier_dhl')->getDhlRmaSettings($vendorId);
-        $width = (float)$request->getParam('specify_orbadhl_width');
-        $height = (float)$request->getParam('specify_orbadhl_height');
-        $length = (float)$request->getParam('specify_orbadhl_length');
+	    /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
+	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
+        $settings = $dhlHelper->getDhlRmaSettings($vendorId);
+	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($request->getParam('specify_orbadhl_size'));
+        $width = (float)$pkgDimensions[0];
+        $height = (float)$pkgDimensions[1];
+        $length = (float)$pkgDimensions[2];
         $date = $request->getParam('specify_orbadhl_shipping_date');
-        $weight = ceil((float)$request->getParam('weight'));
-        $type = $request->getParam('specify_orbadhl_type');
-        switch ($type) {
-            case 'PACKAGE':
-                $dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE;
-            break;
-            case 'ENVELOPE':
-                $dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_ENVELOPE;
-            break;
-            default:
-                throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown DHL package type"));
-        }        
-        $dhlParams = array (
+        $rateType = $request->getParam('specify_orbadhl_rate_type');
+	    $dhlType = $dhlHelper->getDhlParcelTypeByKey($rateType);
+	    $weight = $dhlHelper->getDhlParcelWeightByKey($rateType);
+
+	    $dhlParams = array (
             'width' => $width,
             'height' => $height,            
             'length' => $length,
             'shipmentDate' => $date,
-            'weight' => ($weight>1)? $weight:1,
+            'weight' => $weight,
             'type' => $dhlType,
         );
         if ($request->getParam('specify_orbadhl_custom_dim',false)) {
@@ -49,16 +44,20 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
         $settings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
-        
-        $weight =  $params->getParam("weight");
 
-        if(empty($weight)) {
-            if($shipment && $shipment->getTotalWeight()) {
-                $weight = ceil($shipment->getTotalWeight());
-            } else {
-                $weight = Mage::helper('orbashipping/carrier_dhl')->getDhlDefaultWeight();
-            }
-        }
+
+	    /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
+	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
+
+	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($params->getParam('specify_orbadhl_size'));
+	    $width = (float)$pkgDimensions[0];
+	    $height = (float)$pkgDimensions[1];
+	    $length = (float)$pkgDimensions[2];
+
+
+	    $rateType = $params->getParam('specify_orbadhl_rate_type');
+	    $dhlType = $dhlHelper->getDhlParcelTypeByKey($rateType);
+	    $weight = $dhlHelper->getDhlParcelWeightByKey($rateType);
 
 
         $shipment->setTotalWeight($weight);
@@ -69,13 +68,12 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
             $deliveryValue = 0;
         }
         $shipmentSettings = array(
-                                    'type'			=> $params->getParam('specify_orbadhl_type'),
-                                    'width'			=> $params->getParam('specify_orbadhl_width'),
-                                    'height'		=> $params->getParam('specify_orbadhl_height'),
-                                    'length'		=> $params->getParam('specify_orbadhl_length'),
+                                    'type'			=> $dhlType,
+                                    'width'			=> $width,
+                                    'height'		=> $height,
+                                    'length'		=> $length,
                                     'weight'		=> $weight,
                                     'quantity'		=> Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_QTY,
-                                    'nonStandard'	=> $params->getParam('specify_orbadhl_custom_dim'),
                                     'shipmentDate'  => $params->getParam('specify_orbadhl_shipping_date'),
                                     'shippingAmount'=> $params->getParam('shipping_amount'),
                                     'deliveryValue' => ($deliveryValue>0)? $deliveryValue:0,

@@ -95,6 +95,10 @@
                         <legend>DHL</legend>
                         <position>140</position>
                     </dhl>
+			        <dhl_rates>
+				        <legend>DHL Rates</legend>
+				        <position>150</position>
+			        </dhl_rates>
                     <orbaups>
                         <legend>UPS</legend>
                         <position>160</position>
@@ -314,6 +318,38 @@
                         <position>2</position>
                         <default>1</default>
                     </ghapi_message_order_status_changes>
+
+	                <!-- DHL Rates -->
+	                <dhl_rates_envelope translate="label">
+		                <label>Envelope</label>
+		                <type>text</type>
+		                <fieldset>dhl_rates</fieldset>
+		                <position>10</position>
+	                </dhl_rates_envelope>
+	                <dhl_rates_parcel_0_5 translate="label">
+		                <label>Parcel 0-5kg</label>
+		                <type>text</type>
+		                <fieldset>dhl_rates</fieldset>
+		                <position>20</position>
+	                </dhl_rates_parcel_0_5>
+	                <dhl_rates_parcel_5_10 translate="label">
+		                <label>Parcel 5-10kg</label>
+		                <type>text</type>
+		                <fieldset>dhl_rates</fieldset>
+		                <position>30</position>
+	                </dhl_rates_parcel_5_10>
+	                <dhl_rates_parcel_10_20 translate="label">
+		                <label>Parcel 10-20kg</label>
+		                <type>text</type>
+		                <fieldset>dhl_rates</fieldset>
+		                <position>40</position>
+	                </dhl_rates_parcel_10_20>
+	                <dhl_rates_parcel_20_31_5 translate="label">
+		                <label>Parcel 20-31.5kg</label>
+		                <type>text</type>
+		                <fieldset>dhl_rates</fieldset>
+		                <position>50</position>
+	                </dhl_rates_parcel_20_31_5>
                     
 					<!-- DHL -->
                 	<use_dhl>

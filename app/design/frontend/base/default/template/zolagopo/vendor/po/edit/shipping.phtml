@@ -53,7 +53,7 @@
 								</div>
 							</div>
 						</li>
-						<li class="form-group specify specify-carrier specify-carrier-orbadhl">
+						<?php /* <li class="form-group specify specify-carrier specify-carrier-orbadhl">
 							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package type') ?></label>
 							<div class="col-md-9">
 								<select name="specify_orbadhl_type" id="shipping-specify_orbadhl_type" class="form-control">
@@ -92,6 +92,26 @@
 									<input name="specify_orbadhl_custom_dim" value="0" type="hidden" />
 									<input id="shipping-specify_orbadhl_custom_dim" name="specify_orbadhl_custom_dim" value="1" type="checkbox" class="uniform" />
 								</label> 
+							</div>
+						</li> */ ?>
+						<li class="form-group specify specify-carrier specify-carrier-orbadhl">
+							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package type') ?></label>
+							<div class="col-md-9">
+								<select name="specify_orbadhl_rate_type" id="shipping-specify_orbadhl_rate_type" class="form-control">
+									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkgRateTypes')->toOptionHash() as $value=>$label):?>
+										<option value="<?php echo $this->escapeHtml($value);?>"><?php echo $this->escapeHtml($label);?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+						</li>
+						<li class="form-group specify specify-carrier specify-carrier-orbadhl specify-specify_orbadhl_size" style="display:none">
+							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package size') ?></label>
+							<div class="col-md-9">
+								<select name="specify_orbadhl_size" id="shipping-specify_orbadhl_size" class="form-control" disabled>
+									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkgSizes')->toOptionHash() as $value=>$label):?>
+										<option value="<?php echo $this->escapeHtml($value);?>"><?php echo $this->escapeHtml($label);?></option>
+									<?php endforeach;?>
+								</select>
 							</div>
 						</li>
 						<li class="form-group specify specify-carrier specify-carrier-orbaups specify-specify_orbaups_type specify-specify_orbaups_type-PACKAGE">
@@ -132,8 +152,12 @@ jQuery(function($){
 	
 	<?php if($this->canUseCarrier()):?>
 	var carriers = $(".carrier :radio");
-	var shippingOrbadhlPkgType = $("#shipping-specify_orbadhl_type", form);
+<?php /*
+    var shippingOrbadhlPkgType = $("#shipping-specify_orbadhl_type", form);
 	var specifyOrbadhlPkgType = $(".specify-specify_orbadhl_type", form);
+*/ ?>
+	var shippingOrbadhlPkgRateType = $("#shipping-specify_orbadhl_rate_type", form);
+	var specifyOrbadhlPkgSize = $(".specify-specify_orbadhl_size",form);
 	var shippingOrbaupsPkgType = $("#shipping-specify_orbaups_type", form);
 	var specifyOrbaupsPkgType = $(".specify-specify_orbaups_type", form);
 	var specifyCarrier = $(".specify-carrier", form);
@@ -151,7 +175,8 @@ jQuery(function($){
 		switch(val){
 			case "orbadhl":
 				autotracking.val("on");
-				shippingOrbadhlPkgType.change();
+				<?php /* shippingOrbadhlPkgType.change(); */?>
+				shippingOrbadhlPkgRateType.change();
 			break;
 			case "orbaups":
 				autotracking.val("off");
@@ -159,22 +184,31 @@ jQuery(function($){
 				// Process for ups
 			break;
 		}
-	}
+	};
 	
 	// Package handling
-	var handleOrbadhlPkgType = function(){
+	<?php /* var handleOrbadhlPkgType = function(){
 		if(!$(this).parents('.form-group').hasClass("hidden")){
 			specifyOrbadhlPkgType.addClass("hidden");
 			specifyOrbadhlPkgType.filter(".specify-specify_orbadhl_type-"+$(this).val()).removeClass("hidden")
 		}
-	}
+	}; */ ?>
+	var handleOrbadhlPkgRateType = function(){
+		if(jQuery(this).val() == 'dhl_rates_envelope') {
+			specifyOrbadhlPkgSize.hide();
+			specifyOrbadhlPkgSize.find('select').attr('disabled',true);
+		} else {
+			specifyOrbadhlPkgSize.show();
+			specifyOrbadhlPkgSize.find('select').attr('disabled',false);
+		}
+	};
 	
 	var handleOrbaupsPkgType = function(){
 		if(!$(this).parents('.form-group').hasClass("hidden")){
 			specifyOrbaupsPkgType.addClass("hidden");
 			specifyOrbaupsPkgType.filter(".specify-specify_orbaups_type-"+$(this).val()).removeClass("hidden")
 		}
-	}
+	};
 	
 	$(".datepicker", form).datepicker().
 			attr("placeholder", $.datepicker._defaults.dateFormat);
@@ -184,7 +218,8 @@ jQuery(function($){
 	
 	// Register events
 	carriers.change(handleCarrierChange);
-	shippingOrbadhlPkgType.change(handleOrbadhlPkgType);
+	<?php /* shippingOrbadhlPkgType.change(handleOrbadhlPkgType); */ ?>
+	shippingOrbadhlPkgRateType.change(handleOrbadhlPkgRateType);
 	shippingOrbaupsPkgType.change(handleOrbaupsPkgType);
 	
 	// Trigger flow
