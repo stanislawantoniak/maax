@@ -228,6 +228,7 @@ class Zolago_SalesRule_Model_Observer {
 
             foreach($rulesForCustomer as $ruleId => $suscriberIds){
                 if(in_array($subscriberId,$suscriberIds)){
+	                Mage::log($ruleId,null,'rule_id.log');
                     unset($subscribers[$subscriberId]);
                 }
             }
