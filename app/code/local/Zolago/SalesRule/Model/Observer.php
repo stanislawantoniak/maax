@@ -205,6 +205,8 @@ class Zolago_SalesRule_Model_Observer {
         ;
         $collection->setPageSize(10000);
 
+	    Mage::log((string)$collection->getSelect(),null,'coupons_subscribers.log');
+
         if ($collection->getSize() == 0) {
             return;
         }
