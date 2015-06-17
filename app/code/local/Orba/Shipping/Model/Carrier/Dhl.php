@@ -104,7 +104,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         $settings = $this->_settings;
         $client = Mage::helper('orbashipping/carrier_dhl')->startClient($settings);
         if (!$client) {
-            throw new Mage_Core_Exception(Mage::helper('orbashipping')->_('Cant connect to %s server','DHL'));
+            throw new Mage_Core_Exception(Mage::helper('orbashipping')->__('Cant connect to %s server','DHL'));
         }
         $client->setShipmentSettings($settings);
         $client->setShipperAddress($this->_senderAddress);
