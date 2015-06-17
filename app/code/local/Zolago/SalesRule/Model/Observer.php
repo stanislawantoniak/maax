@@ -181,7 +181,7 @@ class Zolago_SalesRule_Model_Observer {
 
         $result = $readConnection->fetchAll($query);
 
-	    Mage::log($query,null,'coupons.log');
+	    Mage::log((string)$query,null,'coupons.log');
 
         //Group coupons by rule
         if (empty($result)) {
