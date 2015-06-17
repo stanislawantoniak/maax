@@ -182,6 +182,7 @@ class Zolago_SalesRule_Model_Observer {
 
         //Group coupons by rule
         if (empty($result)) {
+	        Mage::log('1',null,'coupons.loggg');
             return;
         }
         //2. Subscribers
@@ -208,7 +209,7 @@ class Zolago_SalesRule_Model_Observer {
         $subscribersCollection = $collection->getItems();
         $subscribers = array();
         $subscribersCustomersId = array();
-
+	    Mage::log('2',null,'coupons.loggg');
         $rulesForCustomer = array();
         foreach ($subscribersCollection as $subId => $subscriber) {
             $subscribers[$subId] = $subscriber->getSubscriberEmail();
@@ -216,7 +217,7 @@ class Zolago_SalesRule_Model_Observer {
 
             $rulesForCustomer[$subscriber->getRuleId()][] = $subscriber->getSubscriberId();
         }
-
+	    Mage::log('3',null,'coupons.loggg');
         $coupons = array();
         foreach ($result as $couponData) {
             $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
@@ -230,7 +231,7 @@ class Zolago_SalesRule_Model_Observer {
                 }
             }
         }
-
+	    Mage::log('4',null,'coupons.loggg');
         //3. Assign coupons to customers
         $dataToSend = array();
 
@@ -245,7 +246,7 @@ class Zolago_SalesRule_Model_Observer {
         $res = $helper->assignCouponsToSubscribers($data);
         //Mage::log($res["data_to_send"], null, "coupon5.log");
 
-
+	    Mage::log('5',null,'coupons.loggg');
         //4. Send mails
         $dataAssign = $res["data_to_send"];
         if (!empty($dataAssign)) {
@@ -254,13 +255,14 @@ class Zolago_SalesRule_Model_Observer {
                 if($customerId){
                     if (!$helper->sendPromotionEmail($customerId, array_values($sendData))) {
                         //if mail sending failed
-	                    Mage::log('could not send',null,'coupons_send.log');
                         unset($dataAssign[$email]);
                     }
                 }
             }
             unset($customerId);
         }
+
+	    Mage::log('6',null,'coupons.loggg');
 
         //5. Set customer_id to salesrule_coupon table
         if (!empty($dataAssign)) {
@@ -272,6 +274,7 @@ class Zolago_SalesRule_Model_Observer {
                     }
                 }
             }
+	        Mage::log('7',null,'coupons.loggg');
 
             if(!empty($insertData)){
                 $insertData = implode(",", $insertData);
