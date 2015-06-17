@@ -488,16 +488,16 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 	public function getDhlParcelWeightByKey($key) {
 		switch ($key) {
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5 :
-				$weight = 5;
+				$weight = 1;
 				break;
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
-				$weight = 10;
+				$weight = 5;
 				break;
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
-				$weight = 20;
+				$weight = 10;
 				break;
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
-				$weight = 31.5;
+				$weight = 20;
 				break;
 
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
