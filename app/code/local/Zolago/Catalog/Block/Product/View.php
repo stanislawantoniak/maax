@@ -182,7 +182,6 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         preg_match_all('(\$current_date\sformat=\"([\w\-]+)\")', $seoText, $matchesOfDate, PREG_SET_ORDER);
 
         $attributesFoundInLine = array();
-        Mage::log($matches, null, "dynamicM.log");
 
         if(!empty($matches)){
             foreach($matches as $match){
