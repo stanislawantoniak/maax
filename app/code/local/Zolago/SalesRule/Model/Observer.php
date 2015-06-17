@@ -178,8 +178,10 @@ class Zolago_SalesRule_Model_Observer {
             ->where('salesrule_rule.to_date >= ?', date("Y-m-d H:i:s", $currentTimestamp))
             ->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
         ;
-	    Mage::log($query,null,'coupons.log');
+
         $result = $readConnection->fetchAll($query);
+
+	    Mage::log($query,null,'coupons.log');
 
         //Group coupons by rule
         if (empty($result)) {
