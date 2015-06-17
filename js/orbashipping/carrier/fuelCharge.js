@@ -35,9 +35,8 @@ function initDatepicker(){
 
             var begD = jQuery.datepicker.parseDate('dd-mm-yy', f);
             var endD = jQuery.datepicker.parseDate('dd-mm-yy', t);
-            
 
-            if(begD > endD){
+            if(endD !== null && begD > endD){
                 alert("Fuel Charge: Date to can not be earlier than Date from");
                 datepicker_from.css({"border": borderError});
                 datepicker_to.css({"border": borderError});
