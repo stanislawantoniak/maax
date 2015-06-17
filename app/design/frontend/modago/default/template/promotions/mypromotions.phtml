@@ -1,0 +1,65 @@
+<?php
+/** @var Zolago_Modago_Block_Mypromotions $this */
+/** @var Zolago_Salesrule_Helper_Data $helper */
+$helper = Mage::helper('zolagosalesrule');
+?>
+<?php echo $this->getCmsBlock(); ?>
+<?php if (($this->isLogged()) || ($this->isPersistent())): ?>
+	<?php $list = $this->getPromotionList(); ?>
+	<?php if (count($list)): ?>
+		<section class="container-fluid">
+			<div id="promo_list">
+				<?php foreach ($list as $item): ?>
+					<div class="promo_item col-xs-6 col-sm-4 col-md-3 col-lg-3">
+						<?php $imageName = $item['ruleItem']->getPromoImage(); ?>
+						<?php if($imageName): ?>
+							<?php $imageResized = $helper->getResizedPromotionImage($imageName); ?>
+							<?php $imageInfo = $helper->getResizedPromotionImageInfo($imageName); ?>
+						<figure class="promo_img"
+						        <?php if(is_array($imageInfo) && isset($imageInfo['ratio'])): ?>
+								style="padding-bottom: <?php echo $imageInfo['ratio']; ?>%;"
+								<?php endif; ?>>
+							<img src="<?php echo $imageResized; ?>"
+							     alt="<?php echo $item['ruleItem']->getName(); ?>">
+						</figure>
+						<?php endif; ?>
+						<div class="promo_info">
+							<h3 class="promo_name">
+								<?php echo $item['ruleItem']->getName(); ?>
+							</h3>
+
+							<?php if ($item['ruleItem']->getDescription()): ?>
+							<div class="promo_desc">
+								<?php echo $item['ruleItem']->getDescription(); ?>
+							</div>
+							<?php endif; ?>
+
+							<?php if ($this->isLogged()) : ?>
+							<div class="promo_code">
+								<?php echo $helper->__('Your coupon code:'); ?>
+								<textarea readonly><?php echo $item['code']; ?></textarea>
+							</div>
+							<?php else: ?>
+							<div class="promo_code_hidden">
+								<?php echo $helper->__('Login to see your coupon code'); ?>
+							</div>
+							<?php endif; ?>
+
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</section>
+		<script>
+			jQuery(document).ready(function() {
+				jQuery('#promo_list')
+					.on('done.shuffle', function() {
+						jQuery(window).resize();
+					})
+					.shuffle({throttleTime: 250, speed: 0, easing: 'linear' });
+			});
+		</script>
+	<?php endif; ?>
+<?php else: ?>
+	<?php echo $this->getChildHtml('mypromotions.login'); ?>
+<?php endif; ?>

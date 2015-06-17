@@ -2,10 +2,35 @@
 <config>
     <modules>
         <Zolago_SalesRule>
-            <version>0.0.4</version>
+            <version>0.0.7</version>
         </Zolago_SalesRule>
     </modules>
+    <frontend>
+        <routers>
+            <mypromotions>	
+                <use>standard</use>
+                <args>
+                    <module>Zolago_SalesRule</module>
+                    <frontName>mypromotions</frontName>
+                </args>
+            </mypromotions>
+        </routers>
+        <translate>
+            <modules>
+                <Zolago_SalesRule>
+                    <files>
+                        <default>Zolago_SalesRule.csv</default>
+                    </files>
+                </Zolago_SalesRule>
+            </modules>
+        </translate>
+    </frontend>
     <global>
+        <blocks>
+            <zolagosalesrule>
+                <class>Zolago_SalesRule_Block</class>
+            </zolagosalesrule>
+        </blocks>
 		<helpers>
 			<zolagosalesrule>
 				<class>Zolago_SalesRule_Helper</class>
@@ -24,7 +49,12 @@
                     </relation>
 				</entities>
 			 </zolagosalesrule_resource>
-		</models>
+            <salesrule_resource>
+                <rewrite>
+                    <coupon>Zolago_SalesRule_Model_Resource_Coupon</coupon>
+                </rewrite>
+            </salesrule_resource>
+        </models>
         <resources>
             <zolagosalesrule_setup>
                 <setup>
@@ -87,4 +117,17 @@
 			</adminhtml_promo_quote_edit_tab_main_prepare_form>
 		</events>
 	</adminhtml>
+    <crontab>
+        <jobs>
+            <zolagosalesrule_send_subscriber_coupon_mail>
+                <schedule>
+                    <!-- Run every 1 hour -->
+                    <cron_expr>0 */1 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosalesrule/observer::sendSubscriberCouponMail</model>
+                </run>
+            </zolagosalesrule_send_subscriber_coupon_mail>
+        </jobs>
+    </crontab>
 </config>
