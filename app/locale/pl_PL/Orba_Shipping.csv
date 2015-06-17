@@ -5,5 +5,12 @@
 "DHL Service Error: %s", "Błąd serwisu DHL: %s"
 "Create shipment error", "Błąd przy tworzeniu wysyłki"
 "Print label error", "Błąd przy drukowaniu etykiety"
-
-
+"Small parcel (biggest dimension is less than 45cm)","mała paczka (największy wymiar ne przekracza 45cm)"
+"Medium parcel (biggest dimension is less than 60cm)","średnia paczka (największy wymiar nie przekracza 60cm)"
+"Big parcel (biggest dimension is less than 75cm)","duża paczka (największy wymiar nie przekracza 75cm)"
+"Parcel size","Wymiary paczki"
+"Envelope","Koperta"
+"Parcel 0-5kg","Paczka 0-5kg"
+"Parcel 5-10kg","Paczka 5-10kg"
+"Parcel 10-20kg","Paczka 10-20kg"
+"Parcel 20-31.5kg","Paczka 20-31.5kg"
