@@ -111,47 +111,32 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                 if ($customer->getIsSubscribed()) {
                     // customer wants to be subscribed
 
-                    if ($subscriberStatus == self::STATUS_NOT_ACTIVE) {
-                        // customer was subscriber but not active and wants to be subscribed
-
-                        if($confirmationNeeded) {
-                            $subscriber->setStatus(self::STATUS_UNCONFIRMED);
-                            $subscriber->sendConfirmationRequestEmail();
-                        } else {
-                            $subscriber->setStatus(self::STATUS_SUBSCRIBED);
-                            $subscriber->sendConfirmationSuccessEmail();
-                        }
-                    }
-                    if ($subscriberStatus == self::STATUS_SUBSCRIBED) {
-                        // customer wants to be in subscribed and he is subscribed
-                    }
                     if ($subscriberStatus == self::STATUS_UNSUBSCRIBED) {
                         // customer is unsubscribed and he wants to be subscribed
                         $subscriber->setStatus(self::STATUS_SUBSCRIBED);
                         $subscriber->sendConfirmationSuccessEmail();
                     }
-                    if ($subscriberStatus == self::STATUS_UNCONFIRMED) {
+                    elseif ($subscriberStatus == self::STATUS_UNCONFIRMED) {
                         // customer don't confirm newsletter but he wants to be subscribed
                         $subscriber->sendConfirmationRequestEmail();
+                    } elseif ($subscriberStatus == self::STATUS_SUBSCRIBED) {
+						//do nothing
+                    } else { //if $subscriberStatus == NULL || $subscriberStatus == self::STATUS_NOT_ACTIVE
+	                    if($confirmationNeeded) {
+		                    $subscriber->setStatus(self::STATUS_UNCONFIRMED);
+		                    $subscriber->sendConfirmationRequestEmail();
+	                    } else {
+		                    $subscriber->setStatus(self::STATUS_SUBSCRIBED);
+		                    $subscriber->sendConfirmationSuccessEmail();
+	                    }
                     }
                 } else {
                     // customer don't wont to be subscribed
-
-                    if ($subscriberStatus == self::STATUS_NOT_ACTIVE) {
-                        // subscriber was not active and he don't wont to be subscribed
-                    }
-                    if ($subscriberStatus == self::STATUS_SUBSCRIBED) {
-                        // he don't wont to be subscribed and he is subscribed
-                        $subscriber->setStatus(self::STATUS_UNSUBSCRIBED);
-                        $subscriber->sendUnsubscriptionEmail();
-                    }
-                    if ($subscriberStatus == self::STATUS_UNSUBSCRIBED) {
-                        // he is unsubscribed and he wont to be unsubscribed
-                    }
-/*                    if ($subscriberStatus == self::STATUS_UNCONFIRMED) {
-                        // he do not confirm and he don't wants to be subscribed
-                        $subscriber->setStatus(self::STATUS_NOT_ACTIVE);
-                    }*/
+	                if ($subscriberStatus == self::STATUS_SUBSCRIBED) {
+		                // he don't wont to be subscribed and he is subscribed
+		                $subscriber->setStatus(self::STATUS_UNSUBSCRIBED);
+		                $subscriber->sendUnsubscriptionEmail();
+	                }
                 }
 	        }
 
