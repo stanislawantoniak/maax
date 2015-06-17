@@ -222,6 +222,8 @@ class Zolago_SalesRule_Model_Observer {
             $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
         }
 
+	    Mage::log($subscribers,null,'coupon.log');
+
         foreach($subscribers as $subscriberId => $subscriberEmail){
 
             foreach($rulesForCustomer as $ruleId => $suscriberIds){
