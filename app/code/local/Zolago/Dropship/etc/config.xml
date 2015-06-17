@@ -329,6 +329,8 @@
 							<dhl_ecas>1</dhl_ecas>
 							<dhl_terminal>1</dhl_terminal>
 							<dhl_charge_amount>1</dhl_charge_amount>
+							<dhl_cod_charge_amount>1</dhl_cod_charge_amount>
+							<dhl_cod_charge_percent>1</dhl_cod_charge_percent>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
@@ -366,8 +368,20 @@
                         <label>Charge amount plus %</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
-                        <position>60</position>
+                        <position>52</position>
                     </dhl_charge_amount>
+                    <dhl_cod_charge_amount>
+                        <label>COD charge amount</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>53</position>
+                    </dhl_cod_charge_amount>
+                    <dhl_cod_charge_percent>
+                        <label>COD charge %</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>54</position>
+                    </dhl_cod_charge_percent>
                     <use_orbaups>
                         <label>Use UPS</label>
                         <type>select</type>
@@ -379,6 +393,8 @@
                             <orbaups_password>1</orbaups_password>
 							<orbaups_account>1</orbaups_account>
 							<orbaups_charge_amount>1</orbaups_charge_amount>
+							<orbaups_cod_charge_percent>1</orbaups_cod_charge_percent>
+							<orbaups_cod_charge_amount>1</orbaups_cod_charge_amount>
                         </depend_fields>
                         <position>55</position>
                     </use_orbaups>
@@ -406,6 +422,18 @@
                         <fieldset>orbaups</fieldset>
                         <position>90</position>
                     </orbaups_charge_amount>
+                    <orbaups_cod_charge_amount>
+                        <label>COD charge amount</label>
+                        <type>text</type>
+                        <fieldset>orbaups</fieldset>
+                        <position>100</position>
+                    </orbaups_cod_charge_amount>
+                    <orbaups_cod_charge_percent>
+                        <label>COD charge %</label>
+                        <type>text</type>
+                        <fieldset>orbaups</fieldset>
+                        <position>110</position>
+                    </orbaups_cod_charge_percent>
                     <!-- Rma -->
                     <dhl_rma>
                         <label>Use another DHL account for RMA</label>
