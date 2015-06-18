@@ -15,7 +15,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
             if (is_array($customer) && !empty($customer)) {
                 $data = $this->_getHelper()->_setCustomerData($customer);
 
-                $r = $this->_getHelper()->salesmanagoContactSync($data, true);
+                $r = $this->_getHelper()->salesmanagoContactSync($data);
 
                 if ($r == false || (isset($r['success']) && $r['success'] == false)) {
                     $data['status'] = 0;
@@ -53,7 +53,8 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
             if (($moduleName == 'newsletter' && $controllerName == 'manage' && $actionName == 'save') ||
                 ($moduleName == 'newsletter' && $controllerName == 'subscribe' && $actionName == 'unsubscribe') ||
                 ($moduleName == 'newsletter' && $controllerName == 'subscriber' && $actionName == 'confirm') ||
-                ($moduleName == 'newsletter' && $controllerName == 'subscriber' && $actionName == 'invitation')
+                ($moduleName == 'newsletter' && $controllerName == 'subscriber' && $actionName == 'invitation') ||
+                ($moduleName == 'checkout' && $controllerName == 'guest' && $actionName == 'saveOrder')
             ) {
 
                 $clientId = Mage::getStoreConfig('salesmanago_tracking/general/client_id');
@@ -84,7 +85,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                     'owner' => $ownerEmail,
                 );
 
-                if ($data['subscriber_status'] == "1") {
+                if ($data['subscriber_status'] == Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED) {
                     $data_to_json['forceOptIn'] = true;
                     $data_to_json['forceOptOut'] = false;
                 } else {
@@ -93,7 +94,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 }
 
                 $json = json_encode($data_to_json);
-                $result = $this->_getHelper()->_doPostRequest('https://' . $endPoint . '/api/contact/update', $json);
+                $result = $this->_getHelper()->_doPostRequest('https://' . $endPoint . '/api/contact/upsert', $json);
 
                 $r = json_decode($result, true);
 

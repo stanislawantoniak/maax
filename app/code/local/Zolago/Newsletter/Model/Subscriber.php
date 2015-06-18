@@ -367,4 +367,15 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             ->getFirstItem();
         return $subscriber;
     }
+
+    public function rawLoadByEmail($email, $storeId) {
+
+        /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+        $subscriber = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter('subscriber_email', array('eq' => $email))
+            ->addFieldToFilter('store_id', array('eq' => $storeId))
+            ->getFirstItem();
+        return $subscriber;
+    }
 }
