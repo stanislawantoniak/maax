@@ -25,7 +25,6 @@ function initDatepicker(){
             var tr = jQuery(this).closest("tr");
 
             var datepicker_from = tr.find("input[name*=fuel_percent_date_from]");
-
             var datepicker_to = tr.find("input[name*=fuel_percent_date_to]");
             var f = datepicker_from.val();
             var t = datepicker_to.val();
@@ -43,7 +42,36 @@ function initDatepicker(){
             }
 
 
+        },
+        beforeShowDay: function (date) {
+
+            var trs = jQuery(this).closest("table.data").find("tbody tr");
+            var dateRange = [];
+            trs.each(function (i, tr) {
+                var datepicker_from, datepicker_to, f, t, startDate, endDate;
+
+                datepicker_from = jQuery(tr).find("input[name*=fuel_percent_date_from]");
+                datepicker_to = jQuery(tr).find("input[name*=fuel_percent_date_to]");
+
+                f = datepicker_from.val();
+                t = datepicker_to.val();
+
+
+                if (f.length > 0 && t.length) {
+                    startDate = jQuery.datepicker.parseDate('dd-mm-yy', f);
+                    endDate = jQuery.datepicker.parseDate('dd-mm-yy', t);
+
+                    for (var d = new Date(startDate); d <= new Date(endDate); d.setDate(d.getDate() + 1)) {
+                        dateRange.push(jQuery.datepicker.formatDate('dd-mm-yy', d));
+                    }
+                }
+
+
+            })
+            var dateString = jQuery.datepicker.formatDate('dd-mm-yy', date);
+            return [dateRange.indexOf(dateString) == -1];
         }
+
     });
 }
 
