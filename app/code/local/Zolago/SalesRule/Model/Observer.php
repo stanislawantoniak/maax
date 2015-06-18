@@ -177,6 +177,7 @@ class Zolago_SalesRule_Model_Observer {
             ->where('customer_id IS NULL')
             ->where('salesrule_rule.to_date >= ?', date("Y-m-d H:i:s", $currentTimestamp))
             ->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
+
         ;
         $result = $readConnection->fetchAll($query);
 
@@ -244,6 +245,7 @@ class Zolago_SalesRule_Model_Observer {
         $helper = Mage::helper("zolagosalesrule");
         $res = $helper->assignCouponsToSubscribers($data);
         //Mage::log($res["data_to_send"], null, "coupon5.log");
+
 
         //4. Send mails
         $dataAssign = $res["data_to_send"];
