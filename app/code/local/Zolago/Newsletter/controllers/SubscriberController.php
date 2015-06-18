@@ -81,17 +81,15 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
      */
     public function subscribeAgainAction() {
         $hlp    = Mage::helper('zolagonewsletter');
-        $email  = $this->getRequest()->getParam('email');
-        $key = $this->getRequest()->getParam('key');
+        $smcid  = $this->getRequest()->getParam('smcid');
+        $customers = Mage::getModel("customer/customer")->getCollection()->addFieldToFilter("salesmanago_contact_id", $smcid);
+        /** @var Zolago_Customer_Model_Customer $customer */
+        $customer = $customers->getFirstItem();
         $isValid = false;
 
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
         if($active == 1) {
-            $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
-            $sha1 = sha1($email . $apiSecret);
-            if (isset($email) && isset($key) && isset($sha1) && filter_var($email, FILTER_VALIDATE_EMAIL) && $key == $sha1) {
-                $isValid = true;
-            }
+            $isValid = $customer->getId() ? true : false;
         }
 
         if (!$this->_validateFormKey() || !$isValid) {
@@ -102,7 +100,7 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
         try {
             /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
             $subscriber = Mage::getModel('newsletter/subscriber');
-            $subscriber->loadByEmail($email);
+            $subscriber = $subscriber->rawLoadByCustomer($customer);
             if ($subscriber->getId()) {
                 $subscriber->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED);
                 $subscriber->save();
