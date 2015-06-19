@@ -206,4 +206,8 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
             return $r;
         }
     }
+
+	public function addCookie($name,$value) {
+		$this->sm_create_cookie($name,$value,time()+(60*60*24*365*10)); //10years
+	}
 }

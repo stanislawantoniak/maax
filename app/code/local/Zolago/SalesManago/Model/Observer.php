@@ -140,8 +140,14 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
             $ownerEmail = Mage::getStoreConfig('salesmanago_tracking/general/email');
             $endPoint = Mage::getStoreConfig('salesmanago_tracking/general/endpoint');
 
-            $customerEmail = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
-            $isLoggedIn = Mage::getSingleton('customer/session')->isLoggedIn();
+	        /** @var Zolago_Customer_Model_Session $customerSession */
+	        $customerSession = Mage::getSingleton('customer/session');
+
+	        /** @var Mage_Persistent_Helper_Session $persistentHelper */
+	        $persistentHelper = Mage::helper('persistent/session');
+
+            $customerEmail = $customerSession->getCustomer()->getEmail();
+            $isLoggedIn = $customerSession->isLoggedIn();
             //if (!empty($customerEmail)) {
             $apiKey = md5(time() . $apiSecret);
             $dateTime = new DateTime('NOW');
@@ -160,7 +166,32 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 ),
             );
 
-            $eventId = Mage::getSingleton('core/session')->getEventId();
+
+	        /** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
+	        $salesmanagoHelper = Mage::helper('tracking');
+
+	        $eventId = false;
+	        $cookieKey = 'smCartEventId';
+
+	        if($customerSession->isLoggedIn()) {
+		        $customer = $customerSession->getCustomer();
+	        } elseif($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()) {
+		        $customer = $persistentHelper->getCustomer();
+	        } else {
+		        $customer = false;
+	        }
+
+	        if($customer !== false && $customer->getId()) {
+		        if($customer->getSalesmanagoCartEventId()) {
+			        $eventId = $customer->getSalesmanagoCartEventId();
+		        }
+
+		        if($eventId && (!isset($_COOKIE[$cookieKey]) || empty($_COOKIE[$cookieKey]) || $_COOKIE[$cookieKey] != $eventId)) {
+			        $salesmanagoHelper->addCookie($cookieKey,$eventId);
+		        }
+	        } elseif(isset($_COOKIE[$cookieKey]) && !empty($_COOKIE[$cookieKey])) {
+		        $eventId = $_COOKIE[$cookieKey];
+	        }
 
             if (isset($eventId) && !empty($eventId)) {
                 $data_to_json['contactEvent']['eventId'] = $eventId;
@@ -182,8 +213,16 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 
             $r = json_decode($result, true);
 
-            if (!isset($eventId) && isset($r['eventId'])) {
-                Mage::getSingleton('core/session')->setEventId($r['eventId']);
+            if (!isset($eventId) && isset($r['eventId']) && !empty($r['eventId'])) {
+	            $eventId = $r['eventId'];
+                if($customer !== false && $customer->getId()) {
+	                $customer->setData('salesmanago_cart_event_id', $eventId)
+		                ->getResource()
+		                ->saveAttribute($customer, 'salesmanago_cart_event_id');
+                }
+	            if(!isset($_COOKIE[$cookieKey]) || empty($_COOKIE[$cookieKey]) || $_COOKIE[$cookieKey] != $eventId) {
+		            $salesmanagoHelper->addCookie($cookieKey,$eventId);
+	            }
             }
             //}
         }

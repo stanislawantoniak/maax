@@ -186,7 +186,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 	    }
 
 	    if($customer !== false && $customer->getId()) {
-		    /** @var Salesmanago_Tracking_Helper_Data $salesmanagoHelper */
+		    /** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
 		    $salesmanagoHelper = Mage::helper('tracking');
 
 		    $smContactId = false;
@@ -212,7 +212,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 		    if(!isset($_COOKIE['smclient']) || empty($_COOKIE['smclient']) ||
 			    (isset($_COOKIE['smclient']) && $_COOKIE['smclient'] != $smContactId)) {
-			    $salesmanagoHelper->sm_create_cookie('smclient',$smContactId,time()+(60*60*24*365*10));
+			    $salesmanagoHelper->addCookie('smclient',$smContactId);
 		    }
 	    }
 
