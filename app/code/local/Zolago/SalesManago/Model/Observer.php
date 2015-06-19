@@ -182,8 +182,8 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 	        }
 
 	        if($customer !== false && $customer->getId()) {
-		        if($customer->getSalesmanagoCartEventId()) {
-			        $eventId = $customer->getSalesmanagoCartEventId();
+		        if($customer->getData('salesmanago_cart_event_id')) {
+			        $eventId = $customer->getData('salesmanago_cart_event_id');
 		        }
 
 		        if($eventId && (!isset($_COOKIE[$cookieKey]) || empty($_COOKIE[$cookieKey]) || $_COOKIE[$cookieKey] != $eventId)) {
@@ -205,15 +205,13 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                         $data_to_json['contactId'] = $_COOKIE['smclient'];
                 }
 
-                //Mage::log(serialize($data_to_json), null, 'mylogfile.log');
-
                 $json = json_encode($data_to_json);
                 $result = $this->_getHelper()->_doPostRequest('https://' . $endPoint . '/api/contact/addContactExtEvent', $json);
             }
 
             $r = json_decode($result, true);
 
-            if (!isset($eventId) && isset($r['eventId']) && !empty($r['eventId'])) {
+            if (!$eventId && isset($r['eventId']) && !empty($r['eventId'])) {
 	            $eventId = $r['eventId'];
                 if($customer !== false && $customer->getId()) {
 	                $customer->setData('salesmanago_cart_event_id', $eventId)
@@ -224,7 +222,6 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 		            $salesmanagoHelper->addCookie($cookieKey,$eventId);
 	            }
             }
-            //}
         }
     }
 }

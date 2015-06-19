@@ -68,7 +68,6 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                     $data_to_json['tags'] = $tags;
                 }
             }
-	        Mage::log($data_to_json,null,'order2.log');
             $json = json_encode($data_to_json);
             $result = $this->_doPostRequest('https://' . $endPoint . '/api/contact/upsert', $json);
             $r = json_decode($result, true);
