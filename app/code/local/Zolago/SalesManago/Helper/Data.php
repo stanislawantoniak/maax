@@ -3,6 +3,8 @@
 class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
 {
 
+	const SALESMANAGO_NO_NEWSLETTER_POST_REGISTRY_KEY = 'salesmanago_no_newsletter_post';
+
     /**
      * Calling Upsert (api/contact/upsert) after new customer registration, customer login
      * and for customer, who make purchase without registration
@@ -43,6 +45,8 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                 'async' => false,
             );
 
+
+
             if (isset($data['is_subscribed']) && !$data['is_subscribed']) {
                 $data_to_json['forceOptIn'] = false;
                 $data_to_json['forceOptOut'] = true;
@@ -64,7 +68,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                     $data_to_json['tags'] = $tags;
                 }
             }
-
+	        Mage::log($data_to_json,null,'order2.log');
             $json = json_encode($data_to_json);
             $result = $this->_doPostRequest('https://' . $endPoint . '/api/contact/upsert', $json);
             $r = json_decode($result, true);
@@ -174,13 +178,15 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                 $this->sm_create_cookie('smclient', $r['contactId'], $period);
             }
 
-            $apiKey = md5(time() . $apiSecret);
+	        $time = time();
+
+            $apiKey = md5($time . $apiSecret);
             $dateTime = new DateTime('NOW');
 
             $data_to_json = array(
                 'apiKey' => $apiKey,
                 'clientId' => $clientId,
-                'requestTime' => time(),
+                'requestTime' => $time,
                 'sha' => sha1($apiKey . $clientId . $apiSecret),
                 'owner' => $ownerEmail,
                 'email' => $customerEmail,

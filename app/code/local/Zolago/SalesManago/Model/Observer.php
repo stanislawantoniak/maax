@@ -43,6 +43,11 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 
     public function newsletter_subscriber_save_after($observer)
     {
+	    $key = Zolago_SalesManago_Helper_Data::SALESMANAGO_NO_NEWSLETTER_POST_REGISTRY_KEY;
+	    if(Mage::registry($key) === true) {
+		    Mage::unregister($key);
+		    return array();
+	    }
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
         if ($active == 1) {
             $request = Mage::app()->getRequest();
@@ -71,12 +76,14 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 $id = (int)Mage::app()->getFrontController()->getRequest()->getParam('id');
                 $code = (string)Mage::app()->getFrontController()->getRequest()->getParam('code');
 
-                $apiKey = md5(time() . $apiSecret);
+	            $time = time();
+
+                $apiKey = md5($time . $apiSecret);
 
                 $data_to_json = array(
                     'apiKey' => $apiKey,
                     'clientId' => $clientId,
-                    'requestTime' => time(),
+                    'requestTime' => $time,
                     'contact' => array(
                         'email' => $email,
                         'state' => 'CUSTOMER',

@@ -26,6 +26,12 @@ abstract class Zolago_Checkout_Controller_Abstract
             return;
         }
 
+		$key = Zolago_SalesManago_Helper_Data::SALESMANAGO_NO_NEWSLETTER_POST_REGISTRY_KEY;
+		if(Mage::registry($key)) {
+			Mage::unregister($key);
+		}
+		Mage::register($key,true);
+
 		// Check if customer has name and phone number set in account if not set it now
 		/** @var Mage_Customer_Model_Session $session */
 		$session = Mage::getSingleton('customer/session');
