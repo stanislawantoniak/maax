@@ -25,7 +25,7 @@
 
         }
         .name_product {
-            height: 34px;
+            height: 36px;
             overflow: hidden;
         }
 
@@ -48,7 +48,7 @@
                                     margin: 0 0 18px 0;
                                     display: block;
                                     ">
-                                        <img style="
+                                        <img class="sm-inline" style="
                                                 width: 100%;
                                                 height: auto;
                                                 vertical-align: middle;
@@ -66,17 +66,17 @@
                                                                 margin-top: 18px;
                                                                 margin-bottom: 18px;
                                                                 display: block;
-                                                                max-height: 34px;
+                                                                max-height: 36px;
                                                                 overflow: hidden;
 
                                     ">
                                     <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
                                 </div>
                                 <span style="color: #000000;
-                                        font-size: 1.5em;
+                                        font-size: 120%;
                                         position: relative;
                                     ">
-                                    <?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?>
+                                    <b><?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?></b>
                                 </span>
 
 
