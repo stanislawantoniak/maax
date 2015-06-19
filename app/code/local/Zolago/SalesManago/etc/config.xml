@@ -118,7 +118,7 @@
                     </salesmanago_tracking_observer>
                 </observers>
             </sales_quote_remove_item>
-            <checkout_cart_product_update_after>
+            <checkout_cart_update_items_after>
                 <observers>
                     <salesmanago_tracking_observer>
                         <type>singleton</type>
@@ -126,7 +126,7 @@
                         <method>add_cart_event</method>
                     </salesmanago_tracking_observer>
                 </observers>
-            </checkout_cart_product_update_after>
+            </checkout_cart_update_items_after>
         </events>
         <resources>
             <salesmanago>
