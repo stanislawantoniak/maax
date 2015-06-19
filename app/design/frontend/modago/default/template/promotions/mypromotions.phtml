@@ -34,6 +34,10 @@ $helper = Mage::helper('zolagosalesrule');
 							</div>
 							<?php endif; ?>
 
+							<div class="promo_desc">
+								<?php echo $helper->__("Expiration date:").$item['ruleItem']->getExpirationDate(); ?>
+							</div>
+
 							<?php if ($this->isLogged()) : ?>
 							<div class="promo_code">
 								<?php echo $helper->__('Your coupon code:'); ?>
