@@ -127,8 +127,19 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
     {
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
         if ($active == 1) {
-            $cartHelper = Mage::getModel('checkout/cart')->getQuote();
-            $items = $cartHelper->getAllVisibleItems();
+            /** @var Zolago_Sales_Model_Quote $quote */
+            $quote = Mage::getModel('checkout/cart')->getQuote();
+            if ($observer->getCart()) {
+                // Case for event:
+                // 1) checkout_cart_update_items_after
+                // 2) checkout_cart_product_add_after
+                $quote = $observer->getCart()->getQuote();
+            }elseif($observer->getQuoteItem()) {
+                // Case for event sales_quote_remove_item
+                $quote = $observer->getQuoteItem()->getQuote();
+            }
+            $quote->collectTotals();
+            $items = $quote->getAllItems();
             $itemsNamesList = array();
             foreach ($items as $item) {
                 array_push($itemsNamesList, $item->getProduct()->getId());
@@ -162,7 +173,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                     'date' => $dateTime->format('c'),
                     'contactExtEventType' => 'CART',
                     'products' => implode(',', $itemsNamesList),
-                    'value' => $cartHelper->getGrandTotal(),
+                    'value' => $quote->getTotals()['subtotal']->getValueInclTax(), // no shipping cost
                 ),
             );
 
