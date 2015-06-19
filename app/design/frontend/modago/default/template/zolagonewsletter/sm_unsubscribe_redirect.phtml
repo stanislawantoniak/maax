@@ -1,9 +1,10 @@
 <?php
 /** @var Mage_Core_Block_Template $this */
-$smcid = $this->getRequest()->getParam('smclient');
-$customers = Mage::getModel("customer/customer")->getCollection()->addFieldToFilter("salesmanago_contact_id", $smcid);
-$customer = $customers->getFirstItem();
-$isValid = $customer->getId() ? true : false;
+$apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+$arr   =  explode('|', $this->getRequest()->getParam('params'));
+$email = !empty($arr[0]) ? str_replace(' ', '+', $arr[0]) : '';
+$key   = !empty($arr[1]) ? $arr[1] : '';
+$isValid = ($key == sha1($email . $apiSecret));
 ?>
 <style>
     .is-invalid .hide-if-invalid {display:none;}
@@ -15,7 +16,8 @@ $isValid = $customer->getId() ? true : false;
             <div class="col-sm-12 column-block">
                 <div class="main bg-w equalBlock col-01 <?php echo !$isValid ? 'is-invalid' : ''; ?>">
                     <form action="<?php echo $this->getUrl("newsletter/subscriber/subscribeAgain");?>" method="post" class="form-horizontal" >
-                        <input type="hidden" name="smcid" value="<?php echo $smcid ?>"/>
+                        <input type="hidden" name="email" value="<?php echo $email ?>"/>
+                        <input type="hidden" name="key" value="<?php echo $key ?>"/>
                         <?php echo $this->getChildHtml("zolagonewsletter.sm.unsubscribe.redirect.formkey");?>
                         <?php echo $this->getChildHtml("salesmanago_unsubscribe_redirect");?>
                     </form>

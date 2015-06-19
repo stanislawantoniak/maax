@@ -59,7 +59,8 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 ($moduleName == 'newsletter' && $controllerName == 'subscribe' && $actionName == 'unsubscribe') ||
                 ($moduleName == 'newsletter' && $controllerName == 'subscriber' && $actionName == 'confirm') ||
                 ($moduleName == 'newsletter' && $controllerName == 'subscriber' && $actionName == 'invitation') ||
-                ($moduleName == 'checkout' && $controllerName == 'guest' && $actionName == 'saveOrder')
+                ($moduleName == 'checkout' && $controllerName == 'guest' && $actionName == 'saveOrder') ||
+                ($moduleName == 'newsletter' && $controllerName == 'subscriber' && $actionName == 'subscribeAgain')
             ) {
 
                 $clientId = Mage::getStoreConfig('salesmanago_tracking/general/client_id');
