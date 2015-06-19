@@ -118,6 +118,15 @@
                     </salesmanago_tracking_observer>
                 </observers>
             </sales_quote_remove_item>
+            <checkout_cart_product_update_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_product_update_after>
         </events>
         <resources>
             <salesmanago>
