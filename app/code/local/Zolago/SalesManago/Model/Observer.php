@@ -212,9 +212,10 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
             } else {
                 if ($isLoggedIn) {
                     $data_to_json['email'] = $customerEmail;
+                } elseif(!empty($_COOKIE['smclient'])) {
+                    $data_to_json['contactId'] = $_COOKIE['smclient'];
                 } else {
-                    if (!empty($_COOKIE['smclient']))
-                        $data_to_json['contactId'] = $_COOKIE['smclient'];
+	                return;
                 }
 
                 $json = json_encode($data_to_json);
