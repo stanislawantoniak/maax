@@ -120,19 +120,27 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
             $ownerEmail = Mage::getStoreConfig('salesmanago_tracking/general/email');
             $endPoint = Mage::getStoreConfig('salesmanago_tracking/general/endpoint');
 
-            $items = $orderDetails->getAllVisibleItems();
+            $items = $orderDetails->getAllItems();
             $itemsNamesList = array();
             foreach ($items as $item) {
                 array_push($itemsNamesList, $item->getProduct()->getId());
             }
 
             $customerEmail = $orderDetails->getCustomerEmail();
-            $grandTotal = $orderDetails->getBaseGrandTotal();
+            $subtotalIncTax = $orderDetails->getSubtotalInclTax();
             $incrementOrderId = $orderDetails->getIncrementId();
             $orderStoreId = $orderDetails->getStoreId();
             $customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($customerEmail)->getData();
             $orderData = $orderDetails->getData();
             $customerDetails = $orderDetails->getBillingAddress();
+
+            /** @var Zolago_Po_Model_Po $po */
+            $po = $orderDetails->getPoListByOrder()->getFirstItem();
+            $paymentMethod = str_replace('_',' ',$po->ghapiPaymentMethod());
+            $shippingAdress = $orderDetails->getShippingAddress();
+            $street = htmlentities(trim($shippingAdress->getStreet(-1)));
+            $zip = htmlentities(trim($shippingAdress->getPostcode()));
+            $city = htmlentities(trim($shippingAdress->getCity()));
 
             $data = array();
             $data['name'] = $customerDetails->getFirstname() . ' ' . $customerDetails->getLastname();
@@ -193,8 +201,10 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                     'date' => $dateTime->format('c'),
                     'products' => implode(',', $itemsNamesList),
                     'contactExtEventType' => 'PURCHASE',
-                    'value' => $grandTotal,
+                    'value' => $subtotalIncTax,
                     'externalId' => $incrementOrderId,
+                    'detail1' => $paymentMethod, // Payment Method
+                    'location' => $street.' '.$zip.' '.$city,  // Location of shipping
                 ),
             );
 
