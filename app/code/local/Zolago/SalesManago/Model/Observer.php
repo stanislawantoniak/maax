@@ -112,6 +112,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
 
     /**
      * Dodanie (oraz na biezaco modyfikowanie) zdarzenia w koszyku addContactExtEvent z typem CART
+     * @see SalesManago_Tracking_Model_Observer::checkout_cart_save_after
      * @see app/code/community/SalesManago/Tracking/Model/Observer.php -> checkout_cart_save_after
      * @param $observer
      */
