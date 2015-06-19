@@ -30,7 +30,7 @@
         }
 
     </style>
-<div class="container-fluid bg-w" style="background: #fff; margin-right: auto; margin-left: auto;">
+    <div class="container-fluid bg-w" style="background: #fff; margin-right: auto; margin-left: auto;">
     <div id="items-product" class="container-fluid">
         <div>
             <?php $helper = Mage::helper("zolagosalesmanago"); ?>
@@ -42,7 +42,7 @@
                             <div class="box_listing_product"  style="background: #fff;font-size: 12px;padding: 0 0 20px 0;">
                                 <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
 
-                                <a href="<?php echo $_product->getProductUrl(); ?>">
+                                <a href="<?php echo Mage::getUrl('checkout/cart'); ?>">
                                     <figure class="img_product" style="
                                     position: relative;
                                     margin: 0 0 18px 0;
@@ -54,10 +54,10 @@
                                                 vertical-align: middle;
                                                 border: 0;
                                         "
-                                            src="<?php echo (string)Mage::helper('catalog/image')
-                                                ->init($_product, 'image')
-                                                ->resize(148, 222); ?>"
-                                            alt="<?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 42); ?>"/>
+                                             src="<?php echo (string)Mage::helper('catalog/image')
+                                                 ->init($_product, 'image')
+                                                 ->resize(148, 222); ?>"
+                                             alt="<?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 42); ?>"/>
                                     </figure>
 
                                 </a>
@@ -70,7 +70,7 @@
                                                                 overflow: hidden;
 
                                     ">
-                                    <a href="<?php echo $_product->getProductUrl(); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
+                                    <a href="<?php echo Mage::getUrl('checkout/cart'); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
                                 </div>
                                 <span style="color: #000000;
                                         font-size: 120%;
@@ -84,8 +84,8 @@
                         </div>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
+            </div>
         </div>
     </div>
-</div>
-<div style="clear: both;margin-bottom: 20px;"></div>
+    <div style="clear: both;margin-bottom: 20px;"></div>
 <?php endif; ?>
