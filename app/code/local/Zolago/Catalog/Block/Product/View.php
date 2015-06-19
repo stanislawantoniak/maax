@@ -170,6 +170,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
      * @return string
      */
     public function getAttributesSubstitutions($product, $seoText){
+        Mage::log($seoText, null, "dynamic.log");
         $result = "";
         if(!$product instanceof Zolago_Catalog_Model_Product){
             return $result;
@@ -178,21 +179,33 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             return $result;
         }
         preg_match_all('#\$([a-zA-Z0-9_]+)#', $seoText, $matches, PREG_SET_ORDER);
+        preg_match_all('(\$current_date\sformat=\"([\w\-]+)\")', $seoText, $matchesOfDate, PREG_SET_ORDER);
 
         $attributesFoundInLine = array();
+
         if(!empty($matches)){
             foreach($matches as $match){
                 $attributesFoundInLine[$match[1]] = $match[1];
             }
+            unset($match);
         }
-
+        $dates = array();
+        if(!empty($matchesOfDate)){
+            foreach($matchesOfDate as $match){
+                $dates[$match[1]] = $match[1];
+            }
+            unset($match);
+        }
         if(empty($attributesFoundInLine)){
             return $seoText;
         }
 
+
+
         $labels = array();
 
         foreach ($attributesFoundInLine as $attributeCode) {
+
             $label = "";
 
             $attribute = $product->getResource()
@@ -202,22 +215,31 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 continue;
             }
             $frontend_input = $attribute->getData("frontend_input");
-
-            if ($frontend_input == "select") {
-                $label = $product
-                    ->setData($attributeCode, $product->getData($attributeCode))
-                    ->getAttributeText($attributeCode);
-            }
-            if ($frontend_input == "multiselect") {
-                $label = $product->getResource()
-                    ->getAttribute($attributeCode)
-                    ->getFrontend()
-                    ->getValue($product);
-            }
-            if ($frontend_input == "text") {
-                $label = $product->getResource()
-                    ->getAttribute($attributeCode)
-                    ->getFrontend()->getValue($product);
+            //Mage::log($attributeCode. "--".$frontend_input, null, "codes.log");
+            switch($frontend_input){
+                case "select":
+                    $label = $product
+                        ->setData($attributeCode, $product->getData($attributeCode))
+                        ->getAttributeText($attributeCode);
+                    break;
+                case "price":
+                    $label = Mage::helper('core')->currency($product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product), true, false);
+                    break;
+                case "multiselect":
+                    $value = $product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product);
+                    $label = !empty($value) ? explode(",", $value)[0] : "";
+                    break;
+                default:
+                    $label = $product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product);
             }
 
             $labels[$attributeCode] = $label;
@@ -230,7 +252,15 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $subst = array();
         foreach($labels as $code => $strItem){
             $subst['{$'.$code.'}'] = $strItem;
+            $subst['{$'.$code.' first_letter=capital}'] = ucfirst($strItem);
         }
+        if(!empty($dates)){
+            foreach($dates as $format){
+                $subst['{$current_date format="'.$format.'"}'] = date($format);
+            }
+        }
+
+
 
         return strtr($seoText, $subst);
     }
