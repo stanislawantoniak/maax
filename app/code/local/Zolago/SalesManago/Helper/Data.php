@@ -210,4 +210,10 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
 	public function addCookie($name,$value) {
 		$this->sm_create_cookie($name,$value,time()+(60*60*24*365*10)); //10years
 	}
+
+	public function removeCookie($name) {
+		$url = parse_url(Mage::getBaseUrl());
+		unset($_COOKIE[$name]);
+		setcookie($name,null,-1,$this->sm_get_domain($url['host']));
+	}
 }
