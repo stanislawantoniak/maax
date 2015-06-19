@@ -372,4 +372,46 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 
 		return $ids;
 	}
+
+	public function isAlreadyReturned() {
+		/** @var Zolago_Payment_Model_Allocation $allocationsModel */
+		$allocationsModel = Mage::getModel('zolagopayment/allocation');
+		$refundsCollection = $allocationsModel->getCollection()
+			->addFieldToFilter('rma_id',$this->getId())
+			->addFieldToFilter('allocation_type','refund');
+		$negativePaymentsCollection = $allocationsModel->getCollection()
+			->addFieldToFilter('rma_id',$this->getId())
+			->addFieldToFilter('allocation_type','payment')
+			->addFieldToFilter('allocation_amount',array('lt'=>'0'));
+
+		$sumRefunds = 0;
+		foreach($refundsCollection as $refund) {
+			$sumRefunds += abs($refund->getAllocationAmount());
+		}
+
+		$sumNegativePayments = 0;
+		foreach($negativePaymentsCollection as $negativePayment) {
+			$sumNegativePayments += abs($negativePayment->getAllocationAmount());
+		}
+
+		if($sumRefunds != $sumNegativePayments) {
+			return false;
+		} else {
+			$txnIds = array();
+			foreach($refundsCollection as $allocation) {
+				$txnIds[] = $allocation->getRefundTransactionId();
+			}
+			if(count($txnIds)) {
+				/** @var Mage_Sales_Model_Order_Payment_Transaction $transactions */
+				$transactions = Mage::getModel("sales/order_payment_transaction")
+					->getCollection()
+					->addFieldToFilter('transaction_id',array('in'=>$txnIds))
+					->addFieldToFilter('txn_status','3');
+				if($transactions->getSize() == count($txnIds)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
