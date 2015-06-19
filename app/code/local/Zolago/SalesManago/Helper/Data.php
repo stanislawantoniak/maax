@@ -204,7 +204,7 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
                     'value' => $subtotalIncTax,
                     'externalId' => $incrementOrderId,
                     'detail1' => $paymentMethod, // Payment Method
-                    'detail2' => $street.' '.$zip.' '.$city,  // Location of shipping
+                    'location' => $street.' '.$zip.' '.$city,  // Location of shipping
                 ),
             );
 
