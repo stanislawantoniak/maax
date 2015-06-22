@@ -66,7 +66,6 @@ class Zolago_SalesManago_Helper_Data extends SalesManago_Tracking_Helper_Data
 
         $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($customer['email']);
         $subscription_status = $subscriber->isSubscribed();
-        Mage::log("subscription_status: ". (int)$subscription_status);
 
         if(isset($customer['firstname']) && isset($customer['lastname'])){
             $data['name'] = $customer['firstname'].' '.$customer['lastname'];
