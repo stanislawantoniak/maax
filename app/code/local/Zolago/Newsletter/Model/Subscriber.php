@@ -118,6 +118,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     }
                     elseif ($subscriberStatus == self::STATUS_UNCONFIRMED) {
                         // customer don't confirm newsletter but he wants to be subscribed
+                        $customer->setConfirmMsg(true);
                         $subscriber->sendConfirmationRequestEmail();
                     } elseif ($subscriberStatus == self::STATUS_SUBSCRIBED) {
 						//do nothing
