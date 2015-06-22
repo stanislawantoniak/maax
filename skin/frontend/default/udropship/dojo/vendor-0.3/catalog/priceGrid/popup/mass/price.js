@@ -55,7 +55,13 @@ define([
 								});
 							}
 						})
-					
+
+                    if (parseInt(data.skipped)) {
+                        noty({
+                            text: data.skipped_msg,
+                            type: 'warning'
+                        });
+                    }
 				},
 				complete: function(){
 					button.button('reset');

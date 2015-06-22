@@ -37,6 +37,15 @@
             </newsletter_subscriber_save_after>
 
         </events>
+        <routers>
+            <frontend>
+                <args>
+                    <modules>
+                        <zolago_salesmanago before="SalesManago_Tracking">Zolago_SalesManago</zolago_salesmanago>
+                    </modules>
+                </args>
+            </frontend>
+        </routers>
     </frontend>
     <global>
         <models>
@@ -54,9 +63,9 @@
             </salesmanago>
         </models>
         <blocks>
-            <salesmanago>
-                <class>Zolago_SalesManago_Tracking_Block</class>
-            </salesmanago>
+            <zolagosalesmanago>
+                <class>Zolago_SalesManago_Block</class>
+            </zolagosalesmanago>
         </blocks>
         <helpers>
             <zolagosalesmanago>
@@ -83,6 +92,32 @@
                     </salesmanago_tracking_observer>
                 </observers>
             </newsletter_subscriber_save_before>
+            <checkout_cart_save_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>disabled</type>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_save_after>
+
+            <checkout_cart_product_add_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_product_add_after>
+            <sales_quote_remove_item>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </sales_quote_remove_item>
         </events>
         <resources>
             <salesmanago>

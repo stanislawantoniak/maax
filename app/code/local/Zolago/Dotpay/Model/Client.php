@@ -254,11 +254,21 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	}
 
 	/**
+	 *
+	 * @param $txnId
+	 * @param bool|array $params
+	 * @return bool
+	 */
+	public function getDotpayTransaction($txnId,$params=false) {
+		return $this->dotpayCurl("operations",$txnId,false,$params);
+	}
+
+	/**
 	 * @param $txnId
 	 * @return array|bool
 	 */
 	public function getDotpayTransactionUpdateFromApi($txnId) {
-		$dotpayTransaction = $this->dotpayCurl("operations",$txnId);
+		$dotpayTransaction = $this->getDotpayTransaction($txnId);
 		if(isset($dotpayTransaction['number']) && $dotpayTransaction['number'] == $txnId) {
 			return array(
 				"txnId" => $dotpayTransaction['number'],
@@ -290,17 +300,52 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
 						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
 						$transaction->setIsClosed(1);
+						$rejected = true;
 					}
 				} elseif(isset($response['detail']) && $response['detail'] == 'ok') {
 					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 					$transaction->setIsClosed(1);
+
+					//load parent transaction to get dotpay txn_id
+					$oldTransactionId = $transaction->getTxnId();
+					$newTransactionId = false;
+					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
+
+					if(isset($parentTxn['count']) && $parentTxn['count'] == 1 && isset($parentTxn['results']) && isset($parentTxn['results'][0])) {
+						$newTransactionId = $parentTxn['results'][0]['number'];
+						$response = $parentTxn['results'][0];
+					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 1 && isset($parentTxn['results'])) {
+						foreach ($parentTxn['results'] as $parentResult) {
+							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
+								$otherTransaction = Mage::getModel('sales/order_payment_transaction')->getCollection()->addFieldToFilter('transaction_id',$parentResult['number']);
+								if(!$otherTransaction->getSize()) {
+									$response = $parentResult;
+									$newTransactionId = $parentResult['number'];
+									break;
+								}
+								unset($transactionModel);
+							}
+						}
+					}
+					//if dotpay has returned new transaction id then update it in allocations
+					if($newTransactionId) {
+						$transaction->setTxnId($newTransactionId);
+						/** @var Zolago_Payment_Model_Allocation $allocationModel */
+						$allocationModel = Mage::getModel('zolagopayment/allocation');
+						$allocations = $allocationModel->getCollection()->addFieldToFilter('refund_transaction_id',$transaction->getId());
+						foreach($allocations as $allocation) {
+							$allocation->setData('comment',str_replace($oldTransactionId,$newTransactionId,$allocation->getComment()));
+							$allocation->save();
+						}
+					}
 				}
+
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
 					$response
 				);
 				$transaction->save();
-				return true;
+				return isset($rejected) && $rejected ? false : true;
 			} catch(Exception $e) {
 				Mage::logException($e);
 			}

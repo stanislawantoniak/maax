@@ -133,7 +133,6 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $categoryParentId = $category->getData("parent_id");
 
-
         if ((int)$categoryParentId == 0 ||
             $categoryParentId == $rootId ||
             (isset($seo["dynamic_meta_title"])
