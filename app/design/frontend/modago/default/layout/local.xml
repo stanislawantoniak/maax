@@ -453,7 +453,7 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml"></block>
+            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml" />
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </zolagomodago_brands_index>
@@ -1346,7 +1346,7 @@
 
 	<customer_account_login>
 		<reference name="customer_form_login">
-			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
+			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue" />
 		</reference>
 
 		<update handle="zolago_modago_customer_handle" />
@@ -1770,7 +1770,32 @@
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </newsletter_manage_index>
-
+    <mypromotions_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>My promotions</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
+				<block type="zolagomodago/promotions_login" name="mypromotions.login" template="promotions/login.phtml">
+					<block type="cms/block" name="promotions.login.header" as="login-header">
+						<action method="setBlockId"><block_id>promotions-login-header</block_id></action>
+					</block>
+				</block>
+            </block>
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+        </reference>
+        
+    </mypromotions_index_index>
     <wishlist_index_index>
 
         <remove name="left"/>
@@ -1825,4 +1850,25 @@
 
     </wishlist_index_index>
 
+    <newsletter_subscriber_sm_unsubscribe_redirect>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="setBodyClass">
+                <value>nobreadcrumbs</value>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="core/template" template="zolagonewsletter/sm_unsubscribe_redirect.phtml" name="zolagonewsletter.sm.unsubscribe.redirect">
+                <block name="zolagonewsletter.sm.unsubscribe.redirect.formkey" type="core/template" template="core/formkey.phtml"/>
+                <block type="cms/block" name="salesmanago_unsubscribe_redirect">
+                    <action method="setBlockId"><block_id>salesmanago_unsubscribe_redirect</block_id></action>
+                </block>
+            </block>
+        </reference>
+
+    </newsletter_subscriber_sm_unsubscribe_redirect>
 </layout>

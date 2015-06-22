@@ -73,7 +73,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         if (!$product instanceof Zolago_Catalog_Model_Product) {
             return $seo;
         }
-        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        // Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $catIds = $product->getCategoryIds();
 
 
@@ -129,7 +130,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
     public function getDynamicMetaTagsInParents($seo, $category)
     {
-        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        // Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $categoryParentId = $category->getData("parent_id");
 
         if ((int)$categoryParentId == 0 ||

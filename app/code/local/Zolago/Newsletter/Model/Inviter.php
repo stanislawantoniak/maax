@@ -217,10 +217,15 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 					return true;
 				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
 					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
-
-					$subscriber->setStatus($status);
-					$subscriber->save();
-					$this->sendConfirmationRequestEmail($subscriberId);
+					if($confirmationNeeded) {
+						$subscriber->setStatus(self::STATUS_UNCONFIRMED);
+						$subscriber->save();
+						$this->sendConfirmationRequestEmail($subscriberId);
+					} else {
+						$subscriber->setStatus(self::STATUS_SUBSCRIBED);
+						$subscriber->save();
+						$this->sendConfirmationSuccessEmail($subscriberId);
+					}
 					return true;
 				} else {
                     $subscriber->setStatus($status);
