@@ -466,6 +466,17 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 		return isset($validationArray[$key]) && $vendor->getData($key) !== "" ? floatval($vendor->getData($key)) : -1;
 	}
 
+	/**
+	 * gets package volumetric weight calculated by cubic size of package divided by value set in config
+	 * @param string $key
+	 * @return float
+	 */
+	public function getDhlVolumetricWeightByKey($key) {
+		$dimensions = $this->getDhlParcelDimensionsByKey($key);
+		$volumetricDivider = Mage::getStoreConfig('carriers/orbadhl/volumetric_weight');
+		return floatval($dimensions[0]*$dimensions[1]*$dimensions[2]/$volumetricDivider);
+	}
+
 	public function getDhlParcelTypeByKey($key) {
 		switch ($key) {
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
@@ -488,16 +499,16 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 	public function getDhlParcelWeightByKey($key) {
 		switch ($key) {
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5 :
-				$weight = 1;
-				break;
-			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
 				$weight = 5;
 				break;
-			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
 				$weight = 10;
 				break;
-			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
 				$weight = 20;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
+				$weight = 31.5;
 				break;
 
 			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
