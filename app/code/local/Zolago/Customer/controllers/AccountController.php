@@ -460,6 +460,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$errors = $this->_getCustomerErrors($data);
 			if (empty($errors)) {
 				unset($data['agreement']);
+                $data['is_subscribed'] = isset($data['is_subscribed']) ? 1 : 0;
 				$customer->setData($data);
 				/* needed for proper newsletter handling */
 				$customer->setIsJustRegistered(true);

@@ -76,7 +76,7 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
                     $cart->removeItem($item->getItemId());
                 }
             }
-
+            $cart->save();
             /** @var Zolago_Checkout_Helper_Data $helper */
             $helper = Mage::helper("zolagocheckout");
             $helper->fixCartShippingRates();
