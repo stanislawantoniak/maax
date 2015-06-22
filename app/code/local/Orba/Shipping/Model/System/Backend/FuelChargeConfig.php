@@ -112,6 +112,10 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
 
     private function intersects($start1, $end1, $start2, $end2)
     {
+        $start1 = strtotime($start1);
+        $end1 = strtotime($end1);
+        $start2 = strtotime($start2);
+        $end2 = strtotime($end2);
         return ($start1 == $start2) || ($start1 > $start2 ? $start1 <= $end2 : $start2 <= $end1);
     }
 }
