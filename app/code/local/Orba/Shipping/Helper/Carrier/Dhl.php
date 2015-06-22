@@ -441,4 +441,69 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         return true;
     }
 
+	/**
+	 * gets package size from source class and returns them as array(width,height,depth), if key does not exist then it returns array(0,0,0)
+	 * @param string $key
+	 * @return array
+	 */
+	public function getDhlParcelDimensionsByKey($key) {
+		/** @var Orba_Shipping_Model_System_Source_PkgSizes $pkgSizesSingleton */
+		$pkgSizesSingleton = Mage::getSingleton('orbashipping/system_source_pkgSizes');
+		$validationArray = $pkgSizesSingleton->toOptionHash();
+		return isset($validationArray[$key]) ? explode('x',$key) : array(0,0,0);
+	}
+
+	/**
+	 * gets package rate from vendor config by specified key, if key does not exist then it returns -1
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @param string $key
+	 * @return float
+	 */
+	public function getDhlVendorRateByKey(Zolago_Dropship_Model_Vendor $vendor,$key) {
+		/** @var Orba_Shipping_Model_System_Source_PkgRateTypes $pkgRateTypesSingleton */
+		$pkgRateTypesSingleton = Mage::getSingleton('orbashipping/system_source_pkgRateTypes');
+		$validationArray = $pkgRateTypesSingleton->toOptionHash();
+		return isset($validationArray[$key]) && $vendor->getData($key) !== "" ? floatval($vendor->getData($key)) : -1;
+	}
+
+	public function getDhlParcelTypeByKey($key) {
+		switch ($key) {
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
+				$dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_ENVELOPE;
+				break;
+
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
+				$dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE;
+				break;
+
+			default:
+				throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown DHL package type"));
+		}
+		return $dhlType;
+	}
+
+	public function getDhlParcelWeightByKey($key) {
+		switch ($key) {
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5 :
+				$weight = 1;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
+				$weight = 5;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
+				$weight = 10;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
+				$weight = 20;
+				break;
+
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
+			default:
+				$weight = 1;
+		}
+		return $weight;
+	}
 }
