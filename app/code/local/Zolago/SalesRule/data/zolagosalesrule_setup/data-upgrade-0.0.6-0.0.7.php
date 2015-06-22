@@ -59,7 +59,7 @@ $template = <<<EOD
 								<div class="lowerMarginBlack">
 									<a href='{{store url=""}}' style="text-decoration:none;border:none">
 										<img width="175" height="52" alt="{{var logo_alt}}"
-										     src="cid:logo_email.png">
+										     src="cid:logo.png">
 									</a>
 								</div>
 							</div>

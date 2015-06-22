@@ -144,7 +144,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      * @param $data
      * @return array
      */
-    public function assignCouponsToSubscribers($data)
+    public function assignCouponsToSubscribers($data, $rulesForCustomer)
     {
         $subscribers = $data["subscribers"];
         $coupons = $data["coupons"];
@@ -160,11 +160,15 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
             foreach ($coupons as $ruleId => $couponIds) {
                 $firstCouponId = key($couponIds);
-                if(!empty($firstCouponId)){
-                    $dataToSend[$firstSubscriberEmail][$ruleId] = $firstCouponId;
-                    $customerCodes[$ruleId] = $firstCouponId;
 
-                    $dataToSend = array_merge($dataToSend, array($firstSubscriberEmail => $customerCodes));
+                if(!empty($firstCouponId)){
+                    if(!isset($rulesForCustomer[$ruleId]) || !in_array($firstSubscriberEmail,$rulesForCustomer[$ruleId])){
+                        $dataToSend[$firstSubscriberEmail][$ruleId] = $firstCouponId;
+                        $customerCodes[$ruleId] = $firstCouponId;
+
+                        $dataToSend = array_merge($dataToSend, array($firstSubscriberEmail => $customerCodes));
+                    }
+
                 }
 
                 unset($coupons[$ruleId][$firstCouponId]);
@@ -177,7 +181,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                 "data_to_send" => $dataToSend
             );
 
-            return $this->assignCouponsToSubscribers($data);
+            return $this->assignCouponsToSubscribers($data, $rulesForCustomer);
         }
     }
 
