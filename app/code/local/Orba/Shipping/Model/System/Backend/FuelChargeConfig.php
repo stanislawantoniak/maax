@@ -42,23 +42,28 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
 
         if(!empty($value)){
             foreach($value as $n => $valueItem){
-                //krumo($valueItem);
+                if($n !== "group"){
+                    if (empty($valueItem['fuel_percent'])) {
+                        Mage::getSingleton('adminhtml/session')->addError("Fuel Charge % can not be empty");
+                        return;
+                    }
+                    if (empty($valueItem['fuel_percent_date_from'])) {
+                        Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date from can not be empty");
+                        return;
+                    }
+                    if (empty($valueItem['fuel_percent_date_to'])) {
+                        Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date to can not be empty");
+                        return;
+                    }
+                    if (strtotime($valueItem['fuel_percent_date_to']) <= strtotime($valueItem['fuel_percent_date_from'])) {
+                        Mage::getSingleton('adminhtml/session')->addError("Fuel Charge: Date to can not be earlier than Date from");
+                        return;
 
-                if(empty($valueItem['fuel_percent'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge % can not be empty");
+                    }
                 }
-                if(empty($valueItem['fuel_percent_date_from'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date from can not be empty");
-                }
-                if(empty($valueItem['fuel_percent_date_to'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date to can not be empty");
-                }
-                if(strtotime($valueItem['fuel_percent_date_to']) <= strtotime($valueItem['fuel_percent_date_from'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge: Date to can not be earlier than Date from");
-                }
+
             }
         }
-//        die("test");
 
         return parent::save();  //call original save method so whatever happened
         //before still happens (the value saves)
