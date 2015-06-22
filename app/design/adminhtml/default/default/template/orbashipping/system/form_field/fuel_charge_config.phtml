@@ -19,7 +19,7 @@ $configValue = Mage::getStoreConfig('carriers/'.$groupName.'/fuel_charge');
 
 ?>
 <div class="grid">
-    <input id="<?php echo $this->getFieldName(); ?>" type="hidden" />
+    <input id="<?php echo $this->getFieldName(); ?>" type="hidden" name="<?php echo $fieldName; ?>[group]" value="<?php echo $groupName; ?>" />
     <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:70px" class="config">
         <col width="500" />
         <col width="700" />
@@ -34,6 +34,7 @@ $configValue = Mage::getStoreConfig('carriers/'.$groupName.'/fuel_charge');
         <tbody>
             <?php if(!empty($fValue)): ?>
                 <?php foreach($fValue as $n => $fValueItem): ?>
+                    <?php if($n !== "group"): ?>
 
                     <tr data-index="<?php echo $n; ?>">
                         <td>
@@ -49,6 +50,7 @@ $configValue = Mage::getStoreConfig('carriers/'.$groupName.'/fuel_charge');
                             <button type="button" class="scalable delete delete-fieldset"  onclick="jQuery(this).closest('tr').remove();"><span></span></button>
                         </td>
                     </tr>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             <?php endif; ?>
         </tbody>

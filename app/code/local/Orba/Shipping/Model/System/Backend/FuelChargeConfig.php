@@ -41,26 +41,77 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
         $value = $this->getValue(); //get the value from our config
 
         if(!empty($value)){
-            foreach($value as $n => $valueItem){
-                //krumo($valueItem);
+            $helper = Mage::helper("orbashipping");
+            $periods = array();
+            $group = $value["group"];
 
-                if(empty($valueItem['fuel_percent'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge % can not be empty");
+            $carrierLabel = "";
+            switch ($group){
+                case "orbadhl":
+                    $carrierLabel = "Modago DHL - ";
+                    break;
+                case "orbaups":
+                    $carrierLabel = "Modago UPS - ";
+                    break;
+            }
+
+            foreach($value as $n => $valueItem){
+                if($n !== "group"){
+                    if (empty($valueItem['fuel_percent'])) {
+                        Mage::getSingleton('adminhtml/session')
+                            ->addError($helper->__('%s Fuel Charge percent can not be empty', $carrierLabel));
+                        return;
+                    }
+                    if (empty($valueItem['fuel_percent_date_from'])) {
+                        Mage::getSingleton('adminhtml/session')
+                            ->addError($helper->__('%s Fuel Charge date from can not be empty', $carrierLabel));
+                        return;
+                    }
+                    if (empty($valueItem['fuel_percent_date_to'])) {
+                        Mage::getSingleton('adminhtml/session')
+                            ->addError($helper->__('%s Fuel Charge date to can not be empty', $carrierLabel));
+                        return;
+                    }
+                    if (strtotime($valueItem['fuel_percent_date_to']) < strtotime($valueItem['fuel_percent_date_from'])) {
+                        Mage::getSingleton('adminhtml/session')
+                            ->addError($helper->__('%s Fuel Charge Settings: Date to can not be earlier than Date from', $carrierLabel));
+                        return;
+
+                    }
+                    $periods[$n] = array("from" => $valueItem['fuel_percent_date_from'], "to" => $valueItem['fuel_percent_date_to']);
                 }
-                if(empty($valueItem['fuel_percent_date_from'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date from can not be empty");
-                }
-                if(empty($valueItem['fuel_percent_date_to'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge date to can not be empty");
-                }
-                if(strtotime($valueItem['fuel_percent_date_to']) <= strtotime($valueItem['fuel_percent_date_from'])){
-                    Mage::getSingleton('adminhtml/session')->addError("Fuel Charge: Date to can not be earlier than Date from");
+
+            }
+
+
+            if (!empty($periods)) {
+                foreach ($periods as $period) {
+                    foreach ($periods as $periodToCompare) {
+                        if($period !== $periodToCompare){
+                            $result = $this->intersects($period["from"], $period["to"], $periodToCompare["from"], $periodToCompare["to"]);
+
+                            if($result){
+                                $from1 = $period["from"];
+                                $from2 = $periodToCompare["from"];
+                                $to1 = $period["to"];
+                                $to2 = $periodToCompare["to"];
+                                Mage::getSingleton('adminhtml/session')
+                                    ->addError($helper->__('%s Fuel Charge Settings: Dates period %s - %s  overlapped with period  %s - %s', $carrierLabel, $from1, $to1, $from2, $to2));
+                                return;
+                            }
+                        }
+
+                    }
                 }
             }
         }
-//        die("test");
 
         return parent::save();  //call original save method so whatever happened
         //before still happens (the value saves)
+    }
+
+    private function intersects($start1, $end1, $start2, $end2)
+    {
+        return ($start1 == $start2) || ($start1 > $start2 ? $start1 <= $end2 : $start2 <= $end1);
     }
 }

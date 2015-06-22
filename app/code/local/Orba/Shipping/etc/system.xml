@@ -159,6 +159,16 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </fuel_charge>
+						<volumetric_weight translate="label">
+							<label>Volumetric weight</label>
+							<comment>Determines how package volumetric weight is calculated: width x height x length / this value</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>120</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<default>4000</default>
+						</volumetric_weight>
 					</fields>
 				</orbadhl>
 				<orbaups translate="label">
@@ -308,6 +318,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </fuel_charge>
+						<volumetric_weight translate="label">
+							<label>Volumetric weight</label>
+							<comment>Determines how package volumetric weight is calculated: width x height x length / this value</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>120</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</volumetric_weight>
 					</fields>
 				</orbaups>
 			</groups>
