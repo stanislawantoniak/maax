@@ -140,6 +140,7 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 $quote = $observer->getQuoteItem()->getQuote();
             }
             $quote->collectTotals();
+            $quote->getShippingAddress()->collectTotals();
             $items = $quote->getAllItems();
             $itemsNamesList = array();
             foreach ($items as $item) {

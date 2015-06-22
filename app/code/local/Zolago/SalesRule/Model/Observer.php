@@ -152,11 +152,24 @@ class Zolago_SalesRule_Model_Observer {
 
         $fieldset->addField("promo_image", "image", $param);
     }
-    /**
+   /**
      * Send new coupons to subscriber
      */
-    public static function sendSubscriberCouponMail()
-    {
+    public static function sendSubscriberCouponMail(Varien_Event_Observer $observer)
+    {	
+        $model = $observer->getEvent()->getSubscriber();
+        $newStatus = $model->getData('subscriber_status');
+        if ($newStatus != Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED) {
+            return;
+        }
+        $customerId = $model->getCustomerId();
+        $subscribersCustomersId = array ($customerId);
+        $subscribers[$model->getId()] = $model->getSubscriberEmail();
+        $subscribersCustomersId[$model->getSubscriberEmail()] = $model->getCustomerId();
+        $subscribersCustomersSubscribers[$model->getCustomerId()] = $model->getSubscriberEmail();
+
+
+
         //1. Coupons
         $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 
@@ -181,39 +194,9 @@ class Zolago_SalesRule_Model_Observer {
         ;
 
         $result = $readConnection->fetchAll($query);
-
         //Group coupons by rule
         if (empty($result)) {
             return;
-        }
-        //2. Subscribers
-        $collection = Mage::getModel('newsletter/subscriber')
-            ->getCollection()
-            ->addFieldToFilter("subscriber_status", Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
-            ;
-        $collection->getSelect()
-            ->joinLeft(array("customer" => "customer_entity"),
-                "main_table.subscriber_email = customer.email",
-                array("customer_id" => "customer.entity_id")
-            )
-            ->where("main_table.store_id=customer.store_id")
-        ;
-        $collection->setPageSize(10000);
-
-        if ($collection->getSize() == 0) {
-            return;
-        }
-        $subscribersCollection = $collection->getItems();
-        $subscribers = array();
-        $subscribersCustomersId = array();
-        $subscribersCustomersSubscribers = array();
-
-        $rulesForCustomer = array();
-        foreach ($subscribersCollection as $subId => $subscriber) {
-            $subscribers[$subId] = $subscriber->getSubscriberEmail();
-            $subscribersCustomersId[$subscriber->getSubscriberEmail()] = $subscriber->getCustomerId();
-            $subscribersCustomersSubscribers[$subscriber->getCustomerId()] = $subscriber->getSubscriberEmail();
-            //$rulesForCustomer[$subscriber->getRuleId()][] = $subscriber->getSubscriberId();
         }
 
         //Find if customer already got coupon in rule
@@ -227,7 +210,7 @@ class Zolago_SalesRule_Model_Observer {
 
         ;
         $resultRules = $readConnection->fetchAll($queryRules);
-
+        $rulesForCustomer = array();
         foreach($resultRules as $resultRulesItem){
             $rulesForCustomer[$resultRulesItem["rule_id"]][] = $subscribersCustomersSubscribers[$resultRulesItem["customer_id"]];
         }
@@ -250,7 +233,6 @@ class Zolago_SalesRule_Model_Observer {
         /* @var $helper Zolago_SalesRule_Helper_Data */
         $helper = Mage::helper("zolagosalesrule");
         $res = $helper->assignCouponsToSubscribers($data, $rulesForCustomer);
-        //Mage::log($res["data_to_send"], null, "coupon5.log");
 
 
 

@@ -45,6 +45,11 @@
 	</frontend>
 	<global>
 		<models>
+		    <newsletter>
+		        <rewrite>
+		            <subscriber>Zolago_Newsletter_Model_Subscriber</subscriber>
+		        </rewrite>
+		    </newsletter>
 			<zolagonewsletter>
 				<class>Zolago_Newsletter_Model</class>
 				<resourceModel>zolagonewsletter_resource</resourceModel>
