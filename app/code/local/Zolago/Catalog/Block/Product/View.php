@@ -253,7 +253,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             }
         }
         $subst['{$current_date}'] = date("d-m-Y");
-        $subst['{$price}'] = Mage::helper('core')->currency($product->getFinalPrice(),true,false);
+        $subst['{$price}'] = str_replace(" ","&nbsp;",Mage::helper('core')->currency($product->getFinalPrice(),true,false));
 
         return strtr($seoText, $subst);
     }
