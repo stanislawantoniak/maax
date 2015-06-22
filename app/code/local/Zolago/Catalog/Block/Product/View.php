@@ -90,15 +90,14 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->setStoreId($store);
         $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
-//        $collection->addAttributeToFilter("basic_category", 1);
+
         $collection->addPathFilter("/$rootId/");
         $collection->setOrder("basic_category", "DESC");
         $collection->setOrder("level", "DESC");
         $collection->setOrder("position", "ASC");
-        //$collection->addAttributeToSelect("*");
-        //Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
+
         $cat = $collection->getFirstItem();
-        //Mage::log($cat->getData(), null, "dcat1.log");
+
 
 
         if($cat->getData("basic_category") == 1){
@@ -256,7 +255,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             }
         }
         $subst['{$current_date}'] = date("d-m-Y");
-        $subst['{$price}'] = Mage::helper('core')->currency($product->getFinalPrice(),true,false);
+        $subst['{$price}'] = str_replace(Mage::helper('core')->currency($product->getFinalPrice(),true,false), "&nbsp;", " ");
 
         return strtr($seoText, $subst);
     }
