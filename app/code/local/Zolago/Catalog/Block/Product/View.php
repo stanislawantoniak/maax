@@ -172,7 +172,6 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
      * @return string
      */
     public function getAttributesSubstitutions($product, $seoText){
-        Mage::log($seoText, null, "dynamic.log");
         $result = "";
         if(!$product instanceof Zolago_Catalog_Model_Product){
             return $result;
@@ -217,18 +216,12 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 continue;
             }
             $frontend_input = $attribute->getData("frontend_input");
-            //Mage::log($attributeCode. "--".$frontend_input, null, "codes.log");
+
             switch($frontend_input){
                 case "select":
                     $label = $product
                         ->setData($attributeCode, $product->getData($attributeCode))
                         ->getAttributeText($attributeCode);
-                    break;
-                case "price":
-                    $label = Mage::helper('core')->currency($product->getResource()
-                        ->getAttribute($attributeCode)
-                        ->getFrontend()
-                        ->getValue($product), true, false);
                     break;
                 case "multiselect":
                     $value = $product->getResource()
@@ -256,13 +249,14 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             $subst['{$'.$code.'}'] = $strItem;
             $subst['{$'.$code.' first_letter=capital}'] = ucfirst($strItem);
         }
+
         if(!empty($dates)){
             foreach($dates as $format){
                 $subst['{$current_date format="'.$format.'"}'] = date($format);
             }
         }
-
-
+        $subst['{$current_date}'] = date("d-m-Y");
+        $subst['{$price}'] = Mage::helper('core')->currency($product->getFinalPrice(),true,false);
 
         return strtr($seoText, $subst);
     }
