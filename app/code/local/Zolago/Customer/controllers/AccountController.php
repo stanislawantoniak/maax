@@ -140,7 +140,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
                 Mage::helper("zolagocustomer")->__("You have been logged in")
             );
 
-            if ($this->getRequest()->getParams('is_checkout') == 0) {
+	        if(strpos($_SERVER['HTTP_REFERER'],'mypromotions') !== false) {
+		        $this->_redirectReferer();
+	        } elseif ($this->getRequest()->getParams('is_checkout') == 0) {
                 $this->_redirect("customer/account");
             }
 
