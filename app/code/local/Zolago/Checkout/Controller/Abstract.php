@@ -26,6 +26,12 @@ abstract class Zolago_Checkout_Controller_Abstract
             return;
         }
 
+		$key = Zolago_SalesManago_Helper_Data::SALESMANAGO_NO_NEWSLETTER_POST_REGISTRY_KEY;
+		if(Mage::registry($key)) {
+			Mage::unregister($key);
+		}
+		Mage::register($key,true);
+
 		// Check if customer has name and phone number set in account if not set it now
 		/** @var Mage_Customer_Model_Session $session */
 		$session = Mage::getSingleton('customer/session');
@@ -82,6 +88,20 @@ abstract class Zolago_Checkout_Controller_Abstract
 				"message"	=> isset($oldResponse['error_messages']) ? $oldResponse['error_messages'] : false
 			)
 		);
+
+		/* clear salesmanago cart event id after successful checkout */
+		if($success) {
+			if($logged && isset($customer)) {
+				$customer->setData('salesmanago_cart_event_id', '')
+					->getResource()
+					->saveAttribute($customer, 'salesmanago_cart_event_id');
+			}
+			if(isset($_COOKIE['smCartEventId'])) {
+				/** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
+				$salesmanagoHelper = Mage::helper('tracking');
+				$salesmanagoHelper->removeCookie('smCartEventId');
+			}
+		}
 				
 		$this->getResponse()->
 				setHeader("content-type", "application/json")->

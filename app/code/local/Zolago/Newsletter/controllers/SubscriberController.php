@@ -75,13 +75,12 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
         $this->loadLayout()->renderLayout();
     }
 
-
     /**
      * Subscribing again after SalesManago unsubscribe
      */
     public function subscribeAgainAction() {
         $hlp    = Mage::helper('zolagonewsletter');
-        $email  = $this->getRequest()->getParam('email');
+        $email  = str_replace(' ', '+', $this->getRequest()->getParam('email'));
         $key = $this->getRequest()->getParam('key');
         $isValid = false;
 
