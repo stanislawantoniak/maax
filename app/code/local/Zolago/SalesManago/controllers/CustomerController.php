@@ -12,6 +12,7 @@ class Zolago_SalesManago_CustomerController extends Mage_Core_Controller_Front_A
         header('Content-Type: text/html');
 
         $email = $this->getRequest()->getParam('email');
+        echo $email;
         $block = $this->getLayout()
             ->createBlock('zolagosalesmanago/customer_cart')
             ->setTemplate('zolagosalesmanago/customer/cart.phtml');
