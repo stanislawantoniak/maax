@@ -16,8 +16,7 @@ class Zolago_Faq_IndexController extends Inic_Faq_IndexController
     public function resultAction()
     {
         $keyword = $this->getRequest()->getParam('keyword');
-        $keyword = Zolago_Catalog_Helper_Data::secureInvisibleContent($keyword);
-        $this->getRequest()->setParam('keyword', $keyword);
+        $this->getRequest()->setParam('keyword', Zolago_Catalog_Helper_Data::secureInvisibleContent($keyword));
 
         $this->loadLayout()->renderLayout();
     }
