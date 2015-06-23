@@ -252,12 +252,18 @@ class SalesManago_Tracking_Helper_Data extends Mage_Core_Helper_Abstract{
 
             $result = curl_exec($ch);
 
-            if(curl_errno($ch) > 0){
-                if(curl_errno($ch)==28){
-                    Mage::log("TIMEOUT ERROR NO: " . curl_errno($ch));
-                } else{
-                    Mage::log("ERROR NO: " . curl_errno($ch));
-                }
+            if(curl_errno($ch) > 0) {
+
+                Mage::log("===============================", null, 'salesmanago_error.log');
+                Mage::log("ERROR (".curl_errno($ch) ." ". curl_error($ch) . ") ". Mage::getModel('core/date')->date('Y-m-d H:i:s'), null, 'salesmanago_error.log');
+                Mage::log("URL: " . $url, null, 'salesmanago_error.log');
+                Mage::log("START POST DATA:", null, 'salesmanago_error.log');
+                Mage::log(json_decode($data), null, 'salesmanago_error.log');
+                Mage::log("END POST DATA", null, 'salesmanago_error.log');
+                Mage::log("START RETURNED TRANSFER DATA:", null, 'salesmanago_error.log');
+                Mage::log($result, null, 'salesmanago_error.log');
+                Mage::log("ENDRETURNED TRANSFER DATA", null, 'salesmanago_error.log');
+
                 return false;
             }
 
