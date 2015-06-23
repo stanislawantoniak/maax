@@ -15,6 +15,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         /* @var $collection Zolago_Mapper_Model_Resource_Mapper_Collection */
 		$collection->setFlag('abstract', true);
 		$collection->joinAttributeSet();
+        $collection->addCustomId();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -68,6 +69,17 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
 		}
         return $this->getUrl('*/*/new', array('back'=>'list', 'attribute_set_id'=>$row->getAttributeSetId()));
     }
-    
 
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('custom_id');
+        $this->getMassactionBlock()->setFormFieldName('custom_ids');
+
+        $this->getMassactionBlock()->addItem('queue', array(
+            'label'=> Mage::helper("zolagomapper")->__('Queue'),
+            'url'  => $this->getUrl('*/*/massQueue', array('' => '')),
+        ));
+
+        return $this;
+    }
 }

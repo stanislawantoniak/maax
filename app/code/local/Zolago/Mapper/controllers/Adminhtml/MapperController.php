@@ -251,5 +251,39 @@ class Zolago_Mapper_Adminhtml_MapperController
 	protected function _getId() {
 		return $this->getRequest()->getParam("mapper_id");
 	}
-	
+
+    public function massQueueAction() {
+
+        $ids = $this->getRequest()->getParam('custom_ids');
+        $_ids = array();
+        // Filtering ids with mapper_id (id is like 'attribute_set_id-mapper_id')
+        foreach($ids as $id) {
+            $arr = preg_split('/\d*-\d*/',$id);
+            $asid = isset($arr[0]) ? $arr[0] : 0;
+            $mid  = isset($arr[1]) ? $arr[1] : 0;
+            if ($mid) {
+                $_ids[] = $mid;
+            }
+        }
+
+        if(!is_array($ids) || !count($_ids)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zolagomapper')->__('Please select valid mappers'));
+        } else {
+            try {
+                foreach($_ids as $id){
+                    $queue = Mage::getModel('zolagomapper/queue_mapper');
+                    $queue->push($id);
+                }
+                $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s Mappers added to rebuild queue", count($_ids)));
+
+            } catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                $this->_getSession()->addException($e, Mage::helper('zolagomapper')->__('An error occurred while adding mappers to queue'));
+            }
+        }
+
+
+        $this->_redirect('*/*/index');
+    }
 }
