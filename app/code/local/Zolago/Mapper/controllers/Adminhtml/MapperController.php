@@ -72,30 +72,24 @@ class Zolago_Mapper_Adminhtml_MapperController
             $mapper->loadPost($data);
             $mapper->save();
 			$this->_getSession()->setData('mapper_form_data', null);
-			
+
+            $this->_getSession()->addSuccess(
+                Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+
 			// Forward run or index
 			$doRun = $request->getParam("do_run");
-			$doSaveAndQueue = $request->getParam("doSaveAndQueue");
-
+			$doSaveAndQueue = $request->getParam("do_saveAndQueue");
             if ($doSaveAndQueue) {
-
-                if ($id = $mapper->getId()) {
-                    $queue = Mage::getModel('zolagomapper/queue_mapper');
-                    $queue->push($id);
-                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
-                } else {
-                    $this->_getSession()->addError(Mage::helper("zolagomapper")->__("No mapper to add"));
-                }
-
-                $this->_getSession()->addSuccess(
-                    Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+                // Add to queue
+                $queue = Mage::getModel('zolagomapper/queue_mapper');
+                $queue->push($mapper->getId());
+                $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
                 $backUrl = null;
-
-            } elseif(!$doRun){
-				$this->_getSession()->addSuccess(
-					Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+            }elseif(!$doRun){
+                // Save
 				$backUrl = $this->getUrl("*/*");
 			}else{
+                // Run
 				$backUrl = $this->getUrl("*/*/run", array("mapper_id"=>$mapper->getId()));
 			}
 
@@ -255,7 +249,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 	 * @return mixed
 	 */
 	protected function _getId() {
-		return (int)$this->getRequest()->getParam("mapper_id") ? $this->getRequest()->getParam("mapper_id") : null;
+		return $this->getRequest()->getParam("mapper_id");
 	}
 	
 }

@@ -40,10 +40,9 @@
             if(window.confirm("<?php echo Mage::helper('zolagomapper')->__('Are you sure that you want to delete this mapper?') ?>")) {
                 window.location.href = '<?php echo $this->getDeleteUrl() ?>';
             }
-        }
-        saveAndQueue: function(mapper_id) {
+        },
+        saveAndQueue: function() {
             $("do_saveAndQueue").value = 1;
-            $("mapper_id").value = mapper_id;
             editForm.submit();
         }
     };
