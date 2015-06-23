@@ -20,10 +20,10 @@
 
                     <div class="bg-w main faq-content">
                         <?php if ($id !== "" && $keyword !== "" && $category !== ""): ?>
-                            <h3><?php echo $this->__('Search Result For - "%s" from category "%s"', $keyword, $category->getName()); ?></h3>
+                            <h3><?php echo $this->__('Search Result For - "%s" from category "%s"', $this->htmlEscape($keyword), $category->getName()); ?></h3>
                         <?php elseif ($id == "" && $keyword !== ""): ?>
                             <h3>
-                                <?php echo $this->__('Search Result For : "%s"', $keyword); ?>
+                                <?php echo $this->__('Search Result For : "%s"', $this->htmlEscape($keyword)); ?>
 
                             </h3>
                         <?php
