@@ -1825,4 +1825,25 @@
 
     </wishlist_index_index>
 
+    <newsletter_subscriber_sm_unsubscribe_redirect>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="setBodyClass">
+                <value>nobreadcrumbs</value>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="core/template" template="zolagonewsletter/sm_unsubscribe_redirect.phtml" name="zolagonewsletter.sm.unsubscribe.redirect">
+                <block name="zolagonewsletter.sm.unsubscribe.redirect.formkey" type="core/template" template="core/formkey.phtml"/>
+                <block type="cms/block" name="salesmanago_unsubscribe_redirect">
+                    <action method="setBlockId"><block_id>salesmanago_unsubscribe_redirect</block_id></action>
+                </block>
+            </block>
+        </reference>
+
+    </newsletter_subscriber_sm_unsubscribe_redirect>
 </layout>
