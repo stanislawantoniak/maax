@@ -9,4 +9,16 @@ class Zolago_Faq_IndexController extends Inic_Faq_IndexController
         Mage::dispatchEvent('faq_controller_index');
         return $this;
     }
+
+    /**
+     * Displays the current Category's FAQ list view
+     */
+    public function resultAction()
+    {
+        $keyword = $this->getRequest()->getParam('keyword');
+        $keyword = preg_replace('#<script(.*?)>(.*?)</script>#is', ' ', $keyword);
+        $this->getRequest()->setParam('keyword', $keyword);
+
+        $this->loadLayout()->renderLayout();
+    }
 }
