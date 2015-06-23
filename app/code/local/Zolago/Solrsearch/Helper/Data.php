@@ -113,12 +113,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getRootCategoryId() {
 		if (is_null($this->_rootId)) {
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            $rootId = 0;
             if ($vendor) {
                 $rootId = Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory(
 					$vendor,
 					Mage::app()->getWebsite()->getId()
 				);
-            } else {
+            } 
+            if (!$rootId) {
                 $rootId = Mage::app()->getStore()->getRootCategoryId();
             }
             $this->_rootId = $rootId;
