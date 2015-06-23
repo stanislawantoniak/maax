@@ -16,4 +16,13 @@
             </faq>
         </routers>
     </frontend>
+    <global>
+        <blocks>
+            <faq>
+                <rewrite>
+                    <frontend_faqsearch_result>Zolago_Faq_Block_Frontend_Faqsearch_Result</frontend_faqsearch_result>
+                </rewrite>
+            </faq>
+        </blocks>
+    </global>
 </config>
