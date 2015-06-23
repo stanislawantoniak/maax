@@ -116,4 +116,98 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
         }
         $this->_redirect('');
     }
+
+    /**
+     * Function for coll back opt-out from SalesManago
+     * It tell us that in SM system subscriber change his state to unsubscribed
+     * @return string
+     */
+    public function sm_newsletter_unsubscribeAction() {
+        $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
+        if($active == 1) {
+            $email = $this->getRequest()->getParam('email');
+            $key = $this->getRequest()->getParam('key');
+            $result = array();
+
+            $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+            $sha1 = sha1($email . $apiSecret);
+
+            if (isset($email) && isset($key) && isset($sha1) && filter_var($email, FILTER_VALIDATE_EMAIL) && $key == $sha1) {
+                try {
+                    /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+                    $subscriber = Mage::getModel('zolagonewsletter/subscriber')->loadByEmail($email);
+                    $status     = $subscriber->isSubscribed();
+
+                    if ($status) {
+                        $subscriber->unsubscribe();
+                        $result['success'] = true;
+                        $result['message'] = 'Email succesfully unsubscribed';
+
+                    } else {
+                        $result['success'] = false;
+                        $result['message'] = 'Email already unsubscribed';
+                    }
+                } catch (Mage_Core_Exception $e) {
+                    $result['success'] = false;
+                    $result['message'] = 'General error';
+                } catch (Exception $e) {
+                    $result['success'] = false;
+                    $result['message'] = 'General error';
+                }
+            } else {
+                $result['success'] = false;
+                $result['message'] = 'Validation failed';
+            }
+
+            $json = json_encode($result);
+            return $json;
+        }
+    }
+
+    /**
+     * Function for coll back opt-in from SalesManago
+     * It tell us that in SM system subscriber change his state to subscribed
+     * @return string
+     */
+    public function sm_newsletter_subscribeAction(){
+        $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
+        if($active == 1) {
+            $email = $this->getRequest()->getParam('email');
+            $key = $this->getRequest()->getParam('key');
+            $result = array();
+
+            $apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+            $sha1 = sha1($email . $apiSecret);
+
+            if (isset($email) && isset($key) && isset($sha1) && filter_var($email, FILTER_VALIDATE_EMAIL) && $key == $sha1) {
+                try {
+                    /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+                    $subscriber = Mage::getModel('zolagonewsletter/subscriber')->loadByEmail($email);
+                    $status     = $subscriber->isSubscribed();
+
+                    if (!$status) {
+                        $subscriber->simpleSubscribe();
+                        $result['success'] = true;
+                        $result['message'] = 'Email succesfully subscribed';
+
+                    } else {
+                        $result['success'] = false;
+                        $result['message'] = 'Email already subscribed';
+                    }
+                } catch (Mage_Core_Exception $e) {
+                    $result['success'] = false;
+                    $result['message'] = 'General error';
+                } catch (Exception $e) {
+                    $result['success'] = false;
+                    $result['message'] = 'General error';
+                }
+            } else {
+                $result['success'] = false;
+                $result['message'] = 'Validation failed';
+            }
+
+            $json = json_encode($result);
+            return $json;
+        }
+    }
 }
