@@ -118,6 +118,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     }
                     elseif ($subscriberStatus == self::STATUS_UNCONFIRMED) {
                         // customer don't confirm newsletter but he wants to be subscribed
+                        $customer->setConfirmMsg(true);
                         $subscriber->sendConfirmationRequestEmail();
                     } elseif ($subscriberStatus == self::STATUS_SUBSCRIBED) {
 						//do nothing
@@ -377,5 +378,23 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             ->addFieldToFilter('store_id', array('eq' => $storeId))
             ->getFirstItem();
         return $subscriber;
+    }
+
+    /**
+     * Simplified version of subscribe
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function simpleSubscribe()
+    {
+        try {
+            $this->setSubscriberStatus(self::STATUS_SUBSCRIBED)
+                ->save();
+            $this->sendConfirmationSuccessEmail();
+            return $this;
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 }
