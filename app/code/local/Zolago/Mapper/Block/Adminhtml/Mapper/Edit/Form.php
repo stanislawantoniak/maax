@@ -49,6 +49,16 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Form extends Mage_Adminhtml_Bloc
 				'value' => 0
 			));
 
+
+            $fieldset->addField('do_saveAndQueue', 'hidden', array(
+                'name' => 'do_saveAndQueue',
+                'value' => 0
+            ));
+            $fieldset->addField('mapper_id', 'hidden', array(
+                'name' => 'mapper_id',
+                'value' => 0
+            ));
+
 			$fieldset->addField('name', 'text', array(
 				'name' => 'name',
 				'required' => true,

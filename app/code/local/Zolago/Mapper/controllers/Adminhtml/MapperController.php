@@ -1,18 +1,7 @@
 <?php
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
-	
-	public function queueAction() {
-	    $queue = Mage::getModel('zolagomapper/queue_mapper');
-	    $model = $this->_registerModel();
-	    if ($id = $model->getId()) {
-            $queue->push($id);
-            $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
-        } else {
-            $this->_getSession()->addError(Mage::helper("zolagomapper")->__("No mapper to add"));
-        }
-        $this->_redirectReferer();
-	}
+
 	public function runAction() {
 		$model = $this->_registerModel();
 		if (!($id = $model->getId())) {
@@ -86,15 +75,30 @@ class Zolago_Mapper_Adminhtml_MapperController
 			
 			// Forward run or index
 			$doRun = $request->getParam("do_run");
-			if(!$doRun){
+			$doSaveAndQueue = $request->getParam("doSaveAndQueue");
+
+            if ($doSaveAndQueue) {
+
+                if ($id = $mapper->getId()) {
+                    $queue = Mage::getModel('zolagomapper/queue_mapper');
+                    $queue->push($id);
+                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
+                } else {
+                    $this->_getSession()->addError(Mage::helper("zolagomapper")->__("No mapper to add"));
+                }
+
+                $this->_getSession()->addSuccess(
+                    Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+                $backUrl = null;
+
+            } elseif(!$doRun){
 				$this->_getSession()->addSuccess(
 					Mage::helper('zolagomapper')->__('The mapper has been saved.'));
 				$backUrl = $this->getUrl("*/*");
 			}else{
 				$backUrl = $this->getUrl("*/*/run", array("mapper_id"=>$mapper->getId()));
 			}
-	
-			
+
 			return $this->_redirectUrl($backUrl);
    
         } catch (Exception $e) {
@@ -251,7 +255,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 	 * @return mixed
 	 */
 	protected function _getId() {
-		return $this->getRequest()->getParam("mapper_id");
+		return (int)$this->getRequest()->getParam("mapper_id") ? $this->getRequest()->getParam("mapper_id") : null;
 	}
 	
 }

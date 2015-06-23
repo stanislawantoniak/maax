@@ -41,6 +41,11 @@
                 window.location.href = '<?php echo $this->getDeleteUrl() ?>';
             }
         }
+        saveAndQueue: function(mapper_id) {
+            $("do_saveAndQueue").value = 1;
+            $("mapper_id").value = mapper_id;
+            editForm.submit();
+        }
     };
     
 </script>
