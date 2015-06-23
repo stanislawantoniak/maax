@@ -16,19 +16,7 @@ class Zolago_Faq_IndexController extends Inic_Faq_IndexController
     public function resultAction()
     {
         $keyword = $this->getRequest()->getParam('keyword');
-        $keyword = preg_replace(
-            array(
-                // Remove invisible content
-                '@<head[^>]*?>.*?</head>@siu',
-                '@<style[^>]*?>.*?</style>@siu',
-                '@<script[^>]*?.*?</script>@siu',
-                '@<object[^>]*?.*?</object>@siu',
-                '@<embed[^>]*?.*?</embed>@siu',
-                '@<applet[^>]*?.*?</applet>@siu',
-                '@<noframes[^>]*?.*?</noframes>@siu',
-                '@<noscript[^>]*?.*?</noscript>@siu',
-                '@<noembed[^>]*?.*?</noembed>@siu'),
-            array("","","","","","","","",""),  $keyword );
+        $keyword = Zolago_Catalog_Helper_Data::secureInvisibleContent($keyword);
         $this->getRequest()->setParam('keyword', $keyword);
 
         $this->loadLayout()->renderLayout();
