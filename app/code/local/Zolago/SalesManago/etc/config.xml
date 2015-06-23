@@ -7,6 +7,15 @@
     </modules>
     <frontend>
         <events>
+            <customer_login>
+                <observers>
+                    <zolago_salesmanago_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </zolago_salesmanago_observer>
+                </observers>
+            </customer_login>
             <customer_register_success>
                 <observers>
                     <salesmanago_tracking_observer>
