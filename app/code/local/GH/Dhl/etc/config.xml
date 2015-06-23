@@ -8,11 +8,11 @@
     <global>
         <models>
             <ghdhl>
-                <class>Gh_Dhl_Model</class>
+                <class>GH_Dhl_Model</class>
                 <resourceModel>ghdhl_resource</resourceModel>
             </ghdhl>
             <ghdhl_resource>
-                <class>Gh_Dhl_Model_Resource</class>
+                <class>GH_Dhl_Model_Resource</class>
                 <entities>
                     <dhl>
                         <table>gh_dhl</table>
@@ -38,4 +38,26 @@
             </ghdhl_setup>
         </resources>
     </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <GH_Dhl>
+                    <files>
+                        <default>GH_Dhl.csv</default>
+                    </files>
+                </GH_Dhl>
+            </modules>
+        </translate>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ghdhl before="Mage_Adminhtml">GH_Dhl_Adminhtml</ghdhl>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>
