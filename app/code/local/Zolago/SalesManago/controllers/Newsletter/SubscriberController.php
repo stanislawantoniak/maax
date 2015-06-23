@@ -1,10 +1,12 @@
 <?php
-require_once "Mage/Newsletter/controllers/SubscriberController.php";
+
+require_once Mage::getConfig()->getModuleDir('controllers', "SalesManago_Tracking") . DS . "SubscriberController.php";
 
 class Zolago_Tracking_Newsletter_SubscriberController extends SalesManago_Tracking_Newsletter_SubscriberController {
 
 
     public function sm_newsletter_unsubscribeAction() {
+        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
         if($active == 1) {
             $email = $this->getRequest()->getParam('email');
@@ -38,12 +40,14 @@ class Zolago_Tracking_Newsletter_SubscriberController extends SalesManago_Tracki
                 $result['success'] = false;
                 $result['message'] = 'Validation failed';
             }
+            Mage::log($result, null, 'mylog.log');
 
             $json = json_encode($result);
             return $json;
         }
     }
     public function sm_newsletter_subscribeAction(){
+        Mage::log(__METHOD__ . '(' . __LINE__ . ')', null, 'mylog.log');
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
         if($active == 1) {
             $email = $this->getRequest()->getParam('email');
@@ -77,7 +81,7 @@ class Zolago_Tracking_Newsletter_SubscriberController extends SalesManago_Tracki
                 $result['success'] = false;
                 $result['message'] = 'Validation failed';
             }
-
+            Mage::log($result, null, 'mylog.log');
             $json = json_encode($result);
             return $json;
         }
