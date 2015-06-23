@@ -379,4 +379,22 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             ->getFirstItem();
         return $subscriber;
     }
+
+    /**
+     * Simplified version of subscribe
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function simpleSubscribe()
+    {
+        try {
+            $this->setSubscriberStatus(self::STATUS_SUBSCRIBED)
+                ->save();
+            $this->sendConfirmationSuccessEmail();
+            return $this;
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
 }
