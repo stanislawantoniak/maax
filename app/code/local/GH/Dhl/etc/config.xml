@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Dhl>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </GH_Dhl>
     </modules>
     <global>
@@ -17,6 +17,9 @@
                     <dhl>
                         <table>gh_dhl</table>
                     </dhl>
+                    <dhl_vendor>
+                        <table>gh_dhl_vendor</table>
+                    </dhl_vendor>
                 </entities>
             </ghdhl_resource>
         </models>
@@ -55,6 +58,16 @@
                 </ghdhl>
             </updates>
         </layout>
+        <events>
+            <udropship_adminhtml_vendor_tabs_after>
+                <observers>
+                    <ghdhl>
+                        <class>ghdhl/observer</class>
+                        <method>udropship_adminhtml_vendor_tabs_after</method>
+                    </ghdhl>
+                </observers>
+            </udropship_adminhtml_vendor_tabs_after>
+        </events>
     </adminhtml>
     <admin>
         <routers>

@@ -110,4 +110,16 @@ class GH_Dhl_Adminhtml_DhlController extends Mage_Adminhtml_Controller_Action
         return $this->_redirect("*/*");
     }
 
+    public function vendorAction()
+    {
+        $block =  $this->getLayout()
+            ->createBlock(
+                'ghdhl/adminhtml_dropship_settings_dhl_grid',
+                'admin.ghdhl.settings.dhl'
+            );
+        $block->setVendorId($this->getRequest()->getParam('id'));
+        $block->setUseAjax(true);
+        $this->getResponse()->setBody($block->toHtml());
+    }
+
 }
