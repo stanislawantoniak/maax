@@ -113,7 +113,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             $galleryDHLAccount = $ghdhl->getGalleryDHLAccountData($this->_dhlAccount);
             $galleryDHLAccountId = $galleryDHLAccount->getId();
             if (!empty($galleryDHLAccountId)) {
-                $this->_dhlLogin = $galleryDHLAccount->getDhlLogin();
+                //$this->_dhlLogin = $galleryDHLAccount->getDhlLogin();
                 $this->_dhlPassword = $galleryDHLAccount->getDhlPassword();
             }
 
