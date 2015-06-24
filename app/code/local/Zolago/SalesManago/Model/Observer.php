@@ -138,8 +138,19 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
             }elseif($observer->getQuoteItem()) {
                 // Case for event sales_quote_remove_item
                 $quote = $observer->getQuoteItem()->getQuote();
+            }elseif($observer->getCustomer()){
+                // Case after customer register successfully
+                // Event: customer_login
+                // Ugly but working, if you know better solution tell me
+                // Note: $observer->getCustomer()->getCart() return null
+                if (Mage::getSingleton('checkout/session')->getQuote() && $observer->getCustomer()->getIsJustRegistered()) {
+                    $quote = Mage::getSingleton('checkout/session')->getQuote();
+                }else{
+                    return;
+                }
             }
             $quote->collectTotals();
+            $quote->getShippingAddress()->collectTotals();
             $items = $quote->getAllItems();
             $itemsNamesList = array();
             foreach ($items as $item) {
