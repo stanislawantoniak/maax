@@ -13,7 +13,6 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
      */
     public function getCategoryRequestPath($category, $parentPath)
     {
-        Mage::log($parentPath, null, 'seoZolago.log');
         $storeId = $category->getStoreId();
         $idPath  = $this->generatePath('id', null, $category);
         $suffix  = $this->getCategoryUrlSuffix($storeId);

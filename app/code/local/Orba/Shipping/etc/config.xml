@@ -6,6 +6,11 @@
     </Orba_Shipping>
   </modules>
   <global>
+      <blocks>
+          <orbashipping>
+              <class>Orba_Shipping_Block</class>
+          </orbashipping>
+      </blocks>
     <models>
       <orbashipping>
         <class>Orba_Shipping_Model</class>
@@ -109,6 +114,7 @@
         <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
         <repeat_tracking>1</repeat_tracking>
         <default_weight>2</default_weight>
+        <volumetric_weight>4000</volumetric_weight>
       </orbadhl>
       <orbaups>
         <active>1</active>
@@ -119,6 +125,7 @@
         <title>UPS</title>
         <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
         <repeat_tracking>1</repeat_tracking>
+        <volumetric_weight>5000</volumetric_weight>
       </orbaups>
     </carriers>
   </default>
