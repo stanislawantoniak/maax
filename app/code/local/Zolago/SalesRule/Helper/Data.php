@@ -349,4 +349,70 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $this->_changeDesign($oldArea,$oldPack,$oldTheme);
          return true;             
      }
+
+	public function getSalesRulesForSubscribers() {
+		$currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+		$resource = Mage::getSingleton('core/resource');
+		$readConnection = $resource->getConnection('core_read');
+
+		$query = $readConnection
+			->select()
+			->from(
+				array('salesrule_rule' => $resource->getTableName("salesrule/rule")),
+				array("rule_id", "name", "from_date", "to_date", "coupon_type")
+			)
+			->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
+				'salesrule_rule.rule_id = salesrule_coupon.rule_id',
+				array("coupon_id","code")
+			)
+			->where('salesrule_rule.is_active = ?', 1)
+			->where('customer_id IS NULL')
+			->where('salesrule_rule.to_date >= ?', date("Y-m-d", $currentTimestamp))
+			->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
+		;
+
+		return $readConnection->fetchAll($query);
+	}
+
+	public function getSalesRulesCouponsByCustomers(array $customerIds) {
+		$resource = Mage::getSingleton('core/resource');
+		$readConnection = $resource->getConnection('core_read');
+
+		$queryRules = $readConnection
+			->select()
+			->from(
+				array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
+				array("rule_id", "customer_id")           )
+			->where('salesrule_coupon.customer_id IN(?)', $customerIds)
+		;
+
+		return $readConnection->fetchAll($queryRules);
+	}
+
+	public function areCouponsForCustomerAvailable($customerId) {
+		//are any rules for subscribers available?
+		$rules = $this->getSalesRulesForSubscribers();
+		if(empty($rules)) {
+			return false;
+		}
+		$availableRulesIds = array();
+		foreach($rules as $rule) {
+			if(array_search($rule['rule_id'],$availableRulesIds) === false) {
+				$availableRulesIds[] = $rule['rule_id'];
+			}
+		}
+		$customerAssignedRules = $this->getSalesRulesCouponsByCustomers(array($customerId));
+		//if customer has no assigned rules then return true as there are other available (checked above)
+		if(empty($customerAssignedRules)) {
+			return true;
+		}
+		//if it's not empty check if his assigned rules are all that he could get
+		foreach($customerAssignedRules as $customerRule) {
+			$searchResult = array_search($customerRule['rule_id'],$availableRulesIds);
+			if($searchResult !== false) {
+				unset($availableRulesIds[$searchResult]);
+			}
+		}
+		return count($availableRulesIds) ? true : false;
+	}
 }

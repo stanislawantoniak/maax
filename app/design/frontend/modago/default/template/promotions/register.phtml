@@ -1,0 +1,138 @@
+<?php
+/** @var $this Zolago_Modago_Block_Promotions_Register */
+/** @var Zolago_Customer_Helper_Data $_hlp */
+$_hlp = Mage::helper("zolagocustomer");
+?>
+<div class="container-fluid">
+	<div class="row">
+		<section id="mypromotions-register" class="main bg-w col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-push-2 col-md-push-1">
+			<header class="title-section">
+				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_registration_header')->toHtml(); ?>
+			</header>
+			<div class="row">
+				<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
+				      id="createAccountForm" method="post" role="form" novalidate="novalidate">
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<div class="form-group clearfix">
+							<div class="row">
+								<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+								       for="account_email">
+									<?php echo $_hlp->__('Email Address'); ?>
+								</label>
+
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 control-label required">
+									<input type="email" value="" class="form-control hint email"
+									       required="true" id="account_email" title=""
+									       name="email" data-original-title="<?php echo $_hlp->__("Please enter email."); ?>"
+									       aria-required="true"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group clearfix border-top">
+							<div class="row">
+								<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label required"
+								       for="account_password">
+									<?php echo $_hlp->__('Password'); ?>
+								</label>
+
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+									<input type="password" class="form-control hint password"
+									       required="true" id="account_password" title=""
+									       name="password" data-original-title="<?php echo $_hlp->__("Please enter password."); ?>"
+									       aria-required="true"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="is_subscribed" class="css-checkbox" checked="checked"
+							       name="is_subscribed" style="opacity: 0; visibility: visible;">
+							<label for="is_subscribed" class="css-label agreement-label">
+								<?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?>
+							</label>
+						</div>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="agreement" class="css-checkbox required"
+							       required="true" style="opacity: 0; visibility: visible;"
+							       name="agreement"
+							       aria-required="true">
+							<label for="agreement" class="css-label agreement-label control-label required">
+								<?php echo Mage::getStoreConfig('customer/agreements/policy'); ?>
+							</label>
+						</div>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="row action">
+							<div class="col-sm-12">
+								<button type="submit" class="button button-primary large link pull-right">
+									<?php echo $_hlp->__('Save') ?>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+</div>
+<script type="text/javascript">
+	Mall.translate.add(
+		"Please enter password.",
+		"<?php echo $_hlp->__("Please enter password."); ?>"
+	);
+	Mall.translate.add(
+		"Password needs to have at least 6 characters",
+		"<?php echo $_hlp->__("Password needs to have at least 6 characters"); ?>"
+	);
+	Mall.translate.add(
+		"Please enter email.",
+		"<?php echo $_hlp->__("Please enter email."); ?>"
+	);
+	Mall.translate.add(
+		"Please enter correct email.",
+		"<?php echo $_hlp->__("Please enter correct email."); ?>"
+	);
+	Mall.translate.add(
+		"You must agree to our Terms of Service",
+		"<?php echo $_hlp->__("You must agree to our Terms of Service"); ?>"
+	);
+
+	jQuery(document).ready(function () {
+		var form = jQuery("#createAccountForm");
+
+		if (form.length) {
+			form.validate(Mall.validate.getOptions({
+				rules: {
+					email: {
+						required: true,
+						email: true
+					},
+					password: {
+						required: true,
+						minlength: 6
+					},
+					agreement: {
+						required: true
+					}
+				},
+				messages: {
+					password: {
+						required: Mall.translate.__("Please enter password."),
+						minlength: Mall.translate.__("Password needs to have at least 6 characters")
+					},
+					email: {
+						required: Mall.translate.__("Please enter email."),
+						email: Mall.translate.__("Please enter correct email.")
+					},
+					agreement: {
+						required: Mall.translate.__("You must agree to our Terms of Service")
+					}
+				}
+			}));
+			form.submit(function () {
+				return
+			});
+		}
+	});
+</script>

@@ -468,6 +468,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 				$customer->save();
 				$this->_dispatchRegisterSuccess($customer);
 				$this->_successProcessRegistration($customer);
+				if(strpos($this->_getRefererUrl(),'mypromotions') != -1) {
+					$this->_redirectReferer();
+				}
 				return;
 			} else {
 				$this->_addSessionError($errors);
@@ -486,8 +489,12 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$session->setCustomerFormData($this->getRequest()->getPost())
 				->addException($e, $this->__('Cannot save the customer.'));
 		}
-		$errUrl = $this->_getUrl('*/*/create', array('_secure' => true));
-		$this->_redirectError($errUrl);
+		if(strpos($this->_getRefererUrl(),'mypromotions') != -1) {
+			$this->_redirectReferer();
+		} else {
+			$errUrl = $this->_getUrl('*/*/create', array('_secure' => true));
+			$this->_redirectError($errUrl);
+		}
 	}
 
 	/**

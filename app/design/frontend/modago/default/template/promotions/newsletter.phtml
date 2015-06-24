@@ -1,0 +1,25 @@
+<?php
+/** @var Zolago_Modago_Block_Promotions_Newsletter $this */
+/** @var Zolago_Customer_Helper_Data $_hlp */
+$_hlp = Mage::helper("zolagocustomer");
+?>
+<form action="<?php echo $this->getUrl('newsletter/manage/save') ?>" method="post" id="form-validate">
+	<?php echo $this->getBlockHtml('formkey'); ?>
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="form-group form-checkbox small text-align-left" style="margin-top:0">
+			<input type="checkbox" id="is_subscribed" class="css-checkbox" checked="checked" name="is_subscribed" style="opacity: 0; visibility: visible;">
+			<label for="is_subscribed" class="css-label agreement-label">
+				<?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?>
+			</label>
+		</div>
+	</div>
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="row action">
+			<div class="col-sm-12">
+				<button type="submit" class="button button-primary large link pull-right">
+					<?php echo $_hlp->__('Save') ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
