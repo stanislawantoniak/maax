@@ -48,6 +48,13 @@
                 </GH_Dhl>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <ghdhl>
+                    <file>ghdhl.xml</file>
+                </ghdhl>
+            </updates>
+        </layout>
     </adminhtml>
     <admin>
         <routers>
