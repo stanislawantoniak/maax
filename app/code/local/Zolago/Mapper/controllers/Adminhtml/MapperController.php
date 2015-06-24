@@ -259,7 +259,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 
         $ids = $this->getRequest()->getParam('custom_ids');
         $_ids = array();
-        // Filtering ids with mapper_id (id is like 'attribute_set_id-mapper_id')
+        // Filtering ids with mapper_id (id is like 'attribute_set_id:mapper_id')
         foreach($ids as $id) {
             $arr = explode(':',$id);
             $asid = isset($arr[0]) ? $arr[0] : 0;
