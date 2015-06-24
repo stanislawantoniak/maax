@@ -1,6 +1,6 @@
 <?php
 /**
- * blok with list of promotions
+ * block with list of promotions
  */
 
 
@@ -19,11 +19,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
              $customer = Mage::getModel('customer/customer')->load($this->_customer_id);
              $email = $customer->getEmail();
              $this->_subscribed = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->isSubscribed();
-             if ($this->_subscribed) { 
-                 $this->_cms_block = 'mypromotions_logged_subscribed';
-             } else {
-                 $this->_cms_block = 'mypromotions_logged_not_subscribed';
-             }
+             $this->_cms_block = 'mypromotions_logged';
          } else {
              $helper = Mage::helper('persistent/session');         
              $this->_persistent = $helper->isPersistent();         
@@ -37,12 +33,6 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         parent::_prepareLayout();
     }
     public function getPromotionList() {
-        if (!$this->_customer_id) {
-            return array();
-        }
-        if (!$this->_subscribed && $this->_logged) {
-            return array();
-        }
         $collection = Mage::getModel('salesrule/coupon')->getCollection();
         $collection->addFieldToFilter('customer_id',$this->_customer_id);
         $select = $collection->getSelect();
@@ -84,6 +74,10 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
      public function isPersistent() {
          return $this->_persistent;
      }
-     
-	
+     public function isSubscribed() {
+	     return $this->_subscribed;
+     }
+     public function getCustomerId() {
+	     return $this->_customer_id;
+     }
 } 
