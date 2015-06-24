@@ -83,8 +83,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             'quantity' => 1,            
             'type' => Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE,
         );
-        Mage::log($dhlSettings, null, "dhl.log");
-        die("test");
+
         return $dhlSettings;
 	}
 
