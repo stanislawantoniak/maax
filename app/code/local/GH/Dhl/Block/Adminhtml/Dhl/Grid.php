@@ -37,10 +37,7 @@ class GH_Dhl_Block_Adminhtml_Dhl_Grid extends Mage_Adminhtml_Block_Widget_Grid
             "index" => "dhl_login",
             "header" => Mage::helper("ghdhl")->__("Login"),
         ));
-        $this->addColumn("dhl_password", array(
-            "index" => "dhl_password",
-            "header" => Mage::helper("ghdhl")->__("Password"),
-        ));
+
         $this->addColumn("comment", array(
             "index" => "comment",
             "header" => Mage::helper("ghdhl")->__("Comment"),
