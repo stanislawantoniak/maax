@@ -8,6 +8,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         $this->setDefaultSort('mapper_id');
         $this->setDefaultDir('desc');
         $this->setSaveParametersInSession(true);
+        $this->setMassactionIdFieldOnlyIndexValue(true);// custom_id value for mass action
     }
 
     protected function _prepareCollection(){
@@ -76,7 +77,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         $this->getMassactionBlock()->setFormFieldName('custom_ids');
 
         $this->getMassactionBlock()->addItem('queue', array(
-            'label'=> Mage::helper("zolagomapper")->__('Queue'),
+            'label'=> Mage::helper("zolagomapper")->__('Add to queue'),
             'url'  => $this->getUrl('*/*/massQueue', array('' => '')),
         ));
 
