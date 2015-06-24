@@ -2,6 +2,17 @@
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
 
+    public function queueAction() {
+        $queue = Mage::getModel('zolagomapper/queue_mapper');
+        $model = $this->_registerModel();
+        if ($id = $model->getId()) {
+            $queue->push($id);
+            $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
+        } else {
+            $this->_getSession()->addError(Mage::helper("zolagomapper")->__("No mapper to add"));
+        }
+        $this->_redirectReferer();
+    }
 	public function runAction() {
 		$model = $this->_registerModel();
 		if (!($id = $model->getId())) {
@@ -281,9 +292,9 @@ class Zolago_Mapper_Adminhtml_MapperController
                     $queue->push($id);
                 }
                 if ($oldCount == $newCount) {
-                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s Mappers added to rebuild queue", $newCount));
+                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue", $newCount));
                 } else {
-                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s Mappers added to rebuild queue, %s row skipped", $newCount, $oldCount - $newCount));
+                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue, %s row skipped", $newCount, $oldCount - $newCount));
                 }
 
             } catch (Mage_Core_Exception $e) {
