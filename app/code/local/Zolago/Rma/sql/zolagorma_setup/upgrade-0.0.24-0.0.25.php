@@ -7,9 +7,9 @@
 $installer = $this;
 $installer->startSetup();
 
-$poTable = $this->getTable("udpo/po");
+$tableName = $installer->getTable("urma/rma");
 
-$installer->getConnection()->addColumn($poTable, "payment_channel_owner", array(
+$installer->getConnection()->addColumn($tableName, 'payment_channel_owner', array(
     "type" => Varien_Db_Ddl_Table::TYPE_SMALLINT,
     "comment" => "Payment channel owner",
     "nullable" => false,
