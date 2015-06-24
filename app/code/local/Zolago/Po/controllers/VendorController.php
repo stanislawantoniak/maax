@@ -1280,6 +1280,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return;
         }
         try {
+	        /** @var Zolago_Po_Helper_Shipment $manager */
             $manager = Mage::helper('zolagopo/shipment');            
             if ($r->getParam('use_label_shipping_amount')) {
                 $udpo->setUseLabelShippingAmount(true);
@@ -1303,11 +1304,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $shipment = $manager->getShipment();
             $number = $this->_addShipping($carrier,$udpo,$shipment);
             if (!$number) {
-                return $this->_redirectReferer();
-
+                $this->_redirectReferer();
+	            return;
             }
+
             $manager->setNumber($number);                                    
-            $manager->processSaveTracking();
+            $manager->processSaveTracking($r->getParams());
             $session->addSuccess($this->__('Tracking ID has been added'));
             $highlight['tracking'] = true;
 
