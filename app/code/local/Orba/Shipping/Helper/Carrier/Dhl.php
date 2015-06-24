@@ -109,7 +109,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 
             /* DHL client number be assigned to gallery or to vendor */
             /* @var $ghdhl GH_Dhl_Helper_Data */
-            $ghdhl = Mage::helper("ghdhl/dhl");
+            $ghdhl = Mage::helper("ghdhl");
             $galleryDHLAccount = $ghdhl->getGalleryDHLAccountData($this->_dhlAccount);
             $galleryDHLAccountId = $galleryDHLAccount->getId();
             if (!empty($galleryDHLAccountId)) {
