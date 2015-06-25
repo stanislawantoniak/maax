@@ -119,13 +119,16 @@
 			<cashondelivery>
 				<visible>1</visible>
 				<p_details>0</p_details>
+                <channel_owner>2</channel_owner>
 			</cashondelivery>
 			<banktransfer>
 				<visible>1</visible>
 				<p_details>1</p_details>
+                <channel_owner>1</channel_owner>
 			</banktransfer>
 			<dotpay>
 				<p_details>1</p_details>
+                <channel_owner>1</channel_owner>
 			</dotpay>
 			<payment_refunds>
 				<payment_refunds_automatic>2</payment_refunds_automatic>
