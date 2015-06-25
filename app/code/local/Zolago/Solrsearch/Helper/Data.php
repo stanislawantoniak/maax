@@ -649,7 +649,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				"q" => $query,
 				"scat" => $cat,
 			);
-			$url = Mage::getUrl("search/index/index", $final);
+			$url = Mage::getUrl("search", $final);
 		} else {
 			if ($vendor) {
 				// check if vendor category
