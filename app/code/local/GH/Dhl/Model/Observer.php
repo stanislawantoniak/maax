@@ -17,18 +17,29 @@ class GH_Dhl_Model_Observer
         ) {
             return;
         }
+        $ghDHLBlock = Mage::app()->getLayout()
+            ->createBlock(
+                'ghdhl/adminhtml_dropship_settings_dhl_grid',
+                'admin.ghdhl.settings.dhl'
+            )
+            ->setVendorId(Mage::app()->getRequest()->getParam('id'))
+            ->toHtml();
 
         if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
-            $block->addTab('ghdhl_dhl', array(
+            $block->addTab('ghdhl_section', array(
                 'label' => Mage::helper('ghdhl')->__('DHL Account Access settings'),
-                'content' => Mage::app()->getLayout()
-                    ->createBlock(
-                        'ghdhl/adminhtml_dropship_settings_dhl_grid',
-                        'admin.ghdhl.settings.dhl'
-                    )
-                    ->setVendorId(Mage::app()->getRequest()->getParam('id'))
-                    ->toHtml()
+                'content' => $ghDHLBlock
             ));
         }
+    }
+
+    public function udropship_adminhtml_vendor_edit_prepare_form($observer)
+    {
+        $block = $observer->getEvent()->getBlock();
+        $form = $block->getForm();
+        $fieldset = $form->getElement('vendor_form');
+        $fieldset->addField('dhl_vendor', 'hidden', array(
+            'name' => 'dhl_vendor',
+        ));
     }
 }

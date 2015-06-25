@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Dhl>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </GH_Dhl>
     </modules>
     <global>
@@ -67,6 +67,14 @@
                     </ghdhl>
                 </observers>
             </udropship_adminhtml_vendor_tabs_after>
+            <udropship_adminhtml_vendor_edit_prepare_form>
+                <observers>
+                    <ghdhl>
+                        <class>ghdhl/observer</class>
+                        <method>udropship_adminhtml_vendor_edit_prepare_form</method>
+                    </ghdhl>
+                </observers>
+            </udropship_adminhtml_vendor_edit_prepare_form>
         </events>
     </adminhtml>
     <admin>
@@ -78,6 +86,13 @@
                     </modules>
                 </args>
             </adminhtml>
+            <ghdhladmin>
+                <use>admin</use>
+                <args>
+                    <module>GH_Dhl_Adminhtml</module>
+                    <frontName>ghdhladmin</frontName>
+                </args>
+            </ghdhladmin>
         </routers>
     </admin>
 </config>

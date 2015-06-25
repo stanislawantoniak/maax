@@ -14,10 +14,7 @@ $table = $installer->getConnection()
     ->newTable($dhDHLVendorTable)
     ->addColumn('vendor_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false, 'default' => 0))
     ->addColumn('dhl_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false, 'default' => 0))
-    ->addIndex(
-        $installer->getIdxName('ghdhl/dhl_vendor', array('vendor_id')),
-        array('vendor_id')
-    )
+
     ->addIndex(
         $installer->getIdxName('ghdhl/dhl', array('dhl_id')),
         array('dhl_id')

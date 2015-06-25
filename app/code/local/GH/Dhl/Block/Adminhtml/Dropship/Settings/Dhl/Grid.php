@@ -22,6 +22,7 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
+
     /**
      *
      * @return string
@@ -29,8 +30,9 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
 
     public function getGridUrl()
     {
-        return $this->getUrl('admin/dhl/vendor', array('_current'=>true));
+        return $this->getUrl('ghdhladmin/dhl/vendor', array('_current' => true));
     }
+
     protected function _prepareColumns()
     {
         $this->addColumn('connect_vendor_dhl', array(
@@ -40,7 +42,7 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
             'values' => $this->_getSelectedDHLAccounts(),
             'align' => 'center',
             'width' => '50px',
-            'index' => 'option_id'
+            'index' => 'id'
         ));
         $this->addColumn("dhl_account", array(
             "index" => "dhl_account",
@@ -54,31 +56,32 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
         return parent::_prepareColumns();
     }
 
-//    protected function _addColumnFilterToCollection($column)
-//    {
-//        Mage::log("_addColumnFilterToCollection");
-//        $id = $column->getId();
-//        Mage::log($id);
-//        if ($id == 'connect_vendor_dhl') {
-//            $select = $this->getCollection()->getSelect();
-//            Mage::log($column->getFilter()->getValue());
-//            if ($column->getFilter()->getValue()) {
-//                $select->join(
-//                    array('dhl_v' => Mage::getSingleton('core/resource')->getTableName('ghdhl/dhl_vendor')),
-//                    'main_table.id = dhl_v.dhl_id AND dhl_v.vendor_id = '.$this->getVendorId());
-//            } else {
-//                $select->joinLeft(
-//                    array('dhl_v' => Mage::getSingleton('core/resource')->getTableName('ghdhl/dhl_vendor')),
-//                    'main_table.id = dhl_v.dhl_id AND dhl_v.vendor_id = '.$this->getVendorId())
-//                    //->where('dhl_v.dhl_id is null')
-//                ;
-//            }
-//            Mage::log($select->__toString());
-//            return $this;
-//        }
-//        parent::_addColumnFilterToCollection($column);
-//        return $this;
-//    }
+    protected function _addColumnFilterToCollection($column)
+    {
+        $id = $column->getId();
+        if ($id == 'connect_vendor_dhl') {
+            $select = $this->getCollection()->getSelect();
+            $columnValue = $column->getFilter()->getValue();
+
+            if ($columnValue) {
+                $select->join(
+                    array('dhl_v' => Mage::getSingleton('core/resource')->getTableName('ghdhl/dhl_vendor')),
+                    'main_table.id = dhl_v.dhl_id AND dhl_v.vendor_id = ' . $this->getVendorId(),
+                    array());
+
+            } else {
+                $select->joinLeft(
+                    array('dhl_v' => Mage::getSingleton('core/resource')->getTableName('ghdhl/dhl_vendor')),
+                    'main_table.id = dhl_v.dhl_id AND dhl_v.vendor_id = ' . $this->getVendorId(),
+                    array())
+                    ->where('dhl_v.id is null');
+            }
+
+            return $this;
+        }
+        parent::_addColumnFilterToCollection($column);
+        return $this;
+    }
 
     /**
      *
@@ -87,14 +90,15 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
     protected function _getSelectedDHLAccounts()
     {
         $json = $this->getRequest()->getPost('selected_dhl_accounts');
+
         $vendorDHLAccounts = array();
         if (is_null($json)) {
             $vendorId = $this->getVendorId();
+
             $collection = Mage::getModel('ghdhl/dhl_vendor')->getCollection();
 
             $collection->getSelect()
                 ->where('main_table.vendor_id = ?', $vendorId);
-            Mage::log($collection->getSelect()->__toString());
 
             foreach ($collection as $vendorDHLAccount) {
                 $vendorDHLAccounts[] = $vendorDHLAccount->getData('dhl_id');
@@ -102,6 +106,7 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
         } else {
             $vendorDHLAccounts = array_keys((array)Zend_Json::decode($json));
         }
+
         return $vendorDHLAccounts;
 
     }

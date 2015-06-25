@@ -112,7 +112,7 @@ class GH_Dhl_Adminhtml_DhlController extends Mage_Adminhtml_Controller_Action
 
     public function vendorAction()
     {
-        $block =  $this->getLayout()
+        $block = $this->getLayout()
             ->createBlock(
                 'ghdhl/adminhtml_dropship_settings_dhl_grid',
                 'admin.ghdhl.settings.dhl'
