@@ -127,7 +127,7 @@ if (typeof connect_attributesetJsObject != "undefined") {
         var fname = this.name.replace(/^_/, '');
         vendorAttributeset[this.attributesetId][fname] = this.value;
         highlightAttributesetRow(this);
-        console.log(Object.toJSON(vendorAttributeset));
+
         $('vendor_attributeset').value = Object.toJSON(vendorAttributeset);
     }
 
