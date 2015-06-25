@@ -143,8 +143,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$_product[1] = $product->getName();
 //			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
             $_product[2] = $product->getCurrentUrl();
-			$_product[3] = $product->getStrikeoutPrice();
-			$_product[4] = $product->getFinalPrice();
+			$_product[3] = floatval($product->getStrikeoutPrice());
+			$_product[4] = floatval($product->getFinalPrice());
 			$_product[5] = $product->getWishlistCount();
 			$_product[6] = $product->getInMyWishlist();
 			$_product[7] = $this->_prepareListingResizedImageUrl($product->getListingResizedImageUrl());

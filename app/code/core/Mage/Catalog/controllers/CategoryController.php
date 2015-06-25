@@ -113,6 +113,9 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
      */
     public function viewAction()
     {
+	    if($this->getRequest()->getParam('q')) {
+		    $this->getRequest()->setParam('q',null);
+	    }
         if ($category = $this->_initCatagory()) {
             $design = Mage::getSingleton('catalog/design');
             $settings = $design->getDesignSettings($category);
