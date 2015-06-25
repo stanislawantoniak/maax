@@ -173,9 +173,6 @@ class Zolago_SalesRule_Model_Observer {
 
 
         //1. Coupons
-        $resource = Mage::getSingleton('core/resource');
-        $readConnection = $resource->getConnection('core_read');
-
 	    $result = $helper->getSalesRulesForSubscribers();
 
         //Group coupons by rule
