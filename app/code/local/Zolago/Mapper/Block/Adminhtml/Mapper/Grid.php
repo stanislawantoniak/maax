@@ -18,7 +18,23 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
 		$collection->joinAttributeSet();
         $collection->addCustomId();
         $this->setCollection($collection);
+        $this->setAdditionalJavaScript($this->_prepareJsCustomIds()); // Shame on me
         return parent::_prepareCollection();
+    }
+
+    /**
+     * @return string
+     */
+    private function _prepareJsCustomIds() {
+        $collection = $this->getCollection();
+        $list = '';
+        foreach ($collection as $row) {
+            $customId = $row->getCustomId();
+            $list .= $customId.',';
+        }
+        $list = rtrim($list, ',');
+        $list = "zolagomapper_mapper_grid_massactionJsObject.setGridIds('" .$list."');";
+        return $list;
     }
 
     protected function _prepareColumns() {
