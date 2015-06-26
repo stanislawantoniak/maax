@@ -42,7 +42,6 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
 
         if(!empty($value)){
             $helper = Mage::helper("orbashipping");
-            $periods = array();
             $group = $value["group"];
 
             $carrierLabel = "";
@@ -67,43 +66,11 @@ class Orba_Shipping_Model_System_Backend_FuelChargeConfig extends Mage_Core_Mode
                             ->addError($helper->__('%s Fuel Charge date from can not be empty', $carrierLabel));
                         return;
                     }
-                    if (empty($valueItem['fuel_percent_date_to'])) {
-                        Mage::getSingleton('adminhtml/session')
-                            ->addError($helper->__('%s Fuel Charge date to can not be empty', $carrierLabel));
-                        return;
-                    }
-                    if (strtotime($valueItem['fuel_percent_date_to']) < strtotime($valueItem['fuel_percent_date_from'])) {
-                        Mage::getSingleton('adminhtml/session')
-                            ->addError($helper->__('%s Fuel Charge Settings: Date to can not be earlier than Date from', $carrierLabel));
-                        return;
 
-                    }
-                    $periods[$n] = array("from" => $valueItem['fuel_percent_date_from'], "to" => $valueItem['fuel_percent_date_to']);
                 }
 
             }
 
-
-            if (!empty($periods)) {
-                foreach ($periods as $period) {
-                    foreach ($periods as $periodToCompare) {
-                        if($period !== $periodToCompare){
-                            $result = $this->intersects($period["from"], $period["to"], $periodToCompare["from"], $periodToCompare["to"]);
-
-                            if($result){
-                                $from1 = $period["from"];
-                                $from2 = $periodToCompare["from"];
-                                $to1 = $period["to"];
-                                $to2 = $periodToCompare["to"];
-                                Mage::getSingleton('adminhtml/session')
-                                    ->addError($helper->__('%s Fuel Charge Settings: Dates period %s - %s  overlapped with period  %s - %s', $carrierLabel, $from1, $to1, $from2, $to2));
-                                return;
-                            }
-                        }
-
-                    }
-                }
-            }
         }
 
         return parent::save();  //call original save method so whatever happened
