@@ -3,7 +3,7 @@ require_once Mage::getModuleDir('controllers', "Mage_Catalog") . DS . "CategoryC
 class Zolago_Catalog_CategoryController extends Mage_Catalog_CategoryController {
 
 	public function viewAction() {
-		$this->getRequest()->setParam('q',null);
+		$this->getRequest()->setParam('q','');
 		parent::viewAction();
 	}
 }
