@@ -518,7 +518,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 		return $weight;
 	}
 	public function getDhlParcelKeyByWeight($weight) {
-	    if ($weight <= 5) {
+	    if ($weight <= 1) {
 	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE;
 	    } else if ($weight <= 5) {
 	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5;
