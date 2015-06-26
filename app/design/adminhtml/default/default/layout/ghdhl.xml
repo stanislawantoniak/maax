@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<layout>
+    
+    <ghdhl_update_menu>
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/dhl</menupath></action>
+        </reference>
+    </ghdhl_update_menu>
+    <adminhtml_dhl_index>
+        <update handle="ghdhl_update_menu"/>
+        <reference name="content">
+            <block type="ghdhl/adminhtml_dhl" name="ghdhl_dhl" template="ghdhl/dhl.phtml">
+                <block type="ghdhl/adminhtml_dhl_grid" name="ghdhl_dhl_grid"/>
+            </block>
+        </reference>
+    </adminhtml_dhl_index>
+    <adminhtml_dhl_edit>
+        <update handle="ghdhl_update_menu"/>
+        <reference name="content">
+            <block type="ghdhl/adminhtml_dhl_edit" name="ghdhl_dhl_edit" template="ghdhl/dhl/edit.phtml"/>
+        </reference>
+        <reference name="left">
+            <block type="ghdhl/adminhtml_dhl_edit_tabs" name="ghdhl_dhl_edit_tabs">
+                <!-- General tab -->
+                <action method="addTab">
+                    <name>group_general</name>
+                    <block>ghdhl/adminhtml_dhl_edit_tab_general</block>
+                </action>
+
+            </block>
+        </reference>
+    </adminhtml_dhl_edit>
+</layout>
