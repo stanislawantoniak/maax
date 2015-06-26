@@ -160,7 +160,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 	            ->setNumber($number)
 	            ->setCarrierCode($carrier)
 	            ->setTitle($title);
-
+	            
 	        if(!is_null($requestData)) {
 		        switch($title) {
 			        case 'DHL':
@@ -210,21 +210,25 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 
          $track = $this->getTrack($requestData);
          $shipment = $this->getShipment();
-         $shipment->addTrack($track);
+         $carrier = $this->getCarrierName();
          $vendor = $this->getVendor();
+         $udpo = $shipment->getUdpo();
+         $totalValue = $udpo->getGrandTotalInclTax() - $udpo->getPaymentAmount();
+         $cod = $shipment->getUdpo()->isCod();
+         $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+         $type = empty($requestData['specify_orbadhl_page_type'])? 0:$requestData['specify_orbadhl_page_type'];
+         $manager->calculateCharge($track,$type,$vendor,$totalValue,$cod);
+         $shipment->addTrack($track,$requestData);
          $number = $this->getNumber();
-
          $isShipped = $this->getShippedFlag();
- 
-         Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
-         Mage::helper('udropship')->addShipmentComment(
+          Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
+          Mage::helper('udropship')->addShipmentComment(
              $shipment,
              $this->__('%s added tracking ID %s', $vendor->getVendorName(), $number)
-         );
+         );         
          $shipment->save();
              // Carrier saved
          $udpo = $this->getUdpo();
-         $carrier = $this->getCarrierName();
          $udpo->setCurrentCarrier($carrier);
          $udpo->getResource()->saveAttribute($udpo, "current_carrier");            
      }

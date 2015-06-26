@@ -227,12 +227,18 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $rma->register();
             // set tracking
             if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
+                $carrier = Orba_Shipping_Model_Carrier_Dhl::CODE;
                 $track = Mage::getModel('urma/rma_track');
                 $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
                 $track->setTrackNumber($trackingParams['trackingNumber']);
                 $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
-                $track->setCarrierCode(Orba_Shipping_Model_Carrier_Dhl::CODE);
+                $track->setCarrierCode($carrier);
                 $track->setLabelPic($trackingParams['file']);
+                $po = $rma->getPo();
+                $weight = $po->getTracking()->getWeight();
+                $type = Mage::helper('orbashipping/carrier_dhl')->getDhlParcelKeyByWeight($weight);
+                $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+                $manager->calculateCharge($track,$type,$po->getVendor(),$rma->getTotalValue(),false);
                 $rma->addTrack($track);
                 $rma->setCurrentTrack($track);
             }
