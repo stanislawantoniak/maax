@@ -23,7 +23,7 @@ class GH_Dhl_Helper_Data extends Mage_Core_Helper_Abstract
                 if(!empty($access)){
                     $password = $galleryDHLAccount->getDhlPassword();
                 } else {
-                    throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("You don't have access to this DHL Account"));
+                    throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("You don't have access to %s DHL Account", $galleryDHLAccount->getDhlAccount()));
                 }
             }
         }

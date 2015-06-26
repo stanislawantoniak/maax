@@ -107,17 +107,6 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 $this->_dhlPassword	= $this->getDhlPassword();
             }
 
-            /* DHL client number be assigned to gallery or to vendor */
-            /* @var $ghdhl GH_Dhl_Helper_Data */
-            $ghdhl = Mage::helper("ghdhl");
-            $galleryDHLAccountPassword = $ghdhl->getGalleryDHLAccountData($this->_dhlAccount);
-
-            if (!empty($galleryDHLAccountPassword)) {
-                //$this->_dhlLogin = $galleryDHLAccount->getDhlLogin();
-                $this->_dhlPassword = $galleryDHLAccountPassword;
-            }
-
-
             $dhlClient = Mage::getModel('orbashipping/carrier_client_dhl');
             $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword, $this->_dhlAccount);
             $this->_dhlClient = $dhlClient;
