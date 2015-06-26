@@ -148,8 +148,6 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * @return Mage_Sales_Model_Order_Shipment_Track|false
      */
     public function getTrack($requestData=null) {
-        Mage::log("getTrack gallery_shipping_source", null,"tracking.log");
-        Mage::log((int)$requestData["gallery_shipping_source"], null,"tracking.log");
         if (empty($this->_track)) {
             $number = $this->getNumber();
             $carrier = $this->getCarrierName();
