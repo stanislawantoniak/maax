@@ -12,6 +12,16 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 	    /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
 	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
         $settings = $dhlHelper->getDhlRmaSettings($vendorId);
+
+        /* DHL client number be assigned to gallery or to vendor */
+        /* @var $ghdhl GH_Dhl_Helper_Data */
+        $ghdhl = Mage::helper("ghdhl");
+        $galleryDHLAccountPassword = $ghdhl->getGalleryDHLAccountData($settings["account"]);
+        if (!empty($galleryDHLAccountPassword)) {
+            $settings["password"] = $galleryDHLAccountPassword;
+            $settings["gallery_shipping_source"] = 1;
+        }
+
 	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($request->getParam('specify_orbadhl_size'));
         $width = (float)$pkgDimensions[0];
         $height = (float)$pkgDimensions[1];
@@ -55,7 +65,6 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
             $settings["password"] = $galleryDHLAccountPassword;
             $settings["gallery_shipping_source"] = 1;
         }
-
 
         /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
 	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
@@ -130,7 +139,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     }
     public function createShipmentAtOnce() {
         $client = $this->_startClient();
-        $out = $client->createShipmentAtOnce();                
+        $out = $client->createShipmentAtOnce();
 		if ($out) {
 		    if (is_array($out) && !empty($out['error'])) {
 			    $_helper = Mage::helper('zolagorma');
