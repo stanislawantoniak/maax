@@ -158,7 +158,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
      * @param bool $isCod shipment with COD
      */
 
-    public function calculateCharge($track,$rate,$vendor,$packageValue,$isCod) {
+    public function calculateCharge($track,$rate,$vendor,$packageValue,$codValue) {
         $chargeShipment = floatval(str_replace(',','.',$vendor->getData($rate)));
         $chargeFuelList = Mage::app()->getStore()->getConfig('carriers/orbadhl/fuel_charge');
         if ($chargeFuelList) {
@@ -180,13 +180,13 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         $threshold = Mage::app()->getStore()->getConfig('carriers/orbadhl/parcel_value_threshold');
         $addCod = Mage::app()->getStore()->getConfig('carriers/orbadhl/charge_always_for_cod');        
         $chargeInsurance = 0;
-        if (($addCod && $isCod) ||
+        if (($addCod && ($codValue > 0)) ||
             ($packageValue >= $threshold)) {
             $chargeInsurance = round(floatval(str_replace(',','.',$vendor->getData('dhl_insurance_charge_amount')))+floatval(str_replace(',','.',$vendor->getData('dhl_insurance_charge_percent')))*$packageValue/100,2);
         }
         $chargeCod = 0;
-        if ($isCod) {
-            $chargeCod = round(floatval(str_replace(',','.',$vendor->getData('dhl_cod_charge_amount')))+floatval(str_replace(',','.',$vendor->getData('dhl_cod_charge_percent')))*$packageValue/100,2);
+        if ($codValue > 0) {
+            $chargeCod = round(floatval(str_replace(',','.',$vendor->getData('dhl_cod_charge_amount')))+floatval(str_replace(',','.',$vendor->getData('dhl_cod_charge_percent')))*$codValue/100,2);
         }
         $chargeTotal = $chargeShipment + $chargeFuel + $chargeInsurance + $chargeCod;
         // setting track values

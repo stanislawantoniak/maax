@@ -238,7 +238,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 $weight = $po->getTracking()->getWeight();
                 $type = Mage::helper('orbashipping/carrier_dhl')->getDhlParcelKeyByWeight($weight);
                 $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
-                $manager->calculateCharge($track,$type,$po->getVendor(),$rma->getTotalValue(),false);
+                $manager->calculateCharge($track,$type,$po->getVendor(),$rma->getTotalValue(),0);
                 $rma->addTrack($track);
                 $rma->setCurrentTrack($track);
             }

@@ -213,11 +213,11 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
          $carrier = $this->getCarrierName();
          $vendor = $this->getVendor();
          $udpo = $shipment->getUdpo();
-         $totalValue = $udpo->getGrandTotalInclTax() - $udpo->getPaymentAmount();
-         $cod = $shipment->getUdpo()->isCod();
+         $codValue = $udpo->getGrandTotalInclTax() - $udpo->getPaymentAmount();
+         $totalValue = $udpo->getGrandTotalInclTax();
          $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
-         $type = empty($requestData['specify_orbadhl_page_type'])? 0:$requestData['specify_orbadhl_page_type'];
-         $manager->calculateCharge($track,$type,$vendor,$totalValue,$cod);
+         $type = empty($requestData['specify_orbadhl_rate_type'])? 0:$requestData['specify_orbadhl_rate_type'];
+         $manager->calculateCharge($track,$type,$vendor,$totalValue,$codValue);
          $shipment->addTrack($track,$requestData);
          $number = $this->getNumber();
          $isShipped = $this->getShippedFlag();
