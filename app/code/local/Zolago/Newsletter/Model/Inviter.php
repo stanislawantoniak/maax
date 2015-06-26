@@ -65,6 +65,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		}
 
         if ($this->_isInvitationEmailEnabled()
+	        && Mage::getSingleton("customer/session")->isLoggedIn()
 			&& $this->validateEmail($email)
 			&& $this->_isEmailSuitableForInvitation($email)
         ) {
