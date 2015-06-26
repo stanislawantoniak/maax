@@ -167,13 +167,16 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
             $chargeFuelList = array();
         }
         $fuelPercent = 0;
+        $lastDate = 0;
         foreach ($chargeFuelList as $item) {
             if (!is_object($item)) {
                 continue;
             }
-            if (strtotime($item->fuel_percent_date_from)<time()
-                && strtotime($item->fuel_percent_date_to)>time()) {
-                    $fuelPercent = floatval(str_replace(',','.',$item->fuel_percent));
+            $newDate = strtotime($item->fuel_percent_date_from);
+            if ($newDate > $lastDate) {
+                $lastDate = $newDate;
+                $fuelPercent = floatval(str_replace(',','.',$item->fuel_percent));
+                
             }
         }
         $chargeFuel = round($chargeShipment*$fuelPercent/100,2);
