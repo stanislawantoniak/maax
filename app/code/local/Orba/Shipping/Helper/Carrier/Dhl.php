@@ -518,4 +518,18 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 		}
 		return $weight;
 	}
+	public function getDhlParcelKeyByWeight($weight) {
+	    if ($weight <= 1) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE;
+	    } else if ($weight <= 5) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5;
+	    } else if ($weight <= 10) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10;
+	    } else if ($weight <= 20) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20;
+	    } else {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5;
+	    }
+	    return $key;
+	}
 }
