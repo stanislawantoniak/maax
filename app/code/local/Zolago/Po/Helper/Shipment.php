@@ -180,6 +180,9 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 								->setHeight(0)
 								->setLength(0);
 						}
+                        if(isset($requestData['gallery_shipping_source']) && $requestData['gallery_shipping_source'] == 1) {
+                            $track->setGalleryShippingSource(1);
+                        }
 				        break;
 			        default:
 				        break;
