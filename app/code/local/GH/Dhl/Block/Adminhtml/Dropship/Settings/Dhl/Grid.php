@@ -44,11 +44,11 @@ class GH_Dhl_Block_Adminhtml_Dropship_Settings_Dhl_Grid extends Mage_Adminhtml_B
             'width' => '50px',
             'index' => 'id'
         ));
-        $this->addColumn("dhl_account", array(
+        $this->addColumn("dhl_account_vendor", array(
             "index" => "dhl_account",
             "header" => Mage::helper("ghdhl")->__("Account"),
         ));
-        $this->addColumn("dhl_login", array(
+        $this->addColumn("dhl_login_vendor", array(
             "index" => "dhl_login",
             "header" => Mage::helper("ghdhl")->__("Login"),
         ));
