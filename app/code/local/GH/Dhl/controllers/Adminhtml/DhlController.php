@@ -63,6 +63,20 @@ class GH_Dhl_Adminhtml_DhlController extends Mage_Adminhtml_Controller_Action
                 }
                 $model->setData($data);
                 $validErrors = $model->validate();
+
+
+                if($model->isObjectNew()){
+                    $modelE = Mage::getModel("ghdhl/dhl");
+                    $new = $modelE->load($data["dhl_account"],"dhl_account");
+                    $newId = $new->getId();
+
+                    if(!empty($newId)){
+                        $this->_getSession()->addError($helper->__("DHL Account %s already exist", $data["dhl_account"]));
+                        $this->_getSession()->setFormData($data);
+                        return $this->_redirectReferer();
+                    }
+                }
+
                 if ($validErrors === true) {
                     $model->save();
                 } else {
