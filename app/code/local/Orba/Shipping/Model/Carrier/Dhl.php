@@ -13,15 +13,6 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
         $settings = $dhlHelper->getDhlRmaSettings($vendorId);
 
-        /* DHL client number be assigned to gallery or to vendor */
-        /* @var $ghdhl GH_Dhl_Helper_Data */
-        $ghdhl = Mage::helper("ghdhl");
-        $galleryDHLAccountPassword = $ghdhl->getGalleryDHLAccountData($settings["account"]);
-        if (!empty($galleryDHLAccountPassword)) {
-            $settings["password"] = $galleryDHLAccountPassword;
-            $settings["gallery_shipping_source"] = 1;
-        }
-
 	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($request->getParam('specify_orbadhl_size'));
         $width = (float)$pkgDimensions[0];
         $height = (float)$pkgDimensions[1];
@@ -53,16 +44,14 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
-        $settings = Mage::helper('udpo')->getDhlSettings($vendor, $pos->getId());
-        /* DHL client number be assigned to gallery or to vendor */
-        /* @var $ghdhl GH_Dhl_Helper_Data */
-        $ghdhl = Mage::helper("ghdhl");
-        $galleryDHLAccountPassword = $ghdhl->getGalleryDHLAccountData($settings["account"]);
 
-        if (!empty($galleryDHLAccountPassword)) {
-            //$this->_dhlLogin = $galleryDHLAccount->getDhlLogin();
-            $settings["password"] = $galleryDHLAccountPassword;
-            $settings["gallery_shipping_source"] = 1;
+        /* @var $udpo Zolago_Po_Helper_Data */
+        $udpo = Mage::helper('udpo');
+        $settings = $udpo->getDhlSettings($vendor, $pos->getId());
+
+        if(!$settings){
+            //No settings for POS (Konfiguracja DHL) and no settings for vendor (Sposoby dostawy - Konfiguracja DHL)
+            throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Check your DHL Account Settings"));
         }
 
         /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
