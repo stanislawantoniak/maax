@@ -599,13 +599,13 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
                 $dhlSettings['password'] = $vendor->getDhlPassword();
             }
         }
-//        Mage::log($account, null, "dhl.log");
+
         if($account && $vendor && $vendor->getId()){
             /* DHL client number be assigned to gallery or to vendor */
             /* @var $ghdhl GH_Dhl_Helper_Data */
             $ghdhl = Mage::helper("ghdhl");
             $galleryDHLAccountData = $ghdhl->getGalleryDHLAccountData($account, $vendor->getId());
-//            Mage::log($galleryDHLAccountData->getData(), null, "dhl.log");
+
             if (!empty($galleryDHLAccountData)) {
                 $dhlSettings['account'] = $galleryDHLAccountData->getDhlAccount();
                 $dhlSettings["login"] = $galleryDHLAccountData->getDhlLogin();
