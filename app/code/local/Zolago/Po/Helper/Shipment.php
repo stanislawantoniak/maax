@@ -151,7 +151,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         if (empty($this->_track)) {
             $number = $this->getNumber();
             $carrier = $this->getCarrierName();
-            Mage::log($requestData, null, "12.log");
+
             $title = $this->getCarrierTitle();
 
 	        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
@@ -167,11 +167,11 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 			        case 'DHL':
 						/** @var Orba_Shipping_Helper_Carrier_Dhl $_dhlHlp */
 						$_dhlHlp = Mage::helper('orbashipping/carrier_dhl');
-                        Mage::log($requestData['shipping_source_account'], null, "12.log");
+
 
                         if(isset($requestData['shipping_source_account'])){
                             $shipping_source_account = $requestData['shipping_source_account'];
-                            Mage::log($shipping_source_account, null, "12.log");
+
                             $track->setData("shipping_source_account",$shipping_source_account);
                         }
 				        $weight = $_dhlHlp->getDhlParcelWeightByKey($requestData['specify_orbadhl_rate_type']);
@@ -221,7 +221,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      public function processSaveTracking($requestData=null) {
 
          $track = $this->getTrack($requestData);
-         Mage::log($track->getData());
+
          $shipment = $this->getShipment();
          $carrier = $this->getCarrierName();
          $vendor = $this->getVendor();

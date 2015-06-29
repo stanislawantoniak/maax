@@ -79,7 +79,6 @@ class GH_Dhl_Adminhtml_DhlController extends Mage_Adminhtml_Controller_Action
             $this->_getSession()->setFormData($data);
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            Mage::log($e->getMessage());
             $this->_getSession()->addError($helper->__("Some error occurred!"));
             $this->_getSession()->setFormData($data);
             Mage::logException($e);
