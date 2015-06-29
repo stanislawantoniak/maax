@@ -582,16 +582,37 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 	
 	public function getDhlSettings($vendor, $posId) {
 		$dhlSettings = false;
-		$posModel = Mage::getModel('zolagopos/pos')->load($posId);
-		if ($posModel && $posModel->getId() && $posModel->getUseDhl() && $posModel->getDhlLogin() && $posModel->getDhlPassword() && $posModel->getDhlAccount()) {
-			$dhlSettings['login']		= $posModel->getDhlLogin();
-			$dhlSettings['account']		= $posModel->getDhlAccount();
-			$dhlSettings['password']	= $posModel->getDhlPassword();
-		} elseif ($vendor && $vendor->getId() && $vendor->getUseDhl() && $vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
-			$dhlSettings['login']		= $vendor->getDhlLogin();
-			$dhlSettings['account']		= $vendor->getDhlAccount();
-			$dhlSettings['password']	= $vendor->getDhlPassword();
-		}
+        $account = false;
+        $posModel = Mage::getModel('zolagopos/pos')->load($posId);
+        if ($posModel && $posModel->getId() && $posModel->getUseDhl()) {
+            $account = $posModel->getDhlAccount();
+            if ($posModel->getDhlLogin() && $posModel->getDhlPassword() && $posModel->getDhlAccount()) {
+                $dhlSettings['login'] = $posModel->getDhlLogin();
+                $dhlSettings['account'] = $posModel->getDhlAccount();
+                $dhlSettings['password'] = $posModel->getDhlPassword();
+            }
+        } elseif ($vendor && $vendor->getId() && $vendor->getUseDhl()) {
+            $account = $vendor->getDhlAccount();
+            if ($vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
+                $dhlSettings['login'] = $vendor->getDhlLogin();
+                $dhlSettings['account'] = $vendor->getDhlAccount();
+                $dhlSettings['password'] = $vendor->getDhlPassword();
+            }
+        }
+//        Mage::log($account, null, "dhl.log");
+        if($account && $vendor && $vendor->getId()){
+            /* DHL client number be assigned to gallery or to vendor */
+            /* @var $ghdhl GH_Dhl_Helper_Data */
+            $ghdhl = Mage::helper("ghdhl");
+            $galleryDHLAccountData = $ghdhl->getGalleryDHLAccountData($account, $vendor->getId());
+//            Mage::log($galleryDHLAccountData->getData(), null, "dhl.log");
+            if (!empty($galleryDHLAccountData)) {
+                $dhlSettings['account'] = $galleryDHLAccountData->getDhlAccount();
+                $dhlSettings["login"] = $galleryDHLAccountData->getDhlLogin();
+                $dhlSettings["password"] = $galleryDHLAccountData->getDhlPassword();
+                $dhlSettings["gallery_shipping_source"] = 1;
+            }
+        }
 		
 		return $dhlSettings;
 	}
