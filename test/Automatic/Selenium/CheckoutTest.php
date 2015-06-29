@@ -104,7 +104,9 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->waitForPageToLoad("30000");
         $this->_register($email,true);
     }
-    public function addToBasketMatterhorn() {    
+    public function testAddToBasketMatterhorn() {    
+        $this->_getProductUrlByVendor(5);
+        die();
         $this->open("/acilia-32371.html");
         $this->click("id=size_384");
         $this->click("id=add-to-cart");

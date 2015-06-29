@@ -93,10 +93,10 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
                  array('customer' => $resource->getTableName("customer/entity")),
                  array("email")
              )
-             ->where ('email like ?',TEST_LOGIN.'%'.TEST_SERVER)
-             ->order('email desc')
+             ->where ('email like ?',TEST_LOGIN.'+%'.TEST_SERVER)
+             ->order('entity_id desc')
              ->limit(1);
-        $result = $readConnection->fetchAll($query);                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        $result = $readConnection->fetchAll($query); 
         if (empty($result)) {
             $email = TEST_LOGIN.'+1@'.TEST_SERVER;
         } else {
@@ -208,7 +208,16 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
             $product->save();
         }
     }
-    protected function _getProductUrlByVendor($vendorName) {
+    protected function _getProductUrlByVendor($vendorId) {
+        $res = Mage::getSingleton('core/resource');
+        $connection = $res->getConnection('core_read');
+        $select = $connection->select()
+            ->from(array('assoc' =>'udropship_vendor_product_assoc'),'assoc.product_id')
+            ->where('vendor_id = ?',$vendorId)
+            ->limit(1);
+        echo $select;
+        $list = $connection->fetchAll($select);
+        var_dump($list);
     }
     
 
