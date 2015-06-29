@@ -190,3 +190,4 @@
 "You are trying to close RMA, however it does not contain any refund value. Do you want to continue?","Próbujesz zamknąć RMA do którego nie został utworzony żaden zwrot. Czy chcesz kontynuować?"
 "Email about RMA refund was sent to customer (RMA id: %s, amount: %s)","Wysłano email do klienta o zwrocie płatności RMA (id: %s, kwota: %s)"
 "Email about refund was sent to customer (Amount: %s)","Wysłano email do klienta o zwrocie płatności (kwota: %s)"
+"You don't have access to %s DHL Account","Nie masz uprawnień do korzystania z konta DHL %s"
