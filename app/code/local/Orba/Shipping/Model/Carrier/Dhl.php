@@ -45,9 +45,9 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
 
-        /* @var $udpo Zolago_Po_Helper_Data */
-        $udpo = Mage::helper('udpo');
-        $settings = $udpo->getDhlSettings($vendor, $pos->getId());
+        /* @var $udpoH Zolago_Po_Helper_Data */
+        $udpoH = Mage::helper('udpo');
+        $settings = $udpoH->getDhlSettings($vendor, $pos->getId());
 
         if(!$settings){
             //No settings for POS (Konfiguracja DHL) and no settings for vendor (Sposoby dostawy - Konfiguracja DHL)
