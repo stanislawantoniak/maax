@@ -187,12 +187,12 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
      * Works for square and select list and simple product (no size)
      */
     public function addToBasketSelectSize() {
-
+        $this->pause(500);// wait for js to do stuff
         $isSelect = $this->getEval("win.jQuery('.size-box select').data('selectBox-selectBoxIt') ? 1 : 0;");
-        $isSquare = $this->getEval("win.jQuery('.size-box .size label') ? 1 : 0;");
+        $isSquare = $this->getEval("win.jQuery('.size-box .size label').length ? 1 : 0;");
 
         if ($isSelect) {
-            $this->getEval("win.jQuery('.size-box select').data('selectBox-selectBoxIt').open().selectOption(0);");
+            $this->getEval("win.jQuery('.size-box select').data('selectBox-selectBoxIt').selectOption(0);");//todo nie dziala
         } elseif ($isSquare) {
             $this->click("css=.size-box .size label");
         } else {

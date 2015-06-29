@@ -191,7 +191,7 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
                 }
                 $this->click("id=step-0-submit");
             } else {
-                $this->click("//div[@id='content-main']/section/form/div[4]/div[2]/button");
+                $this->click("//div[@id='content-main']/section/form/div[4]/div[2]/button"); //todo przy zarejestrowanym nie dziala
             }            
         } else {
             $this->_noLogin();
