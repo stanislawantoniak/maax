@@ -35,6 +35,23 @@ class Zolago_Mapper_Model_Resource_Mapper_Collection
 			where("attribute_set.entity_type_id=?", $productEntityType->getId());
 		return $this;
 	}
+
+    /**
+     * Add custom identifier to collection
+     * because row can be mapper or attribute set
+     * custom_id is like attribute_set_id:mapper_id
+     * if any is null zero is taken
+     * @return Zolago_Mapper_Model_Resource_Mapper_Collection
+     */
+    public function addCustomId() {
+        $this->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns(array("CONCAT(IFNULL(attribute_set.attribute_set_id,'0'), ':', IFNULL(main_table.mapper_id,'0')) AS custom_id",
+                "attribute_set.attribute_set_name",
+                "attribute_set.attribute_set_id"))
+            ->columns();
+        return $this;
+    }
 	
 	public function getIdFieldName() {
 		if($this->getFlag('abstract')){

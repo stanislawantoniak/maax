@@ -5,6 +5,8 @@
  * @method string getMaxShippingDate()
  * @method string getGrandTotalInclTax()
  * @method string getIncrementId()
+ * @method string getPaymentMethodOwner()
+ * @method Zolago_Po_Model_Po setPaymentChannelOwner($owner)
  */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
@@ -684,10 +686,40 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$this->_processStatus();
 
 		$this->_processMaxShippingDate();
+
+        $this->_processPaymentChannelOwner();
 		
 		return parent::_beforeSave();
 	}
-	
+
+    /**
+     * @param bool $force
+     * @return Zolago_Po_Model_Po
+     */
+    public function _processPaymentChannelOwner($force = false) {
+        if ($this->isObjectNew() || $force) {
+            $paymentChannelOwner = $this->getCurrentPaymentChannelOwner();
+            $this->setPaymentChannelOwner($paymentChannelOwner);
+        }
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrentPaymentChannelOwner() {
+        $path = '';
+        if ($this->isPaymentCheckOnDelivery()) {
+            $path = "payment/cashondelivery/channel_owner";
+        } elseif ($this->isPaymentBanktransfer()) {
+            $path = "payment/banktransfer/channel_owner";
+        } elseif ($this->isPaymentDotpay()) {
+            $path = "payment/dotpay/channel_owner";
+        }
+        $paymentChannelOwner = Mage::getStoreConfig($path);
+        return $paymentChannelOwner;
+    }
+
 	protected function _processAlert() {
 		if(!$this->getId()){
 			$alertBit = 0;
