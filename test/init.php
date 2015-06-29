@@ -78,8 +78,27 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     public function __construct() {
         Mage::app('default');
         return parent::__construct();
-    }    
-    protected function _login($user,$password = TEST_PASSWORD) {        
+    }
+
+    /**
+     * Login to account
+     *
+     * @param string $user
+     * @param string $password
+     */
+    protected function _doLogin($user = TEST_LOGIN,$password = TEST_PASSWORD) {
+        $this->open('/customer/account/login');
+        $this->_login($user, $password);
+    }
+
+    /**
+     * Logout from account
+     */
+    protected function _doLogout() {
+        $this->open('/customer/account/logout');
+    }
+
+    protected function _login($user = TEST_LOGIN,$password = TEST_PASSWORD) {
         $this->type("id=email", $user);
         $this->type("id=pass", $password);
         $this->clickAndWait("name=send");
@@ -139,14 +158,28 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     protected function _payment($type,$subtype) {
         switch ($type) {
             case 'p_method_zolagopayment_gateway':
-            case 'p_method_zolagopayment_cc':
+            case 'p':
                 $this->click('id='.$type);
                 $this->click('id='.$subtype);
                 break;
             default:
                 $this->click('id='.$type);
         }
-    }    
+    }
+
+    /**
+     * Do checkout process
+     * $scenario is an array like:
+     * $scenario = array(
+     *    'login'      => true|false,
+     *    'email'      => TEST_USER,
+     *    'password'   => TEST_PASSWORD,
+     *    'newsletter'  => true|false,
+     *    'payment'      => 'p_method_cashondelivery'
+     *    'payment_type' => '?'
+     *    );
+     * @param $scenario
+     */
     protected function _checkout($scenario) {
         $this->_buy();        
         if ($scenario['login']) {
@@ -170,6 +203,7 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
                 $this->_addressNewsletter();                
             }
             $this->click("id=step-0-submit");
+
         }
         // payment
         if ($scenario['payment']) {
@@ -241,11 +275,18 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
             ->addAttributeToFilter('udropship_vendor', $vendorId)
-            ->addAttributeToFilter('type_id', $typeId);
+            ->addAttributeToFilter('type_id', $typeId)
+            ->addAttributeToFilter('name', array('nlike' => '%test%'))
+            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         $collection->setPageSize(1);
         return $collection->getFirstItem();
     }
     
+    protected function _setupEval() {
+        return "var win = (this.page().getCurrentWindow().wrappedJSObject) ? this.page().getCurrentWindow().wrappedJSObject : this.page().getCurrentWindow();";
+    }
 
-
+    public function getEval($eval) {
+        return parent::getEval($this->_setupEval().$eval);
+    }
 }
