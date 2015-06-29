@@ -53,8 +53,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
-        $settings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
-
+        $settings = Mage::helper('udpo')->getDhlSettings($vendor, $pos->getId());
         /* DHL client number be assigned to gallery or to vendor */
         /* @var $ghdhl GH_Dhl_Helper_Data */
         $ghdhl = Mage::helper("ghdhl");
