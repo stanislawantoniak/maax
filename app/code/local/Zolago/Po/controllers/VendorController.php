@@ -1215,17 +1215,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $r = $this->getRequest();
         $settings = $shippingManager->prepareSettings($r,$shipment,$udpo);
+        Mage::log($settings, null, "dhjl_account.log");
         $pos = $udpo->getDefaultPos();
         $shippingManager->setSenderAddress($pos->getSenderAddress());
         $receiver = $udpo->getShippingAddress()->getData();
         $shippingManager->setReceiverCustomerAddress($receiver);
-        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE
-            && isset($settings["gallery_shipping_source"])
-            && ($settings["gallery_shipping_source"] == 1)
-        ) {
+        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
+            $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
             //Assign Client Number to Gallery Or To Vendor
-            $this->getRequest()->setParam("gallery_shipping_source", 1);
+            if (isset($settings["gallery_shipping_source"])
+                && ($settings["gallery_shipping_source"] == 1)
+            ) {
+                $this->getRequest()->setParam("gallery_shipping_source", 1);
+            }
         }
+
         $result = $shippingManager->createShipments();
         $number = null;
         if ($result['shipmentId']) {
