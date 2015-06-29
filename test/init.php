@@ -197,6 +197,13 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
         $this->waitForPageToLoad("30000");
         $this->assertTitle('Moje konto');
     }
+
+    /**
+     * Set new qty for product so it be available to buy
+     * @param $productId
+     * @return Zolago_Catalog_Model_Product
+     * @throws Exception
+     */
     protected function _allowProduct($productId) {
         $product = Mage::getModel('catalog/product')->load($productId);
         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
@@ -207,20 +214,38 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
             $stockItem->save();
             $product->save();
         }
+        return $product;
     }
-    protected function _getProductUrlByVendor($vendorId) {
-        $res = Mage::getSingleton('core/resource');
-        $connection = $res->getConnection('core_read');
-        $select = $connection->select()
-            ->from(array('assoc' =>'udropship_vendor_product_assoc'),'assoc.product_id')
-            ->where('vendor_id = ?',$vendorId)
-            ->limit(1);
-        echo $select;
-        $list = $connection->fetchAll($select);
-        var_dump($list);
+
+    /**
+     * Set new qty for product so it be available to buy
+     * @param $sku
+     * @return Zolago_Catalog_Model_Product
+     */
+    protected function _allowProductBySku($sku) {
+        /** @var Unirgy_Dropship_Helper_Catalog $uCatalogHlp */
+        $uCatalogHlp = Mage::helper('udropship/catalog');
+        $productId = $uCatalogHlp->getPidBySku($sku);
+        return $this->_allowProduct($productId);
+    }
+
+    /**
+     * Get first product
+     * @param $vendorId
+     * @param string $typeId
+     * @return Zolago_Catalog_Model_Product
+     */
+    protected function _getProductByVendor($vendorId, $typeId = Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
+        $collection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('udropship_vendor', $vendorId)
+            ->addAttributeToFilter('type_id', $typeId);
+        $collection->setPageSize(1);
+        return $collection->getFirstItem();
     }
     
 
 
 }
-?>

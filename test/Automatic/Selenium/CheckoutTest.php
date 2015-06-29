@@ -11,8 +11,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
 
     }
     public function testCheckoutUnregisterNoSubscribe() {
-        $this->allowProduct(25758);
-        $this->addToBasketMatterhorn();
+        $this->addToBasketProductFromVendor();
         $email = $this->_getNewEmail();
         $scenario = array(
             'login' => false,
@@ -24,8 +23,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->_checkout($scenario);
     }
     public function testCheckoutUnregisterSubscribe() {
-        $this->allowProduct(25758);
-        $this->addToBasketMatterhorn();
+        $this->addToBasketProductFromVendor();
         $email = $this->_getNewEmail();
         $scenario = array(
             'login' => false,
@@ -37,8 +35,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->_checkout($scenario);
     }
     public function testRegisterAfterCheckoutSubscribeUnsubscribe() {
-        $this->allowProduct(25758);
-        $this->addToBasketMatterhorn();
+        $this->addToBasketProductFromVendor();
         $email = $this->_getNewEmail();
         $scenario = array(
             'login' => false,
@@ -54,8 +51,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->_register($email,false);
     }
     public function testRegisterAfterCheckoutSubscribeSubscribe() {
-        $this->allowProduct(25758);
-        $this->addToBasketMatterhorn();
+        $this->addToBasketProductFromVendor();
         $email = $this->_getNewEmail();
         $scenario = array(
             'login' => false,
@@ -71,8 +67,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->_register($email,true);
     }
     public function testRegisterAfterCheckoutUnsubscribeUnsubscribe() {
-        $this->allowProduct(25758);
-        $this->addToBasketMatterhorn();
+        $this->addToBasketProductFromVendor();
         $email = $this->_getNewEmail();
         $scenario = array(
             'login' => false,
@@ -88,8 +83,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->_register($email,false);
     }
     public function testRegisterAfterCheckoutUnsubscribeSubscribe() {
-        $this->allowProduct(25758);
-        $this->addToBasketMatterhorn();
+        $this->addToBasketProductFromVendor();
         $email = $this->_getNewEmail();
         $scenario = array(
             'login' => false,
@@ -104,37 +98,40 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $this->waitForPageToLoad("30000");
         $this->_register($email,true);
     }
-    public function testAddToBasketMatterhorn() {    
-        $this->_getProductUrlByVendor(5);
-        die();
-        $this->open("/acilia-32371.html");
-        $this->click("id=size_384");
-        $this->click("id=add-to-cart");
-        $this->click("css=div.modal-loaded.modal-header > button.close");
-    }
-    public function addToBasketEsotiq() {
-        $this->open("/stanik-norah.html");
-        $this->click("id=select-data-id-281");
-        $this->click("id=add-to-cart");
-        $this->click("id=popup-after-add-to-cart");
 
-    }
-    public function addToBasketJeansdom() {
-        $this->open("/levi-sr-511tm-jeans-slim-fit-wood-acre.html");
+
+    /**
+     * Add product to basket for specific vendor (default Matterhorn)
+     * @param int $vendorId
+     * @param string $typeId
+     */
+    public function addToBasketProductFromVendor($vendorId = 5, $typeId = Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+        /** @var Zolago_Catalog_Model_Product $product */
+        $product = $this->_getProductByVendor($vendorId, $typeId);
+        $this->_allowProduct($product->getId());
+        $url = $product->getProductUrl();
+        $this->open($url);
+        $this->addToBasketSelectSize();
         $this->click("id=add-to-cart");
         $this->click("css=div.modal-loaded.modal-header > button.close");
     }
-    protected function _allowProduct($productId) {
-        $product = Mage::getModel('catalog/product')->load($productId);
-        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
-        $data = $stockItem->getData();
-        if (($data['qty'] < 1) || $data['is_in_stock'] == 0) {
-            $stockItem->setData('qty',10);
-            $stockItem->setData('is_in_stock',1);
-            $stockItem->save();
-            $product->save();
-        }
+
+    /**
+     * Selecting some size of product
+     * Works for square and select list
+     */
+    public function addToBasketSelectSize() {
+        // Handling simple select of sizes
+        $this->waitForElementPresent("css=.size-box .size label");
+        $this->click("css=.size-box .size label");
+
+        // Handling select (with selectboxit) and jQuery
+        $this->getEval("
+            var win = (this.page().getCurrentWindow().wrappedJSObject) ? this.page().getCurrentWindow().wrappedJSObject : this.page().getCurrentWindow();
+            var sm = win.jQuery('.size-box select').data('selectBox-selectBoxIt');
+            if(sm) { sm.open().selectOption(0); }");
     }
+
     /*
     public function testOrderWithNoAddress() {
         $this->allowProduct(25758);
