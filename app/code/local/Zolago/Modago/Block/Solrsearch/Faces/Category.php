@@ -66,7 +66,7 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
                 $q = "&q=" . $_solrDataArray['responseHeader']['params']['q'];
             }
 
-            $parentCategoryUrl = Mage::getUrl("search/index/index") . "?scat={$id}{$q}";
+            $parentCategoryUrl = Mage::getUrl("search") . "?scat={$id}{$q}";
         }
 
         return $parentCategoryUrl;

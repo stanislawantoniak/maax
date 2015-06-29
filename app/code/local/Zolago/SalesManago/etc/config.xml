@@ -7,6 +7,15 @@
     </modules>
     <frontend>
         <events>
+            <customer_login>
+                <observers>
+                    <zolago_salesmanago_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </zolago_salesmanago_observer>
+                </observers>
+            </customer_login>
             <customer_register_success>
                 <observers>
                     <salesmanago_tracking_observer>
@@ -118,13 +127,33 @@
                     </salesmanago_tracking_observer>
                 </observers>
             </sales_quote_remove_item>
+            <checkout_cart_update_items_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_update_items_after>
         </events>
-        <resources>
-            <salesmanago>
-                <setup>
-                    <module>Zolago_SalesManago_Tracking</module>
-                </setup>
-            </salesmanago>
-        </resources>
+	    <resources>
+		    <zolagosalesmanago_setup>
+			    <setup>
+				    <module>Zolago_SalesManago</module>
+				    <class>SalesManago_Tracking_Model_Resource_Setup</class>
+			    </setup>
+		    </zolagosalesmanago_setup>
+		    <zolagosalesmanago_write>
+			    <connection>
+				    <use>core_write</use>
+			    </connection>
+		    </zolagosalesmanago_write>
+		    <zolagosalesmanago_read>
+			    <connection>
+				    <use>core_read</use>
+			    </connection>
+		    </zolagosalesmanago_read>
+	    </resources>
     </global>
 </config>

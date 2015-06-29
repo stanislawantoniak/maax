@@ -13,7 +13,7 @@ $_helper = Mage::helper('zolagosolrsearch');
         <div class="dropdown-panel-inner">
             <div class="searchDropdown">
 
-                <form class="clearfix" role="search" action="<?php echo Mage::getUrl("search/index/index", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get">
+                <form class="clearfix" role="search" action="<?php echo Mage::getUrl("search", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get">
                     <div class="form-group">
                         <input type="text" class="form-control" name="q" placeholder="<?php echo $_helper->__('Search...'); ?>">
                     </div>

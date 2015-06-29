@@ -83,7 +83,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
 
-    function secureInvisibleContent( $text )
+    static function secureInvisibleContent( $text )
     {
         $text = preg_replace(
             array(

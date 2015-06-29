@@ -8,7 +8,7 @@ $_helper = Mage::helper('zolagosolrsearch');
 ?>
 
 <div class="block_search search hidden-sm hidden-xs">
-    <form action="<?php echo Mage::getUrl("search/index/index", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get" role="search">
+    <form action="<?php echo Mage::getUrl("search", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get" role="search">
         <div class="form-group">
             <input type="text" class="form-control" name="q" placeholder="<?php echo $_helper->__('Search...'); ?>" value="">
         </div>

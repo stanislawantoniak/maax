@@ -23,7 +23,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getCurrentUrlPath() {
         if($this->isSearchMode()) {
-            return "search/index/index";
+            return "search";
         }
         return "catalog/category/view";
     }
@@ -259,7 +259,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
             if($this->isCategoryMode()) {
                 $path = "catalog/category/view";
             } else {
-                $path = "search/index/index";
+                $path = "search";
             }
             $this->setData("url_route", $path);
         }
