@@ -41,6 +41,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		/** @var Zolago_Customer_Model_Session $customerSession */
 		$customerSession = Mage::getSingleton('zolagocustomer/session');
+		Mage::log($products,null,'products.log');
 		$customerSession->addProductsToCache($products);
 
 		$params = $this->getRequest()->getParams();
