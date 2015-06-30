@@ -20,7 +20,7 @@ class Zolago_Mapper_Model_Queue_Mapper extends Zolago_Common_Model_Queue_Abstrac
         }
         $indexer = Mage::getResourceModel('zolagomapper/index');
         $oldProducts = $indexer->getAssignedProducts($mapperList);
-        $productIds = $indexer->reindexForMappers($mapperList);        
+        $productsIds = $indexer->reindexForMappers($mapperList);        
         $final = array_merge($oldProducts,$productsIds);
         $final = array_unique($final);
         $indexer->assignWithCatalog($final);

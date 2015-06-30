@@ -1,18 +1,18 @@
 <?php
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
-	
-	public function queueAction() {
-	    $queue = Mage::getModel('zolagomapper/queue_mapper');
-	    $model = $this->_registerModel();
-	    if ($id = $model->getId()) {
+
+    public function queueAction() {
+        $queue = Mage::getModel('zolagomapper/queue_mapper');
+        $model = $this->_registerModel();
+        if ($id = $model->getId()) {
             $queue->push($id);
             $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
         } else {
             $this->_getSession()->addError(Mage::helper("zolagomapper")->__("No mapper to add"));
         }
         $this->_redirectReferer();
-	}
+    }
 	public function runAction() {
 		$model = $this->_registerModel();
 		if (!($id = $model->getId())) {
@@ -83,18 +83,27 @@ class Zolago_Mapper_Adminhtml_MapperController
             $mapper->loadPost($data);
             $mapper->save();
 			$this->_getSession()->setData('mapper_form_data', null);
-			
+
+            $this->_getSession()->addSuccess(
+                Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+
 			// Forward run or index
 			$doRun = $request->getParam("do_run");
-			if(!$doRun){
-				$this->_getSession()->addSuccess(
-					Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+			$doSaveAndQueue = $request->getParam("do_saveAndQueue");
+            if ($doSaveAndQueue) {
+                // Add to queue
+                $queue = Mage::getModel('zolagomapper/queue_mapper');
+                $queue->push($mapper->getId());
+                $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
+                $backUrl = null;
+            }elseif(!$doRun){
+                // Save
 				$backUrl = $this->getUrl("*/*");
 			}else{
+                // Run
 				$backUrl = $this->getUrl("*/*/run", array("mapper_id"=>$mapper->getId()));
 			}
-	
-			
+
 			return $this->_redirectUrl($backUrl);
    
         } catch (Exception $e) {
@@ -253,5 +262,49 @@ class Zolago_Mapper_Adminhtml_MapperController
 	protected function _getId() {
 		return $this->getRequest()->getParam("mapper_id");
 	}
-	
+
+    /**
+     * Process mass adding mappers to queue
+     */
+    public function massQueueAction() {
+
+        $ids = $this->getRequest()->getParam('custom_ids');
+        $_ids = array();
+        // Filtering ids with mapper_id (id is like 'attribute_set_id:mapper_id')
+        foreach($ids as $id) {
+            $arr = explode(':',$id);
+            $asid = isset($arr[0]) ? $arr[0] : 0;
+            $mid  = isset($arr[1]) ? $arr[1] : 0;
+            if ($mid) {
+                $_ids[] = $mid;
+            }
+        }
+
+        $oldCount = count($ids);
+        $newCount = count($_ids);
+
+        if(!is_array($ids) || !count($_ids)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zolagomapper')->__('Please select valid mappers'));
+        } else {
+            try {
+                foreach($_ids as $id){
+                    $queue = Mage::getModel('zolagomapper/queue_mapper');
+                    $queue->push($id);
+                }
+                if ($oldCount == $newCount) {
+                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue", $newCount));
+                } else {
+                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue, %s row skipped", $newCount, $oldCount - $newCount));
+                }
+
+            } catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                $this->_getSession()->addException($e, Mage::helper('zolagomapper')->__('An error occurred while adding mappers to queue'));
+            }
+        }
+
+
+        $this->_redirect('*/*/index');
+    }
 }
