@@ -373,8 +373,12 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 
             $model = Mage::getModel('urma/rma_track')->
-                     addData($trackData)->
-                     save();
+                     addData($trackData);
+            $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+            $type = $request->getParam('specify_orbadhl_rate_type',0);
+            $manager->calculateCharge($model,$type,$this->_getSession()->getVendor(),$rma->getTotalValue(),0);
+                     
+            $model->save();
 
             Mage::dispatchEvent("zolagorma_rma_track_added", array(
                                     "rma"		=> $rma,

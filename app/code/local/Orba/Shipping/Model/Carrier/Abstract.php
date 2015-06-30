@@ -66,6 +66,7 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     public function createShipmentAtOnce() {
         Mage::throwException(Mage::helper('orbacommon')->__('Not implemented yet'));
     }
-
-
+    public function calculateCharge($track,$rate,$vendor,$packageValue,$isCod) {
+        // nothing to do
+    }
 }
