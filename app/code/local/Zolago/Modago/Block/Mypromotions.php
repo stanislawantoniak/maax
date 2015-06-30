@@ -1,6 +1,6 @@
 <?php
 /**
- * blok with list of promotions
+ * block with list of promotions
  */
 
 
@@ -19,11 +19,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
              $customer = Mage::getModel('customer/customer')->load($this->_customer_id);
              $email = $customer->getEmail();
              $this->_subscribed = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->isSubscribed();
-             if ($this->_subscribed) { 
-                 $this->_cms_block = 'mypromotions_logged_subscribed';
-             } else {
-                 $this->_cms_block = 'mypromotions_logged_not_subscribed';
-             }
+             $this->_cms_block = 'mypromotions_logged';
          } else {
              $helper = Mage::helper('persistent/session');         
              $this->_persistent = $helper->isPersistent();         
@@ -37,17 +33,13 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         parent::_prepareLayout();
     }
     public function getPromotionList() {
-        if (!$this->_customer_id) {
-            return array();
-        }
-        if (!$this->_subscribed && $this->_logged) {
-            return array();
-        }
         $collection = Mage::getModel('salesrule/coupon')->getCollection();
         $collection->addFieldToFilter('customer_id',$this->_customer_id);
-        $select = $collection->getSelect();
-        $select->where('expiration_date > ?',date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
-        $select->where('(main_table.times_used < main_table.usage_limit) OR (main_table.usage_limit = 0)');
+        $collection->getSelect()
+	        ->join(array('salesrule'=>'salesrule'),'salesrule.rule_id = main_table.rule_id',array('salesrule.use_auto_generation'))
+	        ->where('expiration_date > ?',date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())))
+            ->where('(main_table.times_used < main_table.usage_limit) OR (main_table.usage_limit = 0)')
+            ->where('salesrule.use_auto_generation = 1');
         $out = array();
         $rules = array();
         foreach ($collection as $item) {
@@ -84,6 +76,10 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
      public function isPersistent() {
          return $this->_persistent;
      }
-     
-	
+     public function isSubscribed() {
+	     return $this->_subscribed;
+     }
+     public function getCustomerId() {
+	     return $this->_customer_id;
+     }
 } 

@@ -156,7 +156,9 @@ class Zolago_SalesRule_Model_Observer {
      * Send new coupons to subscriber
      */
     public static function sendSubscriberCouponMail(Varien_Event_Observer $observer)
-    {	
+    {
+	    /** @var Zolago_Salesrule_Helper_Data $helper */
+	    $helper = Mage::helper('zolagosalesrule');
         $model = $observer->getEvent()->getSubscriber();
         $newStatus = $model->getData('subscriber_status');
         if ($newStatus != Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED) {
@@ -171,45 +173,16 @@ class Zolago_SalesRule_Model_Observer {
 
 
         //1. Coupons
-        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+	    $result = $helper->getSalesRulesForSubscribers();
 
-        $resource = Mage::getSingleton('core/resource');
-        $readConnection = $resource->getConnection('core_read');
-
-        $query = $readConnection
-            ->select()
-            ->from(
-                array('salesrule_rule' => $resource->getTableName("salesrule/rule")),
-                array("rule_id", "name", "from_date", "to_date", "coupon_type")
-            )
-            ->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
-                'salesrule_rule.rule_id = salesrule_coupon.rule_id',
-                array("coupon_id","code")
-            )
-            ->where('salesrule_rule.is_active = ?', 1)
-            ->where('customer_id IS NULL')
-            ->where('salesrule_rule.to_date >= ?', date("Y-m-d H:i:s", $currentTimestamp))
-            ->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
-
-        ;
-
-        $result = $readConnection->fetchAll($query);
         //Group coupons by rule
         if (empty($result)) {
             return;
         }
 
         //Find if customer already got coupon in rule
-        $queryRules = $readConnection
-            ->select()
-            ->from(
-                array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
-                array("rule_id", "customer_id")           )
+        $resultRules = $helper->getSalesRulesCouponsByCustomers(array_values($subscribersCustomersId));
 
-            ->where('salesrule_coupon.customer_id IN(?)', array_values($subscribersCustomersId))
-
-        ;
-        $resultRules = $readConnection->fetchAll($queryRules);
         $rulesForCustomer = array();
         foreach($resultRules as $resultRulesItem){
             $rulesForCustomer[$resultRulesItem["rule_id"]][] = $subscribersCustomersSubscribers[$resultRulesItem["customer_id"]];
@@ -222,18 +195,13 @@ class Zolago_SalesRule_Model_Observer {
 
 
         //3. Assign coupons to customers
-        $dataToSend = array();
-
         $data = array(
             "subscribers" => $subscribers,
             "coupons" => $coupons,
-            "data_to_send" => $dataToSend
+            "data_to_send" => array()
         );
 
-        /* @var $helper Zolago_SalesRule_Helper_Data */
-        $helper = Mage::helper("zolagosalesrule");
         $res = $helper->assignCouponsToSubscribers($data, $rulesForCustomer);
-
 
 
         //4. Send mails
