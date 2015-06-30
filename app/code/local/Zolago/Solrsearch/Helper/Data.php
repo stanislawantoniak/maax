@@ -113,12 +113,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getRootCategoryId() {
 		if (is_null($this->_rootId)) {
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            $rootId = 0;
             if ($vendor) {
                 $rootId = Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory(
 					$vendor,
 					Mage::app()->getWebsite()->getId()
 				);
-            } else {
+            } 
+            if (!$rootId) {
                 $rootId = Mage::app()->getStore()->getRootCategoryId();
             }
             $this->_rootId = $rootId;
@@ -141,8 +143,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$_product[1] = $product->getName();
 //			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
             $_product[2] = $product->getCurrentUrl();
-			$_product[3] = $product->getStrikeoutPrice();
-			$_product[4] = $product->getFinalPrice();
+			$_product[3] = floatval($product->getStrikeoutPrice());
+			$_product[4] = floatval($product->getFinalPrice());
 			$_product[5] = $product->getWishlistCount();
 			$_product[6] = $product->getInMyWishlist();
 			$_product[7] = $this->_prepareListingResizedImageUrl($product->getListingResizedImageUrl());
@@ -647,7 +649,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				"q" => $query,
 				"scat" => $cat,
 			);
-			$url = Mage::getUrl("search/index/index", $final);
+			$url = Mage::getUrl("search", $final);
 		} else {
 			if ($vendor) {
 				// check if vendor category

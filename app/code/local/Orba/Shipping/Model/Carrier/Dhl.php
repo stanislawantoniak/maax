@@ -9,29 +9,25 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 
     public function prepareRmaSettings($request,$vendor,$rma) {
         $vendorId = $vendor->getId();
-        $settings = Mage::helper('orbashipping/carrier_dhl')->getDhlRmaSettings($vendorId);
-        $width = (float)$request->getParam('specify_orbadhl_width');
-        $height = (float)$request->getParam('specify_orbadhl_height');
-        $length = (float)$request->getParam('specify_orbadhl_length');
+	    /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
+	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
+        $settings = $dhlHelper->getDhlRmaSettings($vendorId);
+
+	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($request->getParam('specify_orbadhl_size'));
+        $width = (float)$pkgDimensions[0];
+        $height = (float)$pkgDimensions[1];
+        $length = (float)$pkgDimensions[2];
         $date = $request->getParam('specify_orbadhl_shipping_date');
-        $weight = ceil((float)$request->getParam('weight'));
-        $type = $request->getParam('specify_orbadhl_type');
-        switch ($type) {
-            case 'PACKAGE':
-                $dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE;
-            break;
-            case 'ENVELOPE':
-                $dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_ENVELOPE;
-            break;
-            default:
-                throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown DHL package type"));
-        }        
-        $dhlParams = array (
+        $rateType = $request->getParam('specify_orbadhl_rate_type');
+	    $dhlType = $dhlHelper->getDhlParcelTypeByKey($rateType);
+	    $weight = $dhlHelper->getDhlParcelWeightByKey($rateType);
+
+	    $dhlParams = array (
             'width' => $width,
             'height' => $height,            
             'length' => $length,
             'shipmentDate' => $date,
-            'weight' => ($weight>1)? $weight:1,
+            'weight' => $weight,
             'type' => $dhlType,
         );
         if ($request->getParam('specify_orbadhl_custom_dim',false)) {
@@ -48,17 +44,28 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
-        $settings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
-        
-        $weight =  $params->getParam("weight");
 
-        if(empty($weight)) {
-            if($shipment && $shipment->getTotalWeight()) {
-                $weight = ceil($shipment->getTotalWeight());
-            } else {
-                $weight = Mage::helper('orbashipping/carrier_dhl')->getDhlDefaultWeight();
-            }
+        /* @var $udpoH Zolago_Po_Helper_Data */
+        $udpoH = Mage::helper('udpo');
+        $settings = $udpoH->getDhlSettings($vendor, $pos->getId());
+
+        if(!$settings){
+            //No settings for POS (Konfiguracja DHL) and no settings for vendor (Sposoby dostawy - Konfiguracja DHL)
+            throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Check your DHL Account Settings"));
         }
+
+        /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
+	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
+
+	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($params->getParam('specify_orbadhl_size'));
+	    $width = (float)$pkgDimensions[0];
+	    $height = (float)$pkgDimensions[1];
+	    $length = (float)$pkgDimensions[2];
+
+
+	    $rateType = $params->getParam('specify_orbadhl_rate_type');
+	    $dhlType = $dhlHelper->getDhlParcelTypeByKey($rateType);
+	    $weight = $dhlHelper->getDhlParcelWeightByKey($rateType);
 
 
         $shipment->setTotalWeight($weight);
@@ -69,13 +76,12 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
             $deliveryValue = 0;
         }
         $shipmentSettings = array(
-                                    'type'			=> $params->getParam('specify_orbadhl_type'),
-                                    'width'			=> $params->getParam('specify_orbadhl_width'),
-                                    'height'		=> $params->getParam('specify_orbadhl_height'),
-                                    'length'		=> $params->getParam('specify_orbadhl_length'),
+                                    'type'			=> $dhlType,
+                                    'width'			=> $width,
+                                    'height'		=> $height,
+                                    'length'		=> $length,
                                     'weight'		=> $weight,
                                     'quantity'		=> Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_QTY,
-                                    'nonStandard'	=> $params->getParam('specify_orbadhl_custom_dim'),
                                     'shipmentDate'  => $params->getParam('specify_orbadhl_shipping_date'),
                                     'shippingAmount'=> $params->getParam('shipping_amount'),
                                     'deliveryValue' => ($deliveryValue>0)? $deliveryValue:0,
@@ -106,7 +112,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         $settings = $this->_settings;
         $client = Mage::helper('orbashipping/carrier_dhl')->startClient($settings);
         if (!$client) {
-            throw new Mage_Core_Exception(Mage::helper('orbashipping')->_('Cant connect to %s server','DHL'));
+            throw new Mage_Core_Exception(Mage::helper('orbashipping')->__('Cant connect to %s server','DHL'));
         }
         $client->setShipmentSettings($settings);
         $client->setShipperAddress($this->_senderAddress);
@@ -121,7 +127,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     }
     public function createShipmentAtOnce() {
         $client = $this->_startClient();
-        $out = $client->createShipmentAtOnce();                
+        $out = $client->createShipmentAtOnce();
 		if ($out) {
 		    if (is_array($out) && !empty($out['error'])) {
 			    $_helper = Mage::helper('zolagorma');
@@ -149,5 +155,56 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
                 Mage::throwException(Mage::helper('orbashipping')->__('Create shipment error'));
 		}		
     }
-            	    
+    
+    /**
+     * fill charge fields 
+     *
+     * @param Mage_Sales_Model_Order_Shipment_Track|Unirgy_Rma_Model_Rma_Track $track
+     * @param int $rate dhl parcel rate
+     * @param Unirgy_Dropship_Model_Vendor $vendor
+     * @param float $packageValue total value 
+     * @param bool $isCod shipment with COD
+     */
+
+    public function calculateCharge($track,$rate,$vendor,$packageValue,$codValue) {
+        $chargeShipment = floatval(str_replace(',','.',$vendor->getData($rate)));
+        $chargeFuelList = Mage::app()->getStore()->getConfig('carriers/orbadhl/fuel_charge');
+        if ($chargeFuelList) {
+            $chargeFuelList = json_decode($chargeFuelList);
+        } else {
+            $chargeFuelList = array();
+        }
+        $fuelPercent = 0;
+        $lastDate = 0;
+        foreach ($chargeFuelList as $item) {
+            if (!is_object($item)) {
+                continue;
+            }
+            $newDate = strtotime($item->fuel_percent_date_from);
+            if ($newDate > $lastDate) {
+                $lastDate = $newDate;
+                $fuelPercent = floatval(str_replace(',','.',$item->fuel_percent));
+                
+            }
+        }
+        $chargeFuel = round($chargeShipment*$fuelPercent/100,2);
+        $threshold = Mage::app()->getStore()->getConfig('carriers/orbadhl/parcel_value_threshold');
+        $addCod = Mage::app()->getStore()->getConfig('carriers/orbadhl/charge_always_for_cod');        
+        $chargeInsurance = 0;
+        if (($addCod && ($codValue > 0)) ||
+            ($packageValue >= $threshold)) {
+            $chargeInsurance = round(floatval(str_replace(',','.',$vendor->getData('dhl_insurance_charge_amount')))+floatval(str_replace(',','.',$vendor->getData('dhl_insurance_charge_percent')))*$packageValue/100,2);
+        }
+        $chargeCod = 0;
+        if ($codValue > 0) {
+            $chargeCod = round(floatval(str_replace(',','.',$vendor->getData('dhl_cod_charge_amount')))+floatval(str_replace(',','.',$vendor->getData('dhl_cod_charge_percent')))*$codValue/100,2);
+        }
+        $chargeTotal = $chargeShipment + $chargeFuel + $chargeInsurance + $chargeCod;
+        // setting track values
+        $track->setChargeTotal($chargeTotal);
+        $track->setChargeShipment($chargeShipment);
+        $track->setChargeFuel($chargeFuel);
+        $track->setChargeInsurance($chargeInsurance);
+        $track->setChargeCod($chargeCod);
+    }           	    
 }

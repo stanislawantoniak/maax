@@ -168,7 +168,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
         } catch(Exception $e) {
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured"));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             Mage::logException($e);
             return $this->_redirectReferer();
         }
@@ -268,7 +268,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             } catch(Exception $e) {
                 $transaction->rollBack();
                 $this->_getSession()->addError(
-                    Mage::helper("zolagopo")->__("Some error occure")
+                    Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
                 );
                 Mage::logException($e);
             }
@@ -358,7 +358,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             $this->_getSession()->addError(
-                Mage::helper("zolagopo")->__("Some error occure")
+                Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
             );
             Mage::logException($e);
         }
@@ -438,7 +438,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             $this->_getSession()->addError(
-                Mage::helper("zolagopo")->__("Some error occure")
+                Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
             );
             Mage::logException($e);
         }
@@ -503,7 +503,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         } catch(Exception $e) {
             $transaction->rollback();
             $this->_getSession()->addError(
-                Mage::helper("zolagopo")->__("Some error occure")
+                Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
             );
             Mage::logException($e);
         }
@@ -576,7 +576,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }
 
@@ -697,7 +697,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -717,7 +717,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }
 
@@ -957,7 +957,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -971,7 +971,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }
 
@@ -998,7 +998,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             $this->_getSession()->addError(
-                Mage::helper("zolagopo")->__("Some error occure")
+                Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
             );
             Mage::logException($e);
         }
@@ -1022,7 +1022,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occurred."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }
 
@@ -1147,10 +1147,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             Mage::logException($e);
             $response = array(
                             "status"=>0,
-                            "content"=>Mage::helper("zolagopo")->__("Some errors occure. Check logs.")
+                            "content"=>Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
                         );
             if(!$isAjax) {
-                $session->addError(Mage::helper("zolagopo")->__("Some errors occure. Check logs."));
+                $session->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             }
         }
         if($isAjax) {
@@ -1173,7 +1173,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }
         /* @var $po Unirgy_DropshipPo_Model_Po */
@@ -1207,18 +1207,29 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return;
         }
 
-        $this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
+        $this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"There was a technical error. Please contact shop Administrator.")));
     }
 
     protected function _addShipping($carrier,$udpo,$shipment) {
         $session = $this->_getSession();
         $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $r = $this->getRequest();
-        $shippingManager->prepareSettings($r,$shipment,$udpo);
+        $settings = $shippingManager->prepareSettings($r,$shipment,$udpo);
+
         $pos = $udpo->getDefaultPos();
         $shippingManager->setSenderAddress($pos->getSenderAddress());
         $receiver = $udpo->getShippingAddress()->getData();
         $shippingManager->setReceiverCustomerAddress($receiver);
+        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
+            $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
+            //Assign Client Number to Gallery Or To Vendor
+            if (isset($settings["gallery_shipping_source"])
+                && ($settings["gallery_shipping_source"] == 1)
+            ) {
+                $this->getRequest()->setParam("gallery_shipping_source", 1);
+            }
+        }
+
         $result = $shippingManager->createShipments();
         $number = null;
         if ($result['shipmentId']) {
@@ -1273,41 +1284,42 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             return $this->_redirectReferer();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }        
         if (!$id = $udpo->getId()) {
             return;
         }
         try {
-            $manager = Mage::helper('zolagopo/shipment');            
+	        /** @var Zolago_Po_Helper_Shipment $manager */
+            $manager = Mage::helper('zolagopo/shipment');
             if ($r->getParam('use_label_shipping_amount')) {
                 $udpo->setUseLabelShippingAmount(true);
             }
             elseif ($r->getParam('shipping_amount')) {
                 $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
             }
-            
+
             $poStatus = $r->getParam('status');
             $manager->setPoStatus($poStatus);
 
             $carrier = $r->getParam('carrier');
             $carrierTitle = $r->getParam('carrier_title');
-            $manager->setCarrierData($carrier,$carrierTitle);            
-            
+            $manager->setCarrierData($carrier,$carrierTitle);
+
 
             $udpo->setUdpoNoSplitPoFlag(true);
             $manager->setUdpo($udpo);
 
-
             $shipment = $manager->getShipment();
             $number = $this->_addShipping($carrier,$udpo,$shipment);
             if (!$number) {
-                return $this->_redirectReferer();
-
+                $this->_redirectReferer();
+	            return;
             }
-            $manager->setNumber($number);                                    
-            $manager->processSaveTracking();
+
+            $manager->setNumber($number);
+            $manager->processSaveTracking($r->getParams());
             $session->addSuccess($this->__('Tracking ID has been added'));
             $highlight['tracking'] = true;
 
@@ -1359,7 +1371,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -1378,7 +1390,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -1397,7 +1409,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
         return $this->_redirectReferer();
     }
@@ -1411,7 +1423,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
         return $this->_redirectReferer();
     }
@@ -1445,7 +1457,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
         return $this->_redirectReferer();
 
@@ -1482,7 +1494,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -1528,7 +1540,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -1564,7 +1576,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -1580,7 +1592,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
         }
     }
 

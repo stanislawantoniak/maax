@@ -24,7 +24,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 * simple function that gets invitation email template id from system config
 	 * @return string|mixed
 	 */
-	public function _getInvitationEmailTemplateId() {
+	protected function _getInvitationEmailTemplateId() {
 		return Mage::getStoreConfig(self::INVITATION_EMAIL_TEMPLATE_XML_PATH);
 	}
 
@@ -65,6 +65,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		}
 
         if ($this->_isInvitationEmailEnabled()
+	        && Mage::getSingleton("customer/session")->isLoggedIn()
 			&& $this->validateEmail($email)
 			&& $this->_isEmailSuitableForInvitation($email)
         ) {
@@ -217,10 +218,15 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 					return true;
 				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
 					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
-
-					$subscriber->setStatus($status);
-					$subscriber->save();
-					$this->sendConfirmationRequestEmail($subscriberId);
+					if($confirmationNeeded) {
+						$subscriber->setStatus(self::STATUS_UNCONFIRMED);
+						$subscriber->save();
+						$this->sendConfirmationRequestEmail($subscriberId);
+					} else {
+						$subscriber->setStatus(self::STATUS_SUBSCRIBED);
+						$subscriber->save();
+						$this->sendConfirmationSuccessEmail($subscriberId);
+					}
 					return true;
 				} else {
                     $subscriber->setStatus($status);

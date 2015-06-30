@@ -50,41 +50,56 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
     }
 
 
-	public function getDhlRmaSettings($vendorId) {
-		$dhlSettings = false;
+    public function getDhlRmaSettings($vendorId)
+    {
+        $dhlSettings = false;
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         $useRma = $vendor->getDhlRma();
         $useDhl = $vendor->getUseDhl();
-        if ((!$account = $vendor->getDhlRmaAccount()) || (!$useRma)) {            
-            if ((!$account = $vendor->getDhlAccount()) || (!$useDhl)) {
-                return false;
+
+        if ($useRma) {
+            $account = $vendor->getDhlRmaAccount();
+            if ($vendor->getDhlRmaLogin() && $vendor->getDhlRmaPassword() && $vendor->getDhlRmaAccount()) {
+                $dhlSettings['login'] = $vendor->getDhlRmaLogin();
+                $dhlSettings['account'] = $vendor->getDhlRmaAccount();
+                $dhlSettings['password'] = $vendor->getDhlRmaPassword();
             }
-        }
-        if ((!$login = $vendor->getDhlRmaLogin()) || (!$useRma)) {
-            if (!$login = $vendor->getDhlLogin()) {
-                return false;
+        } elseif ($vendor && $vendor->getId() && $useDhl) {
+            $account = $vendor->getDhlAccount();
+            if ($vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
+                $dhlSettings['login'] = $vendor->getDhlLogin();
+                $dhlSettings['account'] = $vendor->getDhlAccount();
+                $dhlSettings['password'] = $vendor->getDhlPassword();
             }
         }
 
-        if ((!$password = $vendor->getDhlRmaPassword()) || (!$useRma)) {
-            if (!$password = $vendor->getDhlPassword()) {
-                return false;
+
+        if ($account && $vendor && $vendor->getId()) {
+            /* DHL client number be assigned to gallery or to vendor */
+            /* @var $ghdhl GH_Dhl_Helper_Data */
+            $ghdhl = Mage::helper("ghdhl");
+            $galleryDHLAccountData = $ghdhl->getGalleryDHLAccountData($account, $vendor->getId());
+
+            if (!empty($galleryDHLAccountData)) {
+                $dhlSettings['account'] = $galleryDHLAccountData->getDhlAccount();
+                $dhlSettings["login"] = $galleryDHLAccountData->getDhlLogin();
+                $dhlSettings["password"] = $galleryDHLAccountData->getDhlPassword();
+                $dhlSettings["gallery_shipping_source"] = 1;
             }
         }
+
         // default params
-        $dhlSettings = array (
-            'login' => $login,
-            'password' => $password,
-            'account' => $account,            
+        $dhlSettingsDefault = array(
             'weight' => 2,
             'height' => 1,
             'length' => 1,
             'width' => 1,
-            'quantity' => 1,            
+            'quantity' => 1,
             'type' => Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE,
         );
+        $dhlSettings = array_merge($dhlSettings, $dhlSettingsDefault);
         return $dhlSettings;
-	}
+    }
 
     /**
      * Initialize DHL Web API Client
@@ -106,9 +121,9 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 $this->_dhlPassword	= $this->getDhlPassword();
             }
 
-            $dhlClient			= Mage::getModel('orbashipping/carrier_client_dhl');
-            $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword,$this->_dhlAccount);
-            $this->_dhlClient	= $dhlClient;
+            $dhlClient = Mage::getModel('orbashipping/carrier_client_dhl');
+            $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword, $this->_dhlAccount);
+            $this->_dhlClient = $dhlClient;
         }
 
         return $this->_dhlClient;
@@ -441,4 +456,94 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         return true;
     }
 
+	/**
+	 * gets package size from source class and returns them as array(width,height,depth), if key does not exist then it returns array(0,0,0)
+	 * @param string $key
+	 * @return array
+	 */
+	public function getDhlParcelDimensionsByKey($key) {
+		/** @var Orba_Shipping_Model_System_Source_PkgSizes $pkgSizesSingleton */
+		$pkgSizesSingleton = Mage::getSingleton('orbashipping/system_source_pkgSizes');
+		$validationArray = $pkgSizesSingleton->toOptionHash();
+		return isset($validationArray[$key]) ? explode('x',$key) : array(0,0,0);
+	}
+
+	/**
+	 * gets package rate from vendor config by specified key, if key does not exist then it returns -1
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @param string $key
+	 * @return float
+	 */
+	public function getDhlVendorRateByKey(Zolago_Dropship_Model_Vendor $vendor,$key) {
+		/** @var Orba_Shipping_Model_System_Source_PkgRateTypes $pkgRateTypesSingleton */
+		$pkgRateTypesSingleton = Mage::getSingleton('orbashipping/system_source_pkgRateTypes');
+		$validationArray = $pkgRateTypesSingleton->toOptionHash();
+		return isset($validationArray[$key]) && $vendor->getData($key) !== "" ? floatval($vendor->getData($key)) : -1;
+	}
+
+	/**
+	 * gets package volumetric weight calculated by cubic size of package divided by value set in config
+	 * @param string $key
+	 * @return float
+	 */
+	public function getDhlVolumetricWeightByKey($key) {
+		$dimensions = $this->getDhlParcelDimensionsByKey($key);
+		$volumetricDivider = Mage::getStoreConfig('carriers/orbadhl/volumetric_weight');
+		return floatval($dimensions[0]*$dimensions[1]*$dimensions[2]/$volumetricDivider);
+	}
+
+	public function getDhlParcelTypeByKey($key) {
+		switch ($key) {
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
+				$dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_ENVELOPE;
+				break;
+
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
+				$dhlType = Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE;
+				break;
+
+			default:
+				throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown DHL package type"));
+		}
+		return $dhlType;
+	}
+
+	public function getDhlParcelWeightByKey($key) {
+		switch ($key) {
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5 :
+				$weight = 5;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10 :
+				$weight = 10;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20 :
+				$weight = 20;
+				break;
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5 :
+				$weight = 31.5;
+				break;
+
+			case Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE :
+			default:
+				$weight = 1;
+		}
+		return $weight;
+	}
+	public function getDhlParcelKeyByWeight($weight) {
+	    if ($weight <= 1) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE;
+	    } else if ($weight <= 5) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_0_5;
+	    } else if ($weight <= 10) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_5_10;
+	    } else if ($weight <= 20) {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_10_20;
+	    } else {
+	        $key = Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_PARCEL_20_31_5;
+	    }
+	    return $key;
+	}
 }

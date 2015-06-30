@@ -1,0 +1,71 @@
+<?php
+/**
+ * @var $this Orba_Shipping_Block_Adminhtml_SystemConfigField_FuelChargeConfig
+ */
+?>
+<link rel="stylesheet" type="text/css" href="/skin/frontend/default/udropship/plugins/jquery-ui/jquery-ui-1.10.2.custom.css">
+<script type="text/javascript" src="/skin/frontend/default/udropship/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js"></script>
+
+<?php
+
+$_element = $this->getElement();
+$this->setFieldName($_element->getName());
+$fValue = $_element->getValue();
+
+$fieldName = $this->getFieldName();
+
+$groupName = explode("_", $_element->getHtmlId())[1];
+$configValue = Mage::getStoreConfig('carriers/'.$groupName.'/fuel_charge');
+
+?>
+<div class="grid">
+    <input id="<?php echo $this->getFieldName(); ?>" type="hidden" name="<?php echo $fieldName; ?>[group]" value="<?php echo $groupName; ?>" />
+    <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:70px" class="config">
+        <col width="500" />
+        <col width="700" />
+        <col width="700" />
+        <thead>
+            <tr class="headings">
+                <th><?php echo Mage::helper('orbashipping')->__('%') ?></th>
+                <th><?php echo Mage::helper('orbashipping')->__('From date') ?></th>
+                <th><?php echo Mage::helper('orbashipping')->__('To date') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if(!empty($fValue)): ?>
+                <?php foreach($fValue as $n => $fValueItem): ?>
+                    <?php if($n !== "group"): ?>
+
+                    <tr data-index="<?php echo $n; ?>">
+                        <td>
+                            <input type="text" name="<?php echo $fieldName; ?>[<?php echo $n; ?>][fuel_percent]" value="<?php echo $fValueItem['fuel_percent']; ?>"  />
+                        </td>
+                        <td>
+                            <input type="text" class="datepicker_from" name="<?php echo $fieldName; ?>[<?php echo $n; ?>][fuel_percent_date_from]" value="<?php echo $fValueItem['fuel_percent_date_from']; ?>"  />
+                        </td>
+
+                        <td>
+                            <button type="button" class="scalable delete delete-fieldset"  onclick="jQuery(this).closest('tr').remove();"><span></span></button>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="5" class="a-left">
+                <div class="left">
+                    <button type="button" class="addFuelChargeItem scalable add" id="<?php echo $this->suffixId('addBtn')?>">
+                        <span>+ <?php echo $this->__('Add Fuel Charge') ?></span>
+                    </button>
+                </div>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+    var fuelChargeTableId = '<?php echo $this->suffixId('cfgTable')?>';
+
+</script>

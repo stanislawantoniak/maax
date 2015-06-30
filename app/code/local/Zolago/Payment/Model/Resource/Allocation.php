@@ -89,6 +89,10 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 	 *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
 	 *    'comment'           => $comment
 	 *    'customer_id'       => $po['customer_id']));
+	 *    'vendor_id'         => $po['vendor_id']
+	 *    'is_automat'        => 0/1
+	 *    'refund_transaction_id' => $refundTransactionId
+	 *    'rma_id'            => $rmaId
 	 *
 	 * @param $data
 	 */

@@ -25,7 +25,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         if($render) {
@@ -83,10 +83,10 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						$this->_throwRefundTooMuchAmountException();
 					}
 
-					if(!$po->isCod()) {
+					if($po->isPaymentDotpay()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund");
+						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund",$rma->getId());
 						if($result === false) {
 							$this->_throwRefundTooMuchAmountException();
 						}
@@ -94,8 +94,20 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
 					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
-					$po->saveComments();
 					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+
+					//send emails to not transactional refunds
+					if(!$po->isPaymentDotpay()) {
+						//todo: send email
+						/** @var Zolago_Payment_Helper_Data $paymentHelper */
+						$paymentHelper = Mage::helper('zolagopayment');
+						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
+							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
+							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
+						}
+					}
+
+					$po->saveComments();
 					$rma->saveComments();
 				} elseif (count($invalidItems)) {
 					Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
@@ -113,7 +125,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		} catch(Exception $e) {
 			$connection->rollBack();
 			Mage::logException($e);
-			$this->_getSession()->addError($hlp->__("Other error. Check logs."));
+			$this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
 		}
 
 		return $this->_redirectReferer();
@@ -171,6 +183,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             //then no meter
             //else
             //no meter
+
+	        //don't allow to close rma if refund is still processing
+	        if($rma->getRmaRefundAmount() && $rma->getPo()->isPaymentDotpay() && !$rma->isAlreadyReturned() && $status == 'closed_accepted') {
+		        throw new Mage_Core_Exception(
+			        Mage::helper("zolagorma")->__("You can't close RMA if refund is still processing. Please try again after refund completion.")
+		        );
+	        }
 
             $messages = array();
 
@@ -257,7 +276,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Exception $e) {
             $connection->rollBack();
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -267,9 +286,18 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         $request = $this->getRequest();
 		$vendor = $this->_getSession()->getVendor();
         $rma = $this->_registerRma();
-                        
-        $manager->prepareRmaSettings($request,$vendor,$rma);
-        
+        $settings = $manager->prepareRmaSettings($request,$vendor,$rma);
+        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
+            $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
+            if (isset($settings["gallery_shipping_source"])
+                && ($settings["gallery_shipping_source"] == 1)
+            ) {
+                //Assign Client Number to Gallery Or To Vendor
+                $this->getRequest()->setParam("gallery_shipping_source", 1);
+            }
+
+        }
+
         $address = $rma->getFormattedAddressForVendor();
         $manager->setReceiverAddress($address);
         $address = $vendor->getRmaAddress();
@@ -338,13 +366,19 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                              "master_tracking_id"	=> null, // what is this ?
                              "package_count"			=> null, // what is this ?
                              "package_idx"			=> null, // what is this ?
-                             "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR
+                             "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR,
+                             "gallery_shipping_source" => $this->getRequest()->getParam("gallery_shipping_source", 0),
+                             "shipping_source_account" => $this->getRequest()->getParam("shipping_source_account", 0)
                          );
 
 
             $model = Mage::getModel('urma/rma_track')->
-                     addData($trackData)->
-                     save();
+                     addData($trackData);
+            $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+            $type = $request->getParam('specify_orbadhl_rate_type',0);
+            $manager->calculateCharge($model,$type,$this->_getSession()->getVendor(),$rma->getTotalValue(),0);
+                     
+            $model->save();
 
             Mage::dispatchEvent("zolagorma_rma_track_added", array(
                                     "rma"		=> $rma,
@@ -355,9 +389,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         } catch(Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
-            throw $e;
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+            $this->_getSession()->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -432,7 +465,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $session->addError($e->getMessage());
         } catch(Exception $e) {
             Mage::logException($e);
-            $session->addError(Mage::helper("zolagorma")->__("Some errors occure. Check logs."));
+            $session->addError(Mage::helper("zolagorma")->__("There was a technical error. Please contact shop Administrator."));
         }
 
         return $this->_redirectReferer();
@@ -457,8 +490,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 	    $rma = Mage::getModel("zolagorma/rma");
 		$rma->load($id);
 
+        if(!$rma->getId()) {
+            throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA does not exist."));
+        }
 	    if(!$this->_validateRma($rma)) {
-		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__('Rma not found'));
+		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA is not yours."));
 	    } else {
 		    Mage::register('current_rma', $rma);
 		    return Mage::registry('current_rma');
@@ -466,12 +502,15 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
     }
 
     /**
-     * @return boolean
+     * Check if rma is valid. This means rma belongs to vendor or vendor children
+     * @param Zolago_Rma_Model_Rma $rma
+     * @return bool
      */
     protected function _validateRma(Zolago_Rma_Model_Rma $rma) {
         if(!$rma->getId()) {
             return false;
         }
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
 		$vendor = $this->_getSession()->getVendor();
 		$rmaVendorId = $rma->getVendor()->getId();
 	

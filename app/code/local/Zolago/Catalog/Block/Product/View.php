@@ -73,7 +73,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         if (!$product instanceof Zolago_Catalog_Model_Product) {
             return $seo;
         }
-        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        // Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $catIds = $product->getCategoryIds();
 
 
@@ -89,15 +90,14 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->setStoreId($store);
         $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
-//        $collection->addAttributeToFilter("basic_category", 1);
+
         $collection->addPathFilter("/$rootId/");
         $collection->setOrder("basic_category", "DESC");
         $collection->setOrder("level", "DESC");
         $collection->setOrder("position", "ASC");
-        //$collection->addAttributeToSelect("*");
-        //Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
+
         $cat = $collection->getFirstItem();
-        //Mage::log($cat->getData(), null, "dcat1.log");
+
 
 
         if($cat->getData("basic_category") == 1){
@@ -130,9 +130,9 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
     public function getDynamicMetaTagsInParents($seo, $category)
     {
-        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        // Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $categoryParentId = $category->getData("parent_id");
-
 
         if ((int)$categoryParentId == 0 ||
             $categoryParentId == $rootId ||
@@ -179,21 +179,33 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             return $result;
         }
         preg_match_all('#\$([a-zA-Z0-9_]+)#', $seoText, $matches, PREG_SET_ORDER);
+        preg_match_all('(\$current_date\sformat=\"([\w\-]+)\")', $seoText, $matchesOfDate, PREG_SET_ORDER);
 
         $attributesFoundInLine = array();
+
         if(!empty($matches)){
             foreach($matches as $match){
                 $attributesFoundInLine[$match[1]] = $match[1];
             }
+            unset($match);
         }
-
+        $dates = array();
+        if(!empty($matchesOfDate)){
+            foreach($matchesOfDate as $match){
+                $dates[$match[1]] = $match[1];
+            }
+            unset($match);
+        }
         if(empty($attributesFoundInLine)){
             return $seoText;
         }
 
+
+
         $labels = array();
 
         foreach ($attributesFoundInLine as $attributeCode) {
+
             $label = "";
 
             $attribute = $product->getResource()
@@ -204,21 +216,24 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             }
             $frontend_input = $attribute->getData("frontend_input");
 
-            if ($frontend_input == "select") {
-                $label = $product
-                    ->setData($attributeCode, $product->getData($attributeCode))
-                    ->getAttributeText($attributeCode);
-            }
-            if ($frontend_input == "multiselect") {
-                $label = $product->getResource()
-                    ->getAttribute($attributeCode)
-                    ->getFrontend()
-                    ->getValue($product);
-            }
-            if ($frontend_input == "text") {
-                $label = $product->getResource()
-                    ->getAttribute($attributeCode)
-                    ->getFrontend()->getValue($product);
+            switch($frontend_input){
+                case "select":
+                    $label = $product
+                        ->setData($attributeCode, $product->getData($attributeCode))
+                        ->getAttributeText($attributeCode);
+                    break;
+                case "multiselect":
+                    $value = $product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product);
+                    $label = !empty($value) ? explode(",", $value)[0] : "";
+                    break;
+                default:
+                    $label = $product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product);
             }
 
             $labels[$attributeCode] = $label;
@@ -231,7 +246,16 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $subst = array();
         foreach($labels as $code => $strItem){
             $subst['{$'.$code.'}'] = $strItem;
+            $subst['{$'.$code.' first_letter=capital}'] = ucfirst($strItem);
         }
+
+        if(!empty($dates)){
+            foreach($dates as $format){
+                $subst['{$current_date format="'.$format.'"}'] = date($format);
+            }
+        }
+        $subst['{$current_date}'] = date("d-m-Y");
+        $subst['{$price}'] = Mage::helper('core')->currency($product->getFinalPrice(),true,false);
 
         return strtr($seoText, $subst);
     }

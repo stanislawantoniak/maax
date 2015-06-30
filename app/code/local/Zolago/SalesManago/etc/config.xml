@@ -7,6 +7,15 @@
     </modules>
     <frontend>
         <events>
+            <customer_login>
+                <observers>
+                    <zolago_salesmanago_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </zolago_salesmanago_observer>
+                </observers>
+            </customer_login>
             <customer_register_success>
                 <observers>
                     <salesmanago_tracking_observer>
@@ -37,6 +46,15 @@
             </newsletter_subscriber_save_after>
 
         </events>
+        <routers>
+            <frontend>
+                <args>
+                    <modules>
+                        <zolago_salesmanago before="SalesManago_Tracking">Zolago_SalesManago</zolago_salesmanago>
+                    </modules>
+                </args>
+            </frontend>
+        </routers>
     </frontend>
     <global>
         <models>
@@ -54,9 +72,9 @@
             </salesmanago>
         </models>
         <blocks>
-            <salesmanago>
-                <class>Zolago_SalesManago_Tracking_Block</class>
-            </salesmanago>
+            <zolagosalesmanago>
+                <class>Zolago_SalesManago_Block</class>
+            </zolagosalesmanago>
         </blocks>
         <helpers>
             <zolagosalesmanago>
@@ -83,13 +101,59 @@
                     </salesmanago_tracking_observer>
                 </observers>
             </newsletter_subscriber_save_before>
+            <checkout_cart_save_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>disabled</type>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_save_after>
+
+            <checkout_cart_product_add_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_product_add_after>
+            <sales_quote_remove_item>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </sales_quote_remove_item>
+            <checkout_cart_update_items_after>
+                <observers>
+                    <salesmanago_tracking_observer>
+                        <type>singleton</type>
+                        <class>Zolago_SalesManago_Model_Observer</class>
+                        <method>add_cart_event</method>
+                    </salesmanago_tracking_observer>
+                </observers>
+            </checkout_cart_update_items_after>
         </events>
-        <resources>
-            <salesmanago>
-                <setup>
-                    <module>Zolago_SalesManago_Tracking</module>
-                </setup>
-            </salesmanago>
-        </resources>
+	    <resources>
+		    <zolagosalesmanago_setup>
+			    <setup>
+				    <module>Zolago_SalesManago</module>
+				    <class>SalesManago_Tracking_Model_Resource_Setup</class>
+			    </setup>
+		    </zolagosalesmanago_setup>
+		    <zolagosalesmanago_write>
+			    <connection>
+				    <use>core_write</use>
+			    </connection>
+		    </zolagosalesmanago_write>
+		    <zolagosalesmanago_read>
+			    <connection>
+				    <use>core_read</use>
+			    </connection>
+		    </zolagosalesmanago_read>
+	    </resources>
     </global>
 </config>

@@ -147,15 +147,57 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * Gets track
      * @return Mage_Sales_Model_Order_Shipment_Track|false
      */
-    public function getTrack() {
+    public function getTrack($requestData=null) {
         if (empty($this->_track)) {
             $number = $this->getNumber();
             $carrier = $this->getCarrierName();
+
             $title = $this->getCarrierTitle();
-            $track = Mage::getModel('sales/order_shipment_track')
-                     ->setNumber($number)
-                     ->setCarrierCode($carrier)
-                     ->setTitle($title);
+
+	        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
+	        $track = Mage::getModel('sales/order_shipment_track');
+            $track
+	            ->setData('qty',1)
+	            ->setNumber($number)
+	            ->setCarrierCode($carrier)
+	            ->setTitle($title);
+	            
+	        if(!is_null($requestData)) {
+		        switch($title) {
+			        case 'DHL':
+						/** @var Orba_Shipping_Helper_Carrier_Dhl $_dhlHlp */
+						$_dhlHlp = Mage::helper('orbashipping/carrier_dhl');
+
+
+                        if(isset($requestData['shipping_source_account'])){
+                            $shipping_source_account = $requestData['shipping_source_account'];
+
+                            $track->setData("shipping_source_account",$shipping_source_account);
+                        }
+				        $weight = $_dhlHlp->getDhlParcelWeightByKey($requestData['specify_orbadhl_rate_type']);
+						$track->setWeight($weight);
+						if(isset($requestData['specify_orbadhl_size'])) {
+							$dimensions = $_dhlHlp->getDhlParcelDimensionsByKey($requestData['specify_orbadhl_size']);
+							$track
+								->setWidth($dimensions[0])
+								->setHeight($dimensions[1])
+								->setLength($dimensions[2]);
+						} else {
+							$track
+								->setWidth(0)
+								->setHeight(0)
+								->setLength(0);
+						}
+                        if(isset($requestData['gallery_shipping_source']) && $requestData['gallery_shipping_source'] == 1) {
+                            $track->setGalleryShippingSource(1);
+                        }
+
+				        break;
+			        default:
+				        break;
+		        }
+	        }
+
             $this->_track = $track;
         }
         return $this->_track;
@@ -176,24 +218,30 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      * Connecting track to shipment
      * @return void
      */
-     public function processSaveTracking() {
-         $track = $this->getTrack();
-         $shipment = $this->getShipment();
-         $shipment->addTrack($track);
-         $vendor = $this->getVendor();
-         $number = $this->getNumber();
+     public function processSaveTracking($requestData=null) {
 
+         $track = $this->getTrack($requestData);
+
+         $shipment = $this->getShipment();
+         $carrier = $this->getCarrierName();
+         $vendor = $this->getVendor();
+         $udpo = $shipment->getUdpo();
+         $codValue = $udpo->getGrandTotalInclTax() - $udpo->getPaymentAmount();
+         $totalValue = $udpo->getGrandTotalInclTax();
+         $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+         $type = empty($requestData['specify_orbadhl_rate_type'])? 0:$requestData['specify_orbadhl_rate_type'];
+         $manager->calculateCharge($track,$type,$vendor,$totalValue,$codValue);
+         $shipment->addTrack($track,$requestData);
+         $number = $this->getNumber();
          $isShipped = $this->getShippedFlag();
- 
-         Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
-         Mage::helper('udropship')->addShipmentComment(
+          Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
+          Mage::helper('udropship')->addShipmentComment(
              $shipment,
              $this->__('%s added tracking ID %s', $vendor->getVendorName(), $number)
-         );
+         );         
          $shipment->save();
              // Carrier saved
          $udpo = $this->getUdpo();
-         $carrier = $this->getCarrierName();
          $udpo->setCurrentCarrier($carrier);
          $udpo->getResource()->saveAttribute($udpo, "current_carrier");            
      }
