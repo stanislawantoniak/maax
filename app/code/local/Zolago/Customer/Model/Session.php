@@ -37,8 +37,6 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 
 		$this->_setCurrentProductsExpire();
 
-		Mage::log($this->getData(self::CURRENT_PRODUCTS),null,'turbolog.loglog.log');
-
 		return $this->getData(self::CURRENT_PRODUCTS);
 	}
 
