@@ -22,41 +22,49 @@ class SalesManago_Tracking_Block_Layer extends Mage_Core_Block_Template
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('salesmanago/tracking/tracking.phtml');
+        $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
+        if($active == 1) {
+            $this->setTemplate('salesmanago/tracking/tracking.phtml');
+        }
     }
-    
+
     public function getClientId(){
-      return Mage::getStoreConfig('salesmanago_tracking/general/client_id');
+        return Mage::getStoreConfig('salesmanago_tracking/general/client_id');
     }
-  
+
     public function getClientApiSecret(){
-      return Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+        return Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
     }
-  
+
     public function getClientEmail(){
-      return Mage::getStoreConfig('salesmanago_tracking/general/email');
+        return Mage::getStoreConfig('salesmanago_tracking/general/email');
     }
-    
+
     public function getEndPoint(){
-      return Mage::getStoreConfig('salesmanago_tracking/general/endpoint');
+        return Mage::getStoreConfig('salesmanago_tracking/general/endpoint');
     }
-	
-	public function getAdditionalJs(){
-      return Mage::getStoreConfig('salesmanago_tracking/general/additional_js');
+
+    public function getAdditionalJs(){
+        return Mage::getStoreConfig('salesmanago_tracking/general/additional_js');
     }
-    
+
+    public function isActive(){
+        return Mage::getStoreConfig('salesmanago_tracking/general/active');
+    }
+
+
     public function getTags(){
-      $tags = Mage::getStoreConfig('salesmanago_tracking/general/tags');
-      $tags = explode(',', $tags);
-      return $tags;
+        $tags = Mage::getStoreConfig('salesmanago_tracking/general/tags');
+        $tags = explode(',', $tags);
+        return $tags;
     }
-    
+
     public function getClientSalesManagoId(){
-		if(Mage::getSingleton('customer/session')->isLoggedIn()) {
-			$customerData = Mage::getSingleton('customer/session')->getCustomer();
-			return $customerData->getSalesmanagoContactId();
-		}
-		
-		return false;
-	}
+        if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $customerData = Mage::getSingleton('customer/session')->getCustomer();
+            return $customerData->getSalesmanagoContactId();
+        }
+
+        return false;
+    }
 }

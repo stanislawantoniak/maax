@@ -1,7 +1,7 @@
 <?php
 	$client_id = $this->getClientId();
 	$endpoint = $this->getEndPoint();
-	$client_salesmanago_id = $this->getClientSalesManagoId();
+	//$client_salesmanago_id = $this->getClientSalesManagoId();
 	$additional_js = $this->getAdditionalJs();
 	
 	if(!empty($client_id) && !empty($endpoint)){
@@ -10,9 +10,9 @@
 		if(isset($additional_js) && !empty($additional_js)){
 			$trackingScript .= "\t".$additional_js."\n";
 		}
-		if($client_salesmanago_id){
+		/*if($client_salesmanago_id){
 			  $trackingScript .= "\tvar _smclientid = '".$client_salesmanago_id."';\n";
-		}
+		}*/
 		$trackingScript .= "\t(function () {\n";
 		$trackingScript .= "\t\tvar sm = document.createElement('script');\n";
 		$trackingScript .= "\t\tsm.type = 'text/javascript';\n";
