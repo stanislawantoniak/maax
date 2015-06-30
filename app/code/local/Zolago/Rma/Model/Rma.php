@@ -1,6 +1,8 @@
 <?php
 /**
- * @method Unirgy_DropshipPo_Model_Mysql4_Po getResource() 
+ * @method Unirgy_DropshipPo_Model_Mysql4_Po getResource()
+ * @method string getPaymentMethodOwner()
+ * @method Zolago_Rma_Model_Rma setPaymentChannelOwner($owner)
  */
 class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 {
@@ -298,8 +300,24 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 			$this->getStatusModel()->processNewRmaStatus($this);
 			$this->setIsNewFlag(true);
 	   }
+
+       $this->_processPaymentChannelOwner();
+
 	   return parent::_beforeSave();
    }
+
+    /**
+     * @param bool $force
+     * @return Zolago_Rma_Model_Rma
+     */
+    public function _processPaymentChannelOwner($force = false) {
+        if ($this->isObjectNew() || $force) {
+            $paymentChannelOwner = $this->getPo()->getCurrentPaymentChannelOwner();
+            $this->setPaymentChannelOwner($paymentChannelOwner);
+        }
+        return $this;
+    }
+
     /**
      * generated pdf for customer
      * @return string
