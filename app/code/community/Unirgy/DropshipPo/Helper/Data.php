@@ -1431,7 +1431,7 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
             }
             $po->getResource()->saveAttribute($po, 'udropship_status');
             $po->saveComments();
-            Mage::log('udpo_po_status_save_after', null, 'setOrderReservation.log');
+
             Mage::dispatchEvent(
                 'udpo_po_status_save_after',
                 array('po'=>$po, 'old_status'=>$oldStatus, 'new_status'=>$status)

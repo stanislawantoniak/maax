@@ -50,41 +50,56 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
     }
 
 
-	public function getDhlRmaSettings($vendorId) {
-		$dhlSettings = false;
+    public function getDhlRmaSettings($vendorId)
+    {
+        $dhlSettings = false;
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         $useRma = $vendor->getDhlRma();
         $useDhl = $vendor->getUseDhl();
-        if ((!$account = $vendor->getDhlRmaAccount()) || (!$useRma)) {            
-            if ((!$account = $vendor->getDhlAccount()) || (!$useDhl)) {
-                return false;
+
+        if ($useRma) {
+            $account = $vendor->getDhlRmaAccount();
+            if ($vendor->getDhlRmaLogin() && $vendor->getDhlRmaPassword() && $vendor->getDhlRmaAccount()) {
+                $dhlSettings['login'] = $vendor->getDhlRmaLogin();
+                $dhlSettings['account'] = $vendor->getDhlRmaAccount();
+                $dhlSettings['password'] = $vendor->getDhlRmaPassword();
             }
-        }
-        if ((!$login = $vendor->getDhlRmaLogin()) || (!$useRma)) {
-            if (!$login = $vendor->getDhlLogin()) {
-                return false;
+        } elseif ($vendor && $vendor->getId() && $useDhl) {
+            $account = $vendor->getDhlAccount();
+            if ($vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
+                $dhlSettings['login'] = $vendor->getDhlLogin();
+                $dhlSettings['account'] = $vendor->getDhlAccount();
+                $dhlSettings['password'] = $vendor->getDhlPassword();
             }
         }
 
-        if ((!$password = $vendor->getDhlRmaPassword()) || (!$useRma)) {
-            if (!$password = $vendor->getDhlPassword()) {
-                return false;
+
+        if ($account && $vendor && $vendor->getId()) {
+            /* DHL client number be assigned to gallery or to vendor */
+            /* @var $ghdhl GH_Dhl_Helper_Data */
+            $ghdhl = Mage::helper("ghdhl");
+            $galleryDHLAccountData = $ghdhl->getGalleryDHLAccountData($account, $vendor->getId());
+
+            if (!empty($galleryDHLAccountData)) {
+                $dhlSettings['account'] = $galleryDHLAccountData->getDhlAccount();
+                $dhlSettings["login"] = $galleryDHLAccountData->getDhlLogin();
+                $dhlSettings["password"] = $galleryDHLAccountData->getDhlPassword();
+                $dhlSettings["gallery_shipping_source"] = 1;
             }
         }
+
         // default params
-        $dhlSettings = array (
-            'login' => $login,
-            'password' => $password,
-            'account' => $account,            
+        $dhlSettingsDefault = array(
             'weight' => 2,
             'height' => 1,
             'length' => 1,
             'width' => 1,
-            'quantity' => 1,            
+            'quantity' => 1,
             'type' => Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE,
         );
+        $dhlSettings = array_merge($dhlSettings, $dhlSettingsDefault);
         return $dhlSettings;
-	}
+    }
 
     /**
      * Initialize DHL Web API Client
@@ -106,9 +121,9 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 $this->_dhlPassword	= $this->getDhlPassword();
             }
 
-            $dhlClient			= Mage::getModel('orbashipping/carrier_client_dhl');
-            $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword,$this->_dhlAccount);
-            $this->_dhlClient	= $dhlClient;
+            $dhlClient = Mage::getModel('orbashipping/carrier_client_dhl');
+            $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword, $this->_dhlAccount);
+            $this->_dhlClient = $dhlClient;
         }
 
         return $this->_dhlClient;

@@ -12,6 +12,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 	    /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
 	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
         $settings = $dhlHelper->getDhlRmaSettings($vendorId);
+
 	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($request->getParam('specify_orbadhl_size'));
         $width = (float)$pkgDimensions[0];
         $height = (float)$pkgDimensions[1];
@@ -43,10 +44,17 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     public function prepareSettings($params,$shipment,$udpo) {
         $pos = $udpo->getDefaultPos();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
-        $settings = Mage::helper('udpo')->getDhlSettings($pos->getId(),$vendor->getId());
 
+        /* @var $udpoH Zolago_Po_Helper_Data */
+        $udpoH = Mage::helper('udpo');
+        $settings = $udpoH->getDhlSettings($vendor, $pos->getId());
 
-	    /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
+        if(!$settings){
+            //No settings for POS (Konfiguracja DHL) and no settings for vendor (Sposoby dostawy - Konfiguracja DHL)
+            throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Check your DHL Account Settings"));
+        }
+
+        /** @var Orba_Shipping_Helper_Carrier_Dhl $dhlHelper */
 	    $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
 
 	    $pkgDimensions = $dhlHelper->getDhlParcelDimensionsByKey($params->getParam('specify_orbadhl_size'));
@@ -119,7 +127,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     }
     public function createShipmentAtOnce() {
         $client = $this->_startClient();
-        $out = $client->createShipmentAtOnce();                
+        $out = $client->createShipmentAtOnce();
 		if ($out) {
 		    if (is_array($out) && !empty($out['error'])) {
 			    $_helper = Mage::helper('zolagorma');

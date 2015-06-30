@@ -286,9 +286,18 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         $request = $this->getRequest();
 		$vendor = $this->_getSession()->getVendor();
         $rma = $this->_registerRma();
-                        
-        $manager->prepareRmaSettings($request,$vendor,$rma);
-        
+        $settings = $manager->prepareRmaSettings($request,$vendor,$rma);
+        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
+            $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
+            if (isset($settings["gallery_shipping_source"])
+                && ($settings["gallery_shipping_source"] == 1)
+            ) {
+                //Assign Client Number to Gallery Or To Vendor
+                $this->getRequest()->setParam("gallery_shipping_source", 1);
+            }
+
+        }
+
         $address = $rma->getFormattedAddressForVendor();
         $manager->setReceiverAddress($address);
         $address = $vendor->getRmaAddress();
@@ -357,7 +366,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                              "master_tracking_id"	=> null, // what is this ?
                              "package_count"			=> null, // what is this ?
                              "package_idx"			=> null, // what is this ?
-                             "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR
+                             "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR,
+                             "gallery_shipping_source" => $this->getRequest()->getParam("gallery_shipping_source", 0),
+                             "shipping_source_account" => $this->getRequest()->getParam("shipping_source_account", 0)
                          );
 
 
