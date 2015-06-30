@@ -286,3 +286,4 @@
 "Failed to get waybill","Nie udało się pobrać listu przewozowego"
 "DHL Service Error. Failed to get waybill.","Błąd serwisu DHL. Nie udało się pobrać listu przewozowego."
 "Selected package's size volumetric weight is bigger than weight set up in first step. Values has been adjusted.","Waga wolumetryczna wybranej wielkości paczki jest większa niż waga ustawiona wyżej. Wartości zostały automatycznie dostosowane"
+"You don't have access to %s DHL Account","Nie masz uprawnień do korzystania z konta DHL %s"
