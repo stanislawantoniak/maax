@@ -435,7 +435,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         } else {
             $email = $vendor->getEmail();
         }
-        Mage::log("_sendNewPoNotificationEmail", null, "operator.log");
+        Mage::log("Zolago: _sendNewPoNotificationEmail", null, "operator.log");
         Mage::log($email, null, "operator.log");
 
 //        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
@@ -456,7 +456,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
     }
 
 	public function sendNewPoNotificationEmail($po, $comment=''){
-        Mage::log("sendNewPoNotificationEmail", null, "operator.log");
+        Mage::log("Zolago: sendNewPoNotificationEmail", null, "operator.log");
 		$vendor = $po->getVendor();
 		/* @var $po Zolago_Po_Model_Po */
 		$order = $po->getOrder();

@@ -1340,6 +1340,7 @@ class Unirgy_Dropship_Helper_Protected
 		Mage::dispatchEvent("udropship_order_save_after", array( "order" => $order, "shipments" => $shipments ));
 		foreach( $shipments as $shipment )
 		{
+            Mage::log("Dropship Protected: sendNewPoNotificationEmail", null, "operator.log");
 			$hlp->sendVendorNotification($shipment);
 		}
 		$hlp->processQueue();
