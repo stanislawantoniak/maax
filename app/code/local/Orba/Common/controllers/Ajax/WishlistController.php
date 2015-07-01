@@ -92,7 +92,7 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 			return;
 		}
 
-		$this->_changeWishlistInCache(1,$this->getRequest()->getParam('product'));
+		$this->_changeWishlistInCache(0,$this->getRequest()->getParam('product'));
 		
 		// Send correct data
 		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
