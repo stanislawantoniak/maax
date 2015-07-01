@@ -923,6 +923,7 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function sendNewPoNotificationEmail($po, $comment='')
     {
+        Mage::log("DropShip: sendNewPoNotificationEmail", null, "operator.log");
         $order = $po->getOrder();
         $store = $order->getStore();
 
