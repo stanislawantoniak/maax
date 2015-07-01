@@ -90,7 +90,11 @@ if($vendorContext && $vendorContext->getId()) {
         </div>
     <?php endif;?>
     <div class="col-xs-12">
-        <a href="<?php echo $this->getParentCategoryUrl(); ?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	    <?php if($isVendorContent):?>
+		    <a href="<?php echo $this->getVendorUrl();?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getVendorName(); ?></a>
+	    <?php else: ?>
+	        <a href="<?php echo $this->getParentCategoryUrl(); ?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	    <?php endif; ?>
     </div>
 </div>
 
