@@ -456,6 +456,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
     }
 
 	public function sendNewPoNotificationEmail($po, $comment=''){
+        Mage::log("sendNewPoNotificationEmail", null, "operator.log");
 		$vendor = $po->getVendor();
 		/* @var $po Zolago_Po_Model_Po */
 		$order = $po->getOrder();
