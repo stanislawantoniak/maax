@@ -80,7 +80,7 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::log("DropshipPo: sendVendorNotification", null, "operator.log");
         $vendor = $po->getVendor();
         $method = $vendor->getNewOrderNotifications();
-        Mage::log("DropshipPo: method: ". $method, null, "operator.log");
+        Mage::log("DropshipPo: method: ". (int)$method, null, "operator.log");
         if (!$method || $method=='0') {
             return $this;
         }
