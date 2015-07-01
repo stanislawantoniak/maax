@@ -153,6 +153,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
     * @return bool
     */
    public function isGatewayPayment() {
+       if(!$this->getPayment()){
+           return false;
+       }
 	   return $this->getPayment()->getMethod() == Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE;
    }
 
@@ -160,6 +163,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
     * @return bool
     */
    public function isPaymentCheckOnDelivery() {
+       if(!$this->getPayment()){
+           return false;
+       }
        return $this->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
    }
 
@@ -170,6 +176,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
      * @return bool
      */
     public function isPaymentBanktransfer() {
+        if(!$this->getPayment()){
+            return false;
+        }
        return $this->getPayment()->getMethod() == Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
     }
 
@@ -180,6 +189,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
      * @return bool
      */
     public function isPaymentDotpay() {
+        if(!$this->getPayment()){
+            return false;
+        }
        return $this->getPayment()->getMethod() == Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
     }
 
