@@ -111,8 +111,9 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
                         }
                     }
                 } else {
+	                $to = array();
 	                $errors[] = 'Not allowed recipient emails [test server]';
-                }                
+                }
             }
 	        if(count($errors)) {
 		        foreach($errors as $error) {
