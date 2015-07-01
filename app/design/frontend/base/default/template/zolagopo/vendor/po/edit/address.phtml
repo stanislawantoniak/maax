@@ -149,6 +149,9 @@
 				"lastname": {
 					required: true
 				},
+				"telephone": {
+					"validate-telephone": true
+				},
 				"street": {
 					required: true
 				},
@@ -172,7 +175,8 @@
 			        required: true
 		        },
 		        "telephone": {
-			        required: true
+			        required: true,
+			        "validate-telephone": true
 		        },
 		        "street": {
 			        required: true
