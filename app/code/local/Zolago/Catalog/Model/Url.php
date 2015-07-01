@@ -60,7 +60,7 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
     public function refreshProductRewrites($storeId)
     {
         ini_set("max_execution_time", 3600);
-        //Mage::log("Reindex start");
+        Mage::log("Reindex start", null, "patch_url.log");
         $this->_categories = array();
         $storeRootCategoryId = $this->getStores($storeId)->getRootCategoryId();
         $this->_categories[$storeRootCategoryId] = $this->getResource()->getCategory($storeRootCategoryId, $storeId);
@@ -131,7 +131,7 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
         }
 
         $this->_categories = array();
-        //Mage::log("Reindex stop");
+        Mage::log("Reindex stop", null, "patch_url.log");
         return $this;
     }
 }
