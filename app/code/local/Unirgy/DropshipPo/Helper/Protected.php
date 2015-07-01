@@ -276,7 +276,7 @@ class Unirgy_DropshipPo_Helper_Protected
 		$order->setUdropshipOrderSplitFlag(true);
 		Mage::dispatchEvent("udpo_order_save_after", array("order" => $order, "udpos" => $udpos));
 		foreach ($udpos as $udpo) {
-            Mage::log("DropshipPo Protected: sendNewPoNotificationEmail", null, "operator.log");
+            Mage::log("DropshipPo Protected: sendVendorNotification", null, "operator.log");
 			$poHlp->sendVendorNotification($udpo, $comment);
 		}
 		$hlp->processQueue();
