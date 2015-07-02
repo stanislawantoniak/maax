@@ -238,7 +238,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $block = $observer->getEvent()->getBlock();
         $form = $block->getForm();
         $fieldset = $form->getElement('vendor_form');
-        
+
         $this->_overrideConfigData();
         
         $keys = array (
@@ -265,6 +265,12 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $fieldset->removeField('email_template');
         $fieldset->removeField('vacation_mode');
         $fieldset->removeField('vacation_end');
+
+
+        $id = Mage::app()->getRequest()->getParam('id');
+        if (!$id) {
+            $form->setValues(array("new_order_notifications" => 1));
+        }
 
         // marketing
         $fieldset = $form->addFieldset('marketing', array(
