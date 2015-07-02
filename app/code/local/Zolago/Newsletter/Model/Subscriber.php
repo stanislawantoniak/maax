@@ -124,6 +124,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 						//do nothing
                     } else { //if $subscriberStatus == NULL || $subscriberStatus == self::STATUS_NOT_ACTIVE
 	                    if($confirmationNeeded) {
+		                    $customer->setConfirmMsg(true);
 		                    $subscriber->setStatus(self::STATUS_UNCONFIRMED);
 		                    $subscriber->sendConfirmationRequestEmail();
 	                    } else {
