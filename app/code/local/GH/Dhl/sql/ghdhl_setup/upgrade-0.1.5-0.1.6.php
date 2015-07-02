@@ -3,7 +3,6 @@
 $installer = $this;
 
 $installer->startSetup();
-Mage::log("ndfsdfg");
 
 $installer->getConnection()
     ->changeColumn(
