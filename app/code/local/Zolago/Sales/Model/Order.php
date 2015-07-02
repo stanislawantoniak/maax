@@ -187,6 +187,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
      * @return bool
      */
     public function isCC() {
+        if(!$this->getPayment()){
+            return false;
+        }
         $data = $this->getPayment()->getAdditionalInformation();
         return isset($data['is_cc']) ? true : false;
     }
@@ -195,6 +198,9 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
      * @return bool
      */
     public function isGateway() {
+        if(!$this->getPayment()){
+            return false;
+        }
         $data = $this->getPayment()->getAdditionalInformation();
         return isset($data['is_gateway']) ? true : false;
     }
