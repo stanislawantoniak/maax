@@ -65,7 +65,9 @@ $hlpRma = Mage::helper('zolagorma');
 												<td>
 												<?php echo $name; ?><br/>
 												<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
-													<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
+                                                    <?php if(!empty($_option) && isset($_option['label'])): ?>
+													    <span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
+                                                    <?php endif; ?>
 												<?php endforeach;?>
 												</td>
 											</tr>
@@ -119,7 +121,9 @@ $hlpRma = Mage::helper('zolagorma');
 													<?php $name = $this->escapeHtml($item->getName()); ?>
 													<span><?php echo $name; ?></span>
 													<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
-														<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span>
+                                                        <?php if(!empty($_option) && isset($_option['label'])): ?>
+														    <span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span>
+                                                        <?php endif; ?>
 													<?php endforeach;?>
 												<?php endif; ?>
 											<?php endforeach;?>

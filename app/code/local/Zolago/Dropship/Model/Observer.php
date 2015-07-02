@@ -257,7 +257,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'sequence',
             'url_key',
             'logo',
-        );        
+        );
         $this->_addFieldsToFieldset($keys,$fieldset);
 
         $fieldset->removeField('carrier_code');

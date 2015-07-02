@@ -390,8 +390,18 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 				}
 			}
 		}
-
-
+        //Send Email to Dane kontaktowe do działu odpowiedzianego za zwroty i reklamacje
+        $rmaEmail = $vendor->getRmaEmail();
+        if($rmaEmail){
+            $helper->sendEmailTemplate(
+                $rmaEmail,
+                $vendor->getVendorName(),
+                $template,
+                $data,
+                true,
+                $identity
+            );
+        }
 
 		$hlp->setDesignStore();
 	}
