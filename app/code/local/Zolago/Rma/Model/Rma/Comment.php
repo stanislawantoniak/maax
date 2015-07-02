@@ -89,6 +89,17 @@ class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
 		}
 		return Mage::helper('zolagorma')->__("System");
 	}
+
+	public function getAuthorEmail() {
+		if($this->getCustomer()->getId()){
+			return $this->getCustomer()->getEmail();
+		}elseif($this->getOperator()->getId()){
+			return $this->getOperator()->getEmail();
+		}elseif($this->getVednor()->getId()){
+			return $this->getVednor()->getEmail();
+		}
+		return '';
+	}
 	
 	/**
 	 * @return string

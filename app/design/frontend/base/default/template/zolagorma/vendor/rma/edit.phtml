@@ -251,6 +251,7 @@ jQuery(document).ready(function() {
 					<?php if($_comments->count()):?>
 					<dl class="dl-horizontal">
 						<?php foreach ($_comments as $_c): ?>
+							<?php /** @var Zolago_Rma_Model_Rma_Comment $_c */ ?>
 						<dt>
 							<?php echo Mage::helper('core')->formatDate($_c->getCreatedAt(), 'medium', true) ?>
 							<br/>
@@ -261,7 +262,9 @@ jQuery(document).ready(function() {
 						<dd>
 							<?php $_name = $_c->getAuthorName();?>
 							<?php $type = $_c->getAuthorTypeText(); ?>
-							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?><?php echo $_name ? " " . $_name : "";?>]
+							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?><?php echo $_name && $_name != Mage::helper('zolagorma')->__("System") ? " " . $_name : "";?>]
+							<?php $_email = $_c->getAuthorEmail(); ?>
+							<?php echo $_email ? "[".$_email."]" : ""; ?>
 							<?php echo $_helper->formatComment($_c);?>
 						</dd>
 						
