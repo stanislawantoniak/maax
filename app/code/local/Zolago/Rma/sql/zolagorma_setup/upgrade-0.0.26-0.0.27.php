@@ -11,7 +11,7 @@ $installer->startSetup();
 // Get all rma collection
 /* @var $collection Zolago_Rma_Model_Resource_Rma_Collection */
 $collection = Mage::getResourceModel('zolagorma/rma_collection');
-Mage::log($collection->getSize());
+
 foreach($collection as $rma) {
     /** @var Zolago_Rma_Model_Rma $rma */
     $owner = 0;
