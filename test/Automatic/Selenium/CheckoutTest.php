@@ -42,6 +42,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
     }
 
     /**
+     * TODO
      * Zarejestrowany zakupy dla 3 vendorow z prostymi i konfigurowalnymi produktami
      * Platnosc przy odbiorze
      * @param string $payment
@@ -70,6 +71,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
     }
 
     /**
+     * TODO
      * Zarejestrowany zakupy dla 3 vendorow z prostymi i konfigurowalnymi produktami
      * Platnosc przy odbiorze
      * @param string $payment
@@ -178,6 +180,7 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
             $this->open($url);
             $this->addToBasketSelectSize();
             $this->click("id=add-to-cart");
+            $this->waitForCondition($this->_setupEval()."win.jQuery('#cart-after-add-to-cart').is(':visible');");
             $this->click("css=div.modal-loaded.modal-header > button.close");
         }
     }

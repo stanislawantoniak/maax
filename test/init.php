@@ -283,7 +283,7 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     }
     
     protected function _setupEval() {
-        return "var win = (this.page().getCurrentWindow().wrappedJSObject) ? this.page().getCurrentWindow().wrappedJSObject : this.page().getCurrentWindow();";
+        return "var win = (selenium.browserbot.getCurrentWindow().wrappedJSObject) ? selenium.browserbot.getCurrentWindow().wrappedJSObject : selenium.browserbot.getCurrentWindow();";
     }
 
     public function getEval($eval) {
