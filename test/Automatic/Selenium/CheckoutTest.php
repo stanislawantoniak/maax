@@ -192,7 +192,11 @@ class Automatic_Selenium_CheckoutTest extends ZolagoSelenium_TestCase {
         $isSquare = $this->getEval("win.jQuery('.size-box .size label').length ? 1 : 0;");
 
         if ($isSelect) {
-            $this->getEval("win.jQuery('.size-box select').data('selectBox-selectBoxIt').selectOption(0);");//todo nie dziala
+            $this->getEval("
+            win.jQuery('.size-box select').data('selectBox-selectBoxIt').selectOption(0);
+            win.jQuery('.size-box select option:eq(0)').selected = true;
+            win.jQuery('.size-box select').trigger('option-click');
+            ");
         } elseif ($isSquare) {
             $this->click("css=.size-box .size label");
         } else {
