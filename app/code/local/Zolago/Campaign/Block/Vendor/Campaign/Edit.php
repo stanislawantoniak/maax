@@ -176,8 +176,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $design->setArea("adminhtml");
         $block = $this->getLayout()
             ->createBlock("zolagocampaign/vendor_campaign_product_grid", "vendor_campaign_product_grid")
-            ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml")
-        ;
+            ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
+
         $block->setParentBlock($this);
         $this->setProductsGrid($block);
         $design->setArea("frontend");

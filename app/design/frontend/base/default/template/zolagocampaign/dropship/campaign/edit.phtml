@@ -11,6 +11,7 @@
 					<?php echo $_helper->__("Edit campaign '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
+            <p><?php echo $_helper->__("Create new campaign. Required fields are marked with an asterisk.");?></p>
 		</div>
 		
 	</div>
@@ -37,10 +38,10 @@
         <a name="tmp"></a>
     </li>
     <li style="float:right" class="">
-        <a href="#tab_products" data-toggle="tab"><?php echo $_helper->__('Products'); ?></a>
+        <a href="#tab_products" data-toggle="tab"><i class="icon-folder-open"></i>&nbsp;<?php echo $_helper->__('Products'); ?></a>
     </li>
     <li style="float:right" class="active">
-        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
+        <a href="#tab_banners" data-toggle="tab"><i class="icon-picture"></i>&nbsp;<?php echo $_helper->__('Campaign creatives'); ?></a>
     </li>
 
 </ul>
@@ -51,15 +52,15 @@
 
             <div class="widget box">
                 <div class="widget-header">
-                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Products"); ?></h4>
-                    <div class="toolbar no-padding">
-                        <div class="btn-group">
-						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">
-							<i class="icon-plus"></i>
-                            <?php echo $_helper->__("Add products");?>
-						</span>
-                        </div>
-                    </div>
+                    <h4><i class="icon-folder-open"></i>&nbsp;<?php echo $_helper->__("Products"); ?></h4>
+<!--                    <div class="toolbar no-padding">-->
+<!--                        <div class="btn-group">-->
+<!--						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">-->
+<!--							<i class="icon-plus"></i>-->
+<!--                            --><?php //echo $_helper->__("Add products");?>
+<!--						</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getProductsGrid()->toHtml(); ?>
@@ -73,16 +74,16 @@
         <div class="container z-grid">
             <div class="widget box">
                 <div class="widget-header">
-                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Campaign creatives"); ?></h4>
-                    <div class="toolbar no-padding">
-                        <div class="btn-group">
-                            <a href="<?php echo $this->getAddNewBannerPath(); ?>">
-                                <span class="btn btn-xs"><i class="icon-plus"></i>
-                                    <?php echo $_helper->__("Add new campaign creative"); ?>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
+                    <h4><i class="icon-picture"></i>&nbsp;<?php echo $_helper->__("Campaign creatives"); ?></h4>
+<!--                    <div class="toolbar no-padding">-->
+<!--                        <div class="btn-group">-->
+<!--                            <a href="--><?php //echo $this->getAddNewBannerPath(); ?><!--">-->
+<!--                                <span class="btn btn-xs"><i class="icon-plus"></i>-->
+<!--                                    --><?php //echo $_helper->__("Add new campaign creative"); ?>
+<!--                                </span>-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getBannersGrid()->toHtml(); ?>

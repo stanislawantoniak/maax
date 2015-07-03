@@ -77,9 +77,9 @@
     margin: 0px;
     border-top: none;
 }
-#zolagocampaign_campaign_product_grid .pull-right .form-group {
-    padding-top: 17px;
-}
+/*#zolagocampaign_campaign_product_grid .pull-right .form-group {*/
+    /*padding-top: 17px;*/
+/*}*/
 
 /*Banners*/
 .widget-content div[data-type="slider"] {
@@ -485,8 +485,8 @@
     text-align: right;
 }
 #edit-question .form-group div.col-md-10 {
-	padding-top: 7px;
-
+    padding-top: 7px;
+}
 #rmaRefundItems tr {
 	cursor: pointer;
 }
