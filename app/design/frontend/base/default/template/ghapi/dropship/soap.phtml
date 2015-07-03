@@ -16,6 +16,7 @@ $_helper = Mage::helper("ghapi");
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_collected');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_shipment');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_reservation');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_categories_sets');?>
 		</form>
 	</div>
 </div>
@@ -138,5 +139,17 @@ jQuery(function ($) {
         doSoapAjax(params,'reservation');
     }
  	//--setOrderReservation
+
+    //getCategoriesSets
+    jQuery('#get_categories_sets_action').click(function(){getCategoriesSet(); });
+    jQuery('#soap_categories_sets_token').keypress(function (e) { if (e.which == 13) { getChangeOrderMessage(); return false;} });
+
+    function getCategoriesSet(){
+        var params = {};
+        params.action = 'getCategoriesSets';
+        params.token = jQuery('#soap_categories_sets_token').val();
+        doSoapAjax(params,'get_categories_sets');
+    }
+    //--getCategoriesSets
 });
 </script>

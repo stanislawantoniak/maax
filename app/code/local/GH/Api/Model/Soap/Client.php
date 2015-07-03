@@ -124,6 +124,17 @@ class GH_Api_Model_Soap_Client  {
         $obj->reservationMessage = $reservationMessage;
         $this->_query('setOrderReservation', $obj);
     }
+
+    /**
+     * Test for getCategoriesSets
+     * @param $token
+     */
+    public function getCategoriesSets($token) {
+        $obj = new StdClass();
+        $obj->sessionToken = trim($token);
+        $this->_query('getCategoriesSets', $obj);
+    }
+
     /**
      * xml formatter
      * @param string $xml
