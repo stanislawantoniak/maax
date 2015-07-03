@@ -64,7 +64,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "name" => "name",
             "class" => "form-control",
             "required" => true,
-            "label" => $helper->__('Name')
+            "label" => $helper->__('Name'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-6"
         ));
 
         if(!empty($campaignId)){
