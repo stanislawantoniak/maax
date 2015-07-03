@@ -77,9 +77,22 @@
     margin: 0px;
     border-top: none;
 }
-/*#zolagocampaign_campaign_product_grid .pull-right .form-group {*/
-    /*padding-top: 17px;*/
-/*}*/
+
+#edit-campaign .form-group label[for=url_typeurl_type_manual_link],
+#edit-campaign .form-group label[for=url_typeurl_type_landing_page],
+
+#edit-campaign .form-group label[for=strikeout_type1],
+#edit-campaign .form-group label[for=strikeout_type2] {
+    position: relative;
+    top: -2px;
+    margin: 0 8px 0 4px;
+}
+#edit-campaign input.datetimepicker {
+    width: 150px;
+}
+#edit-campaign .icon-calendar {
+    cursor: pointer;
+}
 
 /*Banners*/
 .widget-content div[data-type="slider"] {

@@ -169,6 +169,11 @@
             jQuery('.datetimepicker').datetimepicker({
                 format: 'd-m-Y H:i'
             });
+            jQuery(".icon-calendar").click(function () {
+                jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
+                    .datetimepicker("show")
+                    .blur();
+            });
 
             var form = jQuery("#edit-campaign");
             new Zolago.formIntegrator(form);
