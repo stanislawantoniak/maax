@@ -227,7 +227,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
                         if ($captionMaxSymbols) {
-                            $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . $helper->__('Max length is ') . $captionMaxSymbols . '</p>';
+                            $afterElementHtml = "<p class='help-block align-left'>" .
+                                $helper->__('Max length is %s', $captionMaxSymbols) .
+                                "</p>";
                             $captionOptions = array_merge($captionOptions,
                                 array(
                                     //'maxlength' => $captionMaxSymbols,
