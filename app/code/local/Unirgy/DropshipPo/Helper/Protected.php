@@ -4,6 +4,7 @@ class Unirgy_DropshipPo_Helper_Protected
 {
 	public function splitOrderToPos($order, $qtys = array(), $comment = "")
 	{
+        Mage::log("DropshipPo Protected: splitOrderToPos sendNewPoNotificationEmail", null, "operator.log");
 		Unirgy_Dropship_Helper_Protected::validateLicense("Unirgy_DropshipPo");
 		if (!Mage::helper("udropship")->isActive($order->getStore())) {
 			return false;
@@ -275,6 +276,7 @@ class Unirgy_DropshipPo_Helper_Protected
 		$order->setUdropshipOrderSplitFlag(true);
 		Mage::dispatchEvent("udpo_order_save_after", array("order" => $order, "udpos" => $udpos));
 		foreach ($udpos as $udpo) {
+            Mage::log("DropshipPo Protected: sendVendorNotification", null, "operator.log");
 			$poHlp->sendVendorNotification($udpo, $comment);
 		}
 		$hlp->processQueue();
