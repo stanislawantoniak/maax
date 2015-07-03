@@ -14,11 +14,17 @@ class Orba_Shipping_Model_Carrier_Abstract extends
         $this->_settings = $settings;
     }
     public function setSenderAddress($address) {
+	    $address['phone'] = $this->getOnlyNumbers($address['phone']);
         $this->_senderAddress = $address;
     }
     public function setReceiverAddress($address) {
+	    $address['contact_phone'] = $this->getOnlyNumbers($address['contact_phone']);
         $this->_receiverAddress = $address;
     }
+
+	protected function getOnlyNumbers($value) {
+		return filter_var(str_replace(array('+','-'),'',$value), FILTER_SANITIZE_NUMBER_INT);
+	}
 
 	/**
 	 * Empyt collect

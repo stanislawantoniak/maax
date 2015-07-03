@@ -317,4 +317,18 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
         $hlp->setDesignStore();
     }
+    
+    /**
+     * list of vendors which can add product 
+     *
+     * @param 
+     * @return 
+     */
+
+    public function getCanAddProduct() {
+        $model = Mage::getModel('zolagodropship/vendor_brandshop');
+        $collection = $model->getCollection();
+        $collection->setCanAddFilter($this->getId());
+        return $collection;    
+    }
 }

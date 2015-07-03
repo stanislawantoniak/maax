@@ -5,12 +5,12 @@ class Zolago_SalesManago_Block_Customer_Cart extends Mage_Core_Block_Template
 
     public function getCustomerCart(){
         $products= array();
-        $smcid = $this->getSmcid();
+        $email = $this->getEmail();
 
         $customers =
             Mage::getModel("customer/customer")
                 ->getCollection();
-        $customers->addFieldToFilter("salesmanago_contact_id", $smcid);
+        $customers->addFieldToFilter("email", $email);
         $customer = $customers->getFirstItem();
 
         if($customer){

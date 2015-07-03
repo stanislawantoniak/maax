@@ -119,6 +119,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		$po = $observer->getEvent()->getData('po');
 		/* @var $po Zolago_Po_Model_Po */
 		// Send email
+        Mage::log("Zolago: poCreatedFromOrder", null, "operator.log");
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();
 	}
@@ -139,7 +140,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				"Changed POS (%s&rarr;%s)", $oldPos->getExternalId(), $newPos->getExternalId());
 		
 		$this->_logEvent($po, $text);
-		
+
+        Mage::log("Zolago: poChangePos", null, "operator.log");
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();

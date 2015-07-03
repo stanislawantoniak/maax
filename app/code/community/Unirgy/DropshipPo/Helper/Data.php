@@ -77,15 +77,18 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function sendVendorNotification($po, $comment='')
     {
+        Mage::log("DropshipPo: sendVendorNotification", null, "operator.log");
         $vendor = $po->getVendor();
         $method = $vendor->getNewOrderNotifications();
-
+        Mage::log("DropshipPo: method: ". (int)$method, null, "operator.log");
         if (!$method || $method=='0') {
             return $this;
         }
 
+        Mage::log("DropshipPo: method: ". $method, null, "operator.log");
         $data = compact('vendor', 'po', 'method');
         if ($method=='1') {
+            Mage::log("DropshipPo: sendNewPoNotificationEmail", null, "operator.log");
             $this->sendNewPoNotificationEmail($po, $comment);
         } else {
             $config = Mage::getConfig()->getNode('global/udropship/notification_methods/'.$method);
@@ -923,6 +926,7 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function sendNewPoNotificationEmail($po, $comment='')
     {
+        Mage::log("DropShip: sendNewPoNotificationEmail", null, "operator.log");
         $order = $po->getOrder();
         $store = $order->getStore();
 
