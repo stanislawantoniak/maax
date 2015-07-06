@@ -234,6 +234,47 @@ if($vendorContext && $vendorContext->getId()) {
                 <h2 class="title_section"><?php echo $this->__("Ask Vendor A Question"); ?></h2>
             </div>
             <div class="modal-body">
+	            <?php
+	            $vendorInfo = new Zolago_Catalog_Block_Product_Vendor_Info;
+	            $brandShopId = $vendorInfo->getBrandshopVendor()->getVendorId();
+	            $producer = ($vendorInfo->getVendor()->getVendorId() == $brandShopId);
+	            ?>
+	            <?php if (!$producer && !empty($brandShopId)): ?>
+		            <figure>
+			            <h3 id="bLogo">
+				            <a href="<?php echo $vendorInfo->getBrandshopVendorUrl(); ?>">
+					            <img itemprop="logo" src="<?php echo Mage::getBaseUrl('media') . $vendorInfo->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $vendorInfo->escapeHtml($vendorInfo->getBrandshopVendor()->getVendorName()); ?>">
+					            <meta itemprop="brand" content="<?php echo $vendorInfo->escapeHtml($vendorInfo->getBrandshopVendor()->getVendorName()); ?>" />
+				            </a>
+			            </h3>
+
+		            </figure>
+		            <div class="seller">
+			            <div class="seller-info">
+				            <a class="clearfix" href="<?php echo $vendorInfo->getVendorUrl(); ?>">
+					            <span ><strong><?php echo $vendorInfo->__("Seller"); ?>:</strong> <?php echo $vendorInfo->escapeHtml($vendorInfo->getVendor()->getVendorName()); ?></span>
+				            </a>
+				            <span><?php echo $vendorInfo->escapeHtml($vendorInfo->getBrandshopVendor()->getBrandshopInfo()); ?></span>
+			            </div>
+
+		            </div>
+	            <?php else: ?>
+		            <figure>
+			            <h3 id="bLogo">
+				            <a href="<?php echo $vendorInfo->getBrandshopVendorUrl(); ?>">
+					            <img itemprop="logo" src="<?php echo $vendorInfo->getLogoUrl(); ?>" alt="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>">
+					            <meta itemprop="brand" content="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>" />
+				            </a>
+			            </h3>
+		            </figure>
+		            <div class="seller producer">
+			            <div class="seller-info">
+				            <a href="<?php echo $vendorInfo->getVendorUrl(); ?>">
+					            <strong><?php echo $vendorInfo->__("Seller"); ?>:</strong> <?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>
+				            </a>
+			            </div>
+		            </div>
+	            <?php endif; ?>
                 <?php echo $this->getChildHtml('udqa.product.question.product'); ?>
             </div>
         </div>
