@@ -858,7 +858,6 @@
                     i0.addClass('fa fa-spinner fa-spin');
                     if (jQuery(this).valid()) {
                         self.submit();
-                        submit0Button.prop("disabled", false);
                     }
 					return false;
 				});
@@ -1584,7 +1583,6 @@
                     i.addClass('fa fa-spinner fa-spin');
                     if (jQuery(this).valid()) {
                         self.submit();
-                        submitButton.prop("disabled", false);
 
                     }
 					return false;
@@ -1647,6 +1645,7 @@
 
 				this.content.find("#step-1-prev").click(function(){
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
+                    jQuery("button").prop("disabled", false);
 					checkoutObject.prev();
 					jQuery(window).trigger("resize");
 					return false;
@@ -1848,7 +1847,7 @@
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
-                    var submit2Button = jQuery(this).find('button[id=step-2-submit]');
+                    var submit2Button = jQuery(this);
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');
                     i2.addClass('fa fa-spinner fa-spin');
@@ -1858,6 +1857,7 @@
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
+                    jQuery("button").prop("disabled", false);
 					checkoutObject.prev();
 					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
 						jQuery('#view_default_pay').trigger('click');
