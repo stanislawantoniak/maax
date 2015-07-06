@@ -511,3 +511,6 @@
 #rmaRefundForm .has-error {
 	color: #b94a48;
 }
+.radio-buttons {
+    padding-top: 7px;
+}
