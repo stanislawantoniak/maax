@@ -13,11 +13,13 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function editAction() {
         Mage::register('as_frontend', true);
-        $banner = $this->_initModel();
+        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+        $bannerId = $this->getRequest()->getParam('id',null);
+        $banner = $this->_initModel($bannerId);
         $vendor = $this->_getSession()->getVendor();
 
         //validate vendor
-        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+
         if(!empty($campaignId)){
             $modelCampaign = Mage::getModel("zolagocampaign/campaign");
             $modelCampaign->load($campaignId);
@@ -125,14 +127,16 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
-        $banner = $this->_initModel();
+
+        $modelId = $this->getRequest()->getParam("id");
+        $banner = $this->_initModel($modelId);
         $vendor = $this->_getSession()->getVendor();
 
         // Try save
         $data = $this->getRequest()->getParams();
 
         $this->_getSession()->setFormData(null);
-        $modelId = $this->getRequest()->getParam("id");
+
 
         try {
             // If Edit
