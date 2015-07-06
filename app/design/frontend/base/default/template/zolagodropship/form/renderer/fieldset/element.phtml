@@ -1,5 +1,8 @@
 <?php
 $element = $this->getElement();
+$labelWrapperClass = $this->getElement()->getData("label_wrapper_class");
+$LwC = !empty($labelWrapperClass) ? $labelWrapperClass : "col-md-2";
+
 $wrapperClass = $this->getElement()->getData("wrapper_class");
 $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
 ?>
@@ -10,7 +13,7 @@ $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
             <a href="<?php echo $this->getElement()->getData('url'); ?>"><?php echo $this->getElement()->getData('inside'); ?></a>
         </div>
     <?php else: ?>
-        <label class="col-md-2 control-label"><?php echo $element->getLabelHtml();?></label>
+        <label class="<?php echo $LwC;  ?> control-label"><?php echo $element->getLabelHtml();?></label>
         <div class="<?php echo $wC;  ?>"><?php echo $element->getElementHtml(); ?></div>
     <?php endif;?>
 </div>
