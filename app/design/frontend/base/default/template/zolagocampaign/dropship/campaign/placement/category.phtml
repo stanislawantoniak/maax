@@ -308,8 +308,8 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         </select>
                     </div>
                     <div class="row">
-                        <a data-edit-val="link-delete" href="" data-toggle="modal" data-target="#confirm-delete">
-                            <?php echo $_helper->__("Delete this creative from the placement"); ?>
+                        <a data-edit-val="link-delete" class="btn btn-danger" href="" data-toggle="modal" data-target="#confirm-delete">
+                            <i class="icon-remove"></i>&nbsp;<?php echo $_helper->__("Delete this creative from the placement"); ?>
                         </a>
                     </div>
                 </div>
@@ -626,7 +626,7 @@ jQuery(function ($) {
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-12 dates">' +
-                '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
+                '<i class="'+status+'" data-edit-val="link-edit-status"></i> '+
                  dates +
                 '</div>' +
                 '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +
