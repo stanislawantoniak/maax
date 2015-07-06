@@ -117,6 +117,7 @@
     overflow: hidden;
     width: 23%;
     float: left;
+    cursor: move;
 }
 
 .banner-positions {
