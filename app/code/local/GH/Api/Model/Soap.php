@@ -340,6 +340,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
         try {
 
+            $user = $this->getUserByToken($token);
             $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
             $attributeSetCollection->addFilter('use_to_create_product', 1);
             $attributeSetCollection->load();
