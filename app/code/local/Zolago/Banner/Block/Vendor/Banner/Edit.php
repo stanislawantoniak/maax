@@ -181,7 +181,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             "class" => "form-control",
                             "required" => true,
                             "data_attribute" => array('restrictw' => $pictureW, 'restricth' => $pictureH),
-                            "label" => $helper->__($picture->picture_label)
+                            "label" => $helper->__($picture->picture_label),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         );
                         if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
                             && (isset($picture->pictures_h) && !empty($picture->pictures_h))
@@ -202,7 +204,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             "name" => "image_url[" . $n . "]",
                             "class" => "form-control",
                             "required" => $pictureUrlRequired,
-                            "label" => $helper->__($picture->picture_label . ": url")
+                            "label" => $helper->__($picture->picture_label . ": url"),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         ));
                     }
                     unset($n);
@@ -218,13 +222,17 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             "name" => "caption_url[" . $n . "]",
                             "class" => "form-control",
                             "required" => $captionUrlRequired,
-                            "label" => $helper->__($caption->caption_label . ": url")
+                            "label" => $helper->__($caption->caption_label . ": url"),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         ));
                         $captionOptions = array(
                             "name" => "caption_text[" . $n . "]",
                             "class" => "form-control",
                             "required" => $captionUrlRequired,
-                            "label" => $helper->__($caption->caption_label . ": text")
+                            "label" => $helper->__($caption->caption_label . ": text"),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         );
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
