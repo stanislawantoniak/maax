@@ -330,11 +330,11 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
      * Method to export all attributes sets (with create products = yes)
      * Export id and name
      *
-     * @param $getCategoriesSetsParameters
+     * @param $getCategoriesParameters
      * @return StdClass
      */
-    public function getCategoriesSets($getCategoriesSetsParameters) {
-        $request = $getCategoriesSetsParameters;
+    public function getCategories($getCategoriesParameters) {
+        $request = $getCategoriesParameters;
         $token = $request->sessionToken;
         $obj = new StdClass();
 
@@ -353,7 +353,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 $list[] = $m;
             }
 
-            $obj->categoriesSets = $list;
+            $obj->categories = $list;
             $message = 'ok';
             $status = true;
         } catch(Exception $e) {

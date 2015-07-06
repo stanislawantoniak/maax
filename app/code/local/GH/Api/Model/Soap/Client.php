@@ -126,13 +126,13 @@ class GH_Api_Model_Soap_Client  {
     }
 
     /**
-     * Test for getCategoriesSets
+     * Test for getCategories
      * @param $token
      */
-    public function getCategoriesSets($token) {
+    public function getCategories($token) {
         $obj = new StdClass();
         $obj->sessionToken = trim($token);
-        $this->_query('getCategoriesSets', $obj);
+        $this->_query('getCategories', $obj);
     }
 
     /**

@@ -193,27 +193,27 @@
 		    </xsd:all>
 	    </xsd:complexType>
 
-        <xsd:complexType name="categorySetItem">
+        <xsd:complexType name="categoryItem">
             <xsd:all>
-                <xsd:element name="categorySetId" type="xsd:int"/>
-                <xsd:element name="categorySetName" type="xsd:string"/>
+                <xsd:element name="categoryId" type="xsd:int"/>
+                <xsd:element name="categoryName" type="xsd:string"/>
             </xsd:all>
         </xsd:complexType>
-        <xsd:complexType name="categoriesSets">
+        <xsd:complexType name="categories">
             <xsd:sequence>
-                <xsd:element name="categorySet" type="tns:categorySetItem" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="category" type="tns:categoryItem" minOccurs="0" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
-        <xsd:complexType name="getCategoriesSets">
+        <xsd:complexType name="getCategories">
             <xsd:all>
                 <xsd:element name="sessionToken" type="xsd:string"/>
             </xsd:all>
         </xsd:complexType>
-        <xsd:complexType name="getCategoriesSetsResponse">
+        <xsd:complexType name="getCategoriesResponse">
             <xsd:all>
                 <xsd:element name="message" type="xsd:string"/>
                 <xsd:element name="status" type="xsd:boolean"/>
-                <xsd:element name="categoriesSets" type="tns:categoriesSets" nillable="true"/>
+                <xsd:element name="categories" type="tns:categories" nillable="true"/>
             </xsd:all>
         </xsd:complexType>
 
@@ -261,11 +261,11 @@
   <message name="setOrderReservationResponse">
 	  <part name="setOrderReservationResponse" type="tns:statusResponse"/>
   </message>
-  <message name="getCategoriesSetsRequest">
-      <part name="getCategoriesSets" type="tns:getCategoriesSets"/>
+  <message name="getCategoriesRequest">
+      <part name="getCategories" type="tns:getCategories"/>
   </message>
-  <message name="getCategoriesSetsResponse">
-      <part name="getCategoriesSetsResponse" type="tns:getCategoriesSetsResponse"/>
+  <message name="getCategoriesResponse">
+      <part name="getCategoriesResponse" type="tns:getCategoriesResponse"/>
   </message>
   <portType name="GHApi_PortType">
       <operation name="doLogin">
@@ -296,9 +296,9 @@
 		  <input message="tns:setOrderReservationRequest"/>
 		  <output message="tns:setOrderReservationResponse"/>
 	  </operation>
-      <operation name="getCategoriesSets">
-          <input message="tns:getCategoriesSetsRequest"/>
-          <output message="tns:getCategoriesSetsResponse"/>
+      <operation name="getCategories">
+          <input message="tns:getCategoriesRequest"/>
+          <output message="tns:getCategoriesResponse"/>
       </operation>
   </portType>
   <binding name="GHApi_Binding" type="tns:GHApi_PortType">
@@ -395,8 +395,8 @@
 				  use="literal"/>
 		  </output>
 	  </operation>
-      <operation name="getCategoriesSets">
-          <soap:operation soapAction="<?php echo $this->getWsUrl();?>getCategoriesSets"/>
+      <operation name="getCategories">
+          <soap:operation soapAction="<?php echo $this->getWsUrl();?>getCategories"/>
           <input>
           <soap:body
               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
