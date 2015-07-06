@@ -95,5 +95,6 @@
 "Are you sure you want to delete product %s from campaign %s?","Czy na pewno chcesz usunąć produkt %s z kampanii %s?"
 "Poniżej znajdziesz szczegóły kampanii. Możesz wprowadzić zmiany w ustawieniach kampanii edytując poszczególne pola. Możesz dodać krecje i dodać produkty.","Poniżej znajdziesz szczegóły kampanii. Możesz wprowadzić zmiany w ustawieniach kampanii edytując poszczególne pola. Możesz dodać krecje i dodać produkty."
 "UWAGA! Zdjęcie musi mieć szerokość %spx i wysokość %spx","UWAGA! Zdjęcie musi mieć szerokość %spx i wysokość %spx"
+"Campaign ""%s"" saved. Now you can attach creations and products to the campaign.","Kampania ""%s"" została zapisana. Możesz teraz dodać do kampanii kreacje i producty."
 
 
