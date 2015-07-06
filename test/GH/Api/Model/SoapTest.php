@@ -101,4 +101,10 @@ class GH_Api_Model_SoapTest {
         $obj->shipmentTrackingNumber = $shipmentTrackingNumber;
         var_dump($client->setOrderShipment($obj));
     }
+    public function getCategoriesSets($token) {
+        $client = $this->_getClient();
+        $obj = new StdClass();
+        $obj->sessionToken = $token;
+        var_dump($client->getCategoriesSets($obj));
+    }
 }
