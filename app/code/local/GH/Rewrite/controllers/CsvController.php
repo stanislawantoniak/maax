@@ -215,7 +215,7 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 							$this->_getSession()->addSuccess($hlp->__("Updated rewrites: %s",$updatedRewrites));
 						}
 						if(count($skippedRewrites)) {
-							$this->_getSession()->addWarning($hlp->__("Skipped rewrites lines due to identical content: %s",implode(',',$skippedRewrites)));
+							$this->_getSession()->addWarning($hlp->__("Skipped csv lines due to identical content: %s",implode(',',$skippedRewrites)));
 						}
 						if($urlChanged) {
 							$this->_getSession()->addWarning($hlp->__("Url has changed for one or more rewrites, don't forget to regenerate them!"));
