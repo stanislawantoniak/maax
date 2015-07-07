@@ -1866,7 +1866,6 @@
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');
                     i2.addClass('fa fa-spinner fa-spin');
-                    console.log("placeOrder");
 
 					// Add validation
 					checkoutObject.placeOrder()
