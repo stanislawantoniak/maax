@@ -854,6 +854,7 @@
 				this.content.find("form").submit(function(){
                     jQuery("button[id*='-prev']").prop("disabled", false);
                     var submit0Button = jQuery(this).find('button[target=step-0-submit]');
+
                     submit0Button.prop("disabled", true);
                     var i0 = submit0Button.find('i');
                     i0.addClass('fa fa-spinner fa-spin');
@@ -1165,6 +1166,12 @@
 				this.init();
 				var self = this;
 				this.content.find("form").submit(function(){
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+                    var submitNotLoggedButton = jQuery(this).find('button[target=step-0-submit]');
+
+                    submitNotLoggedButton.prop("disabled", true);
+                    var iNotLogged = submitNotLoggedButton.find('i');
+                    iNotLogged.addClass('fa fa-spinner fa-spin');
                     if (jQuery(this).valid()) {
                         self.submit();
                     }
@@ -1861,7 +1868,7 @@
                     i2.addClass('fa fa-spinner fa-spin');
 
 					// Add validation
-					checkoutObject.placeOrder()
+					//checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
