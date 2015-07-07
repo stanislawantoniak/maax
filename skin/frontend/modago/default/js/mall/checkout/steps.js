@@ -1586,7 +1586,7 @@
 
 				this.content.find("form").submit(function(){
                     jQuery("button[id*='-prev']").prop("disabled", false);
-                    jQuery(this).find("button[id*='-prev']").prop("disabled", true);
+                    //jQuery(this).find("button[id*='-prev']").prop("disabled", true);
                     var submitButton = jQuery(this).find('button[id=step-1-submit]');
                     submitButton.prop("disabled", true);
                     var i = submitButton.find('i');
@@ -1656,7 +1656,7 @@
 				this.content.find("#step-1-prev").click(function(){
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
                     jQuery("button[id*='-prev']").prop("disabled", false);
-                    jQuery(this).prop("disabled", true);
+                    //jQuery(this).prop("disabled", true);
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
 
 					checkoutObject.prev();
@@ -1866,14 +1866,15 @@
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');
                     i2.addClass('fa fa-spinner fa-spin');
+                    console.log("placeOrder");
 
 					// Add validation
-					//checkoutObject.placeOrder()
+					checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
                     jQuery("button[id*='-prev']").prop("disabled", false);
-                    jQuery(this).prop("disabled", true);
+                   // jQuery(this).prop("disabled", true);
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
 
 					checkoutObject.prev();
