@@ -311,6 +311,36 @@ define([
 		});
 	};
 	
+	var rendererDescription = function (item, value, node, options){
+		var label = "close";
+		var color = "red";
+		switch(value){
+			case "1":
+				label = "open";
+				color = "green";
+			break;
+			case "0":
+			default:
+				label = "close";
+				color = "red";
+			break;
+		}
+		node.title = this.options[value] || "";
+		
+		jQuery(node).tooltip({
+			container: "body", 
+			trigger: "hover",
+			animation: false, 
+			placement: "top",
+			delay: {"show": 1000, "hide": 0}
+		});
+		var content = put("div");
+		put(content, "p", {
+			innerHTML: "<i style='color:"+color+"' class='icon-2 icon-eye-"+label+"'></i>"
+		});
+		put(node, content);
+	};
+	
 	/**
 	 * @param {string} currency
 	 * @returns {Function}
@@ -398,7 +428,9 @@ define([
 
 				// Prepare fomratter
 				if(childColumn.options){
-					if(column.field=="status"){
+					if(column.field=="description_accepted") {
+						childColumn.renderCell = rendererDescription;
+					} else 	if(column.field=="status"){
 						childColumn.renderCell = rendererStatus;
 					}else{
 						childColumn.formatter = formatterOptionsFactor(
