@@ -57,6 +57,19 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract {
         return "use ex: php -f shell/devtest -action tierCommission -poid 26";
     }
 
+    public function testCheckProductAction() {
+        $pid = $this->getArg('pid');
+        /** @var Zolago_Catalog_Model_Product $product */
+        $product = Mage::getModel("zolagocatalog/product")->load($pid);
+
+        var_dump($product->getData('description_accepted'));
+        var_dump($product->getFinalPrice());
+        var_dump($product->getIsProductCanBeEnabled());
+    }
+
+    public function testCheckProductActionHelp() {
+        return "use ex: php -f shell/devtest -action testCheckProduct -pid 26";
+    }
 }
 
 $shell = new Aoe_Scheduler_Shell_Scheduler();
