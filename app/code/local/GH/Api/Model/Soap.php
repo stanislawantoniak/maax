@@ -348,8 +348,8 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $list = array();
             foreach ($attributeSetCollection as $id => $item) {
                 $m = new StdClass();
-                $m->categorySetId   = $id;
-                $m->categorySetName = $item->getAttributeSetName();
+                $m->categoryId   = $id;
+                $m->categoryName = $item->getAttributeSetName();
                 $list[] = $m;
             }
 
