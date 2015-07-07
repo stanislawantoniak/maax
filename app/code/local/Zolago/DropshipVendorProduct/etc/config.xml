@@ -7,12 +7,44 @@
     </modules>
 
     <global>
-		<models>
-			<udprod>
-				<rewrite>
-					<observer>Zolago_DropshipVendorProduct_Model_Observer</observer>
-				</rewrite>
-			</udprod>
-		</models>
-	</global>
+        <models>
+            <udprod>
+                <rewrite>
+                    <observer>Zolago_DropshipVendorProduct_Model_Observer</observer>
+                </rewrite>
+            </udprod>
+            <catalog>
+                <rewrite>
+                    <product_status>Zolago_DropshipVendorProduct_Model_ProductStatus</product_status>
+                </rewrite>
+            </catalog>
+        </models>
+        <helpers>
+            <zolagovendorproduct>
+                <class>Zolago_DropshipVendorProduct_Helper</class>
+            </zolagovendorproduct>
+        </helpers>
+    </global>
+    <frontend>
+        <translate>
+            <modules>
+                <Zolago_DropshipVendorProduct>
+                    <files>
+                        <default>Zolago_DropshipVendorProduct.csv</default>
+                    </files>
+                </Zolago_DropshipVendorProduct>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Zolago_DropshipVendorProduct>
+                    <files>
+                        <default>Zolago_DropshipVendorProduct.csv</default>
+                    </files>
+                </Zolago_DropshipVendorProduct>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>
