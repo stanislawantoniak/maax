@@ -123,4 +123,16 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
         return $this->getData('media_gallery_images');
     }
+
+    /**
+     * Product can be enabled when have accepted description and any price
+     * @return bool
+     */
+    public function getIsProductCanBeEnabled() {
+        $descAccepted = $this->getData('description_accepted');
+        $isValidPrice = $this->getFinalPrice() > 0 ? true : false;
+        // Check if description is accepted and
+        // Check if price is not zero
+        return $descAccepted && $isValidPrice;
+    }
 }
