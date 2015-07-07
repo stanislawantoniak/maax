@@ -852,6 +852,7 @@
 			onPrepare: function(){
 				var self = this;
 				this.content.find("form").submit(function(){
+                    jQuery("button[id*='-prev']").prop("disabled", false);
                     var submit0Button = jQuery(this).find('button[target=step-0-submit]');
                     submit0Button.prop("disabled", true);
                     var i0 = submit0Button.find('i');
@@ -1577,6 +1578,7 @@
 				this.validate.init();
 
 				this.content.find("form").submit(function(){
+                    jQuery("button[id*='-prev']").prop("disabled", false);
                     var submitButton = jQuery(this).find('button[id=step-1-submit]');
                     submitButton.prop("disabled", true);
                     var i = submitButton.find('i');
@@ -1644,8 +1646,10 @@
                 }).change();
 
 				this.content.find("#step-1-prev").click(function(){
+                    jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery(this).prop("disabled", true);
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
-                    jQuery("button").prop("disabled", false);
+
 					checkoutObject.prev();
 					jQuery(window).trigger("resize");
 					return false;
@@ -1847,6 +1851,7 @@
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
+                    jQuery("button[id*='-prev']").prop("disabled", false);
                     var submit2Button = jQuery(this);
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');
@@ -1856,8 +1861,10 @@
 					checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
+                    jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery(this).prop("disabled", true);
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
-                    jQuery("button").prop("disabled", false);
+
 					checkoutObject.prev();
 					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
 						jQuery('#view_default_pay').trigger('click');
