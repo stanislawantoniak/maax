@@ -1579,6 +1579,7 @@
 
 				this.content.find("form").submit(function(){
                     jQuery("button[id*='-prev']").prop("disabled", false);
+                    jQuery(this).find("button[id*='-prev']").prop("disabled", true);
                     var submitButton = jQuery(this).find('button[id=step-1-submit]');
                     submitButton.prop("disabled", true);
                     var i = submitButton.find('i');
@@ -1647,6 +1648,7 @@
 
 				this.content.find("#step-1-prev").click(function(){
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery("button[id*='-prev']").prop("disabled", false);
                     jQuery(this).prop("disabled", true);
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
 
@@ -1852,6 +1854,7 @@
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
                     jQuery("button[id*='-prev']").prop("disabled", false);
+                    jQuery("#step-2-prev").prop("disabled", true);
                     var submit2Button = jQuery(this);
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');
@@ -1862,6 +1865,7 @@
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery("button[id*='-prev']").prop("disabled", false);
                     jQuery(this).prop("disabled", true);
                     jQuery("i").removeClass('fa fa-spinner fa-spin');
 
