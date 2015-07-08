@@ -125,10 +125,10 @@ define([
                     if (notyObj.text) { // Show msg only once
                         noty(notyObj);
                     }
-                    // Fix for correct updating "changed" select in row for cell status
-                    var row = grid.row(data['entity_id']);
-                    jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
                 }
+                // Fix for correct updating "changed" select in row for cell status
+                var row = grid.row(data['entity_id']);
+                jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
             }, function(evt){
                 obj.changed = states.changed[obj.entity_id] = [];
 
