@@ -7,7 +7,6 @@ $installer->updateAttribute('catalog_product', 'description_accepted', 'is_requi
 $installer->updateAttribute('catalog_product', 'description_accepted', 'default', 0); 
 $installer->updateAttribute('catalog_product', 'description_accepted', 'is_global', Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE); 
 $installer->updateAttribute('catalog_product', 'description_accepted', 'grid_permission', Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY); 
-$installer->updateAttribute('catalog_product', 'status', 'grid_permission', Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DO_NOT_USE); 
 
 
 
