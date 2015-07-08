@@ -101,7 +101,16 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
                     $helper = Mage::helper("zolagocatalog");
                     $data['status']  = $product->getStatus();
 
-                    $data['message']['text']    = $helper->__("Product %s can not be enabled.", $product->getName());
+                    $descAccepted = $this->getData('description_accepted');
+                    $isValidPrice = $this->getFinalPrice() > 0 ? true : false;
+                    if (!$descAccepted) {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled because don't have accepted description.", $product->getName());
+                    } elseif (!$isValidPrice) {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled because don't have valid price.", $product->getName());
+                    } else {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled.", $product->getName());
+                    }
+
                     $data['message']['type']    = 'warning';
 //                    $data['message']['timeout'] = '10000';
                 } else {
