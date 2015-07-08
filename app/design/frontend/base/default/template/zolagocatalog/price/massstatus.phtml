@@ -1,10 +1,8 @@
 <?php
 /* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */
 $_helper = Mage::helper('zolagocatalog');
-
 /** @var Zolago_DropshipVendorProduct_Model_ProductStatus $modelStatuses */
 $modelStatuses = Mage::getModel("catalog/product_status");
-
 ?>
 
 <input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>

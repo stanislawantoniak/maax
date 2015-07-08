@@ -108,7 +108,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 					"global"	  => (int)$global,
 					"time"		  => microtime(true)-$time,
 					"skipped"     => count($productsInCampaignsData) ? 1 : 0,
-                    "skipped_msg" => $this->getShippedMessage($productsInCampaignsData)
+                    "skipped_msg" => $this->getShippedMessage($productsInCampaignsData, "Products skipped because they are in the campaign:<br/>%s")
 				)
 			);
 			
@@ -132,7 +132,83 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
      * Handle mass status save
      */
     public function massStatusSaveAction() {
-        // TODO
+        $time = microtime(true);
+
+        $response = $this->getResponse();
+        $request = $this->getRequest();
+
+        $storeId = $this->_getStoreId();
+        $global = $request->getParam("global");
+        $productsIds = explode(",", $request->getParam("selected", ""));
+        $query = Mage::helper("core")->jsonDecode(base64_decode($request->getParam("encoded_query")));
+        /** @var Zolago_Catalog_Helper_Data $helper */
+        $helper = Mage::helper("zolagocatalog");
+        $attributeData["status"] = $request->getParam("status");
+
+        try{
+
+            if (empty($attributeData["status"])) {
+                throw new Mage_Core_Exception($helper->__("Wrong status selected. Select valid status."));
+            }
+
+            $collection = $this->_prepareCollection();
+            $collection->addAttributes();
+            $collection->addAttributeToSelect(array('skuv','name','description_accepted'));
+
+            if($global && is_array($query)){
+                foreach($this->_getRestQuery($query) as $key=>$value){
+                    $collection->addAttributeToFilter($key, $value, "left");
+                }
+            }elseif($productsIds){
+                $collection->addIdFilter($productsIds);
+            }else{
+                // empty collection if no result found
+                $collection->addIdFilter(-1);
+            }
+            $collection->load();
+
+            // Skip products
+            $allValidIds = array();
+            $skippedData = array();
+            $allIds      = array();
+
+            foreach ($collection as $product) {
+                /** @var Zolago_Catalog_Model_Product $product */
+                if ($attributeData["status"] != Mage_Catalog_Model_Product_Status::STATUS_ENABLED || $product->getIsProductCanBeEnabled()) {
+                    $allValidIds[] = (int)$product->getId();
+                } else {
+                    $skippedData[] = array(
+                        'entity_id' => (int)$product->getId(),
+                        'name'      => $product->getName(),
+                        'skuv'      => $product->getSkuv()
+                    );
+                }
+                $allIds[] = (int)$product->getId();
+            }
+
+            if($allValidIds && $attributeData){
+                $this->_processAttributresSave($allValidIds, $attributeData, $storeId, array());
+            }
+
+            // Prepare response data
+            $data = array(
+                "status"	=> 1,
+                "content"	=> array(
+                    "changed_ids" => $allIds,
+                    "changes"	  => $attributeData,
+                    "global"	  => (int)$global,
+                    "time"		  => microtime(true)-$time,
+                    "skipped"     => count($skippedData) ? 1 : 0,
+                    "skipped_msg" => $this->getShippedMessage($skippedData, "Products skipped because they are have not accepted descriptions or invalid prices:<br/>%s")
+                )
+            );
+
+            $response->setBody(Mage::helper('core')->jsonEncode($data));
+        } catch (Exception $ex) {
+            $response->setHttpResponseCode(500);
+            $response->setBody($ex->getMessage());
+        }
+        $this->_prepareRestResponse();
     }
 	
 	/**
@@ -156,17 +232,18 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
      *    'name'      => $prod->getName(),
      *    'skuv'      => $prod->getSkuv() );
      *
-     * @param $productsInCampaignsData
+     * @param array $skippedData
+     * @param string $msg
      * @param int $maxShow
      * @return string
      */
-    private function getShippedMessage($productsInCampaignsData, $maxShow = 10) {
+    private function getShippedMessage($skippedData, $msg, $maxShow = 10) {
         /** @var Zolago_Catalog_Helper_Data $hlp */
         $hlp = Mage::helper("zolagocatalog");
         $skippedProducts = '';
 
         $i = 0;
-        foreach ($productsInCampaignsData as $prod) {
+        foreach ($skippedData as $prod) {
             if ($i >= $maxShow) {
                 break;
             }
@@ -178,7 +255,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             $skippedProducts .= ' ...';
         }
 
-        return $hlp->__("Products skipped because they are in the campaign:<br/>%s", $skippedProducts);
+        return $hlp->__($msg, $skippedProducts);
     }
 }
 
