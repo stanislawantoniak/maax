@@ -110,17 +110,24 @@ define([
                     var notyObj = {};
                     if (data['message']['text']) {
                         notyObj.text = data['message']['text'];
+                        data['message']['text'] = undefined;// Show msg only once
                     }
                     if (data['message']['type']) {
                         notyObj.type = data['message']['type'];
+                        data['message']['type'] = undefined;
                     } else {
                         notyObj.type = 'warning';// Default
                     }
                     if (data['message']['timeout']) {
                         notyObj.timeout = data['message']['timeout'];
+                        data['message']['timeout'] = undefined;
                     }
-                    noty(notyObj);
-                    //var row = grid.row(data['entity_id']);
+                    if (notyObj.text) { // Show msg only once
+                        noty(notyObj);
+                    }
+                    // Fix for correct updating "changed" select in row for cell status
+                    var row = grid.row(data['entity_id']);
+                    jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
                 }
             }, function(evt){
                 obj.changed = states.changed[obj.entity_id] = [];
