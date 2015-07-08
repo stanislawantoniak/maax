@@ -663,12 +663,7 @@ define([
 			misc.startLoading();
 			massConfirm.trigger(e).always(misc.stopLoading);
 		});
-		
-		on(dom.byId("massDisbaleProducts"), "click", function(e){
-			misc.startLoading();
-			massDisable.trigger(e).always(misc.stopLoading);
-		});
-	}
+	};
 	
 	////////////////////////////////////////////////////////////////////////////
 	// The grid

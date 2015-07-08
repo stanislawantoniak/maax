@@ -1,0 +1,16 @@
+<?php
+/* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */
+$_helper = Mage::helper('zolagocatalog');
+?>
+
+<input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>
+<input type="hidden" name="global" value="<?php echo $this->getGlobal() ? "1" : "0";?>"/>
+<input type="hidden" name="encoded_query" value="<?php echo $this->getEncodedQuery();?>"/>
+<input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
+<p class="alert alert-info">
+    <strong><?php echo $this->__("Information");?>:</strong>
+    <?php echo $this->__("info-vendor-price-mass-change-status");?>
+</p>
+<div class="row">
+    // TODO
+</div>

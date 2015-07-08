@@ -120,6 +120,20 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		$this->_prepareRestResponse();
 	}
 
+    /**
+     * Handle mass status
+     */
+    public function massStatusAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    /**
+     * Handle mass status save
+     */
+    public function massStatusSaveAction() {
+        // TODO
+    }
 	
 	/**
 	 * @return Zolago_Catalog_Model_Resource_Vendor_Price_Collection

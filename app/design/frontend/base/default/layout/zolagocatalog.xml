@@ -72,6 +72,12 @@
             <block type="zolagocatalog/vendor_price_mass" template="zolagocatalog/price/mass.phtml"/>
         </block>
 	</udprod_vendor_price_mass>
+
+    <udprod_vendor_price_massstatus>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagocatalog/vendor_price_mass" template="zolagocatalog/price/massstatus.phtml"/>
+        </block>
+    </udprod_vendor_price_massstatus>
 	
 	<udprod_vendor_price_detail_pricemodal>
 		<block type="core/text_list" name="root" output="toHtml">
