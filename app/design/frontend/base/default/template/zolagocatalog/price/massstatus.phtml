@@ -1,6 +1,10 @@
 <?php
 /* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */
 $_helper = Mage::helper('zolagocatalog');
+
+/** @var Zolago_DropshipVendorProduct_Model_ProductStatus $modelStatuses */
+$modelStatuses = Mage::getModel("catalog/product_status");
+
 ?>
 
 <input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>
@@ -11,6 +15,15 @@ $_helper = Mage::helper('zolagocatalog');
     <strong><?php echo $this->__("Information");?>:</strong>
     <?php echo $this->__("info-vendor-price-mass-change-status");?>
 </p>
-<div class="row">
-    // TODO
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <span class="help-block"><?php echo $_helper->__("Status");?></span>
+            <select id="mass-change-status-select"  name="status" type="text" class="form-control mass-change-status-select">
+                <?php foreach ($modelStatuses->getAllOptions() as $option):?>
+                    <option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+    </div>
 </div>

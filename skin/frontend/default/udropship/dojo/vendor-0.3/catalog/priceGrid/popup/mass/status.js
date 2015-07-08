@@ -34,11 +34,16 @@ define([
 
             var form = node.parents("form"),
                 btn = jQuery(".btn-primary", form),
+                massChangeStatusSelect = jQuery(".mass-change-status-select", node),
                 self = this;
 
             var refreshSaveBtn = function(){
-
+                btn.prop("disabled", !jQuery(".mass-change-status-select", node).val().length);
             };
+
+            massChangeStatusSelect.change(function(){
+                refreshSaveBtn();
+            });
 
             refreshSaveBtn();
         }
