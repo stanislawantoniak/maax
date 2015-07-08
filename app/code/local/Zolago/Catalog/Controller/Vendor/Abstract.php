@@ -107,6 +107,8 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
                         $data['message']['text'] = $helper->__("Product %s can not change status to enabled because don't have accepted description.", $product->getName());
                     } elseif (!$isValidPrice) {
                         $data['message']['text'] = $helper->__("Product %s can not change status to enabled because don't have valid price.", $product->getName());
+                    } else {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled.", $product->getName());
                     }
 
                     $data['message']['type']    = 'warning';
