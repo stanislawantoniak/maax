@@ -44,7 +44,12 @@ jQuery(function($){
                 required: true,
                 postcodeWithReplace: true
             }
-		}
+		},
+        messages: {
+            "postcode": {
+                postcodeWithReplace: '<?php echo Mage::helper("zolagopos")->__("Zip code has not valid format (ex.12-345)"); ?>'
+            }
+        }
 	});
 });
 </script>
