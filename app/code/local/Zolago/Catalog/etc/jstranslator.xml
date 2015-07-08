@@ -120,6 +120,9 @@
     <mass-price-change translate="message" module="zolagocatalog">
         <message>Mass price change</message>
     </mass-price-change>
+    <mass-status-change translate="message" module="zolagocatalog">
+        <message>Mass status change</message>
+    </mass-status-change>
     <empty translate="message" module="zolagocatalog">
         <message>empty</message>
     </empty>
