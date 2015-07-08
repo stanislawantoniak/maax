@@ -1344,6 +1344,20 @@ Mall.isFirefox = function() {
 	return jQuery.browser.mozilla === true;
 };
 
+Mall.swipeOptions = {
+	swipeLeft:function(event) {
+		if (jQuery('body').hasClass('sb-open')) {
+			closeHamburgerMenu(event);
+		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
+			Mall.listing.closeMobileFilters();
+		}
+		jQuery(window).swipe("destroy");
+	},
+	triggerOnTouchEnd: true,
+	excludedElements: "label, button, input, select, textarea, .noSwipe",
+	threshold: 5
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
@@ -1352,29 +1366,12 @@ jQuery(document).ready(function() {
 	Mall.Slick.init();
 	Mall.Footer.init();
 
-
-
 	jQuery(".header_top").headroom({
 		offset: 60
 	});
 
 	initToggleSearch();
     Mall.disableSearchNoQuery();
-
-    // Close  by swipe: Slidebars Submenus and mobile filters in listing
-    jQuery(window).swipe( {
-        swipeLeft:function(event) {
-            if (jQuery('body').hasClass('sb-open')) {
-                closeHamburgerMenu(event);
-            }
-            if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
-                Mall.listing.closeMobileFilters();
-            }
-        },
-        triggerOnTouchEnd: true,
-        excludedElements: "label, button, input, select, textarea, .noSwipe",
-        threshold: 5
-    });
 
     //hack for vendor main page (turpentine shows global messages only one time)
     if(jQuery(".page-messages-block ul.messages").length > 0){
