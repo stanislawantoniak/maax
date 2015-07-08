@@ -211,3 +211,4 @@
 "info-vendor-price-mass-change-status","Ta funkcja spowoduje zapisanie statusu dla zaznaczonych produktów."
 "Wrong status selected. Select valid status.","Wybrano błędny status. Wybierz z listy poprawny status."
 "Products skipped because they are have not accepted descriptions or invalid prices:<br/>%s","Pominięto produkty ponieważ nie mają zaakceptowanego opisu lub mają niepoprawną cene:<br/>%s"
+"Change statuses","Zmień statusy"
