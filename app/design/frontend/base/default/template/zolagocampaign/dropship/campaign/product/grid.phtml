@@ -60,6 +60,11 @@ $numColumns = sizeof($this->getColumns());
             </div>
         <?php endif;?>
         <div class="pull-right form-inline">
+            <div class="form-group" style="margin-right: 10px;">
+                  <a data-toggle="modal" data-target="#browseProducts" class="btn btn-success">
+                    <i class="icon-plus"></i>&nbsp;<?php echo $_helper->__("Add products"); ?>
+                  </a>
+            </div>
             <?php $_curPage  = $this->getCollection()->getCurPage() ?>
             <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
             <div class="form-group">
