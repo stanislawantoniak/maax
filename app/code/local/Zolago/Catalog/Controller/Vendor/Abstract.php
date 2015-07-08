@@ -84,7 +84,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
 				
 		try{
-			$productIds = $data['entity_id'];
+			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
 			$storeId = $data['store_id'];
@@ -95,8 +95,19 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				}
 			}
 			if($attributeData){
-				$this->_processAttributresSave(array($productIds), $attributeData, $storeId, $data);
-			}
+                /** @var Zolago_Catalog_Model_Product $product */
+                $product = Mage::getModel("zolagocatalog/product")->load($productId);
+                if (in_array('status', $attributeChanged) && !$product->getIsProductCanBeEnabled() && $data['status'] == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+                    $helper = Mage::helper("zolagocatalog");
+                    $data['status']  = $product->getStatus();
+
+                    $data['message']['text']    = $helper->__("Product %s can not be enabled.", $product->getName());
+                    $data['message']['type']    = 'warning';
+//                    $data['message']['timeout'] = '10000';
+                } else {
+                    $this->_processAttributresSave(array($productId), $attributeData, $storeId, $data);
+                }
+            }
 
 		} catch (Mage_Core_Exception $ex) {
 			$reposnse->setHttpResponseCode(500);

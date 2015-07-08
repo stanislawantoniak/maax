@@ -93,7 +93,7 @@ define([
 			}
 			//updater.setCanProcess(false);
 			
-			
+
 			var ret = JsonRest.prototype.query.call(this, query, options);
 			
 			//ret.then(function(){updater.setCanProcess(true);})
@@ -104,13 +104,35 @@ define([
 		put: function(obj){
 			obj.changed = states.changed[obj.entity_id];
 			var def = JsonRest.prototype.put.apply(this, arguments);
-			def.then(function(){
-				obj.changed = states.changed[obj.entity_id] = [];
-			}, function(evt){
-				obj.changed = states.changed[obj.entity_id] = [];
+			def.then(function(data){
+                obj.changed = states.changed[obj.entity_id] = [];
+                if (data['message']) {
+                    var notyObj = {};
+                    if (data['message']['text']) {
+                        notyObj.text = data['message']['text'];
+                        data['message']['text'] = undefined;// Show msg only once
+                    }
+                    if (data['message']['type']) {
+                        notyObj.type = data['message']['type'];
+                        data['message']['type'] = undefined;
+                    } else {
+                        notyObj.type = 'warning';// Default
+                    }
+                    if (data['message']['timeout']) {
+                        notyObj.timeout = data['message']['timeout'];
+                        data['message']['timeout'] = undefined;
+                    }
+                    if (notyObj.text) { // Show msg only once
+                        noty(notyObj);
+                    }
+                    // Fix for correct updating "changed" select in row for cell status
+                    var row = grid.row(data['entity_id']);
+                    jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
+                }
+            }, function(evt){
+                obj.changed = states.changed[obj.entity_id] = [];
 
 				var id = obj.entity_id;
-						
 				if(states.orig[id]){
 					if (grid.dirty.hasOwnProperty(id)) {
 						delete grid.dirty[id]; // delete dirty data
