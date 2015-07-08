@@ -188,7 +188,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
                             && (isset($picture->pictures_h) && !empty($picture->pictures_h))
                         ) {
-                            $afterImageElementHtml = "<p class='help-block align-left'>" .
+                            $afterImageElementHtml = "<p class='align-left'>" .
                                 $helper->__("UWAGA! Zdjęcie musi mieć szerokość %spx i wysokość %spx", $pictureW, $pictureH) .
                                 "</p>";
                             $imageOptions = array_merge($imageOptions,
@@ -237,7 +237,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
                         if ($captionMaxSymbols) {
-                            $afterElementHtml = "<p class='help-block align-left'>" .
+                            $afterElementHtml = "<p class='align-left'>" .
                                 $helper->__('Max length is %s', $captionMaxSymbols) .
                                 "</p>";
                             $captionOptions = array_merge($captionOptions,
