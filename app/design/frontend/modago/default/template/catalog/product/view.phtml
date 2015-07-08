@@ -241,7 +241,7 @@ if($vendorContext && $vendorContext->getId()) {
 	            ?>
 	            <figure>
 		            <h3 id="bLogo">
-			            <a href="<?php echo $vendorInfo->getBrandshopVendorUrl(); ?>">
+			            <a href="<?php echo $vendorInfo->getVendorUrl(); ?>">
 				            <img itemprop="logo" src="<?php echo $vendorInfo->getLogoUrl(); ?>" alt="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>">
 				            <meta itemprop="brand" content="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>" />
 			            </a>
