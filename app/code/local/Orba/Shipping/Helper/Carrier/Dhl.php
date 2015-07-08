@@ -329,12 +329,10 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             $zip = str_replace('-', '', $zip);
             $zipModel = Mage::getModel('orbashipping/zip');
             $source = $zipModel->load($zip, 'zip')->getId();
-            Mage::log($source);
             if (!empty($source)) {
                 return true;
             } else {
                 $ret = $this->_getDhlPostalService($zip,time());
-                Mage::log($ret);
                 if ($ret) {
                     $zipModel = Mage::getResourceModel('orbashipping/zip');
                     $zipModel->updateDhlZip($country, $zip);
