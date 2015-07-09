@@ -1,20 +1,45 @@
+<?php
+/** @var Zolago_Catalog_Block_Vendor_Price */
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+?>
 
 <div class="container">
     <div class="page-header row">
         <div class="col-lg-4 page-title">
-            <h3><?php echo Mage::helper("zolagocatalog")->__("Mass prices");?></h3>
-			<span class="tageline"><?php echo Mage::helper("zolagocatalog")->__("Manage prices and stocks");?></span>
+            <h3><?php echo $helper->__("Mass prices");?></h3>
+			<span class="tageline"><?php echo $helper->__("Manage prices and stocks");?></span>
         </div>
 		<div class="col-lg-4 main-actions ">
-			<label><?php echo Mage::helper("zolagocatalog")->__("Selected");?>: </label>
-			<button class="btn" disabled="disabled" id="change-prices">
-				<i class="icon icon-pencil"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Change prices");?>
-			</button>
+            <div style="position: relative;">
+                <button class="btn btn-default dropdown-toggle" type="button" disabled="disabled" id="massActions" data-toggle="dropdown" aria-expanded="true">
+                    <?php echo $helper->__("Selected"); ?>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="massActions">
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#" id="change-prices">
+                            <i class="icon icon-pencil"></i>
+                            <?php echo $helper->__("Change prices"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-2" href="#" id="mass-change-statuses">
+                            <i class="icon icon-off"></i>
+                            <?php echo $helper->__("Change statuses"); ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 		</div>
 		<div class="main-actions align-right col-lg-4 " style="padding-right: 0;">
 			<form>
-				<select id="store-switcher" class="form-control">
+				<select id="store-switcher" class="form-control"><li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#" id="change-prices">
+                            <i class="icon icon-pencil"></i>
+                            <?php echo $helper->__("Change prices"); ?>
+                        </a>
+                    </li>
 					<?php foreach($this->getAllowedStores() as $store):?>
 					<option value="<?php echo $this->escapeHtml($store->getId());?>" <?php if($this->getCurrentStoreId()==$store->getId()):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store->getName());?></option>
 					<?php endforeach;?>

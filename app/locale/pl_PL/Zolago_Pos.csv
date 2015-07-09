@@ -1,4 +1,4 @@
-"Pos", "Point Of Sale"
+﻿"Pos", "Point Of Sale"
 "Create POS", "Dodaj POS"
 "Client number", "Numer klienta"
 "Phone", "Telefon"
@@ -37,4 +37,5 @@
 "Save","Zapisz"
 "This field is required.","To pole jest wymagane."
 "POS Saved","Dane POS zostały zapisane"
+"Zip code has not valid format (ex.12-345)","Niepoprawny kod pocztowy. Powinien składać się z 5 liczb, w formacie XX-XXX."
 
