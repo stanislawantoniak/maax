@@ -48,6 +48,9 @@
     <price-type translate="message" module="zolagocatalog">
         <message>Type</message>
     </price-type>
+    <price-politics translate="message" module="zolagocatalog">
+        <message>Manually disabled</message>
+    </price-politics>
     <price-loading translate="message" module="zolagocatalog">
         <message>Loading...</message>
     </price-loading>

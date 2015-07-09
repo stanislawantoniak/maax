@@ -50,7 +50,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$stockTable = $this->getTable('cataloginventory/stock_item');
 		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
-		
 		// Join price attrib
 		$priceExpression = $adapter->getCheckSql(
 			'(at_campaign_regular_id.value IS NOT NULL) AND (at_campaign_regular_id.value > 0)', 
@@ -61,7 +60,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$this->addExpressionAttributeToSelect('display_price', $priceExpression, array());
 		
 		
-		// Join stock item from stock index
+		// Join stock item from stocak index
 		$this->joinTable(
 				$stockStatusTable, 
 				'product_id=entity_id',
@@ -69,7 +68,14 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
 				'left'
 		);
+		$select->join(
+				array('cataloginventory_stock_table' => $stockTable), 
+				"e.entity_id = cataloginventory_stock_table.product_id", 
+				array()
+        );
 		
+		$this->addExpressionAttributeToSelect('politics', 
+				"IF(e.type_id IN ('configurable', 'grouped'), (cataloginventory_stock_table.manage_stock = 1 AND cataloginventory_stock_table.is_in_stock = 0) , (cataloginventory_stock_table.min_qty>999999) )", array());
 		// Join all childs count
 		$subSelect = $adapter->select();
 		$subSelect->from(array("link_all"=>$linkTabel), array("COUNT(link_all.link_id)"));
@@ -94,15 +100,13 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$subSelect->from(array("link_qty"=>$linkTabel), array("IFNULL(SUM(child_qty.qty),0)"));
 		$subSelect->join(
 				array("child_qty"=>$stockTable), 
-				"link_qty.product_id=child_qty.product_id", 
-				array());
+				"link_qty.product_id=child_qty.product_id", array());
 		$subSelect->where("link_qty.parent_id=e.entity_id");
 		$subSelect->where("child_qty.is_in_stock=?",1);
 		
 		// Use subselect only for parent products
 		$this->addExpressionAttributeToSelect('stock_qty', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), IFNULL($stockStatusTable.qty,0))", array());
-		
 		return $this;
 	}
 	
@@ -141,6 +145,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"status",
 			"type_id",
 			"skuv",
+			"politics",
 		);
 	}
 	
@@ -163,6 +168,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"stock",
 			"status",
 			"type_id",
+			"politics",
 		));
 	}
    

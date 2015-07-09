@@ -478,6 +478,27 @@ define([
 					}
 				]
 			},
+			politics: {
+				label: Translator.translate("Manually disabled"), 
+				field: "politics",
+				className: "column-short",				
+				children: [
+					{
+						renderHeaderCell: filterRendererFacory("select", "politics", {options: boolOptions}),
+						sortable: false,
+						field: "politics",
+						className: "filterable align-center column-short text-overflow",
+						formatter: function(value, item){
+							for(var i=0; i<boolOptions.length; i++){
+								if(boolOptions[i].value+'' == value+''){
+									return boolOptions[i].label;
+								}
+							}
+							return "";
+						}
+					}
+				]
+			},
 			status: { 
 				label: "Status", 
 				field: "status",
