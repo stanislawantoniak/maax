@@ -195,3 +195,4 @@
 "Ordering a refund will inform gallery administrators about need of refunding the money. Refund will be processed manually and then will change it's status to completed","Zlecenie zwrotu poinformuje administrację galerii o potrzebie zwrócenia pieniędzy klientowi. Zwrot zmieni status na zakończony po ręcznym potwierdzeniu przez administratora."
 "{{author_name}} has confirmed refund for this RMA, amount: %s","{{author_name}} potwierdził wykonanie zwrotu do tego RMA na kwotę %s"
 "{{author_name}} has ordered refund for this RMA, amount: %s","{{author_name}} zlecił wykonanie zwrotu do tego RMA na kwotę %s"
+"Shipping costs","Koszty dostawy"

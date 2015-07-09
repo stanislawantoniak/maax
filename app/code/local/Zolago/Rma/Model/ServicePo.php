@@ -63,6 +63,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
                 }
     			$orderItem = $poItem->getOrderItem();    			
                 $item = $this->_convertor->itemToRmaItem($poItem);
+	            Mage::log(get_class($item),null,'rmaitemclass.log');
                 $item->setQty(1); // only 1 by line
                 $item->setItemCondition($conditions[$itemId][$packId]);
 	            $item->setCommissionPercent($poItems[$itemId]->getCommissionPercent());
@@ -75,12 +76,12 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
             }
         }
 
-
         if (empty($rmaItems)) {
             Mage::throwException(
                 Mage::getStoreConfig('urma/message/customer_no_items')
             );
         }
+
         foreach ($rmaItems as $vId=>$items) {
             if (empty($items)) continue;
             
@@ -98,10 +99,27 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
 			$rma->addData($data);
             $rmas[$vId] = $rma;
             foreach ($items as $item) {
+	            Mage::log($item->getData(),null,'itemdata.log');
                 $rma->addItem($item);
             }
-
         }
+
+	    //add shipping costs
+	    foreach($rmas as $rma) {
+		    /** @var $rma Zolago_Rma_Model_Rma */
+		    /** @var Zolago_Rma_Model_Rma_Item $shippingRmaItem */
+		    $shippingRmaItem = Mage::getModel('zolagorma/rma_item');
+		    $po = $rma->getPo();
+		    $shippingCostsIncludingTax = $po->getShippingAmountIncl();
+		    $shippingCostsExcludingTax = $po->getShippingAmount();
+		    $shippingRmaItem->setData(array(
+			    'name' => 'Shipping costs',
+			    'price' => $shippingCostsIncludingTax,
+			    'base_cost' => $shippingCostsExcludingTax,
+			    'qty' => 1,
+		    ));
+		    $rma->addItem($shippingRmaItem);
+	    }
         
         return $rmas;
     }
