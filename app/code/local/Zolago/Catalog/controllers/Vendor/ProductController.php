@@ -70,7 +70,7 @@ class Zolago_Catalog_Vendor_ProductController
 					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);											
 					$this->_processAttributresSave(
 						$ids, 
-						array("description_accepted"=>1), 
+						array("description_status" => Zolago_Catalog_Model_Product_Source_Description::DESCRIPTION_ACCEPTED),
 						$storeId, 
 						array("check_editable"=>false)
 					);

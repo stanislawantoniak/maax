@@ -312,19 +312,27 @@ define([
 	};
 	
 	var rendererDescription = function (item, value, node, options){
+
+        // @see Zolago_Catalog_Model_Product_Source_Description
+        // const DESCRIPTION_NOT_ACCEPTED = -1;// Nie zatwierdzony
+        // const DESCRIPTION_WAITING      =  0;// Oczekuje na zatwierdzenie
+        // const DESCRIPTION_ACCEPTED     =  1;// Zatwierdzony
+
+        value = parseInt(value);
 		var label = "close";
 		var color = "red";
-		switch(value){
-			case "1":
-				label = "open";
-				color = "green";
-			break;
-			case "0":
-			default:
-				label = "close";
-				color = "red";
-			break;
-		}
+        switch (value) {
+            case 1:
+                label = "open";
+                color = "green";
+                break;
+            case -1:
+            case 0:
+            default:
+                label = "close";
+                color = "red";
+                break;
+        }
 		node.title = this.options[value] || "";
 		
 		jQuery(node).tooltip({
@@ -428,7 +436,7 @@ define([
 
 				// Prepare fomratter
 				if(childColumn.options){
-					if(column.field=="description_accepted") {
+					if(column.field=="description_status") {
 						childColumn.renderCell = rendererDescription;
 					} else 	if(column.field=="status"){
 						childColumn.renderCell = rendererStatus;
