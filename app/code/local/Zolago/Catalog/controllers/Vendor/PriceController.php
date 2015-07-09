@@ -55,7 +55,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		
 		try{
 			
-			$priceCollection = $this->_prepareCollection();
+			$priceCollection = $this->_getCollection();
 			if($global && is_array($query)){
 				foreach($this->_getRestQuery($query) as $key=>$value){
 					$priceCollection->addAttributeToFilter($key, $value, "left");
@@ -151,9 +151,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
                 throw new Mage_Core_Exception($helper->__("Wrong status selected. Select valid status."));
             }
 
-            $collection = $this->_prepareCollection();
-            $collection->addAttributes();
-            $collection->addAttributeToSelect(array('skuv','name','description_accepted'));
+            $collection = $this->_getCollection();
+            $collection->addAttributeToSelect(array('description_accepted'));
 
             if($global && is_array($query)){
                 foreach($this->_getRestQuery($query) as $key=>$value){

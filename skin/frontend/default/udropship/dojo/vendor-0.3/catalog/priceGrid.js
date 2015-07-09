@@ -175,7 +175,7 @@ define([
 				renderHeaderCell: function(node){
 					on(node, "click", function(){
 						updater.toggleExpandAll();
-					})
+					});
 					
 					node.innerHTML = updater.getExpandSign();
 					node.style.cursor = "pointer";
@@ -256,7 +256,6 @@ define([
 				className: "column-medium",
 				children: [
 					{
-						className: "filterable align-right column-medium",
 						renderHeaderCell: filterRendererFacory("range", "price_margin"),
 						sortable: false, 
 						field: "price_margin",
@@ -597,7 +596,7 @@ define([
 		
 		massPriceUpdater.handleClick({
 			"global":	global ? 1 : 0,
-			"query":	global ? query : {},
+			"query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
 			"selected": selected.join(","),
 			"store_id": switcher.value
 		});
@@ -615,7 +614,7 @@ define([
 
         massStatusUpdater.handleClick({
             "global":	global ? 1 : 0,
-            "query":	global ? query : {},
+            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
             "selected": selected.join(","),
             "store_id": switcher.value
         });
