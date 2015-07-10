@@ -26,6 +26,7 @@ body {
 	.headroom--top {
 		position: static !important;
 		margin-top: -56px !important;
+		transition: none !important;
 	}
 	&.sb-open > header {
 		margin-left: 288px;
