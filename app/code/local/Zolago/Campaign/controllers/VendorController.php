@@ -158,7 +158,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 }
                 return $this->_redirectReferer();
             }
-            $this->_getSession()->addSuccess($helper->__('Campaign "%s" saved', $campaign->getName()));
+            if($campaign->isObjectNew()){
+                $this->_getSession()->addSuccess($helper->__('Campaign "%s" saved. Now you can attach creations and products to the campaign.', $campaign->getName()));
+            } else {
+                $this->_getSession()->addSuccess($helper->__('Campaign "%s" saved', $campaign->getName()));
+            }
+
             $campaignId = $campaign->getId();
             if ($campaign->isObjectNew() && !empty($campaignId)) {
                 return $this->_redirect("*/*/edit", array('id' => $campaignId));
