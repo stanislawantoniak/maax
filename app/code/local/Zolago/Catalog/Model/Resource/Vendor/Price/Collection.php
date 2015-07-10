@@ -12,6 +12,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"msrp",
 			"product_flag",
 			"status",
+			"description_status",
 			"special_price",
 			"price",
 			"skuv"
@@ -143,6 +144,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"available_child_count",
 			"stock_qty",
 			"status",
+            "description_status",
 			"type_id",
 			"skuv",
 			"politics",
@@ -167,6 +169,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"available_child_count",
 			"stock",
 			"status",
+            "description_status",
 			"type_id",
 			"politics",
 		));
