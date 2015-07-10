@@ -3,7 +3,7 @@
 class Zolago_Payment_Model_Source_Channel_Owner
 {
     const OWNER_MALL     = 1;
-    const OWNER_VENDOR   = 2;
+    const OWNER_VENDOR   = 0;
 
     public function toOptionArray()
     {
