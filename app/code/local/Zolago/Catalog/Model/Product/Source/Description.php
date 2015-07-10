@@ -28,4 +28,22 @@ class Zolago_Catalog_Model_Product_Source_Description
         }
         return $this->_options;
     }
+
+    /**
+     * @param bool $selector
+     * @return array
+     */
+    public function toOptionHash($selector = false) {
+
+        $arr = array();
+        if ($selector) {
+            $arr[''] = Mage::helper("zolagocatalog")->__("* Please select");
+        }
+
+        $arr[self::DESCRIPTION_NOT_ACCEPTED] = Mage::helper("zolagocatalog")->__("Description not accepted");
+        $arr[self::DESCRIPTION_WAITING     ] = Mage::helper("zolagocatalog")->__("Description waiting for acceptation");
+        $arr[self::DESCRIPTION_ACCEPTED    ] = Mage::helper("zolagocatalog")->__("Description accepted");
+
+        return $arr;
+    }
 }

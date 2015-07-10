@@ -552,8 +552,9 @@
                         <label>Product Review Status</label>
                         <type>select</type>
                         <fieldset>vendor_info</fieldset>
-						<source_model>zolagodropship/source_review</source_model>
+                        <source_model>zolagodropship/source</source_model>
                         <position>800</position>
+                        <selector>1</selector>
                     </review_status>					
 					<!-- label store -->
 					<label_store>
