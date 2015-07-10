@@ -1351,7 +1351,9 @@ Mall.swipeOptions = {
 		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
 			Mall.listing.closeMobileFilters();
 		}
-		jQuery(window).swipe("destroy");
+		setTimeout(function() {
+			jQuery(window).swipe("destroy");
+		},100);
 	},
 	triggerOnTouchEnd: true,
 	excludedElements: "label, button, input, select, textarea, .noSwipe",
