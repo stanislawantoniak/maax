@@ -242,9 +242,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		if($modelId){
 			$model->load($modelId);
 		}
-//		if(!$this->_validateModel($model)){
-//			throw new Mage_Core_Exception(Mage::helper('zolagocampaign')->__("Model is not vaild"));
-//		}
+
 		Mage::register('current_campaign', $model);
 		return $model;
 	}

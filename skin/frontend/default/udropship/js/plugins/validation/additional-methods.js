@@ -821,7 +821,7 @@ jQuery.validator.addMethod('pricePositive', function(value, element) {
 // urlkey validate format
 jQuery.validator.addMethod('urlKeyFormat', function(value, element) {
 	return this.optional(element) || (/^[a-z0-9][a-z0-9\_\-\.]{3,99}[a-z0-9]$/.test(value) && !/\-\-+|\.\.+|\_\_+/.test(value));	
-}, jQuery.format(Translator.translate("Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'.")));
+}, jQuery.format(Translator.translate("Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Starts with alphanumeric. No '--', '__', '..'.")));
 
 // urlkey validate
 jQuery.validator.addMethod('urlKeyExists', function(value, element) {

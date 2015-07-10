@@ -16,8 +16,10 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
 <form name="campaign-position" method="POST" action="/campaign/placement_category/save">
     <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>" />
     <div class="page-heading row">
-        <div class="col-lg-6">
-            <h3><span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
+        <div class="col-lg-12">
+            <h3><?php echo $_helper->__('Manage placements on page') ?>: <span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
+            <p><?php echo $_helper->__('Dodawaj lub usuwaj ze strony, ustawiaj kolejność i priorytet reklam.') ?></p>
+            <p><?php echo $_helper->__('UWAGA! Nie musisz zapisywać zmian - każda zmiana poniżej od razu automaticznie wprowadzana jest na stronę serwisu.') ?></p>
         </div>
     </div>
     <div class="page-heading row">
@@ -306,8 +308,8 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         </select>
                     </div>
                     <div class="row">
-                        <a data-edit-val="link-delete" href="" data-toggle="modal" data-target="#confirm-delete">
-                            <?php echo $_helper->__("Delete this creative from the placement"); ?>
+                        <a data-edit-val="link-delete" class="btn btn-danger" href="" data-toggle="modal" data-target="#confirm-delete">
+                            <i class="icon-remove"></i>&nbsp;<?php echo $_helper->__("Delete this creative from the placement"); ?>
                         </a>
                     </div>
                 </div>
@@ -624,7 +626,7 @@ jQuery(function ($) {
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-12 dates">' +
-                '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
+                '<i class="'+status+'" data-edit-val="link-edit-status"></i> '+
                  dates +
                 '</div>' +
                 '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +

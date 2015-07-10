@@ -164,7 +164,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $bannerContent->addField("show", "hidden", array(
             "name" => "show"
         ));
-        $bannerContent->addType("thumb","Zolago_Banner_Varien_Data_Form_Element_Thumbnail");
+        $bannerContent->addType("thumb", "Zolago_Banner_Varien_Data_Form_Element_Thumbnail");
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
@@ -181,12 +181,14 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             "class" => "form-control",
                             "required" => true,
                             "data_attribute" => array('restrictw' => $pictureW, 'restricth' => $pictureH),
-                            "label" => $helper->__($picture->picture_label)
+                            "label" => $helper->__($picture->picture_label),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         );
                         if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
                             && (isset($picture->pictures_h) && !empty($picture->pictures_h))
                         ) {
-                            $afterImageElementHtml = "<p class='help-block align-left'>" .
+                            $afterImageElementHtml = "<p class='align-left'>" .
                                 $helper->__("UWAGA! Zdjęcie musi mieć szerokość %spx i wysokość %spx", $pictureW, $pictureH) .
                                 "</p>";
                             $imageOptions = array_merge($imageOptions,
@@ -200,9 +202,11 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
                         $bannerContent->addField("image_url_" . $n, "text", array(
                             "name" => "image_url[" . $n . "]",
-                            "class" => "form-control",
+                            "class" => "form-control urlKeyFormat",
                             "required" => $pictureUrlRequired,
-                            "label" => $helper->__($picture->picture_label . ": url")
+                            "label" => $helper->__($picture->picture_label . ": url"),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         ));
                     }
                     unset($n);
@@ -216,25 +220,28 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                     foreach ($data->caption as $n => $caption) {
                         $bannerContent->addField("caption_url_" . $n, "text", array(
                             "name" => "caption_url[" . $n . "]",
-                            "class" => "form-control",
+                            "class" => "form-control urlKeyFormat",
                             "required" => $captionUrlRequired,
-                            "label" => $helper->__($caption->caption_label . ": url")
+                            "label" => $helper->__($caption->caption_label . ": url"),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         ));
                         $captionOptions = array(
                             "name" => "caption_text[" . $n . "]",
                             "class" => "form-control",
                             "required" => $captionUrlRequired,
-                            "label" => $helper->__($caption->caption_label . ": text")
+                            "label" => $helper->__($caption->caption_label . ": text"),
+                            "label_wrapper_class" => "col-md-3",
+                            "wrapper_class" => "col-md-6"
                         );
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
                         if ($captionMaxSymbols) {
-                            $afterElementHtml = "<p class='help-block align-left'>" .
+                            $afterElementHtml = "<p class='align-left'>" .
                                 $helper->__('Max length is %s', $captionMaxSymbols) .
                                 "</p>";
                             $captionOptions = array_merge($captionOptions,
                                 array(
-                                    //'maxlength' => $captionMaxSymbols,
                                     'after_element_html' => $afterElementHtml
                                 )
                             );

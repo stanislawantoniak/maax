@@ -117,6 +117,7 @@
     overflow: hidden;
     width: 23%;
     float: left;
+    cursor: move;
 }
 
 .banner-positions {
@@ -129,15 +130,6 @@
     padding: 10px;
 }
 
-
-.banner-preview-image {
-    /*height: 120px;*/
-    /*max-width: 95%;*/
-}
-.image-preview-big {
-    /*width: 540px;*/
-    /*height: 185px;*/
-}
 .banner-preview-image {
     display: block;
     margin-left: auto;
@@ -152,7 +144,11 @@
 #basicModal .row, #editModal .row {
     margin: 10px auto;
 }
-
+.placements-categories .actions .list-group .list-group-item .align-right {
+    float: right;
+    padding-left: 10px;
+    padding-right: 0;
+}
 /******************************************************************************
  * Dojo grid 
  ******************************************************************************/
@@ -514,4 +510,7 @@
 }
 #rmaRefundForm .has-error {
 	color: #b94a48;
+}
+.radio-buttons {
+    padding-top: 7px;
 }
