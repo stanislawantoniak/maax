@@ -454,10 +454,11 @@ jQuery.noConflict();
 			htmlBody.addClass('noscroll');
 			$('#sb-site').addClass('open');
 			$('.sb-slidebar').addClass('sb-active');
-			body.append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+			body.append('<div class="noscroll closeHamburgerMenu" style="width:100%; height:'+screenHeight+'px"></div>');
 			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
 			}
+			jQuery('.closeHamburgerMenu').click(closeHamburgerMenu);
 		});
 
 		closeHamburgerMenu = function(event) {
@@ -468,6 +469,7 @@ jQuery.noConflict();
 			htmlBody.removeClass('noscroll');
 			$('#sb-site').removeClass('open');
 			$('.sb-slidebar').removeClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
+			jQuery('.closeHamburgerMenu').off('click');
 			body.find('.noscroll').remove();
 			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
