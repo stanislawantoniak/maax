@@ -126,6 +126,9 @@
     <mass-status-change translate="message" module="zolagocatalog">
         <message>Mass status change</message>
     </mass-status-change>
+    <mass-politics-change translate="message" module="zolagocatalog">
+        <message>Mass politics change</message>
+    </mass-politics-change>
     <empty translate="message" module="zolagocatalog">
         <message>empty</message>
     </empty>
