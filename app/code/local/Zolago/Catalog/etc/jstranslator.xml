@@ -147,5 +147,8 @@
     <apply-to-selection translate="message" module="zolagocatalog">
         <message>Apply to selection</message>
     </apply-to-selection>
+    <description-status translate="message" module="zolagocatalog">
+        <message>Description status</message>
+    </description-status>
 
 </jstranslator>

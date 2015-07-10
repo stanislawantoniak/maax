@@ -135,6 +135,9 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			case "thumbnail":
 				$out['label'] = $this->__("Img.");
 			break;
+            case "description_status":
+                $out['label'] = Mage::helper("zolagocatalog")->__("Description status");
+            break;
 		}
 		
 		
