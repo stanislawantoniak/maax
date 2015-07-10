@@ -77,7 +77,6 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                     <?php if($i == $placement['position']): ?>
                                                         <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
                                                             <div class="content">
-<!--                                                                --><?php //echo $placement['placement_id']; ?><!--<br />-->
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
                                                                 <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" style="height: 120px;"  />
                                                             <?php endif; ?>
@@ -362,11 +361,14 @@ jQuery(function ($) {
     $(document).on('click', '#delete-placement', function (e) {
         e.preventDefault();
         var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
-
+console.log(placement);
+        //return false;
         if (parseInt(placement) > 0) {
             //remove from db
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
 
+            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']'));
+            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item'));
             $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
         } else {
             //remove added html
@@ -400,8 +402,7 @@ jQuery(function ($) {
             data: dataToSave,
             success: function(id){
                 $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
-                $('[data-current="1"]').data("current",0);
-
+                $('[data-current="1"]').attr("data-current", 0);
                 savePresentation();
             }
 
@@ -503,7 +504,7 @@ jQuery(function ($) {
     function setPriority(){
         $('form[name=campaign-position] .banner-positions .campaign-list').each(function(i,value){
             $(value).find('.banner-item').each(function(v,item){
-                $(item).find('[name="priority[]"]').val(parseInt($(item).index())+1)
+                $(item).find('[name="priority[]"]').attr("value", parseInt($(item).index())+1);
             });
 
         })
@@ -755,6 +756,7 @@ jQuery(function ($) {
     function getCampaignCreations(campaign,type, optionsContainer) {
         var loading = '<?php echo $_helper->__("Loading..."); ?>';
         optionsContainer.html('<option value="0">'+loading+'</option>');
+        optionsContainer.prop("disabled", true);
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
@@ -767,7 +769,7 @@ jQuery(function ($) {
                         bannerOptions += '<option value="' + value.banner_id + '">' + value.name + '</option>';
                     })
 
-                    optionsContainer.html(bannerOptions);
+                    optionsContainer.html(bannerOptions).prop("disabled", false);
                 }
             })
         }
