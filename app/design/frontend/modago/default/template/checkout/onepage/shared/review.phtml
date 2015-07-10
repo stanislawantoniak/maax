@@ -84,13 +84,13 @@
 					<p class="text-potwierdzenie">{{checkout_review_info}}</p>
 				</div>
 				<div class="col-md-3 col-sm-6 col-md-pull-6 col-lg-2 col-lg-pull-7">
-					<a href="#"  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
+					<button  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
 				</div>
 				<div class="col-md-3 col-sm-6" col-lg-2">
                     <?php if($checkoutOrderDeactivate): ?>
                         <a class="button button-primary large link pull-right disabled"><?php echo $_helper->__('Order now and pay'); ?></a>
                         <?php else: ?>
-                        <button class="button button-primary large link pull-right"  id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $_helper->__('Order now and pay'); ?></button>
                     <?php endif; ?>
 				</div>
 			</div>
@@ -167,13 +167,13 @@
 			<p class="text-potwierdzenie">{{checkout_review_info}}</p>
 			<div class="row">
 				<div class="col-sm-6">
-					<a  href="#"  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
+					<button  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
 				</div>
 				<div class="col-sm-6">
                     <?php if($checkoutOrderDeactivate): ?>
                         <a class="button button-primary large link pull-right disabled "><?php echo $_helper->__('Order now and pay'); ?></a>
                     <?php else: ?>
-                        <button class="button button-primary large link pull-right"  id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $_helper->__('Order now and pay'); ?></button>
                     <?php endif; ?>
 				</div>
 			</div>
