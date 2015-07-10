@@ -27,13 +27,14 @@ define([
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc",
     "vendor/catalog/priceGrid/popup/campaign",
-    "vendor/catalog/priceGrid/popup/mass/status"
+    "vendor/catalog/priceGrid/popup/mass/status",
+    "vendor/catalog/priceGrid/popup/mass/politics"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
 	Keyboard, editor, declare, domConstruct, on, query, Memory, 
 	Observable, put, Cache, JsonRest, Selection, selector, lang, 
 	request, ObserverFilter, filterRendererFacory, 
 	singlePriceUpdater, singleStockUpdater, 
-	massPriceUpdater, RowUpdater, misc, campaignUpdater, massStatusUpdater){
+	massPriceUpdater, RowUpdater, misc, campaignUpdater, massStatusUpdater, massPoliticsUpdater){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -84,6 +85,7 @@ define([
 	var switcher = query("#store-switcher")[0];
 	var priceChanger = query("#change-prices")[0];
     var statusChanger =query("#mass-change-statuses")[0];
+    var politicsChanger =query("#mass-change-politics")[0];
 	
 
 			
@@ -666,6 +668,23 @@ define([
             "store_id": switcher.value
         });
     });
+    // Politics changer
+    on(politicsChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massPoliticsUpdater.handleClick({
+            "global":	global ? 1 : 0,
+            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected": selected.join(","),
+            "store_id": switcher.value
+        });
+    });
 	
 	// listen for selection
 	on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
@@ -717,7 +736,7 @@ define([
 	
 
 	// Connect objects
-	updater.setGrid(grid);
+	updater.setGrid	(grid);
 	updater.setStoreId(switcher.value);
 	
 	massPriceUpdater.setGrid(grid);
@@ -726,6 +745,9 @@ define([
     massStatusUpdater.setGrid(grid);
     massStatusUpdater.setStoreId(switcher.value);
 	
+	massPoliticsUpdater.setGrid(grid);
+	massPoliticsUpdater.setStoreId(switcher.value);
+
 	singlePriceUpdater.setGrid(grid);
 	singlePriceUpdater.setStoreId(switcher.value);
 	
