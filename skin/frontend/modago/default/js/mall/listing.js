@@ -1392,6 +1392,7 @@ Mall.listing = {
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
+		jQuery('#'+self.getMobileFiltersOverlayId()).click(self.closeMobileFilters);
 		//self.triggerResize();
 	},
 
@@ -1401,6 +1402,7 @@ Mall.listing = {
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','auto'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.hideMobileFiltersOverlay();
+		jQuery('#'+self.getMobileFiltersOverlayId()).off('click');
 		//self.triggerResize();
 	},
 
@@ -1790,10 +1792,6 @@ Mall.listing = {
 				self.showAjaxLoading();
 			});
 		}
-
-		// handle mobile filters overlay click
-		jQuery(document).delegate('#'+self.getMobileFiltersOverlayId(),'click', self.closeMobileFilters);
-
 	},
 
 	/**
