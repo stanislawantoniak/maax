@@ -482,9 +482,13 @@ define([
 			politics: {
 				label: Translator.translate("Manually disabled"), 
 				field: "politics",
-				className: "column-short",				
+				className: "column-medium",				
 				children: [
-					{
+					editor({
+						editor: "select",
+						editorArgs: {options: boolOptions, required: true},
+						editOn: "dblclick",
+						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "politics", {options: boolOptions}),
 						sortable: false,
 						field: "politics",
@@ -497,7 +501,7 @@ define([
 							}
 							return "";
 						}
-					}
+					})
 				]
 			},
 			status: { 
