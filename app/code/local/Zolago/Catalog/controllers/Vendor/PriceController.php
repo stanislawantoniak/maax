@@ -152,7 +152,6 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             }
 
             $collection = $this->_getCollection();
-            $collection->addAttributeToSelect(array('description_accepted'));
 
             if($global && is_array($query)){
                 foreach($this->_getRestQuery($query) as $key=>$value){

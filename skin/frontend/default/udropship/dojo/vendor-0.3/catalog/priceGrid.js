@@ -44,6 +44,7 @@ define([
 		converterPriceTypeOptions = sourceOptions.converter_price_type,
 		flagOptions = sourceOptions.product_flag,
 		statusOptions = sourceOptions.status,
+		descriptionStatusOptions = sourceOptions.description_status,
 		typeIdOptions = sourceOptions.type_id,
 		boolOptions = sourceOptions.bool;
 		
@@ -52,11 +53,11 @@ define([
 		loaded: {},
 		changed: {},
 		orig: {}
-	}
+	};
 	
 	var priceEditPriceMeta = function(object,value){
 		return !object.campaign_regular_id;
-	}
+	};
 	
 	
 	
@@ -529,6 +530,27 @@ define([
 					})
 				]
 			},
+            description_status: {
+                label: Translator.translate("Description status"),
+                field: "description_status",
+                className: "column-medium",
+                children: [
+                    {
+                        renderHeaderCell: filterRendererFacory("select", "description_status", {options: descriptionStatusOptions}),
+                        sortable: false,
+                        field: "description_status",
+                        className: "filterable column-medium align-center text-overflow",
+                        formatter: function(value, item){
+                            for(var i=0; i<descriptionStatusOptions.length; i++){
+                                if(descriptionStatusOptions[i].value+'' == value+''){
+                                    return descriptionStatusOptions[i].label;
+                                }
+                            }
+                            return "";
+                        }
+                    }
+                ]
+            },
 			type_id: { 
 				label: Translator.translate("Type"), 
 				field: "type_id",
