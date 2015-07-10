@@ -361,14 +361,11 @@ jQuery(function ($) {
     $(document).on('click', '#delete-placement', function (e) {
         e.preventDefault();
         var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
-console.log(placement);
-        //return false;
+
         if (parseInt(placement) > 0) {
             //remove from db
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
 
-            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']'));
-            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item'));
             $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
         } else {
             //remove added html
