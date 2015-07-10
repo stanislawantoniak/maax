@@ -67,10 +67,10 @@ class Zolago_Catalog_Vendor_ProductController
 				 * Handle status change
 				 */
 				case "confirm":
-					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);											
+					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
 						$ids, 
-						array("description_status" => Zolago_Catalog_Model_Product_Source_Description::DESCRIPTION_ACCEPTED),
+						array("description_status" => $this->_getSession()->getVendor()->getData("review_status")),
 						$storeId, 
 						array("check_editable"=>false)
 					);
