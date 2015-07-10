@@ -23,6 +23,10 @@ body {
 			top: 0 !important;
 		}
 	}
+	.headroom--top {
+		position: static !important;
+		margin-top: -56px !important;
+	}
 	&.sb-open > header {
 		margin-left: 288px;
 		width: 100%;
