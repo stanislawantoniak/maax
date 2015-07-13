@@ -331,6 +331,7 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
+        $("[data-banner=preview]").html("");
         var type= $(this).closest('#basicModal').find('[name="creation_type"]').val();
 
         getCampaignCreations(campaign,type, $('#basicModal select[name=banner]'));
@@ -339,6 +340,7 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=banner]', function () {
         var banner = $(this).val();
+        $("[data-banner=preview]").html("");
         if (banner.length > 0) {
             $("#basicModal .alert.alert-warning").remove();
         }
