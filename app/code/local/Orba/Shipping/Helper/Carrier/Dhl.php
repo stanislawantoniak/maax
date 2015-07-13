@@ -277,12 +277,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $login = $this->getDhlLogin();
         $password = $this->getDhlPassword();
         $dhlClient->setAuth($login, $password);
-        $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d',$timestamp));
+        $ret = $dhlClient->getPostalCodeServices($zip, date("Y-m-d", Mage::getModel('core/date')->timestamp(time())));
         if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
             $empty = new StdClass;
             $empty->domesticExpress9 = false;
             $empty->domesticExpress12 = false;
             $empty->deliveryEvening = false;
+            $empty->pickupOnSaturday = false;
             $empty->deliverySaturday = false;
             $empty->exPickupFrom     = 'brak';
             $empty->exPickupTo       = 'brak';
