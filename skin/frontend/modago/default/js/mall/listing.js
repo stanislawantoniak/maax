@@ -1392,6 +1392,7 @@ Mall.listing = {
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
+		jQuery(window).swipe(Mall.swipeOptions);
 		//self.triggerResize();
 	},
 
