@@ -287,6 +287,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 'date_to' => !empty($dateTo) ? date($format, strtotime($dateTo)) : ''
             );
 
+            $showEditLink = ($campaign->getVendorId() == $vendorId);
 
             $status = array();
             //status
@@ -294,8 +295,8 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
             /* @var $statuses Zolago_Campaign_Model_Campaign_PlacementStatus */
             $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')
-                ->statusOptionsData($campaign->getId());
-            Mage::log($statuses, null, "campaign.log");
+                ->statusOptionsData($campaign->getId(), $showEditLink);
+
             $now = Mage::getModel('core/date')->timestamp(time());
             if (!empty($dateTo) && !empty($dateFrom)) {
 

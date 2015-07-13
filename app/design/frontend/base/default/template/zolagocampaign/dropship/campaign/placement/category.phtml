@@ -125,22 +125,9 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                 <i data-edit-val="link-edit-status" class="<?php echo $iconClass; ?>"></i>
                                                                 <span data-edit-source="campaign_status" class="hidden">
                                                                     <?php if(!empty($placement['status'])): ?>
-                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
+
                                                                     <?php echo $placement['status']['message']; ?>
 
-                                                                    <?php if($placement['show_edit_link']): ?>
-                                                                        <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
-                                                                       target="_blank">
-                                                                        <?php echo $_helper->__('go to campaign.'); ?>
-                                                                    </a>
-                                                                     <?php endif; ?>
-                                                                        <?php else:?>
-                                                                        <?php if($placement['show_edit_link']): ?>
-                                                                            <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
-                                                                                   target="_blank">
-                                                                            <?php echo $_helper->__('go to campaign.'); ?>
-                                                                        </a>
-                                                                        <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_from">
