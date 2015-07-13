@@ -26,13 +26,15 @@ define([
 	"vendor/catalog/priceGrid/popup/mass/price",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc",
-    "vendor/catalog/priceGrid/popup/campaign"
+    "vendor/catalog/priceGrid/popup/campaign",
+    "vendor/catalog/priceGrid/popup/mass/status",
+    "vendor/catalog/priceGrid/popup/mass/politics"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
 	Keyboard, editor, declare, domConstruct, on, query, Memory, 
 	Observable, put, Cache, JsonRest, Selection, selector, lang, 
 	request, ObserverFilter, filterRendererFacory, 
 	singlePriceUpdater, singleStockUpdater, 
-	massPriceUpdater, RowUpdater, misc, campaignUpdater){
+	massPriceUpdater, RowUpdater, misc, campaignUpdater, massStatusUpdater, massPoliticsUpdater){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -43,6 +45,7 @@ define([
 		converterPriceTypeOptions = sourceOptions.converter_price_type,
 		flagOptions = sourceOptions.product_flag,
 		statusOptions = sourceOptions.status,
+		descriptionStatusOptions = sourceOptions.description_status,
 		typeIdOptions = sourceOptions.type_id,
 		boolOptions = sourceOptions.bool;
 		
@@ -51,11 +54,11 @@ define([
 		loaded: {},
 		changed: {},
 		orig: {}
-	}
+	};
 	
 	var priceEditPriceMeta = function(object,value){
 		return !object.campaign_regular_id;
-	}
+	};
 	
 	
 	
@@ -81,6 +84,8 @@ define([
 			
 	var switcher = query("#store-switcher")[0];
 	var priceChanger = query("#change-prices")[0];
+    var statusChanger =query("#mass-change-statuses")[0];
+    var politicsChanger =query("#mass-change-politics")[0];
 	
 
 			
@@ -93,7 +98,7 @@ define([
 			}
 			//updater.setCanProcess(false);
 			
-			
+
 			var ret = JsonRest.prototype.query.call(this, query, options);
 			
 			//ret.then(function(){updater.setCanProcess(true);})
@@ -104,13 +109,35 @@ define([
 		put: function(obj){
 			obj.changed = states.changed[obj.entity_id];
 			var def = JsonRest.prototype.put.apply(this, arguments);
-			def.then(function(){
-				obj.changed = states.changed[obj.entity_id] = [];
-			}, function(evt){
-				obj.changed = states.changed[obj.entity_id] = [];
+			def.then(function(data){
+                obj.changed = states.changed[obj.entity_id] = [];
+                if (data['message']) {
+                    var notyObj = {};
+                    if (data['message']['text']) {
+                        notyObj.text = data['message']['text'];
+                        data['message']['text'] = undefined;// Show msg only once
+                    }
+                    if (data['message']['type']) {
+                        notyObj.type = data['message']['type'];
+                        data['message']['type'] = undefined;
+                    } else {
+                        notyObj.type = 'warning';// Default
+                    }
+                    if (data['message']['timeout']) {
+                        notyObj.timeout = data['message']['timeout'];
+                        data['message']['timeout'] = undefined;
+                    }
+                    if (notyObj.text) { // Show msg only once
+                        noty(notyObj);
+                    }
+                }
+                // Fix for correct updating "changed" select in row for cell status
+                var row = grid.row(data['entity_id']);
+                jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
+            }, function(evt){
+                obj.changed = states.changed[obj.entity_id] = [];
 
 				var id = obj.entity_id;
-						
 				if(states.orig[id]){
 					if (grid.dirty.hasOwnProperty(id)) {
 						delete grid.dirty[id]; // delete dirty data
@@ -151,7 +178,7 @@ define([
 				renderHeaderCell: function(node){
 					on(node, "click", function(){
 						updater.toggleExpandAll();
-					})
+					});
 					
 					node.innerHTML = updater.getExpandSign();
 					node.style.cursor = "pointer";
@@ -168,7 +195,7 @@ define([
 						renderHeaderCell: filterRendererFacory("text", "name"),
 						sortable: false, 
 						field: "name",
-						className: "filterable",
+						className: "filterable"
 					}
 				]
 			},
@@ -181,7 +208,7 @@ define([
 						renderHeaderCell: filterRendererFacory("text", "skuv"),
 						sortable: false, 
 						field: "skuv",
-						className: "filterable column-medium",
+						className: "filterable column-medium"
 					}
 				]
 			},
@@ -232,7 +259,6 @@ define([
 				className: "column-medium",
 				children: [
 					{
-						className: "filterable align-right column-medium",
 						renderHeaderCell: filterRendererFacory("range", "price_margin"),
 						sortable: false, 
 						field: "price_margin",
@@ -248,7 +274,7 @@ define([
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
 						},
-						className: "filterable align-right column-medium signle-price-edit popup-trigger",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger"
 					}
 				]
 			},
@@ -438,7 +464,7 @@ define([
 								return item.available_child_count + "/" + item.all_child_count;
 							}
 							return "";
-						},
+						}
 					}
 				]
 			},
@@ -454,6 +480,31 @@ define([
 						className: "filterable align-right  column-medium",
 						formatter: function(value){return parseInt(value);}
 					}
+				]
+			},
+			politics: {
+				label: Translator.translate("Manually disabled"), 
+				field: "politics",
+				className: "column-medium",				
+				children: [
+					editor({
+						editor: "select",
+						editorArgs: {options: boolOptions, required: true},
+						editOn: "dblclick",
+						autoSave: true,
+						renderHeaderCell: filterRendererFacory("select", "politics", {options: boolOptions}),
+						sortable: false,
+						field: "politics",
+						className: "filterable align-center column-short text-overflow",
+						formatter: function(value, item){
+							for(var i=0; i<boolOptions.length; i++){
+								if(boolOptions[i].value+'' == value+''){
+									return boolOptions[i].label;
+								}
+							}
+							return "";
+						}
+					})
 				]
 			},
 			status: { 
@@ -481,6 +532,27 @@ define([
 					})
 				]
 			},
+            description_status: {
+                label: Translator.translate("Description status"),
+                field: "description_status",
+                className: "column-medium",
+                children: [
+                    {
+                        renderHeaderCell: filterRendererFacory("select", "description_status", {options: descriptionStatusOptions}),
+                        sortable: false,
+                        field: "description_status",
+                        className: "filterable column-medium align-center text-overflow",
+                        formatter: function(value, item){
+                            for(var i=0; i<descriptionStatusOptions.length; i++){
+                                if(descriptionStatusOptions[i].value+'' == value+''){
+                                    return descriptionStatusOptions[i].label;
+                                }
+                            }
+                            return "";
+                        }
+                    }
+                ]
+            },
 			type_id: { 
 				label: Translator.translate("Type"), 
 				field: "type_id",
@@ -540,7 +612,11 @@ define([
 		getBeforePut: false,
 		sort: "entity_id"
 	}, "grid-holder");
-	
+
+    var updateMassButton = function(){
+        jQuery("#massActions").prop( "disabled", !grid.getSelectedIds().length);
+    };
+
 	var updateSelectionButtons = function(){
 		var disabled = true;
 		for(var k in grid.selection){
@@ -549,13 +625,13 @@ define([
 			}
 		}
 		jQuery(priceChanger).prop("disabled", disabled);
-	}
+	};
 	
 	// Store switcher 
 	on(switcher, "change", function(){
 		updater.setStoreId(this.value);
 		grid.refresh();
-	})
+	});
 	
 	// Price changer 
 	on(priceChanger, "click", function(){
@@ -569,18 +645,58 @@ define([
 		
 		massPriceUpdater.handleClick({
 			"global":	global ? 1 : 0,
-			"query":	global ? query : {},
+			"query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
 			"selected": selected.join(","),
 			"store_id": switcher.value
 		});
 	});
+
+    // Status changer
+    on(statusChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massStatusUpdater.handleClick({
+            "global":	global ? 1 : 0,
+            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected": selected.join(","),
+            "store_id": switcher.value
+        });
+    });
+    // Politics changer
+    on(politicsChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massPoliticsUpdater.handleClick({
+            "global":	global ? 1 : 0,
+            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected": selected.join(","),
+            "store_id": switcher.value
+        });
+    });
 	
 	// listen for selection
 	on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
-	
+	on.pausable(grid.domNode, "dgrid-select", updateMassButton);
+
 	// listen for selection
 	on.pausable(grid.domNode, "dgrid-deselect", updateSelectionButtons);
-	
+	on.pausable(grid.domNode, "dgrid-deselect", updateMassButton);
+
+    // listen for refresh if selected
+    on.pausable(grid.domNode, "dgrid-refresh-complete", updateMassButton);
+
 	// listen for clicks to trigger expand/collapse in table view mode
 	on.pausable(grid.domNode, ".dgrid-row td.expander :click", function(evt){
 		updater.toggle(grid.row(evt));		
@@ -618,14 +734,20 @@ define([
 		
 	});
 	
-	
+
 	// Connect objects
-	updater.setGrid(grid);
+	updater.setGrid	(grid);
 	updater.setStoreId(switcher.value);
 	
 	massPriceUpdater.setGrid(grid);
 	massPriceUpdater.setStoreId(switcher.value);
+
+    massStatusUpdater.setGrid(grid);
+    massStatusUpdater.setStoreId(switcher.value);
 	
+	massPoliticsUpdater.setGrid(grid);
+	massPoliticsUpdater.setStoreId(switcher.value);
+
 	singlePriceUpdater.setGrid(grid);
 	singlePriceUpdater.setStoreId(switcher.value);
 	
@@ -637,7 +759,8 @@ define([
 
 	
 	updateSelectionButtons();
-	
+	updateMassButton();
+
 	return grid; 
 	
 	

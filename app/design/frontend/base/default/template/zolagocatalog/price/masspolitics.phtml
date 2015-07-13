@@ -1,0 +1,28 @@
+<?php
+/* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */
+$_helper = Mage::helper('zolagocatalog');
+/** @var Zolago_Catalog_Model_Product_Source_Politics $modelPolitics */
+$modelPolitics = Mage::getModel("zolagocatalog/product_source_politics");
+?>
+
+<input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>
+<input type="hidden" name="global" value="<?php echo $this->getGlobal() ? "1" : "0";?>"/>
+<input type="hidden" name="encoded_query" value="<?php echo $this->getEncodedQuery();?>"/>
+<input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
+<p class="alert alert-info">
+    <strong><?php echo $this->__("Information");?>:</strong>
+    <?php echo $this->__("This function change politics.");?>
+</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <span class="help-block"><?php echo $_helper->__("Politics");?></span>
+            <select id="mass-change-politics-select"  name="politics" type="text" class="form-control mass-change-politics-select">
+                    <option value=""><?php echo $_helper->__('-- Please choose politics --');?></option>
+                <?php foreach ($modelPolitics->getAllOptions() as $option):?>
+                    <option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+    </div>
+</div>

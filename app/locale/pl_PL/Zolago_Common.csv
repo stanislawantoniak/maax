@@ -47,7 +47,7 @@
 "Enter valid integer","Wprowadź poprawną cyfrę"
 "Enter valid positive integer","Wprowadź poprawną dodatnią cyfrę"
 "Enter valid number","Wprowadź poprawną liczbę"
-"Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'.","Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'."
+"Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Starts with alphanumeric. No '--', '__', '..'.","URL musi zawierać min. 5, max. 100 znaków i zaczynać się od alfanumerycznego. URL może zwierać znaki: [a-b0-9]_-.Nie może zawierać: '--', '__', '..'."
 "Url key already exists","Klucz Url już istnieje"
 "The converter price of product or one of child product is not available","Cena z konwerterów dla produktu lub jego dzieci jest niedostępna"
 "Enter valid price","Wprowadź prawidłową cenę"
