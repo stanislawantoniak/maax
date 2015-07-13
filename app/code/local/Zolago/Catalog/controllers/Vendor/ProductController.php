@@ -66,21 +66,11 @@ class Zolago_Catalog_Vendor_ProductController
 				/**
 				 * Handle status change
 				 */
-				case "disable":
 				case "confirm":
-					if($method=="confirm"){
-						$this->_validateProductAttributes($ids, $attributeSetId, $storeId);						
-						$status = Mage::helper('zolagodropship')->getProductStatusForVendor(
-							$this->_getSession()->getVendor()
-						);
-					}else{
-						$status = Mage_Catalog_Model_Product_Status::STATUS_DISABLED;
-					}
-					
-					$this->_validateMassStatus($ids, $status);
+					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
 						$ids, 
-						array("status"=>$status), 
+						array("description_status" => $this->_getSession()->getVendor()->getData("review_status")),
 						$storeId, 
 						array("check_editable"=>false)
 					);
@@ -221,7 +211,7 @@ class Zolago_Catalog_Vendor_ProductController
 			if ($attribute->getIsRequired() && $this->_isVisibleInGrid($attribute)) {
 				/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 				$value = Mage::getResourceModel('catalog/product')->getAttributeRawValue(
-						$product->getId(), $attribute->getAttributeCode(), $storeId);
+						$product->getId(), $attribute->getAttributeCode(), $storeId);                
 				if ($attribute->isValueEmpty($value) || 
 					(in_array($attribute->getFrontendInput(), array("select", "multiselect")) && $value===false)) {
 					//Mage::log($attribute->getAttributeCode() . ": " . var_export($value, 1));
@@ -230,7 +220,6 @@ class Zolago_Catalog_Vendor_ProductController
 				}
 			}
 		}
-		
 		return $missingAttributes;
 	}
 	
