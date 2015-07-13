@@ -677,7 +677,7 @@ jQuery(function ($) {
         var campaignShowEditLink = nameSpace.find('[name="show_edit_link"]').val();
 
         var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
-        console.log(status);
+
 
         var placementId = nameSpace.find('[name="placement_id[]"]').val();
 
@@ -817,7 +817,7 @@ jQuery(function ($) {
                 url : "/campaign/vendor/getCampaignData",
                 data: {id : campaign},
                 success: function(result){
-                    console.log(result);
+
                     var data = jQuery.parseJSON(result);
                     $("#basicModal").find('[data-val="campaign-date-from"]').html(data.date_from);
                     $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
