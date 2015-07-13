@@ -813,12 +813,7 @@ jQuery(function ($) {
 
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
 
-//                    var l1 = '<?php //echo $_helper->__('To edit'); ?>//';
-//                    var l2 = '<?php //echo $_helper->__('go to campaign.'); ?>//';
-//                    var link = "/campaign/vendor/edit/id/" + data.campaign_id;
-                    $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message
-//                        + l1 + ' <a data-edit-val="link-edit" href="'+link+'" target="_blank">'+l2+'</a>'
-                    );
+                    $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message);
 
 
                     $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
