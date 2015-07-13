@@ -239,6 +239,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                     <div class="col-md-6" data-banner="preview"></div>
                     <div class="hidden">
                         <span data-val="campaign-status"></span>
+                        <span data-val="campaign-status-message"></span>
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
                         <span data-val="campaign-vendorname"></span>
@@ -593,6 +594,7 @@ jQuery(function ($) {
         var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
         var status = modal.find('[data-val="campaign-status"]').text();
+        var statusMessage = modal.find('[data-val="campaign-status-message"]').html();
         var vendorName = modal.find('[data-val="campaign-vendorname"]').text();
 
         //set data
@@ -627,7 +629,8 @@ jQuery(function ($) {
                 '</div>' +
                 '<div class="col-md-12 dates">' +
                 '<i class="'+status+'" data-edit-val="link-edit-status"></i> '+
-                 dates +
+                    '<span data-edit-source="campaign_status" class="hidden">'+statusMessage+'</span>'
+                 + dates +
                 '</div>' +
                 '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +
                 '</li>';
@@ -674,6 +677,7 @@ jQuery(function ($) {
         var campaignShowEditLink = nameSpace.find('[name="show_edit_link"]').val();
 
         var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
+        console.log(status);
 
         var placementId = nameSpace.find('[name="placement_id[]"]').val();
 
@@ -810,14 +814,23 @@ jQuery(function ($) {
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
-                url : "/campaign/vendor/getCompaignData",
+                url : "/campaign/vendor/getCampaignData",
                 data: {id : campaign},
                 success: function(result){
+                    console.log(result);
                     var data = jQuery.parseJSON(result);
                     $("#basicModal").find('[data-val="campaign-date-from"]').html(data.date_from);
                     $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
 
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
+
+//                    var l1 = '<?php //echo $_helper->__('To edit'); ?>//';
+//                    var l2 = '<?php //echo $_helper->__('go to campaign.'); ?>//';
+//                    var link = "/campaign/vendor/edit/id/" + data.campaign_id;
+                    $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message
+//                        + l1 + ' <a data-edit-val="link-edit" href="'+link+'" target="_blank">'+l2+'</a>'
+                    );
+
 
                     $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
                     $("#basicModal").find('[data-val="campaign-showedit"]').html(data.showedit);
