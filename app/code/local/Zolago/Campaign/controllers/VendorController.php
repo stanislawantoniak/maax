@@ -262,7 +262,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     /**
      * @return array
      */
-    public function getCompaignDataAction()
+    public function getCampaignDataAction()
     {
         $campaignData = array();
         $modelId = (int)$this->getRequest()->getParam("id");
@@ -287,14 +287,19 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 'date_to' => !empty($dateTo) ? date($format, strtotime($dateTo)) : ''
             );
 
+            $showEditLink = ($campaign->getVendorId() == $vendorId);
 
             $status = array();
             //status
             $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
-            $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
+
+            /* @var $statuses Zolago_Campaign_Model_Campaign_PlacementStatus */
+            $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')
+                ->statusOptionsData($campaign->getId(), $showEditLink);
+
             $now = Mage::getModel('core/date')->timestamp(time());
             if (!empty($dateTo) && !empty($dateFrom)) {
-                //Zend_Debug::dump($statuses);
+
                 //1.Expired
                 if (strtotime($dateFrom) < $now && $now < strtotime($dateTo)) {
                     $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
