@@ -99,5 +99,6 @@
 "Campaign ""%s"" saved. Now you can attach creations and products to the campaign.","Kampania ""%s"" została zapisana. Możesz teraz dodać do kampanii kreacje i producty."
 "Poniżej lista stron, na których możesz zarządzać reklamami. Wejdż w tryb strony by dodać lubusunąć kreacje.","Poniżej lista stron, na których możesz zarządzać reklamami. Wejdż w tryb strony by dodać lubusunąć kreacje."
 "Campaign has ended. Creative is not active. To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>.","Kampania się już zakończyła. Kreacja nie jest aktywna. Kreację możesz edytować z poziomu <a data-edit-val='link-edit' href='%s' target='_blank'>kampanii</a>."
+" To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>."," Kreację możesz edytować z poziomu <a data-edit-val='link-edit' href='%s' target='_blank'>kampanii</a>."
 
 
