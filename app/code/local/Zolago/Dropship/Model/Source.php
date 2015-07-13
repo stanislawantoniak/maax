@@ -12,6 +12,11 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
             case 'vendorstype':
                 $out = $this->_getVendorsType();
                 break;
+            case 'review_status':
+                /** @var Zolago_Catalog_Model_Product_Source_Description $descriptionStatusSrc */
+                $descriptionStatusSrc = Mage::getSingleton("zolagocatalog/product_source_description");
+                $out = $descriptionStatusSrc->toOptionHash($selector);
+                break;
             default:
                 $out = parent::toOptionHash($selector);
 	    }

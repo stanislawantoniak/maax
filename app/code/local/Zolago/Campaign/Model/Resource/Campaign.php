@@ -216,8 +216,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
 
-
-
+    /**
+     * @param $placement
+     * @return mixed
+     */
     public function setNewCampaignPlacement($placement){
         $table = $this->getTable("zolagocampaign/campaign_placement");
 
@@ -229,7 +231,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $position = $placement['position'];
         $priority = $placement['priority'];
 
-        $write = Mage::getSingleton('core/resource')->getConnection('core_write');
         $sql = "INSERT INTO {$table} (vendor_id,category_id,campaign_id,banner_id,type,position,priority)
         VALUES ({$vendor_id},{$category_id},{$campaign_id},{$banner_id},'{$type}',{$position},{$priority})";
 
@@ -238,23 +239,29 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         return $lastInsertId;
     }
+
     /**
      * @param $categoryId
      * @param array $placements
      * @return $this
      */
-    public function setCampaignPlacements($categoryId, $vendorId, array $placements)
+    public function setCampaignPlacements(array $placements)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
-        $where = "category_id={$categoryId} AND vendor_id={$vendorId}";
-        $this->_getWriteAdapter()->delete($table, $where);
 
         if (count($placements)) {
-            $this->_getWriteAdapter()->insertMultiple($table, $placements);
+
+            $this->_getWriteAdapter()
+                ->insertOnDuplicate($table, $placements, array('position', 'priority'));
+
         }
         return $this;
     }
 
+    /**
+     * @param array $placements
+     * @return $this
+     */
     public function removeCampaignPlacements(array $placements)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");

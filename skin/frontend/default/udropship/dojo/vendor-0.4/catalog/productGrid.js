@@ -311,6 +311,44 @@ define([
 		});
 	};
 	
+	var rendererDescription = function (item, value, node, options){
+
+        // @see Zolago_Catalog_Model_Product_Source_Description
+        // const DESCRIPTION_NOT_ACCEPTED = -1;// Nie zatwierdzony
+        // const DESCRIPTION_WAITING      =  0;// Oczekuje na zatwierdzenie
+        // const DESCRIPTION_ACCEPTED     =  1;// Zatwierdzony
+
+        value = parseInt(value);
+		var label = "close";
+		var color = "red";
+        switch (value) {
+            case 1:
+                label = "open";
+                color = "green";
+                break;
+            case -1:
+            case 0:
+            default:
+                label = "close";
+                color = "red";
+                break;
+        }
+		node.title = this.options[value] || "";
+		
+		jQuery(node).tooltip({
+			container: "body", 
+			trigger: "hover",
+			animation: false, 
+			placement: "top",
+			delay: {"show": 1000, "hide": 0}
+		});
+		var content = put("div");
+		put(content, "p", {
+			innerHTML: "<i style='color:"+color+"' class='icon-2 icon-eye-"+label+"'></i>"
+		});
+		put(node, content);
+	};
+	
 	/**
 	 * @param {string} currency
 	 * @returns {Function}
@@ -398,7 +436,9 @@ define([
 
 				// Prepare fomratter
 				if(childColumn.options){
-					if(column.field=="status"){
+					if(column.field=="description_status") {
+						childColumn.renderCell = rendererDescription;
+					} else 	if(column.field=="status"){
 						childColumn.renderCell = rendererStatus;
 					}else{
 						childColumn.formatter = formatterOptionsFactor(
@@ -631,12 +671,7 @@ define([
 			misc.startLoading();
 			massConfirm.trigger(e).always(misc.stopLoading);
 		});
-		
-		on(dom.byId("massDisbaleProducts"), "click", function(e){
-			misc.startLoading();
-			massDisable.trigger(e).always(misc.stopLoading);
-		});
-	}
+	};
 	
 	////////////////////////////////////////////////////////////////////////////
 	// The grid

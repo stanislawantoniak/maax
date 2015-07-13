@@ -237,7 +237,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
                         if ($captionMaxSymbols) {
-                            $afterElementHtml = "<p class='align-left'>" .
+                            $afterElementHtml = "<p class='help-block-message align-left'>" .
                                 $helper->__('Max length is %s', $captionMaxSymbols) .
                                 "</p>";
                             $captionOptions = array_merge($captionOptions,
