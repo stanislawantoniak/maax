@@ -8,9 +8,15 @@ $attrData = $element->getAttrData();
             data-<?php echo $data->name; ?>="<?php echo $data->value; ?>"
         <?php endforeach; ?>
     <?php endif; ?>>
+    <?php $iconClass = $this->getElement()->getIconClass(); ?>
 	<div class="widget-header"> 
 		<h4>
-			<i class="icon-reorder"></i> 
+            <?php if(!empty($iconClass)): ?>
+                <i class="<?php echo $iconClass; ?>"></i>
+            <?php else: ?>
+                <i class="icon-reorder"></i>
+            <?php endif; ?>
+
 			<?php echo $this->getElement()->getLegend() ?>
 		</h4> 
 	</div> 

@@ -18,7 +18,10 @@ class Orba_Shipping_Model_Carrier_Abstract extends
         $this->_senderAddress = $address;
     }
     public function setReceiverAddress($address) {
-	    $address['contact_phone'] = $this->getOnlyNumbers($address['contact_phone']);
+	    $address['contact_phone'] = $this->getOnlyNumbers(
+            isset($address['contact_phone'])
+                ? $address['contact_phone']
+                : (isset($address['telephone']) ? $address['telephone'] : ''));
         $this->_receiverAddress = $address;
     }
 
