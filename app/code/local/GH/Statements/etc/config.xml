@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <GH_Statements>
+            <version>0.0.1</version>
+        </GH_Statements>
+    </modules>
+    <global>
+        <helpers>
+            <ghstatements>
+                <class>
+                    GH_Statements_Helper
+                </class>
+            </ghstatements>
+        </helpers>
+    </global>
+</config>
