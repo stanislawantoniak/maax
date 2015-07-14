@@ -164,6 +164,25 @@
 					</zolagosolrsearch>
 				</observers>
 			</catalog_product_attribute_update_after>
+
+            <!-- Process save politics -->
+            <vendor_manual_mass_save_politics_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_mass_save_politics_after>
+            <vendor_manual_save_politics_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_save_politics_after>
+
 			
 			<!-- Process mapper asign -->
 			<zolago_mapper_after_assign_products>

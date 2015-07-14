@@ -206,7 +206,13 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
             $coll = $banHelper->prepareCollectionForMultiProductBan($collection->getAllIds());
 
-            Mage::dispatchEvent("vendor_manual_mass_save_politics_after", array("products" => $coll));
+            Mage::dispatchEvent("vendor_manual_mass_save_politics_after",
+                array(
+                    "products"          => $coll,
+                    'product_ids'       => $coll->getAllIds(),
+                    'attributes_data'   => "politics",
+                    'store_id'          => $storeId
+                ));
 
             // Prepare response data
             $data = array(

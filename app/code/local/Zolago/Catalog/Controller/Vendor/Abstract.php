@@ -123,7 +123,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
                         $coll = $banHelper->prepareCollectionForMultiProductBan(array($productId));
 
                         Mage::dispatchEvent(in_array('status', $attributeChanged) ? "vendor_manual_save_status_after" : "vendor_manual_save_politics_after",
-                            array("products" => $coll));
+                            array(
+                                "products"          => $coll,
+                                'product_ids'       => $coll->getAllIds(),
+                                'attributes_data'   => $attributeData,
+                                'store_id'          => $storeId
+                            ));
                     }
                 }
             }
