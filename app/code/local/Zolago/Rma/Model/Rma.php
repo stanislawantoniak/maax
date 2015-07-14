@@ -272,6 +272,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
     * @return type
     */
    public function sendDhlRequest($dhlParams = array()) {
+	   /** @var Zolago_Rma_Model_Rma_Request $request */
        $request = Mage::getModel('zolagorma/rma_request');
        foreach ($dhlParams as $key=>$val) {
            $request->setParam($key,$val);

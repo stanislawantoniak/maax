@@ -22,31 +22,39 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $form->setAction($this->getUrl("campaign/vendor/save"));
 
         $general = $form->addFieldset("general", array(
-            "legend" => $helper->__("General")
+            "legend" => $helper->__("General"),
+            "icon_class" => "icon-cog"
         ));
 
         $prices = $form->addFieldset("price", array(
-            "legend" => $helper->__("Prices")
+            "legend" => $helper->__("Prices"),
+            "icon_class" => "icon-euro"
         ));
 
         $general->addField("name", "text", array(
             "name" => "name",
             "class" => "form-control",
             "required" => true,
-            "label" => $helper->__('Campaign name for internal use')
+            "label" => $helper->__('Campaign name for internal use'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-6"
         ));
         $general->addField("name_customer", "text", array(
             "name" => "name_customer",
             "class" => "form-control",
             "required" => true,
-            "label" => $helper->__('Campaign name for customers')
+            "label" => $helper->__('Campaign name for customers'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-6"
         ));
         $general->addField("type", "select", array(
             "name" => "type",
             "required" => true,
             "class" => "form-control",
             "label" => $helper->__('Type'),
-            "values" => Mage::getSingleton('zolagocampaign/campaign_type')->toOptionHash()
+            "values" => Mage::getSingleton('zolagocampaign/campaign_type')->toOptionHash(),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-3"
         ));
 
         $general->addField("status", "select", array(
@@ -54,34 +62,44 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "required" => true,
             "class" => "form-control",
             "label" => $helper->__('Status'),
-            "values" => Mage::getSingleton('zolagocampaign/campaign_status')->toOptionHash()
+            "values" => Mage::getSingleton('zolagocampaign/campaign_status')->toOptionHash(),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-3"
         ));
         $general->addField("url_type", "radios", array(
             "name" => "url_type",
             "required" => true,
             "label" => $helper->__('URL type'),
             "values" => Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
-            "value" => Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK
+            "value" => Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK,
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-8"
         ));
         $general->addField("url_key", "text", array(
             "name" => "url_key",
             "required" => true,
             "class" => "form-control urlKeyFormat urlKeyExists",
-            "label" => $helper->__('URL Key')
+            "label" => $helper->__('URL Key'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-6"
         ));
 
         $general->addField("date_from", "text", array(
             "name" => "date_from",
-            "class" => "form-control datetimepicker",
-            "wrapper_class" => "col-md-3",
+            "class" => "form-control datetimepicker col-md-2",
             "label" => $helper->__('Date from'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-5 datetimepicker-wrapper",
+            "after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>'
         ));
 
         $general->addField("date_to", "text", array(
             "name" => "date_to",
-            "class" => "form-control datetimepicker",
-            "wrapper_class" => "col-md-3",
+            "class" => "form-control datetimepicker col-md-2",
             "label" => $helper->__('Date to'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-5 datetimepicker-wrapper",
+            "after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>'
         ));
 
 
@@ -99,13 +117,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "required" => true,
             "class" => "multiple",
             "label" => $helper->__('Websites'),
-            "values" => $websiteOptions
-        ));
-        $prices->addField("campaign_products", "hidden", array(
-            "name" => "campaign_products",
-            "required" => false,
-            "class" => "form-control",
-            "label" => $helper->__('Campaign Products')
+            "values" => $websiteOptions,
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-6"
         ));
 
         // Prices definition
@@ -115,7 +129,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "required" => true,
             "class" => "form-control",
             "label" => $helper->__('Special Price source'),
-            "values" => Mage::getSingleton('zolagocampaign/campaign_pricesource')->toOptionHash()
+            "values" => Mage::getSingleton('zolagocampaign/campaign_pricesource')->toOptionHash(),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-2"
         ));
 
         $percentCode = Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_DISCOUNT_CODE;
@@ -123,7 +139,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "name" => $percentCode,
             "required" => true,
             "class" => "form-control positiveInteger",
-            "label" => $helper->__('Discount percent')
+            "label" => $helper->__('Discount percent'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-2"
+        ));
+
+        $prices->addField("campaign_products", "hidden", array(
+            "name" => "campaign_products",
+            "required" => false,
+            "label" => $helper->__('Campaign Products')
         ));
 
         $prices->addField("strikeout_type", "radios", array(
@@ -131,6 +155,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "required" => true,
             "label" => $helper->__('Strikeout price'),
             "values" => Mage::getSingleton('zolagocampaign/campaign_strikeout')->toOptionArray(),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-9"
         ));
 
         $values = $this->getModel()->getData();
@@ -176,8 +202,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $design->setArea("adminhtml");
         $block = $this->getLayout()
             ->createBlock("zolagocampaign/vendor_campaign_product_grid", "vendor_campaign_product_grid")
-            ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml")
-        ;
+            ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
+
         $block->setParentBlock($this);
         $this->setProductsGrid($block);
         $design->setArea("frontend");
