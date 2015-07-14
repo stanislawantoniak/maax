@@ -196,3 +196,4 @@
 "{{author_name}} has confirmed refund for this RMA, amount: %s","{{author_name}} potwierdził wykonanie zwrotu do tego RMA na kwotę %s"
 "{{author_name}} has ordered refund for this RMA, amount: %s","{{author_name}} zlecił wykonanie zwrotu do tego RMA na kwotę %s"
 "Contact phone","Telefon kontaktowy"
+"Shipping costs","Koszty dostawy"
