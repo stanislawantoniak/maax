@@ -1862,7 +1862,14 @@
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
                     jQuery("button[id*='-prev']").prop("disabled", false);
+
+                    //disable prev buttons
                     jQuery("#step-2-prev").prop("disabled", true);
+                    jQuery("#zmiana_zawartosci_koszyka").prop("disabled", true);
+                    jQuery(".prev-button-address").prop("disabled", true);
+                    jQuery(".prev-button-deliverypaymnet").prop("disabled", true);
+
+
                     var submit2Button = jQuery(this);
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');
