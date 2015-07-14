@@ -72,7 +72,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             try {
                 $campaign->removeCampaignPlacements($data['remove']);
             } catch (Exception $e) {
-                echo $helper->__("Some error occure");
+                echo $helper->__("Some error occurred");
             }
         }
         $placements = array();
@@ -82,6 +82,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             for ($i = 0; $i < $itemsCount; $i++) {
                 //campaigns
                 $placements[] = array(
+                    'placement_id' => $data['placement_id'][$i],
                     'vendor_id' => $vendorId,
                     'category_id' => $data['category'],
                     'campaign_id' => $data['campaign_id'][$i],
@@ -94,9 +95,9 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         }
         if (!empty($placements)) {
             try {
-                $campaign->setCampaignPlacements($categoryId, $vendorId, $placements);
+                $campaign->setCampaignPlacements($placements);
             } catch (Exception $e) {
-                echo $helper->__("Some error occure");
+                echo $helper->__("Some error occurred");
             }
 
         }

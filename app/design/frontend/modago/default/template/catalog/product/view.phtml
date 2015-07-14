@@ -234,6 +234,26 @@ if($vendorContext && $vendorContext->getId()) {
                 <h2 class="title_section"><?php echo $this->__("Ask Vendor A Question"); ?></h2>
             </div>
             <div class="modal-body">
+	            <?php
+	            $vendorInfo = new Zolago_Catalog_Block_Product_Vendor_Info;
+	            $brandShopId = $vendorInfo->getBrandshopVendor()->getVendorId();
+	            $producer = ($vendorInfo->getVendor()->getVendorId() == $brandShopId);
+	            ?>
+	            <figure>
+		            <h3 id="bLogo">
+			            <a href="<?php echo $vendorInfo->getVendorUrl(); ?>">
+				            <img itemprop="logo" src="<?php echo $vendorInfo->getLogoUrl(); ?>" alt="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>">
+				            <meta itemprop="brand" content="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>" />
+			            </a>
+		            </h3>
+	            </figure>
+	            <div class="seller producer">
+		            <div class="seller-info">
+			            <a href="<?php echo $vendorInfo->getVendorUrl(); ?>">
+				            <strong><?php echo $vendorInfo->__("Seller"); ?>:</strong> <?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>
+			            </a>
+		            </div>
+	            </div>
                 <?php echo $this->getChildHtml('udqa.product.question.product'); ?>
             </div>
         </div>
