@@ -84,7 +84,8 @@ define([
 			
 	var switcher = query("#store-switcher")[0];
 	var priceChanger = query("#change-prices")[0];
-    var statusChanger =query("#mass-change-statuses")[0];
+    var massEnableProductChanger  = query("#mass-enable-products")[0];
+    var massInvalidProductChanger = query("#mass-invalid-products")[0];
     var politicsChanger =query("#mass-change-politics")[0];
 	
 
@@ -651,8 +652,8 @@ define([
 		});
 	});
 
-    // Status changer
-    on(statusChanger, "click", function() {
+    // Status changer for mass enable products
+    on(massEnableProductChanger, "click", function() {
         var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
         var query = grid.get("query");
         var selected = [];
@@ -662,10 +663,29 @@ define([
         }
 
         massStatusUpdater.handleClick({
-            "global":	global ? 1 : 0,
-            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
-            "selected": selected.join(","),
-            "store_id": switcher.value
+            "global"   : global ? 1 : 0,
+            "query"    : global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected" : selected.join(","),
+            "store_id" : switcher.value,
+            "status"   : "enable"
+        });
+    });
+    // Status changer for mass invalid products
+    on(massInvalidProductChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massStatusUpdater.handleClick({
+            "global"   : global ? 1 : 0,
+            "query"    : global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected" : selected.join(","),
+            "store_id" : switcher.value,
+            "status"   : "invalid"
         });
     });
     // Politics changer

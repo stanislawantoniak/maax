@@ -44,7 +44,7 @@ define([
 
                     var data = data.content;
 
-                    // Restore selection just changed prices
+                    // Restore selection just changed
                     grid.
                         refresh({keepScrollPosition: true}).
                         then(function(){
@@ -76,7 +76,7 @@ define([
 
         _afterRender: function(data){
             this.inherited(arguments);
-            this._modal.find("h4").text(Translator.translate("Mass status change"));
+            this._modal.find("h4").text(Translator.translate("Mass enable products on site"));
         },
 
         // After load content
@@ -85,16 +85,7 @@ define([
 
             var form = node.parents("form"),
                 btn = jQuery(".btn-primary", form),
-                massChangeStatusSelect = jQuery(".mass-change-status-select", node),
                 self = this;
-
-            var refreshSaveBtn = function(){
-                btn.prop("disabled", !jQuery(".mass-change-status-select", node).val().length);
-            };
-
-            massChangeStatusSelect.change(function(){
-                refreshSaveBtn();
-            });
 
             form.validate({
                 submitHandler: function(){
@@ -102,11 +93,6 @@ define([
                     return false;
                 }
             });
-
-            //App.applyNumeric(); // Apply numeric plugin
-            //App.uniform(); // Apply uniform
-
-            refreshSaveBtn();
         }
     });
 

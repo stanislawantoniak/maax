@@ -9,19 +9,20 @@ $modelStatuses = Mage::getModel("catalog/product_status");
 <input type="hidden" name="global" value="<?php echo $this->getGlobal() ? "1" : "0";?>"/>
 <input type="hidden" name="encoded_query" value="<?php echo $this->getEncodedQuery();?>"/>
 <input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
+<input type="hidden" name="status" value="<?php echo $this->getStatus();?>"/>
 <p class="alert alert-info">
     <strong><?php echo $this->__("Information");?>:</strong>
-    <?php echo $this->__("info-vendor-price-mass-change-status");?>
+    <?php
+    if ($this->getStatus() == Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_ENABLED) {
+        echo $this->__("This function will enable products on site for the selected products.");
+    } else {
+        echo $this->__("This function will set products as invalid for the selected products.");
+    }
+    ?>
 </p>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <span class="help-block"><?php echo $_helper->__("Status");?></span>
-            <select id="mass-change-status-select"  name="status" type="text" class="form-control mass-change-status-select">
-                <?php foreach ($modelStatuses->getAllOptions() as $option):?>
-                    <option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
-                <?php endforeach;?>
-            </select>
         </div>
     </div>
 </div>
