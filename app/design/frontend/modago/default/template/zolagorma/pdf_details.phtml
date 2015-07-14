@@ -141,6 +141,7 @@
 	<table class="rmaProducts" id="rmaProductsTable">
 		<tbody>
 		<?php foreach($_rma->getItemsCollection() as $item):?>
+			<?php if($item->getPoItem()->getId()): ?>
 			<tr>
 <!--				<td class="img" rowspan="2">-->
 <!--					<img src="--><?php //echo $this->getRmaItemThumb($item);?><!--" alt=""/>-->
@@ -162,6 +163,7 @@
 					<?php echo $this->getItemCondition($item);?>
 				</td>
 			</tr>
+			<?php endif; ?>
 		<?php endforeach;?>
 		</tbody>
 	</table>

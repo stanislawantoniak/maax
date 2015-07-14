@@ -46,13 +46,14 @@
 		fillEditForm: function (address, form) {
 			form = jQuery(form);
 			jQuery.each(address.getData(), function (idx, item) {
+                var _item = item;
 				if (idx.indexOf("street") !== -1 && item) {
-					if (jQuery.isArray(item)) {
-						item = item.shift();
-					}
+                    if (jQuery.isArray(item)) {
+                        _item = item[0] ? item[0] : '';
+                    }
 				}
 				if (form.find("[name='"+ idx +"']").length > 0) {
-					form.find("[name='"+ idx +"']").val(item);
+					form.find("[name='"+ idx +"']").val(_item);
 				}
 			});
 		},
