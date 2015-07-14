@@ -18,7 +18,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
     }
 
     /**
-     * Handle mass
+     * Handle mass price
      */
     public function massAction() {
         $this->loadLayout();
@@ -26,7 +26,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
     }
 
     /**
-     * Handle mass save
+     * Handle mass price save
+     * Skipping products in campaign
      */
     public function massSaveAction() {
 
@@ -200,6 +201,13 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
                 Mage_Index_Model_Event::TYPE_SAVE
             );
 
+            /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+            $banHelper = Mage::helper( 'turpentine/ban' );
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+            $coll = $banHelper->prepareCollectionForMultiProductBan($collection->getAllIds());
+
+            Mage::dispatchEvent("vendor_manual_mass_save_politics_after", array("products" => $coll));
+
             // Prepare response data
             $data = array(
                         "status"	=> 1,
@@ -280,6 +288,13 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 
             if($allValidIds && $attributeData) {
                 $this->_processAttributresSave($allValidIds, $attributeData, $storeId, array());
+
+                /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+                $banHelper = Mage::helper( 'turpentine/ban' );
+                /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+                $coll = $banHelper->prepareCollectionForMultiProductBan($allValidIds);
+
+                Mage::dispatchEvent("vendor_manual_mass_save_status_after", array("products" => $coll));
             }
 
             // Prepare response data
