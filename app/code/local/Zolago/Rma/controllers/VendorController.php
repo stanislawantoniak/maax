@@ -63,7 +63,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
 					$rmaItem = $rma->getItemById($id);
 					if (is_object($rmaItem) && $rmaItem->getId()) {
-						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						if($rmaItem->getPoItem()->getId()) {
+							$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						} else {
+							$maxValue = $rmaItem->getPrice();
+						}
 						if (isset($data['returnValues'][$id]) &&
 							$data['returnValues'][$id] <= $maxValue) {
 							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
