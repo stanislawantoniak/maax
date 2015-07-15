@@ -152,6 +152,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
         /** @var Zolago_Catalog_Helper_Data $helper */
         $helper = Mage::helper("zolagocatalog");
         $politics = $request->getParam("politics");
+        $attributeData["politics"] = $politics;
 
         try {
 
@@ -175,31 +176,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             }
             $collection->load();
 
-            // Skip products
-            $allValidIds = array();
-            $skippedData = array();
-            $allIds      = array();
-
-            $stockItem = Mage::getModel('cataloginventory/stock_item');
-            $stockItem->setProcessIndexEvents(false);
-            foreach ($collection as $product) {
-                $productId = (int)$product->getId();
-                $stockItem->setData(array());
-                $stockItem->loadByProduct($productId)
-                ->setProductId($productId);
-                $type = $product->getTypeId();
-                if ($type == 'simple') {
-                    $stockItem->setData('min_qty',1000000*$politics);
-                } else {
-                    $stockItem->setData('manage_stock',$politics);
-                    $stockItem->setData('is_in_stock',1-$politics);
-                }
-                $stockItem->save();
-            }
-            Mage::getSingleton('index/indexer')->indexEvents(
-                Mage_CatalogInventory_Model_Stock_Item::ENTITY,
-                Mage_Index_Model_Event::TYPE_SAVE
-            );
+            $this->_processAttributresSave($collection->getAllIds(), $attributeData, $storeId, array());
 
             /** @var Zolago_Turpentine_Helper_Ban $banHelper */
             $banHelper = Mage::helper( 'turpentine/ban' );
@@ -218,8 +195,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             $data = array(
                         "status"	=> 1,
                         "content"	=> array(
-                            "changed_ids" => $allIds,
-                            "changes"	  => array('politics'=>$politics),
+                            "changed_ids" => $collection->getAllIds(),
+                            "changes"	  => $attributeData,
                             "global"	  => (int)$global,
                             "time"		  => microtime(true)-$time,
                             "skipped"     => 0,
