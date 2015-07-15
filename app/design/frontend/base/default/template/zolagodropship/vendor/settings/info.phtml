@@ -1,6 +1,10 @@
 <?php
 $_session = Mage::getSingleton('udropship/session');
 $_vendor = $_session->getVendor();
+$_errorData = $_session->getData('vendorSettings') ? $_session->getData('vendorSettings') : array();
+if(count($_errorData)) {
+	$_session->unsetData('vendorSettings');
+}
 ?>
 <div class="container">
     <!--=== Page Header ===-->
@@ -25,7 +29,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="vendor_name" name="vendor_name" value="<?php echo $_vendor->getVendorName(); ?>" type="text" required
+	                            <?php $vendor_name = isset($_errorData['vendor_name']) ? $_errorData['vendor_name'] : $_vendor->getVendorName(); ?>
+                                <input id="vendor_name" name="vendor_name" value="<?php echo $vendor_name; ?>" type="text" required
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -37,7 +42,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_street" name="billing_street" value="<?php echo $_vendor->getBillingStreet(1); ?>" type="text"
+	                            <?php $billing_street = isset($_errorData['billing_street']) ? $_errorData['billing_street'] : $_vendor->getBillingStreet(1); ?>
+                                <input id="billing_street" name="billing_street" value="<?php echo $billing_street; ?>" type="text"
                                        required class="form-control" size="10">
                             </div>
                         </div>
@@ -48,7 +54,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_city" name="billing_city" value="<?php echo $_vendor->getBillingCity(); ?>" required type="text"
+	                            <?php $billing_city = isset($_errorData['billing_city']) ? $_errorData['billing_city'] : $_vendor->getBillingCity(); ?>
+                                <input id="billing_city" name="billing_city" value="<?php echo $billing_city; ?>" required type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -59,7 +66,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_zip" name="billing_zip" value="<?php echo $_vendor->getBillingZip(); ?>" required type="text"
+	                            <?php $billing_zip = isset($_errorData['billing_zip']) ? $_errorData['billing_zip'] : $_vendor->getBillingZip(); ?>
+                                <input id="billing_zip" name="billing_zip" value="<?php echo $billing_zip; ?>" required type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -70,7 +78,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="tax_no" name="tax_no" value="<?php echo $_vendor->getTaxNo(); ?>" required type="text" class="form-control"
+	                            <?php $tax_no = isset($_errorData['tax_no']) ? $_errorData['tax_no'] : $_vendor->getTaxNo(); ?>
+                                <input id="tax_no" name="tax_no" value="<?php echo $tax_no; ?>" required type="text" class="form-control"
                                        size="10">
                             </div>
                         </div>
@@ -90,7 +99,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="www" name="www" value="<?php echo $_vendor->getWww(); ?>" type="text" class="form-control" size="10">
+	                            <?php $www = isset($_errorData['www']) ? $_errorData['www'] : $_vendor->getWww(); ?>
+                                <input id="www" name="www" value="<?php echo $www; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -99,7 +109,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="contact_email" name="contact_email" value="<?php echo $_vendor->getContactEmail(); ?>" type="text" class="form-control" size="10">
+	                            <?php $contact_email = isset($_errorData['contact_email']) ? $_errorData['contact_email'] : $_vendor->getContactEmail(); ?>
+                                <input id="contact_email" name="contact_email" value="<?php echo $contact_email; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -108,7 +119,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="contact_telephone" name="contact_telephone" value="<?php echo $_vendor->getData('contact_telephone'); ?>" type="text" class="form-control" size="10">
+	                            <?php $contact_telephone = isset($_errorData['contact_telephone']) ? $_errorData['contact_telephone'] : $_vendor->getData('contact_telephone'); ?>
+                                <input id="contact_telephone" name="contact_telephone" value="<?php echo $contact_telephone; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                     </div>
@@ -127,7 +139,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_firstname" name="executive_firstname" required value="<?php echo $_vendor->getData('executive_firstname'); ?>" type="text"
+	                            <?php $executive_firstname = isset($_errorData['executive_firstname']) ? $_errorData['executive_firstname'] : $_vendor->getData('executive_firstname'); ?>
+                                <input id="executive_firstname" name="executive_firstname" required value="<?php echo $executive_firstname; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -138,7 +151,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_lastname" name="executive_lastname" required value="<?php echo $_vendor->getData('executive_lastname'); ?>" type="text"
+	                            <?php $executive_lastname = isset($_errorData['executive_lastname']) ? $_errorData['executive_lastname'] : $_vendor->getData('executive_lastname'); ?>
+                                <input id="executive_lastname" name="executive_lastname" required value="<?php echo $executive_lastname; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -149,7 +163,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_telephone" name="executive_telephone" required value="<?php echo $_vendor->getData('executive_telephone'); ?>" type="text"
+	                            <?php $executive_telephone = isset($_errorData['executive_telephone']) ? $_errorData['executive_telephone'] : $_vendor->getData('executive_telephone'); ?>
+                                <input id="executive_telephone" name="executive_telephone" required value="<?php echo $executive_telephone; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -160,7 +175,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_telephone_mobile" name="executive_telephone_mobile" required value="<?php echo $_vendor->getData('executive_telephone_mobile'); ?>"
+	                            <?php $executive_telephone_mobile = isset($_errorData['executive_telephone_mobile']) ? $_errorData['executive_telephone_mobile'] : $_vendor->getData('executive_telephone_mobile'); ?>
+                                <input id="executive_telephone_mobile" name="executive_telephone_mobile" required value="<?php echo $executive_telephone_mobile; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -171,7 +187,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_email" name="billing_email" required value="<?php echo $_vendor->getData('billing_email'); ?>" type="text"
+	                            <?php $billing_email = isset($_errorData['billing_email']) ? $_errorData['billing_email'] : $_vendor->getData('billing_email'); ?>
+                                <input id="billing_email" name="billing_email" required value="<?php echo $billing_email; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -191,7 +208,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_firstname" name="administrator_firstname" required value="<?php echo $_vendor->getData('administrator_firstname'); ?>"
+	                            <?php $administrator_firstname = isset($_errorData['administrator_firstname']) ? $_errorData['administrator_firstname'] : $_vendor->getData('administrator_firstname'); ?>
+                                <input id="administrator_firstname" name="administrator_firstname" required value="<?php echo $administrator_firstname; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -202,7 +220,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_lastname" name="administrator_lastname" required value="<?php echo $_vendor->getData('administrator_lastname'); ?>"
+	                            <?php $administrator_lastname = isset($_errorData['administrator_lastname']) ? $_errorData['administrator_lastname'] : $_vendor->getData('administrator_lastname'); ?>
+                                <input id="administrator_lastname" name="administrator_lastname" required value="<?php echo $administrator_lastname; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -213,7 +232,8 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_telephone" name="administrator_telephone" required value="<?php echo $_vendor->getData('administrator_telephone'); ?>"
+	                            <?php $administrator_telephone = isset($_errorData['administrator_telephone']) ? $_errorData['administrator_telephone'] : $_vendor->getData('administrator_telephone'); ?>
+                                <input id="administrator_telephone" name="administrator_telephone" required value="<?php echo $administrator_telephone; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -224,8 +244,9 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
+	                            <?php $administrator_telephone_mobile = isset($_errorData['administrator_telephone_mobile']) ? $_errorData['administrator_telephone_mobile'] : $_vendor->getData('administrator_telephone_mobile'); ?>
                                 <input id="administrator_telephone_mobile" name="administrator_telephone_mobile" required
-                                       value="<?php echo $_vendor->getData('administrator_telephone_mobile'); ?>" type="text" class="form-control" size="10">
+                                       value="<?php echo $administrator_telephone_mobile; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -235,8 +256,9 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
+	                            <?php $email = isset($_errorData['email']) ? $_errorData['email'] : $_vendor->getEmail(); ?>
                                 <input id="email" name="email" required
-                                       value="<?php echo $_vendor->getEmail(); ?>" type="text" class="form-control"
+                                       value="<?php echo $email; ?>" type="text" class="form-control"
                                        size="10">
                             </div>
                         </div>

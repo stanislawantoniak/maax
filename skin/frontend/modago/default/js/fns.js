@@ -459,6 +459,7 @@ jQuery.noConflict();
 				Mall.listing.positionFilters();
 			}
 			jQuery('.closeHamburgerMenu').click(closeHamburgerMenu);
+			jQuery(window).swipe(Mall.swipeOptions);
 		});
 
 		closeHamburgerMenu = function(event) {

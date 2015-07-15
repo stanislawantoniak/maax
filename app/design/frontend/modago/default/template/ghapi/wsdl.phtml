@@ -52,7 +52,7 @@
 					<xsd:element name="messageID" type="xsd:int"/>
 					<xsd:element name="messageType" type="xsd:string"/>
 					<xsd:element name="orderID" type="xsd:string"/>
-				</xsd:all>		
+				</xsd:all>
 			</xsd:complexType>
 		<xsd:complexType name="messageList">
 			<xsd:sequence>
@@ -89,7 +89,7 @@
 				<xsd:element name="item_value_before_discount" type="xsd:float"/>
 				<xsd:element name="item_discount" type="xsd:float"/>
 				<xsd:element name="item_value_after_discount" type="xsd:float"/>
-			</xsd:all>		
+			</xsd:all>
 		</xsd:complexType>
 
 		<xsd:complexType name="order">
@@ -108,9 +108,9 @@
 				<xsd:element name="pos_id" type="xsd:string"/>
 				<xsd:element name="order_currency" type="xsd:string"/>
 				<xsd:element name="invoice_data" type="tns:invoiceData"/>
-				<xsd:element name="delivery_data" type="tns:deliveryData"/>	
-				<xsd:element name="order_items" type="tns:orderItemList"/>	
-			</xsd:all>		
+				<xsd:element name="delivery_data" type="tns:deliveryData"/>
+				<xsd:element name="order_items" type="tns:orderItemList"/>
+			</xsd:all>
 		</xsd:complexType>
 
 		<xsd:complexType name="deliveryData">
@@ -181,7 +181,7 @@
 			<xsd:all>
 				<xsd:element name="message" type="xsd:string"/>
 				<xsd:element name="status" type="xsd:boolean"/>
-				<xsd:element name="orderList" type="tns:orderList" nillable="true"/>	
+				<xsd:element name="orderList" type="tns:orderList" nillable="true"/>
 			</xsd:all>
 		</xsd:complexType>
 	    <xsd:complexType name="setOrderReservation">
@@ -192,6 +192,31 @@
 			    <xsd:element name="reservationMessage" type="xsd:string"/>
 		    </xsd:all>
 	    </xsd:complexType>
+
+        <xsd:complexType name="categoryItem">
+            <xsd:all>
+                <xsd:element name="categoryID" type="xsd:int"/>
+                <xsd:element name="categoryName" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+        <xsd:complexType name="categories">
+            <xsd:sequence>
+                <xsd:element name="category" type="tns:categoryItem" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="getCategories">
+            <xsd:all>
+                <xsd:element name="sessionToken" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+        <xsd:complexType name="getCategoriesResponse">
+            <xsd:all>
+                <xsd:element name="message" type="xsd:string"/>
+                <xsd:element name="status" type="xsd:boolean"/>
+                <xsd:element name="categories" type="tns:categories" nillable="true"/>
+            </xsd:all>
+        </xsd:complexType>
+
 	</xsd:schema>
   </types>
   <message name="doLoginRequest">
@@ -236,6 +261,12 @@
   <message name="setOrderReservationResponse">
 	  <part name="setOrderReservationResponse" type="tns:statusResponse"/>
   </message>
+  <message name="getCategoriesRequest">
+      <part name="getCategories" type="tns:getCategories"/>
+  </message>
+  <message name="getCategoriesResponse">
+      <part name="getCategoriesResponse" type="tns:getCategoriesResponse"/>
+  </message>
   <portType name="GHApi_PortType">
       <operation name="doLogin">
          <input message="tns:doLoginRequest"/>
@@ -265,6 +296,10 @@
 		  <input message="tns:setOrderReservationRequest"/>
 		  <output message="tns:setOrderReservationResponse"/>
 	  </operation>
+      <operation name="getCategories">
+          <input message="tns:getCategoriesRequest"/>
+          <output message="tns:getCategoriesResponse"/>
+      </operation>
   </portType>
   <binding name="GHApi_Binding" type="tns:GHApi_PortType">
       <soap:binding style="document"
@@ -360,6 +395,19 @@
 				  use="literal"/>
 		  </output>
 	  </operation>
+      <operation name="getCategories">
+          <soap:operation soapAction="<?php echo $this->getWsUrl();?>getCategories"/>
+          <input>
+          <soap:body
+              encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+              use="literal"/>
+          </input>
+          <output>
+              <soap:body
+                  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                  use="literal"/>
+          </output>
+      </operation>
   </binding>
   <service name="GHApi_Service">
 	  <port binding="tns:GHApi_Binding" name="GHApi_Port">

@@ -1393,6 +1393,7 @@ Mall.listing = {
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
 		jQuery('#'+self.getMobileFiltersOverlayId()).click(self.closeMobileFilters);
+		jQuery(window).swipe(Mall.swipeOptions);
 		//self.triggerResize();
 	},
 
@@ -1792,6 +1793,10 @@ Mall.listing = {
 				self.showAjaxLoading();
 			});
 		}
+
+		// handle mobile filters overlay click
+		jQuery(document).delegate('#'+self.getMobileFiltersOverlayId(),'click', self.closeMobileFilters);
+
 	},
 
 	/**
