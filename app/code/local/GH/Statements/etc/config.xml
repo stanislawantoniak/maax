@@ -8,10 +8,32 @@
     <global>
         <helpers>
             <ghstatements>
-                <class>
-                    GH_Statements_Helper
-                </class>
+                <class>GH_Statements_Helper</class>
             </ghstatements>
         </helpers>
+        <models>
+            <ghstatements>
+                <class>GH_Statements_Model</class>
+                <resourceModel>ghstatements_resource</resourceModel>
+            </ghstatements>
+            <ghstatements_resource>
+                <class>GH_Statements_Model_Resource</class>
+                <entities>
+                    <calendar>
+                        <table>gh_statements_calendar</table>
+                    </calendar>
+                    <calendar_item>
+                        <table>gh_statements_calendar_item</table>
+                    </calendar_item>
+                </entities>
+            </ghstatements_resource>
+        </models>
+        <resources>
+            <ghstatements_setup>
+                <setup>
+                    <module>GH_Statements</module>
+                </setup>
+            </ghstatements_setup>
+        </resources>
     </global>
 </config>
