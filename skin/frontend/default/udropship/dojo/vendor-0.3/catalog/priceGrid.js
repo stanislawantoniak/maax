@@ -49,7 +49,8 @@ define([
 		typeIdOptions = sourceOptions.type_id,
 		boolOptions = sourceOptions.bool;
 		
-	
+	var descriptionStatusOptionsForFormatter = sourceOptionsForFormatter.status;
+
 	var states = {
 		loaded: {},
 		changed: {},
@@ -515,7 +516,7 @@ define([
 				children: [
 					editor({
 						editor: "select",
-						editorArgs: {options: statusOptions, required: true},
+						editorArgs: {options: descriptionStatusOptionsForFormatter, required: true},
 						editOn: "dblclick",
 						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "status", {options: statusOptions}),
@@ -523,9 +524,12 @@ define([
 						field: "status",
 						className: "filterable align-center column-medium editable",
 						formatter: function(value, item){
-							for(var i=0; i<statusOptions.length; i++){
-								if(statusOptions[i].value+'' == value+''){
-									return statusOptions[i].label;
+                            //console.log(value);
+                            //console.log(item);
+                            //console.log(statusOptions);
+							for(var i=0; i<descriptionStatusOptionsForFormatter.length; i++){
+								if(descriptionStatusOptionsForFormatter[i].value+'' == value+''){
+									return descriptionStatusOptionsForFormatter[i].label;
 								}
 							}
 							return "";
