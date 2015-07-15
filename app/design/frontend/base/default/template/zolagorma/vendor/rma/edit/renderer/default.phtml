@@ -1,22 +1,32 @@
+<?php $_rma = Mage::registry('current_rma'); ?>
 <?php $_item = $this->getItem() ?>
 <?php $_poItem = $_item->getPoItem();?>
 <?php /* @var $_poItem Zolago_Po_Model_Po_Item */ ?>
 <?php $_order = $this->getItem()->getOrderItem()->getOrder() ?>
-<?php $_store = $_order->getStore();?>
+<?php $_store = is_object($_order) ? $_order->getStore() : $_rma->getOrder()->getStore();?>
 <?php $_configurableText = $_poItem->getConfigurableText();?>
+<?php if($_poItem->getId()): ?>
+	<?php $name = $this->htmlEscape($_item->getName()); ?>
+	<?php $finalItemPrice = $_poItem->getFinalItemPrice(); ?>
+	<?php $discount = $_poItem->getDicount(); ?>
+<?php else: ?>
+	<?php $name = Mage::helper('zolagorma')->__($_item->getName()); ?>
+	<?php $finalItemPrice = $_item->getPrice(); ?>
+	<?php $discount = 0; ?>
+<?php endif; ?>
 <tr>
 	<td class="align-right"><?php echo $_item->getLp();?></td>
     <td><?php echo $this->htmlEscape(Mage::helper('core/string')->splitInjection($_item->getFinalSku())) ?></td>
     <td>
 		<div>
-			<?php echo $this->htmlEscape($_item->getName()) ?>
+			<?php echo $name ?>
 			<?php if($_configurableText):?>
 			<em class="text-muted">(<?php echo $_configurableText;?>)</em>
 			<?php endif;?>
 		</div>
     </td>
     <td class="align-right"><?php echo $_item->getQty()*1 ?></td>
-	<td class="align-right"><?php echo $_store->formatPrice($_poItem->getFinalItemPrice())?></td>
-	<td class="align-right"><?php echo $_store->formatPrice($_poItem->getDicount())?></td>
+	<td class="align-right"><?php echo $_store->formatPrice($finalItemPrice); ?></td>
+	<td class="align-right"><?php echo $_store->formatPrice($discount); ?></td>
     <td><?php echo $this->htmlEscape($_item->getItemConditionName()) ?></td>
 </tr>

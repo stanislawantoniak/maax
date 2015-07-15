@@ -73,7 +73,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "values" => Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
             "value" => Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK,
             "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-8"
+            "wrapper_class" => "col-md-8 radio-buttons"
         ));
         $general->addField("url_key", "text", array(
             "name" => "url_key",
@@ -156,7 +156,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label" => $helper->__('Strikeout price'),
             "values" => Mage::getSingleton('zolagocampaign/campaign_strikeout')->toOptionArray(),
             "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-9"
+            "wrapper_class" => "col-md-9 radio-buttons"
         ));
 
         $values = $this->getModel()->getData();
