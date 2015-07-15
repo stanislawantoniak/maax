@@ -62,6 +62,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	 * @return array
 	 */
 	public function getEavIndexAttributeValues(array $entityIds, $storeId) {
+
 		array_walk($entityIds, function($item){return (int)$item;});
 		
 		$tabel = $this->getTable('catalog/product_index_eav');
@@ -70,27 +71,23 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$select->where("index.entity_id IN (?)", $entityIds);
 		$select->where("store_id=?",$storeId);
 
+		$out = array();
 
-		$collection = Mage::getModel('catalog/product')->getCollection();
-		$collection->addAttributeToFilter('entity_id', array('in' => $entityIds));
-		$collection->addStoreFilter($storeId);
 
 		$availableSizes = array();
-		foreach ($entityIds as $entityId) {
-			$ids = Mage::getResourceSingleton('catalog/product_type_configurable')
-				->getChildrenIds($entityId);
-			$_subproducts = Mage::getModel('catalog/product')->getCollection()
-				->addIdFilter($ids)
-				->addAttributeToSelect('size');
-			Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
-			foreach ($_subproducts as $_subproduct) {
-				if ($_subproduct->getSize()) {
-					$availableSizes[$entityId][(int)$_subproduct->getSize()] = (int)$_subproduct->getSize();
-				}
+		$childrenFeatParent = $this->getChildrenIds($entityIds);
+		$children = array_keys($childrenFeatParent);
+		$_subproducts = Mage::getModel('catalog/product')->getCollection()
+			->addIdFilter($children)
+			->addAttributeToSelect('size')
+			->addAttributeToSelect('parent_id');
+		Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
+		foreach ($_subproducts as $_subproduct) {
+			if ($_subproduct->getSize()) {
+				$availableSizes[$childrenFeatParent[$_subproduct->getId()]][(int)$_subproduct->getSize()] = (int)$_subproduct->getSize();
 			}
 		}
 
-		$out = array();
 		$attribute = Mage::getModel('catalog/resource_eav_attribute')
 			->loadByCode(Mage_Catalog_Model_Product::ENTITY, "size");
 
@@ -113,7 +110,38 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		return $out;
 		
 	}
-	
+
+
+	/**
+	 *
+	 * Retrieve Required children-parent ids
+	 *
+	 * @param $parentIds
+	 * @return array
+	 */
+	public function getChildrenIds($parentIds)
+	{
+		$childrenFeatParent = array();
+
+		$select = $this->_getReadAdapter()->select()
+			->from(array('l' => $this->getMainTable()), array('product_id', 'parent_id'))
+			->join(
+				array('e' => $this->getTable('catalog/product')),
+				'e.entity_id = l.product_id AND e.required_options = 0',
+				array()
+			)
+			->where('parent_id IN (?)', $parentIds);
+
+		$rows = $this->_getReadAdapter()->fetchAll($select);
+		if (!empty($rows)) {
+			foreach ($rows as $row) {
+				$childrenFeatParent[$row["product_id"]] = $row["parent_id"];
+			}
+		}
+
+		return $childrenFeatParent;
+	}
+
 	/**
 	 * @param int|array $childId
 	 * @return array
