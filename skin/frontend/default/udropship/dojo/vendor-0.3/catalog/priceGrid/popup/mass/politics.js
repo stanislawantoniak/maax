@@ -52,7 +52,7 @@ define([
                                 grid.selectAll();
                             }else{
                                 jQuery.each(data.changed_ids, function(){
-                                    grid.select(this + 0); // Cast to number
+                                    grid.select(parseInt(this));
                                 });
                             }
                         });
