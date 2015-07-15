@@ -76,30 +76,31 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$collection->addStoreFilter($storeId);
 
 		$availableSizes = array();
-		foreach($entityIds as $entityId){
-
-			$ids=Mage::getResourceSingleton('catalog/product_type_configurable')
+		foreach ($entityIds as $entityId) {
+			$ids = Mage::getResourceSingleton('catalog/product_type_configurable')
 				->getChildrenIds($entityId);
 			$_subproducts = Mage::getModel('catalog/product')->getCollection()
-				->addIdFilter ($ids)
+				->addIdFilter($ids)
 				->addAttributeToSelect('size');
 			Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
-			foreach($_subproducts as $_subproduct){
-
-				if($_subproduct->getSize()){
+			foreach ($_subproducts as $_subproduct) {
+				if ($_subproduct->getSize()) {
 					$availableSizes[$entityId][(int)$_subproduct->getSize()] = (int)$_subproduct->getSize();
 				}
-
 			}
 		}
 
 		$out = array();
+		$attribute = Mage::getModel('catalog/resource_eav_attribute')
+			->loadByCode(Mage_Catalog_Model_Product::ENTITY, "size");
+
+
 		foreach($this->getReadConnection()->fetchAll($select) as $row){
 
 			if(!isset($out[$row['entity_id']][$row['attribute_id']])){
 				$out[$row['entity_id']][$row['attribute_id']] = array();
 			}
-			if($row['attribute_id'] == 281){
+			if($row['attribute_id'] == $attribute->getId()){
 				if(isset($availableSizes[$row['entity_id']][$row['value']])){
 					$out[$row['entity_id']][$row['attribute_id']][] = $row['value'];
 				}
