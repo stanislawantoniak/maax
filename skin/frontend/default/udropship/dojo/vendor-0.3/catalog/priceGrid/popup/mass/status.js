@@ -77,6 +77,8 @@ define([
         _afterRender: function(data){
             this.inherited(arguments);
             this._modal.find("h4").text(Translator.translate("Mass enable products on site"));
+            this._modal.find(".modal-footer .btn-default").html(Translator.translate("Cancel"));
+            this._modal.find(".modal-footer .btn-primary").html(Translator.translate("Execute"));
         },
 
         // After load content
