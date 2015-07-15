@@ -159,6 +159,20 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"filterable"=>true,
 				"header"	=> $this->_getColumnLabel($name)
 			);
+
+            // Status
+            $status = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "status");
+            $status->setStoreId($this->getLabelStore()->getId());
+            $columnStart[$status->getAttributeCode()] = array(
+                "index"		=> $status->getAttributeCode(),
+                "type"		=> "options",
+                "attribute" => $name,
+                "clickable" => true,
+                "required"  => (int)$status->getIsRequired(),
+                "filterable"=> true,
+                "header"	=> $this->_getColumnLabel($name),
+                "attribute"	=> $status
+            );
 			
 			$columnEnd = array();
 
