@@ -100,6 +100,20 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
 	}
 
     /**
+     * Method to export all attributes sets (with create products = yes)
+     * Export id and name
+     *
+     * @param $getCategoriesParameters
+     * @return StdClass
+     */
+    public function getCategories($getCategoriesParameters) {
+        $this->_begin();
+        $obj = parent::getCategories($getCategoriesParameters);
+        $this->_rollback();
+        return $obj;
+    }
+
+    /**
      * @return GH_Api_Model_Message
      */
     protected function getMessageModel() {

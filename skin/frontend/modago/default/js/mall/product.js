@@ -530,6 +530,7 @@ Mall.product = {
             this.initThumbsCarousel();
             this.flagBigMedia();
             this.initReleatedCarousel();
+	        this.initKeyboardActions();
         },
 
 	    _lightboxHasSlick: false,
@@ -590,6 +591,42 @@ Mall.product = {
 					Mall.product.gallery._lighboxCalculationsEnabled = false;
 				    Mall.product.gallery.getLightbox().hide();
 			    }
+		    });
+	    },
+
+	    initKeyboardActions: function() {
+		    jQuery(document).keyup(function(e) {
+			    var gallery = Mall.product.gallery;
+			    //27 - escape
+			    //39 - right arrow
+			    //37 - left arrow
+			    if(gallery.getLightbox().is(':visible')) {
+					switch(e.keyCode) {
+						case 27:
+							jQuery('#lightbox-close').click();
+							break;
+						case 39:
+							gallery._lightboxSlickContainer.slick('slickNext');
+							break;
+						case 37:
+							gallery._lightboxSlickContainer.slick('slickPrev');
+							break;
+						default:
+							return false;
+					}
+			    } else {
+				    switch(e.keyCode) {
+					    case 39:
+						    Mall.product.gallery.getBigMedia().trigger("rwd.next");
+						    break;
+					    case 37:
+						    Mall.product.gallery.getBigMedia().trigger("rwd.prev");
+						    break;
+					    default:
+						    return false;
+				    }
+			    }
+			    return true;
 		    });
 	    },
 

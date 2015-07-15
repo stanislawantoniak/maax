@@ -20,7 +20,15 @@ class Zolago_Banner_Block_Vendor_Banner_Type extends Mage_Core_Block_Template
         return $types;
     }
 
-    public function getCampaignId(){
-        return $this->getRequest()->getParam("campaign_id");
+    public function getCampaignId()
+    {
+        return $this->getRequest()->getParam("campaign_id", 0);
+    }
+
+    public function getCampaignName()
+    {
+        $campaignId = $this->getCampaignId();
+        $model = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+        return $model->getName();
     }
 }

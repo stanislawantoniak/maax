@@ -1,5 +1,8 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Logged_Addressbook */ ?>
-<?php $formKey = Mage::getSingleton('core/session')->getFormKey(); ?>
+<?php
+/* @var $this Zolago_Modago_Block_Checkout_Onepage_Logged_Addressbook */
+$formKey = Mage::getSingleton('core/session')->getFormKey();
+$_helper = Mage::helper("zolagocheckout");
+?>
 
 <?php echo $this->getStep1Sidebar(); ?>
 <input type="hidden" name="shipping[country_id]" id="country_id" value="<?php echo $this->getStoreDefaultCountryId();?>">
@@ -19,7 +22,7 @@
 				<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
 				<dd>{{street}}</dd>
 				<dd>{{postcode}} {{city}}</dd>
-				<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+				<dd class="separator phone"><?php echo $_helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 				<dd class="action separator">
 					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
 					<span class="set-default">
