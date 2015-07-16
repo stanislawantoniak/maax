@@ -624,7 +624,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection, 
 			array $allIds, $storeId) {
 
-        Mage::log("loadAttributesData", null, "solrX.log");
+
 		if (!$collection->count()) {
             return $this;
         }
@@ -643,7 +643,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         foreach ($attrbiuteCollection as $attributeId=>$attribute) {
 			$attribute->setStoreId($storeId);
 			$attributeCode = $attribute->getAttributeCode();
-            Mage::log("loadAttributesData: " . $attributeCode, null, "solrX.log");
+
             if (!$attributeId) {
                 continue;
             }
@@ -654,8 +654,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 }
             }
         }
-        Mage::log("attributeTypes: ", null, "solrX.log");
-        Mage::log($attributeTypes, null, "solrX.log");
+
 		
         $selects = array();
         foreach ($tableAttributes as $table=>$attributes) {
@@ -667,20 +666,12 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				$storeId
             );
         }
-        Mage::log("tableAttributes: ", null, "solrX.log");
-        Mage::log($tableAttributes, null, "solrX.log");
-        $selectGroups = Mage::getResourceHelper('eav')->getLoadAttributesSelectGroups($selects);
 
-		Mage::log("selectGroups: ", null, "solrX.log");
-		Mage::log($selectGroups, null, "solrX.log");
-		Mage::log("selectGroups--------------------------------------------", null, "solrX.log");
+        $selectGroups = Mage::getResourceHelper('eav')->getLoadAttributesSelectGroups($selects);
 		
 		
         foreach ($selectGroups as $selects) {
-			Mage::log($selects);
-			foreach($selects as $select){
-				Mage::log($select->__toString());
-			}
+
             if (!empty($selects)) {
                 try {
                     $select = implode(' UNION ALL ', $selects);
@@ -690,19 +681,11 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                     throw $e;
                 }
 
-                Mage::log("Values: ", null, "solrX.log");
-                Mage::log($values, null, "solrX.log");
                 foreach ($values as $value) {
-					Mage::log("_setItemAttributeValue: " . $value["attribute_id"], null, "solrX.log");
-					Mage::log($value, null, "solrX.log");
                     $this->_setItemAttributeValue($collection, $attrbiuteCollection, $value);
                 }
             }
         }
-
-        Mage::log("attrbiuteCollection: ", null, "solrX.log");
-        Mage::log($attrbiuteCollection->getData(), null, "solrX.log");
-        Mage::log("loadAttributesData ---------------------------------- ", null, "solrX.log");
 	}
 	
 	/**
@@ -844,7 +827,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	 * @return array
 	 */
 	public function getFlatProducts($storeId, array $allIds = array(), array $extraJoins = array()) {
-        Mage::log("getFlatProducts", null, "solrX.log");
 		$store = Mage::app()->getStore($storeId);
 		$websiteId = $store->getWebsiteId();
 		$adapter = $this->getReadConnection();
@@ -947,7 +929,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	public function loadAttributesDataForFrontend(
 			Zolago_Solrsearch_Model_Catalog_Product_Collection $collection, 
 			$storeId, $customerGroupId) {
-        Mage::log("loadAttributesDataForFrontend", null, "solrX.log");
+
 		$profiler = Mage::helper("zolagocommon/profiler");
 		$profiler->start();
 		
