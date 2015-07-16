@@ -72,7 +72,7 @@
 
 <?php if (!$this->getRequest()->getParam('ajax')): ?>
 <script type="text/javascript">
-	console.log('dupa');
+
     Translator.add('Please enter valid email address', '<?php echo $this->__('Please enter valid email address'); ?>');
     Validation.addAllThese([
         ['validate-email', Translator.translate('Please enter valid email address'), function (v) {
