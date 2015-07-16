@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <vendors>
+            <children>
+                <ghstatements>
+                    <title>Statements calendar</title>
+                    <sort_order>110</sort_order>
+                    <action>adminhtml/statements/calendar</action>
+                </ghstatements>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <ghstatements>
+                                <title>Statements calendar</title>
+                                <sort_order>45</sort_order>
+                            </ghstatements>
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

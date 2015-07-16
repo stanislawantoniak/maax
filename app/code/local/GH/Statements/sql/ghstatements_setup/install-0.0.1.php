@@ -33,7 +33,13 @@ $table = $installer->getConnection()
     ->addColumn('event_date', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
         'nullable'  => false,
         ), 'Creation Time')
-    ;                
+    ->addIndex($installer->getIdxName('ghstatements/calendar_item', array('calendar_id')),
+            array('calendar_id'))
+    ->addForeignKey(
+        $installer->getFkName('ghstatements/calendar_item', 'calendar_id', 'ghstatements/calendar', 'calendar_id'),
+        'calendar_id', $installer->getTable('ghstatements/calendar'), 'calendar_id',
+         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
+            
 $installer->getConnection()->createTable($table);
 
 $vendorTable = $this->getTable("udropship/vendor");

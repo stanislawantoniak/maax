@@ -28,6 +28,11 @@
                 </entities>
             </ghstatements_resource>
         </models>
+        <blocks>
+            <ghstatements>
+                <class>GH_Statements_Block</class>
+            </ghstatements>
+        </blocks>
         <resources>
             <ghstatements_setup>
                 <setup>
@@ -36,4 +41,32 @@
             </ghstatements_setup>
         </resources>
     </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <ghdhl>
+                    <file>ghstatements.xml</file>
+                </ghdhl>
+            </updates>
+        </layout>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ghstatements before="Mage_Adminhtml">GH_Statements_Adminhtml</ghstatements>
+                    </modules>
+                </args>
+            </adminhtml>
+            <ghstatementsadmin>
+                <use>admin</use>
+                <args>
+                    <module>GH_Statements_Adminhtml</module>
+                    <frontName>ghstatementsadmin</frontName>
+                </args>
+            </ghstatementsadmin>
+        </routers>
+    </admin>
+
 </config>
