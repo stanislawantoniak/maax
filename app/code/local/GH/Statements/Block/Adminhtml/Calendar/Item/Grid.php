@@ -37,5 +37,9 @@ class GH_Statements_Block_Adminhtml_Calendar_Item_Grid extends Mage_Adminhtml_Bl
 
         return parent::_prepareColumns();
     }
+    public function getRowUrl($row)
+    {
+        return $this->getUrl('*/*/calendar_item_edit', array('id' => $row->getId()));
+    }
 
 }

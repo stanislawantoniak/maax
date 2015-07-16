@@ -41,7 +41,17 @@
             </ghstatements_setup>
         </resources>
     </global>
+    
     <adminhtml>
+        <translate>	
+            <modules>
+                <GH_Statements>
+                    <files>
+                        <default>GH_Statements.csv</default>
+                    </files>
+                </GH_Statements> 
+            </modules>
+        </translate>
         <layout>
             <updates>
                 <ghdhl>

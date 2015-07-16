@@ -16,13 +16,23 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
     public function calendar_newAction() {
         $this->_forward("calendar_edit");
     }
+    public function calendar_item_newAction() {
+        $this->_forward("calendar_item_edit");
+    }
     public function calendar_editAction() {
+        $model = Mage::getModel("ghstatements/calendar");
+        $registerKey = 'ghstatements_current_calendar';
+        $this->_edit($model,$registerKey);
+    }
+    protected function _edit($object,$registerKey) {
         $id = $this->getRequest()->getParam("id");
         try {
-            $model = Mage::getModel("ghstatements/calendar")->load($id);
+            $model = $object->load($id);
             if (!$model->getId()) {
                 // Default values for form
                 $model->setDefaults();
+            } else {
+                $this->getRequest()->setParam('calendar_id',$model->getCalendarId());
             }
             $sessionData = $this->_getSession()->getFormData();
             if (!empty($sessionData)) {
@@ -30,7 +40,7 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
                 //$this->getRequest()->setParam("entityCollection", Mage::helper('adminhtml/js')->decodeGridSerializedInput($sessionData['post_vendor_ids']));
                 $this->_getSession()->setFormData(null);
             }
-            Mage::register("ghstatements_current_calendar", $model);
+            Mage::register($registerKey, $model);
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
@@ -43,25 +53,23 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
         $this->loadLayout();
         $this->renderLayout();
     }
-    public function calendar_edit_itemAction() {
-        $this->loadLayout();
-        $this->renderLayout();
+    public function calendar_item_editAction() {
+        $model = Mage::getModel("ghstatements/calendar_item");
+        $registerKey = 'ghstatements_current_calendar_item';
+        $this->_edit($model,$registerKey);
     }
-    public function calendar_saveAction() {
-        $model = Mage::getModel("ghstatements/calendar");
-        $helper = Mage::helper('ghstatements');
-        $data = $this->getRequest()->getParams();
-        $modelId = $this->getRequest()->getParam("id");
-
+    protected function _save($model,$type) {        
         $this->_getSession()->setFormData(null);
-
+        $helper = Mage::helper('ghstatements');
+        $modelId = $this->getRequest()->getParam("id");
+        $data = $this->getRequest()->getParams();
         try {
             if ($this->getRequest()->isPost()) {
                 // Edit ?
                 if ($modelId !== null) {
                     $model->load($modelId);
                     if (!$model->getId()) {
-                        throw new Mage_Core_Exception($helper->__("Calendar not found"));
+                        throw new Mage_Core_Exception($helper->__($type." not found"));
                     }
                 }
                 $model->setData($data);
@@ -77,7 +85,7 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
                     }
                     return $this->_redirectReferer();
                 }
-                $this->_getSession()->addSuccess($helper->__("Calendar saved"));
+                $this->_getSession()->addSuccess($helper->__($type." saved"));
             }
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -90,18 +98,39 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
             return $this->_redirectReferer();
         }
         $id = $model->getId();
+        return $id;
+    }
+    public function calendar_saveAction() {
+        $model = Mage::getModel("ghstatements/calendar");
+        $oldId =  $this->getRequest()->getParam("id");        
+        $id = $this->_save($model,'Calendar');
+        if ($oldId != $id) {
+            return $this->_redirect("*/*/calendar_item",array('id' => $id));
+        } else {
+            return $this->_redirect("*/*/calendar");
+        }
+
+    }
+    public function calendar_item_saveAction() {
+        $model = Mage::getModel("ghstatements/calendar_item");
+        $itemId = $this->getRequest()->getParam("id");
+        if ($itemId) {
+            $this->getRequest()->setParam('item_id',$itemId);
+        }
+        $this->_save($model,'Event');
+        $id = $this->getRequest()->getParam('calendar_id');
         return $this->_redirect("*/*/calendar_item",array('id' => $id));
 
     }
-    public function calendar_deleteAction() {
+    protected function _delete($model,$type) {
         $id = $this->getRequest()->getParam("id");
         try {
-            $model = Mage::getModel("ghstatements/calendar")->load($id);
+            $model->load($id);
             if (!$model->getId()) {
-                throw new Mage_Core_Exception(Mage::helper('ghstatements')->__("Calendar not found"));
+                throw new Mage_Core_Exception(Mage::helper('ghstatements')->__($type." not found"));
             }
             $model->delete();
-            $this->_getSession()->addSuccess(Mage::helper('ghstatements')->__("Calendar deleted"));
+            $this->_getSession()->addSuccess(Mage::helper('ghstatements')->__($type." deleted"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
@@ -109,7 +138,18 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
             $this->_getSession()->addError(Mage::helper('ghstatements')->__("Some error occurred!"));
             Mage::logException($e);
         }
+    }    
+    public function calendar_deleteAction() {
+        $model = Mage::getModel("ghstatements/calendar");
+        $this->_delete($model,'Calendar');
         return $this->_redirect("*/*/calendar");
+
+    }
+    public function calendar_item_deleteAction() {
+        $model = Mage::getModel("ghstatements/calendar_item");
+        $this->_delete($model,'Event');
+        $calendar_id = $this->getRequest()->getParam('calendar_id');
+        return $this->_redirect("*/*/calendar_item",array('id'=>$calendar_id));
 
     }
 

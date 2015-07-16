@@ -32,18 +32,17 @@
         </reference>
     </adminhtml_statements_calendar_edit>
     <adminhtml_statements_calendar_item_edit>
-        <update handle="ghdhl_update_menu"/>
+        <update handle="ghstatements_update_menu"/>
         <reference name="content">
-            <block type="ghdhl/adminhtml_dhl_edit" name="ghdhl_dhl_edit" template="ghdhl/dhl/edit.phtml"/>
+            <block type="ghstatements/adminhtml_calendar_item_edit" name="ghstatements_calendar_item_edit" template="ghstatements/calendar/item/edit.phtml"/>
         </reference>
         <reference name="left">
-            <block type="ghdhl/adminhtml_dhl_edit_tabs" name="ghdhl_dhl_edit_tabs">
+            <block type="ghstatements/adminhtml_calendar_item_edit_tabs" name="ghstatements_calendar_item_edit_tabs">
                 <!-- General tab -->
                 <action method="addTab">
                     <name>group_general</name>
-                    <block>ghdhl/adminhtml_dhl_edit_tab_general</block>
+                    <block>ghstatements/adminhtml_calendar_item_edit_tab_general</block>
                 </action>
-
             </block>
         </reference>
     </adminhtml_statements_calendar_item_edit>

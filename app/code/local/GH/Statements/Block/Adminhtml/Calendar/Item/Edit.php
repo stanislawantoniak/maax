@@ -1,23 +1,24 @@
 <?php
 
-class GH_Statements_Block_Adminhtml_Calendar_Edit extends GH_Statements_Block_Adminhtml_Calendar_Edit_Abstract
+class GH_Statements_Block_Adminhtml_Calendar_Item_Edit extends GH_Statements_Block_Adminhtml_Calendar_Edit_Abstract
 {
 
     /**
-     * @return GH_Statements_Model_Calendar
+     * @return GH_Statements_Model_Calendar_Item
      */
     public function getModel()
     {
-        return Mage::registry('ghstatements_current_calendar');
+        return Mage::registry('ghstatements_current_calendar_item');
     }
 
     protected function _prepareLayout()
     {
+        $id = $this->getRequest()->getParam('calendar_id');
         $this->setChild('back_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
                     'label' => Mage::helper('ghstatements')->__('Back'),
-                    'onclick' => "window.location.href = '" . $this->getUrl('*/*/calendar') . "'",
+                    'onclick' => "window.location.href = '" . $this->getUrl('*/*/calendar_item',array('id'=>$id)) . "'",
                     'class' => 'back'
                 ))
         );
@@ -32,7 +33,7 @@ class GH_Statements_Block_Adminhtml_Calendar_Edit extends GH_Statements_Block_Ad
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
                     'label' => Mage::helper('ghstatements')->__('Save'),
-                    'onclick' => 'calendarControl.save();',
+                    'onclick' => 'calendarItemControl.save();',
                     'class' => 'save'
                 ))
         );
@@ -40,7 +41,7 @@ class GH_Statements_Block_Adminhtml_Calendar_Edit extends GH_Statements_Block_Ad
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
                     'label' => Mage::helper('ghstatements')->__('Delete'),
-                    'onclick' => 'calendarControl.remove();',
+                    'onclick' => 'calendarItemControl.remove();',
                     'class' => 'delete'
                 ))
         );
@@ -50,19 +51,19 @@ class GH_Statements_Block_Adminhtml_Calendar_Edit extends GH_Statements_Block_Ad
     public function getHeaderText()
     {
         if ($this->getIsNew()) {
-            return Mage::helper('ghstatements')->__('Edit calendar');
+            return Mage::helper('ghstatements')->__('Edit event');
         }
-        return Mage::helper('ghstatements')->__('New calendar');
+        return Mage::helper('ghstatements')->__('New event');
     }
 
     public function getSaveUrl()
     {
-        return $this->getUrl('*/*/calendar_save', array("_current" => true));
+        return $this->getUrl('*/*/calendar_item_save', array("_current" => true));
     }
 
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/calendar_delete', array("_current" => true));
+        return $this->getUrl('*/*/calendar_item_delete', array("_current" => true));
     }
 
 }
