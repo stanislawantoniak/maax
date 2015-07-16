@@ -166,7 +166,6 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
             $columnStart[$status->getAttributeCode()] = array(
                 "index"		=> $status->getAttributeCode(),
                 "type"		=> "options",
-                "attribute" => $name,
                 "clickable" => true,
                 "required"  => (int)$status->getIsRequired(),
                 "filterable"=> true,
