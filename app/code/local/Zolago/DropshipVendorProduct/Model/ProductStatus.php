@@ -17,9 +17,9 @@ class Zolago_DropshipVendorProduct_Model_ProductStatus extends Mage_Catalog_Mode
         return $res;
     }
 
-    static public function getAllOptions($select = false, $formatter = false)
+    static public function getAllOptions($withEmpty = true, $defaultValues = false, $formatter = false)
     {
-        if ($select) {
+        if ($withEmpty) {
             $res = array(
                 array(
                     'value' => '',
@@ -38,7 +38,7 @@ class Zolago_DropshipVendorProduct_Model_ProductStatus extends Mage_Catalog_Mode
         return $res;
     }
 
-    static public function getForFormatterOptions($select = false) {
-        return self::getAllOptions($select, true);
+    static public function getForFormatterOptions($withEmpty = false) {
+        return self::getAllOptions($withEmpty, false, true);
     }
 }
