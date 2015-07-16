@@ -288,18 +288,26 @@ define([
 	 * @returns {string}
 	 */
 	var rendererStatus = function (item, value, node, options){
-		var label = "wait";
-		switch(value){
-			case "1":
-				label = "on";
-			break;
-			case "2":
-				label = "off";
-			break;
-		}
+
+        value = parseInt(value);
+        var icon = '';
+        var label = '';
+        switch (value) {
+            case 1:
+                icon = "ania-icon-enabled";
+                label = "enabled";
+                break;
+            case 2:
+                icon = "ania-icon-new";
+                label = "new";
+                break;
+            default:
+                icon = "ania-icon-wrong";
+                label = "wrong";
+                break;
+        }
 		
 		node.className = node.className + " " + "status-" + label;
-		//node.innerHTML = label;
 		node.title = this.options[value] || "";
 		
 		jQuery(node).tooltip({
@@ -307,8 +315,13 @@ define([
 			trigger: "hover",
 			animation: false, 
 			placement: "top",
-			delay: {"show": 1000, "hide": 0}
+			delay: {"show": 500, "hide": 0}
 		});
+        var content = put("div");
+        put(content, "p", {
+            innerHTML: "<i class='" + icon +"'></i>"
+        });
+        put(node, content);
 	};
 	
 	var rendererDescription = function (item, value, node, options){
@@ -319,18 +332,19 @@ define([
         // const DESCRIPTION_ACCEPTED     =  1;// Zatwierdzony
 
         value = parseInt(value);
-		var label = "close";
-		var color = "red";
+		var icon = '';
         switch (value) {
             case 1:
-                label = "open";
-                color = "green";
+                icon = "ania-icon-accepted";
                 break;
             case -1:
+                icon = "ania-icon-notaccepted";
+                break;
             case 0:
+                icon = "ania-icon-hourglass";
+                break;
             default:
-                label = "close";
-                color = "red";
+                icon = "ania-icon-notaccepted";
                 break;
         }
 		node.title = this.options[value] || "";
@@ -340,11 +354,11 @@ define([
 			trigger: "hover",
 			animation: false, 
 			placement: "top",
-			delay: {"show": 1000, "hide": 0}
+			delay: {"show": 500, "hide": 0}
 		});
 		var content = put("div");
 		put(content, "p", {
-			innerHTML: "<i style='color:"+color+"' class='icon-2 icon-eye-"+label+"'></i>"
+			innerHTML: "<i class='" + icon +"'></i>"
 		});
 		put(node, content);
 	};
