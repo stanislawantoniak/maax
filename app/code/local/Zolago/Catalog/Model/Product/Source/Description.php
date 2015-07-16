@@ -18,7 +18,7 @@ class Zolago_Catalog_Model_Product_Source_Description
                 ),
                 array (
                     'value' => self::DESCRIPTION_WAITING,
-                    'label' => Mage::helper("zolagocatalog")->__("Description waiting for acceptation"),
+                    'label' => Mage::helper("zolagocatalog")->__("Description waiting for acceptation by admin"),
                 ),
                 array (
                     'value' => self::DESCRIPTION_ACCEPTED,
@@ -41,7 +41,7 @@ class Zolago_Catalog_Model_Product_Source_Description
         }
 
         $arr[self::DESCRIPTION_NOT_ACCEPTED] = Mage::helper("zolagocatalog")->__("Description not accepted");
-        $arr[self::DESCRIPTION_WAITING     ] = Mage::helper("zolagocatalog")->__("Description waiting for acceptation");
+        $arr[self::DESCRIPTION_WAITING     ] = Mage::helper("zolagocatalog")->__("Description waiting for acceptation by admin");
         $arr[self::DESCRIPTION_ACCEPTED    ] = Mage::helper("zolagocatalog")->__("Description accepted");
 
         return $arr;
