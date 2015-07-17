@@ -19,7 +19,8 @@ class GH_Statements_Model_Form_Fieldset_Calendar_Item extends Zolago_Common_Mode
             'required' => true,
             "maxlength" => 32,
             'class' => "form-control",
-            'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM),
+            'format' => 'yyyy-MM-dd',
+            'note' => $this->_helper->__('Allowed format: yyyy-mm-dd'),
         ));
 
     }

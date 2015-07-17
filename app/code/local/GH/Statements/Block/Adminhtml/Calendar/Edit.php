@@ -21,6 +21,13 @@ class GH_Statements_Block_Adminhtml_Calendar_Edit extends GH_Statements_Block_Ad
                     'class' => 'back'
                 ))
         );
+        $this->setChild('events_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label' => Mage::helper('ghstatements')->__('Edit events'),
+                        'onclick' => "window.location.href = '".$this->getUrl('*/*/calendar_item', array("_current" => true))."'",
+                    ))
+        );
         $this->setChild('reset_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
@@ -54,7 +61,9 @@ class GH_Statements_Block_Adminhtml_Calendar_Edit extends GH_Statements_Block_Ad
         }
         return Mage::helper('ghstatements')->__('New calendar');
     }
-
+    public function getEventsButtonHtml() {
+        return $this->getChildHtml('events_button');
+    }
     public function getSaveUrl()
     {
         return $this->getUrl('*/*/calendar_save', array("_current" => true));

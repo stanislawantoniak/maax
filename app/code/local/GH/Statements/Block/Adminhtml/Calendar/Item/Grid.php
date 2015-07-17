@@ -28,7 +28,9 @@ class GH_Statements_Block_Adminhtml_Calendar_Item_Grid extends Mage_Adminhtml_Bl
             "header" => Mage::helper("ghstatements")->__("ID"),
             "align" => "right",
             "type" => "number",
-            "width" => "100px"
+            "width" => "40px",
+            "sortable" => false,
+            "filter" => false,
         ));
         $this->addColumn("date", array(
             "index" => "event_date",

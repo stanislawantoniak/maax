@@ -9,7 +9,7 @@
 "Save", "Zapisz"
 "Calendar saved", "Kalendarz zapisany"
 "Calendar not found", "Kalendarz nie odnaleziony"
-"Calendar events list", "Terminy"
+"Calendar events list: [%s]", "Terminy dla [%s]"
 "Event date", "Termin rozliczenia"
 "New event", "Nowy termin"
 "Statement event", "Termin rozliczenia"
@@ -25,4 +25,8 @@
 "Edit calendar", "Edycja kalendarza rozliczeń"
 "Calendar deleted", "Kalendarz usunięty"
 "Are you sure that you want to delete this calendar?", "Czy na pewno chcesz usunąć ten kalendarz rozliczeń?"
+"-- empty --", "-- brak --"
+"Edit events", "Edytuj terminy"
+"Allowed format: yyyy-mm-dd", "Dozwolony format: RRRR-MM-DD"
+"Wrong date format at field: %s", "Błędny format daty w polu: %s"
 

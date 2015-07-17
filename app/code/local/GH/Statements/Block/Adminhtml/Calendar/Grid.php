@@ -27,7 +27,9 @@ class GH_Statements_Block_Adminhtml_Calendar_Grid extends Mage_Adminhtml_Block_W
             "header" => Mage::helper("ghstatements")->__("ID"),
             "align" => "right",
             "type" => "number",
-            "width" => "100px"
+            "width" => "40px",
+            "filter" => false,
+            "sortable" => false,
         ));
         $this->addColumn("name", array(
             "index" => "name",
@@ -38,15 +40,8 @@ class GH_Statements_Block_Adminhtml_Calendar_Grid extends Mage_Adminhtml_Block_W
             array(
                 'header'    => Mage::helper('catalog')->__('Action'),
                 'type'      => 'action',
-                'getter'     => 'getId',
-                'width' 	=> '50px',
-                'actions'   => array(
-                    array(
-                        'caption' => Mage::helper('catalog')->__('Edit'),
-                        'field'   => 'id',
-                        'url' => array ('base' => '*/*/calendar_edit'),
-                    )
-                ),
+                'width' 	=> '150px',
+                'renderer'  => Mage::getConfig()->getBlockClassName("ghstatements/adminhtml_calendar_grid_column_renderer_action"),
                 'filter'    => false,
                 'sortable'  => false
         ));

@@ -74,8 +74,6 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
                 }
                 $model->setData($data);
                 $validErrors = $model->validate();
-
-
                 if ($validErrors === true) {
                     $model->save();
                 } else {
@@ -83,7 +81,7 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
                     foreach ($validErrors as $error) {
                         $this->_getSession()->addError($error);
                     }
-                    return $this->_redirectReferer();
+                    return null;
                 }
                 $this->_getSession()->addSuccess($helper->__($type." saved"));
             }
@@ -103,7 +101,10 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
     public function calendar_saveAction() {
         $model = Mage::getModel("ghstatements/calendar");
         $oldId =  $this->getRequest()->getParam("id");        
-        $id = $this->_save($model,'Calendar');
+        if (!($id = $this->_save($model,'Calendar'))) {
+            return $this->_redirectReferer();
+        }
+        
         if ($oldId != $id) {
             return $this->_redirect("*/*/calendar_item",array('id' => $id));
         } else {
@@ -117,7 +118,9 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
         if ($itemId) {
             $this->getRequest()->setParam('item_id',$itemId);
         }
-        $this->_save($model,'Event');
+        if (!$this->_save($model,'Event')) {
+            return $this->_redirectReferer();
+        }
         $id = $this->getRequest()->getParam('calendar_id');
         return $this->_redirect("*/*/calendar_item",array('id' => $id));
 
@@ -142,6 +145,15 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
     public function calendar_deleteAction() {
         $model = Mage::getModel("ghstatements/calendar");
         $this->_delete($model,'Calendar');
+        // remove vendor settings
+        $id = $this->getRequest()->getParam('id');
+        $write = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $table = $write->getTableName('udropship_vendor');
+        $write->update(
+                $table,
+                array("statements_calendar" => NULL),
+                "statements_calendar=".$id
+        );
         return $this->_redirect("*/*/calendar");
 
     }
