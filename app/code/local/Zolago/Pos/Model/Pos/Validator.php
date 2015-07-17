@@ -47,7 +47,7 @@ class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Model_Validator_Abstr
 		$this->_notEmpty('postcode','Postcode');
 
 		if (!Zend_Validate::is($this->_data['postcode'], 'PostCode', array("format" => "\d\d-\d\d\d"))) {
-			$this->_errors[] = $this->_helper->__('%s has not valid format (ex.12-345)', $this->_helper->__('Postcode'));
+			$this->_errors[] = $this->_helper->__('Zip code has not valid format (ex.12-345)');
 		}
 		$this->_notEmpty('street','Street');
 		$this->_stringLength('street','Street',150);
