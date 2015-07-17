@@ -1383,11 +1383,37 @@
                 return true;
             },
 
+            afterZipValidationAction: function () {
+                if (this.getCustomerIsLoggedIn()) {
+                    return true;
+                }
+
+                var zipEntered = jQuery("[name='shipping[postcode]']").val();
+
+                if (jQuery(".zipcode").valid()) {
+                    //send backend zip checking
+                    jQuery.ajax({
+                        url: Config.url.zip_validate,
+                        data: {zip: zipEntered, country: jQuery("[name='billing[country_id]']").val()}
+                    }).done(function (data) {
+                        jQuery("#zip-warning").empty();
+                        if (!data.status) {
+                            // not valid zip - show warning
+                            Mall.Checkout.prototype.showWarning(jQuery("#zip-warning"), Mall.translate.__('warning-wrong-zip'));
+                        }
+                    })
+                } else {
+                    jQuery("#zip-warning").empty();
+                }
+
+            },
+
             validate: {
                 _checkout: null,
 
                 init: function () {
                     var self = this;
+
 
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
@@ -1396,9 +1422,18 @@
                         rules: { }
                     }));
 
+                    // backend zip validate
+                    jQuery(".zipcode").keyup(function () {
+                        Mall.Checkout.steps.address.afterZipValidationAction();
+                    })
+
+
+
                     // validate email address
                     jQuery("#account_email").blur(
                         function () {Mall.Checkout.steps.address.afterEmailValidationAction();});
+
+
                 }
             }
 		},
