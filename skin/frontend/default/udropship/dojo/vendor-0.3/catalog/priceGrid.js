@@ -135,7 +135,7 @@ define([
                 }
                 // Fix for correct updating "changed" select in row for cell status
                 var row = grid.row(data['entity_id']);
-                jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
+				jQuery(row.element).remove();
             }, function(evt){
                 obj.changed = states.changed[obj.entity_id] = [];
 
