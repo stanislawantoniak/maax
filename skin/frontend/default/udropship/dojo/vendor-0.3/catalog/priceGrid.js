@@ -524,12 +524,9 @@ define([
 						field: "status",
 						className: "filterable align-center column-medium editable",
 						formatter: function(value, item){
-                            //console.log(value);
-                            //console.log(item);
-                            //console.log(statusOptions);
-							for(var i=0; i<descriptionStatusOptionsForFormatter.length; i++){
-								if(descriptionStatusOptionsForFormatter[i].value+'' == value+''){
-									return descriptionStatusOptionsForFormatter[i].label;
+							for(var i=0; i<statusOptions.length; i++){
+								if(statusOptions[i].value+'' == value+''){
+									return statusOptions[i].label;
 								}
 							}
 							return "";
