@@ -327,24 +327,25 @@ define([
 	var rendererDescription = function (item, value, node, options){
 
         // @see Zolago_Catalog_Model_Product_Source_Description
-        // const DESCRIPTION_NOT_ACCEPTED = -1;// Nie zatwierdzony
-        // const DESCRIPTION_WAITING      =  0;// Oczekuje na zatwierdzenie
-        // const DESCRIPTION_ACCEPTED     =  1;// Zatwierdzony
+        //const DESCRIPTION_NOT_ACCEPTED = 1;// Nie zatwierdzony
+        //const DESCRIPTION_WAITING      = 2;// Oczekuje na zatwierdzenie
+        //const DESCRIPTION_ACCEPTED     = 3;// Zatwierdzony
 
         value = parseInt(value);
 		var icon = '';
         switch (value) {
-            case 1:
+            case 3:
                 icon = "ania-icon-accepted";
                 break;
-            case -1:
+            case 1:
                 icon = "ania-icon-notaccepted";
                 break;
-            case 0:
+            case 2:
                 icon = "ania-icon-hourglass";
                 break;
             default:
                 icon = "ania-icon-notaccepted";
+                value = 1;
                 break;
         }
 		node.title = this.options[value] || "";
