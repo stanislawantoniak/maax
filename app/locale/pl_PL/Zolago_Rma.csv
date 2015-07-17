@@ -1,4 +1,4 @@
-"This RMA does not exist.","To RMA nie istnieje."
+﻿"This RMA does not exist.","To RMA nie istnieje."
 "This RMA is not yours.","To RMA nie jest Twoje."
 "There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
 "Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
@@ -196,3 +196,4 @@
 "{{author_name}} has confirmed refund for this RMA, amount: %s","{{author_name}} potwierdził wykonanie zwrotu do tego RMA na kwotę %s"
 "{{author_name}} has ordered refund for this RMA, amount: %s","{{author_name}} zlecił wykonanie zwrotu do tego RMA na kwotę %s"
 "Contact phone","Telefon kontaktowy"
+"Shipping costs","Koszty dostawy"

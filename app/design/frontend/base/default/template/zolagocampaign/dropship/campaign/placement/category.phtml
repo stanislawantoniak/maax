@@ -330,6 +330,7 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
+        $("[data-banner=preview]").html("");
         var type= $(this).closest('#basicModal').find('[name="creation_type"]').val();
 
         getCampaignCreations(campaign,type, $('#basicModal select[name=banner]'));
@@ -338,6 +339,7 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=banner]', function () {
         var banner = $(this).val();
+        $("[data-banner=preview]").html("");
         if (banner.length > 0) {
             $("#basicModal .alert.alert-warning").remove();
         }
@@ -679,13 +681,6 @@ jQuery(function ($) {
 
         modal.find('[name=priority]').val(priority);
 
-//        if(campaignShowEditLink == 0){
-//            modal.find('[data-edit-val="link-delete"]').hide();
-//        }
-//        if(campaignShowEditLink == 1){
-//            modal.find('[data-edit-val="link-delete"]').show();
-//        }
-
         modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
     });
@@ -810,12 +805,7 @@ jQuery(function ($) {
 
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
 
-//                    var l1 = '<?php //echo $_helper->__('To edit'); ?>//';
-//                    var l2 = '<?php //echo $_helper->__('go to campaign.'); ?>//';
-//                    var link = "/campaign/vendor/edit/id/" + data.campaign_id;
-                    $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message
-//                        + l1 + ' <a data-edit-val="link-edit" href="'+link+'" target="_blank">'+l2+'</a>'
-                    );
+                    $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message);
 
 
                     $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
