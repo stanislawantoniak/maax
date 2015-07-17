@@ -5,38 +5,33 @@
 class Zolago_Catalog_Model_Product_Source_Description
     extends Zolago_Catalog_Model_Product_Source_Abstract {
 
-    const DESCRIPTION_NOT_ACCEPTED = -1;// Nie zatwierdzony
-    const DESCRIPTION_WAITING      =  0;// Oczekuje na zatwierdzenie
-    const DESCRIPTION_ACCEPTED     =  1;// Zatwierdzony
+    const DESCRIPTION_NOT_ACCEPTED = 1;// Nie zatwierdzony
+    const DESCRIPTION_WAITING      = 2;// Oczekuje na zatwierdzenie
+    const DESCRIPTION_ACCEPTED     = 3;// Zatwierdzony
 
-    public function getAllOptions() {
+    public function getAllOptions($withEmpty = false, $defaultValues = false) {
+
         if (!$this->_options || $this->_force) {
-            $this->_options = array (
-                array (
-                    'value' => self::DESCRIPTION_NOT_ACCEPTED,
-                    'label' => Mage::helper("zolagocatalog")->__("Description not accepted"),
-                ),
-                array (
-                    'value' => self::DESCRIPTION_WAITING,
-                    'label' => Mage::helper("zolagocatalog")->__("Description waiting for acceptation by admin"),
-                ),
-                array (
-                    'value' => self::DESCRIPTION_ACCEPTED,
-                    'label' => Mage::helper("zolagocatalog")->__("Description accepted"),
-                ),
-            );
+            $res = array();
+            foreach (self::toOptionHash($withEmpty) as $index => $value) {
+                $res[] = array(
+                    'value' => $index,
+                    'label' => $value
+                );
+            }
+            $this->_options = $res;
         }
         return $this->_options;
     }
 
     /**
-     * @param bool $selector
+     * @param bool $withEmpty
      * @return array
      */
-    public function toOptionHash($selector = false) {
+    public function toOptionHash($withEmpty = false) {
 
         $arr = array();
-        if ($selector) {
+        if ($withEmpty) {
             $arr[''] = Mage::helper("zolagocatalog")->__("* Please select");
         }
 
