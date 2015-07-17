@@ -23,6 +23,13 @@ $_hlp = $this->getRmaHelper();
 							<?php echo $_hlp->__("Confirming RMA refund"); ?>
 						<?php endif; ?>
 					</h4>
+					<div class="modal-comment">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering a refund will inform gallery administrators about need of refunding the money. Refund will be processed manually and then will change it's status to completed"); ?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming refund means that you have already made a bank transfer with refund to customer.");?>
+						<?php endif; ?>
+					</div>
 				</div>
 				<div class="modal-body">
 					<table id="rmaRefundItems" class="table table-striped table-bordered table-checkable  foot-empty-cells">
@@ -44,7 +51,12 @@ $_hlp = $this->getRmaHelper();
 							<?php
 							/** @var Mage_Core_Helper_Data $coreHlp */
 							$coreHlp = Mage::helper('core');
-							$paidNum = $_item->getPoItem()->getFinalItemPrice();
+							$_poItemId = $_item->getPoItem()->getId();
+							if($_poItemId) {
+								$paidNum = $_item->getPoItem()->getFinalItemPrice();
+							} else {
+								$paidNum = $_item->getPrice();
+							}
 							$paid = $coreHlp->currency($paidNum, true, false);
 							$paidAmount = $this->getPriceValue($paidNum);
 
@@ -70,7 +82,7 @@ $_hlp = $this->getRmaHelper();
 									<?php echo $_item->getVendorSimpleSku(); ?>
 								</td>
 								<td>
-									<?php echo $_item->getName(); ?>
+									<?php echo $_poItemId ? $_item->getName() : $_hlp->__($_item->getName()); ?>
 								</td>
 								<td>
 									<?php echo $paid; ?>

@@ -176,11 +176,24 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
     }
 
     /**
-     * ajax functon from testing soap
-     * @return void
+     * Preparing test for getCategories
+     *
+     * @param GH_Api_Block_Dropship_Answer $block
+     */
+    public function _prepareGetCategories($block) {
+        $client   = $this->_getClient($block);
+        $request  = $this->getRequest();
+        $token    = $request->get('token');
+
+        $client->getCategories($token);
+    }
+
+    /**
+     * Ajax function from testing soap
      */
      public function testAction() {
          $this->loadLayout();
+         /** @var GH_Api_Block_Dropship_Answer $block */
          $block = $this->getLayout()->createBlock('ghapi/dropship_answer')->setTemplate('ghapi/dropship/soap/ajaxAnswer.phtml');
          $action = $this->getRequest()->getPost('action');
          switch ($action) {
@@ -204,6 +217,9 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                  break;
              case 'setOrderReservation':
                  $this->_prepareSetOrderReservation($block);
+                 break;
+             case 'getCategories':
+                 $this->_prepareGetCategories($block);
                  break;
              default:
                  $block->setSoapRequest('error');

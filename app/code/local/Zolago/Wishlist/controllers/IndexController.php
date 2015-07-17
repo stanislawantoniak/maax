@@ -72,7 +72,7 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
 		if(!$wishlist->getId()){
 			$wishlist->save();
 		}
-		return parent::_addItemToWishList();
+		parent::_addItemToWishList();
 	}
 	
 	/**
