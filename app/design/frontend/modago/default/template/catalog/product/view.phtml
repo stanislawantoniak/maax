@@ -90,8 +90,9 @@ if($vendorContext && $vendorContext->getId()) {
         </div>
     <?php endif;?>
     <div class="col-xs-12">
-	    <?php if($isVendorContent):?>
-		    <a href="<?php echo $this->getVendorUrl();?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getVendorName(); ?></a>
+	    <?php if(Mage::registry('mobile_breadcrumb')):?>
+		    <?php $mobileBreadcrumb = Mage::registry('mobile_breadcrumb'); ?>
+		    <a href="<?php echo $mobileBreadcrumb['link'];?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $mobileBreadcrumb['label']; ?></a>
 	    <?php else: ?>
 	        <a href="<?php echo $this->getParentCategoryUrl(); ?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
 	    <?php endif; ?>
