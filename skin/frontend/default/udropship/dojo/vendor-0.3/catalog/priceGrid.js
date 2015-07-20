@@ -128,6 +128,7 @@ define([
                         data['message']['timeout'] = undefined;
                     }
                     if (notyObj.text) { // Show msg only once
+	                    jQuery('#noty_top_layout_container').remove();
                         noty(notyObj);
                     }
                 }
@@ -165,7 +166,7 @@ define([
 	
 	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
 
-	grid = new PriceGrid({
+	window.priceGrid = grid = new PriceGrid({
 		columns: {
 			selector: selector({ 
 				label: ''
