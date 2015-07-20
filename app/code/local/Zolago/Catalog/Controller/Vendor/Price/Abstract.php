@@ -95,7 +95,10 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
     /**
      * @param array $productIds
      * @param array $attributes
-     * @param type $storeId
+     * @param int $storeId
+     * @param array $data
+     * @return $this|Zolago_Catalog_Controller_Vendor_Abstract
+     * @throws Exception
      * @throws Mage_Core_Exception
      */
     protected function _processAttributresSave(array $productIds, array $attributes, $storeId, array $data) {
@@ -120,25 +123,18 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
 
             // Process modified flow attributes
             switch($attributeCode) {
-            case "is_in_stock":
-                $inventoryData['is_in_stock'] = $value;
-                unset($attributes[$attributeCode]);
             case "politics":
                 $inventoryData['politics'] = $value;
                 unset($attributes[$attributeCode]);
                 break;
-
             }
         }
 
-
-        $actionModel = Mage::getSingleton('catalog/product_action');
-        /* @var $actionModel Mage_Catalog_Model_Product_Action */
-
         if($attributes) {
+            /* @var $actionModel Mage_Catalog_Model_Product_Action */
+            $actionModel = Mage::getSingleton('catalog/product_action');
             $actionModel->updateAttributes($productIds, $attributes, $storeId);
         }
-
 
         // Prepare stock
         foreach (Mage::helper('cataloginventory')->getConfigItemOptions() as $option) {
@@ -154,23 +150,31 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
             $stockItem->setProcessIndexEvents(false);
             $stockItemSaved = false;
 
-            foreach ($productIds as $productId) {
-                $stockItem->setData(array());
-                $stockItem->loadByProduct($productId)
-                ->setProductId($productId);
+            // Preparing collection of stock items
+            /** @var Mage_CatalogInventory_Model_Resource_Stock_Item_Collection $collStockItems */
+            $collStockItems = Mage::getModel('cataloginventory/stock')->getItemCollection();
+            $collStockItems->addFieldToFilter('product_id', array('in' => $productIds));
 
+            foreach ($productIds as $productId) {
+
+                $stockItem = $collStockItems->getItemByColumnValue('product_id', $productId);
                 $stockDataChanged = false;
                 foreach ($inventoryData as $k => $v) {
                     if ($k == 'politics') {
-                        $model = Mage::getModel('catalog/product')->load($productId);
-                        $type = $model->getTypeId();
-                        if ($type == 'simple') {
+                        $type = $stockItem->getTypeId();
+                        if ($type == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
+                            // Simple
+                            $stockItem->setData('use_config_min_qty',1-$v);
                             $stockItem->setData('min_qty',1000000*$v);
                         } else {
+                            // Configurable
+                            $stockItem->setData('use_config_manage_stock', 0);
                             $stockItem->setData('manage_stock',$v);
-                            $stockItem->setData('is_in_stock',1-$v);
-
+                            $stockItem->setData('is_in_stock',
+                                !$v ? Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK :
+                                     Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
                         }
+
                         $stockDataChanged = true;
                     } else {
                         $stockItem->setDataUsingMethod($k, $v);
@@ -192,6 +196,7 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
                 );
             }
         }
+        return $this;
     }
 }
 

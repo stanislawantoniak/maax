@@ -205,6 +205,15 @@
     input[type="tel"] {
       line-height: 29px;
     }
+    .checkout-warning:not(:empty) {
+      font-size: 11px;
+      max-width: 450px;
+      background: #F2F1F0;
+      padding: 5px 10px;
+      position: relative;
+      top: 5px;
+    }
+
     #payment_form_zolagopayment_gateway,
     #payment_form_zolagopayment_cc {
       .provider-item {

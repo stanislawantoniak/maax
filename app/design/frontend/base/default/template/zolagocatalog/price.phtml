@@ -24,9 +24,15 @@ $helper = Mage::helper("zolagocatalog");
                         </a>
                     </li>
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-2" href="#" id="mass-change-statuses">
+                        <a role="menuitem" tabindex="-2" href="#" id="mass-enable-products">
                             <i class="icon icon-off"></i>
-                            <?php echo $helper->__("Change statuses"); ?>
+                            <?php echo $helper->__("Enable products on page"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-2" href="#" id="mass-invalid-products">
+                            <i class="icon icon-off"></i>
+                            <?php echo $helper->__("Set products as invalid"); ?>
                         </a>
                     </li>
                     <li role="presentation">
@@ -65,7 +71,7 @@ $helper = Mage::helper("zolagocatalog");
 <script type="text/javascript">
 	
 	sourceOptions = <?php echo $this->getAttributeSourceJson();?>;
-	
+
 	require(['vendor/catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
 		<?php /*
 		var store = new Observable(new Memory({ idProperty: "entity_id", data: <?php echo $this->getJsonCollection();?>}));

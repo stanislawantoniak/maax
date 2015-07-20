@@ -138,6 +138,13 @@
                         <fieldset>vendor_info</fieldset>
                         <position>0</position>
                     </super_vendor_id>
+                    <statements_calendar>
+                        <label>Statements calendar</label>
+                        <type>select</type>
+						<source_model>ghstatements/source_calendar</source_model>
+                        <fieldset>vendor_info</fieldset>
+                        <position>20</position>                        
+                    </statements_calendar>
                 	<vendor_type>
                         <label>Vendor type</label>
                         <type>select</type>

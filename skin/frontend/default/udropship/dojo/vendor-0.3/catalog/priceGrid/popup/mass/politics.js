@@ -52,7 +52,7 @@ define([
                                 grid.selectAll();
                             }else{
                                 jQuery.each(data.changed_ids, function(){
-                                    grid.select(this + 0); // Cast to number
+                                    grid.select(parseInt(this));
                                 });
                             }
                         });
@@ -77,6 +77,8 @@ define([
         _afterRender: function(data){
             this.inherited(arguments);
             this._modal.find("h4").text(Translator.translate("Mass politics change"));
+            this._modal.find(".modal-footer .btn-default").html(Translator.translate("Cancel"));
+            this._modal.find(".modal-footer .btn-primary").html(Translator.translate("Execute"));
         },
 
         // After load content

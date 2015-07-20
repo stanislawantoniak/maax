@@ -63,7 +63,7 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		
 		return Mage::helper("core")->jsonEncode($source);
 	}
-	
+
 	/**
 	 * @param array $array
 	 * @return array
