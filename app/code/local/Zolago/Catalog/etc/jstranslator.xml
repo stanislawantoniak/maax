@@ -160,6 +160,6 @@
         <message>Mass enable products on site</message>
     </Mass-enable-products-on-site>
     <Mass-disable-products-on-site translate="message" module="zolagocatalog">
-        <message>Mass enable products on site</message>
+        <message>Mass disable products on site</message>
     </Mass-disable-products-on-site>
 </jstranslator>
