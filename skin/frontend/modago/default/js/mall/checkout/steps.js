@@ -210,7 +210,10 @@
                         jQuery(this).parents('.form-group').addClass('hide-success-vaild');
                     }
                 });
-
+                // backend zip validate
+                jQuery(".postcode").keyup(function () {
+                    Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name=postcode]"));
+                })
                 //end validate
             },
 			
@@ -279,7 +282,12 @@
                         , item.inputClass
                         , ""
                     );
-                    formGroup.find(".row").append(element.label).append(element.input);
+                    var row = formGroup.find(".row");
+                    row.append(element.label).append(element.input);
+                    if(item.name == "postcode"){
+                        row.find("input").after('<div id="zip-warning" class="checkout-warning"></div>');
+                    }
+
                     panelBody.append(formGroup);
                 });
 
@@ -1395,12 +1403,12 @@
                 return true;
             },
 
-            afterZipValidationAction: function () {
+            afterZipValidationAction: function (field) {
                 if (this.getCustomerIsLoggedIn()) {
                     return true;
                 }
 
-                var zipEntered = jQuery("[name='shipping[postcode]']").val();
+                var zipEntered = field.val();
 
                 if (jQuery(".zipcode").valid()) {
                     //send backend zip checking
@@ -1436,7 +1444,7 @@
 
                     // backend zip validate
                     jQuery(".zipcode").keyup(function () {
-                        Mall.Checkout.steps.address.afterZipValidationAction();
+                        Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name='shipping[postcode]']"));
                     })
 
 
