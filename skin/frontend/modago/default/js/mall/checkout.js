@@ -573,7 +573,11 @@
 		dataObject, textInfo, template) {
 		textInfo.html(Mall.replace(template, dataObject));
 		return textInfo;		
-	};		
+	};
+	Mall.Checkout.prototype.showWarning = function (textInfo, message) {
+		textInfo.html(message);
+		return textInfo;
+	};
 	/**
 	 * @param {bool} isInvoice
 	 * @returns {string}

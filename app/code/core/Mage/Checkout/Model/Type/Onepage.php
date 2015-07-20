@@ -904,6 +904,23 @@ class Mage_Checkout_Model_Type_Onepage
     }
 
     /**
+     * Check if customer entered zip exists
+     *
+     * @param $country
+     * @param $zip
+     * @return bool
+     */
+    protected function _customerZipExists($country, $zip)
+    {
+        /* @var $helper Orba_Shipping_Helper_Carrier_Dhl */
+        $helper = Mage::helper("orbashipping/carrier_dhl");
+        $isValidZip = $helper->isDHLValidZip($country, $zip);
+        return $isValidZip;
+    }
+
+
+
+    /**
      * Get last order increment id by order id
      *
      * @return string
