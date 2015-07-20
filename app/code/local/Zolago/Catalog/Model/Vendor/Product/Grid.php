@@ -169,7 +169,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
                 "clickable" => true,
                 "required"  => (int)$status->getIsRequired(),
                 "filterable"=> true,
-                "header"	=> $this->_getColumnLabel($name),
+                "header"	=> $this->_getColumnLabel($status),
                 "attribute"	=> $status
             );
 			

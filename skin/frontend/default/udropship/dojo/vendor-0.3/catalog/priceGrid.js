@@ -780,7 +780,19 @@ define([
 	updateSelectionButtons();
 	updateMassButton();
 
+    jQuery('#grid-holder-header tr:eq(1) .dgrid-cell[role="columnheader"]').each(function(idx, elem){
+        jQuery(elem).attr('title', jQuery(elem).html());
+        jQuery(elem).tooltip({
+            container: "body",
+            animation: false,
+            placement: "top",
+            trigger: "hover",
+            delay: {"show": 0, "hide": 0}
+        });
+    });
+
 	return grid; 
-	
+
+
 	
 });
