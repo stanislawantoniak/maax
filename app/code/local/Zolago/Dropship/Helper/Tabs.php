@@ -72,7 +72,9 @@ class Zolago_Dropship_Helper_Tabs extends Mage_Core_Helper_Abstract {
             if (in_array($type, array('multiselect', 'checkboxes', 'radios')) || !is_callable(array($source, 'toOptionHash'))) {
                 $field['params']['values'] = $source->toOptionArray();
             } else {
-                $field['params']['options'] = $source->toOptionHash();
+                $nodeArray = $node->asArray();
+                $selector = isset($nodeArray['selector']) ? $nodeArray['selector'] : false;
+                $field['params']['options'] = $source->toOptionHash($selector);
             }
             break;
 
