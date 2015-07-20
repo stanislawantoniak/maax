@@ -51,9 +51,13 @@ class GH_Statements_Block_Adminhtml_Calendar_Item_Edit extends GH_Statements_Blo
     public function getHeaderText()
     {
         if ($this->getIsNew()) {
-            return Mage::helper('ghstatements')->__('Edit event');
+            $text = Mage::helper('ghstatements')->__('Edit event');
+        } else {
+	        $text = Mage::helper('ghstatements')->__('New event');
         }
-        return Mage::helper('ghstatements')->__('New event');
+	    $text .= " [".$this->getCalendarName()."]";
+
+	    return $text;
     }
 
     public function getSaveUrl()
@@ -65,5 +69,14 @@ class GH_Statements_Block_Adminhtml_Calendar_Item_Edit extends GH_Statements_Blo
     {
         return $this->getUrl('*/*/calendar_item_delete', array("_current" => true));
     }
+
+	protected function getCalendarName() {
+		$calendarId = $this->getRequest()->getParam('calendar_id');
+
+		/** @var GH_Statements_Model_Calendar $calendar */
+		$calendar = Mage::getModel("ghstatements/calendar")->load($calendarId);
+
+		return $calendar->getName();
+	}
 
 }

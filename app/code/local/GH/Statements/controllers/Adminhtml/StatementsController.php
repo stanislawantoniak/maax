@@ -106,7 +106,7 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
         }
         
         if ($oldId != $id) {
-            return $this->_redirect("*/*/calendar_item",array('id' => $id));
+            return $this->_redirect("*/*/calendar_item_new",array('calendar_id' => $id));
         } else {
             return $this->_redirect("*/*/calendar");
         }
