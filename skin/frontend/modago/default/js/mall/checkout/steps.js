@@ -853,13 +853,13 @@
 			onPrepare: function(){
 				var self = this;
 				this.content.find("form").submit(function(){
-                    jQuery("button[id*='-prev']").prop("disabled", false);
-                    var submit0Button = jQuery(this).find('button[target=step-0-submit]');
-
-                    submit0Button.prop("disabled", true);
-                    var i0 = submit0Button.find('i');
-                    i0.addClass('fa fa-spinner fa-spin');
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submit0Button = jQuery(this).find('button[target=step-0-submit]');
+                        submit0Button.prop("disabled", true);
+                        var i0 = submit0Button.find('i');
+                        i0.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1167,13 +1167,13 @@
 				this.init();
 				var self = this;
 				this.content.find("form").submit(function(){
-                    jQuery("button[id*='-prev']").prop("disabled", false);
-                    var submitNotLoggedButton = jQuery(this).find('button[target=step-0-submit]');
-
-                    submitNotLoggedButton.prop("disabled", true);
-                    var iNotLogged = submitNotLoggedButton.find('i');
-                    iNotLogged.addClass('fa fa-spinner fa-spin');
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submitNotLoggedButton = jQuery(this).find('button[target=step-0-submit]');
+                        submitNotLoggedButton.prop("disabled", true);
+                        var iNotLogged = submitNotLoggedButton.find('i');
+                        iNotLogged.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1586,15 +1586,14 @@
 				this.validate.init();
 
 				this.content.find("form").submit(function(){
-                    jQuery("button[id*='-prev']").prop("disabled", false);
-                    //jQuery(this).find("button[id*='-prev']").prop("disabled", true);
-                    var submitButton = jQuery(this).find('button[id=step-1-submit]');
-                    submitButton.prop("disabled", true);
-                    var i = submitButton.find('i');
-                    i.addClass('fa fa-spinner fa-spin');
                     if (jQuery(this).valid()) {
-                        self.submit();
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submitButton = jQuery(this).find('button[id=step-1-submit]');
+                        submitButton.prop("disabled", true);
+                        var i = submitButton.find('i');
+                        i.addClass('fa fa-spinner fa-spin');
 
+                        self.submit();
                     }
 					return false;
                 });
@@ -1862,7 +1861,14 @@
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
                     jQuery("button[id*='-prev']").prop("disabled", false);
+
+                    //disable prev buttons
                     jQuery("#step-2-prev").prop("disabled", true);
+                    jQuery("#zmiana_zawartosci_koszyka").prop("disabled", true);
+                    jQuery(".prev-button-address").prop("disabled", true);
+                    jQuery(".prev-button-deliverypaymnet").prop("disabled", true);
+
+
                     var submit2Button = jQuery(this);
                     submit2Button.prop("disabled", true);
                     var i2 = submit2Button.find('i');

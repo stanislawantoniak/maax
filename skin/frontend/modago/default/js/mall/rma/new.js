@@ -199,7 +199,7 @@ jQuery(function($){
                 var valid = true,
 	                from = s.find('input[name="rma[carrier_time_from]"]').val().split(":")[0],
 		            to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0],
-	                account = s.find('input[name="rma[customer_account]"]').val().replace(new RegExp('pl','gi'),"").replace(new RegExp(' ','g'),"");
+	                account = s.find('input[name="rma[customer_account]"]');
 
 
 
@@ -214,7 +214,7 @@ jQuery(function($){
 		         //   }
 
 	            //validate if entered account number is correct (optional field)
-	            if(account && (account.length != 26 || !$.isNumeric(account))) {
+	            if(account.parent().hasClass('has-error')) {
 		            valid = false
 	            }
 
