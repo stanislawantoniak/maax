@@ -76,7 +76,11 @@ define([
 
         _afterRender: function(data){
             this.inherited(arguments);
-            this._modal.find("h4").text(Translator.translate("Mass enable products on site"));
+            if (data.status == "enable") {
+                this._modal.find("h4").text(Translator.translate("Mass enable products on site"));
+            } else {
+                this._modal.find("h4").text(Translator.translate("Mass disable products on site"));
+            }
             this._modal.find(".modal-footer .btn-default").html(Translator.translate("Cancel"));
             this._modal.find(".modal-footer .btn-primary").html(Translator.translate("Execute"));
         },
