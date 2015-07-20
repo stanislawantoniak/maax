@@ -3,39 +3,39 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 
     public function testStock() {
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-        $liczba = 150;
+        $liczba = rand(5, 500);
         $param =array (
             5 => array (
-                '5-30025-BEZOWY-34' => array (
+                '5-25678-CZERWONY-XXXXL' => array (
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => 0,
+                    'k99' => 0   
+                ),
+                '5-25680-BIALY-XXXXL' => array (
                     'SKLEP2' => 0,
                     'SKLEP1' => $liczba,
                     'MAGAZYN' => 400,
-                    'k99' => 0   
-                ),
-                '5-30025-BEZOWY-36' => array (
-                    'SKLEP2' => 0,
-                    'SKLEP1' => $liczba,
-                    'MAGAZYN' => 0,
-                    'k99' => 0   
-                ),
-                '5-30025-BEZOWY-38' => array (
-                    'SKLEP2' => 0,
-                    'SKLEP1' => $liczba,
-                    'MAGAZYN' => 0,
-                    'k99' => 0   
-                ),
-                '5-30025-BEZOWY-40' => array (
-                    'SKLEP2' => 0,
-                    'SKLEP1' =>$liczba,
-                    'MAGAZYN' => 0,
                     'k99' => 0
                 ),
-                '5-30025-BEZOWY-42' => array (
-                    'SKLEP2' => 0,
-                    'SKLEP1' => $liczba,
-                    'MAGAZYN' => 0,
-                    'k99' => 0
-                ),
+//                '5-30025-BEZOWY-38' => array (
+//                    'SKLEP2' => 0,
+//                    'SKLEP1' => $liczba,
+//                    'MAGAZYN' => 0,
+//                    'k99' => 0
+//                ),
+//                '5-30025-BEZOWY-40' => array (
+//                    'SKLEP2' => 0,
+//                    'SKLEP1' =>$liczba,
+//                    'MAGAZYN' => 0,
+//                    'k99' => 0
+//                ),
+//                '5-30025-BEZOWY-42' => array (
+//                    'SKLEP2' => 0,
+//                    'SKLEP1' => $liczba,
+//                    'MAGAZYN' => 0,
+//                    'k99' => 0
+//                ),
             ),
         );
         $obj::updateStockConverter($param);
@@ -56,30 +56,30 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         Mage::log("nowa cena: ".$randomek, null, 'mylog.log');
 
         $param = array(
-        '5-24939-BIALY-XXL' => array(
+        '5-25678-CZERWONY-XXXXL' => array(
                 'A' => $randomek,
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
             ),
-        '5-24939-BIALY-XL' => array(
+        '5-25680-BIALY-XXXXL' => array(
                 'A' => $randomek+1,
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
             ),
-        '5-24939-BIALY-S' => array(
-                'A' => $randomek+2,
-                'B' => 6,
-                'C' => 18,
-                'Z' => 88
-            ),
-        '5-24939-BIALY-L' => array(
-                'A' => $randomek+3,
-                'B' => 6,
-                'C' => 18,
-                'Z' => 88
-            ),
+//        '5-24939-BIALY-S' => array(
+//                'A' => $randomek+2,
+//                'B' => 6,
+//                'C' => 18,
+//                'Z' => 88
+//            ),
+//        '5-24939-BIALY-L' => array(
+//                'A' => $randomek+3,
+//                'B' => 6,
+//                'C' => 18,
+//                'Z' => 88
+//            ),
 
 //        '5123124' => array(
 //            'A' => $randomek+3,
