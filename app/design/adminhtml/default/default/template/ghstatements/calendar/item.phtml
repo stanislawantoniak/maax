@@ -1,0 +1,24 @@
+<?php
+/*  @var $this GH_Statements_Block_Adminhtml_Calendar_Item_Grid */
+?>
+<div class="content-header">
+<table cellspacing="0">
+    <tr>
+        <td style="width:50%;">
+            <h3>
+                <?php echo Mage::helper('ghstatements')->__('Calendar events list: [%s]',$this->_getCalendarName()) ?>
+            </h3>
+        </td>
+        <td class="a-right">
+            <p class="form-buttons">
+                <button style="" onclick="setLocation('<?php echo $this->getUrl('*/*/calendar/index') ?>')" class="scalable back" type="button" ><span><?php echo Mage::helper('ghstatements')->__('Back');?></span></button>
+                <button style="" onclick="setLocation('<?php echo $this->getUrl('*/*/calendar_item_new',array('calendar_id' => $this->getRequest()->getParam('id'))) ?>')" class="scalable add" type="button" ><span><?php echo Mage::helper('ghstatements')->__('New event');?></span></button>
+            </p>
+            
+        </td>
+    </tr>
+</table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('ghstatements_calendar_item_grid') ?>
+</div>
