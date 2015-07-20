@@ -18,7 +18,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
     }
 
     /**
-     * Handle mass
+     * Handle mass price
      */
     public function massAction() {
         $this->loadLayout();
@@ -26,7 +26,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
     }
 
     /**
-     * Handle mass save
+     * Handle mass price save
+     * Skipping products in campaign
      */
     public function massSaveAction() {
 
@@ -151,6 +152,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
         /** @var Zolago_Catalog_Helper_Data $helper */
         $helper = Mage::helper("zolagocatalog");
         $politics = $request->getParam("politics");
+        $attributeData["politics"] = $politics;
 
         try {
 
@@ -174,38 +176,27 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             }
             $collection->load();
 
-            // Skip products
-            $allValidIds = array();
-            $skippedData = array();
-            $allIds      = array();
+            $this->_processAttributresSave($collection->getAllIds(), $attributeData, $storeId, array());
 
-            $stockItem = Mage::getModel('cataloginventory/stock_item');
-            $stockItem->setProcessIndexEvents(false);
-            foreach ($collection as $product) {
-                $productId = (int)$product->getId();
-                $stockItem->setData(array());
-                $stockItem->loadByProduct($productId)
-                ->setProductId($productId);
-                $type = $product->getTypeId();
-                if ($type == 'simple') {
-                    $stockItem->setData('min_qty',1000000*$politics);
-                } else {
-                    $stockItem->setData('manage_stock',$politics);
-                    $stockItem->setData('is_in_stock',1-$politics);
-                }
-                $stockItem->save();
-            }
-            Mage::getSingleton('index/indexer')->indexEvents(
-                Mage_CatalogInventory_Model_Stock_Item::ENTITY,
-                Mage_Index_Model_Event::TYPE_SAVE
-            );
+            /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+            $banHelper = Mage::helper( 'turpentine/ban' );
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+            $coll = $banHelper->prepareCollectionForMultiProductBan($collection->getAllIds());
+
+            Mage::dispatchEvent("vendor_manual_mass_save_politics_after",
+                array(
+                    "products"          => $coll,
+                    'product_ids'       => $coll->getAllIds(),
+                    'attributes_data'   => "politics",
+                    'store_id'          => $storeId
+                ));
 
             // Prepare response data
             $data = array(
                         "status"	=> 1,
                         "content"	=> array(
-                            "changed_ids" => $allIds,
-                            "changes"	  => array('politics'=>$politics),
+                            "changed_ids" => $collection->getAllIds(),
+                            "changes"	  => $attributeData,
                             "global"	  => (int)$global,
                             "time"		  => microtime(true)-$time,
                             "skipped"     => 0,
@@ -229,7 +220,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
         $response = $this->getResponse();
         $request = $this->getRequest();
 
-        $storeId = $this->_getStoreId();
+        $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
         $global = $request->getParam("global");
         $productsIds = explode(",", $request->getParam("selected", ""));
         $query = Mage::helper("core")->jsonDecode(base64_decode($request->getParam("encoded_query")));
@@ -280,6 +271,13 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 
             if($allValidIds && $attributeData) {
                 $this->_processAttributresSave($allValidIds, $attributeData, $storeId, array());
+
+                /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+                $banHelper = Mage::helper( 'turpentine/ban' );
+                /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+                $coll = $banHelper->prepareCollectionForMultiProductBan($allValidIds);
+
+                Mage::dispatchEvent("vendor_manual_mass_save_status_after", array("products" => $coll));
             }
 
             // Prepare response data

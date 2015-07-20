@@ -44,7 +44,7 @@ define([
 
                     var data = data.content;
 
-                    // Restore selection just changed prices
+                    // Restore selection just changed
                     grid.
                         refresh({keepScrollPosition: true}).
                         then(function(){
@@ -52,7 +52,7 @@ define([
                                 grid.selectAll();
                             }else{
                                 jQuery.each(data.changed_ids, function(){
-                                    grid.select(this + 0); // Cast to number
+                                    grid.select(parseInt(this));
                                 });
                             }
                         });
@@ -76,7 +76,9 @@ define([
 
         _afterRender: function(data){
             this.inherited(arguments);
-            this._modal.find("h4").text(Translator.translate("Mass status change"));
+            this._modal.find("h4").text(Translator.translate("Mass enable products on site"));
+            this._modal.find(".modal-footer .btn-default").html(Translator.translate("Cancel"));
+            this._modal.find(".modal-footer .btn-primary").html(Translator.translate("Execute"));
         },
 
         // After load content
@@ -85,16 +87,7 @@ define([
 
             var form = node.parents("form"),
                 btn = jQuery(".btn-primary", form),
-                massChangeStatusSelect = jQuery(".mass-change-status-select", node),
                 self = this;
-
-            var refreshSaveBtn = function(){
-                btn.prop("disabled", !jQuery(".mass-change-status-select", node).val().length);
-            };
-
-            massChangeStatusSelect.change(function(){
-                refreshSaveBtn();
-            });
 
             form.validate({
                 submitHandler: function(){
@@ -102,11 +95,6 @@ define([
                     return false;
                 }
             });
-
-            //App.applyNumeric(); // Apply numeric plugin
-            //App.uniform(); // Apply uniform
-
-            refreshSaveBtn();
         }
     });
 
