@@ -1392,9 +1392,6 @@
             },
 
             afterZipValidationAction: function (field) {
-                if (this.getCustomerIsLoggedIn()) {
-                    return true;
-                }
 
                 var zipEntered = field.val();
 
