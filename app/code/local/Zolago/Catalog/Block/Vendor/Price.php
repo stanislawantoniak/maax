@@ -64,21 +64,6 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		return Mage::helper("core")->jsonEncode($source);
 	}
 
-    public function getForFormatterAttributeSourceJson() {
-
-        $status = Mage::getSingleton('eav/config')->getAttribute(
-            Mage_Catalog_Model_Product::ENTITY,
-            "status"
-        );
-        $status->setStoreId($this->getCurrentStoreId());
-
-        $source=array(
-            "status" => $this->_clearEmpty($status->getSource()->getForFormatterOptions(false)),
-        );
-
-        return Mage::helper("core")->jsonEncode($source);
-    }
-
 	/**
 	 * @param array $array
 	 * @return array

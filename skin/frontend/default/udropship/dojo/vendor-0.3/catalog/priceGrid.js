@@ -48,8 +48,6 @@ define([
 		descriptionStatusOptions = sourceOptions.description_status,
 		typeIdOptions = sourceOptions.type_id,
 		boolOptions = sourceOptions.bool;
-		
-	var descriptionStatusOptionsForFormatter = sourceOptionsForFormatter.status;
 
 	var states = {
 		loaded: {},
@@ -153,7 +151,7 @@ define([
 					   }
 					});
 				}
-				
+
 				alert(evt.response.data)
 			});
 			return def;
@@ -516,7 +514,7 @@ define([
 				children: [
 					editor({
 						editor: "select",
-						editorArgs: {options: descriptionStatusOptionsForFormatter, required: true},
+						editorArgs: {options: statusOptions, required: true},
 						editOn: "dblclick",
 						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "status", {options: statusOptions}),

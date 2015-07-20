@@ -71,7 +71,6 @@ $helper = Mage::helper("zolagocatalog");
 <script type="text/javascript">
 	
 	sourceOptions = <?php echo $this->getAttributeSourceJson();?>;
-	sourceOptionsForFormatter = <?php echo $this->getForFormatterAttributeSourceJson();?>;
 
 	require(['vendor/catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
 		<?php /*

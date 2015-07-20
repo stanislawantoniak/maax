@@ -38,7 +38,4 @@ class Zolago_DropshipVendorProduct_Model_ProductStatus extends Mage_Catalog_Mode
         return $res;
     }
 
-    static public function getForFormatterOptions($withEmpty = false) {
-        return self::getAllOptions($withEmpty, false, true);
-    }
 }
