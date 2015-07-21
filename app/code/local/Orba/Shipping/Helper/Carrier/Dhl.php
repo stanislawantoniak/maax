@@ -278,6 +278,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $password = $this->getDhlPassword();
         $dhlClient->setAuth($login, $password);
         $ret = $dhlClient->getPostalCodeServices($zip, date("Y-m-d", $timestamp));
+        Mage::log($ret, null, "dhl_response.log");
         if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
             $empty = new StdClass;
             $empty->domesticExpress9 = false;
