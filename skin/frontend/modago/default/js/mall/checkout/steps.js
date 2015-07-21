@@ -211,7 +211,7 @@
                     }
                 });
                 // backend zip validate
-                jQuery(".postcode").keyup(function () {
+                jQuery(".postcode").blur(function () {
                     Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name=postcode]"));
                 })
                 //end validate
@@ -1440,7 +1440,7 @@
                     }));
 
                     // backend zip validate
-                    jQuery(".zipcode").keyup(function () {
+                    jQuery(".zipcode").blur(function () {
                         Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name='shipping[postcode]']"));
                     })
 
