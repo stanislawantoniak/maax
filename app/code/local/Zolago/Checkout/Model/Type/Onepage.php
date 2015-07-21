@@ -611,7 +611,14 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         return $this->_customerForm;
     }
 
-    public function customerEmailExists($email, $websiteId = null){
+    public function customerEmailExists($email, $websiteId = null)
+    {
         return $this->_customerEmailExists($email, $websiteId);
     }
+
+    public function customerZipExists($country, $zip)
+    {
+        return $this->_customerZipExists($country, $zip);
+    }
+
 }

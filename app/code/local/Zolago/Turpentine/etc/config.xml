@@ -66,6 +66,44 @@
                 </observers>
             </vendor_manual_save_price_after>
 
+            <!-- After vendor manual change product status from vendor portal price grid  -->
+            <vendor_manual_save_status_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </vendor_manual_save_status_after>
+            <!-- After vendor mass change product status from vendor portal price grid  -->
+            <vendor_manual_mass_save_status_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </vendor_manual_mass_save_status_after>
+
+            <!-- After vendor manual change product politics from vendor portal price grid  -->
+            <vendor_manual_save_politics_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </vendor_manual_save_politics_after>
+            <!-- After vendor mass change product politics from vendor portal price grid  -->
+            <vendor_manual_mass_save_status_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </vendor_manual_mass_save_status_after>
+
         </events>
 	</global>
 	<frontend>

@@ -25,7 +25,7 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
 		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
 		                                     class="img-responsive" />
 	                                </figure>
-	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $brandImagesList[$product->getData('brand_id')]; ?>)"></div>
+	                                <?php if(isset($brandImagesList[$product->getData('brand_id')])): ?><div class="logo_manufacturer" style="background-image:url(<?php echo $brandImagesList[$product->getData('brand_id')]; ?>)"></div><?php endif; ?>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
