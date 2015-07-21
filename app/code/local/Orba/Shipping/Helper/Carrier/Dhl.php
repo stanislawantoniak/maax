@@ -284,7 +284,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             $empty->domesticExpress9 = false;
             $empty->domesticExpress12 = false;
             $empty->deliveryEvening = false;
-            $empty->pickupOnSaturday = false;
+            //$empty->pickupOnSaturday = false;
             $empty->deliverySaturday = false;
             $empty->exPickupFrom     = 'brak';
             $empty->exPickupTo       = 'brak';
