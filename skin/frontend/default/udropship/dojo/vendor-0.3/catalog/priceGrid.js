@@ -128,6 +128,7 @@ define([
                         data['message']['timeout'] = undefined;
                     }
                     if (notyObj.text) { // Show msg only once
+	                    jQuery('#noty_top_layout_container').remove();
                         noty(notyObj);
                     }
                 }
@@ -165,7 +166,7 @@ define([
 	
 	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
 
-	grid = new PriceGrid({
+	window.priceGrid = grid = new PriceGrid({
 		columns: {
 			selector: selector({ 
 				label: ''
@@ -780,7 +781,19 @@ define([
 	updateSelectionButtons();
 	updateMassButton();
 
+    jQuery('#grid-holder-header tr:eq(1) .dgrid-cell[role="columnheader"]').each(function(idx, elem){
+        jQuery(elem).attr('title', jQuery(elem).html());
+        jQuery(elem).tooltip({
+            container: "body",
+            animation: false,
+            placement: "top",
+            trigger: "hover",
+            delay: {"show": 0, "hide": 0}
+        });
+    });
+
 	return grid; 
-	
+
+
 	
 });
