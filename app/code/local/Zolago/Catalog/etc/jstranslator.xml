@@ -153,5 +153,13 @@
     <description-status translate="message" module="zolagocatalog">
         <message>Description status</message>
     </description-status>
-
+    <execute translate="message" module="zolagocatalog">
+        <message>Execute</message>
+    </execute>
+    <Mass-enable-products-on-site translate="message" module="zolagocatalog">
+        <message>Mass enable products on site</message>
+    </Mass-enable-products-on-site>
+    <Mass-disable-products-on-site translate="message" module="zolagocatalog">
+        <message>Mass disable products on site</message>
+    </Mass-disable-products-on-site>
 </jstranslator>

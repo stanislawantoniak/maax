@@ -87,7 +87,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
-			$storeId = $data['store_id'];
+			$storeId = in_array('status', $attributeChanged) ? Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID : $data['store_id'];
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
@@ -115,6 +115,21 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 //                    $data['message']['timeout'] = '10000';
                 } else {
                     $this->_processAttributresSave(array($productId), $attributeData, $storeId, $data);
+
+                    if (in_array('status', $attributeChanged) || in_array('politics', $attributeChanged)) {
+                        /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+                        $banHelper = Mage::helper( 'turpentine/ban' );
+                        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+                        $coll = $banHelper->prepareCollectionForMultiProductBan(array($productId));
+
+                        Mage::dispatchEvent(in_array('status', $attributeChanged) ? "vendor_manual_save_status_after" : "vendor_manual_save_politics_after",
+                            array(
+                                "products"          => $coll,
+                                'product_ids'       => $coll->getAllIds(),
+                                'attributes_data'   => $attributeData,
+                                'store_id'          => $storeId
+                            ));
+                    }
                 }
             }
 

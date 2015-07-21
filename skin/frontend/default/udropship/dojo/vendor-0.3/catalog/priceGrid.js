@@ -48,8 +48,7 @@ define([
 		descriptionStatusOptions = sourceOptions.description_status,
 		typeIdOptions = sourceOptions.type_id,
 		boolOptions = sourceOptions.bool;
-		
-	
+
 	var states = {
 		loaded: {},
 		changed: {},
@@ -84,7 +83,8 @@ define([
 			
 	var switcher = query("#store-switcher")[0];
 	var priceChanger = query("#change-prices")[0];
-    var statusChanger =query("#mass-change-statuses")[0];
+    var massEnableProductChanger  = query("#mass-enable-products")[0];
+    var massInvalidProductChanger = query("#mass-invalid-products")[0];
     var politicsChanger =query("#mass-change-politics")[0];
 	
 
@@ -128,12 +128,13 @@ define([
                         data['message']['timeout'] = undefined;
                     }
                     if (notyObj.text) { // Show msg only once
+	                    jQuery('#noty_top_layout_container').remove();
                         noty(notyObj);
                     }
                 }
                 // Fix for correct updating "changed" select in row for cell status
                 var row = grid.row(data['entity_id']);
-                jQuery(row.element).find('.field-status.dgrid-cell-editing').html('');
+				jQuery(row.element).remove();
             }, function(evt){
                 obj.changed = states.changed[obj.entity_id] = [];
 
@@ -151,7 +152,7 @@ define([
 					   }
 					});
 				}
-				
+
 				alert(evt.response.data)
 			});
 			return def;
@@ -165,7 +166,7 @@ define([
 	
 	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
 
-	grid = new PriceGrid({
+	window.priceGrid = grid = new PriceGrid({
 		columns: {
 			selector: selector({ 
 				label: ''
@@ -651,8 +652,8 @@ define([
 		});
 	});
 
-    // Status changer
-    on(statusChanger, "click", function() {
+    // Status changer for mass enable products
+    on(massEnableProductChanger, "click", function() {
         var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
         var query = grid.get("query");
         var selected = [];
@@ -662,10 +663,29 @@ define([
         }
 
         massStatusUpdater.handleClick({
-            "global":	global ? 1 : 0,
-            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
-            "selected": selected.join(","),
-            "store_id": switcher.value
+            "global"   : global ? 1 : 0,
+            "query"    : global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected" : selected.join(","),
+            "store_id" : switcher.value,
+            "status"   : "enable"
+        });
+    });
+    // Status changer for mass invalid products
+    on(massInvalidProductChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massStatusUpdater.handleClick({
+            "global"   : global ? 1 : 0,
+            "query"    : global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected" : selected.join(","),
+            "store_id" : switcher.value,
+            "status"   : "invalid"
         });
     });
     // Politics changer
@@ -761,7 +781,19 @@ define([
 	updateSelectionButtons();
 	updateMassButton();
 
+    jQuery('#grid-holder-header tr:eq(1) .dgrid-cell[role="columnheader"]').each(function(idx, elem){
+        jQuery(elem).attr('title', jQuery(elem).html());
+        jQuery(elem).tooltip({
+            container: "body",
+            animation: false,
+            placement: "top",
+            trigger: "hover",
+            delay: {"show": 0, "hide": 0}
+        });
+    });
+
 	return grid; 
-	
+
+
 	
 });

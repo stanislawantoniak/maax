@@ -249,7 +249,7 @@ define([
 			animation: false, 
 			placement: "top",
 			trigger: "hover",
-			delay: {"show": 1000, "hide": 0},
+			delay: {"show": 0, "hide": 0},
 			title: function(){
 				// Show only if editor closed
 				var editor = grid.get("editors")[column.field];
@@ -288,18 +288,26 @@ define([
 	 * @returns {string}
 	 */
 	var rendererStatus = function (item, value, node, options){
-		var label = "wait";
-		switch(value){
-			case "1":
-				label = "on";
-			break;
-			case "2":
-				label = "off";
-			break;
-		}
+
+        value = parseInt(value);
+        var icon = '';
+        var label = '';
+        switch (value) {
+            case 1:
+                icon = "ania-icon-enabled";
+                label = "enabled";
+                break;
+            case 2:
+                icon = "ania-icon-new";
+                label = "new";
+                break;
+            default:
+                icon = "ania-icon-wrong";
+                label = "wrong";
+                break;
+        }
 		
 		node.className = node.className + " " + "status-" + label;
-		//node.innerHTML = label;
 		node.title = this.options[value] || "";
 		
 		jQuery(node).tooltip({
@@ -307,30 +315,37 @@ define([
 			trigger: "hover",
 			animation: false, 
 			placement: "top",
-			delay: {"show": 1000, "hide": 0}
+			delay: {"show": 0, "hide": 0}
 		});
+        var content = put("div");
+        put(content, "p", {
+            innerHTML: "<i class='" + icon +"'></i>"
+        });
+        put(node, content);
 	};
 	
 	var rendererDescription = function (item, value, node, options){
 
         // @see Zolago_Catalog_Model_Product_Source_Description
-        // const DESCRIPTION_NOT_ACCEPTED = -1;// Nie zatwierdzony
-        // const DESCRIPTION_WAITING      =  0;// Oczekuje na zatwierdzenie
-        // const DESCRIPTION_ACCEPTED     =  1;// Zatwierdzony
+        //const DESCRIPTION_NOT_ACCEPTED = 1;// Nie zatwierdzony
+        //const DESCRIPTION_WAITING      = 2;// Oczekuje na zatwierdzenie
+        //const DESCRIPTION_ACCEPTED     = 3;// Zatwierdzony
 
         value = parseInt(value);
-		var label = "close";
-		var color = "red";
+		var icon = '';
         switch (value) {
-            case 1:
-                label = "open";
-                color = "green";
+            case 3:
+                icon = "ania-icon-accepted";
                 break;
-            case -1:
-            case 0:
+            case 1:
+                icon = "ania-icon-notaccepted";
+                break;
+            case 2:
+                icon = "ania-icon-hourglass";
+                break;
             default:
-                label = "close";
-                color = "red";
+                icon = "ania-icon-notaccepted";
+                value = 1;
                 break;
         }
 		node.title = this.options[value] || "";
@@ -340,11 +355,11 @@ define([
 			trigger: "hover",
 			animation: false, 
 			placement: "top",
-			delay: {"show": 1000, "hide": 0}
+			delay: {"show": 0, "hide": 0}
 		});
 		var content = put("div");
 		put(content, "p", {
-			innerHTML: "<i style='color:"+color+"' class='icon-2 icon-eye-"+label+"'></i>"
+			innerHTML: "<i class='" + icon +"'></i>"
 		});
 		put(node, content);
 	};
@@ -769,6 +784,17 @@ define([
 					this.getColumns(),  
 					container
 			);
+            jQuery('.dgrid-cell.header[role="columnheader"]').each(function(idx, elem){
+                jQuery(elem).attr('title', jQuery(elem).html());
+
+                jQuery(elem).tooltip({
+                    container: "body",
+                    animation: false,
+                    placement: "top",
+                    trigger: "hover",
+                    delay: {"show": 0, "hide": 0}
+                });
+            });
 		}
 	}; 
 });
