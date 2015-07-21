@@ -77,19 +77,19 @@ $table = $installer->getConnection()
 	->addColumn("sku", Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(
 		'nullable'  => false
 	),'SKU')
-	->addColumn("shipped_date", Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
+	->addColumn("shipped_date", Varien_Db_Ddl_Table::TYPE_DATE, null, array(
 		'nullable'  => false
 	),'Shipped Date')
 	->addColumn("carrier", Varien_Db_Ddl_Table::TYPE_VARCHAR, 32, array(
 		'nullable'  => false
 	),'Carrier')
-	->addColumn("gallery_shipping_source", Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
+	->addColumn("gallery_shipping_source", Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
 		'nullable'  => false
 	),'Gallery Shipping Source')
 	->addColumn("payment_method", Varien_Db_Ddl_Table::TYPE_VARCHAR, 64, array(
 		'nullable'  => false
 	),'Payment Method')
-	->addColumn("payment_channel_owner", Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
+	->addColumn("payment_channel_owner", Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
 		'nullable'  => false
 	),'Payment Channel Owner')
 	->addColumn("price", Varien_Db_Ddl_Table::TYPE_DECIMAL, "12,4", array(
@@ -149,7 +149,7 @@ $table = $installer->getConnection()
 		'nullable'  => false
 	),'Date')
 	->addColumn("operator_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
-		'nullable'  => false
+		'nullable'  => true
 	),'Operator Id')
 	->addColumn("vendor_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
 		'nullable'  => false
