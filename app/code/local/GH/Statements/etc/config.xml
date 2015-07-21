@@ -90,5 +90,17 @@
             </ghstatementsadmin>
         </routers>
     </admin>
-
+    <crontab>
+        <jobs>
+            <ghstatements_callendar>
+                <schedule>
+                    <!-- Run every ? minute -->
+                    <cron_expr>0 */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>ghstatements/observer::processStatements</model>
+                </run>
+            </ghstatements_callendar>
+        </jobs>
+    </crontab>
 </config>
