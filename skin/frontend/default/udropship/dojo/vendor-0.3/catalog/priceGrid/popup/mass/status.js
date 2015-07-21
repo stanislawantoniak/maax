@@ -58,6 +58,7 @@ define([
                         });
 
                     if (parseInt(data.skipped)) {
+	                    jQuery('#noty_top_layout_container').remove();
                         noty({
                             text: data.skipped_msg,
                             type: 'warning'
