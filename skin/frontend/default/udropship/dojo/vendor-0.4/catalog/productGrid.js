@@ -249,7 +249,7 @@ define([
 			animation: false, 
 			placement: "top",
 			trigger: "hover",
-			delay: {"show": 1000, "hide": 0},
+			delay: {"show": 0, "hide": 0},
 			title: function(){
 				// Show only if editor closed
 				var editor = grid.get("editors")[column.field];
@@ -315,7 +315,7 @@ define([
 			trigger: "hover",
 			animation: false, 
 			placement: "top",
-			delay: {"show": 500, "hide": 0}
+			delay: {"show": 0, "hide": 0}
 		});
         var content = put("div");
         put(content, "p", {
@@ -355,7 +355,7 @@ define([
 			trigger: "hover",
 			animation: false, 
 			placement: "top",
-			delay: {"show": 500, "hide": 0}
+			delay: {"show": 0, "hide": 0}
 		});
 		var content = put("div");
 		put(content, "p", {
@@ -784,6 +784,17 @@ define([
 					this.getColumns(),  
 					container
 			);
+            jQuery('.dgrid-cell.header[role="columnheader"]').each(function(idx, elem){
+                jQuery(elem).attr('title', jQuery(elem).html());
+
+                jQuery(elem).tooltip({
+                    container: "body",
+                    animation: false,
+                    placement: "top",
+                    trigger: "hover",
+                    delay: {"show": 0, "hide": 0}
+                });
+            });
 		}
 	}; 
 });
