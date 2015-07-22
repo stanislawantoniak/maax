@@ -71,9 +71,9 @@ class GH_Statements_Model_Observer
      */
     public static function initStatement($vendor, $calendarItem) {
 
-        if (self::isStatementAlready($vendor, $calendarItem)) {
-            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
-        }
+//        if (self::isStatementAlready($vendor, $calendarItem)) {
+//            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
+//        }
 
         /** @var GH_Statements_Model_Calendar $calendar */
         $calendar = Mage::getModel('ghstatements/calendar')->load($calendarItem->getCalendarId());
@@ -135,10 +135,10 @@ class GH_Statements_Model_Observer
             $data['shipped_date'] = $track->getShippedDate();
             $data['carrier'] = $track->getTitle();
             $data['gallery_shipping_source'] = $track->getGalleryShippingSource();
+            $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
 
-            $data['payment_method'] = 'todo';
-            $data['gallery_discount_value'] = 'todo';
-            $data['commission_value'] = 'todo';
+            $data['gallery_discount_value'] = 999; //TODO
+            $data['commission_value'] = 999; //TODO
 
 
             /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
@@ -156,14 +156,17 @@ class GH_Statements_Model_Observer
                 $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty();
                 $data['commission_percent'] = $item->getCommissionPercent();
                 $data['final_price'] = $item->getFinalItemPrice() * $item->getQty();
-
+                $data['value'] = 999; //TODO
                 if ($shippingCost) { // Shipping cost for first item only
                     $data['shipping_cost'] = $shippingCost;
                     $shippingCost = 0;
                 }
-            }
 
-            $data['value'] = 'todo';
+                // Save
+                $statementOrder = Mage::getModel('ghstatements/order');
+                $statementOrder->setData($data);
+                $statementOrder->save();
+            }
         }
     }
 
