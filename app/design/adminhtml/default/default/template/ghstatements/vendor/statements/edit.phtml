@@ -8,15 +8,13 @@
     <p class="content-buttons form-buttons">
         <?php echo $this->getBackButtonHtml(); ?>
         <?php echo $this->getResetButtonHtml(); ?>
-        <?php if ($this->getIsNew()): ?>
-            <?php //echo $this->getDeleteButtonHtml(); ?>
-        <?php endif; ?>
-        <?php //echo $this->getSaveButtonHtml(); ?>
+
+        <?php echo $this->getDeleteButtonHtml(); ?>
     </p>
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="template_edit_form">
     <?php echo $this->getBlockHtml('formkey') ?>
-    <?php //echo $this->getForm() ?>
+    <?php echo $this->getForm() ?>
 </form>
 
 <script type="text/javascript">
