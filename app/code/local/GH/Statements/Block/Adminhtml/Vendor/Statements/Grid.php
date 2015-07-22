@@ -50,22 +50,37 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         $this->addColumn("order_commission_value", array(
             "index" => "order_commission_value",
             "header" => Mage::helper("ghstatements")->__("Order Commission Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         $this->addColumn("order_value", array(
             "index" => "order_value",
             "header" => Mage::helper("ghstatements")->__("Order Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         $this->addColumn("rma_commission_value", array(
             "index" => "rma_commission_value",
             "header" => Mage::helper("ghstatements")->__("RMA Commission Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         $this->addColumn("rma_value", array(
             "index" => "rma_value",
             "header" => Mage::helper("ghstatements")->__("RMA Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         $this->addColumn("refund_value", array(
             "index" => "refund_value",
             "header" => Mage::helper("ghstatements")->__("Refund Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         /*Values*/
 
@@ -74,10 +89,16 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         $this->addColumn("tracking_charge_subtotal", array(
             "index" => "tracking_charge_subtotal",
             "header" => Mage::helper("ghstatements")->__("Tracking Charge Subtotal (netto)"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         $this->addColumn("tracking_charge_total", array(
             "index" => "tracking_charge_total",
             "header" => Mage::helper("ghstatements")->__("Tracking Charge Total"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         /*Totals*/
 
