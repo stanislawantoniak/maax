@@ -40,9 +40,9 @@ class GH_Statements_Model_Observer
                     $calendarItem = $itemCollection->getFirstItem();
 
 
-                    self::initStatement($vendor, $calendarItem);
+                    $statement = self::initStatement($vendor, $calendarItem);
 
-                    self::processStatementsOrders();
+                    self::processStatementsOrders($statement);
                     self::processStatementsRma();
                     self::processStatementsRefunds();
                     self::processStatementsTracks();
@@ -67,6 +67,7 @@ class GH_Statements_Model_Observer
      * @param GH_Statements_Model_Calendar_Item $calendarItem
      * @throws Exception
      * @throws Mage_Core_Exception
+     * @return GH_Statements_Model_Statement
      */
     public static function initStatement($vendor, $calendarItem) {
 
@@ -86,6 +87,8 @@ class GH_Statements_Model_Observer
             "name"              => $vendor->getVendorName() . ' ' . date("Y-m-d", strtotime($calendarItem->getEventDate())) . ' (' . $calendar->getName()  . ')'
         ));
         $statement->save();
+
+        return $statement;
     }
 
     /**
@@ -97,9 +100,11 @@ class GH_Statements_Model_Observer
 
     /**
      * This process statements orders
+     * @param GH_Statements_Model_Statement $statement
      */
-    public static function processStatementsOrders() {
-
+    public static function processStatementsOrders($statement) {
+        $statementId = (int)$statement->getId();
+        // TODO
     }
 
     /**
