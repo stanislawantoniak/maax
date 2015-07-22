@@ -1,7 +1,7 @@
 <?php
 
 class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
-    extends Mage_Adminhtml_Block_Widget_Grid
+    extends GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Statement
 {
 
     public function __construct()
@@ -10,23 +10,6 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         $this->setId('statement_order');
         $this->setDefaultSort('id');
         $this->setUseAjax(true);
-    }
-
-    protected function getStatementId()
-    {
-        return $this->getRequest()->getParam("id");
-    }
-
-    public function getStatement()
-    {
-
-        $statement = Mage::registry('ghstatements_current_statement');
-        if (!$statement) {
-            $statement = Mage::getModel('ghstatements/statement')
-                ->load($this->getStatementId());
-            Mage::register('ghstatements_current_statement', $statement);
-        }
-        return $statement;
     }
 
     protected function _prepareCollection()
@@ -163,6 +146,11 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+    }
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/orderGrid', array('_current'=>true));
     }
 
 }

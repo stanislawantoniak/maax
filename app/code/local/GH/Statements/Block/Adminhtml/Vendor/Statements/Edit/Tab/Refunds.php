@@ -1,28 +1,73 @@
 <?php
 
 class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Refunds
-    extends Mage_Adminhtml_Block_Widget_Form
-    implements Mage_Adminhtml_Block_Widget_Tab_Interface
+    extends GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Statement
 {
 
-    public function canShowTab()
+    public function __construct()
     {
-        return 1;
+        parent::__construct();
+        $this->setId('statement_refund');
+        $this->setDefaultSort('id');
+        $this->setUseAjax(true);
     }
 
-    public function getTabLabel()
+    protected function _prepareCollection()
     {
-        return Mage::helper('ghstatements')->__("Refunds");
+        $collection = Mage::getModel('ghstatements/refund')
+            ->getCollection()
+            ->addFieldToFilter('statement_id', $this->getStatement()->getId());
+
+        $this->setCollection($collection);
+        return parent::_prepareCollection();
     }
 
-    public function getTabTitle()
+    protected function _prepareColumns()
     {
-        return Mage::helper('ghstatements')->__("Refunds");
+        $this->addColumn('id', array(
+            'header' => Mage::helper('ghstatements')->__('ID'),
+            'sortable' => true,
+            'width' => '60',
+            'index' => 'id'
+        ));
+        $this->addColumn('po_increment_id', array(
+            'header' => Mage::helper('ghstatements')->__('Order number'),
+            'sortable' => true,
+            'width' => '60',
+            'index' => 'po_increment_id'
+        ));
+        $this->addColumn('rma_increment_id', array(
+            'header' => Mage::helper('ghstatements')->__('RMA number'),
+            'sortable' => true,
+            'width' => '60',
+            'index' => 'rma_increment_id'
+        ));
+        $this->addColumn('date', array(
+            'header' => Mage::helper('ghstatements')->__('Date'),
+            'sortable' => true,
+            'width' => '60',
+            'index' => 'date',
+            'type' => 'date',
+        ));
+        $this->addColumn('operator_name', array(
+            'header' => Mage::helper('ghstatements')->__('Operator'),
+            'sortable' => true,
+            'width' => '60',
+            'index' => 'operator_name',
+        ));
+
+        $this->addColumn("value", array(
+            "index" => "value",
+            "header" => Mage::helper("ghstatements")->__("Amount"),
+            'type' => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
     }
 
-    public function isHidden()
+    public function getGridUrl()
     {
-        return false;
+        return $this->getUrl('*/*/refundGrid', array('_current'=>true));
     }
 
 }
