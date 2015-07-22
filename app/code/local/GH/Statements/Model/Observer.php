@@ -52,6 +52,9 @@ class GH_Statements_Model_Observer
             }
 
             $transaction->commit();
+        } catch (Mage_Core_Exception $ex){
+            // For example when 'Statement already exist'
+            $transaction->rollBack();
         } catch (Exception $ex) {
             $transaction->rollBack();
             Mage::logException($ex);
@@ -62,11 +65,17 @@ class GH_Statements_Model_Observer
      * This create row for statement
      * @param Zolago_Dropship_Model_Vendor $vendor
      * @param GH_Statements_Model_Calendar_Item $calendarItem
+     * @throws Exception
+     * @throws Mage_Core_Exception
      */
-    private function initStatement($vendor, $calendarItem) {
+    public static function initStatement($vendor, $calendarItem) {
+
+        if (self::isStatementAlready($vendor, $calendarItem)) {
+            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
+        }
 
         /** @var GH_Statements_Model_Calendar $calendar */
-        $calendar = Mage::getModel('ghstatements/calendar')->load($calendarItem->getItemId());
+        $calendar = Mage::getModel('ghstatements/calendar')->load($calendarItem->getCalendarId());
 
         /** @var GH_Statements_Model_Statement $statement */
         $statement = Mage::getModel('ghstatements/statement');
@@ -74,7 +83,7 @@ class GH_Statements_Model_Observer
             "vendor_id"         => (int)$vendor->getId(),
             "calendar_id"       => (int)$calendarItem->getCalendarId(),
             "calendar_item_id"  => (int)$calendarItem->getItemId(),
-            "name"              => $vendor->getVendorName() . ' ' . $calendar->getName() . '( ' . $calendarItem->getEventDate() . ' )'
+            "name"              => $vendor->getVendorName() . ' ' . date("Y-m-d", strtotime($calendarItem->getEventDate())) . ' (' . $calendar->getName()  . ')'
         ));
         $statement->save();
     }
@@ -82,35 +91,51 @@ class GH_Statements_Model_Observer
     /**
      * This populate statement with sums of ...
      */
-    private function populateStatement() {
+    public static function populateStatement() {
 
     }
 
     /**
      * This process statements orders
      */
-    private function processStatementsOrders() {
+    public static function processStatementsOrders() {
 
     }
 
     /**
      * This process statements refunds
      */
-    private function processStatementsRefunds() {
+    public static function processStatementsRefunds() {
 
     }
 
     /**
      * This process statements tracks
      */
-    private function processStatementsTracks() {
+    public static function processStatementsTracks() {
 
     }
 
     /**
      * This process statements RMA
      */
-    private function processStatementsRma() {
+    public static function processStatementsRma() {
 
+    }
+
+    /**
+     * This check if statement for vendor and event date is in table
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @param GH_Statements_Model_Calendar_Item $calendarItem
+     * @return bool
+     */
+    public static function isStatementAlready($vendor, $calendarItem) {
+
+        /* @var $collection GH_Statements_Model_Resource_Statement_Collection */
+        $collection = Mage::getResourceModel('ghstatements/statement_collection');
+        $collection->addFieldToFilter('vendor_id', $vendor->getId());
+        $collection->addFieldToFilter('calendar_item_id', $calendarItem->getItemId());
+
+        return $collection->getFirstItem()->getId() ? true : false;
     }
 }

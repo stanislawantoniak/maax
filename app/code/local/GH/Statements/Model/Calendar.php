@@ -1,6 +1,6 @@
 <?php
 /**
- *   Calendar for statements
+ * Calendar for statements
  * @method string getName()
  * @method string getCalendarId()
  */
