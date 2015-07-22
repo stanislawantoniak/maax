@@ -35,16 +35,21 @@ class GH_Statements_Model_Observer
                 $itemCollection->addFieldToFilter('calendar_id', $calendarId);
                 $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
 
+	            Mage::log($yesterday);
+	            Mage::log((string)$itemCollection->getSelect());
+
+
                 if ($itemCollection->getFirstItem()->getId()) {
                     /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                     $calendarItem = $itemCollection->getFirstItem();
 
+	                Mage::log($calendarItem->getData());
 
                     $statement = self::initStatement($vendor, $calendarItem);
 
                     self::processStatementsOrders($statement);
                     self::processStatementsRma();
-                    self::processStatementsRefunds();
+                    self::processStatementsRefunds($statement);
                     self::processStatementsTracks();
 
                     self::populateStatement();
@@ -107,11 +112,42 @@ class GH_Statements_Model_Observer
         // TODO
     }
 
-    /**
-     * This process statements refunds
-     */
-    public static function processStatementsRefunds() {
+	/**
+	 * @param GH_Statements_Model_Statement $statement
+	 * @return GH_Statements_Model_Statement
+	 */
+    public static function processStatementsRefunds(&$statement) {
+	    /** @var GH_Statements_Model_Refund $refundsStatements */
+	    $refundsStatements = Mage::getModel('ghstatements/refund');
 
+	    $dateModel = Mage::getModel('core/date');
+	    $today     = $dateModel->date('Y-m-d');
+	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+
+	    $collection = $refundsStatements->getCollection();
+	    $collection
+		    ->addFieldToFilter('statement_id',array('null' => true))
+		    ->addFieldToFilter('date',array('lteq' => $yesterday))
+		    ->addFieldToFilter('vendor_id',$statement->getVendorId());
+
+	    $refundValue = 0;
+	    $refundIdsToUpdate = array();
+	    if($collection->getSize()) {
+		    foreach($collection as $refundStatement) {
+			    /** @var GH_Statements_Model_Refund $refundStatement */
+			    $refundValue += $refundStatement->getValue();
+			    $refundIdsToUpdate[] = $refundStatement->getId();
+		    }
+	    }
+
+	    if(count($refundIdsToUpdate)) {
+		    /** @var GH_Statements_Model_Resource_Refund $refundStatementsResource */
+		    $refundStatementsResource = $refundsStatements->getResource();
+		    $refundStatementsResource->assignToStatement($statement->getId(), $refundIdsToUpdate);
+	    }
+
+	    $statement->setRefundValue($refundValue);
+	    return $statement;
     }
 
     /**
