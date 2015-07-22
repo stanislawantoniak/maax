@@ -33,12 +33,12 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tabs extends Mage_Adm
             'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_refunds')
                 ->toHtml(),
         ));
-//        $this->addTab('statement_tracks_information', array(
-//            'label' => Mage::helper('ghstatements')->__('Tracking'),
-//            'title' => Mage::helper('ghstatements')->__('Tracking'),
-//            'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_track')
-//                ->toHtml(),
-//        ));
+        $this->addTab('statement_tracks_information', array(
+            'label' => Mage::helper('ghstatements')->__('Tracking'),
+            'title' => Mage::helper('ghstatements')->__('Tracking'),
+            'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_track')
+                ->toHtml(),
+        ));
 //        $this->addTab('statement_tracks_rma', array(
 //            'label' => Mage::helper('ghstatements')->__('RMA'),
 //            'title' => Mage::helper('ghstatements')->__('RMA'),
