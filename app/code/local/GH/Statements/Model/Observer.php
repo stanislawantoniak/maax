@@ -103,7 +103,7 @@ class GH_Statements_Model_Observer
      * @param GH_Statements_Model_Statement $statement
      * @param Zolago_Dropship_Model_Vendor $vendor
      */
-    public static function processStatementsOrders($statement, $vendor) {
+    public static function processStatementsOrders(&$statement, $vendor) {
         $statementId = (int)$statement->getId();
 
         /* @var Zolago_Po_Model_Resource_Po_Collection $collection */
@@ -116,32 +116,29 @@ class GH_Statements_Model_Observer
             Zolago_Po_Model_Source::UDPO_STATUS_RETURNED    // Zwrocono
         )));
 
-
-//        $collection->addOrderData();
-//        $collection->addProductNames();
-//        $collection->addHasShipment();
-//        $collection->joinAggregatedNames();
-//        $collection->addPaymentStatuses();
-
         foreach ($collection as $po) {
             /** @var Zolago_Po_Model_Po $po */
+
+            // Shipping and track
+            $currentShipping = $po->getLastNotCanceledShipment();
+            /** @var Mage_Sales_Model_Order_Shipment_Track $track */
+            $track = $currentShipping->getTracksCollection()->getFirstItem();
+            $shippingCost = $currentShipping->getShippingAmountIncl();
+
+            // Data to save
             $data = array();
+            $data['statement_id'] = $statementId;
             $data['po_id'] = $po->getId();
             $data['po_increment_id'] = $po->getIncrementId();
             $data['payment_channel_owner'] = $po->getPaymentChannelOwner();
             $data['shipping_cost'] = 0;
+            $data['shipped_date'] = $track->getShippedDate();
+            $data['carrier'] = $track->getTitle();
+            $data['gallery_shipping_source'] = $track->getGalleryShippingSource();
 
-            $shippingCost = 'todo'; //'Todo: shipping cost for first item only'
-
-            $data['shipped_date'] = 'todo';
-            $data['carrier'] = 'todo';
-            $data['gallery_shipping_source'] = 'todo';
             $data['payment_method'] = 'todo';
             $data['gallery_discount_value'] = 'todo';
             $data['commission_value'] = 'todo';
-            $data['value'] = 'todo';
-
-//            $currentShipping = $po->getLastNotCanceledShipment();
 
 
             /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
@@ -160,11 +157,13 @@ class GH_Statements_Model_Observer
                 $data['commission_percent'] = $item->getCommissionPercent();
                 $data['final_price'] = $item->getFinalItemPrice() * $item->getQty();
 
-                if ($shippingCost) {
+                if ($shippingCost) { // Shipping cost for first item only
                     $data['shipping_cost'] = $shippingCost;
                     $shippingCost = 0;
                 }
             }
+
+            $data['value'] = 'todo';
         }
     }
 
