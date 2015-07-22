@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </GH_Statements>
     </modules>
     <global>
@@ -94,8 +94,8 @@
         <jobs>
             <ghstatements_callendar>
                 <schedule>
-                    <!-- Run every ? minute -->
-                    <cron_expr>0 */2 * * *</cron_expr>
+                    <!-- Run 0:00 everyday  -->
+                    <cron_expr>0 0 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>ghstatements/observer::processStatements</model>
