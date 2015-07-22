@@ -100,7 +100,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/statement', array('id' => $row->getId()));
+        return $this->getUrl('*/vendor_statements/edit', array('id' => $row->getId()));
     }
 
 

@@ -17,7 +17,8 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tabs extends Mage_Adm
         $this->addTab('statement_general_information', array(
             'label' => Mage::helper('ghstatements')->__('General Information'),
             'title' => Mage::helper('ghstatements')->__('General Information'),
-            'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_general')
+            'content' => $this->getLayout()
+                ->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_general')
                 ->toHtml(),
         ));
         $this->addTab('statement_order_information', array(

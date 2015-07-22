@@ -78,10 +78,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit extends Mage_Adminhtm
 
     public function getHeaderText()
     {
-        if ($this->getIsNew()) {
-            return Mage::helper('ghstatements')->__('Edit Statement');
-        }
-        return Mage::helper('ghdhl')->__('New Statement');
+        return Mage::helper('ghstatements')->__('Statement');
     }
 
     public function getSaveUrl()
