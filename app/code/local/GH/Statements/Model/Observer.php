@@ -44,7 +44,7 @@ class GH_Statements_Model_Observer
 
                     self::processStatementsOrders($statement);
                     self::processStatementsRma();
-                    self::processStatementsRefunds();
+                    self::processStatementsRefunds($statement);
                     self::processStatementsTracks();
 
                     self::populateStatement();
@@ -110,8 +110,35 @@ class GH_Statements_Model_Observer
     /**
      * This process statements refunds
      */
-    public static function processStatementsRefunds() {
+    public static function processStatementsRefunds($statement) {
+	    /** @var GH_Statements_Model_Refund $refundsStatements */
+	    $refundsStatements = Mage::getModel('ghstatements/refund');
 
+	    $dateModel = Mage::getModel('core/date');
+	    $today     = $dateModel->date('Y-m-d');
+	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+
+	    $collection = $refundsStatements->getCollection();
+	    $collection
+		    ->addFieldToFilter('statement_id',array('null' => true))
+		    ->addFieldToFilter('date',array('lteq' => $yesterday))
+		    ->addFieldToFilter('vendor_id',$statement->getVendorId());
+
+	    $refundValue = 0;
+	    $refundIdsToUpdate = array();
+	    if($collection->getSize()) {
+		    foreach($collection as $refundStatement) {
+			    /** @var GH_Statements_Model_Refund $refundStatement */
+			    $refundValue += $refundStatement->getValue();
+			    $refundIdsToUpdate[] = $refundStatement->getId();
+		    }
+	    }
+	    /** @var GH_Statements_Model_Resource_Refund $refundStatementsResource */
+	    $refundStatementsResource = $refundsStatements->getResource();
+	    $refundStatementsResource->assignToStatement($statement->getId(),$refundIdsToUpdate);
+
+	    &$statement->setRefundValue($refundValue);
+	    return $statement;
     }
 
     /**
