@@ -107,7 +107,6 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
             "options" => $paymentOwner = Mage::getModel("zolagopayment/source_channel_owner")->toOptionHash()
         ));
 
-
         $this->addColumn("price", array(
             "index" => "price",
             "header" => Mage::helper("ghstatements")->__("Price"),
