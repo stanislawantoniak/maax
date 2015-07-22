@@ -83,7 +83,7 @@ class GH_Statements_Model_Observer
         $statement->setData(array(
             "vendor_id"         => (int)$vendor->getId(),
             "calendar_id"       => (int)$calendarItem->getCalendarId(),
-            "calendar_item_id"  => (int)$calendarItem->getItemId(),
+            "event_date"        => $calendarItem->getEventDate(),
             "name"              => $vendor->getVendorName() . ' ' . date("Y-m-d", strtotime($calendarItem->getEventDate())) . ' (' . $calendar->getName()  . ')'
         ));
         $statement->save();
@@ -166,7 +166,7 @@ class GH_Statements_Model_Observer
         /* @var $collection GH_Statements_Model_Resource_Statement_Collection */
         $collection = Mage::getResourceModel('ghstatements/statement_collection');
         $collection->addFieldToFilter('vendor_id', $vendor->getId());
-        $collection->addFieldToFilter('calendar_item_id', $calendarItem->getItemId());
+        $collection->addFieldToFilter('event_date', date("Y-m-d", strtotime($calendarItem->getEventDate())));
 
         return $collection->getFirstItem()->getId() ? true : false;
     }
