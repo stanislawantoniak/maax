@@ -39,11 +39,10 @@ class GH_Statements_Model_Observer
                     /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                     $calendarItem = $itemCollection->getFirstItem();
 
-	                Mage::log($calendarItem->getData());
 
                     $statement = self::initStatement($vendor, $calendarItem);
 
-                    self::processStatementsOrders($statement);
+                    self::processStatementsOrders($statement, $vendor);
                     self::processStatementsRma();
                     self::processStatementsRefunds($statement);
                     self::processStatementsTracks();
@@ -102,10 +101,71 @@ class GH_Statements_Model_Observer
     /**
      * This process statements orders
      * @param GH_Statements_Model_Statement $statement
+     * @param Zolago_Dropship_Model_Vendor $vendor
      */
-    public static function processStatementsOrders($statement) {
+    public static function processStatementsOrders($statement, $vendor) {
         $statementId = (int)$statement->getId();
-        // TODO
+
+        /* @var Zolago_Po_Model_Resource_Po_Collection $collection */
+        $collection = Mage::getResourceModel('zolagopo/po_collection');
+        $collection->addVendorFilter($vendor);
+        $collection->addFieldToFilter('main_table.statement_id', array('null' => true));
+        $collection->addFieldToFilter('main_table.udropship_status', array('in' => array(
+            Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED,    // Wysłano
+            Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED,  // Dostarczono
+            Zolago_Po_Model_Source::UDPO_STATUS_RETURNED    // Zwrocono
+        )));
+
+
+//        $collection->addOrderData();
+//        $collection->addProductNames();
+//        $collection->addHasShipment();
+//        $collection->joinAggregatedNames();
+//        $collection->addPaymentStatuses();
+
+        foreach ($collection as $po) {
+            /** @var Zolago_Po_Model_Po $po */
+            $data = array();
+            $data['po_id'] = $po->getId();
+            $data['po_increment_id'] = $po->getIncrementId();
+            $data['payment_channel_owner'] = $po->getPaymentChannelOwner();
+            $data['shipping_cost'] = 0;
+
+            $shippingCost = 'todo'; //'Todo: shipping cost for first item only'
+
+            $data['shipped_date'] = 'todo';
+            $data['carrier'] = 'todo';
+            $data['gallery_shipping_source'] = 'todo';
+            $data['payment_method'] = 'todo';
+            $data['gallery_discount_value'] = 'todo';
+            $data['commission_value'] = 'todo';
+            $data['value'] = 'todo';
+
+//            $currentShipping = $po->getLastNotCanceledShipment();
+
+
+            /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
+            $itemsColl = $po->getItemsCollection();
+
+            foreach ($itemsColl as $item) {
+                /** @var Zolago_Po_Model_Po_Item $item */
+                if ($item->getParentItemId()) {
+                    continue; // Skip simple from configurable
+                }
+                $data['po_item_id'] = $item->getId();
+                $data['sku'] = $item->getFinalSku();
+                $data['qty'] = $item->getQty();
+                $data['price'] = $item->getPriceInclTax() * $item->getQty();
+                $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty();
+                $data['commission_percent'] = $item->getCommissionPercent();
+                $data['final_price'] = $item->getFinalItemPrice() * $item->getQty();
+
+                if ($shippingCost) {
+                    $data['shipping_cost'] = $shippingCost;
+                    $shippingCost = 0;
+                }
+            }
+        }
     }
 
 	/**
