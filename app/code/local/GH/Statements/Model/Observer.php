@@ -137,7 +137,7 @@ class GH_Statements_Model_Observer
 	    $refundStatementsResource = $refundsStatements->getResource();
 	    $refundStatementsResource->assignToStatement($statement->getId(),$refundIdsToUpdate);
 
-	    &$statement->setRefundValue($refundValue);
+	    $statement->setRefundValue($refundValue);
 	    return $statement;
     }
 
