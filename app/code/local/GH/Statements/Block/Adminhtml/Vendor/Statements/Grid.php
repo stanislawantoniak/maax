@@ -45,6 +45,11 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             "index" => "vendor_name",
             "header" => Mage::helper("ghstatements")->__("Vendor"),
         ));
+        $this->addColumn("event_date", array(
+            "index" => "event_date",
+            "header" => Mage::helper("ghstatements")->__("Event date"),
+            "type" => "date"
+        ));
 
         /*Values*/
         $this->addColumn("order_commission_value", array(
