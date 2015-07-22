@@ -13,8 +13,14 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getResourceModel('ghstatements/statement_collection');
         /* @var $collection GH_Statements_Model_Resource_Calendar_Collection */
+        $collection = Mage::getResourceModel('ghstatements/statement_collection');
+
+        $select = $collection->getSelect();
+        $select->joinLeft(
+            array('vendor' => Mage::getSingleton('core/resource')->getTableName('udropship/vendor')),
+            'main_table.vendor_id = vendor.vendor_id',
+            array("vendor_name"));
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -23,7 +29,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
     protected function _prepareColumns()
     {
         $this->addColumn("id", array(
-            "index" => "statement_id",
+            "index" => "id",
             "header" => Mage::helper("ghstatements")->__("ID"),
             "align" => "right",
             "type" => "number",
@@ -35,8 +41,8 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             "index" => "name",
             "header" => Mage::helper("ghstatements")->__("Name"),
         ));
-        $this->addColumn("vendor_id", array(
-            "index" => "vendor_id",
+        $this->addColumn("vendor_name", array(
+            "index" => "vendor_name",
             "header" => Mage::helper("ghstatements")->__("Vendor"),
         ));
 
