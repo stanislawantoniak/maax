@@ -121,9 +121,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         $this->addColumn("commission_percent", array(
             "index" => "commission_percent",
             "header" => Mage::helper("ghstatements")->__("Commission Percent"),
-            'type' => 'price',
-            'currency' => 'base_currency_code',
-            'currency_code' => Mage::getStoreConfig('currency/options/base')
+            'type' => 'number'
         ));
         $this->addColumn("gallery_discount_value", array(
             "index" => "gallery_discount_value",

@@ -47,7 +47,7 @@ class GH_Statements_Model_Observer
                     self::processStatementsRefunds($statement);
                     self::processStatementsTracks();
 
-                    self::populateStatement();
+                    self::populateStatement($statement);
                 }
             }
 
@@ -94,8 +94,8 @@ class GH_Statements_Model_Observer
     /**
      * This populate statement with sums of ...
      */
-    public static function populateStatement() {
-
+    public static function populateStatement($statement) {
+		Mage::log($statement->getData());
     }
 
     /**

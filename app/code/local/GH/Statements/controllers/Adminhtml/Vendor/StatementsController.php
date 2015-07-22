@@ -46,4 +46,20 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
         );
     }
 
+    /**
+     * trackGrid ajax block response
+     */
+    public function trackGridAction()
+    {
+        $this->getResponse()->setBody(
+            $this->getLayout()
+                ->createBlock(
+                    'ghstatements/adminhtml_vendor_statements_edit_tab_track',
+                    'ghstatements.statement.track'
+                )
+                ->setStatementId($this->getRequest()->getParam('id'))
+                ->toHtml()
+        );
+    }
+
 }
