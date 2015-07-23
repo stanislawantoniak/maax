@@ -248,6 +248,19 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
+
+
+
+
+
+	    $yesterday = $today; //todo: remove
+
+
+
+
+
+
+
 	    $collection = $refundsStatements->getCollection();
 	    $collection
 		    ->addFieldToFilter('statement_id',array('null' => true))
@@ -288,6 +301,17 @@ class GH_Statements_Model_Observer
 	    $dateModel = Mage::getModel('core/date');
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+
+
+
+
+
+	    $yesterday = $today;//todo: remove
+
+
+
+
+
 	    $trackStatements = array();
 	    $tax = self::getTax();
 
