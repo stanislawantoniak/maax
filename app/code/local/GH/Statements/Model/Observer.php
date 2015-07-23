@@ -39,15 +39,15 @@ class GH_Statements_Model_Observer
                     /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                     $calendarItem = $itemCollection->getFirstItem();
 
-
                     $statement = self::initStatement($vendor, $calendarItem);
 
-                    self::processStatementsOrders($statement, $vendor);
-                    self::processStatementsRma();
-                    self::processStatementsRefunds($statement);
-                    self::processStatementsTracks($statement);
+                    $statementTotals = new stdClass();
+                    $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+                    $statementTotals->rma = self::processStatementsRma();
+                    $statementTotals->refund = self::processStatementsRefunds($statement);
+                    $statementTotals->track = self::processStatementsTracks($statement);
 
-                    self::populateStatement($statement);
+                    self::populateStatement($statement, $statementTotals);
                 }
             }
 
@@ -92,10 +92,33 @@ class GH_Statements_Model_Observer
     }
 
     /**
-     * This populate statement with sums of ...
+     *
+     * This populate statement with sums of totals
+     *
+     * @param GH_Statements_Model_Statement $statement
+     * @param $statementTotals
      */
-    public static function populateStatement($statement) {
-		Mage::log($statement->getData());
+    public static function populateStatement(GH_Statements_Model_Statement $statement, $statementTotals)
+    {
+        $data = array(
+            //order
+            "order_commission_value" => $statementTotals->order->commissionAmount,
+            "order_value" => $statementTotals->order->amount,
+
+            //rma
+            "rma_commission_value" => $statementTotals->rma->commissionAmount,
+            "rma_value" => $statementTotals->rma->amount,
+
+            //refund
+            "refund_value" => $statementTotals->refund->amount,
+
+            //track
+            "tracking_charge_subtotal" => $statementTotals->track->netto,
+            "tracking_charge_total" => $statementTotals->track->brutto,
+        );
+
+        $statement->addData($data);
+        $statement->save();
     }
 
     /**
@@ -104,6 +127,8 @@ class GH_Statements_Model_Observer
      * @param Zolago_Dropship_Model_Vendor $vendor
      */
     public static function processStatementsOrders(&$statement, $vendor) {
+        $orderStatementTotals = new stdClass();
+        $statementId = (int)$statement->getId();
 
         /* @var Zolago_Po_Model_Resource_Po_Collection $collection */
         $collection = Mage::getResourceModel('zolagopo/po_collection');
@@ -114,6 +139,9 @@ class GH_Statements_Model_Observer
             Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED,  // Dostarczono
             Zolago_Po_Model_Source::UDPO_STATUS_RETURNED    // Zwrocono
         )));
+
+        $commissionAmount = 0;
+        $amount = 0;
 
         foreach ($collection as $po) {
             /** @var Zolago_Po_Model_Po $po */
@@ -135,6 +163,10 @@ class GH_Statements_Model_Observer
             $data['carrier'] = $track->getTitle(); // Kurier
             $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
             $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
+
+            $data['gallery_discount_value'] = 999; //TODO
+            $data['commission_value'] = 999; //TODO
+
 
             /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
             $itemsColl = $po->getItemsCollection();
@@ -172,6 +204,9 @@ class GH_Statements_Model_Observer
                 // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
                 $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value'];
 
+                $commissionAmount += $data['commission_value'];
+                $amount += $data['value'];
+                
                 // Save
                 $statementOrder = Mage::getModel('ghstatements/order');
                 $statementOrder->setData($data);
@@ -182,6 +217,10 @@ class GH_Statements_Model_Observer
             $po->setData('statement_id', $statement->getId());
             $po->save();
         }
+        $orderStatementTotals->commissionAmount = $commissionAmount;
+        $orderStatementTotals->amount = $amount;
+
+        return $orderStatementTotals;
     }
 
 	/**
@@ -189,6 +228,8 @@ class GH_Statements_Model_Observer
 	 * @return GH_Statements_Model_Statement
 	 */
     public static function processStatementsRefunds(&$statement) {
+        $refundStatementTotals = new stdClass();
+
 	    /** @var GH_Statements_Model_Refund $refundsStatements */
 	    $refundsStatements = Mage::getModel('ghstatements/refund');
 
@@ -219,13 +260,20 @@ class GH_Statements_Model_Observer
 	    }
 
 	    $statement->setRefundValue($refundValue);
-	    return $statement;
+        $refundStatementTotals->amount = $refundValue;
+
+	    return $refundStatementTotals;
     }
 
     /**
      * This process statements tracks
      */
     public static function processStatementsTracks(&$statement) {
+        $trackStatementTotals = new stdClass();
+
+        $nettoTotal = 0;
+        $bruttoTotal =0;
+
 	    $dateModel = Mage::getModel('core/date');
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
@@ -238,13 +286,27 @@ class GH_Statements_Model_Observer
 		    ->addFieldToFilter('statement_id',array('null'=>true))
 		    ->addFieldToFilter('gallery_shipping_source',1)
 		    ->addFieldToFilter('shipped_date',array('lteq'=>$yesterday))*/
+
+
+        $trackStatementTotals->netto = $nettoTotal;
+        $trackStatementTotals->brutto = $bruttoTotal;
+
+        return $trackStatementTotals;
     }
 
     /**
      * This process statements RMA
      */
     public static function processStatementsRma() {
+        $rmaStatementTotals = new stdClass();
 
+        $commissionAmount = 0;
+        $amount = 0;
+
+        $rmaStatementTotals->commissionAmount = $commissionAmount;
+        $rmaStatementTotals->amount = $amount;
+
+        return $rmaStatementTotals;
     }
 
     /**
