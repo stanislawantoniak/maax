@@ -154,15 +154,15 @@ class GH_Statements_Model_Observer
 
             // Data to save
             $data = array();
-            $data['statement_id'] = $statementId;
+            $data['statement_id'] = $statement->getId();
             $data['po_id'] = $po->getId();
-            $data['po_increment_id'] = $po->getIncrementId();
-            $data['payment_channel_owner'] = $po->getPaymentChannelOwner();
+            $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
+            $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
             $data['shipping_cost'] = 0;
-            $data['shipped_date'] = $track->getShippedDate();
-            $data['carrier'] = $track->getTitle();
-            $data['gallery_shipping_source'] = $track->getGalleryShippingSource();
-            $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
+            $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
+            $data['carrier'] = $track->getTitle(); // Kurier
+            $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
+            $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
 
             $data['gallery_discount_value'] = 999; //TODO
             $data['commission_value'] = 999; //TODO
@@ -177,27 +177,45 @@ class GH_Statements_Model_Observer
                     continue; // Skip simple from configurable
                 }
                 $data['po_item_id'] = $item->getId();
-                $data['sku'] = $item->getFinalSku();
+                $data['sku'] = $item->getFinalSku();// SKU
                 $data['qty'] = $item->getQty();
-                $data['price'] = $item->getPriceInclTax() * $item->getQty();
-                $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty();
-                $data['commission_percent'] = $item->getCommissionPercent();
-                $data['final_price'] = $item->getFinalItemPrice() * $item->getQty();
-                $data['value'] = 999; //TODO
+                $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
+                $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty(); // Zniżka (zł)
+                $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
+                $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
+
+                $data['gallery_discount_value'] = 0;
+                foreach ($item->getDiscountInfo() as $relation) {
+                    /** @var Zolago_SalesRule_Model_Relation $relation */
+                    if ($relation->getPayer() == Zolago_SalesRule_Model_Rule_Payer::PAYER_GALLERY) {
+                        $data['gallery_discount_value'] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
+                    }
+                }
+
+                if ($shippingCost) { // Shipping cost for first item only
+                    $data['shipping_cost'] = $shippingCost; // Transport
+                    $shippingCost = 0;
+                }
+                // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
+                $data['commission_value'] =
+                    (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
+                        * $data['commission_percent']) * self::getTax(); // Prowizja Modago
+
+                // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
+                $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value'];
 
                 $commissionAmount += $data['commission_value'];
                 $amount += $data['value'];
-
-                if ($shippingCost) { // Shipping cost for first item only
-                    $data['shipping_cost'] = $shippingCost;
-                    $shippingCost = 0;
-                }
-
+                
                 // Save
                 $statementOrder = Mage::getModel('ghstatements/order');
                 $statementOrder->setData($data);
                 $statementOrder->save();
             }
+
+            // For each PO save info about statement was processed
+            $po->setData('statement_id', $statement->getId());
+            $po->save();
         }
         $orderStatementTotals->commissionAmount = $commissionAmount;
         $orderStatementTotals->amount = $amount;
@@ -305,5 +323,14 @@ class GH_Statements_Model_Observer
         $collection->addFieldToFilter('event_date', date("Y-m-d", strtotime($calendarItem->getEventDate())));
 
         return $collection->getFirstItem()->getId() ? true : false;
+    }
+
+    /**
+     * This return tax for statement
+     *
+     * @return float
+     */
+    public static function getTax() {
+        return 1.23; // TODO
     }
 }
