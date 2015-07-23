@@ -59,9 +59,13 @@
 "Discount Amount","Zniżka"
 "Final Price","Sprzedaż w zł"
 "Shipping Cost","Transport"
-"Commission Percent","Stawka prowizji modago"
+"Commission Percent","Stawka prowizji modago (%)"
 "Gallery Discount","Zniżka finansowana przez Modago"
 "Commission","Prowizja Modago"
-"Amount","Do wypłaty"
-
+"Amount","Kwota"
+"RMA number","Numer RMA"
+"Date","Data"
+"Operator","Operator"
+"Total netto shipment charge","Koszt netto"
+"Total brutto shipment charge","Koszt brutto"
 
