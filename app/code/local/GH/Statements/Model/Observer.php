@@ -71,9 +71,9 @@ class GH_Statements_Model_Observer
      */
     public static function initStatement($vendor, $calendarItem) {
 
-//        if (self::isStatementAlready($vendor, $calendarItem)) {
-//            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
-//        }
+        if (self::isStatementAlready($vendor, $calendarItem)) {
+            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
+        }
 
         /** @var GH_Statements_Model_Calendar $calendar */
         $calendar = Mage::getModel('ghstatements/calendar')->load($calendarItem->getCalendarId());
