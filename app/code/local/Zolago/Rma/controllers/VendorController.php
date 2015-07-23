@@ -148,7 +148,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						}
 					}
 
-					if(!$po->isPaymentDotpay() && $refundStatementModel) {
+					if($po->isPaymentDotpay() && $refundStatementModel) {
 						$refundStatementModel
 							->setPoId($po->getId())
 							->setPoIncrementId($po->getIncrementId())
