@@ -90,6 +90,13 @@
             </ghstatementsadmin>
         </routers>
     </admin>
+    <default>
+        <ghstatements>
+            <general>
+                <tax_for_commission>1.23</tax_for_commission>
+            </general>
+        </ghstatements>
+    </default>
     <crontab>
         <jobs>
             <ghstatements_callendar>

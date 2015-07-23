@@ -65,7 +65,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
 
         /*@var $ghDhl GH_Dhl_Model_Source_Shipping */
         $this->addColumn('gallery_shipping_source', array(
-            'header' => Mage::helper('ghstatements')->__('Kontakt kurierski'),
+            'header' => Mage::helper('ghstatements')->__('Gallery shipping source'),
             'sortable' => true,
             'width' => '60',
             'index' => 'gallery_shipping_source',

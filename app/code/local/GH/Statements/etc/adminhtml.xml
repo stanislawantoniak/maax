@@ -17,6 +17,11 @@
                             <sort_order>2</sort_order>
                             <action>adminhtml/vendor_statements/index</action>
                         </ghstatements_vendor>
+                        <ghstatements_general_settings translate="title" module="ghstatements">
+                            <title>General settings</title>
+                            <sort_order>100</sort_order>
+                            <action>adminhtml/system_config/edit/section/ghstatements</action>
+                        </ghstatements_general_settings>
                     </children>
                 </ghstatements>
             </children>
@@ -44,6 +49,17 @@
                             </ghstatements>
                         </children>
                     </vendors>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ghstatements translate="title" module="ghstatements">
+                                        <title>GH statements</title>
+                                    </ghstatements>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
                 </children>
             </admin>
         </resources>
