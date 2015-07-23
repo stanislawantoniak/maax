@@ -125,10 +125,11 @@ class GH_Statements_Model_Observer
      * This process statements orders
      * @param GH_Statements_Model_Statement $statement
      * @param Zolago_Dropship_Model_Vendor $vendor
+     * @return stdClass
+     * @throws Exception
      */
     public static function processStatementsOrders(&$statement, $vendor) {
         $orderStatementTotals = new stdClass();
-        $statementId = (int)$statement->getId();
 
         /* @var Zolago_Po_Model_Resource_Po_Collection $collection */
         $collection = Mage::getResourceModel('zolagopo/po_collection');
@@ -164,10 +165,6 @@ class GH_Statements_Model_Observer
             $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
             $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
 
-            $data['gallery_discount_value'] = 999; //TODO
-            $data['commission_value'] = 999; //TODO
-
-
             /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
             $itemsColl = $po->getItemsCollection();
 
@@ -199,7 +196,7 @@ class GH_Statements_Model_Observer
                 // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
                 $data['commission_value'] =
                     (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
-                        * $data['commission_percent']) * self::getTax(); // Prowizja Modago
+                        * (floatval($data['commission_percent'])/100)) * self::getTax(); // Prowizja Modago
 
                 // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
                 $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value'];
