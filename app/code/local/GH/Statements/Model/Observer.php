@@ -177,6 +177,10 @@ class GH_Statements_Model_Observer
                 $statementOrder->setData($data);
                 $statementOrder->save();
             }
+
+            // For each PO save info about statement was processed
+            $po->setData('statement_id', $statement->getId());
+            $po->save();
         }
     }
 
