@@ -53,5 +53,15 @@
 "Shipping Date","Data wysyłki"
 "Carrier","Kurier"
 "Gallery shipping source","Kontakt kurierski"
+"Payment Method","Metoda płatności"
+"Payment Owner","System płatności"
+"Price","Sprzedaż przed zniżką"
+"Discount Amount","Zniżka"
+"Final Price","Sprzedaż w zł"
+"Shipping Cost","Transport"
+"Commission Percent","Stawka prowizji modago"
+"Gallery Discount","Zniżka finansowana przez Modago"
+"Commission","Prowizja Modago"
+"Amount","Do wypłaty"
 
 
