@@ -66,9 +66,9 @@
         </translate>
         <layout>
             <updates>
-                <ghdhl>
+                <ghstatements>
                     <file>ghstatements.xml</file>
-                </ghdhl>
+                </ghstatements>
             </updates>
         </layout>
     </adminhtml>
