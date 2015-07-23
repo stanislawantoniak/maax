@@ -274,21 +274,152 @@ class GH_Statements_Model_Observer
 	    $dateModel = Mage::getModel('core/date');
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+	    $trackStatements = array();
+	    $tax = self::getTax();
 
-	    /** @var Mage_Sales_Model_Order_Shipment_Track $orderTracks */
-	    $orderTracks = Mage::getModel('sales/order_shipment_track');
+	    /** @var Mage_Sales_Model_Order_Shipment $ordersShipments */
+		$ordersShipments = Mage::getModel('sales/order_shipment');
 
-/*	    $orderTracksCollection = $orderTracks->getCollection();
-	    $orderTracksCollection
-		    ->addFieldToFilter('statement_id',array('null'=>true))
-		    ->addFieldToFilter('gallery_shipping_source',1)
-		    ->addFieldToFilter('shipped_date',array('lteq'=>$yesterday))*/
+	    //orders tracking start
 
+	    //load orders shipments
+	    $orderShipmentsCollection = $ordersShipments->getCollection();
+	    $orderShipmentsCollection
+		    ->addFieldToFilter('statement_id',array('null' => true))
+		    ->addFieldToFilter('udropship_vendor',$statement->getVendorId())
+		    ->addFieldToFilter('udropship_status',array('neq'=>Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED));
 
-        $trackStatementTotals->netto = $nettoTotal;
-        $trackStatementTotals->brutto = $bruttoTotal;
+	    //prepare arrays to load orders shipments trackings
+	    $ordersShipmentsIds = array();
+	    $ordersShipmentsObjects = array();
+	    if($orderShipmentsCollection->getSize()) {
+		    foreach($orderShipmentsCollection as $orderShipment) {
+			    /** @var Mage_Sales_Model_Order_Shipment $orderShipment */
+			    $ordersShipmentsIds[] = $orderShipment->getId();
+			    $ordersShipmentsObjects[$orderShipment->getId()] = $orderShipment;
+		    }
+	    }
 
-        return $trackStatementTotals;
+	    if(count($ordersShipmentsIds)) {
+
+			//load orders shipments tracks based on shimpents ids gathered in previous loop
+		    /** @var Mage_Sales_Model_Order_Shipment_Track $ordersTracks */
+		    $ordersTracks = Mage::getModel('sales/order_shipment_track');
+
+		    $ordersTracksCollection = $ordersTracks->getCollection();
+		    $ordersTracksCollection
+			    ->addFieldToFilter('statement_id', array('null' => true))
+			    ->addFieldToFilter('gallery_shipping_source', 1)
+			    ->addFieldToFilter('shipped_date', array('notnull' => true))
+			    ->addFieldToFilter('shipped_date', array('lteq' => $yesterday))
+			    ->addFieldToFilter('parent_id',array('in'=>$ordersShipmentsIds))
+		        ->addFieldToFilter('udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)));
+
+		    //not all shipments selected in previous loop will be adequate to update so we have to collect shipments ids once again based on loaded trackings
+		    $ordersShipmentsIdsToUpdate = array();
+		    if($ordersTracksCollection->getSize()) {
+			    foreach($ordersTracksCollection as $orderTrack) {
+				    /** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
+				    $shipmentId = $orderTrack->getParentId();
+				    $shipment = $ordersShipmentsObjects[$shipmentId];
+				    $ordersShipmentsIdsToUpdate[] = $shipmentId;
+
+				    $chargeTotal = $orderTrack->getChargeTotal() * $tax;
+
+				    //prepare array to insert into gh_statements_track
+				    $trackStatements[] = array(
+					    'statement_id'      => $statement->getId(),
+					    'po_id'             => $shipment->getUdpoId(),
+					    'po_increment_id'   => $shipment->getUdpoIncrementId(),
+					    'shipped_date'      => $orderTrack->getShippedDate(),
+					    'track_number'      => $orderTrack->getTrackNumber(),
+					    'charge_shipment'   => $orderTrack->getChargeShipment(),
+					    'charge_fuel'       => $orderTrack->getChargeFuel(),
+					    'charge_insurance'  => $orderTrack->getChargeInsurance(),
+					    'charge_cod'        => $orderTrack->getChargeCod(),
+					    'charge_subtotal'   => $orderTrack->getChargeTotal(),
+					    'charge_total'      => $chargeTotal,
+				    );
+
+				    $nettoTotal += $orderTrack->getChargeTotal();
+				    $bruttoTotal += $chargeTotal;
+			    }
+		    }
+		    //orders tracking end
+
+		    //rmas tracking start
+		    /** @var Zolago_Rma_Model_Rma_Track $rmasTracks */
+		    $rmasTracks = Mage::getModel('urma/rma_track');
+
+		    $rmasTracksCollection = $rmasTracks->getCollection();
+		    $rmasTracksCollection
+			    ->addFieldToFilter('statement_id', array('null' => true))
+			    ->addFieldToFilter('gallery_shipping_source', 1)
+			    ->addFieldToFilter('udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)));
+
+		    $rmasTracksToUpdate = array();
+			if($rmasTracksCollection->getSize()) {
+				foreach($rmasTracksCollection as $rmaTrack) {
+					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
+
+					/** @var Zolago_Rma_Model_Rma $rma */
+					$rma = Mage::getModel("zolagorma/rma")->load($rmaTrack->getParentId());
+
+					if($rma && $rma->getId()) {
+						$rmasTracksToUpdate[] = $rmaTrack->getId();
+
+						$chargeTotal = $rmaTrack->getChargeTotal() * $tax;
+
+						$shippedDate = date('Y-m-d',strtotime($rmaTrack->getUpdatedAt()));
+
+						/** @var Zolago_Po_Model_Po $po */
+						$po = $rma->getPo();
+
+						//prepare array to insert into gh_statements_track
+						$trackStatements[] = array(
+							'statement_id'      => $statement->getId(),
+							'po_id'             => $po->getId(),
+							'po_increment_id'   => $po->getIncrementId(),
+							'shipped_date'      => $shippedDate,
+							'track_number'      => $rmaTrack->getTrackNumber(),
+							'charge_shipment'   => $rmaTrack->getChargeShipment(),
+							'charge_fuel'       => $rmaTrack->getChargeFuel(),
+							'charge_insurance'  => $rmaTrack->getChargeInsurance(),
+							'charge_cod'        => $rmaTrack->getChargeCod(),
+							'charge_subtotal'   => $rmaTrack->getChargeTotal(),
+							'charge_total'      => $chargeTotal,
+						);
+
+						$nettoTotal += $rmaTrack->getChargeTotal();
+						$bruttoTotal += $chargeTotal;
+					}
+				}
+			}
+		    //rmas tracking end
+
+		    if(count($trackStatements)) {
+			    /** @var GH_Statements_Model_Track $trackStatement */
+			    $trackStatement = Mage::getModel("ghstatements/track");
+
+			    /** @var GH_Statements_Model_Resource_Track $trackStatementResource */
+			    $trackStatementResource = $trackStatement->getResource();
+			    $trackStatementResource->appendTracks($trackStatements);
+		    }
+
+		    if(count($ordersShipmentsIdsToUpdate)) {
+			    foreach($ordersShipmentsIdsToUpdate as $shipmentId) {
+				    /** @var Mage_Sales_Model_Order_Shipment $currentShipment */
+				    $currentShipment = $ordersShipmentsObjects[$shipmentId];
+				    $currentShipment->setStatementId($statement->getId());
+				    $currentShipment->save();
+			    }
+		    }
+
+		    $trackStatementTotals->netto = $nettoTotal;
+		    $trackStatementTotals->brutto = $bruttoTotal;
+
+		    return $trackStatementTotals;
+	    }
     }
 
     /**

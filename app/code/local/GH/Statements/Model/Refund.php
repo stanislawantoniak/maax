@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Zolago_Payment_Model_Allocation
+ * Class GH_Statements_Model_Refund
  * @method int getId()
  * @method GH_Statements_Model_Refund setId(int $id)
  * @method int getStatementId()
