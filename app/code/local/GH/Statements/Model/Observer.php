@@ -17,7 +17,7 @@ class GH_Statements_Model_Observer
             /* Format our dates */
             /** @var Mage_Core_Model_Date $dateModel */
             $dateModel = Mage::getModel('core/date');
-            $today     = $dateModel->date('Y-m-d H:i:s');
+            $today     = $dateModel->date('Y-m-d');
             $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
             // Collection of active vendors who have statement calendar
@@ -45,7 +45,7 @@ class GH_Statements_Model_Observer
                     self::processStatementsOrders($statement, $vendor);
                     self::processStatementsRma();
                     self::processStatementsRefunds($statement);
-                    self::processStatementsTracks();
+                    self::processStatementsTracks($statement);
 
                     self::populateStatement($statement);
                 }
@@ -221,8 +221,19 @@ class GH_Statements_Model_Observer
     /**
      * This process statements tracks
      */
-    public static function processStatementsTracks() {
+    public static function processStatementsTracks(&$statement) {
+	    $dateModel = Mage::getModel('core/date');
+	    $today     = $dateModel->date('Y-m-d');
+	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
+	    /** @var Mage_Sales_Model_Order_Shipment_Track $orderTracks */
+	    $orderTracks = Mage::getModel('sales/order_shipment_track');
+
+/*	    $orderTracksCollection = $orderTracks->getCollection();
+	    $orderTracksCollection
+		    ->addFieldToFilter('statement_id',array('null'=>true))
+		    ->addFieldToFilter('gallery_shipping_source',1)
+		    ->addFieldToFilter('shipped_date',array('lteq'=>$yesterday))*/
     }
 
     /**
