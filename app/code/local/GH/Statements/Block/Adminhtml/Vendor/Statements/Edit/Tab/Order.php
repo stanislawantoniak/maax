@@ -121,7 +121,8 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         $this->addColumn("commission_percent", array(
             "index" => "commission_percent",
             "header" => Mage::helper("ghstatements")->__("Commission Percent"),
-            'type' => 'number'
+            'type' => 'number',
+            'renderer'  => 'GH_Statements_Block_Adminhtml_Calendar_Grid_Column_Renderer_Percent',
         ));
         $this->addColumn("gallery_discount_value", array(
             "index" => "gallery_discount_value",
