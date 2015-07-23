@@ -200,8 +200,13 @@ class GH_Statements_Model_Observer
 				        (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
 					        * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
 
-			        // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
-			        $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value'];
+                    if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
+                        // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
+                        $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value']; // Do wypłaty
+                    } else {
+                        // - <prowizja modago> + <Zniżka finansowana przez Modago>
+                        $data['value'] = $data['gallery_discount_value'] - $data['commission_value'] + ; // Do wypłaty
+                    }
 
 			        $commissionAmount += $data['commission_value'];
 			        $amount += $data['value'];
