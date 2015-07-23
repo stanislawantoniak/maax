@@ -184,7 +184,7 @@ class GH_Statements_Model_Observer
 			        $data['sku'] = $item->getFinalSku();// SKU
 			        $data['qty'] = $item->getQty();
 			        $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
-			        $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty(); // Zniżka (zł)
+			        $data['discount_amount'] = $item->getDiscountAmount(); // Zniżka (zł)
 			        $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
 			        $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
 
