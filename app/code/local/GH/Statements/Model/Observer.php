@@ -42,18 +42,18 @@ class GH_Statements_Model_Observer
 
 	                try {
 		                $statement = self::initStatement($vendor, $calendarItem);
+
+		                $statementTotals = new stdClass();
+		                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+		                $statementTotals->rma = self::processStatementsRma();
+		                $statementTotals->refund = self::processStatementsRefunds($statement);
+		                $statementTotals->track = self::processStatementsTracks($statement);
+
+		                self::populateStatement($statement, $statementTotals);
 	                } catch(Mage_Core_Exception $e) {
 		                Mage::logException($e);
 		                $alreadyExists[] = $e->getMessage();
 	                }
-
-                    $statementTotals = new stdClass();
-                    $statementTotals->order = self::processStatementsOrders($statement, $vendor);
-                    $statementTotals->rma = self::processStatementsRma();
-                    $statementTotals->refund = self::processStatementsRefunds($statement);
-                    $statementTotals->track = self::processStatementsTracks($statement);
-
-                    self::populateStatement($statement, $statementTotals);
                 }
             }
 
