@@ -154,7 +154,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 							->setPoIncrementId($po->getIncrementId())
 							->setRmaId($rma->getId())
 							->setRmaIncrementId($rma->getIncrementId())
-							->setDate(Mage::getModel('core/date')->date('Y-m-d H:i:s'))
+							->setDate(Mage::getModel('core/date')->date('Y-m-d'))
 							->setVendorId($po->getVendor()->getId())
 							->setValue($returnAmount)
 							->save();
