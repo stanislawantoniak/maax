@@ -10,6 +10,7 @@ class GH_Statements_Model_Observer
 
         /* @var $transaction Varien_Db_Adapter_Interface */
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
+	    $alreadyExists = array();
 
         try {
             $transaction->beginTransaction();
@@ -39,7 +40,12 @@ class GH_Statements_Model_Observer
                     /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                     $calendarItem = $itemCollection->getFirstItem();
 
-                    $statement = self::initStatement($vendor, $calendarItem);
+	                try {
+		                $statement = self::initStatement($vendor, $calendarItem);
+	                } catch(Mage_Core_Exception $e) {
+		                Mage::logException($e);
+		                $alreadyExists[] = $e->getMessage();
+	                }
 
                     $statementTotals = new stdClass();
                     $statementTotals->order = self::processStatementsOrders($statement, $vendor);
@@ -72,7 +78,7 @@ class GH_Statements_Model_Observer
     public static function initStatement($vendor, $calendarItem) {
 
         if (self::isStatementAlready($vendor, $calendarItem)) {
-            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
+            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
         }
 
         /** @var GH_Statements_Model_Calendar $calendar */
