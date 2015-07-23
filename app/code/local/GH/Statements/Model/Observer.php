@@ -10,6 +10,7 @@ class GH_Statements_Model_Observer
 
         /* @var $transaction Varien_Db_Adapter_Interface */
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
+	    $alreadyExists = array();
 
         try {
             $transaction->beginTransaction();
@@ -39,15 +40,20 @@ class GH_Statements_Model_Observer
                     /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                     $calendarItem = $itemCollection->getFirstItem();
 
-                    $statement = self::initStatement($vendor, $calendarItem);
+	                try {
+		                $statement = self::initStatement($vendor, $calendarItem);
 
-                    $statementTotals = new stdClass();
-                    $statementTotals->order = self::processStatementsOrders($statement, $vendor);
-                    $statementTotals->rma = self::processStatementsRma();
-                    $statementTotals->refund = self::processStatementsRefunds($statement);
-                    $statementTotals->track = self::processStatementsTracks($statement);
+		                $statementTotals = new stdClass();
+		                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+		                $statementTotals->rma = self::processStatementsRma();
+		                $statementTotals->refund = self::processStatementsRefunds($statement);
+		                $statementTotals->track = self::processStatementsTracks($statement);
 
-                    self::populateStatement($statement, $statementTotals);
+		                self::populateStatement($statement, $statementTotals);
+	                } catch(Mage_Core_Exception $e) {
+		                Mage::logException($e);
+		                $alreadyExists[] = $e->getMessage();
+	                }
                 }
             }
 
@@ -72,7 +78,7 @@ class GH_Statements_Model_Observer
     public static function initStatement($vendor, $calendarItem) {
 
         if (self::isStatementAlready($vendor, $calendarItem)) {
-            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement already exist'));
+            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
         }
 
         /** @var GH_Statements_Model_Calendar $calendar */
@@ -149,70 +155,78 @@ class GH_Statements_Model_Observer
 
             // Shipping and track
             $currentShipping = $po->getLastNotCanceledShipment();
-            /** @var Mage_Sales_Model_Order_Shipment_Track $track */
-            $track = $currentShipping->getTracksCollection()->getFirstItem();
-            $shippingCost = $currentShipping->getShippingAmountIncl();
 
-            // Data to save
-            $data = array();
-            $data['statement_id'] = $statement->getId();
-            $data['po_id'] = $po->getId();
-            $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
-            $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
-            $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
-            $data['carrier'] = $track->getTitle(); // Kurier
-            $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
-            $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
+	        if($currentShipping) {
+		        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
+		        $track = $currentShipping->getTracksCollection()->getFirstItem();
+		        $shippingCost = $currentShipping->getShippingAmountIncl();
 
-            /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
-            $itemsColl = $po->getItemsCollection();
+		        // Data to save
+		        $data = array();
+		        $data['statement_id'] = $statement->getId();
+		        $data['po_id'] = $po->getId();
+		        $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
+		        $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
+		        $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
+		        $data['carrier'] = $track->getTitle(); // Kurier
+		        $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
+		        $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
 
-            foreach ($itemsColl as $item) {
-                /** @var Zolago_Po_Model_Po_Item $item */
-                if ($item->getParentItemId()) {
-                    continue; // Skip simple from configurable
-                }
-                $data['po_item_id'] = $item->getId();
-                $data['sku'] = $item->getFinalSku();// SKU
-                $data['qty'] = $item->getQty();
-                $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
-                $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty(); // Zniżka (zł)
-                $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
-                $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
+		        /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
+		        $itemsColl = $po->getItemsCollection();
 
-                $data['gallery_discount_value'] = 0;
-                foreach ($item->getDiscountInfo() as $relation) {
-                    /** @var Zolago_SalesRule_Model_Relation $relation */
-                    if ($relation->getPayer() == Zolago_SalesRule_Model_Rule_Payer::PAYER_GALLERY) {
-                        $data['gallery_discount_value'] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
+		        foreach ($itemsColl as $item) {
+			        /** @var Zolago_Po_Model_Po_Item $item */
+			        if ($item->getParentItemId()) {
+				        continue; // Skip simple from configurable
+			        }
+			        $data['po_item_id'] = $item->getId();
+			        $data['sku'] = $item->getFinalSku();// SKU
+			        $data['qty'] = $item->getQty();
+			        $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
+			        $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty(); // Zniżka (zł)
+			        $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
+			        $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
+
+			        $data['gallery_discount_value'] = 0;
+			        foreach ($item->getDiscountInfo() as $relation) {
+				        /** @var Zolago_SalesRule_Model_Relation $relation */
+				        if ($relation->getPayer() == Zolago_SalesRule_Model_Rule_Payer::PAYER_GALLERY) {
+					        $data['gallery_discount_value'] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
+				        }
+			        }
+
+			        $data['shipping_cost'] = 0;
+			        if ($shippingCost) { // Shipping cost for first item only
+				        $data['shipping_cost'] = $shippingCost; // Transport
+				        $shippingCost = 0;
+			        }
+			        // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
+			        $data['commission_value'] =
+				        (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
+					        * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
+
+                    if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
+                        // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
+                        $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value']; // Do wypłaty
+                    } else {
+                        // - <prowizja modago> + <Zniżka finansowana przez Modago>
+                        $data['value'] = $data['gallery_discount_value'] - $data['commission_value']; // Do wypłaty
                     }
-                }
 
-                $data['shipping_cost'] = 0;
-                if ($shippingCost) { // Shipping cost for first item only
-                    $data['shipping_cost'] = $shippingCost; // Transport
-                    $shippingCost = 0;
-                }
-                // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
-                $data['commission_value'] =
-                    (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
-                        * (floatval($data['commission_percent'])/100)) * self::getTax(); // Prowizja Modago
+			        $commissionAmount += $data['commission_value'];
+			        $amount += $data['value'];
 
-                // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
-                $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value'];
+			        // Save
+			        $statementOrder = Mage::getModel('ghstatements/order');
+			        $statementOrder->setData($data);
+			        $statementOrder->save();
+		        }
 
-                $commissionAmount += $data['commission_value'];
-                $amount += $data['value'];
-                
-                // Save
-                $statementOrder = Mage::getModel('ghstatements/order');
-                $statementOrder->setData($data);
-                $statementOrder->save();
-            }
-
-            // For each PO save info about statement was processed
-            $po->setData('statement_id', $statement->getId());
-            $po->save();
+		        // For each PO save info about statement was processed
+		        $po->setData('statement_id', $statement->getId());
+		        $po->save();
+	        }
         }
         $orderStatementTotals->commissionAmount = $commissionAmount;
         $orderStatementTotals->amount = $amount;
@@ -233,6 +247,19 @@ class GH_Statements_Model_Observer
 	    $dateModel = Mage::getModel('core/date');
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+
+
+
+
+
+
+	    $yesterday = $today; //todo: remove
+
+
+
+
+
+
 
 	    $collection = $refundsStatements->getCollection();
 	    $collection
@@ -274,6 +301,17 @@ class GH_Statements_Model_Observer
 	    $dateModel = Mage::getModel('core/date');
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+
+
+
+
+
+	    $yesterday = $today;//todo: remove
+
+
+
+
+
 	    $trackStatements = array();
 	    $tax = self::getTax();
 
