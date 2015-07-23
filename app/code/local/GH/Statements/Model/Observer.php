@@ -211,7 +211,7 @@ class GH_Statements_Model_Observer
                         $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value']; // Do wypłaty
                     } else {
                         // - <prowizja modago> + <Zniżka finansowana przez Modago>
-                        $data['value'] = $data['gallery_discount_value'] - $data['commission_value'] + ; // Do wypłaty
+                        $data['value'] = $data['gallery_discount_value'] - $data['commission_value']; // Do wypłaty
                     }
 
 			        $commissionAmount += $data['commission_value'];
