@@ -159,7 +159,6 @@ class GH_Statements_Model_Observer
             $data['po_id'] = $po->getId();
             $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
             $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
-            $data['shipping_cost'] = 0;
             $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
             $data['carrier'] = $track->getTitle(); // Kurier
             $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
@@ -189,6 +188,7 @@ class GH_Statements_Model_Observer
                     }
                 }
 
+                $data['shipping_cost'] = 0;
                 if ($shippingCost) { // Shipping cost for first item only
                     $data['shipping_cost'] = $shippingCost; // Transport
                     $shippingCost = 0;
