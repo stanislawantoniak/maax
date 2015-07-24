@@ -365,6 +365,7 @@ class GH_Statements_Model_Observer
 				    $ordersShipmentsIdsToUpdate[] = $shipmentId;
 
 				    $chargeTotal = $orderTrack->getChargeTotal() * $tax;
+                    $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
 				    //prepare array to insert into gh_statements_track
 				    $trackStatements[] = array(
@@ -409,6 +410,7 @@ class GH_Statements_Model_Observer
 						$rmasTracksToUpdate[] = $rmaTrack->getId();
 
 						$chargeTotal = $rmaTrack->getChargeTotal() * $tax;
+                        $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
 						$shippedDate = date('Y-m-d',strtotime($rmaTrack->getUpdatedAt()));
 
