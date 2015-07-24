@@ -51,7 +51,7 @@ class GH_Statements_Model_Observer
 
 		                self::populateStatement($statement, $statementTotals);
 	                } catch(Mage_Core_Exception $e) {
-		                Mage::logException($e);
+                        Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
 		                $alreadyExists[] = $e->getMessage();
 	                }
                 }
