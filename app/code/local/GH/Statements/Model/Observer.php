@@ -12,58 +12,54 @@ class GH_Statements_Model_Observer
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
 	    $alreadyExists = array();
 
-        try {
-            $transaction->beginTransaction();
+        /* Format our dates */
+        /** @var Mage_Core_Model_Date $dateModel */
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-            /* Format our dates */
-            /** @var Mage_Core_Model_Date $dateModel */
-            $dateModel = Mage::getModel('core/date');
-            $today     = $dateModel->date('Y-m-d');
-            $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+        // Collection of active vendors who have statement calendar
+        /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
+        $VendorsSollection = Mage::getResourceModel('udropship/vendor_collection');
+        $VendorsSollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+        $VendorsSollection->addFieldToFilter('statements_calendar', array('neq' => null));
 
-            // Collection of active vendors who have statement calendar
-            /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
-            $VendorsSollection = Mage::getResourceModel('udropship/vendor_collection');
-            $VendorsSollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
-            $VendorsSollection->addFieldToFilter('statements_calendar', array('neq' => null));
+        foreach($VendorsSollection as $vendor) {
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $calendarId = (int)$vendor->getStatementsCalendar();
 
-            foreach($VendorsSollection as $vendor) {
-                /** @var Zolago_Dropship_Model_Vendor $vendor */
-                $calendarId = (int)$vendor->getStatementsCalendar();
+            /* @var GH_Statements_Model_Resource_Calendar_Item_Collection $itemCollection */
+            $itemCollection = Mage::getResourceModel('ghstatements/calendar_item_collection');
+            $itemCollection->addFieldToFilter('calendar_id', $calendarId);
+            $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
 
-                /* @var GH_Statements_Model_Resource_Calendar_Item_Collection $itemCollection */
-                $itemCollection = Mage::getResourceModel('ghstatements/calendar_item_collection');
-                $itemCollection->addFieldToFilter('calendar_id', $calendarId);
-                $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
+            if ($itemCollection->getFirstItem()->getId()) {
+                /** @var GH_Statements_Model_Calendar_Item $calendarItem */
+                $calendarItem = $itemCollection->getFirstItem();
 
-                if ($itemCollection->getFirstItem()->getId()) {
-                    /** @var GH_Statements_Model_Calendar_Item $calendarItem */
-                    $calendarItem = $itemCollection->getFirstItem();
+                try {
+	                $transaction->beginTransaction();
 
-	                try {
-		                $statement = self::initStatement($vendor, $calendarItem);
+	                $statement = self::initStatement($vendor, $calendarItem);
 
-		                $statementTotals = new stdClass();
-		                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
-		                $statementTotals->rma = self::processStatementsRma();
-		                $statementTotals->refund = self::processStatementsRefunds($statement);
-		                $statementTotals->track = self::processStatementsTracks($statement);
+	                $statementTotals = new stdClass();
+	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+	                $statementTotals->rma = self::processStatementsRma();
+	                $statementTotals->refund = self::processStatementsRefunds($statement);
+	                $statementTotals->track = self::processStatementsTracks($statement);
 
-		                self::populateStatement($statement, $statementTotals);
-	                } catch(Mage_Core_Exception $e) {
-                        Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
-		                $alreadyExists[] = $e->getMessage();
-	                }
+	                self::populateStatement($statement, $statementTotals);
+                } catch(Mage_Core_Exception $e) {
+                    Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
+	                $alreadyExists[] = $e->getMessage();
+	                $transaction->rollBack();
+                } catch (Exception $ex) {
+	                $transaction->rollBack();
+	                Mage::logException($ex);
                 }
-            }
 
-            $transaction->commit();
-        } catch (Mage_Core_Exception $ex){
-            // For example when 'Statement already exist'
-            $transaction->rollBack();
-        } catch (Exception $ex) {
-            $transaction->rollBack();
-            Mage::logException($ex);
+                $transaction->commit();
+            }
         }
     }
 
@@ -134,7 +130,7 @@ class GH_Statements_Model_Observer
      * @return stdClass
      * @throws Exception
      */
-    public static function processStatementsOrders(&$statement, $vendor) {
+    public static function processStatementsOrders($statement, $vendor) {
         $orderStatementTotals = new stdClass();
 
         /* @var Zolago_Po_Model_Resource_Po_Collection $collection */
@@ -240,7 +236,7 @@ class GH_Statements_Model_Observer
 	 * @param GH_Statements_Model_Statement $statement
 	 * @return GH_Statements_Model_Statement
 	 */
-    public static function processStatementsRefunds(&$statement) {
+    public static function processStatementsRefunds($statement) {
         $refundStatementTotals = new stdClass();
 
 	    /** @var GH_Statements_Model_Refund $refundsStatements */
@@ -285,7 +281,6 @@ class GH_Statements_Model_Observer
 		    $refundStatementsResource->assignToStatement($statement->getId(), $refundIdsToUpdate);
 	    }
 
-	    $statement->setRefundValue($refundValue);
         $refundStatementTotals->amount = $refundValue;
 
 	    return $refundStatementTotals;
@@ -294,7 +289,7 @@ class GH_Statements_Model_Observer
     /**
      * This process statements tracks
      */
-    public static function processStatementsTracks(&$statement) {
+    public static function processStatementsTracks($statement) {
         $trackStatementTotals = new stdClass();
 
         $nettoTotal = 0;
