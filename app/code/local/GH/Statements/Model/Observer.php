@@ -418,6 +418,8 @@ class GH_Statements_Model_Observer
 							'statement_id'      => $statement->getId(),
 							'po_id'             => $po->getId(),
 							'po_increment_id'   => $po->getIncrementId(),
+							'rma_id'             => $rma->getId(),
+							'rma_increment_id'   => $rma->getIncrementId(),
 							'shipped_date'      => $shippedDate,
 							'track_number'      => $rmaTrack->getTrackNumber(),
 							'charge_shipment'   => $rmaTrack->getChargeShipment(),
