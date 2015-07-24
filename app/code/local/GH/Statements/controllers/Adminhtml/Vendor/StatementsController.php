@@ -10,9 +10,36 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
 
     public function editAction()
     {
+        $id = $this->getRequest()->getParam('id');
+        $statement = $this->_initModel($id);
+
+        if(!$statement->getId()){
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Statement does not exists"));
+            return $this->_redirect("*/*");
+        }
+
         $this->loadLayout();
         $this->renderLayout();
     }
+
+    /**
+     * @return GH_Statements_Model_Statement
+     */
+    protected function _initModel($modelId) {
+        if(Mage::registry('ghstatements_current_statement') instanceof GH_Statements_Model_Statement){
+            return Mage::registry('ghstatements_current_statement');
+        }
+
+        $model = Mage::getModel("ghstatements/statement");
+        /* @var $model GH_Statements_Model_Statement */
+        if($modelId){
+            $model->load($modelId);
+        }
+
+        Mage::register('ghstatements_current_statement', $model);
+        return $model;
+    }
+
     public function deleteAction()
     {
         $model = Mage::getModel("ghstatements/statement");
