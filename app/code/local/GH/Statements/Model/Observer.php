@@ -51,7 +51,7 @@ class GH_Statements_Model_Observer
 
 		                self::populateStatement($statement, $statementTotals);
 	                } catch(Mage_Core_Exception $e) {
-		                Mage::logException($e);
+                        Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
 		                $alreadyExists[] = $e->getMessage();
 	                }
                 }
@@ -184,7 +184,7 @@ class GH_Statements_Model_Observer
 			        $data['sku'] = $item->getFinalSku();// SKU
 			        $data['qty'] = $item->getQty();
 			        $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
-			        $data['discount_amount'] = $item->getDiscountAmount() * $item->getQty(); // Zniżka (zł)
+			        $data['discount_amount'] = $item->getDiscountAmount(); // Zniżka (zł)
 			        $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
 			        $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
 
@@ -205,6 +205,7 @@ class GH_Statements_Model_Observer
 			        $data['commission_value'] =
 				        (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
 					        * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
+                    $data['commission_value'] = round($data['commission_value'], 2, PHP_ROUND_HALF_UP);
 
                     if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
                         // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
@@ -213,6 +214,7 @@ class GH_Statements_Model_Observer
                         // - <prowizja modago> + <Zniżka finansowana przez Modago>
                         $data['value'] = $data['gallery_discount_value'] - $data['commission_value']; // Do wypłaty
                     }
+                    $data['value'] = round($data['value'], 2, PHP_ROUND_HALF_UP);
 
 			        $commissionAmount += $data['commission_value'];
 			        $amount += $data['value'];
@@ -363,6 +365,7 @@ class GH_Statements_Model_Observer
 				    $ordersShipmentsIdsToUpdate[] = $shipmentId;
 
 				    $chargeTotal = $orderTrack->getChargeTotal() * $tax;
+                    $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
 				    //prepare array to insert into gh_statements_track
 				    $trackStatements[] = array(
@@ -407,6 +410,7 @@ class GH_Statements_Model_Observer
 						$rmasTracksToUpdate[] = $rmaTrack->getId();
 
 						$chargeTotal = $rmaTrack->getChargeTotal() * $tax;
+                        $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
 						$shippedDate = date('Y-m-d',strtotime($rmaTrack->getUpdatedAt()));
 
