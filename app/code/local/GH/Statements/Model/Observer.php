@@ -394,9 +394,16 @@ class GH_Statements_Model_Observer
 
 		    $rmasTracksCollection = $rmasTracks->getCollection();
 		    $rmasTracksCollection
-			    ->addFieldToFilter('statement_id', array('null' => true))
-			    ->addFieldToFilter('gallery_shipping_source', 1)
-			    ->addFieldToFilter('udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)));
+			    ->addFieldToFilter('main_table.statement_id', array('null' => true))
+			    ->addFieldToFilter('main_table.gallery_shipping_source', 1)
+			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)))
+			    ->getSelect()
+			        ->join(
+				        'urma_rma',
+				        'main_table.parent_id = urma_rma.entity_id',
+				        array('udropship_vendor')
+			        )
+			        ->where('urma_rma.udropship_vendor = '.$statement->getVendorId());
 
 		    $rmasTracksToUpdate = array();
 			if($rmasTracksCollection->getSize()) {
