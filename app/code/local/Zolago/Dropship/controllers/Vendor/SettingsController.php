@@ -16,7 +16,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
             }
         }
-        $this->_renderPage(null, "info");
+        $this->_renderPage(null, "vendorsettings_info");
     }
 
     public function shippingAction()
@@ -30,7 +30,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
             }
         }
-        $this->_renderPage(null, "shipping");
+        $this->_renderPage(null, "vendorsettings_shipping");
     }
 
     public function rmaAction()
@@ -44,7 +44,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
             }
         }
-        $this->_renderPage(null, "rma");
+        $this->_renderPage(null, "vendorsettings_rma");
     }
 
 
