@@ -69,7 +69,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Refunds
             'type' => 'date',
         ));
         $this->addColumn('refund_initiator', array(
-            'header' => Mage::helper('ghstatements')->__('Refund Initiator'),
+            'header' => Mage::helper('ghstatements')->__("Refund Initiator"),
             'sortable' => true,
             'width' => '60',
             'index' => 'refund_initiator',
