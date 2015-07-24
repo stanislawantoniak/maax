@@ -234,6 +234,10 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
                 $track->setCarrierCode($carrier);
                 $track->setLabelPic($trackingParams['file']);
+
+                $track->setData("gallery_shipping_source", isset($trackingParams["gallery_shipping_source"]) ? $trackingParams["gallery_shipping_source"] : 0);
+                $track->setData("shipping_source_account", $trackingParams["account"]);
+
                 $po = $rma->getPo();
                 $weight = $po->getTracking()->getWeight();
                 $type = Mage::helper('orbashipping/carrier_dhl')->getDhlParcelKeyByWeight($weight);
