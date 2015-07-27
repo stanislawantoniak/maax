@@ -4,9 +4,25 @@
         <vendors>
             <children>
                 <ghstatements>
-                    <title>Statements calendar</title>
+                    <title>Statements</title>
                     <sort_order>110</sort_order>
-                    <action>adminhtml/statements/calendar</action>
+                    <children>
+                        <ghstatements_calendar>
+                            <title>Statements calendar</title>
+                            <sort_order>1</sort_order>
+                            <action>adminhtml/statements/calendar</action>
+                        </ghstatements_calendar>
+                        <ghstatements_vendor>
+                            <title>Vendor Statements</title>
+                            <sort_order>2</sort_order>
+                            <action>adminhtml/vendor_statements/index</action>
+                        </ghstatements_vendor>
+                        <ghstatements_general_settings translate="title" module="ghstatements">
+                            <title>General settings</title>
+                            <sort_order>100</sort_order>
+                            <action>adminhtml/system_config/edit/section/ghstatements</action>
+                        </ghstatements_general_settings>
+                    </children>
                 </ghstatements>
             </children>
         </vendors>
@@ -18,11 +34,32 @@
                     <vendors>
                         <children>
                             <ghstatements>
-                                <title>Statements calendar</title>
+                                <title>Statements</title>
                                 <sort_order>45</sort_order>
+                                <children>
+                                    <ghstatements_calendar>
+                                        <title>Statements calendar</title>
+                                        <sort_order>1</sort_order>
+                                    </ghstatements_calendar>
+                                    <ghstatements_vendor>
+                                        <title>Vendor Statements</title>
+                                        <sort_order>2</sort_order>
+                                    </ghstatements_vendor>
+                                </children>
                             </ghstatements>
                         </children>
                     </vendors>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ghstatements translate="title" module="ghstatements">
+                                        <title>GH statements</title>
+                                    </ghstatements>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
                 </children>
             </admin>
         </resources>
