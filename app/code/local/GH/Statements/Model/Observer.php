@@ -412,8 +412,6 @@ class GH_Statements_Model_Observer
 						$chargeTotal = $rmaTrack->getChargeTotal() * $tax;
                         $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
-						$shippedDate = date('Y-m-d',strtotime($rmaTrack->getUpdatedAt()));
-
 						/** @var Zolago_Po_Model_Po $po */
 						$po = $rma->getPo();
 
@@ -424,7 +422,7 @@ class GH_Statements_Model_Observer
 							'po_increment_id'   => $po->getIncrementId(),
 							'rma_id'            => $rma->getId(),
 							'rma_increment_id'  => $rma->getIncrementId(),
-							'shipped_date'      => $shippedDate,
+							'shipped_date'      => $rmaTrack->getShippedDate(),
 							'track_number'      => $rmaTrack->getTrackNumber(),
 							'charge_shipment'   => $rmaTrack->getChargeShipment(),
 							'charge_fuel'       => $rmaTrack->getChargeFuel(),
