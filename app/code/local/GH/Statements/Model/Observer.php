@@ -4,7 +4,9 @@ class GH_Statements_Model_Observer
 {
 
     /**
-     * todo description here
+     * This function is fire by cron
+     * Process all statements for gallery and vendors for:
+     * Orders, RMA, refunds and tracks
      */
     public static function processStatements() {
 
