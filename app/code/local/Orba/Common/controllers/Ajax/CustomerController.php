@@ -28,9 +28,15 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		/* @var $quote Mage_Sales_Model_Quote */
 		$totals = $quote->getTotals();
 		//$profiler->log("Quote totals");
-		
-		$persistent = Mage::helper('persistent/session')->isPersistent() && 
-			!Mage::getSingleton('customer/session')->isLoggedIn();
+
+	    /** @var Mage_Persistent_Helper_Session $persistentHelper */
+	    $persistentHelper = Mage::helper('persistent/session');
+
+	    /** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+
+		$persistent = $persistentHelper->isPersistent() &&
+			!$customerSession->isLoggedIn();
 		
 		//$profiler->log("Persistent");
 	    //set registry to correctly identify current context
@@ -128,9 +134,6 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             $singleton = Mage::getSingleton('Mage_Reports_Block_Product_Viewed');
 
             // By persistent
-            /* @var $persistentHelper Mage_Persistent_Helper_Session */
-            $persistentHelper = Mage::helper('persistent/session');
-
             if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
                 $customerId = $persistentHelper->getSession()->getCustomerId();
                 $singleton->setCustomerId($customerId);
@@ -172,6 +175,47 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             $product->setId($productId);
             Mage::dispatchEvent('ajax_get_account_information_after', array('product' => $product));
         }
+
+	    /* salesmanago cookie */
+	    if($customerSession->isLoggedIn()) {
+		    $customer = $customerSession->getCustomer();
+	    } elseif($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()) {
+			$customer = $persistentHelper->getCustomer();
+	    } else {
+		    $customer = false;
+	    }
+
+	    if($customer !== false && $customer->getId()) {
+		    /** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
+		    $salesmanagoHelper = Mage::helper('tracking');
+
+		    $smContactId = false;
+
+		    if($customer->getSalesmanagoContactId()) { //if customer has salesmanago contact id then set it to variable
+			    $smContactId = $customer->getSalesmanagoContactId();
+		    } else {
+		        //sync customer with salesmanago as contact - it updates existing one or generates a new one
+			    try {
+				    $data = $salesmanagoHelper->_setCustomerData($customer->getData());
+				    $r = $salesmanagoHelper->salesmanagoContactSync($data, true);
+				    $smContactId = isset($r['contactId']) && $r['contactId'] ? $r['contactId'] : false;
+			    } catch (Exception $e) {
+				    Mage::logException($e);
+			    }
+
+			    if($smContactId) {
+				    $customer->setData('salesmanago_contact_id', $smContactId)
+					    ->getResource()
+					    ->saveAttribute($customer, "salesmanago_contact_id");
+			    }
+		    }
+
+		    if(!isset($_COOKIE['smclient']) || empty($_COOKIE['smclient']) ||
+			    (isset($_COOKIE['smclient']) && $_COOKIE['smclient'] != $smContactId)) {
+			    $salesmanagoHelper->addCookie('smclient',$smContactId);
+		    }
+	    }
+
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);

@@ -48,6 +48,9 @@
     <price-type translate="message" module="zolagocatalog">
         <message>Type</message>
     </price-type>
+    <price-politics translate="message" module="zolagocatalog">
+        <message>Manually disabled</message>
+    </price-politics>
     <price-loading translate="message" module="zolagocatalog">
         <message>Loading...</message>
     </price-loading>
@@ -120,6 +123,12 @@
     <mass-price-change translate="message" module="zolagocatalog">
         <message>Mass price change</message>
     </mass-price-change>
+    <mass-status-change translate="message" module="zolagocatalog">
+        <message>Mass status change</message>
+    </mass-status-change>
+    <mass-politics-change translate="message" module="zolagocatalog">
+        <message>Mass politics change</message>
+    </mass-politics-change>
     <empty translate="message" module="zolagocatalog">
         <message>empty</message>
     </empty>
@@ -141,5 +150,16 @@
     <apply-to-selection translate="message" module="zolagocatalog">
         <message>Apply to selection</message>
     </apply-to-selection>
-
+    <description-status translate="message" module="zolagocatalog">
+        <message>Description status</message>
+    </description-status>
+    <execute translate="message" module="zolagocatalog">
+        <message>Execute</message>
+    </execute>
+    <Mass-enable-products-on-site translate="message" module="zolagocatalog">
+        <message>Mass enable products on site</message>
+    </Mass-enable-products-on-site>
+    <Mass-disable-products-on-site translate="message" module="zolagocatalog">
+        <message>Mass disable products on site</message>
+    </Mass-disable-products-on-site>
 </jstranslator>

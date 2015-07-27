@@ -344,6 +344,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		
 		// Validate products vendor
 		if($checkVendor){
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $collection */
 			$collection = Mage::getResourceModel("catalog/product_collection");
 			$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
 			$collection->addIdFilter($productIds);
@@ -356,9 +357,26 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		// Collect validation data
 		$notAllowed = array();
 		$missings = array();
-		foreach($attributesData as $attributeCode=>$value){
+		foreach($attributesData as $attributeCode=>$value){		    
 			$attribute = $this->getGridModel()->getAttribute($attributeCode);
 			$attributesObjects[$attributeCode] = $attribute;
+			// special check for brandshop
+			if ($attributeCode == 'brandshop') {
+			    $vendor = $this->getVendor();
+			    if ($vendor->getVendorId() != $value) {			        
+    			    $list = $vendor->getCanAddProduct();    			        			    
+    			    $allow = false;
+    			    foreach ($list as $vendor) {
+                        if ($vendor['brandshop_id'] == $value) {
+                            $allow = true;
+                        }
+			        }
+			        if (!$allow) {
+			            $notAllowed[] = $attribute->getStoreLabel($vendorStoreId);
+			            continue;
+			        }
+			    }			    
+			}
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
 				$notAllowed[] = $attribute->getStoreLabel($vendorStoreId);

@@ -1214,11 +1214,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $session = $this->_getSession();
         $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $r = $this->getRequest();
-        $shippingManager->prepareSettings($r,$shipment,$udpo);
+        $settings = $shippingManager->prepareSettings($r,$shipment,$udpo);
+
         $pos = $udpo->getDefaultPos();
         $shippingManager->setSenderAddress($pos->getSenderAddress());
         $receiver = $udpo->getShippingAddress()->getData();
         $shippingManager->setReceiverCustomerAddress($receiver);
+        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
+            $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
+            //Assign Client Number to Gallery Or To Vendor
+            if (isset($settings["gallery_shipping_source"])
+                && ($settings["gallery_shipping_source"] == 1)
+            ) {
+                $this->getRequest()->setParam("gallery_shipping_source", 1);
+            }
+        }
+
         $result = $shippingManager->createShipments();
         $number = null;
         if ($result['shipmentId']) {
@@ -1281,25 +1292,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
         try {
 	        /** @var Zolago_Po_Helper_Shipment $manager */
-            $manager = Mage::helper('zolagopo/shipment');            
+            $manager = Mage::helper('zolagopo/shipment');
             if ($r->getParam('use_label_shipping_amount')) {
                 $udpo->setUseLabelShippingAmount(true);
             }
             elseif ($r->getParam('shipping_amount')) {
                 $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
             }
-            
+
             $poStatus = $r->getParam('status');
             $manager->setPoStatus($poStatus);
 
             $carrier = $r->getParam('carrier');
             $carrierTitle = $r->getParam('carrier_title');
-            $manager->setCarrierData($carrier,$carrierTitle);            
-            
+            $manager->setCarrierData($carrier,$carrierTitle);
+
 
             $udpo->setUdpoNoSplitPoFlag(true);
             $manager->setUdpo($udpo);
-
 
             $shipment = $manager->getShipment();
             $number = $this->_addShipping($carrier,$udpo,$shipment);
@@ -1308,7 +1318,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	            return;
             }
 
-            $manager->setNumber($number);                                    
+            $manager->setNumber($number);
             $manager->processSaveTracking($r->getParams());
             $session->addSuccess($this->__('Tracking ID has been added'));
             $highlight['tracking'] = true;

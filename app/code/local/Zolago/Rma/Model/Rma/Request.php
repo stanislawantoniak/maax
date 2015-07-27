@@ -45,6 +45,6 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         $address = $rma->getFormattedAddressForCustomer();
         $carrierManager->setSenderAddress($address);
 
-        return $carrierManager->createShipmentAtOnce();        
+        return $carrierManager->createShipmentAtOnce();
     }
 }

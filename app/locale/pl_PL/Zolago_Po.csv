@@ -1,4 +1,4 @@
-﻿"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
+"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
 "Lack of DHL Settings", "Brak konfiguracji DHL"
 "Custom dim.", "Paczka NST"
 "I have no Track ID", "Chcę utworzyć list przewozowy"
@@ -181,6 +181,7 @@
 "Reset","Wyczyść filtr"
 "View","Przeglądaj"
 "Zip code in shipment address is not valid. There will be a problem when shipping to that address.","Kod pocztowy w adresie wysyłki nie jest poprawny. Wysyłka na ten adres może okazać się niemożliwa."
+"Zip code in shipment address is not valid.","Kod pocztowy w adresie wysyłki nie jest poprawny."
 "Action","Akcja"
 "Non standard Package","Paczka niestandardowa NST"
 "Dimensions","Wymiary (cm)"
@@ -286,3 +287,4 @@
 "Failed to get waybill","Nie udało się pobrać listu przewozowego"
 "DHL Service Error. Failed to get waybill.","Błąd serwisu DHL. Nie udało się pobrać listu przewozowego."
 "Selected package's size volumetric weight is bigger than weight set up in first step. Values has been adjusted.","Waga wolumetryczna wybranej wielkości paczki jest większa niż waga ustawiona wyżej. Wartości zostały automatycznie dostosowane"
+"You don't have access to %s DHL Account","Nie masz uprawnień do korzystania z konta DHL %s"

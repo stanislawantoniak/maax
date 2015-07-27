@@ -63,7 +63,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
 					$rmaItem = $rma->getItemById($id);
 					if (is_object($rmaItem) && $rmaItem->getId()) {
-						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						if($rmaItem->getPoItem()->getId()) {
+							$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						} else {
+							$maxValue = $rmaItem->getPrice();
+						}
 						if (isset($data['returnValues'][$id]) &&
 							$data['returnValues'][$id] <= $maxValue) {
 							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
@@ -94,11 +98,38 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
 					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
-					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+					/*$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount),false,true);*/
+
+
+					$commentData = array(
+						"parent_id" => $rma->getId(),
+						"is_visible_on_front" => 0,
+						"is_vendor_notified" => 0,
+						"is_customer_notified" => 0,
+						"is_visible_to_vendor" => 1
+					);
+					/* @var $vendorSession  Zolago_Dropship_Model_Session*/
+					$vendorSession = Mage::getSingleton('udropship/session');
+					$commentData['vendor_id'] = $vendorSession->getVendorId();
+					if($vendorSession->isOperatorMode()) {
+						$commentData['operator_id'] = $vendorSession->getOperator()->getId();
+					}
+
+					if(!$po->isPaymentDotpay()) {
+						//refund confirm
+						$commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s",$_returnAmount);
+					} else {
+						//refund order
+						$commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s",$_returnAmount);
+					}
+					$commentModel = Mage::getModel("zolagorma/rma_comment");
+					$commentModel->setRma($rma);
+					$commentModel->addData($commentData);
+					$commentModel->setAuthorName($commentModel->getAuthorName(false));
+					$commentModel->save();
 
 					//send emails to not transactional refunds
 					if(!$po->isPaymentDotpay()) {
-						//todo: send email
 						/** @var Zolago_Payment_Helper_Data $paymentHelper */
 						$paymentHelper = Mage::helper('zolagopayment');
 						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
@@ -286,9 +317,18 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         $request = $this->getRequest();
 		$vendor = $this->_getSession()->getVendor();
         $rma = $this->_registerRma();
-                        
-        $manager->prepareRmaSettings($request,$vendor,$rma);
-        
+        $settings = $manager->prepareRmaSettings($request,$vendor,$rma);
+        if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
+            $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
+            if (isset($settings["gallery_shipping_source"])
+                && ($settings["gallery_shipping_source"] == 1)
+            ) {
+                //Assign Client Number to Gallery Or To Vendor
+                $this->getRequest()->setParam("gallery_shipping_source", 1);
+            }
+
+        }
+
         $address = $rma->getFormattedAddressForVendor();
         $manager->setReceiverAddress($address);
         $address = $vendor->getRmaAddress();
@@ -357,13 +397,19 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                              "master_tracking_id"	=> null, // what is this ?
                              "package_count"			=> null, // what is this ?
                              "package_idx"			=> null, // what is this ?
-                             "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR
+                             "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR,
+                             "gallery_shipping_source" => $this->getRequest()->getParam("gallery_shipping_source", 0),
+                             "shipping_source_account" => $this->getRequest()->getParam("shipping_source_account", 0)
                          );
 
 
             $model = Mage::getModel('urma/rma_track')->
-                     addData($trackData)->
-                     save();
+                     addData($trackData);
+            $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+            $type = $request->getParam('specify_orbadhl_rate_type',0);
+            $manager->calculateCharge($model,$type,$this->_getSession()->getVendor(),$rma->getTotalValue(),0);
+                     
+            $model->save();
 
             Mage::dispatchEvent("zolagorma_rma_track_added", array(
                                     "rma"		=> $rma,

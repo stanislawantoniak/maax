@@ -122,6 +122,16 @@
 	.row {
 		margin: 0;
 	}
+	h3#bLogo {
+		padding: 0 0 5px 15px;
+		img {
+			max-width: 120px;
+			max-height: 60px;
+		}
+	}
+	.seller {
+		padding: 0 0 15px 15px;
+	}
 }
 
 
@@ -907,7 +917,7 @@ form {
     .firm 		{max-width: 266px;}
     .city 		{max-width: 266px;}
     .street 	{max-width: 266px;}
-    .zipcode 	{max-width: 72px;}
+    .zipcode 	{max-width: 72px; padding: 0 4px !important;}
     .phone 		{max-width: 115px;}
     .email,.login-text-field 		{max-width: 266px !important;}
     .password 	{max-width: 235px;}

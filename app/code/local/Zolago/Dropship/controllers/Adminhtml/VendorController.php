@@ -60,7 +60,13 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
                 }
                 if ($r->getParam('vendor_attributeset')) {
                     $this->_saveAttributeSet(Zend_Json::decode($r->getParam('vendor_attributeset')),$id);                    
-                }	
+                }
+
+                //TODO
+                if ($r->getParam('dhl_vendor')) {
+                    $this->_saveDhlVendor(Zend_Json::decode($r->getParam('dhl_vendor')),$id);
+                }
+
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                 if ($r->getParam('reg_id')) {
@@ -134,5 +140,16 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
      protected function _saveAttributeSet($attributeset,$vendor_id) {
         $this->_saveParams($attributeset,$vendor_id,'zolagosizetable/vendor_attribute_set','attribute_set_id');
      }
+
+    /**
+     * saving vendor permissions to attribute sets
+     * @param array $attributesets
+     * @param int $vendor_id
+     * @return
+     */
+    protected function _saveDhlVendor($dhl, $vendor_id)
+    {
+        $this->_saveParams($dhl, $vendor_id, 'ghdhl/dhl_vendor', 'dhl_id');
+    }
 
 }

@@ -107,4 +107,22 @@ class Zolago_Modago_Block_Page_Html_Breadcrumbs extends Mage_Page_Block_Html_Bre
             $request->getActionName()=="index"
         );
     }
+
+	protected function _toHtml() {
+		if (is_array($this->_crumbs)) {
+			reset($this->_crumbs);
+			$this->_crumbs[key($this->_crumbs)]['first'] = true;
+			end($this->_crumbs);
+			$this->_crumbs[key($this->_crumbs)]['last'] = true;
+		}
+		if($this->getRequest()->getControllerName() == 'product') { //indicates that we're in products context
+			$mbKey = 'mobile_breadcrumb';
+			if(Mage::registry($mbKey)) {
+				Mage::unregister($mbKey);
+			}
+			Mage::register('mobile_breadcrumb',current(array_slice($this->_crumbs, -2, 1)));
+		}
+		$this->assign('crumbs', $this->_crumbs);
+		return parent::_toHtml();
+	}
 }

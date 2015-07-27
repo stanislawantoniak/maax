@@ -44,7 +44,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
                 !$category
                 || $category->getId() == $this->_getRootCategoryId()
 //                || (Mage::registry('current_product') && !$refererUrl)
-                || (Mage::registry('current_product') && (int)strpos($refererUrl,"search/index/index") > 0 && !in_array("scat=".$category->getId(), $params))
+                || (Mage::registry('current_product') && (int)strpos($refererUrl,"search") > 0 && !in_array("scat=".$category->getId(), $params))
             ) {
                 $category = $this->_getDefaultCategory(
 					$this->_getProduct(),
@@ -127,7 +127,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 	 * @return string
 	 */
 	public function getSearchLink(array $params = array()) {
-		return $this->getUrl("search/index/index", $params);
+		return $this->getUrl("search", $params);
 	}
 	
 	/**

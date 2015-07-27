@@ -1,44 +1,33 @@
-<?php $_helper = Mage::helper("zolagocampaign");?>
+<?php /*@var $this Zolago_Campaign_Block_Vendor_Campaign_Placement */ ?>
+
+<?php $_helper = Mage::helper("zolagocampaign"); ?>
 <?php
 $categoriesList = $this->getVendorCategoriesList();
-
-
 ?>
+<div class="placements-categories">
+    <div class="container">
+        <div class="page-heading row">
+            <div class="col-lg-6">
+                <h3><span><?php echo $_helper->__('Categories'); ?></span></h3>
 
-<div class="container">
-    <div class="page-heading row">
-        <div class="col-lg-6">
-            <h3><span><?php echo $_helper->__('Categories'); ?></span></h3>
+                <p><?php echo $_helper->__('Poniżej lista stron, na których możesz zarządzać reklamami. Wejdż w tryb edycji strony by dodać lub usunąć kreacje.'); ?></p>
+            </div>
+        </div>
+        <div class="actions row">
+            <div class="col-md-4">
+            <?php if (!empty($categoriesList)): ?>
+                <div class="list-group">
+                    <?php foreach ($categoriesList as $category): ?>
+                        <a class="list-group-item" href="<?php echo $category['edit_url']; ?>">
+                            <?php echo $category['name']; ?>
+                            <span class="align-right">
+                                <?php echo $_helper->__('edit'); ?>&nbsp;<i class="icon-angle-right"></i>
+                            </span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            </div>
         </div>
     </div>
-    <?php if (!empty($categoriesList)): ?>
-        <?php foreach ($categoriesList as $category): ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="widget box">
-                        <div class="widget-header">
-                            <a class="widget-header-link" href="<?php echo $category['edit_url']; ?>">
-                                <h4><i class="icon-pin-flag"></i><?php echo $category['name']; ?></h4>
-
-                                <div class="toolbar no-padding">
-                                    <h4><i class="icon-pin-flag"></i>
-                                        <?php echo $_helper->__('Edit'); ?>
-                                    </h4>
-
-                                    <div class="btn-group">
-                                    <span class="btn btn-xs widget-collapse">
-                                        <i class="icon-angle-up"></i>
-                                    </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!--<div class="widget-content banner-type" style="display: block;">
-                           Category content
-                       </div>-->
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
 </div>

@@ -210,7 +210,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 			$urlData = count($urlData) ? implode("/", $urlData) . "/" : '';
 
-			if (count($parameters)) {
+			if ($parameters && count($parameters)) {
 				$parameters = "?" . http_build_query($parameters);
 				$urlData = $urlData . $parameters;
 			}

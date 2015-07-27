@@ -435,6 +435,8 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         } else {
             $email = $vendor->getEmail();
         }
+        Mage::log("Zolago: _sendNewPoNotificationEmail", null, "operator.log");
+        Mage::log($email, null, "operator.log");
 
 //        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
         /* @var $helper Zolago_Common_Helper_Data */
@@ -454,6 +456,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
     }
 
 	public function sendNewPoNotificationEmail($po, $comment=''){
+        Mage::log("Zolago: sendNewPoNotificationEmail", null, "operator.log");
 		$vendor = $po->getVendor();
 		/* @var $po Zolago_Po_Model_Po */
 		$order = $po->getOrder();
@@ -471,7 +474,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		if($pos && $pos->getId()){
 			$newEmail = $pos->getEmail();
 		}
-		
+        Mage::log($newEmail, null, "operator.log");
 		// Replace vendor email to pos email & send mail & restore origin
 		$vendor->setData($emailField, $newEmail);	
 		$vendor->setData("po", $po);
@@ -582,16 +585,37 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 	
 	public function getDhlSettings($vendor, $posId) {
 		$dhlSettings = false;
-		$posModel = Mage::getModel('zolagopos/pos')->load($posId);
-		if ($posModel && $posModel->getId() && $posModel->getUseDhl() && $posModel->getDhlLogin() && $posModel->getDhlPassword() && $posModel->getDhlAccount()) {
-			$dhlSettings['login']		= $posModel->getDhlLogin();
-			$dhlSettings['account']		= $posModel->getDhlAccount();
-			$dhlSettings['password']	= $posModel->getDhlPassword();
-		} elseif ($vendor && $vendor->getId() && $vendor->getUseDhl() && $vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
-			$dhlSettings['login']		= $vendor->getDhlLogin();
-			$dhlSettings['account']		= $vendor->getDhlAccount();
-			$dhlSettings['password']	= $vendor->getDhlPassword();
-		}
+        $account = false;
+        $posModel = Mage::getModel('zolagopos/pos')->load($posId);
+        if ($posModel && $posModel->getId() && $posModel->getUseDhl()) {
+            $account = $posModel->getDhlAccount();
+            if ($posModel->getDhlLogin() && $posModel->getDhlPassword() && $posModel->getDhlAccount()) {
+                $dhlSettings['login'] = $posModel->getDhlLogin();
+                $dhlSettings['account'] = $posModel->getDhlAccount();
+                $dhlSettings['password'] = $posModel->getDhlPassword();
+            }
+        } elseif ($vendor && $vendor->getId() && $vendor->getUseDhl()) {
+            $account = $vendor->getDhlAccount();
+            if ($vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
+                $dhlSettings['login'] = $vendor->getDhlLogin();
+                $dhlSettings['account'] = $vendor->getDhlAccount();
+                $dhlSettings['password'] = $vendor->getDhlPassword();
+            }
+        }
+
+        if($account && $vendor && $vendor->getId()){
+            /* DHL client number be assigned to gallery or to vendor */
+            /* @var $ghdhl GH_Dhl_Helper_Data */
+            $ghdhl = Mage::helper("ghdhl");
+            $galleryDHLAccountData = $ghdhl->getGalleryDHLAccountData($account, $vendor->getId());
+
+            if (!empty($galleryDHLAccountData)) {
+                $dhlSettings['account'] = $galleryDHLAccountData->getDhlAccount();
+                $dhlSettings["login"] = $galleryDHLAccountData->getDhlLogin();
+                $dhlSettings["password"] = $galleryDHLAccountData->getDhlPassword();
+                $dhlSettings["gallery_shipping_source"] = 1;
+            }
+        }
 		
 		return $dhlSettings;
 	}

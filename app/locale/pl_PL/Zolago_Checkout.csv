@@ -1,4 +1,3 @@
-"begin:::";"b:::"
 "Cart","Koszyk"
 "Delivery and payment", "Dostawa i płatność"
 "Shipping data", "Dane dostawy"
@@ -80,5 +79,6 @@
 "See your cart","Zobacz koszyk"
 "No products in basket.","Brak produktów w koszyku."
 "Remove my data from device","Usuń moje dane z urządzenia"
+"Kod został wprowadzony poprawnie, ale nie znaleźliśmy takiego kodu w bazie adresowej. Sprawdź proszę jeszcze poprawność kodu pocztowego.","Kod został wprowadzony poprawnie, ale nie znaleźliśmy takiego kodu w bazie adresowej. Sprawdź proszę jeszcze poprawność kodu pocztowego."
 
 

@@ -185,8 +185,8 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $shipmentObject->item[] = $obj;
 
         $message->shipments = $shipmentObject;
-
-        return $this->_sendMessage('createShipments', $message);
+        $messageResult = $this->_sendMessage('createShipments', $message);
+        return $messageResult;
     }
     /**
      * @param $postCode

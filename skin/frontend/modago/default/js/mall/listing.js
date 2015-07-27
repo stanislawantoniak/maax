@@ -743,8 +743,7 @@ Mall.listing = {
      * @returns {string}
 	 */
     createProductEntityImprove: function(product) {
-
-        var oldPrice = product[3] != product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
+        var oldPrice = product[3] > product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
 	        likeClass = "like" + (product[6] ? " liked" : ""),
 	        likeText = (product[6] ? "<span>Ty + </span>" : "<span></span>") + (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ",
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);return false;" : "Mall.wishlist.addFromSmallBlock(this);return false;";
@@ -761,7 +760,7 @@ Mall.listing = {
                 "</a>"+
                 "<div class='price clearfix'>"+
                     "<div class='col-price'>" + oldPrice +
-                        "<span>" + (number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
+                        "<span>" + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
                     "</div>"+
                     "<div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' onclick='"+likeOnClick+"'>"+
 	                    "<span class='like_count'>" + likeText + "</span><span class='icoLike'>"+
@@ -1393,6 +1392,7 @@ Mall.listing = {
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
+		jQuery(window).swipe(Mall.swipeOptions);
 		//self.triggerResize();
 	},
 

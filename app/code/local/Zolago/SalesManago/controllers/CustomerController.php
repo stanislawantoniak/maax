@@ -11,11 +11,11 @@ class Zolago_SalesManago_CustomerController extends Mage_Core_Controller_Front_A
         header("Pragma: no-cache");
         header('Content-Type: text/html');
 
-        $smCId = $this->getRequest()->getParam('smcid');
+        $email  = str_replace(' ', '+', $this->getRequest()->getParam('email'));
         $block = $this->getLayout()
             ->createBlock('zolagosalesmanago/customer_cart')
             ->setTemplate('zolagosalesmanago/customer/cart.phtml');
-        $block->setSmcid($smCId);
+        $block->setEmail($email);
         echo $block->toHtml();exit;
     }
 }

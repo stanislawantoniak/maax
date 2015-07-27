@@ -65,6 +65,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 		}
 
         if ($this->_isInvitationEmailEnabled()
+	        && Mage::getSingleton("customer/session")->isLoggedIn()
 			&& $this->validateEmail($email)
 			&& $this->_isEmailSuitableForInvitation($email)
         ) {
@@ -118,7 +119,7 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 			if ($status == self::STATUS_SUBSCRIBED) {
 
 				return false;
-			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0 || $status == self::STATUS_NOT_ACTIVE) {
+			} elseif($this->_canRepeatInvitation() || is_null($status) || $status == 0) {
 				$this->_setSubscriberId($sid);
 				$confirm_code = $subscription->getSubscriberConfirmCode();
 				if(!$confirm_code) {
@@ -134,7 +135,6 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 				if($save) {
 					$subscription->save();
 				}
-                ;
 				return true;
 
 			} else {
@@ -217,10 +217,15 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 					return true;
 				} elseif(($oldStatus == self::STATUS_NOT_ACTIVE || $oldStatus == self::STATUS_UNCONFIRMED)
 					&& ($status == self::STATUS_SUBSCRIBED || $status == self::STATUS_UNCONFIRMED)) {
-
-					$subscriber->setStatus($status);
-					$subscriber->save();
-					$this->sendConfirmationRequestEmail($subscriberId);
+					if($confirmationNeeded) {
+						$subscriber->setStatus(self::STATUS_UNCONFIRMED);
+						$subscriber->save();
+						$this->sendConfirmationRequestEmail($subscriberId);
+					} else {
+						$subscriber->setStatus(self::STATUS_SUBSCRIBED);
+						$subscriber->save();
+						$this->sendConfirmationSuccessEmail($subscriberId);
+					}
 					return true;
 				} else {
                     $subscriber->setStatus($status);

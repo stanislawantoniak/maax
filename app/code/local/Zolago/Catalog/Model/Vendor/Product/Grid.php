@@ -159,6 +159,19 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"filterable"=>true,
 				"header"	=> $this->_getColumnLabel($name)
 			);
+
+            // Status
+            $status = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "status");
+            $status->setStoreId($this->getLabelStore()->getId());
+            $columnStart[$status->getAttributeCode()] = array(
+                "index"		=> $status->getAttributeCode(),
+                "type"		=> "options",
+                "clickable" => true,
+                "required"  => (int)$status->getIsRequired(),
+                "filterable"=> true,
+                "header"	=> $this->_getColumnLabel($status),
+                "attribute"	=> $status
+            );
 			
 			$columnEnd = array();
 
@@ -256,6 +269,26 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 							}
 						break;
 
+						case "brandshop":
+						    $vendors = $this->getVendor()->getCanAddProduct();
+						    foreach ($vendors as $vendor) {
+						        $extend['filter_options'][] = array (
+						            'value' => $vendor->getBrandshopId(),
+						            'label' => $vendor->getVendorName(),
+                                );
+						    }
+						    // vendor himself
+						    $extend['filter_options'][] = array(
+						        'value' => $this->getVendor()->getId(),
+						        'label' => $this->getVendor()->getVendorName(),
+						    );
+							$options  = $attribute->getSource()->getAllOptions(false);
+							foreach($options as $option){
+								if($option['value']!==""){
+									$extend['options'][$option['value']]=$option['label'];
+								}
+							}
+						    break;
 						default:
 							$extend['options']  = array();
 							$extend['filter_options']  = $attribute->getSource()->getAllOptions(false);

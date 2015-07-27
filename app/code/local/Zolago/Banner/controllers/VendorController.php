@@ -13,11 +13,13 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function editAction() {
         Mage::register('as_frontend', true);
-        $banner = $this->_initModel();
+        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+        $bannerId = $this->getRequest()->getParam('id',null);
+        $banner = $this->_initModel($bannerId);
         $vendor = $this->_getSession()->getVendor();
 
         //validate vendor
-        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+
         if(!empty($campaignId)){
             $modelCampaign = Mage::getModel("zolagocampaign/campaign");
             $modelCampaign->load($campaignId);
@@ -55,6 +57,22 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function typeAction(){
         Mage::register('as_frontend', true);
+        $id = $this->getRequest()->getParam('campaign_id', 0);
+
+        $campaign = Mage::getModel("zolagocampaign/campaign")->load($id);
+        $vendor = $this->_getSession()->getVendor();
+
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("campaign/vendor");
+            }
+        } elseif($this->getRequest()->getParam('campaign_id',null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("campaign/vendor");
+        }
+
         $this->_renderPage(null, 'zolagobanner');
     }
 
@@ -76,19 +94,17 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
     /**
      * @return Zolago_Banner_Model_Banner
      */
-    protected function _initModel() {
+    protected function _initModel($modelId) {
         if(Mage::registry('current_banner') instanceof Zolago_Banner_Model_Banner){
             return Mage::registry('current_banner');
         }
-        $modelId = (int)$this->getRequest()->getParam("id");
+
         $model = Mage::getModel("zolagobanner/banner");
         /* @var $model Zolago_Banner_Model_Banner */
         if($modelId){
             $model->load($modelId);
         }
-        if(!$this->_validateModel($model)){
-            throw new Mage_Core_Exception(Mage::helper('zolagobanner')->__("Model is not vaild"));
-        }
+
         Mage::register('current_banner', $model);
         return $model;
     }
@@ -111,14 +127,16 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
-        $banner = $this->_initModel();
+
+        $modelId = $this->getRequest()->getParam("id");
+        $banner = $this->_initModel($modelId);
         $vendor = $this->_getSession()->getVendor();
 
         // Try save
         $data = $this->getRequest()->getParams();
 
         $this->_getSession()->setFormData(null);
-        $modelId = $this->getRequest()->getParam("id");
+
 
         try {
             // If Edit

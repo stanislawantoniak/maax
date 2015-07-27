@@ -45,7 +45,12 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 	}
 
 	protected function _clearProductsCache($products) {
-		$newCategory = Mage::registry('current_category')->getId();
+		$newCategory = Mage::registry('current_category');
+		if(is_object($newCategory)) {
+			$newCategory = $newCategory->getId();
+		} else {
+			return $this;
+		}
 		$prevCategory = $this->getData(self::CURRENT_PRODUCTS_CATEGORY);
 		$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
 		$prevProductsExpire = $this->getData(self::CURRENT_PRODUCTS_EXPIRE);
