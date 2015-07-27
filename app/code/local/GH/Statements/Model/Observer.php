@@ -148,6 +148,10 @@ class GH_Statements_Model_Observer
         $commissionAmount = 0;
         $amount = 0;
 
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = strtotime('yesterday',strtotime($today));
+
         foreach ($collection as $po) {
             /** @var Zolago_Po_Model_Po $po */
 
@@ -160,9 +164,6 @@ class GH_Statements_Model_Observer
 
                 // Only PO with track shipped, delivered or returned
                 // and shipped date <= yesterday
-                $dateModel = Mage::getModel('core/date');
-                $today     = $dateModel->date('Y-m-d');
-                $yesterday = strtotime('yesterday',strtotime($today));
                 if (strtotime($track->getShippedDate()) > $yesterday) {
                     continue;
                 }
