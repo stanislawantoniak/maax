@@ -468,6 +468,7 @@ class GH_Statements_Model_Observer
 				}
 			}
 			if($rmasTracksCollection->getSize()) {
+				unset($rmaTrack);
 				foreach($rmasTracksCollection as $rmaTrack) {
 					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
 					$rmaTrack->setStatementId($statement->getId());
