@@ -54,7 +54,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
             'sortable' => true,
             'width' => '60',
             'index' => 'shipped_date',
-            'type' => 'date',
+            //'type' => 'date',
         ));
         $this->addColumn('carrier', array(
             'header' => Mage::helper('ghstatements')->__('Carrier'),
