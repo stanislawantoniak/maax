@@ -344,6 +344,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		
 		// Validate products vendor
 		if($checkVendor){
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $collection */
 			$collection = Mage::getResourceModel("catalog/product_collection");
 			$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
 			$collection->addIdFilter($productIds);

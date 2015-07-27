@@ -138,6 +138,13 @@
                         <fieldset>vendor_info</fieldset>
                         <position>0</position>
                     </super_vendor_id>
+                    <statements_calendar>
+                        <label>Statements calendar</label>
+                        <type>select</type>
+						<source_model>ghstatements/source_calendar</source_model>
+                        <fieldset>vendor_info</fieldset>
+                        <position>20</position>                        
+                    </statements_calendar>
                 	<vendor_type>
                         <label>Vendor type</label>
                         <type>select</type>
@@ -552,8 +559,9 @@
                         <label>Product Review Status</label>
                         <type>select</type>
                         <fieldset>vendor_info</fieldset>
-						<source_model>zolagodropship/source_review</source_model>
+                        <source_model>zolagodropship/source</source_model>
                         <position>800</position>
+                        <selector>1</selector>
                     </review_status>					
 					<!-- label store -->
 					<label_store>

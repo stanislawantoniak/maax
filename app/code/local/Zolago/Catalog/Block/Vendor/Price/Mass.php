@@ -10,6 +10,13 @@ class Zolago_Catalog_Block_Vendor_Price_Mass extends Zolago_Catalog_Block_Vendor
 	public function getSelected() {
 		return $this->getRequest()->getParam("selected");
 	}
+
+    public function getStatus() {
+        $status = $this->getRequest()->getParam("status");
+        $value  = $status == 'enable'  ? Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_ENABLED : '';
+        $value  = $status == 'invalid' ? Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID : $value;
+        return $value;
+    }
 	
 	public function getEncodedQuery() {
 		return base64_encode(Mage::helper("core")->jsonEncode($this->getRequest()->getParam("query")));

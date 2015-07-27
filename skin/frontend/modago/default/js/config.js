@@ -42,7 +42,9 @@ var Config = {
             remove: "/customer/address/deleteAjax",
             save: "/customer/address/saveAjax",
             get: ""
-        }
+        },
+		zip_validate: window.location.protocol + "//"
+		+ window.location.host + '/checkout/singlepage/checkZip'
     }
 };
 

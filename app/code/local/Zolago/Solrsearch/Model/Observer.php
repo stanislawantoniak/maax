@@ -320,6 +320,25 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 	}
 
+	public function catalogInventorySave(Varien_Event_Observer $observer)
+	{
+		$event = $observer->getEvent();
+		$_item = $event->getItem();
+		$productId = $_item->getData("product_id");
+
+		$isInStock = (int)$_item->getData("is_in_stock");
+		$type_id = $_item->getData("type_id");
+
+		if ($type_id == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE && $isInStock == 0) {
+			$_product = Mage::getModel("catalog/product")->load($productId);
+			$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($_product->getId());
+
+			if (!empty($parentIds) && isset($parentIds[0])) {
+				$this->collectProduct($productId);
+				$this->processCollectedProducts();
+			}
+		}
+	}
 	/**
 	 * Process prices after catalog update via converter
 	 * @param Varien_Event_Observer $observer
