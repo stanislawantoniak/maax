@@ -4,7 +4,9 @@ class GH_Statements_Model_Observer
 {
 
     /**
-     * todo description here
+     * This function is fire by cron
+     * Process all statements for gallery and vendors for:
+     * Orders, RMA, refunds and tracks
      */
     public static function processStatements() {
 
@@ -146,6 +148,10 @@ class GH_Statements_Model_Observer
         $commissionAmount = 0;
         $amount = 0;
 
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = strtotime('yesterday',strtotime($today));
+
         foreach ($collection as $po) {
             /** @var Zolago_Po_Model_Po $po */
 
@@ -155,6 +161,13 @@ class GH_Statements_Model_Observer
 	        if($currentShipping) {
 		        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
 		        $track = $currentShipping->getTracksCollection()->getFirstItem();
+
+                // Only PO with track shipped, delivered or returned
+                // and shipped date <= yesterday
+                if (strtotime($track->getShippedDate()) > $yesterday) {
+                    continue;
+                }
+
 		        $shippingCost = $currentShipping->getShippingAmountIncl();
 
 		        // Data to save
@@ -246,18 +259,7 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-
-
-
-
-
-	    $yesterday = $today; //todo: remove
-
-
-
-
-
-
+        $yesterday = $today; //todo: remove
 
 	    $collection = $refundsStatements->getCollection();
 	    $collection
@@ -299,15 +301,7 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-
-
-
-
-	    $yesterday = $today;//todo: remove
-
-
-
-
+        $yesterday = $today; //todo: remove
 
 	    $trackStatements = array();
 	    $tax = self::getTax();
