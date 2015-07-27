@@ -157,6 +157,16 @@ class GH_Statements_Model_Observer
 	        if($currentShipping) {
 		        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
 		        $track = $currentShipping->getTracksCollection()->getFirstItem();
+
+                // Only PO with track shipped, delivered or returned
+                // and shipped date <= yesterday
+                $dateModel = Mage::getModel('core/date');
+                $today     = $dateModel->date('Y-m-d');
+                $yesterday = strtotime('yesterday',strtotime($today));
+                if (strtotime($track->getShippedDate()) > $yesterday) {
+                    continue;
+                }
+
 		        $shippingCost = $currentShipping->getShippingAmountIncl();
 
 		        // Data to save
