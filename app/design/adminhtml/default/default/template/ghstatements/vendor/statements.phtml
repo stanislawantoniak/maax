@@ -1,0 +1,17 @@
+<?php
+/*  @var $this GH_Statements_Block_Adminhtml_Vendor_Statements */
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;">
+                <h3>
+                    <?php echo Mage::helper('ghstatements')->__('Vendor Statements') ?>
+                </h3>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('ghstatements_vendor_statements_grid') ?>
+</div>
