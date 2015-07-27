@@ -387,6 +387,8 @@ class GH_Statements_Model_Observer
 		    $rmasTracksCollection
 			    ->addFieldToFilter('main_table.statement_id', array('null' => true))
 			    ->addFieldToFilter('main_table.gallery_shipping_source', 1)
+                ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
+                ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
 			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)))
 			    ->getSelect()
 			        ->join(
