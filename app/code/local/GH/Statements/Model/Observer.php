@@ -387,6 +387,8 @@ class GH_Statements_Model_Observer
 		    $rmasTracksCollection
 			    ->addFieldToFilter('main_table.statement_id', array('null' => true))
 			    ->addFieldToFilter('main_table.gallery_shipping_source', 1)
+                ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
+                ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
 			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)))
 			    ->getSelect()
 			        ->join(
@@ -410,8 +412,6 @@ class GH_Statements_Model_Observer
 						$chargeTotal = $rmaTrack->getChargeTotal() * $tax;
                         $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
-						$shippedDate = date('Y-m-d',strtotime($rmaTrack->getUpdatedAt()));
-
 						/** @var Zolago_Po_Model_Po $po */
 						$po = $rma->getPo();
 
@@ -422,7 +422,7 @@ class GH_Statements_Model_Observer
 							'po_increment_id'   => $po->getIncrementId(),
 							'rma_id'            => $rma->getId(),
 							'rma_increment_id'  => $rma->getIncrementId(),
-							'shipped_date'      => $shippedDate,
+							'shipped_date'      => $rmaTrack->getShippedDate(),
 							'track_number'      => $rmaTrack->getTrackNumber(),
 							'charge_shipment'   => $rmaTrack->getChargeShipment(),
 							'charge_fuel'       => $rmaTrack->getChargeFuel(),
