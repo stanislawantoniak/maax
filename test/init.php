@@ -98,6 +98,12 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
         $this->open('/customer/account/logout');
     }
 
+    /**
+     * Uzupełnia dane do logowania, następnie sie loguje
+     *
+     * @param string $user
+     * @param string $password
+     */
     protected function _login($user = TEST_LOGIN,$password = TEST_PASSWORD) {
         $this->type("id=email", $user);
         $this->type("id=pass", $password);
@@ -129,10 +135,14 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
         }
         return $email;
     }
+
+    /**
+     * Przechodzi do koszyka i klika 'kupuje'
+     */
     protected function _buy() {
         $this->click("css=#link_basket > a.dropdown-toggle");
         $this->waitForPageToLoad("30000");
-        $this->clickAndWait("link=Kupuję");
+        $this->clickAndWait("css=#cart-buy");
     }
     protected function _noLogin() {
         $this->clickAndWait("//div[@id='content-main']/div[2]/div/section/a/span/span");
@@ -183,6 +193,7 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     protected function _checkout($scenario) {
         $this->_buy();        
         if ($scenario['login']) {
+            // Logowanie na konto podczas checkout
             $this->_login($scenario['email']);
             if ($scenario['address']) {
                 $this->_address($scenario['email']);
@@ -194,6 +205,7 @@ class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
                 $this->click("//div[@id='content-main']/section/form/div[4]/div[2]/button"); //todo przy zarejestrowanym nie dziala
             }            
         } else {
+            // Checkout jako gosc
             $this->_noLogin();
             $this->_address($scenario['email']);
             if ($scenario['password']) {

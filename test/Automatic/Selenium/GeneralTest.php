@@ -197,16 +197,7 @@ class Automatic_Selenium_GeneralTest extends ZolagoSelenium_TestCase {
             $product->save();
         }
     }
-    protected function _buy() {
-        $this->click("css=#link_basket > a.dropdown-toggle");
-        $this->waitForPageToLoad("30000");
-        $this->clickAndWait("link=Kupuję");
-    }
-    protected function _login($user,$password = TEST_PASSWORD) {        
-        $this->type("id=email", $email);
-        $this->type("id=pass", $password);
-        $this->clickAndWait("name=send");
-    }
+
     protected function _noLogin() {
         $this->clickAndWait("//div[@id='content-main']/div[2]/div/section/a/span/span");
     }
