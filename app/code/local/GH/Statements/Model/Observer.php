@@ -457,6 +457,25 @@ class GH_Statements_Model_Observer
 			    }
 		    }
 
+
+			//set tracking statement_id
+			if ($ordersTracksCollection->getSize()) {
+				unset($orderTrack);
+				foreach ($ordersTracksCollection as $orderTrack) {
+					/** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
+					$orderTrack->setStatementId($statement->getId());
+					$orderTrack->save();
+				}
+			}
+			if($rmasTracksCollection->getSize()) {
+				foreach($rmasTracksCollection as $rmaTrack) {
+					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
+					$rmaTrack->setStatementId($statement->getId());
+					$rmaTrack->save();
+				}
+			}
+			//--set tracking statement_id
+
 		    $trackStatementTotals->netto = $nettoTotal;
 		    $trackStatementTotals->brutto = $bruttoTotal;
 
