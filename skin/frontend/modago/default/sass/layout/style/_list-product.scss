@@ -38,18 +38,33 @@
             position:relative;
             z-index: 900;
             cursor: pointer;
-            .icoLike {
-	            img {
-		            width: 18px;
-		            height: 18px;
+	        text-align: center;
+            .icoLike, &.liked .icoLike {
+	            font-size: 16px !important;
+	            display: inline-block;
+	            vertical-align: middle;
+	            width: 18px;
+	            height: 18px;
+	            background-size: contain;
+	            background-repeat: no-repeat;
+	            background-position: top left;
+	            &.fa-spinner {
+		            background-image: none !important;
 	            }
-                .img-01 {
-                   display:inline-block;
-                }
-                .img-02 {
-                    display:none;
-                }
             }
+	        .icoLike {
+		        background-image: url('../images/svg/unlike.svg');
+	            &:hover {
+		            background-image: url('../images/svg/like.svg');
+	            }
+            }
+
+	        &.liked .icoLike {
+		        background-image: url('../images/svg/like.svg');
+		        &:hover {
+			        background-image: url('../images/svg/unlike.svg');
+		        }
+	        }
             
             .toolLike {
                 position:absolute;
@@ -63,59 +78,15 @@
                 -ms-transition: opacity 0.5s linear;
                 -o-transition: opacity 0.5s linear;
                 transition: opacity 0.5s linear;
-                
-
-                &:before, 
+                &:before,
                 &:after {
                     content: "";
                     position: absolute;
                     top: 100%;
                     right: 19px;
                 }
-
                 &:after{
                     z-index: 1;
-                }
-            }   
-            &.hover {
-                .toolLike {
-                    display:block; 
-                }
-            } 
-            &.liked {
-                .icoLike {
-
-                    .img-01 {
-                       display:none; 
-                    }
-                    .img-02 {
-                        display:inline-block;
-                    }
-                }
-            
-            }
-            &:hover {
-                .icoLike {
-
-                    .img-01 {
-                       display:none; 
-                    }
-                    .img-02 {
-                        display:inline-block;
-                    }
-                }
-            }
-            &.liked {
-                &:hover {
-                    .icoLike {
-
-                        .img-01 {
-                           display:inline-block;
-                        }
-                        .img-02 {
-                            display:none;
-                        }
-                }
                 }
             }
         }
@@ -133,7 +104,7 @@
 	            margin-bottom: -5px;
                 .icoLike {
 	                display: block;
-	                text-align: center;
+	                margin: 0 auto;
                 }
             }
         }

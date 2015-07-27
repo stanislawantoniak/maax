@@ -70,14 +70,7 @@ $_collection = $this->getCollection();
                                                 </span>
                                                 <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
                                             </span>
-                                            <span class="icoLike">
-                                                <img class="img-01"
-                                                     src="<?php echo $this->getSkinUrl('images/svg/unlike.svg'); ?>"
-                                                     alt="" width="18" height="18" />
-                                                <img class="img-02"
-                                                     src="<?php echo $this->getSkinUrl('images/svg/like.svg'); ?>"
-                                                     alt="" width="18" height="18" />
-                                            </span>
+                                            <div class="icoLike"></div>
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
@@ -113,15 +106,6 @@ $_collection = $this->getCollection();
         in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
     });
     <?php endforeach; ?>
-
-    jQuery('#grid .like').click(function() {
-        var inMyWishlisy = parseInt(jQuery(this).attr('data-status'));
-        if (inMyWishlisy) {
-            Mall.wishlist.removeFromSmallBlock(this);
-        } else {
-            Mall.wishlist.addFromSmallBlock(this);
-        }
-    });
 
     jQuery(window).resize(function() {
         Mall.listing.placeListingFadeContainer();

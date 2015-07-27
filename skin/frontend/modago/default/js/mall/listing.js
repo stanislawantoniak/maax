@@ -716,9 +716,8 @@ Mall.listing = {
         grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 		// attach events
 		this.preprocessProducts();
-		this.attachEventsToProducts();
 
-            jQuery(window).trigger('appendToListEnd');
+        jQuery(window).trigger('appendToListEnd');
 
 		return eachItemsHtml;
 	},
@@ -772,42 +771,6 @@ Mall.listing = {
             "</div>"+
         "</div>";
     },
-
-	/**
-	 * Attaches events to products inserted to listing.
-	 */
-	attachEventsToProducts: function() {
-
-		var itemProduct = jQuery('.box_listing_product'),
-			textLike;
-
-		itemProduct.on('mouseenter', '.like', function(event) {
-			event.preventDefault();
-			if (jQuery(this).hasClass('liked')) {
-				textLike = 'Dodane do ulubionych';
-			} else {
-				textLike = 'Dodaj do ulubionych';
-			}
-			jQuery(this).find('.toolLike').show().text(textLike);
-		});
-		itemProduct.on('mouseleave mouseup', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('.toolLike').hide().text('');
-		});
-		itemProduct.on('mousedown', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('img:visible').animate({transform: 'scale(1.2)'}, 200);
-		});
-		itemProduct.on('mouseup', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200);
-		});
-		itemProduct.on('mousedown', '.liked', function(event) {
-			event.preventDefault();
-			var textLike = 'Usunięte z ulubionych';
-			jQuery(this).find('.toolLike').show().text(textLike);
-		});
-	},
 
 	/**
 	 * Return whether loading more products is possible,

@@ -1,7 +1,6 @@
 /**
  * Created by pawelchyl on 28.08.2014.
  */
-
 Mall.wishlist = {
     /**
      * Products array, stores wishlist data
@@ -391,15 +390,15 @@ Mall.wishlist = {
         product = this.getProduct(id);
         this.added(id);
 
+	    obj.find('.icoLike').addClass('fa fa-spinner fa-spin');
+
         OrbaLib.Wishlist.add({product: id}, function (data) {
             if(data.status === true) {
 
                 // build element
                 wrapper = jQuery("<div/>", {
                     "class": "like liked",
-                    "data-idproduct": id,
-                    "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
-                    onclick: "Mall.wishlist.removeFromSmallBlock(this);return false;"
+                    "data-idproduct": id
                 });
 
 	            likeCount = jQuery("<span/>", {
@@ -409,22 +408,6 @@ Mall.wishlist = {
                 ico = jQuery("<span/>", {
                     "class": "icoLike"
                 }).appendTo(wrapper);
-
-                jQuery("<img/>", {
-                    "class": "img-01",
-                    src: Config.path.heartLike,
-	                width: 18,
-	                height: 18,
-                    alt: ""
-                }).appendTo(ico);
-
-                jQuery("<img/>", {
-                    "class": "img-02",
-                    src: Config.path.heartLiked,
-	                width: 18,
-	                height: 18,
-                    alt: ""
-                }).appendTo(ico);
 
                 jQuery("<span/>", {
                     html: Mall.translate.__("you")
@@ -468,15 +451,15 @@ Mall.wishlist = {
         product = this.getProduct(id);
         this.removed(id);
 
+	    obj.find('.icoLike').addClass('fa fa-spinner fa-spin');
+
         OrbaLib.Wishlist.remove({product: id}, function (data) {
             if(data.status === true) {
 
                 // build element
                 wrapper = jQuery("<div/>", {
                     "class": "like",
-                    "data-idproduct": id,
-                    "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
-                    onclick: "Mall.wishlist.addFromSmallBlock(this);return false;"
+                    "data-idproduct": id
                 });
 
 	            likeCount = jQuery("<span/>", {
@@ -489,22 +472,6 @@ Mall.wishlist = {
                     "class": "icoLike"
                 }).appendTo(wrapper);
 
-                jQuery("<img/>", {
-                    "class": "img-01",
-                    src: Config.path.heartLike,
-	                width: 18,
-	                height: 18,
-                    alt: ""
-                }).appendTo(ico);
-
-                jQuery("<img/>", {
-                    "class": "img-02",
-                    src: Config.path.heartLiked,
-	                width: 18,
-	                height: 18,
-                    alt: ""
-                }).appendTo(ico);
-
                 jQuery("<span/>", {
                     html: ""
                 }).prependTo(likeCount);
@@ -514,9 +481,15 @@ Mall.wishlist = {
                 }).appendTo(wrapper);
 
                 // replace blocks
-                jQuery(obj).parent().append(wrapper);
-                jQuery(obj).remove();
-
+	            if(typeof unlikingOnWishlist != 'undefined' && unlikingOnWishlist) {
+		            //remove item
+		            grid.shuffle('remove',jQuery(obj).parents('.item'));
+		            //fix for footer
+		            jQuery(window).resize();
+	            } else {
+		            jQuery(obj).parent().append(wrapper);
+		            jQuery(obj).remove();
+	            }
                 Mall.buildAccountInfo(data, true);
                 Mall.wishlist.calculateWidths();
             }
