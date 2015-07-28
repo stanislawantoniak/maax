@@ -44,7 +44,7 @@ class Zolago_Catalog_Vendor_AttributesController
      * Index
      */
     public function indexAction() {
-        $this->_renderPage(null, 'udprod_product');
+        $this->_renderPage(null, 'udprod_attributes');
     }
 
 
