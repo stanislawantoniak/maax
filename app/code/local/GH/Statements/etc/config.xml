@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </GH_Statements>
     </modules>
     <global>
@@ -37,6 +37,9 @@
 	                <track>
 		                <table>gh_statements_tracks</table>
 	                </track>
+                    <rma>
+                        <table>gh_statements_rma</table>
+                    </rma>
                 </entities>
             </ghstatements_resource>
         </models>
