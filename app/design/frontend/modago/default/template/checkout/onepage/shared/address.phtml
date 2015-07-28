@@ -80,9 +80,9 @@ $_billingAddress = $_quote->getBillingAddress();
 				</div>
 			</fieldset>
             <?php endif; ?>
-			<div class="row hide-success-vaild ">
+			<div class="row  ">
                 <?php $agreements = $this->getAgreements(); ?>
-				<div class="form-group form-checkbox small text-align-left">
+				<div class="form-group form-checkbox small agreement-container text-align-left" id="tos_agreement_container">
 
 					<input type="checkbox" id="agreement_tos" class="css-checkbox invoice_vat"
 					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
@@ -91,7 +91,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
 				</div>
 				<?php if(!$this->isCustomerSubscribed()):?>
-				<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container">
+				<div class="form-group form-checkbox small agreement-container text-align-left" id="newsletter_agreement_container">
 					<input type="hidden" name="agreement[newsletter]" value="0" />
 					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
 					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"

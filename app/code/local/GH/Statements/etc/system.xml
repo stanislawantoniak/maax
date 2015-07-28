@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <ghstatements translate="label" module="ghstatements">
+            <label>GH statements</label>
+            <sort_order>101</sort_order>
+        </ghstatements>
+    </tabs>
+    <sections>
+        <ghstatements translate="label" module="ghstatements">
+            <label>General</label>
+            <tab>ghstatements</tab>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+
+            <groups>
+                <general translate="label" module="ghstatements">
+                    <label>GH statement general</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+
+                    <fields>
+                        <tax_for_commission translate="label">
+                            <label>Tax for statement commission</label>
+                            <comment>Example: 1.23 is 23% of tax</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<frontend_class>validate-number</frontend_class>-->
+                        </tax_for_commission>
+                    </fields>
+                </general>
+            </groups>
+        </ghstatements>
+    </sections>
+</config>
