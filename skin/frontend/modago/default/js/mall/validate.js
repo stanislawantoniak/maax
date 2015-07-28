@@ -50,6 +50,13 @@ Mall.validate = {
                     .append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
             }
 
+            var parentFormGroup = elem.parents(".form-group");
+            if(parentFormGroup.hasClass("agreement-container")){
+                we = parentFormGroup.actual( 'innerWidth' ) + 10;
+                parentFormGroup
+                    .append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>')
+                ;
+            }
 
             target.find('.form-ico-checked').remove();
         },
@@ -92,6 +99,14 @@ Mall.validate = {
                     .not( ".form-checkbox" )
                     .not( ".form-radio" )
                     .append('<i style="left:'+we+'px; right:auto;'+top+'" class="form-ico-checked form-control-feedback"></i>');
+            }
+
+            var parentFormGroup = elem.parents(".form-group");
+            if(parentFormGroup.hasClass("agreement-container")){
+                we = parentFormGroup.actual( 'innerWidth' ) + 10;
+                parentFormGroup
+                    .append('<i style="left:'+we+'px; right:auto;'+top+'" class="form-ico-checked form-control-feedback"></i>')
+                ;
             }
 
             target.find('.form-ico-times').remove();
