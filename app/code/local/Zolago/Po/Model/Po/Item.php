@@ -172,9 +172,12 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	   if($this->getData('vendor_simple_sku')){
 		   return $this->getData('vendor_simple_sku');
 	   }
-	   
-	   
-	   return $this->getData('vendor_sku');
+
+       if ($this->getData('vendor_sku')) {
+           return $this->getData('vendor_sku');
+       }
+
+	   return $this->getData('sku');
    }
    
    
