@@ -78,11 +78,7 @@
     border-top: none;
 }
 
-#edit-campaign .form-group label[for=url_typeurl_type_manual_link],
-#edit-campaign .form-group label[for=url_typeurl_type_landing_page],
-
-#edit-campaign .form-group label[for=strikeout_type1],
-#edit-campaign .form-group label[for=strikeout_type2] {
+#edit-campaign .form-group .radio-buttons label {
     position: relative;
     top: -2px;
     margin: 0 8px 0 4px;

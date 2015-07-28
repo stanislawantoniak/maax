@@ -53,6 +53,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
 
+        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        $udropshipHelper = Mage::helper("udropship");
+        $localVendor = $udropshipHelper->getLocalVendorId();
+
         // Existing campaign
         if ($campaign->getId()) {
             if ($campaign->getVendorId() != $vendor->getId()) {
@@ -70,10 +74,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
-            ->addAttributeToFilter('skuv', array('in' => $skuVS))
-            ->addAttributeToFilter('udropship_vendor', $vendor->getId())
-            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))
-            ->getAllIds();
+            ->addAttributeToFilter('skuv', array('in' => $skuVS));
+        if ($vendor->getId() !== $localVendor) {
+            $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
+        }
+        $collection->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $collection = $collection->getAllIds();
 
         $productIds = array();
         if (!empty($collection)) {
@@ -123,6 +129,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             }
 
             $campaign->addData($data);
+
             $validErrors = $campaign->validate();
             if ($validErrors === true) {
                 // Fix empty value
@@ -136,11 +143,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $campaign->setVendorId($vendor->getId());
                 }
 
-                if ($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
-                    $nameForCustomer = $data["name_customer"];
-                    $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
-                    $campaign->addData(array('url_key' => $urlKey));
-                }
+//                if($data['is_landing_page'] == 1){
+//                    $nameForCustomer = $data["name_customer"];
+//                    $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
+//                    $campaign->addData(array('url_key' => $urlKey));
+//                }
+
 
                 $campaign->save();
 

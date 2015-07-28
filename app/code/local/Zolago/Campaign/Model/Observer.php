@@ -221,6 +221,7 @@ class Zolago_Campaign_Model_Observer
         $campaignId = $observer->getCampaignId();
         $revertProductOptions = $observer->getRevertProductOptions();
 
+
         /* @var $model Zolago_Campaign_Model_Campaign */
         $model = Mage::getModel('zolagocampaign/campaign');
         $model->unsetProductAttributesOnProductRemoveFromCampaign($campaignId,$revertProductOptions);

@@ -1,6 +1,8 @@
 <?php /* @var $this Zolago_Campaign_Block_Vendor_Campaign_Edit */ ?>
 <?php $_helper = Mage::helper("zolagocampaign"); ?>
 <?php $_model = $this->getModel();?>
+
+
 <div class="container">
     <div class="page-heading row">
         <div class="col-lg-12">
@@ -21,12 +23,15 @@
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 
+
 		<div class="form-actions">
             <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
             <a href="<?php echo Mage::getUrl('campaign/vendor'); ?>" class="btn btn-default pull-right"><?php echo $_helper->__("Cancel");?></a>
         </div>
 	</form>
 </div>
+
+
 
 <!--        Show product tab and banners tab only on edit page-->
 <?php if(!$this->isModelNew()) :?>
@@ -51,14 +56,7 @@
             <div class="widget box">
                 <div class="widget-header">
                     <h4><i class="icon-folder-open"></i>&nbsp;<?php echo $_helper->__("Products"); ?></h4>
-<!--                    <div class="toolbar no-padding">-->
-<!--                        <div class="btn-group">-->
-<!--						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">-->
-<!--							<i class="icon-plus"></i>-->
-<!--                            --><?php //echo $_helper->__("Add products");?>
-<!--						</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
+
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getProductsGrid()->toHtml(); ?>
@@ -73,15 +71,7 @@
             <div class="widget box">
                 <div class="widget-header">
                     <h4><i class="icon-picture"></i>&nbsp;<?php echo $_helper->__("Campaign creatives"); ?></h4>
-<!--                    <div class="toolbar no-padding">-->
-<!--                        <div class="btn-group">-->
-<!--                            <a href="--><?php //echo $this->getAddNewBannerPath(); ?><!--">-->
-<!--                                <span class="btn btn-xs"><i class="icon-plus"></i>-->
-<!--                                    --><?php //echo $_helper->__("Add new campaign creative"); ?>
-<!--                                </span>-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                    </div>-->
+
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getBannersGrid()->toHtml(); ?>
@@ -114,7 +104,34 @@
             </div>
         </form>
     </div>
+</div>
 <?php endif; ?>
+<div class="modal fade" id="browseCategory">
+    <div class="modal-dialog" style="width: 50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><?php echo $_helper->__("Select Category");?></h4>
+            </div>
+            <div class="modal-body">
+                <div id='jqxWidget'>
+                    <div >
+                        <div id='jqxTree' style="padding: 10px 0;">
+                            <?php echo Mage::helper("zolagocampaign")->getCategoriesTree(); ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
+                <button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <script type="text/javascript">
         jQuery(document).ready(function () {
 
@@ -201,29 +218,22 @@
             });
 
 
-            var urlTypeManual = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK; ?>';
-            var urlTypeLandingPage = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE; ?>';
+            var urlKeyContainer = jQuery('.landing-page-config').parents(".form-group");
+            toggleUrlKeyField(jQuery(form).find('input[name="is_landing_page"]'), urlKeyContainer);
 
-
-            var urlKeyContainer = jQuery(form).find('[name="url_key"]').parents('.form-group');
-
-            toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'), urlKeyContainer);
-
-            jQuery(form).find('input[name="url_type"]').on('change', function () {
-                toggleUrlKeyField(jQuery(this), urlKeyContainer);
+            jQuery(form).find('input[name="is_landing_page"]').on('click', function () {
+                toggleUrlKeyField(this, urlKeyContainer);
 
             })
             function toggleUrlKeyField(element, toggleContainer) {
-                var type = element.val();
-                switch (type) {
-                    case urlTypeManual:
-                        toggleContainer.show();
-                        break;
-                    case urlTypeLandingPage:
-                        toggleContainer.hide();
-                        break;
-                }
-            }
+                var showLandingPageConfig = jQuery(element).is(":checked");
 
+                if (showLandingPageConfig) {
+                    toggleContainer.show();
+                } else {
+                    toggleContainer.hide();
+                }
+
+            }
         });
     </script>

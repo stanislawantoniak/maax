@@ -177,4 +177,35 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         return $cats;
     }
 
+
+
+    public function getCategoriesTree(){
+        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+        return  $this->getTreeCategories($rootCatId, false);
+    }
+
+    public function getTreeCategories($parentId, $isChild)
+    {
+        $html = "";
+        $allCats = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter('include_in_menu', '1')
+            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+
+
+        $html .= '<ul>';
+
+        foreach ($allCats as $category) {
+            $html .= '<li data-category="' . $category->getId() . '">' . $category->getName() . "";
+            $subcats = $category->getChildren();
+            if ($subcats != '') {
+                $html .= $this->getTreeCategories($category->getId(), true);
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
 }

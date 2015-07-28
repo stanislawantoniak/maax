@@ -15,7 +15,17 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         parent::_prepareLayout();
     }
 
+    public function getVendor(){
+        return Mage::getSingleton('udropship/session')->getVendor();
+    }
+
     public function _prepareForm(){
+        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        $udropshipHelper = Mage::helper("udropship");
+        $localVendor = $udropshipHelper->getLocalVendorId();
+
+        $_vendor = $this->getVendor();
+
         $helper = Mage::helper('zolagocampaign');
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
@@ -25,11 +35,20 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "legend" => $helper->__("General"),
             "icon_class" => "icon-cog"
         ));
+        if($_vendor->getId() == $localVendor){
+            $landingPage = $form->addFieldset("landing_page", array(
+                "legend" => $helper->__("Landing Page Configuration"),
+                "icon_class" => "icon-desktop"
+            ));
+            $landingPage->addType("category_tree", "Zolago_Campaign_Varien_Data_Form_Element_Categorytree");
+        }
 
         $prices = $form->addFieldset("price", array(
             "legend" => $helper->__("Prices"),
             "icon_class" => "icon-euro"
         ));
+
+
 
         $general->addField("name", "text", array(
             "name" => "name",
@@ -66,23 +85,45 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label_wrapper_class" => "col-md-3",
             "wrapper_class" => "col-md-3"
         ));
-        $general->addField("url_type", "radios", array(
-            "name" => "url_type",
-            "required" => true,
-            "label" => $helper->__('URL type'),
-            "values" => Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
-            "value" => Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK,
-            "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-8 radio-buttons"
-        ));
-        $general->addField("url_key", "text", array(
-            "name" => "url_key",
-            "required" => true,
-            "class" => "form-control urlKeyFormat urlKeyExists",
-            "label" => $helper->__('URL Key'),
-            "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-6"
-        ));
+
+        if($_vendor->getId() == $localVendor){
+
+            $landingPage->addField('is_landing_page', 'checkbox', array(
+                'label'     => $helper->__('Landing Page'),
+                'name'      => 'is_landing_page',
+                'onclick'   => 'this.value = this.checked ? 1 : 0;',
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-3"
+            ));
+
+            $landingPage->addField("url_key", "text", array(
+                "name" => "url_key",
+                "required" => false,
+                "class" => "form-control",
+                "label" => $helper->__('URL Key'),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-6 landing-page-config"
+            ));
+            $landingPage->addField("landing_page_category", "category_tree", array(
+                "name" => "landing_page_category",
+                "required" => false,
+                "class" => "form-control",
+                "label" => $helper->__('Category'),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-6 landing-page-config"
+            ));
+            /* @var $landingPage Zolago_Campaign_Model_Campaign_LandingPage */
+            $landingPage->addField("landing_page_context", "radios", array(
+                "name" => "landing_page_context",
+                "required" => false,
+                "label" => $helper->__('Context'),
+                "values" => $landingPage = Mage::getSingleton('zolagocampaign/campaign_landingPage')->toOptionArray(),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-9 radio-buttons landing-page-config",
+            ));
+
+        }
+
 
         $general->addField("date_from", "text", array(
             "name" => "date_from",
@@ -180,6 +221,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "campaign_products" => $productsSelected
             )
         );
+        $form->getElement('is_landing_page')->setIsChecked(!empty($values['is_landing_page']));
+
         $form->setValues($values);
         $this->setForm($form);
     }

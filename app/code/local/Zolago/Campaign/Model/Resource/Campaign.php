@@ -135,6 +135,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             foreach ($websites as $websiteId) {
                 $recoverOptionsProducts[$websiteId] = array($productId);
             }
+
             Mage::dispatchEvent(
                 "campaign_product_remove_update_after",
                 array(

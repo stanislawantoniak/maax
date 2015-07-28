@@ -1,0 +1,64 @@
+<?php /* @var $this Zolago_Campaign_Varien_Data_Form_Element_Categorytree  */ ?>
+
+<?php $_helper = Mage::helper("zolagocampaign");?>
+
+
+<link rel="stylesheet" type="text/css" href="/js/jqwidgets/styles/jqx.base.css"/>
+<link rel="stylesheet" type="text/css" href="/js/jqwidgets/styles/jqx.arctic.css"/>
+
+<script type="application/javascript" src="/js/jqwidgets/jqxcore.js"></script>
+<script type="application/javascript" src="/js/jqwidgets/jqxbuttons.js"></script>
+<script type="application/javascript" src="/js/jqwidgets/jqxscrollbar.js"></script>
+<script type="application/javascript" src="/js/jqwidgets/jqxpanel.js"></script>
+<script type="application/javascript" src="/js/jqwidgets/jqxtree.js"></script>
+<script type="application/javascript" src="/js/jqwidgets/jqxcheckbox.js"></script>
+
+
+<input id="<?php echo $this->getFieldName(); ?>" name="<?php echo $this->getFieldName(); ?>"
+       value="<?php echo $this->getFieldValue(); ?>" class="form-control col-md-2" style="width: 152px;" type="text">
+<label style="margin: 8px; cursor: pointer;">
+    <span data-toggle="modal" data-target="#browseCategory" title="<?php echo $_helper->__("Select Category");?>">
+        <i class="icon-edit"></i>&nbsp;
+    </span>
+</label>
+
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        // create jqxTree
+        jQuery('#jqxTree').jqxTree({
+            height: '300px',
+            //hasThreeStates: true,
+            checkboxes: true,
+            width: '90%',
+            theme: "arctic"
+        });
+
+        jQuery('#jqxTree').jqxTree('hitTest', 10, 20);
+        jQuery('#jqxTree').css('visibility', 'visible');
+
+        jQuery("#browseCategory").on("show.bs.modal", function () {
+            jQuery('#jqxTree').jqxTree('uncheckAll');
+            jQuery('#jqxTree').jqxTree('collapseAll');
+
+        });
+
+
+
+        jQuery("#browseCategory button[type=submit]").click(function(){
+            var items = jQuery('#jqxTree').jqxTree('getCheckedItems');
+
+            var categories = [];
+            jQuery(items).each(function (i, item) {
+                categories.push(jQuery(item.element).data("category"));
+            })
+
+            jQuery("input[name=<?php echo $this->getFieldName(); ?>]").val(categories.join(","));
+            jQuery("#browseCategory").modal("hide");
+
+            jQuery('#jqxTree').jqxTree('uncheckAll');
+            jQuery('#jqxTree').jqxTree('collapseAll');
+        });
+    });
+</script>
