@@ -113,7 +113,17 @@
 					</zolagosolrsearch>
 				</observers>
 			</catalog_product_delete_after>
-			
+
+			<cataloginventory_stock_item_save_commit_after>
+				<observers>
+					<zolagosolrsearch>
+						<type>model</type>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogInventorySave</method>
+					</zolagosolrsearch>
+				</observers>
+			</cataloginventory_stock_item_save_commit_after>
+
 			<!-- Process product save anywhere -->
 			<catalog_product_save_after>
 				<observers>
@@ -164,6 +174,25 @@
 					</zolagosolrsearch>
 				</observers>
 			</catalog_product_attribute_update_after>
+
+            <!-- Process save politics -->
+            <vendor_manual_mass_save_politics_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_mass_save_politics_after>
+            <vendor_manual_save_politics_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_save_politics_after>
+
 			
 			<!-- Process mapper asign -->
 			<zolago_mapper_after_assign_products>

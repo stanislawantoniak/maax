@@ -530,6 +530,8 @@
 		
 		// Bind click
 		sidebar.find(".prev-button-address").click(function(){
+            jQuery("i").removeClass('fa fa-spinner fa-spin');
+            jQuery("button").prop("disabled", false);
 			self.go(0); // Address is always 1st step
 			jQuery(window).trigger("resize");
 			return false;
@@ -559,6 +561,8 @@
 		
 		// Bind click
 		sidebar.find(".prev-button-deliverypaymnet").click(function(){
+            jQuery("i").removeClass('fa fa-spinner fa-spin');
+            jQuery("button").prop("disabled", false);
 			self.go(1);
 			return false;
 		});
@@ -569,7 +573,11 @@
 		dataObject, textInfo, template) {
 		textInfo.html(Mall.replace(template, dataObject));
 		return textInfo;		
-	};		
+	};
+	Mall.Checkout.prototype.showWarning = function (textInfo, message) {
+		textInfo.html(message);
+		return textInfo;
+	};
 	/**
 	 * @param {bool} isInvoice
 	 * @returns {string}

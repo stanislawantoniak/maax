@@ -112,11 +112,16 @@ Mall.validate.validators = {
 
     bankAccount: function(value, elem, params){
         value = value.replace(/\D/g, "");
-        return this.optional(elem) || value.replace(/\D/g,"").length == 26; //26 digits
+        return this.optional(elem) || value.length == 26; //26 digits
     },
 
     bankAccountWithReplace: function(value, elem, params){
-        value = value.replace(/\D/g, "");
+	    cutoutValue = value.match(/\d|-|\s/g, "");
+	    if(cutoutValue && cutoutValue.length) {
+		    value = cutoutValue.join("");
+	    } else {
+		    value = "";
+	    }
         jQuery(elem).val(value);
 
         var test1 = this.optional(elem);

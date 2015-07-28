@@ -29,7 +29,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             return $this->_redirect('campaign/placement/index');
         }
         Mage::register('as_frontend', true);
-        $this->_renderPage(null, 'zolagocampaign');
+        $this->_renderPage(null, 'zolagocampaign_placement');
     }
 
     public function saveNewAction() {

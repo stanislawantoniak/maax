@@ -75,6 +75,10 @@
 						<class>zolagopo/observer</class>
                         <method>updatePoStatusByAllocation</method>
 					</zolagopo>
+                    <zolagopo_alert>
+                        <model>zolagopo/observer</model>
+                        <method>poAlertUpdate</method>
+                    </zolagopo_alert>
 				</observers>
 			</zolagopo_po_save_after>
 			<zolagopo_po_save_new>
