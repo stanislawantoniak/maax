@@ -259,7 +259,7 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-        $yesterday = $today; //todo: remove
+//        $yesterday = $today; //todo: remove
 
 	    $collection = $refundsStatements->getCollection();
 	    $collection
@@ -301,7 +301,7 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-        $yesterday = $today; //todo: remove
+//        $yesterday = $today; //todo: remove
 
 	    $trackStatements = array();
 	    $tax = self::getTax();
