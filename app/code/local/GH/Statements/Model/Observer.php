@@ -45,12 +45,12 @@ class GH_Statements_Model_Observer
 	                $statement = self::initStatement($vendor, $calendarItem);
 
 	                $statementTotals = new stdClass();
-	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
-	                $statementTotals->rma = self::processStatementsRma();
-	                $statementTotals->refund = self::processStatementsRefunds($statement);
-	                $statementTotals->track = self::processStatementsTracks($statement);
+//	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+	                $statementTotals->rma = self::processStatementsRma($statement);
+//	                $statementTotals->refund = self::processStatementsRefunds($statement);
+//	                $statementTotals->track = self::processStatementsTracks($statement);
 
-	                self::populateStatement($statement, $statementTotals);
+//	                self::populateStatement($statement, $statementTotals);
                 } catch(Mage_Core_Exception $e) {
                     Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
 	                $alreadyExists[] = $e->getMessage();
@@ -75,9 +75,9 @@ class GH_Statements_Model_Observer
      */
     public static function initStatement($vendor, $calendarItem) {
 
-        if (self::isStatementAlready($vendor, $calendarItem)) {
-            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
-        }
+//        if (self::isStatementAlready($vendor, $calendarItem)) {
+//            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
+//        }
 
         /** @var GH_Statements_Model_Calendar $calendar */
         $calendar = Mage::getModel('ghstatements/calendar')->load($calendarItem->getCalendarId());
@@ -487,15 +487,96 @@ class GH_Statements_Model_Observer
     /**
      * This process statements RMA
      */
-    public static function processStatementsRma() {
+    public static function processStatementsRma($statement) {
         $rmaStatementTotals = new stdClass();
-
         $commissionAmount = 0;
         $amount = 0;
 
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
+        $yesterday = $today . ' 23:59:59'; // Todo: remove
+
+        // Zwroty o statusie zamknięte-zrealizowane, które mają kwotę do zwrotu lub o typie zwrot nieodebranej niezależnie od kwoty do zwrotu
+        // Te które nie zostały dotąd ujęte w rozliczeniu
+
+        /** @var Unirgy_Rma_Model_Mysql4_Rma_Item_Collection $rmaItemsColl  */
+        $rmaItemsColl = Mage::getResourceModel('urma/rma_item_collection');
+        $rmaItemsColl->addFieldToFilter('main_table.statement_id', array('null' => true));
+        $rmaItemsColl->getSelect()
+            ->join(
+                'urma_rma',
+                'main_table.parent_id = urma_rma.entity_id',
+                array(
+                    'udropship_vendor', 'rma_status', 'rma_type', 'payment_channel_owner', 'udpo_id',
+                    'udpo_increment_id', 'increment_id')
+            )
+            ->where('urma_rma.udropship_vendor = ' . $statement->getVendorId());
+        $rmaItemsColl->addFieldToFilter(
+            array('urma_rma.rma_status', 'urma_rma.rma_type'),
+            array(Zolago_Rma_Model_Rma_Status::STATUS_CLOSED_ACCEPTED, Zolago_Rma_Model_Rma::RMA_TYPE_RETURN));
+        $rmaItemsColl->addFieldToFilter('urma_rma.updated_at', array('lteq' => $yesterday));
+
+
+        foreach ($rmaItemsColl as $rmaItem) {
+            /** @var Zolago_Rma_Model_Rma_Item $rmaItem */
+            if (!$rmaItem->getProductId()) {
+                continue; // Shipping const
+            }
+            if (!floatval($rmaItem->getReturnedValue()) && $rmaItem->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_STANDARD) {
+                continue; // No value to return
+            }
+
+            $pco = $rmaItem->getPaymentChannelOwner();
+            if ($pco == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
+                $returnedValue = floatval($rmaItem->getReturnedValue());
+            } else {
+                $returnedValue = floatval($rmaItem->getPrice());
+            }
+
+            $po = $rmaItem->getPoItem()->getPo();
+            $poItem = $rmaItem->getPoItem();
+
+            $data = array();
+            $data["statement_id"]           = $statement->getId();
+            $data["po_id"]                  = $rmaItem->getUdpoId();
+            $data["po_increment_id"]        = $rmaItem->getUdpoIncrementId();
+            $data["rma_id"]                 = $rmaItem->getParentId();
+            $data["rma_increment_id"]       = $rmaItem->getIncrementId();
+            $data["event_date"]             = $rmaItem->getCreatedAt();
+            $data["sku"]                    = $rmaItem->getVendorSimpleSku();
+            $data["reason"]                 = $rmaItem->getItemConditionName();
+            $data["payment_method"]         = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
+            $data["payment_channel_owner"]  = $po->getPaymentChannelOwner();
+            $data["approved_refund_amount"] = $returnedValue;
+            $data["price"]                  = $poItem->getPriceInclTax();       // Sprzedaż przed zniżką (zł)
+            $data["discount_amount"]        = $poItem->getDiscountAmount();     // Zniżka (zł)
+            $data["final_price"]            = $poItem->getFinalItemPrice();     // Sprzedaż w zł
+            $data["commission_percent"]     = $rmaItem->getCommissionPercent(); // Stawka prowizji Modago;
+            $data["gallery_discount_value"] = 0;
+            foreach ($poItem->getDiscountInfo() as $relation) {
+                /** @var Zolago_SalesRule_Model_Relation $relation */
+                if ($relation->getPayer() == Zolago_SalesRule_Model_Rule_Payer::PAYER_GALLERY) {
+                    $data["gallery_discount_value"] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
+                }
+            }
+            // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
+            $data["commission_value"]       =
+                (($data['price'] - $data["discount_amount"] + $data["gallery_discount_value"])
+                    * (floatval($data["commission_percent"]) / 100)) * self::getTax(); // Prowizja Modago
+            $data["commission_value"]       = round($data["commission_value"], 2, PHP_ROUND_HALF_UP);
+
+            // (<Prowizja Modago> - <Zniżka finansowana przez Modago>) * procentowy zwrot z calosci
+            $data["value"]                  = ($data["commission_value"] - $data["gallery_discount_value"]) * ($data["approved_refund_amount"] / $data["final_price"]);
+            $data["value"]                  = round($data['value'], 2, PHP_ROUND_HALF_UP);
+
+            $commissionAmount              += $data["commission_value"];
+            $amount                        += $data["value"];
+
+        }
+
         $rmaStatementTotals->commissionAmount = $commissionAmount;
         $rmaStatementTotals->amount = $amount;
-
         return $rmaStatementTotals;
     }
 
