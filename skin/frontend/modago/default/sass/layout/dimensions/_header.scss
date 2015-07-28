@@ -169,7 +169,7 @@ body {
 
                 @include max-screen($screen-sm-max) {
                     width: 60px;
-	                &:hover {
+	                &:hover, &#link_search.open  {
 		                background-color: #2A2A2A;
 	                }
 	                &#link_search.open {

@@ -761,10 +761,9 @@ Mall.listing = {
                     "<div class='col-price'>" + oldPrice +
                         "<span>" + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
                     "</div>"+
-                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' onclick='"+likeOnClick+"'>"+
-	                    "<span class='like_count'>" + likeText + "</span><span class='icoLike'>"+
-                    "<img src='" + Config.path.heartLike +"' class='img-01' style='width: 18px; height: 18px;' />"+
-                    "<img src='" + Config.path.heartLiked + "' class='img-02' style='width: 18px; height: 18px;'></span>"+
+                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"'>"+
+                        "<span class='like_count'>" + likeText + "</span>"+
+                        "<span class='icoLike'></span>"+
                         "<div class='toolLike'></div>"+
                     "</div>"+
                 "</div>"+
