@@ -457,4 +457,14 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 
 		return $this;
 	}
+
+
+	/**
+	 * Check if current vendor local
+	 * @return bool
+	 */
+	public function isLocalVendor(){
+		$vendorId = Mage::getSingleton('udropship/session')->getVendorId();
+		return (bool)($vendorId == $this->getLocalVendorId());
+	}
 }

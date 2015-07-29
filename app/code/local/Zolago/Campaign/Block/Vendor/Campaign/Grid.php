@@ -31,13 +31,25 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
 			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Campaign"),
 		));
-		
-		$this->addColumn("url_key", array(
-			"type"		=>	"text",
-			"index"		=>	"url_key",
-			"class"		=>  "form-control",
-			"header"	=>	$_helper->__("Url"),
-		));
+
+        if(Mage::helper("zolagodropship")->isLocalVendor()){
+            $this->addColumn("is_landing_page", array(
+                "type"		=>	"options",
+                'options'   => Mage::getModel('adminhtml/system_config_source_yesno')->toArray(),
+                "index"		=>	"is_landing_page",
+                "class"		=>  "form-control",
+                "header"	=>	$_helper->__("Landing Page"),
+            ));
+
+
+            $this->addColumn("url_key", array(
+                "type"		=>	"text",
+                "index"		=>	"url_key",
+                "class"		=>  "form-control",
+                "header"	=>	$_helper->__("Landing Page Url"),
+            ));
+        }
+
 		
 		$this->addColumn("type", array(
             "type"		=>	"options",

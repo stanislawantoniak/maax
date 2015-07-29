@@ -20,13 +20,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
     }
 
     public function _prepareForm(){
-        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
-        $udropshipHelper = Mage::helper("udropship");
-        $localVendor = $udropshipHelper->getLocalVendorId();
-
-        $_vendor = $this->getVendor();
-
         $helper = Mage::helper('zolagocampaign');
+
+        /* @var $_zolagoDropshipHelper Zolago_Dropship_Helper_Data */
+        $_zolagoDropshipHelper = Mage::helper("zolagodropship");
+
+        $isLocalVendor = $_zolagoDropshipHelper->isLocalVendor();
+
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
         $form->setAction($this->getUrl("campaign/vendor/save"));
@@ -35,7 +35,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "legend" => $helper->__("General"),
             "icon_class" => "icon-cog"
         ));
-        if($_vendor->getId() == $localVendor){
+        if($isLocalVendor){
             $landingPage = $form->addFieldset("landing_page", array(
                 "legend" => $helper->__("Landing Page Configuration"),
                 "icon_class" => "icon-desktop"
@@ -47,8 +47,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "legend" => $helper->__("Prices"),
             "icon_class" => "icon-euro"
         ));
-
-
 
         $general->addField("name", "text", array(
             "name" => "name",
@@ -86,7 +84,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "wrapper_class" => "col-md-3"
         ));
 
-        if($_vendor->getId() == $localVendor){
+        if($isLocalVendor){
 
             $landingPage->addField('is_landing_page', 'checkbox', array(
                 'label'     => $helper->__('Landing Page'),
@@ -221,7 +219,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "campaign_products" => $productsSelected
             )
         );
-        $form->getElement('is_landing_page')->setIsChecked(!empty($values['is_landing_page']));
+        if($isLocalVendor){
+            $form->getElement('is_landing_page')->setIsChecked(!empty($values['is_landing_page']));
+        }
 
         $form->setValues($values);
         $this->setForm($form);
