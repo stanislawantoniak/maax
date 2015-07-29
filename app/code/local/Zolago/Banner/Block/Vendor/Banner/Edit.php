@@ -26,11 +26,21 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
     }
 
     /**
+     * Get banner type code
      * @return mixed
      */
     public function getType()
     {
         return $this->_type;
+    }
+
+    /**
+     * Get banner type label
+     * @return string
+     */
+    public function getTypeLabel()
+    {
+        return ucfirst(str_replace("_", " ", $this->_type));
     }
 
     public function getCampaignId(){
@@ -81,11 +91,13 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $general->addField("type", "hidden", array(
             "name" => "type"
         ));
-        //--Common edit banner fields
+
         $data = $this->getTypeConfiguration($type);
 
         //Additional banner fields depends on type
         $this->_completeForm($form, $data);
+
+
 
         $values = $this->getModel()->getData();
 
@@ -93,7 +105,10 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
         $contentValues = $this->_prepareContentDataToSet($contentData);
 
-        $values = array_merge($values, array('show' => $data->show_as, 'type' => $type  ));
+        if(!empty($data)){
+            $values = array_merge($values, array('show' => $data->show_as, 'type' => $type  ));
+        }
+
         $values = array_merge($values, array('campaign_id'=> $campaignId));
         $values = array_merge($values, $contentValues);
 
@@ -200,14 +215,17 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
                         $bannerContent->addField("image_" . $n, "thumb", $imageOptions);
 
-                        $bannerContent->addField("image_url_" . $n, "text", array(
-                            "name" => "image_url[" . $n . "]",
-                            "class" => "form-control urlKeyFormat",
-                            "required" => $pictureUrlRequired,
-                            "label" => $helper->__($picture->picture_label . ": url"),
-                            "label_wrapper_class" => "col-md-3",
-                            "wrapper_class" => "col-md-6"
-                        ));
+                        if(!isset($data->banner_no_link)){
+                            $bannerContent->addField("image_url_" . $n, "text", array(
+                                "name" => "image_url[" . $n . "]",
+                                "class" => "form-control urlKeyFormat",
+                                "required" => $pictureUrlRequired,
+                                "label" => $helper->__($picture->picture_label . ": url"),
+                                "label_wrapper_class" => "col-md-3",
+                                "wrapper_class" => "col-md-6"
+                            ));
+                        }
+
                     }
                     unset($n);
                 }
