@@ -344,6 +344,26 @@ abstract class Zolago_Checkout_Controller_Abstract
 
     }
 
+	/**
+	 * Checking if ZIP exist in DB with ajax
+	 */
+	public function checkZipAction()
+	{
+		$onepage = $this->getOnepage();
+
+		$zip = trim($this->getRequest()->getParam("zip"));
+		$country = trim($this->getRequest()->getParam("country"));
+
+		$isExitsZip = $onepage->customerZipExists($country, $zip);
+		$isExits = $isExitsZip === false ? false : true;
+
+		$response = array(
+			"status" => $isExits,
+			"content" => '');
+
+		$this->_prepareJsonResponse($response);
+	}
+
     public function successAction()
     {
         $session = $this->getOnepage()->getCheckout();

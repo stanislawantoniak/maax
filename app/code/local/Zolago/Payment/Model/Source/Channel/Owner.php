@@ -16,4 +16,16 @@ class Zolago_Payment_Model_Source_Channel_Owner
         );
         return $arr;
     }
+
+    public function toOptionHash()
+    {
+        /** @var Zolago_Payment_Helper_Data $paymentHelper */
+        $paymentHelper = Mage::helper('zolagopayment');
+
+        $out = array(
+            self::OWNER_MALL => $paymentHelper->__('GALLERY'),
+            self::OWNER_VENDOR => $paymentHelper->__('PARTNER'),
+        );
+        return $out;
+    }
 }

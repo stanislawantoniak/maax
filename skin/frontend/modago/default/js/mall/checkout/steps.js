@@ -210,7 +210,10 @@
                         jQuery(this).parents('.form-group').addClass('hide-success-vaild');
                     }
                 });
-
+                // backend zip validate
+                jQuery(".postcode").blur(function () {
+                    Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name=postcode]"));
+                })
                 //end validate
             },
 			
@@ -279,7 +282,12 @@
                         , item.inputClass
                         , ""
                     );
-                    formGroup.find(".row").append(element.label).append(element.input);
+                    var row = formGroup.find(".row");
+                    row.append(element.label).append(element.input);
+                    if(item.name == "postcode"){
+                        row.find("input").after('<div id="zip-warning" class="checkout-warning"></div>');
+                    }
+
                     panelBody.append(formGroup);
                 });
 
@@ -854,6 +862,12 @@
 				var self = this;
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submit0Button = jQuery(this).find('button[target=step-0-submit]');
+                        submit0Button.prop("disabled", true);
+                        var i0 = submit0Button.find('i');
+                        i0.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1162,6 +1176,12 @@
 				var self = this;
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submitNotLoggedButton = jQuery(this).find('button[target=step-0-submit]');
+                        submitNotLoggedButton.prop("disabled", true);
+                        var iNotLogged = submitNotLoggedButton.find('i');
+                        iNotLogged.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1383,11 +1403,34 @@
                 return true;
             },
 
+            afterZipValidationAction: function (field) {
+
+                var zipEntered = field.val();
+
+                if (jQuery(".zipcode").valid()) {
+                    //send backend zip checking
+                    jQuery.ajax({
+                        url: Config.url.zip_validate,
+                        data: {zip: zipEntered, country: jQuery("[name='billing[country_id]']").val()}
+                    }).done(function (data) {
+                        jQuery("#zip-warning").empty();
+                        if (!data.status) {
+                            // not valid zip - show warning
+                            Mall.Checkout.prototype.showWarning(jQuery("#zip-warning"), Mall.translate.__('warning-wrong-zip'));
+                        }
+                    })
+                } else {
+                    jQuery("#zip-warning").empty();
+                }
+
+            },
+
             validate: {
                 _checkout: null,
 
                 init: function () {
                     var self = this;
+
 
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
@@ -1396,9 +1439,18 @@
                         rules: { }
                     }));
 
+                    // backend zip validate
+                    jQuery(".zipcode").blur(function () {
+                        Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name='shipping[postcode]']"));
+                    })
+
+
+
                     // validate email address
                     jQuery("#account_email").blur(
                         function () {Mall.Checkout.steps.address.afterEmailValidationAction();});
+
+
                 }
             }
 		},
@@ -1575,6 +1627,12 @@
 
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submitButton = jQuery(this).find('button[id=step-1-submit]');
+                        submitButton.prop("disabled", true);
+                        var i = submitButton.find('i');
+                        i.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1636,6 +1694,11 @@
                 }).change();
 
 				this.content.find("#step-1-prev").click(function(){
+                    jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+                    //jQuery(this).prop("disabled", true);
+                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+
 					checkoutObject.prev();
 					jQuery(window).trigger("resize");
 					return false;
@@ -1837,10 +1900,29 @@
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+
+                    //disable prev buttons
+                    jQuery("#step-2-prev").prop("disabled", true);
+                    jQuery("#zmiana_zawartosci_koszyka").prop("disabled", true);
+                    jQuery(".prev-button-address").prop("disabled", true);
+                    jQuery(".prev-button-deliverypaymnet").prop("disabled", true);
+
+
+                    var submit2Button = jQuery(this);
+                    submit2Button.prop("disabled", true);
+                    var i2 = submit2Button.find('i');
+                    i2.addClass('fa fa-spinner fa-spin');
+
 					// Add validation
 					checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
+                    jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+                   // jQuery(this).prop("disabled", true);
+                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+
 					checkoutObject.prev();
 					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
 						jQuery('#view_default_pay').trigger('click');
