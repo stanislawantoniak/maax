@@ -102,5 +102,11 @@
 "Campaign has ended. Creative is not active. To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>.","Kampania się już zakończyła. Kreacja nie jest aktywna. Kreację możesz edytować z poziomu <a data-edit-val='link-edit' href='%s' target='_blank'>kampanii</a>."
 " To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>."," Kreację możesz edytować z poziomu <a data-edit-val='link-edit' href='%s' target='_blank'>kampanii</a>."
 "Please fill the required fields","Proszę wypełnić wymagane pola"
+"Landing Page Configuration","Landing Page Configuration [PL]"
+"Landing Page","Landing Page [PL]"
+"Category","Category [PL]"
+"Context","Context [PL]"
+"VENDOR ","VENDOR [PL]"
+"GALLERY","GALLERY [PL]"
 
 
