@@ -70,7 +70,7 @@ $defaultTypesConfig = array(
             2 => array('caption_label' => 'Body caption')
         )
     ),
-    //INSPIRATION
+    //Landing page creative
     4 => array(
         'title' => 'Landing page creative',
         'show_as' => Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE,
