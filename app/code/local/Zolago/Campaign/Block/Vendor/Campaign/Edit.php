@@ -115,7 +115,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "name" => "landing_page_context",
                 "required" => false,
                 "label" => $helper->__('Context'),
-                "values" => $landingPage = Mage::getSingleton('zolagocampaign/campaign_landingPage')->toOptionArray(),
+                "values" => $landingPage = Mage::getSingleton('zolagocampaign/attribute_source_campaign_landingPage')->toOptionArray(),
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-9 radio-buttons landing-page-config",
             ));
