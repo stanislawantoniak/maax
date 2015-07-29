@@ -45,12 +45,12 @@ class GH_Statements_Model_Observer
 	                $statement = self::initStatement($vendor, $calendarItem);
 
 	                $statementTotals = new stdClass();
-//	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
 	                $statementTotals->rma = self::processStatementsRma($statement);
-//	                $statementTotals->refund = self::processStatementsRefunds($statement);
-//	                $statementTotals->track = self::processStatementsTracks($statement);
+	                $statementTotals->refund = self::processStatementsRefunds($statement);
+	                $statementTotals->track = self::processStatementsTracks($statement);
 
-//	                self::populateStatement($statement, $statementTotals);
+	                self::populateStatement($statement, $statementTotals);
                 } catch(Mage_Core_Exception $e) {
                     Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
 	                $alreadyExists[] = $e->getMessage();
@@ -104,25 +104,30 @@ class GH_Statements_Model_Observer
      */
     public static function populateStatement(GH_Statements_Model_Statement $statement, $statementTotals)
     {
-        $data = array(
-            //order
-            "order_commission_value" => $statementTotals->order->commissionAmount,
-            "order_value" => $statementTotals->order->amount,
-
-            //rma
-            "rma_commission_value" => $statementTotals->rma->commissionAmount,
-            "rma_value" => $statementTotals->rma->amount,
-
-            //refund
-            "refund_value" => $statementTotals->refund->amount,
-
-            //track
-            "tracking_charge_subtotal" => $statementTotals->track->netto,
-            "tracking_charge_total" => $statementTotals->track->brutto,
-        );
-
-        $statement->addData($data);
-        $statement->save();
+        $data = array();
+        // Order
+        if (!empty($statementTotals->order)) {
+            $data["order_commission_value"]     = $statementTotals->order->commissionAmount;
+            $data["order_value"]                = $statementTotals->order->amount;
+        }
+        // Rma
+        if (!empty($statementTotals->rma)) {
+            $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
+            $data["rma_value"]                  = $statementTotals->rma->amount;
+        }
+        // Refund
+        if (!empty($statementTotals->refund)) {
+            $data["refund_value"]               = $statementTotals->refund->amount;
+        }
+        // Track
+        if (!empty($statementTotals->track)) {
+            $data["tracking_charge_subtotal"]   = $statementTotals->track->netto;
+            $data["tracking_charge_total"]      = $statementTotals->track->brutto;
+        }
+        if (!empty($data)) {
+            $statement->addData($data);
+            $statement->save();
+        }
     }
 
     /**
@@ -509,7 +514,7 @@ class GH_Statements_Model_Observer
                 'main_table.parent_id = urma_rma.entity_id',
                 array(
                     'udropship_vendor', 'rma_status', 'rma_type', 'payment_channel_owner', 'udpo_id',
-                    'udpo_increment_id', 'increment_id')
+                    'udpo_increment_id', 'increment_id', 'created_at')
             )
             ->where('urma_rma.udropship_vendor = ' . $statement->getVendorId());
         $rmaItemsColl->addFieldToFilter(
@@ -527,15 +532,8 @@ class GH_Statements_Model_Observer
                 continue; // No value to return
             }
 
-            $pco = $rmaItem->getPaymentChannelOwner();
-            if ($pco == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
-                $returnedValue = floatval($rmaItem->getReturnedValue());
-            } else {
-                $returnedValue = floatval($rmaItem->getPrice());
-            }
-
-            $po = $rmaItem->getPoItem()->getPo();
             $poItem = $rmaItem->getPoItem();
+            $po = Mage::getModel('zolagopo/po')->load($rmaItem->getUdpoId());
 
             $data = array();
             $data["statement_id"]           = $statement->getId();
@@ -548,7 +546,7 @@ class GH_Statements_Model_Observer
             $data["reason"]                 = $rmaItem->getItemConditionName();
             $data["payment_method"]         = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
             $data["payment_channel_owner"]  = $po->getPaymentChannelOwner();
-            $data["approved_refund_amount"] = $returnedValue;
+            $data["approved_refund_amount"] = $rmaItem->getReturnedValue();
             $data["price"]                  = $poItem->getPriceInclTax();       // Sprzedaż przed zniżką (zł)
             $data["discount_amount"]        = $poItem->getDiscountAmount();     // Zniżka (zł)
             $data["final_price"]            = $poItem->getFinalItemPrice();     // Sprzedaż w zł
@@ -573,6 +571,17 @@ class GH_Statements_Model_Observer
             $commissionAmount              += $data["commission_value"];
             $amount                        += $data["value"];
 
+            // Save
+            $statementOrder = Mage::getModel('ghstatements/rma');
+            $statementOrder->setData($data);
+            $statementOrder->save();
+
+            $rmaItem->setStatementId($statement->getId());
+            $rmaItem->save();
+
+            $rma = Mage::getModel('urma/rma')->load($rmaItem->getParentId());
+            $rma->setStatementId($statement->getId());
+            $rma->save();
         }
 
         $rmaStatementTotals->commissionAmount = $commissionAmount;

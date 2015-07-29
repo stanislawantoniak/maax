@@ -26,4 +26,15 @@ $installer->getConnection()
         "shipping_cost"
     );
 
+$installer->getConnection()
+    ->addForeignKey(
+        $installer->getFkName('urma/rma_item', 'statement_id', 'ghstatements/statement', 'id'), //$fkName
+        $installer->getTable('urma/rma_item'), //$tableName
+        'statement_id', //$columnName
+        $installer->getTable('ghstatements/statement'), //$refTableName
+        'id', //$refColumnName
+        Varien_Db_Ddl_Table::ACTION_SET_NULL,
+        Varien_Db_Ddl_Table::ACTION_CASCADE
+    );
+
 $installer->endSetup();
