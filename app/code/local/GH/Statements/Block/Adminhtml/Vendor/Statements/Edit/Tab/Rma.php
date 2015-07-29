@@ -1,22 +1,23 @@
 <?php
 
-class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
+class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Rma
     extends GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Statement
 {
 
     public function __construct()
     {
         parent::__construct();
-        $this->setId('statement_order');
+        $this->setId('statement_rma');
         $this->setDefaultSort('id');
         $this->setUseAjax(true);
     }
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('ghstatements/order')
+        $collection = Mage::getModel('ghstatements/rma')
             ->getCollection()
             ->addFieldToFilter('statement_id', $this->getStatement()->getId());
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -26,70 +27,53 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         $this->addColumn('id', array(
             'header' => Mage::helper('ghstatements')->__('ID'),
             'sortable' => true,
-            'width' => '60',
             'index' => 'id'
         ));
         $this->addColumn('po_increment_id', array(
             'header' => Mage::helper('ghstatements')->__('Order number'),
             'sortable' => true,
-            'width' => '60',
             'index' => 'po_increment_id'
+        ));
+        $this->addColumn('rma_increment_id', array(
+            'header' => Mage::helper('ghstatements')->__('RMA number'),
+            'sortable' => true,
+            'index' => 'rma_increment_id'
+        ));
+        $this->addColumn('event_date', array(
+            'header' => Mage::helper('ghstatements')->__('RMA Date'),
+            'sortable' => true,
+            'index' => 'event_date',
+            'type' => 'date',
         ));
         $this->addColumn('sku', array(
             'header' => Mage::helper('ghstatements')->__('SKU'),
             'sortable' => true,
-            'width' => '60',
             'index' => 'sku'
         ));
-        $this->addColumn('qty', array(
-            'header' => Mage::helper('ghstatements')->__('Qty'),
+        $this->addColumn('reason', array(
+            'header' => Mage::helper('ghstatements')->__('Reason'),
             'sortable' => true,
-            'width' => '60',
-            'index' => 'qty',
-            "type" => "number"
+            'index' => 'reason'
         ));
-
-        $this->addColumn('shipped_date', array(
-            'header' => Mage::helper('ghstatements')->__('Shipping Date'),
-            'sortable' => true,
-            'width' => '60',
-            'index' => 'shipped_date',
-            //'type' => 'date',
-        ));
-        $this->addColumn('carrier', array(
-            'header' => Mage::helper('ghstatements')->__('Carrier'),
-            'sortable' => true,
-            'width' => '60',
-            'index' => 'carrier'
-        ));
-
-        /** @var $ghDhl GH_Dhl_Model_Source_Shipping */
-        $this->addColumn('gallery_shipping_source', array(
-            'header' => Mage::helper('ghstatements')->__('Gallery shipping source'),
-            'sortable' => true,
-            'width' => '60',
-            'index' => 'gallery_shipping_source',
-            "type" => "options",
-            "options" => $ghDhl = Mage::getModel("ghdhl/source_shipping")->toOptionHash()
-        ));
-
         $this->addColumn('payment_method', array(
             'header' => Mage::helper('ghstatements')->__('Payment Method'),
             'sortable' => true,
-            'width' => '60',
             'index' => 'payment_method'
         ));
-
-        /** @var $paymentOwner Zolago_Payment_Model_Source_Channel_Owner */
         $this->addColumn('payment_channel_owner', array(
             'header' => Mage::helper('ghstatements')->__('Payment Owner'),
             'sortable' => true,
-            'width' => '60',
             'index' => 'payment_channel_owner',
             "type" => "options",
-            "options" => $paymentOwner = Mage::getModel("zolagopayment/source_channel_owner")->toOptionHash()
+            "options" => Mage::getModel("zolagopayment/source_channel_owner")->toOptionHash()
         ));
-
+        $this->addColumn('approved_refund_amount', array(
+            'header' => Mage::helper('ghstatements')->__('Approved refund amount'),
+            'index' => 'approved_refund_amount',
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base'),
+        ));
         $this->addColumn("price", array(
             "index" => "price",
             "header" => Mage::helper("ghstatements")->__("Price"),
@@ -107,13 +91,6 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         $this->addColumn("final_price", array(
             "index" => "final_price",
             "header" => Mage::helper("ghstatements")->__("Final Price"),
-            'type' => 'price',
-            'currency' => 'base_currency_code',
-            'currency_code' => Mage::getStoreConfig('currency/options/base')
-        ));
-        $this->addColumn("shipping_cost", array(
-            "index" => "shipping_cost",
-            "header" => Mage::helper("ghstatements")->__("Shipping Cost"),
             'type' => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
@@ -140,7 +117,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         ));
         $this->addColumn("value", array(
             "index" => "value",
-            "header" => Mage::helper("ghstatements")->__("Amount"),
+            "header" => Mage::helper("ghstatements")->__("To return"),
             'type' => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
@@ -149,7 +126,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/orderGrid', array('_current'=>true));
+        return $this->getUrl('*/*/rmaGrid', array('_current'=>true));
     }
 
 }
