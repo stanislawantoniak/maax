@@ -12,6 +12,7 @@ class Zolago_Campaign_Varien_Data_Form_Element_Categorytree
             ->setTemplate('zolagocampaign/dropship/campaign/edit/category_tree.phtml')
             ->setData("field_name", $this->getName())
             ->setData("field_value", $this->getValue())
+            ->setData("after_element_html", $this->getData("after_element_html"))
             ->toHtml();
     }
 }

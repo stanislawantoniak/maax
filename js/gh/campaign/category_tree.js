@@ -23,12 +23,16 @@ jQuery(document).ready(function () {
     });
 
     jQuery("#browseCategory button[type=submit]").click(function () {
-        var items = jQuery('#jstree').jstree("get_checked", null, true);
+        var items = jQuery('#jstree').jstree("get_checked");
+        console.log(items);
         var checked_ids = [];
         jQuery(items).each(function (i, item) {
             checked_ids.push(item);
         });
+
+
         jQuery("input[name=landing_page_category]").val(checked_ids.join(","));
+        jQuery("#landing_page_category_text").html(jQuery('#jstree ul li[id=' + checked_ids + ']').data("name"));
         jQuery("#browseCategory").modal("hide");
 
     });

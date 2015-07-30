@@ -31,6 +31,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         /* @var $form Zolago_Dropship_Model_Form */
         $form->setAction($this->getUrl("campaign/vendor/save"));
 
+        $values = $this->getModel()->getData();
+
+
         $general = $form->addFieldset("general", array(
             "legend" => $helper->__("General"),
             "icon_class" => "icon-cog"
@@ -85,6 +88,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         ));
 
         if($isLocalVendor){
+            if(!$this->isModelNew()){
+                $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
+                $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
+            }
 
             $landingPage->addField('is_landing_page', 'checkbox', array(
                 'label'     => $helper->__('Landing Page'),
@@ -120,7 +127,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "class" => "form-control",
                 "label" => $helper->__('Category'),
                 "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-6 landing-page-config"
+                "wrapper_class" => "col-md-6 landing-page-config",
+                "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div>' : '<div id="landing_page_category_text"></div>'
             ));
         }
 
@@ -200,7 +208,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "wrapper_class" => "col-md-9 radio-buttons"
         ));
 
-        $values = $this->getModel()->getData();
+
 
 
         //reformat date_from date_to

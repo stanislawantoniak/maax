@@ -249,6 +249,7 @@
 
             jQuery("[name=context_vendor_id]").change(function(){
                 jQuery("[name=landing_page_category]").val("");
+                jQuery("#landing_page_category_text").html("");
                 refreshCategoriesTree(jQuery(this).val());
             })
 
