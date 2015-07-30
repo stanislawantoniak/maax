@@ -1,8 +1,8 @@
 <?php
 class Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPage {
 
-    const LANDING_PAGE_CONTEXT_VENDOR = 'landing_page_context_vendor';
-    const LANDING_PAGE_CONTEXT_GALLERY = "landing_page_context_gallery";
+    const LANDING_PAGE_CONTEXT_VENDOR = 'vendor';
+    const LANDING_PAGE_CONTEXT_GALLERY = "gallery";
 
     /**
      * @return array
