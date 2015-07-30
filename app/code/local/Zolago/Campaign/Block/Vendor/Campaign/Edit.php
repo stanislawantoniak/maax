@@ -94,15 +94,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "wrapper_class" => "col-md-3"
             ));
 
-            $landingPage->addField("landing_page_category", "category_tree", array(
-                "name" => "landing_page_category",
-                "required" => false,
-                "class" => "form-control",
-                "label" => $helper->__('Category'),
-                "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-6 landing-page-config"
-            ));
-
             $landingPage->addField("landing_page_context", "radios", array(
                 "name" => "landing_page_context",
                 "required" => false,
@@ -121,6 +112,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-4 landing-page-config",
                 "form_group_wrapper_class" => "hidden"
+            ));
+
+            $landingPage->addField("landing_page_category", "category_tree", array(
+                "name" => "landing_page_category",
+                "required" => false,
+                "class" => "form-control",
+                "label" => $helper->__('Category'),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-6 landing-page-config"
             ));
         }
 

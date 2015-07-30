@@ -42,6 +42,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
        return $this->_forward('edit');
     }
 
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
     public function productsAction()
     {
 
@@ -98,6 +101,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             return $this->_redirectReferer();
         }
     }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
 	public function saveAction() {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {
@@ -261,7 +268,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 	}
 
     /**
-     * @return array
+     *
      */
     public function getCampaignDataAction()
     {
@@ -377,4 +384,14 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 
 
+    public function get_category_treeAction() {
+        $vendor = (int)$this->getRequest()->getParam("vendor");
+        $tree = Mage::helper("zolagocampaign")->getCategoriesTree($vendor);
+
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('Content-type', 'application/text', true);
+
+        $this->getResponse()->setBody($tree);
+    }
 }

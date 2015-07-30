@@ -116,14 +116,7 @@
                 <h4 class="modal-title"><?php echo $_helper->__("Select Category");?></h4>
             </div>
             <div class="modal-body">
-                <div id='jqxWidget'>
-                    <div >
-                        <div id='jstree' style="padding: 10px 0;">
-                            <?php echo Mage::helper("zolagocampaign")->getCategoriesTree(); ?>
-                        </div>
-                    </div>
-
-                </div>
+                <div id='jstree' style="padding: 10px 0;"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
@@ -170,7 +163,7 @@
             });
 
             jQuery("#browseProducts").on("show.bs.modal", function () {
-                console.log("Init loading products")
+                //console.log("Init loading products")
             });
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
@@ -205,7 +198,7 @@
                     "date_to": {dateAfter: '#date_from'},
                     landing_page_category: {
                         required: "input[name=is_landing_page]:checked",
-                        number: true
+                        digits: true
                     },
                     landing_page_context: {
                         required: "input[name=is_landing_page]:checked"
@@ -253,12 +246,52 @@
                 toggleVendorSelect(this);
             })
 
+            jQuery("[name=context_vendor_id]").change(function(){
+                jQuery("[name=landing_page_category]").html("");
+                refreshCategoriesTree(jQuery(this).val());
+            })
+
+
             function toggleVendorSelect(element) {
+                var vendor = 0;
                 if(jQuery(element).val() == "vendor"){
                     jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
+                    vendor = jQuery("#context_vendor_id option:selected").val();
                 } else {
                     jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
                 }
+
+                refreshCategoriesTree(vendor);
+            }
+
+            function refreshCategoriesTree(vendor){
+                jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree", array("_secure" => true)); ?>',
+                    method: 'POST',
+                    data: {"vendor": vendor},
+                    success: function(tree){
+
+                        jQuery("#jstree").jstree("destroy");
+                        jQuery("#jstree").html(tree);
+                        jQuery("#jstree").jstree({
+                            "core": {
+                                "multiple": false,
+                                "animation": 0,
+                                'themes': {
+                                    'name': 'proton',
+                                    'responsive': true
+                                }
+                            },
+                            "checkbox": {
+                                "keep_selected_style": false,
+                                three_state: false
+                            },
+                            "plugins": ["checkbox"]
+
+                        });
+                    }
+                })
             }
         });
     </script>

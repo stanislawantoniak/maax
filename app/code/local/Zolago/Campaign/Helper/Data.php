@@ -136,13 +136,29 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 
-
-    public function getCategoriesTree(){
+    /**
+     * @param null $vendorId
+     * @return string
+     */
+    public function getCategoriesTree($vendorId = null){
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+        if(!empty($vendorId)){
+            $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+
+            $customVendorVars = Mage::helper('core')->jsonDecode($vendor->getCustomVarsCombined());
+
+            $vendorRootCategory = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category']) && (int)reset($customVendorVars['root_category']) > 0) ?
+                (int)reset($customVendorVars['root_category']) :
+                $rootCatId;
+
+            if ($vendorRootCategory > 0) {
+                $rootCatId = $vendorRootCategory;
+            }
+        }
         return  $this->getTreeCategories($rootCatId, false);
     }
 
-    public function getTreeCategories($parentId, $isChild)
+    public function getTreeCategories($parentId)
     {
         $html = "";
         $allCats = Mage::getModel('catalog/category')->getCollection()
