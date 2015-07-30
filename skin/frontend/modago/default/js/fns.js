@@ -421,6 +421,7 @@ jQuery.noConflict();
 			var screenHeight = $(window).height(),
 				body = $('body'),
 				htmlBody = $('html,body');
+            jQuery('#link_menu').toggleClass('not-open');
 			body.addClass('sb-open');
 			htmlBody.addClass('noscroll');
 			$('#sb-site').addClass('open');

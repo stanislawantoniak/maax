@@ -1264,6 +1264,7 @@ function initToggleSearch() {
 		dropdown.show();
 		toggle.parent().addClass("open");
 		toggle.css('pointer-events','none');
+        toggle.parent().toggleClass('not-open');
 	});
 
 	jQuery(document).click(function(e){
@@ -1272,6 +1273,7 @@ function initToggleSearch() {
 			toggle.parent().removeClass('open');
 			dropdown.hide();
 			toggle.css('pointer-events','');
+            toggle.parent().toggleClass('not-open');
 		}
 	});
 }
@@ -1348,6 +1350,7 @@ Mall.swipeOptions = {
 	swipeLeft:function(event) {
 		if (jQuery('body').hasClass('sb-open')) {
 			closeHamburgerMenu(event);
+            jQuery('#link_menu').toggleClass('not-open');
 		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
 			Mall.listing.closeMobileFilters();
 		}
@@ -1525,4 +1528,4 @@ jQuery(document).ready(function() {
 
 	//init like events
 	Mall.delegateLikeEvents();
-});''
+});

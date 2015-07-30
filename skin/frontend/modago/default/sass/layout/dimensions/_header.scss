@@ -157,9 +157,17 @@ body {
 	            vertical-align: top;
 	            cursor: pointer;
 
-	            a:hover,&.open {
-		            background-color: #2A2A2A;
-	            }
+                @include min-screen($screen-md-min) {
+                    a:hover,&.open {
+                      background-color: #2A2A2A;
+                    }
+                }
+                &#link_search.not-open, &#link_search.not-open:hover {
+                    background-color: transparent !important;
+                }
+                &#link_menu.not-open, &#link_menu.not-open:hover {
+                    background-color: transparent !important;
+                }
 
 	            @include min-screen($screen-md-min) {
 		            &#link_basket {
