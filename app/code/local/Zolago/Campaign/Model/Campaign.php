@@ -625,6 +625,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $storesByWebsite = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
 
         foreach ($revertProductOptions as $websiteId => $productIds) {
+            Mage::log($productIds, null, "productAttributeRevert.log");
             $stores = isset($storesByWebsite[$websiteId]) ? $storesByWebsite[$websiteId] : false;
             if ($stores) {
                 $this->setCampaignAttributesToProducts($campaignId, $campaign->getType(), $productIds, $stores);
@@ -674,6 +675,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($stores as $store) {
                 foreach ($productIds as $productId) {
+
                     $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store);
 
                     if (!$val) {
@@ -682,12 +684,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
 
-                    if (!empty($campaignIds)) {
-                        $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
-                        $actionModel
-                            ->updateAttributesPure($productIds, $attributesData, (int)$store);
-                    }
-
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
+                    $actionModel
+                        ->updateAttributesPure($productIds, $attributesData, (int)$store);
 
                 }
                 unset($productId);

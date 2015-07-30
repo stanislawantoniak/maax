@@ -94,14 +94,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "wrapper_class" => "col-md-3"
             ));
 
-            $landingPage->addField("url_key", "text", array(
-                "name" => "url_key",
-                "required" => false,
-                "class" => "form-control",
-                "label" => $helper->__('URL Key'),
-                "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-6 landing-page-config"
-            ));
             $landingPage->addField("landing_page_category", "category_tree", array(
                 "name" => "landing_page_category",
                 "required" => false,
@@ -110,16 +102,26 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6 landing-page-config"
             ));
-            /* @var $landingPage Zolago_Campaign_Model_Campaign_LandingPage */
+
             $landingPage->addField("landing_page_context", "radios", array(
                 "name" => "landing_page_context",
                 "required" => false,
                 "label" => $helper->__('Context'),
-                "values" => $landingPage = Mage::getSingleton('zolagocampaign/attribute_source_campaign_landingPage')->toOptionArray(),
+                "values" => $landingPageSource = Mage::getSingleton('zolagocampaign/attribute_source_campaign_landingPageContext')->toOptionArray(),
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-9 radio-buttons landing-page-config",
             ));
 
+            $landingPage->addField("context_vendor_id", "select", array(
+                "name" => "context_vendor_id",
+                "required" => true,
+                "class" => "form-control",
+                "label" => $helper->__('Select Vendor'),
+                "values" => $landingPageVendorContextSource = Mage::getSingleton('zolagocampaign/attribute_source_campaign_landingPageContext_vendor')->toOptionArray(),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-4 landing-page-config",
+                "form_group_wrapper_class" => "hidden"
+            ));
         }
 
 

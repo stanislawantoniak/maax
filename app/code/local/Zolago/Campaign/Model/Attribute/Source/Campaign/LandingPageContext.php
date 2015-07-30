@@ -1,5 +1,5 @@
 <?php
-class Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPage {
+class Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext {
 
     const LANDING_PAGE_CONTEXT_VENDOR = 'vendor';
     const LANDING_PAGE_CONTEXT_GALLERY = "gallery";

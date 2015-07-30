@@ -143,13 +143,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $campaign->setVendorId($vendor->getId());
                 }
 
-//                if($data['is_landing_page'] == 1){
-//                    $nameForCustomer = $data["name_customer"];
-//                    $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
-//                    $campaign->addData(array('url_key' => $urlKey));
-//                }
-
-
                 $campaign->save();
 
 
