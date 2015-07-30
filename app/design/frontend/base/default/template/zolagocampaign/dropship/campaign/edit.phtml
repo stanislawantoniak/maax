@@ -186,6 +186,7 @@
             }
 
             jQuery('.datetimepicker').datetimepicker({
+                lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
                 format: 'd-m-Y H:i'
             });
             jQuery(".icon-calendar").click(function () {
