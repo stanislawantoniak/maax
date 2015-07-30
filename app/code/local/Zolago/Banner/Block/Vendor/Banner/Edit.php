@@ -204,7 +204,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             && (isset($picture->pictures_h) && !empty($picture->pictures_h))
                         ) {
                             $afterImageElementHtml = "<p class='help-block-message align-left'>" .
-                                $helper->__("UWAGA! Zdjęcie musi mieć szerokość %spx i wysokość %spx", $pictureW, $pictureH) .
+                                $helper->__("NOTE! Image must have a width %spx and height %spx", $pictureW, $pictureH) .
                                 "</p>";
                             $imageOptions = array_merge($imageOptions,
                                 array(

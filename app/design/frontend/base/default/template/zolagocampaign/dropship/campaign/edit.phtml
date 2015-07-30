@@ -11,7 +11,7 @@
                 <p><?php echo $_helper->__("Create new campaign. Required fields are marked with an asterisk."); ?></p>
             <?php else: ?>
                 <h3><?php echo $_helper->__("Edit campaign '%s'", $_model->getName()); ?></h3>
-                <p><?php echo $_helper->__("Poniżej znajdziesz szczegóły kampanii. Możesz wprowadzić zmiany w ustawieniach kampanii edytując poszczególne pola. Możesz dodać krecje i dodać produkty."); ?></p>
+                <p><?php echo $_helper->__("Below you will find details of campaign. You can make changes to your campaign settings by editing each field. You can add creation and add products."); ?></p>
             <?php endif; ?>
         </div>
     </div>
@@ -179,6 +179,7 @@
             }
 
             jQuery('.datetimepicker').datetimepicker({
+                lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
                 format: 'd-m-Y H:i'
             });
             jQuery(".icon-calendar").click(function () {
