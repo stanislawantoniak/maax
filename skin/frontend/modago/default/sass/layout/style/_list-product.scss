@@ -140,3 +140,23 @@
       
     }    
 }
+html.is-browser-mobile {
+  .box_listing_product {
+    .price {
+      .like {
+        .icoLike {
+          background-image: url('../images/svg/unlike.svg');
+          &:hover {
+            background-image: url('../images/svg/unlike.svg');
+          }
+        }
+        &.liked .icoLike {
+          background-image: url('../images/svg/like.svg');
+          &:hover {
+            background-image: url('../images/svg/like.svg');
+          }
+        }
+      }
+    }
+  }
+}

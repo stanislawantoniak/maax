@@ -1420,6 +1420,8 @@ jQuery(document).ready(function() {
 	initToggleSearch();
     Mall.disableSearchNoQuery();
 
+    if (Mall.getIsBrowserMobile) { jQuery('html').addClass('is-browser-mobile'); }
+
     //hack for vendor main page (turpentine shows global messages only one time)
     if(jQuery(".page-messages-block ul.messages").length > 0){
         var messages = jQuery(".page-messages-block ul.messages").clone();
