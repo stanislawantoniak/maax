@@ -79,6 +79,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					</div>
 				</div>
 			</fieldset>
+            <?php echo $this->getChildHtml('ced_sociallogin_login'); ?>
             <?php endif; ?>
 			<div class="row  ">
                 <?php $agreements = $this->getAgreements(); ?>

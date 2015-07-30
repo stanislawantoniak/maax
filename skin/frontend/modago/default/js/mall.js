@@ -1360,6 +1360,43 @@ Mall.swipeOptions = {
 	threshold: 5
 };
 
+Mall.socialLogin = function(url,redirect) {
+	var socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
+	var redirecting = false;
+	var pollTimer = window.setInterval(function () {
+		try {
+			if(!socialLoginWindow.closed) {
+				if (socialLoginWindow.document.URL.indexOf(redirect) != -1) {
+					window.clearInterval(pollTimer);
+					var url = socialLoginWindow.document.getElementById('redirect').innerText;
+
+					socialLoginWindow.close();
+					redirecting = true;
+
+					if(url) {
+						window.location = url;
+					}
+				}
+			} else if(!redirecting) {
+				window.clearInterval(pollTimer);
+			}
+		} catch (e) {
+		}
+	}, 500);
+}
+
+//credits: http://www.netlobo.com/url_query_string_javascript.html
+Mall.getUrlPart = function(url,name) {
+	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	var regexS = "[\\#&]"+name+"=([^&#]*)";
+	var regex = new RegExp( regexS );
+	var results = regex.exec( url );
+	if( results == null )
+		return "";
+	else
+		return results[1];
+}
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();

@@ -876,6 +876,12 @@
 					<block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
 					<block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
 					<block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/address/password.phtml"/>
+					<block type="sociallogin/login" name="ced_sociallogin_login" template="sociallogin/login.phtml" >
+						<block type="sociallogin/google_button" name="ced_google_login_button" template="sociallogin/google/button.phtml" />
+						<block type="sociallogin/facebook_button" name="ced_facebook_login_button" template="sociallogin/facebook/button.phtml" />
+						<block type="sociallogin/twitter_button" name="ced_twitter_login_button" template="sociallogin/twitter/button.phtml" />
+						<block type="sociallogin/linkedin_button" name="ced_linkedin_login_button" template="sociallogin/linkedin/button.phtml" />
+					</block>
 				</block>
 				<block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
 					<block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" as="shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
@@ -1043,6 +1049,30 @@
                 <path>customer/account/privacy</path>
                 <label>Privacy settings</label>
             </action>
+			<!--Google login-->
+			<action method="addLink" translate="label" module="sociallogin" ifconfig="ced/ced_sociallogin_google/enabled">
+				<name>ced_sociallogin_google</name>
+				<path>cedsociallogin/account/google</path>
+				<label>Google login</label>
+			</action>
+			<!--Facebook login-->
+			<action method="addLink" translate="label" module="sociallogin" ifconfig="ced/ced_sociallogin_facebook/enabled">
+				<name>ced_sociallogin_facebook</name>
+				<path>cedsociallogin/account/facebook</path>
+				<label>Facebook login</label>
+			</action>
+			<!--Twitter login-->
+			<action method="addLink" translate="label" module="sociallogin" ifconfig="ced/ced_sociallogin_twitter/enabled">
+				<name>ced_sociallogin_twitter</name>
+				<path>cedsociallogin/account/twitter</path>
+				<label>Twitter login</label>
+			</action>
+			<!--LinkedIn login-->
+			<action method="addLink" translate="label" module="sociallogin" ifconfig="ced/ced_sociallogin_linkedin/enabled">
+				<name>ced_sociallogin_linkedin</name>
+				<path>cedsociallogin/account/linkedin</path>
+				<label>Linkedin login</label>
+			</action>
 			<!--logout-->
 			<action method="addLink" translate="label">
 				<name>logout</name>
@@ -1370,6 +1400,20 @@
 
 	<customer_account_create>
 		<update handle="zolago_modago_customer_handle" />
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>ced_sociallogin/css/styles.css</name>
+			</action>
+		</reference>
+		<reference name="customer_form_register">
+			<block type="sociallogin/register" name="ced_sociallogin_register">
+				<block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" />
+				<block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" />
+				<block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" />
+				<block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button"/>
+			</block>
+		</reference>
 	</customer_account_create>
 	
 	

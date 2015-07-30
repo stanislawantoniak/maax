@@ -46,6 +46,7 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 								<?php /* echo $this->getChildHtml('persistent.remember.me') */; ?>
 								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
 							</ul>
+							<?php echo $this->getChildHtml('ced_sociallogin_login'); ?>
 							<?php /* <footer class="footer-section">
 								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
 							</footer> */ ?>

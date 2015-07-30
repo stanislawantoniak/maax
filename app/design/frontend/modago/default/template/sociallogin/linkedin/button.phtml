@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+<?php
 /**
  * CedCommerce
  *
@@ -19,19 +17,15 @@
  */
 
 /**
- * SocialLogin 	module/Ced_SocialLogin.xml
- *
  * @category   	Ced
  * @package    	Ced_SocialLogin
- * @author		CedCommerce Magento Core Team <Ced_MagentoCoreTeam@cedcommerce.com>
+ * @author 		CedCommerce Magento Core Team <Ced_MagentoCoreTeam@cedcommerce.com>
  */
--->
-
-<config>
-    <modules>
-        <Ced_SocialLogin>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Ced_SocialLogin>
-    </modules>
-</config>
+?>
+<div class="clearer">
+    <a href="<?php echo $this->escapeUrl($this->_getButtonUrl()); ?>">
+    <?php //echo $this->_getButtonText(); ?>
+			<div class="ced-sociallogin-linkedin-inner <?php echo $this->_getButtonClass(); ?>">
+			</div>
+    </a>    
+</div>

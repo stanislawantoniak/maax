@@ -102,7 +102,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
              * const STATUS_UNCONFIRMED  -> 0
              */
 	        if($customer->hasIsSubscribedHasChanged() ||
-                // never confirmed newsletter and now don't wont newsletter
+                // never confirmed newsletter and now don't want newsletter
                 // STATUS_UNCONFIRMED -> STATUS_NOT_ACTIVE
                 (!$customer->getIsSubscribed() && $subscriberStatus == self::STATUS_UNCONFIRMED)
             ) {
@@ -123,7 +123,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
                     } elseif ($subscriberStatus == self::STATUS_SUBSCRIBED) {
 						//do nothing
                     } else { //if $subscriberStatus == NULL || $subscriberStatus == self::STATUS_NOT_ACTIVE
-	                    if($confirmationNeeded) {
+	                    if($confirmationNeeded && !$customer->getCedSocialloginFid() && !$customer->getCedSocialloginGid()) {
 		                    $customer->setConfirmMsg(true);
 		                    $subscriber->setStatus(self::STATUS_UNCONFIRMED);
 		                    $subscriber->sendConfirmationRequestEmail();
@@ -184,7 +184,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-	        if($customer->getIsSubscribed() && $confirmationNeeded) {
+	        if($customer->getIsSubscribed() && $confirmationNeeded && !$customer->getCedSocialloginFid() && !$customer->getCedSocialloginGid()) {
 		        $newStatus = self::STATUS_UNCONFIRMED;
 	        } elseif($customer->getIsSubscribed() && !$confirmationNeeded) {
 		        $newStatus = self::STATUS_SUBSCRIBED;

@@ -1,0 +1,18 @@
+<?php
+/** @var Ced_SocialLogin_Block_Facebook_Button $this */
+$url = $this->escapeUrl($this->_getButtonUrl());
+?>
+<div class="clearer">
+	<?php if($this->isLogged()): ?>
+		<?php $redirect = $this->getClient()->getRedirectUri(); ?>
+		<a href="#" onclick="Mall.socialLogin('<?php echo $url ?>','<?php echo $redirect ?>');">
+	    <?php //echo $this->_getButtonText(); ?>
+			<div class="ced-sociallogin-facebook-inner <?php echo $this->_getButtonClass(); ?>"></div>
+	    </a>
+	<?php else: ?>
+		<a href="<?php echo $url ?>">
+			<?php //echo $this->_getButtonText(); ?>
+			<div class="ced-sociallogin-facebook-inner <?php echo $this->_getButtonClass(); ?>"></div>
+		</a>
+	<?php endif; ?>
+</div>
