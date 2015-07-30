@@ -40,7 +40,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Banner_Grid extends Mage_Adminhtml_B
     }
     public function getAddNewBannerPath(){
         $campaignId = $this->getRequest()->getParam("id");
-        return Mage::getUrl('banner/vendor/new', array('campaign_id' => $campaignId));
+        return Mage::getUrl('banner/vendor/new', array('campaign_id' => $campaignId, '_secure'=>true));
     }
 
     protected function _prepareColumns()

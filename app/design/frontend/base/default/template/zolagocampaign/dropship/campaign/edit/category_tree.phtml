@@ -2,16 +2,18 @@
 
 <?php $_helper = Mage::helper("zolagocampaign");?>
 
+<?php $secureBaseUrl = Mage::getUrl('',array('_secure'=>true)); ?>
 
-<link rel="stylesheet" type="text/css" href="/js/jqwidgets/styles/jqx.base.css"/>
-<link rel="stylesheet" type="text/css" href="/js/jqwidgets/styles/jqx.arctic.css"/>
 
-<script type="application/javascript" src="/js/jqwidgets/jqxcore.js"></script>
-<script type="application/javascript" src="/js/jqwidgets/jqxbuttons.js"></script>
-<script type="application/javascript" src="/js/jqwidgets/jqxscrollbar.js"></script>
-<script type="application/javascript" src="/js/jqwidgets/jqxpanel.js"></script>
-<script type="application/javascript" src="/js/jqwidgets/jqxtree.js"></script>
-<script type="application/javascript" src="/js/jqwidgets/jqxcheckbox.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $secureBaseUrl; ?>js/jqwidgets/styles/jqx.base.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $secureBaseUrl; ?>js/jqwidgets/styles/jqx.arctic.css"/>
+
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jqwidgets/jqxcore.js"></script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jqwidgets/jqxbuttons.js"></script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jqwidgets/jqxscrollbar.js"></script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jqwidgets/jqxpanel.js"></script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jqwidgets/jqxtree.js"></script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jqwidgets/jqxcheckbox.js"></script>
 
 
 <input id="<?php echo $this->getFieldName(); ?>" name="<?php echo $this->getFieldName(); ?>"
@@ -22,43 +24,4 @@
     </span>
 </label>
 
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        // create jqxTree
-        jQuery('#jqxTree').jqxTree({
-            height: '300px',
-            //hasThreeStates: true,
-            checkboxes: true,
-            width: '90%',
-            theme: "arctic"
-        });
-
-        jQuery('#jqxTree').jqxTree('hitTest', 10, 20);
-        jQuery('#jqxTree').css('visibility', 'visible');
-
-        jQuery("#browseCategory").on("show.bs.modal", function () {
-            jQuery('#jqxTree').jqxTree('uncheckAll');
-            jQuery('#jqxTree').jqxTree('collapseAll');
-
-        });
-
-
-
-        jQuery("#browseCategory button[type=submit]").click(function(){
-            var items = jQuery('#jqxTree').jqxTree('getCheckedItems');
-
-            var categories = [];
-            jQuery(items).each(function (i, item) {
-                categories.push(jQuery(item.element).data("category"));
-            })
-
-            jQuery("input[name=<?php echo $this->getFieldName(); ?>]").val(categories.join(","));
-            jQuery("#browseCategory").modal("hide");
-
-            jQuery('#jqxTree').jqxTree('uncheckAll');
-            jQuery('#jqxTree').jqxTree('collapseAll');
-        });
-    });
-</script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/gh/campaign/category_tree.js"></script>

@@ -9,6 +9,8 @@ class Zolago_Banner_Model_Banner_Type
     const TYPE_BOX = 'box';
     const TYPE_INSPIRATION = 'inspiration';
 
+    const TYPE_LANDING_PAGE_CREATIVE = 'landing_page_creative';
+
     /**
      * @return array
      */
