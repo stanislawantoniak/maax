@@ -42,12 +42,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
             ));
 
 
-            $this->addColumn("url_key", array(
-                "type"		=>	"text",
-                "index"		=>	"url_key",
-                "class"		=>  "form-control",
-                "header"	=>	$_helper->__("Landing Page Url"),
-            ));
+//            $this->addColumn("url_key", array(
+//                "type"		=>	"text",
+//                "index"		=>	"url_key",
+//                "class"		=>  "form-control",
+//                "header"	=>	$_helper->__("Landing Page Url"),
+//            ));
         }
 
 		
