@@ -75,9 +75,9 @@ class GH_Statements_Model_Observer
      */
     public static function initStatement($vendor, $calendarItem) {
 
-//        if (self::isStatementAlready($vendor, $calendarItem)) {
-//            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
-//        }
+        if (self::isStatementAlready($vendor, $calendarItem)) {
+            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
+        }
 
         /** @var GH_Statements_Model_Calendar $calendar */
         $calendar = Mage::getModel('ghstatements/calendar')->load($calendarItem->getCalendarId());
