@@ -59,10 +59,12 @@ class Ced_SocialLogin_Model_Facebook_Userdetails
 
             } catch(FacebookOAuthException $e) {
                 $helper->disconnect($customer);
-                Mage::getSingleton('core/session')->addNotice($e->getMessage());
+	            Mage::logException($e);
+                //Mage::getSingleton('core/session')->addError($e->getMessage());
             } catch(Exception $e) {
                 $helper->disconnect($customer);
-                Mage::getSingleton('core/session')->addError($e->getMessage());
+	            Mage::logException($e);
+                //Mage::getSingleton('core/session')->addError($e->getMessage());
             }
 
         }  

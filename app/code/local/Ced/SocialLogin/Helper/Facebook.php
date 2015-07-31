@@ -86,7 +86,7 @@ class Ced_SocialLogin_Helper_Facebook extends Mage_Core_Helper_Abstract
         $customer->setConfirmation(null);
         $customer->save();
 
-        $customer->sendNewAccountEmail('confirmed', '', Mage::app()->getStore()->getId());
+        $customer->sendNewAccountEmail('registered', '', Mage::app()->getStore()->getId());
 
         Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($customer);            
 
