@@ -7,78 +7,12 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 
-
-$images = array();
-$fq = $this->getRequest()->getParam("fq");
-//krumo($fq["campaign_regular_id"]);
-
-$currentCategory = $this->getCategory();
-
-if(isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])){
-    $landingPageCampaign = "";
-    if(isset($fq["campaign_regular_id"])){
-        $landingPageCampaign = $fq["campaign_regular_id"];
-    }
-    if(isset($fq["campaign_info_id"])){
-        $landingPageCampaign = $fq["campaign_info_id"];
-    }
-
-    $campaign = Mage::getModel("zolagocampaign/campaign")->load($landingPageCampaign,"name");
-    $campaignId = $campaign->getId();
-    if ($campaignId !== NULL) {
-        //krumo($campaign->getData());
-        if (
-            ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
-            && $campaign->getIsLandingPage()
-            && $campaign->getLandingPageCategory()
-            && ($campaign->getLandingPageCategory() == $currentCategory->getId())
-        ) {
-            //context landing_page_context
-
-            $landing_page_context = $campaign->getData("landing_page_context");
-
-
-            if($vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR){
-                //if vendor context
-            }
-            if(!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY){
-                //if gallery context
-
-                //krumo($currentCategory->getData());
-                //load banner
-                $bannerCollection = Mage::getModel("zolagobanner/banner")
-                    ->getCollection();
-                $bannerCollection->addFieldToFilter("campaign_id", $campaign->getData("campaign_id"));
-                $bannerCollection->addFieldToFilter("type", Zolago_Banner_Model_Banner_Type::TYPE_LANDING_PAGE_CREATIVE);
-                $bannerCollection->getSelect()
-                    ->join(
-                        array('banner_content' => Mage::getSingleton('core/resource')->getTableName(
-                            "zolagobanner/banner_content"
-                        )),
-                        'banner_content.banner_id = main_table.banner_id'
-                    )
-                    ->where("campaign_id=?", $campaignId);
-
-                $landingPageBanner = $bannerCollection->getFirstItem();
-
-                $imageData = $landingPageBanner->getData("image");
-                //krumo($imageData);
-                $images = unserialize($imageData);
-                //krumo($images);
-            }
-
-        }
-    }
-}
-
-
-
-
+$images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
 
 ?>
 
-<?php if(!$this->isContentMode() || $vendor): ?>
-<header id="header-main"  <?php if($this->isContentMode()): ?> class="hidden-xs" <?php endif; ?>>
+<?php if((!$this->isContentMode() || $vendor )&& empty($images) ): ?>
+<header data-test="3" id="header-main"  <?php if($this->isContentMode()): ?> class="hidden-xs" <?php endif; ?>>
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div class="row">
@@ -88,17 +22,12 @@ if(isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])){
                         <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                     </div>
 
-                    <?php if(!empty($images)): ?>
-                        <?php $desktop = $images[1]["path"];  ?>
-                        <?php $mobile = $images[2]["path"];  ?>
-                        <h1 class="hidden-xs"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $campaign->getName(); ?>>" alt="<?php echo $campaign->getName(); ?>" /></h1>
-                        <h1 class="visible-xs"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $campaign->getName(); ?>>" alt="<?php echo $campaign->getName(); ?>" /></h1>
-                    <?php else: ?>
+
                         <div id="view-current-filter" >
                             <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
                             <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                         </div>
-                    <?php endif; ?>
+
 
 
                     <div id="active-filters-wrapper">
@@ -123,10 +52,15 @@ if(isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])){
                             <div id="breadcrumbs-header">
                                 <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                             </div>
-                            <div id="view-current-filter">
-                                <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                                <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
-                            </div>
+
+
+
+                                <div id="view-current-filter">
+                                    <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                    <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                </div>
+
+
                             <div id="active-filters-wrapper">
                                 <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
                             </div>
@@ -138,4 +72,89 @@ if(isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])){
         </div>
     </div>
 </header>
+<?php endif; ?>
+
+
+
+
+<?php if(!empty($images)): ?>
+    <?php $banners = isset($images->banners)? (array)$images->banners : array(); ?>
+    <header data-test="31" id="header-main">
+        <div class="wrapp-section bg-w">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12 header-panel">
+                        <?php if(!$vendor): ?>
+                            <div id="breadcrumbs-header">
+                                <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                            </div>
+
+                            <?php if(!empty($banners)): ?>
+                                <div id="view-current-filter" class="visible-xs">
+                                    <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                    <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                </div>
+                                <?php $desktop = $banners[1]["path"];  ?>
+                                <?php $mobile = $banners[2]["path"];  ?>
+                                <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
+                                <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
+                            <?php else: ?>
+                                <div id="view-current-filter" >
+                                    <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                    <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                </div>
+                            <?php endif; ?>
+
+
+                            <div id="active-filters-wrapper">
+                                <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                            </div>
+                        <?php else: ?>
+                            <div id="category-header-left">
+                                <div id="category-header-vendor-box">
+                                    <?php if(!empty($vendorTypeLabel)): ?>
+                                        <div class="vendor-header-label">
+                                            <?php echo $vendor->getVendorTypeLabel(); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <a href="<?php echo $vendor->getVendorUrl(); ?>">
+                                        <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div style="clear:both" class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"></div>
+                            <div id="category-header-right">
+                                <div class="right-wrapper">
+                                    <div id="breadcrumbs-header">
+                                        <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                                    </div>
+
+
+                                    <?php if(!empty($banners)): ?>
+                                        <div id="view-current-filter"  class="visible-xs">
+                                            <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                            <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                        </div>
+                                        <?php $desktop = $banners[1]["path"];  ?>
+                                        <?php $mobile = $banners[2]["path"];  ?>
+                                        <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
+                                        <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
+                                    <?php else: ?>
+                                        <div id="view-current-filter">
+                                            <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                            <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <div id="active-filters-wrapper">
+                                        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 <?php endif; ?>

@@ -99,6 +99,10 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
         }
+        $images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
+        if(!empty($images)){
+            $res = false;
+        }
         return $res;
     }
     public function isMixedMode() {

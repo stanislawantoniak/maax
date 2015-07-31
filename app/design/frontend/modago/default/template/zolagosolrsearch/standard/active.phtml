@@ -13,9 +13,9 @@ if(!empty($rewriteData)){
         $categoryWithFiltersTitle = $rewriteData["listing_title"];
     }
 }
-
+$images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
 ?>
-<?php if(!$this->isContentMode()): ?>
+<?php if(!$this->isContentMode() || !empty($images)): ?>
 <div id="active-filters">
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
@@ -25,7 +25,7 @@ if(!empty($rewriteData)){
                         <dl class="clearfix" >
                             <dt><?php echo $filterLabel; ?></dt>
                             <dd>
-                                <?php foreach ($filterQuery as $key => $values): //krumo($key); ?>
+                                <?php foreach ($filterQuery as $key => $values):?>
                                     <?php foreach ($values as $v): ?>
                                         <?php if($key != 'category_id'): ?>
                                             <?php $face_key = substr($key, 0, strrpos($key, '_')) ?>

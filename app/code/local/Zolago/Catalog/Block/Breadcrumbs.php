@@ -43,7 +43,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             if (
                 !$category
                 || $category->getId() == $this->_getRootCategoryId()
-//                || (Mage::registry('current_product') && !$refererUrl)
                 || (Mage::registry('current_product') && (int)strpos($refererUrl,"search") > 0 && !in_array("scat=".$category->getId(), $params))
             ) {
                 $category = $this->_getDefaultCategory(
@@ -160,22 +159,40 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
     protected function _preparePath($category) {
         $path = array();
         $rootId = $this->_getRootCategoryId();
+
+
+
+        $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+        $lpData = $landingPageHelper->getCampaignLandingPageBanner();
+
+
         /* @var $category Mage_Catalog_Model_Category */
         if($category->getId() && ($parents = $category->getParentCategories())) {
             $pathIds = array_reverse($category->getPathIds());
             // Remove root category
             array_pop($pathIds);
             foreach($pathIds as $parentId) {
+
                 if ($parentId == $rootId) {
                     break; // we are in root
                 }
                 if(isset($parents[$parentId]) && $parents[$parentId]
                         instanceof Mage_Catalog_Model_Category) {
+
                     $parentCategory = $parents[$parentId];
+                    $categoryName = $parentCategory->getName();
+
+
+                    if(!empty($lpData)){
+                        if(isset($lpData->campaign) && $parentCategory->getId() == $lpData->campaign){
+                            $categoryName = $lpData->name_customer;
+                        }
+                    }
+
                     array_unshift($path, array(
 						"name"      => "category" . $parentCategory->getId(),
                         "id"        => $parentCategory->getId(),
-						"label"     => $parentCategory->getName(),
+						"label"     => $categoryName,
 						"link"      => $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId),
                         "data-link" => $parentCategory->getUrl(),
                         'categorylongname' => $parentCategory->getLongName()

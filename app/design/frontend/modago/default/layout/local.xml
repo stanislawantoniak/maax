@@ -513,6 +513,7 @@
         <reference name="content">
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header_m" template="zolagosolrsearch/catalog/product/list/header/mobile/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+				<block type="zolagocatalog/campaign_landingPage" name="zolagocatalog_campaign_landingPage" as="zolagocatalog_campaign_landingPage" template="catalog/category/campaign/landing_page.phtml"/>
                 <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
             <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
@@ -520,6 +521,7 @@
             </block>
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+				<block type="zolagocatalog/campaign_landingPage" name="zolagocatalog_campaign_landingPage" as="zolagocatalog_campaign_landingPage" template="catalog/category/campaign/landing_page.phtml"/>
                 <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
 
