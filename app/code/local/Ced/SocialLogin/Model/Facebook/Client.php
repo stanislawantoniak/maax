@@ -198,7 +198,7 @@ class Ced_SocialLogin_Model_Facebook_Client
 
 		$response = $client->request($method);
 
-		Mage::log($response->getStatus() . ' - ' . $response->getBody());
+//		Mage::log($response->getStatus() . ' - ' . $response->getBody());
 
 		$decoded_response = json_decode($response->getBody());
 
