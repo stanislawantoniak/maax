@@ -162,8 +162,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
 
 
-        $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-        $lpData = $landingPageHelper->getCampaignLandingPageBanner();
+//        $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+//        $lpData = $landingPageHelper->getCampaignLandingPageBanner();
+
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
 
 
         /* @var $category Mage_Catalog_Model_Category */

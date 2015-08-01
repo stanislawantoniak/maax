@@ -6,13 +6,16 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 
-$images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
-$banners = isset($images->banners)? (array)$images->banners : array();
+/*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+$lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+$lpData = $lpBlock->getData('campaign_landing_page');
+
+$banners = isset($lpData->banners)? (array)$lpData->banners : array();
 
 ?>
 
 <?php if($this->isContentMode()
-    && empty($images)
+    && empty($lpData)
 ): ?>
 <header data-test="5" id="header-main"  class="visible-xs">
     <div class="wrapp-section bg-w">

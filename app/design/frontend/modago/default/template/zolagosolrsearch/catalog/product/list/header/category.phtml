@@ -7,7 +7,9 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 
-$images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
+/*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+$lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+$images = $lpBlock->getData('campaign_landing_page');
 
 ?>
 

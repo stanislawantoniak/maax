@@ -99,8 +99,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
         }
-        $images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
-        if(!empty($images)){
+//        $images = Mage::helper("zolagocampaign/landingPage")->getCampaignLandingPageBanner();
+
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
+
+        if(!empty($lpData)){
             $res = false;
         }
         return $res;
