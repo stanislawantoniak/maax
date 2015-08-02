@@ -87,7 +87,7 @@ $images = (array)$images;
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12 header-panel">
-                        <?php if(!$vendor): ?>
+
                             <div id="breadcrumbs-header">
                                 <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                             </div>
@@ -112,49 +112,7 @@ $images = (array)$images;
                             <div id="active-filters-wrapper">
                                 <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
                             </div>
-                        <?php else: ?>
-                            <div id="category-header-left">
-                                <div id="category-header-vendor-box">
-                                    <?php if(!empty($vendorTypeLabel)): ?>
-                                        <div class="vendor-header-label">
-                                            <?php echo $vendor->getVendorTypeLabel(); ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <a href="<?php echo $vendor->getVendorUrl(); ?>">
-                                        <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div style="clear:both" class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"></div>
-                            <div id="category-header-right">
-                                <div class="right-wrapper">
-                                    <div id="breadcrumbs-header">
-                                        <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
-                                    </div>
 
-
-                                    <?php if(!empty($banners)): ?>
-                                        <div id="view-current-filter"  class="visible-xs">
-                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
-                                            <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
-                                        </div>
-                                        <?php $desktop = $banners[1]["path"];  ?>
-                                        <?php $mobile = $banners[2]["path"];  ?>
-                                        <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images["name_customer"]; ?>" /></div>
-                                        <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
-                                    <?php else: ?>
-                                        <div id="view-current-filter">
-                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
-                                            <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
-                                        </div>
-                                    <?php endif; ?>
-
-                                    <div id="active-filters-wrapper">
-                                        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>

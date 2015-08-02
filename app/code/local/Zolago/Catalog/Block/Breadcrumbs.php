@@ -226,7 +226,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
     protected function _prepareListingBreadcrumb() {
         $vendor = $this->_getVendor();
         $breadcrumbsBlock = $this->_getBlock();
-        if($vendor) {
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
+        $lpData = (array)$lpData;
+
+        if($vendor && empty($lpData)) {
             $breadcrumbsBlock->addCrumb('home', array(
 				'label'=>Mage::helper('catalog')->__('Mall'),
 				'title'=>Mage::helper('catalog')->__('Go to Mall'),
