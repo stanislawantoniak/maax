@@ -10,6 +10,7 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
 $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
 $images = $lpBlock->getData('campaign_landing_page');
+$images = (array)$images;
 
 ?>
 
@@ -80,7 +81,7 @@ $images = $lpBlock->getData('campaign_landing_page');
 
 
 <?php if(!empty($images)): ?>
-    <?php $banners = isset($images->banners)? (array)$images->banners : array(); ?>
+    <?php $banners = isset($images["banners"])? $images["banners"] : array();  ?>
     <header data-test="31" id="header-main">
         <div class="wrapp-section bg-w">
             <div class="container-fluid">
@@ -98,11 +99,11 @@ $images = $lpBlock->getData('campaign_landing_page');
                                 </div>
                                 <?php $desktop = $banners[1]["path"];  ?>
                                 <?php $mobile = $banners[2]["path"];  ?>
-                                <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
-                                <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
+                                <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
+                                <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
                             <?php else: ?>
                                 <div id="view-current-filter" >
-                                    <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                    <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
                                     <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                             <?php endif; ?>
@@ -134,16 +135,16 @@ $images = $lpBlock->getData('campaign_landing_page');
 
                                     <?php if(!empty($banners)): ?>
                                         <div id="view-current-filter"  class="visible-xs">
-                                            <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
                                             <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                         </div>
                                         <?php $desktop = $banners[1]["path"];  ?>
                                         <?php $mobile = $banners[2]["path"];  ?>
-                                        <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
-                                        <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images->name_customer; ?>" alt="<?php echo $images->name_customer; ?>" /></div>
+                                        <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images["name_customer"]; ?>" /></div>
+                                        <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
                                     <?php else: ?>
                                         <div id="view-current-filter">
-                                            <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
                                             <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                         </div>
                                     <?php endif; ?>

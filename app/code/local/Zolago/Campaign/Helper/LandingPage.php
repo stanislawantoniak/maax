@@ -23,7 +23,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
             $campaign = Mage::getModel("zolagocampaign/campaign")
                 ->load($landingPageCampaign,"name_customer");
-            //krumo($campaign->getData());
+
             $campaignId = $campaign->getId();
             if ($campaignId !== NULL) {
 
@@ -40,17 +40,27 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
                         //if vendor context
                         $imageData = $this->getLandingPageBanner($campaignId);
 
-                        $images->banners = $imageData;
                         $images->name_customer = $campaign->getData("name_customer");
+                        $images->campaign = $campaign->getLandingPageCategory();
+
+                        if(array_filter($imageData)){
+                            $images->banners = $imageData;
+
+                        }
+
                     }
                     if(!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY){
                         //if gallery context
                         //load banner
                         $imageData = $this->getLandingPageBanner($campaignId);
 
-                        $images->banners = $imageData;
                         $images->name_customer = $campaign->getData("name_customer");
                         $images->campaign = $campaign->getLandingPageCategory();
+
+                        if(array_filter($imageData)){
+                            $images->banners = $imageData;
+                        }
+
                     }
 
                 }
@@ -83,7 +93,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
         $landingPageBanner = $bannerCollection->getFirstItem();
 
-        $imageData = (object)unserialize($landingPageBanner->getData("image"));
+        $imageData = (array)unserialize($landingPageBanner->getData("image"));
 
         return $imageData;
     }
