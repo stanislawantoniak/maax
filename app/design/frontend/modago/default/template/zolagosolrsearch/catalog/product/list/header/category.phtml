@@ -97,10 +97,13 @@ $images = (array)$images;
                                     <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
                                     <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                 </div>
-                                <?php $desktop = $banners[1]["path"];  ?>
-                                <?php $mobile = $banners[2]["path"];  ?>
-                                <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
-                                <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
+                                <div style="margin: 10px 0;">
+                                    <?php $desktop = $banners[1]["path"];  ?>
+                                    <?php $mobile = $banners[2]["path"];  ?>
+                                    <div class="hidden-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
+                                    <div class="visible-xs"><img style="width:100%;height: 200px;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>" title="<?php echo $images["name_customer"]; ?>" alt="<?php echo $images["name_customer"]; ?>" /></div>
+                                </div>
+
                             <?php else: ?>
                                 <div id="view-current-filter" >
                                     <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
