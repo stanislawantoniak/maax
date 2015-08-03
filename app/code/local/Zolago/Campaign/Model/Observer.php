@@ -14,7 +14,7 @@ class Zolago_Campaign_Model_Observer
         /* @var $campaign Zolago_Campaign_Model_Campaign */
         $campaignId = $campaign->getId();
 
-//        $campaignPromoSaleType = $campaign->getType();
+
         if (empty($campaignId)) {
             //not implement to new campaigns
             return;
@@ -22,33 +22,39 @@ class Zolago_Campaign_Model_Observer
         $localeTime = Mage::getModel('core/date')->timestamp(time());
         $localeTimeF = date("Y-m-d H:i", $localeTime);
 
-//        $rabatChanged = $campaign->dataHasChangedFor('percent');
-//        $salePriceTypeChanged = $campaign->dataHasChangedFor('price_source_id');
-//        $rabatOrPriceTypeChanged = false;
-//
-//
-//        if ($rabatChanged) {
-//            $rabatOrPriceTypeChanged = true;
-//        }
-//
-//        if ($salePriceTypeChanged) {
-//            $rabatOrPriceTypeChanged = true;
-//        }
+        //set to campaign products assigned_to_campaign = 0
+        /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+        $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
+        $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
 
-        //if (($campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) && $rabatOrPriceTypeChanged) {
-            //set to campaign products assigned_to_campaign = 0
-            /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
-            $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
-            $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
-        //}
+        if($campaign->getData("is_landing_page") == 1){
+            $campaignType = $campaign->getType();
+            //generate landing page url
+            $landingPageUrl = "";
+            $nameCustomer = $campaign->getData("name_customer");
+            ;
+            if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
+                //fq[campaign_regular_id][0]=-50%25+Matterhorn++PODKOSZULKI+MĘSKIE
+                $landingPageUrl = "fq[campaign_regular_id][0]=" . str_replace(" ", "+", $nameCustomer);
+            }
+            if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
+                //fq[campaign_info_id][0]=LP+50%25+rabatu+na+produkty+Esotiq+Publiczna+nazwa+kampanii
+                $landingPageUrl = "fq[campaign_info_id][0]=" . str_replace(" ", "+", $nameCustomer);
+            }
+            if(!empty($landingPageUrl)){
+                $campaign->setData("landing_page_url", $landingPageUrl);
+                $campaign->save();
+            }
+        }
 
 
-        if((strtotime($campaign->getData('date_to'))<= $localeTime) 
-            && ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE) ){
+        if ((strtotime($campaign->getData('date_to')) <= $localeTime)
+            && ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
+        ) {
             $campaign->setStatus(Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
             $campaign->save();
         }
-        //die('test');
+
     }
 
     static function setProductAttributes()
