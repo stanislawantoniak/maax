@@ -37,7 +37,7 @@ jQuery(document).ready(function () {
 
 
         jQuery("#landing_page_category_text").html(jQuery('#jstree ul li[id=' + checked_ids + ']').data("name"));
-        jQuery("#landing_page_category_url").html(jQuery('#jstree ul li[id=' + checked_ids + ']').data("url")+ "?fq[campaign_regular_id][0]="+nameCustomer.replace("  ", "++").replace(" ", "+"));
+        //jQuery("#landing_page_category_url").html(jQuery('#jstree ul li[id=' + checked_ids + ']').data("url")+ "?fq[campaign_regular_id][0]="+nameCustomer.replace("  ", "++").replace(" ", "+"));
         jQuery("#browseCategory").modal("hide");
 
     });

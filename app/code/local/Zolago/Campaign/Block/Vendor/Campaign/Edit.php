@@ -91,7 +91,28 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             if(!$this->isModelNew()){
                 $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
                 $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
-                $categoryUrl = Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrl()."?fq[campaign_regular_id][0]=".str_replace(" ","+", $values["name_customer"]);
+                $campaignType = $values["type"];
+
+                $nameCustomer = $values["name_customer"];
+                $landing_page_context = $values["landing_page_context"];
+                $vendorUrlPart = "";
+                if($landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR){
+                    $vendor = Mage::getModel("udropship/vendor")->load($values["context_vendor_id"]);
+
+                    $vendorName = $vendor->getUrlKey();
+                    $vendorUrlPart = $vendorName."/";
+                }
+
+                if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
+                    //fq[campaign_regular_id][0]=-50%25+Matterhorn++PODKOSZULKI+MĘSKIE
+                    $landingPageUrl = "fq[campaign_regular_id][0]=" . str_replace(" ", "+", $nameCustomer);
+                }
+                if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
+                    //fq[campaign_info_id][0]=LP+50%25+rabatu+na+produkty+Esotiq+Publiczna+nazwa+kampanii
+                    $landingPageUrl = "fq[campaign_info_id][0]=" . str_replace(" ", "+", $nameCustomer);
+                }
+
+                $urlText = Mage::getBaseUrl(). $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
             }
 
             $landingPage->addField('is_landing_page', 'checkbox', array(
@@ -129,7 +150,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label" => $helper->__('Category'),
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6 landing-page-config",
-                "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div><div id="landing_page_category_url">'.$categoryUrl.'</div>' : '<div id="landing_page_category_text"></div><div id="landing_page_category_url"></div>'
+                "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div><div id="landing_page_category_url">'.$urlText.'</div>' : '<div id="landing_page_category_text"></div><div id="landing_page_category_url"></div>'
             ));
         }
 
