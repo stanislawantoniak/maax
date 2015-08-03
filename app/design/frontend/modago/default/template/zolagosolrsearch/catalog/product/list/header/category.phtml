@@ -12,6 +12,13 @@ $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
 $images = $lpBlock->getData('campaign_landing_page');
 $images = (array)$images;
 
+
+/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+/** @var Zolago_Campaign_Model_Campaign $campaign */
+$canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
+
+
 ?>
 
 <?php if((!$this->isContentMode() || $vendor )&& empty($images) ): ?>
@@ -81,6 +88,7 @@ $images = (array)$images;
 
 
 <?php if(!empty($images)): ?>
+
     <?php $banners = isset($images["banners"])? $images["banners"] : array();  ?>
     <header data-test="31" id="header-main">
         <div class="wrapp-section bg-w">
@@ -95,7 +103,7 @@ $images = (array)$images;
                             <?php if(!empty($banners)): ?>
                                 <div id="view-current-filter" class="visible-xs">
                                     <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                                    <a href="<?php echo $images["url"]; ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                    <a href="<?php echo ($canShowBackToCampaign) ? $images["url"]: $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                                 <div style="margin: 10px 0;">
                                     <?php $desktop = $banners[1]["path"];  ?>
@@ -107,7 +115,7 @@ $images = (array)$images;
                             <?php else: ?>
                                 <div id="view-current-filter" >
                                     <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: ""; ?></h1>
-                                    <a href="<?php echo $images["url"]; ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                    <a href="<?php echo ($canShowBackToCampaign) ? $images["url"]: $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                             <?php endif; ?>
 

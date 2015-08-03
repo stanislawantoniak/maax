@@ -151,14 +151,7 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
     public function getCanShowBackToCampaign() {
         /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
         $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-        /** @var Zolago_Campaign_Model_Campaign $campaign */
-        $campaign = $landingPageHelper->getCampaign();
 
-        $parentCat = $this->getCurrentCategory()->getParentCategory();
-
-        if ($campaign && $campaign->getId() && $campaign->getLandingPageCategory() == $parentCat->getId()) {
-            return true;
-        }
-        return false;
+        return  $landingPageHelper->getCanShowBackToCampaign();
     }
 } 

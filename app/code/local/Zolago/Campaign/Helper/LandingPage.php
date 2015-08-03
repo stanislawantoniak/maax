@@ -162,4 +162,16 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
         return Mage::registry("current_zolagocampaign");
     }
+
+
+    public function getCanShowBackToCampaign()
+    {
+        $campaign = $this->getCampaign();
+        $parentCat = Mage::registry('current_category')->getParentCategory();
+
+        if ($campaign && $campaign->getId() && $campaign->getLandingPageCategory() == $parentCat->getId()) {
+            return true;
+        }
+        return false;
+    }
 }
