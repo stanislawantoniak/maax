@@ -95,7 +95,7 @@ $images = (array)$images;
                             <?php if(!empty($banners)): ?>
                                 <div id="view-current-filter" class="visible-xs">
                                     <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                                    <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                    <a href="<?php echo $images["url"]; ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                                 <div style="margin: 10px 0;">
                                     <?php $desktop = $banners[1]["path"];  ?>
@@ -106,8 +106,8 @@ $images = (array)$images;
 
                             <?php else: ?>
                                 <div id="view-current-filter" >
-                                    <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: "";; ?></h1>
-                                    <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                                    <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"]: ""; ?></h1>
+                                    <a href="<?php echo $images["url"]; ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                             <?php endif; ?>
 

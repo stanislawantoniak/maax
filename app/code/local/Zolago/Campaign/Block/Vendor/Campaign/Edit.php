@@ -91,9 +91,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             if(!$this->isModelNew()){
                 $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
                 $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
-                $campaignType = $values["type"];
 
-                $nameCustomer = $values["name_customer"];
                 $landing_page_context = $values["landing_page_context"];
                 $vendorUrlPart = "";
                 if($landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR){

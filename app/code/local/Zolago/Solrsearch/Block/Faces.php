@@ -33,8 +33,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return string
 	 */
 	public function getFacetLabel($facetCode){
+
 		if($facetCode==Zolago_Solrsearch_Model_Solr::FLAGS_FACET){
 			return Mage::helper('zolagosolrsearch')->__('Product Flags');
+		}
+		if(in_array($facetCode, array("campaign_info_id_facet", "campaign_regular_id_facet"))){
+			return Mage::helper('zolagosolrsearch')->__('Campaign');
 		}
 		return parent::getFacetLabel($facetCode);
 	}
