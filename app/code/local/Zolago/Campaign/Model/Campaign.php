@@ -629,7 +629,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $storesByWebsite = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
 
         foreach ($revertProductOptions as $websiteId => $productIds) {
-            Mage::log($productIds, null, "productAttributeRevert.log");
+
             $stores = isset($storesByWebsite[$websiteId]) ? $storesByWebsite[$websiteId] : false;
             if ($stores) {
                 $this->setCampaignAttributesToProducts($campaignId, $campaign->getType(), $productIds, $stores);
