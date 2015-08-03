@@ -242,7 +242,7 @@
             }
 
             //vendor context select
-            toggleVendorSelect(jQuery("[name=landing_page_context]"));
+            toggleVendorSelect("[name=landing_page_context]");
             jQuery("[name=landing_page_context]").change(function(){
                 toggleVendorSelect(this);
             })
@@ -256,7 +256,8 @@
 
             function toggleVendorSelect(element) {
                 var vendor = 0;
-                if(jQuery(element).val() == "vendor"){
+
+                if(jQuery(element+":checked").val()== "vendor"){
                     jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
                     vendor = jQuery("#context_vendor_id option:selected").val();
                 } else {
