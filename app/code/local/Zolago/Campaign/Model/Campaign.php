@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Zolago_Campaign_Model_Campaign
+ * @method int getLandingPageCategory()
+ */
 class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
     const ZOLAGO_CAMPAIGN_ID_CODE = "campaign_regular_id";
