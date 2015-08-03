@@ -103,15 +103,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                     $vendorUrlPart = $vendorName."/";
                 }
 
-                if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
-                    //fq[campaign_regular_id][0]=-50%25+Matterhorn++PODKOSZULKI+MĘSKIE
-                    $landingPageUrl = "fq[campaign_regular_id][0]=" . str_replace(" ", "+", $nameCustomer);
-                }
-                if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
-                    //fq[campaign_info_id][0]=LP+50%25+rabatu+na+produkty+Esotiq+Publiczna+nazwa+kampanii
-                    $landingPageUrl = "fq[campaign_info_id][0]=" . str_replace(" ", "+", $nameCustomer);
-                }
-
+                $landingPageUrl = $values["landing_page_url"];
                 $urlText = Mage::getBaseUrl(). $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
             }
 
