@@ -12,10 +12,7 @@ $helper = Mage::helper("zolagosolrsearch");
         $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
         $isSearch = $this->getIsSearch();
         $isParrentRoot = $this->getIsParentRootCategory();
-        /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-        $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-        /** @var Zolago_Campaign_Model_Campaign $campaign */
-        $campaign = $landingPageHelper->getCampaign();
+        $canShowBackToCampaign = $this->getCanShowBackToCampaign();
     ?>
 	<div class="section clearfix" data-xs-rolled="open" data-lg-rolled="<?php echo $sectionClass; ?>">
 		<h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
@@ -44,13 +41,13 @@ $helper = Mage::helper("zolagosolrsearch");
 			<?php if($backUrl != null) : ?>
                 <?php if(!$isSearch): ?>
                     <?php if($isParrentRoot): ?>
-                        <?php if($campaign && $campaign->getId()): ?>
+                        <?php if($canShowBackToCampaign): ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
                         <?php else: ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
                         <?php endif; ?>
                     <?php else: ?>
-                        <?php if($campaign && $campaign->getId()): ?>
+                        <?php if($canShowBackToCampaign): ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
                         <?php else: ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
