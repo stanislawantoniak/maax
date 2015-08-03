@@ -64,7 +64,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         $codeList = $this->getFilterCollection($categoty_id);
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
-                if (in_array($key,array('price','flags','product_rating'))) continue; // price is always
+                if (in_array($key,array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id'))) continue; // price is always
                 if (!in_array($key,$codeList)) {
                     unset($params['fq'][$key]);
                 }
