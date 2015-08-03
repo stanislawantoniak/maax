@@ -150,7 +150,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label" => $helper->__('Category'),
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6 landing-page-config",
-                "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div><div id="landing_page_category_url">'.$urlText.'</div>' : '<div id="landing_page_category_text"></div><div id="landing_page_category_url"></div>'
+                "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div><div id="landing_page_category_url"><a target="_blank" href="'.$urlText.'">'.$urlText.'</a></div>' : '<div id="landing_page_category_text"></div><div id="landing_page_category_url"></div>'
             ));
         }
 
