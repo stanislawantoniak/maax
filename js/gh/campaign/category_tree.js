@@ -24,7 +24,7 @@ jQuery(document).ready(function () {
 
     jQuery("#browseCategory button[type=submit]").click(function () {
         var items = jQuery('#jstree').jstree("get_checked");
-        console.log(items);
+
         var checked_ids = [];
         jQuery(items).each(function (i, item) {
             checked_ids.push(item);
@@ -32,7 +32,12 @@ jQuery(document).ready(function () {
 
 
         jQuery("input[name=landing_page_category]").val(checked_ids.join(","));
+
+        var nameCustomer= jQuery("[name=name_customer]").val();
+
+
         jQuery("#landing_page_category_text").html(jQuery('#jstree ul li[id=' + checked_ids + ']').data("name"));
+        jQuery("#landing_page_category_url").html(jQuery('#jstree ul li[id=' + checked_ids + ']').data("url")+ "fq[campaign_regular_id][0]="+nameCustomer.replace("  ", "++").replace(" ", "+"));
         jQuery("#browseCategory").modal("hide");
 
     });

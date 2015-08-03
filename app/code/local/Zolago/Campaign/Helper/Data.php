@@ -171,7 +171,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         $html .= '<ul>';
 
         foreach ($allCats as $category) {
-            $html .= '<li id="'.$category->getId().'" data-name="' . $category->getName() . '">' . $category->getName() . "";
+            $html .= '<li id="'.$category->getId().'" data-name="' . $category->getName() . '" data-url="'.$category->getUrl().'">' . $category->getName() . "";
             $subcats = $category->getChildren();
             if ($subcats != '') {
                 $html .= $this->getTreeCategories($category->getId(), true);
