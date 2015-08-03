@@ -39,6 +39,8 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
                     $landingPageUrl = $campaign->getData("landing_page_url");
 
 
+
+
                     if($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId()) && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR){
                         //if vendor context
                         $imageData = $this->getLandingPageBanner($campaignId);
