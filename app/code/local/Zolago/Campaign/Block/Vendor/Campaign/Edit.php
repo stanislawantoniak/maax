@@ -91,7 +91,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             if(!$this->isModelNew()){
                 $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
                 $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
-                $categoryUrl = Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrl()."fq[campaign_regular_id][0]=".str_replace(" ","+", $values["name_customer"]);
+                $categoryUrl = Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrl()."?fq[campaign_regular_id][0]=".str_replace(" ","+", $values["name_customer"]);
             }
 
             $landingPage->addField('is_landing_page', 'checkbox', array(
