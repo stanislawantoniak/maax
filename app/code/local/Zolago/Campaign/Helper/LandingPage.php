@@ -111,4 +111,55 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         return $imageData;
     }
 
+    /**
+     * Return current campaign for listing if correct
+     * @return false|Mage_Core_Model_Abstract|Zolago_Campaign_Model_Campaign
+     */
+    public function getCampaign() {
+        if (!Mage::registry("current_zolagocampaign")) {
+
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            $fq = Mage::app()->getRequest()->getParam("fq");
+
+            if (isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])) {
+                $landingPageCampaign = "";
+                if (isset($fq["campaign_regular_id"])) {
+                    $landingPageCampaign = $fq["campaign_regular_id"][0];
+                }
+                if (isset($fq["campaign_info_id"])) {
+                    $landingPageCampaign = $fq["campaign_info_id"][0];
+                }
+                $landingPageCampaign = trim($landingPageCampaign);
+
+                /** @var Zolago_Campaign_Model_Campaign $campaign */
+                $campaign = Mage::getModel("zolagocampaign/campaign")
+                    ->load($landingPageCampaign, "name_customer");
+
+                if ($campaign->getId()) {
+                    if (
+                        ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
+                        && $campaign->getIsLandingPage()
+                        && $campaign->getLandingPageCategory()
+                    ) {
+                        //context landing_page_context
+                        $landing_page_context = $campaign->getData("landing_page_context");
+
+                        if ($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId()) && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
+                            //if vendor context
+                            Mage::register("current_zolagocampaign", $campaign);
+                        }
+                        if (!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY) {
+                            //if gallery context
+                            Mage::register("current_zolagocampaign", $campaign);
+                        }
+                    }
+                }
+            }
+            if (!Mage::registry("current_zolagocampaign")) {
+                Mage::register("current_zolagocampaign", Mage::getModel("zolagocampaign/campaign"));
+            }
+        }
+        return Mage::registry("current_zolagocampaign");
+    }
 }
