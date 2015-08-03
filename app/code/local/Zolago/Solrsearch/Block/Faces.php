@@ -33,7 +33,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return string
 	 */
 	public function getFacetLabel($facetCode){
-		Mage::log($facetCode);
+
 		if($facetCode==Zolago_Solrsearch_Model_Solr::FLAGS_FACET){
 			return Mage::helper('zolagosolrsearch')->__('Product Flags');
 		}
