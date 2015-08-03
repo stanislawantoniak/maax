@@ -181,10 +181,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
                     $parentCategory = $parents[$parentId];
                     $categoryName = $parentCategory->getName();
+                    $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId);
 
                     if(!empty($lpData)){
                         if(isset($lpData["campaign"]) && $parentCategory->getId() == $lpData["campaign"]){
                             $categoryName = $lpData["name_customer"];
+                            $link = $lpData["url"];
                         }
                     }
 
@@ -192,7 +194,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 						"name"      => "category" . $parentCategory->getId(),
                         "id"        => $parentCategory->getId(),
 						"label"     => $categoryName,
-						"link"      => $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId),
+						"link"      => $link,
                         "data-link" => $parentCategory->getUrl(),
                         'categorylongname' => $parentCategory->getLongName()
 					));

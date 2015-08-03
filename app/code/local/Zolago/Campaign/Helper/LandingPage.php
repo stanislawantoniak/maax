@@ -34,6 +34,9 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
                 ) {
                     //context landing_page_context
                     $landing_page_context = $campaign->getData("landing_page_context");
+                    $landing_page_category_id = $campaign->getData("landing_page_category");
+
+                    $landingPageUrl = $campaign->getData("landing_page_url");
 
 
                     if($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId()) && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR){
@@ -42,6 +45,12 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
                         $images->name_customer = $campaign->getData("name_customer");
                         $images->campaign = $campaign->getLandingPageCategory();
+
+                        $vendorName = $vendor->getUrlKey();
+                        $vendorUrlPart = $vendorName."/";
+
+
+                        $images->url =  Mage::getBaseUrl(). $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
 
                         if(array_filter($imageData)){
                             $images->banners = $imageData;
@@ -56,6 +65,8 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
                         $images->name_customer = $campaign->getData("name_customer");
                         $images->campaign = $campaign->getLandingPageCategory();
+
+                        $images->url =  Mage::getBaseUrl(). Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
 
                         if(array_filter($imageData)){
                             $images->banners = $imageData;
