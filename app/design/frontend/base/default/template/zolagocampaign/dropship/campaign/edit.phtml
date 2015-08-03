@@ -242,9 +242,9 @@
             }
 
             //vendor context select
-            toggleVendorSelect("[name=landing_page_context]");
+            toggleVendorSelect();
             jQuery("[name=landing_page_context]").change(function(){
-                toggleVendorSelect(this);
+                toggleVendorSelect();
             })
 
             jQuery("[name=context_vendor_id]").change(function(){
@@ -255,10 +255,11 @@
             })
 
 
-            function toggleVendorSelect(element) {
+            function toggleVendorSelect() {
+
                 var vendor = 0;
 
-                if(jQuery(element+":checked").val()== "vendor"){
+                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
                     jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
                     vendor = jQuery("#context_vendor_id option:selected").val();
                 } else {
