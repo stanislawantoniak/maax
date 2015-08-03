@@ -1,5 +1,6 @@
 <?php
 /** @var $this Zolago_Modago_Block_Solrsearch_Faces_Category */
+$helper = Mage::getModel("zolagosolrsearch");
 ?>
 <?php $key = $this->getFacetKey(); ?>
 <?php if($this->getCanShow()): ?>
@@ -43,13 +44,13 @@
                 <?php if(!$isSearch): ?>
                     <?php if($isParrentRoot): ?>
                         <?php if($campaign && $campaign->getId()): ?>
-                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to campaign"); ?></a>
+                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
                         <?php else: ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if($campaign && $campaign->getId()): ?>
-                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to campaign"); ?></a>
+                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
                         <?php else: ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
                         <?php endif; ?>
