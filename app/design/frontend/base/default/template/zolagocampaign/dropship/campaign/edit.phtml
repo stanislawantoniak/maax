@@ -269,7 +269,7 @@
             function refreshCategoriesTree(vendor){
                 jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
                 jQuery.ajax({
-                    url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree", array("_secure" => true)); ?>',
+                    url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree"); ?>',
                     method: 'POST',
                     data: {"vendor": vendor},
                     success: function(tree){
