@@ -374,7 +374,11 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 			$_items = $this->getAllItems();
 			$amount = 0;
 			foreach($_items as $item) {
-				$amount += $item->getPoItem()->getFinalItemPrice();
+                if ($item->getPoItem()->getId()) {
+                    $amount += $item->getPoItem()->getFinalItemPrice();
+                } else {
+                    $amount += $this->getPo()->getShippingAmountIncl();
+                }
 			}
 			$this->_refundAmountMax = $amount;
 		}

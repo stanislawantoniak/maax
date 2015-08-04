@@ -29,7 +29,8 @@ body{
 				position:relative;
 				margin-bottom: 13px;
 				@media (max-width: $screen-xs-max) {
-					padding:14.86px 0 0px 29.41px;
+					margin: 10px !important;
+					padding: 0;
 				}
 				&:before {
 					content: ' ';
@@ -46,6 +47,9 @@ body{
 			}
 			.panel-contact-vendor{
 				padding: 0 30px;
+				@media (max-width: 400px) {
+					padding: 0 10px;
+				}
 			}
 			.mobile-toggler{
 				margin-top: -15px;
@@ -105,6 +109,9 @@ body{
 
     .cart-price {
         margin-left: 20px;
+	    @media (max-width: 515px) {
+		    margin-left: 0;
+	    }
     }
 
     @media (max-width: 711px) {
