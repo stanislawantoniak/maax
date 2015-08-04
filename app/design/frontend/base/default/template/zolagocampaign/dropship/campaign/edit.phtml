@@ -1,6 +1,8 @@
 <?php /* @var $this Zolago_Campaign_Block_Vendor_Campaign_Edit */ ?>
 <?php $_helper = Mage::helper("zolagocampaign"); ?>
 <?php $_model = $this->getModel();?>
+
+
 <div class="container">
     <div class="page-heading row">
         <div class="col-lg-12">
@@ -9,7 +11,7 @@
                 <p><?php echo $_helper->__("Create new campaign. Required fields are marked with an asterisk."); ?></p>
             <?php else: ?>
                 <h3><?php echo $_helper->__("Edit campaign '%s'", $_model->getName()); ?></h3>
-                <p><?php echo $_helper->__("Poniżej znajdziesz szczegóły kampanii. Możesz wprowadzić zmiany w ustawieniach kampanii edytując poszczególne pola. Możesz dodać krecje i dodać produkty."); ?></p>
+                <p><?php echo $_helper->__("Below you will find details of campaign. You can make changes to your campaign settings by editing each field. You can add creation and add products."); ?></p>
             <?php endif; ?>
         </div>
     </div>
@@ -21,12 +23,15 @@
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 
+
 		<div class="form-actions">
             <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
             <a href="<?php echo Mage::getUrl('campaign/vendor'); ?>" class="btn btn-default pull-right"><?php echo $_helper->__("Cancel");?></a>
         </div>
 	</form>
 </div>
+
+
 
 <!--        Show product tab and banners tab only on edit page-->
 <?php if(!$this->isModelNew()) :?>
@@ -51,14 +56,7 @@
             <div class="widget box">
                 <div class="widget-header">
                     <h4><i class="icon-folder-open"></i>&nbsp;<?php echo $_helper->__("Products"); ?></h4>
-<!--                    <div class="toolbar no-padding">-->
-<!--                        <div class="btn-group">-->
-<!--						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">-->
-<!--							<i class="icon-plus"></i>-->
-<!--                            --><?php //echo $_helper->__("Add products");?>
-<!--						</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
+
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getProductsGrid()->toHtml(); ?>
@@ -73,15 +71,7 @@
             <div class="widget box">
                 <div class="widget-header">
                     <h4><i class="icon-picture"></i>&nbsp;<?php echo $_helper->__("Campaign creatives"); ?></h4>
-<!--                    <div class="toolbar no-padding">-->
-<!--                        <div class="btn-group">-->
-<!--                            <a href="--><?php //echo $this->getAddNewBannerPath(); ?><!--">-->
-<!--                                <span class="btn btn-xs"><i class="icon-plus"></i>-->
-<!--                                    --><?php //echo $_helper->__("Add new campaign creative"); ?>
-<!--                                </span>-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                    </div>-->
+
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getBannersGrid()->toHtml(); ?>
@@ -114,7 +104,29 @@
             </div>
         </form>
     </div>
+</div>
 <?php endif; ?>
+
+<?php if(Mage::helper('zolagodropship')->isLocalVendor()): ?>
+<div class="modal fade" id="browseCategory">
+    <div class="modal-dialog" style="width: 50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><?php echo $_helper->__("Select Category");?></h4>
+            </div>
+            <div class="modal-body">
+                <div id='jstree' style="padding: 10px 0;"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
+                <button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
     <script type="text/javascript">
         jQuery(document).ready(function () {
 
@@ -151,7 +163,7 @@
             });
 
             jQuery("#browseProducts").on("show.bs.modal", function () {
-                console.log("Init loading products")
+                //console.log("Init loading products")
             });
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
@@ -167,6 +179,7 @@
             }
 
             jQuery('.datetimepicker').datetimepicker({
+                lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
                 format: 'd-m-Y H:i'
             });
             jQuery(".icon-calendar").click(function () {
@@ -184,7 +197,16 @@
                     },
                     "date_from": {dateBefore: '#date_to'},
                     "date_to": {dateAfter: '#date_from'},
-                    //url_key:"urlKeyFormat"
+                    landing_page_category: {
+                        required: "input[name=is_landing_page]:checked",
+                        digits: true
+                    },
+                    landing_page_context: {
+                        required: "input[name=is_landing_page]:checked"
+                    },
+                    context_vendor_id: {
+                        required: "input[name=landing_page_context][value=vendor]:checked"
+                    }
                 },
                 messages: {
                     date_from: {
@@ -201,29 +223,116 @@
             });
 
 
-            var urlTypeManual = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK; ?>';
-            var urlTypeLandingPage = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE; ?>';
+            var urlKeyContainer = jQuery('.landing-page-config').parents(".form-group");
+            toggleLandingPagePanel(jQuery(form).find('input[name="is_landing_page"]'), urlKeyContainer);
 
-
-            var urlKeyContainer = jQuery(form).find('[name="url_key"]').parents('.form-group');
-
-            toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'), urlKeyContainer);
-
-            jQuery(form).find('input[name="url_type"]').on('change', function () {
-                toggleUrlKeyField(jQuery(this), urlKeyContainer);
+            jQuery(form).find('input[name="is_landing_page"]').on('click', function () {
+                toggleLandingPagePanel(this, urlKeyContainer);
 
             })
-            function toggleUrlKeyField(element, toggleContainer) {
-                var type = element.val();
-                switch (type) {
-                    case urlTypeManual:
-                        toggleContainer.show();
-                        break;
-                    case urlTypeLandingPage:
-                        toggleContainer.hide();
-                        break;
+            function toggleLandingPagePanel(element, toggleContainer) {
+                var showLandingPageConfig = jQuery(element).is(":checked");
+
+                if (showLandingPageConfig) {
+                    toggleContainer.show();
+                } else {
+                    toggleContainer.hide();
                 }
+
             }
 
+            //vendor context select
+            toggleVendorSelect();
+            jQuery("[name=landing_page_context]").change(function(){
+                toggleVendorSelect();
+                jQuery("#landing_page_category_url").html("");
+            })
+
+            jQuery("[name=context_vendor_id]").change(function(){
+                jQuery("[name=landing_page_category]").val("");
+                jQuery("#landing_page_category_text").html("");
+                jQuery("#landing_page_category_url").html("");
+                //refreshLPLink();
+                refreshCategoriesTree(jQuery(this).val());
+            })
+
+
+            jQuery("#browseCategory button[type=submit]").click(function () {
+                jQuery("#landing_page_category_url").html("");
+
+
+            });
+
+            jQuery("#landing_page_category_url_refresh").click(function(){
+                alert("test");
+            })
+
+            function refreshLPLink(){
+                var vendor = 0;
+                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
+                    vendor = jQuery("#context_vendor_id option:selected").val();
+                }
+                var category = jQuery("[name=landing_page_category]").val();
+
+                var name_customer = jQuery("[name=name_customer]").val();
+
+                var type = jQuery("[name=type] option:selected").val();
+
+
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl("campaign/vendor/get_lp_url"); ?>',
+                    method: 'POST',
+                    data: {"vendor": vendor, category: category, name_customer:name_customer, type:type},
+                    success: function(url){
+                        jQuery("#landing_page_category_url").html("<a href='"+url+"'>"+url+"</a>");
+
+                    }
+                })
+            }
+
+
+            function toggleVendorSelect() {
+
+                var vendor = 0;
+
+                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
+                    jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
+                    vendor = jQuery("#context_vendor_id option:selected").val();
+                } else {
+                    jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
+                }
+
+                refreshCategoriesTree(vendor);
+            }
+
+            function refreshCategoriesTree(vendor){
+                jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree"); ?>',
+                    method: 'POST',
+                    data: {"vendor": vendor},
+                    success: function(tree){
+
+                        jQuery("#jstree").jstree("destroy");
+                        jQuery("#jstree").html(tree);
+                        jQuery("#jstree").jstree({
+                            "core": {
+                                "multiple": false,
+                                "animation": 0,
+                                'themes': {
+                                    'name': 'proton',
+                                    'responsive': true
+                                }
+                            },
+                            "checkbox": {
+                                "keep_selected_style": false,
+                                three_state: false
+                            },
+                            "plugins": ["checkbox"]
+
+                        });
+                    }
+                })
+            }
         });
     </script>

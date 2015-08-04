@@ -60,7 +60,8 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->getBlock('root')
                 ->addBodyClass('node-type-main_categories')
                 ->addBodyClass('is-content-mode')
-                ->setTemplate('page/1column.phtml');
+                //->setTemplate('page/1column.phtml')
+            ;
 
 			$this->getLayout()->getBlock('before_body_end')->unsetChild('searchfaces');
 
@@ -98,6 +99,15 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         $res = false;
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
+        }
+
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
+        $lpData = (array)$lpData;
+
+        if(!empty($lpData)){
+            $res = false;
         }
         return $res;
     }

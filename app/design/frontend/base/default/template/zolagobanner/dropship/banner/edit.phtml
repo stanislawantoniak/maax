@@ -49,7 +49,7 @@ $captionsNumber = (int)$config->captions_number;
                     </li>
                 <?php else: ?>
                     <li>
-                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getType(); ?>
+                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getTypeLabel(); ?>
                     </li>
                 <?php endif;?>
                 <?php if($this->isModelNew()):?>

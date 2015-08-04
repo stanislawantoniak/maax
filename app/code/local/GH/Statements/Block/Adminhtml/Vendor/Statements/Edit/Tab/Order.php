@@ -63,7 +63,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
             'index' => 'carrier'
         ));
 
-        /*@var $ghDhl GH_Dhl_Model_Source_Shipping */
+        /** @var $ghDhl GH_Dhl_Model_Source_Shipping */
         $this->addColumn('gallery_shipping_source', array(
             'header' => Mage::helper('ghstatements')->__('Gallery shipping source'),
             'sortable' => true,
@@ -80,7 +80,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
             'index' => 'payment_method'
         ));
 
-        /*@var $paymentOwner Zolago_Payment_Model_Source_Channel_Owner */
+        /** @var $paymentOwner Zolago_Payment_Model_Source_Channel_Owner */
         $this->addColumn('payment_channel_owner', array(
             'header' => Mage::helper('ghstatements')->__('Payment Owner'),
             'sortable' => true,
@@ -140,7 +140,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         ));
         $this->addColumn("value", array(
             "index" => "value",
-            "header" => Mage::helper("ghstatements")->__("Amount"),
+            "header" => Mage::helper("ghstatements")->__("Order amount"),
             'type' => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
