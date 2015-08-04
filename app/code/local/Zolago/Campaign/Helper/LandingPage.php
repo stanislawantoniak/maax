@@ -134,12 +134,14 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
                 /** @var Zolago_Campaign_Model_Campaign $campaign */
                 $campaign = Mage::getModel("zolagocampaign/campaign")
                     ->load($landingPageCampaign, "name_customer");
+                $campaignWebsites = $campaign->getAllowedWebsites();
 
                 if ($campaign->getId()) {
                     if (
                         ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
                         && $campaign->getIsLandingPage()
                         && $campaign->getLandingPageCategory()
+                        && in_array(Mage::app()->getWebsite()->getId(), $campaignWebsites)
                     ) {
                         //context landing_page_context
                         $landing_page_context = $campaign->getData("landing_page_context");
