@@ -218,7 +218,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         if(!isset($data->banner_no_link)){
                             $bannerContent->addField("image_url_" . $n, "text", array(
                                 "name" => "image_url[" . $n . "]",
-                                "class" => "form-control urlKeyFormat",
+                                "class" => "form-control",
                                 "required" => $pictureUrlRequired,
                                 "label" => $helper->__($picture->picture_label . ": url"),
                                 "label_wrapper_class" => "col-md-3",
@@ -238,7 +238,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                     foreach ($data->caption as $n => $caption) {
                         $bannerContent->addField("caption_url_" . $n, "text", array(
                             "name" => "caption_url[" . $n . "]",
-                            "class" => "form-control urlKeyFormat",
+                            "class" => "form-control",
                             "required" => $captionUrlRequired,
                             "label" => $helper->__($caption->caption_label . ": url"),
                             "label_wrapper_class" => "col-md-3",
