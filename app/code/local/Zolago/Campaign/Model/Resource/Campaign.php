@@ -314,12 +314,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                  'banner_caption' => 'banner_content.caption'
             )
         );
+        $select->joinLeft(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array("campaign_website" => "campaign_website.website_id")
+        );
         $select->where("campaign_placement.category_id=?", $categoryId);
         //$select->where("campaign.vendor_id=campaign_placement.vendor_id");
         $select->where("campaign_placement.vendor_id=?", $vendorId);
         if(!empty($bannerTypes)){
             $select->where("banner.type in(?)", $bannerTypes);
         }
+        $select->where("campaign_website.website_id=?", Mage::app()->getWebsite()->getId());
         if($notExpired){
             $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
 
