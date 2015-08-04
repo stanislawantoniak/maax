@@ -174,4 +174,32 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
         return false;
     }
+
+
+    public function getLandingPageUrl($campaignId)
+    {
+        $urlText = "";
+        $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+
+        if($campaign->getData("is_landing_page") == 0){
+            return $urlText;
+        }
+
+        $landing_page_category = $campaign->getData("landing_page_category");
+        $landing_page_category_id = isset($landing_page_category) ? $landing_page_category : 0;
+
+        $landing_page_context = $campaign->getData("landing_page_context");
+        $vendorUrlPart = "";
+        if ($landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
+            $vendor = Mage::getModel("udropship/vendor")->load($campaign->getData("context_vendor_id"));
+
+            $vendorName = $vendor->getUrlKey();
+            $vendorUrlPart = $vendorName . "/";
+        }
+
+        $landingPageUrl = $campaign->getData("landing_page_url");
+        $urlText = Mage::getBaseUrl() . $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
+
+        return $urlText;
+    }
 }

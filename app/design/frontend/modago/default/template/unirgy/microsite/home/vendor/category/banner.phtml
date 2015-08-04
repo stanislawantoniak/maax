@@ -1,8 +1,16 @@
 <?php
+
+/**
+ * Inspiration block on Gallery Home
+ */
+
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
 $inspirations = $this->getInspirations(); ?>
+
+<?php $landingPageHelper = Mage::helper("zolagocampaign/landingPage"); ?>
+
 <?php if ($inspirations) : ?>
 <div class="row">
     <section class="block-inspiration">
@@ -17,18 +25,25 @@ $inspirations = $this->getInspirations(); ?>
                     <?php $captions = empty($inspiration['banner_caption'])? array():unserialize($inspiration['banner_caption']); ?>
                     <?php if(!empty($inspiratio)): ?>
                         <?php foreach($inspiratio as $i => $insp): ?>
+
+                            <?php $urlText = $landingPageHelper->getLandingPageUrl($inspiration['campaign_id']); ?>
+                            <?php $campaignUrl = !empty($urlText) ? $urlText: $inspiration['campaign_url']; ?>
+
+                            <?php $inspUrl = !empty($insp['url']) ? $insp['url'] : $campaignUrl; ?>
+
                             <div class="item">
-                                <?php if(!empty($insp['url'])): ?>
-                                <a href="<?php echo $insp['url']; ?>">
-                                    <?php endif; ?>
+                                <?php if(!empty($inspUrl)): ?><a href="<?php echo $inspUrl; ?>"><?php endif; ?>
+
                                     <img src="<?php echo Mage::getBaseUrl('media')  . $this->getImageResizePath($inspirationType).$insp['path']; ?>" alt="">
                                     <?php if(!empty($insp['url'])): ?>
 
 
                                     <div class="carousel-caption">
+                                        <?php $showCaptions = false; ?>
                                         <?php foreach($captions as $i => $caption): ?>
                                             <?php  $captionText = $caption['text'];  ?>
                                             <?php if(!empty($captionText)): ?>
+                                                <?php $showCaptions = true; ?>
                                                 <?php if(!empty($caption['url'])): ?>
                                                     <a href="<?php echo $caption['url']; ?>" class="<?php if($i > 1): ?>margin-top-20px<?php endif; ?>">
                                                 <?php endif; ?>
@@ -40,13 +55,16 @@ $inspirations = $this->getInspirations(); ?>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                         <?php unset($i); ?>
-                                        <a href="<?php echo $insp['url']; ?>">
-                                            <span class="seemore-caption"><?php echo $this->__('zobacz'); ?> &gt;</span>
-                                        </a>
+
+                                        <?php if($showCaptions): ?>
+                                            <a href="<?php echo $inspUrl; ?>">
+                                                <span class="seemore-caption"><?php echo $this->__('zobacz'); ?> &gt;</span>
+                                            </a>
+                                        <?php endif; ?>
 
                                     </div>
 
-                                </a>
+                                    <?php if(!empty($inspUrl)): ?></a><?php endif; ?>
                             <?php endif; ?>
                             </div>
                         <?php endforeach; ?>

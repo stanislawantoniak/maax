@@ -68,7 +68,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 		if(!$this->hasData("finder")){
 			$placements = array();
 			$vendor = $this->getVendor();
-            //krumo($vendor->getId());
+
 			if(!empty($vendor)){
 				$vendorId = $vendor->getId();
                 $rootCatId = $vendor->getRootCategory();

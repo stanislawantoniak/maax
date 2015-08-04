@@ -62,7 +62,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
-        $form->setAction($this->getUrl("banner/vendor/save"));
+        $form->setAction($this->getUrl("banner/vendor/save", array("_secure" => true)));
 
         //Common edit banner fields
         $general = $form->addFieldset("general", array(

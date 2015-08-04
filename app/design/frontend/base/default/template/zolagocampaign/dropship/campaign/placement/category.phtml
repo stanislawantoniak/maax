@@ -26,7 +26,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
         <div class="container">
             <ol class="breadcrumb">
                 <li>
-                    <a href="/campaign/placement/index/">
+                    <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true))?>">
                         <?php echo $_helper->__('Manage placements') ?>
                     </a>
                 </li>
@@ -795,7 +795,7 @@ jQuery(function ($) {
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
-                url : "/campaign/vendor/getCampaignData",
+                url : '<?php echo Mage::getUrl("campaign/vendor/getCampaignData", array("_secure" => true))?>',
                 data: {id : campaign},
                 success: function(result){
 

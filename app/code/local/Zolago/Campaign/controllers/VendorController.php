@@ -149,7 +149,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
                 }
-
+                $campaign->setData("is_landing_page", isset($data["is_landing_page"]) ? 1 : 0);
                 $campaign->save();
 
 

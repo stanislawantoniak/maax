@@ -294,6 +294,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'campaign_date_to' => 'campaign.date_to',
                 'campaign_status' => 'campaign.status',
                 'campaign_vendor' => 'campaign.vendor_id',
+                'campaign_url' => 'campaign.campaign_url',
             )
         );
         $select->joinLeft(

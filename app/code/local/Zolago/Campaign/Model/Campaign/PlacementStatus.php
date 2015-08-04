@@ -70,7 +70,7 @@ class Zolago_Campaign_Model_Campaign_PlacementStatus{
         $messages = array(
             self::TYPE_EXPIRED => "<i class='" . $icons[self::TYPE_EXPIRED] . "'></i> " .
                 Mage::helper("zolagocampaign")->__("Campaign has ended. Creative is not active.") .
-                ($showEditLink ? Mage::helper("zolagocampaign")->__(" To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>.", Mage::getUrl("/campaign/vendor/edit", array("id" => $campaignId))) : ""),
+                ($showEditLink ? Mage::helper("zolagocampaign")->__(" To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>.", Mage::getUrl("/campaign/vendor/edit", array("id" => $campaignId, "_secure" => true))) : ""),
 
             self::TYPE_ACTIVE => "<i class='" . $icons[self::TYPE_ACTIVE] . "'></i> "
                 . Mage::helper("zolagocampaign")->__('Creative is active.'),

@@ -1,10 +1,17 @@
 <?php
+
+/**
+ * Slider and Box on CMS Categories
+*/
+
 /** @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner */
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 
 $sliders = $this->getSliders();
 $boxes = $this->getBoxes();
+
+$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 
 if (!empty($sliders) || !empty($boxes)): ?>
 	<div id="vendor-banners">
@@ -13,11 +20,20 @@ if (!empty($sliders) || !empty($boxes)): ?>
 				<?php foreach ($sliders as $slider): ?>
 					<?php $slides = !empty($slider['banner_image']) ? unserialize($slider['banner_image']) : array(); ?>
 					<?php $captions = !empty($slider['banner_caption']) ? unserialize($slider['banner_caption']) : array(); ?>
+
+
+					<?php
+
+					$urlText = $landingPageHelper->getLandingPageUrl($slider['campaign_id']);
+					?>
+					<?php $campaignUrl = !empty($urlText) ? $urlText: $slider['campaign_url']; ?>
 					<div class="topSlide">
 						<div class="topSlideImages">
 							<?php foreach ($slides as $i => $slide): ?>
-								<?php if (!empty($slide['url'])): ?>
-									<a href="<?php echo $slide['url']; ?>">
+
+								<?php $slideUrl = !empty($slide['url']) ? $slide['url'] : $campaignUrl; ?>
+								<?php if(!empty($slideUrl)): ?>
+									<a href="<?php echo $slideUrl; ?>">
 								<?php endif; ?>
 								<?php if ($i == 1): ?>
 									<?php $imageSize = $this->getImageSize($slide['path']); ?>
@@ -30,9 +46,10 @@ if (!empty($sliders) || !empty($boxes)): ?>
 									     class="visible-xs"
 										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
 								<?php endif; ?>
-								<?php if (!empty($slide['url'])): ?>
+								<?php if (!empty($slideUrl)): ?>
 									</a>
 								<?php endif; ?>
+								<?php unset($slideUrl); ?>
 							<?php endforeach; ?>
 						</div>
 						<div class="topSlideCaptions">
@@ -71,23 +88,28 @@ if (!empty($sliders) || !empty($boxes)): ?>
 				<?php foreach ($boxes as $n => $box): ?>
 					<?php if (!empty($box['banner_image'])):
 						$path = $box['banner_image']['path'];
-						$url = $box['banner_image']['url'];
-						if ($this->imageExists($path)): ?>
+						$url = $box['banner_image']['url']; ?>
+
+						<?php
+
+						$urlBoxText = $landingPageHelper->getLandingPageUrl($box['campaign_id']);
+						?>
+						<?php $campaignBoxUrl = !empty($urlBoxText) ? $urlBoxText: $box['campaign_url']; ?>
+
+						<?php $boxUrl = !empty($url) ? $url : $urlBoxText; ?>
+						<?php if ($this->imageExists($path)): ?>
 							<div class="boxesSlide">
-								<?php if (!empty($url)): ?>
-								<a href="<?php echo $url; ?>">
-									<?php endif; ?>
+								<?php if (!empty($boxUrl)): ?><a href="<?php echo $boxUrl; ?>"><?php endif; ?>
 									<?php $imageSize = $this->getImageSize($path); ?>
 									<div class="boxesSlideIn"
 									     style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
 									     data-ratio="<?php echo $this->getImageRatio($path); ?>">
 									</div>
-									<?php if (!empty($url)): ?>
-								</a>
-							<?php endif; ?>
+									<?php if (!empty($boxUrl)): ?></a><?php endif; ?>
 							</div>
 						<?php endif; ?>
 					<?php endif; ?>
+					<?php unset($boxUrl); ?>
 				<?php endforeach; ?>
 			</section>
 		<?php endif; ?>
