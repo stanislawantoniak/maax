@@ -190,7 +190,38 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             $customer = $this->_getSession()->getCustomer();
             $origEmail = trim($customer->getEmail());
             $postEmail = trim($this->getRequest()->getParam('email'));
-            
+
+	        $postFirstname = $this->getRequest()->getParam('firstname');
+	        if($postFirstname !== null) {
+		        $postFirstname = trim($postFirstname);
+	        }
+
+	        $postLastname = $this->getRequest()->getParam('lastname');
+	        if($postLastname !== null) {
+		        $postLastname = trim($postLastname);
+	        }
+
+	        $postPhone = trim($this->getRequest()->getParam('phone'));
+			$postErrors = false;
+
+			if (($postFirstname === "" && $customer->getFirstname()) || ($postLastname === "" && $customer->getLastname())) {
+				$this->_getSession()->addError(
+					Mage::helper("zolagocustomer")->__("You cannot remove your firstname and lastname")
+				);
+				$postErrors = true;
+			}
+
+	        if($postPhone === "" && $customer->getPhone()) {
+		        $this->_getSession()->addError(
+			        Mage::helper("zolagocustomer")->__("You cannot remove your phone")
+		        );
+		        $postErrors = true;
+	        }
+
+	        if($postErrors) {
+		        return $this->_redirect('*/*/edit');
+	        }
+
             if(empty($postEmail)){
                 $postEmail = $origEmail;
                 $this->getRequest()->setParam("email", $origEmail);

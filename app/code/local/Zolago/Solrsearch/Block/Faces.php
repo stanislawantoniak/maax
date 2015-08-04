@@ -33,8 +33,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return string
 	 */
 	public function getFacetLabel($facetCode){
+
 		if($facetCode==Zolago_Solrsearch_Model_Solr::FLAGS_FACET){
 			return Mage::helper('zolagosolrsearch')->__('Product Flags');
+		}
+		if(in_array($facetCode, array("campaign_info_id_facet", "campaign_regular_id_facet"))){
+			return Mage::helper('zolagosolrsearch')->__('Campaign');
 		}
 		return parent::getFacetLabel($facetCode);
 	}
@@ -503,13 +507,27 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      */
     public function getFilterBlocks() {
         $solrData = $this->getSolrData();
-        $outBlock = $this->_getRegularFilterBlocks($solrData);
         $additionalBlocks = array(
 			'category' => $this->getCategoryBlock($solrData),
 			'price' =>$this->getPriceBlock($solrData),
 			'flag' => $this->getFlagBlock($solrData),
 			'rating' => $this->getRatingBlock($solrData),
 		);
+
+        // Fix for landing pages and campaigns
+        $fq = $this->getRequest()->getParam('fq');
+        $campInfo = isset($fq['campaign_info_id']) ? $fq['campaign_info_id'] : null;
+        $campRegular = isset($fq['campaign_regular_id']) ? $fq['campaign_regular_id'] : null;
+        if (!empty($fq) && !empty($campInfo) && !isset($solrData['facet_counts']['facet_fields']['campaign_info_id_facet'])) {
+            $solrData['facet_counts']['facet_fields']['campaign_info_id_facet'] = array($campInfo[0] => 1); // Don;t care about counts here
+        }
+        if (!empty($fq) && !empty($campRegular) && !isset($solrData['facet_counts']['facet_fields']['campaign_regular_id_facet'])) {
+            $solrData['facet_counts']['facet_fields']['campaign_regular_id_facet'] = array($campRegular[0] => 1); // Don;t care about counts here
+        }
+        // End od fix
+
+        $outBlock = $this->_getRegularFilterBlocks($solrData);
+
         // block order #484
         $finishBlock = array ();
         if ($additionalBlocks['category']) {        
@@ -806,7 +824,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
                 // Skip attribs with no custom filter
                 if(!$filter || !$filter->getId()) {
-                    continue;
+                    // Always attach campaign information ( for landing pages )
+                    if ($attrCode != "campaign_info_id" & $attrCode != "campaign_regular_id") {
+                        continue;
+                    } else {
+                        $filter = Mage::getModel("zolagocatalog/category_filter");
+                        $filter->setCustomShowFlag(1);
+                        $filter->setSortOrder(10000);
+                    }
                 }
 
                 // Check is filter depended - if not - skip
@@ -851,6 +876,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 $block->setAllItems($data);
                 $block->setAttributeCode($attrCode);
                 $block->setFacetKey($key);
+                $block->setCustomShowFlag($filter->getCustomShowFlag());
                 if(!isset($sorted[$sortOrder])) {
                     $sorted[$sortOrder] = array();
                 }

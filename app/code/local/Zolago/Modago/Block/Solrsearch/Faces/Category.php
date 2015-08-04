@@ -47,8 +47,24 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         $parentCategory = $this->getCurrentCategory()->getParentCategory();
         $parentCategoryUrl = null;
         if($this->getParentBlock()->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+
+            // Fix for landing pages and campaigns
+            /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+            $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+            /** @var Zolago_Campaign_Model_Campaign $campaign */
+            $campaign = $landingPageHelper->getCampaign();
+            $_query = null;
+            if ($campaign && $campaign->getId()) {
+                if ($parentCategory->getId() == $campaign->getLandingPageCategory()) {
+                    $_fq = $this->getRequest()->getParam('fq');
+                    $_query['fq']['campaign_info_id']    = isset($_fq['campaign_info_id'])    ? $_fq['campaign_info_id']    : null;
+                    $_query['fq']['campaign_regular_id'] = isset($_fq['campaign_regular_id']) ? $_fq['campaign_regular_id'] : null;
+                }
+            }
+
             $parentCategoryUrl = Mage::getUrl('',
                 array(
+                    '_query'  => $_query,
                     '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $parentCategory->getId())->getRequestPath(),
                 )
             );
@@ -132,4 +148,10 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         return $result;
     }
 
+    public function getCanShowBackToCampaign() {
+        /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+        $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+
+        return  $landingPageHelper->getCanShowBackToCampaign();
+    }
 } 

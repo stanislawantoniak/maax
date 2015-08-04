@@ -27,7 +27,7 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Mode
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
                 $options[] = array(
-                    'label' => $campaign['campaign_name'],
+                    'label' => $campaign['name_customer'],
                     'value' => $campaign['campaign_id']
                 );
             }
