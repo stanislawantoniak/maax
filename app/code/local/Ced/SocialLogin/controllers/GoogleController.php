@@ -167,7 +167,7 @@ class Ced_SocialLogin_GoogleController extends Mage_Core_Controller_Front_Action
 				return;
 			}
 
-			$customersByEmail = Mage::helper('sociallogin/facebook')
+			$customersByEmail = Mage::helper('sociallogin/google')
 				->getCustomersByEmail($userInfo->email);
 
 			if($customersByEmail->count())  {
