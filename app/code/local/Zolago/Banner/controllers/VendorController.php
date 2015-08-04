@@ -13,8 +13,25 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function editAction() {
         Mage::register('as_frontend', true);
+
+        $bannerType = $this->getRequest()->getParam('type', "");
+
+        /* @var $_zolagoDropshipHelper Zolago_Dropship_Helper_Data */
+        $_zolagoDropshipHelper = Mage::helper("zolagodropship");
+
+        //restrict for not LOCAL VENDOR
+        /* @var $bannerTypeModel Zolago_Banner_Model_Banner_Type */
+        $bannerTypeModel = Mage::getModel("zolagobanner/banner_type");
+        $isAvailableType = $bannerTypeModel->isTypeDefinitionAvailableVorLocalVendor($bannerType);
+
+        if(!$isAvailableType && !$_zolagoDropshipHelper->isLocalVendor()){
+            //only Local vendor can edit Landing page Banners
+            return $this->_redirect("campaign/vendor/index");
+        }
+
         $campaignId = $this->getRequest()->getParam('campaign_id',null);
         $bannerId = $this->getRequest()->getParam('id',null);
+
         $banner = $this->_initModel($bannerId);
         $vendor = $this->_getSession()->getVendor();
 

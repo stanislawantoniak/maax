@@ -135,6 +135,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             foreach ($websites as $websiteId) {
                 $recoverOptionsProducts[$websiteId] = array($productId);
             }
+
             Mage::dispatchEvent(
                 "campaign_product_remove_update_after",
                 array(
@@ -431,13 +432,13 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
                  'campaign_id'   => 'campaign.campaign_id',
-                 'campaign_name' => 'campaign.name'
+                 'name_customer' => 'campaign.name_customer'
             )
         );
         $select->where(
             "campaign.type  IN (?)", array(Zolago_Campaign_Model_Campaign_Type::TYPE_INFO)
         );
-        //$select->where("campaign.vendor_id=(?)",5);
+
         $select->distinct(true);
 
         return $this->getReadConnection()->fetchAll($select);

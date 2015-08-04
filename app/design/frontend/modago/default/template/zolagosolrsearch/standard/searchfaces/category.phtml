@@ -1,15 +1,18 @@
 <?php
 /** @var $this Zolago_Modago_Block_Solrsearch_Faces_Category */
+/** @var Zolago_Solrsearch_Helper_Data $helper */
+$helper = Mage::helper("zolagosolrsearch");
 ?>
 <?php $key = $this->getFacetKey(); ?>
 <?php if($this->getCanShow()): ?>
     <?php
         $backUrl = $this->getParentCategoryUrl();
-        $backLabel = $this->escapeHtml($this->getParentCategoryLabel());
+        $backLabel = strtolower($this->escapeHtml($this->getParentCategoryLabel()));
         $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
         $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
         $isSearch = $this->getIsSearch();
         $isParrentRoot = $this->getIsParentRootCategory();
+        $canShowBackToCampaign = $this->getCanShowBackToCampaign();
     ?>
 	<div class="section clearfix" data-xs-rolled="open" data-lg-rolled="<?php echo $sectionClass; ?>">
 		<h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
@@ -38,9 +41,17 @@
 			<?php if($backUrl != null) : ?>
                 <?php if(!$isSearch): ?>
                     <?php if($isParrentRoot): ?>
-                        <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
+                        <?php if($canShowBackToCampaign): ?>
+                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
+                        <?php else: ?>
+                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
+                        <?php endif; ?>
                     <?php else: ?>
-                        <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                        <?php if($canShowBackToCampaign): ?>
+                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
+                        <?php else: ?>
+                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                        <?php endif; ?>
                     <?php endif; ?>
                 <?php else: ?>
                     <?php if($isParrentRoot): ?>

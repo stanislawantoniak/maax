@@ -43,7 +43,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             if (
                 !$category
                 || $category->getId() == $this->_getRootCategoryId()
-//                || (Mage::registry('current_product') && !$refererUrl)
                 || (Mage::registry('current_product') && (int)strpos($refererUrl,"search") > 0 && !in_array("scat=".$category->getId(), $params))
             ) {
                 $category = $this->_getDefaultCategory(
@@ -160,23 +159,42 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
     protected function _preparePath($category) {
         $path = array();
         $rootId = $this->_getRootCategoryId();
+
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
+        $lpData = (array)$lpData;
+
+
         /* @var $category Mage_Catalog_Model_Category */
         if($category->getId() && ($parents = $category->getParentCategories())) {
             $pathIds = array_reverse($category->getPathIds());
             // Remove root category
             array_pop($pathIds);
             foreach($pathIds as $parentId) {
+
                 if ($parentId == $rootId) {
                     break; // we are in root
                 }
                 if(isset($parents[$parentId]) && $parents[$parentId]
                         instanceof Mage_Catalog_Model_Category) {
+
                     $parentCategory = $parents[$parentId];
+                    $categoryName = $parentCategory->getName();
+                    $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId);
+
+                    if(!empty($lpData)){
+                        if(isset($lpData["campaign"]) && $parentCategory->getId() == $lpData["campaign"]){
+                            $categoryName = $lpData["name_customer"];
+                            $link = $lpData["url"];
+                        }
+                    }
+
                     array_unshift($path, array(
 						"name"      => "category" . $parentCategory->getId(),
                         "id"        => $parentCategory->getId(),
-						"label"     => $parentCategory->getName(),
-						"link"      => $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId),
+						"label"     => $categoryName,
+						"link"      => $link,
                         "data-link" => $parentCategory->getUrl(),
                         'categorylongname' => $parentCategory->getLongName()
 					));
@@ -210,7 +228,12 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
     protected function _prepareListingBreadcrumb() {
         $vendor = $this->_getVendor();
         $breadcrumbsBlock = $this->_getBlock();
-        if($vendor) {
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
+        $lpData = (array)$lpData;
+
+        if($vendor && empty($lpData)) {
             $breadcrumbsBlock->addCrumb('home', array(
 				'label'=>Mage::helper('catalog')->__('Mall'),
 				'title'=>Mage::helper('catalog')->__('Go to Mall'),
