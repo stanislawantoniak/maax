@@ -97,16 +97,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
 
         if($isLocalVendor){
-
-
-//            $landingPage->addField('is_landing_page', 'checkbox', array(
-//                'label'     => $helper->__('Landing Page'),
-//                'name'      => 'is_landing_page',
-//                'onclick'   => 'this.value = this.checked ? 1 : 0;',
-//                "label_wrapper_class" => "col-md-3",
-//                "wrapper_class" => "col-md-3"
-//            ));
-
             $general->addField("is_landing_page", "radios", array(
                 "name" => "is_landing_page",
                 "required" => false,
@@ -144,6 +134,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6 landing-page-config",
                 "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div><div id="landing_page_category_url"><a target="_blank" href="'.$urlText.'">'.$urlText.'</a></div>' : '<div id="landing_page_category_text"></div><div id="landing_page_category_url"></div>'
+            ));
+        } else {
+            $general->addField('is_landing_page', 'hidden', array(
+                'label' => $helper->__('Landing Page'),
+                'name' => 'is_landing_page',
+                'value' => 0,
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-3 hidden"
             ));
         }
         $general->addField("campaign_url", "text", array(
