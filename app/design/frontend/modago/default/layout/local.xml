@@ -1409,7 +1409,7 @@
 			</action>
 		</reference>
 		<reference name="customer_form_register">
-			<block type="sociallogin/register" name="ced_sociallogin_register">
+			<block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml" >
 				<block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" />
 				<block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" />
 				<block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" />

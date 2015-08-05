@@ -28,7 +28,8 @@ class Ced_SocialLogin_Block_Register extends Mage_Core_Block_Template
 {
     protected $clientGoogle = null;
     protected $clientFacebook = null;
-    protected $clientTwitter = null;		protected $clientLinkedin = null;
+    protected $clientTwitter = null;
+    protected $clientLinkedin = null;
     
     protected $numEnabled = 0;
     protected $numShown = 0;
@@ -38,11 +39,13 @@ class Ced_SocialLogin_Block_Register extends Mage_Core_Block_Template
 
         $this->clientGoogle = Mage::getSingleton('sociallogin/google_client');
         $this->clientFacebook = Mage::getSingleton('sociallogin/facebook_client');
-        $this->clientTwitter = Mage::getSingleton('sociallogin/twitter_client');		$this->clientLinkedin = Mage::getSingleton('sociallogin/linkedin_client');
+        $this->clientTwitter = Mage::getSingleton('sociallogin/twitter_client');
+        $this->clientLinkedin = Mage::getSingleton('sociallogin/linkedin_client');
 
         if( !$this->_googleEnabled() &&
             !$this->_facebookEnabled() &&
-            !$this->_twitterEnabled() &&            !$this->_linkedinEnabled())
+            !$this->_twitterEnabled() &&
+            !$this->_linkedinEnabled())
             return;
 
         if($this->_googleEnabled()) {
@@ -55,7 +58,11 @@ class Ced_SocialLogin_Block_Register extends Mage_Core_Block_Template
 
         if($this->_twitterEnabled()) {
             $this->numEnabled++;
-        }		if($this->_linkedinEnabled()) {            $this->numEnabled++;        }
+        }
+
+        if($this->_linkedinEnabled()) {
+            $this->numEnabled++;
+        }
 
         Mage::register('ced_sociallogin_button_text', $this->__('Register'));
 
@@ -85,6 +92,10 @@ class Ced_SocialLogin_Block_Register extends Mage_Core_Block_Template
     protected function _twitterEnabled()
     {
         return (bool) $this->clientTwitter->isEnabled();
-    }		protected function _linkedinEnabled()    {        return (bool) $this->clientLinkedin->isEnabled();    }
+    }
 
+    protected function _linkedinEnabled()
+    {
+        return (bool) $this->clientLinkedin->isEnabled();
+    }
 }
