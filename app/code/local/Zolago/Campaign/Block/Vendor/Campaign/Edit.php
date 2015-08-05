@@ -95,24 +95,25 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "wrapper_class" => "col-md-3"
         ));
 
-        $general->addField("campaign_url", "text", array(
-            "name" => "campaign_url",
-            "class" => "form-control",
-            "required" => false,
-            "label" => $helper->__('URL Key'),
-            "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-6"
-        ));
 
         if($isLocalVendor){
 
 
-            $landingPage->addField('is_landing_page', 'checkbox', array(
-                'label'     => $helper->__('Landing Page'),
-                'name'      => 'is_landing_page',
-                'onclick'   => 'this.value = this.checked ? 1 : 0;',
+//            $landingPage->addField('is_landing_page', 'checkbox', array(
+//                'label'     => $helper->__('Landing Page'),
+//                'name'      => 'is_landing_page',
+//                'onclick'   => 'this.value = this.checked ? 1 : 0;',
+//                "label_wrapper_class" => "col-md-3",
+//                "wrapper_class" => "col-md-3"
+//            ));
+
+            $general->addField("is_landing_page", "radios", array(
+                "name" => "is_landing_page",
+                "required" => false,
+                "label" => $helper->__('Landing Page'),
+                "values" => $landingPageSource = Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
                 "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-3"
+                "wrapper_class" => "col-md-9 radio-buttons",
             ));
 
             $landingPage->addField("landing_page_context", "radios", array(
@@ -145,7 +146,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "after_element_html" => !$this->isModelNew() ? '<div id="landing_page_category_text">'.$categoryName.'</div><div id="landing_page_category_url"><a target="_blank" href="'.$urlText.'">'.$urlText.'</a></div>' : '<div id="landing_page_category_text"></div><div id="landing_page_category_url"></div>'
             ));
         }
-
+        $general->addField("campaign_url", "text", array(
+            "name" => "campaign_url",
+            "class" => "form-control",
+            "required" => false,
+            "label" => $helper->__('URL Key'),
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-6"
+        ));
 
         $general->addField("date_from", "text", array(
             "name" => "date_from",

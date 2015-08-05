@@ -205,7 +205,7 @@
                         required: "input[name=is_landing_page]:checked"
                     },
                     campaign_url: {
-                        required: "input[name=is_landing_page]:not(:checked)"
+                        required: "input[name=is_landing_page][value=0]:checked"
                     },
                     context_vendor_id: {
                         required: "input[name=landing_page_context][value=vendor]:checked"
@@ -226,20 +226,23 @@
             });
 
 
-            var urlKeyContainer = jQuery('.landing-page-config').parents(".form-group");
-            toggleLandingPagePanel(jQuery(form).find('input[name="is_landing_page"]'), urlKeyContainer);
 
-            jQuery(form).find('input[name="is_landing_page"]').on('click', function () {
-                toggleLandingPagePanel(this, urlKeyContainer);
+            toggleLandingPagePanel();
+
+            jQuery(form).find('input[name="is_landing_page"]').on('change', function () {
+                toggleLandingPagePanel();
 
             })
             function toggleLandingPagePanel(element, toggleContainer) {
-                var showLandingPageConfig = jQuery(element).is(":checked");
+                var showLandingPageConfig = jQuery('input[name="is_landing_page"]:checked').val();
+                var LandingPageConfig = jQuery('.landing-page-config').parents(".widget");
 
-                if (showLandingPageConfig) {
-                    toggleContainer.show();
+                if (showLandingPageConfig ==1) {
+                    jQuery("[name=campaign_url]").parents(".form-group").hide();
+                    LandingPageConfig.show();
                 } else {
-                    toggleContainer.hide();
+                    jQuery("[name=campaign_url]").parents(".form-group").show();
+                    LandingPageConfig.hide();
                 }
 
             }
