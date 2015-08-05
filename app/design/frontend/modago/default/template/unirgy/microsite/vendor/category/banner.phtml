@@ -6,7 +6,10 @@
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
-$inspirations = $this->getInspirations(); ?>
+$inspirations = $this->getInspirations();
+
+$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+?>
 
 
 <?php if ($inspirations) : ?>
@@ -22,9 +25,13 @@ $inspirations = $this->getInspirations(); ?>
                 <?php foreach($inspirations as $n => $inspiration): ?>
                             <?php $inspiratio = empty($inspiration['banner_image']) ?array():unserialize($inspiration['banner_image']); ?>
                             <?php $captions = empty($inspiration['banner_caption'])? array():unserialize($inspiration['banner_caption']); ?>
-                            <?php if(!empty($inspiratio)): ?>
+                    <?php $urlText = $landingPageHelper->getLandingPageUrl($inspiration['campaign_id']); ?>
+                    <?php $campaignUrl = !empty($urlText) ? $urlText: $inspiration['campaign_url']; ?>
+
+                    <?php if(!empty($inspiratio)): ?>
                                 <?php foreach($inspiratio as $i => $insp): ?>
-                            <?php $inspUrl = !empty($insp['url']) ? $insp['url'] : $inspiration['campaign_url']; ?>
+
+                            <?php $inspUrl = !empty($insp['url']) ? $insp['url'] : $campaignUrl; ?>
                                     <div class="item">
                                         <?php if(!empty($inspUrl)): ?><a href="<?php echo $inspUrl; ?>"><?php endif; ?>
 
