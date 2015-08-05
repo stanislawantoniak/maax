@@ -1413,7 +1413,8 @@ Mall.socialLogin = function(url,redirect) {
 			if(!socialLoginWindow.closed) {
 				if (socialLoginWindow.document.URL.indexOf(redirect) != -1) {
 					window.clearInterval(pollTimer);
-					var url = socialLoginWindow.document.getElementById('redirect').innerText;
+                    var elem = socialLoginWindow.document.getElementById('redirect');
+					var url  = elem.innerText || elem.textContent;
 
 					socialLoginWindow.close();
 					redirecting = true;
@@ -1428,7 +1429,7 @@ Mall.socialLogin = function(url,redirect) {
 		} catch (e) {
 		}
 	}, 500);
-}
+};
 
 //credits: http://www.netlobo.com/url_query_string_javascript.html
 Mall.getUrlPart = function(url,name) {
@@ -1440,7 +1441,7 @@ Mall.getUrlPart = function(url,name) {
 		return "";
 	else
 		return results[1];
-}
+};
 
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
