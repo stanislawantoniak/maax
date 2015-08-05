@@ -26,6 +26,7 @@
 class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Action {
 	protected $referer = null;
 	const FACEBOOK_ERROR_ACCESS_DENIED = 'access_denied';
+    protected $userInfo = null;
 	/**
 	 * Action connect
 	 */
@@ -33,6 +34,10 @@ class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Acti
 		try {
 			$this->_connectCallback();
 		} catch (Exception $e) {
+            if (!empty($this->userInfo->id)) {
+                // Facebook user need to be disconnected with facebook app because sth goes wrong
+                Mage::helper('sociallogin/facebook')->disconnectWhenException($this->userInfo->id);
+            }
 			Mage::getSingleton('core/session')->addError($e->getMessage());
 		}
 		echo '<div id="redirect" style="color:#FFF">';
@@ -108,7 +113,7 @@ class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Acti
 		if ($code) {
 			$client = Mage::getSingleton('sociallogin/facebook_client');
 
-			$userInfo = $client->api('/me?fields=id,name,first_name,last_name,email');
+			$this->userInfo = $userInfo = $client->api('/me?fields=id,name,first_name,last_name,email');
 			$token = $client->getAccessToken();
 
 			$customersByFacebookId = Mage::helper('sociallogin/facebook')
@@ -155,6 +160,12 @@ class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Acti
 
 				return;
 			}
+
+            if (empty($userInfo->email)) {
+                throw new Exception(
+                    $this->__('Sorry, could not retrieve your Facebook email. Please try again and make sure you provide us your email address.')
+                );
+            }
 
 			$customersByEmail = Mage::helper('sociallogin/facebook')
 				->getCustomersByEmail($userInfo->email);

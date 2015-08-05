@@ -32,7 +32,9 @@ class Ced_SocialLogin_Helper_Facebook extends Mage_Core_Helper_Abstract
         try {
             $client->setAccessToken($customer->getCedSocialloginFtoken());
             $client->api('/me/permissions', 'DELETE');            
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
         
         $pictureFilename = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA)
                 .DS
@@ -51,6 +53,32 @@ class Ced_SocialLogin_Helper_Facebook extends Mage_Core_Helper_Abstract
         $customer->setCedSocialloginFid(null)
         ->setCedSocialloginFtoken(null)
         ->save();   
+    }
+
+    public function disconnectWhenException($fid) {
+        $client = Mage::getSingleton('sociallogin/facebook_client');
+        $token  = $client->getAccessToken();
+
+        try {
+            $client->setAccessToken($token);
+            $client->api('/me/permissions', 'DELETE');
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
+        $pictureFilename = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA)
+            .DS
+            .'ced'
+            .DS
+            .'sociallogin'
+            .DS
+            .'facebook'
+            .DS
+            .$fid;
+
+        if(file_exists($pictureFilename)) {
+            @unlink($pictureFilename);
+        }
     }
     
     public function connectByFacebookId(
