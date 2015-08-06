@@ -63,8 +63,6 @@ $canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
                                 <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                             </div>
 
-
-
                                 <div id="view-current-filter">
                                     <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
                                     <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>

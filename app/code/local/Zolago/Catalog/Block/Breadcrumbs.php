@@ -165,7 +165,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         $lpData = $lpBlock->getData('campaign_landing_page');
         $lpData = (array)$lpData;
 
-
         /* @var $category Mage_Catalog_Model_Category */
         if($category->getId() && ($parents = $category->getParentCategories())) {
             $pathIds = array_reverse($category->getPathIds());
@@ -181,11 +180,13 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
                     $parentCategory = $parents[$parentId];
                     $categoryName = $parentCategory->getName();
+                    $categoryLongName = $parentCategory->getLongName();
                     $link = $this->_prepareCategoryLink($category, $parentCategory, $parentId);
 
                     if(!empty($lpData)){
                         if(isset($lpData["campaign"]) && $parentCategory->getId() == $lpData["campaign"]){
                             $categoryName = $lpData["name_customer"];
+                            $categoryLongName = $lpData["name_customer"];
                             $link = $lpData["url"];
                         }
                     }
@@ -196,7 +197,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 						"label"     => $categoryName,
 						"link"      => $link,
                         "data-link" => $parentCategory->getUrl(),
-                        'categorylongname' => $parentCategory->getLongName()
+                        'categorylongname' => $categoryLongName
 					));
                 }
             }

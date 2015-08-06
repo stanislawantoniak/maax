@@ -44,6 +44,9 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$customerSession->addProductsToCache($products);
 
 		$params = $this->getRequest()->getParams();
+
+		Mage::register("listing_reload_params", $params);
+
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
 		$rewriteHelper = Mage::helper('ghrewrite');
@@ -87,6 +90,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
 			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
+			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
 			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
             "category_head_title" => $title
 		));
