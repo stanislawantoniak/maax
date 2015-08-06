@@ -1,0 +1,20 @@
+#lp-banners {
+  display: block;
+  position: relative;
+  background-color: #FFFFFF;
+  vertical-align: top;
+  float: none;
+
+  .lp-banners {
+    margin-top: 10px;
+    .lp-banner-desktop {
+      margin-bottom: 15px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
