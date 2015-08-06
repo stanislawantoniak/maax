@@ -46,7 +46,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $lpData = (array)$lpData;
             if(!empty($lpData)){
                 if(isset($lpData["name_customer"]) && !empty($lpData["name_customer"])){
-                    $headBlock->setDescription($lpData["name_customer"] . " - " . Mage::app()->getStore()->getName());
+                    $headBlock->setTitle($lpData["name_customer"] . " - " . Mage::app()->getStore()->getName());
                 }
             }
         }
