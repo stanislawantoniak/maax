@@ -39,6 +39,16 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 }
             }
             /*rewrite gh_url_rewrite*/
+
+            /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+            $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+            $lpData = $lpBlock->getData('campaign_landing_page');
+            $lpData = (array)$lpData;
+            if(!empty($lpData)){
+                if(isset($lpData["name_customer"]) && !empty($lpData["name_customer"])){
+                    $headBlock->setDescription($lpData["name_customer"] . " - " . Mage::app()->getStore()->getName());
+                }
+            }
         }
 
         if($this->isContentMode()) {
