@@ -84,7 +84,7 @@
 <!--Products tab-->
 <div class="modal fade" id="browseProducts">
     <div class="modal-dialog" style="width: 80%">
-        <form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
+        <form id="campaign_products" action="<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>"  class="form-horizontal row-border" method="post">
             <input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 
             <div class="modal-content">
@@ -148,7 +148,7 @@
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
                         jQuery.ajax({
-                            url:  '<?php echo Mage::getUrl('campaign/vendor/products'); ?>'   ,
+                            url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
