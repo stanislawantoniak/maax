@@ -1205,7 +1205,8 @@ Mall.listing = {
 
         var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
 		this.getHeader().replaceWith(jQuery(content.header));
-        this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
+        //this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
+		this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
 		this.getActive().replaceWith(jQuery(content.active));
 
         //Category with filters
