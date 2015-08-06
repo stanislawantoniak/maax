@@ -6,7 +6,7 @@ $cmsNavigationBlocks = array(
 		'title'         => 'Cookie restriction notice',
 		'identifier'    => 'cookie_restriction_notice_block',
 		'content'       => <<<EOD
-Strona korzysta z plików cookie w celu realizacji usług zgodnie z <a href="{{store direct_url="privacy-policy-cookie-restriction-mode"}}">Polityką przywatności</a>. Możesz określić warunki przechowywania lub dostępu do cookie w Twojej przeglądarce.
+Strona korzysta z plików cookie w celu realizacji usług zgodnie z <a href="{{store direct_url="privacy-policy-cookie-restriction-mode"}}">Polityką prywatności</a>. Możesz określić warunki przechowywania lub dostępu do cookie w Twojej przeglądarce.
 EOD
 	,
 		'is_active'     => 1,
