@@ -180,9 +180,15 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
     public function getLandingPageUrl($campaignId)
     {
         $urlText = "";
-        $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
 
-        if($campaign->getData("is_landing_page") == 0){
+        $campaign = Mage::registry('campaigns_data_' . $campaignId);
+
+        if (!Mage::registry('campaigns_data_' . $campaignId)) {
+            $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+            Mage::register('campaigns_data_' . $campaignId, $campaign);
+        }
+
+        if ($campaign->getData("is_landing_page") == Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK) {
             return $urlText;
         }
 
