@@ -191,6 +191,19 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                             } elseif (isset($data['image']) && !empty($data['image'])) {
                                 $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
                             }
+
+                            // Only Inspiration need to be resize ( box and sliders not )
+                            $type = $banner->getType();
+                            if (Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION == $type) {
+                                $_path = $bannerContentToSave['image'][$n]['path'];
+                                $imageBoxPath = Mage::getBaseDir('media') . $_path;
+                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::getImageResizePath($banner->getType()) . $_path;
+                                Mage::getModel("zolagobanner/banner")->scaleImage(
+                                    $imageBoxPath,
+                                    $imageBoxResizePath,
+                                    Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::BANNER_INSPIRATION_WIDTH,
+                                    Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::BANNER_INSPIRATION_HEIGHT);
+                            }
                         }
                         unset($n);
                     }
