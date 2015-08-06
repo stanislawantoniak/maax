@@ -81,9 +81,12 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             $title = $rewriteData["title"];
         }
 
+        $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
+        $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
+
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,
-			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
+			"header"		=> $this->_cleanUpHtml($block->toHtml()),
 			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
 			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
