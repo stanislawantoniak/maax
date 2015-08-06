@@ -29,7 +29,10 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign extends Mage_Eav_Model_Ent
      */
     private function _prepareCampaignOptions($campaigns)
     {
-        $options = array( 0 => '  ');
+        $options = array( 0 => array(
+            'label' => '',
+            'value' => ''
+        ));
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
                 $options[] = array(
