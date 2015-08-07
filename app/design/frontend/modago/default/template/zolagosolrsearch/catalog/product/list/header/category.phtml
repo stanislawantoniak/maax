@@ -17,9 +17,8 @@ $images = (array)$images;
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 /** @var Zolago_Campaign_Model_Campaign $campaign */
 $canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
-
-
 ?>
+
 
 <?php if((!$this->isContentMode() || $vendor )&& empty($images) ): ?>
 <header data-test="3" id="header-main"  <?php if($this->isContentMode()): ?> class="hidden-xs" <?php endif; ?>>
@@ -32,13 +31,10 @@ $canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
                         <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                     </div>
 
-
                         <div id="view-current-filter" >
                             <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
                             <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
                         </div>
-
-
 
                     <div id="active-filters-wrapper">
                         <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
@@ -135,6 +131,60 @@ $canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
                         <div id="active-filters-wrapper">
                             <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+<?php endif; ?>
+
+
+<?php if ($this->isContentMode() && Mage::registry("listing_reload_params")): ?>
+    <header data-test="51" id="header-main"  class="visible-xs">
+        <div class="wrapp-section bg-w">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12 header-panel">
+                        <?php if(!$vendor): ?>
+                            <div id="breadcrumbs-header">
+                                <?php //echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                            </div>
+                            <div id="view-current-filter" >
+                                <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
+                            </div>
+                            <div id="active-filters-wrapper">
+                                <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                            </div>
+                        <?php else: ?>
+                            <div id="category-header-left">
+                                <div id="category-header-vendor-box">
+                                    <?php if(!empty($vendorTypeLabel)): ?>
+                                        <div class="vendor-header-label">
+                                            <?php echo $vendor->getVendorTypeLabel(); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <a href="<?php echo $vendor->getVendorUrl(); ?>">
+                                        <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div style="clear:both" class="visible-xs"></div>
+                            <div id="category-header-right">
+                                <div class="right-wrapper">
+                                    <div id="breadcrumbs-header">
+                                        <?php //echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                                    </div>
+                                    <div id="view-current-filter">
+                                        <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
+                                        <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>
+                                    </div>
+                                    <div id="active-filters-wrapper">
+                                        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
