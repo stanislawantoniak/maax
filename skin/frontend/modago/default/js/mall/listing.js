@@ -1280,6 +1280,10 @@ Mall.listing = {
 		var self = this,
 			active = this.getActiveLabel(scope),
 			remove = this.getActiveRemove(scope);
+
+
+		var categoryDMPage = jQuery(scope).data("categorydmpage");
+
 		if(this.getPushStateSupport()) {
 
 			function unCheckbox(id) {
@@ -1292,7 +1296,17 @@ Mall.listing = {
 
 			active.click(function() {
 				var me = jQuery(this);
+				var activeDisplayModePage = me.data("displaymode");
+				if (categoryDMPage
+					&& activeDisplayModePage
+					&& jQuery(Mall.listing.getActiveId()).find("input[name^=fq]").length ==1
+				) {
+					window.location = window.location.pathname;
+					return false;
+				}
+
 				self._current_url = me.attr('href');
+
 				if(!me.parent().hasClass('query-text-iks')) {
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
@@ -1308,6 +1322,12 @@ Mall.listing = {
 
 			remove.click(function() {
 				var me = jQuery(this);
+
+				if (categoryDMPage) {
+					window.location = window.location.pathname;
+					return false;
+				}
+
 				self._current_url = me.attr('href');
 				active.each(function() {
 					unCheckbox(jQuery(this).data('input'));

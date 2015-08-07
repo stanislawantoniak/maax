@@ -44,7 +44,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$customerSession->addProductsToCache($products);
 
 		$params = $this->getRequest()->getParams();
-
+		Mage::log($params, null, "lp.log");
 		Mage::register("listing_reload_params", $params);
 
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
@@ -55,6 +55,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
+		Mage::log($category->getData("display_mode"), null, "lp.log");
+		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
 
 		$url = false;
 		if($type == "search") {
@@ -92,7 +94,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
 			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
 			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
-            "category_head_title" => $title
+            "category_head_title" => $title,
+			"category_display_mode" => $categoryDisplayMode
 		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);

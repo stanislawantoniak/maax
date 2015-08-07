@@ -35,11 +35,11 @@ class Zolago_Campaign_Model_Observer
             ;
             if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
                 //fq[campaign_regular_id][0]=-50%25+Matterhorn++PODKOSZULKI+MĘSKIE
-                $landingPageUrl = "fq[campaign_regular_id][0]=" . urlencode($nameCustomer);
+                $landingPageUrl = "fq[".Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE."][0]=" . urlencode($nameCustomer);
             }
             if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
                 //fq[campaign_info_id][0]=LP+50%25+rabatu+na+produkty+Esotiq+Publiczna+nazwa+kampanii
-                $landingPageUrl = "fq[campaign_info_id][0]=" .  urlencode($nameCustomer);
+                $landingPageUrl = "fq[".Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE."][0]=" .  urlencode($nameCustomer);
             }
             if(!empty($landingPageUrl)){
                 $campaign->setData("landing_page_url", $landingPageUrl);
