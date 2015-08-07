@@ -1406,17 +1406,18 @@ Mall.delegateLikeEvents = function() {
 };
 
 Mall.socialLogin = function(url,redirect) {
-	var socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
+	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
 	var redirecting = false;
 	var pollTimer = window.setInterval(function () {
 		try {
-			if(!socialLoginWindow.closed) {
-				if (socialLoginWindow.document.URL.indexOf(redirect) != -1) {
-					window.clearInterval(pollTimer);
-                    var elem = socialLoginWindow.document.getElementById('redirect');
-					var url  = elem.innerText || elem.textContent;
+			if(!Mall.socialLoginWindow.closed) {
+				if (Mall.socialLoginWindow.document.URL.indexOf(redirect) != -1) {
 
-					socialLoginWindow.close();
+					window.clearInterval(pollTimer);
+                    var elem = Mall.socialLoginWindow.document.getElementById('redirect');
+					var url  = elem.innerText || elem.textContent;
+                    alert("jest redirect do " + url);
+                    Mall.socialLoginWindow.close();
 					redirecting = true;
 
 					if(url) {
