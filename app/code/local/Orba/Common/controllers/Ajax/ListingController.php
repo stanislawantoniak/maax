@@ -44,8 +44,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$customerSession->addProductsToCache($products);
 
 		$params = $this->getRequest()->getParams();
-		Mage::log($params, null, "lp.log");
+
+		$lp = $this->getRequest()->getParam("lp");
 		Mage::register("listing_reload_params", $params);
+		Mage::register("lp", $lp);
 
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
@@ -55,7 +57,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
-		Mage::log($category->getData("display_mode"), null, "lp.log");
+
 		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
 
 		$url = false;
@@ -88,6 +90,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
         $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
         $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
+		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active')->setData("lp", $lp));
+		$block->setData("lp", $lp);
 
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,

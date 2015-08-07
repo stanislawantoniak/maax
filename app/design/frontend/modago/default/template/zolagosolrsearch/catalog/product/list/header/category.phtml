@@ -17,11 +17,13 @@ $images = (array)$images;
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 /** @var Zolago_Campaign_Model_Campaign $campaign */
 $canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
+
+$lp = $this->getRequest()->getParam("lp", 0);
 ?>
 
 
-<?php if((!$this->isContentMode() || $vendor )&& empty($images) ): ?>
-<header data-test="3" id="header-main"  <?php if($this->isContentMode()): ?> class="hidden-xs" <?php endif; ?>>
+<?php if((!$this->isContentMode() || $vendor || $lp)&& empty($images)  ): ?>
+<header data-test="3" id="header-main"  <?php if($this->isContentMode() && !$lp): ?> class="hidden-xs" <?php endif; ?>>
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div class="row">

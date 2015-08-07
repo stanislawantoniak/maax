@@ -154,10 +154,14 @@ Mall.listing = {
      * clicked url
      */
 	_current_url: '',
+
+	_isLP: 0,
 	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+
+		this.isLP();
 
 		this.delegateSavePosition();
 
@@ -2379,7 +2383,8 @@ console.log(content.header);
 			dir: this.getDir(),
 			scat: this.getScat(),
 			rows: this.getScrollLoadOffset(),
-			start: 0
+			start: 0,
+			lp: this._isLP
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2551,6 +2556,10 @@ console.log(content.header);
     },
 
 	beforeResizeWidth: window.innerWidth,
+
+	isLP: function(){
+		this._isLP = jQuery("#solr_search_facets").data("islp");
+	},
 
     delegateSavePosition: function() {
 
