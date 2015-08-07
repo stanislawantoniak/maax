@@ -1407,25 +1407,24 @@ Mall.delegateLikeEvents = function() {
 
 Mall.socialLogin = function(url,redirect) {
 	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
-	var redirecting = false;
-	var pollTimer = window.setInterval(function () {
+	Mall.redirecting = false;
+	Mall.pollTimer = window.setInterval(function () {
 		try {
 			if(!Mall.socialLoginWindow.closed) {
 				if (Mall.socialLoginWindow.document.URL.indexOf(redirect) != -1) {
 
-					window.clearInterval(pollTimer);
+					window.clearInterval(Mall.pollTimer);
                     var elem = Mall.socialLoginWindow.document.getElementById('redirect');
 					var url  = elem.innerText || elem.textContent;
-                    alert("jest redirect do " + url);
                     Mall.socialLoginWindow.close();
-					redirecting = true;
+					Mall.redirecting = true;
 
 					if(url) {
 						window.location = url;
 					}
 				}
-			} else if(!redirecting) {
-				window.clearInterval(pollTimer);
+			} else if(!Mall.redirecting) {
+				window.clearInterval(Mall.pollTimer);
 			}
 		} catch (e) {
 		}
