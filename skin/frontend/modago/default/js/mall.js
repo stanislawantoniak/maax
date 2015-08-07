@@ -1416,19 +1416,24 @@ Mall.socialLogin = function(url,redirect) {
 					window.clearInterval(Mall.pollTimer);
                     var elem = Mall.socialLoginWindow.document.getElementById('redirect');
 					var url  = elem.innerText || elem.textContent;
+                    jQuery('#logIn').append("url:" + url + "<br />");
                     Mall.socialLoginWindow.close();
-					Mall.redirecting = true;
+                    jQuery('#logIn').append("social login window close");
+					Mall.redirecting = url;
 
 					if(url) {
+                        jQuery('#logIn').append("zmiana window location");
 						window.location = url;
 					}
 				}
 			} else if(!Mall.redirecting) {
+                jQuery('#logIn').append("redirec");
 				window.clearInterval(Mall.pollTimer);
+                window.location = Mall.redirecting;
 			}
 		} catch (e) {
 		}
-	}, 200);
+	}, 150);
 };
 
 //credits: http://www.netlobo.com/url_query_string_javascript.html
