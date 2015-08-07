@@ -1188,7 +1188,7 @@ Mall.listing = {
 	},
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
-
+console.log(content.header);
 		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
