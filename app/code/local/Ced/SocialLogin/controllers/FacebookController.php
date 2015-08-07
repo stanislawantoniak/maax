@@ -49,6 +49,7 @@ class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Acti
 			echo Mage::getUrl('/');
 		}
 		echo '</div>';
+        echo '<script>setTimeout(function(){ alert("Hello"); }, 3000);</script>'
 	}
 
 	/**

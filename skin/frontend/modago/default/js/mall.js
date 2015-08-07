@@ -1428,7 +1428,7 @@ Mall.socialLogin = function(url,redirect) {
 			}
 		} catch (e) {
 		}
-	}, 500);
+	}, 200);
 };
 
 //credits: http://www.netlobo.com/url_query_string_javascript.html
