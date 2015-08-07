@@ -40,7 +40,7 @@ class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Acti
             }
 			Mage::getSingleton('core/session')->addError($e->getMessage());
 		}
-		echo '<div id="redirect" style="color:red; font-size:20px;">';
+        echo '<div id="redirect" style="color:#FFF">';
 		if($this->getRequest()->getParam('error') == self::FACEBOOK_ERROR_ACCESS_DENIED) {
 			echo '';
 		} elseif(!empty($this->referer)) {
