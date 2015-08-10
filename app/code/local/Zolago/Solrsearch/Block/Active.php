@@ -34,6 +34,9 @@ class Zolago_Solrsearch_Block_Active extends Zolago_Solrsearch_Block_Faces
 			if(!empty($lpData)){
 				$res = false;
 			}
+            if (Mage::registry('is_search_mode')) {
+                $res = false;
+            }
         }
         return $res;
     }

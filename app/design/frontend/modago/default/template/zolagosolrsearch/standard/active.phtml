@@ -46,7 +46,6 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                             }
                                             ?>
                                             <span class="label">
-                                                <?php Mage::log($key, null, "lp2.log"); ?>
                                                 <?php echo $this->__($this->getFacetLabel($key)); ?>:
                                                 <span class="value">
                                                     <?php echo $this->facetFormat($selectedFacetValue) ?>
