@@ -298,17 +298,24 @@
 
 
             function toggleVendorSelect() {
+                if (jQuery("[name=is_landing_page]").is(":visible")) {
 
-                var vendor = 0;
+                    // Set by default context gallery checked
+                    if (jQuery("[name=landing_page_context]:checked").length == 0) {
+                        jQuery("#landing_page_contextgallery").prop('checked', true);
+                    }
 
-                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
-                    jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
-                    vendor = jQuery("#context_vendor_id option:selected").val();
-                } else {
-                    jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
+                    var vendor = 0;
+
+                    if (jQuery("[name=landing_page_context]:checked").val() == "vendor") {
+                        jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
+                        vendor = jQuery("#context_vendor_id option:selected").val();
+                    } else {
+                        jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
+                    }
+
+                    refreshCategoriesTree(vendor);
                 }
-
-                refreshCategoriesTree(vendor);
             }
 
             function refreshCategoriesTree(vendor){
