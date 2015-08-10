@@ -245,8 +245,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
         $values = array_merge($values,
             array(
-                'website_ids' => $websiteIdsSelected,
-                "campaign_products" => $productsSelected
+                'website_ids'       => $websiteIdsSelected,
+                "campaign_products" => $productsSelected,
+                "date_from"         => Mage::getModel('core/date')->date('Y-m-d H') . ":00"
             )
         );
         if($isLocalVendor){
