@@ -166,6 +166,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "name" => "date_to",
             "class" => "form-control datetimepicker col-md-2",
             "label" => $helper->__('Date to'),
+            "required" => true,
             "label_wrapper_class" => "col-md-3",
             "wrapper_class" => "col-md-5 datetimepicker-wrapper",
             "after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>'
