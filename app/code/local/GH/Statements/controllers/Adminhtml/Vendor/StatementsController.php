@@ -113,4 +113,25 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
         );
     }
 
+    /**
+     * Manually trigger gh_statements cron with custom date (today)
+     * @return Mage_Adminhtml_Controller_Action
+     */
+    public function generate_todayAction() {
+        $forceCustomDate = $this->getRequest()->getParam('date');
+        try {
+            /** @var GH_Statements_Model_Observer $model */
+            $model = Mage::getModel('ghstatements/observer');
+            $model->processStatements($forceCustomDate);
+            return $this->_redirect("*/*/index");
+
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            $this->_getSession()->addError(Mage::helper("ghstatements")->__("Some error occurred!"));
+            Mage::logException($e);
+            return $this->_redirectReferer();
+        }
+    }
 }
