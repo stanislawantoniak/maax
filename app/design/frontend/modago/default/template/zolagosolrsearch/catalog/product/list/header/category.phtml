@@ -81,8 +81,16 @@ $lp = $this->getRequest()->getParam("lp", 0);
 <?php endif; ?>
 
 
-
-
+<?php
+/**
+ * If is media (banner) replace header by banner (no vendor media & info)
+ * If media (banner) is NOT set
+ *  If is vendor context
+ *   show vendor media on left and rest on right
+ *  If is not vendor context
+ *   show rest
+ */
+?>
 <?php if (!empty($images)): ?>
     <?php $banners = isset($images["banners"]) ? $images["banners"] : array(); ?>
     <header data-test="31" id="header-main">
@@ -90,13 +98,13 @@ $lp = $this->getRequest()->getParam("lp", 0);
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12 header-panel">
-                        <div id="breadcrumbs-header">
-                            <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
-                        </div>
-                        <div id="lp-banners">
-                            <?php if (!empty($banners)):
-                                //show LP banners
-                                ?>
+                        <?php if (!empty($banners)):
+                            //show LP banners
+                            ?>
+                            <div id="breadcrumbs-header">
+                                <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                            </div>
+                            <div id="lp-banners">
                                 <div id="view-current-filter" class="visible-xs">
                                     <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
                                     <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
@@ -118,21 +126,61 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                             alt="<?php echo $images["name_customer"]; ?>"/>
                                     </div>
                                 </div>
-
-                            <?php else:
-                                //Show LP campaign name instead of banners
-                                ?>
+                            </div>
+                            <div id="active-filters-wrapper">
+                                <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                            </div>
+                        <?php
+                        else:
+                            //Show LP campaign name instead of banners
+                            ?>
+                            <?php if (!$vendor): ?>
+                                <div id="breadcrumbs-header">
+                                    <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                                </div>
                                 <div id="view-current-filter">
                                     <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
                                     <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
                                        class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                 </div>
-                            <?php endif; ?>
-                        </div>
+                                <div id="active-filters-wrapper">
+                                    <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                                </div>
+                            <?php else: ?>
+                                <div id="category-header-left">
+                                    <div id="category-header-vendor-box">
+                                        <?php if (!empty($vendorTypeLabel)): ?>
+                                            <div class="vendor-header-label">
+                                                <?php echo $vendor->getVendorTypeLabel(); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        <a href="<?php echo $vendor->getVendorUrl(); ?>">
+                                            <div class="vendor-header-logo"
+                                                 style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div style="clear:both"
+                                     class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : '' ?>"></div>
+                                <div id="category-header-right">
+                                    <div class="right-wrapper">
+                                        <div id="breadcrumbs-header">
+                                            <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                                        </div>
 
-                        <div id="active-filters-wrapper">
-                            <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
-                        </div>
+                                        <div id="view-current-filter">
+                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
+                                            <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
+                                               class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
+                                        </div>
+
+                                        <div id="active-filters-wrapper">
+                                            <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
