@@ -163,6 +163,8 @@ Mall.listing = {
 
 		this.isLP();
 
+		this.positionFiltersAfterLpBannerLoad();
+
 		this.delegateSavePosition();
 
 		this.initShuffle();
@@ -2559,6 +2561,15 @@ Mall.listing = {
 
 	isLP: function(){
 		this._isLP = jQuery("#solr_search_facets").data("islp");
+	},
+
+	positionFiltersAfterLpBannerLoad: function() {
+		var bannersContainer = jQuery('.lp-banners');
+		if(bannersContainer.length) {
+			bannersContainer.find('img').load(function() {
+				Mall.listing.positionFilters();
+			});
+		}
 	},
 
     delegateSavePosition: function() {
