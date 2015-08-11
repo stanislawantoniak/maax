@@ -240,6 +240,14 @@
                 <script>js/mall/navigation.js</script>
             </action>
 
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/cookiebar/jquery.cookiebar.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
+			</action>
+
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
 
             <remove name="salesmanago_tracking"/>
@@ -250,6 +258,9 @@
 				<template>page/1column.phtml</template>
 			</action>
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
+			<action method="addBodyClass">
+				<value>gh-cookiebar</value>
+			</action>
 		</reference>
 
         <reference name="header">
@@ -286,6 +297,7 @@
 
 		<reference name="before_body_end">
 			<block type="zolagomodago/page_html_scrolltop" name="scrolltop" template="page/html/scrolltop.phtml" />
+			<block type="core/template"  name="cookie_bar" template="page/html/cookie_bar.phtml" />
 		</reference>
 		<!-- remove cart link - better performance-->
 		<remove name="checkout_cart_link"/>
