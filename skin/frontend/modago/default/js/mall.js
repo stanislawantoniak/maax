@@ -1441,7 +1441,7 @@ Mall.storeCheckoutValues = function() {
 		//firstname, lastname and email - propably not needed as they'll be filled by social login
 		dataToStore.account_firstname = form.find('#account_firstname').val();
 		dataToStore.account_lastname = form.find('#account_lastname').val();
-		dataToStore.account_email = form.find('#account_email').val();
+		//dataToStore.account_email = form.find('#account_email').val(); //don't store email because social login provides one
 
 		//needed data
 		dataToStore.account_telephone = form.find('#account_telephone').val();
