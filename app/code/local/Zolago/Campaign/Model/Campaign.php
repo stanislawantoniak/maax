@@ -2,7 +2,25 @@
 
 /**
  * Class Zolago_Campaign_Model_Campaign
+ * @method int getCampaignId()
+ * @method int getVendorId()
+ * @method int getStatus()
+ * @method string getType()
+ * @method int getPriceSourceId()
+ * @method float getPriceSrp()
+ * @method string getName()
+ * @method int getPercent()
+ * @method string getDateFrom()
+ * @method string getDateTo()
+ * @method string getCreatedAt()
+ * @method string getUpdatedAt()
+ * @method string getNameCustomer()
+ * @method int getStrikeoutType()
  * @method int getLandingPageCategory()
+ * @method int getIsLandingPage()
+ * @method int getLandingPageContext()
+ * @method int getContextVendorId()
+ * @method string getCampaignUrl()
  */
 class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
