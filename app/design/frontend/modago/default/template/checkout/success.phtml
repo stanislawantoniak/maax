@@ -1,22 +1,18 @@
 <?php
-/**
- * user: Andrzej Spólnicki
- */
+/** @var Mage_Checkout_Block_Onepage_Success $this */
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
 ?>
 
 <div id="content" class="container-fluid">
-    <div id="checkout" class="row">
-
-        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('checkout-thank-you-page')->toHtml(); ?>
-
-        <div id="content-main" class="col-md-10 col-md-push-1 col-sm-12 section">
-            <section class="main bg-w">
-                <header class="title-section">
-                    <h2 class="open number_order"><?php echo $this->__('ORDER NUMBER:') ?><?php echo $this->escapeHtml($this->getOrderId()) ?></span>
-                    </h2>
-                </header>
-            </section>
-        </div>
+    <div id="checkout" class="row checkout-success">
+        <aside class="col-md-10 col-md-push-1 col-sm-12 section helpful-vote">
+            <div class="main bg-w">
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('checkout-thank-you-page')->toHtml(); ?>
+                <h4 class="open number_order"><?php echo $helper->__('YOUR ORDER NUMBER: ') ?><?php echo $this->escapeHtml($this->getOrderId()) ?></span></h4>
+                <p class="see-this-order"><a href="<?php echo Mage::getUrl("sales/order/process");?>"><?php echo $helper->__("SEE THIS ORDER IN YOUR ACCOUNT >"); ?></a></p>
+            </div>
+        </aside>
     </div>
 </div>
 
