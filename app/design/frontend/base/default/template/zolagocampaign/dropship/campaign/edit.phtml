@@ -172,7 +172,7 @@
                 var campaignId = jQuery("input[name=campaign_id]").val();
                 var path = jQuery(this).attr('href');
                 removeCampaignGridItemLink(path, campaignId);
-            })
+            });
             function removeCampaignGridItemLink(path, campaignId) {
                 var link = path + "campaignId/" + campaignId;
                 window.location = link;
@@ -232,7 +232,7 @@
             jQuery(form).find('input[name="is_landing_page"]').on('change', function () {
                 toggleLandingPagePanel();
 
-            })
+            });
             function toggleLandingPagePanel(element, toggleContainer) {
                 var showLandingPageConfig = jQuery('input[name="is_landing_page"]:checked').val();
                 var LandingPageConfig = jQuery('.landing-page-config').parents(".widget");
@@ -252,50 +252,20 @@
             jQuery("[name=landing_page_context]").change(function(){
                 toggleVendorSelect();
                 jQuery("#landing_page_category_url").html("");
-            })
+            });
 
             jQuery("[name=context_vendor_id]").change(function(){
                 jQuery("[name=landing_page_category]").val("");
                 jQuery("#landing_page_category_text").html("");
                 jQuery("#landing_page_category_url").html("");
-                //refreshLPLink();
                 refreshCategoriesTree(jQuery(this).val());
-            })
-
+            });
 
             jQuery("#browseCategory button[type=submit]").click(function () {
                 jQuery("#landing_page_category_url").html("");
 
 
             });
-
-            jQuery("#landing_page_category_url_refresh").click(function(){
-                alert("test");
-            })
-
-            function refreshLPLink(){
-                var vendor = 0;
-                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
-                    vendor = jQuery("#context_vendor_id option:selected").val();
-                }
-                var category = jQuery("[name=landing_page_category]").val();
-
-                var name_customer = jQuery("[name=name_customer]").val();
-
-                var type = jQuery("[name=type] option:selected").val();
-
-
-                jQuery.ajax({
-                    url: '<?php echo Mage::getUrl("campaign/vendor/get_lp_url"); ?>',
-                    method: 'POST',
-                    data: {"vendor": vendor, category: category, name_customer:name_customer, type:type},
-                    success: function(url){
-                        jQuery("#landing_page_category_url").html("<a href='"+url+"'>"+url+"</a>");
-
-                    }
-                })
-            }
-
 
             function toggleVendorSelect() {
                 if (jQuery("[name=is_landing_page]").is(":visible")) {

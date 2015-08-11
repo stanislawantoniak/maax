@@ -394,39 +394,4 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $this->getResponse()->setBody($tree);
     }
-
-    public function get_lp_urlAction() {
-        $name_customer = $this->getRequest()->getParam("name_customer");
-        $vendorId = (int)$this->getRequest()->getParam("vendor");
-        $categoryId = (int)$this->getRequest()->getParam("category");
-        $type = $this->getRequest()->getParam("type");
-
-        $url = Mage::getBaseUrl();
-
-        if(!empty($vendorId)){
-            /** @var Zolago_Dropship_Model_Vendor $vendor */
-            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
-            if($vendor){
-                $url .= $vendor->getUrlKey();
-            }
-        }
-        if(!empty($categoryId)){
-            $categoryUrlPath = Mage::getModel("catalog/category")->load($categoryId)->getUrlPath();
-            $url.= $categoryUrlPath;
-        }
-
-        if($type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
-            $url .= "?fq[campaign_regular_id][0]=".urlencode($name_customer);
-        }
-        if($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
-            $url .= "?fq[campaign_info_id][0]=".urlencode($name_customer);
-        }
-
-
-        $this->getResponse()
-            ->clearHeaders()
-            ->setHeader('Content-type', 'application/text', true);
-
-        $this->getResponse()->setBody($url);
-    }
 }
