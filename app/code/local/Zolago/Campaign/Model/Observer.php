@@ -42,7 +42,7 @@ class Zolago_Campaign_Model_Observer
                 $landingPageUrl = "fq[".Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE."][0]=" .  urlencode($nameCustomer);
             }
             if(!empty($landingPageUrl)){
-                $campaign->setData("landing_page_url", $landingPageUrl);
+                $campaign->setData("campaign_url", $landingPageUrl);
                 $campaign->save();
             }
         }
