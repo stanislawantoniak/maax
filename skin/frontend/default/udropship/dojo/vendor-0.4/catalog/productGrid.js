@@ -428,7 +428,7 @@ define([
 		var columnSets = [
 			[
 				[
-					{ selector: 'checkbox', label: "+" }
+					{ selector: 'checkbox', label: "" }
 				]
 			], [
 				[
@@ -703,7 +703,7 @@ define([
 			noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
 
 			selectionMode: 'none',
-			//allowSelectAll: true,
+			allowSelectAll: true,
 			deselectOnRefresh: true,
 			
 			cellNavigation: true, /*false*/
@@ -763,7 +763,7 @@ define([
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
 		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
 
-        grid.on("th.field-0-0-0:click", handleSelectAll);
+//        grid.on("th.field-0-0-0:click", handleSelectAll);
 		
 		registerMassactions(grid);
 		
