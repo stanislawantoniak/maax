@@ -21,7 +21,7 @@ $_hlp = Mage::helper("zolagocustomer");
 								</label>
 
 								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 control-label required">
-									<input type="email" value="" class="form-control hint email"
+									<input type="email" value="" class="form-control email"
 									       required="true" id="account_email" title=""
 									       name="email" data-original-title="<?php echo $_hlp->__("Please enter email."); ?>"
 									       aria-required="true"/>
@@ -38,7 +38,7 @@ $_hlp = Mage::helper("zolagocustomer");
 								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 									<input type="password" class="form-control hint password"
 									       required="true" id="account_password" title=""
-									       name="password" data-original-title="<?php echo $_hlp->__("Please enter password."); ?>"
+									       name="password" data-original-title="<?php echo $this->__("Password needs to have at least 6 characters"); ?>"
 									       aria-required="true"/>
 								</div>
 							</div>
