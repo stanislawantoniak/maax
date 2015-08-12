@@ -63,8 +63,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
                     $vendorName = $vendor->getUrlKey();
                     $vendorUrlPart = $vendorName . "/";
 
-
-                    $images->url = Mage::getBaseUrl() . $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
+                    $images->url = Mage::getBaseUrl() . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
 
                     if (array_filter($imageData)) {
                         $images->banners = $imageData;
