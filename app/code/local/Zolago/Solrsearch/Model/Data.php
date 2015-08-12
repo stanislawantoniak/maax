@@ -327,7 +327,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
         }
 		//campaign info
 		if ($item->getOrigData('campaign_info_id')) {
-			$docData['campaign_info_id_int'] = (string)$item->getOrigData('campaign_info_id');
+			$docData['campaign_info_id_int'] = (int)$item->getOrigData('campaign_info_id');
 		}
         if ($item->getOrigData('campaign_strikeout_price_type')) {
             $docData['campaign_strikeout_price_type_int'] = (int)$item->getOrigData('campaign_strikeout_price_type');
