@@ -235,7 +235,7 @@
             });
             function toggleLandingPagePanel(element, toggleContainer) {
                 var showLandingPageConfig = jQuery('input[name="is_landing_page"]:checked').val();
-                var LandingPageConfig = jQuery('.landing-page-config').parents(".widget");
+                var LandingPageConfig = jQuery('.landing-page-config').parents('.form-group');
 
                 if (showLandingPageConfig ==1) {
                     jQuery("[name=campaign_url]").parents(".form-group").hide();

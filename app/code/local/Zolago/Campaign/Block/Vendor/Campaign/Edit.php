@@ -97,7 +97,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
 
         if($isLocalVendor){
-            $general->addField("is_landing_page", "radios", array(
+	        $landingPage->addField("is_landing_page", "radios", array(
                 "name" => "is_landing_page",
                 "required" => false,
                 "label" => $helper->__('Landing Page'),
@@ -144,11 +144,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "wrapper_class" => "col-md-3 hidden"
             ));
         }
-        $general->addField("campaign_url", "text", array(
+
+	    $url = $isLocalVendor ? Mage::getUrl() : Mage::getUrl($this->getVendor()->getUrlKey());
+
+	    $landingPage->addField("campaign_url", "text", array(
             "name" => "campaign_url",
             "class" => "form-control",
             "required" => false,
-            "label" => $helper->__('URL Key'),
+            "label" => $helper->__('URL Key').": ".$url,
             "label_wrapper_class" => "col-md-3",
             "wrapper_class" => "col-md-6"
         ));
