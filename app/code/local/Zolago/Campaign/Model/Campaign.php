@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Zolago_Campaign_Model_Campaign
+ * @method int getLandingPageCategory()
+ */
 class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
     const ZOLAGO_CAMPAIGN_ID_CODE = "campaign_regular_id";
@@ -625,6 +629,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $storesByWebsite = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
 
         foreach ($revertProductOptions as $websiteId => $productIds) {
+
             $stores = isset($storesByWebsite[$websiteId]) ? $storesByWebsite[$websiteId] : false;
             if ($stores) {
                 $this->setCampaignAttributesToProducts($campaignId, $campaign->getType(), $productIds, $stores);
@@ -667,19 +672,26 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     public function setCampaignAttributesToProducts($campaignId, $type, $productIds, $stores)
     {
+
         /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
         if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
+
             foreach ($stores as $store) {
                 foreach ($productIds as $productId) {
+
                     $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store);
+
+                    if (!$val) {
+                        continue;
+                    }
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
-                    if (!empty($campaignIds)) {
-                        $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
-                        $actionModel
-                            ->updateAttributesPure($productIds, $attributesData, (int)$store);
-                    }
+
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
+                    $actionModel
+                        ->updateAttributesPure($productIds, $attributesData, (int)$store);
+
                 }
                 unset($productId);
             }
@@ -693,6 +705,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
             unset($store);
         }
+
         $attributesData = array(
             'special_price' => '',
             'special_from_date' => '',

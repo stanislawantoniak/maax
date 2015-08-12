@@ -42,6 +42,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
        return $this->_forward('edit');
     }
 
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
     public function productsAction()
     {
 
@@ -52,6 +55,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $isAjax = $this->getRequest()->getParam('isAjax',false);
         $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
+
+        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        $udropshipHelper = Mage::helper("udropship");
+        $localVendor = $udropshipHelper->getLocalVendorId();
 
         // Existing campaign
         if ($campaign->getId()) {
@@ -70,10 +77,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $collection = Mage::getModel('catalog/product')
             ->getCollection()
-            ->addAttributeToFilter('skuv', array('in' => $skuVS))
-            ->addAttributeToFilter('udropship_vendor', $vendor->getId())
-            ->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))
-            ->getAllIds();
+            ->addAttributeToFilter('skuv', array('in' => $skuVS));
+        if ($vendor->getId() !== $localVendor) {
+            $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
+        }
+        $collection->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $collection = $collection->getAllIds();
 
         $productIds = array();
         if (!empty($collection)) {
@@ -92,6 +101,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             return $this->_redirectReferer();
         }
     }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
 	public function saveAction() {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {
@@ -123,6 +136,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             }
 
             $campaign->addData($data);
+
             $validErrors = $campaign->validate();
             if ($validErrors === true) {
                 // Fix empty value
@@ -134,12 +148,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 if (!$campaign->getId()) {
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
-                }
-
-                if ($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
-                    $nameForCustomer = $data["name_customer"];
-                    $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
-                    $campaign->addData(array('url_key' => $urlKey));
                 }
 
                 $campaign->save();
@@ -260,7 +268,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 	}
 
     /**
-     * @return array
+     *
      */
     public function getCampaignDataAction()
     {
@@ -376,4 +384,49 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 
 
+    public function get_category_treeAction() {
+        $vendor = (int)$this->getRequest()->getParam("vendor");
+        $tree = Mage::helper("zolagocampaign")->getCategoriesTree($vendor);
+
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('Content-type', 'application/text', true);
+
+        $this->getResponse()->setBody($tree);
+    }
+
+    public function get_lp_urlAction() {
+        $name_customer = $this->getRequest()->getParam("name_customer");
+        $vendorId = (int)$this->getRequest()->getParam("vendor");
+        $categoryId = (int)$this->getRequest()->getParam("category");
+        $type = $this->getRequest()->getParam("type");
+
+        $url = Mage::getBaseUrl();
+
+        if(!empty($vendorId)){
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+            if($vendor){
+                $url .= $vendor->getUrlKey();
+            }
+        }
+        if(!empty($categoryId)){
+            $categoryUrlPath = Mage::getModel("catalog/category")->load($categoryId)->getUrlPath();
+            $url.= $categoryUrlPath;
+        }
+
+        if($type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
+            $url .= "?fq[campaign_regular_id][0]=".urlencode($name_customer);
+        }
+        if($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
+            $url .= "?fq[campaign_info_id][0]=".urlencode($name_customer);
+        }
+
+
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('Content-type', 'application/text', true);
+
+        $this->getResponse()->setBody($url);
+    }
 }

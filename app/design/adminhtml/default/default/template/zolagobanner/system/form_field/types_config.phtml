@@ -16,6 +16,7 @@ $fValue = $_element->getValue();
                 <th><?php echo Mage::helper('zolagobanner')->__('Type Name') ?></th>
                 <th><?php echo Mage::helper('zolagobanner')->__('Images') ?></th>
                 <th><?php echo Mage::helper('zolagobanner')->__('Captions') ?></th>
+                <th><?php echo Mage::helper('zolagobanner')->__('Only for local vendor') ?></th>
                 <th><?php echo Mage::helper('zolagobanner')->__('Action') ?></th>
             </tr>
 
@@ -108,7 +109,7 @@ $fValue = $_element->getValue();
                                     </td>
                                     <td>
                                         <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
-                                        <input alt="is_required" name="<?php echo $this->getFieldName()?>[$$ROW][caption_can_be_empty]" value="1" style="width:50px" type="checkbox"  value="1" />
+                                        <input alt="is_required" name="<?php echo $this->getFieldName()?>[$$ROW][caption_can_be_empty]" value="1" style="width:50px" type="checkbox"  />
                                     </td>
                                 </tr>
                                 <tr class="headings">
@@ -126,6 +127,10 @@ $fValue = $_element->getValue();
                     </div>
 
 
+                </td>
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Only for LOCAL VENDOR')?></h3>
+                    <input type="ckeckbox" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][only_for_local_vendor]" value="1" style="width:50px" />
                 </td>
                 <td>
                     <button type="button" class="scalable delete delete-fieldset"><span><?php echo $this->__('Remove') ?></span></button>
@@ -314,6 +319,10 @@ $fValue = $_element->getValue();
                     </div>
 
 
+                </td>
+                <td>
+                    <span><?php echo Mage::helper('zolagobanner')->__('Only for LOCAL VENDOR')?></span>
+                    <input type="checkbox" name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][only_for_local_vendor]"  style="width:50px" <?php if(isset($fV['only_for_local_vendor']) && $fV['only_for_local_vendor'] == 1): ?> checked <?php endif; ?> value="1"/>
                 </td>
                 <td>
                     <button type="button" class="scalable delete delete-fieldset"  onclick="jQuery(this).closest('tr').remove();"><span><?php echo $this->__('Remove') ?></span></button>

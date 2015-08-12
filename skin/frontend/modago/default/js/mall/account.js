@@ -100,14 +100,21 @@ Mall.account = {
 						email: true
 					},
 					phone: {
-						required: true,
 						"validate-telephone": true
 					},
 					firstname: {
-						required: true
+						required: {
+							depends: function(element) {
+								return jQuery('#customer_lastname').val() != "";
+							}
+						}
 					},
 					lastname: {
-						required: true
+						required: {
+							depends: function(element) {
+								return jQuery('#customer_firstname').val() != "";
+							}
+						}
 					}
 				},
 				messages: {

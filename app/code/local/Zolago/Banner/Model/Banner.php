@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Zolago_Banner_Model_Banner zolagobanner/banner
+ * @method string getType()
+ */
 class Zolago_Banner_Model_Banner extends Mage_Core_Model_Abstract
 {
 
@@ -37,4 +41,23 @@ class Zolago_Banner_Model_Banner extends Mage_Core_Model_Abstract
         $this->getResource()->saveBannerContent($content);
     }
 
+    public function scaleImage($imagePath, $imageResizePath, $width, $height=null)
+    {
+        try
+        {
+            $image = new Varien_Image($imagePath);
+            if(!is_null($height)) {
+                $image->constrainOnly(false);
+                $image->keepFrame(true);
+                $image->backgroundColor(array(255, 255, 255));
+            }
+            $image->keepAspectRatio(true);
+            $image->resize($width, $height);
+            $image->save($imageResizePath);
+        }
+        catch(Exception $e)
+        {
+            Mage::logException($e);
+        }
+    }
 }

@@ -78,7 +78,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Refunds
 
         $this->addColumn("value", array(
             "index" => "value",
-            "header" => Mage::helper("ghstatements")->__("Amount"),
+            "header" => Mage::helper("ghstatements")->__("Refund Amount"),
             'type' => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')

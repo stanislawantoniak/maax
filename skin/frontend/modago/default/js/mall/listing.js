@@ -716,9 +716,8 @@ Mall.listing = {
         grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 		// attach events
 		this.preprocessProducts();
-		this.attachEventsToProducts();
 
-            jQuery(window).trigger('appendToListEnd');
+        jQuery(window).trigger('appendToListEnd');
 
 		return eachItemsHtml;
 	},
@@ -762,52 +761,15 @@ Mall.listing = {
                     "<div class='col-price'>" + oldPrice +
                         "<span>" + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
                     "</div>"+
-                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' onclick='"+likeOnClick+"'>"+
-	                    "<span class='like_count'>" + likeText + "</span><span class='icoLike'>"+
-                    "<img src='" + Config.path.heartLike +"' class='img-01' style='width: 18px; height: 18px;' />"+
-                    "<img src='" + Config.path.heartLiked + "' class='img-02' style='width: 18px; height: 18px;'></span>"+
+                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"'>"+
+                        "<span class='like_count'>" + likeText + "</span>"+
+                        "<span class='icoLike'></span>"+
                         "<div class='toolLike'></div>"+
                     "</div>"+
                 "</div>"+
             "</div>"+
         "</div>";
     },
-
-	/**
-	 * Attaches events to products inserted to listing.
-	 */
-	attachEventsToProducts: function() {
-
-		var itemProduct = jQuery('.box_listing_product'),
-			textLike;
-
-		itemProduct.on('mouseenter', '.like', function(event) {
-			event.preventDefault();
-			if (jQuery(this).hasClass('liked')) {
-				textLike = 'Dodane do ulubionych';
-			} else {
-				textLike = 'Dodaj do ulubionych';
-			}
-			jQuery(this).find('.toolLike').show().text(textLike);
-		});
-		itemProduct.on('mouseleave mouseup', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('.toolLike').hide().text('');
-		});
-		itemProduct.on('mousedown', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('img:visible').animate({transform: 'scale(1.2)'}, 200);
-		});
-		itemProduct.on('mouseup', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200);
-		});
-		itemProduct.on('mousedown', '.liked', function(event) {
-			event.preventDefault();
-			var textLike = 'Usunięte z ulubionych';
-			jQuery(this).find('.toolLike').show().text(textLike);
-		});
-	},
 
 	/**
 	 * Return whether loading more products is possible,
@@ -1392,6 +1354,7 @@ Mall.listing = {
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
+		jQuery('#'+self.getMobileFiltersOverlayId()).click(self.closeMobileFilters);
 		jQuery(window).swipe(Mall.swipeOptions);
 		//self.triggerResize();
 	},
@@ -1402,6 +1365,7 @@ Mall.listing = {
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','auto'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.hideMobileFiltersOverlay();
+		jQuery('#'+self.getMobileFiltersOverlayId()).off('click');
 		//self.triggerResize();
 	},
 

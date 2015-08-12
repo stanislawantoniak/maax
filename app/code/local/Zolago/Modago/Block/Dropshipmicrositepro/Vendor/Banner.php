@@ -15,8 +15,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_BOX_WIDTH = 280;
     const BANNER_BOX_HEIGHT = 323;
 
-    const BANNER_INSPIRATION_WIDTH = 203;
-    const BANNER_INSPIRATION_HEIGHT = 304;
+    const BANNER_INSPIRATION_WIDTH = 400;
+    const BANNER_INSPIRATION_HEIGHT = 600;
 
     const BANNER_RESIZE_DIRECTORY = 'bannerresized';
     const BANNER_RESIZE_M_DIRECTORY = 'bannerresized/mobile';
@@ -66,9 +66,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 	 */
 	public function getFinder() {
 		if(!$this->hasData("finder")){
-			$placements = array();
 			$vendor = $this->getVendor();
-            //krumo($vendor->getId());
 			if(!empty($vendor)){
 				$vendorId = $vendor->getId();
                 $rootCatId = $vendor->getRootCategory();
@@ -85,30 +83,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 					$rootCatId = $currentCategory->getId();
 				}
 
-				$campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-
-				$placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
-				    $this->boxTypes
-				);
-
-
-                $imagesToScale = array();
-                if (!empty($placements)) {
-                    foreach ($placements as $placement) {
-                        if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
-                            $images = unserialize($placement['banner_image']);
-                            $placement['images'] = $images;
-                            $imagesToScale[$placement['type']][] = $images;
-                        }
-                    }
-                }
-
-                if(!empty($imagesToScale)){
-                    $this->scaleBannerImages($imagesToScale);
-                }
-
 			} else {
-                $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+                $vendorId = Mage::helper('udropship')->getLocalVendorId();
 
                 $rootCatId = 0;
                 if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
@@ -120,118 +96,26 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                         $rootCatId = $currentCategory->getId();
                     }
                 }
-
-
-                $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-
-                $placements = $campaignModel->getCategoryPlacements($rootCatId, $localVendorId,
-                    $this->boxTypes
-                );
-
-
-                $imagesToScale = array();
-                if (!empty($placements)) {
-                    foreach ($placements as $placement) {
-                        if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
-                            $images = unserialize($placement['banner_image']);
-                            $placement['images'] = $images;
-                            $imagesToScale[$placement['type']][] = $images;
-                        }
-                    }
-                }
-
-                if(!empty($imagesToScale)){
-                    $this->scaleBannerImages($imagesToScale);
-                }
             }
+
+            $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
+            $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId, $this->boxTypes);
+
 			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
 		}
 		return $this->getData("finder");
 	}
 
 
-    /**
-     * @param $imagesToScale
-     */
-    public function scaleBannerImages($imagesToScale)
-    {
-        if (!empty($imagesToScale)) {
-            foreach ($imagesToScale as $type => $imagesToScaleData) {
-                switch ($type) {
-                    case Zolago_Banner_Model_Banner_Type::TYPE_SLIDER:
-/*                        foreach ($imagesToScaleData as $sliderImageData) {
-                            foreach ($sliderImageData as $sliderImage) {
-
-                                $imageSliderPath = Mage::getBaseDir('media') . $sliderImage['path'];
-                                $imageSliderResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $sliderImage['path'];
-                                $imageSliderResizePathMobile = Mage::getBaseDir('media') . DS . $this->getImageResizeMobilePath($type) . $sliderImage['path'];
-
-                                //Desktop
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH);
-                                //Mobile
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH);
-
-                            }
-                        }
-                        unset($sliderImageData);*/
-                        break;
-                    case Zolago_Banner_Model_Banner_Type::TYPE_BOX:
-/*                        foreach ($imagesToScaleData as $boxImageData) {
-                            foreach ($boxImageData as $boxImage) {
-                                $imageBoxPath = Mage::getBaseDir('media') . $boxImage['path'];
-                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $boxImage['path'];
-
-                                $this->scaleBannerImage($imageBoxPath, $imageBoxResizePath, self::BANNER_BOX_WIDTH, self::BANNER_BOX_HEIGHT);
-                            }
-                        }
-                        unset($sliderImageData);*/
-                        break;
-                    case Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION:
-                        foreach ($imagesToScaleData as $boxImageData) {
-                            foreach ($boxImageData as $boxImage) {
-                                $imageBoxPath = Mage::getBaseDir('media') . $boxImage['path'];
-                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $boxImage['path'];
-
-                                $this->scaleBannerImage($imageBoxPath, $imageBoxResizePath, self::BANNER_INSPIRATION_WIDTH, self::BANNER_INSPIRATION_HEIGHT);
-                            }
-                        }
-                        unset($sliderImageData);
-                        break;
-                }
-            }
-        }
-    }
-
-
-    public function getImageResizePath($type)
+    static public function getImageResizePath($type)
     {
         return self::BANNER_RESIZE_DIRECTORY . DS . $type;
     }
 
 
-    public function getImageResizeMobilePath($type)
+    static public function getImageResizeMobilePath($type)
     {
         return self::BANNER_RESIZE_M_DIRECTORY . DS . $type;
-    }
-
-    public function scaleBannerImage($imagePath, $imageResizePath, $width, $height=null)
-    {
-        try
-        {
-            $image = new Varien_Image($imagePath);
-	        if(!is_null($height)) {
-		        $image->constrainOnly(false);
-		        $image->keepFrame(true);
-		        $image->backgroundColor(array(255, 255, 255));
-	        }
-            $image->keepAspectRatio(true);
-            $image->resize($width, $height);
-            $image->save($imageResizePath);
-        }
-        catch(Exception $e)
-        {
-            //Mage::log('No banner image', Zend_Log::ALERT);
-        }
     }
 
 	public function imageExists($imagePath) {
