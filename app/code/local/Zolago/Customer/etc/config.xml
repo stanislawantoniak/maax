@@ -153,6 +153,9 @@
 				<email_template>zolagocustomer_attach_orders_email</email_template>
 				<email_identity>support</email_identity>
 			</orders_attach>
+			<listing_products_cache>
+				<expiration_time>15</expiration_time>
+			</listing_products_cache>
 		</customer>
 	</default>
 </config>
