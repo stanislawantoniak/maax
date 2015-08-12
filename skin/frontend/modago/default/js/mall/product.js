@@ -76,8 +76,26 @@ Mall.product = {
         if (contextBreadcrumbsHtml) {
 			var productHtml = jQuery('#breadcrumbs .product');
 			jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
-			this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
-			this._path_back_to_category_text = jQuery('#breadcrumbs ol li:last').text();
+
+	        this._path_back_to_category_text = jQuery('#breadcrumbs ol li:last').text();
+	        this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
+
+	        //lp changes
+	        var backLink = jQuery('#breadcrumbs').find('ol li:last a').prop('href'),
+		        campaignRegularParam = "fq[campaign_regular_id][0]",
+				campaignInfoParam = "fq[campaign_info_id][0]",
+		        campaignRegularId = Mall.getUrlPart(campaignRegularParam,backLink),
+		        campaignInfoId = false;
+
+	        if(!campaignRegularId) {
+		        campaignInfoId = Mall.getUrlPart(campaignInfoParam, backLink);
+	        } else {
+		        this._path_back_to_category_link = this._path_back_to_category_link+"?"+campaignRegularParam+"="+campaignRegularId;
+	        }
+
+	        if(campaignInfoId) {
+		        this._path_back_to_category_link += this._path_back_to_category_link+"?"+campaignInfoParam+"="+campaignInfoId;
+	        }
 
 			jQuery('#breadcrumbs ol li:last').html("<a href='" + this._path_back_to_category_link + "'>" + this._path_back_to_category_text + "</a>");
 			jQuery('#breadcrumbs ol').append(productHtml);
