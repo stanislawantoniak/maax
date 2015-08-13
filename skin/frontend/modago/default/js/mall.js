@@ -1421,8 +1421,6 @@ Mall.socialLogin = function(url,redirect) {
                     Mall.socialLoginWindow.close();
 					Mall.redirecting = url;
 
-					console.log(url);
-
 					if(url) {
 						window.location = url;
 					} else if(Mall.isGuestCheckout) { //always reload when window closes in checkout
