@@ -5,13 +5,11 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign extends Mage_Eav_Model_Ent
 
     public function getAllOptions()
     {
-        /* @var $campaignModel Zolago_Campaign_Model_Campaign */
-        $campaignModel = Mage::getModel("zolagocampaign/campaign");
-        $campaigns = $campaignModel->getProductCampaign();
-
-        $options = $this->_prepareCampaignOptions($campaigns);
-        if (is_null($this->_options)) {
-            $this->_options = $options;
+        if (!$this->_options) {
+            /* @var $campaignModel Zolago_Campaign_Model_Campaign */
+            $campaignModel = Mage::getModel("zolagocampaign/campaign");
+            $campaigns = $campaignModel->getProductCampaign();
+            $this->_options = $this->_prepareCampaignOptions($campaigns);
         }
 
         return $this->_options;

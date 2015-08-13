@@ -706,7 +706,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
 
-                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? implode(",",$campaignIds) : null));
                     $actionModel
                         ->updateAttributesPure($productIds, $attributesData, (int)$store);
 
@@ -716,7 +716,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             unset($store);
 
         } elseif ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
+            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => null);
             foreach ($stores as $store) {
                 $actionModel
                     ->updateAttributesPure($productIds, $attributesData, (int)$store);
