@@ -825,7 +825,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 // Skip attribs with no custom filter
                 if(!$filter || !$filter->getId()) {
                     // Always attach campaign information ( for landing pages )
-                    if ($attrCode != "campaign_info_id" & $attrCode != "campaign_regular_id") {
+                    if ($attrCode != Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE &
+                        $attrCode != Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE) {
                         continue;
                     } else {
                         $filter = Mage::getModel("zolagocatalog/category_filter");

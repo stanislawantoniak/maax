@@ -43,6 +43,8 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                             $selectedFacetValue = $v;
                                             if($face_key == 'price') {
                                                 $selectedFacetValue = $this->formatFacetPrice($v);
+                                            } elseif (in_array($face_key, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE, Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE))) {
+                                                $selectedFacetValue = $lpData['name_customer'];
                                             }
                                             ?>
                                             <span class="label">

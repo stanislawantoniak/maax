@@ -2,9 +2,11 @@
 
 class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
 {
-    public function getAllOptions()
+    protected $_useCustomOptions = false;
+
+    public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
-        if (!$this->_options) {
+        if (!$this->_options || $this->_useCustomOptions) {
             /* @var $campaignModel Zolago_Campaign_Model_Resource_Campaign */
             $campaignModel = Mage::getModel("zolagocampaign/campaign");
             $campaigns = $campaignModel->getProductCampaignInfo();
@@ -25,11 +27,20 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Mode
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
                 $options[] = array(
-                    'label' => $campaign['name_customer'],
+                    'label' => $this->_useCustomOptions ? $campaign['campaign_id'] : $campaign['name_customer'],
                     'value' => $campaign['campaign_id']
                 );
             }
         }
         return $options;
+    }
+
+    /**
+     * Force getAllOptions to serve custom variables for solr/faces
+     * When indexing/updating process
+     * @param $value
+     */
+    public function setUseCustomOptions($value) {
+        $this->_useCustomOptions = $value;
     }
 }
