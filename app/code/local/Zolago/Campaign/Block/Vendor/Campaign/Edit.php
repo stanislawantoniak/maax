@@ -100,7 +100,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 	        $landingPage->addField("is_landing_page", "radios", array(
                 "name" => "is_landing_page",
                 "required" => false,
-                "label" => $helper->__('Landing Page'),
+                "label" => $helper->__('Url type'),
                 "values" => $landingPageSource = Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-9 radio-buttons",
@@ -137,7 +137,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             ));
         } else {
             $general->addField('is_landing_page', 'hidden', array(
-                'label' => $helper->__('Landing Page'),
+                'label' => $helper->__('Url type'),
                 'name' => 'is_landing_page',
                 'value' => 0,
                 "label_wrapper_class" => "col-md-3",
