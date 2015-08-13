@@ -76,8 +76,9 @@ Mall.product = {
         if (contextBreadcrumbsHtml) {
 			var productHtml = jQuery('#breadcrumbs .product');
 			jQuery('#breadcrumbs ol').html(contextBreadcrumbsHtml);
-			this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
-			this._path_back_to_category_text = jQuery('#breadcrumbs ol li:last').text();
+
+	        this._path_back_to_category_text = jQuery('#breadcrumbs ol li:last').text();
+	        this._path_back_to_category_link = jQuery('#breadcrumbs ol li:last').attr('data-link');
 
 			jQuery('#breadcrumbs ol li:last').html("<a href='" + this._path_back_to_category_link + "'>" + this._path_back_to_category_text + "</a>");
 			jQuery('#breadcrumbs ol').append(productHtml);
