@@ -146,15 +146,20 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         }
 
 	    $url = $isLocalVendor ? Mage::getUrl() : Mage::getUrl($this->getVendor()->getUrlKey());
+		$urlFieldConfig = array(
+			"name" => "campaign_url",
+			"class" => "form-control",
+			"required" => false,
+			"label" => $helper->__('URL Key') . ": " . $url,
+			"label_wrapper_class" => "col-md-3",
+			"wrapper_class" => "col-md-6"
+		);
 
-	    $landingPage->addField("campaign_url", "text", array(
-            "name" => "campaign_url",
-            "class" => "form-control",
-            "required" => false,
-            "label" => $helper->__('URL Key').": ".$url,
-            "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-6"
-        ));
+	    if($isLocalVendor) {
+		    $landingPage->addField("campaign_url", "text", $urlFieldConfig);
+	    } else {
+		    $general->addField("campaign_url", "text", $urlFieldConfig);
+	    }
 
         $general->addField("date_from", "text", array(
             "name" => "date_from",
