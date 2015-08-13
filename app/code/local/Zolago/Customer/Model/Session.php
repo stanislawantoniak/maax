@@ -20,22 +20,26 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 
 		$this->_clearProductsCache($products);
 
-		$newCategory = Mage::registry('current_category')->getId();
-		$prevCategory = $this->getData(self::CURRENT_PRODUCTS_CATEGORY);
+		$currentCategory = Mage::registry('current_category');
 
-		$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
+		if($currentCategory) {
+			$newCategory = $currentCategory->getId();
+			$prevCategory = $this->getData(self::CURRENT_PRODUCTS_CATEGORY);
 
-		if(!$prevCategory || !$prevProducts) {
-			$this
-				->setData(self::CURRENT_PRODUCTS_CATEGORY, $newCategory)
-				->setData(self::CURRENT_PRODUCTS, $products);
-		} elseif($prevProducts['start'] < $products['start']) {
-			$newProducts = $products;
-			$newProducts['products'] = array_merge($prevProducts['products'],$newProducts['products']);
-			$this->setData(self::CURRENT_PRODUCTS,$newProducts);
+			$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
+
+			if (!$prevCategory || !$prevProducts) {
+				$this
+					->setData(self::CURRENT_PRODUCTS_CATEGORY, $newCategory)
+					->setData(self::CURRENT_PRODUCTS, $products);
+			} elseif ($prevProducts['start'] < $products['start']) {
+				$newProducts = $products;
+				$newProducts['products'] = array_merge($prevProducts['products'], $newProducts['products']);
+				$this->setData(self::CURRENT_PRODUCTS, $newProducts);
+			}
+
+			$this->_setCurrentProductsExpire();
 		}
-
-		$this->_setCurrentProductsExpire();
 
 		return $this->getData(self::CURRENT_PRODUCTS);
 	}
