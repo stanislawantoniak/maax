@@ -1,20 +1,19 @@
 <?php
 /** @var Ced_SocialLogin_Block_Google_Button $this */
 $url = $this->escapeUrl($this->_getButtonUrl());
+$customerHelper = Mage::helper("zolagocustomer");
 ?>
-<div class="clearer">
-	<?php if($this->isLogged()): ?>
-		<?php $redirect = $this->getClient()->getRedirectUri(); ?>
-		<a onclick="Mall.socialLogin('<?php echo $url ?>','<?php echo $redirect ?>');">
-			<?php //echo $this->_getButtonText(); ?>
-			<div class="ced-sociallogin-google-inner <?php echo $this->_getButtonClass(); ?>">
-			</div>
-		</a>
-	<?php else: ?>
-		<a href="<?php echo $url ?>">
-			<?php //echo $this->_getButtonText(); ?>
-			<div class="ced-sociallogin-google-inner <?php echo $this->_getButtonClass(); ?>">
-			</div>
-		</a>
-	<?php endif; ?>
-</div>
+<?php if($this->isLogged()): ?>
+	<?php $redirect = $this->getClient()->getRedirectUri(); ?>
+	<a onclick="Mall.socialLogin('<?php echo $url ?>','<?php echo $redirect ?>');">
+		<?php //echo $this->_getButtonText(); ?>
+		<?php /* <div class="ced-sociallogin-google-inner <?php echo $this->_getButtonClass(); ?>"></div> */ ?>
+		<div class="button btn-social g-plus small"><?php echo $customerHelper->__("Login"); ?></div>
+	</a>
+<?php else: ?>
+	<a href="<?php echo $url ?>">
+		<?php //echo $this->_getButtonText(); ?>
+		<?php /* <div class="ced-sociallogin-google-inner <?php echo $this->_getButtonClass(); ?>"></div> */ ?>
+		<div class="button btn-social g-plus small"><?php echo $customerHelper->__("Log Out"); ?></div>
+	</a>
+<?php endif; ?>

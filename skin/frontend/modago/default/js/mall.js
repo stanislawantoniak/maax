@@ -1409,6 +1409,7 @@ Mall.socialLogin = function(url,redirect) {
 	Mall.storeCheckoutValues();
 	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
 	Mall.redirecting = false;
+	Mall.isGuestCheckout = document.location.href.search('checkout/guest/index') !== -1;
 	Mall.pollTimer = window.setInterval(function () {
 		try {
 			if(!Mall.socialLoginWindow.closed) {
@@ -1420,15 +1421,24 @@ Mall.socialLogin = function(url,redirect) {
                     Mall.socialLoginWindow.close();
 					Mall.redirecting = url;
 
+					console.log(url);
+
 					if(url) {
 						window.location = url;
+					} else if(Mall.isGuestCheckout) { //always reload when window closes in checkout
+						window.location.reload();
 					}
 				}
 			} else if(!Mall.redirecting) {
 				window.clearInterval(Mall.pollTimer);
-                window.location = Mall.redirecting;
+				if(Mall.redirecting) {
+					window.location = Mall.redirecting;
+				} else if(Mall.isGuestCheckout) {
+					window.location.reload();
+				}
 			}
 		} catch (e) {
+			//do nothing - it just means that popup is not yet in our domain
 		}
 	}, 150);
 };
@@ -1441,7 +1451,7 @@ Mall.storeCheckoutValues = function() {
 		//firstname, lastname and email - propably not needed as they'll be filled by social login
 		dataToStore.account_firstname = form.find('#account_firstname').val();
 		dataToStore.account_lastname = form.find('#account_lastname').val();
-		//dataToStore.account_email = form.find('#account_email').val(); //don't store email because social login provides one
+		dataToStore.account_email = form.find('#account_email').val();
 
 		//needed data
 		dataToStore.account_telephone = form.find('#account_telephone').val();
@@ -1498,27 +1508,16 @@ Mall.restoreCheckoutValues = function() {
 				if(jQuery('#'+id).is(":checkbox")) {
 					var nowIsChecked = jQuery('#'+id+':checked').length ? 1 : 0;
 					if(nowIsChecked != val) {
-						console.log(id);
 						jQuery('#'+id).click();
 					}
 				} else if(jQuery('#'+id).length && (jQuery('#'+id).is('input') || jQuery('#'+id).is('textarea'))) {
-					jQuery('#'+id).val(val);
+					if(id != 'account_email' || (id == 'account_email' && !jQuery('#account_email').val())) {
+						jQuery('#' + id).val(val);
+					}
 				}
 			});
 		}
 	}
-};
-
-//credits: http://www.netlobo.com/url_query_string_javascript.html
-Mall.getUrlPart = function(url,name) {
-	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	var regexS = "[\\#&]"+name+"=([^&#]*)";
-	var regex = new RegExp( regexS );
-	var results = regex.exec( url );
-	if( results == null )
-		return "";
-	else
-		return results[1];
 };
 
 jQuery(document).ready(function() {

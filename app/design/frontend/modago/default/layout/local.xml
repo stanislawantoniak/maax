@@ -890,11 +890,11 @@
 					<block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
 					<block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
 					<block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/address/password.phtml"/>
-					<block type="sociallogin/login" name="ced_sociallogin_login" template="sociallogin/login.phtml" >
-						<block type="sociallogin/google_button" name="ced_google_login_button" template="sociallogin/google/button.phtml" />
-						<block type="sociallogin/facebook_button" name="ced_facebook_login_button" template="sociallogin/facebook/button.phtml" />
-						<block type="sociallogin/twitter_button" name="ced_twitter_login_button" template="sociallogin/twitter/button.phtml" />
-						<block type="sociallogin/linkedin_button" name="ced_linkedin_login_button" template="sociallogin/linkedin/button.phtml" />
+					<block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml" >
+						<block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" template="sociallogin/google/button.phtml" />
+						<block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" template="sociallogin/facebook/button.phtml" />
+						<block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" template="sociallogin/twitter/button.phtml" />
+						<block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button" template="sociallogin/linkedin/button.phtml" />
 					</block>
 				</block>
 				<block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >

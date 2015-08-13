@@ -1,27 +1,28 @@
 <?php
 
 ?>
-<div class="ced-sociallogin-register">   
-    <div class="<?php echo $this->_getColSet(); ?> fieldset">
-        <?php if($this->_googleEnabled()): ?>
-        <div class="<?php echo $this->_getCol(); ?> ced-sociallogin-register-google">
-          <?php echo $this->getChildHtml('ced_sociallogin_checkout_google_button')?>
-        </div>
-        <?php endif; ?>
-        <?php if($this->_facebookEnabled()): ?>
-        <div class="<?php echo $this->_getCol(); ?> ced-sociallogin-register-facebook">
-            <?php echo $this->getChildHtml('ced_sociallogin_checkout_facebook_button')?>
-        </div>
-        <?php endif; ?>
-        <?php if($this->_twitterEnabled()): ?>
-        <div class="<?php echo $this->_getCol(); ?> ced-sociallogin-register-twitter">
-            <?php echo $this->getChildHtml('ced_sociallogin_checkout_twitter_button')?>
-        </div>
-        <?php endif; ?>
-		<?php if($this->_linkedinEnabled()): ?>
-        <div class="<?php echo $this->_getCol(); ?> ced-sociallogin-register-linkedin">
-            <?php echo $this->getChildHtml('ced_sociallogin_checkout_linkedin_button')?>
-        </div>
-        <?php endif; ?>
-    </div>
+<div class="social-register">
+	<div>
+		<?php echo Mage::helper('zolagocustomer')->__("Don't want to create password? You don't have to:") ?>
+	</div>
+	<?php if($this->_googleEnabled()): ?>
+		<div class="social-button social-button-google">
+			<?php echo $this->getChildHtml('ced_sociallogin_checkout_google_button')?>
+		</div>
+	<?php endif; ?>
+	<?php if($this->_facebookEnabled()): ?>
+		<div class="social-button social-button-facebook">
+			<?php echo $this->getChildHtml('ced_sociallogin_checkout_facebook_button')?>
+		</div>
+	<?php endif; ?>
+	<?php if($this->_twitterEnabled()): ?>
+		<div class="social-button social-button-twitter">
+			<?php echo $this->getChildHtml('ced_sociallogin_checkout_twitter_button')?>
+		</div>
+	<?php endif; ?>
+	<?php if($this->_linkedinEnabled()): ?>
+		<div class="social-button social-button-linkedin">
+			<?php echo $this->getChildHtml('ced_sociallogin_checkout_linkedin_button')?>
+		</div>
+	<?php endif; ?>
 </div>
