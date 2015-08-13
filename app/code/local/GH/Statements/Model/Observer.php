@@ -39,7 +39,7 @@ class GH_Statements_Model_Observer
             $itemCollection->addFieldToFilter('calendar_id', $calendarId);
             $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
 
-            if ($itemCollection->getFirstItem()->getId()) {
+            if ($itemCollection->getSize() && $itemCollection->getFirstItem()->getId()) {
                 /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                 $calendarItem = $itemCollection->getFirstItem();
 
