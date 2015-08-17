@@ -122,7 +122,7 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
         try {
             /** @var GH_Statements_Model_Observer $model */
             $model = Mage::getModel('ghstatements/observer');
-            $model->processStatements($forceCustomDate);
+            $model->processStatements(null,$forceCustomDate);
             return $this->_redirect("*/*/index");
 
         } catch (Mage_Core_Exception $e) {

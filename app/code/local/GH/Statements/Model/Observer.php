@@ -9,7 +9,7 @@ class GH_Statements_Model_Observer
      * Orders, RMA, refunds and tracks
      * @param string|null $forceCustomDate
      */
-    public static function processStatements($forceCustomDate = null) {
+    public static function processStatements($object,$forceCustomDate = null) {
 
         /* @var $transaction Varien_Db_Adapter_Interface */
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
@@ -38,6 +38,9 @@ class GH_Statements_Model_Observer
             $itemCollection = Mage::getResourceModel('ghstatements/calendar_item_collection');
             $itemCollection->addFieldToFilter('calendar_id', $calendarId);
             $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
+
+	        Mage::log($forceCustomDate,null,'chujowy_sql.log');
+	        Mage::log((string)$itemCollection->getSelect(),null,'chujowy_sql.log');
 
             if ($itemCollection->getSize() && $itemCollection->getFirstItem()->getId()) {
                 /** @var GH_Statements_Model_Calendar_Item $calendarItem */
