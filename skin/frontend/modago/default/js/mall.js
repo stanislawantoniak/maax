@@ -1427,7 +1427,7 @@ Mall.socialLogin = function(url,redirect) {
 						window.location.reload();
 					}
 				}
-			} else if(!Mall.redirecting) {
+			} else {
 				window.clearInterval(Mall.pollTimer);
 				if(Mall.redirecting) {
 					window.location = Mall.redirecting;
