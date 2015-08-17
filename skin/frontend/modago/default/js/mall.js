@@ -1415,8 +1415,6 @@ Mall.socialLogin = function(url,redirect) {
 		try {
 			if(!Mall.socialLoginWindow.closed) {
 				if (Mall.socialLoginWindow.document.URL.indexOf(redirect) != -1) {
-
-					window.clearInterval(Mall.pollTimer);
                     var elem = Mall.socialLoginWindow.document.getElementById('redirect');
 					var url  = elem.innerText || elem.textContent;
                     Mall.socialLoginWindow.close();
@@ -1427,14 +1425,16 @@ Mall.socialLogin = function(url,redirect) {
 					} else if(Mall.isGuestCheckout) { //always reload when window closes in checkout
 						window.location.reload();
 					}
+
+					window.clearInterval(Mall.pollTimer);
 				}
 			} else {
-				window.clearInterval(Mall.pollTimer);
 				if(Mall.redirecting) {
 					window.location = Mall.redirecting;
 				} else {
 					window.location.reload();
 				}
+				window.clearInterval(Mall.pollTimer);
 			}
 		} catch (e) {
 			//do nothing - it just means that popup is not yet in our domain
