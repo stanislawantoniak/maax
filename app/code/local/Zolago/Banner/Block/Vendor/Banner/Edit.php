@@ -185,6 +185,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                 $picturesNumber = $data->pictures_number;
 
                 if ($picturesNumber > 0) {
+                    // Note: picture_can_be_empty should be read like: picture_url_can_be_empty
                     $pictureUrlRequired = (isset($data->picture_can_be_empty) && $data->picture_can_be_empty == 1) ? FALSE : TRUE;
                     foreach ($data->picture as $n => $picture) {
                         $pictureW = (isset($picture->pictures_w) && !empty($picture->pictures_w)) ? $picture->pictures_w : "-";
