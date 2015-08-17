@@ -1431,7 +1431,7 @@ Mall.socialLogin = function(url,redirect) {
 				window.clearInterval(Mall.pollTimer);
 				if(Mall.redirecting) {
 					window.location = Mall.redirecting;
-				} else if(Mall.isGuestCheckout) {
+				} else {
 					window.location.reload();
 				}
 			}
