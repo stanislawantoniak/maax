@@ -49,7 +49,7 @@ class Ced_SocialLogin_FacebookController extends Mage_Core_Controller_Front_Acti
 			echo Mage::getUrl('/');
 		}
 		echo '</div>';
-        echo '<script>setTimeout(function(){ window.close(); }, 600);</script>';
+        echo '<script>setTimeout(function(){ window.close(); }, 1100);</script>';
 	}
 
 	/**

@@ -48,7 +48,7 @@ class Ced_SocialLogin_GoogleController extends Mage_Core_Controller_Front_Action
 			echo Mage::getUrl('/');
 		}
 		echo '</div>';
-
+		echo '<script>setTimeout(function(){ window.close(); }, 1100);</script>';
 		return;
 	}
 
