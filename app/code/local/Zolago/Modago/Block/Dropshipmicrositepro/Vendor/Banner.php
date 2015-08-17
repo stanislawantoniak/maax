@@ -21,15 +21,33 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_RESIZE_DIRECTORY = 'bannerresized';
     const BANNER_RESIZE_M_DIRECTORY = 'bannerresized/mobile';
 
+    /**
+     * Cache for loaded vendors
+     * @var array
+     */
+    protected $_vendors = array();
+
     protected $boxTypes = array(
         Zolago_Banner_Model_Banner_Type::TYPE_SLIDER,
         Zolago_Banner_Model_Banner_Type::TYPE_BOX
     );
 
 
-    public function getVendor()
+    public function getVendor($vendorId = null)
     {
-        return Mage::helper('umicrosite')->getCurrentVendor();
+        if ($vendorId) {
+            if (!isset($this->_vendors[$vendorId])) {
+                $this->_vendors[$vendorId] = Mage::getModel("zolagodropship/vendor")->load($vendorId);
+            }
+        } else {
+            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            if (!empty($vendor) && $vendor->getId()) {
+                $this->_vendors[$vendor->getId()] = $vendor;
+            } else {
+                return $vendor;
+            }
+        }
+        return $this->_vendors[$vendorId];
     }
 
 
@@ -98,8 +116,12 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 }
             }
 
+            /** @var Zolago_Campaign_Model_Resource_Campaign $campaignModel */
             $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
             $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId, $this->boxTypes);
+            foreach ($placements as $key => $value) {
+                $placements[$key]["vendor"] = $this->getVendor($value["campaign_vendor"]);
+            }
 
 			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
 		}

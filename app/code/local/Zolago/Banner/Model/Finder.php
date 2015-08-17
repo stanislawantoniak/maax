@@ -59,9 +59,16 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 		            }
 		        }
 		    }
+
+            $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $vendor = $item["vendor"];
+            $url = $vendor->getUrlKey() . "/" . $item["campaign_url"];
+            $item["campaign_url"] = $item["campaign_vendor"] == $localVendorId ? $item["campaign_url"] : $url;
+
 		    if (empty($out[$item['position']]) || ($out[$item['position']]['priority']>$item['priority'])) {
     		    $out[$item['position']] = $item;		    
-		    }		    
+		    }
 		}
 		if ($out) {	
 		    ksort($out);
