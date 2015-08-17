@@ -184,6 +184,11 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
 
+                /* @var Zolago_Dropship_Helper_Data $zolDropHelper */
+                $zolDropHelper = Mage::helper("zolagodropship");
+                $isLocalVendor = $zolDropHelper->isLocalVendor();
+                $url = $isLocalVendor ? Mage::getUrl() : Mage::getUrl($this->getVendor()->getUrlKey());
+
                 if ($picturesNumber > 0) {
                     // Note: picture_can_be_empty should be read like: picture_url_can_be_empty
                     $pictureUrlRequired = (isset($data->picture_can_be_empty) && $data->picture_can_be_empty == 1) ? FALSE : TRUE;
@@ -223,7 +228,8 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                                 "required" => $pictureUrlRequired,
                                 "label" => $helper->__($picture->picture_label . ": url"),
                                 "label_wrapper_class" => "col-md-3",
-                                "wrapper_class" => "col-md-6"
+                                "wrapper_class" => "col-md-6",
+                                "input_group_addon" => $url
                             ));
                         }
 
@@ -243,7 +249,8 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             "required" => $captionUrlRequired,
                             "label" => $helper->__($caption->caption_label . ": url"),
                             "label_wrapper_class" => "col-md-3",
-                            "wrapper_class" => "col-md-6"
+                            "wrapper_class" => "col-md-6",
+                            "input_group_addon" => $url
                         ));
                         $captionOptions = array(
                             "name" => "caption_text[" . $n . "]",
@@ -298,5 +305,13 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
     public function isModelNew()
     {
         return $this->getModel()->isObjectNew();
+    }
+
+    /**
+     * Get current vendor from udropship session
+     * @return mixed|Zolago_Dropship_Model_Vendor
+     */
+    public function getVendor() {
+        return Mage::getSingleton('udropship/session')->getVendor();
     }
 }
