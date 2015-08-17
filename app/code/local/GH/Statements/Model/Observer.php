@@ -39,9 +39,6 @@ class GH_Statements_Model_Observer
             $itemCollection->addFieldToFilter('calendar_id', $calendarId);
             $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
 
-	        Mage::log($forceCustomDate,null,'chujowy_sql.log');
-	        Mage::log((string)$itemCollection->getSelect(),null,'chujowy_sql.log');
-
             if ($itemCollection->getSize() && $itemCollection->getFirstItem()->getId()) {
                 /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                 $calendarItem = $itemCollection->getFirstItem();
