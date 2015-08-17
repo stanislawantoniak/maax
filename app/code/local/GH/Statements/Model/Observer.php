@@ -180,7 +180,7 @@ class GH_Statements_Model_Observer
 
                 // Only PO with track shipped, delivered or returned
                 // and shipped date <= yesterday
-                if (strtotime($track->getShippedDate()) > $yesterday) {
+                if (strtotime($track->getShippedDate()) >= strtotime($yesterday)) {
                     continue;
                 }
 
