@@ -1406,6 +1406,7 @@ Mall.delegateLikeEvents = function() {
 };
 
 Mall.socialLogin = function(url,redirect) {
+	Mall.socialLoginInterval = Mall.isFirefox() ? 1000 : 150;
 	Mall.storeCheckoutValues();
 	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
 	Mall.redirecting = false;
@@ -1438,7 +1439,7 @@ Mall.socialLogin = function(url,redirect) {
 		} catch (e) {
 			//do nothing - it just means that popup is not yet in our domain
 		}
-	}, 150);
+	}, Mall.socialLoginInterval);
 };
 
 Mall.storeCheckoutValues = function() {
