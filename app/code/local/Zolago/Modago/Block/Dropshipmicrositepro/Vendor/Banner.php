@@ -37,17 +37,16 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     {
         if ($vendorId) {
             if (!isset($this->_vendors[$vendorId])) {
-                $this->_vendors[$vendorId] = Mage::getModel("zolagodropship/vendor")->load($vendorId);
+                return $this->_vendors[$vendorId] = Mage::getModel("zolagodropship/vendor")->load($vendorId);
             }
         } else {
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
             if (!empty($vendor) && $vendor->getId()) {
-                $this->_vendors[$vendor->getId()] = $vendor;
+                return $this->_vendors[$vendor->getId()] = $vendor;
             } else {
                 return $vendor;
             }
         }
-        return $this->_vendors[$vendorId];
     }
 
 
