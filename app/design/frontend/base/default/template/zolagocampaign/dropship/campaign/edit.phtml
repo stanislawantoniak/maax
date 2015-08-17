@@ -267,6 +267,12 @@
 
             });
 
+	        //clear value of #campaign_url (non lp) if it's not visible
+	        var campaignUrl = jQuery('#campaign_url');
+	        if(!campaignUrl.is(':visible')) {
+		        campaignUrl.val("");
+	        }
+
             function toggleVendorSelect() {
                 if (jQuery("[name=is_landing_page]").is(":visible")) {
 
