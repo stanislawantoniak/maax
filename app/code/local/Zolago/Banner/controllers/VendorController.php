@@ -196,7 +196,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                                 $image = md5(mt_rand() . $image);
                                 $folder = $image[0] . "/" . $image[1] . "/" . $image[2] . "/";
 
-                                mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
+                                @mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
 
                                 $path = Mage::getBaseDir() . "/media/banners/" . $folder . $uniqName;
                                 try {
