@@ -1,15 +1,15 @@
 <?php
-
 /**
  * Inspiration block on Gallery Home
  */
+/** @var Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Category_Banner $this */
 
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
-$inspirations = $this->getInspirations(); ?>
-
-<?php $landingPageHelper = Mage::helper("zolagocampaign/landingPage"); ?>
+$inspirations = $this->getInspirations();
+$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+?>
 
 <?php if ($inspirations): // 1 START ?>
 <div class="row">

@@ -55,7 +55,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
      * @return Varien_Object
      */
     protected function _prepareRequest() {
-            $time = Mage::getSingleton('core/date')->timestamp();
+        $time = Mage::getSingleton('core/date')->timestamp();
 		$request = new Varien_Object();
 		$request->setBannerShow("image");
 		$request->setStatus(1); // only active
