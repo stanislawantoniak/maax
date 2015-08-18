@@ -135,7 +135,10 @@
 			position:relative;
 		}
 		form {
-			margin-bottom: 50px;
+			margin-bottom: 30px;
+			&#login-form {
+				margin-bottom: 150px;
+			}
 		}
       .forget-pass-button-container {
         padding-top: 7px;
@@ -149,6 +152,9 @@
 			bottom: 30px;
 			right: 30px;
 			width: 140px;
+			&#login-button {
+				bottom: 105px;
+			}
           &.forget-pass-button {
             width: auto;
             position: static;
@@ -164,37 +170,6 @@
 			margin:0 35px;
 			padding-bottom: 27px;
 			height: 85px;
-			.button  + .button + .button  {
-				margin-right: -5px!important;
-				@media (max-width: 340px) {
-					margin-right: -18px!important;
-				}
-			}
-			.button-primary {
-				position:relative;
-				top:-78px;
-				margin-bottom: -78px!important;
-				margin-right: 0px!important;
-				min-width: 150px;
-				@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-					top:-78px;
-					margin-bottom: -78px!important;
-				}
-				@media (max-width: $screen-xs-max) {
-					top:-78px;
-					margin-bottom: -78px!important;
-				}
-			}
-			.g-plus {
-				@media (max-width: 340px) {
-					margin-left: -10px!important;
-				}
-			}
-			.fb {
-				@media (max-width: 340px) {
-					margin-right: -18px!important;
-				}
-			}
 		}
 		.col-01 {
 			margin-bottom: 30px;
@@ -228,4 +203,9 @@
 			}
 		}
 	}
+}
+
+.social-button {
+	cursor: pointer;
+	display: inline-block;
 }

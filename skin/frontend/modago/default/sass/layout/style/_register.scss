@@ -10,13 +10,10 @@
 	}
 	form {
 		.form-group {
-			margin-bottom: 10px;
-			@media(max-width:$screen-sm-max) {
-				margin-bottom: 15px;
-			}
+			margin-bottom: 15px;
 			&.border-top {
 				border-top: 1px solid $gray-lighter;
-				padding-top: 15px;
+				padding-top: 20px;
 				margin-top: 5px;
 				@media(max-width:$screen-xs-max) {
 					margin-top: 20px;
@@ -62,5 +59,17 @@
 	}
 	.tooltip .tooltip-inner {
 		white-space: nowrap;
+	}
+}
+
+html.customer-account-create {
+	.social-register {
+		margin: 13px -10px 0 20px;
+		@media(max-width: 1070px) {
+			margin-left: 10px;
+		}
+		@media(max-width: 1000px) {
+			margin-left: 5px;
+		}
 	}
 }

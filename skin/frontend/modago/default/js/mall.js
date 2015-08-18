@@ -1405,6 +1405,124 @@ Mall.delegateLikeEvents = function() {
 	});
 };
 
+Mall.socialLogin = function(url,redirect) {
+	Mall.socialLoginInterval = Mall.isFirefox() ? 1000 : 150;
+	Mall.storeCheckoutValues();
+	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
+	Mall.isGuestCheckout = document.location.href.search('checkout/guest/index') !== -1;
+	Mall.pollTimer = window.setInterval(function () {
+		//check if window is in our domain
+		var socialLoginWindowUrl = false;
+		try {
+			socialLoginWindowUrl = Mall.socialLoginWindow.document.URL;
+		} catch(error) {
+			//do nothing - it means that popup is in different domain
+		}
+
+		//handle popup close
+		if(Mall.socialLoginWindow.closed && Mall.isGuestCheckout) {
+			//reload window if someone closed popup during guest checkout
+			window.location.reload();
+			window.clearInterval(Mall.pollTimer);
+		} else if(socialLoginWindowUrl && socialLoginWindowUrl.indexOf(redirect) > -1) {
+			//proceed only if popup is in our domain and is not closed
+
+			var elem = Mall.socialLoginWindow.document.getElementById('redirect');
+			var url  = elem.innerText ? elem.innerText : (elem.textContent ? elem.textContent : false);
+
+			Mall.socialLoginWindow.close();
+
+			if(url) {
+				window.location = url;
+			} else if(Mall.isGuestCheckout) { //always reload when window closes in checkout
+				window.location.reload();
+			}
+
+			//clear timer - always on the end because of mobile browsers (firefox for example)
+			window.clearInterval(Mall.pollTimer);
+		}
+
+
+	}, Mall.socialLoginInterval);
+};
+
+Mall.storeCheckoutValues = function() {
+	if(typeof localStorage != "undefined") {
+		var form = jQuery('form#co-address'),
+			dataToStore = {};
+
+		//firstname, lastname and email - propably not needed as they'll be filled by social login
+		dataToStore.account_firstname = form.find('#account_firstname').val();
+		dataToStore.account_lastname = form.find('#account_lastname').val();
+		dataToStore.account_email = form.find('#account_email').val();
+
+		//needed data
+		dataToStore.account_telephone = form.find('#account_telephone').val();
+
+		//ordering for someone else
+		dataToStore.orders_someone_else = form.find('#orders_someone_else:checked').length ? 1 : 0;
+		if (dataToStore.orders_someone_else) {
+			dataToStore.shipping_firstname = form.find('#shipping_firstname').val();
+			dataToStore.shipping_lastname = form.find('#shipping_lastname').val();
+			dataToStore.shipping_telephone = form.find('#shipping_telephone').val();
+		}
+
+		//address data
+		dataToStore.shipping_street = form.find('#shipping_street').val();
+		dataToStore.shipping_postcode = form.find('#shipping_postcode').val();
+		dataToStore.shipping_city = form.find('#shipping_city').val();
+		dataToStore.shipping_company = form.find('#shipping_company').val();
+
+		//need invoice
+		dataToStore.invoice_vat = form.find('#invoice_vat:checked').length ? 1 : 0;
+		if (dataToStore.invoice_vat) {
+			//same data as shipping
+			dataToStore.invoice_data_address = form.find('#invoice_data_address:checked').length ? 1 : 0;
+			if (!dataToStore.invoice_data_address) {
+				//invoice data
+				dataToStore.billing_company = form.find('#billing_company').val();
+				dataToStore.billing_vat_id = form.find('#billing_vat_id').val();
+				dataToStore.billing_street = form.find('#billing_street').val();
+				dataToStore.billing_postcode = form.find('#billing_postcode').val();
+				dataToStore.billing_city = form.find('#billing_city').val();
+			}
+		}
+
+		//password - propably not needed too
+		dataToStore.account_password = form.find('#account_password').val();
+
+		//agreements
+		dataToStore.agreement_tos = form.find('#agreement_tos:checked').length ? 1 : 0;
+		dataToStore.agreement_newsletter = form.find('#agreement_newsletter:checked').length ? 1 : 0;
+
+		localStorage.setItem('checkoutData', JSON.stringify(dataToStore));
+	}
+};
+
+Mall.restoreCheckoutValues = function() {
+	if(typeof localStorage != "undefined" && jQuery('form#co-address').length) {
+		var dataToRestore = localStorage.getItem('checkoutData');
+		if (dataToRestore) {
+			localStorage.removeItem('checkoutData');
+			dataToRestore = JSON.parse(dataToRestore);
+
+			jQuery.each(dataToRestore, function(id,val) {
+				//click checkbox and trigger change event
+				if(jQuery('#'+id).is(":checkbox")) {
+					var nowIsChecked = jQuery('#'+id+':checked').length ? 1 : 0;
+					if(nowIsChecked != val) {
+						jQuery('#'+id).click();
+					}
+				} else if(jQuery('#'+id).length && (jQuery('#'+id).is('input') || jQuery('#'+id).is('textarea'))) {
+					if(id != 'account_email' || (id == 'account_email' && !jQuery('#account_email').val())) {
+						jQuery('#' + id).val(val);
+					}
+				}
+			});
+		}
+	}
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
@@ -1530,4 +1648,7 @@ jQuery(document).ready(function() {
 
 	//init like events
 	Mall.delegateLikeEvents();
+
+	//restore checkout values on social login
+	setTimeout(Mall.restoreCheckoutValues,100);
 });
