@@ -73,6 +73,24 @@
 						</email_identity>
 					</fields>
 				</orders_attach>
+				<listing_products_cache>
+					<label>Listing products cache</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1200</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<expiration_time translate="label">
+							<label>Expiration time in minutes</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</expiration_time>
+					</fields>
+				</listing_products_cache>
 			</groups>
 		</customer>
 	</sections>

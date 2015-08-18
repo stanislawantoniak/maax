@@ -44,11 +44,11 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 								</li>
 								<?php echo $this->getChildHtml('form.additional.info'); ?>
 								<?php /* echo $this->getChildHtml('persistent.remember.me') */; ?>
-								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
+								<button type="submit" name="send" class="button button-primary large link pull-right" id="login-button"><?php echo $_hlp->__('Login') ?></button>
 							</ul>
-							<?php /* <footer class="footer-section">
-								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
-							</footer> */ ?>
+							<footer class="footer-section">
+								<?php echo $this->getChildHtml('ced_sociallogin_login'); ?>
+							</footer>
 						</section>
 					</form>
 				</div>   
