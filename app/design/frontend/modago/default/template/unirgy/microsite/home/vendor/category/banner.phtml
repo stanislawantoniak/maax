@@ -9,6 +9,9 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
 $inspirations = $this->getInspirations();
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+/** @var Zolago_Banner_Helper_Data $bannerHelper */
+$bannerHelper = Mage::helper("zolagobanner");
+
 ?>
 
 <?php if ($inspirations): // 1 START ?>
@@ -16,7 +19,7 @@ $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
     <section class="block-inspiration">
         <header class="title-section">
             <div class="inspiration-strips "></div>
-            <h2 ><?php echo $this->__('inspirations'); ?></h2>
+            <h2 ><?php echo $bannerHelper->__("inspirations"); ?></h2>
         </header>
         <div id="rwd-inspiration" class="rwdCarousel">
             <div class="rwd-carousel rwd-theme">
@@ -54,7 +57,7 @@ $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 
                                         <?php if($showCaptions): ?>
                                             <a href="<?php echo $inspUrl; ?>">
-                                                <span class="seemore-caption"><?php echo $this->__('zobacz'); ?> &gt;</span>
+                                                <span class="seemore-caption"><?php echo $bannerHelper->__("see"); ?> &gt;</span>
                                             </a>
                                         <?php endif; ?>
                                     </div>
