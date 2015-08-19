@@ -197,3 +197,5 @@
 "{{author_name}} has ordered refund for this RMA, amount: %s","{{author_name}} zlecił wykonanie zwrotu do tego RMA na kwotę %s"
 "Contact phone","Telefon kontaktowy"
 "Shipping costs","Koszty dostawy"
+"RMA: %s", "Reklamacja: %s"
+"RMA number: %s, order number: %s", "Reklamacja nr: %s, Zamówienie nr: %s"
