@@ -276,9 +276,16 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
 
     /**
+     * NOTE: refactoring in progress, Use collections on placement
+     * @see Zolago_Campaign_Model_Resource_Placement_Collection::addPlacementForCategory()
+     *
      * @param $categoryId
      * @param $vendorId
+     * @param array $bannerTypes
+     * @param bool $notExpired
+     * @param bool $currentWebsite
      * @return array
+     * @throws Mage_Core_Exception
      */
     public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array(), $notExpired = FALSE, $currentWebsite = true)
     {
