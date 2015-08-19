@@ -403,7 +403,10 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $shipment = new stdClass;
         $shipment->shipmentInfo = $this->_prepareShipmentInfoAtOnce(); 
         $shipment->ship = $this->_prepareShipmentAtOnce();
-        $shipment->content = self::SHIPMENT_RMA_CONTENT;
+        $shipment->content = empty($this->_settings['content'])? self::SHIPMENT_RMA_CONTENT:$this->_settings['content'];
+        if (!empty($this->_settings['comment'])) {
+            $shipment->comment = $this->_settings['comment'];
+        }
         $shipment->pieceList = $this->_createPieceList();
         $message->shipment = $shipment;
         return $this->_sendMessage('createShipment',$message);
