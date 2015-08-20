@@ -8,9 +8,9 @@
 /** @var Zolago_Banner_Helper_Data $bannerHelper */
 $bannerHelper = Mage::helper("zolagobanner");
 
-$_sliders        = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
-$_boxes          = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
-$_inspirations   = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION);
+$_sliders      = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
+$_boxes        = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
+$_inspirations = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION);
 $_isSliderBoxContent = ($_sliders->count() || $_boxes->count()) ? true : false;
 
 ?>
@@ -19,9 +19,7 @@ $_isSliderBoxContent = ($_sliders->count() || $_boxes->count()) ? true : false;
 <div id="content" class="container-fluid">
     <div class="col-sm-12">
 <?php endif; ?>
-<?php
-// SLIDERS START
-?>
+<?php // SLIDERS START ?>
 <?php if ($_sliders->count()): ?>
         <div class="row">
             <section id="topSlider">

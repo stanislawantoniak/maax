@@ -62,7 +62,12 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
      * @return string
      */
     private function getUrl($item) {
-        return $item['url'] ? $item['url'] :
+        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+        $vendorUrlPart = "";
+        if ($localVendorId != $this->getData("campaign_vendor_id")) {
+            $vendorUrlPart = $this->getData("vendor_url_key") . "/";
+        }
+        return $item['url'] ? Mage::getUrl("/", array("_no_vendor" => true)) . $vendorUrlPart . $item['url'] :
             ($this->getLandingPageUrl() ? $this->getLandingPageUrl() : ($this->getCampaignUrl() ? $this->getCampaignUrl() : "") );
     }
 
@@ -80,7 +85,7 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
         if ($localVendorId != $this->getData("campaign_vendor_id")) {
             $vendorUrlPart = $this->getData("vendor_url_key") . "/";
         }
-        return Mage::getBaseUrl() . $vendorUrlPart . $this->getData("campaign_url");
+        return Mage::getUrl("/", array("_no_vendor" => true)) . $vendorUrlPart . $this->getData("campaign_url");
     }
 
     /**
@@ -107,7 +112,7 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
                 ) {
                     $vendorUrlPart = $vendorUrlKey . "/";
                 }
-                $url = Mage::getBaseUrl() . $vendorUrlPart . Mage::getModel("catalog/category")->load($id)->getUrlPath() . "?" . $lpUrl;
+                $url = Mage::getUrl("/", array("_no_vendor" => true)) . $vendorUrlPart . Mage::getModel("catalog/category")->load($id)->getUrlPath() . "?" . $lpUrl;
             }
             $this->setData($cacheKey, $url);
         }
