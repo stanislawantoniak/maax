@@ -31,11 +31,17 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
             "campaign.campaign_id = main_table.campaign_id",
             array(
                 'campaign_name'         => 'campaign.name',
+                'campaign_name_customer'=> 'campaign.name_customer',
                 'campaign_date_from'    => 'campaign.date_from',
                 'campaign_date_to'      => 'campaign.date_to',
                 'campaign_status'       => 'campaign.status',
                 'campaign_vendor_id'    => 'campaign.vendor_id',
                 'campaign_url'          => 'campaign.campaign_url',
+                'campaign_type'         => 'campaign.type',
+                'campaign_is_landing_page' => 'campaign.is_landing_page',
+                'campaign_context_vendor_id'  => 'campaign.context_vendor_id',
+                'campaign_landing_page_context'  => 'campaign.landing_page_context',
+                'campaign_landing_page_category_id' => 'campaign.landing_page_category',
             )
         );
 
@@ -139,15 +145,17 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
 
     /**
      * Add data from vendor ("udropship/vendor") table
+     * $joinFrom may by "main_table" or "campaign" or ...
      *
+     * @param string $joinFrom
      * @return $this
      */
-    public function addVendor() {
+    public function addVendor($joinFrom = "main_table") {
         $this->getSelect()->joinLeft(
             array("vendor" => $this->getTable("udropship/vendor")),
-            "vendor.vendor_id = main_table.vendor_id",
+            "vendor.vendor_id = {$joinFrom}.vendor_id",
             array(
-                'banner_url_key' => 'vendor.url_key'
+                'vendor_url_key' => 'vendor.url_key'
             )
         );
         return $this;
@@ -215,7 +223,7 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
         // For category
         $this->addCategoryFilter($category);
         // For vendor
-        $this->addVendor();
+        $this->addVendor("campaign");
         $this->addVendorFilter($vendor);
 
         $this->setOrder("banner.type", self::SORT_ORDER_DESC);

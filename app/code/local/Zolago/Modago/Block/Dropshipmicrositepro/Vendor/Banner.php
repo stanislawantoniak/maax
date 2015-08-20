@@ -27,57 +27,61 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
      */
     protected $_vendors = array();
 
-    protected $boxTypes = array(
+    protected $bannerTypeFilter = array(
         Zolago_Banner_Model_Banner_Type::TYPE_SLIDER,
-        Zolago_Banner_Model_Banner_Type::TYPE_BOX
+        Zolago_Banner_Model_Banner_Type::TYPE_BOX,
+        Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION,
     );
 
-
-    public function getVendor($vendorId = null)
-    {
-        if ($vendorId) {
-            if (!isset($this->_vendors[$vendorId])) {
-                return $this->_vendors[$vendorId] = Mage::getModel("zolagodropship/vendor")->load($vendorId);
-            }
-        } else {
-            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-            if (!empty($vendor) && $vendor->getId()) {
-                return $this->_vendors[$vendor->getId()] = $vendor;
-            } else {
-                return $vendor;
-            }
+    /**
+     * Set banner filter type
+     * Param can by string or array of strings
+     * For banner types @see Zolago_Banner_Model_Banner_Type
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setBannerTypeFilter($value) {
+        if (!is_array($value)) {
+            $value = array($value);
         }
+        $this->bannerTypeFilter = $value;
+        return $this;
     }
-
 
     /**
-     * 
-     * @return Varien_Object
+     * Get array of banner types for future filtering
+     *
+     * @return array
      */
-    protected function _prepareRequest() {
-        $time = Mage::getSingleton('core/date')->timestamp();
-		$request = new Varien_Object();
-		$request->setBannerShow("image");
-		$request->setStatus(1); // only active
-		$request->setDate(date('Y-m-d H:i:s',$time)); // only not expired
-		return $request;
+    public function getBannerTypeFilter() {
+        return $this->bannerTypeFilter;
     }
 
-    public function getBoxes() {
-		
-		$finder = $this->getFinder();
-		$request = $this->_prepareRequest();
-		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
-		return $finder->request($request);
-    }	
-	
-	public function getSliders() {
-		$request = $this->_prepareRequest();
-		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);		
-		$finder = $this->getFinder();
-		return $finder->request($request);
-	}
-	
+    public function getVendor()
+    {
+        return Mage::helper('umicrosite')->getCurrentVendor();
+    }
+
+    /**
+     * @return Varien_Object
+     */
+    protected function _prepareFilter() {
+        $filter = new Varien_Object();
+        $filter->setBannerShow(Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE);
+        $filter->setCampaignStatus(Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $filter->setDate(Mage::getModel('core/date')->date('Y-m-d H:i:s'));
+        $filter->setOnlyValid(true);
+        return $filter;
+    }
+
+    public function getPlacements($type) {
+        $filter = $this->_prepareFilter();
+        $filter->setType($type);
+        $finder = $this->getFinder();
+        return $finder->filter($filter);
+    }
+
 	/**
 	 * @return Zolago_Banner_Model_Finder
 	 */
@@ -115,14 +119,11 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 }
             }
 
-            /** @var Zolago_Campaign_Model_Resource_Campaign $campaignModel */
-            $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-            $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId, $this->boxTypes);
-            foreach ($placements as $key => $value) {
-                $placements[$key]["vendor"] = $this->getVendor($value["campaign_vendor"]);
-            }
-
-			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
+            // Placements
+            /** @var Zolago_Campaign_Model_Resource_Placement_Collection $placementsColl */
+            $placementsColl = Mage::getResourceModel("zolagocampaign/placement_collection");
+            $placementsColl->addPlacementForCategory($rootCatId, $vendorId, $this->bannerTypeFilter);
+			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placementsColl));
 		}
 		return $this->getData("finder");
 	}
@@ -167,4 +168,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 	public function getImageUrl($imagePath) {
 		return rtrim(Mage::getBaseUrl('media'),'/') . $imagePath;
 	}
+
+    public function getImageResizeUrl($type, $path) {
+        return Mage::getBaseUrl('media')  . $this->getImageResizePath($type) . $path;
+    }
 }
