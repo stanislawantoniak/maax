@@ -119,6 +119,7 @@ $_isSliderBoxContent = ($_sliders->count() || $_boxes->count()) ? true : false;
                     <div id="rwd-inspiration" class="rwdCarousel">
                         <div class="rwd-carousel rwd-theme">
                             <?php foreach($_inspirations as $n => $inspiration): // 2 START
+                                /** @var Zolago_Campaign_Model_Placement $inspiration */
                                 $bannerImageData   = $inspiration->getBannerImageData();
                                 $bannerCaptionData = $inspiration->getBannerCaptionData();
 

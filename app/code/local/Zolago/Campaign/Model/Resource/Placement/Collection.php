@@ -147,15 +147,21 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
      * Add data from vendor ("udropship/vendor") table
      * $joinFrom may by "main_table" or "campaign" or ...
      *
-     * @param string $joinFrom
      * @return $this
      */
-    public function addVendor($joinFrom = "main_table") {
+    public function addVendor() {
         $this->getSelect()->joinLeft(
             array("vendor" => $this->getTable("udropship/vendor")),
-            "vendor.vendor_id = {$joinFrom}.vendor_id",
+            "vendor.vendor_id = campaign.vendor_id",
             array(
                 'vendor_url_key' => 'vendor.url_key'
+            )
+        );
+        $this->getSelect()->joinLeft(
+            array("lp_vendor" => $this->getTable("udropship/vendor")),
+            "lp_vendor.vendor_id = campaign.context_vendor_id",
+            array(
+                'lp_vendor_url_key' => 'lp_vendor.url_key'
             )
         );
         return $this;
@@ -223,7 +229,7 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
         // For category
         $this->addCategoryFilter($category);
         // For vendor
-        $this->addVendor("campaign");
+        $this->addVendor();
         $this->addVendorFilter($vendor);
 
         $this->setOrder("banner.type", self::SORT_ORDER_DESC);

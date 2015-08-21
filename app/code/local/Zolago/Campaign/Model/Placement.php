@@ -37,16 +37,18 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
                 $bannerImage = !empty($bannerImage) ? unserialize($bannerImage)[1] : array();
             } elseif ($type == Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION) {
                 $bannerImage = !empty($bannerImage) ? unserialize($bannerImage) : array();
+            } elseif ($type == Zolago_Banner_Model_Banner_Type::TYPE_LANDING_PAGE_CREATIVE) {
+                $bannerImage = !empty($bannerImage) ? unserialize($bannerImage) : array(); // NOT tested
             } else {
                 $bannerImage = array();
             }
 
-            // Setup final url
-            foreach ($bannerImage as $i => &$slide) {
-                if (is_array($slide)) {
-                    $slide["url"] = $this->getUrl($slide);
-                } elseif(isset($bannerImage["url"])) {
-                    $bannerImage["url"] = $this->getUrl($bannerImage);
+            if (isset($bannerImage["url"])) {
+                $bannerImage["url"] = $this->getUrl($bannerImage);
+            } else {
+                // Array of arrays
+                foreach ($bannerImage as $i => &$item) {
+                    $item["url"] = $this->getUrl($item);
                 }
             }
             $this->setData("banner_image_data", $bannerImage);
@@ -98,13 +100,13 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
     private function getLandingPageUrl() {
         $id = $this->getData("campaign_landing_page_category_id");
         $id = !empty($id) ? $id : 0;
-        $vendorUrlKey = $this->getData("vendor_url_key");
-        $is = (int)$this->getData("campaign_is_landing_page");
+        $vendorUrlKey = $this->getData("lp_vendor_url_key");
+        $isLP = (int)$this->getData("campaign_is_landing_page");
 
         $cacheKey = "lp_url_".$vendorUrlKey."_category_". $id;
         if (!$this->getData($cacheKey)) {
             $url = "";
-            if ($is) { // is LP
+            if ($isLP) { // is Landing Page
                 $lpUrl = $this->getData("campaign_url");
                 $vendorUrlPart = "";
                 if ($this->getData("campaign_landing_page_context")
@@ -130,20 +132,26 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
         if (!$this->getData("banner_caption_data")) {
             $bannerCaption = $this->getData("banner_caption");
             $type = $this->getData("type");
+
+            /**
+             * Captions currently in use for Sliders and Inspirations
+             */
             if ($type == Zolago_Banner_Model_Banner_Type::TYPE_SLIDER) {
                 $bannerCaption = !empty($bannerCaption) ? unserialize($bannerCaption) : array();
-            } elseif ($type == Zolago_Banner_Model_Banner_Type::TYPE_BOX) {
-                $bannerCaption = array(); // For boxes not used
             } elseif ($type == Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION) {
                 $bannerCaption = !empty($bannerCaption) ? unserialize($bannerCaption) : array();
             } else {
                 $bannerCaption = array();
             }
 
-
             // Setup final url
-            foreach ($bannerCaption as $i => &$caption) {
-                $caption['url'] = $this->getUrl($caption);
+            if (isset($bannerCaption["url"])) {
+                $bannerCaption["url"] = $this->getUrl($bannerCaption);
+            } else {
+                // Array of arrays
+                foreach ($bannerCaption as $i => &$item) {
+                    $item["url"] = $this->getUrl($item);
+                }
             }
             $this->setData("banner_caption_data", $bannerCaption);
         }
