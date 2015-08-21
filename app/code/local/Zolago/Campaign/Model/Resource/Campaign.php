@@ -45,11 +45,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * Set for campaign corresponding website
+     * Currently usage is one(campaign) to one(website)
+     * DB structure make it one to many but for future(?) usages we don't change it
      * @param Mage_Core_Model_Abstract $object
-     * @param array $websites
+     * @param $websites
      * @return Zolago_Campaign_Model_Resource_Campaign
      */
-    protected function _setWebsites(Mage_Core_Model_Abstract $object, array $websites)
+    protected function _setWebsites(Mage_Core_Model_Abstract $object, $websites)
     {
         $table = $this->getTable("zolagocampaign/campaign_website");
         $where = $this->getReadConnection()
@@ -57,6 +60,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $this->_getWriteAdapter()->delete($table, $where);
 
         $toInsert = array();
+        if (!is_array($websites)) {
+            $websites = array($websites);
+        }
         foreach ($websites as $websiteId) {
             $toInsert[] = array("website_id" => $websiteId, "campaign_id" => $object->getId());
         }

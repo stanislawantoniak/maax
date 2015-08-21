@@ -152,7 +152,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
                 $campaign->save();
 
-
+                /**
+                 * @see Zolago_Campaign_Model_Observer::campaignAfterUpdate
+                 */
                 Mage::dispatchEvent(
                     "campaign_save_after",
                     array(

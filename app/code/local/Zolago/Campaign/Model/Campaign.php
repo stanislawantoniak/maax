@@ -73,35 +73,37 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      * @throws Mage_Core_Exception
      */
     public function getFinalCampaignUrl($customUrl = null) {
-        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
-        $vendorUrlPart = "";
-        if ($localVendorId != $this->getVendorId()) {
-            $vendorUrlPart = $this->getVendor()->getUrlKey() . "/";
-        }
-        $websiteUrl = $this->getWebsiteUrl();
-        return $customUrl ? $websiteUrl . $vendorUrlPart . $customUrl :
+        return $customUrl ? $this->getWebsiteUrl() . $customUrl :
             ($this->getLandingPageUrl() ? $this->getLandingPageUrl() : ($this->_getCampaignUrl() ? $this->_getCampaignUrl() : "") );
     }
 
     /**
-     * Get url for website
+     * Get url for website with vendor part (url_key)
      *
      * NOTE: Currently campaign can by assigned to one website
      * (From DB structure can by 1(campaign) to many(websites) but for now is 1 to 1)
      *
-     * @return mixed
+     * @param string $customVendorUrlPart
+     * @return string
      * @throws Mage_Core_Exception
      */
-    public function getWebsiteUrl() {
+    public function getWebsiteUrl($customVendorUrlPart = "") {
         $websiteIds = $this->getAllowedWebsites();
         if (empty($websiteIds)) {
-            throw new Mage_Core_Exception("Invalid campaign. No information about allowed websites");
+//            throw new Mage_Core_Exception("Invalid campaign. No information about allowed websites");
+            return null;
         } else {
             /** @var Mage_Core_Model_Website $website */
             $website = Mage::app()->getWebsite($websiteIds[0]); // Currently campaign can by assigned to one website
         }
         $websiteUrl = $website->getConfig("web/unsecure/base_url");
-        return $websiteUrl;
+
+        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+        $vendorUrlPart = $customVendorUrlPart;
+        if ($localVendorId != $this->getVendorId() && empty($customVendorUrlPart)) {
+            $vendorUrlPart = $this->getVendor()->getUrlKey() . "/";
+        }
+        return $websiteUrl . $vendorUrlPart;
     }
 
     /**
@@ -111,12 +113,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     private function _getCampaignUrl() {
         $rawCampaignUrl = $this->getData("campaign_url");
-        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
-        $vendorUrlPart = "";
-        if ($localVendorId != $this->getVendorId()) {
-            $vendorUrlPart = $this->getVendor()->getUrlKey() . "/";
-        }
-        return $this->getWebsiteUrl() . $vendorUrlPart . $rawCampaignUrl;
+        return $this->getWebsiteUrl() . $rawCampaignUrl;
     }
 
     /**
@@ -139,7 +136,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 if ($this->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
                     $vendorUrlPart = $vendorUrlKey . "/";
                 }
-                $url = $this->getWebsiteUrl() . $vendorUrlPart . Mage::getModel("catalog/category")->load($id)->getUrlPath() . "?" . $lpUrl;
+                $url = $this->getWebsiteUrl($vendorUrlPart) . Mage::getModel("catalog/category")->load($id)->getUrlPath() . "?" . $lpUrl;
             }
             $this->setData($cacheKey, $url);
         }
