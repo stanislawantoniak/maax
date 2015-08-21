@@ -145,7 +145,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             ));
         }
 
-	    $url = $isLocalVendor ? Mage::getUrl() : Mage::getUrl($this->getVendor()->getUrlKey());
+        $url = $this->getModel()->getWebsiteUrl() !== null ? $this->getModel()->getWebsiteUrl() : true;
 		$urlFieldConfig = array(
 			"name" => "campaign_url",
 			"class" => "form-control",
@@ -191,14 +191,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             );
         }
 
-        $general->addField("website_ids", "multiselect", array(
+        $general->addField("website_ids", "select", array(
             "name" => "website_ids",
             "required" => true,
-            "class" => "multiple",
+            "class" => "form-control",
             "label" => $helper->__('Websites'),
             "values" => $websiteOptions,
             "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-6"
+            "wrapper_class" => "col-md-3"
         ));
 
         // Prices definition
@@ -268,6 +268,21 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $this->setForm($form);
     }
 
+    public function getWebsites() {
+        $websiteOptions = array();
+        $isLocalVendor = Mage::helper("zolagodropship")->isLocalVendor();
+        $vendorPart = $isLocalVendor ? "" : $this->getVendor()->getUrlKey() . "/";
+
+        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
+            /** @var Mage_Core_Model_Website $website */
+            $websiteOptions[] = array(
+                "label" => $website->getName(),
+                "value" => $website->getId(),
+                "url" => $website->getConfig("web/unsecure/base_url") . $vendorPart
+            );
+        }
+        return $websiteOptions;
+    }
 
     public function _prepareBannersGrid() {
         $design = Mage::getDesign();
