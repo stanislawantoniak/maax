@@ -2533,26 +2533,8 @@ Mall.listing = {
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
 	        var breadcrumb = jQuery('ol.breadcrumb');
-            if (breadcrumb.attr('data-search') == "0") {
-                e.preventDefault();
-                localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header').find('ol').html());
-            }
-            if (breadcrumb.attr('data-search') == "1") {
-                e.preventDefault();
-                var searchBreadcrumb = "";
-	            breadcrumb.find("li:not(.home,.search,.vendor)").each(function(i,val){
-                    var li = jQuery(val);
-                    var link = jQuery(val).data("link");
-                    var catid = jQuery(val).data("catid");
-                    var text = jQuery(val).find("a").html();
-
-                    searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
-                    +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
-                    +'</li>';
-                });
-
-                localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
-            }
+            e.preventDefault();
+            localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header').find('ol').html());
 
         });
     },

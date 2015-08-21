@@ -169,7 +169,13 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                         </div>
 
                                         <div id="view-current-filter">
-                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
+                                           <h1><?php 
+                                                if (isset($images['campaign']) && ($this->getCategory()->getId() == $images['campaign'])):
+                                                    echo isset($images["name_customer"]) ? $images["name_customer"] : ""; 
+                                                else:
+                                                    echo $this->getCategory()->getLongName();
+                                                endif;
+                                            ?></h1>
                                             <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
                                                class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                         </div>
