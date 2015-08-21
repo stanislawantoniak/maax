@@ -20,6 +20,7 @@
  * @method int getIsLandingPage()
  * @method int getLandingPageContext()
  * @method int getContextVendorId()
+ * @method int getCampaignUrl()
  *
  * @method Zolago_Campaign_Model_Resource_Campaign getResource()
  */
@@ -71,7 +72,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      * @return string
      * @throws Mage_Core_Exception
      */
-    public function getCampaignUrl($customUrl = null) {
+    public function getFinalCampaignUrl($customUrl = null) {
         $localVendorId = Mage::helper('udropship')->getLocalVendorId();
         $vendorUrlPart = "";
         if ($localVendorId != $this->getVendorId()) {

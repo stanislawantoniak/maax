@@ -74,7 +74,7 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
      * @return string
      */
     private function getUrl($customUrl = null) {
-        return $this->getCampaign()->getCampaignUrl($customUrl);
+        return $this->getCampaign()->getFinalCampaignUrl($customUrl);
     }
 
     /**
