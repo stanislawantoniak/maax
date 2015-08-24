@@ -111,9 +111,9 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
                     $_query['fq']['campaign_info_id']    = isset($_fq['campaign_info_id'])    ? $_fq['campaign_info_id']    : null;
                     $_query['fq']['campaign_regular_id'] = isset($_fq['campaign_regular_id']) ? $_fq['campaign_regular_id'] : null;
                 }
-                if($landing_page_category == $currentCategory->getId()){
-                    $urlPath = $currentCategory->getUrlPath();
-                }
+//                if($landing_page_category == $currentCategory->getId()){
+//                    $urlPath = $currentCategory->getUrlPath();
+//                }
 
             }
 
