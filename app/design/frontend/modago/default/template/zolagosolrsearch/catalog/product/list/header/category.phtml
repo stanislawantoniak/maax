@@ -11,7 +11,6 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
 $images = $lpBlock->getData('campaign_landing_page');
 $images = (array)$images;
-krumo($images);
 
 /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
