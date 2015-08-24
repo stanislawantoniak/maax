@@ -149,7 +149,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 		$urlFieldConfig = array(
 			"name" => "campaign_url",
 			"class" => "form-control",
-			"required" => false,
+			"required" => true,
 			"label" => $helper->__('URL Key'),
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-6",
