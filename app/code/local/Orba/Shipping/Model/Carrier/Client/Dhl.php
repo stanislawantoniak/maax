@@ -352,8 +352,6 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         return $account;
     }
     protected function _prepareBiling() {
-        Mage::log($this->_settings);
-        Mage::log($this->_default_params);
         $message = new StdClass;
         $message->shippingPaymentType = $this->getParam('shippingPaymentType');
         $message->billingAccountNumber = $this->_auth->account;
