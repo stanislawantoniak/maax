@@ -106,7 +106,7 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                 <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                             </div>
                             <div id="lp-banners">
-                                <div id="view-current-filter" class="visible-xs">
+                                <div id="view-current-filter" class="visible-xs visible-sm-to-smmd">
                                     <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
                                     <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
                                        class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : '' ?>"><?php echo $this->__("Go up"); ?></a>
