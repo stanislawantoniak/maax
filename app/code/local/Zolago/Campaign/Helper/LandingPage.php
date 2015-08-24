@@ -203,7 +203,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         $parentCat = Mage::registry('current_category')->getParentCategory();
         $parentCatId = $parentCat->getId();
 
-        $subCats = array();
+        $subCats = array($parentCatId => $parentCatId);
 
         /* @var $categoryHelper Zolago_Catalog_Helper_Category */
         $categoryHelper = Mage::helper("zolagocatalog/category");
