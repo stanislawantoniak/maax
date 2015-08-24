@@ -48,6 +48,10 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         $parentCategoryUrl = null;
 
         if($this->getParentBlock()->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+            if ($vendor && $vendor->getId() && $parentCategory->getId() == $vendorRootCategoryId) {
+                $parentCategoryUrl = $vendor->getVendorUrl();
+            }
+
             // Fix for landing pages and campaigns
             /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
             $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
@@ -81,9 +85,7 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
                 )
             );
 
-            if ($vendor && $vendor->getId() && $parentCategory->getId() == $vendorRootCategoryId) {
-                $parentCategoryUrl = $vendor->getVendorUrl();
-            }
+
         }
         else {
             $id = $parentCategory->getId();
