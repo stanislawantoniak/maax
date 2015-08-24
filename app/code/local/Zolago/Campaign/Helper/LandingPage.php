@@ -190,6 +190,24 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
         return false;
     }
+    public function getKeepParametersCampaign()
+    {
+        $campaign = $this->getCampaign();
+        $parentCat = Mage::registry('current_category')->getParentCategory();
+        $parentCatId = $parentCat->getId();
+
+        $subCats = array($parentCatId => $parentCatId);
+
+        /* @var $categoryHelper Zolago_Catalog_Helper_Category */
+        $categoryHelper = Mage::helper("zolagocatalog/category");
+        $children = $categoryHelper->getChildrenIds($parentCatId);
+        $subCats = array_merge($subCats, $children);
+
+        if ($campaign && $campaign->getId() && $campaign->getIsLandingPage() && in_array($parentCatId, $subCats)) {
+            return true;
+        }
+        return false;
+    }
 
 
     public function getLandingPageUrl($campaignId)

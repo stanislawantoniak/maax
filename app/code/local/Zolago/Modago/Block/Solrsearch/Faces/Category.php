@@ -61,10 +61,10 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
 
                 $subCats = array($landing_page_category => $landing_page_category);
 
-                $children = Mage::getModel('catalog/category')->getCategories($landing_page_category);
-                foreach ($children as $category) {
-                    $subCats[$category->getId()] = $category->getId();
-                }
+                /* @var $categoryHelper Zolago_Catalog_Helper_Category */
+                $categoryHelper = Mage::helper("zolagocatalog/category");
+                $children = $categoryHelper->getChildrenIds($landing_page_category);
+                $subCats = array_merge($subCats, $children);
 
 
                 if (in_array($parentCategory->getId(), $subCats)) {

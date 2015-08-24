@@ -17,7 +17,7 @@ $images = (array)$images;
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 /** @var Zolago_Campaign_Model_Campaign $campaign */
 $canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
-
+krumo($canShowBackToCampaign);
 $lp = $this->getRequest()->getParam("lp", 0);
 ?>
 
@@ -140,7 +140,7 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                 </div>
                                 <div id="view-current-filter">
                                     <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
-                                    <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
+                                    <a href="<?php echo ($landingPageHelper->getKeepParametersCampaign()) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
                                        class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                                 <div id="active-filters-wrapper">
@@ -176,7 +176,7 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                                     echo $this->getCategory()->getLongName();
                                                 endif;
                                             ?></h1>
-                                            <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
+                                            <a href="<?php echo ($landingPageHelper->getKeepParametersCampaign()) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
                                                class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                         </div>
 
