@@ -190,6 +190,13 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
         return false;
     }
+
+    /**
+     * Return if campaign_regular_id or campaign_info_id should be kept in url
+     * on mobile "Go up" link
+     * Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category template
+     * @return bool
+     */
     public function getKeepParametersCampaign()
     {
         $campaign = $this->getCampaign();
