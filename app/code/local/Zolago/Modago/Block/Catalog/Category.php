@@ -99,6 +99,24 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
             $urlPath = $currentCategoryParent->getUrlPath();
             $currentCategoryParentId = $currentCategoryParent->getId();
 
+            $_query = null;
+
+            $campaign = Mage::helper("zolagocampaign/landingPage")->getCampaign();
+
+            if($campaign->getData("is_landing_page")){
+                $landing_page_category = $campaign->getData("landing_page_category");
+
+                if($landing_page_category !== $currentCategory->getId()){
+                    $_fq = $this->getRequest()->getParam('fq');
+                    $_query['fq']['campaign_info_id']    = isset($_fq['campaign_info_id'])    ? $_fq['campaign_info_id']    : null;
+                    $_query['fq']['campaign_regular_id'] = isset($_fq['campaign_regular_id']) ? $_fq['campaign_regular_id'] : null;
+                }
+                if($landing_page_category == $currentCategory->getId()){
+                    $urlPath = $currentCategory->getUrlPath();
+                }
+
+            }
+
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
             if (!empty($vendor)) {
                 $vendorRootCategory = $vendor->getRootCategory();
@@ -114,7 +132,11 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
                 }
             }
 
-            $parentCategoryPath = Mage::getUrl($urlPath);
+
+
+
+
+            $parentCategoryPath = !is_null($_query) ? Mage::getUrl($urlPath, array('_query'  => $_query)) : Mage::getUrl($urlPath);
         }
         return $parentCategoryPath;
     }

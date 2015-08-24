@@ -91,15 +91,8 @@ $lp = $this->getRequest()->getParam("lp", 0);
  */
 ?>
 <?php if (!empty($images)): ?>
-    <?php $moveUpUrl = ($landingPageHelper->getKeepParametersCampaign()) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>
+    <?php $moveUpUrl = $_categoryBlock->getMoveUpUrl(); ?>
 
-    <?php $lpCategory = $images["campaign"];
-    if($lpCategory == Mage::registry("current_category")->getId()){
-        //just remove parameters
-        $moveUpUrl = Mage::registry("current_category")->getUrl();
-    }
-
-    ?>
     <?php $banners = isset($images["banners"]) ? $images["banners"] : array(); ?>
     <header data-test="31" id="header-main">
         <div class="wrapp-section bg-w">
