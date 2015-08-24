@@ -11,7 +11,7 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
 $images = $lpBlock->getData('campaign_landing_page');
 $images = (array)$images;
-
+krumo($images);
 
 /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
@@ -92,6 +92,15 @@ $lp = $this->getRequest()->getParam("lp", 0);
  */
 ?>
 <?php if (!empty($images)): ?>
+    <?php $moveUpUrl = ($landingPageHelper->getKeepParametersCampaign()) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>
+
+    <?php $lpCategory = $images["campaign"];
+    if($lpCategory == Mage::registry("current_category")->getId()){
+        //just remove parameters
+        $moveUpUrl = Mage::registry("current_category")->getUrl();
+    }
+
+    ?>
     <?php $banners = isset($images["banners"]) ? $images["banners"] : array(); ?>
     <header data-test="31" id="header-main">
         <div class="wrapp-section bg-w">
@@ -140,7 +149,7 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                 </div>
                                 <div id="view-current-filter">
                                     <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
-                                    <a href="<?php echo ($landingPageHelper->getKeepParametersCampaign()) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
+                                    <a href="<?php echo $moveUpUrl; ?>"
                                        class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                 </div>
                                 <div id="active-filters-wrapper">
@@ -176,7 +185,7 @@ $lp = $this->getRequest()->getParam("lp", 0);
                                                     echo $this->getCategory()->getLongName();
                                                 endif;
                                             ?></h1>
-                                            <a href="<?php echo ($landingPageHelper->getKeepParametersCampaign()) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
+                                            <a href="<?php echo $moveUpUrl; ?>"
                                                class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                                         </div>
 
