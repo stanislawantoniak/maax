@@ -49,6 +49,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
                 $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
 
+                /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
                 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
                 $urlText = $landingPageHelper->getLandingPageUrl($this->getModel()->getId());
             }

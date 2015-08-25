@@ -107,6 +107,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Get Campaign Website
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        $websiteIds = $this->getAllowedWebsites();
+        return $websiteIds[0];
+    }
+
+    /**
      * Generate campaign url
      *
      * @return string

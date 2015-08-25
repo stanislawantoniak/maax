@@ -3,6 +3,20 @@
 class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 {
 
+    /**
+     * Get vendor data by vendor_id
+     * @param $vendorId
+     * @return bool|Unirgy_Dropship_Model_Vendor|Zolago_Dropship_Model_Vendor
+     */
+    protected function _getVendorData($vendorId)
+    {
+        if (empty($vendorId)) {
+            return false;
+        }
+        $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+        return $vendor;
+    }
+
     public function getCampaignLandingPageBanner()
     {
         $images = new stdClass();
@@ -217,39 +231,74 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
     }
 
 
+    /**
+     * Construct landing page url
+     * @param $campaignId
+     * @return string
+     */
     public function getLandingPageUrl($campaignId)
     {
-        $key     = 'lp_url_campaign_id_' . $campaignId;
+        $key = 'lp_url_campaign_id_' . $campaignId;
         $urlText = Mage::registry($key);
-        if ($urlText === null) {
-            $urlText = "";
-            /** @var Zolago_Campaign_Model_Campaign $campaign */
-            $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+        if ($urlText !== null) {
+            return $urlText;
+        }
+        $urlText = "";
+        /** @var Zolago_Campaign_Model_Campaign $campaign */
+        $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
 
-            if ($campaign->getData("is_landing_page") == Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK) {
-                Mage::unregister($key);
-                Mage::register($key, $urlText);
-                return $urlText;
-            }
-
-            $landing_page_category    = $campaign->getData("landing_page_category");
-            $landing_page_category_id = isset($landing_page_category) ? $landing_page_category : 0;
-            $landing_page_context     = $campaign->getData("landing_page_context");
-            $vendorUrlPart            = "";
-            if ($landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
-                $vendor               = Mage::getModel("udropship/vendor")->load($campaign->getData("context_vendor_id"));
-                $vendorName           = $vendor->getUrlKey();
-                $vendorUrlPart        = $vendorName . "/";
-            }
-
-            $landingPageUrl = $campaign->getData("campaign_url");
-            $urlText        = Mage::getBaseUrl() . $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
-
+        if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK) {
             Mage::unregister($key);
             Mage::register($key, $urlText);
             return $urlText;
-        } else {
-            return $urlText;
         }
+
+        $landingPageCategory = $campaign->getLandingPageCategory();
+        $landingPageCategoryId = isset($landingPageCategory) ? $landingPageCategory : 0;
+        $landingPageContext = $campaign->getLandingPageContext();
+
+
+        //Get campaign website
+        $websiteId = $campaign->getWebsite();
+        $website = Mage::getModel('core/website')->load($websiteId);
+        $storeIds = $website->getStoreIds();
+        //--Get campaign website
+
+        $rootId = Mage::app()->getStore($storeIds[1])->getRootCategoryId();
+
+        $url = Mage::getBaseUrl();
+        $vendorRootCategoryId = 0;
+        //If vendor context, then modify url according to vendor context
+        if ($landingPageContext == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
+            $contextVendorId = $campaign->getContextVendorId();
+            $contextVendor = $this->_getVendorData($contextVendorId);
+            $vendorRootCategories = $contextVendor->getRootCategory();
+
+            if (!Mage::helper("zolagodropship")->isLocalVendor($contextVendorId)) {
+                $url = Mage::helper("zolagodropshipmicrosite")->getVendorUrl($contextVendor);
+                $vendorRootCategoryId = isset($vendorRootCategories[$websiteId]) ? $vendorRootCategories[$websiteId] : 0;
+            }
+        }
+
+        $landingPageUrl = $campaign->getCampaignUrl();
+
+        $landingPageCategoryUrl = "";
+        if (
+            //Avoid links /modagomall
+            $landingPageCategoryId !== $rootId
+            &&
+            //Avoid links /moda-menska (if moda-menska is vendor root category)
+            $landingPageCategory !== $vendorRootCategoryId
+        ) {
+            $landingPageCategoryModel = Mage::getModel("catalog/category")->load($landingPageCategoryId);
+            $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
+        }
+
+        $urlText = $url . $landingPageCategoryUrl . "?" . $landingPageUrl;
+
+        Mage::unregister($key);
+        Mage::register($key, $urlText);
+        return $urlText;
+
     }
 }
