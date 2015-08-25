@@ -227,7 +227,8 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
              $vendorId = 0;
          }
          $categoryIds = array_unique($categoryIds);
-         var_dump(array_unique($categoryIds));
+         $list = $resource->getLandingPagesByCategories($categoryIds,$vendorId,$ids);
+         var_dump($list);
          
          die();                  
      }
