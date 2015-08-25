@@ -1087,5 +1087,41 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $return;
 
     }
+    
+    /**
+     * get campaigns filtered by landing_page_category and campaign_id
+     *
+     * @param array $categories
+     * @param int $vendorId
+     * @param array $campaigns campaing ids
+     * @return array ids of campaigns
+     */
+     public function getLandingPagesByCategories($categories,$vendorId,$campaigns) {
+        if (empty($categories)) {
+            return array();
+        }
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->distinct(true)->from(
+            array("campaign" => $table),
+            array(
+                'campaign.campaign_id as campaign_id',
+                'campaign.landing_page_category as category_id'
+            )
+        );
+        $select->where("campaign.landing_page_category IN(?)", $categories);
+        $select->where("campaign.campaign_id IN(?)", $campaigns);
+        $select->where("campaign.landing_page_context = ?", $vendorId);
+        $_return = $this->getReadConnection()->fetchAll($select);
+
+        $return = array();
+        foreach ($_return as $row) {
+            $return[$row['campaign_id']][] = $row['category_id'];
+        }
+
+        return $return;
+     
+         
+     }
 }
 

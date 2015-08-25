@@ -99,6 +99,12 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
             $urlPath = $currentCategoryParent->getUrlPath();
             $currentCategoryParentId = $currentCategoryParent->getId();
 
+            $campaign = Mage::helper('zolagocampaign')->getCurrentCampaign();
+            if ($campaign) {
+                if ($campaign->getId() != $currentCategory->getId()) {
+                    $urlPath = $currentCategoryParent->getUrlContext();
+                }
+            }
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
             if (!empty($vendor)) {
                 $vendorRootCategory = $vendor->getRootCategory();

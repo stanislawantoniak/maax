@@ -197,4 +197,39 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
          }
          return array_unique($out);
      }
+     
+    /**
+     * link to category with camaign context 
+     *
+     * @return string
+     */
+     public function getUrlContext() {
+         
+     }
+     
+    /**
+     * category name with campaign context
+     *
+     * @return string
+     */
+     public function getNameContext() {
+         $ids = Mage::helper('zolagocampaign')->getCampaignIdsFromUrl();
+         $categoryIds = $this->getPathIds();
+         $categoryIds[] = $this->getId();
+         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+         if (empty($ids)) {
+             return $this->getLongName();
+         }
+         $resource = Mage::getResourceModel('zolagocampaign/campaign');
+         if ($vendor) {
+             $vendorId = $vendor->getId();
+         } else {
+             $vendorId = 0;
+         }
+         $categoryIds = array_unique($categoryIds);
+         var_dump(array_unique($categoryIds));
+         
+         die();                  
+     }
+
 }

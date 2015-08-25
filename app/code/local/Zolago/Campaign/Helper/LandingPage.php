@@ -3,19 +3,30 @@
 class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 {
 
-    public function getCampaignLandingPageBanner()
-    {
+    public function getCampaignLandingPageBanner() {
         $images = new stdClass();
-
-        /** @var Zolago_Dropship_Model_Vendor $vendor */
-        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-
         $campaignId = $this->getCampaignIdFromParams();
         if (!$campaignId) {
             return $images;
         }
         /** @var Zolago_Campaign_Model_Campaign $campaign */
         $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+        return $this->getCampaignLandingPageBannerByCampaign($campaign);
+    }
+    
+    /**
+     * 
+     * @param Zolago_Campaign_Model_Campaign $campaign
+     * @return 
+     */
+
+    public function getCampaignLandingPageBannerByCampaign($campaign)
+    {
+        $images = new stdClass();
+
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
 
         $campaignWebsites = $campaign->getAllowedWebsites();
         $campaignId = $campaign->getId();
