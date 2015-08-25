@@ -40,7 +40,11 @@ class Ced_SocialLogin_Block_Facebook_Button extends Mage_Core_Block_Template
         }
 
         $this->userInfo = Mage::registry('ced_sociallogin_facebook_userdetails');
-        
+
+	    if(empty($this->userInfo)) {
+		    $this->userInfo = Mage::getSingleton('sociallogin/facebook_userdetails')->getUserDetails();
+	    }
+
         // CSRF protection
 		
 		if(!Mage::getSingleton('core/session')->getFacebookCsrf() || Mage::getSingleton('core/session')->getFacebookCsrf()=='') {
@@ -100,7 +104,7 @@ class Ced_SocialLogin_Block_Facebook_Button extends Mage_Core_Block_Template
     }
 
 	public function isLogged() {
-		return (bool)empty($this->userInfo);
+		return (bool)!empty($this->userInfo);
 	}
 
 	/**

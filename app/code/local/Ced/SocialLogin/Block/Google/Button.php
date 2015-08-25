@@ -12,6 +12,11 @@
 			return;
 		}
 		$this->userInfo = Mage::registry('ced_sociallogin_google_userdetails');        /* CSRF protection */
+
+		if(empty($this->userInfo)) {
+			$this->userInfo = Mage::getSingleton('sociallogin/google_userdetails')->getUserDetails();
+		}
+
 		if (!Mage::getSingleton('core/session')->getGoogleCsrf() || Mage::getSingleton('core/session')->getGoogleCsrf() == '') {
 			$csrf = md5(uniqid(rand(), TRUE));
 			Mage::getSingleton('core/session')->setGoogleCsrf($csrf);
@@ -58,7 +63,7 @@
 	}
 
 	public function isLogged() {
-		return (bool)empty($this->userInfo);
+		return (bool)!empty($this->userInfo);
 	}
 
 	/**
