@@ -140,17 +140,14 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
      * @param null $vendorId
      * @return string
      */
-    public function getCategoriesTree($vendorId = null)
+    public function getCategoriesTree($vendorId = null, $website = null)
     {
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         if (!empty($vendorId)) {
             $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+            $rootCategory = $vendor->getData("root_category");
 
-            $customVendorVars = Mage::helper('core')->jsonDecode($vendor->getCustomVarsCombined());
-
-            $vendorRootCategoryId = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category']) && (int)reset($customVendorVars['root_category']) > 0) ?
-                (int)reset($customVendorVars['root_category']) :
-                $rootCatId;
+            $vendorRootCategoryId = (isset($rootCategory[$website]) && !empty($rootCategory[$website])) ? $rootCategory[$website] : $rootCatId;
 
             if ($vendorRootCategoryId > 0) {
                 $rootCatId = $vendorRootCategoryId;

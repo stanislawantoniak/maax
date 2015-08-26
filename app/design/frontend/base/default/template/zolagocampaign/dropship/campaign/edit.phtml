@@ -275,7 +275,7 @@
                 jQuery("[name=landing_page_category]").val("");
                 jQuery("#landing_page_category_text").html("");
                 jQuery("#landing_page_category_url").html("");
-                refreshCategoriesTree(jQuery(this).val());
+                refreshCategoriesTree(jQuery(this).val(), jQuery("[name=website_ids] option:selected").val());
             });
 
             jQuery("#browseCategory button[type=submit]").click(function () {
@@ -299,6 +299,7 @@
                     }
 
                     var vendor = 0;
+                    var website = jQuery("[name=website_ids] option:selected").val();
 
                     if (jQuery("[name=landing_page_context]:checked").val() == "vendor") {
                         jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
@@ -307,16 +308,17 @@
                         jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
                     }
 
-                    refreshCategoriesTree(vendor);
+                    refreshCategoriesTree(vendor, website);
                 }
             }
 
-            function refreshCategoriesTree(vendor){
+            function refreshCategoriesTree(vendor, website){
+                console.log(website);
                 jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
                 jQuery.ajax({
                     url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree"); ?>',
                     method: 'POST',
-                    data: {"vendor": vendor},
+                    data: {"vendor": vendor, website: website},
                     success: function(tree){
 
                         jQuery("#jstree").jstree("destroy");
