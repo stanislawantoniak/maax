@@ -70,6 +70,15 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		if (!$url) {
 			$query = http_build_query($params);
 			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
+			//if landing page on root category or on vendor root category then url should be overwritten
+
+			/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+			$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+			$urlText = $landingPageHelper->getLandingPageUrl(NULL, FALSE);
+
+			if(!empty($urlText)){
+				$url = $urlText . ($query ? "?" . $query : "");
+			}
 		}
 
         Mage::register("category_with_filters", $url);

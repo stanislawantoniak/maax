@@ -443,6 +443,20 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $url = $rawUrl;
         } else {
     		$url = Mage::getUrl($this->getUrlRoute(), $queryData);
+
+			/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+			$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+			$urlText = $landingPageHelper->getLandingPageUrl(NULL, FALSE);
+
+			if(!empty($urlText)){
+
+				$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
+				if (is_array($params)) {
+					ksort($params);
+					$query = http_build_query($params);
+				}
+				$url = $urlText. ($query ? "?" . $query : "");
+			}
         }
         return $url;
 	}
@@ -1075,6 +1089,19 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $url = rtrim($rawUrl,'/');
         } else {
             $url =  Mage::getUrl($this->getUrlRoute(), $queryData);
+
+			/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+			$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+			$urlText = $landingPageHelper->getLandingPageUrl(NULL, FALSE);
+
+			if(!empty($urlText)){
+				$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
+				if (is_array($params)) {
+					ksort($params);
+					$query = http_build_query($params);
+				}
+				$url = $urlText. ($query ? "?" . $query : "");
+			}
         }
         return $url;
 	}
