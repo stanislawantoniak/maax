@@ -21,61 +21,41 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
     {
         $images = new stdClass();
 
-        /** @var Zolago_Dropship_Model_Vendor $vendor */
-        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-
         $campaign = $this->getCampaign();
         $campaignId = $campaign->getId();
 
         if (!$campaignId) {
             return $images;
         }
-        /** @var Zolago_Campaign_Model_Campaign $campaign */
-        $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
 
-        //context landing_page_context
-        $landing_page_context = $campaign->getLandingPageContext();
-        $landing_page_category_id = $campaign->getLandingPageCategory();
+        return $this->getCampaignLandingPageBannerByCampaign($campaign);
+    }
 
-        $landingPageUrl = $campaign->getData("campaign_url");
+    /**
+     *
+     * @param Zolago_Campaign_Model_Campaign $campaign
+     * @return
+     */
 
-        if ($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId()) && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
-            //if vendor context
-            $imageData = $this->getLandingPageBanner($campaignId);
+    public function getCampaignLandingPageBannerByCampaign($campaign)
+    {
+        $images = array();
 
-            $images->name_customer = $campaign->getNameCustomer();
-            $images->campaign = $campaign->getLandingPageCategory();
+        $campaignId = $campaign->getId();
 
-            //TODO URL fix for root
-            $images->url = Mage::getBaseUrl() . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
+        //load banner
+        $imageData = $this->getLandingPageBanner($campaignId);
 
-            if (array_filter($imageData)) {
-                $images->banners = $imageData;
+        $images["name_customer"] = $campaign->getNameCustomer();
+        $images["campaign"] = $campaign->getLandingPageCategory();
+        $images['url'] = $campaign->getLandingPageLink();
 
-            }
-
+        if (array_filter($imageData)) {
+            $images['banners'] = $imageData;
         }
-        if (!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY) {
-            //if gallery context
-            //load banner
-            $imageData = $this->getLandingPageBanner($campaignId);
-
-            $images->name_customer = $campaign->getNameCustomer();
-            $images->campaign = $campaign->getLandingPageCategory();
-
-            //TODO URL fix for root
-            $images->url = Mage::getBaseUrl() . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
-
-            if (array_filter($imageData)) {
-                $images->banners = $imageData;
-            }
-
-        }
-
 
         return $images;
     }
-
     /**
      * Get creative of company with landing page
      * @param $campaignId
