@@ -26,18 +26,18 @@ class Zolago_Campaign_Model_Observer
         $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
         $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
 
-        if($campaign->getIsLandingPage() == 1){
+        if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
             $campaignType = $campaign->getType();
             //generate landing page url
             $landingPageUrl = "";
 
-            if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
-                $landingPageUrl = "fq[".Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE."][0]=" . $campaignId;
+            if ($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
+                $landingPageUrl = "fq[" . Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE . "][0]=" . $campaignId;
             }
-            if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
-                $landingPageUrl = "fq[".Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE."][0]=" . $campaignId;
+            if ($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
+                $landingPageUrl = "fq[" . Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE . "][0]=" . $campaignId;
             }
-            if(!empty($landingPageUrl)){
+            if (!empty($landingPageUrl)) {
                 $campaign->setData("campaign_url", $landingPageUrl);
                 $campaign->save();
             }

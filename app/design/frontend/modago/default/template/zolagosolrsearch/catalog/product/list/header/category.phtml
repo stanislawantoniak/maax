@@ -12,6 +12,8 @@ if ($campaign = $category->getCurrentCampaign()) {
     $banner = null;
 }
 
+$moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
+
 if (($this->isContentMode()) && (!$vendor) && empty($banner['banners'])) return; // no header
 
 ?>
@@ -95,7 +97,3 @@ if (($this->isContentMode()) && (!$vendor) && empty($banner['banners'])) return;
         </div>
     </div>
 </header>
-
-
-
-

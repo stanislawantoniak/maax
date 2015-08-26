@@ -107,6 +107,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Get Campaign Website
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        $websiteIds = $this->getAllowedWebsites();
+        return $websiteIds[0];
+    }
+
+    /**
      * Generate campaign url
      *
      * @return string
@@ -925,5 +935,19 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         return $productIdsUpdated;
     }
+    
+    /**
+     * returns filter key for campaign
+     *
+     * @return string
+     */
+     public function getCampaignFilterKey() {
+         switch ($this->getData['status']) {
+             case Zolago_Campaign_Model_Campaign_Type::TYPE_INFO:
+                 return self::ZOLAGO_CAMPAIGN_INFO_CODE;
+             default:
+                 return self::ZOLAGO_CAMPAIGN_ID_CODE;
+         }
+     }
 
 }

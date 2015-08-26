@@ -460,11 +460,15 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 
 
 	/**
-	 * Check if current vendor local
+	 * Check if vendor is LOCAL VENDOR
+	 * (LOCAL VENDOR = System > Config > Drop Shipping > Vendor Options > Local Vendor)
+	 * @param null $vendorId
 	 * @return bool
 	 */
-	public function isLocalVendor(){
-		$vendorId = Mage::getSingleton('udropship/session')->getVendorId();
+	public function isLocalVendor($vendorId = NULL){
+		if(is_null($vendorId)){
+			$vendorId = Mage::getSingleton('udropship/session')->getVendorId();
+		}
 		return (bool)($vendorId == $this->getLocalVendorId());
 	}
 }

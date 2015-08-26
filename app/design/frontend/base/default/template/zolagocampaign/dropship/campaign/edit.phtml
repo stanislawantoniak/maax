@@ -205,9 +205,6 @@
                     landing_page_context: {
                         required: "input[name=is_landing_page]:checked"
                     },
-                    campaign_url: {
-                        required: "input[name=is_landing_page][value=0],input[name=is_landing_page][value=0]:checked"
-                    },
                     context_vendor_id: {
                         required: "input[name=landing_page_context][value=vendor]:checked"
                     }
@@ -221,8 +218,11 @@
                     }
                 },
                 errorPlacement: function($error, $element){
-                    var name = $element.attr("name");
-                    $element.closest("div").append($error);
+                    if ($element.closest("div").hasClass("input-group")) {
+                        $element.closest("div").parent().append($error);
+                    } else {
+                        $element.closest("div").append($error);
+                    }
                 }
             });
 
