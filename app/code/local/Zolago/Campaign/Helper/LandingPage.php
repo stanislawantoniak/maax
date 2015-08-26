@@ -287,7 +287,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
             $vendorRootCategories = $contextVendor->getRootCategory();
 
             if (!Mage::helper("zolagodropship")->isLocalVendor($contextVendorId)) {
-                $url = Mage::helper("zolagodropshipmicrosite")->getVendorUrl($contextVendor);
+                $url = Mage::helper("zolagodropshipmicrosite")->getVendorUrl($contextVendor, true);
                 $vendorRootCategoryId = isset($vendorRootCategories[$websiteId]) ? $vendorRootCategories[$websiteId] : 0;
             }
         }

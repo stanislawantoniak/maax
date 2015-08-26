@@ -9,10 +9,23 @@ class Zolago_DropshipMicrositePro_IndexController
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 
         if ($vendor) {
-        	
-			// Set root category
-			$vendor->rootCategory();
-			
+
+            /* @var $campaignLandingPageHelper Zolago_Campaign_Helper_LandingPage */
+            $campaignLandingPageHelper = Mage::helper("zolagocampaign/landingPage");
+            $campaign = $campaignLandingPageHelper->getCampaign();
+
+            if ($campaign->getIsLandingPage()
+                && $campaign->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR
+                && $campaign->getContextVendorId() == $vendor->getVendorId()
+            ) {
+                $landingPageCategory = $campaign->getLandingPageCategory();
+                $this->_forward('view', "category", "catalog", array("id" => $landingPageCategory));
+                return;
+            }
+
+            // Set root category
+            $vendor->rootCategory();
+
             $this->_forward('landingPage');
             return;
         }

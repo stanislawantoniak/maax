@@ -4,25 +4,28 @@ require_once Mage::getConfig()->getModuleDir('controllers', "Unirgy_DropshipMicr
 
 class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexController{
 	public function indexAction() {
-		
+
+		/* @var $campaignLandingPageHelper Zolago_Campaign_Helper_LandingPage */
+		$campaignLandingPageHelper = Mage::helper("zolagocampaign/landingPage");
+		$campaign = $campaignLandingPageHelper->getCampaign();
+
+
+		$rootId = Mage::app()->getStore()->getRootCategoryId();
+		if ($campaign->getIsLandingPage()
+			&& $campaign->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY
+			&& $campaign->getLandingPageCategory() == $rootId
+		) {
+			$landingPageCategory = $campaign->getLandingPageCategory();
+			$this->_forward('view', "category", "catalog", array("id" => $landingPageCategory));
+			return;
+		}
+
+
 		if(Mage::helper('umicrosite')->getCurrentVendor()){
 			return parent::indexAction();
 		}
 		
 		$this->loadLayout();
-		/*
-		$block = $this->getLayout()->getBlock("zolago_modago_home_popularvendors");
-		foreach($block->getVendorColleciton() as $vendor){
-			echo $block->getVendorName($vendor) . "<br/>";
-			echo $block->getVendorMarkUrl($vendor) . "<br/>";
-			echo $block->getVendorBaseUrl($vendor) . "<br/>";
-			echo $block->getVendorResizedLogoUrl($vendor) . "<br/>";
-			echo $vendor->getShoppingCartWatchworldOne() . "<br/>";
-			echo $vendor->getShoppingCartWatchworldTwo() . "<br/>";
-		}
-		die;
-		 */
-		
 		$this->renderLayout();
 	}
 }

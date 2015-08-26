@@ -1129,7 +1129,7 @@ Mall.listing = {
 			ajaxData,
 			function(response){
 				if(response.status){
-					// Cache only success respons
+					// Cache only success response
 					self._ajaxCache[ajaxKey] = response;
 				}
 				self._handleAjaxRepsonse(response,ajaxKey,ajaxData)
