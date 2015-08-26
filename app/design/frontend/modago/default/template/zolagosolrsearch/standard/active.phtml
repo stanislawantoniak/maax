@@ -20,6 +20,10 @@ $lpData = (array)$lpData;
 
 $lp = $this->getRequest()->getParam("lp", 0);
 
+/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
+$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
+
 ?>
 <?php if(
     !$this->isContentMode()
@@ -57,6 +61,7 @@ $lp = $this->getRequest()->getParam("lp", 0);
 													   class="fa fa-times active-filter-label"
                                                         data-lpparam="<?php echo (int)($key == Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE."_facet" || $key == Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE."_facet"); ?>"
                                                         data-displaymode="<?php echo $categoryDisplayMode = (int)(Mage::registry('current_category')->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE); ?>"
+                                                        data-listingmode="<?php echo $type; ?>"
 													   data-input="<?php echo $this->getItemId($face_key, $v)?>"></a>
 												</span>
                                             </span>
