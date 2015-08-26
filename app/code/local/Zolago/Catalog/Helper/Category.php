@@ -52,6 +52,7 @@ class Zolago_Catalog_Helper_Category extends Mage_Catalog_Helper_Category
 
     /**
      * Check if a category can be shown
+     * (Overwritten Mage_Catalog_Helper_Category->canShow to have an ability to see listing on root category )
      *
      * @param  Mage_Catalog_Model_Category|int $category
      * @return boolean
