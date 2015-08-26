@@ -219,4 +219,130 @@ class Zolago_Campaign_Model_Observer
         $model->unsetProductAttributesOnProductRemoveFromCampaign($campaignId,$revertProductOptions);
     }
 
+    /**
+     * @param Aoe_Scheduler_Model_Schedule $object
+     */
+    public static function attachProductsToCampaignByCoupon($object) {
+        $startTime = self::getMicrotime();
+
+        /* Collecting products START */
+        $time = self::getMicrotime();
+
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $allProductsColl */
+        $allProductsColl = Mage::getResourceModel("zolagocatalog/product_collection");
+        $allProductsColl->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $allProductsColl->addAttributeToFilter("status",  array("eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
+        $allProductsColl->addAttributeToFilter('type_id', array("in" =>
+            array(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+                  Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)));
+        $allProductsColl->load();
+
+        print_r((string)$allProductsColl->getSelect()."<br/>");
+        print_r("Product collection load: " . self::_formatTime(self::getMicrotime()-$time) . "<br/>");
+        print_r("Found: ".$allProductsColl->count()."<br/><br/>");
+        /* Collecting products END */
+
+
+        /* Collecting sales rules START */
+        $time = self::getMicrotime();
+
+        $now = Mage::getModel('core/date')->date('Y-m-d');
+        /** @var Mage_SalesRule_Model_Resource_Rule_Collection $rulesColl */
+        $rulesColl = Mage::getResourceModel("salesrule/rule_collection");
+        $rulesColl->addIsActiveFilter(); // Active only
+        $rulesColl->addFieldToFilter("from_date",   array("to"   => $now));
+        $rulesColl->addFieldToFilter("to_date",     array("from" => $now));
+        $rulesColl->addFieldToFilter("campaign_id", array("gt"   => 0));
+        $rulesColl->load();
+
+        print_r((string)$rulesColl->getSelect()."<br/>");
+        print_r("Rules collection load: " . self::_formatTime(self::getMicrotime()-$time) . "<br/>");
+        print_r("Found: ".$rulesColl->count()."<br/><br/>");
+        /* Collecting sales rules END */
+
+        // Cleaning conditions because
+        // Rules can have some Cart (quote) conditions
+        /** @var Mage_SalesRule_Model_Rule $rule */
+        foreach ($rulesColl as $rule) {
+            $con = unserialize($rule->getConditionsSerialized()); // Only variables should be passed by reference
+            $rule->setConditionsSerialized(serialize(self::cleanConditions($con)));
+        }
+
+        // Main processing loop
+        $time = self::getMicrotime();
+        $startMemory = memory_get_usage();
+
+        $memoryTable = array();
+        /** @var Mage_SalesRule_Model_Rule $rule */
+        foreach ($rulesColl as $rule) {
+            /** @var Zolago_Catalog_Model_Product $product */
+            foreach ($allProductsColl as $product) {
+                // If configurable or visible simple
+                if ($product->isConfigurable() || !$product->getParentId()) {
+                    $object = new Varien_Object();
+                    $objectProduct = new Varien_Object();
+                    $objectProduct->setProduct($product);
+                    $objectProduct->addData($product->getData());
+                    $object->setAllItems(array($objectProduct));
+
+                    $v = $rule->getConditions()->validate($object);
+                    if ($v) {
+                        $memoryTable[$product->getId()] = $rule->getCampaignId();
+                    }
+                } else {
+                    continue;
+                }
+            }
+            // TODO: save to memory table
+//            print_r($memoryTable);
+            print_r("<br/>");
+            print_r("For rule id: ". $rule->getId() . " found: " . count($memoryTable). "size:" . sizeof($memoryTable));
+            print_r("<br/>");
+        }
+
+
+        print_r(round(((memory_get_usage() - $startMemory)/1024)/1024, 2) . ' mega bytes');
+        print_r("<br/>");
+
+        print_r("Processing time: " . self::_formatTime(self::getMicrotime()-$time) . "<br/>");
+
+
+
+
+
+        print_r("SUM TIME: " . self::_formatTime(self::getMicrotime()-$startTime) . "<br/>");
+        die;
+    }
+
+    public static function _formatTime($t) {
+        return round($t,4) . "s";
+    }
+
+    public static function getMicrotime(){
+        list($usec, $sec) = explode(" ",microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+    private static function cleanConditions(&$conditions) {
+
+        if (isset($conditions["conditions"])) {
+            self::cleanConditions($conditions["conditions"]);
+        } else {
+            foreach ($conditions as $key => &$condition) {
+                if ($condition["type"] == "salesrule/rule_condition_address") {
+                    unset($conditions[$key]);
+                }
+                elseif (!isset($condition["conditions"]) && !empty($condition["attribute"])) {
+                    if (preg_match("/quote|qty|total/",
+                        $condition["attribute"])) {
+                        unset($conditions[$key]);
+                    }
+                }
+                elseif (isset($condition["conditions"])) {
+                    self::cleanConditions($condition["conditions"]);
+                }
+            }
+        }
+        return $conditions;
+    }
 }

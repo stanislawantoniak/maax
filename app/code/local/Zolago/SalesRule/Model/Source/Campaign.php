@@ -3,13 +3,18 @@
     protected $_options = null;
 
     /**
-     * @return array
+     * @param bool $withEmpty
+     * @param null|int|array $ids
+     * @return array|null
      */
     public function toOptionArray($withEmpty = true, $ids = null) {
         if ($this->_options === null) {
             $this->_options = $this->getCollection($ids)->toOptionArray();
             // Todo: Make it more usefully by:
             // label => $name ($customerName) $vendor (if Landing page vendor from LP)
+        }
+        if ($withEmpty) {
+            return array_merge( $this->_options,array(array("value" => 0, "label"=>Mage::helper("zolagocampaign")->__("Please select"))));
         }
         return $this->_options;
     }
