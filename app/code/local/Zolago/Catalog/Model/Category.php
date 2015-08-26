@@ -197,4 +197,60 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
          }
          return array_unique($out);
      }
+      
+    /**
+     * category name with campaign context
+     *
+     * @return string
+     */
+     public function getNameContext() {
+         $campaign = $this->getCurrentCampaign();
+         if (!$campaign) {
+             return $this->getLongName();
+         } else {
+             return $campaign->getNameCustomer();         
+         }
+     }
+     
+    /**
+     * 
+     * @return Zolago_Campaign_Model_Campaign | null
+     */
+     public function getCurrentCampaign() {
+         if (is_null($this->_campaign)) {
+             $this->_campaign = false;
+             $ids = Mage::helper('zolagocampaign')->getCampaignIdsFromUrl();
+             if (empty($ids)) {
+                 return false;
+             }
+             $categoryIds = $this->getPathIds();
+             $categoryIds[] = $this->getId();
+             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+             $resource = Mage::getResourceModel('zolagocampaign/campaign');
+             if ($vendor) {
+                 $vendorId = $vendor->getId();
+             } else {
+                 $vendorId = 0;
+             }
+             $categoryIds = array_unique($categoryIds);
+             $list = $resource->getLandingPagesByCategories($categoryIds,$vendorId,$ids);
+             $id = null;
+             // promotion nearest our category
+             while(!empty($categoryIds)) {
+                 $categoryId = array_pop($categoryIds);
+                 if (!empty($list[$categoryId])) {
+                     $id = reset($list[$categoryId]); // first campaign from list
+                     break;
+                 }
+             }
+             if ($id) {
+                 $campaign = Mage::getModel('zolagocampaign/campaign')->load($id);
+                 if ($campaign->getId()) {
+                     $this->_campaign = $campaign;
+                 }	
+             }                          
+         }
+         return $this->_campaign;
+     }
+
 }

@@ -30,6 +30,8 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         if (!$campaignId) {
             return $images;
         }
+        /** @var Zolago_Campaign_Model_Campaign $campaign */
+        $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
 
         //context landing_page_context
         $landing_page_context = $campaign->getLandingPageContext();

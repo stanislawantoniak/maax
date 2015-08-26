@@ -2,6 +2,7 @@
 
 class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    protected $_campaignIds;
 
     public function getBannerTypesSlots()
     {
@@ -202,5 +203,47 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $html;
     }
+    
+    
+    /**
+     * return campaign ids from request
+     *
+     * @return array
+     */
+    public function getCampaignIdsFromUrl() {
+        if (is_null($this->_campaignIds)) {
+            $params = Mage::app()->getRequest()->getParams();
+            $this->_campaignIds = $this->parseCampaignIds($params);
+            
+        }
+        return $this->_campaignIds;
+    }
+    
+    /**
+     * parse campaign ids from url params
+     *
+     * @param array $params
+     * @return array
+     */
 
+    public function parseCampaignIds($params) {
+        $id = array();
+        if (!empty($params['fq'])) {
+            if (!empty($params['fq']['campaign_regular_id'])) {
+                if (is_array($params['fq']['campaign_regular_id'])) {
+                    $id += $params['fq']['campaign_regular_id'];
+                } else {
+                    $id[] = $params['fq']['campaign_regular_id'];
+                }
+            } 
+            if (!empty($params['fq']['campaign_info_id'])) {
+                if (is_array($params['fq']['campaign_info_id'])) {
+                    $id += $params['fq']['campaign_info_id'];
+                } else {
+                    $id[] = $params['fq']['campaign_info_id'];
+                }
+            }
+        }
+        return array_unique($id);
+    }
 }
