@@ -1,14 +1,17 @@
 <?php
+
 /**
  * Class Zolago_Catalog_Helper_Category
- */ 
-class Zolago_Catalog_Helper_Category extends Mage_Catalog_Helper_Category {
+ */
+class Zolago_Catalog_Helper_Category extends Mage_Catalog_Helper_Category
+{
     private $all_categories = NULL;
 
     /**
      * @return array Array of categories in for of id => path
      */
-    public function getPathArray(){
+    public function getPathArray()
+    {
 
         $categories = Mage::getModel('catalog/category')
             ->getCollection()
@@ -31,24 +34,19 @@ class Zolago_Catalog_Helper_Category extends Mage_Catalog_Helper_Category {
      *
      * @return array
      */
-    public function getChildrenIds($parent_cat_id, $all_categories = NULL){
-
+    public function getChildrenIds($parent_cat_id, $all_categories = NULL)
+    {
         $children_ids = array();
-
-        if(!$all_categories){
+        if (!$all_categories) {
             $all_categories = ($this->all_categories) ? $this->all_categories : $this->getPathArray();
         }
-
-        if($all_categories){
-
-            foreach($all_categories as $cat_id => $cat_path){
-
-                if (strpos($cat_path, '/' . $parent_cat_id . '/') !== FALSE){
+        if ($all_categories) {
+            foreach ($all_categories as $cat_id => $cat_path) {
+                if (strpos($cat_path, '/' . $parent_cat_id . '/') !== FALSE) {
                     $children_ids[] = $cat_id;
                 }
             }
         }
-
         return $children_ids;
     }
 
