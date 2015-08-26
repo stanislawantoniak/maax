@@ -1,7 +1,7 @@
 <?php
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-$vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
+$vendorTypeLabel = $vendor ? $vendor->getVendorTypeLabel() : false;
 $category = $this->getCategory();
 
 /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
