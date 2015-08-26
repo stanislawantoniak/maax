@@ -1304,9 +1304,11 @@ Mall.listing = {
 			active.click(function() {
 				var me = jQuery(this);
 				var activeDisplayModePage = me.data("displaymode");
+				var listingmode = me.data("listingmode");
 				if (categoryDMPage
 					&& activeDisplayModePage
-					&& jQuery(Mall.listing.getActiveId()).find("input[name^=fq]").length ==1
+					&& jQuery(Mall.listing.getActiveId()).find("input[name^=fq]").length == 1
+					&& listingmode == "category"
 				) {
 					window.location = window.location.pathname;
 					return false;
@@ -1330,7 +1332,7 @@ Mall.listing = {
 			remove.click(function() {
 				var me = jQuery(this);
 
-				if (categoryDMPage) {
+				if (categoryDMPage && listingmode == "category") {
 					window.location = window.location.pathname;
 					return false;
 				}
