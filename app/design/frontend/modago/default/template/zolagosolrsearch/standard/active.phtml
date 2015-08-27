@@ -13,10 +13,7 @@ if(!empty($rewriteData)){
         $categoryWithFiltersTitle = $rewriteData["listing_title"];
     }
 }
-/*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
-$lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
-$lpData = $lpBlock->getData('campaign_landing_page');
-$lpData = (array)$lpData;
+$campaign = $this->getCurrentCategory()->getCurrentCampaign();
 
 $lp = $this->getRequest()->getParam("lp", 0);
 
@@ -27,7 +24,8 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 ?>
 <?php if(
     !$this->isContentMode()
-    || !empty($lpData)
+    || $campaign
+    //TODO check if we can live without lp=1
     || ($lp == 1)
 ): ?>
 <div id="active-filters" data-categoryDMPage="<?php echo $categoryDisplayMode = (int)(Mage::registry('current_category')->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE); ?>">
@@ -45,10 +43,10 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
                                             <?php $face_key = substr($key, 0, strrpos($key, '_')) ?>
                                             <?php
                                             $selectedFacetValue = $v;
-                                            if($face_key == 'price') {
+                                            if ($face_key == 'price') {
                                                 $selectedFacetValue = $this->formatFacetPrice($v);
                                             } elseif (in_array($face_key, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE, Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE))) {
-                                                $selectedFacetValue = isset($lpData['name_customer']) ? $lpData['name_customer'] : "";
+                                                $selectedFacetValue = ($campaign) ? $campaign->getNameCustomer() : "";
                                             }
                                             ?>
                                             <span class="label">
