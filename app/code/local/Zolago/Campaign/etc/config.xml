@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Campaign>
-            <version>0.0.18</version>
+            <version>0.0.22</version>
         </Zolago_Campaign>
     </modules>
     <global>
@@ -30,6 +30,9 @@
 					<campaign_product>
 						<table>zolago_campaign_product</table>
 					</campaign_product>
+                    <campaign_product_tmp>
+                        <table>zolago_campaign_product_tmp</table>
+                    </campaign_product_tmp>
                     <campaign_placement>
                         <table>zolago_campaign_placement</table>
                     </campaign_placement>
@@ -122,7 +125,7 @@
                     <cron_expr>0 1 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagocampaign/observer::attachProductsToCampaignByCoupon</model>
+                    <model>zolagocampaign/observer::attachProductsToCampaignBySalesRule</model>
                 </run>
             </zolagocampaign_attach_products_to_campaigns>
         </jobs>

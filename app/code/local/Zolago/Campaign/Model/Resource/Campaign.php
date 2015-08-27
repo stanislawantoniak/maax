@@ -99,7 +99,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         foreach ($productIds as $productId) {
             $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
         }
-        if (count($toInsert)) {
+        if (!empty($toInsert)) {
             $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
@@ -136,6 +136,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 $recoverOptionsProducts[$websiteId] = array($productId);
             }
 
+            /**
+             * @see Zolago_Campaign_Model_Observer::productAttributeRevert
+             */
             Mage::dispatchEvent(
                 "campaign_product_remove_update_after",
                 array(
@@ -1059,6 +1062,42 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         return $return;
 
+    }
+
+    /**
+     * Save product ids corresponding to campaign
+     *
+     * @param Zolago_Campaign_Model_Campaign|int $campaign
+     * @param array $productIds
+     * @return $this
+     */
+    public function saveProductsToMemory($campaign, $productIds = array()) {
+
+        $campaignId = $campaign;
+        if ($campaign instanceof Zolago_Campaign_Model_Campaign) {
+            $campaignId = $campaign->getId();
+        }
+
+        $toInsert = array();
+        foreach ($productIds as $productId) {
+            $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
+        }
+        if (!empty($toInsert)) {
+
+            $chunked = array_chunk($toInsert, 500);
+            foreach ($chunked as $data) {
+                $this->_getWriteAdapter()->insertMultiple(
+                    $this->getTable("zolagocampaign/campaign_product_tmp"),
+                    $data);
+            }
+        }
+        return $this;
+    }
+
+    public function truncateProductsFromMemory() {
+        $table = $this->getTable("zolagocampaign/campaign_product_tmp");
+        $this->_getWriteAdapter()->truncateTable($table);
+        return $this;
     }
 }
 

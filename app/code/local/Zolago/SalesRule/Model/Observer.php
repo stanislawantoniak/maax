@@ -143,7 +143,7 @@ class Zolago_SalesRule_Model_Observer {
                             ));
         $fieldset->addField("campaign_id", "select", array(
                                 "label"		=> Mage::helper("zolagosalesrule")->__("Campaign"),
-                                "values"	=> Mage::getSingleton('zolagosalesrule/source_campaign')->toOptionArray(true, $model->getId()),
+                                "values"	=> Mage::getSingleton('zolagocampaign/source_campaign')->toOptionArray(true, $model->getId()),
                                 "name"		=> "campaign_id",
                                 "value"     => $model->getCampaignId()
                             ));

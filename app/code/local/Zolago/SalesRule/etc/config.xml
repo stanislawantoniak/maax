@@ -47,9 +47,6 @@
                     <relation>
                         <table>zolago_salesrule_relation</table>
                     </relation>
-                    <product_in_campaign_tmp>
-                        <table>zolago_salesrule_product_in_campaign_tmp</table>
-                    </product_in_campaign_tmp>
 				</entities>
 			 </zolagosalesrule_resource>
             <salesrule_resource>
