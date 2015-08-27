@@ -292,20 +292,23 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
             $landingPageCategoryModel = Mage::getModel("catalog/category")->load($landingPageCategoryId);
             $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
         }
-        if ($currentCategory) {
-            $currentCategoryId = $currentCategory->getId();
 
-            if (
-                //Avoid links /modagomall
-                $currentCategoryId !== $rootId
-                &&
-                //Avoid links /moda-menska (if moda-menska is vendor root category)
-                $currentCategoryId !== $vendorRootCategoryId
-            ) {
-                $landingPageCategoryModel = Mage::getModel("catalog/category")->load($currentCategoryId);
-                $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
-            }
-        }
+        //TODO check if e need it: Breaks breadcrumb LP link
+
+//        if ($currentCategory) {
+//            $currentCategoryId = $currentCategory->getId();
+//
+//            if (
+//                //Avoid links /modagomall
+//                $currentCategoryId !== $rootId
+//                &&
+//                //Avoid links /moda-menska (if moda-menska is vendor root category)
+//                $currentCategoryId !== $vendorRootCategoryId
+//            ) {
+//                $landingPageCategoryModel = Mage::getModel("catalog/category")->load($currentCategoryId);
+//                $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
+//            }
+//        }
 
         $urlText = $url . $landingPageCategoryUrl;
 
