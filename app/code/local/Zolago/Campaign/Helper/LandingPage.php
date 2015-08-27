@@ -208,20 +208,20 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
      * @param bool|TRUE $includeParams
      * @return string
      */
-    public function getLandingPageUrl($campaignId = NULL, $includeParams = TRUE, $categoryToCompare = NULL)
+    public function getLandingPageUrl($campaignId = NULL, $includeParams = TRUE)
     {
-        if(is_null($campaignId)){
+        if (is_null($campaignId)) {
             //Try to get campaign_id from params
             $campaignId = $this->getCampaignIdFromParams();
         }
-        if(is_null($campaignId)){
+        if (is_null($campaignId)) {
             return "";
         }
 
         /** @var Zolago_Campaign_Model_Campaign $campaign */
         $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
 
-        return $this->getLandingPageUrlByCampaign($campaign, $includeParams, $categoryToCompare);
+        return $this->getLandingPageUrlByCampaign($campaign, $includeParams);
 
     }
 
@@ -230,12 +230,12 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
      *
      * @param $campaign
      * @param bool|TRUE $includeParams
-     * @param null $categoryToCompare
+     * @param array $params
      * @return string
      */
-    public function getLandingPageUrlByCampaign($campaign, $includeParams = TRUE, $categoryToCompare = NULL)
+    public function getLandingPageUrlByCampaign($campaign, $includeParams = TRUE, $params = array())
     {
-        Mage::log("includeParams: ".(int)$includeParams, null, "url4.log");
+        Mage::log("includeParams: " . (int)$includeParams, null, "url4.log");
         $campaignId = $campaign->getId();
 //        $key = 'lp_url_campaign_id_' . $campaignId;
 //        $urlText = Mage::registry($key);
@@ -294,9 +294,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
         if ($currentCategory) {
             $currentCategoryId = $currentCategory->getId();
-            if($categoryToCompare){
-                $currentCategoryId = $categoryToCompare;
-            }
+
             if (
                 //Avoid links /modagomall
                 $currentCategoryId !== $rootId
@@ -309,12 +307,22 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
             }
         }
 
-        $urlText = $url . $landingPageCategoryUrl . "?" . $landingPageUrl;
-        Mage::log("includeParams: ".(int)$includeParams, null, "url4.log");
-        if(!$includeParams){
-            $urlText = $url . $landingPageCategoryUrl;
+        $urlText = $url . $landingPageCategoryUrl;
+
+        $_q = NULL;
+
+        if ($includeParams) {
+            $_q .= $landingPageUrl;
         }
-        Mage::log($urlText, null, "url4.log");
+
+        if (!empty($params)) {
+            ksort($params);
+            $query = http_build_query($params);
+            $_q .= $query;
+
+        }
+        $urlText = $urlText . ($_q ? "?" . $_q : "");
+
 //        Mage::unregister($key);
 //        Mage::register($key, $urlText);
         return $urlText;

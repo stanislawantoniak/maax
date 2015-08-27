@@ -61,25 +61,25 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
 
 		$url = false;
-		if($type == "search") {
+		if ($type == "search") {
 			$query = http_build_query($params);
 			$url = Mage::getUrl('search') . ($query ? "?" . $query : "");
-		} elseif($type == "category") {
-			$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
-			Mage::log($url, null, "url1.log");
+		} elseif ($type == "category") {
+
+			$campaign = $category->getCurrentCampaign();
+			if ($campaign) {
+				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+				//$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
+				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
+
+			} else {
+				$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
+			}
 		}
 		if (!$url) {
 			$query = http_build_query($params);
 			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
-			//if landing page on root category or on vendor root category then url should be overwritten
-
-			/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-			$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-			$urlText = $landingPageHelper->getLandingPageUrl(NULL, FALSE);
-
-			if(!empty($urlText)){
-				$url = $urlText . ($query ? "?" . $query : "");
-			}
 		}
 
         Mage::register("category_with_filters", $url);

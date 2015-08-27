@@ -1103,15 +1103,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			if($campaign){
 				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
 				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-				$urlText = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE);
-
-				$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
-				if (is_array($params)) {
-					ksort($params);
-					$query = http_build_query($params);
-				}
-				$url = $urlText . ($query ? "?" . $query : "");
-
+				$params = isset($queryData["_query"]) ? $queryData["_query"] : array();
+				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
 				return $url;
 			}
 
