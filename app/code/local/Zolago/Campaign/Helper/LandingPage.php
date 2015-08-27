@@ -46,12 +46,8 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         //load banner
         $imageData = $this->getLandingPageBanner($campaignId);
 
-        $images["name_customer"] = $campaign->getNameCustomer();
-        $images["campaign"] = $campaign->getLandingPageCategory();
-        $images['url'] = $campaign->getLandingPageLink();
-
         if (array_filter($imageData)) {
-            $images['banners'] = $imageData;
+            $images = $imageData;
         }
 
         return $images;

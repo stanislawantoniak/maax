@@ -6,15 +6,13 @@ $category = $this->getCategory();
 
 /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-if ($campaign = $category->getCurrentCampaign()) {
-    $banner = (array)$landingPageHelper->getCampaignLandingPageBannerByCampaign($campaign);
-} else {
-    $banner = null;
-}
+
+/* @var $campaign Zolago_Campaign_Model_Campaign */
+$banner = ($campaign = $category->getCurrentCampaign()) ? (array)$landingPageHelper->getCampaignLandingPageBannerByCampaign($campaign) : NULL;
+
 
 $moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
-if (($this->isContentMode()) && (!$vendor) && empty($banner['banners']) && !($campaign)) return; // no header
-
+if (($this->isContentMode()) && (!$vendor) && empty($banner) && !($campaign)) return; // no header
 ?>
 
 
@@ -23,11 +21,11 @@ if (($this->isContentMode()) && (!$vendor) && empty($banner['banners']) && !($ca
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 header-panel">
-                <?php if (!empty($banner['banners']) || !$vendor): /* one column */?>
+                <?php if (!empty($banner) || !$vendor): /* one column */?>
                     <div id="breadcrumbs-header">
                         <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                     </div>
-                    <?php if (empty($banner['banners'])) : /* category / campaign name */?>
+                    <?php if (empty($banner)) : /* category / campaign name */?>
                     <div id="view-current-filter" >
                         <h1><?php echo $this->getCategory()->getNameContext(); ?></h1>
                         <a href="<?php echo $moveUpUrl; ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
@@ -40,19 +38,19 @@ if (($this->isContentMode()) && (!$vendor) && empty($banner['banners']) && !($ca
                             <a href="<?php echo $moveUpUrl ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                         </div>
                         <div class="lp-banners">
-                            <?php $desktop = $banner['banners'][1]["path"]; ?>
-                            <?php $mobile = $banner['banners'][2]["path"]; ?>
+                            <?php $desktop = $banner[1]["path"]; ?>
+                            <?php $mobile = $banner[2]["path"]; ?>
                             <div class="hidden-xs lp-banner-desktop">
                                 <img
                                     src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>"
-                                    title="<?php echo $banner["name_customer"]; ?>"
-                                    alt="<?php echo $banner["name_customer"]; ?>"/>
+                                    title="<?php echo $campaign->getNameCustomer(); ?>"
+                                    alt="<?php echo $campaign->getNameCustomer(); ?>"/>
                             </div>
                             <div class="visible-xs lp-banner-mobile">
                                 <img
                                     src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>"
-                                    title="<?php echo $banner["name_customer"]; ?>"
-                                    alt="<?php echo $banner["name_customer"]; ?>"/>
+                                    title="<?php echo $campaign->getNameCustomer(); ?>"
+                                    alt="<?php echo $campaign->getNameCustomer(); ?>"/>
                             </div>
                         </div>
                     </div>
