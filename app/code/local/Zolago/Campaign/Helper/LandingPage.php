@@ -217,18 +217,36 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         if(is_null($campaignId)){
             return "";
         }
-        $key = 'lp_url_campaign_id_' . $campaignId;
-        $urlText = Mage::registry($key);
-        if ($urlText !== null) {
-            return $urlText;
-        }
-        $urlText = "";
+
         /** @var Zolago_Campaign_Model_Campaign $campaign */
         $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
 
+        return $this->getLandingPageUrlByCampaign($campaign, $includeParams, $categoryToCompare);
+
+    }
+
+    /**
+     * Construct landing page url
+     *
+     * @param $campaign
+     * @param bool|TRUE $includeParams
+     * @param null $categoryToCompare
+     * @return string
+     */
+    public function getLandingPageUrlByCampaign($campaign, $includeParams = TRUE, $categoryToCompare = NULL)
+    {
+        Mage::log("includeParams: ".(int)$includeParams, null, "url4.log");
+        $campaignId = $campaign->getId();
+//        $key = 'lp_url_campaign_id_' . $campaignId;
+//        $urlText = Mage::registry($key);
+//        if ($urlText !== null) {
+//            return $urlText;
+//        }
+        $urlText = "";
+
         if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK) {
-            Mage::unregister($key);
-            Mage::register($key, $urlText);
+//            Mage::unregister($key);
+//            Mage::register($key, $urlText);
             return $urlText;
         }
 
@@ -292,13 +310,13 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
 
         $urlText = $url . $landingPageCategoryUrl . "?" . $landingPageUrl;
+        Mage::log("includeParams: ".(int)$includeParams, null, "url4.log");
         if(!$includeParams){
             $urlText = $url . $landingPageCategoryUrl;
         }
-
-        Mage::unregister($key);
-        Mage::register($key, $urlText);
+        Mage::log($urlText, null, "url4.log");
+//        Mage::unregister($key);
+//        Mage::register($key, $urlText);
         return $urlText;
-
     }
 }

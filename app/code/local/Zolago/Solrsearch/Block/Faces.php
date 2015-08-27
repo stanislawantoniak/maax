@@ -443,20 +443,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $url = $rawUrl;
         } else {
     		$url = Mage::getUrl($this->getUrlRoute(), $queryData);
-
-			/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-			$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-			$urlText = $landingPageHelper->getLandingPageUrl(NULL, FALSE);
-
-			if(!empty($urlText)){
-
-				$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
-				if (is_array($params)) {
-					ksort($params);
-					$query = http_build_query($params);
-				}
-				$url = $urlText. ($query ? "?" . $query : "");
-			}
         }
         return $url;
 	}
@@ -1089,19 +1075,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $url = rtrim($rawUrl,'/');
         } else {
             $url =  Mage::getUrl($this->getUrlRoute(), $queryData);
-
-			/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-			$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-			$urlText = $landingPageHelper->getLandingPageUrl(NULL, FALSE);
-
-			if(!empty($urlText)){
-				$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
-				if (is_array($params)) {
-					ksort($params);
-					$query = http_build_query($params);
-				}
-				$url = $urlText. ($query ? "?" . $query : "");
-			}
         }
         return $url;
 	}
@@ -1112,20 +1085,46 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * raw url without redirects, with filters only
      */
 
-	public function getRedirectUrl($queryData) {
-	    $url = null;
-	    if ($this->getListModel()->isCategoryMode()) {	        
-    	    $params = Mage::app()->getRequest()->getParams();
-    	    $category = $this->getListModel()->getCurrentCategory();
-    	    $path = $this->getUrlRoute();
-    	    $id = $category->getId();
-  	        $tmp = $queryData['_query'];
+	public function getRedirectUrl($queryData)
+	{
+		$url = null;
+		if ($this->getListModel()->isCategoryMode()) {
 
-		    /** @var GH_Rewrite_Helper_Data $rewriteHelper */
-		    $rewriteHelper = Mage::helper('ghrewrite');
-    	    $url = $rewriteHelper->prepareRewriteUrl($path,$id,$tmp);
-	    }
-	    return $url;
+			$category = $this->getListModel()->getCurrentCategory();
+			$path = $this->getUrlRoute();
+			$id = $category->getId();
+			$tmp = $queryData['_query'];
+
+
+			//1. Check if LP
+			/* @var $campaign Zolago_Campaign_Model_Campaign */
+			$campaign = $category->getCurrentCampaign();
+
+			if($campaign){
+				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+				$urlText = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE);
+
+				$params = isset($queryData["_query"]) ? $queryData["_query"] : "";
+				if (is_array($params)) {
+					ksort($params);
+					$query = http_build_query($params);
+				}
+				$url = $urlText . ($query ? "?" . $query : "");
+
+				return $url;
+			}
+
+
+			//2. Check GH_Rewrite exist
+
+			/** @var GH_Rewrite_Helper_Data $rewriteHelper */
+			$rewriteHelper = Mage::helper('ghrewrite');
+			$url = $rewriteHelper->prepareRewriteUrl($path, $id, $tmp);
+
+
+		}
+		return $url;
 	}
 	/**
 	 * @param array $params params to be set

@@ -66,6 +66,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$url = Mage::getUrl('search') . ($query ? "?" . $query : "");
 		} elseif($type == "category") {
 			$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
+			Mage::log($url, null, "url1.log");
 		}
 		if (!$url) {
 			$query = http_build_query($params);
