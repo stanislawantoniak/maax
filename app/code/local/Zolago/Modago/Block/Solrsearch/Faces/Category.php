@@ -25,7 +25,12 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
     {
         $rootCategory = Mage::app()->getStore()->getRootCategoryId();
         if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
-            if ($rootCategory == $this->getCurrentCategory()->getParentCategory()->getId()) {
+            $category = Mage::registry("current_category");
+            $campaign = FALSE;
+            if($category){
+                $campaign = $category->getCurrentCampaign();
+            }
+            if ($rootCategory == $this->getCurrentCategory()->getParentCategory()->getId() && !$campaign) {
                 return null;
             }
         }
