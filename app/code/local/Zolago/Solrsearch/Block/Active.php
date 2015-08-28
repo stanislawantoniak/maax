@@ -26,7 +26,12 @@ class Zolago_Solrsearch_Block_Active extends Zolago_Solrsearch_Block_Faces
                 $res = true;
             }
 
-			if($campaign = $category->getCurrentCampaign()){
+			/*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+			$lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+			$lpData = $lpBlock->getData('campaign_landing_page');
+			$lpData = (array)$lpData;
+
+			if(!empty($lpData)){
 				$res = false;
 			}
             if (Mage::registry('is_search_mode')) {

@@ -40,11 +40,14 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             }
             /*rewrite gh_url_rewrite*/
 
-            /* @var $campaign Zolago_Campaign_Model_Campaign */
-            $campaign = $category->getCurrentCampaign();
-
-            if($campaign){
-                    $headBlock->setTitle($campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName());
+            /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+            $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+            $lpData = $lpBlock->getData('campaign_landing_page');
+            $lpData = (array)$lpData;
+            if(!empty($lpData)){
+                if(isset($lpData["name_customer"]) && !empty($lpData["name_customer"])){
+                    $headBlock->setTitle($lpData["name_customer"] . " - " . Mage::app()->getStore()->getName());
+                }
             }
         }
 
@@ -108,10 +111,12 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $res = true;
         }
 
-        /* @var $campaign Zolago_Campaign_Model_Campaign */
-        $campaign = $category->getCurrentCampaign();
+        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
+        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
+        $lpData = $lpBlock->getData('campaign_landing_page');
+        $lpData = (array)$lpData;
 
-        if(!$campaign){
+        if(!empty($lpData)){
             $res = false;
         }
         return $res;

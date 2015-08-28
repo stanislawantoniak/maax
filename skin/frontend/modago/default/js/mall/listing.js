@@ -154,10 +154,14 @@ Mall.listing = {
      * clicked url
      */
 	_current_url: '',
+
+	//_isLP: 0,
 	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+
+		//this.isLP();
 
 		this.positionFiltersAfterLpBannerLoad();
 
