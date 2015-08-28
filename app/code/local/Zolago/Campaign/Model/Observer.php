@@ -224,73 +224,48 @@ class Zolago_Campaign_Model_Observer
      */
     public static function attachProductsToCampaignBySalesRule($object) {
 
+        /* @var Zolago_Campaign_Helper_SalesRule $helper */
+        $helper = Mage::helper("zolagocampaign/salesRule");
+
         try {
             $startTime = self::getMicrotime();
+            $startMemory = memory_get_usage();
+            Mage::log("START memory usage" .round(((memory_get_usage()) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
 
             /* Collecting products START */
             $time = self::getMicrotime();
 
-            /** @var Zolago_Catalog_Model_Resource_Product_Collection $allProductsColl */
-            $allProductsColl = Mage::getResourceModel("zolagocatalog/product_collection");
-            $allProductsColl->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
-            $allProductsColl->addAttributeToFilter("status", array("eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
-            $allProductsColl->addAttributeToFilter('type_id', array("in" =>
-                array(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
-                    Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)));
-            // Attributes
-            /** @var Mage_SalesRule_Model_Rule_Condition_Product $productCondition */
-            $productCondition = Mage::getModel('salesrule/rule_condition_product');
-            $productAttributes = $productCondition->loadAttributeOptions()->getAttributeOption();
-            foreach ($productAttributes as $key => $label) {
-                if (!preg_match("/quote|qty|total/", $key)) {
-                    Mage::log("attributes added? : " . $key, null, 'mylog.log');
-                    $allProductsColl->addAttributeToSelect($key); // not working
-                } else {
-                    Mage::log("skipped attribute: ". $key, null, 'mylog.log');
-                }
-            }
-//            $allProductsColl->setStore(??)
-
+            $allProductsColl = $helper->getProductsCollection();
             $allProductsColl->load();
 
-            Mage::log((string)$allProductsColl->getSelect(), null, 'mylog.log');
             Mage::log("Product collection load: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             Mage::log("Found: " . $allProductsColl->count(), null, 'mylog.log');
             Mage::log("", null, 'mylog.log');
-
             /* Collecting products END */
 
 
             /* Collecting sales rules START */
             $time = self::getMicrotime();
 
-            $now = Mage::getModel('core/date')->date('Y-m-d');
-            /** @var Mage_SalesRule_Model_Resource_Rule_Collection $rulesColl */
-            $rulesColl = Mage::getResourceModel("salesrule/rule_collection");
-            $rulesColl->addIsActiveFilter(); // Active only
-            $rulesColl->addFieldToFilter("from_date", array("to" => $now));
-            $rulesColl->addFieldToFilter("to_date", array("from" => $now));
-            $rulesColl->addFieldToFilter("campaign_id", array("gt" => 0));
+            $rulesColl = $helper->getSalesRuleCollection();
             $rulesColl->load();
 
-            Mage::log((string)$rulesColl->getSelect(), null, 'mylog.log');
             Mage::log("Rules collection load: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             Mage::log("Found: " . $rulesColl->count(), null, 'mylog.log');
             Mage::log("", null, 'mylog.log');
-
             /* Collecting sales rules END */
+
 
             // Cleaning conditions because
             // Rules can have some Cart (quote) conditions
             /** @var Mage_SalesRule_Model_Rule $rule */
             foreach ($rulesColl as $rule) {
                 $con = unserialize($rule->getConditionsSerialized()); // Only variables should be passed by reference
-                $rule->setConditionsSerialized(serialize(self::cleanConditions($con)));
+                $rule->setConditionsSerialized(serialize($helper->cleanConditions($con)));
             }
 
             // Main processing loop
             $time = self::getMicrotime();
-            $startMemory = memory_get_usage();
 
             /** @var Zolago_Campaign_Model_Resource_Campaign $campaignResource */
             $campaignResource = Mage::getResourceModel("zolagocampaign/campaign");
@@ -323,10 +298,15 @@ class Zolago_Campaign_Model_Observer
                 Mage::log("", null, 'mylog.log');
 
                 $campaignResource->saveProductsToMemory($rule->getCampaignId(), $productIds);
+
+                Mage::log(round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
+
                 unset($productIds);
+
+                Mage::log(round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
             }
 
-            Mage::log(round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
+            Mage::log("END memory usage" . round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
             Mage::log("", null, 'mylog.log');
             Mage::log("Processing time: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             Mage::log("", null, 'mylog.log');
@@ -344,28 +324,5 @@ class Zolago_Campaign_Model_Observer
     public static function getMicrotime(){
         list($usec, $sec) = explode(" ",microtime());
         return ((float)$usec + (float)$sec);
-    }
-
-    private static function cleanConditions(&$conditions) {
-
-        if (isset($conditions["conditions"])) {
-            self::cleanConditions($conditions["conditions"]);
-        } else {
-            foreach ($conditions as $key => &$condition) {
-                if ($condition["type"] == "salesrule/rule_condition_address") {
-                    unset($conditions[$key]);
-                }
-                elseif (!isset($condition["conditions"]) && !empty($condition["attribute"])) {
-                    if (preg_match("/quote|qty|total/",
-                        $condition["attribute"])) {
-                        unset($conditions[$key]);
-                    }
-                }
-                elseif (isset($condition["conditions"])) {
-                    self::cleanConditions($condition["conditions"]);
-                }
-            }
-        }
-        return $conditions;
     }
 }
