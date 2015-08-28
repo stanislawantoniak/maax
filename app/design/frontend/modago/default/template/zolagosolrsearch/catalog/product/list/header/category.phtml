@@ -12,7 +12,8 @@ $banner = ($campaign = $category->getCurrentCampaign()) ? (array)$landingPageHel
 
 
 $moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
-if (($this->isContentMode()) && (!$vendor) && empty($banner) && !($campaign)) return; // no header
+//var_dump($this->isContentMode() && !$vendor);
+if ($this->isContentMode() && !$vendor) return; // no header only on CMS page and no vendor
 ?>
 
 

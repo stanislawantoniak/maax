@@ -1194,7 +1194,13 @@ Mall.listing = {
 	},
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
-
+		console.log(jQuery(content.header).length);
+		console.log("category_display_mode: "+content.category_display_mode);
+		if(content.category_display_mode == 1 && content.listing_type == "category"){
+			//hack to reload cms page
+			window.location = content.url;
+			return false;
+		}
 		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
@@ -1212,6 +1218,8 @@ Mall.listing = {
 
         var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
 		this.getHeader().replaceWith(jQuery(content.header));
+
+
         //this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
 		this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
 		this.getActive().replaceWith(jQuery(content.active));
@@ -1303,16 +1311,16 @@ Mall.listing = {
 
 			active.click(function() {
 				var me = jQuery(this);
-				var activeDisplayModePage = me.data("displaymode");
-				var listingmode = me.data("listingmode");
-				if (categoryDMPage
-					&& activeDisplayModePage
-					&& jQuery(Mall.listing.getActiveId()).find("input[name^=fq]").length == 1
-					&& listingmode == "category"
-				) {
-					window.location = window.location.pathname;
-					return false;
-				}
+				//var activeDisplayModePage = me.data("displaymode");
+				//var listingmode = me.data("listingmode");
+				//if (categoryDMPage
+				//	&& activeDisplayModePage
+				//	&& jQuery(Mall.listing.getActiveId()).find("input[name^=fq]").length == 1
+				//	&& listingmode == "category"
+				//) {
+				//	window.location = window.location.pathname;
+				//	return false;
+				//}
 
 				self._current_url = me.attr('href');
 
@@ -1332,10 +1340,10 @@ Mall.listing = {
 			remove.click(function() {
 				var me = jQuery(this);
 
-				if (categoryDMPage && listingmode == "category") {
-					window.location = window.location.pathname;
-					return false;
-				}
+				//if (categoryDMPage && listingmode == "category") {
+				//	window.location = window.location.pathname;
+				//	return false;
+				//}
 
 				self._current_url = me.attr('href');
 				active.each(function() {

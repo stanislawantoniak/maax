@@ -35,7 +35,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$design->setTheme($theme ? $theme : "default");
 
 		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
-		
+
 		// Product 
 		$products = $this->_getProducts($listModel);
 
@@ -45,9 +45,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		$params = $this->getRequest()->getParams();
 
-		$lp = $this->getRequest()->getParam("lp");
+		$fq = isset($params["fq"]) ? $params["fq"] : array();
+
+		//$lp = $this->getRequest()->getParam("lp");
 		Mage::register("listing_reload_params", $params);
-		Mage::register("lp", $lp);
+		//Mage::register("lp", $lp);
 
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
@@ -57,6 +59,15 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
+
+
+
+		//if filter params then set display_mode to PRODUCTS
+		if($fq){
+			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
+		} else {
+			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
+		}
 
 		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
 
@@ -100,8 +111,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
         $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
         $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
-		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active')->setData("lp", $lp));
-		$block->setData("lp", $lp);
+		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active')
+			//->setData("lp", $lp)
+		);
+		//$block->setData("lp", $lp);
 
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,
@@ -112,7 +125,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
 			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
             "category_head_title" => $title,
-			"category_display_mode" => $categoryDisplayMode
+			"category_display_mode" => $categoryDisplayMode,
+			"listing_type" => $type
 		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);
