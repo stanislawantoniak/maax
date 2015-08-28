@@ -39,20 +39,37 @@ class Zolago_Campaign_Helper_SalesRule extends Mage_Core_Helper_Abstract
     /**
      * @return null|Zolago_Catalog_Model_Resource_Product_Collection
      */
-    public function getProductsCollection() {
+    public function getProductsDataForWebsites() {
+
         if ($this->_productsCollection === null) {
-            /** @var Zolago_Catalog_Model_Resource_Product_Collection $allProductsColl */
-            $allProductsColl = Mage::getResourceModel("zolagocatalog/product_collection");
-            $allProductsColl->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
-            $allProductsColl->addAttributeToFilter("status", array("eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
-            $allProductsColl->addAttributeToFilter('type_id', array("in" => array(
-                Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
-                Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)));
+            /** @var Mage_Core_Model_Website $website */
+            foreach (Mage::app()->getWebsites() as $website) {
 
-            Mage::log((string)$allProductsColl->getSelect(), null, 'mylog.log');
-            Mage::log("", null, 'mylog.log');
+                // Campaign is assigned for website
+                /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+                $coll = Mage::getResourceModel("zolagocatalog/product_collection");
+                $coll->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+                $coll->addAttributeToFilter("status", array("eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
+                $coll->addAttributeToFilter('type_id', array("in" => array(
+                    Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+                    Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)));
+                $coll->addWebsiteFilter($website);
 
-            $this->_productsCollection = $allProductsColl;
+                $coll->getSelect()->joinLeft(
+                    array('product_relation' => $coll->getTable("catalog/product_relation")),
+                    'product_relation.child_id = e.entity_id',
+                    array(
+                        'parent_id' => 'product_relation.parent_id',
+                    )
+                );
+
+                $prodAttr = $this->getProductAttributes();
+                /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
+                foreach ($prodAttr as $attr) {
+                    $coll->addAttributeToSelect($attr->getAttributeCode(), "left");
+                }
+                $this->_productsCollection[$website->getId()] = $coll->getData();
+            }
         }
         return $this->_productsCollection;
     }
@@ -72,9 +89,6 @@ class Zolago_Campaign_Helper_SalesRule extends Mage_Core_Helper_Abstract
             $rulesColl->addFieldToFilter("from_date", array("lteq" => $now)); // <=
             $rulesColl->addFieldToFilter("to_date",   array("gteq" => $now)); // >=
             $rulesColl->addFieldToFilter("campaign_id", array("gt" => 0));    // >
-
-            Mage::log((string)$rulesColl->getSelect(), null, 'mylog.log');
-            Mage::log("", null, 'mylog.log');
 
             $this->_salesRuleCollection = $rulesColl;
         }
@@ -98,7 +112,11 @@ class Zolago_Campaign_Helper_SalesRule extends Mage_Core_Helper_Abstract
 
                 if (!$attribute->isAllowedForRuleCondition()
                     || !$attribute->getDataUsingMethod("is_used_for_promo_rules")
-                    || preg_match("/quote|qty|total/", $attribute->getAttributeCode())
+                    || preg_match("/quote|qty|total/", $attribute->getAttributeCode()
+                    || !in_array((int)$attribute->getIsGlobal(), array(
+                            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
+                            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE
+                        )))
                 ) {
                     unset($productAttributes[$id]);
                 }

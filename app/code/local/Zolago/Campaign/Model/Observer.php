@@ -223,38 +223,16 @@ class Zolago_Campaign_Model_Observer
      * @param Aoe_Scheduler_Model_Schedule $object
      */
     public static function attachProductsToCampaignBySalesRule($object) {
-
-        /* @var Zolago_Campaign_Helper_SalesRule $helper */
-        $helper = Mage::helper("zolagocampaign/salesRule");
-
         try {
-            $startTime = self::getMicrotime();
-            $startMemory = memory_get_usage();
-            Mage::log("START memory usage" .round(((memory_get_usage()) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
+//            $startTime = self::getMicrotime();
 
-            /* Collecting products START */
-            $time = self::getMicrotime();
-
-            $allProductsColl = $helper->getProductsCollection();
-            $allProductsColl->load();
-
-            Mage::log("Product collection load: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
-            Mage::log("Found: " . $allProductsColl->count(), null, 'mylog.log');
-            Mage::log("", null, 'mylog.log');
-            /* Collecting products END */
-
+            /* @var Zolago_Campaign_Helper_SalesRule $helper */
+            $helper = Mage::helper("zolagocampaign/salesRule");
 
             /* Collecting sales rules START */
-            $time = self::getMicrotime();
-
             $rulesColl = $helper->getSalesRuleCollection();
             $rulesColl->load();
-
-            Mage::log("Rules collection load: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
-            Mage::log("Found: " . $rulesColl->count(), null, 'mylog.log');
-            Mage::log("", null, 'mylog.log');
             /* Collecting sales rules END */
-
 
             // Cleaning conditions because
             // Rules can have some Cart (quote) conditions
@@ -264,53 +242,54 @@ class Zolago_Campaign_Model_Observer
                 $rule->setConditionsSerialized(serialize($helper->cleanConditions($con)));
             }
 
-            // Main processing loop
-            $time = self::getMicrotime();
+            /* Collecting products START */
+            $productsDataPerWebsite = $helper->getProductsDataForWebsites();
+            /* Collecting products END */
 
+            // Main processing loop
             /** @var Zolago_Campaign_Model_Resource_Campaign $campaignResource */
             $campaignResource = Mage::getResourceModel("zolagocampaign/campaign");
-            // Cleaning temporary table
-            $campaignResource->truncateProductsFromMemory();
+            $campaignResource->truncateProductsFromMemory(); // Cleaning temporary table
 
             /** @var Mage_SalesRule_Model_Rule $rule */
             foreach ($rulesColl as $rule) {
+
                 $productIds = array();
-                /** @var Zolago_Catalog_Model_Product $product */
-                foreach ($allProductsColl as $product) {
+                $campaignId = $rule->getCampaignId();
+
+                /** @var Zolago_Campaign_Model_Campaign $campaign */
+                $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+                $websiteId = $campaign->getAllowedWebsites()[0];
+
+                $websiteProducts = $productsDataPerWebsite[$websiteId];
+                // $product is an array not object
+                foreach ($websiteProducts as $product) {
+
                     // If configurable or visible simple
-                    if ($product->isConfigurable() || !$product->getParentId()) {
+                    if ($product["type_id"] == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE ||
+                        !$product["parent_id"]
+                    ) {
+                        /** @var Zolago_Catalog_Model_Product $productObject */
+                        $productObject = Mage::getModel("zolagocatalog/product");
+                        $productObject->addData($product);
+                        $productObject->setProduct($productObject);
+
                         $object = new Varien_Object();
-                        $objectProduct = new Varien_Object();
-                        $objectProduct->setProduct($product);
-                        $objectProduct->addData($product->getData());
-                        $object->setAllItems(array($objectProduct));
+                        $object->setAllItems(array($productObject));
 
                         $v = $rule->getConditions()->validate($object);
                         if ($v) {
-                            $productIds[] = (int)$product->getId();
+                            $productIds[] = (int)$product["entity_id"];
                         }
                     } else {
                         continue;
                     }
                 }
-
-                Mage::log("For rule id: " . $rule->getId() . " found: " . count($productIds), null, 'mylog.log');
-                Mage::log("", null, 'mylog.log');
-
                 $campaignResource->saveProductsToMemory($rule->getCampaignId(), $productIds);
-
-                Mage::log(round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
-
                 unset($productIds);
-
-                Mage::log(round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
             }
 
-            Mage::log("END memory usage" . round(((memory_get_usage() - $startMemory) / 1024) / 1024, 2) . ' mega bytes', null, 'mylog.log');
-            Mage::log("", null, 'mylog.log');
-            Mage::log("Processing time: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
-            Mage::log("", null, 'mylog.log');
-            Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
+//            Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
 
         } catch(Exception $e) {
             Mage::logException($e);
