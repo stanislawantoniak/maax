@@ -1,5 +1,9 @@
-<?php /* images should be 64x64px */ ?>
-<?php /*
+<?php
+$cmsNavigationBlocks = array(
+    array(
+        'title'         => 'Pasek korzyści',
+        'identifier'    => 'benefits-strip-modago',
+        'content'       => <<<EOD
 <div class="benefits">
 	<div class="benefit-item">
 	    <div class="benefit-text" style="background-image: url('/skin/frontend/modago/default/images/benefits/benefits_transport.png')">
@@ -28,6 +32,19 @@
 	    </div>
 	</div>
 </div>
-*/ ?>
-<?php
-echo $this->getLayout()->createBlock("cms/block")->setBlockId("benefits-strip-modago")->toHtml();
+EOD
+
+    ,
+        'is_active'     => 1,
+        'stores'        => 0
+    )
+);
+
+foreach ($cmsNavigationBlocks as $data) {
+    $block = Mage::getModel('cms/block')->load($data['identifier']);
+    if ($block->getBlockId()) {
+        $oldData = $block->getData();
+        $data = array_merge($oldData,$data);
+    }
+    $block->setData($data)->save();
+}

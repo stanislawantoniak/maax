@@ -1,0 +1,73 @@
+body {
+	background: red !important;
+}
+.benefits {
+	font-size: 0;
+	margin: 45px -15px 30px;
+	@media(max-width: 979px) {
+		margin: 30px -15px 15px !important;
+	}
+	.benefit-item {
+		font-family: $fontLight;
+		text-align: center;
+		display: inline-block;
+		vertical-align: middle;
+		width: 25%;
+
+		+ .benefit-item {
+			border-left: 1px solid $color-gray4;
+		}
+
+		@media(max-width: 979px) {
+			border: none !important;
+			.benefit-text {
+				font-size: 13px !important;
+				background-size: 48px 48px !important;
+				padding: 15px 5px 15px 58px !important; // 58px = 48px for image + 10px for padding
+				h3 {
+					font-size: 14px !important;
+				}
+			}
+		}
+
+		@media(max-width: 719px) {
+			width: 50%;
+			.benefit-text {
+				h3 {
+					width: auto !important;
+				}
+			}
+		}
+
+		@media(max-width: 479px) {
+			text-align: left !important;
+		}
+
+		@media(max-width: 359px) {
+			.benefit-text {
+				background: none !important;
+				padding: 15px 5px 15px 10px !important;
+			}
+		}
+		.benefit-text {
+			display: inline-block;
+			vertical-align: middle;
+			font-size: $font-size-base;
+			background-repeat: no-repeat;
+			background-position: left center;
+			background-size: 64px 64px;
+			text-align: left;
+			padding: 15px 5px 15px 79px; // 79px = 64px for image + 15px for padding
+			h3 {
+				font-size: 16px;
+				font-family: $fontRegular;
+				text-transform: uppercase;
+				padding: 0 0 5px;
+				width: 0;
+			}
+			p {
+				margin: 0;
+			}
+		}
+	}
+}
