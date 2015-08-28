@@ -288,13 +288,6 @@
                 <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
         </reference>
-
-		<reference name="footer">
-			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
-				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
-			</block>
-		</reference>
-
 		<reference name="before_body_end">
 			<block type="zolagomodago/page_html_scrolltop" name="scrolltop" template="page/html/scrolltop.phtml" />
 			<block type="core/template"  name="cookie_bar" template="page/html/cookie_bar.phtml" />
@@ -319,9 +312,6 @@
 			<action method="setIsHandle">
 				<applied>1</applied>
 			</action>
-		</reference>
-		<reference name="footer">
-
 		</reference>
 	</page_empty>
 
@@ -428,9 +418,11 @@
 				<block type="zolagomodago/home_banner" name="zolago_modago_home_banners" template="home/banner/hometopwr.phtml">
 					<block type="zolagomodago/home_banner" name="zolago_modago_home_banner_smallfour" template="home/banner/smallfour.phtml"/>
 					<block type="zolagocms/component_slider" name="slider" before="-"/>
-					<block type="zolagocms/component_boxes" name="boxes" before="-"/>
 				</block>
-				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml"/>
+       			<block type="zolagocms/component_boxes" name="boxes" before="-"/>
+				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml">				    
+                    <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        
+				</block>
 				<block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/home/vendor/category/banner.phtml"/>
 
 				<block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
@@ -447,7 +439,6 @@
 				<value>nobreadcrumbs</value>
 			</action>
 		</reference>
-
 	</zolagomodago_index_index>
 
     <zolagomodago_brands_index>
@@ -547,6 +538,7 @@
 	            <!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        
         </reference>
 
 	</solrbridge_solrsearch_category_view>
@@ -623,6 +615,7 @@
                 </block>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        
         </reference>
     </solrsearch_index_index>
 
@@ -676,6 +669,7 @@
 			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        		
 		</reference>
 
 		<reference name="product.info.addto">

@@ -1,3 +1,121 @@
+<style type="text/css">
+    .benefits h3.benefit-title {
+        font-family: latolight,sans-serif;
+        font-size: 14px;
+        text-transform: uppercase;
+        padding:0px;
+    }
+    .benefits {
+        font-size: 11px;
+        text-algin:center;
+    }
+    .benefits .benefit-item {
+        margin-top:5px;
+        height:66px;
+    }
+    .benefits .benefit-container .benefit-text {
+        width:100%;   
+    }    
+    .benefits .benefit-container {
+        height:100%;
+    }
+    .benefits .benefit-container .benefit-image img {
+        height:44px;
+        widht:44px;
+        display:none;
+    }
+@media (min-width: 360px) {
+    .benefits .benefit-container .benefit-text {        
+        width:66.6667%;        
+    }
+    .benefits .benefit-container .benefit-image img {
+        display:block;
+    }
+    .benefits .benefit-image {
+        height:100%;
+        padding-left:0px;
+        padding-right:0px;
+    }
+}
+@media (min-width: 980px) {
+    .benefits {
+        font-size: 14px;
+        height:125px;
+    }
+    .benefits .right-border {
+        border-right:solid 1px #dddddd;
+    }
+    .benefits .left-border {
+        border-left:solid 1px #bbbbbb;
+    }
+    .benefits h3.benefit-title {
+        font-size: 18px;        
+    }
+    .benefits .benefit-item {
+        margin-top:20px;
+        height:98px;
+    }
+    .benefits .benefit-image {
+        padding-left:15px;
+        padding-right:15px;
+    }
+    .benefits .benefit-container {
+        width:255px;
+        margin:20px auto auto;
+    }
+    .benefits .benefit-container .benefit-image img {
+        margin-righ:10px;        
+        height:66px;
+        widht:66px;
+    }
+    
+}
+</style>
+<div class="row benefits benefits">
+    <div class="col-md-3 col-xs-6 benefit-item right-border">        
+        <div class="benefit-container vertical-align">
+            <div class="col-xs-4 benefit-image vertical-align">
+                <img src='/skin/frontend/modago/default/images/benefits/benefits_transport.png'/>
+            </div>
+            <div class="col-xs-8 benefit-text">
+                <h3 class="benefit-title">Darmowa dostawa</h3>
+                na 99% produktów
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-xs-6 benefit-item right-border left-border">
+        <div class="benefit-container">
+            <div class="col-xs-4 benefit-image">
+                <img src='/skin/frontend/modago/default/images/benefits/benefits_return.png'/>
+            </div>
+            <div class="col-xs-8 benefit-text">
+                <h3 class="benefit-title">Darmowy zwrot</h3>
+                w ciągu 30 dni
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-xs-6 benefit-item right-border left-border">
+        <div class="benefit-container">
+            <div class="col-xs-4 benefit-image">
+                <img src='/skin/frontend/modago/default/images/benefits/benefits_shops.png'/>
+            </div>
+            <div class="col-xs-8 benefit-text">
+                <h3 class="benefit-title">Wiele sklepów</h3>
+                jeden koszyk
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-xs-6 benefit-item left-border">
+        <div class="benefit-container">
+            <div class="col-xs-4 benefit-image">
+                <img src='/skin/frontend/modago/default/images/benefits/benefits_rabat.png'/>
+            </div>
+            <div class="col-xs-8 benefit-text">
+                <h3 class="benefit-title">Specjalne rabaty</h3>
+                dowiedz się więcej &raquo;
+            </div>
+        </div>
+    </div>
+</div>
 <?php
-/* @var $this Zolago_Page_Block_Html_Footer */
-echo $this->getLayout()->createBlock('cms/block')->setBlockId('benefits-strip-modago')->toHtml();
+//echo $this->getLayout()->createBlock('cms/block')->setBlockId('benefits-strip-modago')->toHtml();
