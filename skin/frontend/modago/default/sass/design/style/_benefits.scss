@@ -1,9 +1,16 @@
-body {
-	background: red !important;
+body.zolagomodago-index-index .benefits {
+	padding: 0 !important;
 }
+
 .benefits {
 	font-size: 0;
 	margin: 45px -15px 30px;
+	padding: 0 30px;
+	@media(min-width: 1230px) {
+		max-width: 1230px;
+		margin: 45px auto 30px;
+		padding: 0 !important;
+	}
 	@media(max-width: 979px) {
 		margin: 30px -15px 15px !important;
 	}
@@ -32,15 +39,27 @@ body {
 
 		@media(max-width: 719px) {
 			width: 50%;
+			text-align: left !important;
 			.benefit-text {
+				margin-left: 10%;
 				h3 {
 					width: auto !important;
 				}
 			}
 		}
 
+		@media(max-width: 539px) {
+			.benefit-text {
+				h3 {
+					width: 0 !important;
+				}
+			}
+		}
+
 		@media(max-width: 479px) {
-			text-align: left !important;
+			.benefit-text {
+				margin-left: 0 !important;
+			}
 		}
 
 		@media(max-width: 359px) {
