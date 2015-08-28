@@ -1194,8 +1194,6 @@ Mall.listing = {
 	},
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
-		console.log(jQuery(content.header).length);
-		console.log("category_display_mode: "+content.category_display_mode);
 		if(content.category_display_mode == 1 && content.listing_type == "category"){
 			//hack to reload cms page
 			window.location = content.url;
