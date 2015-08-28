@@ -173,7 +173,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @param bool $is_vendor
      * @return array
      */
-    protected function _getFirstBreadcrumb($is_vendor, Zolago_Campaign_Model_Campaign $campaign = NULL)
+    protected function _getFirstBreadcrumb($is_vendor)
     {
         $out = array(
             'name' => 'home',
@@ -184,12 +184,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             'link' => Mage::getBaseUrl()
         );
 
-        if ($campaign) {
-            $out['label'] = $campaign->getNameCustomer();
-            $out['title'] = $campaign->getNameCustomer();
-            $out['link'] = $campaign->getLPLink();
-
-        }
         if ($is_vendor) {
             $out['label'] = Mage::helper('catalog')->__('Mall');
             $out['title'] = Mage::helper('catalog')->__('Go to Mall');
@@ -245,7 +239,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * @param array $lpData landing page data
      * @return array
      */
-    protected function _getCategoryBreadcrumb($category, Zolago_Campaign_Model_Campaign $campaign = NULL)
+    protected function _getCategoryBreadcrumb($category, $campaign = NULL)
     {
         $categoryName = $category->getName();
         $categoryLongName = $category->getLongName();
@@ -319,7 +313,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
 
         // gallery / main page
-        $path[] = $this->_getFirstBreadcrumb(!empty($vendor), $campaign);
+        $path[] = $this->_getFirstBreadcrumb(!empty($vendor));
         // vendor
         if ($vendor) {
             $path[] = $this->_getVendorBreadcrumb($vendor);
