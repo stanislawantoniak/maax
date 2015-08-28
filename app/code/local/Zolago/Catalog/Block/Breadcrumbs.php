@@ -310,10 +310,13 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
         /* @var $campaign Zolago_Campaign_Model_Campaign */
         $campaign = $category->getCurrentCampaign();
-        /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-        $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-        $LPLink = $landingPageHelper->getLandingPageUrlByCampaign($campaign);
-        $campaign->setLPLink($LPLink);
+        if($campaign){
+            /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+            $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+            $LPLink = $landingPageHelper->getLandingPageUrlByCampaign($campaign, TRUE, array(), TRUE);
+            $campaign->setLPLink($LPLink);
+        }
+
 
         // gallery / main page
         $path[] = $this->_getFirstBreadcrumb(!empty($vendor), $campaign);

@@ -52,6 +52,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
         return $images;
     }
+
     /**
      * Get creative of company with landing page
      * @param $campaignId
@@ -225,24 +226,21 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
      * Construct landing page url
      *
      * @param $campaign
-     * @param bool|TRUE $includeParams
-     * @param array $params
+     * @param bool|TRUE $includeParams include parameter fq[campaign_info_id]=N or fq[campaign_regular_id]=N
+     * @param array $params include additional query parameters in link
+     * @param bool|FALSE $SkipCurrentCategory - ignore current category (used during  breadcrumb campaign link construction)
      * @return string
      */
-    public function getLandingPageUrlByCampaign($campaign, $includeParams = TRUE, $params = array())
+    public function getLandingPageUrlByCampaign($campaign, $includeParams = TRUE, $params = array(), $SkipCurrentCategory = FALSE)
     {
-        Mage::log("includeParams: " . (int)$includeParams, null, "url4.log");
-        $campaignId = $campaign->getId();
-//        $key = 'lp_url_campaign_id_' . $campaignId;
-//        $urlText = Mage::registry($key);
-//        if ($urlText !== null) {
-//            return $urlText;
-//        }
+
+        if (!$campaign) {
+            return "";
+        }
+
         $urlText = "";
 
         if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK) {
-//            Mage::unregister($key);
-//            Mage::register($key, $urlText);
             return $urlText;
         }
 
@@ -290,21 +288,20 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         }
 
         //TODO check if e need it: Breaks breadcrumb LP link
+        if (!$SkipCurrentCategory && $currentCategory) {
+            $currentCategoryId = $currentCategory->getId();
 
-//        if ($currentCategory) {
-//            $currentCategoryId = $currentCategory->getId();
-//
-//            if (
-//                //Avoid links /modagomall
-//                $currentCategoryId !== $rootId
-//                &&
-//                //Avoid links /moda-menska (if moda-menska is vendor root category)
-//                $currentCategoryId !== $vendorRootCategoryId
-//            ) {
-//                $landingPageCategoryModel = Mage::getModel("catalog/category")->load($currentCategoryId);
-//                $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
-//            }
-//        }
+            if (
+                //Avoid links /modagomall
+                $currentCategoryId !== $rootId
+                &&
+                //Avoid links /moda-menska (if moda-menska is vendor root category)
+                $currentCategoryId !== $vendorRootCategoryId
+            ) {
+                $landingPageCategoryModel = Mage::getModel("catalog/category")->load($currentCategoryId);
+                $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
+            }
+        }
 
         $urlText = $url . $landingPageCategoryUrl;
 
@@ -321,9 +318,6 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
         }
         $urlText = $urlText . ($_q ? "?" . $_q : "");
-
-//        Mage::unregister($key);
-//        Mage::register($key, $urlText);
         return $urlText;
     }
 }
