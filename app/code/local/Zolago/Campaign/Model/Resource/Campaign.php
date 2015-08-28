@@ -1122,7 +1122,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
          }
 
 
-         $select->where("campaign.is_landing_page = 1");
+         $select->where("campaign.is_landing_page = ?", Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE);
          $localtime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
          $select->where("campaign.date_from < ?", $localtime);
          $select->where("campaign.date_to > ?", $localtime);
