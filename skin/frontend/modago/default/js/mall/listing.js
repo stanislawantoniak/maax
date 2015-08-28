@@ -2375,8 +2375,7 @@ Mall.listing = {
 			dir: this.getDir(),
 			scat: this.getScat(),
 			rows: this.getScrollLoadOffset(),
-			start: 0,
-			//lp: this._isLP
+			start: 0
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2530,10 +2529,6 @@ Mall.listing = {
     },
 
 	beforeResizeWidth: window.innerWidth,
-
-	//isLP: function(){
-	//	this._isLP = jQuery("#solr_search_facets").data("islp");
-	//},
 
 	positionFiltersAfterLpBannerLoad: function() {
 		var bannersContainer = jQuery('.lp-banners');

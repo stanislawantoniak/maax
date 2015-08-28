@@ -130,8 +130,13 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         $parentCategoryPath = '/';
         $currentCategory = $category;
         if (!empty($currentCategory)) {
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();
             $currentCategoryParent = $currentCategory->getParentCategory();
+            if($currentCategory->getId() == $rootCategory){
+                return $parentCategoryPath;
+            }
             $urlPath = $currentCategoryParent->getUrlPath();
+
             $campaign = $currentCategoryParent->getCurrentCampaign();
             $params = array();
             if ($campaign) {
