@@ -2,8 +2,10 @@
 
 require_once Mage::getConfig()->getModuleDir('controllers', "Unirgy_DropshipMicrosite") . DS . "IndexController.php";
 
-class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexController{
-	public function indexAction() {
+class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexController
+{
+	public function indexAction()
+	{
 
 		$rootId = Mage::app()->getStore()->getRootCategoryId();
 		$rootCategory = Mage::getModel("catalog/category")->load($rootId);
@@ -16,10 +18,10 @@ class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexContro
 			return;
 		}
 
-		if(Mage::helper('umicrosite')->getCurrentVendor()){
+		if (Mage::helper('umicrosite')->getCurrentVendor()) {
 			return parent::indexAction();
 		}
-		
+
 		$this->loadLayout();
 		$this->renderLayout();
 	}
