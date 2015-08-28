@@ -1523,6 +1523,30 @@ Mall.restoreCheckoutValues = function() {
 	}
 };
 
+Mall.showAgreement = function(target) {
+	jQuery(target).hide();
+	jQuery(target).parent().find('.agreement-more').show();
+	jQuery(target).parent().find('.agreement-less-btn').show();
+	return false;
+};
+
+Mall.hideAgreement = function(target) {
+	jQuery(target).hide();
+	jQuery(target).parent().find('.agreement-more').hide();
+	jQuery(target).parent().find('.agreement-more-btn').show();
+	return false;
+};
+
+Mall.preventAgreementClick = function() {
+	var target = jQuery('.agreement-btn');
+	if(target.length) {
+		target.click(function(e) {
+			e.preventDefault();
+			return false;
+		});
+	}
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
@@ -1648,6 +1672,9 @@ jQuery(document).ready(function() {
 
 	//init like events
 	Mall.delegateLikeEvents();
+
+	//prevent link behavior on showmore in agreements
+	Mall.preventAgreementClick();
 
 	//restore checkout values on social login
 	setTimeout(Mall.restoreCheckoutValues,100);

@@ -1,4 +1,7 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */ ?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+?>
 
 
 <?php echo $this->getStep1Sidebar(); ?>
@@ -96,7 +99,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
 					       <?php if($agreements['agreement_tos']):?>checked="checked"<?php endif;?>
 						>
-					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
+					<label for="agreement_tos" class="css-label"><?php echo $modagoHelper->getAgreementHtml('tos'); ?></label>
 				</div>
 				<?php if(!$this->isCustomerSubscribed()):?>
 				<div class="form-group form-checkbox small agreement-container text-align-left" id="newsletter_agreement_container">
@@ -105,7 +108,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
 						   <?php if($agreements['agreement_newsletter']):?>checked="checked"<?php endif;?>
 						>
-					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
+					<label for="agreement_newsletter" class="css-label"><?php echo $modagoHelper->getAgreementHtml('newsletter'); ?></label>
 				</div>
 				<?php endif;?>
 			</div>

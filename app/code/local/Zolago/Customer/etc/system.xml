@@ -4,7 +4,7 @@
 		<customer>
 			<groups>
 				<agreements translate="label">
-					<label>Customer agreements</label>
+					<label>Customer agreements (to show "more" button place "|" inside of agreement text)</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>1000</sort_order>
 					<show_in_default>1</show_in_default>
@@ -43,6 +43,14 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</sms>
+						<register_info translate="label">
+							<label>Registration info</label>
+							<sort_order>50</sort_order>
+							<frontend_type>textarea</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</register_info>
 					</fields>
 				</agreements>
 				<orders_attach>
