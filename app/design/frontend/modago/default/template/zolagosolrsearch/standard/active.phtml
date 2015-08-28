@@ -26,7 +26,7 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
     !$this->isContentMode()
     || $campaign
     //TODO check if we can live without lp=1
-    || ($lp == 1)
+    //|| ($lp == 1)
 ): ?>
 <div id="active-filters" data-categoryDMPage="<?php echo $categoryDisplayMode = (int)(Mage::registry('current_category')->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE); ?>">
     <div class="wrapp-section bg-w">

@@ -155,13 +155,13 @@ Mall.listing = {
      */
 	_current_url: '',
 
-	_isLP: 0,
+	//_isLP: 0,
 	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
 
-		this.isLP();
+		//this.isLP();
 
 		this.positionFiltersAfterLpBannerLoad();
 
@@ -2388,7 +2388,7 @@ Mall.listing = {
 			scat: this.getScat(),
 			rows: this.getScrollLoadOffset(),
 			start: 0,
-			lp: this._isLP
+			//lp: this._isLP
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2543,9 +2543,9 @@ Mall.listing = {
 
 	beforeResizeWidth: window.innerWidth,
 
-	isLP: function(){
-		this._isLP = jQuery("#solr_search_facets").data("islp");
-	},
+	//isLP: function(){
+	//	this._isLP = jQuery("#solr_search_facets").data("islp");
+	//},
 
 	positionFiltersAfterLpBannerLoad: function() {
 		var bannersContainer = jQuery('.lp-banners');
