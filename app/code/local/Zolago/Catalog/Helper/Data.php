@@ -155,7 +155,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
                 }
             }
             $parentCategoryPath = Mage::getUrl($urlPath,$params);
-        }
+        }        
         return $parentCategoryPath;
 
      }

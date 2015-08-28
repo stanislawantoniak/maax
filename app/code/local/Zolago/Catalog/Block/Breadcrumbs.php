@@ -43,37 +43,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         }
         return $this->_path;
 
-        /* @var $catalogHelper Mage_Catalog_Helper_Data
-        $catalogHelper = Mage::helper('catalog');
-         * $category = $catalogHelper->getCategory();
-         *
-         * $refererUrl = $this->getRequest()->getServer("HTTP_REFERER");
-         * $params = explode("&", $refererUrl);
-         *
-         * if (
-         * !$category
-         * || $category->getId() == $this->_getRootCategoryId()
-         * || (Mage::registry('current_product') && (int)strpos($refererUrl,"search") > 0 && !in_array("scat=".$category->getId(), $params))
-         * ) {
-         * $category = $this->_getDefaultCategory(
-         * $this->_getProduct(),
-         * $this->_getRootCategoryId()
-         * );
-         * }
-         * if ($category) {
-         * $path = $this->_preparePath($category);
-         * } else {
-         * $path = array();
-         * }
-         * if ($product = $this->_getProduct()) {
-         * $path['product'] = array('label'=>$product->getName());
-         * }
-         *
-         * $this->_path = $path;
-         * }
-         *
-         * return $this->_path;
-         */
     }
 
     /**
@@ -120,12 +89,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      */
     protected function _isSearchContext()
     {
-        $request = $this->getRequest();
-        return (
-            $request->getModuleName() == "search" &&
-            $request->getControllerName() == "index" &&
-            $request->getActionName() == "index"
-        );
+        return Mage::helper('zolagosolrsearch')->isSearchContext();
     }
 
     /**
@@ -236,22 +200,22 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
      * prepare category breadcrumb (with landing page parameters if needed)
      *
      * @param Mage_Catalog_Model_Category $category
-     * @param array $lpData landing page data
+     * @param array $useCampaign 
      * @return array
      */
-    protected function _getCategoryBreadcrumb($category, $campaign = NULL)
+    protected function _getCategoryBreadcrumb($category, $useCampaign = true)
     {
-        $categoryName = $category->getName();
-        $categoryLongName = $category->getLongName();
-
-        if ($campaign && $category->getId() == $campaign->getLandingPageCategory()) {
-            $categoryName = $campaign->getNameCustomer();
-            $categoryLongName = $campaign->getNameCustomer();
-            $link = $campaign->getLPLink();
-        } else {
-            $link = $this->_prepareCategoryLink($category);
+        // in breadcrumb category name is not change in landing page subtree 
+        // change only in category assigned to campaign
+        $useContext = false;
+        if ($useCampaign) {
+            if ($campaign = $category->getCurrentCampaign()) {            
+                $useContext =  ($campaign->getLandingPageCategory() == $category->getId());
+            }
         }
-
+        $categoryName = $useContext? $category->getNameContext(false):$category->getName();
+        $categoryLongName = $useContext? $category->getNameContext():$category->getLongName();
+        $link = $category->getUrlContext(false,$useCampaign);
         $out = array(
 
             "name" => "category" . $category->getId(),
@@ -280,7 +244,21 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         );
         return $out;
     }
-
+    
+    /**
+     * returns path from context root to current category (remove categories before root)
+     * @param Mage_Catalog_Model_Category $category
+     * @return array
+     */
+     protected function _getPathIds($category)  {
+         $rootId = $this->_getRootCategoryId();
+         $pathIds = $category->getpathIds();
+         $key = array_search($rootId,$pathIds);
+         if ($key) {
+             return array_slice($pathIds,$key);
+         }
+         return $pathIds;
+     }
     /**
      * preparing path
      * @param
@@ -291,26 +269,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         $path = array();
         $vendor = $this->_getVendor();
         $rootId = $this->_getRootCategoryId();
-        if ($product = $this->_getProduct()) {
-            /* @var $category Mage_Catalog_Model_Category */
-            $category = $this->_getDefaultCategory($product, $rootId);
-        } else {
-            $catalogHelper = Mage::helper('catalog');
-            /* @var $category Mage_Catalog_Model_Category */
-            $category = $catalogHelper->getCategory();
-        }
 
         $searchContext = $this->_isSearchContext();
 
         /* @var $campaign Zolago_Campaign_Model_Campaign */
-        $campaign = $category->getCurrentCampaign();
-        if($campaign){
-            /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-            $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-            $LPLink = $landingPageHelper->getLandingPageUrlByCampaign($campaign, TRUE, array(), TRUE);
-            $campaign->setLPLink($LPLink);
-        }
-
 
         // gallery / main page
         $path[] = $this->_getFirstBreadcrumb(!empty($vendor));
@@ -324,25 +286,36 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         }
         // category
 
+        if ($product = $this->_getProduct()) {        
+            /* @var $category Mage_Catalog_Model_Category */
+            $category = $this->_getDefaultCategory($product, $rootId);
+        } else {
+            $catalogHelper = Mage::helper('catalog');
+            /* @var $category Mage_Catalog_Model_Category */
+            $category = $catalogHelper->getCategory();
+        }
         if ($category && $category->getId()) {
-            $useLp = null;
-            $pathIds = $category->getPathIds();
-            $pathIds = array_slice($pathIds, 1);
-            // Remove root category
-
+            $categoryId = $category->getId();
+            $pathIds = $this->_getPathIds($category);
+            
             $parents = $category->getParentCategories();
+            $campaign = $category->getCurrentCampaign();            
+            $lpCategory = empty($campaign)? 0: $campaign->getLandingPageCategory();
             foreach ($pathIds as $k => $parentId) {
-
-                if (($parentId == $rootId) && !$campaign) {
-                    continue; // we are in root
+                if (!isset($parents[$parentId])) continue;
+                $cat = $parents[$parentId];
+                if ($parentId == $lpCategory) {                    
+                    if ($parentId != $rootId) {
+                        $path[] = $this->_getCategoryBreadcrumb($cat,false); // add category without landing page
+                    }
+                    $path[] = $this->_getCategoryBreadcrumb($cat); // add landing page
+                } else {
+                    if ($parentId != $rootId) {
+                        $path[] = $this->_getCategoryBreadcrumb($cat); // add category
+                    }
                 }
-                if (isset($parents[$parentId]) && $parents[$parentId]
-                    instanceof Mage_Catalog_Model_Category
-                ) {
-
-                    $path[] = $this->_getCategoryBreadcrumb($parents[$parentId], $campaign);
-                }
-            }
+            }                
+            
         }
         // product
         if ($product) {

@@ -679,6 +679,19 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
          $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
          return $prefix.'_price_decimal';
     } 
-
+    
+    /**
+     * check if we are in search context
+     *
+     * @return bool
+     */
+     public function isSearchContext() {
+        $request = Mage::app()->getRequest();
+        return (
+            $request->getModuleName() == "search" &&
+            $request->getControllerName() == "index" &&
+            $request->getActionName() == "index"
+        );
+     }
 
 }
