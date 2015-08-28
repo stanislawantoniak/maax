@@ -11,18 +11,21 @@ class Zolago_Catalog_CategoryController extends Mage_Catalog_CategoryController 
 		if ($category = $this->_initCatagory()) {
 
 			$fq = $this->getRequest()->getParam('fq', '');
-			if (!empty($fq) &&
-				(in_array("campaign_regular_id", array_keys($fq)) || in_array("campaign_info_id", array_keys($fq)))
-			) {
-				$campaign = $category->getCurrentCampaign();
-				if (!$campaign) {
-					//redirect to category
-					unset($fq["campaign_regular_id"]);
-					unset($fq["campaign_info_id"]);
+			if (!empty($fq)) {
+				//if filter params then set display_mode to PRODUCTS
+				$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
 
-					$url = Mage::getUrl($category->getUrlPath(), array("_query" => array("fq" => $fq)));
-					header("Location: {$url}", true, 302);
-					exit;
+				if (in_array("campaign_regular_id", array_keys($fq)) || in_array("campaign_info_id", array_keys($fq))) {
+					$campaign = $category->getCurrentCampaign();
+					if (!$campaign) {
+						//redirect to category
+						unset($fq["campaign_regular_id"]);
+						unset($fq["campaign_info_id"]);
+
+						$url = Mage::getUrl($category->getUrlPath(), array("_query" => array("fq" => $fq)));
+						header("Location: {$url}", true, 302);
+						exit;
+					}
 				}
 			}
 

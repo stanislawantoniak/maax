@@ -13,7 +13,9 @@ class Zolago_DropshipMicrositePro_IndexController
             $vendorRootCategory = $vendor->rootCategory();
             $campaign = $vendorRootCategory->getCurrentCampaign();
 
-            if ($campaign) {
+            $fq = $this->getRequest()->getParam('fq', '');
+
+            if ($campaign || !empty($fq)) {
                 $this->_forward('view', "category", "catalog", array("id" => $vendorRootCategory->getId()));
                 return;
             }

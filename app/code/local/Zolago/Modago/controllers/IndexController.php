@@ -8,7 +8,10 @@ class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexContro
 		$rootId = Mage::app()->getStore()->getRootCategoryId();
 		$rootCategory = Mage::getModel("catalog/category")->load($rootId);
 		$campaign = $rootCategory->getCurrentCampaign();
-		if ($campaign) {
+
+		$fq = $this->getRequest()->getParam('fq', '');
+
+		if ($campaign || !empty($fq)) {
 			$this->_forward('view', "category", "catalog", array("id" => $rootCategory->getId()));
 			return;
 		}
