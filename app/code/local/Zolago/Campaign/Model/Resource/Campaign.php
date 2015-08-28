@@ -1114,10 +1114,13 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
          $select->where("campaign.landing_page_category IN(?)", $categories);
          $select->where("campaign.campaign_id IN(?)", $campaigns);
 
-         if (!$vendorId) {
-             $vendorId = NULL;
+         if ($vendorId) {
+             $select->where("campaign.context_vendor_id = ?", $vendorId);
+             $select->where("campaign.landing_page_context = ?", Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR);
+         } else {
+             $select->where("campaign.landing_page_context = ?", Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY);
          }
-         $select->where("campaign.context_vendor_id = ?", $vendorId);
+
 
          $select->where("campaign.is_landing_page = 1");
          $localtime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
