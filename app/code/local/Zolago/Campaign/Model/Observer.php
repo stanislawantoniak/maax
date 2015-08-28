@@ -262,6 +262,11 @@ class Zolago_Campaign_Model_Observer
                 $websiteId = $campaign->getAllowedWebsites()[0];
 
                 $websiteProducts = $productsDataPerWebsite[$websiteId];
+
+                /** @var Zolago_Catalog_Model_Product $productObject */
+                $productObject = Mage::getModel("zolagocatalog/product");
+                $object = new Varien_Object();
+
                 // $product is an array not object
                 foreach ($websiteProducts as $product) {
 
@@ -269,12 +274,9 @@ class Zolago_Campaign_Model_Observer
                     if ($product["type_id"] == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE ||
                         !$product["parent_id"]
                     ) {
-                        /** @var Zolago_Catalog_Model_Product $productObject */
-                        $productObject = Mage::getModel("zolagocatalog/product");
+
                         $productObject->addData($product);
                         $productObject->setProduct($productObject);
-
-                        $object = new Varien_Object();
                         $object->setAllItems(array($productObject));
 
                         $v = $rule->getConditions()->validate($object);
