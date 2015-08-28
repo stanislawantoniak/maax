@@ -1294,9 +1294,6 @@ Mall.listing = {
 			active = this.getActiveLabel(scope),
 			remove = this.getActiveRemove(scope);
 
-
-		var categoryDMPage = jQuery(scope).data("categorydmpage");
-
 		if(this.getPushStateSupport()) {
 
 			function unCheckbox(id) {

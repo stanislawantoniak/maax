@@ -22,7 +22,7 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 
 ?>
 <?php if(!$this->isContentMode()): ?>
-<div id="active-filters" data-categoryDMPage="<?php echo $categoryDisplayMode = (int)(Mage::registry('current_category')->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE); ?>">
+<div id="active-filters">
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div class="row">
