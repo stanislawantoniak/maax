@@ -19,7 +19,7 @@ $campaign = $category->getCurrentCampaign();
 /* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
 $listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
-//var_dump($category->getDisplayMode());
+
 ?>
 <?php if(!$this->isContentMode()): ?>
 <div id="active-filters" data-categoryDMPage="<?php echo $categoryDisplayMode = (int)(Mage::registry('current_category')->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE); ?>">
