@@ -17,19 +17,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         return $vendor;
     }
 
-    public function getCampaignLandingPageBanner()
-    {
-        $images = new stdClass();
 
-        $campaign = $this->getCampaign();
-        $campaignId = $campaign->getId();
-
-        if (!$campaignId) {
-            return $images;
-        }
-
-        return $this->getCampaignLandingPageBannerByCampaign($campaign);
-    }
 
     /**
      *
