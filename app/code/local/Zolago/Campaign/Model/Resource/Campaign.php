@@ -65,6 +65,25 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+    
+    /**
+     * add products to campaign from memory
+     *
+     */
+    public function saveProductsFromMemory() {
+        $resource = Mage::getSingleton('core/resource');
+        $table = $resource->getTableName("zolagocampaign/campaign_product");
+        $table_tmp = $resource->getTableName('zolagocampaign/campaign_product_tmp');
+        $connection = $resource->getConnection('core_write');
+        // clean products        
+        $query = 'delete a.* FROM '.$table.' as a inner join '.$table_tmp.' b where a.campaign_id = b.campaign_id ';
+        $connection->query($query);
+        $query = 'insert into '.$table.' (product_id,campaign_id) select product_id,campaign_id from '.$table_tmp;
+        $connection->query($query);
+        $query = 'delete from '.$table_tmp;
+        $connection->query($query);
+                
+    }
 
     /**
      * Assign products to campaign
@@ -169,9 +188,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        foreach ($products as $productId => $skuV) {
+//        foreach ($products as $productId => $skuV) {
             $write->update($table, array('assigned_to_campaign' => 0), array('`campaign_id` = ?' => $campaignId));
-        }
+//        }
     }
 
     /**

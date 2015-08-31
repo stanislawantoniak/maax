@@ -312,7 +312,8 @@ class Zolago_Campaign_Model_Observer
                 unset($productIds);
                 Mage::log("time: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             }
-
+            
+            $campaignResource->saveProductsFromMemory(); // assign to campaign
             Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
 
         } catch(Exception $e) {
