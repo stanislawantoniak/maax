@@ -212,10 +212,16 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         //Get campaign website
         $websiteId = $campaign->getWebsite();
         $website = Mage::getModel('core/website')->load($websiteId);
+        /** @var Mage_Core_Model_Website $website */
         $storeIds = $website->getStoreIds();
         //--Get campaign website
+        $firstStoreId = 0;
+        foreach ($storeIds as $key => $store) {
+            $firstStoreId = $store[$key];
+            break;
+        }
 
-        $rootId = Mage::app()->getStore($storeIds[1])->getRootCategoryId();
+        $rootId = Mage::app()->getStore($firstStoreId)->getRootCategoryId();
 
         $url = Mage::getBaseUrl();
         $vendorRootCategoryId = 0;
