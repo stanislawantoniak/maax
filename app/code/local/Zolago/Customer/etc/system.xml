@@ -51,6 +51,23 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</register_info>
+						<dotpay translate="label">
+							<label>Dotpay</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</dotpay>
+						<checkout translate="label">
+							<label>Checkout</label>
+							<comment>"{vendors}" in this text are replaced with legal entities of vendors that are taking part in transaction</comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>70</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</checkout>
 					</fields>
 				</agreements>
 				<orders_attach>

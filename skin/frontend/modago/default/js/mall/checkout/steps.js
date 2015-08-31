@@ -1466,6 +1466,7 @@
 			_sidebarAddressesTemplate: "",
 	        _previous_payment: false,
 	        _previous_provider: false,
+	        _payment_is_dotpay: false,
 			
             handleChangePaymentMethodClick: function (e) {
 
@@ -1576,6 +1577,8 @@
 
                 if (paymentMemberName === paymentMethodNameAttr) {
                     var paymentMethodCode = jQuery(e.target).val();
+	                Mall.Checkout.steps.shippingpayment._payment_is_dotpay = false;
+
 
                     if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
                         paymentMethodName = jQuery(e.target).data("payment-method");
@@ -1599,6 +1602,7 @@
                     paymentMethodName = jQuery(e.target).closest('.panel.payment-selected').find('input[name="payment[method]"]').data("payment-method");
                     var providerName = jQuery(e.target).data("bank-name");
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
+	                Mall.Checkout.steps.shippingpayment._payment_is_dotpay = true;
 
                     //replace
                     self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
@@ -1900,6 +1904,10 @@
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
+					if(!jQuery('#checkout_agreements').find('form').valid()) {
+						return;
+					}
+
                     jQuery("button[id*='-prev']").prop("disabled", false);
 
                     //disable prev buttons
@@ -1955,6 +1963,30 @@
 					this.getReviewInfoTemplate()
 				);
 				this._prepareTotals(checkout);
+
+				// Prepare dotpay agreement
+				var dotpayAgreementContainer = jQuery("#dotpay_agreement_container"),
+					dotpayAgreement = dotpayAgreementContainer.find('#dotpay_agreement');
+				if(Mall.Checkout.steps.shippingpayment._payment_is_dotpay) {
+					dotpayAgreementContainer.show();
+					dotpayAgreement.prop('disabled',false);
+				} else {
+					dotpayAgreementContainer.hide();
+					dotpayAgreement.prop('disabled',true);
+				}
+
+				//prepare last step agreements validation
+				var form = jQuery('#checkout_agreements').find('form');
+
+				form.find('.has-feedback').each(function() {
+					var elemToCleanup = jQuery(this);
+					elemToCleanup.removeClass('has-feedback has-error has-success');
+					elemToCleanup.find('.error').remove();
+					elemToCleanup.find('i').remove();
+				});
+
+				Mall.validate.init();
+				form.validate(Mall.validate._default_validation_options);
 			},
 			
 			_prepareTotals: function(checkout){

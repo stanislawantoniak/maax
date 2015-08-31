@@ -7,6 +7,10 @@
 	padding: 21px 15px 18px 17px;
 	margin-bottom: 18px;
 }
+#dotpay_agreement_container {
+	padding: 20px 20px 20px 18px;
+	margin-bottom: 15px;
+}
 
 .agreement-container {
 	border: 1px solid $color-gray2;
@@ -37,4 +41,21 @@
 }
 .agreement-less-btn {
 	display: none;
+}
+
+#checkout_agreements {
+	.agreement-nocheck.agreement-container {
+		margin: 0 0 15px;
+		padding-left: 35px;
+		padding-right: 35px;
+	}
+	form {
+		.form-checkbox.agreement-container {
+			margin-left: 0;
+		}
+		#tos_agreement_container {
+			margin-top: 0;
+			margin-bottom: 15px;
+		}
+	}
 }

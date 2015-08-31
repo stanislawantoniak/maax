@@ -83,7 +83,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 	public function getAgreementHtml($type) {
-		$types = array('tos','newsletter','sms','policy','register_info');
+		$types = array('tos','newsletter','sms','policy','register_info','dotpay','checkout');
 		if(!in_array($type,$types)) {
 			Mage::throwException("Incorrect agreement type, allowed types are: ".implode(", ",$types));
 		}
@@ -97,6 +97,10 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 			$html .= '<a href="#" class="agreement-btn agreement-more-btn" onclick="Mall.showAgreement(this)">'.$this->__("more").'</a> ';
 			$html .= '<span class="agreement-more"><br /><br />'.$agreementText[1].'</span> ';
 			$html .= '<a href="#" class="agreement-btn agreement-less-btn" onclick="Mall.hideAgreement(this)">'.$this->__("less").'</a> ';
+
+			if($type == "dotpay") {
+				//todo: replace {vendors} with vendors' legal entities
+			}
 
 			return $html;
 		} else {
