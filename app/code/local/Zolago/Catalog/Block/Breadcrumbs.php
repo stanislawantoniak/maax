@@ -272,7 +272,6 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 
         $searchContext = $this->_isSearchContext();
 
-        /* @var $campaign Zolago_Campaign_Model_Campaign */
 
         // gallery / main page
         $path[] = $this->_getFirstBreadcrumb(!empty($vendor));
