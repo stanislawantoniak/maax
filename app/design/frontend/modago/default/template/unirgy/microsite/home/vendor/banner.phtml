@@ -73,7 +73,7 @@ $_isSliderBoxContent = ($_sliders->count() || $_boxes->count()) ? true : false;
         </div>
 <?php endif; ?>
 <?php // SLIDERS END ?>
-
+<?php echo $this->getChildHtml('zolago.page.benefits');?>
 <?php // BOXES START ?>
     <?php if ($boxesCount = $_boxes->count()) :
         $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
