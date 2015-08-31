@@ -141,12 +141,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if (!$this->getData($cacheKey)) {
             $url = "";
             if ($isLP) { // Is landing page
-                $lpUrl = $this->getData("campaign_url");
-                $vendorUrlPart = "";
-                if ($this->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
-                    $vendorUrlPart = $vendorUrlKey . "/";
-                }
-                $url = $this->getWebsiteUrl($vendorUrlPart) . Mage::getModel("catalog/category")->load($id)->getUrlPath() . "?" . $lpUrl;
+
+                /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+                $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+                $url = $landingPageHelper->getLandingPageUrlByCampaign($this);
             }
             $this->setData($cacheKey, $url);
         }
