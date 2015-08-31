@@ -220,11 +220,27 @@ class Zolago_Campaign_Model_Observer
     }
 
     /**
+     * Attach products to campaign
+     *
+     * Podczepia produkty do kampanii na podstawie reguly cenowej koszyka (z zaznaczoną kampania).
+     * Jezeli produkt spelnia warunki reguly to jest podczepiany do zadanej kampanii
+     * Warunki dotyczace koszyka (qty, total itp) sa pomijane w procesie validacji
+     * Atrybuty (cechy) produktowe sa brane pod uwage tylko te, ktore maja zaznaczone
+     * is_used_for_promo_rules oraz
+     * są widoczne oraz
+     * ich fronted type to:
+     * 'text', 'multiselect', 'textarea', 'date', 'datetime', 'select', 'boolean', 'price' oraz
+     * ich zakres jest globalny lub per website (per store sa pomijane)
+     *
+     * NOTE: Pomimo, ze sprawdzanie odbywa sie per website (ustalony z kampanii)
+     * to warunek kategorii jest ujednolicony do wszystkich zakresow
+     *
+     *
      * @param Aoe_Scheduler_Model_Schedule $object
      */
     public static function attachProductsToCampaignBySalesRule($object) {
         try {
-//            $startTime = self::getMicrotime();
+            $startTime = self::getMicrotime();
 
             /* @var Zolago_Campaign_Helper_SalesRule $helper */
             $helper = Mage::helper("zolagocampaign/salesRule");
@@ -243,7 +259,9 @@ class Zolago_Campaign_Model_Observer
             }
 
             /* Collecting products START */
+//            $time = self::getMicrotime();
             $productsDataPerWebsite = $helper->getProductsDataForWebsites();
+//            Mage::log("Loading products data: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             /* Collecting products END */
 
             // Main processing loop
@@ -253,6 +271,8 @@ class Zolago_Campaign_Model_Observer
 
             /** @var Mage_SalesRule_Model_Rule $rule */
             foreach ($rulesColl as $rule) {
+                $time = self::getMicrotime();
+                Mage::log("Start processing rule ".$rule->getId(), null, 'mylog.log');
 
                 $productIds = array();
                 $campaignId = $rule->getCampaignId();
@@ -281,6 +301,7 @@ class Zolago_Campaign_Model_Observer
 
                         $v = $rule->getConditions()->validate($object);
                         if ($v) {
+//                            Mage::log((int)$product["entity_id"] . " in campaign " . $campaignId, null, 'mylog.log');
                             $productIds[] = (int)$product["entity_id"];
                         }
                     } else {
@@ -289,9 +310,10 @@ class Zolago_Campaign_Model_Observer
                 }
                 $campaignResource->saveProductsToMemory($rule->getCampaignId(), $productIds);
                 unset($productIds);
+                Mage::log("time: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             }
 
-//            Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
+            Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
 
         } catch(Exception $e) {
             Mage::logException($e);
