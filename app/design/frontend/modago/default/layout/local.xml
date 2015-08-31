@@ -288,13 +288,6 @@
                 <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
         </reference>
-
-		<reference name="footer">
-			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
-				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
-			</block>
-		</reference>
-
 		<reference name="before_body_end">
 			<block type="zolagomodago/page_html_scrolltop" name="scrolltop" template="page/html/scrolltop.phtml" />
 			<block type="core/template"  name="cookie_bar" template="page/html/cookie_bar.phtml" />
@@ -427,8 +420,9 @@
 					<block type="zolagocms/component_slider" name="slider" before="-"/>
 					<block type="zolagocms/component_boxes" name="boxes" before="-"/>
 				</block>
-				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml"/>
-
+				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml">
+					<block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>
+				</block>
 				<block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
 				<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
 				<block type="zolagomodago/home_vendor" name="zolago_modago_home_popularvendors" template="home/popularvendors.phtml"/>
@@ -443,7 +437,6 @@
 				<value>nobreadcrumbs</value>
 			</action>
 		</reference>
-
 	</zolagomodago_index_index>
 
     <zolagomodago_brands_index>
