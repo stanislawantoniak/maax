@@ -942,7 +942,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      * @return string
      */
      public function getCampaignFilterKey() {
-         switch ($this->getData['status']) {
+         switch ($this->getData('type')) {             
              case Zolago_Campaign_Model_Campaign_Type::TYPE_INFO:
                  return self::ZOLAGO_CAMPAIGN_INFO_CODE;
              default:

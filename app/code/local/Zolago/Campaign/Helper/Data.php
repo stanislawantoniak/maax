@@ -214,7 +214,6 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         if (is_null($this->_campaignIds)) {
             $params = Mage::app()->getRequest()->getParams();
             $this->_campaignIds = $this->parseCampaignIds($params);
-            
         }
         return $this->_campaignIds;
     }

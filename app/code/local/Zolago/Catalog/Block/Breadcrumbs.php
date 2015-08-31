@@ -297,8 +297,10 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         if ($category && $category->getId()) {
             $categoryId = $category->getId();
             $pathIds = $this->_getPathIds($category);
-            
             $parents = $category->getParentCategories();
+            if (!isset($parents[$categoryId])) {
+                $parents[$categoryId] = $category;
+            }
             $campaign = $category->getCurrentCampaign();            
             $lpCategory = empty($campaign)? 0: $campaign->getLandingPageCategory();
             foreach ($pathIds as $k => $parentId) {

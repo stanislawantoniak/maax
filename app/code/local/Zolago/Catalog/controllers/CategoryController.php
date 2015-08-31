@@ -67,7 +67,6 @@ class Zolago_Catalog_CategoryController extends Mage_Catalog_CategoryController 
 			if ($settings->getPageLayout()) {
 				$this->getLayout()->helper('page/layout')->applyTemplate($settings->getPageLayout());
 			}
-
 			if ($root = $this->getLayout()->getBlock('root')) {
 				$root->addBodyClass('categorypath-' . $category->getUrlPath())
 					->addBodyClass('category-' . $category->getUrlKey());
