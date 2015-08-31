@@ -17,19 +17,19 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         return $vendor;
     }
 
-    public function getCampaignLandingPageBanner()
-    {
-        $images = new stdClass();
-
-        $campaign = $this->getCampaign();
-        $campaignId = $campaign->getId();
-
-        if (!$campaignId) {
-            return $images;
-        }
-
-        return $this->getCampaignLandingPageBannerByCampaign($campaign);
-    }
+//    public function getCampaignLandingPageBanner()
+//    {
+//        $images = new stdClass();
+//
+//        $campaign = $this->getCampaign();
+//        $campaignId = $campaign->getId();
+//
+//        if (!$campaignId) {
+//            return $images;
+//        }
+//
+//        return $this->getCampaignLandingPageBannerByCampaign($campaign);
+//    }
 
     /**
      *
@@ -162,40 +162,15 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
     public function getCanShowBackToCampaign()
     {
-        $campaign = $this->getCampaign();
+        //$campaign = $this->getCampaign(); //TODO check if we can not use $this->getCampaign()
         $parentCat = Mage::registry('current_category')->getParentCategory();
+        $campaign = $parentCat->getCurrentCampaign();
 
         if ($campaign && $campaign->getId() && $campaign->getLandingPageCategory() == $parentCat->getId()) {
             return true;
         }
         return false;
     }
-
-    /**
-     * Return if campaign_regular_id or campaign_info_id should be kept in url
-     * on mobile "Go up" link
-     * Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category template
-     * @return bool
-     */
-    public function getKeepParametersCampaign()
-    {
-        $campaign = $this->getCampaign();
-        $parentCat = Mage::registry('current_category')->getParentCategory();
-        $parentCatId = $parentCat->getId();
-
-        $subCats = array($parentCatId => $parentCatId);
-
-        /* @var $categoryHelper Zolago_Catalog_Helper_Category */
-        $categoryHelper = Mage::helper("zolagocatalog/category");
-        $children = $categoryHelper->getChildrenIds($parentCatId);
-        $subCats = array_merge($subCats, $children);
-
-        if ($campaign && $campaign->getId() && $campaign->getIsLandingPage() && in_array($parentCatId, $subCats)) {
-            return true;
-        }
-        return false;
-    }
-
 
     /**
      * Construct landing page url
