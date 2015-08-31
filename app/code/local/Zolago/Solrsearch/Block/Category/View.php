@@ -40,14 +40,11 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             }
             /*rewrite gh_url_rewrite*/
 
-            /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
-            $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
-            $lpData = $lpBlock->getData('campaign_landing_page');
-            $lpData = (array)$lpData;
-            if(!empty($lpData)){
-                if(isset($lpData["name_customer"]) && !empty($lpData["name_customer"])){
-                    $headBlock->setTitle($lpData["name_customer"] . " - " . Mage::app()->getStore()->getName());
-                }
+            /* @var $campaign Zolago_Campaign_Model_Campaign */
+            $campaign = $category->getCurrentCampaign();
+
+            if($campaign){
+                $headBlock->setTitle($campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName());
             }
         }
 
@@ -110,15 +107,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
         }
-//
-//        /*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
-//        $lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
-//        $lpData = $lpBlock->getData('campaign_landing_page');
-//        $lpData = (array)$lpData;
-//
-//        if(!empty($lpData)){
-//            $res = false;
-//        }
         return $res;
     }
     public function isMixedMode() {

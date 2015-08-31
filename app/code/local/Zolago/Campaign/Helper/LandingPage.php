@@ -147,8 +147,6 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
                             // If gallery context
                             Mage::register("current_zolagocampaign", $campaign);
                         }
-                        //TODO ???????
-                        $campaign->setLandingPageLink($this->getLandingPageUrl());
                     }
                 }
             }
@@ -287,7 +285,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
             $landingPageCategoryUrl = $landingPageCategoryModel->getUrlPath();
         }
 
-        //TODO check if e need it: Breaks breadcrumb LP link
+
         if (!$SkipCurrentCategory && $currentCategory) {
             $currentCategoryId = $currentCategory->getId();
 

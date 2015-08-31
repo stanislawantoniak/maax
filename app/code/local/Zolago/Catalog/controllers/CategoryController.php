@@ -34,7 +34,7 @@ class Zolago_Catalog_CategoryController extends Mage_Catalog_CategoryController 
 							if($vendorRootCategoryId == $category->getId()){
 								//redirect to vendor landing page
 								$categoryPath = "";
-								$fq = array(); //TODO do we need to redirect to listing on VLP or to vendor LP
+								$fq = array(); //we need to redirect to vendor Home
 							}
 						}
 
