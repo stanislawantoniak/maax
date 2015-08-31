@@ -73,6 +73,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		$rootId = Mage::app()->getStore()->getRootCategoryId();
 
+		/* @var $zDropshipHelper Zolago_Dropship_Helper_Data */
+		$zDropshipHelper = Mage::helper("zolagodropship");
+		$vendorRootCategory = $zDropshipHelper->getCurrentVendorRootCategory();
+
 		$url = false;
 		if ($type == "search") {
 			$query = http_build_query($params);
@@ -85,11 +89,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
 
-			} elseif(
-				//Root category
-				$categoryId == $rootId
-			) {
-				//Case when remove las filter on GALLERY ROOT listing
+			} elseif ($categoryId == $rootId || $categoryId == $vendorRootCategory) {
+				//Case when remove last filter on GALLERY ROOT listing or VENDOR ROOT listing (Landing pages)
 				$query = http_build_query($params);
 				$url = Mage::getBaseUrl() . ($query ? "?" . $query : "");
 			} else {
