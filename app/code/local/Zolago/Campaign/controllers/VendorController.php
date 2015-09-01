@@ -156,21 +156,32 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 //Save Coupon image and Coupon PDF
                 /* @var $campaignFormHelper Zolago_Campaign_Helper_Form */
                 $campaignFormHelper = Mage::helper("zolagocampaign/form");
+
                 if (isset($_FILES['coupon_image'])) {
                     $couponImage = $_FILES["coupon_image"];
                     $couponImageTmpName = $couponImage["tmp_name"];
                     $couponImageName = $couponImage["name"];
 
-                    $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, self::LP_COUPON_IMAGE_FOLDER);
-                    $data["coupon_image"] = $couponImagePath;
+                    if (!empty($couponImageName)) { //if file just uploaded
+                        $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, self::LP_COUPON_IMAGE_FOLDER);
+                        $campaign->setData("coupon_image", $couponImagePath);
+                    } elseif (isset($data['coupon_image']) && !empty($data['coupon_image'])) {
+                        $campaign->setData("coupon_image", $data['coupon_image']['value']);
+                    }
+
+
                 }
                 if (isset($_FILES['coupon_conditions'])) {
                     $couponConditions = $_FILES["coupon_conditions"];
                     $couponConditionsTmpName = $couponConditions["tmp_name"];
                     $couponConditionsName = $couponConditions["name"];
 
-                    $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, self::LP_COUPON_PDF_FOLDER);
-                    $data["coupon_conditions"] = $couponConditionsPath;
+                    if (!empty($couponConditionsName)) {
+                        $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, self::LP_COUPON_PDF_FOLDER);
+                        $campaign->setData("coupon_conditions", $couponConditionsPath);
+                    } elseif (isset($data['coupon_conditions']) && !empty($data['coupon_conditions'])) {
+                        $campaign->setData("coupon_conditions", $data['coupon_conditions']['value']);
+                    }
                 }
                 //--Save Coupon image and Coupon PDF
 

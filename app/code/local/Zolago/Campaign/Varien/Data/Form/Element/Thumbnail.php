@@ -14,34 +14,31 @@ class Zolago_Campaign_Varien_Data_Form_Element_Thumbnail extends Varien_Data_For
         $html .= '<div class="campaign-image-container">';
         $html .= '<div class="campaign-image-thumbnail">';
 
-
-        if ((string)$this->getValue()) {
-            $url = Mage::getUrl() . DS . $this->_getUrl();
-
-            if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
-                $url = Mage::getBaseUrl('media') . $url;
+Mage::log($this->getValue(), null, "ZZZ");
+        $value = $this->getValue();
+        if ($value) {
+            if(is_string($value)){
+                $value = $value;
             }
+            if(is_array($value)){
+                $value = $value["value"];
+            }
+            $url = Mage::getUrl() . $value;
+
             $html .= '<a href="' . $url . '"'
                 . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;">'
                 . '<img src="' . $url . '" id="' . $this->getHtmlId()
-                . ' alt="' . $this->getValue() . '" height="200" width="200" class="small-image-preview v-middle" />'
+                . ' alt="' . $value . '" height="200" width="200" class="small-image-preview v-middle" />'
                 . '</a> ';
         }
         $html .= '</div>';
 
-        $dataAttribute = $this->getDataAttribute();
-        $data = "";
-        if (!empty($dataAttribute)) {
-            foreach ($dataAttribute as $attributeName => $attributeValue) {
-                $data .= ' data-' . $attributeName . '=' . $attributeValue;
-            }
-        }
         $this->setClass('input-file');
 
         $html .= '<input  id="' . $this->getHtmlId() . '" name="' . $this->getName()
-            . '" value="' . $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . ' data-resolution="1" ' . $data . ' />' . "\n";
+            . '" value="' . $value . '" ' . $this->serialize($this->getHtmlAttributes()) . ' data-resolution="1"  />' . "\n";
         $html .= '<input id="' . $this->getHtmlId() . '_value" type="hidden"  name="' . $this->getName()
-            . '[value]" value="' . $this->getEscapedValue() . '"   />' . "\n";
+            . '[value]" value="' . $value . '"   />' . "\n";
         $html .= $this->getAfterElementHtml();
         $html .= '</div>';
 
