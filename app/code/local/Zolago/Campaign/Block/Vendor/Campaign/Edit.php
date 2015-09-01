@@ -101,7 +101,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                     $vendorUrlPart = $vendorName."/";
                 }
 
-                $landingPageUrl = $values["landing_page_url"];
+                $landingPageUrl = isset($values["landing_page_url"]) ? $values["landing_page_url"]: '';
                 $urlText = Mage::getBaseUrl(). $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
             }
 
