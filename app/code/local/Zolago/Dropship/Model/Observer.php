@@ -258,6 +258,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'sequence',
             'url_key',
             'logo',
+	        'legal_entity'
         );        
         $this->_addFieldsToFieldset($keys,$fieldset);
 

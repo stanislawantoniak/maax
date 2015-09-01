@@ -36,7 +36,19 @@ class Zolago_DropshipSplit_Block_Cart extends Unirgy_DropshipSplit_Block_Cart
 	
 	public function getItemHtml(Mage_Sales_Model_Quote_Item $item)
     {
+	    $vendorsKey = 'checkoutVendors';
         if ($item instanceof Unirgy_DropshipSplit_Model_Cart_Vendor) {
+	        if(!is_null(Mage::registry($vendorsKey)) && is_array(Mage::registry($vendorsKey)) && Mage::registry($vendorsKey)) {
+		        $vendors = Mage::registry($vendorsKey);
+		        Mage::unregister($vendorsKey);
+	        } else {
+		        $vendors = array();
+	        }
+
+	        if(!isset($vendors[$item->getVendor()->getId()])) {
+		        $vendors[$item->getVendor()->getId()] = $item->getVendor()->getLegalEntity();
+	        }
+
             $blockName = "vendor_{$item->getVendor()->getId()}_{$item->getPart()}";
             $block = $this->getLayout()->createBlock($this->_htmlBlock, $blockName)
                 ->addData($item->getData())
@@ -56,6 +68,8 @@ class Zolago_DropshipSplit_Block_Cart extends Unirgy_DropshipSplit_Block_Cart
 					$this->setData("shipping_total", null);
 				}
 			}
+
+	        Mage::register($vendorsKey,$vendors);
 			
 			return $block->toHtml();
         }

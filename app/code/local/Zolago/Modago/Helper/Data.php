@@ -98,13 +98,20 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 			$html .= '<span class="agreement-more"><br /><br />'.$agreementText[1].'</span> ';
 			$html .= '<a href="#" class="agreement-btn agreement-less-btn" onclick="Mall.hideAgreement(this)">'.$this->__("less").'</a> ';
 
-			if($type == "dotpay") {
-				//todo: replace {vendors} with vendors' legal entities
-			}
-
-			return $html;
+			$return = $html;
 		} else {
-			return $agreementText;
+			$return =  $agreementText;
 		}
+
+		if($type == "checkout") {
+			$vendorsLegalEntites = Mage::registry('checkoutVendors');
+			Mage::unregister('checkoutVendors');
+
+			if(is_array($vendorsLegalEntites)) {
+				$return = str_replace("{vendors}",implode(", ",$vendorsLegalEntites),$return);
+			}
+		}
+
+		return $return;
 	}
 }
