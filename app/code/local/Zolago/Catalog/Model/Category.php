@@ -236,7 +236,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
                 $vendorRootCategoryForSite = isset($vendorRootCategory[$currentStoreId]) ? $vendorRootCategory[$currentStoreId] : false;
                 if ($vendorRootCategoryForSite) {
                     if ($vendorRootCategoryForSite == $this->getId()) {
-                        return Mage::getBaseUrl();
+                        $urlPath = '/';
                     }
                 }
             }

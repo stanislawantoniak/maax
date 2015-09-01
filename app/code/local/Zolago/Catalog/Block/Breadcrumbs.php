@@ -255,7 +255,7 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
          $pathIds = $category->getpathIds();
          $key = array_search($rootId,$pathIds);
          if ($key) {
-             return array_slice($pathIds,$key);
+              return array_slice($pathIds,$key+1);
          }
          return $pathIds;
      }
@@ -269,21 +269,8 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
         $path = array();
         $vendor = $this->_getVendor();
         $rootId = $this->_getRootCategoryId();
-
+        
         $searchContext = $this->_isSearchContext();
-
-
-        // gallery / main page
-        $path[] = $this->_getFirstBreadcrumb(!empty($vendor));
-        // vendor
-        if ($vendor) {
-            $path[] = $this->_getVendorBreadcrumb($vendor);
-        }
-        // search
-        if ($searchContext) {
-            $path[] = $this->_getSearchBreadcrumb();
-        }
-        // category
 
         if ($product = $this->_getProduct()) {        
             /* @var $category Mage_Catalog_Model_Category */
@@ -293,28 +280,40 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
             /* @var $category Mage_Catalog_Model_Category */
             $category = $catalogHelper->getCategory();
         }
+        $campaign = $category? $category->getCurrentCampaign():null;
+        $lpCategory = empty($campaign)? 0: $campaign->getLandingPageCategory();
+        
+
+        // gallery / main page
+        $path[] = $this->_getFirstBreadcrumb(!empty($vendor));
+        // vendor
+        if ($vendor) {
+            $path[] = $this->_getVendorBreadcrumb($vendor);
+        }
+        // landing page for root category (vendor or gallery)
+        if ($lpCategory == $rootId) {
+            $rootCategory = Mage::getModel('zolagocatalog/category')->load($rootId);
+            $path[] = $this->_getCategoryBreadcrumb($rootCategory);
+        }
+        // search
+        if ($searchContext) {
+            $path[] = $this->_getSearchBreadcrumb();
+        }
+        // category
+
         if ($category && $category->getId()) {
             $categoryId = $category->getId();
             $pathIds = $this->_getPathIds($category);
             $parents = $category->getParentCategories();
-            if (!isset($parents[$categoryId])) {
-                $parents[$categoryId] = $category;
-            }
-            $campaign = $category->getCurrentCampaign();            
-            $lpCategory = empty($campaign)? 0: $campaign->getLandingPageCategory();
             foreach ($pathIds as $k => $parentId) {
                 if (!isset($parents[$parentId])) continue;
-                $cat = $parents[$parentId];
+                $cat = $parents[$parentId];                
                 if ($parentId == $lpCategory) {                    
                     if ($parentId != $rootId) {
                         $path[] = $this->_getCategoryBreadcrumb($cat,false); // add category without landing page
-                    }
-                    $path[] = $this->_getCategoryBreadcrumb($cat); // add landing page
-                } else {
-                    if ($parentId != $rootId) {
-                        $path[] = $this->_getCategoryBreadcrumb($cat); // add category
-                    }
+                    }                    
                 }
+                $path[] = $this->_getCategoryBreadcrumb($cat); // add landing page
             }                
             
         }
