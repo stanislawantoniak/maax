@@ -14,7 +14,7 @@ class Zolago_Campaign_Varien_Data_Form_Element_Thumbnail extends Varien_Data_For
         $html .= '<div class="campaign-image-container">';
         $html .= '<div class="campaign-image-thumbnail">';
 
-Mage::log($this->getValue(), null, "ZZZ");
+
         $value = $this->getValue();
         if ($value) {
             if(is_string($value)){
