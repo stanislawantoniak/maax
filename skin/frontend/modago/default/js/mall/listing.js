@@ -1142,12 +1142,23 @@ Mall.listing = {
 	},
 
 	_handleAjaxRepsonse: function(response,ajaxKey,ajaxData){
+		var hideAjaxLoading = true;
 		if(!response.status){
 			this._handleResponseError(response);
 		}else{
-			this.rebuildContents(response.content,ajaxKey,ajaxData);
+			var rebuildContents = this.rebuildContents(response.content,ajaxKey,ajaxData);
+
+			if(!rebuildContents){
+				hideAjaxLoading = false;
+			}
 		}
-		this.hideAjaxLoading();
+
+		if(hideAjaxLoading){
+			//do not hide loader if page will be refreshed
+			//(For example on Landing page last active filter remove)
+			this.hideAjaxLoading();
+		}
+
 	},
 
 	showAjaxLoading: function(){
@@ -1239,6 +1250,8 @@ Mall.listing = {
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
+
+		return true;
 	},
 
 	replaceProducts: function(data){
@@ -1310,7 +1323,7 @@ Mall.listing = {
 				self._current_url = me.attr('href');
 
 				if(!me.parent().hasClass('query-text-iks')) { //not search
-				//	me.parents('.label').detach();
+					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
 					if (active.length == 1) {
 						detachActive();
@@ -1329,7 +1342,7 @@ Mall.listing = {
 				active.each(function() {
 					unCheckbox(jQuery(this).data('input'));
 				});
-				//detachActive();
+				detachActive();
 				self.reloadListingNow();
 				return false;
 			});
