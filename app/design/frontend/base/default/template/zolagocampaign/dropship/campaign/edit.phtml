@@ -18,7 +18,7 @@
 </div>
 
 <div class="container z-grid">
-	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
@@ -267,29 +267,12 @@
                 alert("test");
             })
 
-            function refreshLPLink(){
-                var vendor = 0;
-                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
-                    vendor = jQuery("#context_vendor_id option:selected").val();
-                }
-                var category = jQuery("[name=landing_page_category]").val();
 
-                var name_customer = jQuery("[name=name_customer]").val();
-
-                var type = jQuery("[name=type] option:selected").val();
-
-
-                jQuery.ajax({
-                    url: '<?php echo Mage::getUrl("campaign/vendor/get_lp_url"); ?>',
-                    method: 'POST',
-                    data: {"vendor": vendor, category: category, name_customer:name_customer, type:type},
-                    success: function(url){
-                        jQuery("#landing_page_category_url").html("<a href='"+url+"'>"+url+"</a>");
-
-                    }
-                })
-            }
-
+            jQuery("input[type=file][name=coupon_image]").change(function (e) {
+                if(this.disabled) return alert('File upload not supported!');
+                var F = this.files;
+                readImageUploader($(this), F[0]);
+            });
 
             function toggleVendorSelect() {
 
@@ -335,4 +318,42 @@
                 })
             }
         });
+
+        function readImageUploader(input, file) {
+
+            var reader = new FileReader();
+            var image  = new Image();
+
+            reader.readAsDataURL(file);
+
+            reader.onload = function(_file) {
+                image.src    = _file.target.result;              // url.createObjectURL(file);
+                image.onload = function() {
+                    if(jQuery.type(file) !=="undefined"){
+                        if (jQuery.type(file) !=="undefined"
+                            //&& file.size <= (imageSize * 1000)
+                        ) {
+                            var id = jQuery(input).attr('id');
+                            var thumbPlace = jQuery(input).parents('.campaign-image-container').find('.campaign-image-thumbnail');
+
+                            var preview = '<a href="' +this.src+ '" '
+                                + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                                + '<img src="' + this.src + '" id="'+id+'_image" '
+                                + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                                + '</a>';
+
+
+                            thumbPlace.html(preview);
+                        }
+                    }
+
+
+
+                };
+                image.onerror= function() {
+                    alert('Invalid file type: '+ file.type);
+                };
+            };
+
+        }
     </script>

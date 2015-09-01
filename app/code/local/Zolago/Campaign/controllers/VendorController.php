@@ -6,6 +6,9 @@
 class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
+    const LP_COUPON_IMAGE_FOLDER = "media/lp/coupon/image";
+    const LP_COUPON_PDF_FOLDER = "media/lp/coupon/pdf";
+
     public function indexAction() {
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagocampaign');
@@ -149,6 +152,27 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
                 }
+
+                //Save Coupon image and Coupon PDF
+                /* @var $campaignFormHelper Zolago_Campaign_Helper_Form */
+                $campaignFormHelper = Mage::helper("zolagocampaign/form");
+                if (isset($_FILES['coupon_image'])) {
+                    $couponImage = $_FILES["coupon_image"];
+                    $couponImageTmpName = $couponImage["tmp_name"];
+                    $couponImageName = $couponImage["name"];
+
+                    $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, self::LP_COUPON_IMAGE_FOLDER);
+                    $data["coupon_image"] = $couponImagePath;
+                }
+                if (isset($_FILES['coupon_conditions'])) {
+                    $couponConditions = $_FILES["coupon_conditions"];
+                    $couponConditionsTmpName = $couponConditions["tmp_name"];
+                    $couponConditionsName = $couponConditions["name"];
+
+                    $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, self::LP_COUPON_PDF_FOLDER);
+                    $data["coupon_conditions"] = $couponConditionsPath;
+                }
+                //--Save Coupon image and Coupon PDF
 
                 $campaign->save();
 
