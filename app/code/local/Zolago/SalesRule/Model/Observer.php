@@ -141,6 +141,12 @@ class Zolago_SalesRule_Model_Observer {
                                 "name"		=> "promotion_type",
                                 "value"     => $model->getPromotionType()
                             ));
+        $fieldset->addField("campaign_id", "select", array(
+                                "label"		=> Mage::helper("zolagosalesrule")->__("Campaign"),
+                                "values"	=> Mage::getSingleton('zolagocampaign/source_campaign')->toOptionArray(true, $model->getId()),
+                                "name"		=> "campaign_id",
+                                "value"     => $model->getCampaignId()
+                            ));
         $param = array(
                      "label" => Mage::helper('zolagosalesrule')->__('Promotion image file'),
                      "required" => false,
