@@ -1309,8 +1309,8 @@ Mall.listing = {
 
 				self._current_url = me.attr('href');
 
-				if(!me.parent().hasClass('query-text-iks')) {
-					me.parents('.label').detach();
+				if(!me.parent().hasClass('query-text-iks')) { //not search
+				//	me.parents('.label').detach();
 					unCheckbox(me.data('input'));
 					if (active.length == 1) {
 						detachActive();
@@ -1329,7 +1329,7 @@ Mall.listing = {
 				active.each(function() {
 					unCheckbox(jQuery(this).data('input'));
 				});
-				detachActive();
+				//detachActive();
 				self.reloadListingNow();
 				return false;
 			});
