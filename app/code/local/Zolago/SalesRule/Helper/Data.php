@@ -211,14 +211,25 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
     /**
      * returns url to catalog with promotions images
-     * 
+     *
      * @return string
      */
-     public function getPromotionImageUrl() {
-         $path = Mage::getBaseUrl('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
-         return $path;
-     }
+    public function getPromotionImageUrl()
+    {
+        $path = Mage::getBaseUrl('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
+        return $path;
+    }
 
+    /**
+     * returns url to catalog with campaign coupon images
+     *
+     * @return string
+     */
+    public function getCampaignCouponImageUrl()
+    {
+        $path = Mage::getBaseUrl('media') . DS . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
+        return $path;
+    }
 
 	/**
 	 * returns url to catalog with resized promotions images
@@ -226,7 +237,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	 * @return string
 	 */
 	public function getPromotionResizedImageUrl($width = 480) {
-		$path = $this->getPromotionImageUrl() . DS . 'resized' . DS . $width;
+		$path = $this->getCampaignCouponImageUrl() . DS . 'resized' . DS . $width;
 		return $path;
 	}
 
@@ -248,7 +259,8 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	}
 	
 	public function getResizedPromotionImage($fileName,$width = 480) {
-		$folderURL = $this->getPromotionImageUrl();
+
+        $folderURL = $this->getCampaignCouponImageUrl();
 		$imageURL = $folderURL . $fileName;
 
 		//if width empty then return original size image's URL

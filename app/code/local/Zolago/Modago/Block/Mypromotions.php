@@ -50,16 +50,44 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         }
         $rulesCollection = Mage::getModel('salesrule/rule')->getCollection();
         $rulesCollection->addFieldToFilter('rule_id',array('in',$rules));
-        $rules = array(); // clear 
+        $rules = array(); // clear
+
+        $campaignRuleRelation = array();
         foreach ($rulesCollection as $rule) {
             $rules[$rule['rule_id']] = $rule;
+            $campaignRuleRelation[$rule->getCampaignId()] = $rule['rule_id'];
         }
-        foreach ($collection as $item) {
-            if ($rules[$item['rule_id']]->getIsActive()) {
-                $item['ruleItem'] = $rules[$item['rule_id']];
-                $out[] = $item;
+        $campaignIds = array_keys($campaignRuleRelation);
+
+        $ruleCouponDataRelation = array();
+        if(!empty($campaignIds)){
+            $campaignCollection = Mage::getModel("zolagocampaign/campaign")->getCollection();
+            $campaignCollection->addFieldToFilter('campaign_id',array('in',$campaignIds));
+
+            $campaignCollection->getSelect()
+                ->reset(Zend_Db_Select::COLUMNS)
+                ->columns("campaign_id")
+                ->columns("coupon_image")
+                ->columns("coupon_conditions");
+
+            foreach($campaignCollection as $campaignCollectionItem){
+                $ruleCouponDataRelation[$campaignRuleRelation[$campaignCollectionItem->getCampaignId()]] = $campaignCollectionItem;
             }
         }
+
+        foreach ($collection as $item) {
+            if ($rules[$item['rule_id']]->getIsActive()) {
+                $ruleItem = $rules[$item['rule_id']];
+
+                $ruleItem->setCampaignData($ruleCouponDataRelation[$ruleItem->getId()]);
+
+                $item['ruleItem'] = $ruleItem;
+                $out[] = $item;
+
+                unset($ruleItem);
+            }
+        }
+
         return $out;
     }	
     /**

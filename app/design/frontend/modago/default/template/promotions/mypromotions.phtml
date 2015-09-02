@@ -19,7 +19,7 @@ $helper = Mage::helper('zolagosalesrule');
 								<div id="promo_list">
 									<?php foreach ($list as $item): ?>
 										<div class="promo_item col-xs-6 col-sm-4 col-md-4 col-lg-4">
-											<?php $imageName = $item['ruleItem']->getPromoImage(); ?>
+											<?php $imageName = $item['ruleItem']->getCampaignData()->getCouponImage(); ?>
 											<?php if ($imageName): ?>
 												<?php $imageResized = $helper->getResizedPromotionImage($imageName); ?>
 												<?php $imageInfo = $helper->getResizedPromotionImageInfo($imageName); ?>
