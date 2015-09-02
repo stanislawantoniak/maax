@@ -26,7 +26,7 @@ Mall.product = {
 		if(!window.onpopstate) {
 			var self = this;
 			window.onpopstate = function (e) {
-
+				document.location = document.location;
 			}
 		}
 	},
