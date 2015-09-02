@@ -32,6 +32,14 @@
 	}
 }
 
+.agreement-nocheck-registration {
+	font-size: 12px;
+	margin: 15px 0 15px;
+	@media(min-width: $screen-md-min) {
+		margin-left: 20px;
+	}
+}
+
 .agreement-btn {
 	text-decoration: underline !important;
 	cursor: pointer;
@@ -58,5 +66,15 @@
 			margin-top: 0;
 			margin-bottom: 15px;
 		}
+	}
+}
+
+#tos_agreement_container_registration {
+	margin-bottom: 13px !important;
+}
+
+#tos_agreement_container_registration, #newsletter_agreement_container_registration {
+	@media(min-width: $screen-md-min) {
+		margin-left: 20px;
 	}
 }

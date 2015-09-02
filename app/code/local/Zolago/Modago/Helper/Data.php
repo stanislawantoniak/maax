@@ -95,7 +95,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 			$html = "";
 			$html .= '<span class="agreement-short">'.$agreementText[0].'</span> ';
 			$html .= '<a href="#" class="agreement-btn agreement-more-btn" onclick="Mall.showAgreement(this)">'.$this->__("more").'</a> ';
-			$html .= '<span class="agreement-more"><br /><br />'.$agreementText[1].'</span> ';
+			$html .= '<span class="agreement-more">'.$agreementText[1].'</span> ';
 			$html .= '<a href="#" class="agreement-btn agreement-less-btn" onclick="Mall.hideAgreement(this)">'.$this->__("less").'</a> ';
 
 			$return = $html;
