@@ -23,7 +23,7 @@ class Zolago_Campaign_Varien_Data_Form_Element_Pdf extends Varien_Data_Form_Elem
             }
             $html .= '<div class="col-md-12">';
             $html .= '<div  class="col-md-4 no-padding-left">';
-            $url = Mage::getBaseUrl("media") . $value;
+            $url = Mage::getBaseUrl("media") .  $this->getFolderStorage() . DS . $value;
 
             $html .= '<a href="' . $url . '" target="_blank"><i class="icon-file"></i> PDF</a> ';
             $html .= '</div>';
