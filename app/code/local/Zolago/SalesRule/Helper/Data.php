@@ -342,7 +342,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          );
          $addedFiles = array();
          foreach ($list as $item) {
-             Mage::log($item['ruleItem']->getData(), null, "r.log");
+
              $name = $item['ruleItem']->getPromoImage();
              if ($name && !in_array($name, $addedFiles)) {
                  $this->_resizePromotionImage($name,200);
@@ -370,7 +370,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      }
 
 	public function getSalesRulesForSubscribers() {
-        Mage::log("getSalesRulesForSubscribers", null, "sendSubscriberCouponMail.log");
+
 		$currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 		$resource = Mage::getSingleton('core/resource');
 		$readConnection = $resource->getConnection('core_read');
@@ -390,7 +390,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 			->where('salesrule_rule.to_date >= ?', date("Y-m-d", $currentTimestamp))
 			->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
 		;
-        Mage::log("------getSalesRulesForSubscribers", null, "sendSubscriberCouponMail.log");
+
 		return $readConnection->fetchAll($query);
 	}
 
