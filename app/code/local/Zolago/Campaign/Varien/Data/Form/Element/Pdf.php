@@ -11,29 +11,43 @@ class Zolago_Campaign_Varien_Data_Form_Element_Pdf extends Varien_Data_Form_Elem
     public function getElementHtml()
     {
         $html = '';
-        $html .= '<div>';
+        $html .= '<div class="row">';
 
         $value = $this->getValue();
         if ($value) {
-            if(is_string($value)){
+            if (is_string($value)) {
                 $value = $value;
             }
-            if(is_array($value)){
+            if (is_array($value)) {
                 $value = $value["value"];
             }
+            $html .= '<div class="col-md-12">';
+            $html .= '<div  class="col-md-4 no-padding-left">';
             $url = Mage::getBaseUrl() . $value;
 
-            $html .= '<a href="' . $url . '" target="_blank">PDF</a> ';
+            $html .= '<a href="' . $url . '" target="_blank"><i class="icon-file"></i> PDF</a> ';
+            $html .= '</div>';
+
+            //checkbox to remove pdf if exist
+            $html .= '<div>';
+            $html .= '<input type="checkbox" name="remove_' . $this->getName() . '" />';
+            $html .= ' ' . Mage::helper("zolagocampaign")->__("Remove");
+            $html .= '</div>';
+            //--checkbox to remove pdf if exist
+
+            $html .= '</div>';
         }
 
 
         $this->setClass('input-file');
-
+        $html .= '<div class="col-md-12">';
         $html .= '<input  id="' . $this->getHtmlId() . '" name="' . $this->getName()
             . '" value="' . $value . '" ' . $this->serialize($this->getHtmlAttributes()) . ' data-resolution="1"  />' . "\n";
         $html .= '<input id="' . $this->getHtmlId() . '_value" type="hidden"  name="' . $this->getName()
             . '[value]" value="' . $value . '"   />' . "\n";
         $html .= $this->getAfterElementHtml();
+        $html .= '</div>';
+
         $html .= '</div>';
 
         return $html;
