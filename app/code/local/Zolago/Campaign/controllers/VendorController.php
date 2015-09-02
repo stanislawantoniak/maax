@@ -6,8 +6,6 @@
 class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
-    const LP_COUPON_IMAGE_FOLDER = "lp/coupon/image";
-    const LP_COUPON_PDF_FOLDER = "lp/coupon/pdf";
 
     public function indexAction()
     {
@@ -167,7 +165,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $couponImageName = $couponImage["name"];
 
                     if (!empty($couponImageName)) { //if file just uploaded
-                        $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, self::LP_COUPON_IMAGE_FOLDER);
+                        $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER);
                         $campaign->setData("coupon_image", $couponImagePath);
                     } elseif (isset($data['coupon_image']) && !empty($data['coupon_image'])) {
                         $campaign->setData("coupon_image", $data['coupon_image']['value']);
@@ -181,14 +179,14 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $couponConditionsName = $couponConditions["name"];
 
                     if (!empty($couponConditionsName)) {
-                        $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, self::LP_COUPON_PDF_FOLDER);
+                        $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER);
                         $campaign->setData("coupon_conditions", $couponConditionsPath);
                     } elseif (isset($data['coupon_conditions']) && !empty($data['coupon_conditions'])) {
                         $campaign->setData("coupon_conditions", $data['coupon_conditions']['value']);
                         //check if coupon_conditions file should be removed
                         if (isset($data['remove_coupon_conditions'])) {
                             $campaign->setData("coupon_conditions", "");
-                            @unlink(Mage::getBaseDir() . DS . $data['coupon_conditions']['value']);
+                            @unlink(Mage::getBaseDir("media") . DS . Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER . DS . $data['coupon_conditions']['value']);
                         }
                     }
                 }

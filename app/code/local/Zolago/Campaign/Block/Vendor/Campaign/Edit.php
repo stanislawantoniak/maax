@@ -156,7 +156,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label" => $helper->__('Coupon image'),
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6 landing-page-config",
-                "folder_storage" => Zolago_Campaign_VendorController::LP_COUPON_IMAGE_FOLDER
+                "folder_storage" => Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER
             );
             $landingPage->addField("coupon_image", "thumb", $imageOptions);
 
@@ -165,7 +165,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 'name' => 'coupon_conditions',
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6 landing-page-config",
-                "folder_storage" => Zolago_Campaign_VendorController::LP_COUPON_PDF_FOLDER
+                "folder_storage" => Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER
             ));
         }
 

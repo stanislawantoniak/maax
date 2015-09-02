@@ -13,6 +13,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     const ZOLAGO_CAMPAIGN_DISCOUNT_CODE = "percent";
     const ZOLAGO_CAMPAIGN_DISCOUNT_PRICE_SOURCE_CODE = "price_source_id";
 
+    const LP_COUPON_IMAGE_FOLDER = "lp/coupon/image";
+    const LP_COUPON_PDF_FOLDER = "lp/coupon/pdf";
+
     protected function _construct()
     {
         $this->_init("zolagocampaign/campaign");
