@@ -23,7 +23,7 @@ class Zolago_Campaign_Varien_Data_Form_Element_Thumbnail extends Varien_Data_For
             if(is_array($value)){
                 $value = $value["value"];
             }
-            $url = Mage::getUrl() . $value;
+            $url = Mage::getBaseUrl("media") . $value;
 
             $html .= '<a href="' . $url . '"'
                 . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;">'

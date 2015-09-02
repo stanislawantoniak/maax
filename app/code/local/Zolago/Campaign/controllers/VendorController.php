@@ -6,8 +6,8 @@
 class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
-    const LP_COUPON_IMAGE_FOLDER = "media/lp/coupon/image";
-    const LP_COUPON_PDF_FOLDER = "media/lp/coupon/pdf";
+    const LP_COUPON_IMAGE_FOLDER = "lp/coupon/image";
+    const LP_COUPON_PDF_FOLDER = "lp/coupon/pdf";
 
     public function indexAction()
     {
