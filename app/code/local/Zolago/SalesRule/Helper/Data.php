@@ -185,16 +185,18 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         }
     }
 
-    
+
     /**
      * returns path to catalog with promotions images
-     * 
+     *
      * @return string
      */
-     public function getPromotionImagePath() {
-         $path = Mage::getBaseDir('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
-         return $path;
-     }
+    public function getPromotionImagePath()
+    {
+        //$path = Mage::getBaseDir('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
+        $path = Mage::getBaseDir('media') . DS . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
+        return $path;
+    }
 
 	/**
 	 * returns path to catalog with resized promotions images
@@ -275,17 +277,33 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 		}
 		return null;
 	}
-     
-    protected function _prepareCollection($ids) {
-	    $collection = Mage::getModel('salesrule/coupon')->getCollection();
-	    $collection->addFieldToFilter('coupon_id',array('in' => $ids));
-	    $out = array();
-	    foreach ($collection as $item) {
-	        $item['ruleItem'] = Mage::getModel('salesrule/rule')->load($item['rule_id']);
-	        $out[] = $item;
-	    }
-	    return $out;
+
+    protected function _prepareCollection($ids)
+    {
+        $collection = Mage::getModel('salesrule/coupon')->getCollection();
+        $collection->addFieldToFilter('coupon_id', array('in' => $ids));
+        $out = array();
+        foreach ($collection as $item) {
+            $rule = Mage::getModel('salesrule/rule')->load($item['rule_id']);
+            $campaignId = $rule->getCampaignId();
+            $couponImage = NULL;
+            if ($campaignId) {
+                $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+                if ($campaign) {
+                    $couponImage = $campaign->getCouponImage();
+                }
+            }
+            $rule->setPromoImage($couponImage);
+            $item['ruleItem'] = $rule;
+            $out[] = $item;
+
+            unset($rule);
+            unset($campaign);
+            unset($couponImage);
+        }
+        return $out;
     }
+
     protected function _changeDesign($area,$pack,$theme) {
 
 		Mage::getDesign()->
@@ -324,6 +342,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          );
          $addedFiles = array();
          foreach ($list as $item) {
+             Mage::log($item['ruleItem']->getData(), null, "r.log");
              $name = $item['ruleItem']->getPromoImage();
              if ($name && !in_array($name, $addedFiles)) {
                  $this->_resizePromotionImage($name,200);
@@ -351,6 +370,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      }
 
 	public function getSalesRulesForSubscribers() {
+        Mage::log("getSalesRulesForSubscribers", null, "sendSubscriberCouponMail.log");
 		$currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 		$resource = Mage::getSingleton('core/resource');
 		$readConnection = $resource->getConnection('core_read');
@@ -370,7 +390,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 			->where('salesrule_rule.to_date >= ?', date("Y-m-d", $currentTimestamp))
 			->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
 		;
-
+        Mage::log("------getSalesRulesForSubscribers", null, "sendSubscriberCouponMail.log");
 		return $readConnection->fetchAll($query);
 	}
 
