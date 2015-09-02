@@ -154,6 +154,27 @@ Mall.listing = {
      * clicked url
      */
 	_current_url: '',
+
+	/**
+	 * original title before iframe load
+	 */
+	_original_title: document.title,
+
+	/**
+	 * original scrolltop before igrame load
+	 */
+	_original_scrolltop: 0,
+
+	/**
+	 * iframe timer
+	 */
+	_iframe_timer: false,
+
+	/**
+	 * current iframe src
+	 */
+	_iframe_src: false,
+
 	/**
 	 * Performs initialization for listing object.
 	 */
@@ -204,6 +225,9 @@ Mall.listing = {
 		}
 		this.setLoadMoreLabel();
 
+		//delegate events for opening products in overlay on top of page
+		this.initProductsOpening();
+
 	},
 
     initShuffle: function() {
@@ -237,6 +261,126 @@ Mall.listing = {
                 .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
         });
     },
+
+	initProductsOpening: function() {
+		var self = this;
+
+		if(self.getPushStateSupport()) { //iframes for pushstate supported browsers
+			//click events for products
+			jQuery(document).delegate('.box_listing_product > a', 'click', function (e) {
+				self.openIframe(jQuery(this).prop('href'), true);
+				e.preventDefault();
+				return false;
+			});
+		} else if(Mall.getIsBrowserMobile()) { //open in new tab on mobile browsers that don't support pushstate
+			jQuery(document).delegate('.box_listing_product > a', 'click', function (e) {
+				jQuery(this).prop('target','_blank');
+			});
+		}
+
+	},
+
+	openIframe: function(link,pushState) {
+		var self = this;
+		self._original_scrolltop = document.body.scrolltop || jQuery(window).scrollTop() || jQuery(document).scrollTop();
+		self._original_title = document.title;
+		self._iframe_src = link;
+
+		if(pushState || !jQuery('#productsIframe').length || jQuery('#productsIframe').prop('src') != link) {
+			jQuery('#productsIframe').detach();
+			jQuery('body').append('<iframe id="productsIframe"></iframe>');
+
+			self.showAjaxLoading();
+
+			var iframe = jQuery('#productsIframe');
+			iframe.load(function() {
+				jQuery('html,body').addClass('noscroll');
+				iframe.addClass('open');
+				self.hideAjaxLoading();
+				if(pushState) {
+					history.pushState({iframeLink: link}, '', link);
+				}
+				self.setIframeTitle();
+				var iframeDoc = document.getElementById('productsIframe').contentDocument || document.getElementById('productsIframe').contentWindow.document;
+				self._iframe_src = iframeDoc.location.href;
+				self.handleIframeLocation();
+			});
+
+			iframe.prop('src',link);
+		} else {
+			jQuery('html,body').addClass('noscroll');
+			jQuery('#productsIframe').show();
+			self.setIframeTitle();
+		}
+
+	},
+
+	handleIframeLocation: function() {
+		var self = this,
+			iframeDoc = self.getIframeDocument();
+
+		jQuery(iframeDoc).delegate('a','click',function(e) {
+			var current = jQuery(this),
+				link = current.prop('href');
+			if(link.indexOf('http') === 0 && link.indexOf('#') === -1) {
+				jQuery(this).prop('target', '_top');
+			}
+		});
+
+		/*self._iframe_timer = setTimeout(function() {
+			var iframe = document.getElementById('productsIframe');
+			try {
+				var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+				if (self._iframe_src !== false && iframeDoc.location.href != self._iframe_src) {
+					console.log(iframeDoc.location.href + "");
+					console.log(self._iframe_src);
+					console.log(self._iframe_src == iframeDoc.location.href + "");
+					self._iframe_src = false;
+					clearTimeout(self._iframe_timer);
+				} else {
+					self.handleIframeLocation();
+				}
+			} catch( Exception ) {
+				document.location = jQuery('#productsIframe').prop('src');
+			}
+		}, 100);*/
+
+	},
+
+	getIframeDocument: function() {
+		return  document.getElementById('productsIframe').contentDocument || document.getElementById('productsIframe').contentWindow.document;
+	},
+
+	closeIframe: function() {
+		var self = this;
+
+		jQuery('html,body').removeClass('noscroll');
+
+		Mall.destroyHeadroom();
+
+		setTimeout(function() {
+			jQuery(window).scrollTop(Mall.listing._original_scrolltop);
+			Mall.initHeadroom();
+			self.setOriginalTitle();
+			jQuery('iframe#productsIframe').hide();
+		},100);
+	},
+
+	setIframeTitle: function() {
+		var self = this;
+		try {
+			var title = self.getIframeDocument().getElementsByTagName('title')[0].innerHTML.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
+			document.getElementsByTagName('title')[0].innerHTML = title;
+			document.title = title;
+		} catch (e) { }
+	},
+
+	setOriginalTitle: function() {
+		var title = this._original_title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
+		document.getElementsByTagName('title')[0].innerHTML = title;
+		document.title = title;
+	},
 
     /**
      * hide btn filter product if no products/no sidebar (search for example)
@@ -1027,55 +1171,61 @@ Mall.listing = {
 	initOnpopstateEvent: function() {
 		if(!window.onpopstate) {
 			var self = this;
-			window.onpopstate = function() {
-				//uncheck all filters
-				jQuery("input[type=checkbox]").prop('checked', false);
-				//check url for selected filters
-				var filters = self._getUrlObjects(),
-					sort = false,
-					dir = false;
-				if (Object.keys(filters).length) {
-					for (var filter in filters) {
-						if(filters.hasOwnProperty(filter)) {
-							for (var key in filters[filter]) {
-								if(filters[filter].hasOwnProperty(key)) {
-									var value = filters[filter][key];
-									if (key.substring(0, 2) == 'fq') {
-										jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
-										if (key == "fq[price]") {
-											// Set values of range
-											var slider = jQuery("#slider-range"),
-												values = value.split(" TO "),
-												start = parseInt(values[0], 10),
-												stop = parseInt(values[1], 10);
-											slider.slider("option", "values", [start, stop]);
-											jQuery("#zakres_min").val(start);
-											jQuery("#zakres_max").val(stop);
-											self._transferValuesToCheckbox(start, stop);
+			window.onpopstate = function(e) {
+				if(typeof e.state.iframeLink != 'undefined' && e.state.iframeLink) {
+					self.openIframe(e.state.iframeLink,false);
+				} else if(jQuery('iframe#productsIframe:visible').length) {
+					self.closeIframe();
+				} else {
+					//uncheck all filters
+					jQuery("input[type=checkbox]").prop('checked', false);
+					//check url for selected filters
+					var filters = self._getUrlObjects(),
+						sort = false,
+						dir = false;
+					if (Object.keys(filters).length) {
+						for (var filter in filters) {
+							if (filters.hasOwnProperty(filter)) {
+								for (var key in filters[filter]) {
+									if (filters[filter].hasOwnProperty(key)) {
+										var value = filters[filter][key];
+										if (key.substring(0, 2) == 'fq') {
+											jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
+											if (key == "fq[price]") {
+												// Set values of range
+												var slider = jQuery("#slider-range"),
+													values = value.split(" TO "),
+													start = parseInt(values[0], 10),
+													stop = parseInt(values[1], 10);
+												slider.slider("option", "values", [start, stop]);
+												jQuery("#zakres_min").val(start);
+												jQuery("#zakres_max").val(stop);
+												self._transferValuesToCheckbox(start, stop);
+											}
+										} else if (key == 'sort') {
+											sort = value;
+										} else if (key == 'dir') {
+											dir = value;
+										} else if (key == "slider" && value == "1") {
+											jQuery("input[type=checkbox]#filter_slider").prop("checked", true);
 										}
-									} else if (key == 'sort') {
-										sort = value;
-									} else if (key == 'dir') {
-										dir = value;
-									} else if (key == "slider" && value == "1") {
-										jQuery("input[type=checkbox]#filter_slider").prop("checked", true);
 									}
 								}
 							}
 						}
+						if (sort && dir) {
+							self.setSort(sort);
+							self.setDir(dir);
+						} else {
+							self.setSort('');
+							self.setDir('');
+						}
+						self.setSortSelect();
 					}
-					if(sort && dir) {
-						self.setSort(sort);
-						self.setDir(dir);
-					} else {
-						self.setSort('');
-						self.setDir('');
-					}
-					self.setSortSelect();
+					//reload listing
+					self.onPopStated = true;
+					self.reloadListingNoPushState();
 				}
-				//reload listing
-				self.onPopStated = true;
-				self.reloadListingNoPushState();
 			}
 		}
 	},

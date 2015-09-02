@@ -326,5 +326,10 @@ html.noscroll {
 	body {
 		overflow: hidden;
 		height: 100%;
+		&.noscroll {
+			#sb-site {
+				overflow-y: scroll;
+			}
+		}
 	}
 }

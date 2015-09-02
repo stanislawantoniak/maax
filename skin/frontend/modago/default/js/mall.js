@@ -1523,6 +1523,20 @@ Mall.restoreCheckoutValues = function() {
 	}
 };
 
+Mall.headroom = false;
+
+Mall.initHeadroom = function() {
+	Mall.headroom = new Headroom(document.querySelector(".header_top"));
+	Mall.headroom.init();
+};
+
+Mall.destroyHeadroom = function() {
+	if(Mall.headroom !== false) {
+		Mall.headroom.destroy();
+		Mall.headroom = false;
+	}
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
@@ -1531,9 +1545,7 @@ jQuery(document).ready(function() {
 	Mall.Slick.init();
 	Mall.Footer.init();
 
-	jQuery(".header_top").headroom({
-		offset: 60
-	});
+	Mall.initHeadroom();
 
 	initToggleSearch();
     Mall.disableSearchNoQuery();
