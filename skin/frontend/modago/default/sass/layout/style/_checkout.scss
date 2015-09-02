@@ -31,6 +31,9 @@
 		margin-bottom:15px;
 		padding:0;
 	}
+    h4.number_order {
+      margin-bottom: 10px;
+    }
 	fieldset {
 		> h4 {
 			margin-top:0px;
@@ -674,4 +677,13 @@
 
 #invoice_data {
 	display:none;
+}
+.checkout-success {
+  .see-this-order {
+    font-size: 11px;
+  }
+}
+
+#checkout-onepage-social-login {
+	margin-top: -15px;
 }

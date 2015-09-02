@@ -14,7 +14,7 @@
 		$facetUrl = $this->getFacesUrl(array('fq'=>array('price'=>$values['value'])));
 		?>
 		
-		<li><a href="<?php echo $facetUrl?>" data-params='<?php echo $this->getItemJson($item);?>' class="facet-item"><?php echo $values['formatted']?>&nbsp;<span>(<?php echo $values['count']?>)</span></a></li>
+		<li><a href="<?php echo $facetUrl?>" data-params='<?php echo $this->getItemJson($values);?>' class="facet-item"><?php echo $values['formatted']?>&nbsp;<span>(<?php echo $values['count']?>)</span></a></li>
 		
 		<?php endforeach;?>
 	</ol>

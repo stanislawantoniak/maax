@@ -35,6 +35,8 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
             $dhlSettings[$key] = $param;
         }
         $dhlSettings['deliveryValue'] = (string)$rma->getTotalValue();
+        $dhlSettings['content'] = Mage::helper('zolagorma')->__('RMA: %s',$rma->getIncrementId());
+        $dhlSettings['comment'] = Mage::helper('zolagorma')->__('RMA number: %s, order number: %s',$rma->getIncrementId(),$rma->getUdpoIncrementId());
         $carrierManager->setShipmentSettings($dhlSettings);        
         $vendorId = $rma->getUdropshipVendor();
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
