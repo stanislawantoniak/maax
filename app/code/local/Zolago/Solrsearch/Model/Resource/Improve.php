@@ -934,9 +934,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         Zolago_Solrsearch_Model_Catalog_Product_Collection $collection,
         $storeId, $customerGroupId) {
 
-        $category = $collection->getCurrentCategory();
-
-
         // Add is in my wishlist
         $wishlist = Mage::helper("zolagowishlist")->getWishlist();
         /* @var $wishlist Mage_Wishlist_Model_Wishlist */
@@ -952,54 +949,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 $product->setInMyWishlist(1);
             }
         }
-
-
-        // Add store urls
-
-        $select = $this->getReadConnection()->select();
-        $select->from(
-            array("url_main"			=>	$this->getTable("core/url_rewrite")),
-            array(
-                "product_id"			=> "url_main.product_id",
-                "main_request_path"		=> "url_main.request_path"
-            ));
-        $select->where("url_main.product_id IN (?)", $collection->getAllIds());
-        $select->where("url_main.store_id=?", $storeId);
-        $select->where("url_main.category_id IS NULL");
-
-        $mainUrls=$this->getReadConnection()->fetchPairs($select);
-
-        foreach ($collection as $product) {
-            $productUrl = null;
-            if(isset($mainUrls[$product->getId()])) {
-                $productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
-            }
-            elseif(empty($productUrl)) {
-                // Add category url
-                $catUrls = array();
-                if($category && $category->getId()) {
-                    $select = $this->getReadConnection()->select();
-                    $select->from(
-                        array("url_cat"			=>	$this->getTable("core/url_rewrite")),
-                        array(
-                            "product_id"			=> "url_cat.product_id",
-                            "cat_request_path"		=> "url_cat.request_path"
-                        ));
-                    $select->where("url_cat.product_id IN (?)", $collection->getAllIds());
-                    $select->where("url_cat.store_id=?", $storeId);
-                    $select->where("url_cat.category_id=?",  $category->getId());
-
-                    $catUrls=$this->getReadConnection()->fetchPairs($select);
-                }
-                if (isset($catUrls[$product->getId()])) {
-                    $productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
-                } else {
-                    $productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
-                }
-            }
-            $product->setCurrentUrl($productUrl);
-        }
-
 
         return $this;
     }

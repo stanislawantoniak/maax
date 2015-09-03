@@ -17,6 +17,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	protected $_solrToMageMap = array(
 		"products_id" => "id",
+        "url_path_varchar" => "current_url",
 		"product_type_static" => "type_id",
 		"name_varchar" => "name",
 		"store_id" => "store_id",

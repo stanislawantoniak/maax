@@ -70,7 +70,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
                 }
             }
 
-            // Add urls and `in my wishlist` for all collection
+            // Add `in my wishlist` for all collection
             $this->_loadAttributesData();
         }
 
