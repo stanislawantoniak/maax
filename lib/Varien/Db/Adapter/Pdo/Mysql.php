@@ -128,7 +128,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @var string
      */
-    protected $_debugFile           = 'var/debug/sql_attributes.txt';
+    protected $_debugFile           = 'var/debug/pdo_mysql.log';
 
     /**
      * Io File Adapter
