@@ -120,6 +120,14 @@
                     <model>zolagocampaign/observer::unsetCampaignAttributes</model>
                 </run>
             </zolagocampaign_unset_campaign_attributes>
+	        <zolagocampaign_attach_products_to_campaigns>
+		        <schedule>
+			        <cron_expr>0 1 * * *</cron_expr>
+		        </schedule>
+		        <run>
+			        <model>zolagocampaign/observer::attachProductsToCampaignBySalesRule</model>
+		        </run>
+	        </zolagocampaign_attach_products_to_campaigns>
         </jobs>
     </crontab>
 </config>
