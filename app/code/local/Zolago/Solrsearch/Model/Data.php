@@ -321,6 +321,10 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		if($item->getOrigData('special_to_date')){
 			$docData['special_to_date_varchar'] = $item->getOrigData('special_to_date');
 		}
+        // MSRP
+        if($item->getOrigData('msrp')){
+            $docData['msrp_decimal'] = $item->getOrigData('msrp');
+        }
         //campaign
         if ($item->getOrigData('campaign_regular_id')) {
             $docData['campaign_regular_id_int'] = (int)$item->getOrigData('campaign_regular_id');

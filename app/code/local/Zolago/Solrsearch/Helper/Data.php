@@ -34,6 +34,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"is_bestseller_int" => "is_bestseller",
 		"product_flag_int" => "product_flag",
         "price_decimal" => "price",
+        "msrp_decimal" => "msrp",
 		"special_price_decimal" => "special_price",
 		"special_from_date_varchar" => "special_from_date",
 		"special_to_date_varchar" => "special_to_date",
