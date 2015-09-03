@@ -29,57 +29,102 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
              } else {
                  $this->_cms_block = 'mypromotions_not_logged';
              }
-         }        
+         }
+
         parent::_prepareLayout();
     }
-    public function getPromotionList() {
+
+    /**
+     * Promo list for mypromotions page
+     * @return array
+     */
+    public function getPromotionList()
+    {
+        /* Coupons collection */
         $collection = Mage::getModel('salesrule/coupon')->getCollection();
-        $collection->addFieldToFilter('customer_id',$this->_customer_id);
+        $collection->addFieldToFilter('customer_id', $this->_customer_id);
         $collection->getSelect()
-	        ->join(array('salesrule'=>'salesrule'),'salesrule.rule_id = main_table.rule_id',array('salesrule.use_auto_generation'))
-	        ->where('expiration_date > ?',date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())))
+            ->join(array('salesrule' => 'salesrule'), 'salesrule.rule_id = main_table.rule_id', array('salesrule.use_auto_generation'))
+            ->where('expiration_date > ?', date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())))
             ->where('(main_table.times_used < main_table.usage_limit) OR (main_table.usage_limit = 0)')
             ->where('salesrule.use_auto_generation = 1');
         $out = array();
         $rules = array();
         foreach ($collection as $item) {
-            $rules[$item['rule_id']] = $item['rule_id'];            
+            $rules[$item['rule_id']] = $item['rule_id'];
         }
         if (empty($rules)) {
             return array();
         }
+
+        //TODO clear unused fields from sales_rule
         $rulesCollection = Mage::getModel('salesrule/rule')->getCollection();
-        $rulesCollection->addFieldToFilter('rule_id',array('in',$rules));
+        $rulesCollection->addFieldToFilter('rule_id', array('in', $rules));
+        $rulesCollection->addFieldToFilter('is_active', array('eq', 1));
+
+        $rulesCollection->getSelect()
+            ->join(
+                array("campaign" => "zolago_campaign"),
+                "main_table.campaign_id = campaign.campaign_id",
+                array(
+                    //"campaign_id" => "campaign.campaign_id",
+                    //"is_landing_page" => "campaign.is_landing_page",
+                    "coupon_image" => "campaign.coupon_image",
+                    "landing_page_context" => "campaign.landing_page_context",
+                    "context_vendor_id" => "campaign.context_vendor_id",
+                    "coupon_pdf" => "campaign.coupon_conditions"
+                )
+            );
+
+        //jeśli kupon nie jest powiązany z kampanią (bo ktoś źle zdefiniował)
+        // lub brakuje obrazka - nie pokazujemy kuponu
+        $localtime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
+        $rulesCollection->addFieldToFilter('status', array("eq" => Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE));
+        $rulesCollection->addFieldToFilter('is_landing_page', array("eq" => 1));
+        $rulesCollection->addFieldToFilter('campaign.coupon_image', array('notnull' => true));
+        $rulesCollection->addFieldToFilter('campaign.coupon_image', array('neq' => ''));
+
+        $rulesCollection->addFieldToFilter('date_from', array('lteq' => $localtime));
+        $rulesCollection->addFieldToFilter('date_to', array('gteq' => $localtime));
+
+        //Mage::log($rulesCollection->getSelect()->__toString());
+
         $rules = array(); // clear
 
-        $campaignRuleRelation = array();
+        $vendorIds = array();
         foreach ($rulesCollection as $rule) {
             $rules[$rule['rule_id']] = $rule;
-            $campaignRuleRelation[$rule->getCampaignId()] = $rule['rule_id'];
+            $vendorIds[] = $rule->getContextVendorId();
         }
-        $campaignIds = array_keys($campaignRuleRelation);
+        $vendorIds = array_unique($vendorIds);
 
-        $ruleCouponDataRelation = array();
-        if(!empty($campaignIds)){
-            $campaignCollection = Mage::getModel("zolagocampaign/campaign")->getCollection();
-            $campaignCollection->addFieldToFilter('campaign_id',array('in',$campaignIds));
+        $vendorLogos = array();
+        if (!empty($vendorIds)) {
+            foreach ($vendorIds as $vendorId) {
+                $campaignVendor = Mage::getModel("udropship/vendor")->load($vendorId);
+                if ($campaignVendor) {
+                    $vendorLogos[$vendorId] = $campaignVendor->getLogo();
+                }
+                unset($campaignVendor);
+            }
+        }
 
-            $campaignCollection->getSelect()
-                ->reset(Zend_Db_Select::COLUMNS)
-                ->columns("campaign_id")
-                ->columns("coupon_image")
-                ->columns("coupon_conditions");
+        $campaignDataForRule = array();
+        foreach ($rulesCollection as $ruleData) {
+            $campaignDataForRule[$ruleData->getRuleId()]["image"] = $ruleData->getCouponImage();
 
-            foreach($campaignCollection as $campaignCollectionItem){
-                $ruleCouponDataRelation[$campaignRuleRelation[$campaignCollectionItem->getCampaignId()]] = $campaignCollectionItem;
+            if ($ruleData->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
+                $campaignDataForRule[$ruleData->getRuleId()]["logo_vendor"] = isset($vendorLogos[$ruleData->getContextVendorId()]) ? Mage::getBaseUrl("media") . $vendorLogos[$ruleData->getContextVendorId()] : "";
             }
         }
 
         foreach ($collection as $item) {
-            if ($rules[$item['rule_id']]->getIsActive()) {
+            if (isset($rules[$item['rule_id']])) {
                 $ruleItem = $rules[$item['rule_id']];
-
-                $ruleItem->setCampaignData($ruleCouponDataRelation[$ruleItem->getId()]);
+                $ruleItem->setCouponImage($campaignDataForRule[$item['rule_id']]["image"]);
+                if (isset($campaignDataForRule[$item['rule_id']]["logo_vendor"])) {
+                    $ruleItem->setLogoVendor($campaignDataForRule[$item['rule_id']]["logo_vendor"]);
+                }
 
                 $item['ruleItem'] = $ruleItem;
                 $out[] = $item;
@@ -110,4 +155,8 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
      public function getCustomerId() {
 	     return $this->_customer_id;
      }
+
+    public function getGalleryLogo(){
+        return Mage::getDesign()->getSkinUrl("images/logo_black.png");
+    }
 } 

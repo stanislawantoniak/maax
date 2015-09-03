@@ -203,7 +203,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	 *
 	 * @return string
 	 */
-	public function getPromotionResizedImagePath($width = 480) {
+	public function getPromotionResizedImagePath($width=294, $height=194) {
 		$path = $this->getPromotionImagePath() . DS . 'resized' . DS . $width;
 		return $path;
 	}
@@ -216,7 +216,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      */
     public function getPromotionImageUrl()
     {
-        $path = Mage::getBaseUrl('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
+        $path = Mage::getBaseUrl('media') . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
         return $path;
     }
 
@@ -227,7 +227,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      */
     public function getCampaignCouponImageUrl()
     {
-        $path = Mage::getBaseUrl('media') . DS . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
+        $path = Mage::getBaseUrl('media') . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
         return $path;
     }
 
@@ -241,9 +241,9 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 		return $path;
 	}
 
-	protected function _resizePromotionImage($fileName,$width=480) {
+	protected function _resizePromotionImage($fileName,$width=294, $height=194) {
 		$basePath = $this->getPromotionImagePath() . DS . $fileName;
-		$newPath = $this->getPromotionResizedImagePath($width) . DS . $fileName;
+		$newPath = $this->getPromotionResizedImagePath($width, $height) . DS . $fileName;
 		//if width empty then return original size image's URL
 		if ($width != '') {
 			//if image has already resized then just return URL
@@ -252,13 +252,13 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 				$imageObj->constrainOnly(true);
 				$imageObj->keepAspectRatio(true);
 				$imageObj->keepFrame(false);
-				$imageObj->resize($width, null);
+				$imageObj->resize($width, $height);
 				$imageObj->save($newPath);
 			} 
         }
 	}
-	
-	public function getResizedPromotionImage($fileName,$width = 480) {
+
+	public function getResizedPromotionImage($fileName,$width = 294, $height = 154) {
 
         $folderURL = $this->getCampaignCouponImageUrl();
 		$imageURL = $folderURL . $fileName;
@@ -266,8 +266,8 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 		//if width empty then return original size image's URL
 		if ($width != '') {
 			//if image has already resized then just return URL
-			$this->_resizePromotionImage($fileName,$width);
-			$resizedURL = $this->getPromotionResizedImageUrl($width) . DS . $fileName;
+			$this->_resizePromotionImage($fileName,$width, $height);
+			$resizedURL = $this->getPromotionResizedImageUrl($width, $height) . DS . $fileName;
 		} else {
 			$resizedURL = $imageURL;
 		}

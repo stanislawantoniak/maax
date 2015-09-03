@@ -1,63 +1,104 @@
 #promo_list {
-	background-color: #F2F1F0;
-	margin: 0 -15px;
-	.promo_item {
-		padding: 10px 4px 0 4px;
-		@media(max-width: 479px) {
-			width: 100% !important;
-		}
-		figure.promo_img {
-			position: relative;
-			img {
-				position: absolute;
-				width: 100%;
-				top: 0;
-				left: 0;
-			}
-		}
-		.promo_info {
-			background-color: #FFF;
-			padding: 15px 10px 0 10px;
-			.promo_name {
-				padding: 0;
-			}
-			.promo_desc, .promo_code, .promo_code_hidden {
-				margin-top: 15px;
-			}
-			.promo_code textarea {
-				cursor: text;
-				border: none;
-				width: 100%;
-				font-size: 1.4em;
-				resize: none;
-				overflow: hidden;
-				height: 50px;
-				padding: 0;
-				opacity: 1;
-                outline: none;
-			}
-		}
-	}
+  background-color: #F2F1F0;
+  margin: 0 -15px;
+  .promo_item {
+    .promo_item_box {
+      border: 1px solid #ebebeb;
+      background: #fff;
+      padding: 0 0 0 0;
+    }
+    padding: 10px 4px 0 4px;
+    @media(max-width: 479px) {
+      width: 100% !important;
+    }
+    figure.promo_img {
+      margin: 0 auto;
+      padding-bottom: 18px;
+      text-align: center;
+      img {
+        max-width: 100%;
+      }
+    }
+    .promo_info {
+      background-color: #FFF;
+      .promo_logo {
+        display: block;
+        height: 52px;
+        margin: 0 auto;
+        border: 1px solid #ebebeb;
+        width: 128px;
+        vertical-align: middle;
+        .promo_logo_img {
+          height: 31px;
+          display: block;
+          background-size: contain;
+          background-position: center center;
+          background-repeat: no-repeat;
+          margin: 8px 11px;
+          vertical-align: middle;
+
+        }
+      }
+      .promo_name {
+        //padding: 0;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: latolight, sans-serif;
+        padding: 15px 30px;
+        font-size: 20px;
+        height: 62px;
+        overflow: hidden;
+      }
+      .promo_see_more {
+        text-align: center;
+        padding-bottom: 18px;
+        padding-top: 18px;
+        a {
+          color: #484848;
+          text-transform: capitalize;
+          font-size: 12px;
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+      .promo_desc, .promo_code, .promo_code_hidden {
+        margin-top: 15px;
+      }
+      .promo_code textarea {
+        cursor: text;
+        border: none;
+        width: 100%;
+        font-size: 1.4em;
+        resize: none;
+        overflow: hidden;
+        height: 50px;
+        padding: 0;
+        opacity: 1;
+        outline: none;
+      }
+    }
+  }
 }
+
 .mypromotions-account-create {
-	padding-top: 0 !important;
-	#mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, .mypromotions-cms, #mypromotions-list {
-		margin-top: 15px;
-		padding: 15px;
-		header p {
-			margin-left: 35px;
-			font-size: 11px;
-		}
-	}
-	#mypromotions-gotologin, #mypromotions-gotoregister {
-		a.button.button-primary {
-			margin-top: 15px;
-		}
-	}
-	#mypromotions-list {
-		padding-bottom: 0;
-		header, header p {
-			margin-bottom: 15px !important;
-		}
-	}
+  padding-top: 0 !important;
+  #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, .mypromotions-cms, #mypromotions-list {
+    margin-top: 15px;
+    padding: 15px;
+    header p {
+      margin-left: 35px;
+      font-size: 11px;
+    }
+  }
+  #mypromotions-gotologin, #mypromotions-gotoregister {
+    a.button.button-primary {
+      margin-top: 15px;
+    }
+  }
+  #mypromotions-list {
+    padding-bottom: 0;
+    header, header p {
+      margin-bottom: 15px !important;
+    }
+  }
 }
