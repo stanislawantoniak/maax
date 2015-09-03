@@ -25,6 +25,7 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
     {
         $rootCategory = Mage::app()->getStore()->getRootCategoryId();
         if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+            $campaign = $this->getCurrentCategory()->getCurrentCampaign();
             if ($rootCategory == $this->getCurrentCategory()->getParentCategory()->getId()) {
                 return null;
             }
@@ -45,22 +46,17 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
             }
         }
         $parentCategory = $this->getCurrentCategory()->getParentCategory();
+
         $parentCategoryUrl = null;
+
         if($this->getParentBlock()->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
+            if ($vendor && $vendor->getId() && $parentCategory->getId() == $vendorRootCategoryId) {
+                $parentCategoryUrl = $vendor->getVendorUrl();
+            }
 
             // Fix for landing pages and campaigns
-            /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-            $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-            /** @var Zolago_Campaign_Model_Campaign $campaign */
-            $campaign = $landingPageHelper->getCampaign();
+
             $_query = null;
-            if ($campaign && $campaign->getId()) {
-                if ($parentCategory->getId() == $campaign->getLandingPageCategory()) {
-                    $_fq = $this->getRequest()->getParam('fq');
-                    $_query['fq']['campaign_info_id']    = isset($_fq['campaign_info_id'])    ? $_fq['campaign_info_id']    : null;
-                    $_query['fq']['campaign_regular_id'] = isset($_fq['campaign_regular_id']) ? $_fq['campaign_regular_id'] : null;
-                }
-            }
 
             $parentCategoryUrl = Mage::getUrl('',
                 array(
@@ -69,9 +65,18 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
                 )
             );
 
-            if ($vendor && $vendor->getId() && $parentCategory->getId() == $vendorRootCategoryId) {
-                $parentCategoryUrl = $vendor->getVendorUrl();
+            if ($campaign) {
+                /* @var $campaignLandingPageModel Zolago_Campaign_Model_Campaign_LandingPage */
+                $campaignLandingPageModel = Mage::getModel("zolagocampaign/campaign_landingPage");
+
+                $isParentCategoryRoot = $campaignLandingPageModel->isCategoryRootForCurrentCampaign($parentCategory);
+                if ($isParentCategoryRoot) {
+                    $parentCategoryUrl = Mage::getBaseUrl() . "?" . $campaign->getCampaignUrl();
+                } else {
+                    $parentCategoryUrl = $parentCategoryUrl . "?" . $campaign->getCampaignUrl();
+                }
             }
+
         }
         else {
             $id = $parentCategory->getId();

@@ -155,13 +155,13 @@ Mall.listing = {
      */
 	_current_url: '',
 
-	_isLP: 0,
+	//_isLP: 0,
 	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
 
-		this.isLP();
+		//this.isLP();
 
 		this.positionFiltersAfterLpBannerLoad();
 
@@ -1129,7 +1129,7 @@ Mall.listing = {
 			ajaxData,
 			function(response){
 				if(response.status){
-					// Cache only success respons
+					// Cache only success response
 					self._ajaxCache[ajaxKey] = response;
 				}
 				self._handleAjaxRepsonse(response,ajaxKey,ajaxData)
@@ -1142,12 +1142,23 @@ Mall.listing = {
 	},
 
 	_handleAjaxRepsonse: function(response,ajaxKey,ajaxData){
+		var hideAjaxLoading = true;
 		if(!response.status){
 			this._handleResponseError(response);
 		}else{
-			this.rebuildContents(response.content,ajaxKey,ajaxData);
+			var rebuildContents = this.rebuildContents(response.content,ajaxKey,ajaxData);
+
+			if(!rebuildContents){
+				hideAjaxLoading = false;
+			}
 		}
-		this.hideAjaxLoading();
+
+		if(hideAjaxLoading){
+			//do not hide loader if page will be refreshed
+			//(For example on Landing page last active filter remove)
+			this.hideAjaxLoading();
+		}
+
 	},
 
 	showAjaxLoading: function(){
@@ -1194,7 +1205,11 @@ Mall.listing = {
 	},
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
-
+		if(content.category_display_mode == 1 && content.listing_type == "category"){
+			//hack to reload cms page
+			window.location = content.url;
+			return false;
+		}
 		Mall.listing.showAjaxLoading();
 		// All filters
 		var filters = jQuery(content.filters);
@@ -1212,6 +1227,8 @@ Mall.listing = {
 
         var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
 		this.getHeader().replaceWith(jQuery(content.header));
+
+
         //this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
 		this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
 		this.getActive().replaceWith(jQuery(content.active));
@@ -1233,6 +1250,8 @@ Mall.listing = {
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
+
+		return true;
 	},
 
 	replaceProducts: function(data){
@@ -1288,9 +1307,6 @@ Mall.listing = {
 			active = this.getActiveLabel(scope),
 			remove = this.getActiveRemove(scope);
 
-
-		var categoryDMPage = jQuery(scope).data("categorydmpage");
-
 		if(this.getPushStateSupport()) {
 
 			function unCheckbox(id) {
@@ -1303,18 +1319,10 @@ Mall.listing = {
 
 			active.click(function() {
 				var me = jQuery(this);
-				var activeDisplayModePage = me.data("displaymode");
-				if (categoryDMPage
-					&& activeDisplayModePage
-					&& jQuery(Mall.listing.getActiveId()).find("input[name^=fq]").length ==1
-				) {
-					window.location = window.location.pathname;
-					return false;
-				}
 
 				self._current_url = me.attr('href');
 
-				if(!me.parent().hasClass('query-text-iks')) {
+				if(!me.parent().hasClass('query-text-iks')) { //not search
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
 					if (active.length == 1) {
@@ -1329,11 +1337,6 @@ Mall.listing = {
 
 			remove.click(function() {
 				var me = jQuery(this);
-
-				if (categoryDMPage) {
-					window.location = window.location.pathname;
-					return false;
-				}
 
 				self._current_url = me.attr('href');
 				active.each(function() {
@@ -2385,8 +2388,7 @@ Mall.listing = {
 			dir: this.getDir(),
 			scat: this.getScat(),
 			rows: this.getScrollLoadOffset(),
-			start: 0,
-			lp: this._isLP
+			start: 0
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2533,35 +2535,13 @@ Mall.listing = {
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
 	        var breadcrumb = jQuery('ol.breadcrumb');
-            if (breadcrumb.attr('data-search') == "0") {
-                e.preventDefault();
-                localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header').find('ol').html());
-            }
-            if (breadcrumb.attr('data-search') == "1") {
-                e.preventDefault();
-                var searchBreadcrumb = "";
-	            breadcrumb.find("li:not(.home,.search,.vendor)").each(function(i,val){
-                    var li = jQuery(val);
-                    var link = jQuery(val).data("link");
-                    var catid = jQuery(val).data("catid");
-                    var text = jQuery(val).find("a").html();
-
-                    searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
-                    +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
-                    +'</li>';
-                });
-
-                localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
-            }
+            e.preventDefault();
+            localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header').find('ol').html());
 
         });
     },
 
 	beforeResizeWidth: window.innerWidth,
-
-	isLP: function(){
-		this._isLP = jQuery("#solr_search_facets").data("islp");
-	},
 
 	positionFiltersAfterLpBannerLoad: function() {
 		var bannersContainer = jQuery('.lp-banners');

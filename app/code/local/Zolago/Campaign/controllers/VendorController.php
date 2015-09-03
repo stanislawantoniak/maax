@@ -152,7 +152,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
                 $campaign->save();
 
-
+                /**
+                 * @see Zolago_Campaign_Model_Observer::campaignAfterUpdate
+                 */
                 Mage::dispatchEvent(
                     "campaign_save_after",
                     array(
@@ -385,8 +387,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
 
     public function get_category_treeAction() {
-        $vendor = (int)$this->getRequest()->getParam("vendor");
-        $tree = Mage::helper("zolagocampaign")->getCategoriesTree($vendor);
+        $vendor = (int)$this->getRequest()->getParam("vendor", 0);
+        $website = (int)$this->getRequest()->getParam("website", 0);
+        $tree = Mage::helper("zolagocampaign")->getCategoriesTree($vendor, $website);
 
         $this->getResponse()
             ->clearHeaders()

@@ -1,192 +1,97 @@
 <?php
-/* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category */
-$_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
 /** @var Zolago_Dropship_Model_Vendor $vendor */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-
-$isBrandshop = $vendor ? $vendor->isBrandshop() : null;
-$vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
-
-/*  @var $lpBlock Zolago_Catalog_Block_Campaign_LandingPage */
-$lpBlock = Mage::getBlockSingleton('zolagocatalog/campaign_landingPage');
-$images = $lpBlock->getData('campaign_landing_page');
-$images = (array)$images;
-
+$vendorTypeLabel = $vendor ? $vendor->getVendorTypeLabel() : false;
+$category = $this->getCategory();
 
 /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
 $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-/** @var Zolago_Campaign_Model_Campaign $campaign */
-$canShowBackToCampaign = $landingPageHelper-> getCanShowBackToCampaign();
 
-$lp = $this->getRequest()->getParam("lp", 0);
+/* @var $campaign Zolago_Campaign_Model_Campaign */
+$banner = ($campaign = $category->getCurrentCampaign()) ? (array)$landingPageHelper->getCampaignLandingPageBannerByCampaign($campaign) : NULL;
+
+
+$moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
+
+if ($this->isContentMode() && !$vendor) return; // no header only on CMS page and no vendor
 ?>
 
 
-<?php if((!$this->isContentMode() || $vendor || $lp)&& empty($images)  ): ?>
-<header data-test="3" id="header-main"  <?php if($this->isContentMode() && !$lp): ?> class="hidden-xs" <?php endif; ?>>
+<header data-test="3" id="header-main"  <?php if($this->isContentMode() && !$campaign): ?> class="hidden-xs" <?php endif; ?>>
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 header-panel">
-                <?php if(!$vendor): ?>
+                <?php if (!empty($banner) || !$vendor): /* one column */?>
                     <div id="breadcrumbs-header">
                         <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                     </div>
+                    <?php if (empty($banner)) : /* category / campaign name */?>
+                    <div id="view-current-filter" >
+                        <h1><?php echo $this->getCategory()->getNameContext(); ?></h1>
+                        <a href="<?php echo $moveUpUrl; ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
+                    </div>
+                    <?php else : /* banners */ ?>
 
-                        <div id="view-current-filter" >
-                            <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                            <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
+                    <div id="lp-banners">
+                        <div id="view-current-filter" class="visible-xs visible-sm-to-smmd">
+                            <h1><?php echo $this->getCategory()->getNameContext(); ?></h1>
+                            <a href="<?php echo $moveUpUrl ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                         </div>
+                        <div class="lp-banners">
+                            <?php $desktop = $banner[1]["path"]; ?>
+                            <?php $mobile = $banner[2]["path"]; ?>
+                            <div class="hidden-xs lp-banner-desktop">
+                                <img
+                                    src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>"
+                                    title="<?php echo $campaign->getNameCustomer(); ?>"
+                                    alt="<?php echo $campaign->getNameCustomer(); ?>"/>
+                            </div>
+                            <div class="visible-xs lp-banner-mobile">
+                                <img
+                                    src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>"
+                                    title="<?php echo $campaign->getNameCustomer(); ?>"
+                                    alt="<?php echo $campaign->getNameCustomer(); ?>"/>
+                            </div>
+                        </div>
+                    </div>
 
+                    <?php endif; ?>
                     <div id="active-filters-wrapper">
                         <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
                     </div>
-                <?php else: ?>
+                <?php else: /* two columns */?>
                     <div id="category-header-left">
                         <div id="category-header-vendor-box">
-                            <?php if(!empty($vendorTypeLabel)): ?>
+                            <?php if (!empty($vendorTypeLabel)): ?>
                             <div class="vendor-header-label">
                                 <?php echo $vendor->getVendorTypeLabel(); ?>
                             </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
                             <a href="<?php echo $vendor->getVendorUrl(); ?>">
-                                <div class="vendor-header-logo" style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                                <div class="vendor-header-logo"
+                                    style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
                             </a>
                         </div>
                     </div>
-                    <div style="clear:both" class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"></div>
+                    <div style="clear:both" class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : '' ?>"></div>
                     <div id="category-header-right">
                         <div class="right-wrapper">
                             <div id="breadcrumbs-header">
                                 <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                             </div>
-
-                                <div id="view-current-filter">
-                                    <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                                    <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : ''?>"><?php echo $this->__("Go up"); ?></a>
-                                </div>
-
-
+                            <div id="view-current-filter">
+                                <h1><?php  echo $this->getCategory()->getNameContext();?></h1>
+                                <a href="<?php echo $moveUpUrl; ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
+                            </div>
                             <div id="active-filters-wrapper">
                                 <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
                             </div>
                         </div>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?>                                
                 </div>
             </div>
         </div>
     </div>
 </header>
-<?php endif; ?>
-
-
-<?php
-/**
- * If is media (banner) replace header by banner (no vendor media & info)
- * If media (banner) is NOT set
- *  If is vendor context
- *   show vendor media on left and rest on right
- *  If is not vendor context
- *   show rest
- */
-?>
-<?php if (!empty($images)): ?>
-    <?php $banners = isset($images["banners"]) ? $images["banners"] : array(); ?>
-    <header data-test="31" id="header-main">
-        <div class="wrapp-section bg-w">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12 header-panel">
-                        <?php if (!empty($banners)):
-                            //show LP banners
-                            ?>
-                            <div id="breadcrumbs-header">
-                                <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
-                            </div>
-                            <div id="lp-banners">
-                                <div id="view-current-filter" class="visible-xs">
-                                    <h1><?php echo $this->getCategory()->getLongName(); ?></h1>
-                                    <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
-                                       class="backToCategory underline visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : '' ?>"><?php echo $this->__("Go up"); ?></a>
-                                </div>
-                                <div class="lp-banners">
-                                    <?php $desktop = $banners[1]["path"]; ?>
-                                    <?php $mobile = $banners[2]["path"]; ?>
-                                    <div class="hidden-xs lp-banner-desktop">
-                                        <img
-                                            src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>"
-                                            title="<?php echo $images["name_customer"]; ?>"
-                                            alt="<?php echo $images["name_customer"]; ?>"/>
-                                    </div>
-                                    <div class="visible-xs lp-banner-mobile">
-                                        <img
-                                            src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>"
-                                            title="<?php echo $images["name_customer"]; ?>"
-                                            alt="<?php echo $images["name_customer"]; ?>"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="active-filters-wrapper">
-                                <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
-                            </div>
-                        <?php
-                        else:
-                            //Show LP campaign name instead of banners
-                            ?>
-                            <?php if (!$vendor): ?>
-                                <div id="breadcrumbs-header">
-                                    <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
-                                </div>
-                                <div id="view-current-filter">
-                                    <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
-                                    <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
-                                       class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
-                                </div>
-                                <div id="active-filters-wrapper">
-                                    <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
-                                </div>
-                            <?php else: ?>
-                                <div id="category-header-left">
-                                    <div id="category-header-vendor-box">
-                                        <?php if (!empty($vendorTypeLabel)): ?>
-                                            <div class="vendor-header-label">
-                                                <?php echo $vendor->getVendorTypeLabel(); ?>
-                                            </div>
-                                        <?php endif; ?>
-                                        <a href="<?php echo $vendor->getVendorUrl(); ?>">
-                                            <div class="vendor-header-logo"
-                                                 style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div style="clear:both"
-                                     class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : '' ?>"></div>
-                                <div id="category-header-right">
-                                    <div class="right-wrapper">
-                                        <div id="breadcrumbs-header">
-                                            <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
-                                        </div>
-
-                                        <div id="view-current-filter">
-                                            <h1><?php echo isset($images["name_customer"]) ? $images["name_customer"] : ""; ?></h1>
-                                            <a href="<?php echo ($canShowBackToCampaign) ? $images["url"] : $_categoryBlock->getMoveUpUrl(); ?>"
-                                               class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
-                                        </div>
-
-                                        <div id="active-filters-wrapper">
-                                            <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-<?php endif; ?>
-
-
-

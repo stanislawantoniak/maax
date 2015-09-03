@@ -7,8 +7,9 @@ class GH_Statements_Model_Observer
      * This function is fire by cron
      * Process all statements for gallery and vendors for:
      * Orders, RMA, refunds and tracks
+     * @param string|null $forceCustomDate
      */
-    public static function processStatements() {
+    public static function processStatements($object,$forceCustomDate = null) {
 
         /* @var $transaction Varien_Db_Adapter_Interface */
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
@@ -19,6 +20,9 @@ class GH_Statements_Model_Observer
         $dateModel = Mage::getModel('core/date');
         $today     = $dateModel->date('Y-m-d');
         $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+        if ($forceCustomDate) {
+            $yesterday = $forceCustomDate;
+        }
 
         // Collection of active vendors who have statement calendar
         /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
@@ -35,14 +39,14 @@ class GH_Statements_Model_Observer
             $itemCollection->addFieldToFilter('calendar_id', $calendarId);
             $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
 
-            if ($itemCollection->getFirstItem()->getId()) {
+            if ($itemCollection->getSize() && $itemCollection->getFirstItem()->getId()) {
                 /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                 $calendarItem = $itemCollection->getFirstItem();
 
                 try {
 	                $transaction->beginTransaction();
 
-	                $statement = self::initStatement($vendor, $calendarItem);
+	                $statement = self::initStatement($vendor, $calendarItem, $forceCustomDate);
 
 	                $statementTotals = new stdClass();
 	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
@@ -69,11 +73,12 @@ class GH_Statements_Model_Observer
      * This create row for statement
      * @param Zolago_Dropship_Model_Vendor $vendor
      * @param GH_Statements_Model_Calendar_Item $calendarItem
+     * @param string|null $forceCustomDate
      * @throws Exception
      * @throws Mage_Core_Exception
      * @return GH_Statements_Model_Statement
      */
-    public static function initStatement($vendor, $calendarItem) {
+    public static function initStatement($vendor, $calendarItem, $forceCustomDate = null) {
 
         if (self::isStatementAlready($vendor, $calendarItem)) {
             throw new Mage_Core_Exception(Mage::helper('ghstatements')->__('Statement for date %s and vendor %s already exist',$calendarItem->getEventDate(),$vendor->getVendorName()));
@@ -91,6 +96,9 @@ class GH_Statements_Model_Observer
             "name"              => $vendor->getVendorName() . ' ' . date("Y-m-d", strtotime($calendarItem->getEventDate())) . ' (' . $calendar->getName()  . ')'
         ));
         $statement->save();
+        if ($forceCustomDate) {
+            $statement->setForceCustomDate($forceCustomDate);
+        }
 
         return $statement;
     }
@@ -156,6 +164,9 @@ class GH_Statements_Model_Observer
         $dateModel = Mage::getModel('core/date');
         $today     = $dateModel->date('Y-m-d');
         $yesterday = strtotime('yesterday',strtotime($today));
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate();
+        }
 
         foreach ($collection as $po) {
             /** @var Zolago_Po_Model_Po $po */
@@ -169,7 +180,7 @@ class GH_Statements_Model_Observer
 
                 // Only PO with track shipped, delivered or returned
                 // and shipped date <= yesterday
-                if (strtotime($track->getShippedDate()) > $yesterday) {
+                if (strtotime($track->getShippedDate()) >= strtotime($yesterday)) {
                     continue;
                 }
 
@@ -264,7 +275,9 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-//        $yesterday = $today; //todo: remove
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate();
+        }
 
 	    $collection = $refundsStatements->getCollection();
 	    $collection
@@ -306,7 +319,9 @@ class GH_Statements_Model_Observer
 	    $today     = $dateModel->date('Y-m-d');
 	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
-//        $yesterday = $today; //todo: remove
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate();
+        }
 
 	    $trackStatements = array();
 	    $tax = self::getTax();
@@ -500,7 +515,10 @@ class GH_Statements_Model_Observer
         $dateModel = Mage::getModel('core/date');
         $today     = $dateModel->date('Y-m-d');
         $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
-        $yesterday = $today . ' 23:59:59'; // Todo: remove
+
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate() . ' 23:59:59';
+        }
 
         // Zwroty o statusie zamknięte-zrealizowane, które mają kwotę do zwrotu lub o typie zwrot nieodebranej niezależnie od kwoty do zwrotu
         // Te które nie zostały dotąd ujęte w rozliczeniu

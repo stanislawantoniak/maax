@@ -20,7 +20,9 @@
  * @method int getIsLandingPage()
  * @method int getLandingPageContext()
  * @method int getContextVendorId()
- * @method string getCampaignUrl()
+ * @method int getCampaignUrl()
+ *
+ * @method Zolago_Campaign_Model_Resource_Campaign getResource()
  */
 class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
@@ -31,9 +33,122 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     const ZOLAGO_CAMPAIGN_DISCOUNT_CODE = "percent";
     const ZOLAGO_CAMPAIGN_DISCOUNT_PRICE_SOURCE_CODE = "price_source_id";
 
+    protected $vendor = null;
+    protected $contextVendor = null;
+
     protected function _construct()
     {
         $this->_init("zolagocampaign/campaign");
+    }
+
+    /**
+     * Vendor who create campaign
+     *
+     * @return Zolago_Dropship_Model_Vendor|null
+     */
+    public function getVendor() {
+        if ($this->vendor === null) {
+            $this->vendor = Mage::getModel("zolagodropship/vendor")->load($this->getVendorId());
+        }
+        return $this->vendor;
+    }
+
+    /**
+     * Context vendor when campaign is landing page
+     *
+     * @return Zolago_Dropship_Model_Vendor|null
+     */
+    public function getContextVendor() {
+        if ($this->contextVendor === null) {
+            $this->contextVendor = Mage::getModel("zolagodropship/vendor")->load($this->getContextVendorId());
+        }
+        return $this->contextVendor;
+    }
+
+    /**
+     * Return final campaign url
+     *
+     * @param null|string $customUrl
+     * @return string
+     * @throws Mage_Core_Exception
+     */
+    public function getFinalCampaignUrl($customUrl = null) {
+        return $customUrl ? $this->getWebsiteUrl() . $customUrl :
+            ($this->getLandingPageUrl() ? $this->getLandingPageUrl() : ($this->_getCampaignUrl() ? $this->_getCampaignUrl() : "") );
+    }
+
+    /**
+     * Get url for website with vendor part (url_key)
+     *
+     * NOTE: Currently campaign can by assigned to one website
+     * (From DB structure can by 1(campaign) to many(websites) but for now is 1 to 1)
+     *
+     * @param string $customVendorUrlPart
+     * @return string
+     * @throws Mage_Core_Exception
+     */
+    public function getWebsiteUrl($customVendorUrlPart = "") {
+        $websiteIds = $this->getAllowedWebsites();
+        if (empty($websiteIds)) {
+//            throw new Mage_Core_Exception("Invalid campaign. No information about allowed websites");
+            return null;
+        } else {
+            /** @var Mage_Core_Model_Website $website */
+            $website = Mage::app()->getWebsite($websiteIds[0]); // Currently campaign can by assigned to one website
+        }
+        $websiteUrl = $website->getConfig("web/unsecure/base_url");
+
+        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+        $vendorUrlPart = $customVendorUrlPart;
+        if ($localVendorId != $this->getVendorId() && empty($customVendorUrlPart)) {
+            $vendorUrlPart = $this->getVendor()->getUrlKey() . "/";
+        }
+        return $websiteUrl . $vendorUrlPart;
+    }
+
+    /**
+     * Get Campaign Website
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        $websiteIds = $this->getAllowedWebsites();
+        return $websiteIds[0];
+    }
+
+    /**
+     * Generate campaign url
+     *
+     * @return string
+     */
+    private function _getCampaignUrl() {
+        $rawCampaignUrl = $this->getData("campaign_url");
+        return $this->getWebsiteUrl() . $rawCampaignUrl;
+    }
+
+    /**
+     * Generate landing page url
+     * If Campaign is not landing page return empty string
+     * @return string
+     */
+    private function getLandingPageUrl() {
+        $id = $this->getLandingPageCategory();
+        $id = !empty($id) ? $id : 0;
+        $vendorUrlKey = $this->getContextVendor()->getUrlKey();
+        $isLP = (int)$this->getIsLandingPage();
+
+        $cacheKey = "lp_url_".$vendorUrlKey."_category_". $id;
+        if (!$this->getData($cacheKey)) {
+            $url = "";
+            if ($isLP) { // Is landing page
+
+                /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+                $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+                $url = $landingPageHelper->getLandingPageUrlByCampaign($this);
+            }
+            $this->setData($cacheKey, $url);
+        }
+        return $this->getData($cacheKey);
     }
 
     /**
@@ -818,5 +933,19 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         return $productIdsUpdated;
     }
+    
+    /**
+     * returns filter key for campaign
+     *
+     * @return string
+     */
+     public function getCampaignFilterKey() {
+         switch ($this->getData('type')) {             
+             case Zolago_Campaign_Model_Campaign_Type::TYPE_INFO:
+                 return self::ZOLAGO_CAMPAIGN_INFO_CODE;
+             default:
+                 return self::ZOLAGO_CAMPAIGN_ID_CODE;
+         }
+     }
 
 }

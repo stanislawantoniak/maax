@@ -128,6 +128,7 @@
 <?php endif; ?>
 
     <script type="text/javascript">
+        var websitesData = JSON.parse('<?php echo json_encode($this->getWebsites()); ?>');
         jQuery(document).ready(function () {
 
             jQuery("#browseProducts form").submit(function (e) {
@@ -204,9 +205,6 @@
                     landing_page_context: {
                         required: "input[name=is_landing_page]:checked"
                     },
-                    campaign_url: {
-                        required: "input[name=is_landing_page][value=0],input[name=is_landing_page][value=0]:checked"
-                    },
                     context_vendor_id: {
                         required: "input[name=landing_page_context][value=vendor]:checked"
                     }
@@ -220,8 +218,11 @@
                     }
                 },
                 errorPlacement: function($error, $element){
-                    var name = $element.attr("name");
-                    $element.closest("div").append($error);
+                    if ($element.closest("div").hasClass("input-group")) {
+                        $element.closest("div").parent().append($error);
+                    } else {
+                        $element.closest("div").append($error);
+                    }
                 }
             });
 
@@ -233,6 +234,22 @@
                 toggleLandingPagePanel();
 
             });
+
+            // On change website context update link
+            jQuery("#website_ids").on('change', function () {
+                setNewCampaignUrl(this.value);
+            });
+            function setNewCampaignUrl(value) {
+                var newUrl = "";
+                for (var i = 0; i < websitesData.length; i++) {
+                    if(websitesData[i]["value"] == value) {
+                        newUrl = websitesData[i]["url"];
+                    }
+                }
+                jQuery(form).find("#campaign_url").parent(".input-group").find(".input-group-addon").html(newUrl);
+            }
+            setNewCampaignUrl(jQuery("#website_ids").val());
+
             function toggleLandingPagePanel(element, toggleContainer) {
                 var showLandingPageConfig = jQuery('input[name="is_landing_page"]:checked').val();
                 var LandingPageConfig = jQuery('.landing-page-config').parents('.form-group');
@@ -258,7 +275,7 @@
                 jQuery("[name=landing_page_category]").val("");
                 jQuery("#landing_page_category_text").html("");
                 jQuery("#landing_page_category_url").html("");
-                refreshCategoriesTree(jQuery(this).val());
+                refreshCategoriesTree(jQuery(this).val(), jQuery("[name=website_ids] option:selected").val());
             });
 
             jQuery("#browseCategory button[type=submit]").click(function () {
@@ -282,6 +299,7 @@
                     }
 
                     var vendor = 0;
+                    var website = jQuery("[name=website_ids] option:selected").val();
 
                     if (jQuery("[name=landing_page_context]:checked").val() == "vendor") {
                         jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
@@ -290,16 +308,16 @@
                         jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
                     }
 
-                    refreshCategoriesTree(vendor);
+                    refreshCategoriesTree(vendor, website);
                 }
             }
 
-            function refreshCategoriesTree(vendor){
+            function refreshCategoriesTree(vendor, website){
                 jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
                 jQuery.ajax({
                     url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree"); ?>',
                     method: 'POST',
-                    data: {"vendor": vendor},
+                    data: {"vendor": vendor, website: website},
                     success: function(tree){
 
                         jQuery("#jstree").jstree("destroy");

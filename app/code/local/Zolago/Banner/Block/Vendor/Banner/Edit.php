@@ -43,6 +43,13 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         return ucfirst(str_replace("_", " ", $this->_type));
     }
 
+    /**
+     * @return Zolago_Campaign_Model_Campaign
+     */
+    public function getCampaign() {
+        return Mage::getModel("zolagocampaign/campaign")->load($this->getCampaignId());
+    }
+
     public function getCampaignId(){
         $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
         return $campaignId;
@@ -184,10 +191,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
 
-                /* @var Zolago_Dropship_Helper_Data $zolDropHelper */
-                $zolDropHelper = Mage::helper("zolagodropship");
-                $isLocalVendor = $zolDropHelper->isLocalVendor();
-                $url = $isLocalVendor ? Mage::getUrl() : Mage::getUrl($this->getVendor()->getUrlKey());
+                $url = $this->getCampaign()->getWebsiteUrl();
 
                 if ($picturesNumber > 0) {
                     // Note: picture_can_be_empty should be read like: picture_url_can_be_empty

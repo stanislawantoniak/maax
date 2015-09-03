@@ -2,6 +2,7 @@
 
 class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    protected $_campaignIds;
 
     public function getBannerTypesSlots()
     {
@@ -140,17 +141,14 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
      * @param null $vendorId
      * @return string
      */
-    public function getCategoriesTree($vendorId = null)
+    public function getCategoriesTree($vendorId = null, $website = null)
     {
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         if (!empty($vendorId)) {
             $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+            $rootCategory = $vendor->getData("root_category");
 
-            $customVendorVars = Mage::helper('core')->jsonDecode($vendor->getCustomVarsCombined());
-
-            $vendorRootCategoryId = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category']) && (int)reset($customVendorVars['root_category']) > 0) ?
-                (int)reset($customVendorVars['root_category']) :
-                $rootCatId;
+            $vendorRootCategoryId = (isset($rootCategory[$website]) && !empty($rootCategory[$website])) ? $rootCategory[$website] : $rootCatId;
 
             if ($vendorRootCategoryId > 0) {
                 $rootCatId = $vendorRootCategoryId;
@@ -205,5 +203,46 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $html;
     }
+    
+    
+    /**
+     * return campaign ids from request
+     *
+     * @return array
+     */
+    public function getCampaignIdsFromUrl() {
+        if (is_null($this->_campaignIds)) {
+            $params = Mage::app()->getRequest()->getParams();
+            $this->_campaignIds = $this->parseCampaignIds($params);
+        }
+        return $this->_campaignIds;
+    }
+    
+    /**
+     * parse campaign ids from url params
+     *
+     * @param array $params
+     * @return array
+     */
 
+    public function parseCampaignIds($params) {
+        $id = array();
+        if (!empty($params['fq'])) {
+            if (!empty($params['fq']['campaign_regular_id'])) {
+                if (is_array($params['fq']['campaign_regular_id'])) {
+                    $id += $params['fq']['campaign_regular_id'];
+                } else {
+                    $id[] = $params['fq']['campaign_regular_id'];
+                }
+            } 
+            if (!empty($params['fq']['campaign_info_id'])) {
+                if (is_array($params['fq']['campaign_info_id'])) {
+                    $id += $params['fq']['campaign_info_id'];
+                } else {
+                    $id[] = $params['fq']['campaign_info_id'];
+                }
+            }
+        }
+        return array_unique($id);
+    }
 }

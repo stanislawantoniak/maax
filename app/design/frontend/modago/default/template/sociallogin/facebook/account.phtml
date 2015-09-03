@@ -1,0 +1,111 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+  * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @category    Ced
+ * @package     Ced_SocialLogin
+ * @author 		CedCommerce Magento Core Team <Ced_MagentoCoreTeam@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * @category   	Ced
+ * @package    	Ced_SocialLogin
+ * @author 		CedCommerce Magento Core Team <Ced_MagentoCoreTeam@cedcommerce.com>
+ */
+
+/** @var Ced_SocialLogin_Block_Facebook_Account $this */
+$backUrl = $this->getUrl('customer/account');
+$_helper = Mage::helper('customer');
+$_socialHelper = Mage::helper('sociallogin');
+?>
+<div id="account-edit">
+	<div class="page-title box-wrapper">
+		<h1>
+			<span><?php echo $_socialHelper->__("Facebook login"); ?></span>
+			<span class="back-sm"><a href="<?php echo $backUrl; ?>" class="underline"><?php echo $_helper->__('back: my account'); ?>&nbsp;&gt;</a></span>
+			<span class="back-xs"><a href="<?php echo $backUrl; ?>" class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
+		</h1>
+	</div>
+	<div class="background-wrapper box-wrapper container-fluid">
+		<div class="ced-sociallogin-account">
+			<?php if($this->_hasUserInfo()): ?>
+
+				<?php
+				$googleId = $this->_getFacebookId();
+				$status = $this->_getStatus();
+				$email = $this->_getEmail();
+				$name = $this->_getName();
+				$picture = $this->_getPicture();
+				$gender = $this->_getGender();
+				$birthday = $this->_getBirthday();
+				?>
+
+				<div class="col3-set">
+					<div class="box">
+						<div class="box-content">
+							<div class="col-1">
+								<?php if(!empty($picture)): ?>
+									<p>
+										<img src="<?php echo $picture; ?>" alt="<?php echo $this->htmlEscape($name); ?>" />
+									</p>
+								<?php endif; ?>
+							</div>
+							<div class="col-2">
+								<?php if(!empty($status)): ?>
+									<p>
+										<?php echo $_socialHelper->__('Connected as %s','<strong>'.$status.'</strong>') ?>
+									</p>
+								<?php endif; ?>
+								<?php if(!empty($email)): ?>
+									<p>
+										<?php echo $_socialHelper->__('Email: %s', '<strong>'.$email.'</strong>') ?>
+									</p>
+								<?php endif; ?>
+								<?php if(!empty($googleId)): ?>
+									<p>
+										<?php echo $_socialHelper->__('Facebook id: %s', '<strong>'.$googleId.'</strong>') ?>
+									</p>
+								<?php endif; ?>
+								<?php if(!empty($gender)): ?>
+									<p>
+										<?php echo $_socialHelper->__('Gender: %s', '<strong>'.$gender.'</strong>') ?>
+									</p>
+								<?php endif; ?>
+								<?php if(!empty($birthday)): ?>
+									<p>
+										<?php echo $_socialHelper->__('Birthday: %s', '<strong>'.$birthday.'</strong>') ?>
+									</p>
+								<?php endif; ?>
+							</div>
+							<div class="col-3">
+								<?php echo $this->getChildHtml('ced_sociallogin_account_facebook_button'); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="col2-set">
+					<div class="box-content">
+						<div class="col-1">
+							<p>
+								<?php echo $_socialHelper->__('You can connect store account with your Facebook account so you could login easier in the future.') ?>
+							</p>
+						</div>
+						<div class="col-2">
+							<?php echo $this->getChildHtml('ced_sociallogin_account_facebook_button'); ?>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
+	</div>
+</div>
