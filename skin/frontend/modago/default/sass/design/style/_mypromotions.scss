@@ -20,7 +20,12 @@
       }
     }
     .promo_info {
-      background-color: #FFF;
+      border: 1px solid #ebebeb;
+      &:hover {
+        .promo_see_more {
+          text-decoration: underline;
+        }
+      }
       .promo_logo {
         display: block;
         height: 52px;
@@ -58,7 +63,6 @@
           text-transform: capitalize;
           font-size: 12px;
           cursor: pointer;
-          text-decoration: underline;
         }
       }
       .promo_desc, .promo_code, .promo_code_hidden {

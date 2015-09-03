@@ -36,6 +36,7 @@ $galleryLogo = $this->getGalleryLogo();
 													</figure>
 
 													<div class="promo_logo">
+														<?php // Logo - jeśli jest LP w kontekście vendora - logo vendora, jeśli nie - logo modago ?>
 														<?php if ($logoVendor = $ruleItem->getLogoVendor()): ?>
 															<div class="promo_logo_img" style="background-image: url(<?php echo $logoVendor; ?>)"></div>
 
