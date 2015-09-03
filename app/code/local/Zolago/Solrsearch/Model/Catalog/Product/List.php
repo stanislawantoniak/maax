@@ -44,7 +44,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getCollection() {
         if(!$this->getData("collection")) {
-            //Mage::log("Prepare collection start");
             $collection = Mage::getModel("zolagosolrsearch/catalog_product_collection");
             /* @var $collection Zolago_Solrsearch_Model_Catalog_Product_Collection */
             $collection->setFlag("store_id", Mage::app()->getStore()->getId());
@@ -55,7 +54,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
             $collection->setCurrentCategory($this->getCurrentCategory());
             $collection->load();
             $this->setData("collection", $collection);
-            //Mage::log("Prepare collection stop");
         }
         return $this->getData("collection");
     }
