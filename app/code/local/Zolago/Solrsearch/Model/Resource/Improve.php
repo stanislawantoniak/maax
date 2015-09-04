@@ -791,36 +791,37 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         return Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
     }
 
-    protected function _getLoadAttributesSelect($allIds, $table, array $attributeIds, $storeId = null)
+    protected function _getLoadAttributesSelect($allIds, $table, array $attributeIds, $storeId)
     {
-        if ($storeId) {
-            $adapter        = $this->getReadConnection();
-            $entityIdField  = $this->getEntity()->getEntityIdField();
-            $joinCondition  = array(
-                                  't_s.attribute_id = t_d.attribute_id',
-                                  't_s.entity_id = t_d.entity_id',
-                                  $adapter->quoteInto('t_s.store_id = ?', $storeId)
-                              );
-            $select = $adapter->select()
-                      ->from(array('t_d' => $table), array($entityIdField, 'attribute_id'))
-                      ->joinLeft(
-                          array('t_s' => $table),
-                          implode(' AND ', $joinCondition),
-                          array())
-                      ->where('t_d.entity_type_id = ?', $this->getEntity()->getTypeId())
-                      ->where("t_d.{$entityIdField} IN (?)", $allIds)
-                      ->where('t_d.attribute_id IN (?)', $attributeIds)
-                      ->where('t_d.store_id = ?', 0);
-        } else {
-            $helper = Mage::getResourceHelper('eav');
-            $entityIdField = $this->getEntity()->getEntityIdField();
-            $select = $this->getConnection()->select()
-                      ->from($table, array($entityIdField, 'attribute_id'))
-                      ->where('entity_type_id =?', $this->getEntity()->getTypeId())
-                      ->where("$entityIdField IN (?)", $allIds)
-                      ->where('attribute_id IN (?)', $attributeIds);
-            $select->where('store_id = ?', $this->getDefaultStoreId());
-        }
+        $adapter = $this->getReadConnection();
+        $entityIdField = $this->getEntity()->getEntityIdField();
+        $joinConditionStore = array(
+            't_s.attribute_id = t_main.attribute_id',
+            't_s.entity_id = t_main.entity_id',
+            't_s.entity_type_id = t_main.entity_type_id',
+            $adapter->quoteInto('t_s.store_id = ?', $storeId)
+        );
+        $joinConditionDefault = array(
+            't_d.attribute_id = t_main.attribute_id',
+            't_d.entity_id = t_main.entity_id',
+            't_d.entity_type_id = t_main.entity_type_id',
+            $adapter->quoteInto('t_d.store_id = ?', $this->getDefaultStoreId())
+        );
+        $select = $adapter->select()
+            ->distinct()
+            ->from(array('t_main' => $table), array($entityIdField, 'attribute_id'))
+            ->joinLeft(
+                array('t_s' => $table),
+                implode(' AND ', $joinConditionStore),
+                array())
+            ->joinLeft(
+                array('t_d' => $table),
+                implode(' AND ', $joinConditionDefault),
+                array())
+            ->where('t_main.entity_type_id = ?', $this->getEntity()->getTypeId())
+            ->where("t_main.{$entityIdField} IN (?)", $allIds)
+            ->where('t_main.attribute_id IN (?)', $attributeIds);
+
         return $select;
     }
 
