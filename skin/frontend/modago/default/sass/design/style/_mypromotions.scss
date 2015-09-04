@@ -20,6 +20,11 @@
     &.logged-in {
       padding-left: 0px;
       padding-right: 0px;
+
+      @media(max-width: $screen-md-max) {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
     }
   }
 }
@@ -37,6 +42,7 @@
     @media(max-width: 479px) {
       width: 100% !important;
     }
+
     figure.promo_img {
       margin: 0 auto;
       padding-bottom: 18px;
@@ -79,11 +85,27 @@
         font-size: 20px;
         height: 62px;
         overflow: hidden;
+        @media(max-width: $screen-xs) {
+          padding: 15px 8px;
+          font-size: 15px;
+          height: auto;
+        }
+        @media(max-width: $screen-sm-max) {
+          padding: 15px 8px;
+          font-size: 15px;
+          height: 62px;
+        }
+        @media(max-width: $screen-lg-min) {
+          height: 85px;
+        }
+        @media(max-width: $screen-md) {
+          height: 62px;
+        }
       }
       .promo_see_more {
         text-align: center;
         padding-bottom: 18px;
-        padding-top: 18px;
+        //padding-top: 18px;
         a {
           color: #484848;
           font-size: 12px;
