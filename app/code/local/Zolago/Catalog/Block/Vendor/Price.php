@@ -54,7 +54,7 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 			"converter_msrp_type"	=> $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
 			"campaign_regular_id"	=> $this->_clearEmpty($campaign->toOptionArray()),
 			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
-			"description_status"	=> $this->_clearEmpty($descriptionStatusSrc->getAllOptions()),
+			"description_status"	=> $this->_clearEmpty($descriptionStatusSrc->getAllOptions(false,false,true)),
 			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),
 			"product_flag"			=> $this->_clearEmpty($flags->getSource()->getAllOptions(false)),
 			"bool"					=> $this->_clearEmpty($bool->getAllOptions())
