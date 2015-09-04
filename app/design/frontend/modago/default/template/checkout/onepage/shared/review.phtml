@@ -88,13 +88,13 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 			<div class="row hidden-xs">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="checkout_agreements">
 					<div id="checkout_agreement_vendors">
-						<div class="agreement-nocheck agreement-container">
+						<div class="agreement-nocheck-checkout">
 							<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
 						</div>
 					</div>
 					<form>
 						<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
-						<div class="form-group form-checkbox small text-align-left agreement-container" id="tos_agreement_container">
+						<div class="form-group form-checkbox small text-align-left">
 							<input type="checkbox" id="tos_agreement_checkout" class="css-checkbox required"
 							       required="true"
 							       name="tos_agreement_checkout"
@@ -104,7 +104,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 							</label>
 						</div>
 						<?php endif; ?>
-						<div class="form-group form-checkbox small text-align-left agreement-container" id="dotpay_agreement_container">
+						<div class="form-group form-checkbox small text-align-left">
 							<input type="checkbox" id="dotpay_agreement" class="css-checkbox"
 							       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
 							<label for="dotpay_agreement" class="css-label dotpay_agreement-label">
@@ -215,7 +215,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 	</div>
 
 </div>
-<div style="visibility:hidden" id="checkout-review-hidden-box">
+<?php /* <div style="visibility:hidden" id="checkout-review-hidden-box">
 	<div id="checkout-review-info-cod"><?php echo $this->getCheckoutReviewInfoCod(); ?></div>
 	<div id="checkout-review-info"><?php echo $this->getCheckoutReviewInfo(); ?></div>
-</div>
+</div> */ ?>

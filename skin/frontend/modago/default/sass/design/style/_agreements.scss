@@ -32,6 +32,11 @@
 	}
 }
 
+.agreement-nocheck-checkout {
+	font-size: 12px;
+	margin: 5px 0 18px;
+}
+
 .agreement-nocheck-registration {
 	font-size: 12px;
 	margin: 15px 0 15px;
@@ -52,19 +57,9 @@
 }
 
 #checkout_agreements {
-	.agreement-nocheck.agreement-container {
-		margin: 0 0 15px;
-		padding-left: 35px;
-		padding-right: 35px;
-	}
 	form {
-		.form-checkbox.agreement-container {
+		.form-group.form-checkbox{
 			margin-left: 0;
-			margin-right: 25px;
-		}
-		#tos_agreement_container {
-			margin-top: 0;
-			margin-bottom: 15px;
 		}
 	}
 }

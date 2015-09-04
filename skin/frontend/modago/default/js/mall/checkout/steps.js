@@ -1965,8 +1965,8 @@
 				this._prepareTotals(checkout);
 
 				// Prepare dotpay agreement
-				var dotpayAgreementContainer = jQuery("#dotpay_agreement_container"),
-					dotpayAgreement = dotpayAgreementContainer.find('#dotpay_agreement');
+				var dotpayAgreement = jQuery("#dotpay_agreement"),
+					dotpayAgreementContainer = dotpayAgreement.parent();
 				if(Mall.Checkout.steps.shippingpayment._payment_is_dotpay) {
 					dotpayAgreementContainer.show();
 					dotpayAgreement.prop('disabled',false);

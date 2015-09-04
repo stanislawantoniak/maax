@@ -48,7 +48,10 @@ $modagoHelper = Mage::helper('zolagomodago');
 						</div>
 					</div>
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<div class="form-group form-checkbox small text-align-left agreement-container" id="tos_agreement_container">
+						<div class="agreement-nocheck-registration">
+							<?php echo $modagoHelper->getAgreementHtml('register_info') ?>
+						</div>
+						<div class="form-group form-checkbox small text-align-left" id="tos_agreement_container_registration">
 							<input type="checkbox" id="agreement" class="css-checkbox required"
 							       required="true"
 							       name="agreement"
@@ -57,15 +60,12 @@ $modagoHelper = Mage::helper('zolagomodago');
 								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
 							</label>
 						</div>
-						<div class="form-group form-checkbox small text-align-left agreement-container" id="newsletter_agreement_container">
+						<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container_registration">
 							<input type="checkbox" id="is_subscribed" class="css-checkbox"
 							       name="is_subscribed" style="opacity: 0; visibility: visible;">
 							<label for="is_subscribed" class="css-label agreement-label">
 								<?php echo $modagoHelper->getAgreementHtml('newsletter') ?>
 							</label>
-						</div>
-						<div class="agreement-nocheck agreement-container">
-							<?php echo $modagoHelper->getAgreementHtml('register_info') ?>
 						</div>
 					</div>
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
