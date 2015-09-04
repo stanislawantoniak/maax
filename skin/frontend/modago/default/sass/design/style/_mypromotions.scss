@@ -3,7 +3,7 @@
     h1 {
       text-transform: uppercase;
       padding-top: 0;
-      @media (max-width: $screen-sm-max) {
+      @media (max-width: $screen-xs-max) {
         font-size: 18px;
         padding-bottom: 12px;
         padding-top: 12px;
@@ -75,7 +75,6 @@
         padding-top: 18px;
         a {
           color: #484848;
-          text-transform: capitalize;
           font-size: 12px;
           cursor: pointer;
         }

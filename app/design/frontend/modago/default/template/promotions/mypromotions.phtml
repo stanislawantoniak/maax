@@ -2,6 +2,7 @@
 /** @var Zolago_Modago_Block_Mypromotions $this */
 /** @var Zolago_Salesrule_Helper_Data $helper */
 $helper = Mage::helper('zolagosalesrule');
+$helperModago = Mage::helper("zolagomodago");
 $galleryLogo = $this->getGalleryLogo();
 
 ?>
@@ -53,7 +54,7 @@ $galleryLogo = $this->getGalleryLogo();
 													</h3>
 
 													<div class="promo_see_more">
-														<a><?php echo $helper->__("See more"); ?> &gt;&gt;</a>
+														<a><?php echo $helperModago->__("See more"); ?> &gt;&gt;</a>
 													</div>
 
 												</div>
