@@ -109,6 +109,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
             }
         }
 
+
         $campaignDataForRule = array();
         foreach ($rulesCollection as $ruleData) {
             $campaignDataForRule[$ruleData->getRuleId()]["image"] = $ruleData->getCouponImage();
@@ -116,6 +117,13 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
             if ($ruleData->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
                 $campaignDataForRule[$ruleData->getRuleId()]["logo_vendor"] = isset($vendorLogos[$ruleData->getContextVendorId()]) ? Mage::getBaseUrl("media") . $vendorLogos[$ruleData->getContextVendorId()] : "";
             }
+            if ($ruleData->getCouponPdf())
+                $ruleData->setCouponPdf(Mage::getBaseUrl("media") . Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER . DS . $ruleData->getCouponPdf());
+
+
+            $ruleData->setExpirationDate(date('d.m.Y', Mage::getModel('core/date')->timestamp(
+                strtotime($ruleData->getToDate())
+            )));
         }
 
         foreach ($collection as $item) {

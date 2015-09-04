@@ -13,6 +13,7 @@ $galleryLogo = $this->getGalleryLogo();
 		<div id="content-main" class="section">
 			<?php if ($this->isLogged()): ?>
 				<?php $list = $this->getPromotionList(); ?>
+
 				<div class="container-fluid">
 					<div class="row">
 						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-logged-in">
@@ -27,7 +28,9 @@ $galleryLogo = $this->getGalleryLogo();
 									<?php $n = 1; ?>
 									<?php foreach ($list as $item): ?>
 										<?php $ruleItem = $item->getData("ruleItem"); ?>
-										<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3">
+										<?php $couponId = $item->getCouponId(); ?>
+
+										<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3" data-couponId="<?php echo $couponId; ?>">
 											<div class="promo_item_box">
 
 												<div class="promo_info">
@@ -48,14 +51,22 @@ $galleryLogo = $this->getGalleryLogo();
 															<div class="promo_logo_img" style="background-image: url(<?php echo $galleryLogo; ?>)"></div>
 														<?php endif; ?>
 													</div>
+													<i class="promo_popup_data"
+													   data-description="<?php echo $ruleItem->getDescription(); ?>"
+													   data-term="<?php echo $ruleItem->getExpirationDate(); ?>"
+													   data-code="<?php echo $item['code']; ?>"
+													   data-pdf="<?php echo $ruleItem->getCouponPdf(); ?>"
+														></i>
 
 
-													<h3 class="promo_name" title="<?php echo $ruleItem->getName(); ?>">
+													<h3 class="promo_name" title="<?php echo $ruleItem->getName(); ?>" data-promo-name="<?php echo $ruleItem->getName(); ?>">
 														<?php echo $ruleItem->getName(); ?>
 													</h3>
 
 													<div class="promo_see_more">
-														<a><?php echo $helperModago->__("See more"); ?> &gt;&gt;</a>
+														<a onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal">
+															<?php echo $helperModago->__("See more"); ?> &gt;&gt;
+														</a>
 													</div>
 
 												</div>
@@ -65,7 +76,7 @@ $galleryLogo = $this->getGalleryLogo();
 										<?php if(($n % 3) == 0): ?><div class="clearfix visible-sm visible-xs"></div><?php endif; ?>
 										<?php if(($n % 4) == 0): ?><div class="clearfix visible-md visible-lg"></div><?php endif; ?>
 
-										<?php unset($ruleItem); unset($logoVendor); ?>
+										<?php unset($ruleItem); unset($logoVendor); unset($couponId); ?>
 										<?php $n++; ?>
 									<?php endforeach; ?>
 								</div>
@@ -105,3 +116,27 @@ $galleryLogo = $this->getGalleryLogo();
 		</div>
 	</div>
 </div>
+
+
+<?php if ($this->isLogged()): ?>
+	<div class="modal fade" id="myPromotionsModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"></button>
+				</div>
+				<div class="modal-body"><!--promotion content--></div>
+			</div>
+		</div>
+	</div>
+
+	<?php //translations for popups ?>
+	<script type="text/javascript">
+		jQuery(document).ready(function () {
+			Mall.i18nValidation.add("your-discount", "<?php echo $helper->__("Your discount"); ?>");
+			Mall.i18nValidation.add("your-promo-code", "<?php echo $helper->__("Your promo code"); ?>");
+			Mall.i18nValidation.add("promo-conditions", "<?php echo $helper->__("Promotion Terms and Conditions"); ?>");
+			Mall.i18nValidation.add("your-promo-expiration-date", "<?php echo $helper->__("Expiration date"); ?>");
+		});
+	</script>
+<?php endif; ?>

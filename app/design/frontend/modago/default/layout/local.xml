@@ -248,6 +248,14 @@
 				<stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
 			</action>
 
+			<!--<action method="addItem">-->
+				<!--<type>skin_js</type>-->
+				<!--<script>js/jquery.tmpl.js</script>-->
+			<!--</action>-->
+			<!--<action method="addItem">-->
+				<!--<type>skin_js</type>-->
+				<!--<script>js/promotions.js</script>-->
+			<!--</action>-->
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
 
             <remove name="salesmanago_tracking"/>
@@ -1814,6 +1822,14 @@
             <action method="setTitle" translate="title">
                 <title>My promotions</title>
             </action>
+			<action method="addItem">
+				<type>js</type>
+				<script>jquery/jquery-tmpl/jquery.tmpl.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/promotions.js</script>
+			</action>
         </reference>
         <reference name="content">
 			<block type="zolagomodago/mypromotions_header" name="zolago_modago_mypromotions_header" template="promotions/mypromotions/header.phtml">
