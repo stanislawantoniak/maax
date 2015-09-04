@@ -1803,13 +1803,19 @@
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
-        </reference>
+			<action method="unsetChild">
+				<name>breadcrumbs</name>
+			</action>
+		</reference>
         <reference name="head">
             <action method="setTitle" translate="title">
                 <title>My promotions</title>
             </action>
         </reference>
         <reference name="content">
+			<block type="zolagomodago/mypromotions_header" name="zolago_modago_mypromotions_header" template="promotions/mypromotions/header.phtml">
+				<block type="zolagocatalog/breadcrumbs" name="mypromotions_breadcrumbs"/>
+			</block>
             <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
 				<block type="zolagomodago/promotions_login" name="mypromotions.login" template="promotions/login.phtml">
 					<block type="cms/block" name="promotions.login.header" as="login-header">
@@ -1839,7 +1845,6 @@
             <action method="unsetChild">
                 <name>breadcrumbs</name>
             </action>
-
         </reference>
 
         <remove name="my.account.wrapper"/>

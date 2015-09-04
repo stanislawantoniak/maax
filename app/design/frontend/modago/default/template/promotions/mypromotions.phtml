@@ -2,9 +2,10 @@
 /** @var Zolago_Modago_Block_Mypromotions $this */
 /** @var Zolago_Salesrule_Helper_Data $helper */
 $helper = Mage::helper('zolagosalesrule');
-
 $galleryLogo = $this->getGalleryLogo();
+
 ?>
+<?php echo $this->getChildHtml("zolago_modago_mypromotions_header"); ?>
 
 <div id="content" class="container-fluid mypromotions-account-create account-create">
 	<div class="row">
@@ -13,10 +14,11 @@ $galleryLogo = $this->getGalleryLogo();
 				<?php $list = $this->getPromotionList(); ?>
 				<div class="container-fluid">
 					<div class="row">
-						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<!--							<header class="title-section">-->
-<!--								--><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_list_header')->toHtml(); ?>
-<!--							</header>-->
+						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-logged-in">
+							<?php //Do not remove, only hide (by Staszek) ?>
+							<!--							<header class="title-section">-->
+							<!--								--><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_list_header')->toHtml(); ?>
+							<!--							</header>-->
 
 
 							<?php if (count($list)): ?>
@@ -81,7 +83,7 @@ $galleryLogo = $this->getGalleryLogo();
 						</div>
 					</div>
 				<?php endif; ?>
-				<?php echo $this->getCmsBlock(); ?>
+				<?php //echo $this->getCmsBlock(); // Do not remove, only hide (by Staszek) ?>
 
 			<?php elseif ($this->isPersistent()): ?>
 				<?php echo $this->getChildHtml('mypromotions.gotologin'); ?>
