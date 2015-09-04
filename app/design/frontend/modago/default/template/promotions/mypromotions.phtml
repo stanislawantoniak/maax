@@ -8,7 +8,7 @@ $galleryLogo = $this->getGalleryLogo();
 ?>
 <?php echo $this->getChildHtml("zolago_modago_mypromotions_header"); ?>
 
-<div id="content" class="container-fluid mypromotions-account-create account-create">
+<div id="content" class="container-fluid mypromotions-account-create account-create<?php if ($this->isLogged()): ?> logged-in<?php endif; ?>">
 	<div class="row">
 		<div id="content-main" class="section">
 			<?php if ($this->isLogged()): ?>

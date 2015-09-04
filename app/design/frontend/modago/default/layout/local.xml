@@ -1803,6 +1803,9 @@
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
+			<action method="addBodyClass">
+				<value>your-promotions</value>
+			</action>
 			<action method="unsetChild">
 				<name>breadcrumbs</name>
 			</action>
