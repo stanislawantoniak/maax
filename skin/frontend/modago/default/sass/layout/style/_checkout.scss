@@ -679,7 +679,7 @@
 
 p.text-potwierdzenie {
 	margin: 0;
-	@media(max-width: $screen-md-max) {
+	@media(max-width: $screen-sm-max) {
 		margin-bottom: 15px;
 	}
 }

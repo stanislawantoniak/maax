@@ -56,10 +56,13 @@
 	display: none;
 }
 
-#checkout_agreements {
+.checkout_agreements, .checkout_agreements_mobile {
+	@media(max-width: $screen-sm-max) {
+		padding: 0;
+	}
 	form {
 		.form-group.form-checkbox{
-			margin-left: 0;
+			margin-left: 0 !important;
 		}
 	}
 }

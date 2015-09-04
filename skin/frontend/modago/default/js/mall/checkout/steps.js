@@ -1904,7 +1904,11 @@
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
-					if(!jQuery('#checkout_agreements').find('form').valid()) {
+					var checkout_agreements = jQuery('.checkout_agreements'),
+						checkout_agreements_mobile = jQuery('.checkout_agreements_mobile'),
+						checkout_agreements_to_check = checkout_agreements.is(':visible') ? checkout_agreements : checkout_agreements_mobile;
+
+					if(!checkout_agreements_to_check.find('form').valid()) {
 						return;
 					}
 
@@ -1965,18 +1969,23 @@
 				this._prepareTotals(checkout);
 
 				// Prepare dotpay agreement
-				var dotpayAgreement = jQuery("#dotpay_agreement"),
-					dotpayAgreementContainer = dotpayAgreement.parent();
-				if(Mall.Checkout.steps.shippingpayment._payment_is_dotpay) {
-					dotpayAgreementContainer.show();
-					dotpayAgreement.prop('disabled',false);
-				} else {
-					dotpayAgreementContainer.hide();
-					dotpayAgreement.prop('disabled',true);
-				}
+				var dotpayAgreement = jQuery(".dotpay_agreement");
+
+				dotpayAgreement.each(function() {
+					var dotpayAgreementContainer = jQuery(this).parent(),
+						current = jQuery(this);
+					if(Mall.Checkout.steps.shippingpayment._payment_is_dotpay) {
+						dotpayAgreementContainer.show();
+						current.prop('disabled',false);
+					} else {
+						dotpayAgreementContainer.hide();
+						current.prop('disabled',true);
+					}
+				});
 
 				//prepare last step agreements validation
-				var form = jQuery('#checkout_agreements').find('form');
+				var form = jQuery('.checkout_agreements').find('form'),
+					form_mobile = jQuery('.checkout_agreements_mobile').find('form');
 
 				form.find('.has-feedback').each(function() {
 					var elemToCleanup = jQuery(this);
@@ -1985,8 +1994,16 @@
 					elemToCleanup.find('i').remove();
 				});
 
+				form_mobile.find('.has-feedback').each(function() {
+					var elemToCleanup = jQuery(this);
+					elemToCleanup.removeClass('has-feedback has-error has-success');
+					elemToCleanup.find('.error').remove();
+					elemToCleanup.find('i').remove();
+				});
+
 				Mall.validate.init();
 				form.validate(Mall.validate._default_validation_options);
+				form_mobile.validate(Mall.validate._default_validation_options);
 			},
 			
 			_prepareTotals: function(checkout){
