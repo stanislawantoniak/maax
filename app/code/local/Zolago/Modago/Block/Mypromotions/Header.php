@@ -21,8 +21,8 @@ class Zolago_Modago_Block_Mypromotions_Header extends Zolago_Modago_Block_Myprom
         $breadcrumbs->addCrumb(
             'mypromotions',
             array(
-                'label' => $this->__('Your promotion coupons'),
-                'title' => $this->__('Your promotion coupons')
+                'label' => $this->__('Your coupons'),
+                'title' => $this->__('Your coupons')
             )
         );
 
