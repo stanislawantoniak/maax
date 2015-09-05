@@ -15,6 +15,7 @@
     margin: 20px 0 14px 0;
   }
 }
+
 .your-promotions {
   #content {
     &.logged-in {
@@ -131,7 +132,6 @@
   }
 }
 
-
 .mypromotions-account-create {
   padding-top: 0 !important;
   #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, .mypromotions-cms, #mypromotions-list {
@@ -154,10 +154,135 @@
     }
   }
 }
+
 #mypromotions-list {
   padding-bottom: 0;
   &.mypromotions-logged-in {
     padding-top: 0;
     margin-top: 5px;
+  }
+}
+
+#myPromotionsModal {
+  .modal-content {
+    //min-width: 320px;
+
+    .modal-body {
+      .promo-line {
+        @media(max-width: $screen-xs) {
+          padding-left: 0;
+          padding-right: 2px;
+        }
+      }
+
+      padding: 15px 0px;
+      overflow-x: hidden !important;
+
+      .promo-logo-wrapper {
+        text-align: right;
+        padding-right: 0;
+        //margin: -8px 6px;
+        padding-left: 0;
+
+        img {
+          border: 1px solid #ebebeb;
+          padding: 10px 12px;
+          max-height: 51px;
+          @media(max-width: 360px) {
+            max-height: 48px;
+          }
+        }
+      }
+      .promo-label {
+        font-family: latoblack, sans-serif;
+        font-size: 19px;
+        text-transform: uppercase;
+        padding-left: 0;
+        margin: 10px 0;
+        @media(max-width: $screen-xs) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        @media(min-width: $screen-xs-max) {
+          width: 100%;
+        }
+        @media(max-width: 360px) {
+          font-size: 17px;
+        }
+      }
+      .promo-name {
+        text-transform: uppercase;
+        font-family: latolight, sans-serif;
+        font-size: 19px;
+        margin-top: 11px;
+        margin-bottom: 12px;
+        line-height: normal;
+      }
+      .promo-code {
+        font-size: 14px;
+        span {
+          font-family: latoblack, sans-serif;
+          font-size: 17px;
+        }
+        .promo-code-code {
+          padding-left: 0;
+          margin-bottom: 14px;
+        }
+        .promo-code-copy {
+          padding-left: 0;
+          margin-bottom: 14px;
+
+          .button {
+            padding: 3px 15px;
+            color: #4f4f4f;
+            font-weight: normal;
+            font-size: 12px;
+            font-family: latoregular, sans-serif;
+            min-width: 92px;
+            text-align: center;
+            background: #fff;
+            border: 1px solid #ebebeb;
+            box-shadow: inset 1px 1px 0 0 #e6e6e6;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+
+        }
+      }
+      .promo-link {
+        margin: 5px 0 35px 0;
+        .button.button-primary.medium {
+          padding: 10px 30px 10px 24px;
+          font-size: 12px;
+          @media(max-width: 360px) {
+            font-size: 10px;
+          }
+        }
+      }
+      .promo-text {
+        @media(min-width: $screen-xs) {
+          border: 1px solid #ebebeb;
+          padding: 10px;
+        }
+        p {
+          margin-bottom: 5px;
+        }
+        ol {
+          padding-left: 15px;
+          li {
+            height: 14px;
+          }
+        }
+        .promo-text-how-to {
+
+        }
+        .promo-pdf {
+          a {
+            text-decoration: underline;
+          }
+        }
+      }
+
+    }
   }
 }

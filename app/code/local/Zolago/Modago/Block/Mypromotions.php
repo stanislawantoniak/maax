@@ -67,12 +67,13 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
                 array("campaign" => "zolago_campaign"),
                 "main_table.campaign_id = campaign.campaign_id",
                 array(
-                    //"campaign_id" => "campaign.campaign_id",
+                    "campaign_id" => "campaign.campaign_id",
                     //"is_landing_page" => "campaign.is_landing_page",
                     "coupon_image" => "campaign.coupon_image",
                     "landing_page_context" => "campaign.landing_page_context",
                     "context_vendor_id" => "campaign.context_vendor_id",
-                    "coupon_pdf" => "campaign.coupon_conditions"
+                    "coupon_pdf" => "campaign.coupon_conditions",
+                    "campaign_url" => "campaign.campaign_url"
                 )
             );
 
@@ -124,6 +125,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
             $ruleData->setExpirationDate(date('d.m.Y', Mage::getModel('core/date')->timestamp(
                 strtotime($ruleData->getToDate())
             )));
+            $ruleData->setCampaignUrl(Mage::helper("zolagocampaign/landingPage")->getLandingPageUrl($ruleData->getCampaignId()), FALSE);
         }
 
         foreach ($collection as $item) {

@@ -15,41 +15,44 @@ Mall.promotions.populatePromotionContent = function (couponId) {
     var promoItem = jQuery("#mypromotions-list .promo_item[data-couponid=" + couponId + "]");
 
     if (promoItem.length) {
-        var htmlContent = Mall.promotions.promotionContentTemplate();
 
-        jQuery.tmpl(htmlContent,
-            {
-                "Name": promoItem.find(".promo_name").html(),
-                "Description": promoItem.find(".promo_popup_data").data("description"),
-                "Term": promoItem.find(".promo_popup_data").data("term"),
-                "Code": promoItem.find(".promo_popup_data").data("code"),
-                "PDF": promoItem.find(".promo_popup_data").data("pdf")
-            }
-        ).appendTo("#myPromotionsModal .modal-body");
+        var modal = jQuery("#myPromotionsModal");
+        modal.find(".promo-name").html(promoItem.find(".promo_name").html());
+
+        var logoImg = document.createElement("img");
+        logoImg.setAttribute("src", promoItem.find(".promo_popup_data").data("logo"));
+        logoImg.setAttribute("alt", promoItem.find(".promo_name").html());
+        modal.find(".promo-logo-wrapper").html(logoImg);
+
+
+        modal.find(".promo-description").html(promoItem.find(".promo_popup_data").data("description"));
+        modal.find(".promo-expiration span").html(promoItem.find(".promo_popup_data").data("term"));
+        modal.find(".promo-code span").html(promoItem.find(".promo_popup_data").data("code"));
+
+        modal.find(".promo-link a").attr("href",promoItem.find(".promo_popup_data").data("url"));
+        modal.find(".promo-pdf a").attr("href",promoItem.find(".promo_popup_data").data("pdf"));
 
 
         Mall.promotions.openModal();
     }
 }
 
-/**
- * Template for promotion popup content
- * @returns {string}
- */
-Mall.promotions.promotionContentTemplate = function () {
-    return "<h2>" + Mall.translate.__('your-discount') + ":</h2>" +
-        "<h3>${Name}</h3>" +
-        "<div>${Description}</div>" +
-        "<div>" + Mall.translate.__('your-promo-expiration-date') + " ${Term}.</div>" +
-        "<div>" + Mall.translate.__('your-promo-code') + ": ${Code}</div>" +
-        "<div><a href='${PDF}' download='promotion-conditions'>" + Mall.translate.__('promo-conditions') + "</a></div>";
-}
 
 /**
  * Clear promotion popup content
  */
 Mall.promotions.clearPromotionContent = function () {
-    jQuery("#myPromotionsModal .modal-body").html("");
+    var modal = jQuery("#myPromotionsModal");
+    modal.find(".promo-name").html("");
+    modal.find(".promo-logo-wrapper").html("");
+
+
+    modal.find(".promo-description").html("");
+    modal.find(".promo-expiration span").html("");
+    modal.find(".promo-code span").html("");
+
+    modal.find(".promo-link a").attr("href", "");
+    modal.find(".promo-pdf a").attr("href", "");
 }
 
 Mall.promotions.openModal = function () {
