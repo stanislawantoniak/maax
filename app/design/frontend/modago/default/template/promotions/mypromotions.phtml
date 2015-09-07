@@ -160,10 +160,10 @@ $galleryLogo = $this->getGalleryLogo();
 											<?php echo $helper->__("Copy to clipboard"); ?>
 										</a>
 										<div style="display:none" class="promo-code-copy-result promo-code-copy-error red">
-											<div>nie udało się skopiować kodu</div>
+											<div><? $helper->__("could not copy coupon"); ?></div>
 										</div>
 										<div style="display:none" class="promo-code-copy-result promo-code-copy-success">
-											<div>kod skopiowano do schowka</div>
+											<div><? $helper->__("coupon copied"); ?></div>
 										</div>
 									</div>
 
