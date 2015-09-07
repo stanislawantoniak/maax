@@ -36,9 +36,9 @@ class Zolago_Catalog_Model_Product_Source_Description
             $arr[''] = Mage::helper("zolagocatalog")->__("* Please select");
         }
 		if($noDescription) {
-			$arr[self::DESCRIPTION_NOT_ACCEPTED] = Mage::helper("zolagocatalog")->__("not accepted");
-			$arr[self::DESCRIPTION_WAITING] = Mage::helper("zolagocatalog")->__("waiting for acceptation by admin");
-			$arr[self::DESCRIPTION_ACCEPTED] = Mage::helper("zolagocatalog")->__("accepted");
+			$arr[self::DESCRIPTION_NOT_ACCEPTED] = Mage::helper("zolagocatalog")->__("Not accepted");
+			$arr[self::DESCRIPTION_WAITING] = Mage::helper("zolagocatalog")->__("Waiting for acceptation by admin");
+			$arr[self::DESCRIPTION_ACCEPTED] = Mage::helper("zolagocatalog")->__("Accepted");
 		} else {
 			$arr[self::DESCRIPTION_NOT_ACCEPTED] = Mage::helper("zolagocatalog")->__("Description not accepted");
 			$arr[self::DESCRIPTION_WAITING] = Mage::helper("zolagocatalog")->__("Description waiting for acceptation by admin");
