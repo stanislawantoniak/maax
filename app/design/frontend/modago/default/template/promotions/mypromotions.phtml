@@ -48,7 +48,7 @@ $galleryLogo = $this->getGalleryLogo();
 													</div>
 
 													<i class="promo_popup_data"
-													   data-banner="<?php echo $this->getPromotionImageUrl(). $imageName; ?>"
+													   data-banner="<?php echo $ruleItem->getLandingPageBanner(); ?>"
 													   data-description="<?php echo $ruleItem->getDescription(); ?>"
 													   data-term="<?php echo $ruleItem->getExpirationDate(); ?>"
 													   data-code="<?php echo $item['code']; ?>"

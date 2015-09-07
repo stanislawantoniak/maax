@@ -93,11 +93,18 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         $rules = array(); // clear
 
         $vendorIds = array();
+
+
+        $campaignIds = array();
         foreach ($rulesCollection as $rule) {
             $rules[$rule['rule_id']] = $rule;
             $vendorIds[] = $rule->getContextVendorId();
+            $campaignIds[] = $rule->getCampaignId();
         }
+
         $vendorIds = array_unique($vendorIds);
+        $campaignIds = array_unique($campaignIds);
+
 
         $vendorLogos = array();
         if (!empty($vendorIds)) {
@@ -110,11 +117,19 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
             }
         }
 
+        //Get campaign landing page banners
+        if(!empty($campaignIds)){
+            $landingPageBanners = Mage::helper("zolagocampaign/landingPage")->getLandingPageBanners($campaignIds);
+        }
+
 
         $campaignDataForRule = array();
         foreach ($rulesCollection as $ruleData) {
-            $campaignDataForRule[$ruleData->getRuleId()]["image"] = $ruleData->getCouponImage();
 
+            $campaignDataForRule[$ruleData->getRuleId()]["image"] = $ruleData->getCouponImage();
+            if(isset($landingPageBanners[$ruleData->getCampaignId()])){
+                $ruleData->setLandingPageBanner($landingPageBanners[$ruleData->getCampaignId()]);
+            }
             if ($ruleData->getLandingPageContext() == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
                 $campaignDataForRule[$ruleData->getRuleId()]["logo_vendor"] = isset($vendorLogos[$ruleData->getContextVendorId()]) ? Mage::getBaseUrl("media") . $vendorLogos[$ruleData->getContextVendorId()] : "";
             }
@@ -132,6 +147,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
             if (isset($rules[$item['rule_id']])) {
                 $ruleItem = $rules[$item['rule_id']];
                 $ruleItem->setCouponImage($campaignDataForRule[$item['rule_id']]["image"]);
+
                 if (isset($campaignDataForRule[$item['rule_id']]["logo_vendor"])) {
                     $ruleItem->setLogoVendor($campaignDataForRule[$item['rule_id']]["logo_vendor"]);
                 }
