@@ -45,8 +45,8 @@ Mall.promotions.populatePromotionContent = function (couponId) {
         modal.find(".promo-link a").attr("href",promoItem.find(".promo_popup_data").data("url"));
 
 	    var copy = modal.find(".promo-code-copy"),
-		    copySuccess = modal.find('.promo-code-copy-success'),
-		    copyError = modal.find('.promo-code-copy-error');
+		    copySuccess = modal.find('.promo-code-copy-success').hide(),
+		    copyError = modal.find('.promo-code-copy-error').hide();
 
 	    if(!Mall.promotions.jsCopySupported) {
 		    copy.hide();
