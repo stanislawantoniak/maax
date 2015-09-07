@@ -58,6 +58,7 @@ Mall.promotions.clearPromotionContent = function () {
     var modal = jQuery("#myPromotionsModal");
     modal.find(".promo-name").html("");
     modal.find(".promo-logo-wrapper").html("");
+    modal.find(".promo-banner-wrapper").html("");
 
 
     modal.find(".promo-description").html("");
