@@ -36,7 +36,14 @@ Mall.promotions.populatePromotionContent = function (couponId) {
         modal.find(".promo-code span").html(promoItem.find(".promo_popup_data").data("code"));
 
         modal.find(".promo-link a").attr("href",promoItem.find(".promo_popup_data").data("url"));
-        modal.find(".promo-pdf a").attr("href",promoItem.find(".promo_popup_data").data("pdf"));
+
+
+        if(promoItem.find(".promo_popup_data").data("pdf").length > 0){
+            modal.find(".promo-pdf a").attr("href",promoItem.find(".promo_popup_data").data("pdf"));
+        } else {
+            modal.find(".promo-pdf a").hide();
+        }
+
     }
 }
 
@@ -55,7 +62,7 @@ Mall.promotions.clearPromotionContent = function () {
     modal.find(".promo-code span").html("");
 
     modal.find(".promo-link a").attr("href", "");
-    modal.find(".promo-pdf a").attr("href", "");
+    modal.find(".promo-pdf a").attr("href", "").show();
 }
 
 Mall.promotions.openModal = function () {
