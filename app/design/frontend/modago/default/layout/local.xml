@@ -1829,7 +1829,7 @@
 		</reference>
         <reference name="head">
             <action method="setTitle" translate="title">
-                <title>My promotions</title>
+                <title>Your coupons</title>
             </action>
 			<action method="addItem">
 				<type>skin_js</type>
