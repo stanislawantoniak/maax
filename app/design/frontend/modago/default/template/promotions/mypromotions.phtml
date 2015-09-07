@@ -48,6 +48,7 @@ $galleryLogo = $this->getGalleryLogo();
 													</div>
 
 													<i class="promo_popup_data"
+													   data-banner="<?php echo $imageResized; ?>"
 													   data-description="<?php echo $ruleItem->getDescription(); ?>"
 													   data-term="<?php echo $ruleItem->getExpirationDate(); ?>"
 													   data-code="<?php echo $item['code']; ?>"
@@ -62,7 +63,7 @@ $galleryLogo = $this->getGalleryLogo();
 													</h3>
 
 													<div class="promo_see_more">
-														<a onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal">
+														<a onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal" data-target="#myPromotionsModal">
 															<?php echo $helperModago->__("See more"); ?> &gt;&gt;
 														</a>
 													</div>
@@ -124,7 +125,9 @@ $galleryLogo = $this->getGalleryLogo();
 				<div class="modal-body">
 					<!--promotion content-->
 					<div class='row'>
-						<div class='col-xs-12 hidden-xs'>BANNER</div>
+						<div class="col-xs-12 hidden-xs promo-banner-wrapper">
+<!--							BANNER-->
+						</div>
 
 						<div class='col-xs-12 promo-line'>
 							<div class='col-md-7 col-sm-7 col-xs-12'>
@@ -143,9 +146,9 @@ $galleryLogo = $this->getGalleryLogo();
 						</div>
 
 						<div class='col-xs-12 promo-line'>
-							<div class='col-lg-7 col-md-7 col-sm-6 col-xs-12'>
+							<div class='col-lg-7 col-md-7 col-sm-6 col-xs-9 column-left'>
 								<div class="promo-description"><!--Description--></div>
-								<div class="promo-expiration">
+								<div class="promo-expiration hidden-xs">
 									<?php echo $helper->__("Expiration date"); ?> <span><!--Term--></span>.
 								</div>
 								<div class="promo-code">
@@ -167,15 +170,13 @@ $galleryLogo = $this->getGalleryLogo();
 							<div class='col-lg-5 col-md-5 col-sm-6 col-xs-12 pull-right'>
 								<div class="promo-text">
 									<div  class="promo-text-how-to">
-										<div>Aby skorzystać z rabatu:</div>
-										<ol>
-											<li>skopiuj poniższy kod rabatowy</li>
-											<li>dodaj objęte rabatem produkty do koszyka</li>
-											<li>przejdź do koszyka</li>
-											<li>kliknij w link "Czy posiadasz bon rabatowy?"</li>
-											<li>wprowadź swój kod rabatowy w pole bonu</li>
-											<li>zatwierdź przyciskiem "Dodaj"</li>
-										</ol>
+										<?php
+										echo $this
+											->getLayout()
+											->createBlock('cms/block')
+											->setBlockId('mypromotions_code_how_to_use')
+											->toHtml();
+										?>
 									</div>
 									<div class="promo-pdf">
 										<a download='promotion-conditions'>
@@ -190,15 +191,4 @@ $galleryLogo = $this->getGalleryLogo();
 			</div>
 		</div>
 	</div>
-
-	<?php //translations for popups ?>
-	<script type="text/javascript">
-		jQuery(document).ready(function () {
-//			Mall.i18nValidation.add("your-discount", "<?php //echo $helper->__("Your discount"); ?>//");
-			Mall.i18nValidation.add("your-promo-code", "<?php echo $helper->__("Your promo code"); ?>");
-			Mall.i18nValidation.add("promo-conditions", "<?php echo $helper->__("Promotion Terms and Conditions"); ?>");
-//			Mall.i18nValidation.add("your-promo-expiration-date", "<?php //echo $helper->__("Expiration date"); ?>//");
-			Mall.i18nValidation.add("explore-discount-products", "<?php echo $helper->__("See the products covered by discount"); ?>");
-		});
-	</script>
 <?php endif; ?>

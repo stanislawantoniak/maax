@@ -173,6 +173,11 @@
           padding-left: 0;
           padding-right: 2px;
         }
+        .column-left {
+          @media(max-width: 480px) {
+            width: 100%;
+          }
+        }
       }
 
       padding: 15px 0px;
@@ -198,7 +203,9 @@
         font-size: 19px;
         text-transform: uppercase;
         padding-left: 0;
-        margin: 10px 0;
+        @media(max-width: $screen-sm) {
+          margin: 10px 0;
+        }
         @media(max-width: $screen-xs) {
           padding-left: 0;
           padding-right: 0;
@@ -220,13 +227,23 @@
       }
       .promo-code {
         font-size: 14px;
-        span {
-          font-family: latoblack, sans-serif;
-          font-size: 17px;
-        }
+
         .promo-code-code {
           padding-left: 0;
           margin-bottom: 14px;
+          @media(max-width: 480px) {
+            padding-right: 2px;
+          }
+          @media(max-width: 340px) {
+            font-size: 13px;
+          }
+          span {
+            font-family: latoblack, sans-serif;
+            font-size: 17px;
+            @media(max-width: 340px) {
+              font-size: 13px;
+            }
+          }
         }
         .promo-code-copy {
           padding-left: 0;
@@ -249,6 +266,18 @@
 
         }
       }
+      .promo-description {
+        margin-bottom: 10px;
+        @media(max-width: $screen-xs) {
+          margin-bottom: 20px;
+        }
+      }
+      .promo-expiration {
+        margin-bottom: 10px;
+        @media(max-width: $screen-xs) {
+          margin-bottom: 20px;
+        }
+      }
       .promo-link {
         margin: 5px 0 35px 0;
         .button.button-primary.medium {
@@ -256,6 +285,7 @@
           font-size: 12px;
           @media(max-width: 360px) {
             font-size: 10px;
+            width: 100%;
           }
         }
       }
@@ -271,6 +301,10 @@
           padding-left: 15px;
           li {
             height: 14px;
+            @media(max-width: 340px) {
+              font-size: 13px;
+              height: inherit;
+            }
           }
         }
         .promo-text-how-to {

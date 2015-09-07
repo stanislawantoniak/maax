@@ -1,5 +1,4 @@
 Mall.promotions = function (couponId) {
-    console.log(couponId);
     Mall.promotions.populatePromotionContent(couponId);
 
     jQuery("#myPromotionsModal").on("hide.bs.modal", function () {
@@ -16,13 +15,20 @@ Mall.promotions.populatePromotionContent = function (couponId) {
 
     if (promoItem.length) {
 
+        var promoName = promoItem.find(".promo_name").html();
+
         var modal = jQuery("#myPromotionsModal");
-        modal.find(".promo-name").html(promoItem.find(".promo_name").html());
+        modal.find(".promo-name").html(promoName);
 
         var logoImg = document.createElement("img");
         logoImg.setAttribute("src", promoItem.find(".promo_popup_data").data("logo"));
-        logoImg.setAttribute("alt", promoItem.find(".promo_name").html());
+        logoImg.setAttribute("alt", promoName);
         modal.find(".promo-logo-wrapper").html(logoImg);
+
+        var bannerImg = document.createElement("img");
+        bannerImg.setAttribute("src", promoItem.find(".promo_popup_data").data("banner"));
+        bannerImg.setAttribute("alt", promoName);
+        modal.find(".promo-banner-wrapper").html(bannerImg);
 
 
         modal.find(".promo-description").html(promoItem.find(".promo_popup_data").data("description"));
@@ -31,9 +37,6 @@ Mall.promotions.populatePromotionContent = function (couponId) {
 
         modal.find(".promo-link a").attr("href",promoItem.find(".promo_popup_data").data("url"));
         modal.find(".promo-pdf a").attr("href",promoItem.find(".promo_popup_data").data("pdf"));
-
-
-        Mall.promotions.openModal();
     }
 }
 
