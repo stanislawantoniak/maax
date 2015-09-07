@@ -272,6 +272,16 @@
             cursor: pointer;
           }
 
+          .promo-code-copy-result {
+	          clear: both;
+	          font-size: 12px;
+	          line-height: 25px;
+
+	          .promo-code-copy-error {
+		          color: red;
+	          }
+          }
+
         }
       }
       .promo-description {

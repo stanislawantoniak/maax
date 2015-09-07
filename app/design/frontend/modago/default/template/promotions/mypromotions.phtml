@@ -155,11 +155,17 @@ $galleryLogo = $this->getGalleryLogo();
 									<div class="col-xs-12 promo-code-code">
 										<?php echo $helper->__("Your promo code"); ?> : <span><!--Code--></span>
 									</div>
-<!--									<div class="col-xs-12 promo-code-copy">-->
-<!--										<a class='button large pull-left link'>-->
-<!--											--><?php //echo $helper->__("Copy to clipboard"); ?>
-<!--										</a>-->
-<!--									</div>-->
+									<div class="col-xs-12 promo-code-copy">
+										<a class='button large pull-left link'>
+											<?php echo $helper->__("Copy to clipboard"); ?>
+										</a>
+										<div style="display:none" class="promo-code-copy-result promo-code-copy-error red">
+											<div>nie udało się skopiować kodu</div>
+										</div>
+										<div style="display:none" class="promo-code-copy-result promo-code-copy-success">
+											<div>kod skopiowano do schowka</div>
+										</div>
+									</div>
 
 								</div>
 								<div class="promo-link">
