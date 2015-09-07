@@ -6,7 +6,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12 header-panel">
-                        <?php echo $this->getChildHtml("mypromotions_breadcrumbs"); ?>
+                        <?php echo $this->getLayout()->getBlock('breadcrumbs')->toHtml(); ?>
                         <div class="header-title">
                             <h1><?php echo $helper->__("Your promotion coupons"); ?></h1>
                         </div>
