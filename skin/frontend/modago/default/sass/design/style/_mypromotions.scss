@@ -238,12 +238,16 @@
 
         .promo-code-code {
           padding-left: 0;
+          padding-right: 2px;
           margin-bottom: 14px;
           @media(max-width: 480px) {
             padding-right: 2px;
           }
           @media(max-width: 340px) {
             font-size: 13px;
+          }
+          @media(min-width: $screen-sm-min) and (max-width: 840px) {
+            width: 40%;
           }
           span {
             font-family: latoblack, sans-serif;
@@ -256,9 +260,12 @@
         .promo-code-copy {
           padding-left: 0;
           margin-bottom: 14px;
-
+          margin-top: 6px;
+          @media(min-width: $screen-sm-min) and (max-width: 840px) {
+            width: 60%;
+          }
           .button {
-            padding: 3px 15px;
+            padding: 5px 22px;
             color: #4f4f4f;
             font-weight: normal;
             font-size: 12px;
@@ -319,7 +326,7 @@
           padding-left: 15px;
           li {
             height: 14px;
-            @media(max-width: 340px) {
+            @media(max-width: $screen-sm-max) {
               font-size: 13px;
               height: inherit;
             }
