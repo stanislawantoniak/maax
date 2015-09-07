@@ -169,4 +169,15 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
     public function getGalleryLogo(){
         return Mage::getDesign()->getSkinUrl("images/logo_black.png");
     }
+
+    /**
+     * returns url to catalog with promotions images
+     *
+     * @return string
+     */
+    public function getPromotionImageUrl()
+    {
+        $path = Mage::getBaseUrl('media') . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER. DS ;
+        return $path;
+    }
 } 
