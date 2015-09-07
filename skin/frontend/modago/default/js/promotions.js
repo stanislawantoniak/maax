@@ -25,10 +25,10 @@ Mall.promotions.populatePromotionContent = function (couponId) {
         logoImg.setAttribute("alt", promoName);
         modal.find(".promo-logo-wrapper").html(logoImg);
 
-        var bannerImg = document.createElement("img");
-        bannerImg.setAttribute("src", promoItem.find(".promo_popup_data").data("banner"));
-        bannerImg.setAttribute("alt", promoName);
-        modal.find(".promo-banner-wrapper").html(bannerImg);
+        //var bannerImg = document.createElement("img");
+        //bannerImg.setAttribute("src", promoItem.find(".promo_popup_data").data("banner"));
+        //bannerImg.setAttribute("alt", promoName);
+        //modal.find(".promo-banner-wrapper").html(bannerImg);
 
 
         modal.find(".promo-description").html(promoItem.find(".promo_popup_data").data("description"));
