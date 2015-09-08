@@ -217,8 +217,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
     }
 
     /**
-     * @param Varien_Data_Collection $collection
-     * @return \olago_Solrsearch_Model_Improve_Collection
+     * @param Zolago_Solrsearch_Model_Improve_Collection $collection
+     * @param int $storeId
+     * @return Zolago_Solrsearch_Model_Improve_Collection
      */
     public function loadCategoryData(Zolago_Solrsearch_Model_Improve_Collection $collection, $storeId) {
 
@@ -398,7 +399,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
     }
     /**
      * @param array $allIds
-     * @param type $storeId
+     * @param int $storeId
      * @return Zolago_Solrsearch_Model_Resource_Improve
      */
     protected function _collectCategories(array $allIds, $storeId, $isParent=null) {
@@ -578,8 +579,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
      *
      * @param Varien_Db_Select $select
      * @param Mage_Eav_Model_Entity_Attribute $attribute
-     * @param type $entity
-     * @param type $storeId
+     * @param $joinEntityField
+     * @param int $storeId
+     * @return $this
      */
     protected function _joinAttribute(Varien_Db_Select $select,
                                       Mage_Eav_Model_Entity_Attribute $attribute,
@@ -619,10 +621,11 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
     /**
      * Load attributes data by n*query - n = num data table
      * @param Varien_Data_Collection $collection
-     * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attributesColleciton
+     * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection
      * @param array $allIds
      * @param int $storeId
-     * @return \Zolago_Solrsearch_Model_Ultility
+     * @throws Exception
+     * @throws Mage_Core_Exception
      */
     public function loadAttributesData(Varien_Data_Collection $collection,
                                        Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection,

@@ -38,7 +38,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
                 'options'   => Mage::getModel('adminhtml/system_config_source_yesno')->toArray(),
                 "index"		=>	"is_landing_page",
                 "class"		=>  "form-control",
-                "header"	=>	$_helper->__("Landing Page"),
+                "header"	=>	$_helper->__("Landing page"),
             ));
 
         }

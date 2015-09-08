@@ -7,9 +7,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
     {
         parent::_construct();
     }
-
-    public function _prepareLayout()
-    {
+    public function _prepareLayout() {
 
         $this->_prepareProductsGrid();
         $this->_prepareBannersGrid();
@@ -33,7 +31,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
-        $form->setAction($this->getUrl("campaign/vendor/save"));
+        $form->setAction($this->getUrl("campaign/vendor/save", array("_secure" => true)));
 
         $values = $this->getModel()->getData();
 
@@ -48,6 +46,19 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "icon_class" => "icon-desktop"
             ));
             $landingPage->addType("category_tree", "Zolago_Campaign_Varien_Data_Form_Element_Categorytree");
+
+            $landingPage->addType("thumb", "Zolago_Campaign_Varien_Data_Form_Element_Thumbnail");
+            $landingPage->addType("pdf", "Zolago_Campaign_Varien_Data_Form_Element_Pdf");
+
+            
+            if (!$this->isModelNew()) {
+                $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
+                $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
+
+                /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+                $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+                $urlText = $landingPageHelper->getLandingPageUrl($this->getModel()->getId());
+            }
         }
 
         $prices = $form->addFieldset("price", array(
@@ -91,32 +102,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "wrapper_class" => "col-md-3"
         ));
 
-        if ($isLocalVendor) {
-            if (!$this->isModelNew()) {
-                $landing_page_category_id = isset($values["landing_page_category"]) ? $values["landing_page_category"] : 0;
-                $categoryName = Mage::getModel("catalog/category")->load($landing_page_category_id)->getName();
 
-                $landing_page_context = $values["landing_page_context"];
-                $vendorUrlPart = "";
-                if ($landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
-                    $vendor = Mage::getModel("udropship/vendor")->load($values["context_vendor_id"]);
-
-                    $vendorName = $vendor->getUrlKey();
-                    $vendorUrlPart = $vendorName . "/";
-                }
-
-                $landingPageUrl = isset($values["landing_page_url"]) ? $values["landing_page_url"] : '';
-                $urlText = Mage::getBaseUrl() . $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath() . "?" . $landingPageUrl;
-            }
-            $landingPage->addType("thumb", "Zolago_Campaign_Varien_Data_Form_Element_Thumbnail");
-            $landingPage->addType("pdf", "Zolago_Campaign_Varien_Data_Form_Element_Pdf");
-
-            $landingPage->addField('is_landing_page', 'checkbox', array(
-                'label' => $helper->__('Landing Page'),
-                'name' => 'is_landing_page',
-                'onclick' => 'this.value = this.checked ? 1 : 0;',
+        if($isLocalVendor){
+	        $landingPage->addField("is_landing_page", "radios", array(
+                "name" => "is_landing_page",
+                "required" => false,
+                "label" => $helper->__('Url type'),
+                "values" => $landingPageSource = Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
                 "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-3"
+                "wrapper_class" => "col-md-9 radio-buttons",
             ));
 
             $landingPage->addField("landing_page_context", "radios", array(
@@ -167,8 +161,32 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "wrapper_class" => "col-md-6 landing-page-config",
                 "folder_storage" => Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER
             ));
+        } else {
+            $general->addField('is_landing_page', 'hidden', array(
+                'label' => $helper->__('Url type'),
+                'name' => 'is_landing_page',
+                'value' => 0,
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-3 hidden"
+            ));
         }
 
+        $url = $this->getModel()->getWebsiteUrl() !== null ? $this->getModel()->getWebsiteUrl() : true;
+		$urlFieldConfig = array(
+			"name" => "campaign_url",
+			"class" => "form-control",
+			"required" => true,
+			"label" => $helper->__('URL Key'),
+			"label_wrapper_class" => "col-md-3",
+			"wrapper_class" => "col-md-6",
+            "input_group_addon" => $url
+		);
+
+	    if($isLocalVendor) {
+		    $landingPage->addField("campaign_url", "text", $urlFieldConfig);
+	    } else {
+		    $general->addField("campaign_url", "text", $urlFieldConfig);
+	    }
 
         $general->addField("date_from", "text", array(
             "name" => "date_from",
@@ -183,6 +201,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "name" => "date_to",
             "class" => "form-control datetimepicker col-md-2",
             "label" => $helper->__('Date to'),
+            "required" => true,
             "label_wrapper_class" => "col-md-3",
             "wrapper_class" => "col-md-5 datetimepicker-wrapper",
             "after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>'
@@ -198,14 +217,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             );
         }
 
-        $general->addField("website_ids", "multiselect", array(
+        $general->addField("website_ids", "select", array(
             "name" => "website_ids",
             "required" => true,
-            "class" => "multiple",
+            "class" => "form-control",
             "label" => $helper->__('Websites'),
             "values" => $websiteOptions,
             "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-6"
+            "wrapper_class" => "col-md-3"
         ));
 
         // Prices definition
@@ -260,8 +279,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
         $values = array_merge($values,
             array(
-                'website_ids' => $websiteIdsSelected,
-                "campaign_products" => $productsSelected
+                'website_ids'       => $websiteIdsSelected,
+                "campaign_products" => $productsSelected,
+                "date_from"         => empty($values['date_from']) ? Mage::getModel('core/date')->date('Y-m-d H') . ":00" : $values['date_from']
             )
         );
         if ($isLocalVendor) {
@@ -272,9 +292,23 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $this->setForm($form);
     }
 
+    public function getWebsites() {
+        $websiteOptions = array();
+        $isLocalVendor = Mage::helper("zolagodropship")->isLocalVendor();
+        $vendorPart = $isLocalVendor ? "" : $this->getVendor()->getUrlKey() . "/";
 
-    public function _prepareBannersGrid()
-    {
+        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
+            /** @var Mage_Core_Model_Website $website */
+            $websiteOptions[] = array(
+                "label" => $website->getName(),
+                "value" => $website->getId(),
+                "url" => $website->getConfig("web/unsecure/base_url") . $vendorPart
+            );
+        }
+        return $websiteOptions;
+    }
+
+    public function _prepareBannersGrid() {
         $design = Mage::getDesign();
         $design->setArea("adminhtml");
         $block = $this->getLayout()
@@ -297,7 +331,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $this->setProductsGrid($block);
         $design->setArea("frontend");
     }
-
     /**
      * @return array
      */
@@ -318,9 +351,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
     public function getAddNewBannerPath()
     {
         $campaignId = $this->getRequest()->getParam("id");
-        return Mage::getUrl('banner/vendor/new', array('campaign_id' => $campaignId));
+        return Mage::getUrl('banner/vendor/new', array('campaign_id' => $campaignId, "_secure" => true));
     }
-
     /**
      * @return Zolago_Campaign_Model_Campaign
      */

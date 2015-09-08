@@ -20,29 +20,25 @@ class Zolago_Campaign_Model_Observer
             return;
         }
         $localeTime = Mage::getModel('core/date')->timestamp(time());
-        $localeTimeF = date("Y-m-d H:i", $localeTime);
 
         //set to campaign products assigned_to_campaign = 0
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
         $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
 
-        if($campaign->getData("is_landing_page") == 1){
+        if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
             $campaignType = $campaign->getType();
             //generate landing page url
             $landingPageUrl = "";
-            $nameCustomer = $campaign->getData("name_customer");
-            ;
-            if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
-                //fq[campaign_regular_id][0]=-50%25+Matterhorn++PODKOSZULKI+MĘSKIE
-                $landingPageUrl = "fq[campaign_regular_id][0]=" . urlencode($nameCustomer);
+
+            if ($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
+                $landingPageUrl = "fq[" . Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE . "][0]=" . $campaignId;
             }
-            if($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
-                //fq[campaign_info_id][0]=LP+50%25+rabatu+na+produkty+Esotiq+Publiczna+nazwa+kampanii
-                $landingPageUrl = "fq[campaign_info_id][0]=" .  urlencode($nameCustomer);
+            if ($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
+                $landingPageUrl = "fq[" . Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE . "][0]=" . $campaignId;
             }
-            if(!empty($landingPageUrl)){
-                $campaign->setData("landing_page_url", $landingPageUrl);
+            if (!empty($landingPageUrl)) {
+                $campaign->setData("campaign_url", $landingPageUrl);
                 $campaign->save();
             }
         }

@@ -81,4 +81,37 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getUrl('udqa/customer/post');
     }
+
+	public function getAgreementHtml($type) {
+		$types = array('tos','newsletter','sms','policy','register_info','dotpay','checkout');
+		if(!in_array($type,$types)) {
+			Mage::throwException("Incorrect agreement type, allowed types are: ".implode(", ",$types));
+		}
+
+		$agreementText = Mage::getStoreConfig('customer/agreements/'.$type);
+
+		if(strpos($agreementText,"|") !== false) { //agreement text contains pipeline so we have to show 'more' button
+			$agreementText = explode("|",$agreementText,2);
+			$html = "";
+			$html .= '<span class="agreement-short">'.$agreementText[0].'</span> ';
+			$html .= '<a href="#" class="agreement-btn agreement-more-btn" onclick="Mall.showAgreement(this)">'.$this->__("more").'</a> ';
+			$html .= '<span class="agreement-more">'.$agreementText[1].'</span> ';
+			$html .= '<a href="#" class="agreement-btn agreement-less-btn" onclick="Mall.hideAgreement(this)">'.$this->__("less").'</a> ';
+
+			$return = $html;
+		} else {
+			$return =  $agreementText;
+		}
+
+		if($type == "checkout") {
+			$vendorsLegalEntites = Mage::registry('checkoutVendors');
+			Mage::unregister('checkoutVendors');
+
+			if(is_array($vendorsLegalEntites)) {
+				$return = str_replace("{vendors}",implode(", ",$vendorsLegalEntites),$return);
+			}
+		}
+
+		return $return;
+	}
 }

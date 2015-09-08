@@ -17,83 +17,25 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
         return $vendor;
     }
 
-    public function getCampaignLandingPageBanner(){
-        $images = new stdClass();
 
-        /** @var Zolago_Dropship_Model_Vendor $vendor */
-        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+    /**
+     *
+     * @param Zolago_Campaign_Model_Campaign $campaign
+     * @return
+     */
 
-        $fq = Mage::app()->getRequest()->getParam("fq");
+    public function getCampaignLandingPageBannerByCampaign($campaign)
+    {
+        $images = array();
 
-        if(isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])){
-            $landingPageCampaign = "";
-            if(isset($fq["campaign_regular_id"])){
-                $landingPageCampaign = $fq["campaign_regular_id"][0];
-            }
-            if(isset($fq["campaign_info_id"])){
-                $landingPageCampaign = $fq["campaign_info_id"][0];
-            }
-            $landingPageCampaign = trim($landingPageCampaign);
+        $campaignId = $campaign->getId();
 
-            $campaign = Mage::getModel("zolagocampaign/campaign")
-                ->load($landingPageCampaign,"name_customer");
+        //load banner
+        $imageData = $this->getLandingPageBanner($campaignId);
 
-            $campaignId = $campaign->getId();
-            if ($campaignId !== NULL) {
-
-                if (
-                    ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
-                    && $campaign->getIsLandingPage()
-                    && $campaign->getLandingPageCategory()
-                ) {
-                    //context landing_page_context
-                    $landing_page_context = $campaign->getData("landing_page_context");
-                    $landing_page_category_id = $campaign->getData("landing_page_category");
-
-                    $landingPageUrl = $campaign->getData("landing_page_url");
-
-
-
-
-                    if($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId()) && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR){
-                        //if vendor context
-                        $imageData = $this->getLandingPageBanner($campaignId);
-
-                        $images->name_customer = $campaign->getData("name_customer");
-                        $images->campaign = $campaign->getLandingPageCategory();
-
-                        $vendorName = $vendor->getUrlKey();
-                        $vendorUrlPart = $vendorName."/";
-
-
-                        $images->url =  Mage::getBaseUrl(). $vendorUrlPart . Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
-
-                        if(array_filter($imageData)){
-                            $images->banners = $imageData;
-
-                        }
-
-                    }
-                    if(!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY){
-                        //if gallery context
-                        //load banner
-                        $imageData = $this->getLandingPageBanner($campaignId);
-
-                        $images->name_customer = $campaign->getData("name_customer");
-                        $images->campaign = $campaign->getLandingPageCategory();
-
-                        $images->url =  Mage::getBaseUrl(). Mage::getModel("catalog/category")->load($landing_page_category_id)->getUrlPath(). "?" . $landingPageUrl;
-
-                        if(array_filter($imageData)){
-                            $images->banners = $imageData;
-                        }
-
-                    }
-
-                }
-            }
+        if (array_filter($imageData)) {
+            $images = $imageData;
         }
-
 
         return $images;
     }
@@ -126,6 +68,39 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Return campaign_id from params if exist otherwise null
+     * @return int|null
+     */
+    public function getCampaignIdFromParams()
+    {
+
+        $id = null;
+        if (Mage::registry("listing_reload_params")) {
+            $params = Mage::registry("listing_reload_params");
+        } else {
+            $params = Mage::app()->getRequest()->getParams();
+        }
+        $fq = isset($params["fq"]) ? $params["fq"] : array();
+
+        if (empty($fq)) {
+            return $id;
+        } elseif (isset($fq["campaign_regular_id"])) {
+            return (int)$fq["campaign_regular_id"][0];
+        } elseif (isset($fq["campaign_info_id"])) {
+            return (int)$fq["campaign_info_id"][0];
+        } else {
+            return $id;
+        }
+    }
+
+    /**
+     * Return current campaign for listing
+     * If sth not correct return empty campaign model so always check model before
+     *
+     * Note:
+     * Recommended check
+     * if ($campaign && $campaign->getId()) { ... }
+     *
      * Get landing page banners for multiple campaigns
      * (used in mypromotions page - popups)
      * @param $campaignIds
@@ -166,48 +141,43 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
      * Return current campaign for listing if correct
      * @return false|Mage_Core_Model_Abstract|Zolago_Campaign_Model_Campaign
      */
-    public function getCampaign() {
+    public function getCampaign()
+    {
         if (!Mage::registry("current_zolagocampaign")) {
 
             /** @var Zolago_Dropship_Model_Vendor $vendor */
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-            $fq = Mage::app()->getRequest()->getParam("fq");
-
-            if (isset($fq["campaign_regular_id"]) || isset($fq["campaign_info_id"])) {
-                $landingPageCampaign = "";
-                if (isset($fq["campaign_regular_id"])) {
-                    $landingPageCampaign = $fq["campaign_regular_id"][0];
-                }
-                if (isset($fq["campaign_info_id"])) {
-                    $landingPageCampaign = $fq["campaign_info_id"][0];
-                }
-                $landingPageCampaign = trim($landingPageCampaign);
-
+            $campaignId = $this->getCampaignIdFromParams();
+            if ($campaignId) {
                 /** @var Zolago_Campaign_Model_Campaign $campaign */
-                $campaign = Mage::getModel("zolagocampaign/campaign")
-                    ->load($landingPageCampaign, "name_customer");
+                $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+                $campaignWebsites = $campaign->getAllowedWebsites();
 
                 if ($campaign->getId()) {
                     if (
                         ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
                         && $campaign->getIsLandingPage()
                         && $campaign->getLandingPageCategory()
+                        && in_array(Mage::app()->getWebsite()->getId(), $campaignWebsites)
                     ) {
                         //context landing_page_context
                         $landing_page_context = $campaign->getData("landing_page_context");
 
-                        if ($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId()) && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR) {
-                            //if vendor context
+                        if ($vendor && ($campaign->getContextVendorId() == $vendor->getVendorId())
+                            && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR
+                        ) {
+                            // If vendor context
                             Mage::register("current_zolagocampaign", $campaign);
-                        }
-                        if (!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY) {
-                            //if gallery context
+                        } elseif (!$vendor && $landing_page_context == Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY) {
+                            // If gallery context
                             Mage::register("current_zolagocampaign", $campaign);
                         }
                     }
                 }
             }
             if (!Mage::registry("current_zolagocampaign")) {
+                // If not save empty model so always check before:
+                // if ($campaign && $campaign->getId()) { ... }
                 Mage::register("current_zolagocampaign", Mage::getModel("zolagocampaign/campaign"));
             }
         }
@@ -217,40 +187,14 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
 
     public function getCanShowBackToCampaign()
     {
-        $campaign = $this->getCampaign();
+        //$campaign = $this->getCampaign(); //TODO check if we can not use $this->getCampaign()
         $parentCat = Mage::registry('current_category')->getParentCategory();
+        $campaign = $parentCat->getCurrentCampaign();
 
         if ($campaign && $campaign->getId() && $campaign->getLandingPageCategory() == $parentCat->getId()) {
             return true;
         }
         return false;
-    }
-
-
-    /**
-     * Return campaign_id from params if exist otherwise null
-     * @return int|null
-     */
-    public function getCampaignIdFromParams()
-    {
-
-        $id = null;
-        if (Mage::registry("listing_reload_params")) {
-            $params = Mage::registry("listing_reload_params");
-        } else {
-            $params = Mage::app()->getRequest()->getParams();
-        }
-        $fq = isset($params["fq"]) ? $params["fq"] : array();
-
-        if (empty($fq)) {
-            return $id;
-        } elseif (isset($fq["campaign_regular_id"])) {
-            return (int)$fq["campaign_regular_id"][0];
-        } elseif (isset($fq["campaign_info_id"])) {
-            return (int)$fq["campaign_info_id"][0];
-        } else {
-            return $id;
-        }
     }
 
     /**

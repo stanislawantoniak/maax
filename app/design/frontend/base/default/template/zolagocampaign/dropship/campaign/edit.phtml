@@ -84,7 +84,7 @@
 <!--Products tab-->
 <div class="modal fade" id="browseProducts">
     <div class="modal-dialog" style="width: 80%">
-        <form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
+        <form id="campaign_products" action="<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>"  class="form-horizontal row-border" method="post">
             <input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 
             <div class="modal-content">
@@ -128,6 +128,7 @@
 <?php endif; ?>
 
     <script type="text/javascript">
+        var websitesData = JSON.parse('<?php echo json_encode($this->getWebsites()); ?>');
         jQuery(document).ready(function () {
 
             jQuery("#browseProducts form").submit(function (e) {
@@ -148,7 +149,7 @@
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
                         jQuery.ajax({
-                            url: '/campaign/vendor/products',
+                            url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
@@ -172,7 +173,7 @@
                 var campaignId = jQuery("input[name=campaign_id]").val();
                 var path = jQuery(this).attr('href');
                 removeCampaignGridItemLink(path, campaignId);
-            })
+            });
             function removeCampaignGridItemLink(path, campaignId) {
                 var link = path + "campaignId/" + campaignId;
                 window.location = link;
@@ -217,26 +218,48 @@
                     }
                 },
                 errorPlacement: function($error, $element){
-                    var name = $element.attr("name");
-                    $element.closest("div").append($error);
+                    if ($element.closest("div").hasClass("input-group")) {
+                        $element.closest("div").parent().append($error);
+                    } else {
+                        $element.closest("div").append($error);
+                    }
                 }
             });
 
 
-            var urlKeyContainer = jQuery('.landing-page-config').parents(".form-group");
-            toggleLandingPagePanel(jQuery(form).find('input[name="is_landing_page"]'), urlKeyContainer);
 
-            jQuery(form).find('input[name="is_landing_page"]').on('click', function () {
-                toggleLandingPagePanel(this, urlKeyContainer);
+            toggleLandingPagePanel();
 
-            })
+            jQuery(form).find('input[name="is_landing_page"]').on('change', function () {
+                toggleLandingPagePanel();
+
+            });
+
+            // On change website context update link
+            jQuery("#website_ids").on('change', function () {
+                setNewCampaignUrl(this.value);
+            });
+            function setNewCampaignUrl(value) {
+                var newUrl = "";
+                for (var i = 0; i < websitesData.length; i++) {
+                    if(websitesData[i]["value"] == value) {
+                        newUrl = websitesData[i]["url"];
+                    }
+                }
+                jQuery(form).find("#campaign_url").parent(".input-group").find(".input-group-addon").html(newUrl);
+            }
+            setNewCampaignUrl(jQuery("#website_ids").val());
+
             function toggleLandingPagePanel(element, toggleContainer) {
-                var showLandingPageConfig = jQuery(element).is(":checked");
+                var showLandingPageConfig = jQuery('input[name="is_landing_page"]:checked').val();
+                var LandingPageConfig = jQuery('.landing-page-config').parents('.form-group');
 
-                if (showLandingPageConfig) {
-                    toggleContainer.show();
+                if (showLandingPageConfig ==1) {
+                    jQuery("[name=campaign_url]").parents(".form-group").hide();
+                    LandingPageConfig.show();
                 } else {
-                    toggleContainer.hide();
+                    jQuery("[name=campaign_url]").parents(".form-group").show();
+                    LandingPageConfig.hide();
                 }
 
             }
@@ -246,16 +269,14 @@
             jQuery("[name=landing_page_context]").change(function(){
                 toggleVendorSelect();
                 jQuery("#landing_page_category_url").html("");
-            })
+            });
 
             jQuery("[name=context_vendor_id]").change(function(){
                 jQuery("[name=landing_page_category]").val("");
                 jQuery("#landing_page_category_text").html("");
                 jQuery("#landing_page_category_url").html("");
-
-                refreshCategoriesTree(jQuery(this).val());
-            })
-
+                refreshCategoriesTree(jQuery(this).val(), jQuery("[name=website_ids] option:selected").val());
+            });
 
             jQuery("#browseCategory button[type=submit]").click(function () {
                 jQuery("#landing_page_category_url").html("");
@@ -263,35 +284,45 @@
 
             });
 
+	        //clear value of #campaign_url (non lp) if it's not visible
+	        var campaignUrl = jQuery('#campaign_url');
+	        if(!campaignUrl.is(':visible')) {
+		        campaignUrl.val("");
+	        }
 
+            function toggleVendorSelect() {
+                if (jQuery("[name=is_landing_page]").is(":visible")) {
 
+                    // Set by default context gallery checked
+                    if (jQuery("[name=landing_page_context]:checked").length == 0) {
+                        jQuery("#landing_page_contextgallery").prop('checked', true);
+                    }
 
+                    var vendor = 0;
+                    var website = jQuery("[name=website_ids] option:selected").val();
             jQuery("input[type=file][name=coupon_image]").change(function (e) {
                 if(this.disabled) return alert('File upload not supported!');
                 var F = this.files;
                 readImageUploader($(this), F[0]);
             });
 
-            function toggleVendorSelect() {
+                    if (jQuery("[name=landing_page_context]:checked").val() == "vendor") {
+                        jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
+                        vendor = jQuery("#context_vendor_id option:selected").val();
+                    } else {
+                        jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
+                    }
 
-                var vendor = 0;
-
-                if(jQuery("[name=landing_page_context]:checked").val()== "vendor"){
-                    jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
-                    vendor = jQuery("#context_vendor_id option:selected").val();
-                } else {
-                    jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
+                    refreshCategoriesTree(vendor, website);
                 }
-
-                refreshCategoriesTree(vendor);
             }
 
-            function refreshCategoriesTree(vendor){
+            function refreshCategoriesTree(vendor, website){
                 jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
                 jQuery.ajax({
                     url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree"); ?>',
                     method: 'POST',
-                    data: {"vendor": vendor},
+                    data: {"vendor": vendor, website: website},
                     success: function(tree){
 
                         jQuery("#jstree").jstree("destroy");

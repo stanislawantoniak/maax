@@ -37,7 +37,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"special_from_date_varchar" => "special_from_date",
 		"special_to_date_varchar" => "special_to_date",
         "campaign_regular_id_int" => "campaign_regular_id",
-		"campaign_info_id_varchar" => "campaign_info_id",
+        "campaign_info_id_varchar" => "campaign_info_id",
         "campaign_strikeout_price_type_int" => "campaign_strikeout_price_type",
 		"udropship_vendor_id_int" => "udropship_vendor",
 		"udropship_vendor_logo_varchar" => "udropship_vendor_logo",
@@ -505,7 +505,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 * Map solr docuemnt data to local ORM product
+	 * Map solr document data to local ORM product
 	 * @param array $item
 	 * @param Mage_Catalog_Model_Product $product
 	 * @return Mage_Catalog_Model_Product
@@ -679,6 +679,19 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
          $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
          return $prefix.'_price_decimal';
     } 
-
+    
+    /**
+     * check if we are in search context
+     *
+     * @return bool
+     */
+     public function isSearchContext() {
+        $request = Mage::app()->getRequest();
+        return (
+            $request->getModuleName() == "search" &&
+            $request->getControllerName() == "index" &&
+            $request->getActionName() == "index"
+        );
+     }
 
 }

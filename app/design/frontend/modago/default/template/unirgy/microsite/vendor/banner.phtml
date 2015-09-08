@@ -1,96 +1,97 @@
 <?php
+/**
+ * Slider and Box on CMS Categories
+ * NOTE: For sliders and boxes on Gallery Home Page
+ * @see app/design/frontend/modago/default/template/unirgy/microsite/home/vendor/banner.phtml
+*/
 /** @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner */
-$sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
-$boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 
-$sliders = $this->getSliders();
-$boxes = $this->getBoxes();
+$this->setBannerTypeFilter(array(
+    Zolago_Banner_Model_Banner_Type::TYPE_SLIDER,
+    Zolago_Banner_Model_Banner_Type::TYPE_BOX,
+));
+$_sliders = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
+$_boxes   = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
 
-if (!empty($sliders) || !empty($boxes)): ?>
+if ($_sliders->count() || $_boxes->count()): ?>
 	<div id="vendor-banners">
-		<?php if ($sliders): ?>
+        <?php // SLIDERS START ?>
+		<?php if ($_sliders->count()): ?>
 			<section id="topSlider">
-				<?php foreach ($sliders as $slider): ?>
-					<?php $slides = !empty($slider['banner_image']) ? unserialize($slider['banner_image']) : array(); ?>
-					<?php $captions = !empty($slider['banner_caption']) ? unserialize($slider['banner_caption']) : array(); ?>
+                <?php /** @var Zolago_Campaign_Model_Placement $slider */ ?>
+                <?php foreach ($_sliders as $slider): // F1 OPEN
+                    $bannerImageData   = $slider->getBannerImageData();
+                    $bannerCaptionData = $slider->getBannerCaptionData();
+                    ?>
 					<div class="topSlide">
 						<div class="topSlideImages">
-							<?php foreach ($slides as $i => $slide): ?>
-								<?php if (!empty($slide['url'])): ?>
-									<a href="<?php echo $slide['url']; ?>">
-								<?php endif; ?>
-								<?php if ($i == 1): ?>
+                            <?php foreach($bannerImageData as $i => $slide): ?>
+                                <?php if(!empty($slide['url'])): // A1 OPEN ?>
+                                    <a href="<?php echo $slide['url']; ?>">
+                                <?php endif; ?>
+                                <?php if($i == 1): // Desktop size ?>
 									<?php $imageSize = $this->getImageSize($slide['path']); ?>
-									<img src="<?php echo rtrim(Mage::getBaseUrl('media'), '/') . $slide['path']; ?>"
+                                    <img src="<?php echo $this->getImageUrl($slide['path']); ?>"
 									     class="hidden-xs"
 										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
-								<?php else: ?>
+                                <?php else: // Mobile size ?>
 									<?php $imageSize = $this->getImageSize($slide['path']); ?>
-									<img src="<?php echo rtrim(Mage::getBaseUrl('media'), '/') . $slide['path']; ?>"
+                                    <img src="<?php echo $this->getImageUrl($slide['path']); ?>"
 									     class="visible-xs"
 										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
 								<?php endif; ?>
-								<?php if (!empty($slide['url'])): ?>
-									</a>
-								<?php endif; ?>
+                                <?php if(!empty($slide['url'])): //A1 CLOSE ?>
+                                    </a>
+                                <?php endif; ?>
 							<?php endforeach; ?>
 						</div>
 						<div class="topSlideCaptions">
-							<?php foreach ($captions as $i => $caption): ?>
-								<?php if ($caption['text']): ?>
-									<?php if ($caption['url']): ?>
+                            <?php foreach($bannerCaptionData as $c => $caption): ?>
+                                <?php if($caption['text']): ?>
+                                    <?php if($caption['url']): ?>
 										<a href="<?php echo $caption['url']; ?>">
 									<?php endif; ?>
 									<span><?php echo $caption['text']; ?> <i class="fa fa-caret-right"></i></span>
-									<?php if ($caption['url']): ?>
+                                    <?php if($caption['url']): ?>
 										</a>
 									<?php endif; ?>
-									<?php if (isset($captions[$i + 1])): ?>
-										<br/>
+                                    <?php if(isset($captions[$c+1])): ?>
+                                        <br />
 									<?php endif; ?>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
 					</div>
 				<?php endforeach; ?>
-				<?php unset($slide); ?>
-				<?php unset($caption); ?>
 			</section>
 		<?php endif; ?>
+        <?php // SLIDERS END ?>
+
+        <?php // BOXES START ?>
 		<?php
-		if ($boxes) :
-			$boxesCount = 0;
-			foreach ($boxes as $key => $box) {
-				$boxes[$key]['banner_image'] = empty($box['banner_image']) ? array() : unserialize($box['banner_image'])[1];
-				$boxesCount += !empty($boxes[$key]['banner_image']) && $this->imageExists($boxes[$key]['banner_image']['path']) ? 1 : 0;
-			}
+		if ($boxesCount = $_boxes->count()) :
 			$boxesCount = $boxesCount > 3 ? 3 : $boxesCount;
 			?>
 			<section id="boxesSlider"
 			         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 3 ? ' class="boxesSliderHasArrows"' : ''; ?>>
-				<?php foreach ($boxes as $n => $box): ?>
-					<?php if (!empty($box['banner_image'])):
-						$path = $box['banner_image']['path'];
-						$url = $box['banner_image']['url'];
-						if ($this->imageExists($path)): ?>
-							<div class="boxesSlide">
-								<?php if (!empty($url)): ?>
-								<a href="<?php echo $url; ?>">
-									<?php endif; ?>
-									<?php $imageSize = $this->getImageSize($path); ?>
-									<div class="boxesSlideIn"
-									     style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
-									     data-ratio="<?php echo $this->getImageRatio($path); ?>">
-									</div>
-									<?php if (!empty($url)): ?>
-								</a>
-							<?php endif; ?>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
+                <?php foreach ($_boxes as $box):
+                    /** @var Zolago_Campaign_Model_Placement $box */
+                    $bannerImageData = $box->getBannerImageData();
+                    $path            = $bannerImageData['path'];
+                    $boxUrl          = $bannerImageData['url']; ?>
+                    <div class="boxesSlide">
+                        <?php if (!empty($boxUrl)): ?><a href="<?php echo $boxUrl; ?>"><?php endif; ?>
+                            <?php $imageSize = $this->getImageSize($path); ?>
+                            <div class="boxesSlideIn"
+                                 style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
+                                 data-ratio="<?php echo $this->getImageRatio($path); ?>">
+                            </div>
+                            <?php if (!empty($boxUrl)): ?></a><?php endif; ?>
+                    </div>
 				<?php endforeach; ?>
 			</section>
 		<?php endif; ?>
+        <?php // BOXES END ?>
 	</div>
 <?php endif; ?>
 
