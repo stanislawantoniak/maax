@@ -100,6 +100,14 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 
             if($allValidIds && $attributeData) {
                 $this->_processAttributresSave($allValidIds, $attributeData, $storeId, array());
+
+                // Push to solr
+                Mage::dispatchEvent(
+                    "vendor_manual_mass_save_price_after",
+                    array(
+                        "product_ids" => $allValidIds
+                    )
+                );
             }
 
             // Prepare response data

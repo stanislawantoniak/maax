@@ -192,7 +192,10 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 
         Mage::dispatchEvent(
             "vendor_manual_save_price_after",
-            array("products" => $coll)
+            array(
+                "products"    => $coll,
+                "product_ids" => $coll->getAllIds()
+            )
         );
 
 		$this->_forward("get", "vendor_price", "udprod");
