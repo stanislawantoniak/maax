@@ -1,6 +1,9 @@
-<?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
-<?php $_helper = Mage::helper("zolagobanner");?>
-<?php $_model = $this->getModel();?>
+<?php
+/** @var $this Zolago_Banner_Block_Vendor_Banner_Edit */
+/** @var Zolago_Banner_Helper_Data $_helper */
+$_helper = Mage::helper("zolagobanner");
+$_model = $this->getModel();
+?>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script>
     tinymce.init({
@@ -53,7 +56,7 @@ $captionsNumber = (int)$config->captions_number;
                     </li>
                 <?php endif;?>
                 <?php if($this->isModelNew()):?>
-                    <li class="active"><?php echo $_helper->__("New campaign creative");?></li>
+                    <li class="active"><?php echo $_helper->__("New campaign creative (%s)", $_helper->__($this->getType()));?></li>
                 <?php else: ?>
                     <li class="active"><?php echo $_helper->__("Edit campaign creative '%s'", $_model->getName());?></li>
                 <?php endif;?>

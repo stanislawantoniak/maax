@@ -43,6 +43,13 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         return ucfirst(str_replace("_", " ", $this->_type));
     }
 
+    /**
+     * @return Zolago_Campaign_Model_Campaign
+     */
+    public function getCampaign() {
+        return Mage::getModel("zolagocampaign/campaign")->load($this->getCampaignId());
+    }
+
     public function getCampaignId(){
         $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
         return $campaignId;
@@ -62,7 +69,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
-        $form->setAction($this->getUrl("banner/vendor/save"));
+        $form->setAction($this->getUrl("banner/vendor/save", array("_secure" => true)));
 
         //Common edit banner fields
         $general = $form->addFieldset("general", array(
@@ -184,7 +191,10 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
 
+                $url = $this->getCampaign()->getWebsiteUrl();
+
                 if ($picturesNumber > 0) {
+                    // Note: picture_can_be_empty should be read like: picture_url_can_be_empty
                     $pictureUrlRequired = (isset($data->picture_can_be_empty) && $data->picture_can_be_empty == 1) ? FALSE : TRUE;
                     foreach ($data->picture as $n => $picture) {
                         $pictureW = (isset($picture->pictures_w) && !empty($picture->pictures_w)) ? $picture->pictures_w : "-";
@@ -222,7 +232,8 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                                 "required" => $pictureUrlRequired,
                                 "label" => $helper->__($picture->picture_label . ": url"),
                                 "label_wrapper_class" => "col-md-3",
-                                "wrapper_class" => "col-md-6"
+                                "wrapper_class" => "col-md-6",
+                                "input_group_addon" => $url
                             ));
                         }
 
@@ -242,7 +253,8 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             "required" => $captionUrlRequired,
                             "label" => $helper->__($caption->caption_label . ": url"),
                             "label_wrapper_class" => "col-md-3",
-                            "wrapper_class" => "col-md-6"
+                            "wrapper_class" => "col-md-6",
+                            "input_group_addon" => $url
                         ));
                         $captionOptions = array(
                             "name" => "caption_text[" . $n . "]",
@@ -297,5 +309,13 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
     public function isModelNew()
     {
         return $this->getModel()->isObjectNew();
+    }
+
+    /**
+     * Get current vendor from udropship session
+     * @return mixed|Zolago_Dropship_Model_Vendor
+     */
+    public function getVendor() {
+        return Mage::getSingleton('udropship/session')->getVendor();
     }
 }

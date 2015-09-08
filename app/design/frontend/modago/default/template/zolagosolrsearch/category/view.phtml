@@ -33,16 +33,6 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
             </div>
         </div>
     </div>
-
-    <?php if(strlen($this->getChildHtml('vendor.banner.inspiration')) > 5): ?>
-        <section id="bottom" class="bg-w">
-            <div class="container-fluid">
-                <div class="col-sm-12">
-                    <?php echo $this->getChildHtml('vendor.banner.inspiration'); ?>
-                </div>
-            </div>
-        </section>
-    <?php endif; ?>
     </section>
     <?php //echo $this->getCmsBlockHtml() ?>
 	<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>

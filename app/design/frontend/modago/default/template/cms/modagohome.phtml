@@ -1,20 +1,12 @@
-<?php if(strlen($this->getChildHtml('vendor.banner')) > 5): ?>
-<div id="content" class="container-fluid">
-    <div class="col-sm-12">
-        <?php echo $this->getChildHtml('vendor.banner'); ?>
-    </div>
-</div>
-<?php endif; ?>
-<?php if(strlen($this->getChildHtml('vendor.banner.inspiration')) > 5): ?>
-<section id="bottom" class="bg-w">
-    <div class="container-fluid">
-        <div class="col-sm-12">
-            <?php echo $this->getChildHtml('vendor.banner.inspiration'); ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
+<?php
+/*
+ * In vendor.banner block is:
+ * + Sliders
+ * + Boxes
+ * + Inspirations
+ */
+echo $this->getChildHtml('vendor.banner');
+?>
 
 <?php echo $this->getChildHtml('zolago_modago_home_popularvendors'); ?>
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>

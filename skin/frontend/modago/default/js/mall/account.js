@@ -234,7 +234,7 @@ Mall.account = {
 						email: Mall.translate.__("Please enter correct email.")
 					},
 					agreement: {
-						required: Mall.translate.__("You must agree to our Terms of Service")
+						required: Mall.translate.__("You must accept our Terms of Service")
 					}
 				}
 			}));

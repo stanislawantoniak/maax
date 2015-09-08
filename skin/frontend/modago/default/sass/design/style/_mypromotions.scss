@@ -1,63 +1,347 @@
-#promo_list {
-	background-color: #F2F1F0;
-	margin: 0 -15px;
-	.promo_item {
-		padding: 10px 4px 0 4px;
-		@media(max-width: 479px) {
-			width: 100% !important;
-		}
-		figure.promo_img {
-			position: relative;
-			img {
-				position: absolute;
-				width: 100%;
-				top: 0;
-				left: 0;
-			}
-		}
-		.promo_info {
-			background-color: #FFF;
-			padding: 15px 10px 0 10px;
-			.promo_name {
-				padding: 0;
-			}
-			.promo_desc, .promo_code, .promo_code_hidden {
-				margin-top: 15px;
-			}
-			.promo_code textarea {
-				cursor: text;
-				border: none;
-				width: 100%;
-				font-size: 1.4em;
-				resize: none;
-				overflow: hidden;
-				height: 50px;
-				padding: 0;
-				opacity: 1;
-                outline: none;
-			}
-		}
-	}
+.mypromotions-header {
+  .header-title {
+    h1 {
+      text-transform: uppercase;
+      padding-top: 0;
+      @media (max-width: $screen-xs-max) {
+        font-size: 18px;
+        padding-bottom: 12px;
+        padding-top: 12px;
+        width: 84%;
+      }
+    }
+  }
+  ol.breadcrumb, .brandshop-breadcrumps {
+    margin: 20px 0 14px 0;
+  }
 }
+
+.your-promotions {
+  #content {
+    &.logged-in {
+      padding-left: 0px;
+      padding-right: 0px;
+
+      @media(max-width: $screen-md-max) {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+    }
+  }
+}
+
+#promo_list {
+  background-color: #F2F1F0;
+  margin: 0 -15px;
+  .promo_item {
+    .promo_item_box {
+      border: 1px solid #ebebeb;
+      background: #fff;
+      padding: 0 0 0 0;
+    }
+    padding: 10px 4px 0 4px;
+    @media(max-width: 479px) {
+      width: 100% !important;
+    }
+
+    figure.promo_img {
+      margin: 0 auto;
+      padding-bottom: 18px;
+      text-align: center;
+      img {
+        max-width: 100%;
+      }
+    }
+    .promo_info {
+      border: 1px solid #ebebeb;
+      &:hover {
+        .promo_see_more {
+          text-decoration: underline;
+        }
+      }
+      .promo_logo {
+        display: block;
+        height: 52px;
+        margin: 0 auto;
+        border: 1px solid #ebebeb;
+        width: 128px;
+        vertical-align: middle;
+        .promo_logo_img {
+          height: 31px;
+          display: block;
+          background-size: contain;
+          background-position: center center;
+          background-repeat: no-repeat;
+          margin: 8px 11px;
+          vertical-align: middle;
+
+        }
+      }
+      .promo_name {
+        //padding: 0;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: latolight, sans-serif;
+        padding: 15px 30px;
+        font-size: 20px;
+        height: 62px;
+        overflow: hidden;
+        @media(max-width: $screen-xs) {
+          padding: 15px 8px;
+          font-size: 15px;
+          height: auto;
+        }
+        @media(max-width: $screen-sm-max) {
+          padding: 15px 8px;
+          font-size: 15px;
+          height: 62px;
+        }
+        @media(max-width: $screen-lg-min) {
+          height: 85px;
+        }
+        @media(max-width: $screen-md) {
+          height: 62px;
+        }
+      }
+      .promo_see_more {
+        text-align: center;
+        padding-bottom: 18px;
+        //padding-top: 18px;
+        a {
+          color: #484848;
+          font-size: 12px;
+          cursor: pointer;
+        }
+      }
+      .promo_desc, .promo_code, .promo_code_hidden {
+        margin-top: 15px;
+      }
+      .promo_code textarea {
+        cursor: text;
+        border: none;
+        width: 100%;
+        font-size: 1.4em;
+        resize: none;
+        overflow: hidden;
+        height: 50px;
+        padding: 0;
+        opacity: 1;
+        outline: none;
+      }
+    }
+  }
+}
+
 .mypromotions-account-create {
-	padding-top: 0 !important;
-	#mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, .mypromotions-cms, #mypromotions-list {
-		margin-top: 15px;
-		padding: 15px;
-		header p {
-			margin-left: 35px;
-			font-size: 11px;
-		}
-	}
-	#mypromotions-gotologin, #mypromotions-gotoregister {
-		a.button.button-primary {
-			margin-top: 15px;
-		}
-	}
-	#mypromotions-list {
-		padding-bottom: 0;
-		header, header p {
-			margin-bottom: 15px !important;
-		}
-	}
+  padding-top: 0 !important;
+  #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, .mypromotions-cms, #mypromotions-list {
+    margin-top: 15px;
+    padding: 15px;
+    header p {
+      margin-left: 35px;
+      font-size: 11px;
+    }
+  }
+  #mypromotions-gotologin, #mypromotions-gotoregister {
+    a.button.button-primary {
+      margin-top: 15px;
+    }
+  }
+  #mypromotions-list {
+    padding-bottom: 0;
+    header, header p {
+      margin-bottom: 15px !important;
+    }
+  }
+}
+
+#mypromotions-list {
+  padding-bottom: 0;
+  &.mypromotions-logged-in {
+    padding-top: 0;
+    margin-top: 5px;
+  }
+}
+
+#myPromotionsModal {
+  .modal-content {
+    //min-width: 320px;
+
+    .modal-body {
+      .promo-line {
+        @media(max-width: $screen-xs) {
+          padding-left: 0;
+          padding-right: 2px;
+        }
+        .column-left {
+          @media(max-width: 480px) {
+            width: 100%;
+          }
+        }
+      }
+
+      padding: 15px 0px;
+      overflow-x: hidden !important;
+
+      .promo-logo-wrapper {
+        text-align: right;
+        padding-right: 0;
+        //margin: -8px 6px;
+        padding-left: 0;
+
+        img {
+          border: 1px solid #ebebeb;
+          padding: 10px 12px;
+          max-height: 51px;
+          @media(max-width: 360px) {
+            max-height: 48px;
+          }
+        }
+      }
+      .promo-banner-wrapper {
+        text-align: center;
+        margin-bottom: 15px;
+        img {
+          width: 100%;
+          padding: 0 15px;
+        }
+      }
+      .promo-label {
+        font-family: latoblack, sans-serif;
+        font-size: 19px;
+        text-transform: uppercase;
+        padding-left: 0;
+        @media(max-width: $screen-sm) {
+          margin: 10px 0;
+        }
+        @media(max-width: $screen-xs) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        @media(min-width: $screen-xs-max) {
+          width: 100%;
+        }
+        @media(max-width: 360px) {
+          font-size: 17px;
+        }
+      }
+      .promo-name {
+        text-transform: uppercase;
+        font-family: latolight, sans-serif;
+        font-size: 19px;
+        margin-top: 11px;
+        margin-bottom: 12px;
+        line-height: normal;
+      }
+      .promo-code {
+        font-size: 14px;
+
+        .promo-code-code {
+          padding-left: 0;
+          padding-right: 2px;
+          margin-bottom: 14px;
+          @media(max-width: 480px) {
+            padding-right: 2px;
+          }
+          @media(max-width: 340px) {
+            font-size: 13px;
+          }
+          @media(min-width: $screen-sm-min) and (max-width: 840px) {
+            width: 40%;
+          }
+          span {
+            font-family: latoblack, sans-serif;
+            font-size: 17px;
+            @media(max-width: 340px) {
+              font-size: 13px;
+            }
+          }
+        }
+        .promo-code-copy {
+          padding-left: 0;
+          margin-bottom: 14px;
+          margin-top: 6px;
+          @media(min-width: $screen-sm-min) and (max-width: 840px) {
+            width: 60%;
+          }
+          .button {
+            padding: 5px 22px;
+            color: #4f4f4f;
+            font-weight: normal;
+            font-size: 12px;
+            font-family: latoregular, sans-serif;
+            min-width: 92px;
+            text-align: center;
+            background: #fff;
+            border: 1px solid #ebebeb;
+            box-shadow: inset 1px 1px 0 0 #e6e6e6;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+
+          .promo-code-copy-result {
+	          clear: both;
+	          font-size: 12px;
+	          line-height: 25px;
+
+	          .promo-code-copy-error {
+		          color: red;
+	          }
+          }
+
+        }
+      }
+      .promo-description {
+        margin-bottom: 10px;
+        @media(max-width: $screen-xs) {
+          margin-bottom: 20px;
+        }
+      }
+      .promo-expiration {
+        margin-bottom: 10px;
+        @media(max-width: $screen-xs) {
+          margin-bottom: 20px;
+        }
+      }
+      .promo-link {
+        margin: 5px 0 35px 0;
+        .button.button-primary.medium {
+          padding: 10px 30px 10px 24px;
+          font-size: 12px;
+          @media(max-width: 360px) {
+            font-size: 10px;
+            width: 100%;
+          }
+        }
+      }
+      .promo-text {
+        @media(min-width: $screen-xs) {
+          border: 1px solid #ebebeb;
+          padding: 10px;
+        }
+        p {
+          margin-bottom: 5px;
+        }
+        ol {
+          padding-left: 15px;
+          li {
+            height: 14px;
+            @media(max-width: $screen-sm-max) {
+              font-size: 13px;
+              height: inherit;
+            }
+          }
+        }
+        .promo-text-how-to {
+
+        }
+        .promo-pdf {
+          a {
+            text-decoration: underline;
+          }
+        }
+      }
+
+    }
+  }
 }

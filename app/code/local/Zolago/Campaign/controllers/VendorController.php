@@ -6,12 +6,15 @@
 class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
-    public function indexAction() {
+
+    public function indexAction()
+    {
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagocampaign');
     }
-	
-    public function editAction() {
+
+    public function editAction()
+    {
         Mage::register('as_frontend', true);
         $id = $this->getRequest()->getParam('id');
         $campaign = $this->_initModel($id);
@@ -23,7 +26,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
                 return $this->_redirect("*/*");
             }
-        } elseif($this->getRequest()->getParam('campaign_id',null) !== null) {
+        } elseif ($this->getRequest()->getParam('campaign_id', null) !== null) {
             $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
             return $this->_redirect("*/*");
         }
@@ -35,11 +38,12 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             $this->_getSession()->setFormData(null);
         }
 
-		$this->_renderPage(null, 'zolagocampaign');
+        $this->_renderPage(null, 'zolagocampaign');
     }
-	
-    public function newAction() {
-       return $this->_forward('edit');
+
+    public function newAction()
+    {
+        return $this->_forward('edit');
     }
 
     /**
@@ -50,9 +54,9 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $this->loadLayout();
 
-        $campaignId = $this->getRequest()->getParam('id',null);
-        $productsStr = $this->getRequest()->getParam('products',array());
-        $isAjax = $this->getRequest()->getParam('isAjax',false);
+        $campaignId = $this->getRequest()->getParam('id', null);
+        $productsStr = $this->getRequest()->getParam('products', array());
+        $isAjax = $this->getRequest()->getParam('isAjax', false);
         $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
 
@@ -66,7 +70,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
                 return $this->_redirect("*/*");
             }
-        } elseif($this->getRequest()->getParam('id',null) !== null) {
+        } elseif ($this->getRequest()->getParam('id', null) !== null) {
             $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
             return $this->_redirect("*/*");
         }
@@ -91,7 +95,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             }
         }
 
-        /* @var $model Zolago_Campaign_Model_Resource_Campaign*/
+        /* @var $model Zolago_Campaign_Model_Resource_Campaign */
         $model = Mage::getResourceModel("zolagocampaign/campaign");
         $model->saveProducts($campaignId, $productIds);
 
@@ -105,7 +109,8 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     /**
      * @return Mage_Core_Controller_Varien_Action
      */
-	public function saveAction() {
+    public function saveAction()
+    {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
@@ -150,9 +155,48 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $campaign->setVendorId($vendor->getId());
                 }
 
+                //Save Coupon image and Coupon PDF
+                /* @var $campaignFormHelper Zolago_Campaign_Helper_Form */
+                $campaignFormHelper = Mage::helper("zolagocampaign/form");
+
+                if (isset($_FILES['coupon_image'])) {
+                    $couponImage = $_FILES["coupon_image"];
+                    $couponImageTmpName = $couponImage["tmp_name"];
+                    $couponImageName = $couponImage["name"];
+
+                    if (!empty($couponImageName)) { //if file just uploaded
+                        $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER);
+                        $campaign->setData("coupon_image", $couponImagePath);
+                    } elseif (isset($data['coupon_image']) && !empty($data['coupon_image'])) {
+                        $campaign->setData("coupon_image", $data['coupon_image']['value']);
+                    }
+
+
+                }
+                if (isset($_FILES['coupon_conditions'])) {
+                    $couponConditions = $_FILES["coupon_conditions"];
+                    $couponConditionsTmpName = $couponConditions["tmp_name"];
+                    $couponConditionsName = $couponConditions["name"];
+
+                    if (!empty($couponConditionsName)) {
+                        $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER);
+                        $campaign->setData("coupon_conditions", $couponConditionsPath);
+                    } elseif (isset($data['coupon_conditions']) && !empty($data['coupon_conditions'])) {
+                        $campaign->setData("coupon_conditions", $data['coupon_conditions']['value']);
+                        //check if coupon_conditions file should be removed
+                        if (isset($data['remove_coupon_conditions'])) {
+                            $campaign->setData("coupon_conditions", "");
+                            @unlink(Mage::getBaseDir("media") . DS . Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER . DS . $data['coupon_conditions']['value']);
+                        }
+                    }
+                }
+                //--Save Coupon image and Coupon PDF
+
                 $campaign->save();
 
-
+                /**
+                 * @see Zolago_Campaign_Model_Observer::campaignAfterUpdate
+                 */
                 Mage::dispatchEvent(
                     "campaign_save_after",
                     array(
@@ -166,7 +210,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 }
                 return $this->_redirectReferer();
             }
-            if($campaign->isObjectNew()){
+            if ($campaign->isObjectNew()) {
                 $this->_getSession()->addSuccess($helper->__('Campaign "%s" saved. Now you can attach creations and products to the campaign.', $campaign->getName()));
             } else {
                 $this->_getSession()->addSuccess($helper->__('Campaign "%s" saved', $campaign->getName()));
@@ -188,7 +232,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         }
 
         return $this->_redirect("*/*");
-	}
+    }
 
     /**
      * @return Mage_Core_Controller_Varien_Action
@@ -222,50 +266,53 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 
 
-	public function validateKeyAction() {
-		$key = $this->getRequest()->getParam('key');
-		$store = Mage::app()->getStore();
-		$collection = Mage::getResourceModel('core/url_rewrite_collection');
-		/* @var $collection Mage_Core_Model_Resource_Url_Rewrite_Collection */
-		$collection->addStoreFilter($store);
-		$collection->addFieldToFilter("request_path", $key);
+    public function validateKeyAction()
+    {
+        $key = $this->getRequest()->getParam('key');
+        $store = Mage::app()->getStore();
+        $collection = Mage::getResourceModel('core/url_rewrite_collection');
+        /* @var $collection Mage_Core_Model_Resource_Url_Rewrite_Collection */
+        $collection->addStoreFilter($store);
+        $collection->addFieldToFilter("request_path", $key);
 
-		$response = array("status"=>1, "content"=>$collection->getSize()==0);
+        $response = array("status" => 1, "content" => $collection->getSize() == 0);
 
-		$this->getResponse()->
-				setHeader('Content-type', 'application/json')->
-				setBody(Mage::helper('core')->jsonEncode($response));
-	}
+        $this->getResponse()->
+        setHeader('Content-type', 'application/json')->
+        setBody(Mage::helper('core')->jsonEncode($response));
+    }
 
-	/**
-	 * @return Zolago_Campaign_Model_Campaign
-	 */
-	protected function _initModel($modelId) {
-		if(Mage::registry('current_campaign') instanceof Zolago_Campaign_Model_Campaign){
-			return Mage::registry('current_campaign');
-		}
+    /**
+     * @return Zolago_Campaign_Model_Campaign
+     */
+    protected function _initModel($modelId)
+    {
+        if (Mage::registry('current_campaign') instanceof Zolago_Campaign_Model_Campaign) {
+            return Mage::registry('current_campaign');
+        }
 
-		$model = Mage::getModel("zolagocampaign/campaign");
-		/* @var $model Zolago_Campaign_Model_Campaign */
-		if($modelId){
-			$model->load($modelId);
-		}
+        $model = Mage::getModel("zolagocampaign/campaign");
+        /* @var $model Zolago_Campaign_Model_Campaign */
+        if ($modelId) {
+            $model->load($modelId);
+        }
 
-		Mage::register('current_campaign', $model);
-		return $model;
-	}
+        Mage::register('current_campaign', $model);
+        return $model;
+    }
 
-	/**
-	 * @param Zolago_Campaign_Model_Campaign $model
-	 * @return boolean
-	 */
-	protected function _validateModel(Zolago_Campaign_Model_Campaign $model) {
-		if($model->isObjectNew()){
-			return true;
-		}
-		$session = $this->_getSession();
-		return $model->getVendorId()==$session->getVendorId();
-	}
+    /**
+     * @param Zolago_Campaign_Model_Campaign $model
+     * @return boolean
+     */
+    protected function _validateModel(Zolago_Campaign_Model_Campaign $model)
+    {
+        if ($model->isObjectNew()) {
+            return true;
+        }
+        $session = $this->_getSession();
+        return $model->getVendorId() == $session->getVendorId();
+    }
 
     /**
      *
@@ -376,7 +423,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             }
 
 
-            if($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+            if ($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML) {
                 $previewImage = $previewImageHtml;
             }
         }
@@ -385,48 +432,14 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
 
     public function get_category_treeAction() {
-        $vendor = (int)$this->getRequest()->getParam("vendor");
-        $tree = Mage::helper("zolagocampaign")->getCategoriesTree($vendor);
+        $vendor = (int)$this->getRequest()->getParam("vendor", 0);
+        $website = (int)$this->getRequest()->getParam("website", 0);
+        $tree = Mage::helper("zolagocampaign")->getCategoriesTree($vendor, $website);
 
         $this->getResponse()
             ->clearHeaders()
             ->setHeader('Content-type', 'application/text', true);
 
         $this->getResponse()->setBody($tree);
-    }
-
-    public function get_lp_urlAction() {
-        $name_customer = $this->getRequest()->getParam("name_customer");
-        $vendorId = (int)$this->getRequest()->getParam("vendor");
-        $categoryId = (int)$this->getRequest()->getParam("category");
-        $type = $this->getRequest()->getParam("type");
-
-        $url = Mage::getBaseUrl();
-
-        if(!empty($vendorId)){
-            /** @var Zolago_Dropship_Model_Vendor $vendor */
-            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
-            if($vendor){
-                $url .= $vendor->getUrlKey();
-            }
-        }
-        if(!empty($categoryId)){
-            $categoryUrlPath = Mage::getModel("catalog/category")->load($categoryId)->getUrlPath();
-            $url.= $categoryUrlPath;
-        }
-
-        if($type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION){
-            $url .= "?fq[campaign_regular_id][0]=".urlencode($name_customer);
-        }
-        if($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO){
-            $url .= "?fq[campaign_info_id][0]=".urlencode($name_customer);
-        }
-
-
-        $this->getResponse()
-            ->clearHeaders()
-            ->setHeader('Content-type', 'application/text', true);
-
-        $this->getResponse()->setBody($url);
     }
 }

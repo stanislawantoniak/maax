@@ -13,26 +13,26 @@ class Zolago_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Promo_QuoteC
         if ($data = $this->getRequest()->getPost()) {
             try {
 	            $id = $this->getRequest()->getParam('rule_id');
-                if(isset($_FILES['promo_image']['name']) and (file_exists($_FILES['promo_image']['tmp_name']))) {
-                    $uploader = new Varien_File_Uploader('promo_image');
-                    $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png')); // or pdf or anything                    
-                    $uploader->setAllowRenameFiles(false);
-                    $uploader->setFilesDispersion(false);
-                    $path = Mage::helper('zolagosalesrule')->getPromotionImagePath();
-                    if (!is_dir($path)) {
-                        mkdir($path);
-                    }
-	                $pre = $id."_".time()."_";
-                    $filename = $pre.$uploader->getCorrectFileName($_FILES['promo_image']['name']);
-                    $uploader->save($path,$filename);
-                    $data['promo_image'] = $filename;
-                } else {
-                    if(isset($data['promo_image']['delete']) && $data['promo_image']['delete'] == 1) {
-                        $data['promo_image'] = '';
-                    } else {
-                        unset($data['promo_image']);
-                    }
-                }
+//                if(isset($_FILES['promo_image']['name']) and (file_exists($_FILES['promo_image']['tmp_name']))) {
+//                    $uploader = new Varien_File_Uploader('promo_image');
+//                    $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png')); // or pdf or anything
+//                    $uploader->setAllowRenameFiles(false);
+//                    $uploader->setFilesDispersion(false);
+//                    $path = Mage::helper('zolagosalesrule')->getPromotionImagePath();
+//                    if (!is_dir($path)) {
+//                        mkdir($path);
+//                    }
+//	                $pre = $id."_".time()."_";
+//                    $filename = $pre.$uploader->getCorrectFileName($_FILES['promo_image']['name']);
+//                    $uploader->save($path,$filename);
+//                    $data['promo_image'] = $filename;
+//                } else {
+//                    if(isset($data['promo_image']['delete']) && $data['promo_image']['delete'] == 1) {
+//                        $data['promo_image'] = '';
+//                    } else {
+//                        unset($data['promo_image']);
+//                    }
+//                }
                 /** @var $model Mage_SalesRule_Model_Rule */
                 $model = Mage::getModel('salesrule/rule');
                 Mage::dispatchEvent(

@@ -66,6 +66,11 @@
             <zolagocatalog>
                 <class>Zolago_Catalog_Helper</class>
             </zolagocatalog>
+            <catalog>
+                <rewrite>
+                    <category>Zolago_Catalog_Helper_Category</category>
+                </rewrite>
+            </catalog>
         </helpers>
         <blocks>
             <zolagocatalog>
