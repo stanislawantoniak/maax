@@ -14,7 +14,7 @@
             // label => $name ($customerName) $vendor (if Landing page vendor from LP)
         }
         if ($withEmpty) {
-            return array_merge(array(array("value" => 0, "label"=>Mage::helper("zolagocampaign")->__("-- please select --"))),$this->_options);
+            return array_merge(array(array("value" => 0, "label"=>Mage::helper("zolagocampaign")->__("-- empty --"))),$this->_options);
         }
         return $this->_options;
     }
