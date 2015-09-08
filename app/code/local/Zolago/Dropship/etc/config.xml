@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.6</version>
+			<version>0.0.7</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -111,6 +111,13 @@
 		    </courier>
             <vendor>
                 <fields>
+	                <legal_entity>
+		                <label>Legal entity</label>
+		                <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>
+		                <type>textarea</type>
+		                <fieldset>vendor_info</fieldset>
+		                <position>10</position>
+	                </legal_entity>
                     <new_order_notifications>                    
                         <fieldset>vendor_info</fieldset>
                     </new_order_notifications>
@@ -118,7 +125,7 @@
                         <fieldset>vendor_info</fieldset>
                     </notify_by_udpo_status>
                     <url_key>
-                        <fieldset>vendor_ifno</fieldset>
+                        <fieldset>vendor_info</fieldset>
                     </url_key>
                     <logo>
                         <fieldset>vendor_info</fieldset>
