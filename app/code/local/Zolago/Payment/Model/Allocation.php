@@ -227,6 +227,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								$paymentDecreaseAmount = $payment->getAllocationAmount();
 								$overpaymentAmount -= $paymentDecreaseAmount;
 							}
+                            if (!$paymentDecreaseAmount) {
+                                break;
+                            }
 
 							//create payment decrease
 							$allocations[] = array(
@@ -262,7 +265,10 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 						}
 					}
 					$this->restoreLocale();
-					$r = $this->appendMultipleAllocations($allocations);
+                    $r = false;
+                    if (!empty($allocations)) {
+                        $r = $this->appendMultipleAllocations($allocations);
+                    }
                     if ($r) {
                         Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
                             array(

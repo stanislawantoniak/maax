@@ -147,16 +147,16 @@ class Zolago_SalesRule_Model_Observer {
                                 "name"		=> "campaign_id",
                                 "value"     => $model->getCampaignId()
                             ));
-        $param = array(
-                     "label" => Mage::helper('zolagosalesrule')->__('Promotion image file'),
-                     "required" => false,
-                     "name"		=> "promo_image",
-                 );
-        if ($model->getPromoImage()) {
-            $param["value"] = Mage::helper('zolagosalesrule')->getPromotionImageUrl().DS.$model->getPromoImage();
-        }
-
-        $fieldset->addField("promo_image", "image", $param);
+//        $param = array(
+//                     "label" => Mage::helper('zolagosalesrule')->__('Promotion image file'),
+//                     "required" => false,
+//                     "name"		=> "promo_image",
+//                 );
+//        if ($model->getPromoImage()) {
+//            $param["value"] = Mage::helper('zolagosalesrule')->getPromotionImageUrl().DS.$model->getPromoImage();
+//        }
+//
+//        $fieldset->addField("promo_image", "image", $param);
     }
    /**
      * Send new coupons to subscriber

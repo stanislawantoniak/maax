@@ -1083,6 +1083,9 @@ form {
             color:#b0b0b0;
             font-size:12px;
           }
+	      a {
+		      text-decoration: underline;
+	      }
         }
 
         input[type=checkbox].css-checkbox + label.css-label {

@@ -45,11 +45,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * Set for campaign corresponding website
+     * Currently usage is one(campaign) to one(website)
+     * DB structure make it one to many but for future(?) usages we don't change it
      * @param Mage_Core_Model_Abstract $object
-     * @param array $websites
+     * @param $websites
      * @return Zolago_Campaign_Model_Resource_Campaign
      */
-    protected function _setWebsites(Mage_Core_Model_Abstract $object, array $websites)
+    protected function _setWebsites(Mage_Core_Model_Abstract $object, $websites)
     {
         $table = $this->getTable("zolagocampaign/campaign_website");
         $where = $this->getReadConnection()
@@ -57,6 +60,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $this->_getWriteAdapter()->delete($table, $where);
 
         $toInsert = array();
+        if (!is_array($websites)) {
+            $websites = array($websites);
+        }
         foreach ($websites as $websiteId) {
             $toInsert[] = array("website_id" => $websiteId, "campaign_id" => $object->getId());
         }
@@ -298,11 +304,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
 
     /**
+     * NOTE: refactoring in progress, Use collections on placement
+     * @see Zolago_Campaign_Model_Resource_Placement_Collection::addPlacementForCategory()
+     *
      * @param $categoryId
      * @param $vendorId
+     * @param array $bannerTypes
+     * @param bool $notExpired
+     * @param bool $currentWebsite
      * @return array
+     * @throws Mage_Core_Exception
      */
-    public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array(), $notExpired = FALSE)
+    public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array(), $notExpired = FALSE, $currentWebsite = true)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
         $select = $this->getReadConnection()->select();
@@ -316,6 +329,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'campaign_date_to' => 'campaign.date_to',
                 'campaign_status' => 'campaign.status',
                 'campaign_vendor' => 'campaign.vendor_id',
+                'campaign_url' => 'campaign.campaign_url',
             )
         );
         $select->joinLeft(
@@ -335,12 +349,25 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                  'banner_caption' => 'banner_content.caption'
             )
         );
+        if($currentWebsite){
+            $select->joinLeft(
+                array('campaign_website' => 'zolago_campaign_website'),
+                'campaign_website.campaign_id=campaign.campaign_id',
+                array("campaign_website" => "campaign_website.website_id")
+            );
+        }
+
         $select->where("campaign_placement.category_id=?", $categoryId);
         //$select->where("campaign.vendor_id=campaign_placement.vendor_id");
         $select->where("campaign_placement.vendor_id=?", $vendorId);
         if(!empty($bannerTypes)){
             $select->where("banner.type in(?)", $bannerTypes);
         }
+
+        if($currentWebsite){
+            $select->where("campaign_website.website_id=?", Mage::app()->getWebsite()->getId());
+        }
+
         if($notExpired){
             $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
 
@@ -1118,5 +1145,57 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $this->_getWriteAdapter()->truncateTable($table);
         return $this;
     }
+    
+    /**
+     * get campaigns filtered by landing_page_category and campaign_id
+     *
+     * @param array $categories
+     * @param int $vendorId
+     * @param array $campaigns campaing ids
+     * @return array ids of campaigns
+     */
+     public function getLandingPagesByCategories($categories,$vendorId,$campaigns) {
+        if (empty($categories)) {
+            return array();
+        }
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->distinct(true)->from(
+            array("campaign" => $table),
+            array(
+                'campaign.campaign_id as campaign_id',
+                'campaign.landing_page_category as category_id'
+            )
+        );
+
+
+         $select->where("campaign.landing_page_category IN(?)", $categories);
+         $select->where("campaign.campaign_id IN(?)", $campaigns);
+
+         if ($vendorId) {
+             $select->where("campaign.context_vendor_id = ?", $vendorId);
+             $select->where("campaign.landing_page_context = ?", Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_VENDOR);
+         } else {
+             $select->where("campaign.landing_page_context = ?", Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext::LANDING_PAGE_CONTEXT_GALLERY);
+         }
+
+
+         $select->where("campaign.is_landing_page = ?", Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE);
+         $localtime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
+         $select->where("campaign.date_from < ?", $localtime);
+         $select->where("campaign.date_to > ?", $localtime);
+         $select->where("campaign.status = ?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+
+        $_return = $this->getReadConnection()->fetchAll($select);
+
+        $return = array();
+        foreach ($_return as $row) {
+            $return[$row['category_id']][] = $row['campaign_id'];
+        }
+
+        return $return;
+     
+         
+     }
 }
 

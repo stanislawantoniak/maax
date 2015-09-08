@@ -10,7 +10,7 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext {
     public function toOptionHash()
     {
         return array(
-            self::LANDING_PAGE_CONTEXT_VENDOR => Mage::helper("zolagocampaign")->__("VENDOR "),
+            self::LANDING_PAGE_CONTEXT_VENDOR => Mage::helper("zolagocampaign")->__("VENDOR"),
             self::LANDING_PAGE_CONTEXT_GALLERY => Mage::helper("zolagocampaign")->__("GALLERY")
         );
     }
