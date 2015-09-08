@@ -21,6 +21,8 @@
  * @method int getLandingPageContext()
  * @method int getContextVendorId()
  * @method int getCampaignUrl()
+ * @method int getCouponImage()
+ * @method int getCouponConditions()
  *
  * @method Zolago_Campaign_Model_Resource_Campaign getResource()
  */
@@ -35,6 +37,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     protected $vendor = null;
     protected $contextVendor = null;
+
+    const LP_COUPON_IMAGE_FOLDER = "lp/coupon/image";
+    const LP_COUPON_PDF_FOLDER = "lp/coupon/pdf";
 
     protected function _construct()
     {
@@ -821,7 +826,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
 
-                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? implode(",",$campaignIds) : null));
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
                     $actionModel
                         ->updateAttributesPure($productIds, $attributesData, (int)$store);
 
@@ -831,7 +836,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             unset($store);
 
         } elseif ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => null);
+            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
             foreach ($stores as $store) {
                 $actionModel
                     ->updateAttributesPure($productIds, $attributesData, (int)$store);

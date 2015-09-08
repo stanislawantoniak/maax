@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Campaign>
-            <version>0.0.21</version>
+            <version>0.0.23</version>
         </Zolago_Campaign>
     </modules>
     <global>
@@ -30,9 +30,6 @@
 					<campaign_product>
 						<table>zolago_campaign_product</table>
 					</campaign_product>
-					<campaign_product_tmp>
-						<table>zolago_campaign_product_tmp</table>
-					</campaign_product_tmp>
                     <campaign_placement>
                         <table>zolago_campaign_placement</table>
                     </campaign_placement>
@@ -120,14 +117,6 @@
                     <model>zolagocampaign/observer::unsetCampaignAttributes</model>
                 </run>
             </zolagocampaign_unset_campaign_attributes>
-	        <zolagocampaign_attach_products_to_campaigns>
-		        <schedule>
-			        <cron_expr>0 1 * * *</cron_expr>
-		        </schedule>
-		        <run>
-			        <model>zolagocampaign/observer::attachProductsToCampaignBySalesRule</model>
-		        </run>
-	        </zolagocampaign_attach_products_to_campaigns>
         </jobs>
     </crontab>
 </config>

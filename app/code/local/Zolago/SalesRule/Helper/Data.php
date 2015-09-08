@@ -185,23 +185,25 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         }
     }
 
-    
+
     /**
      * returns path to catalog with promotions images
-     * 
+     *
      * @return string
      */
-     public function getPromotionImagePath() {
-         $path = Mage::getBaseDir('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
-         return $path;
-     }
+    public function getPromotionImagePath()
+    {
+        //$path = Mage::getBaseDir('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
+        $path = Mage::getBaseDir('media') . DS . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
+        return $path;
+    }
 
 	/**
 	 * returns path to catalog with resized promotions images
 	 *
 	 * @return string
 	 */
-	public function getPromotionResizedImagePath($width = 480) {
+	public function getPromotionResizedImagePath($width=294, $height=194) {
 		$path = $this->getPromotionImagePath() . DS . 'resized' . DS . $width;
 		return $path;
 	}
@@ -209,14 +211,25 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
     /**
      * returns url to catalog with promotions images
-     * 
+     *
      * @return string
      */
-     public function getPromotionImageUrl() {
-         $path = Mage::getBaseUrl('media') . DS . Zolago_SalesRule_Model_Promotion_Image::PROMOTION_IMAGE_PATH;
-         return $path;
-     }
+    public function getPromotionImageUrl()
+    {
+        $path = Mage::getBaseUrl('media') . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
+        return $path;
+    }
 
+    /**
+     * returns url to catalog with campaign coupon images
+     *
+     * @return string
+     */
+    public function getCampaignCouponImageUrl()
+    {
+        $path = Mage::getBaseUrl('media') . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER;
+        return $path;
+    }
 
 	/**
 	 * returns url to catalog with resized promotions images
@@ -224,13 +237,13 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	 * @return string
 	 */
 	public function getPromotionResizedImageUrl($width = 480) {
-		$path = $this->getPromotionImageUrl() . DS . 'resized' . DS . $width;
+		$path = $this->getCampaignCouponImageUrl() . DS . 'resized' . DS . $width;
 		return $path;
 	}
 
-	protected function _resizePromotionImage($fileName,$width=480) {
+	protected function _resizePromotionImage($fileName,$width=294, $height=194) {
 		$basePath = $this->getPromotionImagePath() . DS . $fileName;
-		$newPath = $this->getPromotionResizedImagePath($width) . DS . $fileName;
+		$newPath = $this->getPromotionResizedImagePath($width, $height) . DS . $fileName;
 		//if width empty then return original size image's URL
 		if ($width != '') {
 			//if image has already resized then just return URL
@@ -239,21 +252,22 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 				$imageObj->constrainOnly(true);
 				$imageObj->keepAspectRatio(true);
 				$imageObj->keepFrame(false);
-				$imageObj->resize($width, null);
+				$imageObj->resize($width, $height);
 				$imageObj->save($newPath);
 			} 
         }
 	}
-	
-	public function getResizedPromotionImage($fileName,$width = 480) {
-		$folderURL = $this->getPromotionImageUrl();
+
+	public function getResizedPromotionImage($fileName,$width = 294, $height = 154) {
+
+        $folderURL = $this->getCampaignCouponImageUrl();
 		$imageURL = $folderURL . $fileName;
 
 		//if width empty then return original size image's URL
 		if ($width != '') {
 			//if image has already resized then just return URL
-			$this->_resizePromotionImage($fileName,$width);
-			$resizedURL = $this->getPromotionResizedImageUrl($width) . DS . $fileName;
+			$this->_resizePromotionImage($fileName,$width, $height);
+			$resizedURL = $this->getPromotionResizedImageUrl($width, $height) . DS . $fileName;
 		} else {
 			$resizedURL = $imageURL;
 		}
@@ -275,17 +289,33 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 		}
 		return null;
 	}
-     
-    protected function _prepareCollection($ids) {
-	    $collection = Mage::getModel('salesrule/coupon')->getCollection();
-	    $collection->addFieldToFilter('coupon_id',array('in' => $ids));
-	    $out = array();
-	    foreach ($collection as $item) {
-	        $item['ruleItem'] = Mage::getModel('salesrule/rule')->load($item['rule_id']);
-	        $out[] = $item;
-	    }
-	    return $out;
+
+    protected function _prepareCollection($ids)
+    {
+        $collection = Mage::getModel('salesrule/coupon')->getCollection();
+        $collection->addFieldToFilter('coupon_id', array('in' => $ids));
+        $out = array();
+        foreach ($collection as $item) {
+            $rule = Mage::getModel('salesrule/rule')->load($item['rule_id']);
+            $campaignId = $rule->getCampaignId();
+            $couponImage = NULL;
+            if ($campaignId) {
+                $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+                if ($campaign) {
+                    $couponImage = $campaign->getCouponImage();
+                }
+            }
+            $rule->setPromoImage($couponImage);
+            $item['ruleItem'] = $rule;
+            $out[] = $item;
+
+            unset($rule);
+            unset($campaign);
+            unset($couponImage);
+        }
+        return $out;
     }
+
     protected function _changeDesign($area,$pack,$theme) {
 
 		Mage::getDesign()->
@@ -324,6 +354,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          );
          $addedFiles = array();
          foreach ($list as $item) {
+
              $name = $item['ruleItem']->getPromoImage();
              if ($name && !in_array($name, $addedFiles)) {
                  $this->_resizePromotionImage($name,200);
@@ -351,6 +382,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
      }
 
 	public function getSalesRulesForSubscribers() {
+
 		$currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 		$resource = Mage::getSingleton('core/resource');
 		$readConnection = $resource->getConnection('core_read');

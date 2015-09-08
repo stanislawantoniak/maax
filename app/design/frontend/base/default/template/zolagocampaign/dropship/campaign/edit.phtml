@@ -18,7 +18,7 @@
 </div>
 
 <div class="container z-grid">
-	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
@@ -300,6 +300,11 @@
 
                     var vendor = 0;
                     var website = jQuery("[name=website_ids] option:selected").val();
+            jQuery("input[type=file][name=coupon_image]").change(function (e) {
+                if(this.disabled) return alert('File upload not supported!');
+                var F = this.files;
+                readImageUploader($(this), F[0]);
+            });
 
                     if (jQuery("[name=landing_page_context]:checked").val() == "vendor") {
                         jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
@@ -342,4 +347,42 @@
                 })
             }
         });
+
+        function readImageUploader(input, file) {
+
+            var reader = new FileReader();
+            var image  = new Image();
+
+            reader.readAsDataURL(file);
+
+            reader.onload = function(_file) {
+                image.src    = _file.target.result;              // url.createObjectURL(file);
+                image.onload = function() {
+                    if(jQuery.type(file) !=="undefined"){
+                        if (jQuery.type(file) !=="undefined"
+                            //&& file.size <= (imageSize * 1000)
+                        ) {
+                            var id = jQuery(input).attr('id');
+                            var thumbPlace = jQuery(input).parents('.campaign-image-container').find('.campaign-image-thumbnail');
+
+                            var preview = '<a href="' +this.src+ '" '
+                                + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                                + '<img src="' + this.src + '" id="'+id+'_image" '
+                                + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                                + '</a>';
+
+
+                            thumbPlace.html(preview);
+                        }
+                    }
+
+
+
+                };
+                image.onerror= function() {
+                    alert('Invalid file type: '+ file.type);
+                };
+            };
+
+        }
     </script>

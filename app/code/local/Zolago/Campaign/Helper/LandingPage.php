@@ -101,6 +101,44 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
      * Recommended check
      * if ($campaign && $campaign->getId()) { ... }
      *
+     * Get landing page banners for multiple campaigns
+     * (used in mypromotions page - popups)
+     * @param $campaignIds
+     * @return array
+     */
+    public function getLandingPageBanners($campaignIds)
+    {
+        $imagesData = array();
+        if (empty($campaignIds)) {
+            return $imagesData;
+        }
+        $bannerCollection = Mage::getModel("zolagobanner/banner")
+            ->getCollection();
+        $bannerCollection->addFieldToFilter("campaign_id", array("in" => $campaignIds));
+        $bannerCollection->addFieldToFilter("type", Zolago_Banner_Model_Banner_Type::TYPE_LANDING_PAGE_CREATIVE);
+        $bannerCollection->getSelect()
+            ->join(
+                array('banner_content' => Mage::getSingleton('core/resource')->getTableName(
+                    "zolagobanner/banner_content"
+                )),
+                'banner_content.banner_id = main_table.banner_id'
+            )
+            ->where("campaign_id in(?)", $campaignIds);
+
+        foreach ($bannerCollection as $bannerCollectionItem) {
+            $imageData = (array)unserialize($bannerCollectionItem->getData("image"));
+            if (!empty($imageData)) {
+                if (isset($imageData[1]) && isset($imageData[1]["path"])) {
+                    $imagesData[$bannerCollectionItem->getCampaignId()] = Mage::getBaseUrl("media") . $imageData[1]["path"];
+                }
+            }
+        }
+
+        return $imagesData;
+    }
+
+    /**
+     * Return current campaign for listing if correct
      * @return false|Mage_Core_Model_Abstract|Zolago_Campaign_Model_Campaign
      */
     public function getCampaign()

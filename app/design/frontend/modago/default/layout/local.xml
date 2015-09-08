@@ -1801,13 +1801,43 @@
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
-        </reference>
+			<action method="addBodyClass">
+				<value>your-promotions</value>
+			</action>
+			<action method="unsetChild">
+				<name>breadcrumbs</name>
+			</action>
+		</reference>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>Home</crumbName>
+				<crumbInfo>
+					<label>Home</label>
+					<title>Home</title>
+					<link>/</link>
+				</crumbInfo>
+			</action>
+			<action method="addCrumb">
+				<crumbName>mypromotions</crumbName>
+				<crumbInfo>
+					<label>Your coupons</label>
+					<title>Your coupons</title>
+				</crumbInfo>
+			</action>
+		</reference>
         <reference name="head">
             <action method="setTitle" translate="title">
-                <title>My promotions</title>
+                <title>Your coupons</title>
             </action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/promotions.js</script>
+			</action>
         </reference>
         <reference name="content">
+			<block type="zolagomodago/mypromotions_header" name="zolago_modago_mypromotions_header" template="promotions/mypromotions/header.phtml">
+				<block type="page/html_breadcrumbs" name="mypromotions_breadcrumbs"/>
+			</block>
             <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
 				<block type="zolagomodago/promotions_login" name="mypromotions.login" template="promotions/login.phtml">
 					<block type="cms/block" name="promotions.login.header" as="login-header">
@@ -1837,7 +1867,6 @@
             <action method="unsetChild">
                 <name>breadcrumbs</name>
             </action>
-
         </reference>
 
         <remove name="my.account.wrapper"/>
