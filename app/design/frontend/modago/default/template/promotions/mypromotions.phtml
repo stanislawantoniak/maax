@@ -89,16 +89,16 @@ $galleryLogo = $this->getGalleryLogo();
 					</div>
 
 				<?php if(!$this->isSubscribed() && $helper->areCouponsForCustomerAvailable($this->getCustomerId())): ?>
-					<div class="container-fluid">
-						<div class="row">
-							<section class="main bg-w mypromotions-cms col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-push-2 col-md-push-1">
-								<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_notsubscribed')->toHtml(); ?>
-								<div class="row">
-									<?php echo $this->getChildHtml('mypromotions.newsletter'); ?>
-								</div>
-							</section>
-						</div>
-					</div>
+<!--					<div class="container-fluid">-->
+<!--						<div class="row">-->
+<!--							<section class="main bg-w mypromotions-cms col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-push-2 col-md-push-1">-->
+<!--								--><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_notsubscribed')->toHtml(); ?>
+<!--								<div class="row">-->
+<!--									--><?php //echo $this->getChildHtml('mypromotions.newsletter'); ?>
+<!--								</div>-->
+<!--							</section>-->
+<!--						</div>-->
+<!--					</div>-->
 				<?php endif; ?>
 				<?php //echo $this->getCmsBlock(); // Do not remove, only hide (by Staszek) ?>
 
