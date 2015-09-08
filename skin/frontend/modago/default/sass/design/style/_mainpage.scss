@@ -67,3 +67,27 @@
 		}
 	}
 }
+
+@media(max-width: $screen-sm-max) {
+	body.zolagomodago-index-index {
+		section#main {
+			> div#content {
+				padding-left: 0;
+				padding-right: 0;
+				> div.col-sm-12 {
+					padding: 0;
+					> div.row, > div.benefits {
+						margin: 30px 0 15px 0 !important;
+					}
+				}
+			}
+			@media(max-width: $screen-xs-max) {
+				section#boxesSlider {
+					div.boxesSlide.mobile:nth-child(2n) {
+						margin-right: 0 !important;
+					}
+				}
+			}
+		}
+	}
+}
