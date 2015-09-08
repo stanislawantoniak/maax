@@ -114,14 +114,17 @@ Mall.promotions.copyTextToClipboard = function(text,error,success) {
 
 		try {
 			var successful = document.execCommand('copy');
-			if(successful && success) {
-				error.hide();
-				success.show();
-			} else if(!successful && error) {
-				success.hide();
-				error.show();
-			}
-		} catch (err) {}
+		} catch (err) {
+			successful = false;
+		}
+
+		if(successful && success) {
+			error.hide();
+			success.show();
+		} else if(!successful && error) {
+			success.hide();
+			error.show();
+		}
 
 		document.body.removeChild(textArea);
 	}
