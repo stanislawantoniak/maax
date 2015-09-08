@@ -1523,6 +1523,35 @@ Mall.restoreCheckoutValues = function() {
 	}
 };
 
+Mall.getUrlPart = function (name,url) {
+	var query_string = {};
+	if(!url) {
+		var query = window.location.search.substring(1);
+	} else {
+		var query = url.split("?")[1];
+	}
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		// If first entry with this name
+		if (typeof query_string[pair[0]] === "undefined") {
+			query_string[pair[0]] = decodeURIComponent(pair[1]);
+			// If second entry with this name
+		} else if (typeof query_string[pair[0]] === "string") {
+			var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+			query_string[pair[0]] = arr;
+			// If third or later entry with this name
+		} else {
+			query_string[pair[0]].push(decodeURIComponent(pair[1]));
+		}
+	}
+	if(query_string[name]) {
+		return query_string[name];
+	} else {
+		return '';
+	}
+};
+
 Mall.showAgreement = function(target) {
 	jQuery(target).hide();
 	jQuery(target).parent().find('.agreement-more').show();

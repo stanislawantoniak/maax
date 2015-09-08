@@ -120,4 +120,69 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $productName;
     }
+    
+    /**
+     * prepare move up url for category including landing page context
+     * @param Mage_Catalog_Model_Category $category
+     * @return string
+     */
+     public function getMoveUpUrl($category) {
+        $parentCategoryPath = Mage::getUrl('/');;
+        $currentCategory = $category;
+        if ($vendor = Mage::helper('umicrosite')->getCurrentVendor()) {            
+            $rootCategory = $vendor->getRootCategory();
+        } else {
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();        
+        }
+        if (!empty($currentCategory)) {
+            $campaign = $currentCategory->getCurrentCampaign();
+            if ($campaign && ($campaign->getLandingPageCategory() == $category->getId())) {
+                if ($currentCategory->getId() != $rootCategory) {
+                    $parentCategoryPath = $category->getUrlContext(false,false); // the same category without campaign
+                }
+            } else {
+                if($currentCategory->getId() != $rootCategory) {
+                    $currentCategoryParent = $currentCategory->getParentCategory();  
+                    $parentCategoryPath = $currentCategoryParent->getUrlContext(false);                  
+                }
+            }
+        }
+        return $parentCategoryPath;
+            /***********************
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();
+            $currentCategoryParent = $currentCategory->getParentCategory();
+            if($currentCategory->getId() == $rootCategory){
+                return $parentCategoryPath;
+            }
+            $urlPath = $currentCategoryParent->getUrlPath();
+
+            $campaign = $currentCategoryParent->getCurrentCampaign();
+            $params = array();
+            if ($campaign) {
+                $key = $campaign->getCampaignFilterKey();
+                $params['_query']['fq'][$key][] = $campaign->getId();
+            }
+            $currentCategoryParentId = $currentCategoryParent->getId();
+
+            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            if (!empty($vendor)) {
+                $vendorRootCategory = $vendor->getRootCategory();
+
+                if (!empty($vendorRootCategory)) {
+                    $currentStoreId = Mage::app()->getStore()->getId();
+                    $vendorRootCategoryForSite = isset($vendorRootCategory[$currentStoreId]) ? $vendorRootCategory[$currentStoreId] : false;
+                    if ($vendorRootCategoryForSite) {
+                        if ($vendorRootCategoryForSite == $currentCategoryParentId) {
+                            $urlPath = $parentCategoryPath;
+                        }
+                    }
+                }
+            }
+            $parentCategoryPath = Mage::getUrl($urlPath,$params);
+        }        
+        return $parentCategoryPath;
+            */
+
+     }
+
 }

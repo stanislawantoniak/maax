@@ -1,9 +1,10 @@
 <?php
+/** @var Zolago_Dropship_Block_Form_Renderer_Fieldset_Element $element */
 $element = $this->getElement();
 $formGroupWrapperClass = $this->getElement()->getData("form_group_wrapper_class");
 $labelWrapperClass = $this->getElement()->getData("label_wrapper_class");
 $LwC = !empty($labelWrapperClass) ? $labelWrapperClass : "col-md-2";
-
+$inputGroupAddon = $this->getElement()->getData("input_group_addon");
 $wrapperClass = $this->getElement()->getData("wrapper_class");
 $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
 ?>
@@ -15,6 +16,14 @@ $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
         </div>
     <?php else: ?>
         <label class="<?php echo $LwC;  ?> control-label"><?php echo $element->getLabelHtml();?></label>
-        <div class="<?php echo $wC;  ?>"><?php echo $element->getElementHtml(); ?></div>
+        <div class="<?php echo $wC;  ?>">
+            <?php if ($inputGroupAddon):?>
+                <div class="input-group">
+                    <span class="input-group-addon"><?php echo $inputGroupAddon; ?></span>
+            <?php endif;?>
+            <?php echo $element->getElementHtml(); ?></div>
+            <?php if ($inputGroupAddon): // Shame fix ?>
+                </div>
+            <?php endif;?>
     <?php endif;?>
 </div>

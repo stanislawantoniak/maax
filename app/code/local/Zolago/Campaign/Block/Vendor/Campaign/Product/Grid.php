@@ -21,7 +21,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $collection = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price')
-            ->addAttributeToSelect('skuv');
+            ->addAttributeToSelect('skuv')
+            ->addAttributeToSelect('campaign_regular_id')
+            ->addAttributeToSelect('campaign_info_id');
         $collection->getSelect()
             ->join(
                 array('campaign_product' => Mage::getSingleton('core/resource')->getTableName(
@@ -72,6 +74,18 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'type'   => 'number',
                  "class"  => "form-control",
                  'index'  => 'price',
+            )
+        );
+        $this->addColumn(
+            'campaign_regular_id',
+            array(
+                'header' => $_helper->__('campaign_regular_id'),
+                'width'  => '50px',
+                'type'   => 'number',
+                "class"  => "form-control",
+                'column_css_class'=>'hidden',
+                'header_css_class'=>'hidden' ,
+                'index'  => 'campaign_regular_id',
             )
         );
 

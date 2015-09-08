@@ -9,10 +9,17 @@ class Zolago_DropshipMicrositePro_IndexController
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 
         if ($vendor) {
-        	
-			// Set root category
-			$vendor->rootCategory();
-			
+            // Set root category
+            $vendorRootCategory = $vendor->rootCategory();
+            $campaign = $vendorRootCategory->getCurrentCampaign();
+
+            $fq = $this->getRequest()->getParam('fq', '');
+
+            if ($campaign || !empty($fq)) {
+                $this->_forward('view', "category", "catalog", array("id" => $vendorRootCategory->getId()));
+                return;
+            }
+
             $this->_forward('landingPage');
             return;
         }

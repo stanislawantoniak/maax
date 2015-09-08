@@ -90,7 +90,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		return $this->_rootCategory;
 	}
 	
-	protected function _getVendorUrl($_vendor=null) {
+	protected function _getVendorUrl($_vendor=null, $forceInsecure = FALSE) {
 		if(!($_vendor instanceof Unirgy_Dropship_Model_Vendor)){
 			$_vendor	= Mage::helper('umicrosite')->getCurrentVendor();
 		}
@@ -102,7 +102,10 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		$urlMode		= Mage::getStoreConfig(self::URL_MODE_PATH);
 		$unsecureUrl	= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 		$secureUrl		= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true);
-		
+		if($forceInsecure){
+			$secureUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, false);
+		}
+
 		switch ($urlMode) {
 			case self::URL_MODE_SUBDOMAIN:
 			case 2:
@@ -128,8 +131,8 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		return $vendorRootUrl;	
 	}
 	
-	public function getVendorUrl($vendor=null) {
-		return $this->_getVendorUrl($vendor);
+	public function getVendorUrl($vendor=null, $forceInsecure = FALSE) {
+		return $this->_getVendorUrl($vendor, $forceInsecure);
 	}
 	
 	public function getVendorRootUrl()
