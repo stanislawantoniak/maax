@@ -141,9 +141,10 @@ class Zolago_SalesRule_Model_Observer {
                                 "name"		=> "promotion_type",
                                 "value"     => $model->getPromotionType()
                             ));
+        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
         $fieldset->addField("campaign_id", "select", array(
                                 "label"		=> Mage::helper("zolagosalesrule")->__("Campaign"),
-                                "values"	=> Mage::getSingleton('zolagocampaign/source_campaign')->toOptionArray(true, $model->getId()),
+                                "values"	=> Mage::getSingleton('zolagocampaign/source_campaign')->toOptionArray(true, $model->getId(),$localVendorId),
                                 "name"		=> "campaign_id",
                                 "value"     => $model->getCampaignId()
                             ));
