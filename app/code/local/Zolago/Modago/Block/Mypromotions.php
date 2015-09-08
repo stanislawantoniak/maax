@@ -196,4 +196,20 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
         $path = Mage::getBaseUrl('media') . Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER. DS ;
         return $path;
     }
+
+    /**
+     * Restrict Display "Copy to clipboard" link on Firefox
+     * @return bool
+     */
+    public function showCopyToClipboard()
+    {
+        $showCopyLink = false;
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if (strlen(strstr($agent, 'Firefox')) <= 0) {
+                $showCopyLink = true;
+            }
+        }
+        return $showCopyLink;
+    }
 } 

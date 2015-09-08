@@ -156,15 +156,21 @@ $galleryLogo = $this->getGalleryLogo();
 										<?php echo $helper->__("Your promo code"); ?> : <span><!--Code--></span>
 									</div>
 									<div class="col-xs-12 promo-code-copy">
-										<a class='button large pull-left link'>
-											<?php echo $helper->__("Copy to clipboard"); ?>
-										</a>
-										<div style="display:none" class="promo-code-copy-result promo-code-copy-error red">
-											<div><? $helper->__("could not copy coupon"); ?></div>
-										</div>
-										<div style="display:none" class="promo-code-copy-result promo-code-copy-success">
-											<div><? $helper->__("coupon copied"); ?></div>
-										</div>
+
+										<?php if ($this->showCopyToClipboard()) : ?>
+											<a class='button large pull-left link'>
+												<?php echo $helper->__("Copy to clipboard"); ?>
+											</a>
+											<div style="display:none"
+												 class="promo-code-copy-result promo-code-copy-error red">
+												<div><? $helper->__("could not copy coupon"); ?></div>
+											</div>
+											<div style="display:none"
+												 class="promo-code-copy-result promo-code-copy-success">
+												<div><? $helper->__("coupon copied"); ?></div>
+											</div>
+										<?php endif; ?>
+
 									</div>
 
 								</div>
@@ -186,9 +192,7 @@ $galleryLogo = $this->getGalleryLogo();
 										?>
 									</div>
 									<div class="promo-pdf">
-										<a download='promotion-conditions'>
-											<?php echo $helper->__("Promotion Terms and Conditions"); ?>
-										</a>
+										<a download><?php echo $helper->__("Promotion Terms and Conditions"); ?></a>
 									</div>
 								</div>
 							</div>
