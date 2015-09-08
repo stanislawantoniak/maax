@@ -77,12 +77,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      *
      */
     public function saveProductsFromMemory() {
+        /** @var Mage_Core_Model_Resource $resource */
         $resource = Mage::getSingleton('core/resource');
         $table = $resource->getTableName("zolagocampaign/campaign_product");
         $table_tmp = $resource->getTableName('zolagocampaign/campaign_product_tmp');
+        $tableSalesRule = $resource->getTableName("salesrule/rule");
         $connection = $resource->getConnection('core_write');
         // clean products        
-        $query = 'delete a.* FROM '.$table.' as a inner join '.$table_tmp.' b where a.campaign_id = b.campaign_id ';
+        $query = 'delete a.* FROM '.$table.' as a inner join '.$tableSalesRule.' as b where a.campaign_id = b.campaign_id ';
         $connection->query($query);
         $query = 'insert into '.$table.' (product_id,campaign_id) select product_id,campaign_id from '.$table_tmp;
         $connection->query($query);
