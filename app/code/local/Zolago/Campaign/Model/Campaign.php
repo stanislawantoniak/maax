@@ -826,7 +826,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
 
-                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? implode(',',$campaignIds) : 0));
                     $actionModel
                         ->updateAttributesPure($productIds, $attributesData, (int)$store);
 

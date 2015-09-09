@@ -250,8 +250,9 @@ class Zolago_Campaign_Model_Observer
             // Rules can have some Cart (quote) conditions
             /** @var Mage_SalesRule_Model_Rule $rule */
             foreach ($rulesColl as $rule) {
-                $con = unserialize($rule->getConditionsSerialized()); // Only variables should be passed by reference
-                $rule->setConditionsSerialized(serialize($helper->cleanConditions($con)));
+                $tmp = unserialize($rule->getConditionsSerialized()); // Only variables should be passed by reference
+                $con = empty($tmp['conditions'])? $tmp:$helper->cleanConditions($tmp);  // clean if conditions exists
+                $rule->setConditionsSerialized(serialize($con));
             }
 
             /* Collecting products START */
