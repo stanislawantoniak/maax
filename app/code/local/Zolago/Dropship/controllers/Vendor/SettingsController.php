@@ -16,7 +16,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
             }
         }
-        $this->_renderPage(null, "info");
+        $this->_renderPage(null, "vendorsettings_info");
     }
 
     public function shippingAction()
@@ -30,7 +30,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
             }
         }
-        $this->_renderPage(null, "shipping");
+        $this->_renderPage(null, "vendorsettings_shipping");
     }
 
     public function rmaAction()
@@ -44,7 +44,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
             }
         }
-        $this->_renderPage(null, "rma");
+        $this->_renderPage(null, "vendorsettings_rma");
     }
 
 
@@ -59,11 +59,13 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
         $param = $request->getPost();
 
         if ($request->isPost()) {
+	        $errorData = array();
             try {
                 /** @var Zolago_Dropship_Model_Vendor $vendor */
                 $vendor = $session->getVendor();
                 /** @var Zolago_Operator_Model_Operator $operator */
                 $operator = $session->getOperator();
+
                 if ($vendor->getId() && !$operator->getId()) {
                     foreach (
                         array(
@@ -87,7 +89,8 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                             'administrator_telephone',
                             'administrator_telephone_mobile'
                         ) as $key) {
-                        if (array_key_exists($key, $param)) {
+                        if (array_key_exists($key, $param) && $vendor->getData($key) != $param[$key]) {
+							$errorData[$key] = $param[$key];
                             $vendor->setData($key, $param[$key]);
                         }
                     }
@@ -113,6 +116,9 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                     $session->addSuccess(Mage::helper('udropship')->__('Settings has been saved'));
                 }
             } catch (Exception $e) {
+	            if(count($errorData)) {
+		            $session->setData('vendorSettings', $errorData);
+	            }
                 $session->addError($e->getMessage());
             }
         }

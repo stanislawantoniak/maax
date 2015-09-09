@@ -1,8 +1,14 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */ ?>
-<?php $_helper = Mage::helper("zolagocheckout"); ?>
-<?php $_totalDiscount = $this->getTotalDiscount()?>
-<?php $_coupon = $this->getCoupon();?>
-<?php $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */
+
+/** @var Zolago_Checkout_Helper_Data $_helper */
+$_helper = Mage::helper("zolagocheckout");
+
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+
+$_totalDiscount = $this->getTotalDiscount();
+$_coupon = $this->getCoupon();
+$checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 <div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
 	<?php $_items = $this->getItems(); ?>
@@ -37,9 +43,9 @@
 				<div class="panel-body">
 					<div class="col-sm-6 visible-lg visible-md visible-sm">
 						<div class="row">
-							<a href="<?php echo $this->getBasketUrl(); ?>" 
+							<a href="<?php echo $this->getBasketUrl(); ?>"
 							   id="zmiana_zawartosci_koszyka"
-							   class="button button-third large pull-left"><?php echo $_helper->__('Change basket'); ?></a> 
+							   class="button button-third large pull-left"><?php echo $_helper->__('Change basket'); ?></a>
 						</div>
 					</div>
 					
@@ -80,17 +86,44 @@
 			</div>
 
 			<div class="row hidden-xs">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements">
+					<div class="checkout_agreement_vendors">
+						<div class="agreement-nocheck-checkout">
+							<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
+						</div>
+					</div>
+					<form>
+						<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="tos_agreement_checkout" class="css-checkbox required"
+							       required="true"
+							       name="tos_agreement_checkout"
+							       aria-required="true">
+							<label for="tos_agreement_checkout" class="css-label tos_agreement_checkout-label control-label required">
+								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+							</label>
+						</div>
+						<?php endif; ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="dotpay_agreement" class="css-checkbox dotpay_agreement"
+							       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
+							<label for="dotpay_agreement" class="css-label dotpay_agreement-label">
+								<?php echo $modagoHelper->getAgreementHtml('dotpay') ?>
+							</label>
+						</div>
+					</form>
+				</div>
 				<div class="col-md-6 col-sm-12 col-md-push-2 col-lg-push-2 col-lg-7">
 					<p class="text-potwierdzenie">{{checkout_review_info}}</p>
 				</div>
 				<div class="col-md-3 col-sm-6 col-md-pull-6 col-lg-2 col-lg-pull-7">
-					<a href="#"  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
+					<button  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
 				</div>
 				<div class="col-md-3 col-sm-6" col-lg-2">
                     <?php if($checkoutOrderDeactivate): ?>
                         <a class="button button-primary large link pull-right disabled"><?php echo $_helper->__('Order now and pay'); ?></a>
                         <?php else: ?>
-                        <button class="button button-primary large link pull-right"  id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $_helper->__('Order now and pay'); ?></button>
                     <?php endif; ?>
 				</div>
 			</div>
@@ -163,17 +196,44 @@
 				</div>
 			</div>
 		</section>
-		<div class="main bg-w visible-xs opened-panel-group">  
+		<div class="main bg-w visible-xs opened-panel-group">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements_mobile">
+				<div class="checkout_agreement_vendors">
+					<div class="agreement-nocheck-checkout">
+						<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
+					</div>
+				</div>
+				<form>
+					<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="tos_agreement_checkout_mobile" class="css-checkbox required"
+							       required="true"
+							       name="tos_agreement_checkout"
+							       aria-required="true">
+							<label for="tos_agreement_checkout_mobile" class="css-label tos_agreement_checkout-label control-label required">
+								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+							</label>
+						</div>
+					<?php endif; ?>
+					<div class="form-group form-checkbox small text-align-left">
+						<input type="checkbox" id="dotpay_agreement_mobile" class="css-checkbox dotpay_agreement"
+						       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
+						<label for="dotpay_agreement_mobile" class="css-label dotpay_agreement-label">
+							<?php echo $modagoHelper->getAgreementHtml('dotpay') ?>
+						</label>
+					</div>
+				</form>
+			</div>
 			<p class="text-potwierdzenie">{{checkout_review_info}}</p>
 			<div class="row">
 				<div class="col-sm-6">
-					<a  href="#"  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
+					<button  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
 				</div>
 				<div class="col-sm-6">
                     <?php if($checkoutOrderDeactivate): ?>
                         <a class="button button-primary large link pull-right disabled "><?php echo $_helper->__('Order now and pay'); ?></a>
                     <?php else: ?>
-                        <button class="button button-primary large link pull-right"  id="step-2-submit"><?php echo $_helper->__('Order now and pay'); ?></button>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $_helper->__('Order now and pay'); ?></button>
                     <?php endif; ?>
 				</div>
 			</div>
@@ -182,7 +242,7 @@
 	</div>
 
 </div>
-<div style="visibility:hidden" id="checkout-review-hidden-box">
+<div style="display:none" id="checkout-review-hidden-box">
 	<div id="checkout-review-info-cod"><?php echo $this->getCheckoutReviewInfoCod(); ?></div>
 	<div id="checkout-review-info"><?php echo $this->getCheckoutReviewInfo(); ?></div>
 </div>

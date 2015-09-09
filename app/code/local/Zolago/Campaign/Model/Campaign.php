@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * Class Zolago_Campaign_Model_Campaign
+ * @method int getCampaignId()
+ * @method int getVendorId()
+ * @method int getStatus()
+ * @method string getType()
+ * @method int getPriceSourceId()
+ * @method float getPriceSrp()
+ * @method string getName()
+ * @method int getPercent()
+ * @method string getDateFrom()
+ * @method string getDateTo()
+ * @method string getCreatedAt()
+ * @method string getUpdatedAt()
+ * @method string getNameCustomer()
+ * @method int getStrikeoutType()
+ * @method int getLandingPageCategory()
+ * @method int getIsLandingPage()
+ * @method int getLandingPageContext()
+ * @method int getContextVendorId()
+ * @method int getCampaignUrl()
+ * @method int getCouponImage()
+ * @method int getCouponConditions()
+ *
+ * @method Zolago_Campaign_Model_Resource_Campaign getResource()
+ */
 class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
     const ZOLAGO_CAMPAIGN_ID_CODE = "campaign_regular_id";
@@ -9,9 +35,125 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     const ZOLAGO_CAMPAIGN_DISCOUNT_CODE = "percent";
     const ZOLAGO_CAMPAIGN_DISCOUNT_PRICE_SOURCE_CODE = "price_source_id";
 
+    protected $vendor = null;
+    protected $contextVendor = null;
+
+    const LP_COUPON_IMAGE_FOLDER = "lp/coupon/image";
+    const LP_COUPON_PDF_FOLDER = "lp/coupon/pdf";
+
     protected function _construct()
     {
         $this->_init("zolagocampaign/campaign");
+    }
+
+    /**
+     * Vendor who create campaign
+     *
+     * @return Zolago_Dropship_Model_Vendor|null
+     */
+    public function getVendor() {
+        if ($this->vendor === null) {
+            $this->vendor = Mage::getModel("zolagodropship/vendor")->load($this->getVendorId());
+        }
+        return $this->vendor;
+    }
+
+    /**
+     * Context vendor when campaign is landing page
+     *
+     * @return Zolago_Dropship_Model_Vendor|null
+     */
+    public function getContextVendor() {
+        if ($this->contextVendor === null) {
+            $this->contextVendor = Mage::getModel("zolagodropship/vendor")->load($this->getContextVendorId());
+        }
+        return $this->contextVendor;
+    }
+
+    /**
+     * Return final campaign url
+     *
+     * @param null|string $customUrl
+     * @return string
+     * @throws Mage_Core_Exception
+     */
+    public function getFinalCampaignUrl($customUrl = null) {
+        return $customUrl ? $this->getWebsiteUrl() . $customUrl :
+            ($this->getLandingPageUrl() ? $this->getLandingPageUrl() : ($this->_getCampaignUrl() ? $this->_getCampaignUrl() : "") );
+    }
+
+    /**
+     * Get url for website with vendor part (url_key)
+     *
+     * NOTE: Currently campaign can by assigned to one website
+     * (From DB structure can by 1(campaign) to many(websites) but for now is 1 to 1)
+     *
+     * @param string $customVendorUrlPart
+     * @return string
+     * @throws Mage_Core_Exception
+     */
+    public function getWebsiteUrl($customVendorUrlPart = "") {
+        $websiteIds = $this->getAllowedWebsites();
+        if (empty($websiteIds)) {
+//            throw new Mage_Core_Exception("Invalid campaign. No information about allowed websites");
+            return null;
+        } else {
+            /** @var Mage_Core_Model_Website $website */
+            $website = Mage::app()->getWebsite($websiteIds[0]); // Currently campaign can by assigned to one website
+        }
+        $websiteUrl = $website->getConfig("web/unsecure/base_url");
+
+        $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+        $vendorUrlPart = $customVendorUrlPart;
+        if ($localVendorId != $this->getVendorId() && empty($customVendorUrlPart)) {
+            $vendorUrlPart = $this->getVendor()->getUrlKey() . "/";
+        }
+        return $websiteUrl . $vendorUrlPart;
+    }
+
+    /**
+     * Get Campaign Website
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        $websiteIds = $this->getAllowedWebsites();
+        return $websiteIds[0];
+    }
+
+    /**
+     * Generate campaign url
+     *
+     * @return string
+     */
+    private function _getCampaignUrl() {
+        $rawCampaignUrl = $this->getData("campaign_url");
+        return $this->getWebsiteUrl() . $rawCampaignUrl;
+    }
+
+    /**
+     * Generate landing page url
+     * If Campaign is not landing page return empty string
+     * @return string
+     */
+    private function getLandingPageUrl() {
+        $id = $this->getLandingPageCategory();
+        $id = !empty($id) ? $id : 0;
+        $vendorUrlKey = $this->getContextVendor()->getUrlKey();
+        $isLP = (int)$this->getIsLandingPage();
+
+        $cacheKey = "lp_url_".$vendorUrlKey."_category_". $id;
+        if (!$this->getData($cacheKey)) {
+            $url = "";
+            if ($isLP) { // Is landing page
+
+                /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+                $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+                $url = $landingPageHelper->getLandingPageUrlByCampaign($this);
+            }
+            $this->setData($cacheKey, $url);
+        }
+        return $this->getData($cacheKey);
     }
 
     /**
@@ -625,6 +767,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $storesByWebsite = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
 
         foreach ($revertProductOptions as $websiteId => $productIds) {
+
             $stores = isset($storesByWebsite[$websiteId]) ? $storesByWebsite[$websiteId] : false;
             if ($stores) {
                 $this->setCampaignAttributesToProducts($campaignId, $campaign->getType(), $productIds, $stores);
@@ -667,19 +810,26 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     public function setCampaignAttributesToProducts($campaignId, $type, $productIds, $stores)
     {
+
         /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
         if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
+
             foreach ($stores as $store) {
                 foreach ($productIds as $productId) {
+
                     $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store);
+
+                    if (!$val) {
+                        continue;
+                    }
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
-                    if (!empty($campaignIds)) {
-                        $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
-                        $actionModel
-                            ->updateAttributesPure($productIds, $attributesData, (int)$store);
-                    }
+
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
+                    $actionModel
+                        ->updateAttributesPure($productIds, $attributesData, (int)$store);
+
                 }
                 unset($productId);
             }
@@ -693,6 +843,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
             unset($store);
         }
+
         $attributesData = array(
             'special_price' => '',
             'special_from_date' => '',
@@ -787,5 +938,19 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         return $productIdsUpdated;
     }
+    
+    /**
+     * returns filter key for campaign
+     *
+     * @return string
+     */
+     public function getCampaignFilterKey() {
+         switch ($this->getData('type')) {             
+             case Zolago_Campaign_Model_Campaign_Type::TYPE_INFO:
+                 return self::ZOLAGO_CAMPAIGN_INFO_CODE;
+             default:
+                 return self::ZOLAGO_CAMPAIGN_ID_CODE;
+         }
+     }
 
 }

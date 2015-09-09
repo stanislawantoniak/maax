@@ -5,40 +5,52 @@
     <div class="page-header">
         <div class="page-title">
             <h3>
-                <?php echo Mage::helper("zolagobanner")->__("New campaign creative"); ?>
+                <?php echo Mage::helper("zolagobanner")->__("Add new creation in campaign: %s", $this->getCampaignName()); ?>
             </h3>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="widget box">
-                <div class="widget-header">
-                    <!--                   Banner Type-->
-                    <h4><i class="icon-filter"></i><?php echo $this->__('Campaign creative type')?></h4>
-                    <div class="toolbar no-padding">
-                        <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span></div>
+            <div class="form-horizontal row-border">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <!--                   Banner Type-->
+                        <h4><i class="icon-filter"></i><?php echo $this->__('Campaign creative type')?></h4>
+                        <div class="toolbar no-padding">
+                            <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div style="margin: 0 5px;">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <input type="hidden" name="campaign_id" value="<?php echo $this->getCampaignId(); ?>" />
+                                    <select name="banner_type" class="form-control">
+                                        <?php foreach($this->getTypes() as $type => $label): ?>
+                                            <option value="<?php echo $type; ?>"><?php echo $label; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                $("select[name=banner_type]").change(function () {
+                                    var type = $(this).val();
+                                    var campaignId = $("input[name=campaign_id]").val();
+                                    var setTypePath = '<?php echo $_helper->setBannerTypeUrl(); ?>';
+
+                                    window.location = setTypePath + "type/" + type + "/campaign_id/" + campaignId;
+                                })
+                            });
+                        </script>
                     </div>
                 </div>
-                <div class="widget-content fiters">
-                    <input type="hidden" name="campaign_id" value="<?php echo $this->getCampaignId(); ?>" />
-                    <select name="banner_type" class="form-control">
-                        <?php foreach($this->getTypes() as $type => $label): ?>
-                            <option value="<?php echo $type; ?>"><?php echo $label; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <script type="text/javascript">
-                        jQuery(function ($) {
-                            $("select[name=banner_type]").change(function () {
-                                var type = $(this).val();
-                                var campaignId = $("input[name=campaign_id]").val();
-                                var setTypePath = '<?php echo $_helper->setBannerTypeUrl(); ?>';
-                                console.log(setTypePath);
-                                window.location = setTypePath + "type/" + type + "/campaign_id/" + campaignId;
-                            })
-                        });
-                    </script>
-                </div>
             </div>
+
         </div>
     </div>
 </div>

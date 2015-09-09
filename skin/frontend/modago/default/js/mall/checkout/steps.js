@@ -210,7 +210,10 @@
                         jQuery(this).parents('.form-group').addClass('hide-success-vaild');
                     }
                 });
-
+                // backend zip validate
+                jQuery(".postcode").blur(function () {
+                    Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name=postcode]"));
+                })
                 //end validate
             },
 			
@@ -279,7 +282,12 @@
                         , item.inputClass
                         , ""
                     );
-                    formGroup.find(".row").append(element.label).append(element.input);
+                    var row = formGroup.find(".row");
+                    row.append(element.label).append(element.input);
+                    if(item.name == "postcode"){
+                        row.find("input").after('<div id="zip-warning" class="checkout-warning"></div>');
+                    }
+
                     panelBody.append(formGroup);
                 });
 
@@ -766,13 +774,14 @@
             fillEditForm: function (address, form) {
                 form = jQuery(form);
                 jQuery.each(address.getData(), function (idx, item) {
+                    var _item = item;
                     if (idx.indexOf("street") !== -1 && item) {
                         if (jQuery.isArray(item)) {
-                            item = item.shift();
+                            _item = item[0] ? item[0] : '';
                         }
                     }
                     if (form.find("[name='"+ idx +"']").length > 0) {
-                        form.find("[name='"+ idx +"']").val(item);
+                        form.find("[name='"+ idx +"']").val(_item);
                     }
                 });
             },
@@ -853,6 +862,12 @@
 				var self = this;
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submit0Button = jQuery(this).find('button[target=step-0-submit]');
+                        submit0Button.prop("disabled", true);
+                        var i0 = submit0Button.find('i');
+                        i0.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1161,6 +1176,12 @@
 				var self = this;
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submitNotLoggedButton = jQuery(this).find('button[target=step-0-submit]');
+                        submitNotLoggedButton.prop("disabled", true);
+                        var iNotLogged = submitNotLoggedButton.find('i');
+                        iNotLogged.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1382,11 +1403,34 @@
                 return true;
             },
 
+            afterZipValidationAction: function (field) {
+
+                var zipEntered = field.val();
+
+                if (jQuery(".zipcode").valid()) {
+                    //send backend zip checking
+                    jQuery.ajax({
+                        url: Config.url.zip_validate,
+                        data: {zip: zipEntered, country: jQuery("[name='billing[country_id]']").val()}
+                    }).done(function (data) {
+                        jQuery("#zip-warning").empty();
+                        if (!data.status) {
+                            // not valid zip - show warning
+                            Mall.Checkout.prototype.showWarning(jQuery("#zip-warning"), Mall.translate.__('warning-wrong-zip'));
+                        }
+                    })
+                } else {
+                    jQuery("#zip-warning").empty();
+                }
+
+            },
+
             validate: {
                 _checkout: null,
 
                 init: function () {
                     var self = this;
+
 
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
@@ -1395,9 +1439,18 @@
                         rules: { }
                     }));
 
+                    // backend zip validate
+                    jQuery(".zipcode").blur(function () {
+                        Mall.Checkout.steps.address.afterZipValidationAction(jQuery("[name='shipping[postcode]']"));
+                    })
+
+
+
                     // validate email address
                     jQuery("#account_email").blur(
                         function () {Mall.Checkout.steps.address.afterEmailValidationAction();});
+
+
                 }
             }
 		},
@@ -1413,6 +1466,7 @@
 			_sidebarAddressesTemplate: "",
 	        _previous_payment: false,
 	        _previous_provider: false,
+	        _payment_is_dotpay: false,
 			
             handleChangePaymentMethodClick: function (e) {
 
@@ -1523,6 +1577,8 @@
 
                 if (paymentMemberName === paymentMethodNameAttr) {
                     var paymentMethodCode = jQuery(e.target).val();
+	                Mall.Checkout.steps.shippingpayment._payment_is_dotpay = false;
+
 
                     if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
                         paymentMethodName = jQuery(e.target).data("payment-method");
@@ -1546,6 +1602,7 @@
                     paymentMethodName = jQuery(e.target).closest('.panel.payment-selected').find('input[name="payment[method]"]').data("payment-method");
                     var providerName = jQuery(e.target).data("bank-name");
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
+	                Mall.Checkout.steps.shippingpayment._payment_is_dotpay = true;
 
                     //replace
                     self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
@@ -1574,6 +1631,12 @@
 
 				this.content.find("form").submit(function(){
                     if (jQuery(this).valid()) {
+                        jQuery("button[id*='-prev']").prop("disabled", false);
+                        var submitButton = jQuery(this).find('button[id=step-1-submit]');
+                        submitButton.prop("disabled", true);
+                        var i = submitButton.find('i');
+                        i.addClass('fa fa-spinner fa-spin');
+
                         self.submit();
                     }
 					return false;
@@ -1635,6 +1698,11 @@
                 }).change();
 
 				this.content.find("#step-1-prev").click(function(){
+                    jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+                    //jQuery(this).prop("disabled", true);
+                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+
 					checkoutObject.prev();
 					jQuery(window).trigger("resize");
 					return false;
@@ -1836,10 +1904,37 @@
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
+					var checkout_agreements = jQuery('.checkout_agreements'),
+						checkout_agreements_mobile = jQuery('.checkout_agreements_mobile'),
+						checkout_agreements_to_check = checkout_agreements.is(':visible') ? checkout_agreements : checkout_agreements_mobile;
+
+					if(!checkout_agreements_to_check.find('form').valid()) {
+						return;
+					}
+
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+
+                    //disable prev buttons
+                    jQuery("#step-2-prev").prop("disabled", true);
+                    jQuery("#zmiana_zawartosci_koszyka").prop("disabled", true);
+                    jQuery(".prev-button-address").prop("disabled", true);
+                    jQuery(".prev-button-deliverypaymnet").prop("disabled", true);
+
+
+                    var submit2Button = jQuery(this);
+                    submit2Button.prop("disabled", true);
+                    var i2 = submit2Button.find('i');
+                    i2.addClass('fa fa-spinner fa-spin');
+
 					// Add validation
 					checkoutObject.placeOrder()
 				});
 				this.content.find("[id^=step-2-prev]").click(function(){
+                    jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
+                    jQuery("button[id*='-prev']").prop("disabled", false);
+                   // jQuery(this).prop("disabled", true);
+                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+
 					checkoutObject.prev();
 					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {
 						jQuery('#view_default_pay').trigger('click');
@@ -1872,6 +1967,43 @@
 					this.getReviewInfoTemplate()
 				);
 				this._prepareTotals(checkout);
+
+				// Prepare dotpay agreement
+				var dotpayAgreement = jQuery(".dotpay_agreement");
+
+				dotpayAgreement.each(function() {
+					var dotpayAgreementContainer = jQuery(this).parent(),
+						current = jQuery(this);
+					if(Mall.Checkout.steps.shippingpayment._payment_is_dotpay) {
+						dotpayAgreementContainer.show();
+						current.prop('disabled',false);
+					} else {
+						dotpayAgreementContainer.hide();
+						current.prop('disabled',true);
+					}
+				});
+
+				//prepare last step agreements validation
+				var form = jQuery('.checkout_agreements').find('form'),
+					form_mobile = jQuery('.checkout_agreements_mobile').find('form');
+
+				form.find('.has-feedback').each(function() {
+					var elemToCleanup = jQuery(this);
+					elemToCleanup.removeClass('has-feedback has-error has-success');
+					elemToCleanup.find('.error').remove();
+					elemToCleanup.find('i').remove();
+				});
+
+				form_mobile.find('.has-feedback').each(function() {
+					var elemToCleanup = jQuery(this);
+					elemToCleanup.removeClass('has-feedback has-error has-success');
+					elemToCleanup.find('.error').remove();
+					elemToCleanup.find('i').remove();
+				});
+
+				Mall.validate.init();
+				form.validate(Mall.validate._default_validation_options);
+				form_mobile.validate(Mall.validate._default_validation_options);
 			},
 			
 			_prepareTotals: function(checkout){

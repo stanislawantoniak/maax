@@ -119,6 +119,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		$po = $observer->getEvent()->getData('po');
 		/* @var $po Zolago_Po_Model_Po */
 		// Send email
+        Mage::log("Zolago: poCreatedFromOrder", null, "operator.log");
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();
 	}
@@ -139,7 +140,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				"Changed POS (%s&rarr;%s)", $oldPos->getExternalId(), $newPos->getExternalId());
 		
 		$this->_logEvent($po, $text);
-		
+
+        Mage::log("Zolago: poChangePos", null, "operator.log");
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();
@@ -634,6 +636,39 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             if ($ghapiAccessForNew) {
                 $queue->addMessage($newPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
             }
+        }
+    }
+
+
+    /**
+     * Dhl zip validation
+     * @param $observer
+     */
+    public function poAlertUpdate($observer)
+    {
+        $po = $observer->getPo();
+        $alert = $po->getAlert();
+
+        $shippingId = $po->getShippingAddressId();
+        $address = Mage::getModel('sales/order_address')->load($shippingId);
+        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
+        $dhlActive = Mage::helper('orbashipping/carrier_dhl')->isActive();
+        if ($dhlEnabled && $dhlActive) {
+            $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
+            $dhlValidZip = $dhlHelper
+                ->isDHLValidZip($address->getCountry(), $address->getPostcode());
+
+            if (!$dhlValidZip) {
+                $alert |= Zolago_Po_Model_Po_Alert::ALERT_DHL_ZIP_CHECKING;
+
+            } else {
+                $alert &= ~Zolago_Po_Model_Po_Alert::ALERT_DHL_ZIP_CHECKING;
+
+            }
+
+            $po->setAlert($alert);
+            $po->getResource()->saveAttribute($po, "alert");
+
         }
     }
 }

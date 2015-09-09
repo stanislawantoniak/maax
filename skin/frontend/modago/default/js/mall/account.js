@@ -100,14 +100,21 @@ Mall.account = {
 						email: true
 					},
 					phone: {
-						required: true,
 						"validate-telephone": true
 					},
 					firstname: {
-						required: true
+						required: {
+							depends: function(element) {
+								return jQuery('#customer_lastname').val() != "";
+							}
+						}
 					},
 					lastname: {
-						required: true
+						required: {
+							depends: function(element) {
+								return jQuery('#customer_firstname').val() != "";
+							}
+						}
 					}
 				},
 				messages: {
@@ -169,18 +176,22 @@ Mall.account = {
 	},
 
 	attachTooltips: function() {
-		jQuery('input[type=text].hint,input[type=email].hint,input[type=password].hint,textarea.hint').tooltip({
-			placement: function(a, element) {
-				var viewport = window.innerWidth;
-				var placement = "right";
-				if (viewport < 768) {
-					placement = "bottom";
-				}
-				return placement;
-			},
-			html: true,
-			trigger: "focus"
+		jQuery('input[type=text].hint,input[type=email].hint,input[type=password].hint,textarea.hint').each(function() {
+			var self = jQuery(this);
+			self.tooltip({
+				placement: function(a, element) {
+					var viewport = window.innerWidth;
+					var placement = self.data('placement') ? self.data('placement') : "right";
+					if (viewport < 768) {
+						placement = "bottom";
+					}
+					return placement;
+				},
+				html: true,
+				trigger: "focus"
+			});
 		});
+
 		jQuery('input[type=text].hint,input[type=email].hint,input[type=password].hint,textarea.hint').off('shown.bs.tooltip').on('shown.bs.tooltip', function () {
 			if(jQuery(this).parent(':has(i)').length && jQuery(this).parent().find('i').is(":visible")) {
 				jQuery(this).next('div.tooltip.right').animate({left: "+=25"}, 100, function () {
@@ -223,7 +234,7 @@ Mall.account = {
 						email: Mall.translate.__("Please enter correct email.")
 					},
 					agreement: {
-						required: Mall.translate.__("You must agree to our Terms of Service")
+						required: Mall.translate.__("You must accept our Terms of Service")
 					}
 				}
 			}));

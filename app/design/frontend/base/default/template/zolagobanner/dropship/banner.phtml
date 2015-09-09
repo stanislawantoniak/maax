@@ -7,7 +7,7 @@
 			<span class="tageline"><?php echo Mage::helper("zolagobanner")->__("Banners management");?></span>
 		</div>
 		<div class="main-actions align-right col-md-6">
-			<a class="btn btn-success" href="<?php echo Mage::getUrl('zolagobanner/vendor/new');?>">
+			<a class="btn btn-success" href="<?php echo Mage::getUrl('zolagobanner/vendor/new', array('_secure'=>true));?>">
 					<i class="icon-plus"></i>
 					<?php echo $_helper->__("New banner");?>
 				</a> 

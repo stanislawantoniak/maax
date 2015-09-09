@@ -249,6 +249,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'max_shipping_time',
             'external_id',
             'super_vendor_id',
+            'statements_calendar',
             'can_ask',
             'review_status',
             'label_store',
@@ -257,6 +258,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'sequence',
             'url_key',
             'logo',
+	        'legal_entity'
         );        
         $this->_addFieldsToFieldset($keys,$fieldset);
 

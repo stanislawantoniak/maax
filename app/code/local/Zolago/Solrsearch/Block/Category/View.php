@@ -39,6 +39,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 }
             }
             /*rewrite gh_url_rewrite*/
+
+            /* @var $campaign Zolago_Campaign_Model_Campaign */
+            $campaign = $category->getCurrentCampaign();
+
+            if($campaign){
+                $headBlock->setTitle($campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName());
+            }
         }
 
         if($this->isContentMode()) {
@@ -60,7 +67,8 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->getBlock('root')
                 ->addBodyClass('node-type-main_categories')
                 ->addBodyClass('is-content-mode')
-                ->setTemplate('page/1column.phtml');
+                //->setTemplate('page/1column.phtml')
+            ;
 
 			$this->getLayout()->getBlock('before_body_end')->unsetChild('searchfaces');
 

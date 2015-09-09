@@ -63,7 +63,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
 					$rmaItem = $rma->getItemById($id);
 					if (is_object($rmaItem) && $rmaItem->getId()) {
-						$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						if($rmaItem->getPoItem()->getId()) {
+							$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+						} else {
+							$maxValue = $rmaItem->getPrice();
+						}
 						if (isset($data['returnValues'][$id]) &&
 							$data['returnValues'][$id] <= $maxValue) {
 							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
@@ -83,6 +87,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						$this->_throwRefundTooMuchAmountException();
 					}
 
+					$refundStatementModel = false;
 					if($po->isPaymentDotpay()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
@@ -90,21 +95,69 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						if($result === false) {
 							$this->_throwRefundTooMuchAmountException();
 						}
+
+						/** @var GH_Statements_Model_Refund $refundStatementModel */
+						$refundStatementModel = Mage::getModel('ghstatements/refund');
 					}
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
 					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
-					$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount));
+					/*$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount),false,true);*/
+
+
+					$commentData = array(
+						"parent_id" => $rma->getId(),
+						"is_visible_on_front" => 0,
+						"is_vendor_notified" => 0,
+						"is_customer_notified" => 0,
+						"is_visible_to_vendor" => 1
+					);
+					/* @var $vendorSession  Zolago_Dropship_Model_Session*/
+					$vendorSession = Mage::getSingleton('udropship/session');
+					$commentData['vendor_id'] = $vendorSession->getVendorId();
+					if($vendorSession->isOperatorMode()) {
+						$operator = $vendorSession->getOperator();
+						$commentData['operator_id'] = $operator->getId();
+						if($refundStatementModel) {
+							$refundStatementModel
+								->setOperatorId($operator->getId())
+								->setOperatorName($operator->getFirstname()." ".$operator->getLastname()." (".$operator->getEmail().")");
+						}
+					}
+
+					if(!$po->isPaymentDotpay()) {
+						//refund confirm
+						$commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s",$_returnAmount);
+					} else {
+						//refund order
+						$commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s",$_returnAmount);
+					}
+					$commentModel = Mage::getModel("zolagorma/rma_comment");
+					$commentModel->setRma($rma);
+					$commentModel->addData($commentData);
+					$commentModel->setAuthorName($commentModel->getAuthorName(false));
+					$commentModel->save();
 
 					//send emails to not transactional refunds
 					if(!$po->isPaymentDotpay()) {
-						//todo: send email
 						/** @var Zolago_Payment_Helper_Data $paymentHelper */
 						$paymentHelper = Mage::helper('zolagopayment');
 						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
 							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
 							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
 						}
+					}
+
+					if($po->isPaymentDotpay() && $refundStatementModel) {
+						$refundStatementModel
+							->setPoId($po->getId())
+							->setPoIncrementId($po->getIncrementId())
+							->setRmaId($rma->getId())
+							->setRmaIncrementId($rma->getIncrementId())
+							->setDate(Mage::getModel('core/date')->date('Y-m-d'))
+							->setVendorId($po->getVendor()->getId())
+							->setValue($returnAmount)
+							->save();
 					}
 
 					$po->saveComments();

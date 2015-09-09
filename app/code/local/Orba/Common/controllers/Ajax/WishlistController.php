@@ -25,10 +25,33 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 			$this->_sendJson(0, $error);
 			return;
 		}
-		
+
+		$this->_changeWishlistInCache(1,$this->getRequest()->getParam('product'));
 		
 		// Send correct data
 		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
+	}
+
+	protected function _changeWishlistInCache($inWishlist,$productId) {
+		if(($inWishlist === 1 || $inWishlist === 0) && is_numeric($productId)) {
+			//mark item's wishlist status in products cache
+			/** @var Zolago_Customer_Model_Session $customerSession */
+			$customerSession = Mage::getSingleton('customer/session');
+			$currentProducts = $customerSession->getProductsCache();
+			$madeChanges = false;
+			if(isset($currentProducts['products']) && !empty($currentProducts['products'])) {
+				foreach($currentProducts['products'] as $k=>$product) {
+					if($product[0] == $productId && $product[6] != $inWishlist) {
+						$currentProducts['products'][$k][6] = $inWishlist;
+						$madeChanges = true;
+						break;
+					}
+				}
+				if($madeChanges) {
+					$customerSession->setData(Zolago_Customer_Model_Session::CURRENT_PRODUCTS,$currentProducts);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -68,6 +91,8 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 			$this->_sendJson(0, $error);
 			return;
 		}
+
+		$this->_changeWishlistInCache(0,$this->getRequest()->getParam('product'));
 		
 		// Send correct data
 		$this->_forward("get_account_information", "ajax_customer", "orbacommon");

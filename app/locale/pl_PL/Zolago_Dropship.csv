@@ -1,11 +1,7 @@
-﻿<<<<<<< HEAD
-﻿"Address", "Adresy"
-=======
 "Account password management","Zarządzanie hasłem do konta"
 "Password has been saved","Hasło zostało zmienione"
 "Change password","Zmień hasło"
 "Address", "Adresy"
->>>>>>> ee0e0f73d16448f4011803e3c67f540e77f211d1
 "Couriers", "Kurierzy"
 "Tier Commissions", "Tabela prowizji"
 "Associated Products", "Przypisane produkty"
@@ -207,3 +203,4 @@
 "Changed POS (%s&rarr;%s)", "Zmiana POS (%s&rarr;%s)"
 "Billing", "Faktura"
 "Item removed %s", "Usunięto produkt %s"
+"Legal entity","Podmiot"

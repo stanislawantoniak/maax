@@ -10,6 +10,7 @@ class Zolago_Faq_Block_Frontend_Faqsearch_Result extends Inic_Faq_Block_Frontend
     public function getSearch() {
         if (!$this->_search) {
             $keyword=$this->getRequest()->getParam('keyword');
+
             $this->_search = Mage :: getModel('faq/faq')->getCollection();
             if($this->getRequest()->getParam('cat_id')){
                 $id=$this->getRequest()->getParam('cat_id');

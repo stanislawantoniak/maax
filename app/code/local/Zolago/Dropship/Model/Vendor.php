@@ -3,6 +3,8 @@
 /**
  * Class Zolago_Dropship_Model_Vendor
  * @method string getVendorName()
+ * @method string getStatementsCalendar()
+ * @method string getUrlKey()
  */
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {

@@ -1,3 +1,4 @@
+<?php /** @var Zolago_Pos_Block_Dropship_Pos_Edit $this */ ?>
 <?php $_helper = Mage::helper("zolagopos");?>
 <?php $_pos = $this->getModel();?>
 <div class="container">
@@ -33,7 +34,23 @@
 jQuery(function($){
 	var form = $("#edit-pos");
 	new Zolago.formIntegrator(form);
-	form.validate();
+	form.validate({
+		rules: {
+			"phone": {
+				required: true,
+				"validate-telephone": true
+			},
+            "postcode": {
+                required: true,
+                postcodeWithReplace: true
+            }
+		},
+        messages: {
+            "postcode": {
+                postcodeWithReplace: '<?php echo Mage::helper("zolagopos")->__("Zip code has not valid format (ex.12-345)"); ?>'
+            }
+        }
+	});
 });
 </script>
 

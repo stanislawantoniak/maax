@@ -14,41 +14,43 @@ class Zolago_Campaign_Model_Observer
         /* @var $campaign Zolago_Campaign_Model_Campaign */
         $campaignId = $campaign->getId();
 
-//        $campaignPromoSaleType = $campaign->getType();
+
         if (empty($campaignId)) {
             //not implement to new campaigns
             return;
         }
         $localeTime = Mage::getModel('core/date')->timestamp(time());
-        $localeTimeF = date("Y-m-d H:i", $localeTime);
 
-//        $rabatChanged = $campaign->dataHasChangedFor('percent');
-//        $salePriceTypeChanged = $campaign->dataHasChangedFor('price_source_id');
-//        $rabatOrPriceTypeChanged = false;
-//
-//
-//        if ($rabatChanged) {
-//            $rabatOrPriceTypeChanged = true;
-//        }
-//
-//        if ($salePriceTypeChanged) {
-//            $rabatOrPriceTypeChanged = true;
-//        }
+        //set to campaign products assigned_to_campaign = 0
+        /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+        $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
+        $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
 
-        //if (($campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $campaignPromoSaleType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) && $rabatOrPriceTypeChanged) {
-            //set to campaign products assigned_to_campaign = 0
-            /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
-            $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
-            $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
-        //}
+        if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
+            $campaignType = $campaign->getType();
+            //generate landing page url
+            $landingPageUrl = "";
+
+            if ($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE || $campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION) {
+                $landingPageUrl = "fq[" . Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE . "][0]=" . $campaignId;
+            }
+            if ($campaignType == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
+                $landingPageUrl = "fq[" . Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE . "][0]=" . $campaignId;
+            }
+            if (!empty($landingPageUrl)) {
+                $campaign->setData("campaign_url", $landingPageUrl);
+                $campaign->save();
+            }
+        }
 
 
-        if((strtotime($campaign->getData('date_to'))<= $localeTime) 
-            && ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE) ){
+        if ((strtotime($campaign->getData('date_to')) <= $localeTime)
+            && ($campaign->getStatus() == Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
+        ) {
             $campaign->setStatus(Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE);
             $campaign->save();
         }
-        //die('test');
+
     }
 
     static function setProductAttributes()
@@ -118,20 +120,6 @@ class Zolago_Campaign_Model_Observer
             unset($campaignSalesPromoItem);
         }
 
-////        $websitesToUpdateSalesPromo = array_keys($dataToUpdate);
-//        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-////        $catalogHelper = Mage::helper('zolagocatalog');
-////        $storesToUpdateSalesPromo = $catalogHelper->getStoresForWebsites($websitesToUpdateSalesPromo);
-//
-////        if (!empty($dataToUpdate)) {
-////            foreach ($dataToUpdate as $websiteIdSP => $dataToUpdateSalesPromo) {
-////                $storesSP = isset($storesToUpdateSalesPromo[$websiteIdSP]) ? $storesToUpdateSalesPromo[$websiteIdSP] : false;
-////                if ($storesSP) {
-////                    $productIdsSPUpdated = $modelCampaign->setSalesPromoCampaignsToProduct($dataToUpdateSalesPromo, $storesSP);
-////                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
-////                }
-////            }
-////        }
 
         $salesPromoProductsData = array();
 
@@ -220,6 +208,7 @@ class Zolago_Campaign_Model_Observer
 //        );
         $campaignId = $observer->getCampaignId();
         $revertProductOptions = $observer->getRevertProductOptions();
+
 
         /* @var $model Zolago_Campaign_Model_Campaign */
         $model = Mage::getModel('zolagocampaign/campaign');

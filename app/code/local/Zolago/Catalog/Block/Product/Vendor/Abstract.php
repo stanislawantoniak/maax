@@ -30,7 +30,11 @@ class Zolago_Catalog_Block_Product_Vendor_Abstract
 	 */
 	public function getProduct() {
 		if(!$this->getData("product")){
-			$product = $this->getParentBlock()->getProduct();
+			if($this->getParentBlock()) {
+				$product = $this->getParentBlock()->getProduct();
+			} else {
+				$product = false;
+			}
 			if(!$product){
 				$product = Mage::registry('current_product');
 			}

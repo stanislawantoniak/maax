@@ -2,48 +2,7 @@
 
 class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    /**
-     * @param $string
-     * @return string
-     */
-    function createCampaignSlug($string)
-    {
-        //1.Create url from name
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', Mage::helper('catalog/product_url')->format($string));
-        $urlKey = strtolower($urlKey);
-        $slug = trim($urlKey, '-');
-        $slugFull = $slug . '.html';
-
-        if(!$this->_slugExists($slugFull)){
-            $result = $slugFull;
-        } else {
-            for ($i = 1; $i <= 10; $i++) {
-                $slugFullIncrement = $slug . '-' . $i . '.html';
-                if(!$this->_slugExists($slugFullIncrement)){
-                    $result = $slugFullIncrement;
-                    break;
-                }
-            }
-        }
-        return $result;
-    }
-
-    protected function _slugExists($slug)
-    {
-        $store = Mage::app()->getStore();
-        $collection = Mage::getResourceModel('core/url_rewrite_collection');
-        /* @var $collection Mage_Core_Model_Resource_Url_Rewrite_Collection */
-        $collection->addStoreFilter($store);
-        $collection->addFieldToFilter("request_path", $slug);
-
-        $collectionCampaign = Mage::getResourceModel('zolagocampaign/campaign_collection')
-            ->addFieldToFilter('url_key', $slug);
-        //$collectionCampaign->printLogQuery(true);
-        $slugCampaignExist = $collectionCampaign->getFirstItem()->getUrlKey();
-
-        $slugExists = (empty($slugCampaignExist) && $collection->getSize() == 0) ? false : true;
-        return $slugExists;
-    }
+    protected $_campaignIds;
 
     public function getBannerTypesSlots()
     {
@@ -177,4 +136,113 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         return $cats;
     }
 
+
+    /**
+     * @param null $vendorId
+     * @return string
+     */
+    public function getCategoriesTree($vendorId = null, $website = null)
+    {
+        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+        if (!empty($vendorId)) {
+            $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+            $rootCategory = $vendor->getData("root_category");
+
+            $vendorRootCategoryId = (isset($rootCategory[$website]) && !empty($rootCategory[$website])) ? $rootCategory[$website] : $rootCatId;
+
+            if ($vendorRootCategoryId > 0) {
+                $rootCatId = $vendorRootCategoryId;
+                $vendorRootCategory = Mage::getModel("catalog/category")->load($vendorRootCategoryId);
+                $tree = "<ul>";
+                $tree .= '<li id="' . $vendorRootCategory->getId() . '" data-name="' . $vendorRootCategory->getName() . '" data-url="' . $vendorRootCategory->getUrl() . '">' . $vendorRootCategory->getName() . "";
+                $tree .= $this->getTreeCategories($rootCatId);
+                $tree .= "</ul>";
+                return $tree;
+            }
+        }
+        return $this->getTreeCategories($rootCatId, true);
+    }
+
+    /*
+     *
+     */
+    public function getTreeCategories($parentId, $includeRootCategory = false)
+    {
+        $html = "";
+        $allCats = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter('include_in_menu', '1')
+            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+
+        if ($includeRootCategory) {
+            $rootCategory = Mage::getModel("catalog/category")->load($parentId);
+            $html = "<ul>";
+            $html .= '<li id="' . $rootCategory->getId() . '" data-name="' . $rootCategory->getName() . '" data-url="' . $rootCategory->getUrl() . '">' . $rootCategory->getName() . "";
+        }
+
+
+        $html .= '<ul>';
+
+        foreach ($allCats as $category) {
+            $html .= '<li id="'.$category->getId().'" data-name="' . $category->getName() . '" data-url="'.$category->getUrl().'">' . $category->getName() . "";
+            $subcats = $category->getChildren();
+            if ($subcats != '') {
+                $html .= $this->getTreeCategories($category->getId());
+            }
+            $html .= '</li>';
+        }
+
+        if ($includeRootCategory) {
+
+            $html .= "</ul>";
+        }
+
+        $html .= '</ul>';
+
+
+        return $html;
+    }
+    
+    
+    /**
+     * return campaign ids from request
+     *
+     * @return array
+     */
+    public function getCampaignIdsFromUrl() {
+        if (is_null($this->_campaignIds)) {
+            $params = Mage::app()->getRequest()->getParams();
+            $this->_campaignIds = $this->parseCampaignIds($params);
+        }
+        return $this->_campaignIds;
+    }
+    
+    /**
+     * parse campaign ids from url params
+     *
+     * @param array $params
+     * @return array
+     */
+
+    public function parseCampaignIds($params) {
+        $id = array();
+        if (!empty($params['fq'])) {
+            if (!empty($params['fq']['campaign_regular_id'])) {
+                if (is_array($params['fq']['campaign_regular_id'])) {
+                    $id += $params['fq']['campaign_regular_id'];
+                } else {
+                    $id[] = $params['fq']['campaign_regular_id'];
+                }
+            } 
+            if (!empty($params['fq']['campaign_info_id'])) {
+                if (is_array($params['fq']['campaign_info_id'])) {
+                    $id += $params['fq']['campaign_info_id'];
+                } else {
+                    $id[] = $params['fq']['campaign_info_id'];
+                }
+            }
+        }
+        return array_unique($id);
+    }
 }

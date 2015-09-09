@@ -96,8 +96,34 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
         $mail->setSubject('=?utf-8?B?' . base64_encode($this->getProcessedTemplateSubject($variables)) . '?=');
         $mail->setFrom($this->getSenderEmail(), $this->getSenderName());
 
+	    $errors = array();
+
         try {
-            $mail->send();
+            $to = $mail->getRecipients();
+            $testFlag = (string)Mage::getConfig()->getNode('global/test_server');
+            if ($testFlag == 'true') {
+                $allowEmails = Mage::getConfig()->getNode('global/allow_emails');
+                if (!empty($allowEmails)) {
+                    foreach ($to as $k=>$email) {
+                        if (!preg_match('/'.$allowEmails.'/',$email)) {
+	                        unset($to[$k]);
+	                        $errors[] = sprintf('Email not allowed to send (%s)',$email);
+                        }
+                    }
+                } else {
+	                $to = array();
+	                $errors[] = 'Not allowed recipient emails [test server]';
+                }
+            }
+	        if(count($errors)) {
+		        foreach($errors as $error) {
+			        Mage::log($error,null,'email_blocked.log');
+		        }
+	        }
+
+	        if(count($to)) {
+		        $mail->send();
+	        }
             $this->_mail = null;
         }
         catch (Exception $e) {

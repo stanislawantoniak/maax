@@ -469,3 +469,58 @@ table.foot-empty-cells tfoot td:empty {
 	background: #334d63 !important;
 	box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25) inset, -1px 0 0 rgba(0, 0, 0, 0.25) inset !important;
 }
+
+/**
+ * Nowe ikonki
+ */
+
+.ania-icon-wrong {
+    background: url(../../images/ania-icons/wrong.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-notaccepted {
+    background: url(../../images/ania-icons/notaccepted.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-new {
+    background: url(../../images/ania-icons/new.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-hourglass {
+    background: url(../../images/ania-icons/hourglass-icon.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-enabled {
+    background: url(../../images/ania-icons/enabled.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-accepted {
+    background: url(../../images/ania-icons/accepted.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+@media screen and (min-width: 768px) {
+	#shippingModal .modal-dialog {
+		width: 730px;
+	}
+}
+.no-padding-left {
+    padding-left: 0;
+}

@@ -31,6 +31,9 @@
 		margin-bottom:15px;
 		padding:0;
 	}
+    h4.number_order {
+      margin-bottom: 10px;
+    }
 	fieldset {
 		> h4 {
 			margin-top:0px;
@@ -313,7 +316,16 @@
 		.form-checkbox {
 			margin-bottom: 15px;
 			margin-left: 20px;
-			
+
+          &.agreement-container {
+            border: 1px solid $color-gray2;
+            margin-right: 59px;
+            margin-left: 13px;
+            &.has-error {
+              border: 1px solid $validation-error;
+            }
+          }
+
 			@media (max-width: 767px) {
 				margin-bottom: 10px;
 			}
@@ -654,4 +666,20 @@
 
 #invoice_data {
 	display:none;
+}
+.checkout-success {
+  .see-this-order {
+    font-size: 11px;
+  }
+}
+
+#checkout-onepage-social-login {
+	margin-top: -15px;
+}
+
+p.text-potwierdzenie {
+	margin: 0;
+	@media(max-width: $screen-sm-max) {
+		margin-bottom: 15px;
+	}
 }

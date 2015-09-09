@@ -84,7 +84,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryId = $this->getCategoryId();
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
-        $placements = $campaign->getCategoryPlacements($categoryId, $vendorId);
+        $placements = $campaign->getCategoryPlacements($categoryId, $vendorId, array(),  FALSE, false);
 
         $placementsByType = array();
         if (!empty($placements)) {
@@ -94,7 +94,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
             foreach ($placements as $placement) {
                 $placement['campaign_vendor_id'] = $placement['campaign_vendor'];
-                $placement['show_edit_link'] = ($placement['campaign_vendor'] == $vendorId);
+                $showEditLink = ($placement['campaign_vendor'] == $vendorId);
+                $placement['show_edit_link'] = $showEditLink;
                 $placement['campaign_vendor'] = $vendorsList[$placement['campaign_vendor']];
 
 
@@ -118,10 +119,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 }
                 $status = array();
                 //status
-                $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
+                /* @var $statuses Zolago_Campaign_Model_Campaign_PlacementStatus */
+                $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')
+                    ->statusOptionsData($placement['campaign_id'], $showEditLink);
+                Mage::log($statuses, null, "campaign.log");
+
                 $now = Mage::getModel('core/date')->timestamp(time());
                 if (!empty($dateTo) && !empty($dateFrom)) {
-                    //Zend_Debug::dump($statuses);
+
                     //1.Expired
                     if (strtotime($dateFrom) < $now && $now < strtotime($dateTo)) {
                         $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
@@ -165,6 +170,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
 
                 $placementsByType[$placement['type']][] = $placement;
+
+                unset($showEditLink);
             }
         }
 

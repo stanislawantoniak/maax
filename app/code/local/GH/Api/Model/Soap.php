@@ -325,6 +325,47 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 		$obj->status = $status;
 		return $obj;
 	}
+
+    /**
+     * Method to export all attributes sets (with create products = yes)
+     * Export id and name
+     *
+     * @param $getCategoriesParameters
+     * @return StdClass
+     */
+    public function getCategories($getCategoriesParameters) {
+        $request = $getCategoriesParameters;
+        $token = $request->sessionToken;
+        $obj = new StdClass();
+
+        try {
+
+            $user = $this->getUserByToken($token);
+            $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
+            $attributeSetCollection->addFilter('use_to_create_product', 1);
+            $attributeSetCollection->load();
+
+            $list = array();
+            foreach ($attributeSetCollection as $id => $item) {
+                $m = new StdClass();
+                $m->categoryID   = $id;
+                $m->categoryName = $item->getAttributeSetName();
+                $list[] = $m;
+            }
+
+            $obj->categories = $list;
+            $message = 'ok';
+            $status = true;
+        } catch(Exception $e) {
+            $message = $e->getMessage();
+            $status = false;
+        }
+
+        $obj->message = $message;
+        $obj->status = $status;
+        return $obj;
+    }
+
     /**
      * @return GH_Api_Model_Message
      */

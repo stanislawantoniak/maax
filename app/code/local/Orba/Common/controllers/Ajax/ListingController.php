@@ -35,7 +35,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$design->setTheme($theme ? $theme : "default");
 
 		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
-		
+
 		// Product 
 		$products = $this->_getProducts($listModel);
 
@@ -44,6 +44,13 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$customerSession->addProductsToCache($products);
 
 		$params = $this->getRequest()->getParams();
+
+		$fq = isset($params["fq"]) ? $params["fq"] : array();
+
+		//$lp = $this->getRequest()->getParam("lp");
+		Mage::register("listing_reload_params", $params);
+		//Mage::register("lp", $lp);
+
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
 		$rewriteHelper = Mage::helper('ghrewrite');
@@ -53,12 +60,42 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
 
+
+
+		//if filter params then set display_mode to PRODUCTS
+		if($fq){
+			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
+		} else {
+			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
+		}
+
+		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
+
+		$rootId = Mage::app()->getStore()->getRootCategoryId();
+
+		/* @var $zDropshipHelper Zolago_Dropship_Helper_Data */
+		$zDropshipHelper = Mage::helper("zolagodropship");
+		$vendorRootCategory = $zDropshipHelper->getCurrentVendorRootCategory();
+
 		$url = false;
-		if($type == "search") {
+		if ($type == "search") {
 			$query = http_build_query($params);
 			$url = Mage::getUrl('search') . ($query ? "?" . $query : "");
-		} elseif($type == "category") {
-			$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
+		} elseif ($type == "category") {
+
+			$campaign = $category->getCurrentCampaign();
+			if ($campaign) {
+				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
+
+			} elseif ($categoryId == $rootId || $categoryId == $vendorRootCategory) {
+				//Case when remove last filter on GALLERY ROOT listing or VENDOR ROOT listing (Landing pages)
+				$query = http_build_query($params);
+				$url = Mage::getBaseUrl() . ($query ? "?" . $query : "");
+			} else {
+				$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
+			}
 		}
 		if (!$url) {
 			$query = http_build_query($params);
@@ -81,14 +118,21 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             $title = $rewriteData["title"];
         }
 
+        $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
+        $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
+		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
+
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,
-			"header"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml()),
+			"header"		=> $this->_cleanUpHtml($block->toHtml()),
 			"toolbar"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml()),
 			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
+			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
 			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
-            "category_head_title" => $title
+            "category_head_title" => $title,
+			"category_display_mode" => $categoryDisplayMode,
+			"listing_type" => $type
 		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);

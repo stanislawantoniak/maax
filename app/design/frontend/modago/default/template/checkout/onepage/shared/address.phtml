@@ -1,4 +1,7 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */ ?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+?>
 
 
 <?php echo $this->getStep1Sidebar(); ?>
@@ -79,8 +82,16 @@ $_billingAddress = $_quote->getBillingAddress();
 					</div>
 				</div>
 			</fieldset>
+            <fieldset id="checkout-onepage-social-login">
+                <div class="row">
+	                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                        <?php echo $this->getChildHtml('ced_sociallogin_register'); ?>
+                    </div>
+                </div>
+            </fieldset>
             <?php endif; ?>
-			<div class="row hide-success-vaild ">
+			<div class="row  ">
                 <?php $agreements = $this->getAgreements(); ?>
 				<div class="form-group form-checkbox small text-align-left">
 
@@ -88,16 +99,16 @@ $_billingAddress = $_quote->getBillingAddress();
 					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
 					       <?php if($agreements['agreement_tos']):?>checked="checked"<?php endif;?>
 						>
-					<label for="agreement_tos" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/tos'); ?></label>
+					<label for="agreement_tos" class="css-label"><?php echo $modagoHelper->getAgreementHtml('tos'); ?></label>
 				</div>
 				<?php if(!$this->isCustomerSubscribed()):?>
-				<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container">
+				<div class="form-group form-checkbox small text-align-left">
 					<input type="hidden" name="agreement[newsletter]" value="0" />
 					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
 					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
 						   <?php if($agreements['agreement_newsletter']):?>checked="checked"<?php endif;?>
 						>
-					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
+					<label for="agreement_newsletter" class="css-label"><?php echo $modagoHelper->getAgreementHtml('newsletter'); ?></label>
 				</div>
 				<?php endif;?>
 			</div>
@@ -106,7 +117,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<a id="back" href="<?php echo $this->getPreviousStepUrl(); ?>" class="button button-third large pull-left"><?php echo $this->__("Back"); ?></a>
 				</div>
 				<div class="col-sm-6">
-					<button class="button button-primary large link pull-right" id="step-0-submit"><?php echo $this->__("Next"); ?></button>
+					<button class="button button-primary large link pull-right" target="step-0-submit" id="step-0-submit"><i></i>&nbsp;<?php echo $this->__("Next"); ?></button>
 				</div>
 			</div>
 		</form>
@@ -121,6 +132,7 @@ $_billingAddress = $_quote->getBillingAddress();
     Mall.translate.add("email", "<?php echo $this->__('Valid email is required.') ?>");
     Mall.translate.add("Password needs to have at least %s characters", "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>");
     Mall.translate.add("Zip code should be entered in the format xx-xxx.", "<?php echo $this->__("Zip code should be entered in the format xx-xxx."); ?>");
+	Mall.translate.add("warning-wrong-zip", "<?php echo $this->__("Kod został wprowadzony poprawnie, ale nie znaleźliśmy takiego kodu w bazie adresowej. Sprawdź proszę jeszcze poprawność kodu pocztowego.");?>");
 
     Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
     Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");

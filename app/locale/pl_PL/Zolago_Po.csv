@@ -1,4 +1,4 @@
-﻿"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
+"There was a technical error. Please contact shop Administrator.","Wystąpił błąd techniczny. Prosimy skontaktuj się z administratorem sklepu"
 "Lack of DHL Settings", "Brak konfiguracji DHL"
 "Custom dim.", "Paczka NST"
 "I have no Track ID", "Chcę utworzyć list przewozowy"
@@ -181,6 +181,7 @@
 "Reset","Wyczyść filtr"
 "View","Przeglądaj"
 "Zip code in shipment address is not valid. There will be a problem when shipping to that address.","Kod pocztowy w adresie wysyłki nie jest poprawny. Wysyłka na ten adres może okazać się niemożliwa."
+"Zip code in shipment address is not valid.","Kod pocztowy w adresie wysyłki nie jest poprawny."
 "Action","Akcja"
 "Non standard Package","Paczka niestandardowa NST"
 "Dimensions","Wymiary (cm)"

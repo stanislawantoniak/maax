@@ -28,13 +28,15 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         if (!$dhlSettings = $this->_prepareDhlSettings()) {
             return false;
         }
-        
+
         $carrierManager = Mage::helper('orbashipping')->getShippingManager(Orba_Shipping_Model_Carrier_Dhl::CODE);
         
         foreach ($this->_params as $key=>$param) {
             $dhlSettings[$key] = $param;
         }
         $dhlSettings['deliveryValue'] = (string)$rma->getTotalValue();
+        $dhlSettings['content'] = Mage::helper('zolagorma')->__('RMA: %s',$rma->getIncrementId());
+        $dhlSettings['comment'] = Mage::helper('zolagorma')->__('RMA number: %s, order number: %s',$rma->getIncrementId(),$rma->getUdpoIncrementId());
         $carrierManager->setShipmentSettings($dhlSettings);        
         $vendorId = $rma->getUdropshipVendor();
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
@@ -45,6 +47,9 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         $address = $rma->getFormattedAddressForCustomer();
         $carrierManager->setSenderAddress($address);
 
-        return $carrierManager->createShipmentAtOnce();        
+        $return = $carrierManager->createShipmentAtOnce();
+        $return = array_merge($return, $dhlSettings);
+
+        return $return;
     }
 }

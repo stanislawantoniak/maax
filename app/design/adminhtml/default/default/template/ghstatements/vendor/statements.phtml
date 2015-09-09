@@ -1,0 +1,44 @@
+<?php
+/*  @var $this GH_Statements_Block_Adminhtml_Vendor_Statements */
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;">
+                <h3>
+                    <?php echo Mage::helper('ghstatements')->__('Vendor Statements') ?>
+                </h3>
+            </td>
+            <td class="a-right">
+                <p class="form-buttons">
+                    <?php echo $this->getChildHtml('generate_button'); ?>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+<form action="<?php echo $this->getGenerateTodayUrl() ?>" method="post" id="generate_today_form">
+    <?php echo $this->getBlockHtml('formkey') ?>
+    <?php echo $this->getForm() ?>
+    <div class="no-display">
+        <input type="hidden" id="date" name="date" value="<?php echo $this->getTodayDate() ?>" />
+    </div>
+</form>
+<div>
+    <?php echo $this->getChildHtml('ghstatements_vendor_statements_grid') ?>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var generateTodayForm = new varienForm('generate_today_form');
+    var statementsControl = {
+        init: function () {
+
+        },
+        generateToday: function() {
+            generateTodayForm.submit();
+            return false;
+        }
+    };
+    statementsControl.init();
+</script>

@@ -71,11 +71,20 @@ class Orba_Shipping_Model_Carrier_Client_Abstract extends Mage_Core_Model_Abstra
         return array();
     }
     public function setShipperAddress($address) {
+	    if(isset($address['phone'])) {
+		    $address['phone'] = $this->getOnlyNumbers($address['phone']);
+	    }
         $this->_shipperAddress = $address;
     }
     public function setReceiverAddress($address) {
+	    if(isset($address['phone'])) {
+		    $address['phone'] = $this->getOnlyNumbers($address['phone']);
+	    }
         $this->_receiverAddress = $address;
     }
+	protected function getOnlyNumbers($value) {
+		return filter_var(str_replace(array('+','-'),'',$value), FILTER_SANITIZE_NUMBER_INT);
+	}
     /**
      * @param Zolago_Operator_Model_Operator $operator
      */
@@ -84,7 +93,7 @@ class Orba_Shipping_Model_Carrier_Client_Abstract extends Mage_Core_Model_Abstra
             $this->_operator = $operator;
         }
     }
-    public function setShipmentSettings($params) {
+    public function setShipmentSettings($params) {        
         $this->_settings = $params;
     }
     
@@ -94,6 +103,22 @@ class Orba_Shipping_Model_Carrier_Client_Abstract extends Mage_Core_Model_Abstra
         }
         $this->_default_params[$param] = $value;
     }
+    
+    /**
+     * get param from settings or default_params
+     *
+     * @param string $key param name
+     * @return mixed value
+     */
+     public function getParam($key) {
+         if (!isset($this->_settings[$key])) {
+             if (!isset($this->_default_params[$key])) {
+                 return null;
+             } 
+             return $this->_default_params[$key];
+         }
+         return $this->_settings[$key];
+     }
 
 
 }

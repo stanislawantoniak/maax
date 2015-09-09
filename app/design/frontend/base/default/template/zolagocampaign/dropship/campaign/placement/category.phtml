@@ -16,15 +16,17 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
 <form name="campaign-position" method="POST" action="/campaign/placement_category/save">
     <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>" />
     <div class="page-heading row">
-        <div class="col-lg-6">
-            <h3><span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
+        <div class="col-lg-12">
+            <h3><?php echo $_helper->__('Manage placements on page') ?>: <span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
+            <p><?php echo $_helper->__('Add or remove from page, select order and priority of ads.') ?></p>
+            <p><?php echo $_helper->__('NOTE! You do not need to save changes - every change is immediately automatically saved.') ?></p>
         </div>
     </div>
     <div class="page-heading row">
         <div class="container">
             <ol class="breadcrumb">
                 <li>
-                    <a href="/campaign/placement/index/">
+                    <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true))?>">
                         <?php echo $_helper->__('Manage placements') ?>
                     </a>
                 </li>
@@ -77,7 +79,6 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                     <?php if($i == $placement['position']): ?>
                                                         <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
                                                             <div class="content">
-<!--                                                                --><?php //echo $placement['placement_id']; ?><!--<br />-->
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
                                                                 <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" style="height: 120px;"  />
                                                             <?php endif; ?>
@@ -123,22 +124,9 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                 <i data-edit-val="link-edit-status" class="<?php echo $iconClass; ?>"></i>
                                                                 <span data-edit-source="campaign_status" class="hidden">
                                                                     <?php if(!empty($placement['status'])): ?>
-                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
+
                                                                     <?php echo $placement['status']['message']; ?>
 
-                                                                    <?php if($placement['show_edit_link']): ?>
-                                                                        <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
-                                                                       target="_blank">
-                                                                        <?php echo $_helper->__('go to campaign.'); ?>
-                                                                    </a>
-                                                                     <?php endif; ?>
-                                                                        <?php else:?>
-                                                                        <?php if($placement['show_edit_link']): ?>
-                                                                            <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
-                                                                                   target="_blank">
-                                                                            <?php echo $_helper->__('go to campaign.'); ?>
-                                                                        </a>
-                                                                        <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_from">
@@ -237,6 +225,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                     <div class="col-md-6" data-banner="preview"></div>
                     <div class="hidden">
                         <span data-val="campaign-status"></span>
+                        <span data-val="campaign-status-message"></span>
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
                         <span data-val="campaign-vendorname"></span>
@@ -306,8 +295,8 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         </select>
                     </div>
                     <div class="row">
-                        <a data-edit-val="link-delete" href="" data-toggle="modal" data-target="#confirm-delete">
-                            <?php echo $_helper->__("Delete this creative from the placement"); ?>
+                        <a data-edit-val="link-delete" class="btn btn-danger" href="" data-toggle="modal" data-target="#confirm-delete">
+                            <i class="icon-remove"></i>&nbsp;<?php echo $_helper->__("Delete this creative from the placement"); ?>
                         </a>
                     </div>
                 </div>
@@ -341,6 +330,7 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
+        $("[data-banner=preview]").html("");
         var type= $(this).closest('#basicModal').find('[name="creation_type"]').val();
 
         getCampaignCreations(campaign,type, $('#basicModal select[name=banner]'));
@@ -349,6 +339,7 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=banner]', function () {
         var banner = $(this).val();
+        $("[data-banner=preview]").html("");
         if (banner.length > 0) {
             $("#basicModal .alert.alert-warning").remove();
         }
@@ -400,8 +391,7 @@ jQuery(function ($) {
             data: dataToSave,
             success: function(id){
                 $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
-                $('[data-current="1"]').data("current",0);
-
+                $('[data-current="1"]').attr("data-current", 0);
                 savePresentation();
             }
 
@@ -503,7 +493,7 @@ jQuery(function ($) {
     function setPriority(){
         $('form[name=campaign-position] .banner-positions .campaign-list').each(function(i,value){
             $(value).find('.banner-item').each(function(v,item){
-                $(item).find('[name="priority[]"]').val(parseInt($(item).index())+1)
+                $(item).find('[name="priority[]"]').attr("value", parseInt($(item).index())+1);
             });
 
         })
@@ -591,6 +581,7 @@ jQuery(function ($) {
         var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
         var status = modal.find('[data-val="campaign-status"]').text();
+        var statusMessage = modal.find('[data-val="campaign-status-message"]').html();
         var vendorName = modal.find('[data-val="campaign-vendorname"]').text();
 
         //set data
@@ -624,8 +615,9 @@ jQuery(function ($) {
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-12 dates">' +
-                '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
-                 dates +
+                '<i class="'+status+'" data-edit-val="link-edit-status"></i> '+
+                    '<span data-edit-source="campaign_status" class="hidden">'+statusMessage+'</span>'
+                 + dates +
                 '</div>' +
                 '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +
                 '</li>';
@@ -673,6 +665,7 @@ jQuery(function ($) {
 
         var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
 
+
         var placementId = nameSpace.find('[name="placement_id[]"]').val();
 
         var dates = [campaignDateFrom, campaignDateDash, campaignDateTo].join(" ");
@@ -687,13 +680,6 @@ jQuery(function ($) {
         modal.find('[data-edit-val="campaign_status"]').html(status);
 
         modal.find('[name=priority]').val(priority);
-
-//        if(campaignShowEditLink == 0){
-//            modal.find('[data-edit-val="link-delete"]').hide();
-//        }
-//        if(campaignShowEditLink == 1){
-//            modal.find('[data-edit-val="link-delete"]').show();
-//        }
 
         modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
@@ -755,6 +741,7 @@ jQuery(function ($) {
     function getCampaignCreations(campaign,type, optionsContainer) {
         var loading = '<?php echo $_helper->__("Loading..."); ?>';
         optionsContainer.html('<option value="0">'+loading+'</option>');
+        optionsContainer.prop("disabled", true);
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
@@ -767,7 +754,7 @@ jQuery(function ($) {
                         bannerOptions += '<option value="' + value.banner_id + '">' + value.name + '</option>';
                     })
 
-                    optionsContainer.html(bannerOptions);
+                    optionsContainer.html(bannerOptions).prop("disabled", false);
                 }
             })
         }
@@ -808,14 +795,18 @@ jQuery(function ($) {
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
-                url : "/campaign/vendor/getCompaignData",
+                url : '<?php echo Mage::getUrl("campaign/vendor/getCampaignData", array("_secure" => true))?>',
                 data: {id : campaign},
                 success: function(result){
+
                     var data = jQuery.parseJSON(result);
                     $("#basicModal").find('[data-val="campaign-date-from"]').html(data.date_from);
                     $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
 
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
+
+                    $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message);
+
 
                     $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
                     $("#basicModal").find('[data-val="campaign-showedit"]').html(data.showedit);

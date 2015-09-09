@@ -13,11 +13,30 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function editAction() {
         Mage::register('as_frontend', true);
-        $banner = $this->_initModel();
+
+        $bannerType = $this->getRequest()->getParam('type', "");
+
+        /* @var $_zolagoDropshipHelper Zolago_Dropship_Helper_Data */
+        $_zolagoDropshipHelper = Mage::helper("zolagodropship");
+
+        //restrict for not LOCAL VENDOR
+        /* @var $bannerTypeModel Zolago_Banner_Model_Banner_Type */
+        $bannerTypeModel = Mage::getModel("zolagobanner/banner_type");
+        $isAvailableType = $bannerTypeModel->isTypeDefinitionAvailableVorLocalVendor($bannerType);
+
+        if(!$isAvailableType && !$_zolagoDropshipHelper->isLocalVendor()){
+            //only Local vendor can edit Landing page Banners
+            return $this->_redirect("campaign/vendor/index");
+        }
+
+        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+        $bannerId = $this->getRequest()->getParam('id',null);
+
+        $banner = $this->_initModel($bannerId);
         $vendor = $this->_getSession()->getVendor();
 
         //validate vendor
-        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+
         if(!empty($campaignId)){
             $modelCampaign = Mage::getModel("zolagocampaign/campaign");
             $modelCampaign->load($campaignId);
@@ -55,6 +74,22 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function typeAction(){
         Mage::register('as_frontend', true);
+        $id = $this->getRequest()->getParam('campaign_id', 0);
+
+        $campaign = Mage::getModel("zolagocampaign/campaign")->load($id);
+        $vendor = $this->_getSession()->getVendor();
+
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("campaign/vendor");
+            }
+        } elseif($this->getRequest()->getParam('campaign_id',null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("campaign/vendor");
+        }
+
         $this->_renderPage(null, 'zolagobanner');
     }
 
@@ -76,19 +111,17 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
     /**
      * @return Zolago_Banner_Model_Banner
      */
-    protected function _initModel() {
+    protected function _initModel($modelId) {
         if(Mage::registry('current_banner') instanceof Zolago_Banner_Model_Banner){
             return Mage::registry('current_banner');
         }
-        $modelId = (int)$this->getRequest()->getParam("id");
+
         $model = Mage::getModel("zolagobanner/banner");
         /* @var $model Zolago_Banner_Model_Banner */
         if($modelId){
             $model->load($modelId);
         }
-        if(!$this->_validateModel($model)){
-            throw new Mage_Core_Exception(Mage::helper('zolagobanner')->__("Model is not vaild"));
-        }
+
         Mage::register('current_banner', $model);
         return $model;
     }
@@ -111,14 +144,16 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
-        $banner = $this->_initModel();
+
+        $modelId = $this->getRequest()->getParam("id");
+        $banner = $this->_initModel($modelId);
         $vendor = $this->_getSession()->getVendor();
 
         // Try save
         $data = $this->getRequest()->getParams();
 
         $this->_getSession()->setFormData(null);
-        $modelId = $this->getRequest()->getParam("id");
+
 
         try {
             // If Edit
@@ -161,7 +196,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                                 $image = md5(mt_rand() . $image);
                                 $folder = $image[0] . "/" . $image[1] . "/" . $image[2] . "/";
 
-                                mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
+                                @mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
 
                                 $path = Mage::getBaseDir() . "/media/banners/" . $folder . $uniqName;
                                 try {
@@ -172,6 +207,19 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                                 $bannerContentToSave['image'][$n]['path'] = "/banners/" . $folder . $uniqName;
                             } elseif (isset($data['image']) && !empty($data['image'])) {
                                 $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
+                            }
+
+                            // Only Inspiration need to be resize ( box and sliders not )
+                            $type = $banner->getType();
+                            if (Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION == $type) {
+                                $_path = $bannerContentToSave['image'][$n]['path'];
+                                $imageBoxPath = Mage::getBaseDir('media') . $_path;
+                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::getImageResizePath($banner->getType()) . $_path;
+                                Mage::getModel("zolagobanner/banner")->scaleImage(
+                                    $imageBoxPath,
+                                    $imageBoxResizePath,
+                                    Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::BANNER_INSPIRATION_WIDTH,
+                                    Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::BANNER_INSPIRATION_HEIGHT);
                             }
                         }
                         unset($n);

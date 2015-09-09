@@ -22,6 +22,7 @@
             <div id="rwd-complementary-product" class="rwdCarousel">
                 <div class="rwd-carousel rwd-theme">
                     <?php foreach ($this->getItems() as $_item) : ?>
+                        <?php if($_item->isSalable()): ?>
                         <div class="item">
                             <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
                                 <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
@@ -29,7 +30,10 @@
 
                                 <div class="box_listing_product">
                                     <figure class="img_product"><img
-                                            src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(171, 219); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
+                                            src="<?php echo Mage::helper("zolago_image")
+                                            ->init($_item, 'small_image')
+                                            ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+                                            ->adaptiveResize(200, 312); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
                                             class="img-responsive"></figure>
                                     <div class="name_product hidden-xs">
                                         <?php echo $this->getShortProductName($_item, 42); ?>
@@ -49,19 +53,12 @@
                                             </div>
                                         </div>
                                         <div class="like"
-                                             data-idproduct="<?php echo $_item->getId(); ?>"
-                                             data-status="0"
-                                             onclick="Mall.wishlist.addFromSmallBlock(this);return false;">
+                                             data-idproduct="<?php echo $_item->getId(); ?>">
 	                                        <span class="like_count">
                                                 <span>
                                                 </span>
                                             </span>
-                                            <span class="icoLike">
-                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/svg/unlike.svg'); ?>"
-                                                     alt="" width="18" height="18" />
-                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/svg/like.svg'); ?>"
-                                                     alt="" width="18" height="18" />
-                                            </span>
+                                            <span class="icoLike"></span>
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
@@ -70,7 +67,7 @@
                             </a>
                             </h5>
                         </div>
-
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
 
