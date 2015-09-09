@@ -4,9 +4,7 @@
 		li {
 			line-height: 27px;
 			color:#000;
-			label,
-			.label,
-			.value {
+			span, label {
 				font-size: 12px!important;
 				font-family: $fontRegular;
 				font-weight: normal;
@@ -20,6 +18,17 @@
 			}
 		}
 	}
-}
 
+	#navigation_products {
+		.navigation-category {
+			display: inline-block;
+			padding: 1px 21px;
+			background-color: white;
+			border: 1px solid $gray;
+			text-align: center;
+			font-size: 19px;
+			color: $gray;
+		}
+	}
+}
 

@@ -4,7 +4,22 @@
 <aside id="sort-criteria" class="container-fluid">
     <div class="col-sm-12">
         <ul class="sort clearfix">
-            <li id="number_products" class=""><span class="label"><?php echo $this->__("Total products count:"); ?> </span> <span class="value"> <?php echo $_total; ?></span></li>
+            <li id="pagination">
+                <div id="number_products">
+	                <span class="start">1</span><span>-</span><span class="end">100</span>
+	                <span><?php echo $this->__('of'); ?></span>
+	                <span class="value"><?php echo $_total; ?></span>
+	                <span><?php echo $this->__('products'); ?></span>
+	            </div>
+	            <div id="navigation_products">
+		            <a href="#back" class="navigation-category navigation-back">
+			            <i class="fa fa-caret-left"></i>
+		            </a>
+		            <a href="#next" class="navigation-category navigation-next">
+			            <i class="fa fa-caret-right"></i>
+		            </a>
+	            </div>
+            </li>
             <li class="sort-criteria-selector">
 	            <label for="sort-by">
 		            <?php echo $this->__("Sort by:"); ?>
