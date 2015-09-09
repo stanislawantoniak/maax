@@ -49,7 +49,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
             /* @var $collection Zolago_Solrsearch_Model_Catalog_Product_Collection */
             $collection->setFlag("store_id", Mage::app()->getStore()->getId());
             $data = $this->getSolrData();
-            Mage::log($data, null, "XXX.log");
+
             if (is_array($data)) {
                 $collection->setSolrData($this->getSolrData());
             }
@@ -157,7 +157,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getCurrentStart() {
         $request = Mage::app()->getRequest();
-        Mage::log("START 1: ". ($this->getCurrentPage()-1) * $this->getCurrentLimit(), null, "ll.log");
 
         // Page is set so start is callucled by bage
         if((int)$request->getParam("page")) {
@@ -182,12 +181,11 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
         // Ajax request or Google bot - serve paged content
         if($request->isAjax() || $this->isGoogleBot()) {
             $page = (int)$request->getParam("page");
-            Mage::log("CURRENT PAGE 1: ". $page, null, "ll.log");
             if($page>0) {
                 return $page;
             }
         }
-        Mage::log("CURRENT PAGE 2: ". self::DEFAULT_PAGE, null, "ll.log");
+
         // Normal request by human - only first page served
         return self::DEFAULT_PAGE;
     }
@@ -198,11 +196,9 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getCurrentLimit() {
         $queryLimit = (int)Mage::app()->getRequest()->getParam("rows");
-        Mage::log("CURRENT LIMIT 1: ". $queryLimit, null, "ll.log");
         if($queryLimit>0) {
             return $queryLimit;
         }
-        Mage::log("CURRENT LIMIT 2: ". $this->getDefaultLimit(), null, "ll.log");
         return $this->getDefaultLimit();
     }
 
@@ -226,7 +222,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		    if ($limit === 0) {
 			    $limit = self::DEFAULT_LIMIT;
 		    }
-Mage::log("Limit ".$limit, null, "ll.log");
+
         return $limit;
     }
 

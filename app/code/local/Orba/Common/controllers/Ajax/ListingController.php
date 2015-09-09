@@ -160,10 +160,6 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		
 		$result = $this->_formatSuccessContentForResponse($products);
 
-		/** @var Zolago_Customer_Model_Session $customerSession */
-		//$customerSession = Mage::getSingleton('zolagocustomer/session');
-		//$customerSession->addProductsToCache($products);
-
 		$this->_setSuccessResponse($result);
 	}
 	
