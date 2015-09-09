@@ -30,7 +30,6 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
             return parent::load($id, $field);
         }
 
-        Varien_Profiler::start("Loading category");
         $cacheKey = $this->_getCacheKey($id, $field, $this->getStoreId());
 
         if($cacheData = $this->_loadFromCache($cacheKey)) {
@@ -39,22 +38,27 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
             $this->_afterLoad();
             $this->setOrigData();
             $this->_hasDataChanges = false;
-            Varien_Profiler::start("Loading category");
             return $this;
         }
 
         // Load origin
         parent::load($id, $field);
+
+        // Load common used data for much better performance
+        $this->getUrl();
+        $this->getNoVendorContextUrl();
+        $this->getParentCategories();
+
+
         // Do save
         $this->_saveInCache($cacheKey, $this->getData());
-        Varien_Profiler::start("Loading category");
 
         return $this;
     }
 
     /**
      * @param string $key
-     * @return null | string
+     * @return false | mixed | string
      */
     protected function _loadFromCache($key) {
         return Mage::app()->getCache()->load($key);
@@ -85,27 +89,27 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         return "CATEGORY_" . $field . "_" . $id . "_" . $storeId;
     }
 
-
-
     /**
      * Return parent categories of current category
      *
      * @return array
      */
-    public function getParentCategories()
-    {
-        $pathIds = array_reverse(explode(',', $this->getPathInStore()));
-        $categories = Mage::getResourceModel('catalog/category_collection')
-                      ->setStore(Mage::app()->getStore())
-                      ->addAttributeToSelect('name')
-                      ->addAttributeToSelect('long_name')
-                      ->addAttributeToSelect('url_key')
-                      ->addAttributeToSelect('url_path')
-                      ->addFieldToFilter('entity_id', array('in' => $pathIds))
-                      ->addFieldToFilter('is_active', 1)
-                      ->load()
-                      ->getItems();
-        return $categories;
+    public function getParentCategories() {
+        if (!$this->hasData("parent_categories")) {
+            $pathIds = array_reverse(explode(',', $this->getPathInStore()));
+            $categories = Mage::getResourceModel('catalog/category_collection')
+                ->setStore(Mage::app()->getStore())
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('long_name')
+                ->addAttributeToSelect('url_key')
+                ->addAttributeToSelect('url_path')
+                ->addFieldToFilter('entity_id', array('in' => $pathIds))
+                ->addFieldToFilter('is_active', 1)
+                ->load()
+                ->getItems();
+            $this->setData("parent_categories",  $categories);
+        }
+        return $this->getData("parent_categories");
     }
 
     /**
@@ -300,4 +304,54 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         return $this->_campaign;
     }
 
+    /**
+     * Retrieve categories by parent
+     *
+     * @param int $parent
+     * @param int $recursionLevel
+     * @param bool $sorted
+     * @param bool $asCollection
+     * @param bool $toLoad
+     * @return mixed
+     */
+    public function getCategories($parent, $recursionLevel = 0, $sorted=false, $asCollection=false, $toLoad=true) {
+        // Skip cache in admin
+        if(Mage::app()->getStore()->isAdmin()) {
+            $categories = $this->getResource()
+                ->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
+            return $categories;
+        }
+
+        // Cache key for parent node
+        $cacheKey = 'getCategories_parent_node_id_'.$parent.'_'.$recursionLevel.'_' . (int)$sorted.'_'.(int)$asCollection.'_'.(int)$toLoad;
+
+        if($cacheData = $this->_loadFromCache($cacheKey)) {
+            /* @var $tree Zolago_Catalog_Model_Resource_Category_Tree */
+            $tree = Mage::getResourceModel('catalog/category_tree');
+            $parentNodeData = unserialize($cacheData);
+            $node = new Varien_Data_Tree_Node($parentNodeData, 'entity_id', $tree);
+            $node->loadChildren($recursionLevel);
+            $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
+
+            if ($asCollection) {
+                return $tree->getCollection();
+            }
+            return $node->getChildren();
+        }
+
+        // Load origin
+        /** @var Zolago_Catalog_Model_Resource_Category $resource */
+        $resource = $this->getResource();
+        /** @var Varien_Data_Tree_Node_Collection $categories */
+        $categories = $resource->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
+
+        // Save parent node, cache for children in tree->load()
+        /** @var Varien_Data_Tree_Node $parentNode */
+        $parentNode = $resource->getParentNode($parent);
+        if ($parentNode->getId()) {
+            $this->_saveInCache($cacheKey, $parentNode->getData());
+        }
+
+        return $categories;
+    }
 }
