@@ -17,14 +17,11 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
         $frame = array();
 
         $end = $this->getTotalNum();
-
         $limit = $this->getLimit();
 
         for ($i = 0; $i < ceil($end / $limit); $i++) {
             $frame[] = $i * $limit + 1;
         }
-
-        //return array(1, 26, 52, 78);
         return $frame;
     }
 
@@ -44,7 +41,12 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
 
     public function getLastNum()
     {
-        return ($this->getFirstNum() - 1) + $this->getLimit();
+        $lastNum = ($this->getFirstNum() - 1) + $this->getLimit();
+        $totalNum = $this->getTotalNum();
+        if($lastNum >= $totalNum){
+            $lastNum = $totalNum;
+        }
+        return $lastNum;
     }
 
     public function getPreviousPageUrl()
