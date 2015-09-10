@@ -25,9 +25,9 @@ class GH_Rewrite_Model_Resource_Rewrite extends Mage_Core_Model_Resource_Url_Rew
                 }
                 $list = serialize($path);
                 /** @var Zolago_Modago_Helper_Category $helper */
-                $categoryCache = Mage::helper("zolagomodago/category");
+                $helper = Mage::helper("zolagomodago/category");
                 $time = $helper->getCacheLifeTime();
-                $cache->save($list,'filter_url_list',array($categoryCache::CACHE_TAG), $time);
+                $cache->save($list,'filter_url_list',array(Zolago_Modago_Helper_Category::CACHE_TAG), $time);
             }
             $this->categoryPath = unserialize($list);
         }
