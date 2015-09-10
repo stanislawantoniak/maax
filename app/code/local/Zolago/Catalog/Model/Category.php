@@ -2,8 +2,77 @@
 
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {
+    const CACHE_NAME = 'MODEL_CATEGORY';
 
     protected $_relatedCategory;
+
+    /**
+     * Get helper for category cache
+     *
+     * @return Zolago_Modago_Helper_Category
+     */
+    public function getCategoryCacheHelper() {
+        /** @var Zolago_Modago_Helper_Category $helper */
+        $helper = Mage::helper("zolagomodago/category");
+        return $helper;
+    }
+
+    /**
+     * Get unified prefix for this object
+     *
+     * @param $name
+     * @return string
+     */
+    public function getCacheKeyPrefix($name) {
+        return $this->getCategoryCacheHelper()->getPrefix(self::CACHE_NAME. '_' .$name);
+    }
+
+    /**
+     * Build unique cache key for category tree
+     *
+     * @param $id
+     * @param $field
+     * @param $storeId
+     * @return string
+     */
+    protected function _getCacheKey($id, $field, $storeId) {
+        if($field==null) {
+            $field = $this->getIdFieldName();
+        }
+        return $this->getCacheKeyPrefix('load_') . $field . "_" . $id . "_" . $storeId;
+    }
+
+    /**
+     * Load from cache by key
+     *
+     * @param string $key
+     * @param bool $unserialize
+     * @return false | mixed | string
+     */
+    protected function _loadFromCache($key, $unserialize = true) {
+        return $this->getCategoryCacheHelper()->loadFromCache($key, $unserialize);
+    }
+
+    /**
+     * Save to cache by key
+     * Data will be serialized
+     *
+     * @param string $key
+     * @param array $data
+     */
+    protected function _saveInCache($key, $data) {
+        $this->getCategoryCacheHelper()->_saveInCache($key, $data);
+    }
+
+    /**
+     * Check whether to use cache for category cache
+     *
+     * @return bool
+     */
+    public function canUseCache() {
+        return $this->getCategoryCacheHelper()->useCache();
+    }
+
     /**
      * @return string
      */
@@ -26,7 +95,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
     public function load($id, $field=null) {
 
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::load($id, $field);
         }
 
@@ -34,7 +103,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 
         if($cacheData = $this->_loadFromCache($cacheKey)) {
             $this->_beforeLoad($id, $field);
-            $this->setData(unserialize($cacheData));
+            $this->setData($cacheData);
             $this->_afterLoad();
             $this->setOrigData();
             $this->_hasDataChanges = false;
@@ -54,39 +123,6 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         $this->_saveInCache($cacheKey, $this->getData());
 
         return $this;
-    }
-
-    /**
-     * @param string $key
-     * @return false | mixed | string
-     */
-    protected function _loadFromCache($key) {
-        return Mage::app()->getCache()->load($key);
-    }
-
-    /**
-     * @param string $key
-     * @param array $data
-     */
-    protected function _saveInCache($key, $data) {
-        $cache = Mage::app()->getCache();
-        $oldSerialization = $cache->getOption("automatic_serialization");
-        $cache->setOption("automatic_serialization", true);
-        $cache->save($data, $key, array(), 600);
-        $cache->setOption("automatic_serialization", $oldSerialization);
-    }
-
-    /**
-     * @param mixed $id
-     * @param string | null $field
-     * @param int $storeId
-     * @return string
-     */
-    protected function _getCacheKey($id, $field, $storeId) {
-        if($field==null) {
-            $field = $this->getIdFieldName();
-        }
-        return "CATEGORY_" . $field . "_" . $id . "_" . $storeId;
     }
 
     /**
@@ -129,6 +165,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         }
         return $this->_relatedCategory;
     }
+
     /**
      * Return canonical link
      *
@@ -316,20 +353,19 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted=false, $asCollection=false, $toLoad=true) {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             $categories = $this->getResource()
                 ->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
             return $categories;
         }
 
         // Cache key for parent node
-        $cacheKey = 'getCategories_parent_node_id_'.$parent.'_'.$recursionLevel.'_' . (int)$sorted.'_'.(int)$asCollection.'_'.(int)$toLoad;
+        $cacheKey = $this->getCacheKeyPrefix("getCategories_").$parent.'_'.$recursionLevel.'_' . (int)$sorted.'_'.(int)$asCollection.'_'.(int)$toLoad;
 
         if($cacheData = $this->_loadFromCache($cacheKey)) {
             /* @var $tree Zolago_Catalog_Model_Resource_Category_Tree */
             $tree = Mage::getResourceModel('catalog/category_tree');
-            $parentNodeData = unserialize($cacheData);
-            $node = new Varien_Data_Tree_Node($parentNodeData, 'entity_id', $tree);
+            $node = new Varien_Data_Tree_Node($cacheData, 'entity_id', $tree);
             $node->loadChildren($recursionLevel);
             $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
 

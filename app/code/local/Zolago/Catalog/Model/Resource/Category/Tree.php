@@ -2,6 +2,29 @@
 
 class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Resource_Category_Tree
 {
+    const CACHE_NAME = 'RESOURCE_CATEGORY_TREE';
+
+    /**
+     * Get helper for category cache
+     *
+     * @return Zolago_Modago_Helper_Category
+     */
+    public function getCategoryCacheHelper() {
+        /** @var Zolago_Modago_Helper_Category $helper */
+        $helper = Mage::helper("zolagomodago/category");
+        return $helper;
+    }
+
+    /**
+     * Get unified prefix for this object
+     *
+     * @param $name
+     * @return string
+     */
+    public function getCacheKeyPrefix($name) {
+        return $this->getCategoryCacheHelper()->getPrefix(self::CACHE_NAME. '_' .$name);
+    }
+
     /**
      * Build unique cache key for category tree
      *
@@ -10,7 +33,8 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
      * @return string
      */
     protected function _getCacheKey($parentNode=null, $recursionLevel = 0) {
-        $prefix = 'CATEGORY_TREE_';
+
+        $prefix = $this->getCacheKeyPrefix('load_');
         $id = 'null';
         if ($parentNode instanceof Varien_Data_Tree_Node) {
             $id = $parentNode->getId();
@@ -27,10 +51,11 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
      * Load from cache by key
      *
      * @param string $key
+     * @param bool $unserialize
      * @return false | mixed | string
      */
-    protected function _loadFromCache($key) {
-        return Mage::app()->getCache()->load($key);
+    protected function _loadFromCache($key, $unserialize = true) {
+        return $this->getCategoryCacheHelper()->loadFromCache($key, $unserialize);
     }
 
     /**
@@ -41,11 +66,16 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
      * @param array $data
      */
     protected function _saveInCache($key, $data) {
-        $cache = Mage::app()->getCache();
-        $oldSerialization = $cache->getOption("automatic_serialization");
-        $cache->setOption("automatic_serialization", true);
-        $cache->save($data, $key, array(), 600);
-        $cache->setOption("automatic_serialization", $oldSerialization);
+        $this->getCategoryCacheHelper()->_saveInCache($key, $data);
+    }
+
+    /**
+     * Check whether to use cache for category cache
+     *
+     * @return bool
+     */
+    public function canUseCache() {
+        return $this->getCategoryCacheHelper()->useCache();
     }
 
     /**
@@ -58,7 +88,7 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
     public function load($parentNode=null, $recursionLevel = 0)
     {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::load($parentNode, $recursionLevel);
         }
 
@@ -66,7 +96,6 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
 
             $cacheKey = $this->_getCacheKey($parentNode, $recursionLevel);
             if($cacheData = $this->_loadFromCache($cacheKey)) {
-                $cacheData = unserialize($cacheData);
                 $childrenItems = $cacheData["children_items"];
                 $parentPath    = $cacheData["parent_path"];
                 $parentNode    = isset($cacheData["parent_node"]) ? $cacheData["parent_node"] : $parentNode;
@@ -149,7 +178,7 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
     public function addCollectionData($collection = null, $sorted = false, $exclude = array(), $toLoad = true, $onlyActive = false)
     {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::addCollectionData($collection, $sorted, $exclude, $toLoad, $onlyActive);
         }
 
@@ -164,10 +193,10 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
             }
         }
 
-        if ($toLoad) {
-            $cacheKey = 'addCollectionData_' . md5(implode('_', $nodeIds).'_'.(int)$sorted.'_'.(int)$onlyActive);
+        // Cache for default collection
+        if ($toLoad && is_null($collection)) {
+            $cacheKey = $this->getCacheKeyPrefix('addCollectionData_') . md5(implode('_', $nodeIds).'_'.(int)$sorted.'_'.(int)$onlyActive);
             if ($cacheData = $this->_loadFromCache($cacheKey)) {
-                $cacheData = unserialize($cacheData);
 
                 foreach ($cacheData as $categoryData) {
                     if ($node = $this->getNodeById($categoryData["entity_id"])) {
@@ -184,7 +213,8 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
             }
         }
 
-
+        // Custom collection flag
+        $_collectionFlag = is_null($collection) ? 0 : 1; // To make sure category cache works for custom collection
         if (is_null($collection)) {
             $collection = $this->getCollection($sorted);
         } else {
@@ -208,6 +238,26 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
         }
 
         if ($toLoad) {
+
+            if ($_collectionFlag) {
+                // Custom collection can have other conditions
+                $cacheKey = $this->getCacheKeyPrefix('addCollectionData_custom_collection_') . md5((string)$collection->getSelect());
+                if ($cacheData = $this->_loadFromCache($cacheKey)) {
+
+                    foreach ($cacheData as $categoryData) {
+                        if ($node = $this->getNodeById($categoryData["entity_id"])) {
+                            $node->addData($categoryData);
+                        }
+                    }
+
+                    foreach ($this->getNodes() as $node) {
+                        if (!isset($cacheData[$node->getId()]) && $node->getParent()) {
+                            $this->removeNode($node);
+                        }
+                    }
+                    return $this;
+                }
+            }
 
             $collection->load();
             $cacheData = array();
@@ -239,15 +289,14 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
     protected function _getIsActiveAttributeId()
     {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::_getIsActiveAttributeId();
         }
 
-        $cacheKey = "_getIsActiveAttributeId";
+        $cacheKey = $this->getCacheKeyPrefix("_getIsActiveAttributeId");
 
         if ($cacheData = $this->_loadFromCache($cacheKey)) {
-            $this->_isActiveAttributeId = unserialize($cacheData);
-            return $this->_isActiveAttributeId;
+            return $this->_isActiveAttributeId = $cacheData;
         }
 
         $resource = Mage::getSingleton('core/resource');
@@ -279,7 +328,7 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
     protected function _getInactiveItemIds($collection, $storeId)
     {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::_getInactiveItemIds($collection, $storeId);
         }
 
@@ -307,10 +356,9 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
             )
             ->where($conditionSql . ' = :cond');
 
-        $cacheKey = "_getInactiveItemIds_" . md5((string)$select);
+        $cacheKey = $this->getCacheKeyPrefix("_getInactiveItemIds_") . md5((string)$select);
 
         if ($cacheData = $this->_loadFromCache($cacheKey)) {
-            $cacheData = unserialize($cacheData);
             return $cacheData;
         }
 
@@ -329,14 +377,13 @@ class Zolago_Catalog_Model_Resource_Category_Tree extends Mage_Catalog_Model_Res
     protected function _getDisabledIds($collection)
     {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::_getDisabledIds($collection);
         }
 
-        $cacheKey = "_getDisabledIds_" . md5((string)$collection->getSelect());
+        $cacheKey = $this->getCacheKeyPrefix("_getDisabledIds_") . md5((string)$collection->getSelect());
 
         if ($cacheData = $this->_loadFromCache($cacheKey)) {
-            $cacheData = unserialize($cacheData);
             return $cacheData;
         }
 

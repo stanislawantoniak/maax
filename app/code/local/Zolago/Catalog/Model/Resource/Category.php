@@ -2,6 +2,60 @@
 
 class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource_Category
 {
+    const CACHE_NAME = 'RESOURCE_CATEGORY';
+
+    /**
+     * Get helper for category cache
+     *
+     * @return Zolago_Modago_Helper_Category
+     */
+    public function getCategoryCacheHelper() {
+        /** @var Zolago_Modago_Helper_Category $helper */
+        $helper = Mage::helper("zolagomodago/category");
+        return $helper;
+    }
+
+    /**
+     * Get unified prefix for this object
+     *
+     * @param $name
+     * @return string
+     */
+    public function getCacheKeyPrefix($name) {
+        return $this->getCategoryCacheHelper()->getPrefix(self::CACHE_NAME. '_' .$name);
+    }
+
+    /**
+     * Load from cache by key
+     *
+     * @param string $key
+     * @param bool $unserialize
+     * @return false | mixed | string
+     */
+    protected function _loadFromCache($key, $unserialize = true) {
+        return $this->getCategoryCacheHelper()->loadFromCache($key, $unserialize);
+    }
+
+    /**
+     * Save to cache by key
+     * Data will be serialized
+     *
+     * @param string $key
+     * @param array $data
+     */
+    protected function _saveInCache($key, $data) {
+        $this->getCategoryCacheHelper()->_saveInCache($key, $data);
+    }
+
+    /**
+     * Check whether to use cache for category cache
+     *
+     * @return bool
+     */
+    public function canUseCache() {
+        return $this->getCategoryCacheHelper()->useCache();
+    }
+
     /**
      * Load and return parentNode
      *
@@ -23,7 +77,7 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
      */
     public function getChildren($category, $recursive = true) {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::_getIsActiveAttributeId();
         }
 
@@ -50,11 +104,10 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
             )
             ->where($checkSql . ' = :scope');
 
-        $cacheKey = "resource_getChildren_" . md5((string)$select);
+        $cacheKey = $this->getCacheKeyPrefix("getChildren_") . md5((string)$select);
 
         if ($cacheData = $this->_loadFromCache($cacheKey)) {
-            $this->_isActiveAttributeId = unserialize($cacheData);
-            return $this->_isActiveAttributeId;
+            return $this->_isActiveAttributeId = $cacheData;
         }
 
         $data = $adapter->fetchCol($select, $bind);
@@ -71,15 +124,14 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
      */
     protected function _getIsActiveAttributeId() {
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::_getIsActiveAttributeId();
         }
 
-        $cacheKey = "resource__getIsActiveAttributeId";
+        $cacheKey = $this->getCacheKeyPrefix("_getIsActiveAttributeId");
 
         if ($cacheData = $this->_loadFromCache($cacheKey)) {
-            $this->_isActiveAttributeId = unserialize($cacheData);
-            return $this->_isActiveAttributeId;
+            return $this->_isActiveAttributeId = $cacheData;
         }
 
         if ($this->_isActiveAttributeId === null) {
@@ -99,25 +151,5 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
         }
 
         return $this->_isActiveAttributeId;
-    }
-
-    /**
-     * @param string $key
-     * @return false | mixed | string
-     */
-    protected function _loadFromCache($key) {
-        return Mage::app()->getCache()->load($key);
-    }
-
-    /**
-     * @param string $key
-     * @param array $data
-     */
-    protected function _saveInCache($key, $data) {
-        $cache = Mage::app()->getCache();
-        $oldSerialization = $cache->getOption("automatic_serialization");
-        $cache->setOption("automatic_serialization", true);
-        $cache->save($data, $key, array(), 600);
-        $cache->setOption("automatic_serialization", $oldSerialization);
     }
 }
