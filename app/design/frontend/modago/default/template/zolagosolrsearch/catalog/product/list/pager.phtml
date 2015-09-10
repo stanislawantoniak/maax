@@ -1,8 +1,5 @@
 <?php if ($this->getCollection()->getSize()): ?>
-
-
     <div class="pager">
-
         <div class="amount">
             <?php if ($this->getLastPageNum() > 1): ?>
                 <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
@@ -29,12 +26,7 @@
                         <?php endif; ?>
                     </li>
                 </ol>
-
             </div>
         <?php endif; ?>
-
-
     </div>
-
-
 <?php endif ?>
