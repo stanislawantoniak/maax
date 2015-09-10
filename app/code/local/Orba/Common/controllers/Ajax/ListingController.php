@@ -39,17 +39,12 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		// Product 
 		$products = $this->_getProducts($listModel);
 
-		/** @var Zolago_Customer_Model_Session $customerSession */
-		//$customerSession = Mage::getSingleton('zolagocustomer/session');
-		//$customerSession->addProductsToCache($products);
 
 		$params = $this->getRequest()->getParams();
 
 		$fq = isset($params["fq"]) ? $params["fq"] : array();
 
-		//$lp = $this->getRequest()->getParam("lp");
 		Mage::register("listing_reload_params", $params);
-		//Mage::register("lp", $lp);
 
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
