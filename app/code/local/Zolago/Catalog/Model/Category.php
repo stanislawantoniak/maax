@@ -354,9 +354,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
     public function getCategories($parent, $recursionLevel = 0, $sorted=false, $asCollection=false, $toLoad=true) {
         // Skip cache in admin
         if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
-            $categories = $this->getResource()
-                ->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
-            return $categories;
+            return parent::getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
         }
 
         // Cache key for parent node
