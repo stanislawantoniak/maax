@@ -60,6 +60,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
 
+		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
 
 
 		//if filter params then set display_mode to PRODUCTS
@@ -69,7 +70,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
 		}
 
-		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
+
 
 		$rootId = Mage::app()->getStore()->getRootCategoryId();
 
