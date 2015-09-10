@@ -1205,7 +1205,8 @@ Mall.listing = {
 	},
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
-		if(content.category_display_mode == 1 && content.listing_type == "category"){
+
+		if(content.reload_to_cms){
 			//hack to reload cms page
 			window.location = content.url;
 			return false;

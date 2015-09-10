@@ -55,7 +55,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		/** @var Zolago_Catalog_Model_Category $category */
 		$category = Mage::registry('current_category');
 
-		$categoryDisplayMode = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE);
+		$reloadToCms = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
 
 
 		//if filter params then set display_mode to PRODUCTS
@@ -134,7 +134,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
 			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
             "category_head_title" => $title,
-			"category_display_mode" => $categoryDisplayMode,
+			"reload_to_cms" => $reloadToCms,
 			"listing_type" => $type
 		));
 		
