@@ -78,7 +78,7 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
     public function getChildren($category, $recursive = true) {
         // Skip cache in admin
         if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
-            return parent::_getIsActiveAttributeId();
+            return parent::getChildren($category, $recursive);
         }
 
         $attributeId  = (int)$this->_getIsActiveAttributeId();
