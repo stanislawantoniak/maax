@@ -15,10 +15,18 @@
             <div class="pages">
                 <ol>
                     <li>
-                       <a href="<?php echo $this->getPreviousPageUrl() ?>"><< PREV</a>
+                        <?php if ($this->isFirstEnabled()): ?>
+                            <a href="<?php echo $this->getPreviousPageUrl() ?>"><< PREV</a>
+                        <?php else: ?>
+                            <span><< PREV</span>
+                        <?php endif; ?>
                     </li>
                     <li>
-                        <a href="<?php echo $this->getNextPageUrl() ?>">NEXT >></a>
+                        <?php if ($this->isLastEnabled()): ?>
+                            <a href="<?php echo $this->getNextPageUrl() ?>">NEXT >></a>
+                        <?php else: ?>
+                            <span>NEXT >></span>
+                        <?php endif; ?>
                     </li>
                 </ol>
 

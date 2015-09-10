@@ -61,12 +61,21 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
 
     public function getNextPageUrl()
     {
-        $first = $this->getFirstNum();
-        $limit = $this->getLimit();
-        $next = $first + $limit;
+        $next = $this->getFirstNum() + $this->getLimit();
         if ($next >= $this->getTotalNum()) {
             $next = self::DEFAULT_FIRST;
         }
         return $this->getPageUrl($next);
+    }
+
+    public function isFirstEnabled()
+    {
+        return ($this->getFirstNum() !== self::DEFAULT_FIRST);
+    }
+
+    public function isLastEnabled()
+    {
+        $next = $this->getFirstNum() + $this->getLimit();
+        return ($next < $this->getTotalNum());
     }
 }
