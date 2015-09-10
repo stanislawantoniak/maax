@@ -161,11 +161,10 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
         $start = (int)$request->getParam("start", 0);
 
-        if ($start >= 0) {
-            if ($start >= $this->getProductsFound()) {
-                $start = self::DEFAULT_START;
-            }
-            return $start;
+        $currentStart = $start - 1;
+
+        if ($currentStart >= 0) {
+            return $currentStart;
         }
         return self::DEFAULT_START;
     }

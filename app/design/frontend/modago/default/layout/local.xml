@@ -525,7 +525,7 @@
             </block>
 
             <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar">
-				<block type="page/html_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
 			</block>
             <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>

@@ -207,8 +207,6 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
             $pagerBlock
                 ->setPageVarName($this->getStartVarName())
                 ->setLimit($this->getLimit())
-                ->setFrameLength(Mage::getStoreConfig('design/pagination/pagination_frame'))
-                ->setJump(Mage::getStoreConfig('design/pagination/pagination_frame_skip'))
                 ->setCollection($this->getCollection());
 
             return $pagerBlock->toHtml();
@@ -225,6 +223,10 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
     public function getStartVarName()
     {
         return $this->_startVarName;
+    }
+
+    public function getLimit(){
+        return Mage::helper("zolagocatalog/listing_pagination")->productsCountPerPage();
     }
 
 }
