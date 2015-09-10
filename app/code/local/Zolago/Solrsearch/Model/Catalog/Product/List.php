@@ -152,7 +152,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
     /**
      * Query param: start
-     * Get colleciton start row (offset) - ignored if page is set
+     * Get collection start row (offset) - ignored if page is set
      * @return int
      */
     public function getCurrentStart()
@@ -192,10 +192,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      * @return int
      */
     public function getCurrentLimit() {
-        $queryLimit = (int)Mage::app()->getRequest()->getParam("rows");
-        if($queryLimit>0) {
-            return $queryLimit;
-        }
         return $this->getDefaultLimit();
     }
 
