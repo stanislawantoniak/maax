@@ -123,7 +123,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
 
 		$toolbar = $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar");
-		$toolbar->setChild('product_list_toolbar_pager', $layout->createBlock('zolagosolrsearch/catalog_product_list_pager')->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml"));
+		$toolbar->setChild('product_list_toolbar_pager',
+			$layout->createBlock('zolagosolrsearch/catalog_product_list_pager')
+				->setGeneratedUrl($url)
+				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml")
+		);
 
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,

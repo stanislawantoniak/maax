@@ -80,4 +80,27 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
         $next = $this->getFirstNum() + $this->getLimit();
         return ($next < $this->getTotalNum());
     }
+
+    public function getPagerUrl($params = array())
+    {
+        $urlParams = array();
+        $urlParams['_current'] = true;
+        $urlParams['_escape'] = true;
+        $urlParams['_use_rewrite'] = true;
+        $urlParams['_query'] = $params;
+
+        $generatedUrl = $this->getGeneratedUrl(); //ajax url
+
+        if ($generatedUrl) {
+            $parsedUrl = parse_url($generatedUrl);
+            $query = http_build_query($params);
+            if(isset($parsedUrl["query"])){
+                return $generatedUrl . ($query ? "&" . $query : "");
+            } else {
+                return $generatedUrl . ($query ? "?" . $query : "");
+            }
+
+        }
+        return $this->getUrl('*/*/*', $urlParams);
+    }
 }
