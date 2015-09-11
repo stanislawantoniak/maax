@@ -118,17 +118,9 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
         $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
 		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
 
-		$toolbar = $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar");
-		$toolbar->setChild('product_list_toolbar_pager',
-			$layout->createBlock('zolagosolrsearch/catalog_product_list_pager')
-				->setGeneratedUrl($url)
-				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml")
-		);
-
 		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
 			"url"			=> $url,
 			"header"		=> $this->_cleanUpHtml($block->toHtml()),
-			"toolbar"		=> $this->_cleanUpHtml($toolbar->toHtml()),
 			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
 			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
@@ -160,7 +152,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
 		$products=$this->_getProducts($listModel);
-		
+
 		$result = $this->_formatSuccessContentForResponse($products);
 
 		$this->_setSuccessResponse($result);
@@ -194,6 +186,22 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		/** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
 		$_solrHelper = Mage::helper("zolagosolrsearch");
 
+
+		$layout = $this->getLayout();
+		$design = Mage::getDesign();
+
+		$packageName = Mage::app()->getStore()->getConfig('design/package/name');
+		$theme = Mage::app()->getStore()->getConfig('design/theme/template');
+
+		$design->setPackageName($packageName);
+		$design->setTheme($theme ? $theme : "default");
+		$toolbar = $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar");
+		$toolbar->setChild('product_list_toolbar_pager',
+			$layout->createBlock('zolagosolrsearch/catalog_product_list_pager')
+				->setGeneratedUrl($_SERVER["HTTP_REFERER"])
+				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml")
+		);
+
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
 			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
@@ -202,6 +210,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
 			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
+			"toolbar"		=> $this->_cleanUpHtml($toolbar->toHtml())
 		);
 	}
 	

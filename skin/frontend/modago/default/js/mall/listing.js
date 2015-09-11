@@ -847,6 +847,9 @@ Mall.listing = {
 
 		this.appendToList(data.products);
 	},
+	replaceToolbar: function (data) {
+		jQuery("#sort-criteria").html(data.toolbar);
+	},
 
 	initListingLinksEvents: function() {
 		var links = jQuery('.listing-link'),
@@ -1396,6 +1399,7 @@ Mall.listing = {
 			&& !jQuery.isEmptyObject(data.content.products)) {
 
 			Mall.listing.replaceProducts(data.content);
+			Mall.listing.replaceToolbar(data.content);
 
 			Mall.listing.hideAjaxLoading();
 
