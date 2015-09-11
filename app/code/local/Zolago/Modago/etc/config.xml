@@ -67,6 +67,7 @@
 				<load_more_offset>100</load_more_offset>
 				<pixels_before_append>3000</pixels_before_append>
                 <vendor_landingpage_n_products>12</vendor_landingpage_n_products>
+                <category_cache_lifetime>900</category_cache_lifetime>
 			</zolagomodago_cataloglisting>
 		</zolagomodago_catalog>
         <design>

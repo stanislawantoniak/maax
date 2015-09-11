@@ -61,11 +61,14 @@ class Zolago_Modago_Helper_Category extends Mage_Core_Helper_Abstract
 
     /**
      * Return time in seconds
-     * TODO: maybe from config here?
      *
      * @return int
      */
     public function getCacheLifeTime() {
-        return self::CACHE_LIFE_TIME;
+        $time = (int)Mage::getStoreConfig("zolagomodago_catalog/zolagomodago_cataloglisting/category_cache_lifetime", Mage::app()->getStore());
+        if (!$time || empty($time)) {
+            return self::CACHE_LIFE_TIME;
+        }
+        return $time;
     }
 }

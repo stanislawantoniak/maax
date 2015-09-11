@@ -65,6 +65,14 @@
                             <show_in_default>1</show_in_default>
                             <validate>validate-number</validate>
                         </vendor_landingpage_n_products>
+                        <category_cache_lifetime translate="label">
+                            <label>Category cache lifetime</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Time in seconds</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <validate>validate-number</validate>
+                        </category_cache_lifetime>
                     </fields>
                 </zolagomodago_cataloglisting>
             </groups>
