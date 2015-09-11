@@ -807,7 +807,7 @@ Mall.listing = {
 
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
-		this.getToolbar().replaceWith(toolbar);
+		//this.getToolbar().replaceWith(toolbar);
 		this.initSortEvents(toolbar);
 
         var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
@@ -828,6 +828,7 @@ Mall.listing = {
 
 		// Finally product
 		this.replaceProducts(content);
+		this.replacePager(content);
 
 		// Set pushstate
 		this._current_url = content.url;
