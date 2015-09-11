@@ -4,6 +4,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 {
 
     const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
+    const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 10;
 
     protected function _construct()
     {
@@ -145,6 +146,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 $recoverOptionsProducts[$websiteId] = array($productId);
             }
 
+            /**
+             * @see Zolago_Campaign_Model_Observer::productAttributeRevert
+             */
             Mage::dispatchEvent(
                 "campaign_product_remove_update_after",
                 array(
@@ -555,7 +559,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign_product.assigned_to_campaign=0");
         $select->where("campaign.status <> ?",$activeCampaignStatus);
-        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
+        $select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {

@@ -232,7 +232,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
         $notValidCampaigns = $resourceModel->getNotValidCampaigns();
-
+        Mage::log($notValidCampaigns, null,"unsetCampaignAttributes.log" );
         if(empty($notValidCampaigns)){
             return;
         }
@@ -243,13 +243,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $productsIds[$notValidCampaignData['product_id']] = $notValidCampaignData['product_id'];
             $vendorsInUpdate[$notValidCampaignData['vendor_id']] = $notValidCampaignData['vendor_id'];
         }
-
+        Mage::log($vendorsInUpdate, null,"unsetCampaignAttributes1.log" );
 
         $isProductsInSaleOrPromotionByVendor = array();
         foreach ($vendorsInUpdate as $vendorId) {
             $isProductsInSaleOrPromotionByVendor[$vendorId] = $resourceModel->getIsProductsInSaleOrPromotion($productsIds, $vendorId);
         }
-        
+        Mage::log($isProductsInSaleOrPromotionByVendor, null,"unsetCampaignAttributes2.log" );
 
         $localeTime = Mage::getModel('core/date')->timestamp(time());
         $localeTimeF = date("Y-m-d H:i", $localeTime);
@@ -270,12 +270,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 if($productInValidCampaign){
                     $anotherCampaignProducts[] = $notValidCampaign['product_id'];
                 }
-                $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
-            }
 
+            }
+            $dataToUpdate[$notValidCampaign['website_id']][$notValidCampaign['type']][$notValidCampaign['campaign_id']][] = $notValidCampaign['product_id'];
 
         }
-
+        Mage::log($dataToUpdate, null,"unsetCampaignAttributes3.log" );
         if (!empty($anotherCampaignProducts)) {
             $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);       
         }
@@ -294,6 +294,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             }
 
             $recoverOptionsProducts = array();
+            Mage::log($dataToUpdate, null,"unsetCampaignAttributes4.log" );
             foreach($dataToUpdate as $websiteId => $dataToUpdateCampaigns){
                 $storesOfWebsite = (isset($stores[$websiteId]) && !empty($stores[$websiteId])) ? $stores[$websiteId] : false;
                 if(!$storesOfWebsite){
