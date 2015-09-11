@@ -826,7 +826,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $campaignIds = explode(",", $val);
                     $campaignIds = array_diff($campaignIds, array($campaignId));
 
-                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? $campaignIds : 0));
+                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => (!empty($campaignIds) ? implode(',',$campaignIds) : 0));
                     $actionModel
                         ->updateAttributesPure($productIds, $attributesData, (int)$store);
 
@@ -865,32 +865,50 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     public function setInfoCampaignsToProduct($dataToUpdate, $stores)
     {
 
-
+        Mage::log("setInfoCampaignsToProduct", null, "setInfoCampaignsToProduct.log");
+        Mage::log($dataToUpdate, null, "setInfoCampaignsToProduct.log");
         $productIdsUpdated = array();
+        //
         if (!empty($dataToUpdate)) {
             /* @var $aM Zolago_Catalog_Model_Product_Action */
             $aM = Mage::getSingleton('catalog/product_action');
+            $toUpdate = array();
             foreach ($dataToUpdate as $productId => $campaignIds) {
-
+                Mage::log($productId, null, "log.log");
                 if (!empty($campaignIds)) {
-                    $attributesData = array(
-                        Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => implode(",", $campaignIds)
-                    );
-
-                    foreach ($stores as $store) {
-                        $aM->updateAttributesPure(array($productId), $attributesData, $store);
-                    }
-                    //set null to attribute for default store id (required for good quote calculation)
-                    $aM->updateAttributesPure(array($productId),
-                        array(
-                            Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null
-                        ),
-                        Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
-                    );
-
-                    $productIdsUpdated[$productId] = $productId;
+                    $toUpdate[implode(",", $campaignIds)][] = $productId;
                 }
 
+            }
+        }
+
+        if (empty($toUpdate)) {
+            return $productIdsUpdated;
+        }
+
+        $productsAssignedToCampaign = array();
+
+        foreach ($toUpdate as $value => $productIds) {
+            $attributesData = array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => $value);
+            foreach ($stores as $store) {
+                $aM->updateAttributesPure($productIds, $attributesData, $store);
+            }
+
+            //set null to attribute for default store id (required for good quote calculation)
+            $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null),
+                Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+            );
+            $productsAssignedToCampaign[$value] = $productIds;
+            $productIdsUpdated = array_merge($productIdsUpdated, $productIds);
+        }
+
+        unset($productIds);
+        //unsetCampaignProductAssignedToCampaignFlag
+        if(!empty($productsAssignedToCampaign)){
+            foreach($productsAssignedToCampaign as $campaignIdsString => $productIds){
+                foreach(explode(",", $campaignIdsString) as $campaignId){
+                    $this->getResource()->unsetCampaignProductAssignedToCampaignFlag($campaignId, $productIds);
+                }
             }
         }
 

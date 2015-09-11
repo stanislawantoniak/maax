@@ -67,7 +67,7 @@ class Zolago_Campaign_Model_Observer
         //1. Set campaign attributes
         //info campaign
         $campaignInfo = $model->getUpDateCampaignsInfo();
-
+Mage::log($campaignInfo);
         $dataToUpdate = array();
         if (!empty($campaignInfo)) {
             foreach ($campaignInfo as $campaignInfoItem) {

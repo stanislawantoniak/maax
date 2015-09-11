@@ -3,6 +3,8 @@
 class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_Db_Abstract
 {
 
+    const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
+
     protected function _construct()
     {
         $this->_init('zolagocampaign/campaign', "campaign_id");
@@ -71,6 +73,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+
 
     /**
      * Assign products to campaign
@@ -183,6 +186,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @return 
      */
      public function putProductsToRecalculate($campaignId,$productIds) {
+         Mage::log($campaignId, null, "putProductsToRecalculate.log");
+         Mage::log($productIds, null, "putProductsToRecalculate.log");
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
         $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
@@ -194,6 +199,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     public function setCampaignProductAssignedToCampaignFlag($campaignIds, $productId)
     {
+        Mage::log($campaignIds, null, "setCampaignProductAssignedToCampaignFlag.log");
+        Mage::log($productId, null, "setCampaignProductAssignedToCampaignFlag.log");
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
         $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
@@ -206,6 +213,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     public function unsetCampaignProductAssignedToCampaignFlag($campaignId, $productIds)
     {
+        Mage::log("Campaign: {$campaignId}", null, "unsetCampaignProductAssignedToCampaignFlag.log");
+        Mage::log($productIds, null, "unsetCampaignProductAssignedToCampaignFlag.log");
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
         $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
@@ -546,7 +555,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign_product.assigned_to_campaign=0");
         $select->where("campaign.status <> ?",$activeCampaignStatus);
-        $select->limit(2000);
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {
@@ -629,8 +638,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         //$select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign.date_from DESC');
         $select->order('campaign.date_to ASC');
-        $select->limit(2000);
-
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
+        Mage::log($select->__toString(), null, "getUpDateCampaignsInfo.log");
         return $this->getReadConnection()->fetchAll($select);
     }
 
@@ -774,7 +783,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign.date_from DESC');
         $select->order('campaign.date_to ASC');
-        $select->limit(2000);
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
 
         return $this->getReadConnection()->fetchAll($select);
     }
