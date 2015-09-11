@@ -546,6 +546,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign_product.assigned_to_campaign=0");
         $select->where("campaign.status <> ?",$activeCampaignStatus);
+        $select->limit(2000);
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {
