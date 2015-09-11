@@ -537,7 +537,7 @@
 				<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
 					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
-
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager_full" template="zolagosolrsearch/catalog/product/list/pager-full.phtml"/>
 				</block>
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>

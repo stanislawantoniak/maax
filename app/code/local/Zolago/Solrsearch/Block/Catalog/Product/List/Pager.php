@@ -62,9 +62,10 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
 
         $end = $this->getTotalNum();
         $limit = $this->getLimit();
-
+        $query = Mage::app()->getRequest()->getQuery();
         for ($i = 0; $i < ceil($end / $limit); $i++) {
-            $frame[] = $i * $limit + 1;
+            $query["start"] = $i * $limit + 1;
+            $frame[] = $this->getPagerUrl($query);
         }
         return $frame;
     }
@@ -143,7 +144,6 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
             } else {
                 return $generatedUrl . ($query ? "?" . $query : "");
             }
-
         }
         return $this->getUrl('*/*/*', $urlParams);
     }
