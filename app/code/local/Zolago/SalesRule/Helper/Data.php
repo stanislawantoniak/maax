@@ -351,6 +351,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              'use_attachments'=> true,
              'promotionList' => $content->toHtml(),
              'store_name' => $store->getName(),
+             'dateAndTime'  => Mage::getModel('core/date')->date('Y-m-d H:i:s')
          );
          $addedFiles = array();
          foreach ($list as $item) {
