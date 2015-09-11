@@ -163,7 +163,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
         $currentStart = $start - 1;
 
-        if ($currentStart >= 0) {
+        if ($currentStart >= 0 && $this->getProductsFound() !== 0) {
+
             return $currentStart;
         }
         return self::DEFAULT_START;
@@ -302,7 +303,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
     public function getProductsFound()
     {
         $data = Mage::registry(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
-        $numFound = (empty($data['response']['numFound']) ? 0 : $data['response']['numFound']);
+        $numFound = (empty($data['response']['numFound']) ? 0 : (int)$data['response']['numFound']);
 
         return $numFound;
     }
