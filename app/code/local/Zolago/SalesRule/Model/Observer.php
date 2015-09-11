@@ -159,13 +159,47 @@ class Zolago_SalesRule_Model_Observer {
 //
 //        $fieldset->addField("promo_image", "image", $param);
     }
+    
+    /**
+     * send new coupons for all subscribers via cron
+     */
+
+    public static function sendSubscriberCouponMailCron() {
+        $collection = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter("subscriber_status", Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
+            ;
+        $collection->getSelect()
+            ->joinLeft(array("customer" => "customer_entity"),
+                "main_table.subscriber_email = customer.email",
+                array("customer_id" => "customer.entity_id")
+            )
+            ->where("main_table.store_id=customer.store_id")
+        ;
+        $collection->setPageSize(10000);
+        if ($collection->getSize() == 0) {
+            return;
+        }
+        $subscribersCollection = $collection->getItems();
+        $subscribers = array();
+        $subscribersCustomersId = array();
+        $subscribersCustomersSubscribers = array();
+        $rulesForCustomer = array();
+        foreach ($subscribersCollection as $subId => $subscriber) {
+            $subscribers[$subId] = $subscriber->getSubscriberEmail();
+            $subscribersCustomersId[$subscriber->getSubscriberEmail()] = $subscriber->getCustomerId();
+            $subscribersCustomersSubscribers[$subscriber->getCustomerId()] = $subscriber->getSubscriberEmail();
+            $subscribersStore[$subscriber->getCustomerId()] = $subscriber->getStoreId();
+            //$rulesForCustomer[$subscriber->getRuleId()][] = $subscriber->getSubscriberId();
+        }
+        self::_sendCouponMails($subscribers, $subscribersCustomersId, $subscribersCustomersSubscribers,$subscribersStore);
+    }
    /**
-     * Send new coupons to subscriber
+     * Send new coupons to one subscriber
      */
     public static function sendSubscriberCouponMail(Varien_Event_Observer $observer)
     {
 	    /** @var Zolago_Salesrule_Helper_Data $helper */
-	    $helper = Mage::helper('zolagosalesrule');
         $model = $observer->getEvent()->getSubscriber();
         $newStatus = $model->getData('subscriber_status');
         if ($newStatus != Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED) {
@@ -176,9 +210,20 @@ class Zolago_SalesRule_Model_Observer {
         $subscribers[$model->getId()] = $model->getSubscriberEmail();
         $subscribersCustomersId[$model->getSubscriberEmail()] = $model->getCustomerId();
         $subscribersCustomersSubscribers[$model->getCustomerId()] = $model->getSubscriberEmail();
+        $subscribersStore[$model->getCustomerId()] = $model->getStoreId();
+        self::_sendCouponMails($subscribers, $subscribersCustomersId, $subscribersCustomersSubscribers,$subscribersStore);
+    }
 
-
-
+    
+    /**
+     * prepare coupons and send it via mail
+     *
+     * @param array $subscribers
+     * @param array $subscribersCustomersId
+     * @param array $subscribersCustomersSubscribers
+     */
+    protected static function _sendCouponMails($subscribers,$subscribersCustomersId, $subscribersCustomersSubscribers) {    
+	    $helper = Mage::helper('zolagosalesrule');
         //1. Coupons
 	    $result = $helper->getSalesRulesForSubscribers();
 
@@ -199,7 +244,7 @@ class Zolago_SalesRule_Model_Observer {
         foreach ($result as $couponData) {
             $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
         }
-
+        
 
         //3. Assign coupons to customers
         $data = array(
@@ -210,13 +255,25 @@ class Zolago_SalesRule_Model_Observer {
 
         $res = $helper->assignCouponsToSubscribers($data, $rulesForCustomer);
 
-
+        $store = array();
         //4. Send mails
         $dataAssign = $res["data_to_send"];
         if (!empty($dataAssign)) {
             foreach ($dataAssign as $email => $sendData) {
                 $customerId = isset($subscribersCustomersId[$email]) ? $subscribersCustomersId[$email] : false;
                 if($customerId){
+                    // change locale
+                    $storeId = empty($subscribersStore[$customerId])? 0:$subscribersStore[$customerId];
+                    if ($storeId) {                    
+                        if (empty($store[$storeId])) { // nie ładujemy tych samych bez przerwy
+                            $store[$storeId] = Mage::getModel('core/store')->load($storeId)->getLocaleCode();
+                        }
+                        $locale = $store[$storeId];
+                    } else {
+                        $locale = Mage::app()->getLocale()->getLocaleCode();                        
+                    }
+                    Mage::app()->getLocale()->setLocaleCode($locale);
+                    Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
                     if (!$helper->sendPromotionEmail($customerId, array_values($sendData))) {
                         //if mail sending failed
                         unset($dataAssign[$email]);
