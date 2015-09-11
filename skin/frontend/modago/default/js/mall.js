@@ -747,8 +747,7 @@ Mall.Breakpoint = {
 };
 
 Mall.isGoogleBot = function() {
-	//return jQuery('body').hasClass('googlebot');
-    return true;
+	return jQuery('body').hasClass('googlebot');
 };
 
 Mall.isMobile = function(breakpoint) {
