@@ -3,14 +3,6 @@
 class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Block_Template
 {
 
-    /**
-     * GET parameter start variable
-     *
-     * @var string
-     */
-    protected $_startVarName = 'start';
-
-
 
     public function _construct()
     {
@@ -191,42 +183,5 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
         return $url;
     }
 
-
-    /**
-     * Render pagination HTML
-     *
-     * @return string
-     */
-    public function getPagerHtml()
-    {
-        $pagerBlock = $this->getChild('product_list_toolbar_pager');
-
-        if ($pagerBlock instanceof Varien_Object) {
-
-            /* @var $pagerBlock Mage_Page_Block_Html_Pager */
-            $pagerBlock
-                ->setPageVarName($this->getStartVarName())
-                ->setLimit($this->getLimit())
-                ->setCollection($this->getCollection());
-
-            return $pagerBlock->toHtml();
-        }
-        return '';
-    }
-
-
-    /**
-     * Getter for $_pageVarName
-     *
-     * @return string
-     */
-    public function getStartVarName()
-    {
-        return $this->_startVarName;
-    }
-
-    public function getLimit(){
-        return Mage::helper("zolagocatalog/listing_pagination")->productsCountPerPage();
-    }
 
 }

@@ -6,6 +6,50 @@
 class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block_Html_Pager
 {
     const DEFAULT_FIRST = 1;
+    /**
+     * GET parameter start variable
+     *
+     * @var string
+     */
+    protected $_startVarName = 'start';
+
+
+    public function _construct(){
+        $this
+            ->setPageVarName($this->getStartVarName())
+            ->setLimit($this->getLimit())
+            ->setCollection($this->getCollection());
+    }
+
+    /**
+     * Getter for $_pageVarName
+     *
+     * @return string
+     */
+    public function getStartVarName()
+    {
+        return $this->_startVarName;
+    }
+
+    public function getLimit(){
+        return Mage::helper("zolagocatalog/listing_pagination")->productsCountPerPage();
+    }
+
+    /**
+     * @return Zolago_Solrsearch_Model_Catalog_Product_List
+     */
+    public function getListModel()
+    {
+        return Mage::getSingleton('zolagosolrsearch/catalog_product_list');
+    }
+
+    /**
+     * @return Zolago_Solrsearch_Model_Catalog_Product_Collection
+     */
+    public function getCollection()
+    {
+        return $this->getListModel()->getCollection();
+    }
 
     /**
      * Return array of pages in frame

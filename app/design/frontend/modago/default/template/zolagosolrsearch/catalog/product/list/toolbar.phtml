@@ -4,8 +4,8 @@
 <aside id="sort-criteria" class="container-fluid">
     <div class="col-sm-12">
         <ul class="sort clearfix">
-            <li id="pagination">
-				<?php echo $this->getPagerHtml(); ?>
+            <li id="pagination" class="pagination-line">
+				<?php echo $this->getChildHtml('product_list_toolbar_pager'); ?>
             </li>
             <li class="sort-criteria-selector">
 	            <label for="sort-by">

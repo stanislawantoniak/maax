@@ -154,6 +154,7 @@ Mall.listing = {
 				filters: this.getFilters().prop("outerHTML"),
 				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
+				pager: this.getPager().prop("outerHTML"),
                 category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
                 header: this.getHeader().prop("outerHTML"),
                 category_head_title: jQuery("head title").html(),
@@ -847,8 +848,8 @@ Mall.listing = {
 
 		this.appendToList(data.products);
 	},
-	replaceToolbar: function (data) {
-		jQuery("#sort-criteria").html(data.toolbar);
+	replacePager: function (data) {
+		jQuery(".listing-pager").html(data.pager);
 	},
 
 	initListingLinksEvents: function() {
@@ -1359,13 +1360,13 @@ Mall.listing = {
 	 **/
 
 
-	getPaginationId: function() {
-		return 'pagination';
+	getPaginationSelector: function() {
+		return 'pagination-line';
 	},
 
 	delegatePaginationEvents: function() {
 		var self = this;
-		jQuery(document).delegate('#'+self.getPaginationId()+' a','click', self.pageChange);
+		jQuery(document).delegate('.'+self.getPaginationSelector()+' a','click', self.pageChange);
 
 		return self;
 	},
@@ -1399,7 +1400,7 @@ Mall.listing = {
 			&& !jQuery.isEmptyObject(data.content.products)) {
 
 			Mall.listing.replaceProducts(data.content);
-			Mall.listing.replaceToolbar(data.content);
+			Mall.listing.replacePager(data.content);
 
 			Mall.listing.hideAjaxLoading();
 
@@ -1410,6 +1411,9 @@ Mall.listing = {
 
 	getToolbar: function(){
 		return jQuery("#sort-criteria");
+	},
+	getPager: function(){
+		return jQuery(".listing-pager");
 	},
 
 	getSortSelect: function(scope) {

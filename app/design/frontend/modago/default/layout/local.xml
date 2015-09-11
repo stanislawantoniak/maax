@@ -526,10 +526,19 @@
 
             <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar">
 				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+
 			</block>
-            <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
-                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list" />
+
+
+
+			<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
+				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+
+				<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+
+				</block>
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
                 <!--<block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>-->

@@ -195,12 +195,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		$design->setPackageName($packageName);
 		$design->setTheme($theme ? $theme : "default");
-		$toolbar = $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar");
-		$toolbar->setChild('product_list_toolbar_pager',
-			$layout->createBlock('zolagosolrsearch/catalog_product_list_pager')
+
+		$pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
 				->setGeneratedUrl($_SERVER["HTTP_REFERER"])
-				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml")
-		);
+				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
 
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
@@ -210,7 +208,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
 			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
-			"toolbar"		=> $this->_cleanUpHtml($toolbar->toHtml())
+			"pager"		=> $this->_cleanUpHtml($pager->toHtml())
 		);
 	}
 	

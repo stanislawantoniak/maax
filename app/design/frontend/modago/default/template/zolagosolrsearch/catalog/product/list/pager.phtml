@@ -1,5 +1,8 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Pager */ ?>
+
+
 <?php if ($this->getCollection()->getSize()): ?>
-    <div class="pager">
+    <div class="pager listing-pager">
         <div class="amount">
             <?php if ($this->getLastPageNum() > 1): ?>
                 <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
