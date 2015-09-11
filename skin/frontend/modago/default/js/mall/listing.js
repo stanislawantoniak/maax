@@ -850,7 +850,7 @@ Mall.listing = {
 		this.appendToList(data.products);
 	},
 	replacePager: function (data) {
-		jQuery(".listing-pager").html(data.pager);
+		this.getPager().html(data.pager);
 	},
 
 	initListingLinksEvents: function() {
