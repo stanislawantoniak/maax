@@ -879,44 +879,50 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     public function setInfoCampaignsToProduct($dataToUpdate, $stores)
     {
-
-        Mage::log("setInfoCampaignsToProduct", null, "setInfoCampaignsToProduct.log");
-        Mage::log($dataToUpdate, null, "setInfoCampaignsToProduct.log");
         $productIdsUpdated = array();
-        //
+
+        //Prepare data array for update
         if (!empty($dataToUpdate)) {
             /* @var $aM Zolago_Catalog_Model_Product_Action */
             $aM = Mage::getSingleton('catalog/product_action');
             $toUpdate = array();
+//            $toUpdate HISTOGRAM
+//            $toUpdate = array(
+//                "store1" => array(
+//                    "value" => array("product_id1","product_id2","product_id3")
+//                )
+//            );
             foreach ($dataToUpdate as $productId => $campaignIds) {
-                Mage::log($productId, null, "log.log");
-                if (!empty($campaignIds)) {
-                    $toUpdate[implode(",", $campaignIds)][] = $productId;
+                sort($campaignIds);
+                foreach($stores as $store){
+                        $toUpdate[$store][implode(",", $campaignIds)][] = $productId;
                 }
-
             }
         }
+
 
         if (empty($toUpdate)) {
             return $productIdsUpdated;
         }
+        unset($store);
+        unset($productIds);
 
         $productsAssignedToCampaign = array();
 
-        foreach ($toUpdate as $value => $productIds) {
-            $attributesData = array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => $value);
-            foreach ($stores as $store) {
-                $aM->updateAttributesPure($productIds, $attributesData, $store);
+
+        foreach ($toUpdate as $store => $data) {
+
+            foreach ($data as $value => $productIds) {
+                $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => (string)$value), $store);
+                $productsAssignedToCampaign[$value][] = $productIds;
             }
 
             //set null to attribute for default store id (required for good quote calculation)
             $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null),
                 Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
             );
-            $productsAssignedToCampaign[$value] = $productIds;
             $productIdsUpdated = array_merge($productIdsUpdated, $productIds);
         }
-
         unset($productIds);
         //unsetCampaignProductAssignedToCampaignFlag
         if(!empty($productsAssignedToCampaign)){
