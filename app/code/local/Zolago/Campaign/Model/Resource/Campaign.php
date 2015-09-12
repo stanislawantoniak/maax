@@ -6,6 +6,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
     const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 2000;
 
+    const CAMPAIGN_PRODUCTS_PROCESSED = 1;
+    const CAMPAIGN_PRODUCTS_UNPROCESSED = 0;
+
     protected function _construct()
     {
         $this->_init('zolagocampaign/campaign', "campaign_id");
@@ -210,16 +213,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
     }
 
+
     /**
      * Set field assigned_to_campaign to 0 to product
      * Used when product attributes unset by crone
      * @param $productId
      */
-    public function unsetCampaignProductAssignedToCampaignFlag($campaignId, $productIds)
+    public function setProductsAsProcessedByCampaign($campaignId, $productIds)
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
 
     }
 
@@ -556,8 +560,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign_product.assigned_to_campaign=0");
+        $select->where("campaign_product.assigned_to_campaign=?", self::CAMPAIGN_PRODUCTS_UNPROCESSED);
         $select->where("campaign.status <> ?",$activeCampaignStatus);
+        $select->order('campaign_product.product_id ASC');
         $select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
         return $this->getReadConnection()->fetchAll($select);
     }
