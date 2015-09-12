@@ -4,7 +4,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 {
 
     const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
-    const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 10;
+    const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 2000;
 
     protected function _construct()
     {
