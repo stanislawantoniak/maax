@@ -559,7 +559,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $select->where("campaign_product.assigned_to_campaign=0");
         $select->where("campaign.status <> ?",$activeCampaignStatus);
-        $select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
+        //$select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {
@@ -642,7 +642,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         //$select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign.date_from DESC');
         $select->order('campaign.date_to ASC');
-        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
+        //$select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
         Mage::log($select->__toString(), null, "getUpDateCampaignsInfo.log");
         return $this->getReadConnection()->fetchAll($select);
     }
@@ -787,7 +787,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign.date_from DESC');
         $select->order('campaign.date_to ASC');
-        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
+        //$select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
 
         return $this->getReadConnection()->fetchAll($select);
     }
