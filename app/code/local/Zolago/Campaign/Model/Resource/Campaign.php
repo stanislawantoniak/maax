@@ -879,8 +879,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
-        $select->order('campaign.date_from DESC');
-        $select->order('campaign.date_to ASC');
+        $select->order('campaign_product.product_id ASC');
         $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
 
         return $this->getReadConnection()->fetchAll($select);
