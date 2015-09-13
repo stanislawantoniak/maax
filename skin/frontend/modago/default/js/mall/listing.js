@@ -1375,7 +1375,9 @@ Mall.listing = {
 	pageChange: function(e) {
 		var start = Mall.getUrlPart('start',jQuery(this).attr('href'));
 
-		if (Mall.listing.getTotal() > start && !Mall.isGoogleBot()) {
+		if (Mall.listing.getTotal() > start &&
+			//!Mall.isGoogleBot()
+		) {
 			var forceObject = {
 				start: start
 			};
