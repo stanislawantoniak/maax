@@ -24,7 +24,7 @@ class Zolago_Campaign_Model_Observer
         //set to campaign products assigned_to_campaign = 0
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
-        $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
+        $resourceModel->sendProductsToRecalculate($campaign);
 
         if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
             $campaignType = $campaign->getType();

@@ -188,6 +188,29 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * Send all products to recalculate
+     * @param $campaign
+     */
+    public function sendProductsToRecalculate($campaign)
+    {
+        $campaignId = $campaign->getId();
+        if (empty($campaignId)) {
+            //new campaign (no products)
+            return;
+        }
+        $products = $this->getCampaignProducts($campaign);
+        if (empty($products)) {
+            return;
+        }
+
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $write = $this->_getWriteAdapter();
+        foreach ($products as $productId => $skuV) {
+            $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` = ?' => $productId));
+        }
+    }
+
+    /**
      * Set recalculate flag in all active campaigns for products
      * @param array $productIds
      * @return 
