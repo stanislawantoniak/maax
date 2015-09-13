@@ -131,11 +131,12 @@ $_products = $_cache['products'];
 					<div id="listing-loading">
 						<img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
 					</div>
-					<?php $noAjaxLink = $this->getNoAjaxLink(); ?>
-					<?php if ($noAjaxLink): ?>
-						<?php foreach ($noAjaxLink as $page => $link) : ?>
-							<span class="addNewPositionListWrapper" style="width:35px"><a href="<?php echo $link ?>"><?php echo $page ?></a></span>
-						<?php endforeach; ?>
+
+
+
+
+					<?php if ($this->getListModel()->isGoogleBot()): ?>
+						<?php echo $this->getChildHtml('product_list_toolbar_pager_full'); ?>
 					<?php endif; ?>
 
 					<script type="text/javascript">
