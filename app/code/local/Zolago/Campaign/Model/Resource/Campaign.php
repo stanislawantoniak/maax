@@ -233,7 +233,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
     }
 
+    /**
+     * Set field assigned_to_campaign to 0 to product
+     * Used when product attributes unset by crone
+     * @param $productId
+     */
+    public function setProductsAsProcessed($productIds)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $write = $this->_getWriteAdapter();
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds));
 
+    }
     /**
      * Set field assigned_to_campaign to 0 to product
      * Used when product attributes unset by crone

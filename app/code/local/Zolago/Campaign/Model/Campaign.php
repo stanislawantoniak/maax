@@ -924,7 +924,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if(!empty($productsAssignedToCampaign)){
             foreach($productsAssignedToCampaign as $campaignIdsString => $productIds){
                 foreach(explode(",", $campaignIdsString) as $campaignId){
-                    $this->getResource()->setProductsAsProcessedByCampaign($campaignId, $productIds);
+                    Mage::log($campaignId, null, "setProductsAsProcessedByCampaign1.log");
+                    Mage::log($productIds, null, "setProductsAsProcessedByCampaign1.log");
+                    $this->getResource()->setProductsAsProcessed($campaignId, $productIds);
                 }
             }
         }
