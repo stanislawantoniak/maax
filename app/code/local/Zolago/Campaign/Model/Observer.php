@@ -66,7 +66,17 @@ class Zolago_Campaign_Model_Observer
 
         //1. Set campaign attributes
         //info campaign
-        $campaignInfo = $model->getUpDateCampaignsInfo();
+        $campaignInfoData = $model->getUpDateCampaignsInfo(); //Products need to be updated
+
+        //Reformat by product_id
+        $productIdsToUpdate = array();
+        foreach($campaignInfoData as $campaignInfoData){
+            $productIdsToUpdate[] = $campaignInfoData["product_id"];
+            unset($campaignInfoData);
+        }
+
+        $campaignInfo = $model->getUpDateCampaignsInfoPerProduct($productIdsToUpdate);
+
 
         //Reformat by product_id
         $reformattedData = array();
