@@ -206,7 +206,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
         foreach ($products as $productId => $skuV) {
-            $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` = ?' => $productId));
+            $write->update($table, array('assigned_to_campaign' => 0), array('`campaign_id` = ?' => $campaignId));
         }
     }
 
