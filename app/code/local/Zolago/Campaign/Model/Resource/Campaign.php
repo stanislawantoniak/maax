@@ -183,7 +183,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
         foreach ($products as $productId => $skuV) {
-            $write->update($table, array('assigned_to_campaign' => 0), array('`campaign_id` = ?' => $campaignId));
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
         }
     }
 
@@ -205,9 +205,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        foreach ($products as $productId => $skuV) {
-            $write->update($table, array('assigned_to_campaign' => 0), array('`campaign_id` = ?' => $campaignId));
-        }
+        //foreach ($products as $productId => $skuV) {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
+        //}
     }
 
     /**
@@ -219,7 +219,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
      }
     /**
      * Set field assigned_to_campaign to 1 to product
@@ -230,7 +230,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
     }
 
 
