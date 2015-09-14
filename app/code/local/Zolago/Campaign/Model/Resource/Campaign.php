@@ -238,18 +238,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * Used when product attributes unset by crone
      * @param $productId
      */
-    public function setProductsAsProcessed($productIds)
-    {
-        $table = $this->getTable("zolagocampaign/campaign_product");
-        $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds));
-
-    }
-    /**
-     * Set field assigned_to_campaign to 0 to product
-     * Used when product attributes unset by crone
-     * @param $productId
-     */
     public function setProductsAsProcessedByCampaign($campaignId, $productIds)
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
@@ -541,6 +529,47 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
 
+    /**
+     * @param $productIds
+     * @return array
+     * @throws Exception
+     */
+    public function getNotValidCampaignInfoPerProduct($productIds)
+    {
+        $table = $this->getTable("zolagocampaign/campaign");
+
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table),
+            array(
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.date_from',
+                'campaign.date_to',
+                'campaign.status',
+                'campaign.vendor_id'
+            )
+        );
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                'product_id' => 'campaign_product.product_id',
+                'campaign_product.assigned_to_campaign'
+            )
+        );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
+        $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
+        $select->where("campaign.status <> ?",$activeCampaignStatus);
+        $select->order('campaign_product.product_id ASC');
+        return $this->getReadConnection()->fetchAll($select);
+    }
+
     public function getNotValidCampaigns()
     {
         $localeTime = Mage::getModel('core/date')->timestamp(time());
@@ -617,6 +646,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     public function getUpDateCampaignsInfoPerProduct($productIds)
     {
+        Mage::log($productIds, null, "getUpDateCampaignsInfoPerProduct.log");
         $ids = $this->_getCampaignsAttributesId();
         $codeToId = array();
         foreach ($ids as $id) {

@@ -231,19 +231,22 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         //Select campaigns with expired date
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
-        $notValidCampaigns = $resourceModel->getNotValidCampaigns();
+        $notValidCampaignsData = $resourceModel->getNotValidCampaigns(); //products need to be updated
 
-        if(empty($notValidCampaigns)){
+        if(empty($notValidCampaignsData)){
             return;
         }
+
         $vendorsInUpdate = array();
 
         $productsIds = array();
-        foreach($notValidCampaigns as $notValidCampaignData){
+        foreach($notValidCampaignsData as $notValidCampaignData){
             $productsIds[$notValidCampaignData['product_id']] = $notValidCampaignData['product_id'];
             $vendorsInUpdate[$notValidCampaignData['vendor_id']] = $notValidCampaignData['vendor_id'];
         }
 
+        $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
+        //krumo($notValidCampaigns);
 
         $isProductsInSaleOrPromotionByVendor = array();
         foreach ($vendorsInUpdate as $vendorId) {
@@ -287,8 +290,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $reformattedDataInfo[$notValidCampaignsData["website_id"]][$notValidCampaignsData["product_id"]][] = $notValidCampaignsData["campaign_id"];
                 $websitesToUpdateInfo[$notValidCampaignsData["website_id"]] = $notValidCampaignsData["website_id"];
             }
-
         }
+        //var_dump($reformattedDataInfo);
+
 
         if (!empty($reformattedDataInfo)) {
             /* @var $actionModel Zolago_Catalog_Model_Product_Action */
@@ -818,6 +822,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     public function setCampaignAttributesToProducts($campaignId, $type, $productIds, $stores)
     {
+        Mage::log($productIds, null, "setCampaignAttributesToProducts.log");
 
         /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
@@ -924,9 +929,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if(!empty($productsAssignedToCampaign)){
             foreach($productsAssignedToCampaign as $campaignIdsString => $productIds){
                 foreach(explode(",", $campaignIdsString) as $campaignId){
-                    Mage::log($campaignId, null, "setProductsAsProcessedByCampaign1.log");
-                    Mage::log($productIds, null, "setProductsAsProcessedByCampaign1.log");
-                    $this->getResource()->setProductsAsProcessed($productIds);
+                    $this->getResource()->setProductsAsProcessedByCampaign($campaignId,$productIds);
                 }
             }
         }
