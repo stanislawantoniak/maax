@@ -99,11 +99,13 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
         $first = $this->getFirstNum();
         $limit = $this->getLimit();
 
+
         $prev = $first - $limit;
-        if ($prev <= 0) {
-            $prev = self::DEFAULT_FIRST;
+
+        if ($prev <= 1) {
+            $prev = null;
         }
-        Mage::log($this->getPageUrl($prev));
+
         return $this->getPageUrl($prev);
     }
 
@@ -129,15 +131,16 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
 
     public function getPagerUrl($params = array())
     {
+
         $urlParams = array();
         $urlParams['_current'] = true;
         $urlParams['_escape'] = true;
         $urlParams['_use_rewrite'] = true;
         $urlParams['_query'] = $params;
 
-        if ($params["start"] == 1) {
-            unset($params["start"]);
-        }
+
+
+
 
         $generatedUrl = $this->getGeneratedUrl(); //ajax url
 
