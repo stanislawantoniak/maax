@@ -1527,6 +1527,8 @@ Mall.getUrlPart = function (name,url) {
 	var query_string = {};
 	if(!url) {
 		var query = window.location.search.substring(1);
+	} else if(url.indexOf('?') === -1) {
+		return false;
 	} else {
 		var query = url.split("?")[1];
 	}

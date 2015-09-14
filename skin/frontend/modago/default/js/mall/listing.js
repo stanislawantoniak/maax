@@ -1371,7 +1371,7 @@ Mall.listing = {
 	pageChangeUri: false,
 	pageChange: function(e) {
 		var href = jQuery(this).attr('href'),
-			start = Mall.getUrlPart('start',href);
+			start = Mall.listing.getStart(href);
 
 		Mall.listing.pageChangeUri = href;
 
@@ -1997,6 +1997,7 @@ Mall.listing = {
 			sort: this.getSort(),
 			dir: this.getDir(),
 			scat: this.getScat(),
+			start: this.getStart()
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2287,6 +2288,14 @@ Mall.listing = {
 		this._current_query = query;
 
 		return this;
+	},
+
+	getStart: function(href) {
+		href = typeof href != "undefined" ? href : window.location.href;
+		var start = Mall.getUrlPart('start',href);
+		start = start ? start : 1;
+
+		return start;
 	},
 
 	/* Functions that set and get current category id */
