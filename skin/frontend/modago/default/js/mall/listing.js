@@ -1428,7 +1428,7 @@ Mall.listing = {
 		return jQuery("#sort-criteria");
 	},
 	getPager: function(){
-		return jQuery(".listing-pager");
+		return jQuery(".pagination-line");
 	},
 
 	getSortSelect: function(scope) {
@@ -2070,7 +2070,7 @@ Mall.listing = {
 	},
 
 	nextPageExists: function() {
-		return jQuery('.pagination-line').first().find('.pages ol li:eq(1) a').length ? true : false;
+		return jQuery('.page-next').length ? true : false;
 	},
 
 	/**

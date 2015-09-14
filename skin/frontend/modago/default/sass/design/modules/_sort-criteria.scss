@@ -1,9 +1,34 @@
 #sort-criteria {
+	white-space: nowrap;
+	.col-sm-12 {
+		@media(max-width: $screen-xs) {
+			padding: 0 3px;
+		}
+	}
 	ul {
 		list-style: none;
 		li {
+			width: 50%;
 			line-height: 27px;
 			color:#000;
+			&.sort-criteria-selector {
+				text-align: right;
+				@media(max-width: 400px) {
+					display: list-item !important;
+					float: none !important;
+				}
+				@media(max-width: 340px) {
+					.sort-by-container {
+						margin-left: -3px;
+					}
+				}
+				label {
+					@media(max-width: 600px) {
+						display: block;
+						text-align: right;
+					}
+				}
+			}
 			span, label {
 				font-size: 12px!important;
 				font-family: $fontRegular;
@@ -16,18 +41,6 @@
 				vertical-align: middle;
 				margin-left: 5px;
 			}
-		}
-	}
-
-	#navigation_products {
-		.navigation-category {
-			display: inline-block;
-			padding: 1px 21px;
-			background-color: white;
-			border: 1px solid $gray;
-			text-align: center;
-			font-size: 19px;
-			color: $gray;
 		}
 	}
 }

@@ -2,33 +2,37 @@
 
 
 <?php if ($this->getCollection()->getSize()): ?>
-    <div class="pager listing-pager">
-        <div class="amount">
+    <div class="listing-pagination">
+        <div class="totals">
             <?php if ($this->getLastPageNum() > 1): ?>
-                <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+                <?php echo $this->__('%s-%s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
             <?php else: ?>
-                <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+                <strong>
+	                <?php if($this->getTotalNum() > 1): ?>
+	                    <?php echo $this->__('%s items', $this->getTotalNum()) ?></strong>
+		            <?php else: ?>
+		                <?php echo $this->__('1 item'); ?>
+		            <?php endif; ?>
             <?php endif; ?>
         </div>
 
         <?php if ($this->getLastPageNum() > 1): ?>
             <div class="pages">
-                <ol>
-                    <li>
-                        <?php if ($this->isFirstEnabled()): ?>
-                            <a href="<?php echo $this->getPreviousPageUrl() ?>"><< PREV</a>
-                        <?php else: ?>
-                            <span><< PREV</span>
-                        <?php endif; ?>
-                    </li>
-                    <li>
-                        <?php if ($this->isLastEnabled()): ?>
-                            <a href="<?php echo $this->getNextPageUrl() ?>">NEXT >></a>
-                        <?php else: ?>
-                            <span>NEXT >></span>
-                        <?php endif; ?>
-                    </li>
-                </ol>
+                <?php if ($this->isFirstEnabled()): ?>
+                    <a href="<?php echo $this->getPreviousPageUrl() ?>" class="page-prev">
+                <?php else: ?>
+                    <a class="page-disabled">
+                <?php endif; ?>
+	                    <i class="fa fa-caret-left"></i>
+                    </a>
+
+                <?php if ($this->isLastEnabled()): ?>
+                    <a href="<?php echo $this->getNextPageUrl() ?>" class="page-next">
+                <?php else: ?>
+	                <a class="page-disabled">
+                <?php endif; ?>
+		                <i class="fa fa-caret-right"></i>
+	                </a>
             </div>
         <?php endif; ?>
     </div>
