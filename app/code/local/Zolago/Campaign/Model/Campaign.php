@@ -246,7 +246,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
 
         $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
-        //krumo($notValidCampaigns);
 
         $isProductsInSaleOrPromotionByVendor = array();
         foreach ($vendorsInUpdate as $vendorId) {
