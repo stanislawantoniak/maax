@@ -2001,7 +2001,7 @@ Mall.listing = {
 		});
 
 		if(names.indexOf("start") == -1) {
-			out.push("start=1");
+			out.push("start="+Mall.listing.getStart());
 		}
 
 		return out.join("|");
