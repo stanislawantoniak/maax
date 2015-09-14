@@ -460,11 +460,38 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 
 
 	/**
-	 * Check if current vendor local
+	 * Check if vendor is LOCAL VENDOR
+	 * (LOCAL VENDOR = System > Config > Drop Shipping > Vendor Options > Local Vendor)
+	 * @param null $vendorId
 	 * @return bool
 	 */
-	public function isLocalVendor(){
-		$vendorId = Mage::getSingleton('udropship/session')->getVendorId();
+	public function isLocalVendor($vendorId = NULL){
+		if(is_null($vendorId)){
+			$vendorId = Mage::getSingleton('udropship/session')->getVendorId();
+		}
 		return (bool)($vendorId == $this->getLocalVendorId());
+	}
+
+
+	/**
+	 * Get VENDOR ROOT CATEGORY for current website
+	 * @return bool
+	 * @throws Mage_Core_Exception
+	 */
+	public function getCurrentVendorRootCategory()
+	{
+		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		$vendor = Mage::helper("umicrosite")->getCurrentVendor();
+		$vendorRootCategoryId = false; //VENDOR ROOT CATEGORY for current website
+
+		if (!$vendor) {
+			return $vendorRootCategoryId;
+		}
+		$website = Mage::app()->getWebsite()->getId(); //Current website
+		$vendorRootCategory = $vendor->getRootCategory(); //array of root categories (key is website_id)
+		$vendorRootCategoryId = isset($vendorRootCategory[$website]) ? $vendorRootCategory[$website] : false;
+
+
+		return $vendorRootCategoryId;
 	}
 }

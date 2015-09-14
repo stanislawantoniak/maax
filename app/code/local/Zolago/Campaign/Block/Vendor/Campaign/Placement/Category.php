@@ -84,7 +84,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryId = $this->getCategoryId();
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
-        $placements = $campaign->getCategoryPlacements($categoryId, $vendorId);
+        $placements = $campaign->getCategoryPlacements($categoryId, $vendorId, array(),  FALSE, false);
 
         $placementsByType = array();
         if (!empty($placements)) {

@@ -18,7 +18,7 @@ class Zolago_SalesRule_Model_Resource_Coupon extends Mage_SalesRule_Model_Resour
                 $this->getMainTable(), $insertData
             );
             $this->_getWriteAdapter()->query($insert);
-            Mage::log($insert, null, "couponY.log");
+
             $this->_getWriteAdapter()->commit();
         } catch (Exception $e) {
             $this->rollBack();

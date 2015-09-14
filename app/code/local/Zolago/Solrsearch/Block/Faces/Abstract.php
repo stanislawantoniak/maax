@@ -216,6 +216,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			return $allItems;
 		}
 		$out = array();
+        $source = $this->getAttributeSource($this->getAttributeCode());
+        if (method_exists($source, "setUseCustomOptions")) {
+            $source->setUseCustomOptions(true);
+            $this->unsetData("all_options");
+        }
 		$allSourceOptions = $this->getAllOptions();
 		$extraAdded = array();
 		// Options are sorted via admin panel

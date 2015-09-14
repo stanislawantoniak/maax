@@ -521,3 +521,6 @@ table.foot-empty-cells tfoot td:empty {
 		width: 730px;
 	}
 }
+.no-padding-left {
+    padding-left: 0;
+}

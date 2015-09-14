@@ -825,7 +825,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 // Skip attribs with no custom filter
                 if(!$filter || !$filter->getId()) {
                     // Always attach campaign information ( for landing pages )
-                    if ($attrCode != "campaign_info_id" & $attrCode != "campaign_regular_id") {
+                    if ($attrCode != Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE &
+                        $attrCode != Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE) {
                         continue;
                     } else {
                         $filter = Mage::getModel("zolagocatalog/category_filter");
@@ -1084,20 +1085,39 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * raw url without redirects, with filters only
      */
 
-	public function getRedirectUrl($queryData) {
-	    $url = null;
-	    if ($this->getListModel()->isCategoryMode()) {	        
-    	    $params = Mage::app()->getRequest()->getParams();
-    	    $category = $this->getListModel()->getCurrentCategory();
-    	    $path = $this->getUrlRoute();
-    	    $id = $category->getId();
-  	        $tmp = $queryData['_query'];
+	public function getRedirectUrl($queryData)
+	{
+		$url = null;
+		if ($this->getListModel()->isCategoryMode()) {
 
-		    /** @var GH_Rewrite_Helper_Data $rewriteHelper */
-		    $rewriteHelper = Mage::helper('ghrewrite');
-    	    $url = $rewriteHelper->prepareRewriteUrl($path,$id,$tmp);
-	    }
-	    return $url;
+			$category = $this->getListModel()->getCurrentCategory();
+			$path = $this->getUrlRoute();
+			$id = $category->getId();
+			$tmp = $queryData['_query'];
+
+
+			//1. Check if LP
+			/* @var $campaign Zolago_Campaign_Model_Campaign */
+			$campaign = $category->getCurrentCampaign();
+
+			if($campaign){
+				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+				$params = isset($queryData["_query"]) ? $queryData["_query"] : array();
+				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
+				return $url;
+			}
+
+
+			//2. Check GH_Rewrite exist
+
+			/** @var GH_Rewrite_Helper_Data $rewriteHelper */
+			$rewriteHelper = Mage::helper('ghrewrite');
+			$url = $rewriteHelper->prepareRewriteUrl($path, $id, $tmp);
+
+
+		}
+		return $url;
 	}
 	/**
 	 * @param array $params params to be set

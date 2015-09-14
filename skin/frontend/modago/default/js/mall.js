@@ -1523,6 +1523,59 @@ Mall.restoreCheckoutValues = function() {
 	}
 };
 
+Mall.getUrlPart = function (name,url) {
+	var query_string = {};
+	if(!url) {
+		var query = window.location.search.substring(1);
+	} else {
+		var query = url.split("?")[1];
+	}
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		// If first entry with this name
+		if (typeof query_string[pair[0]] === "undefined") {
+			query_string[pair[0]] = decodeURIComponent(pair[1]);
+			// If second entry with this name
+		} else if (typeof query_string[pair[0]] === "string") {
+			var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+			query_string[pair[0]] = arr;
+			// If third or later entry with this name
+		} else {
+			query_string[pair[0]].push(decodeURIComponent(pair[1]));
+		}
+	}
+	if(query_string[name]) {
+		return query_string[name];
+	} else {
+		return '';
+	}
+};
+
+Mall.showAgreement = function(target) {
+	jQuery(target).hide();
+	jQuery(target).parent().find('.agreement-more').show();
+	jQuery(target).parent().find('.agreement-less-btn').show();
+	return false;
+};
+
+Mall.hideAgreement = function(target) {
+	jQuery(target).hide();
+	jQuery(target).parent().find('.agreement-more').hide();
+	jQuery(target).parent().find('.agreement-more-btn').show();
+	return false;
+};
+
+Mall.preventAgreementClick = function() {
+	var target = jQuery('.agreement-btn');
+	if(target.length) {
+		target.click(function(e) {
+			e.preventDefault();
+			return false;
+		});
+	}
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
@@ -1648,6 +1701,9 @@ jQuery(document).ready(function() {
 
 	//init like events
 	Mall.delegateLikeEvents();
+
+	//prevent link behavior on showmore in agreements
+	Mall.preventAgreementClick();
 
 	//restore checkout values on social login
 	setTimeout(Mall.restoreCheckoutValues,100);
