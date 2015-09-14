@@ -5,9 +5,9 @@
     <div class="pager listing-pager">
         <div class="amount">
             <?php if ($this->getLastPageNum() > 1): ?>
-                <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+                <?php echo $this->__('%s - %s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
             <?php else: ?>
-                <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+                <strong><?php echo $this->__('%s product(s)', $this->getTotalNum()) ?></strong>
             <?php endif; ?>
         </div>
 
