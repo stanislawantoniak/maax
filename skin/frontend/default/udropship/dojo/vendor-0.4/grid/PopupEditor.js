@@ -406,15 +406,14 @@ define([
 			put(label, this._useSelection);
 			put(selection, label);
 			put(form, selection);
-			
+
 			// Submit
 			this._formSubmit = put("input", {
 				"type": "submit", 
 				value: Translator.translate("Submit"), 
-				"data-loading-text": "Loading...",
 				className: "btn btn-primary"
 			});
-			
+            this._formSubmit.setAttribute("data-loading-text", Translator.translate("Processing..."));
 			put(form, this._formSubmit);	
 			
 			
