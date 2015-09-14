@@ -23,62 +23,68 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		return $catModel;
 	}
 
-	/**
-	 * Get list plus blocks
-	 */
-	public function get_blocksAction() {
-		$category = $this->_initCategory();
+    protected function _initCurrentLayout(){
+        $layout = $this->getLayout();
+        $design = Mage::getDesign();
 
-		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
-		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
-		
-		$layout = $this->getLayout();
-		$design = Mage::getDesign();
-		
-		$packageName = Mage::app()->getStore()->getConfig('design/package/name');
-		$theme = Mage::app()->getStore()->getConfig('design/theme/template');
-		
-		$design->setPackageName($packageName);
-		$design->setTheme($theme ? $theme : "default");
+        $packageName = Mage::app()->getStore()->getConfig('design/package/name');
+        $theme = Mage::app()->getStore()->getConfig('design/theme/template');
 
-		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
+        $design->setPackageName($packageName);
+        $design->setTheme($theme ? $theme : "default");
 
-		// Product 
-		$products = $this->_getProducts($listModel);
+        return $layout;
+    }
 
+    /**
+     * Get list plus blocks
+     */
+    public function get_blocksAction()
+    {
+        $category = $this->_initCategory();
 
-		$params = $this->getRequest()->getParams();
+        /* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+        $listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 
-		unset($params['start']); //unset start because this means that sorting/filters has changed
+        $layout = $this->_initCurrentLayout();
 
-		$fq = isset($params["fq"]) ? $params["fq"] : array();
+        $type = $listModel->getMode() == $listModel::MODE_SEARCH ? "search" : "category";
 
-		Mage::register("listing_reload_params", $params);
-
-		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
+        // Product
+        $products = $this->_getProducts($listModel);
 
 
-		/** @var Zolago_Catalog_Model_Category $category */
-		//$category = Mage::registry('current_category');
+        $params = $this->getRequest()->getParams();
 
-		$reloadToCms = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
+        unset($params['start']); //unset start because this means that sorting/filters has changed
 
+        $fq = isset($params["fq"]) ? $params["fq"] : array();
 
-		//if filter params then set display_mode to PRODUCTS
-		if($fq){
-			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
-		} else {
-			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
-		}
+        Mage::register("listing_reload_params", $params);
 
-		$url = $this->generateAjaxLink($category, $categoryId, $params, $type);
+        $categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 
 
-		$categoryWithFiltersKey = "category_with_filters";
-		if(Mage::registry($categoryWithFiltersKey)) {
-			Mage::unregister($categoryWithFiltersKey);
-		}
-        Mage::register($categoryWithFiltersKey,$url);
+        /** @var Zolago_Catalog_Model_Category $category */
+
+        $reloadToCms = (int)($category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
+
+
+        //if filter params then set display_mode to PRODUCTS
+        if ($fq) {
+            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
+        } else {
+            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
+        }
+
+        $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
+
+
+        $categoryWithFiltersKey = "category_with_filters";
+        if (Mage::registry($categoryWithFiltersKey)) {
+            Mage::unregister($categoryWithFiltersKey);
+        }
+        Mage::register($categoryWithFiltersKey, $url);
 
         $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
         $path = $breadcrumbs->getPathProp();
@@ -96,32 +102,32 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
         $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
         $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
-		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
+        $block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
 
-		$toolbar = $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar");
-		$toolbar->setChild('product_list_toolbar_pager',
-			$layout->createBlock('zolagosolrsearch/catalog_product_list_pager')
-				->setGeneratedUrl($url)
-				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml")
-		);
+        $toolbar = $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar");
+        $toolbar->setChild('product_list_toolbar_pager',
+            $layout->createBlock('zolagosolrsearch/catalog_product_list_pager')
+                ->setGeneratedUrl($url)
+                ->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml")
+        );
 
 
-		$content=  array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
-			"url"			=> $url,
-			"header"		=> $this->_cleanUpHtml($block->toHtml()),
-			"toolbar"		=> $this->_cleanUpHtml($toolbar->toHtml()),
-			"filters"		=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
-            "category_with_filters"=> $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
-			"breadcrumbs"=> $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
-			"active"		=> $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
+        $content = array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
+            "url" => $url,
+            "header" => $this->_cleanUpHtml($block->toHtml()),
+            "toolbar" => $this->_cleanUpHtml($toolbar->toHtml()),
+            "filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
+            "category_with_filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
+            "breadcrumbs" => $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
+            "active" => $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
             "category_head_title" => $title,
-			"reload_to_cms" => $reloadToCms,
-			"listing_type" => $type
-		));
-		
-		$result = $this->_formatSuccessContentForResponse($content);
-		$this->_setSuccessResponse($result);
-	}
+            "reload_to_cms" => $reloadToCms,
+            "listing_type" => $type
+        ));
+
+        $result = $this->_formatSuccessContentForResponse($content);
+        $this->_setSuccessResponse($result);
+    }
 
 	/**
 	 * clean ups html from excess of newlines, whitespaces and tabs
@@ -174,18 +180,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 		/** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
 		$_solrHelper = Mage::helper("zolagosolrsearch");
-
-
-		$layout = $this->getLayout();
-		$design = Mage::getDesign();
-
-		$packageName = Mage::app()->getStore()->getConfig('design/package/name');
-		$theme = Mage::app()->getStore()->getConfig('design/theme/template');
-
-		$design->setPackageName($packageName);
-		$design->setTheme($theme ? $theme : "default");
-
-
+		$layout = $layout = $this->_initCurrentLayout();
 
 		$params = $this->getRequest()->getParams();
 		unset($params["start"]);
