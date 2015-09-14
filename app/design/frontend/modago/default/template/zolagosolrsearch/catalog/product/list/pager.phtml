@@ -8,9 +8,8 @@
             <?php if ($this->getLastPageNum() > 1): ?>
                 <?php echo $_helper->__('%s-%s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
             <?php else: ?>
-                <strong>
 	                <?php if($this->getTotalNum() > 1): ?>
-	                    <?php echo $_helper->__('%s products', $this->getTotalNum()) ?></strong>
+	                    <?php echo $_helper->__('%s products', $this->getTotalNum()) ?>
 		            <?php else: ?>
 		                <?php echo $_helper->__('1 product'); ?>
 		            <?php endif; ?>
