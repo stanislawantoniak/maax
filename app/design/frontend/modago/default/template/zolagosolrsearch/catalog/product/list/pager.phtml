@@ -7,7 +7,7 @@
             <?php if ($this->getLastPageNum() > 1): ?>
                 <?php echo $this->__('%s - %s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
             <?php else: ?>
-                <strong><?php echo $this->__('%s product(s)', $this->getTotalNum()) ?></strong>
+                <strong><?php echo $this->__('%s products', $this->getTotalNum()) ?></strong>
             <?php endif; ?>
         </div>
 
