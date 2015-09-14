@@ -13,14 +13,21 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		if(!$catModel || !$catModel->getId()){
 			$catModel = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
 		}
-		Mage::register("current_category", $catModel);
+
+		$current_category = "current_category";
+		if(Mage::registry($current_category)) {
+			Mage::unregister($current_category);
+		}
+		Mage::register($current_category,$catModel);
+
+		return $catModel;
 	}
 
 	/**
 	 * Get list plus blocks
 	 */
 	public function get_blocksAction() {
-		$this->_initCategory();
+		$category = $this->_initCategory();
 
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
 		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
@@ -49,13 +56,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		Mage::register("listing_reload_params", $params);
 
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
-		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
-		$rewriteHelper = Mage::helper('ghrewrite');
-		$rewriteHelper->clearParams($params);
-		$rewriteHelper->sortParams($params);
+
 
 		/** @var Zolago_Catalog_Model_Category $category */
-		$category = Mage::registry('current_category');
+		//$category = Mage::registry('current_category');
 
 		$reloadToCms = (int)($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
 
@@ -67,38 +71,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
 		}
 
+		$url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
-
-		$rootId = Mage::app()->getStore()->getRootCategoryId();
-
-		/* @var $zDropshipHelper Zolago_Dropship_Helper_Data */
-		$zDropshipHelper = Mage::helper("zolagodropship");
-		$vendorRootCategory = $zDropshipHelper->getCurrentVendorRootCategory();
-
-		$url = false;
-		if ($type == "search") {
-			$query = http_build_query($params);
-			$url = Mage::getUrl('search') . ($query ? "?" . $query : "");
-		} elseif ($type == "category") {
-
-			$campaign = $category->getCurrentCampaign();
-			if ($campaign) {
-				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
-
-			} elseif ($categoryId == $rootId || $categoryId == $vendorRootCategory) {
-				//Case when remove last filter on GALLERY ROOT listing or VENDOR ROOT listing (Landing pages)
-				$query = http_build_query($params);
-				$url = Mage::getBaseUrl() . ($query ? "?" . $query : "");
-			} else {
-				$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
-			}
-		}
-		if (!$url) {
-			$query = http_build_query($params);
-			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
-		}
 
 		$categoryWithFiltersKey = "category_with_filters";
 		if(Mage::registry($categoryWithFiltersKey)) {
@@ -214,15 +188,55 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 
 		$params = $this->getRequest()->getParams();
+		unset($params["start"]);
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 
+		$category = $this->_initCategory();
+
+		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
+
+		$url = $this->generateAjaxLink($category, $categoryId, $params, $type);
+
+
+
+		$pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
+			->setGeneratedUrl($url)
+			->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
+
+		return array(
+			"total"			=> (int)$listModel->getCollection()->getSize(),
+			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
+			"rows"			=> (int)$this->_getSolrParam($listModel, 'rows'),
+			"query"			=> '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
+			"sort"			=> $listModel->getCurrentOrder(),
+			"dir"			=> $listModel->getCurrentDir(),
+			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
+			"pager"		    => $this->_cleanUpHtml($pager->toHtml()),
+			"url"           => $url
+		);
+	}
+
+
+
+	/**
+	 * Generate category url (depends on landing page ->@see Zolago_Campaign_Helper_LandingPage getLandingPageUrlByCampaign)
+	 * or GH_Rewrite ->@see GH_Rewrite_Helper_Data prepareRewriteUrl
+	 * or category_url
+	 * @param $category
+	 * @param $categoryId
+	 * @param $params
+	 * @param $type
+	 * @return $this|bool|mixed|string
+	 */
+	public function generateAjaxLink($category, $categoryId, $params, $type)
+	{
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
 		$rewriteHelper = Mage::helper('ghrewrite');
 		$rewriteHelper->clearParams($params);
 		$rewriteHelper->sortParams($params);
 
 		$url = false;
-		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
+
 		$rootId = Mage::app()->getStore()->getRootCategoryId();
 
 		/* @var $zDropshipHelper Zolago_Dropship_Helper_Data */
@@ -233,7 +247,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$query = http_build_query($params);
 			$url = Mage::getUrl('search') . ($query ? "?" . $query : "");
 		} elseif ($type == "category") {
-			$category = Mage::registry('current_category');
+
 			$campaign = $category->getCurrentCampaign();
 			if ($campaign) {
 				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
@@ -253,23 +267,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
 		}
 
-		Mage::register("category_with_filters", $url);
-
-		$pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
-			->setGeneratedUrl($url)
-			->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
-
-		return array(
-			"total"			=> (int)$listModel->getCollection()->getSize(),
-			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
-			"rows"			=> (int)$this->_getSolrParam($listModel, 'rows'),
-			"query"			=> '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
-			"sort"			=> $listModel->getCurrentOrder(),
-			"dir"			=> $listModel->getCurrentDir(),
-			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
-			"pager"		    => $this->_cleanUpHtml($pager->toHtml()),
-			"url"           => $url
-		);
+		return $url;
 	}
 	
 	
