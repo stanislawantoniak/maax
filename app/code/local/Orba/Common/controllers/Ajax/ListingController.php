@@ -225,12 +225,11 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	 */
 	public function generateAjaxLink($category, $categoryId, $params, $type)
 	{
+		$url = false;
 		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
 		$rewriteHelper = Mage::helper('ghrewrite');
 		$rewriteHelper->clearParams($params);
 		$rewriteHelper->sortParams($params);
-
-		$url = false;
 
 		$rootId = Mage::app()->getStore()->getRootCategoryId();
 
