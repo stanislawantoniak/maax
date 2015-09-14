@@ -646,7 +646,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     public function getUpDateCampaignsInfoPerProduct($productIds)
     {
-        Mage::log($productIds, null, "getUpDateCampaignsInfoPerProduct.log");
         $ids = $this->_getCampaignsAttributesId();
         $codeToId = array();
         foreach ($ids as $id) {

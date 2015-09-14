@@ -822,7 +822,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     public function setCampaignAttributesToProducts($campaignId, $type, $productIds, $stores)
     {
-        Mage::log($productIds, null, "setCampaignAttributesToProducts.log");
 
         /* @var $actionModel Zolago_Catalog_Model_Product_Action */
         $actionModel = Mage::getSingleton('catalog/product_action');
