@@ -93,10 +93,6 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 			unset($params['rows']);
 		}
 
-		if(isset($params['start'])) {
-			unset($params['start']);
-		}
-
 		if($listingModel->isCategoryMode()) {
 			//clear search queries in category mode
 			if (isset($params['q'])) {

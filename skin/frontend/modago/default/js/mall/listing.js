@@ -18,11 +18,6 @@ Mall.listing = {
 	_ajaxTimer: null,
 
 	/**
-	 * Current listing page.
-	 */
-	_current_page: 1,
-
-	/**
 	 * Current query string - search listing.
 	 */
 	_current_query: "",
@@ -90,12 +85,14 @@ Mall.listing = {
 	_current_url: '',
 
 	/**
+	 * products on page (php determines it based on user agent)
+	 */
+	_products_per_page: 0,
+
+	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-
-		this.initShuffle();
-
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
 
@@ -123,6 +120,8 @@ Mall.listing = {
 
 		//prevents filters from overlapping lp banner
 		this.positionFiltersAfterLpBannerLoad();
+
+		this.initShuffle();
 	},
 
     initShuffle: function() {
@@ -131,8 +130,10 @@ Mall.listing = {
                 .on('layout.shuffle', function() {
                     Mall.listing.hideListingOverlay();
                     Mall.listing.likePriceView();
+		            Mall.listing.placeListingFadeContainer();
                 })
                 .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+	        jQuery(window).resize();
         });
     },
 
@@ -796,6 +797,8 @@ Mall.listing = {
 			return false;
 		}
 		Mall.listing.showAjaxLoading();
+		Mall.Scrolltop.hopToTop();
+
 		// All filters
 		var filters = jQuery(content.filters);
 		if(this.getMobileFiltersOverlay().is(":visible")) {
@@ -849,6 +852,7 @@ Mall.listing = {
 
 		this.appendToList(data.products);
 	},
+
 	replacePager: function (data) {
 		this.getPager().html(data.pager);
 	},
@@ -1355,7 +1359,8 @@ Mall.listing = {
 	/**
 	 *
 	 *
-	 * FILTERS END
+
+	   FILTERS END
 	 *
 	 *
 	 **/
@@ -1372,13 +1377,12 @@ Mall.listing = {
 		return self;
 	},
 
+	pageChangeForceObject: {},
 	pageChange: function(e) {
 		var start = Mall.getUrlPart('start',jQuery(this).attr('href'));
 
-		if (Mall.listing.getTotal() > start
-			//&& !Mall.isGoogleBot()
-		) {
-			var forceObject = {
+		if (Mall.listing.getTotal() > start && !Mall.isGoogleBot()) {
+			Mall.listing.pageChangeForceObject = {
 				start: start
 			};
 
@@ -1386,7 +1390,7 @@ Mall.listing = {
 
 			// Ajax load
 			OrbaLib.Listing.getProducts(
-				Mall.listing.getQueryParamsAsArray(forceObject),
+				Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
 				Mall.listing.goToNextPage
 			);
 		}
@@ -1402,8 +1406,16 @@ Mall.listing = {
 			&& data.content.products !== undefined
 			&& !jQuery.isEmptyObject(data.content.products)) {
 
+			Mall.Scrolltop.hopToTop();
+
 			Mall.listing.replaceProducts(data.content);
 			Mall.listing.replacePager(data.content);
+
+			var ajaxData = self.onPopStated ? window.history.state.ajaxData : Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
+				ajaxKey = self.onPopStated ? window.history.state.ajaxKey : Mall.listing.getAjaxHistoryKey(ajaxData);
+			// Set pushstate
+			Mall.listing._current_url = data.content.url;
+			Mall.listing._pushHistoryState(ajaxKey,ajaxData);
 
 			Mall.listing.hideAjaxLoading();
 
@@ -2014,6 +2026,54 @@ Mall.listing = {
 	},
 
 	/**
+	 * Calculates position and places shape listing fade block.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	placeListingFadeContainer: function() {
+		if(!Mall.isGoogleBot()) {
+			if (this.nextPageExists()) {
+				this.showShapesListing();
+				var grid = jQuery('#grid'),
+					gridHeight = grid.height(),
+					cutFromBottom = [],
+					windowWidth = jQuery(window).width();
+
+				var lastProductToShow = grid.find('.item:eq('+(this.getProductsPerPage()-1)+')'),
+					top = lastProductToShow.position().top,
+					elemHeight = lastProductToShow.height();
+					cutFromBottom.push(gridHeight - top - elemHeight - 60); //60 = shapes_listing height
+
+				cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
+
+				var newHeight = gridHeight - cutFromBottom;
+				if ((grid.height() - cutFromBottom ) <= newHeight) {
+					grid.not('.list-shop-product').height(newHeight);
+				}
+
+			} else {
+				this.hideShapesListing();
+			}
+		}
+
+		return this;
+	},
+
+	showShapesListing: function() {
+		jQuery("#items-product").find(".shapes_listing").show();
+		return this;
+	},
+
+	hideShapesListing: function() {
+		jQuery("#items-product").find(".shapes_listing").hide();
+		return this;
+	},
+
+	nextPageExists: function() {
+		return jQuery('.pagination-line').first().find('.pages ol li:eq(1) a').length ? true : false;
+	},
+
+	/**
 	 * Removes single filter from filters array.
 	 *
 	 * @param filter
@@ -2277,7 +2337,17 @@ Mall.listing = {
 		this._current_price_rage = [min, max];
 
 		return this;
+	},
+
+	/* Functions that set and get how many products per page should be displayed */
+	setProductsPerPage: function(num) {
+		this._products_per_page = num;
+		return this;
+	},
+	getProductsPerPage: function() {
+		return this._products_per_page;
 	}
+
 };
 
 jQuery(document).ready(function () {

@@ -121,6 +121,7 @@ $_products = $_cache['products'];
 										<?php endforeach; ?>
 									</div>
 									<div class="col-xs-12 shuffle__sizer"></div>
+									<div class="shapes_listing"></div>
 								</div>
 							</div>
 						</div>
@@ -144,6 +145,7 @@ $_products = $_cache['products'];
 						Mall.listing.setQuery("<?php echo Mage::helper('catalogsearch')->getQueryText(); ?>");
 						Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
 						Mall.listing.setInitProducts(<?php echo $this->getJsonProducts($_products); ?>);
+						Mall.listing.setProductsPerPage(<?php echo count($_products) - 8; ?>);
 
 						Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
 						Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");

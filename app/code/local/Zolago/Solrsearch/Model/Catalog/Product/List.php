@@ -209,7 +209,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getDefaultLimit()
     {
-	    $limit = Mage::helper("zolagocatalog/listing_pagination")->productsCountPerPage();
+	    $limit = Mage::helper("zolagocatalog/listing_pagination")->productsCountPerPage() + 8; // 8 more because of listing fadeout
 
 		    if ($limit === 0) {
 			    $limit = self::DEFAULT_LIMIT;
