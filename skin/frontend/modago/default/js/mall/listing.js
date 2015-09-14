@@ -808,11 +808,6 @@ Mall.listing = {
 
 		this.initFilterEvents(filters);
 
-		// Init toolbar
-		var toolbar = jQuery(content.toolbar);
-		//this.getToolbar().replaceWith(toolbar);
-		this.initSortEvents(toolbar);
-
         var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
 		this.getHeader().replaceWith(jQuery(content.header));
 
@@ -1365,21 +1360,20 @@ Mall.listing = {
 	 *
 	 **/
 
-
-	getPaginationSelector: function() {
-		return 'pagination-line';
-	},
-
 	delegatePaginationEvents: function() {
 		var self = this;
-		jQuery(document).delegate('.'+self.getPaginationSelector()+' a','click', self.pageChange);
+		jQuery(document).delegate('a.page-next, a.page-prev','click', self.pageChange);
 
 		return self;
 	},
 
 	pageChangeForceObject: {},
+	pageChangeUri: false,
 	pageChange: function(e) {
-		var start = Mall.getUrlPart('start',jQuery(this).attr('href'));
+		var href = jQuery(this).attr('href'),
+			start = Mall.getUrlPart('start',href);
+
+		Mall.listing.pageChangeUri = href;
 
 		if (Mall.listing.getTotal() > start && !Mall.isGoogleBot()) {
 			Mall.listing.pageChangeForceObject = {
@@ -1414,7 +1408,7 @@ Mall.listing = {
 			var ajaxData = self.onPopStated ? window.history.state.ajaxData : Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
 				ajaxKey = self.onPopStated ? window.history.state.ajaxKey : Mall.listing.getAjaxHistoryKey(ajaxData);
 			// Set pushstate
-			Mall.listing._current_url = data.content.url;
+			Mall.listing._current_url = Mall.listing.pageChangeUri;
 			Mall.listing._pushHistoryState(ajaxKey,ajaxData);
 
 			Mall.listing.hideAjaxLoading();
@@ -2036,15 +2030,22 @@ Mall.listing = {
 				this.showShapesListing();
 				var grid = jQuery('#grid'),
 					gridHeight = grid.height(),
-					cutFromBottom = [],
-					windowWidth = jQuery(window).width();
+					cutFromBottom = [];
 
-				var lastProductToShow = grid.find('.item:eq('+(this.getProductsPerPage()-1)+')'),
-					top = lastProductToShow.position().top,
-					elemHeight = lastProductToShow.height();
+				var lastProducts = jQuery('#grid').find(
+					'.item:eq('+(this.getProductsPerPage()-4)+'),'+
+					'.item:eq('+(this.getProductsPerPage()-3)+'),'+
+					'.item:eq('+(this.getProductsPerPage()-2)+'),'+
+					'.item:eq('+(this.getProductsPerPage()-1)+')'); //last 4 products
+
+				lastProducts.each(function() {
+					var top = jQuery(this).position().top,
+						elemHeight = jQuery(this).height();
+
 					cutFromBottom.push(gridHeight - top - elemHeight - 60); //60 = shapes_listing height
+				});
 
-				cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
+				cutFromBottom = parseInt(Math.min.apply(Math, cutFromBottom));
 
 				var newHeight = gridHeight - cutFromBottom;
 				if ((grid.height() - cutFromBottom ) <= newHeight) {

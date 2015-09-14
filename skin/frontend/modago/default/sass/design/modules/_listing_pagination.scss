@@ -1,4 +1,7 @@
 .pagination-line {
+	* {
+		list-style: none !important;
+	}
 	margin: 0 !important;
 	padding: 0;
 	.listing-pagination {
