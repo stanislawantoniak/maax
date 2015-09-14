@@ -801,12 +801,13 @@ Mall.listing = {
 
 		// All filters
 		var filters = jQuery(content.filters);
-		if(this.getMobileFiltersOverlay().is(":visible")) {
-			filters.show();
+		if(filters.length) {
+			if (this.getMobileFiltersOverlay().is(":visible")) {
+				filters.show();
+			}
+			this.getFilters().replaceWith(filters);
+			this.initFilterEvents(filters);
 		}
-		this.getFilters().replaceWith(filters);
-
-		this.initFilterEvents(filters);
 
         var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
 		this.getHeader().replaceWith(jQuery(content.header));
@@ -1370,23 +1371,28 @@ Mall.listing = {
 	pageChangeForceObject: {},
 	pageChangeUri: false,
 	pageChange: function(e) {
-		var href = jQuery(this).attr('href'),
-			start = Mall.listing.getStart(href);
+		Mall.listing.pageChangeUri = jQuery(this).attr('href');
+		var start = Mall.listing.getStart();
 
-		Mall.listing.pageChangeUri = href;
-
-		if (Mall.listing.getTotal() > start && !Mall.isGoogleBot()) {
+		if (!Mall.isGoogleBot()) {
 			Mall.listing.pageChangeForceObject = {
 				start: start
 			};
 
-			Mall.listing.showAjaxLoading();
+			var params = Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
+				ajaxKey = Mall.listing.getAjaxHistoryKey(params);
 
-			// Ajax load
-			OrbaLib.Listing.getProducts(
-				Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
-				Mall.listing.goToNextPage
-			);
+			if(typeof Mall.listing._ajaxCache[ajaxKey] != "undefined") {
+				Mall.listing.goToNextPage(Mall.listing._ajaxCache[ajaxKey]);
+			} else {
+
+				Mall.listing.showAjaxLoading();
+				// Ajax load
+				OrbaLib.Listing.getProducts(
+					params,
+					Mall.listing.goToNextPage
+				);
+			}
 		}
 
 		e.preventDefault();
@@ -1396,7 +1402,7 @@ Mall.listing = {
 	goToNextPage: function (data) {
 		if (!jQuery.isEmptyObject(data)
 			&& data.status !== undefined
-			&& data.status === true && data.content !== undefined
+			&& data.status && data.content !== undefined
 			&& data.content.products !== undefined
 			&& !jQuery.isEmptyObject(data.content.products)) {
 
@@ -1409,7 +1415,10 @@ Mall.listing = {
 				ajaxKey = self.onPopStated ? window.history.state.ajaxKey : Mall.listing.getAjaxHistoryKey(ajaxData);
 			// Set pushstate
 			Mall.listing._current_url = Mall.listing.pageChangeUri;
+			Mall.listing.pageChangeUri = false;
 			Mall.listing._pushHistoryState(ajaxKey,ajaxData);
+
+			Mall.listing._ajaxCache[ajaxKey] = data;
 
 			Mall.listing.hideAjaxLoading();
 
@@ -1983,10 +1992,18 @@ Mall.listing = {
 	},
 
 	getAjaxHistoryKey: function(data) {
-		var out = [];
+		var out = [],
+			names = [];
+
 		data.forEach(function(entry) {
 			out.push(entry.name+"="+entry.value);
+			names.push(entry.name);
 		});
+
+		if(names.indexOf("start") == -1) {
+			out.push("start=1");
+		}
+
 		return out.join("|");
 	},
 
@@ -1996,8 +2013,7 @@ Mall.listing = {
 			q: this.getQuery(),
 			sort: this.getSort(),
 			dir: this.getDir(),
-			scat: this.getScat(),
-			start: this.getStart()
+			scat: this.getScat()
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2290,8 +2306,8 @@ Mall.listing = {
 		return this;
 	},
 
-	getStart: function(href) {
-		href = typeof href != "undefined" ? href : window.location.href;
+	getStart: function() {
+		var href = Mall.listing.pageChangeUri ? Mall.listing.pageChangeUri : window.location.href;
 		var start = Mall.getUrlPart('start',href);
 		start = start ? start : 1;
 
