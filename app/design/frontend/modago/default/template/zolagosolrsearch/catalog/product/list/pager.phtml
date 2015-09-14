@@ -1,13 +1,15 @@
 <?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Pager */ ?>
 
+<?php $_helper = Mage::helper("zolagomodago"); ?>
+
 
 <?php if ($this->getCollection()->getSize()): ?>
     <div class="pager listing-pager">
         <div class="amount">
             <?php if ($this->getLastPageNum() > 1): ?>
-                <?php echo $this->__('%s - %s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+                <?php echo $_helper->__('%s - %s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
             <?php else: ?>
-                <strong><?php echo $this->__('%s products', $this->getTotalNum()) ?></strong>
+                <strong><?php echo $_helper->__('%s products', $this->getTotalNum()) ?></strong>
             <?php endif; ?>
         </div>
 
