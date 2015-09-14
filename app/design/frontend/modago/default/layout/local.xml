@@ -617,8 +617,11 @@
                     <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
                 </block>
 
-                <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar"/>
+                <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar">
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+				</block>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
                 </block>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
