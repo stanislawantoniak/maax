@@ -120,7 +120,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             $title = $rewriteData["title"];
         }
 
-        $block = $layout->createBlock("zolagosolrsearch/catalogetoduct_list_header_$type");
+        $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
         $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
 		$block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
 
@@ -211,9 +211,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$design->setPackageName($packageName);
 		$design->setTheme($theme ? $theme : "default");
 
-		$pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
-				->setGeneratedUrl($_SERVER["HTTP_REFERER"])
-				->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
+
 
 		$params = $this->getRequest()->getParams();
 		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
@@ -256,6 +254,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		}
 
 		Mage::register("category_with_filters", $url);
+
+		$pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
+			->setGeneratedUrl($url)
+			->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
 
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
