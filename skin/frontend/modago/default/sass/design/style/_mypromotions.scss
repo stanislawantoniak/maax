@@ -35,9 +35,19 @@
   margin: 0 -15px;
   .promo_item {
     .promo_item_box {
+      cursor: pointer;
       border: 1px solid #ebebeb;
       background: #fff;
       padding: 0 0 0 0;
+
+      @include transition-property(box-shadow);
+      @include transition-duration(0.1s);
+      @include transition-timing-function(ease-in);
+      //@include transition-delay(0.2s);
+      &:hover,
+      &.hover {
+        box-shadow: 0 0 3px 2px #bcbaba;
+      }
     }
     padding: 10px 4px 0 4px;
     @media(max-width: 479px) {

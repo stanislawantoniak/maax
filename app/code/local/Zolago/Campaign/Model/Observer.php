@@ -24,7 +24,7 @@ class Zolago_Campaign_Model_Observer
         //set to campaign products assigned_to_campaign = 0
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
-        $resourceModel->unsetCampaignProductsAssignedToCampaignFlag($campaign);
+        $resourceModel->sendProductsToRecalculate($campaign);
 
         if ($campaign->getIsLandingPage() == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE) {
             $campaignType = $campaign->getType();
@@ -66,24 +66,35 @@ class Zolago_Campaign_Model_Observer
 
         //1. Set campaign attributes
         //info campaign
-        $campaignInfo = $model->getUpDateCampaignsInfo();
+        $campaignInfoData = $model->getUpDateCampaignsInfo(); //Products need to be updated
 
-        $dataToUpdate = array();
-        if (!empty($campaignInfo)) {
-            foreach ($campaignInfo as $campaignInfoItem) {
-                $dataToUpdate[$campaignInfoItem['website_id']][$campaignInfoItem['product_id']][] = $campaignInfoItem['campaign_id'];
-            }
-            unset($campaignInfoItem);
+        //Reformat by product_id
+        $productIdsToUpdate = array();
+        foreach($campaignInfoData as $campaignInfoData){
+            $productIdsToUpdate[] = $campaignInfoData["product_id"];
+            unset($campaignInfoData);
         }
 
+        $campaignInfo = $model->getUpDateCampaignsInfoPerProduct($productIdsToUpdate);
+
+
+        //Reformat by product_id
+        $reformattedData = array();
+        foreach($campaignInfo as $campaignInfoData){
+            $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
+            $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
+        }
+        //var_dump($reformattedData);
+
         //set attributes
-        if (!empty($dataToUpdate)) {
-            $websitesToUpdateInfo = array_keys($dataToUpdate);
+        if (!empty($reformattedData)) {
+
             /* @var $catalogHelper Zolago_Catalog_Helper_Data */
             $catalogHelper = Mage::helper('zolagocatalog');
             $storesToUpdateInfo = $catalogHelper->getStoresForWebsites($websitesToUpdateInfo);
+            //var_dump($storesToUpdateInfo);
 
-            foreach ($dataToUpdate as $websiteId => $dataToUpdateInfo) {
+            foreach ($reformattedData as $websiteId => $dataToUpdateInfo) {
                 $storesI = isset($storesToUpdateInfo[$websiteId]) ? $storesToUpdateInfo[$websiteId] : false;
                 if ($storesI) {
                     $productIdsInfoUpdated = $modelCampaign->setInfoCampaignsToProduct($dataToUpdateInfo, $storesI);
@@ -92,8 +103,6 @@ class Zolago_Campaign_Model_Observer
             }
             unset($dataToUpdate);
         }
-
-
 
         //sales/promo campaign
         $campaignSalesPromo = array();

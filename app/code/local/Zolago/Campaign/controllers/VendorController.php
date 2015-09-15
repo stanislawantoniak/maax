@@ -164,6 +164,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $couponImageTmpName = $couponImage["tmp_name"];
                     $couponImageName = $couponImage["name"];
 
+
                     if (!empty($couponImageName)) { //if file just uploaded
                         $couponImagePath = $campaignFormHelper->saveFormImage($couponImageName, $couponImageTmpName, Zolago_Campaign_Model_Campaign::LP_COUPON_IMAGE_FOLDER);
                         $campaign->setData("coupon_image", $couponImagePath);
@@ -177,7 +178,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     $couponConditions = $_FILES["coupon_conditions"];
                     $couponConditionsTmpName = $couponConditions["tmp_name"];
                     $couponConditionsName = $couponConditions["name"];
-
                     if (!empty($couponConditionsName)) {
                         $couponConditionsPath = $campaignFormHelper->saveFormImage($couponConditionsName, $couponConditionsTmpName, Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER);
                         $campaign->setData("coupon_conditions", $couponConditionsPath);

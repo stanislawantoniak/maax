@@ -3,6 +3,12 @@
 class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_Db_Abstract
 {
 
+    const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
+    const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 2000;
+
+    const CAMPAIGN_PRODUCTS_PROCESSED = 1;
+    const CAMPAIGN_PRODUCTS_UNPROCESSED = 0;
+
     protected function _construct()
     {
         $this->_init('zolagocampaign/campaign', "campaign_id");
@@ -71,6 +77,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+
 
     /**
      * Assign products to campaign
@@ -142,6 +149,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 $recoverOptionsProducts[$websiteId] = array($productId);
             }
 
+            /**
+             * @see Zolago_Campaign_Model_Observer::productAttributeRevert
+             */
             Mage::dispatchEvent(
                 "campaign_product_remove_update_after",
                 array(
@@ -173,8 +183,31 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
         foreach ($products as $productId => $skuV) {
-            $write->update($table, array('assigned_to_campaign' => 0), array('`campaign_id` = ?' => $campaignId));
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
         }
+    }
+
+    /**
+     * Send all products to recalculate
+     * @param $campaign
+     */
+    public function sendProductsToRecalculate($campaign)
+    {
+        $campaignId = $campaign->getId();
+        if (empty($campaignId)) {
+            //new campaign (no products)
+            return;
+        }
+        $products = $this->getCampaignProducts($campaign);
+        if (empty($products)) {
+            return;
+        }
+
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $write = $this->_getWriteAdapter();
+        //foreach ($products as $productId => $skuV) {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
+        //}
     }
 
     /**
@@ -183,9 +216,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @return 
      */
      public function putProductsToRecalculate($campaignId,$productIds) {
+
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 0), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
      }
     /**
      * Set field assigned_to_campaign to 1 to product
@@ -196,7 +230,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
     }
 
     /**
@@ -204,11 +238,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * Used when product attributes unset by crone
      * @param $productId
      */
-    public function unsetCampaignProductAssignedToCampaignFlag($campaignId, $productIds)
+    public function setProductsAsProcessedByCampaign($campaignId, $productIds)
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => 1), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
+
     }
 
     /**
@@ -494,6 +529,47 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
 
+    /**
+     * @param $productIds
+     * @return array
+     * @throws Exception
+     */
+    public function getNotValidCampaignInfoPerProduct($productIds)
+    {
+        $table = $this->getTable("zolagocampaign/campaign");
+
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table),
+            array(
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.date_from',
+                'campaign.date_to',
+                'campaign.status',
+                'campaign.vendor_id'
+            )
+        );
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                'product_id' => 'campaign_product.product_id',
+                'campaign_product.assigned_to_campaign'
+            )
+        );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
+        $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
+        $select->where("campaign.status <> ?",$activeCampaignStatus);
+        $select->order('campaign_product.product_id ASC');
+        return $this->getReadConnection()->fetchAll($select);
+    }
+
     public function getNotValidCampaigns()
     {
         $localeTime = Mage::getModel('core/date')->timestamp(time());
@@ -544,8 +620,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign_product.assigned_to_campaign=0");
+        $select->where("campaign_product.assigned_to_campaign=?", self::CAMPAIGN_PRODUCTS_UNPROCESSED);
         $select->where("campaign.status <> ?",$activeCampaignStatus);
+        $select->order('campaign_product.product_id ASC');
+        $select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
         return $this->getReadConnection()->fetchAll($select);
     }
     protected function _getCampaignsAttributesId() {
@@ -561,6 +639,77 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
+    /**
+     * GET campaigns type info for products
+     * @param $productIds product ids
+     * @return array
+     */
+    public function getUpDateCampaignsInfoPerProduct($productIds)
+    {
+        $ids = $this->_getCampaignsAttributesId();
+        $codeToId = array();
+        foreach ($ids as $id) {
+            $codeToId[$id['attribute_code']] = $id['attribute_id'];
+        }
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->distinct(true)->from(
+            array("campaign" => $table),
+            array(
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.price_source_id as price_source',
+                'campaign.percent as price_percent',
+                'campaign.price_srp as price_srp',
+                'campaign.strikeout_type as strikeout_type',
+                'campaign.date_from as date_from',
+                'campaign.date_to as date_to',
+
+                'campaign.updated_at'
+            )
+        );
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                'product_id' => 'campaign_product.product_id',
+                'campaign_product.assigned_to_campaign'
+            )
+        );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign.campaign_id=campaign_website.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
+
+        $select->join(
+            array('products_visibility' =>'catalog_product_entity_int'),
+            'campaign_product.product_id=products_visibility.entity_id',
+            array('products_visibility.store_id')
+        );
+
+
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i", $localeTime);
+
+
+        $select->where("campaign.date_from IS NULL OR campaign.date_from<=?", date("Y-m-d H:i", $localeTime));
+        $select->where("campaign.date_to IS NULL OR campaign.date_to>'{$localeTimeF}'");
+
+        $select->where("campaign.type IN(?)", Zolago_Campaign_Model_Campaign_Type::TYPE_INFO);
+        $select->where("campaign_product.product_id IN(?)", $productIds);
+        $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+
+        $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
+        $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
+
+        $select->order('campaign_product.product_id ASC');
+
+
+        return $this->getReadConnection()->fetchAll($select);
+    }
     /**
      * @param array $type
      * @return array
@@ -625,9 +774,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign_product.assigned_to_campaign=?", 0);
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
-        //$select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
-        $select->order('campaign.date_from DESC');
-        $select->order('campaign.date_to ASC');
+        $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
+        $select->order('campaign_product.product_id ASC');
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
 
         return $this->getReadConnection()->fetchAll($select);
     }
@@ -770,9 +919,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
-        $select->order('campaign.date_from DESC');
-        $select->order('campaign.date_to ASC');
-
+        $select->order('campaign_product.product_id ASC');
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
 
         return $this->getReadConnection()->fetchAll($select);
     }
