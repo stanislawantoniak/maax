@@ -22,16 +22,19 @@ class GH_AttributeRules_IndexController extends Zolago_Dropship_Controller_Vendo
         $attributeRule = $this->_initModel($id);
         $vendor = $this->_getSession()->getVendor();
 
+        // Edit
+        if (!empty($id) && !$attributeRule->getId()) {
+            throw new Mage_Core_Exception($_helper->__("Attribute Rule does not exists"));
+        }
+
+        if ($attributeRule->getVendorId() != $vendor->getId()) {
+            throw new Mage_Core_Exception($_helper->__("Attribute Rule does not exists"));
+        }
+
         // Set Vendor Owner
         $attributeRule->setVendorId($vendor->getId());
 
         $data = $this->getRequest()->getParams();
-
-        // If Edit
-        if (!empty($modelId) && !$attributeRule->getId()) {
-            throw new Mage_Core_Exception($_helper->__("Attribute Rule not found"));
-        }
-
         $attributeRule->addData($data);
         $attributeRule->save();
     }
