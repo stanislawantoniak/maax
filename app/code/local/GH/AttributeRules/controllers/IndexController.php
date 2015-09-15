@@ -2,8 +2,9 @@
 
 /**
  * Class GH_AttributeRules_IndexController
+ * @method Zolago_Dropship_Model_Session _getSession()
  */
-class GH_AttributeRules_IndexController extends Mage_Core_Controller_Front_Action
+class GH_AttributeRules_IndexController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
     /**
      * Save Attribute rule action
@@ -19,6 +20,10 @@ class GH_AttributeRules_IndexController extends Mage_Core_Controller_Front_Actio
 
         /* @var $attributeRule GH_AttributeRules_Model_Rule */
         $attributeRule = $this->_initModel($id);
+        $vendor = $this->_getSession()->getVendor();
+
+        // Set Vendor Owner
+        $attributeRule->setVendorId($vendor->getId());
 
         $data = $this->getRequest()->getParams();
 
@@ -29,7 +34,6 @@ class GH_AttributeRules_IndexController extends Mage_Core_Controller_Front_Actio
 
         $attributeRule->addData($data);
         $attributeRule->save();
-
     }
 
 
