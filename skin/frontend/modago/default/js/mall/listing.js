@@ -809,13 +809,25 @@ Mall.listing = {
 			this.initFilterEvents(filters);
 		}
 
-        var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
-		this.getHeader().replaceWith(jQuery(content.header));
 
+		var header = jQuery(content.header);
+		if(header.length) {
+			this.getHeader().replaceWith(jQuery(content.header));
+		}
 
-        //this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
-		this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
-		this.getActive().replaceWith(jQuery(content.active));
+		var breadcrumbs = this.getHeader().find('#breadcrumbs-header'),
+			breadcrumbsContent = content.breadcrumbs;
+
+		if(typeof breadcrumbsContent != "undefined" && breadcrumbsContent.length) {
+			this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
+		}
+
+		var active = jQuery(content.active);
+
+		if(active.length) {
+			this.getActive().replaceWith(jQuery(content.active));
+		}
+
 
         //Category with filters
         var categoryWithFilters = jQuery(content.category_with_filters);
