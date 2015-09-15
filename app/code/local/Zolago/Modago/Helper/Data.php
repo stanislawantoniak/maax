@@ -11,8 +11,8 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories, 
 			$level = 1, $span = false, $allowVendorContext = true)
     {
-		Varien_Profiler::start("todo: Zolago_Modago_Helper_Data::getCategoriesTree");
         $tree = array();
+        /** @var Varien_Data_Tree_Node $category */
         foreach ($categories as $category) {
             $cat = Mage::getModel('catalog/category')->load($category->getId());
 
@@ -21,7 +21,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
                 'url'            => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
                 'category_id'    => $category->getId(),
                 'level'          => $level,
-                'products_count' => $cat->getProductCount()
+//                'products_count' => $cat->getProductCount() // ??
             );
 
 //            echo Mage::getUrl($cat->getUrlPath())."\n";
@@ -38,7 +38,6 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 				$tree[$category->getId()]['has_dropdown']  = false;
 			}
         }
-		Varien_Profiler::start("todo: Zolago_Modago_Helper_Data::getCategoriesTree");
         return $tree;
     }
 

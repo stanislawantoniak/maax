@@ -59,6 +59,8 @@
             <catalog_resource>
                 <rewrite>
                     <product>Zolago_Catalog_Model_Resource_Product</product>
+                    <category>Zolago_Catalog_Model_Resource_Category</category>
+                    <category_tree>Zolago_Catalog_Model_Resource_Category_Tree</category_tree>
                 </rewrite>
             </catalog_resource>
         </models>
