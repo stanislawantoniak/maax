@@ -8,6 +8,9 @@
 	ul {
 		list-style: none;
 		li {
+			&.selectboxit-option {
+				width: 100% !important;
+			}
 			width: 50%;
 			line-height: 27px;
 			color:#000;
