@@ -158,17 +158,9 @@ $galleryLogo = $this->getGalleryLogo();
 									<div class="col-xs-12 promo-code-copy">
 
 										<?php if ($this->showCopyToClipboard()) : ?>
-											<a class='button large pull-left link'>
+											<a class='button large pull-left link' data-copied="<?php echo $helper->__("copied"); ?>">
 												<?php echo $helper->__("Copy to clipboard"); ?>
 											</a>
-											<div style="display:none"
-												 class="promo-code-copy-result promo-code-copy-error red">
-												<div><? $helper->__("could not copy coupon"); ?></div>
-											</div>
-											<div style="display:none"
-												 class="promo-code-copy-result promo-code-copy-success">
-												<div><? $helper->__("coupon copied"); ?></div>
-											</div>
 										<?php endif; ?>
 
 									</div>
