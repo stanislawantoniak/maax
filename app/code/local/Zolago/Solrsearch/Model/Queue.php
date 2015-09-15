@@ -105,7 +105,8 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	 * @return Zolago_Solrsearch_Model_Queue
 	 */
 	public function push(Zolago_Solrsearch_Model_Queue_Item $item) {
-		
+
+        /** @var Zolago_Solrsearch_Model_Resource_Queue_Item $resource */
 		$resource = Mage::getResourceModel("zolagosolrsearch/queue_item");
 		$item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
 		// Skup double items

@@ -65,8 +65,66 @@
                             <show_in_default>1</show_in_default>
                             <validate>validate-number</validate>
                         </vendor_landingpage_n_products>
+                        <category_cache_lifetime translate="label">
+                            <label>Category cache lifetime</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Time in seconds</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <validate>validate-number</validate>
+                        </category_cache_lifetime>
                     </fields>
                 </zolagomodago_cataloglisting>
+                <zolagomodago_cataloglisting_pagination translate="label">
+                    <label>Pagination</label>
+                    <frontend_type>text</frontend_type>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>0</sort_order>
+                    <fields>
+                        <products_per_page_iphone translate="label">
+                            <label>iPhone - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on iPhone per one page.</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_iphone>
+                        <products_per_page_ipad translate="label">
+                            <label>iPad - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on iPad per one page.</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_ipad>
+                        <products_per_page_mobile translate="label">
+                            <label>Mobile browsers - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on Mobile browsers per one page.</comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_mobile>
+                        <products_per_page_desktop translate="label">
+                            <label>Desktop browsers - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on Desktop browsers per one page.</comment>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_desktop>
+                    </fields>
+                </zolagomodago_cataloglisting_pagination>
             </groups>
         </zolagomodago_catalog>
 

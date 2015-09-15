@@ -83,6 +83,26 @@
                     </zolagosolrsearch>
                 </observers>
             </catalog_converter_price_update_after>
+
+            <!-- When vendor change price from grid -->
+            <vendor_manual_save_price_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_save_price_after>
+
+            <!-- When vendor mass change price from grid -->
+            <vendor_manual_mass_save_price_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_mass_save_price_after>
 			
 			<!-- Converter stock save -->
 			<zolagocatalog_converter_stock_complete>

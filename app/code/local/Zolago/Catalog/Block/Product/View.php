@@ -443,7 +443,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                     if (!$showEmpty) 
                         continue;
                     $value = Mage::helper('catalog')->__('N/A');
-                } elseif ((string)$value == '') {
+                } elseif (is_string($value) && $value == '') {
                     if (!$showEmpty) 
                         continue;                        
                     $value = Mage::helper('catalog')->__('No');

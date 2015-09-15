@@ -135,4 +135,17 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
         // Check if price is not zero
         return $descAccepted && $isValidPrice;
     }
+
+    /**
+     * Retrieve category ids where product is available
+     *
+     * @return array
+     */
+    public function getAvailableInCategories()
+    {
+        if (!$this->hasData("available_in_categories")) {
+            $this->setData("available_in_categories", $this->_getResource()->getAvailableInCategories($this));
+        }
+        return $this->getData("available_in_categories");
+    }
 }

@@ -10,6 +10,9 @@ $_poShippingMethod = $this->getShippingMethod();
 
 /** @var Orba_Shipping_Helper_Carrier_Dhl $_dhlHlp */
 $_dhlHlp = Mage::helper('orbashipping/carrier_dhl');
+
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
 ?>
 <!-- Modal add letter-->
 <div class="modal fade" id="shippingModal">
@@ -155,8 +158,8 @@ $_dhlHlp = Mage::helper('orbashipping/carrier_dhl');
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Save");?></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Save");?></button>
 				</div>
 			</div>
 		</form>
