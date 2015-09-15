@@ -21,7 +21,7 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 <?php endif; ?>
 <?php // SLIDERS START ?>
 <?php if ($_sliders->count()): ?>
-        <div class="row">
+        <div class="row row-topSlider">
             <section id="topSlider">
                 <?php /** @var Zolago_Campaign_Model_Placement $slider */ ?>
                 <?php foreach ($_sliders as $slider): // F1 OPEN
@@ -87,7 +87,7 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 	    <?php if ($boxesCount = $_boxes->count()) :
 		    $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
 		    ?>
-	    <div class="col-sm-12">
+	    <div class="col-sm-12 col-boxes">
 		    <div class="row">
 			    <section class="block-inspiration">
 				    <header class="title-section">
@@ -118,7 +118,7 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 	    <?php endif; ?>
 	    <?php // BOXES END ?>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12 col-inspirations">
             <div class="row">
                 <section class="block-inspiration">
                     <header class="title-section">
