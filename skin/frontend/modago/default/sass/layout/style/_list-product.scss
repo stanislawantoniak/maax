@@ -160,15 +160,3 @@ html.is-browser-mobile {
     }
   }
 }
-#grid .item {
-	@media(max-width: $screen-xs-max) {
-		&:nth-last-child(-n+4) {
-			display: none;
-		}
-	}
-	@media(max-width: $screen-sm-max) {
-		&:nth-last-child(-n+2) {
-			display: none;
-		}
-	}
-}
