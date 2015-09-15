@@ -77,6 +77,27 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+    
+    /**
+     * add products to campaign from memory
+     *
+     */
+    public function saveProductsFromMemory() {
+        /** @var Mage_Core_Model_Resource $resource */
+        $resource = Mage::getSingleton('core/resource');
+        $table = $resource->getTableName("zolagocampaign/campaign_product");
+        $table_tmp = $resource->getTableName('zolagocampaign/campaign_product_tmp');
+        $tableSalesRule = $resource->getTableName("salesrule/rule");
+        $connection = $resource->getConnection('core_write');
+        // clean products        
+        $query = 'delete a.* FROM '.$table.' as a inner join '.$tableSalesRule.' as b where a.campaign_id = b.campaign_id ';
+        $connection->query($query);
+        $query = 'insert into '.$table.' (product_id,campaign_id) select distinct product_id,campaign_id from '.$table_tmp;
+        $connection->query($query);
+        $query = 'delete from '.$table_tmp;
+        $connection->query($query);
+                
+    }
 
 
     /**
@@ -112,7 +133,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         foreach ($productIds as $productId) {
             $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
         }
-        if (count($toInsert)) {
+        if (!empty($toInsert)) {
             $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
@@ -182,9 +203,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        foreach ($products as $productId => $skuV) {
-            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
-        }
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
     }
 
     /**
@@ -205,9 +224,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        //foreach ($products as $productId => $skuV) {
-            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
-        //}
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
     }
 
     /**
@@ -1234,6 +1251,42 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         return $return;
 
+    }
+
+    /**
+     * Save product ids corresponding to campaign
+     *
+     * @param Zolago_Campaign_Model_Campaign|int $campaign
+     * @param array $productIds
+     * @return $this
+     */
+    public function saveProductsToMemory($campaign, $productIds = array()) {
+
+        $campaignId = $campaign;
+        if ($campaign instanceof Zolago_Campaign_Model_Campaign) {
+            $campaignId = $campaign->getId();
+        }
+
+        $toInsert = array();
+        foreach ($productIds as $productId) {
+            $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
+        }
+        if (!empty($toInsert)) {
+
+            $chunked = array_chunk($toInsert, 500);
+            foreach ($chunked as $data) {
+                $this->_getWriteAdapter()->insertMultiple(
+                    $this->getTable("zolagocampaign/campaign_product_tmp"),
+                    $data);
+            }
+        }
+        return $this;
+    }
+
+    public function truncateProductsFromMemory() {
+        $table = $this->getTable("zolagocampaign/campaign_product_tmp");
+        $this->_getWriteAdapter()->truncateTable($table);
+        return $this;
     }
     
     /**

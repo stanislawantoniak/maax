@@ -224,4 +224,115 @@ class Zolago_Campaign_Model_Observer
         $model->unsetProductAttributesOnProductRemoveFromCampaign($campaignId,$revertProductOptions);
     }
 
+    /**
+     * Attach products to campaign
+     *
+     * Podczepia produkty do kampanii na podstawie reguly cenowej koszyka (z zaznaczoną kampania).
+     * Jezeli produkt spelnia warunki reguly to jest podczepiany do zadanej kampanii
+     * Warunki dotyczace koszyka (qty, total itp) sa pomijane w procesie validacji
+     * Atrybuty (cechy) produktowe sa brane pod uwage tylko te, ktore maja zaznaczone
+     * is_used_for_promo_rules oraz
+     * są widoczne oraz
+     * ich fronted type to:
+     * 'text', 'multiselect', 'textarea', 'date', 'datetime', 'select', 'boolean', 'price' oraz
+     * ich zakres jest globalny lub per website (per store sa pomijane)
+     *
+     * NOTE: Pomimo, ze sprawdzanie odbywa sie per website (ustalony z kampanii)
+     * to warunek kategorii jest ujednolicony do wszystkich zakresow
+     *
+     *
+     * @param Aoe_Scheduler_Model_Schedule $object
+     */
+    public static function attachProductsToCampaignBySalesRule($object) {
+        try {
+            $startTime = self::getMicrotime();
+
+            /* @var Zolago_Campaign_Helper_SalesRule $helper */
+            $helper = Mage::helper("zolagocampaign/salesRule");
+
+            /* Collecting sales rules START */
+            $rulesColl = $helper->getSalesRuleCollection();
+            $rulesColl->load();
+            /* Collecting sales rules END */
+
+            // Cleaning conditions because
+            // Rules can have some Cart (quote) conditions
+            /** @var Mage_SalesRule_Model_Rule $rule */
+            foreach ($rulesColl as $rule) {
+                $tmp = unserialize($rule->getConditionsSerialized()); // Only variables should be passed by reference
+                $con = empty($tmp['conditions'])? $tmp:$helper->cleanConditions($tmp);  // clean if conditions exists
+                $rule->setConditionsSerialized(serialize($con));
+            }
+
+            /* Collecting products START */
+//            $time = self::getMicrotime();
+            $productsDataPerWebsite = $helper->getProductsDataForWebsites();
+//            Mage::log("Loading products data: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
+            /* Collecting products END */
+
+            // Main processing loop
+            /** @var Zolago_Campaign_Model_Resource_Campaign $campaignResource */
+            $campaignResource = Mage::getResourceModel("zolagocampaign/campaign");
+            $campaignResource->truncateProductsFromMemory(); // Cleaning temporary table
+
+            /** @var Mage_SalesRule_Model_Rule $rule */
+            foreach ($rulesColl as $rule) {
+                $time = self::getMicrotime();
+                Mage::log("Start processing rule ".$rule->getId(), null, 'mylog.log');
+
+                $productIds = array();
+                $campaignId = $rule->getCampaignId();
+
+                /** @var Zolago_Campaign_Model_Campaign $campaign */
+                $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
+                $websiteId = $campaign->getAllowedWebsites()[0];
+
+                $websiteProducts = $productsDataPerWebsite[$websiteId];
+
+                /** @var Zolago_Catalog_Model_Product $productObject */
+                $productObject = Mage::getModel("zolagocatalog/product");
+                $object = new Varien_Object();
+
+                // $product is an array not object
+                foreach ($websiteProducts as $product) {
+
+                    // If configurable or visible simple
+                    if ($product["type_id"] == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE ||
+                        !$product["parent_id"]
+                    ) {
+
+                        $productObject->addData($product);
+                        $productObject->setProduct($productObject);
+                        $object->setAllItems(array($productObject));
+
+                        $v = $rule->getConditions()->validate($object);
+                        if ($v) {
+//                            Mage::log((int)$product["entity_id"] . " in campaign " . $campaignId, null, 'mylog.log');
+                            $productIds[] = (int)$product["entity_id"];
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                $campaignResource->saveProductsToMemory($rule->getCampaignId(), $productIds);
+                unset($productIds);
+                Mage::log("time: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
+            }
+            
+            $campaignResource->saveProductsFromMemory(); // assign to campaign
+            Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
+
+        } catch(Exception $e) {
+            Mage::logException($e);
+        }
+    }
+
+    public static function _formatTime($t) {
+        return round($t,4) . "s";
+    }
+
+    public static function getMicrotime(){
+        list($usec, $sec) = explode(" ",microtime());
+        return ((float)$usec + (float)$sec);
+    }
 }
