@@ -266,6 +266,9 @@ define([
 				this._useSelection.checked;
 		},
 
+        /**
+         * @returns {Boolean|boolean|*}
+         */
         getUseSaveAsRule: function() {
             return this.canShowSaveAsRule() &&
                 domClass.contains(this.content, "use-save-as-rule") &&
