@@ -8,6 +8,7 @@ class Zolago_Campaign_Helper_Form extends Mage_Core_Helper_Abstract
 
     public function saveFormImage($imageName, $imageTmpName, $imageFolder)
     {
+        $imageName = $this->cleanFileName($imageName);
         $uniqName = uniqid() . "_" . $imageName;
 
         $image = md5_file($imageTmpName);
@@ -24,4 +25,14 @@ class Zolago_Campaign_Helper_Form extends Mage_Core_Helper_Abstract
         return $path;
     }
 
+    /**
+     * Clean file name to avoid names like nazwa ' ? % # ! ".pdf
+     * @param $string
+     * @return mixed
+     */
+    function cleanFileName($string) {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        $string = preg_replace('/[^.A-Za-z0-9\-]/', '', $string); // Removes special chars.
+        return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+    }
 }

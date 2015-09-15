@@ -8,6 +8,8 @@ $_rma = $this->getRma();
 $_items = $_rma->getAllItems();
 /** @var $_hlp Zolago_Rma_Helper_Data */
 $_hlp = $this->getRmaHelper();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
 ?>
 
 <div class="modal fade" id="refundModal">
@@ -114,8 +116,8 @@ $_hlp = $this->getRmaHelper();
 					<input type="hidden" required="required" name="refundChecked" id="refundChecked" />
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>">
 						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
 							<?php echo $_hlp->__("Order refund"); ?>
 						<?php else: ?>

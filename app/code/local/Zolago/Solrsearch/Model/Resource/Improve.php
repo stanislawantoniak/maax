@@ -794,36 +794,37 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         return Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
     }
 
-    protected function _getLoadAttributesSelect($allIds, $table, array $attributeIds, $storeId = null)
+    protected function _getLoadAttributesSelect($allIds, $table, array $attributeIds, $storeId)
     {
-        if ($storeId) {
-            $adapter        = $this->getReadConnection();
-            $entityIdField  = $this->getEntity()->getEntityIdField();
-            $joinCondition  = array(
-                                  't_s.attribute_id = t_d.attribute_id',
-                                  't_s.entity_id = t_d.entity_id',
-                                  $adapter->quoteInto('t_s.store_id = ?', $storeId)
-                              );
-            $select = $adapter->select()
-                      ->from(array('t_d' => $table), array($entityIdField, 'attribute_id'))
-                      ->joinLeft(
-                          array('t_s' => $table),
-                          implode(' AND ', $joinCondition),
-                          array())
-                      ->where('t_d.entity_type_id = ?', $this->getEntity()->getTypeId())
-                      ->where("t_d.{$entityIdField} IN (?)", $allIds)
-                      ->where('t_d.attribute_id IN (?)', $attributeIds)
-                      ->where('t_d.store_id = ?', 0);
-        } else {
-            $helper = Mage::getResourceHelper('eav');
-            $entityIdField = $this->getEntity()->getEntityIdField();
-            $select = $this->getConnection()->select()
-                      ->from($table, array($entityIdField, 'attribute_id'))
-                      ->where('entity_type_id =?', $this->getEntity()->getTypeId())
-                      ->where("$entityIdField IN (?)", $allIds)
-                      ->where('attribute_id IN (?)', $attributeIds);
-            $select->where('store_id = ?', $this->getDefaultStoreId());
-        }
+        $adapter = $this->getReadConnection();
+        $entityIdField = $this->getEntity()->getEntityIdField();
+        $joinConditionStore = array(
+            't_s.attribute_id = t_main.attribute_id',
+            't_s.entity_id = t_main.entity_id',
+            't_s.entity_type_id = t_main.entity_type_id',
+            $adapter->quoteInto('t_s.store_id = ?', $storeId)
+        );
+        $joinConditionDefault = array(
+            't_d.attribute_id = t_main.attribute_id',
+            't_d.entity_id = t_main.entity_id',
+            't_d.entity_type_id = t_main.entity_type_id',
+            $adapter->quoteInto('t_d.store_id = ?', $this->getDefaultStoreId())
+        );
+        $select = $adapter->select()
+            ->distinct()
+            ->from(array('t_main' => $table), array($entityIdField, 'attribute_id'))
+            ->joinLeft(
+                array('t_s' => $table),
+                implode(' AND ', $joinConditionStore),
+                array())
+            ->joinLeft(
+                array('t_d' => $table),
+                implode(' AND ', $joinConditionDefault),
+                array())
+            ->where('t_main.entity_type_id = ?', $this->getEntity()->getTypeId())
+            ->where("t_main.{$entityIdField} IN (?)", $allIds)
+            ->where('t_main.attribute_id IN (?)', $attributeIds);
+
         return $select;
     }
 
@@ -937,137 +938,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         Zolago_Solrsearch_Model_Catalog_Product_Collection $collection,
         $storeId, $customerGroupId) {
 
-        $profiler = Mage::helper("zolagocommon/profiler");
-        $profiler->start();
-
-        $websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
-        $category = $collection->getCurrentCategory();
-
-
-        // Load price data
-        $taxClasses = array();
-        foreach($collection as $product) {
-            $taxClasses[$product->getTaxClassId()] = true;
-            $product->setInMyWishlist(0);
-        }
-        $taxClasses = array_keys($taxClasses);
-
-        $select = $this->getReadConnection()->select();
-        $least = $this->getReadConnection()->getLeastSql(
-                     array('price_index.min_price', 'price_index.tier_price')
-                 );
-        $minimalExpr = $this->getReadConnection()->getCheckSql(
-                           'price_index.tier_price IS NOT NULL', $least, 'price_index.min_price'
-                       );
-
-        $colls = array(
-                     'entity_id',
-                     'price',
-                     'tax_class_id',
-                     'final_price',
-                     'minimal_price' => $minimalExpr ,
-                     'min_price',
-                     'max_price',
-                     'tier_price'
-                 );
-
-        $select->from(
-            array("price_index"=>$this->getTable('catalog/product_index_price')),
-            $colls
-        );
-
-        // Join attributes for special price
-        $attributes = array(
-                          "special_from_date",
-                          "special_to_date",
-                          "special_price",
-                          "msrp"
-                      );
-
-        foreach($attributes as $key) {
-            $attribute = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $key);
-            /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-
-            $tableAliasDefault = "at_" . $key . "_d";
-            $tableAlaisStore = "at_" . $key . "_s";
-
-            $joinConds = array(
-                             "$tableAliasDefault.entity_id=price_index.entity_id",
-                             $this->getReadConnection()->quoteInto("$tableAliasDefault.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
-                             $this->getReadConnection()->quoteInto("$tableAliasDefault.attribute_id=?", $attribute->getId())
-                         );
-
-            $select->joinLeft(
-                array($tableAliasDefault=>$attribute->getBackendTable()),
-                implode(" AND ", $joinConds),
-                array()
-            );
-
-            $joinConds = array(
-                             "$tableAlaisStore.entity_id=price_index.entity_id",
-                             $this->getReadConnection()->quoteInto("$tableAlaisStore.store_id=?", $storeId),
-                             $this->getReadConnection()->quoteInto("$tableAlaisStore.attribute_id=?", $attribute->getId())
-                         );
-
-            $select->joinLeft(
-                array($tableAlaisStore=>$attribute->getBackendTable()),
-                implode(" AND ", $joinConds),
-                array()
-            );
-
-            $select->columns(array(
-                                 $key => new Zend_Db_Expr("IF($tableAlaisStore.value_id>0, $tableAlaisStore.value, $tableAliasDefault.value)")
-                             ));
-
-        }
-
-        $ids = $collection->getAllIds();
-        array_walk($ids, function($item) {
-            return (int)$item;
-        });
-
-        $select->where("price_index.entity_id IN (?)", $ids);
-        $select->where("price_index.tax_class_id IN (?)", $taxClasses);
-        $select->where("price_index.website_id=?", $websiteId);
-        $select->where("price_index.customer_group_id=?", $customerGroupId);
-
-        $reasults = $this->getReadConnection()->fetchAll($select);
-        //$profiler->log("Prices query done");
-
-        // Calculate final price
-        foreach($reasults as $row) {
-            if($product = $collection->getItemById($row['entity_id'])) {
-                /* @var $product Mage_Catalog_Model_Product */
-                if($row['tax_class_id']==$product->getTaxClassId()) {
-                    unset($row['entity_id']);
-
-                    $product->addData($row);
-
-                    $basePrice = $product->getPrice();
-                    $specialPrice = $product->getSpecialPrice();
-                    $specialPriceFrom = $product->getSpecialFromDate();
-                    $specialPriceTo = $product->getSpecialToDate();
-                    $rulePrice = $product->getData('_rule_price');
-
-
-                    $finalPrice = $product->getPriceModel()->calculatePrice(
-                                      $basePrice,
-                                      $specialPrice,
-                                      $specialPriceFrom,
-                                      $specialPriceTo,
-                                      $rulePrice,
-                                      $websiteId,
-                                      $customerGroupId,
-                                      $product->getId()
-                                  );
-                    $product->setCalculatedFinalPrice($finalPrice);
-
-                    //$profiler->log("For " . $product->getId(), false);
-                }
-            }
-        }
-        //$profiler->log("After loop");
-
         // Add is in my wishlist
         $wishlist = Mage::helper("zolagowishlist")->getWishlist();
         /* @var $wishlist Mage_Wishlist_Model_Wishlist */
@@ -1083,54 +953,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 $product->setInMyWishlist(1);
             }
         }
-
-
-        // Add store urls
-
-        $select = $this->getReadConnection()->select();
-        $select->from(
-            array("url_main"			=>	$this->getTable("core/url_rewrite")),
-            array(
-                "product_id"			=> "url_main.product_id",
-                "main_request_path"		=> "url_main.request_path"
-            ));
-        $select->where("url_main.product_id IN (?)", $collection->getAllIds());
-        $select->where("url_main.store_id=?", $storeId);
-        $select->where("url_main.category_id IS NULL");
-
-        $mainUrls=$this->getReadConnection()->fetchPairs($select);
-
-        foreach ($collection as $product) {
-            $productUrl = null;
-            if(isset($mainUrls[$product->getId()])) {
-                $productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
-            }
-            elseif(empty($productUrl)) {
-                // Add category url
-                $catUrls = array();
-                if($category && $category->getId()) {
-                    $select = $this->getReadConnection()->select();
-                    $select->from(
-                        array("url_cat"			=>	$this->getTable("core/url_rewrite")),
-                        array(
-                            "product_id"			=> "url_cat.product_id",
-                            "cat_request_path"		=> "url_cat.request_path"
-                        ));
-                    $select->where("url_cat.product_id IN (?)", $collection->getAllIds());
-                    $select->where("url_cat.store_id=?", $storeId);
-                    $select->where("url_cat.category_id=?",  $category->getId());
-
-                    $catUrls=$this->getReadConnection()->fetchPairs($select);
-                }
-                if (isset($catUrls[$product->getId()])) {
-                    $productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
-                } else {
-                    $productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
-                }
-            }
-            $product->setCurrentUrl($productUrl);
-        }
-
 
         return $this;
     }

@@ -18,6 +18,7 @@ class Orba_Common_Ajax_Cart_CouponController extends Orba_Common_Ajax_CartContro
             if ($code) {
                 $quote = Mage::getSingleton('checkout/cart')->getQuote();
                 $oldCoupon = $quote->getCouponCode();
+                /** @var Orba_Common_Model_Ajax_Cart $cart */
                 $cart = Mage::getSingleton('orbacommon/ajax_cart');
                 $cart->saveCoupon($code);
                 if ($code == $quote->getCouponCode()) {

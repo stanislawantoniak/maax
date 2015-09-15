@@ -11,7 +11,7 @@ $bannerHelper = Mage::helper("zolagobanner");
 $_sliders      = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
 $_boxes        = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
 $_inspirations = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION);
-$_isSliderBoxContent = ($_sliders->count() || $_boxes->count()) ? true : false;
+$_isSliderBoxContent = $_sliders->count() ? true : false;
 
 ?>
 
@@ -74,41 +74,50 @@ $_isSliderBoxContent = ($_sliders->count() || $_boxes->count()) ? true : false;
 <?php endif; ?>
 <?php // SLIDERS END ?>
 <?php echo $this->getChildHtml('zolago.page.benefits');?>
-<?php // BOXES START ?>
-    <?php if ($boxesCount = $_boxes->count()) :
-        $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
-        ?>
-        <div class="row">
-            <section id="boxesSlider" data-boxes-mobile-unslick="1"
-                     data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
-                <?php foreach ($_boxes as $box):
-                    /** @var Zolago_Campaign_Model_Placement $box */
-                    $bannerImageData = $box->getBannerImageData();
-                    $path            = $bannerImageData['path'];
-                    $boxUrl          = $bannerImageData['url']; ?>
-                    <div class="boxesSlide">
-                        <?php if (!empty($boxUrl)): ?><a href="<?php echo $boxUrl; ?>"><?php endif; ?>
-                            <?php $imageSize = $this->getImageSize($path); ?>
-                            <div class="boxesSlideIn"
-                                 style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
-                                 data-ratio="<?php echo $this->getImageRatio($path); ?>">
-                            </div>
-                        <?php if (!empty($boxUrl)): ?></a><?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </section>
-        </div>
-    <?php endif; ?>
-<?php // BOXES END ?>
 <?php if ($_isSliderBoxContent): //SBC CLOSE ?>
     </div>
 </div>
 <?php endif; ?>
 
-<?php // INSPIRATIONS START ?>
+<?php // INSPIRATIONS + BOXES START ?>
 <?php if ($_inspirations->count()): // 1 START ?>
 <section id="bottom" class="bg-w">
     <div class="container-fluid">
+	    <?php // BOXES START ?>
+	    <?php if ($boxesCount = $_boxes->count()) :
+		    $boxesCount = $boxesCount > 4 ? 4 : $boxesCount;
+		    ?>
+	    <div class="col-sm-12">
+		    <div class="row">
+			    <section class="block-inspiration">
+				    <header class="title-section">
+					    <div class="inspiration-strips "></div>
+					    <h2 ><?php echo $bannerHelper->__("Specially for you!"); ?></h2>
+				    </header>
+			    </section>
+			    <section id="boxesSlider" data-boxes-mobile-unslick="1"
+			             data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
+				    <?php foreach ($_boxes as $box):
+					    /** @var Zolago_Campaign_Model_Placement $box */
+					    $bannerImageData = $box->getBannerImageData();
+					    $path            = $bannerImageData['path'];
+					    $boxUrl          = $bannerImageData['url']; ?>
+					    <div class="boxesSlide">
+						    <?php if (!empty($boxUrl)): ?><a href="<?php echo $boxUrl; ?>"><?php endif; ?>
+							    <?php $imageSize = $this->getImageSize($path); ?>
+							    <div class="boxesSlideIn"
+							         style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
+							         data-ratio="<?php echo $this->getImageRatio($path); ?>">
+							    </div>
+							    <?php if (!empty($boxUrl)): ?></a><?php endif; ?>
+					    </div>
+				    <?php endforeach; ?>
+			    </section>
+		    </div>
+        </div>
+	    <?php endif; ?>
+	    <?php // BOXES END ?>
+
         <div class="col-sm-12">
             <div class="row">
                 <section class="block-inspiration">

@@ -351,6 +351,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              'use_attachments'=> true,
              'promotionList' => $content->toHtml(),
              'store_name' => $store->getName(),
+             'year'  => Mage::getModel('core/date')->date('Y')
          );
          $addedFiles = array();
          foreach ($list as $item) {
@@ -381,30 +382,46 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          return true;             
      }
 
-	public function getSalesRulesForSubscribers() {
+    public function getSalesRulesForSubscribers()
+    {
 
-		$currentTimestamp = Mage::getModel('core/date')->timestamp(time());
-		$resource = Mage::getSingleton('core/resource');
-		$readConnection = $resource->getConnection('core_read');
+        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
 
-		$query = $readConnection
-			->select()
-			->from(
-				array('salesrule_rule' => $resource->getTableName("salesrule/rule")),
-				array("rule_id", "name", "from_date", "to_date", "coupon_type")
-			)
-			->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
-				'salesrule_rule.rule_id = salesrule_coupon.rule_id',
-				array("coupon_id","code")
-			)
-			->where('salesrule_rule.is_active = ?', 1)
-			->where('customer_id IS NULL')
-			->where('salesrule_rule.to_date >= ?', date("Y-m-d", $currentTimestamp))
-			->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)//->group("salesrule_rule.rule_id")
-		;
+        $query = $readConnection
+            ->select()
+            ->from(
+                array('salesrule_rule' => $resource->getTableName("salesrule/rule")),
+                array("rule_id", "name", "from_date", "to_date", "coupon_type", "campaign_id")
+            )
+            ->joinLeft(array('salesrule_coupon' => $resource->getTableName("salesrule/coupon")),
+                'salesrule_rule.rule_id = salesrule_coupon.rule_id',
+                array("coupon_id", "code")
+            )
+            ->join(
+                array("campaign" => $resource->getTableName("zolagocampaign/campaign")),
+                "salesrule_rule.campaign_id = campaign.campaign_id",
+                array(
+                    "coupon_image" => "campaign.coupon_image"
+                )
+            )
+            ->where('salesrule_rule.is_active = ?', 1)
+            ->where('customer_id IS NULL')
+            ->where('salesrule_rule.to_date >= ?', date("Y-m-d", $currentTimestamp))
+            ->where('salesrule_rule.promotion_type = ?', Zolago_SalesRule_Model_Promotion_Type::PROMOTION_SUBSCRIBERS)
 
-		return $readConnection->fetchAll($query);
-	}
+            //campaign conditions
+            ->where('campaign.coupon_image IS NOT NULL')
+            ->where('campaign.coupon_image<>?','')
+            ->where('is_landing_page=?', 1)
+            ->where('campaign.status=?', Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE)
+            //--campaign conditions
+
+        ;
+
+        return $readConnection->fetchAll($query);
+    }
 
 	public function getSalesRulesCouponsByCustomers(array $customerIds) {
 		$resource = Mage::getSingleton('core/resource');

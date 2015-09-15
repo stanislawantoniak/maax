@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.5.9</version>
+            <version>0.6.0</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
@@ -49,6 +49,15 @@
                 </setup>
             </zolagomodago_setup>
         </resources>
+        <cache>
+            <types>
+                <category_cache>
+                    <label>Category cache</label>
+                    <description>Cache for category and navigation.</description>
+                    <tags>ZOLAGO_CATEGORY_CACHE</tags>
+                </category_cache>
+            </types>
+        </cache>
     </global>
 	<default>
 		<zolagomodago_catalog>
@@ -58,7 +67,14 @@
 				<load_more_offset>100</load_more_offset>
 				<pixels_before_append>3000</pixels_before_append>
                 <vendor_landingpage_n_products>12</vendor_landingpage_n_products>
+                <category_cache_lifetime>900</category_cache_lifetime>
 			</zolagomodago_cataloglisting>
+            <zolagomodago_cataloglisting_pagination>
+                <products_per_page_iphone>20</products_per_page_iphone>
+                <products_per_page_ipad>40</products_per_page_ipad>
+                <products_per_page_mobile>20</products_per_page_mobile>
+                <products_per_page_desktop>100</products_per_page_desktop>
+            </zolagomodago_cataloglisting_pagination>
 		</zolagomodago_catalog>
         <design>
             <popular_brands>

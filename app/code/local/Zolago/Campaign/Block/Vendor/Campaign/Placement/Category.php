@@ -122,7 +122,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 /* @var $statuses Zolago_Campaign_Model_Campaign_PlacementStatus */
                 $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')
                     ->statusOptionsData($placement['campaign_id'], $showEditLink);
-                Mage::log($statuses, null, "campaign.log");
+
 
                 $now = Mage::getModel('core/date')->timestamp(time());
                 if (!empty($dateTo) && !empty($dateFrom)) {

@@ -59,6 +59,8 @@
             <catalog_resource>
                 <rewrite>
                     <product>Zolago_Catalog_Model_Resource_Product</product>
+                    <category>Zolago_Catalog_Model_Resource_Category</category>
+                    <category_tree>Zolago_Catalog_Model_Resource_Category_Tree</category_tree>
                 </rewrite>
             </catalog_resource>
         </models>
@@ -230,15 +232,6 @@
                     <model>zolagocatalog/observer::processPriceTypeQueue</model>
                 </run>
             </zolagocatalog_process_pricetype_queue>
-            <zolagocatalog_clear_configurable_queue>
-                <schedule>
-                    <!-- Run every 10 minutes -->
-                    <cron_expr>*/10 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagocatalog/observer::clearConfigurableQueue</model>
-                </run>
-            </zolagocatalog_clear_configurable_queue>
         </jobs>
     </crontab>
 </config>

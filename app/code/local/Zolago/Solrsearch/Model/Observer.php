@@ -275,8 +275,8 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function zolagoMapperAfterAssignProducts(
 			Varien_Event_Observer $observer) {
-		
-		
+
+
 		$event = $observer->getEvent();
 		$productIds = $event->getProductIds();
 	
@@ -344,15 +344,26 @@ class Zolago_Solrsearch_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function catalogConverterPriceUpdateAfter(Varien_Event_Observer $observer) {
-		$productIds = $observer->getEvent()->getProductIds();
-
-		foreach ($productIds as $productId) {
-			$this->collectProduct($productId);
-		}
-
-		$this->processCollectedProducts();
+		$this->collectProductsAndPushToQueue($observer);
 	}
 
+    /**
+     * Push to solr
+     * Collect product (as ids) and push to solr queue
+     *
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     */
+    public function collectProductsAndPushToQueue(Varien_Event_Observer $observer) {
+        $productIds = $observer->getEvent()->getProductIds();
+
+        foreach ($productIds as $productId) {
+            $this->collectProduct($productId);
+        }
+
+        $this->processCollectedProducts();
+        return $this;
+    }
 	
 	/**
 	 * @param int|Mage_Catalog_Model_Product $product
@@ -536,13 +547,7 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 		return $this->_tmpProduct;
 	}
-	
-	
-	public function doNothing(Varien_Event_Observer $observer) {
-		Mage::log("Nothing");
-	}
-	
-	
+
 	public function handleCatalogLayoutRender($observer)
 	{
 	    if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() === Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY){
@@ -571,5 +576,3 @@ class Zolago_Solrsearch_Model_Observer {
 	}
 	
 }
-
-?>
