@@ -27,11 +27,6 @@ class GH_AttributeRules_IndexController extends Mage_Core_Controller_Front_Actio
             throw new Mage_Core_Exception($_helper->__("Attribute Rule not found"));
         }
 
-        // Fix empty value
-        if ($attributeRule->getId() == "") {
-            $attributeRule->setId(null);
-        }
-
         $attributeRule->addData($data);
         $attributeRule->save();
 
