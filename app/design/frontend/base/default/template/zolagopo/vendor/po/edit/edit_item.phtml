@@ -1,7 +1,10 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Edititem  */?>
 <?php $_hlp = Mage::helper("zolagopo");?>
 <?php $_po =  $this->getPo();?>
-<?php $_currency = $_po->getOrder()->getOrderCurrencyCode();?>
+<?php $_currency = $_po->getOrder()->getOrderCurrencyCode();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
 
 <!-- Modal add letter-->
 <div class="modal fade" id="editItemModal">
@@ -54,8 +57,8 @@
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary product-specified" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Save");?></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary product-specified" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Save");?></button>
 				</div>
 			</div>
 		</form>
