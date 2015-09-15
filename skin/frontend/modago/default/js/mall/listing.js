@@ -131,6 +131,7 @@ Mall.listing = {
                     Mall.listing.hideListingOverlay();
                     Mall.listing.likePriceView();
 		            Mall.listing.placeListingFadeContainer();
+		            Mall.Footer.setContainerPadding();
                 })
                 .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
 	        jQuery(window).resize();
