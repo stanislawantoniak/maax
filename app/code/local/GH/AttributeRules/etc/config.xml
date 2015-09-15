@@ -38,4 +38,26 @@
             </gh_attributerules_setup>
         </resources>
     </global>
+    <frontend>
+        <translate>
+            <modules>
+                <GH_AttributeRules>
+                    <files>
+                        <default>GH_AttributeRules.csv</default>
+                    </files>
+                </GH_AttributeRules>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <GH_AttributeRules>
+                    <files>
+                        <default>GH_AttributeRules.csv</default>
+                    </files>
+                </GH_AttributeRules>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>

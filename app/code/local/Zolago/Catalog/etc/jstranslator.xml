@@ -162,7 +162,4 @@
     <Mass-disable-products-on-site translate="message" module="zolagocatalog">
         <message>Mass disable products on site</message>
     </Mass-disable-products-on-site>
-    <zolago-common-processing-dot-dot-dot translate="message" module="zolagocommon">
-        <message>Processing...</message>
-    </zolago-common-processing-dot-dot-dot>
 </jstranslator>
