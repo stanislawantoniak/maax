@@ -1578,6 +1578,42 @@ Mall.preventAgreementClick = function() {
 	}
 };
 
+Mall.inspirationsSliderInit = function() {
+	var rwdInspiration = jQuery('#rwd-inspiration'),
+		rwdInspirationCarousel = rwdInspiration.find('.rwd-carousel');
+
+	if(!rwdInspiration.length || !rwdInspirationCarousel.length) {
+		return;
+	}
+
+	rwdInspirationCarousel.rwdCarousel({
+		items : 5, //10 items above 1000px browser width
+		itemsDesktop : [1000,4], //5 items between 1000px and 901px
+		itemsDesktopSmall : [900,4], // betweem 900px and 601px
+		itemsTablet: [767,3], //2 items between 600 and 0
+		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
+		pagination : false,
+		navigation: true,
+		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
+		rewindNav : false,
+		itemsScaleUp:true
+	});
+
+	// Custom Navigation Events
+	rwdInspiration.find(".next").click(function(){
+		rwdInspirationCarousel.trigger('rwd.next');
+	});
+	rwdInspiration.find(".prev").click(function(){
+		rwdInspirationCarousel.trigger('rwd.prev');
+	});
+	rwdInspiration.find(".play").click(function(){
+		rwdInspirationCarousel.trigger('rwd.play',1000); //rwd.play event accept autoPlay speed as second parameter
+	});
+	rwdInspiration.find(".stop").click(function(){
+		rwdInspirationCarousel.trigger('rwd.stop');
+	});
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();
@@ -1700,6 +1736,12 @@ jQuery(document).ready(function() {
 			}
 		},200);
 	}
+
+	/**
+	 * HOMEPAGE
+	 */
+	Mall.inspirationsSliderInit();
+
 
 	//init like events
 	Mall.delegateLikeEvents();
