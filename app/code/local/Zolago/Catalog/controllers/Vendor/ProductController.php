@@ -23,6 +23,7 @@ class Zolago_Catalog_Vendor_ProductController
 		$method = $request->getParam("method");
 		$productIds = $request->getParam("product_ids");
 		$attributeSetId = $request->getParam("attribute_set_id");
+        $saveAsRule = $request->getParam("save_as_rule");
 		$storeId = $this->_getStoreId();
 		$global = false;
 		

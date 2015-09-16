@@ -465,6 +465,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
 			$storeId = $data['store_id'];
+            $saveAsRule = $data['save_as_rule'];
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){

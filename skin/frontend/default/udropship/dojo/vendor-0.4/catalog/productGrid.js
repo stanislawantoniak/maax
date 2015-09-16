@@ -499,7 +499,7 @@ define([
 				editor.close(doFocus);
 			}
 		}
-	}
+	};
 	
 	/**
 	 * @param {Evented} e
@@ -513,7 +513,7 @@ define([
 			oldValue = dataObject[field];
 	
 		
-		// Use only single row
+		// Use only single row (if checkbox: 'Apply to selection' is unchecked)
 		if(!e.useSelection){
 			// Start overlay loading hidden progress 
 			misc.startLoading(false);
@@ -521,6 +521,9 @@ define([
 			dataObject.attribute_mode[field] = e.mode;
 			dataObject[field] = value;
 			dataObject.changed = [field];
+            // Add info about 'Save as rule'
+            dataObject.save_as_rule = e.useSaveAsRule;
+
 			store.put(dataObject).then(function(){
 				e.deferred.resolve();
 			}, function(ex){
@@ -528,7 +531,7 @@ define([
 				e.deferred.reject();
 			}).always(function(){
 				misc.stopLoading();
-			})
+			});
 			return;
 		}
 		
@@ -540,7 +543,9 @@ define([
 		
 		req["attribute[" + field + "]"] = value;
 		req["attribute_mode[" + field + "]"] = e.mode;
-	
+        // Add info about 'Save as rule'
+		req["save_as_rule"] = e.useSaveAsRule;
+
 		massAttribute.setFocusedCell(e.cell);
 	
 		massAttribute.send(req).then(function(){
@@ -551,7 +556,7 @@ define([
 			misc.stopLoading();
 		});
 
-	}
+	};
 	
 	/**
 	 * @param {Object} e
@@ -673,13 +678,13 @@ define([
 	};
 	
 	var registerMassactions = function(grid){
-		massAttribute = (new status(grid, massUrl))
+		massAttribute = new status(grid, massUrl);
 		massAttribute.setMethod("attribute");
 		
 		var massConfirm = new status(grid, massUrl);
 		massConfirm.setMethod("confirm");
 		
-		var massDisable = new status(grid, massUrl)
+		var massDisable = new status(grid, massUrl);
 		massDisable.setMethod("disable");
 		
 		on(dom.byId("massConfirmProducts"), "click", function(e){
