@@ -40,7 +40,7 @@ class Zolago_Catalog_Vendor_ProductController
 			$global = true;
 			$ids = $collection->getAllIds();
 		}
-		
+
 		try{
 			array_walk($ids, function($value){
 				return (int)$value;
@@ -84,8 +84,16 @@ class Zolago_Catalog_Vendor_ProductController
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
 		}
-		
-		
+
+		Mage::dispatchEvent(
+			"change_product_attribute_after",
+			array(
+				'store_id' => $storeId,
+				"attribute_code" => key($request->getParam("attribute")),
+				"product_ids" => $ids
+			)
+		);
+
 		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
 		$this->_prepareRestResponse();
 	}

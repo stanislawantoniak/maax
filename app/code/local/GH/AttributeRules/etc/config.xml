@@ -37,6 +37,16 @@
                 </setup>
             </gh_attributerules_setup>
         </resources>
+        <events>
+            <change_product_attribute_after>
+                <observers>
+                    <gh_attributerules_save_rule>
+                        <class>GH_AttributeRules_Model_Observer</class>
+                        <method>saveProductAttributeRule</method>
+                    </gh_attributerules_save_rule>
+                </observers>
+            </change_product_attribute_after>
+        </events>
     </global>
     <frontend>
         <translate>
