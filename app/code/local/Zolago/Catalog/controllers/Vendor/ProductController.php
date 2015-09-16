@@ -27,7 +27,6 @@ class Zolago_Catalog_Vendor_ProductController
 		$attributeMode = $request->getParam("attribute_mode");
 		$storeId = $this->_getStoreId();
 		$global = false;
-		Mage::log($request->getParams(), null, "ZZZ.log");
 
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
@@ -96,8 +95,7 @@ class Zolago_Catalog_Vendor_ProductController
 
 		$attributeCode = key($request->getParam("attribute"));
 		$attributeValue = $request->getParam("attribute")[$attributeCode];
-		Mage::log($attributeMode, null, "555.log");
-		Mage::log($request->getParams(), null, "555.log");
+
 
 		Mage::dispatchEvent(
 			"change_product_attribute_after",
@@ -107,6 +105,7 @@ class Zolago_Catalog_Vendor_ProductController
 				"vendor_id" => $this->getVendorId(),
 				"attribute_mode" => $attributeMode[$attributeCode],
 				"attribute_value" => $attributeValue,
+				"rest_query" =>$this->_getRestQuery(),
 				"save_as_rule" => $saveAsRule
 			)
 		);

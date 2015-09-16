@@ -12,7 +12,7 @@ class GH_AttributeRules_Model_Observer
     {
         $saveAsRule = $observer->getSaveAsRule();
         $attributeMode = $observer->getAttributeMode();
-
+        $restQuery = $observer->getRestQuery();
         $attributeValue = $observer->getAttributeValue();
 
         if (!$saveAsRule || !in_array($attributeMode, array("set", ""))) {
@@ -25,10 +25,18 @@ class GH_AttributeRules_Model_Observer
         $attributeId = Mage::getResourceModel('eav/entity_attribute')
             ->getIdByCode('catalog_product', $attributeCode);
 
+        //Prepare filter to save
+        $filter = "";
+        if (!empty($restQuery)) {
+            foreach ($restQuery as $filterItem => $restQueryItem) {
+                $filter[$filterItem] = $restQueryItem["eq"];
+            }
+        }
+        //--Prepare filter to save
 
         $data = array(
             "vendor_id" => $vendorId,
-            //"filter" => '',
+            "filter" => !empty($filter) ? serialize($filter) : "",
             "column" => $attributeId,
             "value" => $attributeValue
         );
