@@ -155,7 +155,7 @@
 						<block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter" as="additional_filter" template="zolagocatalog/product/custom/filters/additionalcolumnfilter.phtml"/>
 						<block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter" as="static_filter" template="zolagocatalog/product/custom/filters/staticfilter.phtml"/>
 					</block>
-                    <block type="gh_attributerules/attribute" name="filters" template="zolagocatalog/product/custom/attributerules.phtml"/>
+                    <block type="gh_attributerules/attribute" name="attributerules" template="zolagocatalog/product/custom/attributerules.phtml"/>
 				</block>
 			</block>
 		</reference>
