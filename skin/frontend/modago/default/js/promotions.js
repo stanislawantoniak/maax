@@ -52,7 +52,19 @@ Mall.promotions.populatePromotionContent = function (couponId) {
 		    copy.hide();
 	    } else {
 		    copy.click(function() {
-			    Mall.promotions.copyTextToClipboard(code,copyError,copySuccess);
+			    var result = Mall.promotions.copyTextToClipboard(code);
+			    if(result) {
+				    var me = jQuery(this).find('a'),
+					    originalText = me.text(),
+					    copiedText = me.data('copied');
+
+				    me.text(copiedText);
+
+				    setTimeout(function() {
+					    me.text(originalText);
+				    },5000)
+			    }
+
 		    });
 	    }
 
@@ -88,10 +100,8 @@ Mall.promotions.openModal = function () {
     jQuery("#myPromotionsModal").modal();
 };
 
-Mall.promotions.copyTextToClipboard = function(text,error,success) {
+Mall.promotions.copyTextToClipboard = function(text) {
 	if(Mall.promotions.jsCopySupported) {
-		error = typeof error != 'undefined' && error.length ? error : false;
-		success = typeof success != 'undefined' && success.length ? success : false;
 
 		var textArea = document.createElement("textarea");
 
@@ -118,14 +128,8 @@ Mall.promotions.copyTextToClipboard = function(text,error,success) {
 			successful = false;
 		}
 
-		if(successful && success) {
-			error.hide();
-			success.show();
-		} else if(!successful && error) {
-			success.hide();
-			error.show();
-		}
-
 		document.body.removeChild(textArea);
+
+		return successful;
 	}
 };
