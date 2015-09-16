@@ -35,6 +35,8 @@ class GH_AttributeRules_Model_Observer
                 unset($id);
             }
         }
+        $staticFilters = Mage::app()->getRequest()->getParam("static", array());
+        $filter = array_merge($filter,$staticFilters);
         //--Prepare filter to save
 
         $data = array(
