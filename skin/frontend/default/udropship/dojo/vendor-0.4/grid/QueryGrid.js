@@ -58,7 +58,7 @@ define([
 					}
 				}
 				urlParams.push("global" + "=" + "1");
-			// Use selection and some recoreds checked
+			// Use selection and some records checked
 			}else{
 				urlParams.push("product_ids" + "=" + encodeURIComponent(this.getSelectedIds().join(",")));
 				for(k in this.baseQuery){
@@ -66,6 +66,12 @@ define([
 						urlParams.push(k + "=" + encodeURIComponent(this.baseQuery[k]));
 					}
 				}
+                query = this.get("query");
+                for(k in query){
+                    if(query.hasOwnProperty(k)){
+                        urlParams.push(k + "=" + encodeURIComponent(query[k]));
+                    }
+                }
 				urlParams.push("global" + "=" + "0");
 			}
 			return urlParams.join("&");
