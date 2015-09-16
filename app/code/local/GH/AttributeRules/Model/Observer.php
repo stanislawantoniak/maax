@@ -15,13 +15,23 @@ class GH_AttributeRules_Model_Observer
         $restQuery = $observer->getRestQuery();
         $attributeValue = $observer->getAttributeValue();
 
-        if (!$saveAsRule || !in_array($attributeMode, array("set", ""))) {
+        $attributeCode = $observer->getAttributeCode();
+
+        /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+        $attribute = $this->_getAttribute($attributeCode);
+        $frontendInput = $attribute->getFrontendInput();
+
+        if (!$saveAsRule ||
+            //IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode)
+            ($frontendInput == 'multiselect' && !in_array($attributeMode, array("add", "set")))
+        ) {
             return;
         }
 
         $storeId = $observer->getStoreId();
         $vendorId = $observer->getVendorId();
-        $attributeCode = $observer->getAttributeCode();
+
+
         $attributeId = Mage::getResourceModel('eav/entity_attribute')
             ->getIdByCode('catalog_product', $attributeCode);
 
@@ -31,17 +41,39 @@ class GH_AttributeRules_Model_Observer
             foreach ($restQuery as $filterItem => $restQueryItem) {
                 $id = Mage::getResourceModel('eav/entity_attribute')
                     ->getIdByCode('catalog_product', $filterItem);
-                $filter[$id] = $restQueryItem["eq"];
+                $filter["regular"][$id] = $restQueryItem["eq"];
                 unset($id);
             }
         }
         $staticFilters = Mage::app()->getRequest()->getParam("static", array());
-        $filter = array_merge($filter,$staticFilters);
+        if (!empty($staticFilters)) {
+            $filter["ext"] = $staticFilters;
+        }
         //--Prepare filter to save
 
+        $filterSerialized = !empty($filter) ? serialize($filter) : "";
+        if ($frontendInput == 'multiselect' && $attributeMode == "add") {
+            foreach (explode(",", $attributeValue) as $value) {
+                $this->saveRule($vendorId, $filterSerialized, $attributeId, $value);
+            }
+        } else {
+            $this->saveRule($vendorId, $filterSerialized, $attributeId, $attributeValue);
+        }
+
+    }
+
+
+    /**
+     * @param $vendorId
+     * @param $filterSerialized
+     * @param $attributeId
+     * @param $attributeValue
+     */
+    public function saveRule($vendorId, $filterSerialized, $attributeId, $attributeValue)
+    {
         $data = array(
             "vendor_id" => $vendorId,
-            "filter" => !empty($filter) ? serialize($filter) : "",
+            "filter" => $filterSerialized,
             "column" => $attributeId,
             "value" => $attributeValue
         );
@@ -54,5 +86,17 @@ class GH_AttributeRules_Model_Observer
         } catch (Exception $e) {
 
         }
+    }
+
+
+    /**
+     * @param Mage_Catalog_Model_Resource_Eav_Attribute | string $attribute
+     * @return Mage_Catalog_Model_Resource_Eav_Attribute
+     */
+    protected function _getAttribute($attribute)
+    {
+        /* @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
+        $gridModel = Mage::getModel("zolagocatalog/vendor_product_grid");
+        return $gridModel->getAttribute($attribute);
     }
 }

@@ -4,6 +4,7 @@
         <GH_AttributeRules>
             <active>true</active>
             <codePool>local</codePool>
+            <depends><Zolago_Catalog /></depends>
         </GH_AttributeRules>
     </modules>
 </config>
