@@ -409,15 +409,6 @@
     </frontend>
 	<crontab>
         <jobs>
-            <zolagosolrsearch_process_queue>
-                <schedule>
-                    <!-- Run every 2-3 min-->
-                    <cron_expr>1,3,5,9,11,14,16,18,20,23,26,28,31,33,36,38,41,43,46,48,51,53,56,58 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagosolrsearch/observer::cronProcessQueue</model>
-                </run>
-            </zolagosolrsearch_process_queue>
             <zolagosolrsearch_cleanup_queue>
                 <schedule>
                     <!-- Run 0:00 everyday  -->
