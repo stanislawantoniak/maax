@@ -39,7 +39,7 @@ class GH_AttributeRules_Model_Observer
         try {
             $attributeRule->save();
         } catch (Exception $e) {
-            Mage::log($e->getMessage(), null, "save.log");
+
         }
     }
 }
