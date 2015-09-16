@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_AttributeRules>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </GH_AttributeRules>
     </modules>
     <global>
@@ -14,9 +14,9 @@
             <gh_attributerules_resource>
                 <class>GH_AttributeRules_Model_Resource</class>
                 <entities>
-                    <attribute_rules>
+                    <gh_attribute_rules>
                         <table>gh_attribute_rules</table>
-                    </attribute_rules>
+                    </gh_attribute_rules>
                 </entities>
             </gh_attributerules_resource>
         </models>
@@ -37,6 +37,16 @@
                 </setup>
             </gh_attributerules_setup>
         </resources>
+        <events>
+            <change_product_attribute_after>
+                <observers>
+                    <gh_attributerules_save_rule>
+                        <class>GH_AttributeRules_Model_Observer</class>
+                        <method>saveProductAttributeRule</method>
+                    </gh_attributerules_save_rule>
+                </observers>
+            </change_product_attribute_after>
+        </events>
     </global>
     <frontend>
         <translate>

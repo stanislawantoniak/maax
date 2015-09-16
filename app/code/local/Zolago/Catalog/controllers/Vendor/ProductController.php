@@ -24,13 +24,15 @@ class Zolago_Catalog_Vendor_ProductController
 		$productIds = $request->getParam("product_ids");
 		$attributeSetId = $request->getParam("attribute_set_id");
         $saveAsRule = $request->getParam("save_as_rule");
+		$attributeMode = $request->getParam("attribute_mode");
 		$storeId = $this->_getStoreId();
 		$global = false;
-		
+		Mage::log($request->getParams(), null, "ZZZ.log");
+
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
 		}
-		
+
 		if(is_array($productIds) && count($productIds)){
 			$ids = array_unique($productIds);
 		}else{
@@ -41,7 +43,7 @@ class Zolago_Catalog_Vendor_ProductController
 			$global = true;
 			$ids = $collection->getAllIds();
 		}
-		
+
 		try{
 			array_walk($ids, function($value){
 				return (int)$value;
@@ -85,10 +87,29 @@ class Zolago_Catalog_Vendor_ProductController
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
 		}
-		
-		
+
+
+
 		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
 		$this->_prepareRestResponse();
+
+
+		$attributeCode = key($request->getParam("attribute"));
+		$attributeValue = $request->getParam("attribute")[$attributeCode];
+		Mage::log($attributeMode, null, "555.log");
+		Mage::log($request->getParams(), null, "555.log");
+
+		Mage::dispatchEvent(
+			"change_product_attribute_after",
+			array(
+				'store_id' => $storeId,
+				"attribute_code" => $attributeCode,
+				"vendor_id" => $this->getVendorId(),
+				"attribute_mode" => $attributeMode[$attributeCode],
+				"attribute_value" => $attributeValue,
+				"save_as_rule" => $saveAsRule
+			)
+		);
 	}
 	
 	
