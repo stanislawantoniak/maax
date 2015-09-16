@@ -447,6 +447,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $aM = Mage::getSingleton('catalog/product_action');
         $priceTypes = $this->getOptionsData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
 
+
         //Ping converter to get special price
         try {
             /* @var $converter Zolago_Converter_Model_Client */
@@ -467,8 +468,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $collectionS
             ->addFieldToFilter('entity_id', array('in' => $ids));
 
+
         foreach ($collectionS as $_productS) {
             $productSId = $_productS->getId();
+
             $dataSimpleProduct = isset($salesPromoProductsData[$productSId]) ? $salesPromoProductsData[$productSId] : false;
 
             if (!$dataSimpleProduct) {
@@ -541,7 +544,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
 
-
         $productsData = array(); //configurable options data
         $skuSizeRelation = array();
 
@@ -602,6 +604,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $percent = $salesPromoProductsData[$parentProductId]['price_percent'];
 
             foreach ($simpleProductsData as $childProductId => $childData) {
+
                 $newPrice = $converter->getPrice($childData['udropship_vendor'], $childData['skuv'], $priceType);
 
                 //if no price in converter do nothing
@@ -609,6 +612,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $newPriceWithPercent = $newPrice - $newPrice * ((int)$percent / 100);
                     $actualSpecialPricesForChildren[$parentProductId][$childProductId] = $newPriceWithPercent;
                 }
+
             }
 
             unset($childProductId);
@@ -875,6 +879,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     public function unsetInfoCampaignsToProduct($dataToUpdate, $stores)
     {
+
         $productIdsUpdated = array();
         if (empty($dataToUpdate)) {
             return $productIdsUpdated;
@@ -889,15 +894,24 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 //                    "value" => array("product_id1","product_id2","product_id3")
 //                )
 //            );
+        $productsAssignedToCampaign = array();
         foreach ($dataToUpdate as $productId => $campaignIds) {
             sort($campaignIds);
             foreach ($stores as $store) {
+
                 $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store);
                 $campaignIdsAlready = explode(",", $val);
+
                 sort($campaignIdsAlready);
                 $campaignIdsAlready = array_diff($campaignIdsAlready, $campaignIds);
 
+
+
                 $toUpdate[$store][implode(',',$campaignIdsAlready)][] = $productId;
+
+
+                $productsAssignedToCampaign[implode(",",$campaignIds)][$productId] = $productId;
+
             }
             unset($campaignIdsAlready);
         }
@@ -907,13 +921,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
         unset($store);
         unset($productIds);
-        $productsAssignedToCampaign = array();
+
 
         foreach ($toUpdate as $store => $data) {
 
             foreach ($data as $value => $productIds) {
                 $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => (string)$value), $store);
-                $productsAssignedToCampaign[$value][] = $productIds;
             }
 
             //set null to attribute for default store id (required for good quote calculation)
@@ -924,6 +937,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
         unset($productIds);
         //setProductsAsProcessedByCampaign
+
         if(!empty($productsAssignedToCampaign)){
             foreach($productsAssignedToCampaign as $campaignIdsString => $productIds){
                 foreach(explode(",", $campaignIdsString) as $campaignId){
