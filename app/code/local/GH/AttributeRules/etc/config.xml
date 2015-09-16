@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_AttributeRules>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </GH_AttributeRules>
     </modules>
     <global>
@@ -14,9 +14,9 @@
             <gh_attributerules_resource>
                 <class>GH_AttributeRules_Model_Resource</class>
                 <entities>
-                    <attribute_rules>
+                    <gh_attribute_rules>
                         <table>gh_attribute_rules</table>
-                    </attribute_rules>
+                    </gh_attribute_rules>
                 </entities>
             </gh_attributerules_resource>
         </models>

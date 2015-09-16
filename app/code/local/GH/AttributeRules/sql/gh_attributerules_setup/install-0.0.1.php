@@ -5,7 +5,7 @@ $installer = $this;
 
 $installer->startSetup();
 $table = $installer->getConnection()
-    ->newTable($installer->getTable('gh_attributerules/attribute_rules'))
+    ->newTable($installer->getTable('gh_attributerules/gh_attribute_rules'))
     ->addColumn(
         'attribute_rule_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
         array(
