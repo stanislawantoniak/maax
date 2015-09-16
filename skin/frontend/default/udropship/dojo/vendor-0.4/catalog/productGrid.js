@@ -789,6 +789,20 @@ define([
 					this.getColumns(),  
 					container
 			);
+
+            // For mapping attribute process, checkbox 'save as rule' need to be disabled when
+            // for multi select option delete is checked
+            jQuery(document).delegate('input[type=radio][name=mode]','change', function() {
+                var checkbox = jQuery('#clothes_material-sub').closest('form').find('.checkbox.save-as-rule');
+                if (this.value == 'sub') {
+                    checkbox.find('input').attr("disabled", true).prop('checked', false);
+                }
+                else {
+                    checkbox.find('input').attr("disabled", false);
+                }
+            });
+
+            // Adding tooltip's to grid column header
             jQuery('.dgrid-cell.header[role="columnheader"]').each(function(idx, elem){
                 jQuery(elem).attr('title', jQuery(elem).html());
 
