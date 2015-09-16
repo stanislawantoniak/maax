@@ -29,9 +29,14 @@ class GH_AttributeRules_Model_Observer
         $filter = "";
         if (!empty($restQuery)) {
             foreach ($restQuery as $filterItem => $restQueryItem) {
-                $filter[$filterItem] = $restQueryItem["eq"];
+                $id = Mage::getResourceModel('eav/entity_attribute')
+                    ->getIdByCode('catalog_product', $filterItem);
+                $filter[$id] = $restQueryItem["eq"];
+                unset($id);
             }
         }
+        $staticFilters = Mage::app()->getRequest()->getParam("static", array());
+        $filter = array_merge($filter,$staticFilters);
         //--Prepare filter to save
 
         $data = array(
