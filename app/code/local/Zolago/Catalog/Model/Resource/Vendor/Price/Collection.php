@@ -62,11 +62,13 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		// Join stock item from stocak index
+		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId(); 
 		$this->joinTable(
 				$stockStatusTable, 
 				'product_id=entity_id',
 				array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)')), 
-				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
+				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).
+				    ' AND '.$adapter->quoteInto("{{table}}.website_id=?",$websiteId),
 				'left'
 		);
 		$select->join(
