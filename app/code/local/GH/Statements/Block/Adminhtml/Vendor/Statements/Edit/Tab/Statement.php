@@ -10,6 +10,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Statement
         $this->setId('statement_refund');
         $this->setDefaultSort('id');
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
     }
 
     protected function getStatementId()

@@ -6,9 +6,10 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
     public function __construct()
     {
         parent::__construct();
-        $this->setId('ghstatements_calendar_grid');
-        $this->setDefaultSort('calendar_id');
+        $this->setId('ghstatements_statements_grid');
+        $this->setDefaultSort('event_date');
         $this->setDefaultDir('desc');
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection()
@@ -48,7 +49,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         $this->addColumn("event_date", array(
             "index" => "event_date",
             "header" => Mage::helper("ghstatements")->__("Event date"),
-            "type" => "date"
+            "type" => "date",
         ));
 
         /*Values*/
@@ -107,9 +108,9 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         ));
         /*Totals*/
 
-        $this->addColumn('action',
+        $this->addColumn('edit',
             array(
-                'header' => Mage::helper('ghstatements')->__('Action'),
+                'header' => Mage::helper('ghstatements')->__('Edit'),
                 'width' => '50px',
                 'type' => 'action',
                 'getter' => 'getId',
@@ -118,7 +119,26 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
                         'caption' => Mage::helper('ghstatements')->__('Edit'),
                         'url' => array('base' => '*/vendor_statements/edit'),
                         'field' => 'id'
-                    )
+                    ),
+                ),
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'stores',
+                'is_system' => true,
+            ));
+        $this->addColumn('delete',
+            array(
+                'header' => Mage::helper('ghstatements')->__('Delete'),
+                'width' => '50px',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
+                    array(
+                        'caption' => Mage::helper('ghstatements')->__('Delete'),
+                        'url' => array('base' => '*/vendor_statements/delete'),
+                        'field' => 'id',
+                        'confirm'  => Mage::helper('catalog')->__('Are you sure?')
+                    ),
                 ),
                 'filter' => false,
                 'sortable' => false,

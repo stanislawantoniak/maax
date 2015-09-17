@@ -107,11 +107,8 @@ class Zolago_Campaign_Model_Observer
         //sales/promo campaign
         $campaignSalesPromo = array();
 
-        $vendors = $model->getUpDateCampaignsVendors();
-        foreach($vendors as $vendor){
-            $campaignSalesPromoV = $model->getUpDateCampaignsSalePromotion($vendor);
-            $campaignSalesPromo = array_merge($campaignSalesPromo,$campaignSalesPromoV);
-        }
+
+        $campaignSalesPromo = $model->getUpDateCampaignsSalePromotion();
 
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {

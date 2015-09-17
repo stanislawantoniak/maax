@@ -799,6 +799,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * //TODO remove function
      * @param $vendor
      * @return array
      */
@@ -859,14 +860,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
-     * @param $vendor
      * @return array
      */
-    public function getUpDateCampaignsSalePromotion($vendor)
+    public function getUpDateCampaignsSalePromotion()
     {
-        if(empty($vendor)){
-            return;
-        }
         $ids = $this->_getCampaignsAttributesId();
         $codeToId = array();
         foreach ($ids as $id) {
@@ -931,7 +928,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         ));
 
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        $select->where("vendor_id=?", $vendor);
+
         $select->where("campaign_product.assigned_to_campaign=?", 0);
         $select->where("products_visibility.attribute_id=?", $codeToId['visibility']);
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
