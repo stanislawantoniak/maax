@@ -495,22 +495,6 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		
 		/** Get current data **/
 		$this->_handleRestGet($productId);
-
-
-		foreach ($attributeChanged as $attribute) {
-			Mage::dispatchEvent(
-				"change_product_attribute_after",
-				array(
-					'store_id' => $storeId,
-					"attribute_code" => $attribute,
-					"vendor_id" => $this->getVendorId(),
-					"attribute_mode" => $attributeMode[$attribute],
-					"attribute_value" => $data[$attribute],
-					//"rest_query" => $this->_getRestQuery(),
-					"save_as_rule" => $saveAsRule
-				)
-			);
-		}
 	}
 }
 
