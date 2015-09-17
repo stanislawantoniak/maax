@@ -8,7 +8,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
     const CAMPAIGN_PRODUCTS_UNPROCESSED = 0;
     const CAMPAIGN_PRODUCTS_PROCESSED = 1;
-    const CAMPAIGN_PRODUCTS_TO_DELETE = 2;
+    const CAMPAIGN_PRODUCTS_TO_DELETE = 2; //STATUS to recalculate attributes then delete from campaign
 
     protected function _construct()
     {
