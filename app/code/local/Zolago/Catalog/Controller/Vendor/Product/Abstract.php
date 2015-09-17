@@ -459,12 +459,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		$reposnse = $this->getResponse();
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
 		$storeId = 0;
-			
+
 		try{
 			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
 			$storeId = $data['store_id'];
+			$attributeMode = $data["attribute_mode"];
             $saveAsRule = $data['save_as_rule'];
 
 			foreach($attributeChanged as $attribute){
@@ -483,11 +484,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		} catch (Exception $ex) {
 			Mage::logException($ex);
 			$reposnse->setHttpResponseCode(500);
-			$reposnse->setBody("Some error occured");
+			$reposnse->setBody("Some error occurred");
 			return;
 		}
 
-		/** Inclue attribute set **/
+		/** Include attribute set **/
 		if(!$this->getRequest()->getParam("attribute_set_id")){
 			$this->getRequest()->setParam("attribute_set_id", $data['attribute_set_id']);
 		}
