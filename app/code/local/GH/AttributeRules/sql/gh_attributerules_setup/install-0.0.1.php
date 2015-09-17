@@ -38,16 +38,16 @@ $table = $installer->getConnection()
             'nullable' => true,
         )
     )
-    ->addIndex($installer->getIdxName('gh_attributerules/attribute_rules', array('vendor_id')), array('vendor_id'))
-    ->addIndex($installer->getIdxName('gh_attributerules/attribute_rules', array('column')), array('column'))
+    ->addIndex($installer->getIdxName('gh_attributerules/gh_attribute_rules', array('vendor_id')), array('vendor_id'))
+    ->addIndex($installer->getIdxName('gh_attributerules/gh_attribute_rules', array('column')), array('column'))
 
     ->addForeignKey(
-        $installer->getFkName('gh_attributerules/attribute_rules', 'vendor_id', 'udropship/vendor', 'vendor_id'),
+        $installer->getFkName('gh_attributerules/gh_attribute_rules', 'vendor_id', 'udropship/vendor', 'vendor_id'),
         'vendor_id', $installer->getTable('udropship/vendor'), 'vendor_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
     )
     ->addForeignKey(
-        $installer->getFkName('gh_attributerules/attribute_rules', 'column', 'eav/attribute', 'attribute_id'),
+        $installer->getFkName('gh_attributerules/gh_attribute_rules', 'column', 'eav/attribute', 'attribute_id'),
         'column', $installer->getTable('eav/attribute'), 'attribute_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
     )
