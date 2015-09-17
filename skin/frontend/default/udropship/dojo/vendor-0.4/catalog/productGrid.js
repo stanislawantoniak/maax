@@ -793,11 +793,20 @@ define([
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked
             jQuery(document).delegate('input[type=radio][name=mode]','change', function() {
-                var checkbox = jQuery('#clothes_material-sub').closest('form').find('.checkbox.save-as-rule');
+                var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
                 if (this.value == 'sub') {
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
+                } else {
+                    checkbox.find('input').attr("disabled", false);
                 }
-                else {
+            });
+            // For mapping attributes process, checkbox 'save as rule' need to be disabled when
+            // checkbox 'Apply to selection' is unchecked
+            jQuery(document).delegate('input[type=checkbox][name=selection]','change', function() {
+                var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
+                if (!jQuery(this).prop("checked")) {
+                    checkbox.find('input').attr("disabled", true).prop('checked', false);
+                } else {
                     checkbox.find('input').attr("disabled", false);
                 }
             });
