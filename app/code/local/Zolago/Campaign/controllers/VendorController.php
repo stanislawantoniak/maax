@@ -259,8 +259,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $bannerId = $this->getRequest()->getParam("id");
 
         if (!empty($campaignId) && !empty($bannerId)) {
-            $model = Mage::getResourceModel("zolagocampaign/campaign");
-            $model->removeBanner($campaignId, $bannerId);
+
+            /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
+            $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
+            $modelPlacement->removeBanner($campaignId, $bannerId);
         }
         return $this->_redirectReferer();
     }
@@ -410,8 +412,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $previewImage = $bannersConfiguration->no_image;
         $previewImageHtml = $bannersConfiguration->image_html;
 
-        $bannerShow = Mage::getResourceModel('zolagocampaign/campaign')
-            ->getBannerImageData($id);
+
+        /* @var $campaignPlacementModel Zolago_Campaign_Model_Resource_Placement */
+        $campaignPlacementModel = Mage::getResourceModel("zolagocampaign/placement");
+
+        $bannerShow = $campaignPlacementModel->getBannerImageData($id);
 
         if (!empty($bannerShow)) {
             if ($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
