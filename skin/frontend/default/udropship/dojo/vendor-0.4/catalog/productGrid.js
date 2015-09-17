@@ -797,17 +797,23 @@ define([
                 if (this.value == 'sub') {
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
                 } else {
-                    checkbox.find('input').attr("disabled", false);
+					var checked = jQuery(this).closest('form').find('.checkbox.selection').find('input');
+					if (checked.prop('checked')) {
+	                    checkbox.find('input').attr("disabled", false);
+					}
                 }
             });
             // For mapping attributes process, checkbox 'save as rule' need to be disabled when
             // checkbox 'Apply to selection' is unchecked
             jQuery(document).delegate('input[type=checkbox][name=selection]','change', function() {
                 var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
-                if (!jQuery(this).prop("checked")) {
+                if (!jQuery(this).prop("checked")) {					
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
                 } else {
-                    checkbox.find('input').attr("disabled", false);
+					var radio = jQuery(this).closest('form').find('input[type=radio][name=mode]:checked');
+					if (radio.val() != 'sub') {
+	                    checkbox.find('input').attr("disabled", false);
+					}
                 }
             });
 

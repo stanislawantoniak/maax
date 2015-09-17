@@ -92,7 +92,12 @@ define([
 			}
 
             // Show/hide checkbox 'Save as rule'
-            if(this.canShowSaveAsRule() && this.grid.isSelected(cellObj.row)){
+            if(this.canShowSaveAsRule() 
+				&& this.grid.isSelected(cellObj.row)
+				&& (this.parentColumn.type=="multiselect" 
+					|| this.parentColumn.type=="options")
+				
+			){
                 domClass.add(this.content, "use-save-as-rule");
             }else{
                 domClass.remove(this.content, "use-save-as-rule");
