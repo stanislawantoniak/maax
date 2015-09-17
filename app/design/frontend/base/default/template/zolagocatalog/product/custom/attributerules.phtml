@@ -7,6 +7,16 @@ $storeId = $this->getVendor()->getLabelStore();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 ?>
+
+<style>
+    #showAttributeRules .hiddenRow.in {
+        display: table-cell !important
+    }
+    #showAttributeRules table.table {
+        margin-bottom: 0 !important;
+    }
+</style>
+
 <div class="modal fade bs-example-modal-sm" id="showAttributeRules" role="dialog">
     <form method="post" action="<?php echo $this->getActionUrl();?>">
         <div class="modal-dialog modal-sm" style="width: 80%;">
@@ -25,23 +35,22 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             class="table table-bordered table-checkable table-highlight-head table-no-inner-border table-hover">
                             <thead>
                             <tr>
-                                <th class="checkbox-column"></th>
-                                <th class="" style="width: 43px;"></th>
+                                <th class="checkbox-column" style="width: 3%;"></th>
+                                <th class="align-center" style="width: 8%;"><?php echo $helper->__("Show more"); ?></th>
                                 <th><?php echo $helper->__("Attribute"); ?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                            foreach ($this->getRulesData() as $key => $row) { ?>
+                            foreach ($this->getRulesData() as $key => $row): ?>
                             <tr class="">
                                 <td class="checkbox-column">
-                                    <div class="checker"><span class=""><input type="checkbox" class="uniform"></span>
-                                    </div>
+                                    <div class="checker"><span class=""><input type="checkbox" class="uniform"></span></div>
                                 </td>
-                                <td class="">
-                                    <span class="btn btn-xs accordion-toggle" data-toggle="collapse" data-target="#rule-<?php echo $key; ?>"><i class="icon-plus"></i></span>
+                                <td class="show-more-collumn align-center accordion-toggle" data-toggle="collapse" data-target="#row-<?php echo $key; ?>" style="cursor: pointer;">
+                                    <span class="btn btn-xs"><i class="icon-plus"></i></span>
                                 </td>
-                                <td class="attribute-column">
+                                <td class="attribute-column accordion-toggle" data-toggle="collapse" data-target="#row-<?php echo $key; ?>" style="cursor: pointer;">
                                     <?php
                                     /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
                                     $attr = $row['attribute'];
@@ -50,24 +59,42 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="hiddenRow" style="padding: 0;">
-                                    <div id="rule-<?php echo $key; ?>" class="body-lvl-1 accordian-body collapse">
-                                        <?php
-                                        /** @var GH_AttributeRules_Model_AttributeRule $rule */
-                                        foreach ($row['rule'] as $rule) { ?>
-                                            <div>
-                                                <?php echo $attr->getSource()->getOptionText($rule->getValue()); ?>
-                                            </div>
-                                        <?php
-                                        }
-                                        ?>
+
+                                <td colspan="3" style="padding: 0;" id="row-<?php echo $key; ?>" class="body-lvl-1 accordian-body collapse hiddenRow">
+                                    <div>
+                                        <table class="table table-bordered table-checkable table-no-inner-border table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="lvl-1-thead-prefix" style="width: 11%;"></th>
+                                                <th class="checkbox-column" style="width: 3%;"></th>
+                                                <th class="" style="width: 8%;"><?php echo $helper->__("Show more"); ?></th>
+                                                <th><?php echo $helper->__("Value"); ?></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php
+                                            /** @var GH_AttributeRules_Model_AttributeRule $rule */
+                                            foreach ($row['rule'] as $rule): ?>
+                                                <tr>
+                                                    <td><!-- prefix --></td>
+                                                    <td class="checkbox-column">
+                                                        <div class="checker"><span class=""><input type="checkbox" class="uniform"></span></div>
+                                                    </td>
+                                                    <td class="show-more-collumn align-center accordion-toggle" data-toggle="collapse" data-target="#rule-<?php echo $rule->getId(); ?>" style="cursor: pointer;">
+                                                        <span class="btn btn-xs"><i class="icon-plus"></i></span>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $attr->getSource()->getOptionText($rule->getValue()); ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </td>
                             </tr>
 
-                            <?php
-                            }
-                            ?>
+                            <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
