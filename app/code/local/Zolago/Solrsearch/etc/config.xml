@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <config>
+    <default>
+        <solrbridge>
+            <settings>
+                <logs_length_hours>48</logs_length_hours>
+            </settings>
+        </solrbridge>
+    </default>
     <modules>
         <Zolago_Solrsearch>
             <version>0.0.9</version>
@@ -42,7 +49,7 @@
 					<data>Zolago_Solrsearch_Model_Data</data>
 					<indexer>Zolago_Solrsearch_Model_Indexer</indexer>
 					<solr>Zolago_Solrsearch_Model_Solr</solr>
-					<ultility>Zolago_Solrsearch_Model_Ultility</ultility>
+					<ultility>Zolago_Solrsearch_Model_Ultility</ultility>					
 				</rewrite>
 			</solrsearch>
         </models>
@@ -60,6 +67,7 @@
 					<faces>Zolago_Solrsearch_Block_Faces</faces>
 					<faces_price>Zolago_Solrsearch_Block_Faces_Price</faces_price>
 					<faces_range>Zolago_Solrsearch_Block_Faces_Range</faces_range>
+					<adminhtml_logs>Zolago_Solrsearch_Block_Adminhtml_Logs</adminhtml_logs>
 				</rewrite>
 			</solrsearch>
         </blocks>
