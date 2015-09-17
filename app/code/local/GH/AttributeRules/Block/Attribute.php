@@ -7,7 +7,7 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
     /**
      * @return GH_AttributeRules_Model_Resource_AttributeRule_Collection
      */
-    public function getRules()
+    public function getRulesData()
     {
         /** @var GH_AttributeRules_Model_Resource_AttributeRule_Collection $collection */
         $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
@@ -21,7 +21,15 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
             $rule->setData("attribute", $gridModel->getAttribute($rule->getColumn()));
         }
 
-        return $collection;
+        $data = array();
+
+        foreach ($collection as $rule) {
+            $col = $rule->getColumn();
+            $data[$col]['attribute'] = $rule->getData("attribute");
+            $data[$col]['rule'][] = $rule;
+        }
+
+        return $data;
     }
 
     /**

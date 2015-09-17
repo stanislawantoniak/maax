@@ -20,49 +20,51 @@ $_modagoHlp = Mage::helper("zolagocommon");
                         <strong><?php echo $helper->__("Information");?>:</strong>
                         <?php echo $helper->__("Some text here");?>
                     </p>
-
-                    <?php
-                    /** @var GH_AttributeRules_Model_AttributeRule $rule */
-                    foreach ($this->getRules() as $rule) {
-//                        $data = $rule->getData();
-//                        var_dump($data);
-//                        var_dump(unserialize($data['filter']));
-//                        echo ' </br>';
-                    }
-                    ?>
-
                     <div class="widget-content">
                         <table
-                            class="table table-striped table-bordered table-checkable table-highlight-head table-no-inner-border table-hover">
+                            class="table table-bordered table-checkable table-highlight-head table-no-inner-border table-hover">
                             <thead>
                             <tr>
                                 <th class="checkbox-column"></th>
+                                <th class="" style="width: 43px;"></th>
                                 <th><?php echo $helper->__("Attribute"); ?></th>
-                                <th class="align-center"><?php echo $helper->__("Value"); ?></th>
-                                <th class="align-center"><?php echo $helper->__("Filters"); ?></th>
-                                <th class="align-center"><?php echo $helper->__("Delete"); ?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                            /** @var GH_AttributeRules_Model_AttributeRule $rule */
-                            foreach ($this->getRules() as $rule) { ?>
+                            foreach ($this->getRulesData() as $key => $row) { ?>
                             <tr class="">
                                 <td class="checkbox-column">
                                     <div class="checker"><span class=""><input type="checkbox" class="uniform"></span>
                                     </div>
                                 </td>
+                                <td class="">
+                                    <span class="btn btn-xs accordion-toggle" data-toggle="collapse" data-target="#rule-<?php echo $key; ?>"><i class="icon-plus"></i></span>
+                                </td>
                                 <td class="attribute-column">
-                                    <?php echo $rule->getAttribute()->getName(); ?>
+                                    <?php
+                                    /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
+                                    $attr = $row['attribute'];
+                                    echo $attr->getName();
+                                    ?>
                                 </td>
-                                <td class="value-column">
-                                    value
-                                </td>
-                                <td class="filter-column">
-                                    value
-                                </td>
-                                <td class="align-center delete-column"><span class="label label-warning">X</span></td>
                             </tr>
+                            <tr>
+                                <td colspan="3" class="hiddenRow" style="padding: 0;">
+                                    <div id="rule-<?php echo $key; ?>" class="body-lvl-1 accordian-body collapse">
+                                        <?php
+                                        /** @var GH_AttributeRules_Model_AttributeRule $rule */
+                                        foreach ($row['rule'] as $rule) { ?>
+                                            <div>
+                                                <?php var_dump($rule->getId()); ?>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </td>
+                            </tr>
+
                             <?php
                             }
                             ?>
@@ -80,3 +82,19 @@ $_modagoHlp = Mage::helper("zolagocommon");
         </div>
     </form>
 </div>
+
+<script>
+    var attributeRules = {
+        init: function() {
+
+        },
+
+        getModal: function() {
+            return jQuery('#showAttributeRules');
+        }
+    };
+
+    jQuery(document).ready(function() {
+        attributeRules.init();
+    });
+</script>
