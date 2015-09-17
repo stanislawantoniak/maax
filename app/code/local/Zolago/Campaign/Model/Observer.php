@@ -68,6 +68,7 @@ class Zolago_Campaign_Model_Observer
         //info campaign
         $campaignInfoData = $model->getUpDateCampaignsInfo(); //Products need to be updated
 
+
         //Reformat by product_id
         $productIdsToUpdate = array();
         foreach($campaignInfoData as $campaignInfoData){
@@ -84,7 +85,7 @@ class Zolago_Campaign_Model_Observer
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
         }
-        //var_dump($reformattedData);
+        //Zend_Debug::dump($reformattedData);
 
         //set attributes
         if (!empty($reformattedData)) {
@@ -105,9 +106,6 @@ class Zolago_Campaign_Model_Observer
         }
 
         //sales/promo campaign
-        $campaignSalesPromo = array();
-
-
         $campaignSalesPromo = $model->getUpDateCampaignsSalePromotion();
 
         $dataToUpdate = array();
