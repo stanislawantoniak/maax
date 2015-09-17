@@ -20,7 +20,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	 * @var array
 	 */
 	protected $_configurableChildIdsFlat;
-	
+    
 	/**
 	 * @var Mage_Catalog_Model_Resource_Product_Attribute_Collection
 	 */
@@ -408,7 +408,6 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		$documents = "{";
 		
 		//Mage::log("Collection " . count($collecitonIds));
-		
 		foreach($collecitonIds as $id){
 			/* @var $item Varien_Object */
 			
@@ -446,5 +445,18 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		list($usec, $sec) = explode(" ",microtime()); 
 		return ((float)$usec + (float)$sec); 
     } 
+    
+    /**
+     * cleanup log table
+     */
+     public function cleanupLogTable() {
+         $len = Mage::helper('solrsearch')->getSetting('logs_length_hours');
+         if ($len) {
+             $date = date('Y-m-d H:i:s',Mage::getModel('core/date')->timestamp(time()) - $len*3600);
+             $connection = $this->getWriteConnection();
+             $condition = array($connection->quoteInto('update_at < ?',$date));
+             $connection->delete($this->getLogTable(),$condition);
+         }
+     }
 
 }

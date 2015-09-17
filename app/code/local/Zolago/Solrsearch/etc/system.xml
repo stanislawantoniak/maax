@@ -35,5 +35,20 @@
 				</vendor>
             </groups>
 		</udropship>
+		<solrbridge>
+		    <groups>
+		        <settings>
+		            <fields>
+		                <logs_length_hours translate="label comment" module="solrsearch">
+		                    <label>Log table length in hours</label>
+		                    <comment>How long database store logs</comment>
+		                    <frontend_type>text</frontend_type>
+		                    <sort_order>49</sort_order>
+		                    <show_in_default>1</show_in_default>
+		                </logs_length_hours>
+		            </fields>
+		        </settings>
+		    </groups>
+		</solrbridge>
     </sections>
 </config>
