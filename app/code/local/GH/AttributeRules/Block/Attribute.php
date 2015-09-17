@@ -25,8 +25,9 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
 
         foreach ($collection as $rule) {
             $col = $rule->getColumn();
+            $value = $rule->getValue();
             $data[$col]['attribute'] = $rule->getData("attribute");
-            $data[$col]['rule'][] = $rule;
+            $data[$col]['value'][$value][] = $rule;
         }
 
         return $data;
@@ -48,4 +49,43 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
         return Mage::getModel("udropship/session")->getVendor();
     }
 
+    /**
+     * @param GH_AttributeRules_Model_AttributeRule $rule
+     * @return string
+     * @throws Mage_Core_Exception
+     */
+    public function getFilterAsText($rule) {
+        $filter = unserialize($rule->getFilter());
+
+        /** @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
+        $gridModel = Mage::getModel("zolagocatalog/vendor_product_grid");
+
+        /** @var GH_AttributeRules_Helper_Data $helper */
+        $helper = Mage::helper("gh_attributerules");
+
+        $store = $this->getLabelStore();
+        $str = '';
+        foreach ($filter as $typeKey => $item) {
+            foreach ($item as $key => $value) {
+                /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
+                $attr = $gridModel->getAttribute($key);
+                $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
+                if ($typeKey == 'regular') {
+                    $str .= $attr->getSource()->getOptionText($value);
+                } else {
+                    $str .= $value;
+                }
+                $str .= $helper->__(" and ");
+            }
+        }
+
+        return substr($str, 0, -strlen($helper->__(" and ")));
+    }
+
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getLabelStore() {
+        return $this->getVendor()->getLabelStore();
+    }
 }
