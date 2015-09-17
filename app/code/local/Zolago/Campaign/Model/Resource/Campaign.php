@@ -6,8 +6,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
     const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 2000;
 
-    const CAMPAIGN_PRODUCTS_PROCESSED = 1;
     const CAMPAIGN_PRODUCTS_UNPROCESSED = 0;
+    const CAMPAIGN_PRODUCTS_PROCESSED = 1;
+    const CAMPAIGN_PRODUCTS_TO_DELETE = 2;
 
     protected function _construct()
     {
