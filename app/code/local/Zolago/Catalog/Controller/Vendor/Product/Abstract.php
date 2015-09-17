@@ -353,10 +353,10 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				throw new Mage_Core_Exception($helper->__("You are trying to edit not your product"));
 			}
 		}
-		
 		// Collect validation data
 		$notAllowed = array();
 		$missings = array();
+		$childProds = array();
 		foreach($attributesData as $attributeCode=>$value){		    
 			$attribute = $this->getGridModel()->getAttribute($attributeCode);
 			$attributesObjects[$attributeCode] = $attribute;
@@ -377,6 +377,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			        }
 			    }			    
 			}
+			if ($attributeCode == 'description_status') {
+			    // add child 
+			    $list = Mage::getResourceModel('catalog/product')->getRelatedProducts($productIds);
+			    foreach ($list as $item) {
+			        $childProds[$item['product_id']] = $item['product_id'];
+			    }
+                			    
+            }
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
 				$notAllowed[] = $attribute->getStoreLabel($vendorStoreId);
@@ -384,6 +392,8 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			if($checkRequired && $attribute->getIsRequired() && trim($value)==""){
 				$missings[] = $attribute->getStoreLabel($vendorStoreId);
 			}
+			
+			
 		}
 		// Validate grid permissions
 		if($notAllowed){
@@ -446,8 +456,16 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 					}
 				}
 			}
-		}
-
+		}	
+		// if children exists update the children (only description_status)
+		if ($childProds) {
+		    $childAttributes = array(
+		        'description_status' => $attributesData['description_status']
+            );
+            
+	    	Mage::getSingleton('catalog/product_action')
+    			->updateAttributes($childProds, $childAttributes, $store->getId());
+		}	
 		// Write attribs & make reindex
 		Mage::getSingleton('catalog/product_action')
 			->updateAttributes($productIds, $attributesData, $store->getId());
