@@ -9,6 +9,7 @@ class GH_Statements_Block_Adminhtml_Calendar_Grid extends Mage_Adminhtml_Block_W
         $this->setId('ghstatements_calendar_grid');
         $this->setDefaultSort('calendar_id');
         $this->setDefaultDir('desc');
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection()
