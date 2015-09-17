@@ -3,7 +3,7 @@
 
 /** @var GH_AttributeRules_Helper_Data $helper */
 $helper = Mage::helper("gh_attributerules");
-
+$storeId = $this->getVendor()->getLabelStore();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 ?>
@@ -45,7 +45,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                     <?php
                                     /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
                                     $attr = $row['attribute'];
-                                    echo $attr->getName();
+                                    echo $attr->getStoreLabel($storeId);
                                     ?>
                                 </td>
                             </tr>
@@ -56,7 +56,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                         /** @var GH_AttributeRules_Model_AttributeRule $rule */
                                         foreach ($row['rule'] as $rule) { ?>
                                             <div>
-                                                <?php var_dump($rule->getId()); ?>
+                                                <?php echo $attr->getSource()->getOptionText($rule->getValue()); ?>
                                             </div>
                                         <?php
                                         }
