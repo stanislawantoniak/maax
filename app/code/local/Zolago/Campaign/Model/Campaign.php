@@ -248,20 +248,30 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         /**
          * Collect data:
          * a) $productsIds - product ids that should be recalculated because of they included to not valid campaign(s)
+         *
+         *
+         */
+        foreach($notValidCampaignsData as $notValidCampaign){
+            $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
+            unset($notValidCampaign);
+        }
+
+        $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
+
+        /**
+         * Collect data:
          * b) $vendorsInUpdate - vendor ids  to detect if product in SALE or PROMOTION
          * c) $productsToDeleteFromTable products with status Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE to delete them physically
          * from table after attributes will be reverted
          *
          */
-        foreach($notValidCampaignsData as $notValidCampaign){
-            $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
-            $vendorsInUpdate[$notValidCampaign['vendor_id']] = $notValidCampaign['vendor_id'];
-            if($notValidCampaign["assigned_to_campaign"] == Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE){
-                $productsToDeleteFromTable[$notValidCampaign["campaign_id"]][] = $notValidCampaign['product_id'];
+        foreach($notValidCampaigns as $notValidCampaignsItem){
+            $productsIds[$notValidCampaignsItem['product_id']] = $notValidCampaignsItem['product_id'];
+            $vendorsInUpdate[$notValidCampaignsItem['vendor_id']] = $notValidCampaignsItem['vendor_id'];
+            if($notValidCampaignsItem["assigned_to_campaign"] == Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE){
+                $productsToDeleteFromTable[$notValidCampaignsItem["campaign_id"]][] = $notValidCampaignsItem['product_id'];
             }
         }
-
-        $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
 
 
         $isProductsInSaleOrPromotionByVendor = array();
@@ -296,7 +306,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
 
         if (!empty($anotherCampaignProducts)) {
-            $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);       
+            $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);
         }
 
         //Reformat by product_id
@@ -856,6 +866,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable)
     {
+
         $productIdsUpdated = array();
         if (empty($dataToUpdate)) {
             return $productIdsUpdated;
@@ -914,6 +925,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //Delete products with status 2
+
         if (!empty($productsToDeleteFromTable)) {
             foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
                 $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
