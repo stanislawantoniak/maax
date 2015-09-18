@@ -55,31 +55,37 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
      * @throws Mage_Core_Exception
      */
     public function getFilterAsText($rule) {
-        $filter = unserialize($rule->getFilter());
-
-        /** @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
-        $gridModel = Mage::getModel("zolagocatalog/vendor_product_grid");
-
         /** @var GH_AttributeRules_Helper_Data $helper */
         $helper = Mage::helper("gh_attributerules");
 
-        $store = $this->getLabelStore();
-        $str = '';
-        foreach ($filter as $typeKey => $item) {
-            foreach ($item as $key => $value) {
-                /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
-                $attr = $gridModel->getAttribute($key);
-                $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
-                if ($typeKey == 'regular') {
-                    $str .= $attr->getSource()->getOptionText($value);
-                } else {
-                    $str .= $value;
-                }
-                $str .= $helper->__(" and ");
-            }
-        }
+        $filter = unserialize($rule->getFilter());
+        if ($filter !== false) {
 
-        return substr($str, 0, -strlen($helper->__(" and ")));
+            /** @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
+            $gridModel = Mage::getModel("zolagocatalog/vendor_product_grid");
+
+
+
+            $store = $this->getLabelStore();
+            $str = '';
+            foreach ($filter as $typeKey => $item) {
+                foreach ($item as $key => $value) {
+                    /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
+                    $attr = $gridModel->getAttribute($key);
+                    $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
+                    if ($typeKey == 'regular') {
+                        $str .= $attr->getSource()->getOptionText($value);
+                    } else {
+                        $str .= $value;
+                    }
+                    $str .= $helper->__(" and ");
+                }
+            }
+
+            return substr($str, 0, -strlen($helper->__(" and ")));
+        } else {
+            return $helper->__("All products in current category");
+        }
     }
 
     /**
