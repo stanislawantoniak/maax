@@ -305,7 +305,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         }
 
-        Mage::log($anotherCampaignProducts, null, "anotherCampaignProducts.log");
         if (!empty($anotherCampaignProducts)) {
             $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);
         }
@@ -867,7 +866,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable)
     {
-        Mage::log($productsToDeleteFromTable, null, "YYY.log");
         $productIdsUpdated = array();
         if (empty($dataToUpdate)) {
             return $productIdsUpdated;
