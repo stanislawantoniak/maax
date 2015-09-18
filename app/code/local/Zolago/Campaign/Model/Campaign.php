@@ -267,7 +267,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $isProductsInSaleOrPromotionByVendor = array();
         foreach ($vendorsInUpdate as $vendorId) {
-            //$isProductsInSaleOrPromotionByVendor[$vendorId] = $resourceModel->getIsProductsInSaleOrPromotion($productsIds, $vendorId);
+            $isProductsInSaleOrPromotionByVendor[$vendorId] = $resourceModel->getIsProductsInSaleOrPromotion($productsIds, $vendorId);
         }
 
 
@@ -298,7 +298,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         Mage::log($anotherCampaignProducts, null, "anotherCampaignProducts.log");
         if (!empty($anotherCampaignProducts)) {
-            //$resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);
+            $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);
         }
 
         //Reformat by product_id
@@ -928,7 +928,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if (!empty($productsAssignedToCampaign)) {
             foreach ($productsAssignedToCampaign as $campaignIdsString => $productIds) {
                 foreach (explode(",", $campaignIdsString) as $campaignId) {
-                    $this->getResource()->setProductsAsProcessedByCampaign($campaignId, $productIds);
+                    //$this->getResource()->setProductsAsProcessedByCampaign($campaignId, $productIds);
                 }
             }
         }
