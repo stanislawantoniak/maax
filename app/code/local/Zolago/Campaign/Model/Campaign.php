@@ -255,7 +255,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
             unset($notValidCampaign);
         }
-        Mage::log($productsIds, null, "TTT.log");
 
         $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
 
@@ -273,7 +272,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $productsToDeleteFromTable[$notValidCampaignsItem["campaign_id"]][] = $notValidCampaignsItem['product_id'];
             }
         }
-        Mage::log($productsToDeleteFromTable, null, "YYY-2.log");
 
 
         $isProductsInSaleOrPromotionByVendor = array();
@@ -928,7 +926,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //Delete products with status 2
-        Mage::log($productsToDeleteFromTable, null, "YYY-3.log");
+
         if (!empty($productsToDeleteFromTable)) {
             foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
                 $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
@@ -939,7 +937,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if (!empty($productsAssignedToCampaign)) {
             foreach ($productsAssignedToCampaign as $campaignIdsString => $productIds) {
                 foreach (explode(",", $campaignIdsString) as $campaignId) {
-                    //$this->getResource()->setProductsAsProcessedByCampaign($campaignId, $productIds);
+                    $this->getResource()->setProductsAsProcessedByCampaign($campaignId, $productIds);
                 }
             }
         }
