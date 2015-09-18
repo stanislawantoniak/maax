@@ -31,12 +31,13 @@ class Zolago_Catalog_Vendor_ProductController
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
 		}
-
+		$restQuery = array();
 		if(is_array($productIds) && count($productIds)){
 			$ids = array_unique($productIds);
 		}else{
 			$collection = $this->_getCollection();
-			foreach($this->_getRestQuery() as $key=>$value){
+			$restQuery = $this->_getRestQuery();
+			foreach($restQuery as $key=>$value){
 				$collection->addAttributeToFilter($key, $value);
 			}
 			$global = true;
@@ -96,7 +97,6 @@ class Zolago_Catalog_Vendor_ProductController
 		$attributeCode = key($request->getParam("attribute"));
 		$attributeValue = $request->getParam("attribute")[$attributeCode];
 
-
 		Mage::dispatchEvent(
 			"change_product_attribute_after",
 			array(
@@ -105,7 +105,7 @@ class Zolago_Catalog_Vendor_ProductController
 				"vendor_id" => $this->getVendorId(),
 				"attribute_mode" => $attributeMode[$attributeCode],
 				"attribute_value" => $attributeValue,
-				"rest_query" =>$this->_getRestQuery(),
+				"rest_query" =>$restQuery,
 				"save_as_rule" => $saveAsRule
 			)
 		);
