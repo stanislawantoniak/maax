@@ -31,7 +31,7 @@ class Zolago_Catalog_Vendor_ProductController
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
 		}
-		$restQuery = array();
+		$restQuery = null;
 		if(is_array($productIds) && count($productIds)){
 			$ids = array_unique($productIds);
 		}else{
@@ -96,7 +96,9 @@ class Zolago_Catalog_Vendor_ProductController
 
 		$attributeCode = key($request->getParam("attribute"));
 		$attributeValue = $request->getParam("attribute")[$attributeCode];
-
+		if (is_null($restQuery)) {
+			$restQuery = $this->_getRestQuery();
+		}
 		Mage::dispatchEvent(
 			"change_product_attribute_after",
 			array(
