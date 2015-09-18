@@ -84,7 +84,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                 'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
                 "class" => "form-control",
                 'index' => 'price',
-                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_range',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_price',
             )
         );
 
