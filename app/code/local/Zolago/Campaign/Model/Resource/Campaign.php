@@ -92,6 +92,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $connection = $resource->getConnection('core_write');
         // clean products        
         $query = 'update '.$table.' as a inner join '.$tableSalesRule.' as b set a.assigned_to_campaign='.self::CAMPAIGN_PRODUCTS_TO_DELETE.' where a.campaign_id = b.campaign_id ';
+
+        Mage::log($query, null, "XXX.log");
         $connection->query($query);
         $query = 'replace into '.$table.' (product_id,campaign_id,assigned_to_campaign) select distinct product_id,campaign_id,0 from '.$table_tmp;
         $connection->query($query);
