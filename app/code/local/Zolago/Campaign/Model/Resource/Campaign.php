@@ -176,33 +176,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     public function removeProduct($campaignId, $productId)
     {
 
-        //move products to recalculate attributes
-        // then delete from zolago_campaign_product table
-        $this->deleteProductsFromTable($campaignId, $productId);
-
         $model = Mage::getModel('zolagocampaign/campaign');
         $campaign = $model->load($campaignId);
-        $campaignId = $campaign->getId();
 
-        $websites = $this->getAllowedWebsites($campaign);
-
-        if (!empty($websites)) {
-            $recoverOptionsProducts = array();
-            foreach ($websites as $websiteId) {
-                $recoverOptionsProducts[$websiteId] = array($productId);
-            }
-
-            /**
-             * @see Zolago_Campaign_Model_Observer::productAttributeRevert
-             */
-            Mage::dispatchEvent(
-                "campaign_product_remove_update_after",
-                array(
-                    'campaign_id' => $campaignId,
-                    "revert_product_options" => $recoverOptionsProducts
-                )
-            );
-        }
+        /**
+         * Send products to recalculate
+         * to delete them later ( @see Zolago_Campaign_Model_Campaign::unsetCampaignAttributes )
+         */
+        $this->sendProductsToRecalculateThenDelete($campaign, array($productId));
 
     }
 

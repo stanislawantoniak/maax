@@ -796,65 +796,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     }
 
 
-    public function unsetProductAttributesOnProductRemoveFromCampaign($campaignId, $revertProductOptions)
-    {
-        Mage::log($revertProductOptions);
-        if (empty($campaignId)) {
-            return;
-        }
-        if (empty($revertProductOptions)) {
-            return;
-        }
-
-        $campaign = $this->load($campaignId);
-        $productIdsToUpdate = array();
-        $websiteIdsToUpdate = array_keys($revertProductOptions);
-        /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
-        $zolagocatalogHelper = Mage::helper('zolagocatalog');
-        $storesByWebsite = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
-
-        foreach ($revertProductOptions as $websiteId => $productIds) {
-
-            $stores = isset($storesByWebsite[$websiteId]) ? $storesByWebsite[$websiteId] : false;
-            if ($stores) {
-                $this->setCampaignAttributesToProducts($campaignId, $campaign->getType(), $productIds, $stores);
-            }
-            $productIdsToUpdate = array_merge($productIdsToUpdate, $productIds);
-        }
-
-        if ($campaign->getType() == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $campaign->getType() == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-            /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
-            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-            $configurableRModel->setProductOptionsBasedOnSimples($revertProductOptions);
-        }
-
-        //4. reindex
-        $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
-        /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-        $indexer->reindexEntities($productIdsToUpdate);
-
-        $numberQ = 20;
-        if (count($productIdsToUpdate) > $numberQ) {
-            $productsToReindexC = array_chunk($productIdsToUpdate, $numberQ);
-            foreach ($productsToReindexC as $productsToReindexCItem) {
-                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
-
-            }
-            unset($productsToReindexCItem);
-        } else {
-            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
-
-        }
-
-        //5. push to solr
-        Mage::dispatchEvent(
-            "catalog_converter_price_update_after",
-            array(
-                "product_ids" => $productIdsToUpdate
-            )
-        );
-    }
-
     public function setCampaignAttributesToProducts($campaignId, $type, $productIds, $stores)
     {
 
