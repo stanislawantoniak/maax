@@ -177,13 +177,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
 
         try {
-            $this->_getWriteAdapter()->delete(
+            $s = $this->_getWriteAdapter()->delete(
                 $this->getTable("zolagocampaign/campaign_product"),
                 array(
                     'campaign_id = ?' => $campaignId,
                     "product_id IN(?)" => $productIds
                 )
             );
+            Mage::log($s, null, "LLL.log");
         } catch (Exception $e) {
             Mage::log($e->getMessage());
         }
