@@ -39,7 +39,6 @@ class GH_AttributeRules_Model_Observer
         $filter = "";
         if (!empty($restQuery)) {
             foreach ($restQuery as $filterItem => $restQueryItem) {
-                Mage::log($restQueryItem);
                 $id = Mage::getResourceModel('eav/entity_attribute')
                     ->getIdByCode('catalog_product', $filterItem);
                 $filter["regular"][$id] = $restQueryItem;
