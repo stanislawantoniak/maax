@@ -236,18 +236,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
         $notValidCampaignsData = $resourceModel->getNotValidCampaigns(); //products need to be updated
+        krumo($notValidCampaignsData);
 
         if(empty($notValidCampaignsData)){
             return;
         }
 
         $vendorsInUpdate = array();
-
         $productsIds = array();
-
-
-        $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
-
         $productsToDeleteFromTable = array(); //Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE
 
         /**
@@ -258,13 +254,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
          * from table after attributes will be reverted
          *
          */
-        foreach($notValidCampaigns as $notValidCampaign){
+        foreach($notValidCampaignsData as $notValidCampaign){
             $productsIds[$notValidCampaign['product_id']] = $notValidCampaign['product_id'];
             $vendorsInUpdate[$notValidCampaign['vendor_id']] = $notValidCampaign['vendor_id'];
             if($notValidCampaign["assigned_to_campaign"] == Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE){
                 $productsToDeleteFromTable[$notValidCampaign["campaign_id"]][] = $notValidCampaign['product_id'];
             }
         }
+
+        $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
 
 
         $isProductsInSaleOrPromotionByVendor = array();

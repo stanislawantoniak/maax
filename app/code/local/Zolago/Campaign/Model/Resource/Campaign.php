@@ -499,7 +499,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign_product.assigned_to_campaign=?", self::CAMPAIGN_PRODUCTS_UNPROCESSED);
+        $select->where("campaign_product.assigned_to_campaign<>?", self::CAMPAIGN_PRODUCTS_PROCESSED);
         $select->where("campaign.status <> ?", $activeCampaignStatus);
         $select->order('campaign_product.product_id ASC');
         $select->group("campaign_product.product_id");

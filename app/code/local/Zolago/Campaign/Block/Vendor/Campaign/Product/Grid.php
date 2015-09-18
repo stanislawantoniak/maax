@@ -14,6 +14,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
 
     }
 
+    /**
+     * @return Mage_Adminhtml_Block_Widget_Grid
+     * @throws Exception
+     */
     protected function _prepareCollection()
     {
         $campaignId = $this->getRequest()->getParam("id");
@@ -27,11 +31,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $collection->getSelect()
             ->join(
                 array('campaign_product' => Mage::getSingleton('core/resource')->getTableName(
-                        "zolagocampaign/campaign_product"
-                    )),
+                    "zolagocampaign/campaign_product"
+                )),
                 'campaign_product.product_id = e.entity_id'
             )
-            ->where("campaign_product.campaign_id=?", $campaignId);
+            ->where("campaign_product.campaign_id=?", $campaignId)
+            ->where("campaign_product.assigned_to_campaign<>?", Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE);
 
         $collection->setPageSize(10);
         //$collection->printLogQuery(true);
@@ -76,18 +81,18 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'index'  => 'price',
             )
         );
-        $this->addColumn(
-            'campaign_regular_id',
-            array(
-                'header' => $_helper->__('campaign_regular_id'),
-                'width'  => '50px',
-                'type'   => 'number',
-                "class"  => "form-control",
-                'column_css_class'=>'hidden',
-                'header_css_class'=>'hidden' ,
-                'index'  => 'campaign_regular_id',
-            )
-        );
+
+
+//        $this->addColumn(
+//            'assigned_to_campaign',
+//            array(
+//                'header' => $_helper->__('Processing Status'),
+//                'width'  => '50px',
+//                'type'   => 'number',
+//                "class"  => "form-control",
+//                'index'  => 'assigned_to_campaign',
+//            )
+//        );
 
         $this->addColumn(
             'Remove',
