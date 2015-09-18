@@ -235,7 +235,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         //Select campaigns with expired date
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
-        $notValidCampaignsData = $resourceModel->getNotValidCampaigns(); //products need to be updated
+        $notValidCampaignsData = $resourceModel->getNotValidCampaignProducts(); //products need to be updated
 
         if(empty($notValidCampaignsData)){
             return;
