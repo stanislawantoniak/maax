@@ -329,7 +329,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             foreach ($reformattedDataInfo as $websiteId => $dataToUpdateInfo) {
                 $storesI = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
                 if ($storesI) {
-                    $productIdsInfoUpdated = $this->recoverInfoCampaignsToProduct($dataToUpdateInfo, $storesI);
+                    $productIdsInfoUpdated = $this->recoverInfoCampaignsToProduct($dataToUpdateInfo, $storesI, $productsToDeleteFromTable);
                     $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsInfoUpdated);
                 }
             }
@@ -842,20 +842,20 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
     }
 
-    /** Remove invalid value from product info_campaign_id:
+    /**
+     * Remove invalid value from product info_campaign_id:
      *  Details: as far as product can be assigned to several info campaigns,
      * then we need
      * a) to get product info_campaign_id value (string)(campaign_id1, campaign_id2, ....) using Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store)
      * b) remove invalid campaign ids from value
      * c) set to product a list of valid campaigns or NULL if there is no valid campaigns for this product
-     *
      * @param $dataToUpdate
      * @param $stores
+     * @param $productsToDeleteFromTable
      * @return array
      */
-    public function recoverInfoCampaignsToProduct($dataToUpdate, $stores)
+    public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable)
     {
-
         $productIdsUpdated = array();
         if (empty($dataToUpdate)) {
             return $productIdsUpdated;
@@ -912,7 +912,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
         unset($productIds);
 
-        //setProductsAsProcessedByCampaign
+
+        //Delete products with status 2
+        if (!empty($productsToDeleteFromTable)) {
+            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
+                $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
+            }
+        }
+
+        //Set products as processed
         if (!empty($productsAssignedToCampaign)) {
             foreach ($productsAssignedToCampaign as $campaignIdsString => $productIds) {
                 foreach (explode(",", $campaignIdsString) as $campaignId) {

@@ -169,6 +169,27 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * Pure Delete products from table
+     * @param $campaignId
+     * @param $productIds
+     */
+    public function deleteProductsFromTableMass($campaignId, $productIds)
+    {
+
+        try {
+            $this->_getWriteAdapter()->delete(
+                $this->getTable("zolagocampaign/campaign_product"),
+                array(
+                    'campaign_id = ?' => $campaignId,
+                    "product_id IN(?)" => $productIds
+                )
+            );
+        } catch (Exception $e) {
+            Mage::log($e->getMessage());
+        }
+    }
+
+    /**
      * Remove product from campaign:
      * a) Pure delete product from table
      * b)recover magento product instance attributes @see Zolago_Campaign_Model_Observer::productAttributeRevert
