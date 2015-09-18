@@ -2,7 +2,7 @@
 /**
  *
  */
-class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Text extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Abstract
+class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Text extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Text
 {
     public function getHtml()
     {

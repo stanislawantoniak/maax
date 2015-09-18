@@ -73,9 +73,15 @@
     margin:2px;
 }
 
-#zolagocampaign_campaign_product_grid .form-group {
+#vendor_campaign_product_grid .form-group {
     margin: 0px;
     border-top: none;
+}
+#zolagocampaign_campaign_banner_grid .form-group.text-holder {
+    margin: 0 5px;
+}
+#vendor_campaign_product_grid .form-group.text-holder {
+    margin: 0 5px;
 }
 
 #edit-campaign .form-group .radio-buttons label {

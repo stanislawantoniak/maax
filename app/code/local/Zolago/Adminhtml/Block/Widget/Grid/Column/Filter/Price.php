@@ -3,10 +3,8 @@
 /**
  * Class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Price
  */
-class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Price extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Abstract
+class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Price extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Price
 {
-    protected $_currencyList = null;
-    protected $_currencyModel = null;
 
     public function getHtml()
     {
@@ -18,32 +16,6 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Price extends Mage_Adminh
         $html .= '</div>';
 
         return $html;
-    }
-
-    public function getDisplayCurrencySelect()
-    {
-        if (!is_null($this->getColumn()->getData('display_currency_select'))) {
-            return $this->getColumn()->getData('display_currency_select');
-        } else {
-            return true;
-        }
-    }
-
-    public function getCurrencyAffect()
-    {
-        if (!is_null($this->getColumn()->getData('currency_affect'))) {
-            return $this->getColumn()->getData('currency_affect');
-        } else {
-            return true;
-        }
-    }
-
-    protected function _getCurrencyModel()
-    {
-        if (is_null($this->_currencyModel))
-            $this->_currencyModel = Mage::getModel('directory/currency');
-
-        return $this->_currencyModel;
     }
 
     protected function _getCurrencySelectHtml()
@@ -62,61 +34,4 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Price extends Mage_Adminh
         return $html;
     }
 
-    protected function _getCurrencyList()
-    {
-        if (is_null($this->_currencyList)) {
-            $this->_currencyList = $this->_getCurrencyModel()->getConfigAllowCurrencies();
-        }
-        return $this->_currencyList;
-    }
-
-    public function getValue($index=null)
-    {
-        if ($index) {
-            return $this->getData('value', $index);
-        }
-        $value = $this->getData('value');
-        if ((isset($value['from']) && strlen($value['from']) > 0) || (isset($value['to']) && strlen($value['to']) > 0)) {
-            return $value;
-        }
-        return null;
-    }
-
-
-    public function getCondition()
-    {
-        $value = $this->getValue();
-
-        if (isset($value['currency']) && $this->getCurrencyAffect()) {
-            $displayCurrency = $value['currency'];
-        } else {
-            $displayCurrency = $this->getColumn()->getCurrencyCode();
-        }
-        $rate = $this->_getRate($displayCurrency, $this->getColumn()->getCurrencyCode());
-
-        if (isset($value['from']))
-            $value['from'] *= $rate;
-
-        if (isset($value['to']))
-            $value['to'] *= $rate;
-
-        $this->prepareRates($displayCurrency);
-        return $value;
-    }
-
-    protected function _getRate($from, $to)
-    {
-        return Mage::getModel('directory/currency')->load($from)->getAnyRate($to);
-    }
-
-    public function prepareRates($displayCurrency)
-    {
-        $storeCurrency = $this->getColumn()->getCurrencyCode();
-
-        $rate = $this->_getRate($storeCurrency, $displayCurrency);
-        if ($rate) {
-            $this->getColumn()->setRate($rate);
-            $this->getColumn()->setCurrencyCode($displayCurrency);
-        }
-    }
 }
