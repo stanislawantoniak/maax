@@ -466,7 +466,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $select->order('campaign_product.product_id ASC');
 
-
+        Mage::log($select->__toString(), null, "L-2.log");
         return $this->getReadConnection()->fetchAll($select);
     }
 
@@ -545,6 +545,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->order('campaign_product.product_id ASC');
         $select->group("campaign_product.product_id");
         $select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
+        Mage::log($select->__toString(), null, "L-1.log");
 
         return $this->getReadConnection()->fetchAll($select);
     }
