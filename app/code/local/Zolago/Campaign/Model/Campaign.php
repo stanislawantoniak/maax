@@ -260,7 +260,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $productsToDeleteFromTable[$notValidCampaign["campaign_id"]][] = $notValidCampaign['product_id'];
             }
         }
-        Mage::log($productsToDeleteFromTable, null, "YYY.log");
+        Mage::log($productsToDeleteFromTable, null, "YYY-2.log");
         $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
 
 
@@ -915,7 +915,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //Delete products with status 2
-        Mage::log($productsToDeleteFromTable, null, "YYY.log");
+        Mage::log($productsToDeleteFromTable, null, "YYY-3.log");
         if (!empty($productsToDeleteFromTable)) {
             foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
                 $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
