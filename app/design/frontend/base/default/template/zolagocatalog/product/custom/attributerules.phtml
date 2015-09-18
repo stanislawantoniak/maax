@@ -38,6 +38,10 @@ $_modagoHlp = Mage::helper("zolagocommon");
     .table-lvl-1 tr:first-child > td {
         border-top: none;
     }
+    #showAttributeRules .collapsing {
+        -webkit-transition: 0.01s;
+        transition: 0.01s;
+    }
 </style>
 
 <div class="modal fade bs-example-modal-sm" id="showAttributeRules" role="dialog">
@@ -147,7 +151,16 @@ $_modagoHlp = Mage::helper("zolagocommon");
 <script>
     var attributeRules = {
         init: function() {
+            this.attachLogicShowDetails();
+        },
 
+        attachLogicShowDetails: function() {
+            this.getModal().on("shown.bs.collapse", function(e) {
+                jQuery("[data-target='#" + e.target.id + "'] .btn i").removeClass("icon-plus").addClass("icon-minus");
+            });
+            this.getModal().on("hidden.bs.collapse", function(e) {
+                jQuery("[data-target='#" + e.target.id + "'] .btn i").removeClass("icon-minus").addClass("icon-plus");
+            });
         },
 
         getModal: function() {
