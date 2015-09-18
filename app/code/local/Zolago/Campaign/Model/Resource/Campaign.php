@@ -177,14 +177,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
 
         try {
-            $s = $this->_getWriteAdapter()->delete(
-                $this->getTable("zolagocampaign/campaign_product"),
-                array(
-                    'campaign_id = ?' => $campaignId,
-                    "product_id IN(?)" => $productIds
-                )
-            );
-            Mage::log($s, null, "LLL.log");
+
+            $where = join(' AND ', array(
+                $this->_getWriteAdapter()->quoteInto('campaign_id = ?', $campaignId),
+                $this->_getWriteAdapter()->quoteInto('product_id IN(?)', $productIds)
+            ));
+            $this->_getWriteAdapter()->delete($this->getTable("zolagocampaign/campaign_product"), $where);
         } catch (Exception $e) {
             Mage::log($e->getMessage());
         }
@@ -453,10 +451,19 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'website_id' => 'campaign_website.website_id'
             )
         );
-        $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign.status <> ?",$activeCampaignStatus);
         $select->where("campaign_product.product_id IN(?)",$productIds);
+
+
+
+        $orWhere = array();
+        $orWhere[] = 'campaign.status <>' . Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
+        $orWhere[] = 'campaign_product.assigned_to_campaign=' . self::CAMPAIGN_PRODUCTS_TO_DELETE;
+
+        $select->where(join(" OR ", $orWhere));
+
+
         $select->order('campaign_product.product_id ASC');
+
         return $this->getReadConnection()->fetchAll($select);
     }
 
@@ -490,17 +497,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
     /**
      * Get products that need to be recalculated from not valid campaigns
+     * or products with assigned_to_campaign=2
      * @return array
      */
-    public function getNotValidCampaigns()
+    public function getNotValidCampaignProducts()
     {
         $this->setExpiredCampaignsAsArchived();
 
         $select = $this->getReadConnection()->select();
         $select->from(array("campaign" => $this->getTable("zolagocampaign/campaign")),
             array(
-                "campaign.type as type",
                 'campaign.campaign_id as campaign_id',
+                "campaign.type as type",
                 'campaign.date_from',
                 'campaign.date_to',
                 'campaign.status',
@@ -523,8 +531,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign_product.assigned_to_campaign<>?", self::CAMPAIGN_PRODUCTS_PROCESSED);
-        $select->where("campaign.status <> ?", $activeCampaignStatus);
+        $select->where("campaign_product.assigned_to_campaign=?", self::CAMPAIGN_PRODUCTS_TO_DELETE);
+
+        $orWhere = array();
+        $orWhere[] = 'campaign.status <> ' . $activeCampaignStatus;
+        $orWhere[] = 'campaign_product.assigned_to_campaign<>' . self::CAMPAIGN_PRODUCTS_PROCESSED;
+
+        $select->orWhere(join(" AND ", $orWhere));
+
         $select->order('campaign_product.product_id ASC');
         $select->group("campaign_product.product_id");
         $select->limit(self::PRODUCTS_COUNT_TO_UNSET_PRODUCTS);
