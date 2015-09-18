@@ -236,7 +236,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
         $notValidCampaignsData = $resourceModel->getNotValidCampaigns(); //products need to be updated
-        krumo($notValidCampaignsData);
 
         if(empty($notValidCampaignsData)){
             return;
