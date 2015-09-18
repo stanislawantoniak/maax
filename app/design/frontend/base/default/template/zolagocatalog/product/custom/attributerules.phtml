@@ -72,7 +72,16 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             foreach ($this->getRulesData() as $key => $row): ?>
                             <tr class="">
                                 <td class="checkbox-column">
-                                    <div class="checker"><span class=""><input type="checkbox" class="uniform"></span></div>
+                                    <div class="">
+                                        <span class="">
+                                            <input type="checkbox"
+                                                   name="attribute[]"
+                                                   id="attr-<?php echo $key; ?>"
+                                                   value="<?php echo $key;?>"
+                                                   data-checkbox-group-target="input[type=checkbox][data-checkbox-group=value-key-<?php echo $key; ?>]"
+                                                   class="uniform">
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="show-details-column align-center accordion-toggle" data-toggle="collapse" data-target="#row-<?php echo $key; ?>">
                                     <span class="btn btn-xs"><i class="icon-plus"></i></span>
@@ -95,7 +104,18 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                                 <tr>
                                                     <td class="prefix-lvl-1"></td>
                                                     <td class="checkbox-column">
-                                                        <div class="checker"><span class=""><input type="checkbox" class="uniform"></span></div>
+                                                        <div class="">
+                                                            <span class="">
+                                                                <input type="checkbox"
+                                                                       name="value_key[]"
+                                                                       id="value-key-<?php echo $valueKey; ?>"
+                                                                       value="<?php echo $valueKey; ?>"
+                                                                       data-checkbox-group="value-key-<?php echo $key; ?>"
+                                                                       data-checkbox-group-parent="#attr-<?php echo $key; ?>"
+                                                                       data-checkbox-group-target="input[type=checkbox][data-checkbox-group-id=rules-group-<?php echo $valueKey; ?>]"
+                                                                       class="uniform">
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                     <td class="show-details-column-short align-center accordion-toggle" data-toggle="collapse" data-target="#rulesGroup-<?php echo $valueKey; ?>" style="cursor: pointer;">
                                                         <span class="btn btn-xs"><i class="icon-plus"></i></span>
@@ -115,7 +135,16 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                                             <tr>
                                                                 <td class="prefix-lvl-2"></td>
                                                                 <td class="checkbox-column show-details-column-short">
-                                                                    <div class="checker"><span class=""><input type="checkbox" class="uniform"></span></div>
+                                                                    <div class="">
+                                                                        <span class="">
+                                                                            <input type="checkbox"
+                                                                                   name="rule[]"
+                                                                                   value="<?php echo $rule->getId(); ?>"
+                                                                                   data-checkbox-group-id="rules-group-<?php echo $valueKey; ?>"
+                                                                                   data-checkbox-group-parent="#value-key-<?php echo $valueKey; ?>"
+                                                                                   class="uniform">
+                                                                        </span>
+                                                                    </div>
                                                                 </td>
                                                                 <td colspan="4"><?php echo $helper->__("Filters: ") ?><b><?php echo $this->getFilterAsText($rule); ?></b></td>
                                                             </tr>
@@ -152,6 +181,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
     var attributeRules = {
         init: function() {
             this.attachLogicShowDetails();
+            this.attachLogicGroupCheckbox();
         },
 
         attachLogicShowDetails: function() {
@@ -160,6 +190,78 @@ $_modagoHlp = Mage::helper("zolagocommon");
             });
             this.getModal().on("hidden.bs.collapse", function(e) {
                 jQuery("[data-target='#" + e.target.id + "'] .btn i").removeClass("icon-minus").addClass("icon-plus");
+            });
+        },
+
+        attachLogicGroupCheckbox: function() {
+            this.getModal().find("input[type=checkbox]").on("change", function(e, eventFromChildren) {
+                var selector = jQuery(e.target).attr("data-checkbox-group-target");
+
+                console.log("children selector:" + selector);
+                console.log("event from children:" + eventFromChildren);
+
+                if (selector && !eventFromChildren) {
+                    // If parent checked/unchecked => set checked/unchecked state for children
+                    var target = jQuery(selector);
+//                    console.log(target);
+                    if (e.target.checked) {
+                        if (target.prop('checked') != true) {
+                            console.log('set true for children');
+                            target.prop('checked', true).closest('span').addClass('checked').closest('tr').addClass('checked');
+                            console.log("trigger change for children");
+                            target.trigger("change");
+                        } else {
+                            console.log("No change for true");
+                        }
+                    } else {
+                        if (target.prop('checked') != false) {
+                            console.log('set false for children');
+                            target.prop('checked', false).closest('span').removeClass('checked').closest('tr').removeClass('checked');
+                            console.log("trigger change for children");
+                            target.trigger("change");
+                        } else {
+                            console.log("no change to false");
+                        }
+                    }
+                }
+
+                // If all children checked/unchecked,  set checked/unchecked state for parent
+                var parentSelector = jQuery(e.target).attr("data-checkbox-group-parent");
+                console.log("parent selector:" + parentSelector);
+                if (parentSelector) {
+                    var parent = jQuery(parentSelector);
+                    var allChild = jQuery(parent.attr("data-checkbox-group-target"));
+                    var allCheckedChild = jQuery(parent.attr("data-checkbox-group-target") + ":checked");
+
+                    var isAllChecked = allCheckedChild.length == allChild.length;
+
+                    if (isAllChecked) {
+                        console.log("all is checked");
+                        if (parent.prop('checked') != true) {
+                            console.log("---- set true for parent");
+                            parent.prop('checked', true).closest('span').addClass('checked').closest('tr').addClass('checked');
+                            if (!eventFromChildren) {
+                                console.log("trigger change for parent");
+                                parent.trigger("change", [true]);
+                            }
+                        } else {
+                            console.log("---- no change for true");
+                        }
+                    } else {
+                        console.log("all is NOT checked");
+                        if (parent.prop('checked') != false) {
+                            console.log("---- set false for parent ");
+                            parent.prop('checked', false).closest('span').removeClass('checked').closest('tr').removeClass('checked');
+                            if (!eventFromChildren) {
+                                console.log("trigger change for parent");
+                                parent.trigger("change", [true]);
+                            }
+                        } else {
+                            console.log("---- no change for false");
+                        }
+                    }
+
+                }
             });
         },
 
