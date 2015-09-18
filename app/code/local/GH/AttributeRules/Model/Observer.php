@@ -24,6 +24,9 @@ class GH_AttributeRules_Model_Observer
         if (!$saveAsRule ||
             //IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode)
             ($frontendInput == 'multiselect' && !in_array($attributeMode, array("add", "set")))
+            ||
+            //Do not save empty value if mode "add"
+            (empty($attributeValue) && $frontendInput == 'multiselect' && in_array($attributeMode, array("add")))
         ) {
             return;
         }
@@ -41,7 +44,7 @@ class GH_AttributeRules_Model_Observer
             foreach ($restQuery as $filterItem => $restQueryItem) {
                 $id = Mage::getResourceModel('eav/entity_attribute')
                     ->getIdByCode('catalog_product', $filterItem);
-                $filter["regular"][$id] = $restQueryItem["eq"];
+                $filter["regular"][$id] = $restQueryItem;
                 unset($id);
             }
         }
