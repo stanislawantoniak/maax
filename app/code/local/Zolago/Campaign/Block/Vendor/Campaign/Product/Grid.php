@@ -11,6 +11,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         // Need
         $this->setGridClass('z-grid');
         $this->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
+        $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
 
     }
@@ -53,7 +54,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
     protected function _prepareColumns()
     {
         $_helper = Mage::helper("zolagocampaign");
-
+        Mage::log("Hello2");
         $this->addColumn(
             'skuv',
             array(
@@ -61,6 +62,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'index'  => 'skuv',
                  "class"  => "form-control",
                  'width'  => '50px',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_text',
             )
         );
         $this->addColumn(
@@ -70,16 +72,19 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'index'  => 'name',
                  "class"  => "form-control",
                  'width'  => '50px',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_text',
             )
         );
         $this->addColumn(
             'price',
             array(
-                 'header' => $_helper->__('Price'),
-                 'width'  => '50px',
-                 'type'   => 'number',
-                 "class"  => "form-control",
-                 'index'  => 'price',
+                'header' => $_helper->__('Price'),
+                'width' => '50px',
+                'type' => 'price',
+                'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
+                "class" => "form-control",
+                'index' => 'price',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_range',
             )
         );
 
