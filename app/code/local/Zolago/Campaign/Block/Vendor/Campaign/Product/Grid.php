@@ -75,11 +75,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $this->addColumn(
             'price',
             array(
-                 'header' => $_helper->__('Price'),
-                 'width'  => '50px',
-                 'type'   => 'number',
-                 "class"  => "form-control",
-                 'index'  => 'price',
+                'header' => $_helper->__('Price'),
+                'width' => '50px',
+                'type' => 'price',
+                'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
+                "class" => "form-control",
+                'index' => 'price',
             )
         );
 
