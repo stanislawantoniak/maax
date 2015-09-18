@@ -455,16 +455,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $select->where("campaign_product.product_id IN(?)",$productIds);
 
-        $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign.status <> ?",$activeCampaignStatus);
+
 
         $orWhere = array();
+        $orWhere[] = 'campaign.status <>' . Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
         $orWhere[] = 'campaign_product.assigned_to_campaign=' . self::CAMPAIGN_PRODUCTS_TO_DELETE;
 
-        $select->orWhere(join(" OR ", $orWhere));
+        $select->where(join(" OR ", $orWhere));
 
 
         $select->order('campaign_product.product_id ASC');
+
 
         return $this->getReadConnection()->fetchAll($select);
     }
