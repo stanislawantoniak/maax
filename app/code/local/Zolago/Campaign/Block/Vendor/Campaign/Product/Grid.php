@@ -5,12 +5,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
     public function __construct()
     {
         parent::__construct();
-        $this->setId('zolagocampaign_campaign_product_grid');
-        $this->setDefaultSort('entity_id');
+        $this->setId('vendor_campaign_product_grid');
+        $this->setDefaultSort('skuv');
         $this->setDefaultDir('desc');
         // Need
         $this->setGridClass('z-grid');
-        $this->setTemplate("zolagoadminhtml/widget/grid.phtml");
+        $this->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
+        $this->setUseAjax(true);
 
     }
 
@@ -116,7 +117,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/edit', array('_current' => true));
+        return $this->getUrl('*/*/products', array('_current' => true));
     }
 
     public function getRowUrl($item)

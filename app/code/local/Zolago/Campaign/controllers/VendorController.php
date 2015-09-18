@@ -52,8 +52,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     public function productsAction()
     {
 
-        $this->loadLayout();
-
         $campaignId = $this->getRequest()->getParam('id', null);
         $productsStr = $this->getRequest()->getParam('products', array());
         $isAjax = $this->getRequest()->getParam('isAjax', false);
@@ -95,11 +93,18 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             }
         }
 
-        /* @var $model Zolago_Campaign_Model_Resource_Campaign */
-        $model = Mage::getResourceModel("zolagocampaign/campaign");
-        $model->saveProducts($campaignId, $productIds);
+        if($productIds){
+            /* @var $model Zolago_Campaign_Model_Resource_Campaign */
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->saveProducts($campaignId, $productIds);
+        }
 
-        $this->renderLayout();
+
+        $this->getResponse()->setBody(
+            $this->getLayout()
+                ->createBlock('zolagocampaign/vendor_campaign_product_grid')
+                ->toHtml()
+        );
 
         if (!$isAjax) {
             return $this->_redirectReferer();
