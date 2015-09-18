@@ -177,11 +177,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
 
         try {
+
             $where = join(' AND ', array(
                 $this->_getWriteAdapter()->quoteInto('campaign_id = ?', $campaignId),
                 $this->_getWriteAdapter()->quoteInto('product_id IN(?)', $productIds)
             ));
-            $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+            $this->_getWriteAdapter()->delete($this->getTable("zolagocampaign/campaign_product"), $where);
         } catch (Exception $e) {
             Mage::log($e->getMessage());
         }
