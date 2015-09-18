@@ -540,7 +540,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $orWhere[] = 'campaign.status <> ' . $activeCampaignStatus;
         $orWhere[] = 'campaign_product.assigned_to_campaign<>' . self::CAMPAIGN_PRODUCTS_PROCESSED;
 
-        $select->orWhere(join(" OR ", $orWhere));
+        $select->orWhere(join(" AND ", $orWhere));
 
         $select->order('campaign_product.product_id ASC');
         $select->group("campaign_product.product_id");
