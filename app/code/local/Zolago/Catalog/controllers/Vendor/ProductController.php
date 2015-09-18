@@ -277,4 +277,8 @@ class Zolago_Catalog_Vendor_ProductController
          return $errors;
      }
 
+    public function manageattributesAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

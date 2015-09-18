@@ -160,6 +160,12 @@
 			</block>
 		</reference>
 	</udprod_vendor_product_index>
+
+    <udprod_vendor_product_manageattributes>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="gh_attributerules/attribute" name="attributerules" template="zolagocatalog/product/custom/attributerules.phtml"/>
+        </block>
+    </udprod_vendor_product_manageattributes>
 	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
