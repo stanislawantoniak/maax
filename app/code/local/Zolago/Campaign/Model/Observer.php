@@ -199,27 +199,6 @@ class Zolago_Campaign_Model_Observer
 
 
     /**
-     * revert product attributes after delete product from campaign
-     * @param $observer
-     */
-    static function productAttributeRevert($observer)
-    {
-//        $revertProductOptions = array(
-//            'website_id' => array(
-//                    'product_id1',
-//                    'product_id1'
-//                )
-//        );
-        $campaignId = $observer->getCampaignId();
-        $revertProductOptions = $observer->getRevertProductOptions();
-
-
-        /* @var $model Zolago_Campaign_Model_Campaign */
-        $model = Mage::getModel('zolagocampaign/campaign');
-        $model->unsetProductAttributesOnProductRemoveFromCampaign($campaignId,$revertProductOptions);
-    }
-
-    /**
      * Attach products to campaign
      *
      * Podczepia produkty do kampanii na podstawie reguly cenowej koszyka (z zaznaczoną kampania).

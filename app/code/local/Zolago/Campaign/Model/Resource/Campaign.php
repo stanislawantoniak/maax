@@ -91,7 +91,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $tableSalesRule = $resource->getTableName("salesrule/rule");
         $connection = $resource->getConnection('core_write');
         // clean products        
-        $query = 'update '.$table.' as a inner join '.$tableSalesRule.' as b set a.assigned_to_campaign = 2 where a.campaign_id = b.campaign_id ';
+        $query = 'update '.$table.' as a inner join '.$tableSalesRule.' as b set a.assigned_to_campaign = '.self::CAMPAIGN_PRODUCTS_TO_DELETE.' where a.campaign_id = b.campaign_id ';
         $connection->query($query);
         $query = 'replace into '.$table.' (product_id,campaign_id,assigned_to_campaign) select distinct product_id,campaign_id,0 from '.$table_tmp;
         $connection->query($query);
@@ -118,11 +118,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $productIdsOfCampaign = array_keys($campaignProducts);
         $productsToDelete = array_diff($productIdsOfCampaign, $productIds);
 
-        if (!empty($productsToDelete)) {
-            foreach ($productsToDelete as $productsToDeleteId) {
-                $this->removeProduct($campaignId, $productsToDeleteId);
-            }
-        }
+        /**
+         * Send products to recalculate
+         * to delete them later ( @see Zolago_Campaign_Model_Campaign::unsetCampaignAttributes )
+         */
+        $this->sendProductsToRecalculateThenDelete($campaign, $productsToDelete);
+
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $where = $this->getReadConnection()
@@ -174,37 +175,40 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     public function removeProduct($campaignId, $productId)
     {
-        $this->deleteProductsFromTable($campaignId, $productId);
 
         $model = Mage::getModel('zolagocampaign/campaign');
         $campaign = $model->load($campaignId);
+
+        /**
+         * Send products to recalculate
+         * to delete them later ( @see Zolago_Campaign_Model_Campaign::unsetCampaignAttributes )
+         */
+        $this->sendProductsToRecalculateThenDelete($campaign, array($productId));
+
+    }
+
+    /**
+     * Send products to recalculate
+     * to delete them later ( @see Zolago_Campaign_Model_Campaign::unsetCampaignAttributes )
+     * @param $campaign
+     * @param $productIds
+     */
+    public function sendProductsToRecalculateThenDelete($campaign, $productIds)
+    {
         $campaignId = $campaign->getId();
-
-        $websites = $this->getAllowedWebsites($campaign);
-
-        if (!empty($websites)) {
-            $recoverOptionsProducts = array();
-            foreach ($websites as $websiteId) {
-                $recoverOptionsProducts[$websiteId] = array($productId);
-            }
-
-            /**
-             * @see Zolago_Campaign_Model_Observer::productAttributeRevert
-             */
-            Mage::dispatchEvent(
-                "campaign_product_remove_update_after",
-                array(
-                    'campaign_id' => $campaignId,
-                    "revert_product_options" => $recoverOptionsProducts
-                )
-            );
+        if (empty($campaignId)) {
+            //new campaign (no products)
+            return;
         }
 
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $write = $this->_getWriteAdapter();
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
     }
 
 
     /**
-     * Send all products to recalculate
+     * Send products to recalculate
      * @param $campaign
      */
     public function sendProductsToRecalculate($campaign)
@@ -219,6 +223,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $write = $this->_getWriteAdapter();
         $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
     }
+
 
     /**
      * Set recalculate flag in all active campaigns for products
@@ -494,7 +499,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $activeCampaignStatus = Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE;
-        $select->where("campaign_product.assigned_to_campaign=?", self::CAMPAIGN_PRODUCTS_UNPROCESSED);
+        $select->where("campaign_product.assigned_to_campaign<>?", self::CAMPAIGN_PRODUCTS_PROCESSED);
         $select->where("campaign.status <> ?", $activeCampaignStatus);
         $select->order('campaign_product.product_id ASC');
         $select->group("campaign_product.product_id");
