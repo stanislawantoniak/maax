@@ -260,6 +260,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $productsToDeleteFromTable[$notValidCampaign["campaign_id"]][] = $notValidCampaign['product_id'];
             }
         }
+        Mage::log($productsIds, null, "TTT.log");
         Mage::log($productsToDeleteFromTable, null, "YYY-2.log");
         $notValidCampaigns = $resourceModel->getNotValidCampaignInfoPerProduct($productsIds);
 
@@ -295,6 +296,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         }
 
+        Mage::log($anotherCampaignProducts, null, "anotherCampaignProducts.log");
         if (!empty($anotherCampaignProducts)) {
             $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);       
         }
