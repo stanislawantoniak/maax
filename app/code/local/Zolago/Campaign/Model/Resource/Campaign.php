@@ -243,7 +243,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
     }
 
 
@@ -257,7 +257,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
      }
 
     /**
@@ -270,7 +270,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
     }
 
     /**
@@ -283,7 +283,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId));
+        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
 
     }
 
