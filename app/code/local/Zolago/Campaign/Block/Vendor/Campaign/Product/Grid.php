@@ -7,7 +7,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         parent::__construct();
         $this->setId('vendor_campaign_product_grid');
         $this->setDefaultSort('skuv');
-        $this->setDefaultDir('desc');
+        $this->setDefaultDir('asc');
         // Need
         $this->setGridClass('z-grid');
         $this->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
@@ -27,9 +27,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $collection = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price')
-            ->addAttributeToSelect('skuv')
-            ->addAttributeToSelect('campaign_regular_id')
-            ->addAttributeToSelect('campaign_info_id');
+            ->addAttributeToSelect('skuv');
         $collection->getSelect()
             ->join(
                 array('campaign_product' => Mage::getSingleton('core/resource')->getTableName(

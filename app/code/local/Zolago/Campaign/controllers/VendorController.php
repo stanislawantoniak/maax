@@ -46,10 +46,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         return $this->_forward('edit');
     }
 
+
     /**
      * @return Mage_Core_Controller_Varien_Action
      */
-    public function productsAction()
+    public function saveProductsAction()
     {
 
         $campaignId = $this->getRequest()->getParam('id', null);
@@ -97,6 +98,54 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             /* @var $model Zolago_Campaign_Model_Resource_Campaign */
             $model = Mage::getResourceModel("zolagocampaign/campaign");
             $model->saveProducts($campaignId, $productIds);
+        }
+    }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function productsAction()
+    {
+
+        $campaignId = $this->getRequest()->getParam('id', null);
+        $productsStr = $this->getRequest()->getParam('products', array());
+        $isAjax = $this->getRequest()->getParam('isAjax', false);
+        $campaign = $this->_initModel($campaignId);
+        $vendor = $this->_getSession()->getVendor();
+
+        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        $udropshipHelper = Mage::helper("udropship");
+        $localVendor = $udropshipHelper->getLocalVendorId();
+
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("*/*");
+            }
+        } elseif ($this->getRequest()->getParam('id', null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("*/*");
+        }
+        $skuVS = array();
+        if (is_string($productsStr)) {
+            $skuVS = array_map('trim', explode(",", $productsStr));
+        }
+
+        $collection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('skuv', array('in' => $skuVS));
+        if ($vendor->getId() !== $localVendor) {
+            $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
+        }
+        $collection->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $collection = $collection->getAllIds();
+
+        $productIds = array();
+        if (!empty($collection)) {
+            foreach ($collection as $productId) {
+                $productIds[] = $productId;
+            }
         }
 
 

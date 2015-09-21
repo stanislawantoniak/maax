@@ -135,6 +135,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
 
     <script type="text/javascript">
         var websitesData = JSON.parse('<?php echo json_encode($this->getWebsites()); ?>');
+        var productGridId = '<?php echo $this->getProductsGrid()->getId(); ?>';
         jQuery(document).ready(function () {
 
             jQuery("#browseProducts form").submit(function (e) {
@@ -155,19 +156,30 @@ $_modagoHlp = Mage::helper("zolagocommon");
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
                         jQuery.ajax({
-                            url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
+                            url:  '<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>'   ,
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
-                            success: function (result) {
-                                jQuery(('#zolagocampaign_campaign_product_grid')).html(jQuery(result).find('#zolagocampaign_campaign_product_grid').html());
-                                jQuery("#zolagocampaign_campaign_product_grid_table .filter input")
-                                    .addClass("form-control");
+                            success: function () {
+                                refreshProductGrid(modelId);
                             }
                         })
                     }
                 }
             });
+
+
+            function refreshProductGrid(campaign){
+                jQuery.ajax({
+                    url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
+                    //contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    data: {id: campaign, isAjax: true},
+                    success: function (result) {
+                        jQuery("#"+productGridId).replaceWith(result);
+                    }
+                })
+            }
 
             jQuery("#browseProducts").on("show.bs.modal", function () {
                 //console.log("Init loading products")
