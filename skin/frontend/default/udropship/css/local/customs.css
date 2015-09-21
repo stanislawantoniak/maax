@@ -412,3 +412,115 @@ table.foot-empty-cells tfoot td:empty {
     }
 }
 /*fix for horizontal scroll for grid end*/
+
+/* cursor pointer for rows with links */
+.table tbody tr[title^=http] td {
+	cursor: pointer;
+}
+
+
+
+.mass-images-help {
+    margin: 20px 10px;
+}
+
+/* help section */
+#sidebar-help-wrapper {
+	z-index: 1020;
+	width: 0;
+	height: 100%;
+	position: fixed;
+	right: 0;
+	top:0;
+	padding-top:52px;
+	background-color: #f9f9f9;
+	transition: width .5s ease;
+}
+#sidebar-help-wrapper.help-open {
+	box-shadow: rgba(0, 0, 0, .2) 0 12px 6px 0;
+	width: 500px;
+}
+#sidebar-help-wrapper #sidebar-help {
+	width: 500px;
+	border-left: 4px solid #d1d1d1;
+	height: 100%;
+	padding: 10px;
+	position:relative;
+}
+#sidebar-help-wrapper #sidebar-help .sidebar-help-content-container {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index:1;
+	top:0;
+	left:0
+}
+#sidebar-help-wrapper #sidebar-help .sidebar-help-content-container .sidebar-help-content {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	padding: 20px;
+}
+#sidebar-help-wrapper #sidebar-help .sidebar-help-content-container .sidebar-help-content > div {
+	margin: 0 !important;
+}
+.help-btn.help-open {
+	color: #ffffff !important;
+	background: #334d63 !important;
+	box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25) inset, -1px 0 0 rgba(0, 0, 0, 0.25) inset !important;
+}
+
+/**
+ * Nowe ikonki
+ */
+
+.ania-icon-wrong {
+    background: url(../../images/ania-icons/wrong.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-notaccepted {
+    background: url(../../images/ania-icons/notaccepted.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-new {
+    background: url(../../images/ania-icons/new.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-hourglass {
+    background: url(../../images/ania-icons/hourglass-icon.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-enabled {
+    background: url(../../images/ania-icons/enabled.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-accepted {
+    background: url(../../images/ania-icons/accepted.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+@media screen and (min-width: 768px) {
+	#shippingModal .modal-dialog {
+		width: 730px;
+	}
+}
+.no-padding-left {
+    padding-left: 0;
+}
