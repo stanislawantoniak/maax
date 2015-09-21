@@ -551,7 +551,10 @@ define([
 		massAttribute.send(req).then(function(){
 			e.deferred.resolve();
 
-            // Get current attributes mapper block
+            // Spinner for ajax loading current attributes mapper block
+            var spinner = jQuery("<div>").css('text-align','center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+            attributeRules.getModal().find(".modal-body").html(spinner);
+            // Get current attributes mapper block by ajax
             jQuery.ajax({
                 cache: false,
                 url: "/udprod/vendor_product/manageattributes",
@@ -561,7 +564,7 @@ define([
                 success: function(data, status) {
                     jQuery("#showAttributeRules").replaceWith(data);
                     attributeRules.init();
-                    FormComponents.initUniform();
+                    FormComponents.initUniform();// Attach checkbox style
                 }
             });
 
