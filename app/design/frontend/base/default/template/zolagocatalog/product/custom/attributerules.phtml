@@ -50,7 +50,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><?php echo $helper->__("Manage attributes rules"); ?></h4>
+                    <h4 class="modal-title"><?php echo $helper->__("Autofill rules"); ?></h4>
                 </div>
                 <div class="modal-body">
                     <p class="alert alert-info">
@@ -64,7 +64,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             <tr>
                                 <th class="checkbox-column" style="width: 3%;"></th>
                                 <th class="align-center show-details-column"><?php echo $helper->__("Show details"); ?></th>
-                                <th><?php echo $helper->__("Attribute"); ?></th>
+                                <th><?php echo $helper->__("Attribute to fill"); ?></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -146,7 +146,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                                                         </span>
                                                                     </div>
                                                                 </td>
-                                                                <td colspan="4"><?php echo $helper->__("Filters: ") ?><b><?php echo $this->getFilterAsText($rule); ?></b></td>
+                                                                <td colspan="4"><?php echo $helper->__("For filter: ") ?><b><?php echo $this->getFilterAsText($rule); ?></b></td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                         </tbody>
@@ -170,7 +170,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $helper->__("Cancel"); ?></button>
-                    <button type="submit" class="btn btn-primary" disabled="disabled" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__('Action'); ?></button>
+                    <button type="submit" class="btn btn-primary" disabled="disabled" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__("Apply rules to selected"); ?></button>
                 </div>
             </div>
         </div>
