@@ -85,9 +85,9 @@ class Zolago_Campaign_Model_Observer
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
             $productsIdsPullToSolr[] = $campaignInfoData["product_id"];
+            //$productsIdsPullToSolr[] = $campaignInfoData["product_id"];
         }
 
-        Mage::log($reformattedData, null, "reformattedData.log");
         //set attributes
         if (!empty($reformattedData)) {
 
@@ -163,7 +163,7 @@ class Zolago_Campaign_Model_Observer
         }
 //
 //        //3. reindex
-Mage::log($productsIdsPullToSolr, null, "productsIdsPullToSolr.log");
+
          //Better performance
         $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
         /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
