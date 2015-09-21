@@ -15,6 +15,7 @@
                 <type>skin_css</type>
                 <name>js/plugins/datetimepicker/jquery.datetimepicker.css</name>
             </action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
             <action method="addItem">
                 <type>skin_js</type>
                 <name>js/plugins/datetimepicker/jquery.datetimepicker.js</name>
