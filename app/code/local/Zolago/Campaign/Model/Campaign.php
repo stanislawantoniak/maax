@@ -913,13 +913,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($data as $value => $productIds) {
                 $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => (string)$value), $store);
+
+                //set null to attribute for default store id (required for good quote calculation)
+                $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null),
+                    Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+                );
+                $productIdsUpdated = array_merge($productIdsUpdated, $productIds);
+
             }
 
-            //set null to attribute for default store id (required for good quote calculation)
-            $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null),
-                Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
-            );
-            $productIdsUpdated = array_merge($productIdsUpdated, $productIds);
+
         }
         unset($productIds);
 
