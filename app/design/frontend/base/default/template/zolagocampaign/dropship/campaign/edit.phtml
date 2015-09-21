@@ -181,20 +181,29 @@ $_modagoHlp = Mage::helper("zolagocommon");
                 })
             }
 
-            jQuery("#browseProducts").on("show.bs.modal", function () {
-                //console.log("Init loading products")
-            });
+            jQuery("#browseProducts").on("show.bs.modal", function () {});
+
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
             jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
                 e.preventDefault();
                 var campaignId = jQuery("input[name=campaign_id]").val();
-                var path = jQuery(this).attr('href');
-                removeCampaignGridItemLink(path, campaignId);
+                var productId = jQuery(this).data("item");
+                bootbox.confirm('<?php echo $_helper->__("Are you sure you want to delete product from campaign?"); ?>', function (result) {
+                    if (result) {
+                        removeCampaignProduct(campaignId, productId);
+                    }
+                });
             });
-            function removeCampaignGridItemLink(path, campaignId) {
-                var link = path + "campaignId/" + campaignId;
-                window.location = link;
+
+            function removeCampaignProduct(campaignId, productId) {
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl('campaign/vendor/removeProduct', array("_secure" => true)); ?>',
+                    data: {campaignId: campaignId, id: productId},
+                    success: function () {
+                        refreshProductGrid(campaignId);
+                    }
+                })
             }
 
             jQuery('.datetimepicker').datetimepicker({

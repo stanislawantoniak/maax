@@ -100,18 +100,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
             )
         );
 
-
-//        $this->addColumn(
-//            'assigned_to_campaign',
-//            array(
-//                'header' => $_helper->__('Processing Status'),
-//                'width'  => '50px',
-//                'type'   => 'number',
-//                "class"  => "form-control",
-//                'index'  => 'assigned_to_campaign',
-//            )
-//        );
-
         $this->addColumn(
             'Remove',
             array(
