@@ -84,9 +84,8 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
                             $_value = substr($_value, 1, strlen($_value)); // remove first char %
                             $str .= $attr->getStoreLabel($store) . $helper->__(" like '%s'", $_value);
                         }
-                    } else {
-                        $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
-                        $str .= $condition; // here condition is a value, always equal
+                    } else { // ext type
+                        $str .= $attr->getStoreLabel($store) . ": " . $condition; // here condition is a value, always equal
                     }
                     $str .= $helper->__(" and ");
                 }
