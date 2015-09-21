@@ -69,14 +69,22 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
             $store = $this->getLabelStore();
             $str = '';
             foreach ($filter as $typeKey => $item) {
-                foreach ($item as $key => $value) {
+                foreach ($item as $key => $condition) {
                     /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
                     $attr = $gridModel->getAttribute($key);
-                    $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
+
                     if ($typeKey == 'regular') {
-                        $str .= $attr->getSource()->getOptionText($value);
+                        if (isset($condition["eq"])) {
+                            $_value = $condition["eq"];
+                            $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
+                        } elseif (isset($condition["like"])) {
+                            $_value = $condition["like"];
+                            $str .= $attr->getStoreLabel($store) . $helper->__(" like ");
+                        }
+                        $str .= $attr->getSource()->getOptionText($_value);
                     } else {
-                        $str .= $value;
+                        $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
+                        $str .= $condition; // here condition is a value, always equal
                     }
                     $str .= $helper->__(" and ");
                 }
