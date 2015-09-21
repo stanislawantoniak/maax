@@ -186,7 +186,10 @@ $_modagoHlp = Mage::helper("zolagocommon");
 
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
+
+
+
+            jQuery(document).on('click','#'+productGridId+' .btn[data-action=remove]', function (e) {
                 e.preventDefault();
                 var campaignId = jQuery("input[name=campaign_id]").val();
                 var productId = jQuery(this).data("item");
@@ -414,6 +417,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
             };
 
         }
+
 
 
         var startLoading = function () {
