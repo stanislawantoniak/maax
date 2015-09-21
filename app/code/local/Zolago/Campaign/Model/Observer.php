@@ -84,6 +84,7 @@ class Zolago_Campaign_Model_Observer
         foreach($campaignInfo as $campaignInfoData){
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
+            $productsIdsPullToSolr[] = $campaignInfoData["product_id"];
         }
 
         Mage::log($reformattedData, null, "reformattedData.log");
@@ -99,7 +100,7 @@ class Zolago_Campaign_Model_Observer
                 $storesI = isset($storesToUpdateInfo[$websiteId]) ? $storesToUpdateInfo[$websiteId] : false;
                 if ($storesI) {
                     $productIdsInfoUpdated = $modelCampaign->setInfoCampaignsToProduct($dataToUpdateInfo, $storesI);
-                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsInfoUpdated);
+                    //$productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsInfoUpdated);
                 }
             }
             unset($dataToUpdate);
