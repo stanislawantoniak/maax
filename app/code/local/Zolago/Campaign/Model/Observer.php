@@ -85,8 +85,8 @@ class Zolago_Campaign_Model_Observer
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
         }
-        //Zend_Debug::dump($reformattedData);
 
+        Mage::log($reformattedData, null, "reformattedData.log");
         //set attributes
         if (!empty($reformattedData)) {
 
