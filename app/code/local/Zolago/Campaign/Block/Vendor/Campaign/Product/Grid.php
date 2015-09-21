@@ -2,6 +2,11 @@
 
 class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
+    public function getVendor()
+    {
+        return Mage::getSingleton('udropship/session')->getVendor();
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -24,10 +29,20 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
     {
         $campaignId = $this->getRequest()->getParam("id");
 
+        $vendor = $this->getVendor();
+        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        $udropshipHelper = Mage::helper("udropship");
+        $localVendor = $udropshipHelper->getLocalVendorId();
+
         $collection = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('skuv');
+
+        if ($vendor->getId() !== $localVendor) {
+            $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
+        }
+        $collection->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         $collection->getSelect()
             ->join(
                 array('campaign_product' => Mage::getSingleton('core/resource')->getTableName(
@@ -39,6 +54,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
             ->where("campaign_product.assigned_to_campaign<>?", Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE);
 
         $collection->setPageSize(10);
+
+
+
         //$collection->printLogQuery(true);
         $this->setCollection($collection);
 
