@@ -135,7 +135,20 @@ $_modagoHlp = Mage::helper("zolagocommon");
     <script type="text/javascript">
         var websitesData = JSON.parse('<?php echo json_encode($this->getWebsites()); ?>');
         var productGridId = '<?php echo $this->getProductsGrid()->getId(); ?>';
+        var bannerGridId = '<?php echo $this->getBannersGrid()->getId(); ?>';
+
         jQuery(document).ready(function () {
+
+            jQuery(document).on('click','#'+bannerGridId+' .btn[data-action=remove]', function (e) {
+                e.preventDefault();
+                var campaignId = jQuery("input[name=campaign_id]").val();
+                var link = jQuery(this).attr('href') + "campaignId/" + campaignId;
+                bootbox.confirm('<?php echo $_helper->__("Are you sure you want to delete banner from campaign?"); ?>', function (result) {
+                    if (result) {
+                        window.location = link;
+                    }
+                });
+            });
 
             jQuery("#browseProducts form").submit(function (e) {
                 e.preventDefault();
@@ -186,7 +199,10 @@ $_modagoHlp = Mage::helper("zolagocommon");
 
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
+
+
+
+            jQuery(document).on('click','#'+productGridId+' .btn[data-action=remove]', function (e) {
                 e.preventDefault();
                 var campaignId = jQuery("input[name=campaign_id]").val();
                 var productId = jQuery(this).data("item");
@@ -414,6 +430,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
             };
 
         }
+
 
 
         var startLoading = function () {
