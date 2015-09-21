@@ -130,7 +130,7 @@ class Zolago_Catalog_Vendor_ProductController
         // Add custom filter by name
         $inParams = $this->getRequest()->getQuery();
         if (isset($inParams["name"])) {
-            $restQuery["name"] = array("like" => $inParams["name"]);
+            $restQuery["name"] = array("like" => "%".$inParams["name"]."%");
         }
         return $restQuery;
     }

@@ -80,6 +80,8 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
                             $str .= $attr->getSource()->getOptionText($_value);
                         } elseif (isset($condition["like"])) {
                             $_value = $condition["like"];
+                            $_value = substr($_value, 0, strlen($_value)-1); // remove last char %
+                            $_value = substr($_value, 1, strlen($_value)); // remove first char %
                             $str .= $attr->getStoreLabel($store) . $helper->__(" like '%s'", $_value);
                         }
                     } else {
