@@ -265,6 +265,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 
     /**
+     * Ajax action
      * @return Mage_Core_Controller_Varien_Action
      */
     public function removeProductAction()
@@ -277,7 +278,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             $model = Mage::getResourceModel("zolagocampaign/campaign");
             $model->removeProduct($campaignId, $productId);
         }
-        return $this->_redirectReferer();
     }
 
     /**
