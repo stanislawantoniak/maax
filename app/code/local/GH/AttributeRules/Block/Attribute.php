@@ -77,11 +77,11 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
                         if (isset($condition["eq"])) {
                             $_value = $condition["eq"];
                             $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
+                            $str .= $attr->getSource()->getOptionText($_value);
                         } elseif (isset($condition["like"])) {
                             $_value = $condition["like"];
-                            $str .= $attr->getStoreLabel($store) . $helper->__(" like ");
+                            $str .= $attr->getStoreLabel($store) . $helper->__(" like '%s'", $_value);
                         }
-                        $str .= $attr->getSource()->getOptionText($_value);
                     } else {
                         $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
                         $str .= $condition; // here condition is a value, always equal

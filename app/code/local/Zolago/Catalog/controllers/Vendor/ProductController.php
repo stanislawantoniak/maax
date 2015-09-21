@@ -99,7 +99,7 @@ class Zolago_Catalog_Vendor_ProductController
 		if (is_null($restQuery)) {
 			$restQuery = $this->_getRestQuery();
 		}
-        $restQuery = $this->clearRestQuery($restQuery);
+        $restQuery = $this->processRestQueryForSave($restQuery);
 		Mage::dispatchEvent(
 			"change_product_attribute_after",
 			array(
@@ -117,13 +117,21 @@ class Zolago_Catalog_Vendor_ProductController
     /**
      * Clear rest query from params "from" and "to" (images count)
      * for saving conditions in attributes mapper
+     * and add name filter
+     *
      * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
      *
      * @param $restQuery
      * @return mixed
      */
-	protected function clearRestQuery($restQuery) {
+	protected function processRestQueryForSave($restQuery) {
+        // Clear images count filter
         unset($restQuery["images_count"]);
+        // Add custom filter by name
+        $inParams = $this->getRequest()->getQuery();
+        if (isset($inParams["name"])) {
+            $restQuery["name"] = array("like" => $inParams["name"]);
+        }
         return $restQuery;
     }
 	
