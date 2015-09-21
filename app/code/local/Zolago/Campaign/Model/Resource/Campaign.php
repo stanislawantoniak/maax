@@ -138,7 +138,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
         }
         if (!empty($toInsert)) {
-            $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+
+            try {
+                $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
             $localeTimeF = date("Y-m-d H:i", $localeTime);
