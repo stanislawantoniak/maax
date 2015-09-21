@@ -80,6 +80,7 @@
 "Campaign creative type","Typ kreacji"
 "Edit campaign creative '%s'","Edycja kreacji '%s'"
 "Are you sure","Czy jesteś pewien"
+"Are you sure?","Czy jesteś pewien?"
 "Do you want to delete placement?","Czy chcesz usunąć kreację?"
 "Delete","Usuń"
 "Campaign does not exists","Kampania nie istnieje lub nie masz do niej uprawnień (cross-id)"
@@ -116,3 +117,5 @@
 "NOTE! You do not need to save changes - every change is immediately automatically saved.","UWAGA! Nie musisz zapisywać zmian - każda zmiana poniżej od razu automaticznie wprowadzana jest na stronę serwisu."
 "Coupon image","Obrazek do kuponu"
 "Coupon Terms and Conditions PDF","Regulamin promocji - PDF"
+"-- empty --", "-- brak --"
+"Are you sure you want to delete product from campaign?","Czy na pewno chcesz usunąć produkt z kampanii?"
