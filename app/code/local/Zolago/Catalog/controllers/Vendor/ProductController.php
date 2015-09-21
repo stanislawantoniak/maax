@@ -97,7 +97,7 @@ class Zolago_Catalog_Vendor_ProductController
 		$attributeCode = key($request->getParam("attribute"));
 		$attributeValue = $request->getParam("attribute")[$attributeCode];
 		if (is_null($restQuery)) {
-			$restQuery = $this->_getRestQuery();
+			$restQuery = $this->clearRestQuery($this->_getRestQuery());
 		}
 		Mage::dispatchEvent(
 			"change_product_attribute_after",
@@ -112,8 +112,19 @@ class Zolago_Catalog_Vendor_ProductController
 			)
 		);
 	}
-	
-	
+
+    /**
+     * Clear rest query from params "from" and "to" (images count)
+     * for saving conditions in attributes mapper
+     * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
+     *
+     * @param $restQuery
+     * @return mixed
+     */
+	protected function clearRestQuery($restQuery) {
+        unset($restQuery["images_count"]);
+        return $restQuery;
+    }
 	
 	/**
 	 * Save hidden columns

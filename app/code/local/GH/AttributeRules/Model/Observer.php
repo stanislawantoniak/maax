@@ -6,7 +6,10 @@
 class GH_AttributeRules_Model_Observer
 {
     /**
-     * @param  Varien_Event_Observer $observer
+     * @see Zolago_Catalog_Vendor_ProductController::saveProductAttributeRule()
+     *
+     * @event change_product_attribute_after
+     * @param Varien_Event_Observer $observer
      */
     public function saveProductAttributeRule($observer)
     {
