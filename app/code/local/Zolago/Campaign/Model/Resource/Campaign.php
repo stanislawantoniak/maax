@@ -164,7 +164,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         try {
             $this->_getWriteAdapter()->delete($table, $where);
         } catch (Exception $e) {
-            Mage::log($e->getMessage());
+            Mage::logException($e);
         }
     }
 
@@ -184,7 +184,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             ));
             $this->_getWriteAdapter()->delete($this->getTable("zolagocampaign/campaign_product"), $where);
         } catch (Exception $e) {
-            Mage::log($e->getMessage());
+            Mage::logException($e);
         }
     }
 
@@ -225,7 +225,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId));
+
+        try {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE),
+                array(
+                    '`product_id` in (?)' => $productIds,
+                    '`campaign_id` = ?' => $campaignId
+                )
+            );
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 
 
@@ -243,7 +253,13 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
+
+        try {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`campaign_id` = ?' => $campaignId, 'assigned_to_campaign<>?' => self::CAMPAIGN_PRODUCTS_TO_DELETE));
+
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 
 
@@ -253,12 +269,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param $campaignId
      * @param $productIds
      */
-     public function putProductsToRecalculate($campaignId,$productIds) {
-
+    public function putProductsToRecalculate($campaignId, $productIds)
+    {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`product_id` in (?)' => $productIds,'`campaign_id` = ?' => $campaignId, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
-     }
+        try {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_UNPROCESSED), array('`product_id` in (?)' => $productIds, '`campaign_id` = ?' => $campaignId, "assigned_to_campaign<>?" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
+
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
 
     /**
      * Set field assigned_to_campaign to 1 to product
@@ -270,7 +291,13 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId,'`campaign_id` IN(?)' => $campaignIds, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
+
+        try {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` = ?' => $productId, '`campaign_id` IN(?)' => $campaignIds, "assigned_to_campaign<>?" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
+
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 
     /**
@@ -283,8 +310,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $write = $this->_getWriteAdapter();
-        $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds,'`campaign_id`=?' => $campaignId, "assigned_to_campaign<>" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
+        try {
+            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_PROCESSED), array('`product_id` IN(?)' => $productIds, '`campaign_id`=?' => $campaignId, "assigned_to_campaign<>?" => self::CAMPAIGN_PRODUCTS_TO_DELETE));
 
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 
 

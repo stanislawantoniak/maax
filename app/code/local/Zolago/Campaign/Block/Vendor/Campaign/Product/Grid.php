@@ -54,10 +54,6 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
             ->where("campaign_product.assigned_to_campaign<>?", Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE);
 
         $collection->setPageSize(10);
-
-
-
-        //$collection->printLogQuery(true);
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -70,7 +66,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
     protected function _prepareColumns()
     {
         $_helper = Mage::helper("zolagocampaign");
-        Mage::log("Hello2");
+
         $this->addColumn(
             'skuv',
             array(
