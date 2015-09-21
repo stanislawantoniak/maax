@@ -55,7 +55,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         $campaignId = $this->getRequest()->getParam('id', null);
         $productsStr = $this->getRequest()->getParam('products', array());
-        $isAjax = $this->getRequest()->getParam('isAjax', false);
+
         $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
 
@@ -108,14 +108,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     {
 
         $campaignId = $this->getRequest()->getParam('id', null);
-        $productsStr = $this->getRequest()->getParam('products', array());
+
         $isAjax = $this->getRequest()->getParam('isAjax', false);
         $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
-
-        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
-        $udropshipHelper = Mage::helper("udropship");
-        $localVendor = $udropshipHelper->getLocalVendorId();
 
         // Existing campaign
         if ($campaign->getId()) {
@@ -126,26 +122,6 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         } elseif ($this->getRequest()->getParam('id', null) !== null) {
             $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
             return $this->_redirect("*/*");
-        }
-        $skuVS = array();
-        if (is_string($productsStr)) {
-            $skuVS = array_map('trim', explode(",", $productsStr));
-        }
-
-        $collection = Mage::getModel('catalog/product')
-            ->getCollection()
-            ->addAttributeToFilter('skuv', array('in' => $skuVS));
-        if ($vendor->getId() !== $localVendor) {
-            $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
-        }
-        $collection->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
-        $collection = $collection->getAllIds();
-
-        $productIds = array();
-        if (!empty($collection)) {
-            foreach ($collection as $productId) {
-                $productIds[] = $productId;
-            }
         }
 
 
