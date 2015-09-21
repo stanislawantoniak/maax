@@ -766,36 +766,6 @@ jQuery.noConflict();
 			rwd_banners.trigger('rwd.stop');
 		});
 
-		var rwd_inspiration = $("#rwd-inspiration .rwd-carousel");
-
-		rwd_inspiration.rwdCarousel({
-			items : 5, //10 items above 1000px browser width
-			itemsDesktop : [1000,4], //5 items between 1000px and 901px
-			itemsDesktopSmall : [900,3], // betweem 900px and 601px
-			itemsTablet: [600,3], //2 items between 600 and 0
-			itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
-			pagination : false,
-			navigation: true,
-			navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
-			rewindNav : false,
-			itemsScaleUp:true
-		});
-
-		// Custom Navigation Events
-		var rwdInspiration = $("#rwd-inspiration");
-		rwdInspiration.find(".next").click(function(){
-			rwd_inspiration.trigger('rwd.next');
-		});
-		rwdInspiration.find(".prev").click(function(){
-			rwd_inspiration.trigger('rwd.prev');
-		});
-		rwdInspiration.find(".play").click(function(){
-			rwd_inspiration.trigger('rwd.play',1000); //rwd.play event accept autoPlay speed as second parameter
-		});
-		rwdInspiration.find(".stop").click(function(){
-			rwd_inspiration.trigger('rwd.stop');
-		});
-
 		var rwd_complementary_product = $("#rwd-complementary-product .rwd-carousel");
 
 		rwd_complementary_product.rwdCarousel({

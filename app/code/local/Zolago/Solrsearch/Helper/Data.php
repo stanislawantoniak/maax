@@ -17,6 +17,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	protected $_solrToMageMap = array(
 		"products_id" => "id",
+        "url_path_varchar" => "current_url",
 		"product_type_static" => "type_id",
 		"name_varchar" => "name",
 		"store_id" => "store_id",
@@ -33,6 +34,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"product_rating_int" => "product_rating",
 		"is_bestseller_int" => "is_bestseller",
 		"product_flag_int" => "product_flag",
+        "price_decimal" => "price",
+        "msrp_decimal" => "msrp",
 		"special_price_decimal" => "special_price",
 		"special_from_date_varchar" => "special_from_date",
 		"special_to_date_varchar" => "special_to_date",
@@ -522,6 +525,29 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		return $product;
 	}
+
+    /**
+     * Set price for current user from solr data
+     *
+     * @param array $item
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Product
+     */
+    public function mapSolrDocPriceToProduct(array $item, Mage_Catalog_Model_Product $product) {
+        $customerGroupId = Mage::getSingleton('customer/session')->getCustomerGroupId();
+        $finalPrice = $product->getPriceModel()->calculatePrice(
+            $product->getData("price"),             // basePrice
+            $product->getData("special_price"),     // specialPrice
+            $product->getData("special_from_date"), // specialPriceFrom
+            $product->getData("special_to_date"),   // specialPriceTo
+            null,                                   // rulePrice - not decided yet, for now not used
+            $product->getData("website_id"),        // websiteId,
+            $customerGroupId,
+            $product->getId()
+        );
+        $product->setCalculatedFinalPrice($finalPrice);
+        return $product;
+    }
 
 	/**
 	 * @return array

@@ -2,8 +2,77 @@
 
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {
+    const CACHE_NAME = 'MODEL_CATEGORY';
 
     protected $_relatedCategory;
+
+    /**
+     * Get helper for category cache
+     *
+     * @return Zolago_Modago_Helper_Category
+     */
+    public function getCategoryCacheHelper() {
+        /** @var Zolago_Modago_Helper_Category $helper */
+        $helper = Mage::helper("zolagomodago/category");
+        return $helper;
+    }
+
+    /**
+     * Get unified prefix for this object
+     *
+     * @param $name
+     * @return string
+     */
+    public function getCacheKeyPrefix($name) {
+        return $this->getCategoryCacheHelper()->getPrefix(self::CACHE_NAME. '_' .$name);
+    }
+
+    /**
+     * Build unique cache key for category tree
+     *
+     * @param $id
+     * @param $field
+     * @param $storeId
+     * @return string
+     */
+    protected function _getCacheKey($id, $field, $storeId) {
+        if($field==null) {
+            $field = $this->getIdFieldName();
+        }
+        return $this->getCacheKeyPrefix('load_') . $field . "_" . $id . "_" . $storeId;
+    }
+
+    /**
+     * Load from cache by key
+     *
+     * @param string $key
+     * @param bool $unserialize
+     * @return false | mixed | string
+     */
+    protected function _loadFromCache($key, $unserialize = true) {
+        return $this->getCategoryCacheHelper()->loadFromCache($key, $unserialize);
+    }
+
+    /**
+     * Save to cache by key
+     * Data will be serialized
+     *
+     * @param string $key
+     * @param array $data
+     */
+    protected function _saveInCache($key, $data) {
+        $this->getCategoryCacheHelper()->_saveInCache($key, $data);
+    }
+
+    /**
+     * Check whether to use cache for category cache
+     *
+     * @return bool
+     */
+    public function canUseCache() {
+        return $this->getCategoryCacheHelper()->useCache();
+    }
+
     /**
      * @return string
      */
@@ -26,86 +95,57 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
     public function load($id, $field=null) {
 
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin()) {
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
             return parent::load($id, $field);
         }
 
-        Varien_Profiler::start("Loading category");
         $cacheKey = $this->_getCacheKey($id, $field, $this->getStoreId());
 
         if($cacheData = $this->_loadFromCache($cacheKey)) {
             $this->_beforeLoad($id, $field);
-            $this->setData(unserialize($cacheData));
+            $this->setData($cacheData);
             $this->_afterLoad();
             $this->setOrigData();
             $this->_hasDataChanges = false;
-            Varien_Profiler::start("Loading category");
             return $this;
         }
 
         // Load origin
         parent::load($id, $field);
+
+        // Load common used data for much better performance
+        $this->getUrl();
+        $this->getNoVendorContextUrl();
+        $this->getParentCategories();
+
+
         // Do save
         $this->_saveInCache($cacheKey, $this->getData());
-        Varien_Profiler::start("Loading category");
 
         return $this;
     }
-
-    /**
-     * @param string $key
-     * @return null | string
-     */
-    protected function _loadFromCache($key) {
-        return Mage::app()->getCache()->load($key);
-    }
-
-    /**
-     * @param string $key
-     * @param array $data
-     */
-    protected function _saveInCache($key, $data) {
-        $cache = Mage::app()->getCache();
-        $oldSerialization = $cache->getOption("automatic_serialization");
-        $cache->setOption("automatic_serialization", true);
-        $cache->save($data, $key, array(), 600);
-        $cache->setOption("automatic_serialization", $oldSerialization);
-    }
-
-    /**
-     * @param mixed $id
-     * @param string | null $field
-     * @param int $storeId
-     * @return string
-     */
-    protected function _getCacheKey($id, $field, $storeId) {
-        if($field==null) {
-            $field = $this->getIdFieldName();
-        }
-        return "CATEGORY_" . $field . "_" . $id . "_" . $storeId;
-    }
-
-
 
     /**
      * Return parent categories of current category
      *
      * @return array
      */
-    public function getParentCategories()
-    {
-        $pathIds = array_reverse(explode(',', $this->getPathInStore()));
-        $categories = Mage::getResourceModel('catalog/category_collection')
-                      ->setStore(Mage::app()->getStore())
-                      ->addAttributeToSelect('name')
-                      ->addAttributeToSelect('long_name')
-                      ->addAttributeToSelect('url_key')
-                      ->addAttributeToSelect('url_path')
-                      ->addFieldToFilter('entity_id', array('in' => $pathIds))
-                      ->addFieldToFilter('is_active', 1)
-                      ->load()
-                      ->getItems();
-        return $categories;
+    public function getParentCategories() {
+        if (!$this->hasData("parent_categories")) {
+            $pathIds = array_reverse(explode(',', $this->getPathInStore()));
+            $categories = Mage::getResourceModel('catalog/category_collection')
+                ->setStore(Mage::app()->getStore())
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('long_name')
+                ->addAttributeToSelect('url_key')
+                ->addAttributeToSelect('url_path')
+                ->addFieldToFilter('entity_id', array('in' => $pathIds))
+                ->addFieldToFilter('is_active', 1)
+                ->load()
+                ->getItems();
+            $this->setData("parent_categories",  $categories);
+        }
+        return $this->getData("parent_categories");
     }
 
     /**
@@ -125,6 +165,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         }
         return $this->_relatedCategory;
     }
+
     /**
      * Return canonical link
      *
@@ -300,4 +341,51 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         return $this->_campaign;
     }
 
+    /**
+     * Retrieve categories by parent
+     *
+     * @param int $parent
+     * @param int $recursionLevel
+     * @param bool $sorted
+     * @param bool $asCollection
+     * @param bool $toLoad
+     * @return mixed
+     */
+    public function getCategories($parent, $recursionLevel = 0, $sorted=false, $asCollection=false, $toLoad=true) {
+        // Skip cache in admin
+        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
+            return parent::getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
+        }
+
+        // Cache key for parent node
+        $cacheKey = $this->getCacheKeyPrefix("getCategories_").$parent.'_'.$recursionLevel.'_' . (int)$sorted.'_'.(int)$asCollection.'_'.(int)$toLoad;
+
+        if($cacheData = $this->_loadFromCache($cacheKey)) {
+            /* @var $tree Zolago_Catalog_Model_Resource_Category_Tree */
+            $tree = Mage::getResourceModel('catalog/category_tree');
+            $node = new Varien_Data_Tree_Node($cacheData, 'entity_id', $tree);
+            $node->loadChildren($recursionLevel);
+            $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
+
+            if ($asCollection) {
+                return $tree->getCollection();
+            }
+            return $node->getChildren();
+        }
+
+        // Load origin
+        /** @var Zolago_Catalog_Model_Resource_Category $resource */
+        $resource = $this->getResource();
+        /** @var Varien_Data_Tree_Node_Collection $categories */
+        $categories = $resource->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
+
+        // Save parent node, cache for children in tree->load()
+        /** @var Varien_Data_Tree_Node $parentNode */
+        $parentNode = $resource->getParentNode($parent);
+        if ($parentNode->getId()) {
+            $this->_saveInCache($cacheKey, $parentNode->getData());
+        }
+
+        return $categories;
+    }
 }

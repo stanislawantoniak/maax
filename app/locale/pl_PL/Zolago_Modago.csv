@@ -31,5 +31,6 @@
 "Expiration date","Kod jest ważny do"
 "See the products covered by discount","Zobacz produkty objęte rabatem"
 "Copy to clipboard","Skopiuj do schowka"
-"%s - %s of %s products","%s - %s z %s produktów"
+"%s-%s of %s products","%s-%s z %s produktów"
 "%s products","%s produktów"
+"1 product","1 produkt"

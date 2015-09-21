@@ -147,6 +147,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		// Paginaton
 		$itemsPerPage = $this->getListModel()->getCurrentLimit();
 		$start = $this->getListModel()->getCurrentStart();
+
 		$this->start = $start;
         $this->rows = $itemsPerPage;
 	}

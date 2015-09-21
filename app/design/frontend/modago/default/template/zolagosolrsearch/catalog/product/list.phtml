@@ -25,11 +25,6 @@ $_products = $_cache['products'];
 			visibility: hidden;
 			z-index: -1;
 		}
-		.addNewPositionListProductWrapper {
-			display: none;
-			z-index: -1;
-			visibility: hidden;
-		}
 	</style>
 </noscript>
 <div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0; top: 0; z-index: 1000000; background: url(/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat transparent;"></div>
@@ -131,31 +126,27 @@ $_products = $_cache['products'];
 							</div>
 						</div>
 					</div>
+					<div class="pagination-line pagination-bottom">
+						<?php echo $this->getChildHtml('product_list_toolbar_pager'); ?>
+					</div>
 					<div id="listing-loading">
 						<img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
 					</div>
-					<?php $noAjaxLink = $this->getNoAjaxLink(); ?>
-					<?php if ($noAjaxLink): ?>
-						<?php foreach ($noAjaxLink as $page => $link) : ?>
-							<span class="addNewPositionListWrapper" style="width:35px"><a href="<?php echo $link ?>"><?php echo $page ?></a></span>
-						<?php endforeach; ?>
-					<?php else: ?>
-						<div class="addNewPositionListProductWrapper">
-							<a href="#"
-							   class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
-						</div>
+
+
+
+
+					<?php if ($this->getListModel()->isGoogleBot()): ?>
+						<?php echo $this->getChildHtml('product_list_toolbar_pager_full'); ?>
 					<?php endif; ?>
 
 					<script type="text/javascript">
 
 						Mall.listing.setQuery("<?php echo Mage::helper('catalogsearch')->getQueryText(); ?>");
-						Mall.listing.setInitProducts(<?php echo $this->getJsonProducts($_products); ?>);
-						Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
-						Mall.listing.setScrollLoadOffset(<?php echo (int) $this->getAppendWhenScroll(); ?>);
-						Mall.listing.setPixelsBeforeAppend(<?php echo (int) $this->getPixelsBeforeAppend(); ?>);
-
 						Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
-						Mall.listing.addToVisibleItems(<?php echo count($_products); ?>);
+						Mall.listing.setInitProducts(<?php echo $this->getJsonProducts($_products); ?>);
+						Mall.listing.setProductsPerPage(<?php echo count($_products) - 8; ?>);
+
 						Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
 						Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
 						Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
@@ -176,15 +167,6 @@ $_products = $_cache['products'];
 							in_your_wishlist: <?php echo $product[6] ? "true" : "false"; ?>
 						});
 						<?php endforeach; ?>
-
-						jQuery(window).resize(function () {
-							Mall.listing.placeListingFadeContainer();
-						});
-
-						jQuery('a.addNewPositionListProduct').click(function (event) {
-							event.preventDefault();
-							Mall.listing.loadMoreProducts();
-						});
 
 						Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
 

@@ -1,22 +1,26 @@
 body.zolagomodago-index-index .benefits {
 	padding: 0 !important;
+	margin: 30px 0 10px 0 !important;
+	max-width: 1230px;
+	@media(max-width: $screen-sm-max) {
+		margin: 15px 0 -15px !important;
+	}
 }
 
 .benefits {
 	font-size: 0;
-	margin: 45px -15px 30px;
+	margin: 30px -15px 15px;
 	padding: 0 30px;
 	@media(min-width: 1230px) {
 		max-width: 1230px;
-		margin: 45px auto 30px;
+		margin: 30px auto 15px;
 		padding: 0 !important;
 	}
 	@media(max-width: 979px) {
-		margin: 30px -15px 15px !important;
+		margin: 15px -15px 0px !important;
 	}
 	.benefit-item {
 		font-family: $fontLight;
-		text-align: center;
 		display: inline-block;
 		vertical-align: middle;
 		width: 25%;
@@ -39,9 +43,7 @@ body.zolagomodago-index-index .benefits {
 
 		@media(max-width: 719px) {
 			width: 50%;
-			text-align: left !important;
 			.benefit-text {
-				margin-left: 10%;
 				h3 {
 					width: auto !important;
 				}
@@ -56,11 +58,11 @@ body.zolagomodago-index-index .benefits {
 			}
 		}
 
-		@media(max-width: 479px) {
+/*		@media(max-width: 479px) {
 			.benefit-text {
 				margin-left: 0 !important;
 			}
-		}
+		}*/
 
 		@media(max-width: 359px) {
 			.benefit-text {
@@ -72,11 +74,12 @@ body.zolagomodago-index-index .benefits {
 			display: inline-block;
 			vertical-align: middle;
 			font-size: $font-size-base;
+			background-size: 64px 64px;
 			background-repeat: no-repeat;
 			background-position: left center;
-			background-size: 64px 64px;
 			text-align: left;
 			padding: 15px 5px 15px 79px; // 79px = 64px for image + 15px for padding
+			margin-left: 10%;
 			h3 {
 				font-size: 16px;
 				font-family: $fontRegular;
