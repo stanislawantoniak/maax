@@ -327,7 +327,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             ->join(
                 array('campaign_product' => 'zolago_campaign_product'),
                 'campaign_product.product_id = e.entity_id')
-            ->where("campaign_product.campaign_id=?", $object->getId());
+            ->where("campaign_product.campaign_id=?", $object->getId())
+            ->where("campaign_product.assigned_to_campaign<>?", self::CAMPAIGN_PRODUCTS_TO_DELETE);
 
         $skuvS = array();
         foreach ($collection as $collectionItem) {
