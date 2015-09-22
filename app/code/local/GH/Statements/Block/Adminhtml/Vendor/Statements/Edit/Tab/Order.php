@@ -10,6 +10,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Order
         $this->setId('statement_order');
         $this->setDefaultSort('id');
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection()
