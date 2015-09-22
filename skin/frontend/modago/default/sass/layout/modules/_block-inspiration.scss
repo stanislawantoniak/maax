@@ -1,7 +1,15 @@
 .block-inspiration {
 	.rwdCarousel {
 	//	width: 100%;
-		padding:15px 55px;
+		@media(max-width: $screen-sm-max) {
+			padding:15px 25px;
+			.rwd-prev {
+				left: -19px !important;
+			}
+			.rwd-next {
+				right: -19px !important;
+			}
+		}
 		position:relative;
 		//display: inline-block;
 		.item {
