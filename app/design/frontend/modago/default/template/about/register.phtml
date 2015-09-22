@@ -72,14 +72,14 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 					<div class="col-sm-12 about-register-actions">
 						<div class="about-register-login hidden-xs">
 							<?php echo $_hlp->__("Have an account?"); ?>
-							<a href="#"><?php echo $_hlp->__("Login"); ?></a>
+							<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
 						</div>
 						<button type="submit" class="button button-primary large link">
 							<?php echo $_hlp->__('Create account and get coupons') ?>
 						</button>
 						<div class="about-register-login visible-xs">
 							<?php echo $_hlp->__("Have an account?"); ?>
-							<a href="#"><?php echo $_hlp->__("Login"); ?></a>
+							<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
 						</div>
 					</div>
 				</div>
