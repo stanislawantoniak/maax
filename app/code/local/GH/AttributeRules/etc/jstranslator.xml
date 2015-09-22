@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<jstranslator>
+    <save-as-rule translate="message" module="gh_attributerules">
+        <message>Save as rule</message>
+    </save-as-rule>
+</jstranslator>

@@ -23,24 +23,27 @@ class Zolago_Catalog_Vendor_ProductController
 		$method = $request->getParam("method");
 		$productIds = $request->getParam("product_ids");
 		$attributeSetId = $request->getParam("attribute_set_id");
+        $saveAsRule = $request->getParam("save_as_rule");
+		$attributeMode = $request->getParam("attribute_mode");
 		$storeId = $this->_getStoreId();
 		$global = false;
-		
+
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
 		}
-		
+		$restQuery = null;
 		if(is_array($productIds) && count($productIds)){
 			$ids = array_unique($productIds);
 		}else{
 			$collection = $this->_getCollection();
-			foreach($this->_getRestQuery() as $key=>$value){
+			$restQuery = $this->_getRestQuery();
+			foreach($restQuery as $key=>$value){
 				$collection->addAttributeToFilter($key, $value);
 			}
 			$global = true;
 			$ids = $collection->getAllIds();
 		}
-		
+
 		try{
 			array_walk($ids, function($value){
 				return (int)$value;
@@ -84,13 +87,53 @@ class Zolago_Catalog_Vendor_ProductController
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
 		}
-		
-		
+
+
+
 		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
 		$this->_prepareRestResponse();
+
+
+		$attributeCode = key($request->getParam("attribute"));
+		$attributeValue = $request->getParam("attribute")[$attributeCode];
+		if (is_null($restQuery)) {
+			$restQuery = $this->_getRestQuery();
+		}
+        $restQuery = $this->processRestQueryForSave($restQuery);
+		Mage::dispatchEvent(
+			"change_product_attribute_after",
+			array(
+				'store_id' => $storeId,
+				"attribute_code" => $attributeCode,
+				"vendor_id" => $this->getVendorId(),
+				"attribute_mode" => $attributeMode[$attributeCode],
+				"attribute_value" => $attributeValue,
+				"rest_query" =>$restQuery,
+				"save_as_rule" => $saveAsRule
+			)
+		);
 	}
-	
-	
+
+    /**
+     * Clear rest query from params "from" and "to" (images count)
+     * for saving conditions in attributes mapper
+     * and add name filter
+     *
+     * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
+     *
+     * @param $restQuery
+     * @return mixed
+     */
+	protected function processRestQueryForSave($restQuery) {
+        // Clear images count filter
+        unset($restQuery["images_count"]);
+        // Add custom filter by name
+        $inParams = $this->getRequest()->getQuery();
+        if (isset($inParams["name"])) {
+            $restQuery["name"] = array("like" => "%".$inParams["name"]."%");
+        }
+        return $restQuery;
+    }
 	
 	/**
 	 * Save hidden columns
@@ -254,4 +297,8 @@ class Zolago_Catalog_Vendor_ProductController
          return $errors;
      }
 
+    public function manageattributesAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

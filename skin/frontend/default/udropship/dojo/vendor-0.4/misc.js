@@ -9,7 +9,7 @@ define([
 		}
 		currency = currency || "zł"; 
 		return formatNumber(value) + " " + currency;
-	}
+	};
 	
 	
 	var formatNumber = function(number){
@@ -17,31 +17,31 @@ define([
 			number = 0;
 		}
 		return parseFloat(number).toFixed(2).replace("\.", ",");
-	}
+	};
 	
 	var formatNumberEmpty = function(number){
 		if(!parseFloat(number)){
 			return "";
 		}
 		return formatNumber(number);
-	}
+	};
 	
 	var toNumber = function(number){
 		return parseFloat(number.replace(",", "."));
-	}
+	};
 	
 	var formatPercent = function(value){
 		return formatNumber(value) + "%";
-	}
+	};
 	
 	var replace = function(markup, data){
 		for(var key in data){
 			if(data.hasOwnProperty(key)){
 				markup = markup.replace(new RegExp("\{\{" + key + "\}\}", "g"), typeof data[key] != "undefined" ? data[key] : "");
 			}
-        };
+        }
         return markup;
-	}
+	};
 	
 	
 	var startLoading = function(showProgress){
@@ -66,11 +66,11 @@ define([
 		}
 		
 		loader.show();
-	}
+	};
 	
 	var stopLoading =  function(){
 		jQuery("#vendor-loading").fadeOut();
-	}
+	};
 	
 	return {
 		currency: formatPrice,
@@ -82,4 +82,4 @@ define([
 		startLoading: startLoading,
 		stopLoading: stopLoading
 	};
-})
+});
