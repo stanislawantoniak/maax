@@ -82,7 +82,14 @@ jQuery(document).ready(function() {
 						<dd><?php echo $this->escapeHtml($_vendor->getVendorName())?></dd> 
 						<dt><?php echo $_helper->__("Refund payment");?>:</dt>
 						<dd>
-							<?php if($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
+							<?php if($_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $_po->isCod()): ?>
+								<div id="refundDisabled"
+								     data-original-title="<?php echo $_helper->__("Refund is not possible because order was sent using COD and client didn't receive the package."); ?>"
+								     data-placement="bottom">
+									<?php echo $_helper->__("Refund disabled") ?>
+									<i class="icon-question-sign"></i>
+								</div>
+							<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
 							<div class="btn-group" id="status-holder"> 
 								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
 								<?php if($_rma->getRmaRefundAmount()): ?>
@@ -525,5 +532,6 @@ jQuery(function($) {
 
 	<?php endif; ?>
 
+	jQuery('#refundDisabled').tooltip();
 });
 </script>
