@@ -521,8 +521,6 @@ define([
 			dataObject.attribute_mode[field] = e.mode;
 			dataObject[field] = value;
 			dataObject.changed = [field];
-            // Add info about 'Save as rule'
-            dataObject.save_as_rule = e.useSaveAsRule;
 
 			store.put(dataObject).then(function(){
 				e.deferred.resolve();

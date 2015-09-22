@@ -87,7 +87,13 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
                             $str .= $attr->getStoreLabel($store) . $helper->__(" is empty");
                         }
                     } else { // ext type
-                        $str .= $attr->getStoreLabel($store) . ": " . $condition; // here condition is a value, always equal
+                        $_value = $condition; // here condition is a value
+                        $startLabel = strpos($_value, Zolago_Catalog_Helper_Data::SPECIAL_LABELS_OLD_DELIMITER);
+                        if ($startLabel) {
+                            $str .= $_value; // Value like <label>: <value> ex: "lepkość: średnia"
+                        } else {
+                            $str .= $attr->getStoreLabel($store) . ": " . $_value;
+                        }
                     }
                     $str .= $helper->__(" and ");
                 }
