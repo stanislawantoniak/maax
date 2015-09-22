@@ -69,7 +69,18 @@ $dataRules = $this->getRulesData();
                             class="table-lvl-0 table table-bordered table-checkable table-no-inner-border table-hover">
                             <thead>
                             <tr>
-                                <th class="checkbox-column" style="width: 3%;"></th>
+                                <th class="checkbox-column" style="width: 3%;">
+                                    <div class="">
+                                        <span class="">
+                                            <input type="checkbox"
+                                                   name="all"
+                                                   id="attr-select-all"
+                                                   value="1"
+                                                   data-checkbox-group-target="input[type=checkbox][data-checkbox-group=attr-group]"
+                                                   class="uniform">
+                                        </span>
+                                    </div>
+                                </th>
                                 <th colspan="2"><?php echo $helper->__("Attribute to fill"); ?></th>
                             </tr>
                             </thead>
@@ -84,7 +95,9 @@ $dataRules = $this->getRulesData();
                                                    name="attribute[]"
                                                    id="attr-<?php echo $key; ?>"
                                                    value="<?php echo $key;?>"
+                                                   data-checkbox-group="attr-group"
                                                    data-checkbox-group-target="input[type=checkbox][data-checkbox-group=value-key-<?php echo $key; ?>]"
+                                                   data-checkbox-group-parent="#attr-select-all"
                                                    class="uniform">
                                         </span>
                                     </div>
