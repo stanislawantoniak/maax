@@ -410,6 +410,11 @@
 			</action>
 			<block type="cms/page" name="cms_page"/>
 		</reference>
+		<reference name="root">
+			<action method="addBodyClass">
+				<value>lower-breadcrumbs</value>
+			</action>
+		</reference>
 	</cms_page>
 
 	<zolagomodago_index_index>
