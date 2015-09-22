@@ -709,6 +709,13 @@ define([
 			misc.startLoading();
 			massConfirm.trigger(e).always(misc.stopLoading);
 		});
+
+        // Open popup with autofill rules table
+        jQuery("#massAttributeRules").click(function() {
+            jQuery("a[data-target=#showAttributeRules]").click();
+        });
+
+
 	};
 	
 	////////////////////////////////////////////////////////////////////////////
