@@ -13,19 +13,23 @@ class GH_AttributeRules_Model_Observer
      */
     public function saveProductAttributeRule($observer)
     {
-        $saveAsRule = $observer->getSaveAsRule();
-        $attributeMode = $observer->getAttributeMode();
+        /** @var Zolago_Dropship_Model_Vendor $vendor */
+        $vendor = $observer->getVendor();
+        $storeId = $observer->getStoreId();
         $restQuery = $observer->getRestQuery();
+        $saveAsRule = $observer->getSaveAsRule();
+        $attributeCode = $observer->getAttributeCode();
+        $attributeMode = $observer->getAttributeMode();
         $attributeValue = $observer->getAttributeValue();
 
-        $attributeCode = $observer->getAttributeCode();
+        $vendorId = $vendor->getId();
 
         /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
         $attribute = $this->_getAttribute($attributeCode);
         $frontendInput = $attribute->getFrontendInput();
 
         if (!$saveAsRule ||
-            //IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode)
+            //IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode [~remove mode])
             ($frontendInput == 'multiselect' && !in_array($attributeMode, array("add", "set")))
             ||
             //Do not save empty value if mode "add"
@@ -33,10 +37,6 @@ class GH_AttributeRules_Model_Observer
         ) {
             return;
         }
-
-        $storeId = $observer->getStoreId();
-        $vendorId = $observer->getVendorId();
-
 
         $attributeId = Mage::getResourceModel('eav/entity_attribute')
             ->getIdByCode('catalog_product', $attributeCode);
@@ -58,6 +58,23 @@ class GH_AttributeRules_Model_Observer
         //--Prepare filter to save
 
         $filterSerialized = !empty($filter) ? serialize($filter) : "";
+
+        // Check if identical rule don't exists
+        /** @var GH_AttributeRules_Model_Resource_AttributeRule_Collection $collection */
+        $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
+        $collection->addVendorFilter($vendor);
+
+        // Simple hash for skipping
+        $hash = $this->_getHash($vendorId, $filterSerialized, $attributeId, $attributeValue);
+        /** @var GH_AttributeRules_Model_AttributeRule $rule */
+        foreach ($collection as $rule) {
+            $ruleHash = $this->_getHash($rule->getVendorId(),$rule->getFilter(), $rule->getColumn(), $rule->getValue());
+            if ($hash == $ruleHash) {
+                return; // Skip identical
+            }
+        }
+        // --Check if identical rule don't exists
+
         if ($frontendInput == 'multiselect' && $attributeMode == "add") {
             foreach (explode(",", $attributeValue) as $value) {
                 $this->saveRule($vendorId, $filterSerialized, $attributeId, $value);
@@ -104,5 +121,9 @@ class GH_AttributeRules_Model_Observer
         /* @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
         $gridModel = Mage::getModel("zolagocatalog/vendor_product_grid");
         return $gridModel->getAttribute($attribute);
+    }
+
+    protected function _getHash($vendorId, $filter, $column, $value) {
+        return $vendorId."_".$filter."_".$column."_".$value;
     }
 }

@@ -105,7 +105,7 @@ class Zolago_Catalog_Vendor_ProductController
 			array(
 				'store_id' => $storeId,
 				"attribute_code" => $attributeCode,
-				"vendor_id" => $this->getVendorId(),
+                "vendor" => $this->getVendor(),
 				"attribute_mode" => $attributeMode[$attributeCode],
 				"attribute_value" => $attributeValue,
 				"rest_query" =>$restQuery,
