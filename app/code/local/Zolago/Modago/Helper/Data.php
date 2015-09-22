@@ -41,26 +41,6 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         return $tree;
     }
 
-    /**
-     * @param $parentId
-     *
-     * @return array
-     */
-    public function getSubCategories($parentId)
-    {
-        $children = Mage::getModel('catalog/category')->getCategories($parentId);
-        $subCategories = array();
-        if (!empty($children)) {
-            foreach ($children as $cat) {
-                $subCategories[$cat->getId()] = array(
-                    'url'   => $cat->getRequestPath(),
-                    'label' => $cat->getName()
-                );
-            }
-        }
-        return $subCategories;
-    }
-
     protected function _calculatePluralIndex($num)
     {
         $few = 1;
