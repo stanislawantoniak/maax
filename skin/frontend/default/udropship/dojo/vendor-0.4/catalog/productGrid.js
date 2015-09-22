@@ -881,10 +881,12 @@ define([
                 var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
                 if (this.value == 'sub') {
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
+                    checkbox.css("color", "#C8C8C8").attr("disabled", true);
                 } else {
 					var checked = jQuery(this).closest('form').find('.checkbox.selection').find('input');
 					if (checked.prop('checked')) {
 	                    checkbox.find('input').attr("disabled", false);
+                        checkbox.css("color", "").attr("disabled", false);
 					}
                 }
             });
@@ -894,10 +896,12 @@ define([
                 var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
                 if (!jQuery(this).prop("checked")) {					
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
+                    checkbox.css("color", "#C8C8C8").attr("disabled", true);
                 } else {
 					var radio = jQuery(this).closest('form').find('input[type=radio][name=mode]:checked');
 					if (radio.val() != 'sub') {
 	                    checkbox.find('input').attr("disabled", false);
+                        checkbox.css("color", "").attr("disabled", false);
 					}
                 }
             });
