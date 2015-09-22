@@ -6,6 +6,8 @@ $helper = Mage::helper("gh_attributerules");
 $storeId = $this->getLabelStore();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
+
+$dataRules = $this->getRulesData();
 ?>
 
 <style>
@@ -61,6 +63,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                         <strong><?php echo $helper->__("Information");?>:</strong>
                         <?php echo $helper->__("Some text here");?>
                     </p>
+                    <?php if(!empty($dataRules)): ?>
                     <div class="widget-content">
                         <table
                             class="table-lvl-0 table table-bordered table-checkable table-no-inner-border table-hover">
@@ -72,7 +75,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             </thead>
                             <tbody>
                             <?php
-                            foreach ($this->getRulesData() as $key => $row): ?>
+                            foreach ($dataRules as $key => $row): ?>
                             <tr class="">
                                 <td class="checkbox-column">
                                     <div class="">
@@ -168,7 +171,13 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             </tbody>
                         </table>
                     </div>
-
+                    <?php else: ?>
+                    <p>
+                        <strong>
+                            <?php echo $helper->__("Currently you don't have saved any rules"); ?>
+                        </strong>
+                    </p>
+                    <?php endif; ?>
 
                 </div>
                 <div class="modal-footer">
