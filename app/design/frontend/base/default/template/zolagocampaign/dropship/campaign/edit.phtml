@@ -132,10 +132,23 @@ $_modagoHlp = Mage::helper("zolagocommon");
     </div>
 </div>
 <?php endif; ?>
-
     <script type="text/javascript">
         var websitesData = JSON.parse('<?php echo json_encode($this->getWebsites()); ?>');
+        var productGridId = '<?php echo $this->getProductsGrid()->getId(); ?>';
+        var bannerGridId = '<?php echo $this->getBannersGrid()->getId(); ?>';
+
         jQuery(document).ready(function () {
+
+            jQuery(document).on('click','#'+bannerGridId+' .btn[data-action=remove]', function (e) {
+                e.preventDefault();
+                var campaignId = jQuery("input[name=campaign_id]").val();
+                var link = jQuery(this).attr('href') + "campaignId/" + campaignId;
+                bootbox.confirm('<?php echo $_helper->__("Are you sure you want to delete banner from campaign?"); ?>', function (result) {
+                    if (result) {
+                        window.location = link;
+                    }
+                });
+            });
 
             jQuery("#browseProducts form").submit(function (e) {
                 e.preventDefault();
@@ -154,35 +167,61 @@ $_modagoHlp = Mage::helper("zolagocommon");
                     //update grid if edit
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
+                        startLoading();
                         jQuery.ajax({
-                            url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
+                            url:  '<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>'   ,
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
-                            success: function (result) {
-                                jQuery(('#zolagocampaign_campaign_product_grid')).html(jQuery(result).find('#zolagocampaign_campaign_product_grid').html());
-                                jQuery("#zolagocampaign_campaign_product_grid_table .filter input")
-                                    .addClass("form-control");
+                            success: function () {
+                                refreshProductGrid(modelId);
                             }
                         })
                     }
                 }
             });
 
-            jQuery("#browseProducts").on("show.bs.modal", function () {
-                //console.log("Init loading products")
-            });
+
+            function refreshProductGrid(campaign){
+                jQuery.ajax({
+                    url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
+                    //contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    data: {id: campaign, isAjax: true},
+                    success: function (result) {
+                        jQuery("#"+productGridId).replaceWith(result);
+                        stopLoading();
+                    }
+                })
+            }
+
+            jQuery("#browseProducts").on("show.bs.modal", function () {});
+
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
+
+
+
+            jQuery(document).on('click','#'+productGridId+' .btn[data-action=remove]', function (e) {
                 e.preventDefault();
                 var campaignId = jQuery("input[name=campaign_id]").val();
-                var path = jQuery(this).attr('href');
-                removeCampaignGridItemLink(path, campaignId);
+                var productId = jQuery(this).data("item");
+                bootbox.confirm('<?php echo $_helper->__("Are you sure you want to delete product from campaign?"); ?>', function (result) {
+                    if (result) {
+                        startLoading();
+                        removeCampaignProduct(campaignId, productId);
+                    }
+                });
             });
-            function removeCampaignGridItemLink(path, campaignId) {
-                var link = path + "campaignId/" + campaignId;
-                window.location = link;
+
+            function removeCampaignProduct(campaignId, productId) {
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl('campaign/vendor/removeProduct', array("_secure" => true)); ?>',
+                    data: {campaignId: campaignId, id: productId},
+                    success: function () {
+                        refreshProductGrid(campaignId);
+                    }
+                })
             }
 
             jQuery('.datetimepicker').datetimepicker({
@@ -391,4 +430,24 @@ $_modagoHlp = Mage::helper("zolagocommon");
             };
 
         }
+
+
+
+        var startLoading = function () {
+            var loader = jQuery("#vendor-loading");
+            if (!loader.length) {
+                loader = jQuery("<div>").attr({
+                    "id": "vendor-loading"
+                }).click(function () {
+                    return false;
+                }).hide().appendTo("body");
+            }
+            loader.addClass("with-progress");
+            loader.show();
+        };
+
+        var stopLoading = function () {
+            jQuery("#vendor-loading").fadeOut();
+        }
     </script>
+
