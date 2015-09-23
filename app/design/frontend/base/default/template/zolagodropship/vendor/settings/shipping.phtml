@@ -118,7 +118,7 @@ $useUps = $_vendor->getData('use_orbaups');
 
 
 
-<!--                                DHL Rates-->
+<!--                                Shipment charge-->
                                 <div class="form-group subsection">
                                     <label class="col-md-3 control-label">
                                         <?php echo Mage::helper("zolagodropship")->__("Shipment charge"); ?>
@@ -229,6 +229,14 @@ $useUps = $_vendor->getData('use_orbaups');
                                     <input id="orbaups_password" name="orbaups_password" value="<?php echo $_vendor->getOrbaupsPassword(); ?>" type="password" class="form-control" size="10">
                                 </div>
                             </div>
+
+                            <!--                                UPS Rates-->
+                            <div class="form-group subsection">
+                                <label class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS Rates"); ?>
+                                </label>
+                            </div>
+
                                 <div class="form-group">
                                     <label for="orbaups_insurance_charge_amount" class="col-md-3 control-label">
                                         <?php echo Mage::helper("zolagodropship")->__("Insurance charge amount");?>
