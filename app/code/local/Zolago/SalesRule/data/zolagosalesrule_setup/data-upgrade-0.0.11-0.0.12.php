@@ -12,7 +12,82 @@ $cmsNavigationBlocks = array(
 			Jak zdobyć dodatkowe rabaty?
 		</div>
 		<div class="mypromotions-cms-subtitle">
-			Nagradzamy Twoją aktywność.
+			Nagradzamy Twoją aktywność:
+		</div>
+		<ul class="mypromotions-cms-list">
+			<li>Przeglądaj produkty</li>
+			<li>Dodawaj je do ulubionych</li>
+			<li>Dziel się nimi ze znajomymi na Facebooku</li>
+			<li>Kupuj produkty ulubionych sklepów</li>
+		</ul>
+		<div class="mypromotions-cms-text">
+			Im więcej przeglądasz, im więcej kupujesz tym więcej otrzymasz kodów rabatowych i tym lepiej dobierzemy je do Ciebie.
+		</div>
+	</section>
+</div>
+EOD
+	,
+		'is_active'     => 1,
+		'stores'        => 0
+	),
+	array(
+		'title'         => 'Account promotions logged in no newsletter no coupons',
+		'identifier'    => 'mypromotions_logged_nocoupons_nonewsletter',
+		'content'       => <<<EOD
+<div class="mypromotions-cms-container">
+	<section class="main bg-w mypromotions-cms col-xs-12">
+		<div class="mypromotions-cms-pretitle">
+			W tej chwili nie masz żadnych rabatów.
+		</div>
+		<div class="mypromotions-cms-newsletter-title">
+			Odbierz swój pakiet kuponów!
+		</div>
+		<div class="mypromotions-cms-newsletter-subtitle">
+			Zapisz się do newslettera, żeby otrzymać w prezencie wyjątkowy pakiet kodów rabatowych.
+		</div>
+		{{block type="zolagomodago/promotions_newsletter" template="promotions/newsletter.phtml"}}
+	</section>
+</div>
+<div class="mypromotions-cms-container">
+	<section class="main bg-w mypromotions-cms col-xs-12 mypromotions-nolabels">
+		<div class="mypromotions-cms-subtitle">
+			Nagradzamy Twoją aktywność:
+		</div>
+		<ul class="mypromotions-cms-list">
+			<li>Przeglądaj produkty</li>
+			<li>Dodawaj je do ulubionych</li>
+			<li>Dziel się nimi ze znajomymi na Facebooku</li>
+			<li>Kupuj produkty ulubionych sklepów</li>
+		</ul>
+		<div class="mypromotions-cms-text">
+			Im więcej przeglądasz, im więcej kupujesz tym więcej otrzymasz kodów rabatowych i tym lepiej dobierzemy je do Ciebie.
+		</div>
+	</section>
+</div>
+EOD
+	,
+		'is_active'     => 1,
+		'stores'        => 0
+	),
+	array(
+		'title'         => 'Account promotions logged in no newsletter',
+		'identifier'    => 'mypromotions_logged_nonewsletter',
+		'content'       => <<<EOD
+<div class="mypromotions-cms-container">
+	<section class="main bg-w mypromotions-cms col-xs-12">
+		<div class="mypromotions-cms-newsletter-title">
+			Odbierz swój pakiet kuponów!
+		</div>
+		<div class="mypromotions-cms-newsletter-subtitle">
+			Zapisz się do newslettera, żeby otrzymać w prezencie wyjątkowy pakiet kodów rabatowych.
+		</div>
+		{{block type="zolagomodago/promotions_newsletter" template="promotions/newsletter.phtml"}}
+	</section>
+</div>
+<div class="mypromotions-cms-container">
+	<section class="main bg-w mypromotions-cms col-xs-12 mypromotions-nolabels">
+		<div class="mypromotions-cms-subtitle">
+			Nagradzamy Twoją aktywność:
 		</div>
 		<ul class="mypromotions-cms-list">
 			<li>Przeglądaj produkty</li>
@@ -43,7 +118,7 @@ EOD
 			Kupuj swoje ulubione marki do 50% taniej!
 		</div>
 		<div class="mypromotions-cms-subtitle">
-			Nagradzamy Twoją aktywność.
+			Nagradzamy Twoją aktywność:
 		</div>
 		<ul class="mypromotions-cms-list">
 			<li>Przeglądaj produkty</li>
@@ -76,13 +151,13 @@ EOD
 <div class="mypromotions-cms-container">
 	<section class="main bg-w mypromotions-cms col-xs-12">
 		<div class="mypromotions-cms-pretitle">
-			W tej chwili nie masz żadnych rabatów
+			W tej chwili nie masz żadnych rabatów.
 		</div>
 		<div class="mypromotions-cms-title">
 			Jak zdobyć dodatkowe rabaty?
 		</div>
 		<div class="mypromotions-cms-subtitle">
-			Nagradzamy Twoją aktywność.
+			Nagradzamy Twoją aktywność:
 		</div>
 		<ul class="mypromotions-cms-list">
 			<li>Przeglądaj produkty</li>

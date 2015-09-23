@@ -369,6 +369,17 @@
 		background: white url('../images/help/promolabels.png') no-repeat;
 		background-size: auto 400px;
 		background-position: 94% -90px;
+		&.mypromotions-nolabels {
+			background: white !important;
+			min-height: auto !important;
+			padding: 50px 45px 60px;
+			@media(max-width: $screen-xs-max) {
+				padding: 25px 15px 30px;
+			}
+			@media(max-width: 600px) {
+				padding-right: 15px;
+			}
+		}
 		@media(max-width: $screen-xs-max) {
 			padding: 25px 300px 30px 15px;
 			background-size: auto 325px;
@@ -384,6 +395,7 @@
 		@media(max-width: 479px) {
 			padding: 25px 15px 30px;
 			background-image: none;
+			min-height: auto;
 		}
 		.mypromotions-cms-pretitle {
 			font-family: $fontBlack;
@@ -397,7 +409,7 @@
 				font-size: 15px;
 			}
 		}
-		.mypromotions-cms-title {
+		.mypromotions-cms-title, .mypromotions-cms-newsletter-title {
 			font-family: $fontBlack;
 			font-size: 30px;
 			text-transform: uppercase;
@@ -410,7 +422,7 @@
 				font-size: 20px;
 			}
 		}
-		.mypromotions-cms-subtitle {
+		.mypromotions-cms-subtitle, .mypromotions-cms-newsletter-subtitle {
 			font-family: $fontLight;
 			text-transform: uppercase;
 			margin-bottom: 20px;
@@ -427,6 +439,48 @@
 		}
 		.mypromotions-cms-text {
 
+		}
+		/* newsletter title, subtitle, form */
+		.mypromotions-cms-newsletter-title {
+			margin-bottom: 0;
+			@media(max-width: $screen-xs-max) {
+				font-size: 20px;
+				margin-bottom: 25px;
+			}
+		}
+		.mypromotions-cms-newsletter-subtitle {
+			font-size: 23px;
+			text-transform: none;
+			@media(max-width: $screen-xs-max) {
+				margin-bottom: 20px;
+				font-size: 15px;
+			}
+		}
+		.mypromotions-newsletter {
+			white-space: nowrap;
+			@media(max-width: $screen-xs-max) {
+				margin-top: 15px;
+			}
+			.mypromotions-newsletter-checkbox {
+				display: inline-block;
+				vertical-align: middle;
+				margin: 0 !important;
+				label.agreement-label {
+					font-size: 16px !important;
+					margin: 0 0 2px 0 !important;
+					@media(max-width: $screen-xs-max) {
+						font-size: 14px !important;
+					}
+				}
+			}
+			.mypromotions-newsletter-button {
+				display: inline-block;
+				vertical-align: middle;
+				@media(max-width: $screen-xs-max) {
+					display: block;
+					margin-top: 20px;
+				}
+			}
 		}
 	}
 }

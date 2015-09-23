@@ -5,25 +5,39 @@
 
 
 class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
-{		
+{
+	protected $_customer;
 	protected $_customer_id;
 	protected $_subscribed;
 	protected $_cms_block;
 	protected $_logged;
 	protected $_persistent;
-	protected $_list;
+	protected $_list = false;
 
     protected function _prepareLayout() {
-         $this->_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+	    /** @var Zolago_Customer_Model_Session $customerSession */
+	    $customerSession = Mage::getSingleton('customer/session');
+         $this->_logged = $customerSession->isLoggedIn();
          if ($this->_logged) {
-             $this->_customer_id = Mage::getSingleton('customer/session')->getCustomerId();
-             $customer = Mage::getModel('customer/customer')->load($this->_customer_id);
-             $email = $customer->getEmail();
+	         $this->_customer = $customerSession->getCustomer();
+             $this->_customer_id = $this->_customer->getId();
+
+             $email = $this->_customer->getEmail();
              $this->_subscribed = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->isSubscribed();
-	         if(count($this->getPromotionList())) {
-		         $this->_cms_block = 'mypromotions_logged';
+
+	         $hasCoupons = count($this->getPromotionList()) ? true : false;
+	         if($this->_subscribed) {
+		         if ($hasCoupons) {
+			         $this->_cms_block = 'mypromotions_logged';
+		         } else {
+			         $this->_cms_block = 'mypromotions_logged_nocoupons';
+		         }
 	         } else {
-		         $this->_cms_block = 'mypromotions_logged_nocoupons';
+		         if($hasCoupons) {
+			         $this->_cms_block = 'mypromotions_logged_nonewsletter';
+		         } else {
+			         $this->_cms_block = 'mypromotions_logged_nocoupons_nonewsletter';
+		         }
 	         }
          } else {
              $helper = Mage::helper('persistent/session');         
@@ -45,7 +59,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
      */
     public function getPromotionList()
     {
-	    if(!$this->_list) {
+	    if($this->_list === false) {
 		    /* Coupons collection */
 		    $collection = Mage::getModel('salesrule/coupon')->getCollection();
 		    $collection->addFieldToFilter('customer_id', $this->_customer_id);
@@ -54,13 +68,17 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
 			    ->where('expiration_date > ?', date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())))
 			    ->where('(main_table.times_used < main_table.usage_limit) OR (main_table.usage_limit = 0)')
 			    ->where('salesrule.use_auto_generation = 1');
+
+		    Mage::log($collection->getSelect()->__toString());
+
 		    $out = array();
 		    $rules = array();
 		    foreach ($collection as $item) {
 			    $rules[$item['rule_id']] = $item['rule_id'];
 		    }
 		    if (empty($rules)) {
-			    return array();
+			    $this->_list =  array();
+			    return $this->_list;
 		    }
 
 		    //TODO clear unused fields from sales_rule
@@ -94,7 +112,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
 		    $rulesCollection->addFieldToFilter('date_from', array('lteq' => $localtime));
 		    $rulesCollection->addFieldToFilter('date_to', array('gteq' => $localtime));
 
-		    //Mage::log($rulesCollection->getSelect()->__toString());
+		    Mage::log($rulesCollection->getSelect()->__toString());
 
 		    $rules = array(); // clear
 
