@@ -1,5 +1,5 @@
 <?php
-
+/* @var $_session Zolago_Dropship_Model_Session */
 $_session = Mage::getSingleton('udropship/session');
 $_vendor = $_session->getVendor();
 
@@ -16,6 +16,7 @@ $useUps = $_vendor->getData('use_orbaups');
     <div class="row">
         <div class="col-md-12">
             <form id="vendor_settings_shipping" class="form-horizontal"  method="post" action="/udropship/vendor_settings/shippingPost">
+
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("DHL Settings");?></h4>
@@ -106,11 +107,78 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <input id="dhl_cod_charge_percent" name="dhl_cod_charge_percent" value="<?php echo $_vendor->getDhlCodChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
                                     </div>
                                 </div>
-                            </div>
 
+
+
+<!--                                DHL Rates-->
+                                <div class="form-group subsection">
+                                    <label class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL Rates"); ?>
+                                    </label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Envelope"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_envelope" name="dhl_rates_envelope" disabled
+                                               value="<?php echo $_vendor->getDhlRatesEnvelope(); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 0-5kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_0_5" name="dhl_rates_parcel_0_5" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_0_5"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 5-10kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_5_10" name="dhl_rates_parcel_5_10" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_5_10"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 10-20kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_10_20" name="dhl_rates_parcel_10_20" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_10_20"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 20-31.5kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_20_31_5" name="dhl_rates_parcel_20_31_5" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_20_31_5"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="widget box">
                     <div class="widget-header">
