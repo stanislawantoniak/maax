@@ -799,10 +799,23 @@ define([
 		return window.grid;
 	};
 
-    var attributeRules = {
+    window.attributeRules = {
         init: function() {
             this.attachLogicShowDetails();
             this.attachLogicGroupCheckbox();
+            this.attachLogicSubmitButton();
+        },
+
+        attachLogicSubmitButton: function() {
+           this.getModal().find("input[type=checkbox]").on("change", function() {
+               var modal = window.attributeRules.getModal();
+               var btn = modal.find("button[type=submit]");
+               if (modal.find("input[type=checkbox]:checked").length) { // if any checkbox checked then
+                   btn.attr("disabled", false);
+               } else {
+                   btn.attr("disabled", true);
+               }
+           });
         },
 
         attachLogicShowDetails: function() {
@@ -878,7 +891,7 @@ define([
 					container
 			);
 
-            attributeRules.init();
+            window.attributeRules.init();
 
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked
