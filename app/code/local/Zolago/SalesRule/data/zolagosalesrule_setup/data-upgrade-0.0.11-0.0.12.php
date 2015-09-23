@@ -191,7 +191,88 @@ EOD
 	,
 		'is_active'     => 1,
 		'stores'        => 0
-	)
+	),
+	array(
+	'title'         => 'Account promotions not logged in fake coupons',
+	'identifier'    => 'mypromotions_fake_coupons',
+	'content'       => <<<EOD
+<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3" data-couponid="22">
+	<div class="promo_item_box">
+		<div class="promo_info">
+			<figure class="promo_img">
+				<img src="{{media url='lp/coupon/image/resized/294/7/7/5/55eda752f21ef_photo-orange4.jpg'}}" alt="test mycoupons">
+			</figure>
+			<div class="promo_logo">
+				<div class="promo_logo_img" style="background-image: url(https://127.0.0.1/skin/frontend/modago/default/images/logo_black.png)"></div>
+			</div>
+			<h3 class="promo_name" title="test mycoupons" data-promo-name="test mycoupons">
+				test mycoupons
+			</h3>
+			<div class="promo_see_more">
+				<a>Dowiedz się więcej &gt;&gt;</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3" data-couponid="22">
+	<div class="promo_item_box">
+		<div class="promo_info">
+			<figure class="promo_img">
+				<img src="{{media url='lp/coupon/image/resized/294/7/7/5/55eda752f21ef_photo-orange4.jpg'}}" alt="test mycoupons">
+			</figure>
+			<div class="promo_logo">
+				<div class="promo_logo_img" style="background-image: url(https://127.0.0.1/skin/frontend/modago/default/images/logo_black.png)"></div>
+			</div>
+			<h3 class="promo_name" title="test mycoupons" data-promo-name="test mycoupons">
+				test mycoupons
+			</h3>
+			<div class="promo_see_more">
+				<a>Dowiedz się więcej &gt;&gt;</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3" data-couponid="22">
+	<div class="promo_item_box">
+		<div class="promo_info">
+			<figure class="promo_img">
+				<img src="{{media url='lp/coupon/image/resized/294/7/7/5/55eda752f21ef_photo-orange4.jpg'}}" alt="test mycoupons">
+			</figure>
+			<div class="promo_logo">
+				<div class="promo_logo_img" style="background-image: url(https://127.0.0.1/skin/frontend/modago/default/images/logo_black.png)"></div>
+			</div>
+			<h3 class="promo_name" title="test mycoupons" data-promo-name="test mycoupons">
+				test mycoupons
+			</h3>
+			<div class="promo_see_more">
+				<a>Dowiedz się więcej &gt;&gt;</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3" data-couponid="22">
+	<div class="promo_item_box">
+		<div class="promo_info">
+			<figure class="promo_img">
+				<img src="{{media url='lp/coupon/image/resized/294/7/7/5/55eda752f21ef_photo-orange4.jpg'}}" alt="test mycoupons">
+			</figure>
+			<div class="promo_logo">
+				<div class="promo_logo_img" style="background-image: url(https://127.0.0.1/skin/frontend/modago/default/images/logo_black.png)"></div>
+			</div>
+			<h3 class="promo_name" title="test mycoupons" data-promo-name="test mycoupons">
+				test mycoupons
+			</h3>
+			<div class="promo_see_more">
+				<a>Dowiedz się więcej &gt;&gt;</a>
+			</div>
+		</div>
+	</div>
+</div>
+EOD
+,
+	'is_active'     => 1,
+	'stores'        => 0
+)
 );
 
 foreach ($cmsNavigationBlocks as $data) {

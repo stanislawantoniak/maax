@@ -145,7 +145,6 @@
 .mypromotions-account-create {
   padding-top: 0 !important;
   #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, #mypromotions-list {
-    margin-top: 15px;
     padding: 15px;
     header p {
       margin-left: 35px;
@@ -159,6 +158,7 @@
   }
   #mypromotions-list {
     padding-bottom: 0;
+	  overflow: hidden;
     header, header p {
       margin-bottom: 15px !important;
     }
@@ -171,6 +171,10 @@
     padding-top: 0;
     margin-top: 5px;
   }
+}
+
+body.mypromotions-index-index #content {
+	position: relative;
 }
 
 #myPromotionsModal {
@@ -483,4 +487,134 @@
 			}
 		}
 	}
+}
+
+#mypromotions-register-modal {
+	position: absolute;
+	z-index: 5;
+	top: 0;
+	padding: 30px 10%;
+	@media(max-width: $screen-md-max) {
+		padding: 30px 7%;
+	}
+	@media(max-width: $screen-sm-max) {
+		padding: 15px 5%;
+	}
+	@media(max-width: 479px) {
+		padding: 15px 3%;
+	}
+	#mypromotions-register {
+		margin-top: 15px;
+		padding: 20px 300px 30px 40px;
+		border: 4px solid $color-gold;
+		@media(min-width: $screen-md-min) {
+			background: white url('../images/help/promolabels.png') no-repeat;
+			background-size: 280px auto;
+			background-position: 97% 0;
+		}
+		@media(max-width: $screen-sm-max) {
+			padding: 30px;
+		}
+		@media(max-width: 479px) {
+			padding: 15px 15px 25px;
+		}
+		.mypromotions-register-header {
+			position: relative;
+			margin-bottom: 30px;
+			@media(max-width: 479px) {
+				margin-bottom: 25px;
+			}
+			.mypromotions-register-header-title {
+				font-family: $fontRegular;
+				font-size: 35px;
+				letter-spacing: -1px;
+				white-space: nowrap;
+				line-height: normal;
+				@media(max-width: $screen-sm-max) {
+					font-size: 30px;
+					letter-spacing: 0;
+					white-space: normal;
+				}
+				@media(max-width: 479px) {
+					font-size: 25px;
+				}
+				@media(max-width: 360px) {
+					font-size: 20px;
+				}
+				.mypromotions-register-bold {
+					font-size: 40px;
+					letter-spacing: 0;
+					color: #907C3D;
+				}
+			}
+			.mypromotions-register-header-subtitle {
+				font-family: $fontLight;
+				font-size: 25px;
+				margin-top: -5px;
+				@media(max-width: $screen-sm-max) {
+					font-size: 20px;
+					margin-top: 0;
+				}
+				@media(max-width: 479px) {
+					font-size: 17px;
+				}
+				@media(max-width: 360px) {
+					font-size: 15px;
+				}
+			}
+			.mypromotions-register-header-text {
+				font-family: $fontRegular;
+				margin-top: 28px;
+			}
+		}
+		#createAccountForm {
+			input {
+				max-width: 260px !important;
+			}
+			@media(max-width: $screen-xs-max) {
+				.mypromotions-register-form-content {
+					padding: 0 !important;
+				}
+			}
+			.mypromotions-register-agreements {
+				padding: 0 !important;
+				margin-bottom: 30px;
+				@media(max-width: 360px) {
+					margin-bottom: 15px;
+				}
+				.mypromotions-register-agreement {
+					margin-left: 0 !important;
+				}
+			}
+			.mypromotions-register-actions {
+				padding: 0 !important;
+				.mypromotions-register-login {
+					font-size: 18px;
+					display: inline-block;
+					height: 39px;
+					line-height: 38px;
+					margin-right: 40px;
+					a {
+						text-decoration: underline;
+					}
+					@media(max-width: 360px) {
+						margin-top: 15px;
+						font-size: 15px;
+					}
+				}
+			}
+		}
+	}
+}
+
+#mypromotions-list-overlay {
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	position: absolute;
+	background: rgba(0,0,0,.5);
+	overflow: hidden;
+	margin-left: -3840px;
+	padding-left: 7680px;
 }

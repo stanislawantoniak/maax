@@ -1,144 +1,153 @@
 <?php
-/** @var $this Zolago_Modago_Block_Promotions_Register */
-/** @var Zolago_Customer_Helper_Data $_hlp */
-$_hlp = Mage::helper("zolagocustomer");
+if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('persistent/session')->isPersistent()):
 
-/** @var Zolago_Modago_Helper_Data $modagoHelper */
-$modagoHelper = Mage::helper('zolagomodago');
-?>
-<div class="container-fluid">
-	<div class="row">
-		<section id="mypromotions-register" class="main bg-w col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-push-2 col-md-push-1">
-			<header class="title-section">
-				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_registration_header')->toHtml(); ?>
-			</header>
-			<div class="row">
-				<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
-				      id="createAccountForm" method="post" role="form" novalidate="novalidate">
-					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-						<div class="form-group clearfix">
-							<div class="row">
-								<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
-								       for="account_email">
-									<?php echo $_hlp->__('Email Address'); ?>
-								</label>
+	/** @var $this Zolago_Modago_Block_Promotions_Register */
+	/** @var Zolago_Customer_Helper_Data $_hlp */
+	$_hlp = Mage::helper("zolagocustomer");
 
-								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 control-label required">
-									<input type="email" value="" class="form-control email"
-									       required="true" id="account_email" title=""
-									       name="email" data-original-title="<?php echo $_hlp->__("Please enter email."); ?>"
-									       aria-required="true"/>
-								</div>
-							</div>
-						</div>
-						<div class="form-group clearfix border-top">
-							<div class="row">
-								<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label required"
-								       for="account_password">
-									<?php echo $_hlp->__('Password'); ?>
-								</label>
-
-								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-									<input type="password" class="form-control hint password"
-									       required="true" id="account_password" title=""
-									       name="password" data-original-title="<?php echo $this->__("Password needs to have at least 6 characters"); ?>"
-									       aria-required="true"/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<div class="agreement-nocheck-registration">
-							<?php echo $modagoHelper->getAgreementHtml('register_info') ?>
-						</div>
-						<div class="form-group form-checkbox small text-align-left" id="tos_agreement_container_registration">
-							<input type="checkbox" id="agreement" class="css-checkbox required"
-							       required="true"
-							       name="agreement"
-							       aria-required="true">
-							<label for="agreement" class="css-label agreement-label control-label required">
-								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+	/** @var Zolago_Modago_Helper_Data $modagoHelper */
+	$modagoHelper = Mage::helper('zolagomodago');
+	?>
+	<div id="mypromotions-register-modal">
+		<div id="mypromotions-register" class="container-fluid bg-w account-create">
+			<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_registration_header')->toHtml(); ?>
+			<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
+			      id="createAccountForm" method="post" role="form" novalidate="novalidate">
+				<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 mypromotions-register-form-content">
+					<div class="form-group clearfix">
+						<div class="row">
+							<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+							       for="account_email">
+								<?php echo str_replace(' ',"&nbsp;",$_hlp->__('Email Address')); ?>
 							</label>
-						</div>
-						<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container_registration">
-							<input type="checkbox" id="is_subscribed" class="css-checkbox"
-							       name="is_subscribed" style="opacity: 0; visibility: visible;">
-							<label for="is_subscribed" class="css-label agreement-label">
-								<?php echo $modagoHelper->getAgreementHtml('newsletter') ?>
-							</label>
-						</div>
-					</div>
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<div class="row action">
-							<div class="col-sm-12">
-								<button type="submit" class="button button-primary large link pull-right">
-									<?php echo $_hlp->__('Save') ?>
-								</button>
+
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 control-label required">
+								<input type="email" value="" class="form-control email"
+								       required="true" id="account_email" title=""
+								       name="email" data-original-title="<?php echo $_hlp->__("Please enter email."); ?>"
+								       aria-required="true"/>
 							</div>
 						</div>
 					</div>
-				</form>
-			</div>
-		</section>
+					<div class="form-group clearfix">
+						<div class="row">
+							<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label required"
+							       for="account_password">
+								<?php echo $_hlp->__('Password'); ?>
+							</label>
+
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								<input type="password" class="form-control hint password"
+								       required="true" id="account_password" title=""
+								       name="password"
+								       data-original-title="<?php echo $this->__("Password needs to have at least 6 characters"); ?>"
+								       data-placement="bottom"
+								       aria-required="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-register-agreements">
+					<div class="agreement-nocheck-registration mypromotions-register-agreement">
+						<?php echo $modagoHelper->getAgreementHtml('register_info') ?>
+					</div>
+					<div class="form-group form-checkbox small text-align-left mypromotions-register-agreement" id="tos_agreement_container_registration">
+						<input type="checkbox" id="agreement" class="css-checkbox required"
+						       required="true"
+						       name="agreement"
+						       aria-required="true">
+						<label for="agreement" class="css-label agreement-label control-label required">
+							<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+						</label>
+					</div>
+					<div class="form-group form-checkbox small text-align-left mypromotions-register-agreement" id="newsletter_agreement_container_registration">
+						<input type="checkbox" id="is_subscribed" class="css-checkbox"
+						       name="is_subscribed" style="opacity: 0; visibility: visible;">
+						<label for="is_subscribed" class="css-label agreement-label">
+							<?php echo $modagoHelper->getAgreementHtml('newsletter') ?>
+						</label>
+					</div>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="row action">
+						<div class="col-sm-12 mypromotions-register-actions">
+							<div class="mypromotions-register-login hidden-xs">
+								<?php echo $_hlp->__("Have an account?"); ?>
+								<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
+							</div>
+							<button type="submit" class="button button-primary large link">
+								<?php echo $_hlp->__('Create account and get coupons') ?>
+							</button>
+							<div class="mypromotions-register-login visible-xs">
+								<?php echo $_hlp->__("Have an account?"); ?>
+								<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
-</div>
-<script type="text/javascript">
-	Mall.translate.add(
-		"Please enter password.",
-		"<?php echo $_hlp->__("Please enter password."); ?>"
-	);
-	Mall.translate.add(
-		"Password needs to have at least 6 characters",
-		"<?php echo $_hlp->__("Password needs to have at least 6 characters"); ?>"
-	);
-	Mall.translate.add(
-		"Please enter email.",
-		"<?php echo $_hlp->__("Please enter email."); ?>"
-	);
-	Mall.translate.add(
-		"Please enter correct email.",
-		"<?php echo $_hlp->__("Please enter correct email."); ?>"
-	);
-	Mall.translate.add(
-		"You must accept our Terms of Service",
-		"<?php echo $_hlp->__("You must accept our Terms of Service"); ?>"
-	);
+	<script type="text/javascript">
+		Mall.translate.add(
+			"Please enter password.",
+			"<?php echo $_hlp->__("Please enter password."); ?>"
+		);
+		Mall.translate.add(
+			"Password needs to have at least 6 characters",
+			"<?php echo $_hlp->__("Password needs to have at least 6 characters"); ?>"
+		);
+		Mall.translate.add(
+			"Please enter email.",
+			"<?php echo $_hlp->__("Please enter email."); ?>"
+		);
+		Mall.translate.add(
+			"Please enter correct email.",
+			"<?php echo $_hlp->__("Please enter correct email."); ?>"
+		);
+		Mall.translate.add(
+			"You must accept our Terms of Service",
+			"<?php echo $_hlp->__("You must accept our Terms of Service"); ?>"
+		);
 
-	jQuery(document).ready(function () {
-		var form = jQuery("#createAccountForm");
+		jQuery(document).ready(function () {
+			var form = jQuery("#createAccountForm"),
+				password = form.find('#account_password');
 
-		if (form.length) {
-			form.validate(Mall.validate.getOptions({
-				rules: {
-					email: {
-						required: true,
-						email: true
+			if (form.length) {
+				password.tooltip();
+				form.validate(Mall.validate.getOptions({
+					rules: {
+						email: {
+							required: true,
+							email: true
+						},
+						password: {
+							required: true,
+							minlength: 6
+						},
+						agreement: {
+							required: true
+						}
 					},
-					password: {
-						required: true,
-						minlength: 6
-					},
-					agreement: {
-						required: true
+					messages: {
+						password: {
+							required: Mall.translate.__("Please enter password."),
+							minlength: Mall.translate.__("Password needs to have at least 6 characters")
+						},
+						email: {
+							required: Mall.translate.__("Please enter email."),
+							email: Mall.translate.__("Please enter correct email.")
+						},
+						agreement: {
+							required: Mall.translate.__("You must accept our Terms of Service")
+						}
 					}
-				},
-				messages: {
-					password: {
-						required: Mall.translate.__("Please enter password."),
-						minlength: Mall.translate.__("Password needs to have at least 6 characters")
-					},
-					email: {
-						required: Mall.translate.__("Please enter email."),
-						email: Mall.translate.__("Please enter correct email.")
-					},
-					agreement: {
-						required: Mall.translate.__("You must accept our Terms of Service")
-					}
-				}
-			}));
-			form.submit(function () {
-				return
-			});
-		}
-	});
-</script>
+				}));
+				form.submit(function () {
+					return
+				});
+			}
+		});
+	</script>
+<?php endif; ?>

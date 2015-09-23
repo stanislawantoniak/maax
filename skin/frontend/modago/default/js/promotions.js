@@ -8,6 +8,22 @@ Mall.promotions = function (couponId) {
     });
 };
 
+Mall.promotions.initNotLogged = function() {
+	if(jQuery('.mypromotions-not-logged-in').length) {
+
+		Mall.promotions.setListHeight();
+
+		jQuery(window).resize(Mall.promotions.setListHeight);
+	}
+};
+
+Mall.promotions.setListHeight = function() {
+	var height = jQuery('#mypromotions-register-modal').outerHeight(),
+		target = jQuery('#mypromotions-list');
+
+	target.css('min-height',height + 'px');
+}
+
 Mall.promotions.jsCopySupported = false;
 
 /**
