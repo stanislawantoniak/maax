@@ -83,6 +83,8 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
                             $_value = substr($_value, 0, strlen($_value)-1); // remove last char %
                             $_value = substr($_value, 1, strlen($_value)); // remove first char %
                             $str .= $attr->getStoreLabel($store) . $helper->__(" like '%s'", $_value);
+                        } elseif (isset($condition['null'])) {
+                            $str .= $attr->getStoreLabel($store) . $helper->__(" is empty");
                         }
                     } else { // ext type
                         $str .= $attr->getStoreLabel($store) . ": " . $condition; // here condition is a value, always equal

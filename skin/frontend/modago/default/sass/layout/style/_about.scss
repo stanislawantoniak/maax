@@ -8,6 +8,7 @@
 	}
 	@media(max-width: $screen-sm-max) {
 		padding: 30px;
+		margin-top: 15px;
 	}
 	@media(max-width: 479px) {
 		padding: 15px 15px 25px;
@@ -119,7 +120,7 @@
 				}
 			}
 			.about-list-text {
-				font-family: $fontLight;
+				font-family: $fontRegular;
 				font-size: 15px;
 			}
 		}
@@ -146,7 +147,7 @@
 			}
 		}
 		.about-footer-text {
-			font-family: $fontLight;
+			font-family: $fontRegular;
 			font-size: 14px;
 			@media(max-width: 479px) {
 				font-size: 12px;
@@ -173,9 +174,9 @@
 	}
 	.about-register-header {
 		position: relative;
-		margin-bottom: 50px;
+		margin-bottom: 30px;
 		@media(max-width: 479px) {
-			margin-bottom: 30px;
+			margin-bottom: 25px;
 		}
 		.about-register-header-title {
 			font-family: $fontRegular;
@@ -213,7 +214,7 @@
 			}
 		}
 		.about-register-header-text {
-			font-family: $fontLight;
+			font-family: $fontRegular;
 			margin-top: 28px;
 		}
 		&:before {

@@ -38,7 +38,9 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 							<input type="password" class="form-control hint password"
 							       required="true" id="account_password" title=""
-							       name="password" data-original-title="<?php echo $this->__("Password needs to have at least 6 characters"); ?>"
+							       name="password"
+							       data-original-title="<?php echo $this->__("Password needs to have at least 6 characters"); ?>"
+							       data-placement="bottom"
 							       aria-required="true"/>
 						</div>
 					</div>
@@ -70,14 +72,14 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 					<div class="col-sm-12 about-register-actions">
 						<div class="about-register-login hidden-xs">
 							<?php echo $_hlp->__("Have an account?"); ?>
-							<a href="#"><?php echo $_hlp->__("Login"); ?></a>
+							<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
 						</div>
 						<button type="submit" class="button button-primary large link">
 							<?php echo $_hlp->__('Create account and get coupons') ?>
 						</button>
 						<div class="about-register-login visible-xs">
 							<?php echo $_hlp->__("Have an account?"); ?>
-							<a href="#"><?php echo $_hlp->__("Login"); ?></a>
+							<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
 						</div>
 					</div>
 				</div>
@@ -107,9 +109,11 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 		);
 
 		jQuery(document).ready(function () {
-			var form = jQuery("#createAccountForm");
+			var form = jQuery("#createAccountForm"),
+				password = form.find('#account_password');
 
 			if (form.length) {
+				password.tooltip();
 				form.validate(Mall.validate.getOptions({
 					rules: {
 						email: {
