@@ -7,7 +7,6 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	 */
 	public function rmaCreated($observer) {
 		$rma = $observer->getEvent()->getData('rma');
-		
 		$author = null;
 		$customerSession = Mage::getSingleton('customer/session');
 		if($customerSession->isLoggedIn() && $customerSession->getCustomer()->getId()){
@@ -116,6 +115,10 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$oldStatus = $observer->getEvent()->getData("old_status");
 		$notify = $observer->getEvent()->getData("notify");
 
+		// do not send emails with statuses for rma 
+		if ($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN) {
+		    $notify = false;
+		}
 
 		$helper = Mage::helper("zolagorma");
 		/* @var $rma Zolago_Rma_Model_Rma */
@@ -239,7 +242,6 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	 * @param string mixed|null
 	 */
 	protected function _logEvent($rma, $comment, $sendEmail=null, $author=null) {
-		
 		$notifyByStatus = (bool)$rma->getStatusObject()->getNotifyCustomer();
 		
 		$data  = array(
@@ -301,7 +303,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$commentModel->setAuthorName($commentModel->getAuthorName(false));
 		$commentModel->save();
 		
-		// Send email
+		// Send email		
 		if($doSendEmail){
 			if($rma->getIsNewFlag()){
 				$rma->sendEmail(true, $commentModel);
