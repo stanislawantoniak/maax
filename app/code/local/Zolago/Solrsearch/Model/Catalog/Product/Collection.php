@@ -51,17 +51,44 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
         return $this;
     }
 
+    
+    /**
+     * normalize url in returned solr data (if needed)
+     *
+     * @param array $item
+     */    
+    protected function _repairUrl(&$item) {
+        if ($url = empty($item['url_path_varchar'])? null: $item['url_path_varchar']) {
+            $baseUrl = Mage::getBaseUrl();
+            if (($url[0] == '/') && (substr($baseUrl,-1) == '/')) { // remove double slash
+                $url = substr($url,1);
+            }       
+            $item['url_path_varchar'] = $baseUrl.$url;
+        }
+        
+    }
+    
+    /**
+     * Load data from solr current query
+     *
+     * @param type $printQuery
+     * @param type $logQuery
+     */
     public function loadData($printQuery = false, $logQuery = false) {
-
+        $remove_store_from_url = Mage::helper('solrsearch')->getSetting('remove_store_from_url');
         $data = $this->getSolrData("response", "docs");
         if (!empty($data) && empty($data['error'])) {
             /** @var Zolago_Solrsearch_Helper_Data $helper */
             $helper = Mage::helper('zolagosolrsearch');
             foreach($data as $item) {
+                // repair url if needed
+                if ($remove_store_from_url) {
+                    $this->_repairUrl($item);
+                }
                 // Build product
                 /** @var Zolago_Solrsearch_Model_Catalog_Product $product */
                 $product = Mage::getModel("zolagosolrsearch/catalog_product");
-                // Map attributes
+                // Map attributes                
                 $helper->mapSolrDocToProduct($item, $product);
                 if ($product->getId()) {
                     // Add price

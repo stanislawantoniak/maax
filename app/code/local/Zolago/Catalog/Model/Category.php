@@ -114,8 +114,9 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         parent::load($id, $field);
 
         // Load common used data for much better performance
-        $this->getUrl();
+        $this->getUrl(); // Get in easy way request_path from rewrite
         $this->getNoVendorContextUrl();
+        $this->unsetData('url'); // Trick for vendor/no vendor context
         $this->getParentCategories();
 
 

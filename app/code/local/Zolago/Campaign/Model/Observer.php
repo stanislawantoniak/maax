@@ -68,6 +68,7 @@ class Zolago_Campaign_Model_Observer
         //info campaign
         $campaignInfoData = $model->getUpDateCampaignsInfo(); //Products need to be updated
 
+
         //Reformat by product_id
         $productIdsToUpdate = array();
         foreach($campaignInfoData as $campaignInfoData){
@@ -83,8 +84,8 @@ class Zolago_Campaign_Model_Observer
         foreach($campaignInfo as $campaignInfoData){
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
+            //$productsIdsPullToSolr[] = $campaignInfoData["product_id"];
         }
-        //var_dump($reformattedData);
 
         //set attributes
         if (!empty($reformattedData)) {
@@ -105,13 +106,7 @@ class Zolago_Campaign_Model_Observer
         }
 
         //sales/promo campaign
-        $campaignSalesPromo = array();
-
-        $vendors = $model->getUpDateCampaignsVendors();
-        foreach($vendors as $vendor){
-            $campaignSalesPromoV = $model->getUpDateCampaignsSalePromotion($vendor);
-            $campaignSalesPromo = array_merge($campaignSalesPromo,$campaignSalesPromoV);
-        }
+        $campaignSalesPromo = $model->getUpDateCampaignsSalePromotion();
 
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
@@ -202,27 +197,6 @@ class Zolago_Campaign_Model_Observer
         $campaignModel->unsetCampaignAttributes();
     }
 
-
-    /**
-     * revert product attributes after delete product from campaign
-     * @param $observer
-     */
-    static function productAttributeRevert($observer)
-    {
-//        $revertProductOptions = array(
-//            'website_id' => array(
-//                    'product_id1',
-//                    'product_id1'
-//                )
-//        );
-        $campaignId = $observer->getCampaignId();
-        $revertProductOptions = $observer->getRevertProductOptions();
-
-
-        /* @var $model Zolago_Campaign_Model_Campaign */
-        $model = Mage::getModel('zolagocampaign/campaign');
-        $model->unsetProductAttributesOnProductRemoveFromCampaign($campaignId,$revertProductOptions);
-    }
 
     /**
      * Attach products to campaign

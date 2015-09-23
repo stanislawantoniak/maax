@@ -159,4 +159,7 @@
 	<jquery-validation-53 translate="message" module="zolagocommon">
 		<message>The converter price of product or one of child product is not available</message>
 	</jquery-validation-53>
+    <zolago-common-processing-dot-dot-dot translate="message" module="zolagocommon">
+        <message>Processing...</message>
+    </zolago-common-processing-dot-dot-dot>
 </jstranslator>

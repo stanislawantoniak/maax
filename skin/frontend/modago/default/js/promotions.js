@@ -44,16 +44,41 @@ Mall.promotions.populatePromotionContent = function (couponId) {
 
         modal.find(".promo-link a").attr("href",promoItem.find(".promo_popup_data").data("url"));
 
-	    var copy = modal.find(".promo-code-copy"),
-		    copySuccess = modal.find('.promo-code-copy-success').hide(),
-		    copyError = modal.find('.promo-code-copy-error').hide();
+	    var copy = modal.find(".promo-code-copy");
+	    if(copy.length) {
+		    Mall.promotions.copybuttonText = false;
+		    Mall.promotions.copybuttonTimer = false;
 
-	    if(!Mall.promotions.jsCopySupported) {
-		    copy.hide();
-	    } else {
-		    copy.click(function() {
-			    Mall.promotions.copyTextToClipboard(code,copyError,copySuccess);
-		    });
+		    if (Mall.promotions.copybuttonText) {
+			    copy.find('a').text(Mall.promotions.copybuttonText);
+		    }
+
+		    if (!Mall.promotions.jsCopySupported) {
+			    copy.hide();
+		    } else {
+			    copy.find('a').click(function () {
+				    var result = Mall.promotions.copyTextToClipboard(code);
+				    if (result) {
+					    var me = jQuery(this),
+						    copiedText = me.data('copied');
+
+					    if (!Mall.promotions.copybuttonText) {
+						    Mall.promotions.copybuttonText = me.text();
+					    }
+
+					    me.text(copiedText);
+
+					    if (Mall.promotions.copybuttonTimer) {
+						    clearInterval(Mall.promotions.copybuttonTimer);
+					    }
+
+					    Mall.promotions.copybuttonTimer = setTimeout(function () {
+						    me.text(Mall.promotions.copybuttonText);
+					    }, 3000)
+				    }
+
+			    });
+		    }
 	    }
 
         if(promoItem.find(".promo_popup_data").data("pdf").length > 0){
@@ -88,10 +113,8 @@ Mall.promotions.openModal = function () {
     jQuery("#myPromotionsModal").modal();
 };
 
-Mall.promotions.copyTextToClipboard = function(text,error,success) {
+Mall.promotions.copyTextToClipboard = function(text) {
 	if(Mall.promotions.jsCopySupported) {
-		error = typeof error != 'undefined' && error.length ? error : false;
-		success = typeof success != 'undefined' && success.length ? success : false;
 
 		var textArea = document.createElement("textarea");
 
@@ -118,14 +141,8 @@ Mall.promotions.copyTextToClipboard = function(text,error,success) {
 			successful = false;
 		}
 
-		if(successful && success) {
-			error.hide();
-			success.show();
-		} else if(!successful && error) {
-			success.hide();
-			error.show();
-		}
-
 		document.body.removeChild(textArea);
+
+		return successful;
 	}
 };

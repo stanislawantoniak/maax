@@ -82,7 +82,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		
 		$reposnse = $this->getResponse();
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
-				
+
 		try{
 			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];

@@ -17,7 +17,7 @@ class Zolago_Converter_Model_Client {
         if(!$this->_conf) {
             $this->_conf = Mage::getStoreConfig("zolagoconverter/config");
         }
-        return $field ? $this->_conf[$field] : $this->_conf;
+        return $field ? trim($this->_conf[$field]) : $this->_conf;
     }
 
     /**
