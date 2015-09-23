@@ -75,6 +75,14 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <input id="dhl_terminal" name="dhl_terminal" value="<?php echo $_vendor->getDhlTerminal(); ?>" type="text" class="form-control" size="10">
                                     </div>
                                 </div>
+
+                                <!--                                DHL Rates-->
+                                <div class="form-group subsection">
+                                    <label class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL Rates"); ?>
+                                    </label>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="dhl_insurance_charge_amount" class="col-md-3 control-label">
                                         <?php echo Mage::helper("zolagodropship")->__("Insurance charge amount");?>
@@ -113,7 +121,7 @@ $useUps = $_vendor->getData('use_orbaups');
 <!--                                DHL Rates-->
                                 <div class="form-group subsection">
                                     <label class="col-md-3 control-label">
-                                        <?php echo Mage::helper("zolagodropship")->__("DHL Rates"); ?>
+                                        <?php echo Mage::helper("zolagodropship")->__("Shipment charge"); ?>
                                     </label>
                                 </div>
 
