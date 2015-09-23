@@ -78,12 +78,8 @@ $galleryLogo = $this->getGalleryLogo();
 										<?php $n++; ?>
 									<?php endforeach; ?>
 								</div>
-								<?php echo $this->getCmsBlock(); ?>
-							<?php else: ?>
-								<div id="no_promo_list">
-									<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_nocoupons')->toHtml(); ?>
-								</div>
 							<?php endif; ?>
+							<?php echo $this->getCmsBlock(); ?>
 							</section>
 						</div>
 					</div>
