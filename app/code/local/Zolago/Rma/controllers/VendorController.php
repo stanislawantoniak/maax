@@ -45,7 +45,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 		try {
 			$rma = $this->_registerRma();
-			if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
+			if(($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $rma->getPo()->isCod())) {
+				Mage::throwException($hlp->__("Refund is not possible because order was sent using COD and client didn't receive the package."));
+			} else if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
 				$invalidItems = array();
 				$validItems = array();
 				$returnAmount = 0;
