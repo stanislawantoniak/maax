@@ -17,12 +17,11 @@ $galleryLogo = $this->getGalleryLogo();
 				<div class="container-fluid">
 					<div class="row">
 						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-logged-in">
-							<?php //Do not remove, only hide (by Staszek) ?>
-							<!--							<header class="title-section">-->
-							<!--								--><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_list_header')->toHtml(); ?>
-							<!--							</header>-->
-
-
+							<?php /* Do not remove, only hide (by Staszek)
+								<header class="title-section">
+									<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_list_header')->toHtml(); ?>
+								</header>
+                            */ ?>
 							<?php if (count($list)): ?>
 								<div id="promo_list">
 									<?php $n = 1; ?>
@@ -79,6 +78,7 @@ $galleryLogo = $this->getGalleryLogo();
 										<?php $n++; ?>
 									<?php endforeach; ?>
 								</div>
+								<?php echo $this->getCmsBlock(); ?>
 							<?php else: ?>
 								<div id="no_promo_list">
 									<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_nocoupons')->toHtml(); ?>
