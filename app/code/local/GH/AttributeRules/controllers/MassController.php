@@ -14,8 +14,12 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
         $rules      = $req->getParam("rules", array());
         $storeId    = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
         $store      = Mage::app()->getStore($storeId);
-        $productIds = $req->getParam("product_ids"); // todo
-        $attributeSetId = $req->getParam("attribute_set_id", 86); // todo
+        $productIds = $req->getParam("product_ids");
+        $attributeSetId = $req->getParam("attribute_set_id");
+
+        if (empty($attributeSetId)) {
+            Mage::throwException(Mage::helper("gh_attributerules")->__("Error: no attribute set id specified"));
+        }
 
         if(is_string($productIds)){
             $productIds = explode(",", $productIds);
@@ -37,7 +41,9 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
         $collection->load();
         // --Collecting rules
 
-        // TODO: if no rules
+        if ($collection->count()) {
+            Mage::throwException(Mage::helper("gh_attributerules")->__("Error: no rules specified"));
+        }
 
         $usedAttr = array(); // Used attributes
         $dataByProduct = array();

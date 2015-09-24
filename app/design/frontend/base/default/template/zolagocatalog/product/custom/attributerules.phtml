@@ -52,6 +52,8 @@ $dataRules = $this->getRulesData();
 
 <div class="modal fade bs-example-modal-sm" id="showAttributeRules" role="dialog">
     <form method="post" action="<?php echo $this->getActionUrl();?>">
+        <input type="hidden" name="product_ids" value="">
+        <input type="hidden" name="attribute_set_id" value="">
         <div class="modal-dialog modal-sm" style="width: 80%;">
             <div class="modal-content">
                 <div class="modal-header">

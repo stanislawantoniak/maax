@@ -811,6 +811,26 @@ define([
             this.attachLogicShowDetails();
             this.attachLogicGroupCheckbox();
             this.attachLogicSubmitButton();
+            this.attachLogicOnOpen();
+        },
+
+        setDataFromGrid: function() {
+            this.getModal().find("input[type=hidden][name=product_ids]").val(this.getProductIds());
+            this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
+        },
+
+        getProductIds: function() {
+            return window.grid.getSelectedIds().join();
+        },
+
+        getAttributeSetId: function() {
+            return window.grid.baseQuery["attribute_set_id"];
+        },
+
+        attachLogicOnOpen: function() {
+            jQuery("a[data-target=#showAttributeRules]").click(function() {
+                window.attributeRules.setDataFromGrid();
+            });
         },
 
         attachLogicSubmitButton: function() {
