@@ -67,7 +67,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
 			    ->where('(main_table.times_used < main_table.usage_limit) OR (main_table.usage_limit = 0)')
 			    ->where('salesrule.use_auto_generation = 1');
 
-		    Mage::log($collection->getSelect()->__toString());
+		    //Mage::log($collection->getSelect()->__toString());
 
 		    $out = array();
 		    $rules = array();
