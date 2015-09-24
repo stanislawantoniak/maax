@@ -18,7 +18,7 @@ Mall.promotions.initNotLogged = function() {
 };
 
 Mall.promotions.setListHeight = function() {
-	var height = jQuery('.mypromotions-modal').outerHeight(),
+	var height = jQuery('.mypromotions-modal:visible').outerHeight(),
 		target = jQuery('#mypromotions-list');
 
 	target.css('min-height',height + 'px');
@@ -162,3 +162,30 @@ Mall.promotions.copyTextToClipboard = function(text) {
 		return successful;
 	}
 };
+
+Mall.promotions.moveMsgsBlock = function() {
+	var block = jQuery('.page-messages-block');
+	if(block.length) {
+		var header = jQuery('section#main').find('header#header-main');
+		if(header.length) {
+			block.insertAfter(header);
+		}
+	}
+};
+
+Mall.promotions.showPersistentRegister = function(e) {
+	jQuery('#mypromotions-persistent-modal').addClass('hidden');
+	jQuery('.mypromotions-persistent-register').removeClass('hidden');
+	jQuery(window).resize();
+	if(typeof e != 'undefined') {
+		e.preventDefault();
+	}
+	return false;
+};
+
+jQuery(document).ready(function() {
+	if(jQuery('body').hasClass('mypromotions-index-index')) {
+		Mall.promotions.moveMsgsBlock();
+		jQuery('.mypromotions-cms-persistent').find('.mypromotions-cms-text-register').click(Mall.promotions.showPersistentRegister);
+	}
+});

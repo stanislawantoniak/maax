@@ -104,6 +104,9 @@ $galleryLogo = $this->getGalleryLogo();
 				</div>
 					<?php if ($this->isPersistent()): //not logged in but has persistent ?>
 						<?php echo $this->getCmsBlock(); ?>
+					<div class="hidden mypromotions-persistent-register">
+						<?php echo $this->getLayout()->createBlock('zolagomodago/promotions_register')->setData('displayOverride',true)->setTemplate('promotions/register.phtml')->toHtml(); ?>
+					</div>
 					<?php else: //not logged in and no persistent ?>
 						<?php echo $this->getLayout()->createBlock('zolagomodago/promotions_register')->setTemplate('promotions/register.phtml')->toHtml(); ?>
 					<?php endif; ?>

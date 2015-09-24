@@ -23,7 +23,13 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
              $this->_customer_id = $this->_customer->getId();
 
              $email = $this->_customer->getEmail();
-             $this->_subscribed = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->isSubscribed();
+
+	         /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+	         $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($email);
+
+	         //treat unsubscribed as subscriber
+	         $this->_subscribed = $subscriber->isSubscribed() ? true : $subscriber->getStatus() == Zolago_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED;
+
 
 	         $hasCoupons = count($this->getPromotionList()) ? true : false;
 	         if($this->_subscribed) {

@@ -1,5 +1,5 @@
 <?php
-if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('persistent/session')->isPersistent()):
+if ((!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('persistent/session')->isPersistent()) || $this->getData('displayOverride')) :
 
 	/** @var $this Zolago_Modago_Block_Promotions_Register */
 	/** @var Zolago_Customer_Helper_Data $_hlp */
@@ -145,6 +145,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 					}
 				}));
 				form.submit(function () {
+					jQuery(window).resize();
 					return
 				});
 			}
