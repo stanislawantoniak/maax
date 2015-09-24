@@ -9,7 +9,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
      */
     public function banMultiProductPageCache($eventObject)
     {
-        if (!$this->isVarnishEnabled()) {
+        if (!self::isVarnishEnabled()) {
             return;
         }
         /** @var Zolago_Turpentine_Helper_Ban $banHelper */
