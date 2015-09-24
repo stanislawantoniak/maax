@@ -533,7 +533,7 @@ define([
 			return;
 		}
 		
-		// Start overlay loading visible progress 
+		// Start overlay loading visible progress
 		misc.startLoading();
 		
 		// Handle by mass action object
@@ -545,32 +545,39 @@ define([
 		req["save_as_rule"] = e.useSaveAsRule;
 
 		massAttribute.setFocusedCell(e.cell);
-	
-		massAttribute.send(req).then(function(){
-			e.deferred.resolve();
+
+        massAttribute.send(req).then(function () {
+            e.deferred.resolve();
 
             // Spinner for ajax loading current attributes mapper block
-            var spinner = jQuery("<div>").css('text-align','center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
-            attributeRules.getModal().find(".modal-body").html(spinner);
-            // Get current attributes mapper block by ajax
-            jQuery.ajax({
-                cache: false,
-                url: "/udprod/vendor_product/manageattributes",
-                error: function(jqXhr, status, error) {
-                    console.log("Error: ajax can't get udprod/vendor_product/manageattributes");
-                },
-                success: function(data, status) {
-                    jQuery("#showAttributeRules").replaceWith(data);
-                    attributeRules.init();
-                    FormComponents.initUniform();// Attach checkbox style
-                }
-            });
+            if (e.useSaveAsRule) {
+                var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+                attributeRules.getModal().find(".modal-body").html(spinner);
+                // Get current attributes mapper block by ajax
+                jQuery.ajax({
+                    cache: false,
+                    url: "/udprod/vendor_product/manageattributes",
+                    error: function (jqXhr, status, error) {
+                        console.log("Error: ajax can't get udprod/vendor_product/manageattributes");
+                    },
+                    success: function (data, status) {
+                        jQuery("#showAttributeRules").replaceWith(data);
+                        attributeRules.init();
+                        FormComponents.initUniform();// Attach checkbox style
+                    }
+                }).done(function () {
+                    misc.stopLoading();
+                });
+            }
 
-		}, function(){
-			e.deferred.reject();
-		}).always(function(){
-			misc.stopLoading();
-		});
+
+        }, function () {
+            e.deferred.reject();
+        }).always(function () {
+            if (!e.useSaveAsRule) {
+                misc.stopLoading();
+            }
+        });
 
 	};
 	
