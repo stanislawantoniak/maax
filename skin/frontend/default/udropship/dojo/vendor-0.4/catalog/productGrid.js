@@ -828,6 +828,7 @@ define([
         },
 
         attachLogicGroupCheckbox: function() {
+			var modal = this.getModal();
             this.getModal().find("input[type=checkbox]").on("change", function(e, eventFromChildren) {
                 var selector = jQuery(e.target).attr("data-checkbox-group-target");
 
@@ -846,7 +847,8 @@ define([
 
                 // If all children checked/unchecked,  set checked/unchecked state for parent
                 var parentSelector = jQuery(e.target).attr("data-checkbox-group-parent");
-                if (parentSelector) {
+
+                if (parentSelector && parentSelector !== "#attr-select-all") {
                     var parent = jQuery(parentSelector);
                     var allChild = jQuery(parent.attr("data-checkbox-group-target"));
                     var allCheckedChild = jQuery(parent.attr("data-checkbox-group-target") + ":checked");
@@ -870,6 +872,24 @@ define([
                     }
 
                 }
+
+
+
+				// Check/ uncheck all
+				var attrSelectAll = modal.find("#attr-select-all")
+				var allItemsChecked = [];
+
+				modal.find("input[type=checkbox]:not(#attr-select-all)").each(function(i, element){
+					allItemsChecked.push(jQuery(element).prop('checked'));
+				});
+
+				if (jQuery.inArray(false, allItemsChecked) == -1) {
+					attrSelectAll.prop('checked', true).closest('span').addClass('checked');
+				} else {
+					attrSelectAll.prop('checked', false).closest('span').removeClass('checked');
+				}
+
+				// --- Check/ uncheck all
             });
         },
 
