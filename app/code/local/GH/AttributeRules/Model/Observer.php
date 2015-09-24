@@ -63,6 +63,7 @@ class GH_AttributeRules_Model_Observer
         /** @var GH_AttributeRules_Model_Resource_AttributeRule_Collection $collection */
         $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
         $collection->addVendorFilter($vendor);
+        $collection->addAttributeIdFilter($attributeId);
 
         // Simple hash for skipping
         $hash = $this->_getHash($vendorId, $filterSerialized, $attributeId, $attributeValue);
