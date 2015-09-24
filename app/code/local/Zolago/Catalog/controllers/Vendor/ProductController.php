@@ -88,30 +88,33 @@ class Zolago_Catalog_Vendor_ProductController
 			//$response = "Something went wrong. Contact admin.";
 		}
 
-
-
-		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
-		$this->_prepareRestResponse();
-
-
+		/////Save Rule
 		$attributeCode = key($request->getParam("attribute"));
 		$attributeValue = $request->getParam("attribute")[$attributeCode];
 		if (is_null($restQuery)) {
 			$restQuery = $this->_getRestQuery();
 		}
-        $restQuery = $this->processRestQueryForSave($restQuery);
+		$restQuery = $this->processRestQueryForSave($restQuery);
+
 		Mage::dispatchEvent(
 			"change_product_attribute_after",
 			array(
 				'store_id' => $storeId,
 				"attribute_code" => $attributeCode,
-                "vendor" => $this->getVendor(),
+				"vendor" => $this->getVendor(),
 				"attribute_mode" => $attributeMode[$attributeCode],
 				"attribute_value" => $attributeValue,
 				"rest_query" =>$restQuery,
 				"save_as_rule" => $saveAsRule
 			)
 		);
+		/////--Save Rule
+
+		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
+		$this->_prepareRestResponse();
+
+
+
 	}
 
     /**
