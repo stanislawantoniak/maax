@@ -28,13 +28,18 @@ class GH_AttributeRules_Model_Observer
         $attribute = $this->_getAttribute($attributeCode);
         $frontendInput = $attribute->getFrontendInput();
 
-        if (!$saveAsRule ||
+        if ($saveAsRule == "false") {
+            return;
+        }
+
+        if (
             //IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode [~remove mode])
             ($frontendInput == 'multiselect' && !in_array($attributeMode, array("add", "set")))
             ||
             //Do not save empty value if mode "add"
             (empty($attributeValue) && $frontendInput == 'multiselect' && in_array($attributeMode, array("add")))
         ) {
+
             return;
         }
 
