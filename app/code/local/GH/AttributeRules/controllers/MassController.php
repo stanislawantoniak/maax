@@ -17,7 +17,7 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
         $productIds = $req->getParam("product_ids");
         $attributeSetId = $req->getParam("attribute_set_id");
 
-        if (empty($attributeSetId)) {
+        if (!$attributeSetId) {
             Mage::throwException(Mage::helper("gh_attributerules")->__("Error: no attribute set id specified"));
         }
 
@@ -41,7 +41,7 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
         $collection->load();
         // --Collecting rules
 
-        if ($collection->count()) {
+        if (!$collection->count()) {
             Mage::throwException(Mage::helper("gh_attributerules")->__("Error: no rules specified"));
         }
 
