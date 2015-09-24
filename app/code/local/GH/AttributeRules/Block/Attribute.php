@@ -75,6 +75,11 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
                             $_value = $condition["eq"];
                             $str .= $attr->getStoreLabel($store) . $helper->__(" equal ");
                             $str .= $attr->getSource()->getOptionText($_value);
+                        } elseif (isset($condition["regexp"])) {
+                            $_value = $condition["regexp"];
+                            $_value = substr($_value, 0, strlen($_value) - strlen("[[:>:]]")); // remove last part regexp
+                            $_value = substr($_value, strlen("[[:<:]]"), strlen($_value)); // remove first part regexp
+                            $str .= $attr->getStoreLabel($store) . $helper->__(" like '%s'", $attr->getSource()->getOptionText($_value));
                         } elseif (isset($condition["like"])) {
                             $_value = $condition["like"];
                             $_value = substr($_value, 0, strlen($_value)-1); // remove last char %

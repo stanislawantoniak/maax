@@ -115,10 +115,10 @@ class Zolago_Catalog_Vendor_ProductController
 	}
 
     /**
-     * Clear rest query from params "from" and "to" (images count)
-     * for saving conditions in attributes mapper
-     * and add name filter
-     *
+     * Prepare rest query from params for saving conditions in attributes mapper
+     * Remove "from" and "to" (images count),
+     * Add name filter,
+     * Add regexp for multiselect attributes
      * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
      *
      * @param $restQuery
@@ -132,9 +132,34 @@ class Zolago_Catalog_Vendor_ProductController
         if (isset($inParams["name"])) {
             $restQuery["name"] = array("like" => "%".$inParams["name"]."%");
         }
+        $multi = $this->_getRestQueryAttributesByFrontendInput("multiselect");
+        foreach ($multi as $code => $attr) {
+            if (isset($inParams[$code])) {
+                /** @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition() */
+                $restQuery[$code] = array("regexp" => "[[:<:]]".$inParams[$code]."[[:>:]]");
+            }
+        }
         return $restQuery;
     }
-	
+
+    /**
+     * Get available query params attributes filtered by fronted input type
+     *
+     * @param string $type like "select" or "multiselect"
+     * @return array
+     */
+    protected function _getRestQueryAttributesByFrontendInput($type) {
+        $out = array();
+        foreach($this->getGridModel()->getColumns() as $column) {
+            if($column->getAttribute() &&
+                $column->getAttribute()->getFrontendInput() == $type &&
+                $column->getFilterable() !== false ) {
+                $out[$column->getAttribute()->getAttributeCode()] = $column->getAttribute();
+            }
+        }
+        return $out;
+    }
+
 	/**
 	 * Save hidden columns
 	 */
