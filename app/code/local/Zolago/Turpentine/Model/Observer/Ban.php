@@ -7,43 +7,46 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
     /**
      * @param $eventObject
      */
-    public function banMultiProductPageCache( $eventObject ) {
-
-        /** @var Nexcessnet_Turpentine_Helper_Varnish $helperVarnish */
-        $helperVarnish = Mage::helper( 'turpentine/varnish' );
-
-        if($this->isVarnishEnabled()) {
-            /** @var Zolago_Turpentine_Helper_Ban $banHelper */
-            /** @var Nexcessnet_Turpentine_Helper_Cron $cronHelper */
-            $banHelper = Mage::helper( 'turpentine/ban' );
-            $cronHelper = Mage::helper( 'turpentine/cron' );
-            $products = $eventObject->getProducts();
-
-            $idsForBan = array();
-            foreach ($products as $product) {
-                $idsForBan[] = $product->getId();
-            }
-
-            $urlPatterns = $banHelper->getMultiProductBanRegex( $idsForBan ); //return array [0]regex [1]heating uri
-            $results = $this->_getVarnishAdmin()->flushMultiUrl($urlPatterns['regex']);
-
-            if( $this->_checkMultiResults( $results ) && $cronHelper->getCrawlerEnabled() ) {
-
-                $origStore = Mage::app()->getStore();
-                $urls = array();
-                foreach( Mage::app()->getStores() as $storeId => $store ) {
-                    Mage::app()->setCurrentStore( $store );
-                    $baseUrl = rtrim($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK ), '/');
-                    foreach ($urlPatterns['heating'] as $uri) {
-                        $urls[] = "$baseUrl/$uri"; //todo urls for vendors
-                    }
-                }
-                $urls = array_flip(array_flip($urls));
-                Mage::app()->setCurrentStore( $origStore );
-
-                $cronHelper->addUrlsToCrawlerQueue( $urls );
-            }
+    public function banMultiProductPageCache($eventObject)
+    {
+        if (!$this->isVarnishEnabled()) {
+            return;
         }
+        /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+        /** @var Nexcessnet_Turpentine_Helper_Cron $cronHelper */
+        $banHelper = Mage::helper('turpentine/ban');
+        $cronHelper = Mage::helper('turpentine/cron');
+        $products = $eventObject->getProducts();
+
+        if (!$products) {
+            return;
+        }
+
+        $idsForBan = array();
+        foreach ($products as $product) {
+            $idsForBan[] = $product->getId();
+        }
+
+        $urlPatterns = $banHelper->getMultiProductBanRegex($idsForBan); //return array [0]regex [1]heating uri
+        $results = $this->_getVarnishAdmin()->flushMultiUrl($urlPatterns['regex']);
+
+        if ($this->_checkMultiResults($results) && $cronHelper->getCrawlerEnabled()) {
+
+            $origStore = Mage::app()->getStore();
+            $urls = array();
+            foreach (Mage::app()->getStores() as $storeId => $store) {
+                Mage::app()->setCurrentStore($store);
+                $baseUrl = rtrim($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK), '/');
+                foreach ($urlPatterns['heating'] as $uri) {
+                    $urls[] = "$baseUrl/$uri"; //todo urls for vendors
+                }
+            }
+            $urls = array_flip(array_flip($urls));
+            Mage::app()->setCurrentStore($origStore);
+
+            $cronHelper->addUrlsToCrawlerQueue($urls);
+        }
+
     }
 
     /**
@@ -100,7 +103,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
      * Check if Varnish Enabled
      * @return bool
      */
-    public function isVarnishEnabled()
+    public static function isVarnishEnabled()
     {
         /** @var Nexcessnet_Turpentine_Helper_Varnish $helperVarnish */
         return $helperVarnish = Mage::helper('turpentine/varnish')->getVarnishEnabled();
