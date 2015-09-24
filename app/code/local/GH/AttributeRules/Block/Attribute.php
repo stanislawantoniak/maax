@@ -7,8 +7,7 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
     /**
      * @return GH_AttributeRules_Model_Resource_AttributeRule_Collection
      */
-    public function getRulesData()
-    {
+    public function getRulesData() {
         /** @var GH_AttributeRules_Model_Resource_AttributeRule_Collection $collection */
         $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
         $collection->addVendorFilter($this->getVendor());
@@ -36,16 +35,14 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
     /**
      * @return string
      */
-    public function getActionUrl()
-    {
-        return $this->getUrl("*/*/*");
+    public function getActionUrl() {
+        return $this->getUrl("ghattributerules/mass/autofill");
     }
 
     /**
      * @return Zolago_Dropship_Model_Vendor
      */
-    public function getVendor()
-    {
+    public function getVendor() {
         return Mage::getModel("udropship/session")->getVendor();
     }
 

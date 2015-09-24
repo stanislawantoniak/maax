@@ -58,6 +58,15 @@
                 </GH_AttributeRules>
             </modules>
         </translate>
+        <routers>
+            <gh_attributerules>
+                <use>standard</use>
+                <args>
+                    <module>GH_AttributeRules</module>
+                    <frontName>ghattributerules</frontName>
+                </args>
+            </gh_attributerules>
+        </routers>
     </frontend>
     <adminhtml>
         <translate>
