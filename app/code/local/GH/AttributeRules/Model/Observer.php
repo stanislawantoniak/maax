@@ -81,7 +81,7 @@ class GH_AttributeRules_Model_Observer
         }
         // --Check if identical rule don't exists
 
-        if ($frontendInput == 'multiselect' && $attributeMode == "add") {
+        if ($frontendInput == "multiselect") {
             foreach (explode(",", $attributeValue) as $value) {
                 $this->saveRule($vendorId, $filterSerialized, $attributeId, $value);
             }
