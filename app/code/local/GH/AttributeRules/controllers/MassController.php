@@ -46,7 +46,7 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
             // Collecting attributes to update
             $filter = $rule->getFilterArray();
             $ruleAttr = $gridModel->getAttribute($rule->getColumn());
-            $usedAttr[$ruleAttr->getId()] = $ruleAttr;
+            $usedAttr[$ruleAttr->getAttributeCode()] = $ruleAttr;
 
             // Preparing product collection
             $prodColl = $this->_prepareCollection($store, $attributeSetId);
@@ -66,25 +66,148 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
                             ));
                             continue;
                         }
+                        if (isset($condition["regexp"])) {
+                            $this->_addRegexp($prodColl, $attr, $condition["regexp"]);
+                            continue;
+                        }
                         $prodColl->addAttributeToFilter($attr, $condition);
                     }
                 }
             }
             foreach ($prodColl->getAllIds() as $id) {
                 if ($ruleAttr->getFrontendInput() == "multiselect") {
-                    $dataByProduct[$id][$ruleAttr->getAttributeCode()][] = $rule->getValue();
+                    $dataByProduct[(int)$id][$ruleAttr->getAttributeCode()][] = $rule->getValue();
                 } elseif ($ruleAttr->getFrontendInput() == "select") {
-                    $dataByProduct[$id][$ruleAttr->getAttributeCode()][0] = $rule->getValue(); // Overwrite
+                    $dataByProduct[(int)$id][$ruleAttr->getAttributeCode()][0] = $rule->getValue(); // Overwrite
                 }
             }
             // --Collecting attributes to update
         }
+        // dataByProduct now look like:
+        // array
+        //  32929 =>
+        //    array
+        //      'child_age' =>
+        //        array
+        //          0 => string '1992'
+        //          1 => string '1991'
+        //      'color' =>
+        //        array
+        //          0 => string '8'
+        //      'manufacturer' =>
+        //        array
+        //          0 => string '2025'
+        //  32934 =>
+        //    array
+        //      'manufacturer' =>
+        //        array
+        //          0 => string '1035'
+        //  32938 =>
+        //    array
+        //      'manufacturer' =>
+        //        array
+        //          0 => string '1035'
+        //      'color' =>
+        //        array
+        //          0 => string '737'
 
-        // TODO: load product collection with used attributes
-        // TODO: merge current attributes for product (should work like add for multiselect, set for select)
-        // TODO: updateAttributesNoIndex
-        // TODO: reindexAfterMassAttributeChange
 
+        // Load product collection with used attributes
+        $prodColl = $this->_prepareCollection($store, $attributeSetId);
+        $prodColl->addAttributeToSelect(array_keys($usedAttr), "left");
+
+        // Merge current attributes for product (should work like add for multiselect, set for select)
+        $dataForUpdate = array();
+        $prodDatas = $prodColl->getData(); // No load for better performance
+        foreach ($prodDatas as $product) {
+            foreach ($usedAttr as $attr) {
+                $code = $attr->getAttributeCode();
+                $prodId = (int)$product["entity_id"];
+                if ($attr->getFrontendInput() == "multiselect") {
+                    if (isset($dataByProduct[$prodId]) && isset($dataByProduct[$prodId][$code])) {
+                        $tmp = array_filter(explode(",", $product[$code]));
+                        $newValue = array_unique(array_merge(!empty($tmp) ? $tmp : array(), $dataByProduct[$prodId][$code]));
+                        sort($newValue);
+                        $dataForUpdate[$prodId][$attr->getAttributeCode()] =
+                            implode(",", $newValue);
+                    }
+                } elseif ($attr->getFrontendInput() == "select") {
+                    if (isset($dataByProduct[$prodId]) && isset($dataByProduct[$prodId][$code])) {
+                        $dataForUpdate[$prodId][$attr->getAttributeCode()] = implode(",", $dataByProduct[$prodId][$code]);
+                    }
+                }
+            }
+        }
+        // Now we have merged old values and new values like:
+        // array
+        //  32929 =>
+        //    array
+        //      'child_age' => string '1987,1991,1992' // NOTE: 1987 was on product previously
+        //      'color' => string '737'
+        //      'manufacturer' => string '2025'
+        //  32934 =>
+        //    array
+        //      'manufacturer' => string '1035'
+        //  32938 =>
+        //    array
+        //      'color' => string '737'
+        //      'manufacturer' => string '1035'
+
+
+        $dataForReindex = array();
+        foreach ($dataForUpdate as $productId => $attribs) {
+            foreach ($attribs as $code => $value) {
+                $dataForReindex[$code][$value][] = $productId;
+            }
+        }
+        // $dataForReindex now looks like:
+        // array
+        //  'child_age' =>
+        //    array
+        //      '1987,1991,1992' =>
+        //        array
+        //          0 => int 32929
+        //  'color' =>
+        //    array (size=1)
+        //      737 =>
+        //        array
+        //          0 => int 32929
+        //          1 => int 32938
+        //  'manufacturer' =>
+        //    array
+        //      2025 =>
+        //        array
+        //          0 => int 32929
+        //      1035 =>
+        //        array
+        //          0 => int 32934
+        //          1 => int 32938
+
+
+        // Update Attributes No Index
+        /** @var Zolago_Catalog_Model_Product_Action $productAction */
+        $productAction = Mage::getSingleton('catalog/product_action');
+
+        $attrDataForReindex = array();
+        $idsForReindex = array();
+        foreach ($dataForReindex as $code => $item) {
+            foreach ($item as $value => $ids) {
+                if (!empty($ids)) {
+                    $idsForReindex = array_merge($idsForReindex, $ids);
+                    $attrDataForReindex = array_merge($attrDataForReindex, array($code => $value));
+                    $productAction->updateAttributesNoIndex($ids, array($code => $value), $storeId);
+                }
+            }
+        }
+        if (!empty($idsForReindex)) {
+            $productAction->setData(
+                array(
+                    'product_ids' => array_unique(array_keys($idsForReindex)),
+                    'attributes_data' => $attrDataForReindex, // here only attr code really matter
+                )
+            );
+            $productAction->reindexAfterMassAttributeChange();
+        }
     }
 
     /**
@@ -115,6 +238,32 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
             Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
         )));
         return $prodColl;
+    }
+
+    /**
+     * Add filter for multiselect attributes by regexp
+     * Inspired by @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition()
+     *
+     * @param Zolago_Catalog_Model_Resource_Vendor_Product_Collection $collection
+     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param array $value
+     */
+    protected function _addRegexp($collection, $attribute, $value) {
+
+        $code               = $attribute->getAttributeCode();
+        $aliasCode          = $code ."_filter";
+        $valueTableDefault  = "at_".$aliasCode."_default";
+        $valueTable         = "at_".$aliasCode;
+
+        $collection->joinAttribute($aliasCode, "catalog_product/$code", "entity_id", null, "left");
+        if ($collection->getStoreId()) {
+            $valueExpr = $collection->getSelect()->getAdapter()
+                ->getCheckSql("{$valueTable}.value_id > 0", "{$valueTable}.value", "{$valueTableDefault}.value");
+        } else {
+            $valueExpr = "$valueTable.value";
+        }
+        // Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678)
+        $collection->getSelect()->where($valueExpr . " REGEXP ?", $value);
     }
 
     /**
