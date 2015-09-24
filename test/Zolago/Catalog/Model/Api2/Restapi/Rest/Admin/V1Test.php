@@ -14,8 +14,38 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
                 ),
                 '5-25680-BIALY-XXXXL' => array (
                     'SKLEP2' => 0,
-                    'SKLEP1' => $liczba,
-                    'MAGAZYN' => 400,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
+                ),
+                '5-8325-75D' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
+                ),
+                '5-8325-70E' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
+                ),
+                '5-8325-70C' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
+                ),
+                '5-8325-70B' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
+                ),
+                '5-8325-65C' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
                     'k99' => 0
                 ),
 //                '5-30025-BEZOWY-38' => array (
