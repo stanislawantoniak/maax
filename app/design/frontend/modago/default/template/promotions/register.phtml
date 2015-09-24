@@ -8,7 +8,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 	/** @var Zolago_Modago_Helper_Data $modagoHelper */
 	$modagoHelper = Mage::helper('zolagomodago');
 	?>
-	<div id="mypromotions-register-modal">
+	<div id="mypromotions-register-modal" class="mypromotions-modal">
 		<div id="mypromotions-register" class="container-fluid bg-w account-create">
 			<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_registration_header')->toHtml(); ?>
 			<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
@@ -73,14 +73,14 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 						<div class="col-sm-12 mypromotions-register-actions">
 							<div class="mypromotions-register-login hidden-xs">
 								<?php echo $_hlp->__("Have an account?"); ?>
-								<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
+								<a href="<?php echo $this->getUrl('customer/account/login/redirect/mypromotions'); ?>"><?php echo $_hlp->__("Login"); ?></a>
 							</div>
 							<button type="submit" class="button button-primary large link">
 								<?php echo $_hlp->__('Create account and get coupons') ?>
 							</button>
 							<div class="mypromotions-register-login visible-xs">
 								<?php echo $_hlp->__("Have an account?"); ?>
-								<a href="<?php echo $this->getUrl('customer/account/login'); ?>"><?php echo $_hlp->__("Login"); ?></a>
+								<a href="<?php echo $this->getUrl('customer/account/login/redirect/mypromotions'); ?>"><?php echo $_hlp->__("Login"); ?></a>
 							</div>
 						</div>
 					</div>

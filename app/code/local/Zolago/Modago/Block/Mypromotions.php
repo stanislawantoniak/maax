@@ -9,7 +9,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
 	protected $_customer;
 	protected $_customer_id;
 	protected $_subscribed;
-	protected $_cms_block;
+	protected $_cms_block = false;
 	protected $_logged;
 	protected $_persistent;
 	protected $_list = false;
@@ -45,8 +45,6 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
              $this->_customer_id = $helper->getSession()->getCustomerId();
              if ($this->_persistent && $this->_customer_id) {                 
                  $this->_cms_block = 'mypromotions_persistance';
-             } else {
-                 $this->_cms_block = 'mypromotions_not_logged';
              }
          }
 
@@ -192,7 +190,7 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
      * @return string
      */
      public function getCmsBlock() {
-        return $this->getLayout()->createBlock('cms/block')->setBlockId($this->_cms_block)->toHtml();
+        return $this->_cms_block ? $this->getLayout()->createBlock('cms/block')->setBlockId($this->_cms_block)->toHtml() : '';
      }
      
      public function isLogged() {

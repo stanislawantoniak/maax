@@ -103,7 +103,7 @@ $galleryLogo = $this->getGalleryLogo();
 					</div>
 				</div>
 					<?php if ($this->isPersistent()): //not logged in but has persistent ?>
-						<?php //todo: echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_fake_coupons')->toHtml(); ?>
+						<?php echo $this->getCmsBlock(); ?>
 					<?php else: //not logged in and no persistent ?>
 						<?php echo $this->getLayout()->createBlock('zolagomodago/promotions_register')->setTemplate('promotions/register.phtml')->toHtml(); ?>
 					<?php endif; ?>

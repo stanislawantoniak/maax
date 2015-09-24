@@ -109,35 +109,40 @@ EOD
 		'title'         => 'Account promotions persistent',
 		'identifier'    => 'mypromotions_persistance',
 		'content'       => <<<EOD
-<div class="mypromotions-cms-container">
-	<section class="main bg-w mypromotions-cms col-xs-12">
-		<div class="mypromotions-cms-persistent-title">
-			Zaloguj się, by zobaczyć swoje rabaty.
-		</div>
-		<div class="mypromotions-cms-persistent-subtitle">
-			Kupuj swoje ulubione marki do 50% taniej!
-		</div>
-		<div class="mypromotions-cms-subtitle">
-			Nagradzamy Twoją aktywność:
-		</div>
-		<ul class="mypromotions-cms-list">
-			<li>Przeglądaj produkty</li>
-			<li>Dodawaj je do ulubionych</li>
-			<li>Dziel się nimi ze znajomymi na Facebooku</li>
-			<li>Kupuj produkty ulubionych sklepów</li>
-		</ul>
-		<div class="mypromotions-cms-text">
-			Im więcej przeglądasz, im więcej kupujesz tym więcej otrzymasz kodów rabatowych i tym lepiej dobierzemy je do Ciebie.
-		</div>
-		<div class="mypromotions-cms-buttons">
-			<div class="mypromotions-cms-text-register">
-				Nie masz konta? <a href="{{store url='customer/account/create/redirect/mypromotions'}}">Zarejestruj się</a>
+<div id="mypromotions-persistent-modal" class="mypromotions-modal">
+	<div class="mypromotions-cms-container">
+		<section class="main bg-w mypromotions-cms mypromotions-cms-persistent col-xs-12">
+			<div class="mypromotions-cms-persistent-title">
+				Zaloguj się, by zobaczyć swoje rabaty.
 			</div>
-			<div class="mypromotions-cms-button-login button button-primary large link">
-				Zaloguj się i zobacz kupony
+			<div class="mypromotions-cms-persistent-subtitle">
+				Kupuj swoje ulubione marki do 50% taniej!
 			</div>
-		</div>
-	</section>
+			<div class="mypromotions-cms-subtitle">
+				Nagradzamy Twoją aktywność:
+			</div>
+			<ul class="mypromotions-cms-list">
+				<li>Przeglądaj produkty</li>
+				<li>Dodawaj je do ulubionych</li>
+				<li>Dziel się nimi ze znajomymi na Facebooku</li>
+				<li>Kupuj produkty ulubionych sklepów</li>
+			</ul>
+			<div class="mypromotions-cms-text">
+				Im więcej przeglądasz, im więcej kupujesz tym więcej otrzymasz kodów rabatowych i tym lepiej dobierzemy je do Ciebie.
+			</div>
+			<div class="mypromotions-cms-buttons">
+				<div class="mypromotions-cms-text-register hidden-xs">
+					Nie masz konta? <a href="{{store url='customer/account/create/redirect/mypromotions'}}">Zarejestruj się</a>
+				</div>
+				<a href="{{store url='customer/account/login/redirect/mypromotions'}}" class="mypromotions-cms-button-login button button-primary large link">
+					Zaloguj się i zobacz kupony
+				</a>
+				<div class="mypromotions-cms-text-register visible-xs">
+					Nie masz konta? <a href="{{store url='customer/account/create/redirect/mypromotions'}}">Zarejestruj się</a>
+				</div>
+			</div>
+		</section>
+	</div>
 </div>
 EOD
 	,
