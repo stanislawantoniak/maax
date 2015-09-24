@@ -689,6 +689,8 @@ body.mypromotions-index-index #content {
 	position: absolute;
 	background: rgba(0,0,0,.5);
 	overflow: hidden;
-	margin-left: -3840px;
-	padding-left: 7680px;
+	@media(min-width: $screen-lg) {
+		margin-left: -3840px;
+		padding-left: 7680px;
+	}
 }
