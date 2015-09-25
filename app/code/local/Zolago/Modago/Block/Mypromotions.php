@@ -87,8 +87,8 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
 
 		    //TODO clear unused fields from sales_rule
 		    $rulesCollection = Mage::getModel('salesrule/rule')->getCollection();
-		    $rulesCollection->addFieldToFilter('rule_id', array('in', $rules));
-		    $rulesCollection->addFieldToFilter('is_active', array('eq', 1));
+		    $rulesCollection->addFieldToFilter('rule_id', array('in' => $rules));
+		    $rulesCollection->addFieldToFilter('is_active', array('eq'=> 1));
 
 		    $rulesCollection->getSelect()
 			    ->join(
