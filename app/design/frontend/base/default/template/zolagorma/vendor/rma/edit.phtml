@@ -454,7 +454,9 @@ jQuery(function($) {
 	    <?php endif; ?>
 
         notify.prop("checked", doNotify);
+	    <?php if(!$_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN): ?>
         notify.prop("disabled", doNotify);
+	    <?php endif; ?>
         hidden.val(doNotify ? "1" : "0");
     });
 
