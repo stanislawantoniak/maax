@@ -21,8 +21,8 @@ $_hlp = Mage::helper("zolagocustomer");
 </form>
 <script type="text/javascript">
 	Mall.translate.add(
-		"This field is required.",
-		"<?php echo $_hlp->__("This field is required."); ?>"
+		"You must check this box",
+		"<?php echo $_hlp->__("You must check this box"); ?>"
 	);
 
 	jQuery(document).ready(function () {
@@ -37,7 +37,7 @@ $_hlp = Mage::helper("zolagocustomer");
 				},
 				messages: {
 					is_subscribed: {
-						required: Mall.translate.__("This field is required.")
+						required: Mall.translate.__("You must check this box")
 					}
 				}
 			}));
