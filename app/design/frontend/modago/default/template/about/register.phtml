@@ -108,8 +108,8 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 			"<?php echo $_hlp->__("You must accept our Terms of Service"); ?>"
 		);
 		Mall.translate.add(
-			"This field is required.",
-			"<?php echo $_hlp->__("This field is required."); ?>"
+			"You must check this box",
+			"<?php echo $_hlp->__("You must check this box"); ?>"
 		);
 
 		jQuery(document).ready(function () {
@@ -148,7 +148,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 							required: Mall.translate.__("You must accept our Terms of Service")
 						},
 						is_subscribed: {
-							required: Mall.translate.__("This field is required.")
+							required: Mall.translate.__("You must check this box")
 						}
 					}
 				}));
