@@ -21,8 +21,8 @@ Mall.promotions.setListHeight = function() {
 	var height = jQuery('.mypromotions-modal:visible').outerHeight(),
 		target = jQuery('#mypromotions-list');
 
-	target.css('min-height',height + 'px');
-}
+	target.css('height',height + 'px');
+};
 
 Mall.promotions.jsCopySupported = false;
 
