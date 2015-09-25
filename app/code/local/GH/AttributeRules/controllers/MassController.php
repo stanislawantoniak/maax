@@ -219,6 +219,14 @@ class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action
                     )
                 );
                 $productAction->reindexAfterMassAttributeChange();
+
+                // Push to solr and ban varnish
+                Mage::dispatchEvent(
+                    "mass_autofill_attribute_rules_after",
+                    array(
+                        "product_ids" => $ids
+                    )
+                );
             }
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(500);

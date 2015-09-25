@@ -876,6 +876,8 @@ define([
                         type: 'success',
                         timeout: 10000
                     });
+                    // Refresh grid
+                    window.grid.refresh();
                 }).always(function() {
                     misc.stopLoading();
                 });

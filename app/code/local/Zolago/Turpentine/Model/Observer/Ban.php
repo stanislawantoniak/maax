@@ -18,10 +18,15 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
             $banHelper = Mage::helper( 'turpentine/ban' );
             $cronHelper = Mage::helper( 'turpentine/cron' );
             $products = $eventObject->getProducts();
+            $productIds = $eventObject->getProductIds();
 
             $idsForBan = array();
-            foreach ($products as $product) {
-                $idsForBan[] = $product->getId();
+            if (!empty($productIds)) {
+                $idsForBan = $productIds;
+            } else {
+                foreach ($products as $product) {
+                    $idsForBan[] = $product->getId();
+                }
             }
 
             $urlPatterns = $banHelper->getMultiProductBanRegex( $idsForBan ); //return array [0]regex [1]heating uri
