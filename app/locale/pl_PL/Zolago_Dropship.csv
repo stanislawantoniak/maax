@@ -204,3 +204,15 @@
 "Billing", "Faktura"
 "Item removed %s", "Usunięto produkt %s"
 "Legal entity","Podmiot"
+"Insurance charge amount","Opłata stała za ubezpieczenie przesyłki"
+"Insurance charge percent","Opłata % za ubezpieczenie przesyłki"
+"Insurance charge %","Opłata % za ubezpieczenie przesyłki"
+"COD charge amount","Opłata stała za pobranie (COD)"
+"COD charge percent","Opłata % za pobranie (COD)"
+"COD charge %","Opłata % za pobranie (COD)"
+"DHL Rates","Cennik przesyłek DHL"
+"UPS Rates","Cennik przesyłek UPS"
+"Envelope","Koperta"
+"Shipment charge","Opłata za przesyłkę"
+
+
