@@ -24,7 +24,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 							<input type="email" value="" class="form-control email"
 							       required="true" id="account_email" title=""
 							       name="email" data-original-title="<?php echo $_hlp->__("Please enter email."); ?>"
-							       aria-required="true"/>
+							       aria-required="true" required="true" aria-required="true"/>
 						</div>
 					</div>
 				</div>
@@ -107,6 +107,10 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 			"You must accept our Terms of Service",
 			"<?php echo $_hlp->__("You must accept our Terms of Service"); ?>"
 		);
+		Mall.translate.add(
+			"This field is required.",
+			"<?php echo $_hlp->__("This field is required."); ?>"
+		);
 
 		jQuery(document).ready(function () {
 			var form = jQuery("#createAccountForm"),
@@ -126,6 +130,9 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 						},
 						agreement: {
 							required: true
+						},
+						is_subscribed: {
+							required: true
 						}
 					},
 					messages: {
@@ -139,6 +146,9 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 						},
 						agreement: {
 							required: Mall.translate.__("You must accept our Terms of Service")
+						},
+						is_subscribed: {
+							required: Mall.translate.__("This field is required.")
 						}
 					}
 				}));
