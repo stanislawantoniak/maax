@@ -31,12 +31,11 @@ class Zolago_Catalog_Vendor_ProductController
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
 		}
-		$restQuery = null;
+        $restQuery = $this->_getRestQuery();
 		if(is_array($productIds) && count($productIds)){
 			$ids = array_unique($productIds);
 		}else{
 			$collection = $this->_getCollection();
-			$restQuery = $this->_getRestQuery();
 			foreach($restQuery as $key=>$value){
 				$collection->addAttributeToFilter($key, $value);
 			}
@@ -59,6 +58,8 @@ class Zolago_Catalog_Vendor_ProductController
 				 *Handle mass save
 				 */
 				case "attribute":
+                    $attributeCode = key($request->getParam("attribute"));
+                    $attributeValue = $request->getParam("attribute")[$attributeCode];
 					$this->_processAttributresSave(
 						$ids, 
 						$request->getParam("attribute"), 
@@ -70,6 +71,8 @@ class Zolago_Catalog_Vendor_ProductController
 				 * Handle status change
 				 */
 				case "confirm":
+                    $attributeCode = "description_status";
+                    $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
 					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
 						$ids, 
@@ -82,39 +85,35 @@ class Zolago_Catalog_Vendor_ProductController
 				    Mage::throwException("Invaild mass method");
 			
 			}
+            /**
+             * Save Rule
+             * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
+             */
+            $_restQuery = $this->processRestQueryForSave($restQuery);
+            Mage::dispatchEvent(
+                "change_product_attribute_after",
+                array(
+                    'store_id'          => $storeId,
+                    "attribute_code"    => $attributeCode,
+                    "vendor"            => $this->getVendor(),
+                    "attribute_mode"    => $attributeMode[$attributeCode],
+                    "attribute_value"   => $attributeValue,
+                    "rest_query"        => $_restQuery,
+                    "raw_rest_query"    => $restQuery,
+                    "save_as_rule"      => $saveAsRule,
+                    "method"            => $method,
+                    "product_ids"       => $productIds,
+                    "attribute_set_id"  => $attributeSetId
+                )
+            );
 		} catch (Exception $ex) {
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
 		}
 
-		/////Save Rule
-		$attributeCode = key($request->getParam("attribute"));
-		$attributeValue = $request->getParam("attribute")[$attributeCode];
-		if (is_null($restQuery)) {
-			$restQuery = $this->_getRestQuery();
-		}
-		$restQuery = $this->processRestQueryForSave($restQuery);
-
-		Mage::dispatchEvent(
-			"change_product_attribute_after",
-			array(
-				'store_id' => $storeId,
-				"attribute_code" => $attributeCode,
-				"vendor" => $this->getVendor(),
-				"attribute_mode" => $attributeMode[$attributeCode],
-				"attribute_value" => $attributeValue,
-				"rest_query" =>$restQuery,
-				"save_as_rule" => $saveAsRule
-			)
-		);
-		/////--Save Rule
-
 		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
 		$this->_prepareRestResponse();
-
-
-
 	}
 
     /**
