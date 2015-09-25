@@ -62,4 +62,19 @@ class Zolago_Cms_Block_Page extends Mage_Cms_Block_Page
         return $this;
     }
 
+
+	/**
+	 * Prepare HTML content
+	 *
+	 * @return string
+	 */
+	protected function _toHtml()
+	{
+		/* @var $helper Mage_Cms_Helper_Data */
+		$helper = Mage::helper('cms');
+		$processor = $helper->getPageTemplateProcessor();
+		$html = $processor->filter($this->getPage()->getContent());
+		//$html = $this->getMessagesBlock()->toHtml() . $html; //removed because of double messages
+		return $html;
+	}
 }
