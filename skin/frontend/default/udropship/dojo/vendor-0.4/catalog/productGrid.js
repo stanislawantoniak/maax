@@ -699,6 +699,9 @@ define([
 	var updateMassButton = function(){
 		dom.byId("massActions").disabled = !grid.getSelectedIds().length;
 	};
+	var updateRunRuleButton = function(){
+		dom.byId("showAttributeRules-trigger").disabled = !grid.getSelectedIds().length;
+	};
 	
 	var registerMassactions = function(grid){
 		massAttribute = new status(grid, massUrl);
@@ -784,12 +787,15 @@ define([
 		
 		// listen for selection
 		grid.on("dgrid-select", updateMassButton);
+		grid.on("dgrid-select", updateRunRuleButton);
 
 		// listen for selection
 		grid.on("dgrid-deselect", updateMassButton);
+		grid.on("dgrid-deselect", updateRunRuleButton);
 		
 		// listen for refresh if selected
 		grid.on("dgrid-refresh-complete", updateMassButton);
+		grid.on("dgrid-refresh-complete", updateRunRuleButton);
 		
 		// listen for editable
 		if(editDbClick){
