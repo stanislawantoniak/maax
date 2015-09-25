@@ -36,7 +36,7 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
      * @return string
      */
     public function getActionUrl() {
-        return $this->getUrl("ghattributerules/mass/autofill");
+        return $this->getUrl("ghattributerules/mass/autofill", array("_secure" => true));
     }
 
     /**
