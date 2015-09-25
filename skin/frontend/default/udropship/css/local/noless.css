@@ -527,3 +527,56 @@
 .form-horizontal .form-group.subsection .control-label {
 	padding: 0;
 }
+
+#showAttributeRules .hiddenRow.in {
+	display: table-cell !important
+}
+#showAttributeRules table.table {
+	margin-bottom: 0 !important;
+}
+#showAttributeRules .checkbox-column {
+	width: 3%;
+}
+#showAttributeRules .show-details-column-short {
+	width: 4% !important;
+}
+#showAttributeRules .show-details-column {
+	width: 4.5% !important;
+	border-right: none;
+}
+#showAttributeRules .attribute-column {
+	border-left: none;
+}
+.accordion-toggle {
+	cursor: pointer;
+}
+.prefix-lvl-1 {
+	border: none;
+	width: 4%;
+}
+.prefix-lvl-2 {
+	border: none;
+	width: 7%;
+}
+.table-lvl-1 tr:first-child > td {
+	border-top: none;
+}
+#showAttributeRules .collapsing {
+	-webkit-transition: 0.01s;
+	transition: 0.01s;
+}
+
+#showAttributeRules-trigger {
+	color: #4d7496;
+	background-color: #ffffff;
+	border: none;
+	font-size: 11px !important;
+	padding: 0;
+	cursor: pointer;
+}
+#showAttributeRules-trigger.disabled {
+	color: #666666;
+	cursor: not-allowed;
+	opacity: 0.65;
+	pointer-events: auto;
+}

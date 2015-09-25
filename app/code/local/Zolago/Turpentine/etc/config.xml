@@ -104,6 +104,16 @@
                 </observers>
             </vendor_manual_mass_save_status_after>
 
+            <!-- When vendor mass update attributes by attribute rules mapper -->
+            <mass_autofill_attribute_rules_after>
+                <observers>
+                    <zolago_turpentine_observer_ban>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMultiProductPageCache</method>
+                    </zolago_turpentine_observer_ban>
+                </observers>
+            </mass_autofill_attribute_rules_after>
+
         </events>
 	</global>
 	<frontend>

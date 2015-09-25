@@ -13,14 +13,59 @@ class GH_AttributeRules_Model_Resource_AttributeRule_Collection extends Mage_Cor
     }
 
     /**
-     * @param Unirgy_Dropship_Model_Vendor | ini $vendor
+     * @param Unirgy_Dropship_Model_Vendor|int $vendor
      * @return Zolago_Banner_Model_Resource_Banner_Collection
      */
     public function addVendorFilter($vendor) {
         if($vendor instanceof Unirgy_Dropship_Model_Vendor){
             $vendor = $vendor->getId();
         }
-        $this->addFieldToFilter('vendor_id',(int)$vendor);
+        $this->addFieldToFilter('main_table.vendor_id',(int)$vendor);
+        return $this;
+    }
+
+    /**
+     * @param array()|int $ids
+     * @return $this
+     */
+    public function addAttributeIdFilter($ids) {
+        if (empty($ids)) {
+            return $this;
+        }
+        if (!is_array($ids)) {
+            $ids = array($ids);
+        }
+        $this->addFieldToFilter("main_table.column", array("in" => array($ids)));
+        return $this;
+    }
+
+    /**
+     * @param array()|int $values
+     * @return $this
+     */
+    public function addValueIdFilter($values) {
+        if (empty($values)) {
+            return $this;
+        }
+        if (!is_array($values)) {
+            $values = array($values);
+        }
+        $this->addFieldToFilter("main_table.value", array("in" => array($values)));
+        return $this;
+    }
+
+    /**
+     * @param array()|int $ids
+     * @return $this
+     */
+    public function addRuleIdFilter($ids) {
+        if (empty($ids)) {
+            return $this;
+        }
+        if (!is_array($ids)) {
+            $ids = array($ids);
+        }
+        $this->addFieldToFilter("main_table.attribute_rule_id", array("in" => array($ids)));
         return $this;
     }
 }

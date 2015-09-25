@@ -28,10 +28,13 @@
 				<?php echo Mage::helper("zolagocatalog")->__("Remove filters");?> 
 			</a>
             &nbsp;
-            <a href="#" data-toggle="modal" data-target="#showAttributeRules">
-                <i class="icon-puzzle-piece"></i>
-                <?php echo Mage::helper("gh_attributerules")->__("Autofill rules");?>
-            </a>
+
+			<a id="showAttributeRules-trigger" data-toggle="modal" data-target="#showAttributeRules" class="tooltip-wrapper disabled"
+			   data-title='<?php echo Mage::helper("zolagocatalog")->__("Rules can be applied on selected products"); ?>'>
+				<i class="icon-puzzle-piece"></i>
+				<?php echo Mage::helper("gh_attributerules")->__("Autofill rules"); ?>
+			</a>
+
 		</div>
     </div>
 </div>
@@ -49,3 +52,9 @@
 		</div>
 	</div>
 <?php endif;?>
+
+<script type="text/javascript">
+	jQuery(document).ready(function () {
+		jQuery('.tooltip-wrapper').tooltip();
+	})
+</script>
