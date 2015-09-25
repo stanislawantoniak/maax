@@ -700,7 +700,17 @@ define([
 		dom.byId("massActions").disabled = !grid.getSelectedIds().length;
 	};
 	var updateRunRuleButton = function(){
-		dom.byId("showAttributeRules-trigger").disabled = !grid.getSelectedIds().length;
+
+		jQuery("#showAttributeRules-trigger").click(function () {
+			if (!grid.getSelectedIds().length){
+				return false;
+			}
+		});
+		if (!grid.getSelectedIds().length) {
+			jQuery("#showAttributeRules-trigger").addClass("disabled");
+		} else {
+			jQuery("#showAttributeRules-trigger").removeClass("disabled");
+		}
 	};
 	
 	var registerMassactions = function(grid){
@@ -807,7 +817,7 @@ define([
 //        grid.on("th.field-0-0-0:click", handleSelectAll);
 		
 		registerMassactions(grid);
-		
+		updateRunRuleButton();
 		
 		return window.grid;
 	};
