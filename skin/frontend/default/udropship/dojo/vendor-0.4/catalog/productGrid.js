@@ -85,7 +85,7 @@ define([
 		if(resetFilters){
 			resetFilters.className = i ? "remove-filters" : "hidden";
 		}
-	}
+	};
 
 	/**
 	 * Handle reset filters button
@@ -187,7 +187,7 @@ define([
 		
 		modal.modal("show");
 		e.preventDefault();
-	}
+	};
 		
 	/**
 	 * @param {mixed} value
@@ -477,7 +477,7 @@ define([
 			}else{
 				columnSets[1][0].push(column);
 			}
-		};
+		}
 		
 		
 		return columnSets;
@@ -616,7 +616,7 @@ define([
 			}
 		}
 		editors[field].open(cell, e);
-	}
+	};
 
 
     var handleSelectAll = function(e){
@@ -629,7 +629,7 @@ define([
             grid.clearSelection();
         }
 
-    }
+    };
 	
 	on(document.body, "click", function(e){
 		var el = jQuery(e.target);
@@ -670,7 +670,7 @@ define([
 		}else{
 			grid.select(row);
 		}
-	}
+	};
 	/**
 	 * @param {Evented} e
 	 * @returns {void}
@@ -690,7 +690,7 @@ define([
 				e.preventDefault();
 			}
 		}
-	}
+	};
 	
 	////////////////////////////////////////////////////////////////////////////
 	// Mass actions
@@ -903,7 +903,7 @@ define([
 
 
 				// Check/ uncheck all
-				var attrSelectAll = modal.find("#attr-select-all")
+				var attrSelectAll = modal.find("#attr-select-all");
 				var allItemsChecked = [];
 
 				modal.find("input[type=checkbox]:not(#attr-select-all)").each(function(i, element){
