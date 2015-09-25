@@ -831,12 +831,21 @@ define([
         },
 
         setDataFromGrid: function() {
-            this.getModal().find("input[type=hidden][name=product_ids]").val(this.getProductIds());
             this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
+            this.getModal().find("input[type=hidden][name=all_products_flag]").val(this.getAllProductsFlag());
+            var ids = this.getProductIds();
+            if (this.getAllProductsFlag()) {
+                ids = "";// smaller post
+            }
+            this.getModal().find("input[type=hidden][name=product_ids]").val(ids);
         },
 
         getProductIds: function() {
             return window.grid.getSelectedIds().join();
+        },
+
+        getAllProductsFlag: function() {
+            return window.grid.getCheckAll();
         },
 
         getAttributeSetId: function() {
@@ -850,15 +859,57 @@ define([
         },
 
         attachLogicSubmitButton: function() {
-           this.getModal().find("input[type=checkbox]").on("change", function() {
-               var modal = window.attributeRules.getModal();
-               var btn = modal.find("button[type=submit]");
-               if (modal.find("input[type=checkbox]:checked").length) { // if any checkbox checked then
-                   btn.attr("disabled", false);
-               } else {
-                   btn.attr("disabled", true);
-               }
-           });
+            // If any checkbox checked then make submit button available
+            this.getModal().find("input[type=checkbox]").on("change", function () {
+                var modal = window.attributeRules.getModal();
+                var btn = window.attributeRules.getSubmitBtn();
+                if (modal.find("input[type=checkbox]:checked").length) {
+                    btn.attr("disabled", false);
+                } else {
+                    btn.attr("disabled", true);
+                }
+            });
+            // Mail logic for submit
+            this.getForm().submit(function( event ) {
+                // Stop form from submitting normally
+                event.preventDefault();
+
+                var form = event.target;
+
+                misc.startLoading();
+                jQuery.ajax({
+                    type: "POST",
+                    url: jQuery(form).prop("action"),
+                    data: form.serialize()
+                }).success(function(data, textStatus, jqXHR) {
+                    var status = data['status'];
+                    var msg = data['message'];
+
+                    // Close popup and show message
+                    window.attributeRules.closeModal();
+                    noty ({
+                        text: msg,
+                        type: 'success',
+                        timeout: 10000
+                    });
+                    // Refresh grid
+                    window.grid.refresh();
+                }).always(function() {
+                    misc.stopLoading();
+                });
+            });
+        },
+
+        closeModal: function() {
+            this.getModal().find(".modal-header button.close").click();
+        },
+
+        getSubmitBtn: function() {
+            return this.getModal().find("button[type=submit]");
+        },
+
+        getForm: function() {
+            return this.getModal().find("form").first();
         },
 
         attachLogicShowDetails: function() {
