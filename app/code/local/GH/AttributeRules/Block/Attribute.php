@@ -8,12 +8,21 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
      * @return GH_AttributeRules_Model_Resource_AttributeRule_Collection
      */
     public function getRulesData() {
+        $attributeSetId = Mage::app()->getRequest()->getParam("attribute_set_id", 0);
+
         /** @var GH_AttributeRules_Model_Resource_AttributeRule_Collection $collection */
         $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
         $collection->addVendorFilter($this->getVendor());
 
         /* @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
         $gridModel = Mage::getModel("zolagocatalog/vendor_product_grid");
+
+
+        $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
+            ->setAttributeSetFilter($attributeSetId)
+            ->getItems();
+        $allAttributesInSet = array_keys($attributes);
+
 
         /** @var GH_AttributeRules_Model_AttributeRule $rule */
         foreach ($collection as $rule) {
@@ -25,8 +34,12 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
         foreach ($collection as $rule) {
             $col = $rule->getColumn();
             $value = $rule->getValue();
-            $data[$col]['attribute'] = $rule->getData("attribute");
-            $data[$col]['value'][$value][] = $rule;
+            $attribute = $rule->getData("attribute");
+            if (in_array($attribute->getId(), $allAttributesInSet)) {
+                $data[$col]['attribute'] = $attribute;
+                $data[$col]['value'][$value][] = $rule;
+            }
+            unset($attribute);
         }
 
         return $data;
