@@ -1616,6 +1616,10 @@ Mall.inspirationsSliderInit = function() {
 	});
 };
 
+Mall.refresh = function() {
+    location.reload();
+};
+
 jQuery(document).ready(function() {
     Mall.CustomEvents.init(300);
     Mall.dispatch();

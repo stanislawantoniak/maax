@@ -6,50 +6,16 @@ $helper = Mage::helper("gh_attributerules");
 $storeId = $this->getLabelStore();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
+
+$dataRules = $this->getRulesData();
 ?>
 
-<style>
-    #showAttributeRules .hiddenRow.in {
-        display: table-cell !important
-    }
-    #showAttributeRules table.table {
-        margin-bottom: 0 !important;
-    }
-    #showAttributeRules .checkbox-column {
-        width: 3%;
-    }
-    #showAttributeRules .show-details-column-short {
-        width: 4% !important;
-    }
-    #showAttributeRules .show-details-column {
-        width: 4.5% !important;
-        border-right: none;
-    }
-    #showAttributeRules .attribute-column {
-        border-left: none;
-    }
-    .accordion-toggle {
-        cursor: pointer;
-    }
-    .prefix-lvl-1 {
-        border: none;
-        width: 4%;
-    }
-    .prefix-lvl-2 {
-        border: none;
-        width: 7%;
-    }
-    .table-lvl-1 tr:first-child > td {
-        border-top: none;
-    }
-    #showAttributeRules .collapsing {
-        -webkit-transition: 0.01s;
-        transition: 0.01s;
-    }
-</style>
 
 <div class="modal fade bs-example-modal-sm" id="showAttributeRules" role="dialog">
     <form method="post" action="<?php echo $this->getActionUrl();?>">
+        <input type="hidden" name="product_ids" value="">
+        <input type="hidden" name="attribute_set_id" value="">
+        <input type="hidden" name="all_products_flag" value="">
         <div class="modal-dialog modal-sm" style="width: 80%;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -61,27 +27,41 @@ $_modagoHlp = Mage::helper("zolagocommon");
                         <strong><?php echo $helper->__("Information");?>:</strong>
                         <?php echo $helper->__("Some text here");?>
                     </p>
+                    <?php if(!empty($dataRules)): ?>
                     <div class="widget-content">
                         <table
                             class="table-lvl-0 table table-bordered table-checkable table-no-inner-border table-hover">
                             <thead>
                             <tr>
-                                <th class="checkbox-column" style="width: 3%;"></th>
+                                <th class="checkbox-column" style="width: 3%;">
+                                    <div class="">
+                                        <span class="">
+                                            <input type="checkbox"
+                                                   name="all"
+                                                   id="attr-select-all"
+                                                   value="1"
+                                                   data-checkbox-group-target="input[type=checkbox][data-checkbox-group=attr-group]"
+                                                   class="uniform">
+                                        </span>
+                                    </div>
+                                </th>
                                 <th colspan="2"><?php echo $helper->__("Attribute to fill"); ?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                            foreach ($this->getRulesData() as $key => $row): ?>
+                            foreach ($dataRules as $key => $row): ?>
                             <tr class="">
                                 <td class="checkbox-column">
                                     <div class="">
                                         <span class="">
                                             <input type="checkbox"
-                                                   name="attribute[]"
+                                                   name="attributes[]"
                                                    id="attr-<?php echo $key; ?>"
                                                    value="<?php echo $key;?>"
+                                                   data-checkbox-group="attr-group"
                                                    data-checkbox-group-target="input[type=checkbox][data-checkbox-group=value-key-<?php echo $key; ?>]"
+                                                   data-checkbox-group-parent="#attr-select-all"
                                                    class="uniform">
                                         </span>
                                     </div>
@@ -110,7 +90,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                                         <div class="">
                                                             <span class="">
                                                                 <input type="checkbox"
-                                                                       name="value_key[]"
+                                                                       name="values[]"
                                                                        id="value-key-<?php echo $valueKey; ?>"
                                                                        value="<?php echo $valueKey; ?>"
                                                                        data-checkbox-group="value-key-<?php echo $key; ?>"
@@ -141,7 +121,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                                                     <div class="">
                                                                         <span class="">
                                                                             <input type="checkbox"
-                                                                                   name="rule[]"
+                                                                                   name="rules[]"
                                                                                    value="<?php echo $rule->getId(); ?>"
                                                                                    data-checkbox-group-id="rules-group-<?php echo $valueKey; ?>"
                                                                                    data-checkbox-group-parent="#value-key-<?php echo $valueKey; ?>"
@@ -168,12 +148,18 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             </tbody>
                         </table>
                     </div>
-
+                    <?php else: ?>
+                    <p>
+                        <strong>
+                            <?php echo $helper->__("Currently you don't have saved any rules"); ?>
+                        </strong>
+                    </p>
+                    <?php endif; ?>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel"); ?></button>
-                    <button type="submit" class="btn btn-primary" disabled="disabled" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__("Apply rules to selected"); ?></button>
+                    <button type="submit" class="btn btn-primary" disabled="disabled" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__("Apply rules to selected products"); ?></button>
                 </div>
             </div>
         </div>
