@@ -103,7 +103,7 @@ $dataRules = $this->getRulesData();
                                                     <td class="show-details-column-short align-center accordion-toggle" data-toggle="collapse" data-target="#rulesGroup-<?php echo $valueKey; ?>" style="cursor: pointer;">
                                                         <span class="btn btn-xs"><i class="icon-plus"></i></span>
                                                     </td>
-                                                    <td>
+                                                    <td class="option-text-set-value accordion-toggle" data-toggle="collapse" data-target="#rulesGroup-<?php echo $valueKey; ?>" style="cursor: pointer;">
                                                         <?php echo $helper->__("Set value: <b>%s</b>", $attr->getSource()->getOptionText($valueKey)); ?>
                                                     </td>
                                                 </tr>

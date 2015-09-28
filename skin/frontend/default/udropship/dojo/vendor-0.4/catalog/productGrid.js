@@ -566,6 +566,7 @@ define([
                         FormComponents.initUniform();// Attach checkbox style
                     }
                 }).done(function () {
+                    jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
                     misc.stopLoading();
                 });
             }
@@ -894,6 +895,17 @@ define([
                     });
                     // Refresh grid
                     window.grid.refresh();
+                }).fail(function(data) {
+                    var status = data['status'];
+                    var msg = data['message'];
+
+                    // Close popup and show message
+                    window.attributeRules.closeModal();
+                    noty ({
+                        text: msg,
+                        type: 'error',
+                        timeout: 10000
+                    });
                 }).always(function() {
                     misc.stopLoading();
                 });
