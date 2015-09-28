@@ -10,7 +10,12 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
     protected function _construct() {
         parent::_construct();
         $this->setTemplate('zolagodropship/tabs.phtml');
+        // add sections
         $this->addSection('settings',Mage::helper('zolagodropship')->__('Settings'),10);
+        $this->addSection('vendor_rights',Mage::helper('zolagodropship')->__('Vendor rights'),20);
+        $this->addSection('logistic',Mage::helper('zolagodropship')->__('Logistics parameters'),30);
+        $this->addSection('vendor_data',Mage::helper('zolagodropship')->__('Vendor data'),40);
+        $this->addSection('transaction_data',Mage::helper('zolagodropship')->__('Transaction data'),50);
     }  
     
     /**
@@ -83,8 +88,8 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
         $id = Mage::app()->getRequest()->getParam('id', 0);
 
         $this->addTab('form_section', array(
-            'label'     => Mage::helper('udropship')->__('Vendor Information'),
-            'title'     => Mage::helper('udropship')->__('Vendor Information'),
+            'label'     => Mage::helper('udropship')->__('Basic settings'),
+            'title'     => Mage::helper('udropship')->__('Basic settings'),
             'content'   => $this->getLayout()->createBlock('udropship/adminhtml_vendor_edit_tab_form')
                 ->setVendorId($id)
                 ->toHtml(),
@@ -97,6 +102,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
                 ->setVendorId($id)
                 ->toHtml(),
         ));
+        $this->addTabToSection('preferences_section','vendor_data',20);
 
         $this->addTab('custom_section', array(
             'label'     => Mage::helper('udropship')->__('Custom Data'),
@@ -105,6 +111,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
                 ->setVendorId($id)
                 ->toHtml(),
         ));
+        $this->addTabToSection('custom_section','vendor_data',30);
 
         $this->addTab('shipping_section', array(
             'label'     => Mage::helper('udropship')->__('Shipping methods'),
@@ -113,6 +120,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
                 ->setVendorId($id)
                 ->toHtml(),
         ));
+        $this->addTabToSection('shipping_section','logistic',10);
 
         if ($id) {
             $this->addTab('products_section', array(
@@ -122,19 +130,24 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
                     ->setVendorId($id)
                     ->toHtml(),
             ));
+            $this->addTabToSection('products_section','transaction_data',10);
         }
-
+        // attach tabs to sections
         if(($tabId = $this->getRequest()->getParam('tab'))) {
             $this->setActiveTab($tabId);
         }
 
         Mage::dispatchEvent('udropship_adminhtml_vendor_tabs_after', array('block'=>$this, 'id'=>$id));
-
+        // organize unirgy tabs
+        $this->addTabToSection('udratings','transaction_data',30);
+        $this->addTabToSection('udqa','transaction_data',20);
+        $this->addTabToSection('udtiership','logistic',40);
+        $this->addTabToSection('udtiercom','logistic',50);
 
          // prepare sections and tabs order
          $sections = $this->_sections;         
          uasort($sections,array('Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs','sectionSort'));
-         foreach ($sections as $id => $section) {
+         foreach ($sections as $id => &$section) {
              asort($section['tabs']);             
          }
          $this->assign('sections',$sections);
