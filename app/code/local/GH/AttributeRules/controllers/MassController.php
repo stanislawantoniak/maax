@@ -199,15 +199,12 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
             /** @var Zolago_Catalog_Model_Product_Action $productAction */
             $productAction = Mage::getSingleton('catalog/product_action');
 
-            $attrDataForReindex = array();
             $idsForReindex = array();
 
             foreach ($dataForReindex as $code => $item) {
                 foreach ($item as $value => $ids) {
                     if (!empty($ids)) {
                         $idsForReindex = array_merge($idsForReindex, $ids);
-                        //$attrDataForReindex = array_merge($attrDataForReindex, array($code => $value));
-                        //$productAction->updateAttributesNoIndex($ids, array($code => $value), $storeId);
                         $productAction->updateAttributesPure($ids, array($code => $value), $storeId);
                     }
                 }
