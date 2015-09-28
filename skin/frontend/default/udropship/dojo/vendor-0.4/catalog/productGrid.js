@@ -700,19 +700,6 @@ define([
 	var updateMassButton = function(){
 		dom.byId("massActions").disabled = !grid.getSelectedIds().length;
 	};
-	var updateRunRuleButton = function(){
-
-		jQuery("#showAttributeRules-trigger").click(function () {
-			if (!grid.getSelectedIds().length){
-				return false;
-			}
-		});
-		if (!grid.getSelectedIds().length) {
-			jQuery("#showAttributeRules-trigger").addClass("disabled");
-		} else {
-			jQuery("#showAttributeRules-trigger").removeClass("disabled");
-		}
-	};
 	
 	var registerMassactions = function(grid){
 		massAttribute = new status(grid, massUrl);
@@ -798,16 +785,13 @@ define([
 		
 		// listen for selection
 		grid.on("dgrid-select", updateMassButton);
-		grid.on("dgrid-select", updateRunRuleButton);
 
 		// listen for selection
 		grid.on("dgrid-deselect", updateMassButton);
-		grid.on("dgrid-deselect", updateRunRuleButton);
-		
+
 		// listen for refresh if selected
 		grid.on("dgrid-refresh-complete", updateMassButton);
-		grid.on("dgrid-refresh-complete", updateRunRuleButton);
-		
+
 		// listen for editable
 		if(editDbClick){
 			grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
@@ -818,8 +802,6 @@ define([
 //        grid.on("th.field-0-0-0:click", handleSelectAll);
 		
 		registerMassactions(grid);
-		updateRunRuleButton();
-		
 		return window.grid;
 	};
 
@@ -873,20 +855,39 @@ define([
         attachLogicOnOpen: function() {
             jQuery("a[data-target=#showAttributeRules]").click(function() {
                 window.attributeRules.setDataFromGrid();
+                window.attributeRules._attachLogicSubmitButtonOnChange();
             });
+        },
+
+        _attachLogicSubmitButtonOnChange: function() {
+            var modal = window.attributeRules.getModal();
+            var btn = window.attributeRules.getSubmitBtn();
+
+            btn.closest("div.tooltip-wrapper").tooltip('destroy');
+
+            if (!window.attributeRules.getProductIds().length) {
+                btn.closest("div.tooltip-wrapper").attr("title", btn.closest("div.tooltip-wrapper").attr("data-title-products"));
+            }
+            if (!modal.find("input[type=checkbox]:checked").length) {
+                btn.closest("div.tooltip-wrapper").attr("title", btn.closest("div.tooltip-wrapper").attr("data-title-rules"));
+            }
+
+            if (modal.find("input[type=checkbox]:checked").length && window.attributeRules.getProductIds().length) {
+                btn.closest("div.tooltip-wrapper").tooltip('destroy');
+                btn.attr("disabled", false);
+            } else {
+                btn.closest("div.tooltip-wrapper").tooltip();
+                btn.attr("disabled", true);
+            }
         },
 
         attachLogicSubmitButton: function() {
             // If any checkbox checked then make submit button available
+            // only if on grid any products selected
             this.getModal().find("input[type=checkbox]").on("change", function () {
-                var modal = window.attributeRules.getModal();
-                var btn = window.attributeRules.getSubmitBtn();
-                if (modal.find("input[type=checkbox]:checked").length) {
-                    btn.attr("disabled", false);
-                } else {
-                    btn.attr("disabled", true);
-                }
+                window.attributeRules._attachLogicSubmitButtonOnChange();
             });
+            this._attachLogicSubmitButtonOnChange();
             // Mail logic for submit
             this.getForm().submit(function( event ) {
                 // Stop form from submitting normally
