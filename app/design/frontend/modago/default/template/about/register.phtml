@@ -109,7 +109,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 		);
 		Mall.translate.add(
 			"You must check this box",
-			"<?php echo $_hlp->__("You must check this box"); ?>"
+			"<?php echo $_hlp->__("In order to receive starting coupon codes you must check this box"); ?>"
 		);
 
 		jQuery(document).ready(function () {
@@ -148,7 +148,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 							required: Mall.translate.__("You must accept our Terms of Service")
 						},
 						is_subscribed: {
-							required: Mall.translate.__("You must check this box")
+							required: Mall.translate.__("In order to receive starting coupon codes you must check this box")
 						}
 					}
 				}));
