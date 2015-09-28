@@ -68,6 +68,7 @@
 			</zolagodropship>
 			<udropship>
 				<rewrite>
+				    <adminhtml_vendor_edit_tab_form>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form</adminhtml_vendor_edit_tab_form>
 				    <adminhtml_vendor_edit_tabs>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs</adminhtml_vendor_edit_tabs>
 					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
