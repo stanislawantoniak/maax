@@ -8,6 +8,8 @@
 	}
 	@media(max-width: $screen-sm-max) {
 		padding: 30px;
+	}
+	@media(max-width: $screen-xs-max) {
 		margin-top: 15px;
 	}
 	@media(max-width: 479px) {
