@@ -566,6 +566,7 @@ define([
                         FormComponents.initUniform();// Attach checkbox style
                     }
                 }).done(function () {
+                    jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
                     misc.stopLoading();
                 });
             }
@@ -889,7 +890,7 @@ define([
                     window.attributeRules.closeModal();
                     noty ({
                         text: msg,
-                        type: 'success',
+                        type: status ? 'success' : 'error',
                         timeout: 10000
                     });
                     // Refresh grid
