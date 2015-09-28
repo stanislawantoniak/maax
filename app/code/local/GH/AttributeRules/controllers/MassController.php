@@ -217,7 +217,7 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
             if (!empty($idsForReindex)) {
                 $ids = array_unique($idsForReindex);
 
-                Mage::log($ids, null, "index2.log");
+                Mage::log($idsForReindex, null, "index2.log");
 
 
 //                $productAction->setData(
