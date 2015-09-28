@@ -49,6 +49,9 @@
         </events>
     </global>
     <frontend>
+        <secure_url>
+            /ghattributerules
+        </secure_url>
         <translate>
             <modules>
                 <GH_AttributeRules>
