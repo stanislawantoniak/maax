@@ -512,7 +512,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 						//normal register
 						$msg = "Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.";
 					}
-					$session->addSuccess(Mage::helper('zolagonewsletter')->__($msg);
+					$session->addSuccess(Mage::helper('zolagonewsletter')->__($msg));
 				}
 
 				if(strpos($this->_getRefererUrl(),'mypromotions') != -1) {
