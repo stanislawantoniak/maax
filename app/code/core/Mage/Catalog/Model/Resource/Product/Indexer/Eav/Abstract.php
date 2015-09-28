@@ -71,6 +71,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract
      */
     public function reindexEntities($processIds)
     {
+        Mage::log($processIds, null, "index31.log");
         $adapter = $this->_getWriteAdapter();
 
         $this->clearTemporaryIndexTable();
@@ -87,7 +88,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract
         if ($childIds) {
             $processIds = array_unique(array_merge($processIds, $childIds));
         }
-        Mage::log($processIds, null, "index3.log");
+        Mage::log($processIds, null, "index32.log");
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
