@@ -356,7 +356,7 @@ class Zolago_Solrsearch_Model_Observer {
      */
     public function collectProductsAndPushToQueue(Varien_Event_Observer $observer) {
         $productIds = $observer->getEvent()->getProductIds();
-		Mage::log($productIds, null, "index4.log");
+
         foreach ($productIds as $productId) {
             $this->collectProduct($productId);
         }
