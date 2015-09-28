@@ -565,9 +565,7 @@
 	padding: 0;
 	cursor: pointer;
 }
-#showAttributeRules-trigger.disabled {
-	color: #666666;
-	cursor: not-allowed;
-	opacity: 0.65;
-	pointer-events: auto;
+
+#showAttributeRules div.tooltip-wrapper {
+    display: inline-block;
 }

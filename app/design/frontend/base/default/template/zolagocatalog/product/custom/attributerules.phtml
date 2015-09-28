@@ -160,7 +160,16 @@ $dataRules = $this->getRulesData();
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel"); ?></button>
-                    <button type="submit" class="btn btn-primary" disabled="disabled" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__("Apply rules to selected products"); ?></button>
+                    <div class="tooltip-wrapper"
+                         data-placement="top"
+                         data-title-products="<?php echo $helper->__("You don't have selected products");?>"
+                         data-title-rules="<?php echo $helper->__("You don't have selected rules");?>">
+                        <button data-toggle="tooltip"
+                            type="submit"
+                            class="btn btn-primary"
+                            disabled="disabled"
+                            data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__("Apply rules to selected products"); ?></button>
+                    </div>
                 </div>
             </div>
         </div>
