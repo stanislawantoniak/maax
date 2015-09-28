@@ -31,6 +31,15 @@ ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul {
 		}
 	}
 }
+
+body.mypromotions-index-index {
+	ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul, ul.messages >li.success-msg ul {
+		>li:last-child {
+			margin-bottom: 10px !important;
+		}
+	}
+}
+
 ul.messages >li ul>li>span {
     background-color: #deeaca;
     margin-left: 20px;
