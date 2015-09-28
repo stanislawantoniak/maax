@@ -93,14 +93,18 @@
 		<udropship>
 		    <courier>
 		        <fieldsets>		            
+			        <dhl_rates>
+				        <legend>DHL Rates</legend>
+				        <position>130</position>
+			        </dhl_rates>
                     <dhl>
                         <legend>DHL</legend>
                         <position>140</position>
                     </dhl>
-			        <dhl_rates>
-				        <legend>DHL Rates</legend>
-				        <position>150</position>
-			        </dhl_rates>
+                    <orbaups_rates>
+                        <legend>UPS Rates</legend>
+                        <position>150</position>
+                    </orbaups_rates>
                     <orbaups>
                         <legend>UPS</legend>
                         <position>160</position>
@@ -380,10 +384,6 @@
 							<dhl_account>1</dhl_account>
 							<dhl_ecas>1</dhl_ecas>
 							<dhl_terminal>1</dhl_terminal>
-							<dhl_insurance_charge_amount>1</dhl_insurance_charge_amount>
-							<dhl_insurance_charge_percent>1</dhl_insurance_charge_percent>
-							<dhl_cod_charge_amount>1</dhl_cod_charge_amount>
-							<dhl_cod_charge_percent>1</dhl_cod_charge_percent>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
@@ -420,25 +420,25 @@
                     <dhl_insurance_charge_amount>
                         <label>Insurance charge amount</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>51</position>
                     </dhl_insurance_charge_amount>
                     <dhl_insurance_charge_percent>
                         <label>Insurance charge %</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>52</position>
                     </dhl_insurance_charge_percent>
                     <dhl_cod_charge_amount>
                         <label>COD charge amount</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>53</position>
                     </dhl_cod_charge_amount>
                     <dhl_cod_charge_percent>
                         <label>COD charge %</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>54</position>
                     </dhl_cod_charge_percent>
                     <use_orbaups>
@@ -451,10 +451,6 @@
                             <orbaups_login>1</orbaups_login>
                             <orbaups_password>1</orbaups_password>
 							<orbaups_account>1</orbaups_account>
-							<orbaups_insurance_charge_amount>1</orbaups_insurance_charge_amount>
-							<orbaups_insurance_charge_percent>1</orbaups_insurance_charge_percent>
-							<orbaups_cod_charge_percent>1</orbaups_cod_charge_percent>
-							<orbaups_cod_charge_amount>1</orbaups_cod_charge_amount>
                         </depend_fields>
                         <position>55</position>
                     </use_orbaups>
@@ -479,25 +475,25 @@
                     <orbaups_insurance_charge_amount>
                         <label>Insurance charge amount</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>90</position>
                     </orbaups_insurance_charge_amount>
                     <orbaups_insurance_charge_percent>
                         <label>Insurance charge %</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>95</position>
                     </orbaups_insurance_charge_percent>
                     <orbaups_cod_charge_amount>
                         <label>COD charge amount</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>100</position>
                     </orbaups_cod_charge_amount>
                     <orbaups_cod_charge_percent>
                         <label>COD charge %</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>110</position>
                     </orbaups_cod_charge_percent>
                     <!-- Rma -->
