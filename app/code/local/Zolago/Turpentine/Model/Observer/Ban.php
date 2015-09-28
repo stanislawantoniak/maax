@@ -8,7 +8,8 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
      * @param $eventObject
      */
     public function banMultiProductPageCache($eventObject)
-    {
+    {Mage::log($eventObject->getProducts(), null, "XXX.log");
+
         if (!self::isVarnishEnabled()) {
             return;
         }
@@ -17,7 +18,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
         $banHelper = Mage::helper('turpentine/ban');
         $cronHelper = Mage::helper('turpentine/cron');
         $products = $eventObject->getProducts();
-
+        Mage::log($eventObject->getProducts(), null, "XXX1.log");
         if (!$products) {
             return;
         }
@@ -26,7 +27,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
         foreach ($products as $product) {
             $idsForBan[] = $product->getId();
         }
-
+        Mage::log($idsForBan, null, "XXX3.log");
         $urlPatterns = $banHelper->getMultiProductBanRegex($idsForBan); //return array [0]regex [1]heating uri
         $results = $this->_getVarnishAdmin()->flushMultiUrl($urlPatterns['regex']);
 
