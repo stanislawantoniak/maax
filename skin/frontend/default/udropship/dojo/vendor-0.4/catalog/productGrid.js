@@ -890,22 +890,11 @@ define([
                     window.attributeRules.closeModal();
                     noty ({
                         text: msg,
-                        type: 'success',
+                        type: status ? 'success' : 'error',
                         timeout: 10000
                     });
                     // Refresh grid
                     window.grid.refresh();
-                }).fail(function(data) {
-                    var status = data['status'];
-                    var msg = data['message'];
-
-                    // Close popup and show message
-                    window.attributeRules.closeModal();
-                    noty ({
-                        text: msg,
-                        type: 'error',
-                        timeout: 10000
-                    });
                 }).always(function() {
                     misc.stopLoading();
                 });

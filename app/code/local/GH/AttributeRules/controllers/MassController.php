@@ -240,7 +240,6 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
                 );
             }
         } catch (Exception $e) {
-            $this->getResponse()->setHttpResponseCode(500);
             $result = array(
                 'status' => 0,
                 'message'=> $this->__($e->getMessage()),
