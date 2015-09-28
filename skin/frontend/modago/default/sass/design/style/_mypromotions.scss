@@ -472,6 +472,7 @@ body.mypromotions-index-index #content {
 				label.agreement-label {
 					font-size: 16px !important;
 					margin: 0 0 2px 0 !important;
+					white-space: normal;
 					@media(max-width: $screen-xs-max) {
 						font-size: 14px !important;
 					}
