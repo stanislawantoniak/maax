@@ -20,3 +20,5 @@
 "Some text here","Some text here"
 " is empty"," jest pusty"
 "Rules can be applied on selected products","Reguły mogą być wykonane tylko kiedy masz zaznaczone produkty"
+"You don't have selected rules","Nie masz zaznaczonych żadnych reguł"
+"You don't have selected products","Nie masz zaznaczonych żadnych produktów"
