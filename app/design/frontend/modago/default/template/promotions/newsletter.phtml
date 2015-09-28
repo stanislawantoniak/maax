@@ -14,7 +14,7 @@ $_hlp = Mage::helper("zolagocustomer");
 	<div class="row action mypromotions-newsletter-button">
 		<div class="col-sm-12">
 			<button type="submit" class="button button-primary large link">
-				<?php echo $_hlp->__('Save') ?>
+				<i></i>&nbsp;<?php echo $_hlp->__('Save') ?>
 			</button>
 		</div>
 	</div>
@@ -41,8 +41,23 @@ $_hlp = Mage::helper("zolagocustomer");
 					}
 				}
 			}));
+			var spinner = form.find('button[type=submit]').find('i'),
+				spinnerClasses = 'fa fa-spinner fa-spin';
 			form.submit(function () {
-				return
+				if(form.valid()) {
+					spinner.addClass(spinnerClasses).css('pointer-events','none');
+					jQuery.post('<?php echo $this->getUrl('newsletter/manage/ajaxSave', array('_secure'=>true)); ?>', form.serialize())
+						.done(function(data) {
+							spinner.removeClass(spinnerClasses).css('pointer-events','auto');
+							if(data.popup) {
+								jQuery('#mypromotions-newsletter-popup-open').click();
+							} else {
+								Mall.refresh();
+							}
+						});
+
+				}
+				return false;
 			});
 		}
 	});

@@ -116,8 +116,6 @@ class Zolago_Modago_Block_Mypromotions extends Mage_Core_Block_Template
 		    $rulesCollection->addFieldToFilter('date_from', array('lteq' => $localtime));
 		    $rulesCollection->addFieldToFilter('date_to', array('gteq' => $localtime));
 
-		    Mage::log($rulesCollection->getSelect()->__toString());
-
 		    $rules = array(); // clear
 
 		    $vendorIds = array();
