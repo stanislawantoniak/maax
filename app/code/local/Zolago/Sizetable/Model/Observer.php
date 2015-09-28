@@ -26,6 +26,7 @@ class Zolago_Sizetable_Model_Observer
 //                    'url' 		=> $block->getUrl('sizetable/index/brand', array('_current' => true)),
 //                    'class'		=> 'ajax',
                            ));
+            $block->addTabToSection('sizetable_brand','vendor_rights',20);
             $block->addTab('sizetable_attributeset', array(
                                'label'     => Mage::helper('zolagosizetable')->__('Size table attribute set settings'),
                                'content'	=> Mage::app()->getLayout()->createBlock('zolagosizetable/adminhtml_dropship_settings_attributeset_grid', 'admin.sizetable.settings.attributeset')
@@ -34,6 +35,7 @@ class Zolago_Sizetable_Model_Observer
 //                    'url' 		=> $block->getUrl('sizetable/index/attributeset', array('_current' => true)),
 //                    'class'		=> 'ajax',
                            ));
+            $block->addTabToSection('sizetable_attributeset','vendor_rights',30);
         }
     }
     public function udropship_adminhtml_vendor_edit_prepare_form($observer) {
