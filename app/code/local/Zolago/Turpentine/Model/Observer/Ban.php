@@ -18,6 +18,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
         $banHelper = Mage::helper('turpentine/ban');
         $cronHelper = Mage::helper('turpentine/cron');
         $products = $eventObject->getProducts();
+        $productIds = $eventObject->getProductIds();
         Mage::log($eventObject->getProducts(), null, "XXX1.log");
 
 
