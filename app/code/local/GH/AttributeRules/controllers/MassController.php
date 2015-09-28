@@ -224,7 +224,7 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
 //                );
 //                $productAction->reindexAfterMassAttributeChange();
 
-                $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+                $indexer = new Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source();
                 /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
                 $indexer->reindexEntities($idsForReindex);
 
