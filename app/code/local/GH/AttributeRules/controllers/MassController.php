@@ -207,8 +207,8 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
                     if (!empty($ids)) {
                         $idsForReindex = array_merge($idsForReindex, $ids);
                         //$attrDataForReindex = array_merge($attrDataForReindex, array($code => $value));
-                        //$productAction->updateAttributesNoIndex($ids, array($code => $value), $storeId);
-                        $productAction->updateAttributesPure($ids, array($code => $value), $storeId);
+                        $productAction->updateAttributesNoIndex($ids, array($code => $value), $storeId);
+                        //$productAction->updateAttributesPure($ids, array($code => $value), $storeId);
                     }
                 }
             }
@@ -226,7 +226,7 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
 
                 $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
                 /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-                $indexer->reindexEntities($ids);
+                $indexer->reindexEntities($idsForReindex);
 
                 // Push to solr and ban varnish
                 Mage::dispatchEvent(
