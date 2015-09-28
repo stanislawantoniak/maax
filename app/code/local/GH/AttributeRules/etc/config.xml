@@ -50,7 +50,7 @@
     </global>
     <frontend>
         <secure_url>
-            /ghattributerules
+            <ghattributerules>/ghattributerules</ghattributerules>
         </secure_url>
         <translate>
             <modules>
