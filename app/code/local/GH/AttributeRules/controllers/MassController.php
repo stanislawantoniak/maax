@@ -1,6 +1,6 @@
 <?php
 
-class GH_AttributeRules_MassController extends Mage_Core_Controller_Front_Action {
+class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor_Abstract  {
 
     /**
      * Mass auto fill attributes
