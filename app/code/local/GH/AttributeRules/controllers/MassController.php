@@ -1,6 +1,11 @@
 <?php
+require_once Mage::getConfig()->getModuleDir('controllers', 'Zolago_Catalog') . DS . "Vendor" . DS . "ProductController.php";
 
-class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor_Abstract  {
+/**
+ * Class GH_AttributeRules_MassController
+ * require_once @see Zolago_Catalog_Vendor_ProductController
+ */
+class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductController {
 
     /**
      * Mass auto fill attributes
@@ -18,6 +23,8 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
             $store = Mage::app()->getStore($storeId);
             $productIds = $req->getParam("product_ids");
             $attributeSetId = $req->getParam("attribute_set_id");
+            $query = $req->getParams();
+            $static = $req->getParam("static");
 
             if (!$attributeSetId) {
                 Mage::throwException(Mage::helper("gh_attributerules")->__("Technical error: no attribute set id specified"));
@@ -31,6 +38,14 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
             }
             if (is_array($productIds) && count($productIds)) {
                 $productIds = array_filter(array_unique($productIds));
+            }
+            if (!(is_array($productIds) && count($productIds)) || $allProductsFlag) {
+                $restQuery = $this->_getRestQuery($query);
+                $collection = $this->_getCollection();
+                foreach($restQuery as $key => $value){
+                    $collection->addAttributeToFilter($key, $value);
+                }
+                $productIds = $collection->getAllIds();
             }
 
             /** @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
@@ -60,9 +75,11 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
                 $usedAttr[$ruleAttr->getAttributeCode()] = $ruleAttr;
 
                 // Preparing product collection
-                $prodColl = $this->_prepareCollection($store, $attributeSetId);
-                if (count($productIds) && !$allProductsFlag) {
+                $prodColl = $this->_prepareBasicCollectionForUpdate($store, $attributeSetId);
+                if (count($productIds)) {
                     $prodColl->addIdFilter($productIds);
+                } else {
+                    continue;
                 }
                 // --Preparing product collection
                 if ($filter) { // Some filter, process for it
@@ -124,7 +141,7 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
 
 
             // Load product collection with used attributes
-            $prodColl = $this->_prepareCollection($store, $attributeSetId);
+            $prodColl = $this->_prepareBasicCollectionForUpdate($store, $attributeSetId);
             $prodColl->addAttributeToSelect(array_keys($usedAttr), "left");
 
             // Merge current attributes for product (should work like add for multiselect, set for select)
@@ -246,18 +263,11 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
     }
 
     /**
-     * @return Zolago_Dropship_Model_Vendor
-     */
-    public function getVendor() {
-        return Mage::getModel("udropship/session")->getVendor();
-    }
-
-    /**
      * @param Mage_Core_Model_Store $store
      * @param int $attributeSetId
      * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
      */
-    protected function _prepareCollection($store, $attributeSetId) {
+    protected function _prepareBasicCollectionForUpdate($store, $attributeSetId) {
         /** @var Zolago_Catalog_Model_Resource_Vendor_Product_Collection $prodColl */
         $prodColl = Mage::getResourceModel("zolagocatalog/vendor_product_collection");
         $prodColl->setFlag("skip_price_data", true);
@@ -299,12 +309,5 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
         }
         // Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678)
         $collection->getSelect()->where($valueExpr . " REGEXP ?", $value);
-    }
-
-    /**
-     * @return Zolago_Catalog_Model_Vendor_Product_Grid
-     */
-    public function getGridModel() {
-        return Mage::getSingleton('zolagocatalog/vendor_product_grid');
     }
 }

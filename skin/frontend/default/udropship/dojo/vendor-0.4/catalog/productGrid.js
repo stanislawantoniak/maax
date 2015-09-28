@@ -832,6 +832,7 @@ define([
         },
 
         setDataFromGrid: function() {
+            this._setDataFormGridQuery();
             this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
             this.getModal().find("input[type=hidden][name=all_products_flag]").val(this.getAllProductsFlag());
             var ids = this.getProductIds();
@@ -841,12 +842,28 @@ define([
             this.getModal().find("input[type=hidden][name=product_ids]").val(ids);
         },
 
+        _setDataFormGridQuery: function() {
+            var query = jQuery.extend({}, this.getGridQuery()); // Copy
+            delete query.store_id;
+            delete query.attribute_set_id;
+
+            var div = this.getForm().find("div.query-from-grid").html("");
+            jQuery.map(query, function(val,i) {
+                var div = window.attributeRules.getForm().find("div.query-from-grid");
+                div.append(jQuery("<input>").prop("name", i).attr("value", val).prop("type", "hidden"));
+            });
+        },
+
+        getGridQuery: function() {
+            return window.grid.query;
+        },
+
         getProductIds: function() {
             return window.grid.getSelectedIds().join();
         },
 
         getAllProductsFlag: function() {
-            return window.grid.getCheckAll();
+            return window.grid.getCheckAll() ? 1 : 0;
         },
 
         getAttributeSetId: function() {
