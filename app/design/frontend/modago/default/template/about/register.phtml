@@ -10,7 +10,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 	?>
 	<div id="about-register" class="container-fluid bg-w account-create">
 		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('about-register-header')->toHtml(); ?>
-		<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
+		<form autocomplete="off" action="<?php echo $this->getUrl('customer/account/createpost',array('_secure' => true, 'referrer' => 'about')) ?>" class="form"
 		      id="createAccountForm" method="post" role="form" novalidate="novalidate">
 			<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 about-register-form-content">
 				<div class="form-group clearfix">
