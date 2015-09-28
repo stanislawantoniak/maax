@@ -221,7 +221,8 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
                 Mage::dispatchEvent(
                     "mass_autofill_attribute_rules_after",
                     array(
-                        "product_ids" => $ids
+                        "product_ids" => $ids,
+                        "products" => $ids
                     )
                 );
             }
