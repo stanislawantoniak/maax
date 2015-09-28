@@ -201,38 +201,30 @@ class GH_AttributeRules_MassController extends Zolago_Dropship_Controller_Vendor
 
             $attrDataForReindex = array();
             $idsForReindex = array();
-            Mage::log($dataForReindex, null, "index.log");
+
             foreach ($dataForReindex as $code => $item) {
                 foreach ($item as $value => $ids) {
                     if (!empty($ids)) {
                         $idsForReindex = array_merge($idsForReindex, $ids);
                         //$attrDataForReindex = array_merge($attrDataForReindex, array($code => $value));
-                        $productAction->updateAttributesNoIndex($ids, array($code => $value), $storeId);
-                        //$productAction->updateAttributesPure($ids, array($code => $value), $storeId);
+                        //$productAction->updateAttributesNoIndex($ids, array($code => $value), $storeId);
+                        $productAction->updateAttributesPure($ids, array($code => $value), $storeId);
                     }
                 }
             }
-            Mage::log($idsForReindex, null, "index.log");
-            Mage::log($ids, null, "index.log");
+
             if (!empty($idsForReindex)) {
-                $ids = array_unique(array_keys($idsForReindex));
-//                $productAction->setData(
-//                    array(
-//                        'product_ids' => $ids,
-//                        'attributes_data' => $attrDataForReindex, // here only attr code really matter
-//                    )
-//                );
-//                $productAction->reindexAfterMassAttributeChange();
+                $ids = array_unique($idsForReindex);
 
                 $indexer = new Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source();
                 /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-                $indexer->reindexEntities($idsForReindex);
+                $indexer->reindexEntities($ids);
 
                 // Push to solr and ban varnish
                 Mage::dispatchEvent(
                     "mass_autofill_attribute_rules_after",
                     array(
-                        "product_ids" => array_unique($idsForReindex)
+                        "product_ids" => $ids
                     )
                 );
             }
