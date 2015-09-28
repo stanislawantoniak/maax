@@ -47,6 +47,7 @@ class Mana_Filters_Resource_Indexer_Source extends Mage_Catalog_Model_Resource_E
     }
 	
     public function reindexEntities($processIds) {
+        Mage::log($processIds, null, "index31-X.log");
 //        if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7')) {
 //            return parent::reindexEntities($processIds);
 //        }
@@ -66,7 +67,7 @@ class Mana_Filters_Resource_Indexer_Source extends Mage_Catalog_Model_Resource_E
         if ($childIds) {
             $processIds = array_unique(array_merge($processIds, $childIds));
         }
-
+        Mage::log($processIds, null, "index32-X.log");
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
