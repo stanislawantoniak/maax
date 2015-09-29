@@ -453,9 +453,11 @@ jQuery(function($) {
 	        }
 	    <?php endif; ?>
 
+	    <?php if(!$_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN): ?>
         notify.prop("checked", doNotify);
         notify.prop("disabled", doNotify);
         hidden.val(doNotify ? "1" : "0");
+	    <?php endif; ?>
     });
 
     $(".download-letter").click(function () {
