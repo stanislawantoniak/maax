@@ -10,7 +10,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 	?>
 	<div id="about-register" class="container-fluid bg-w account-create">
 		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('about-register-header')->toHtml(); ?>
-		<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
+		<form autocomplete="off" action="<?php echo $this->getUrl('customer/account/createpost',array('_secure' => true, 'referrer' => 'about')) ?>" class="form"
 		      id="createAccountForm" method="post" role="form" novalidate="novalidate">
 			<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 about-register-form-content">
 				<div class="form-group clearfix">
@@ -24,7 +24,7 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 							<input type="email" value="" class="form-control email"
 							       required="true" id="account_email" title=""
 							       name="email" data-original-title="<?php echo $_hlp->__("Please enter email."); ?>"
-							       aria-required="true"/>
+							       aria-required="true" required="true" aria-required="true"/>
 						</div>
 					</div>
 				</div>
@@ -107,6 +107,10 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 			"You must accept our Terms of Service",
 			"<?php echo $_hlp->__("You must accept our Terms of Service"); ?>"
 		);
+		Mall.translate.add(
+			"In order to receive starting coupon codes you must check this box",
+			"<?php echo $_hlp->__("In order to receive starting coupon codes you must check this box"); ?>"
+		);
 
 		jQuery(document).ready(function () {
 			var form = jQuery("#createAccountForm"),
@@ -126,6 +130,9 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 						},
 						agreement: {
 							required: true
+						},
+						is_subscribed: {
+							required: true
 						}
 					},
 					messages: {
@@ -139,6 +146,9 @@ if (!Mage::getSingleton('customer/session')->isLoggedIn() && !Mage::helper('pers
 						},
 						agreement: {
 							required: Mall.translate.__("You must accept our Terms of Service")
+						},
+						is_subscribed: {
+							required: Mall.translate.__("In order to receive starting coupon codes you must check this box")
 						}
 					}
 				}));

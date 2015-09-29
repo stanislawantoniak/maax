@@ -1558,6 +1558,7 @@ Mall.showAgreement = function(target) {
 	jQuery(target).hide();
 	jQuery(target).parent().find('.agreement-more').show();
 	jQuery(target).parent().find('.agreement-less-btn').show();
+	jQuery(window).resize();
 	return false;
 };
 
@@ -1565,6 +1566,7 @@ Mall.hideAgreement = function(target) {
 	jQuery(target).hide();
 	jQuery(target).parent().find('.agreement-more').hide();
 	jQuery(target).parent().find('.agreement-more-btn').show();
+	jQuery(window).resize();
 	return false;
 };
 
@@ -1612,6 +1614,10 @@ Mall.inspirationsSliderInit = function() {
 	rwdInspiration.find(".stop").click(function(){
 		rwdInspirationCarousel.trigger('rwd.stop');
 	});
+};
+
+Mall.refresh = function() {
+    location.reload();
 };
 
 jQuery(document).ready(function() {

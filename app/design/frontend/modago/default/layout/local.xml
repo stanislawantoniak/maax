@@ -411,6 +411,7 @@
 			<block type="cms/page" name="cms_page"/>
 		</reference>
 		<reference name="root">
+			<remove name="global_messages" />
 			<action method="addBodyClass">
 				<value>lower-breadcrumbs</value>
 			</action>
