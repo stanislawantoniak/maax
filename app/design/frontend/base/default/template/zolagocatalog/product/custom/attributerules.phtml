@@ -130,7 +130,7 @@ $dataRules = $this->getRulesData();
                                                                         </span>
                                                                     </div>
                                                                 </td>
-                                                                <td colspan="4"><?php echo $helper->__("For filter: ") ?><b><?php echo $this->getFilterAsText($rule); ?></b></td>
+                                                                <td colspan="4"><?php echo $helper->__("For filter: ") ?><b><?php echo $this->getFilterAsText($rule); ?></b>&nbsp;<a class="btn btn-xs btn-remove-rule" title="<?php echo $helper->__("Remove rule"); ?>" data-placement="top" href="<?php echo $this->getRemoveRuleUrl($rule); ?>" data-action="remove"><i class="icon-remove"></i></a></td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                         </tbody>

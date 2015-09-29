@@ -43,7 +43,7 @@ define([
 			attribute_set_id: switcher.value,
 			store_id: 0
 		};
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	// Filtering
 	////////////////////////////////////////////////////////////////////////////
@@ -548,36 +548,14 @@ define([
 
         massAttribute.send(req).then(function () {
             e.deferred.resolve();
-
-            // Spinner for ajax loading current attributes mapper block
             if (e.useSaveAsRule) {
-                var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
-                attributeRules.getModal().find(".modal-body").html(spinner);
-                // Get current attributes mapper block by ajax
-                jQuery.ajax({
-                    cache: false,
-                    url: "/udprod/vendor_product/manageattributes",
-                    error: function (jqXhr, status, error) {
-                        console.log("Error: ajax can't get udprod/vendor_product/manageattributes");
-                    },
-                    success: function (data, status) {
-                        jQuery("#showAttributeRules").replaceWith(data);
-                        attributeRules.init();
-                        FormComponents.initUniform();// Attach checkbox style
-                    }
-                }).done(function () {
-                    jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
-                    misc.stopLoading();
-                });
+                // Get current attributes mapper block by ajax with spinner
+                attributeRules.updateModal();
             }
-
-
         }, function () {
             e.deferred.reject();
         }).always(function () {
-            if (!e.useSaveAsRule) {
-                misc.stopLoading();
-            }
+            misc.stopLoading();
         });
 
 	};
@@ -806,11 +784,95 @@ define([
 	};
 
     window.attributeRules = {
+        _tmpRemoveBtn: null,
+        _tmpModalData: {},
+
         init: function() {
             this.attachLogicShowDetails();
             this.attachLogicGroupCheckbox();
             this.attachLogicSubmitButton();
             this.attachLogicOnOpen();
+            this.attachLogicRemoveRule();
+        },
+
+        setSpinner: function() {
+            this._tmpModalData = {
+                "class": this.getModal().attr("class"),
+                "style": this.getModal().attr("style")
+            };
+            var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+            this.getModal().find(".modal-body").html(spinner);
+        },
+
+        /**
+         * Update html by ajax auto fill attributes modal
+         * @param useSpinner by default true
+         */
+        updateModal: function(useSpinner) {
+            useSpinner = typeof useSpinner !== 'undefined' ? useSpinner : true;
+            if (useSpinner) {
+                this.setSpinner();
+            }
+            jQuery.ajax({
+                cache: false,
+                url: "/udprod/vendor_product/manageattributes"
+            }).success(function(data, textStatus, jqXHR) {
+                jQuery("#showAttributeRules").replaceWith(data);
+                window.attributeRules.getModal().attr("class", window.attributeRules._tmpModalData.class);
+                window.attributeRules.getModal().attr("style", window.attributeRules._tmpModalData.style);
+                window.attributeRules._tmpModalData = {};
+                window.attributeRules.init();
+                FormComponents.initUniform();// Attach checkbox style
+            }).always(function () {
+                jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
+            });
+        },
+
+        attachLogicRemoveRule: function() {
+            this.getModal().find(".btn-remove-rule[data-action=remove]").tooltip();
+
+            this.getModal().find(".btn-remove-rule[data-action=remove]").click(function(e) {
+                e.preventDefault();
+
+                window.attributeRules._tmpRemoveBtn = jQuery(this);
+
+                bootbox.dialog({
+                    title: Translator.translate("Delete autofill rule?"),
+                    message: Translator.translate("Are you sure you want to delete this rule?"),
+                    onEscape: true,
+                    buttons: {
+                        cancel: {
+                            label: Translator.translate("Cancel"),
+                            className: "btn-default",
+                            callback: function() {}
+                        },
+                        success: {
+                            label:  Translator.translate("Remove autofill rule"),
+                            className: "btn-primary",
+                            callback: function() {
+                                // Add spinner
+                                window.attributeRules.setSpinner();
+                                jQuery.ajax({
+                                    type: "GET",
+                                    url: window.attributeRules._tmpRemoveBtn .prop("href"),
+                                    cache: false
+                                }).success(function(data, textStatus, jqXHR) {
+                                    //var status = data['status'];
+                                    //var msg = data['message'];
+                                    //noty({
+                                    //    text: msg,
+                                    //    type: status ? 'success' : 'error',
+                                    //    timeout: 10000
+                                    //});
+                                }).always(function() {
+                                    window.attributeRules._tmpRemoveBtn = null;
+                                    window.attributeRules.updateModal(false);
+                                });
+                            }
+                        }
+                    }
+                }).css("top","20px");
+            });
         },
 
         setDataFromGrid: function() {

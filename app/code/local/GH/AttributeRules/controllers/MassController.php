@@ -310,4 +310,33 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
         // Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678)
         $collection->getSelect()->where($valueExpr . " REGEXP ?", $value);
     }
+
+    public function removeruleAction() {
+        $ruleId = $this->getRequest()->getQuery("id");
+        $vendor = $this->getVendor();
+
+        /** @var GH_AttributeRules_Model_AttributeRule $rule */
+        $rule = Mage::getModel("gh_attributerules/attributeRule")->load($ruleId);
+        if ($rule->getId() && $rule->getVendorId() == $vendor->getId()) {
+            $rule->delete();
+            $result = array(
+                'status' => 1,
+                'message'=> Mage::helper("gh_attributerules")->__("Rule removed")
+            );
+        } elseif (!$rule->getId()) {
+            $result = array(
+                'status' => 1,
+                'message'=> Mage::helper("gh_attributerules")->__("Rule removed")
+            );
+        } else {
+            $result = array(
+                'status' => 0,
+                'message'=> Mage::helper("gh_attributerules")->__("This autofill rule don't belongs to you")
+            );
+        }
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('Content-type', 'application/json')
+            ->setBody(Mage::helper('core')->jsonEncode($result));
+    }
 }
