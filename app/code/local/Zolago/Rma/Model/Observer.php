@@ -330,6 +330,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
             'content'   => Mage::app()->getLayout()->createBlock('zolagorma/adminhtml_dropship_edit_tab_returnreasons', 'vendor.returnreasons.form')
                 ->toHtml()
         ));
+        $block->addTabToSection('return_reasons','logistic',60);
     }
 	
 	/**

@@ -181,6 +181,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
                                'after'     => 'form_section',
                                'content'	=> $addressBlock
                            ));
+            $block->addTabToSection('address_section','vendor_data',10);
             $courierBlock = Mage::app()
                             ->getLayout()
                             ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_couriers', 'vendor.courier.form')
@@ -192,13 +193,15 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
                                'after'     => 'form_section',
                                'content'	=> $courierBlock
                            ));
+            $block->addTabToSection('courier_section','logistic',20);
 
             $block->addTab('brandshop_section', array(
-                               'label'     => Mage::helper('zolagodropship')->__('Brandshop settings'),
+                               'label'     => Mage::helper('zolagodropship')->__('Shops/Brandshops rights'),
                                'class'	   => 'ajax',
                                'after'     => 'form_section',
                                'url'	=> $block->getUrl('udropshipadmin/adminhtml_vendor/brandshopSettings',array('_current' => true)),
                            ));
+            $block->addTabToSection('brandshop_section','vendor_rights',20);                        
         }
     }
     protected function _overrideConfigData() {
