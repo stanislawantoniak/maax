@@ -13,6 +13,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
 
     /**
+     * Used in UNIT TEST
      * @param Mage_Core_Model_Abstract $object
      * @param array                    $storeId
      * @param array                    $configurableProductsIds
@@ -97,6 +98,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
     /**
+     * TODO remove: no usages found
      * Return array like family tree
      * roots is parents
      * nodes are children

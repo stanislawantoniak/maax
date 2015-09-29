@@ -3,7 +3,10 @@
 class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
+    const URL_KEY_BATCH = "{{keys}}";
+
     static protected $_priceRegistry;
+
     protected $_conf = array();
 
     /**
@@ -63,6 +66,81 @@ class Zolago_Converter_Model_Client {
             }
         }
         return null;
+    }
+
+
+    /**
+     * @param $vendorExternalId
+     * @param $vendorProductsData - array("skuv1"=>"A", "skuv2" => "A", ...); keys - skuv, value - price type
+     * @return array
+     */
+    public function getPriceBatch($vendorExternalId, $vendorProductsData)
+    {
+
+        $priceBatch = array();
+
+        if (empty($vendorProductsData)) {
+            return $priceBatch;
+        }
+
+        $numberQ = 300;
+        if (count($vendorProductsData) >= $numberQ) {
+            $priceBatchAll = array();
+            $vendorProductsDataBatch = array_chunk($vendorProductsData, $numberQ, true);
+            foreach ($vendorProductsDataBatch as $vendorProductsDataBatchItem) {
+                $response = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsDataBatchItem);
+                if(isset($response[$vendorExternalId])){
+                    $priceBatchAll = array_merge($priceBatchAll,$response[$vendorExternalId]);
+                }
+                unset($response);
+            }
+            $priceBatch[$vendorExternalId] = $priceBatchAll;
+        } else {
+            $priceBatch = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsData);
+        }
+
+        return $priceBatch;
+
+    }
+
+    public function getPriceBatchRequest($vendorExternalId, $vendorProductsData){
+        $priceBatch = array();
+
+        $keyParts = array();
+        foreach ($vendorProductsData as $vendorSku => $priceType) {
+            $keyParts[] = "\"" . $vendorExternalId . ":" . trim($vendorSku) . "\"";
+            unset($vendorSku);
+        }
+        if (empty($keyParts)) {
+            return $priceBatch;
+        }
+        $keys = "[" . implode(",", $keyParts) . "]";
+
+        $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
+
+        $result = $this->_makeConnection($url);
+
+        if (isset($result['error'])) {
+            Mage::log(implode(' ,', $result));
+            return $priceBatch;
+        }
+
+        if (is_array($result) && isset($result['rows'])) {
+            foreach ($result['rows'] as $row) {
+                if (isset($row['value']['price']) && !empty($row['value']['price'])) {
+                    $prices = $row['value']['price'];
+                    foreach ($prices as $priceConverterType => $pricesItem) {
+                        $vendorSku = explode(":", $row["key"])[1];
+                        if (strtoupper($priceConverterType) == strtoupper($vendorProductsData[$vendorSku])) {
+                            $priceBatch[$vendorExternalId][$vendorSku] = $pricesItem;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return $priceBatch;
     }
 
     /**
@@ -128,11 +206,15 @@ class Zolago_Converter_Model_Client {
     }
 
     /**
-     * @param string $url
-     * @param string $key
-     * @return string
+     * @param $url
+     * @param $key
+     * @param bool|FALSE $placeholder
+     * @return mixed
      */
-    protected function _replaceUrlKey($url, $key) {
+    protected function _replaceUrlKey($url, $key, $placeholder = FALSE) {
+        if($placeholder){
+            return urldecode(str_replace($placeholder, urlencode($key), $url));
+        }
         return str_replace(self::URL_KEY, urlencode($key), $url);
     }
 
