@@ -6,13 +6,20 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Abstract extends Mage_Admi
     
     protected $helper;
 
-    protected function _prepareForm() {
+    
+    /**
+     * prepare fieldset and fields from xml settings
+     */
+
+    protected function _readFieldsetFromXml() {
         $key = $this->configKey;
         $vendor = Mage::registry('vendor_data');
         $hlp = Mage::helper('udropship');
         $id = $this->getRequest()->getParam('id');
-        $form = new Varien_Data_Form();
-        $this->setForm($form);
+        if (!$form = $this->getForm()) {
+            $form = new Varien_Data_Form();
+            $this->setForm($form);
+        }
 
         if (!$vendor) {
             $vendor = Mage::getModel('udropship/vendor');
@@ -70,7 +77,9 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Abstract extends Mage_Admi
         }
 
         $form->setValues($vendorData);
-
+    }
+    protected function _prepareForm() {
+        $this->_readFieldsetFromXml();
         return parent::_prepareForm();
 
     }

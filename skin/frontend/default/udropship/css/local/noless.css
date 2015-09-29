@@ -518,7 +518,15 @@
 .radio-buttons {
     padding-top: 7px;
 }
-
+.form-horizontal .form-group.subsection {
+	background: #f9f9f9 none repeat scroll 0 0;
+	margin-left: -10px;
+	margin-right: -10px;
+	padding: 10px;
+}
+.form-horizontal .form-group.subsection .control-label {
+	padding: 0;
+}
 #showAttributeRules .hiddenRow.in {
 	display: table-cell !important
 }

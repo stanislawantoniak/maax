@@ -6,16 +6,22 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         $liczba = rand(5, 500);
         $param =array (
             5 => array (
-                '5-25678-CZERWONY-XXXXL' => array (
+                '5-8325-85C' => array(
                     'SKLEP2' => 0,
                     'SKLEP1' => 0,
-                    'MAGAZYN' => 0,
-                    'k99' => 0   
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
                 ),
-                '5-25680-BIALY-XXXXL' => array (
+                '5-8325-85B' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => $liczba,
-                    'MAGAZYN' => 400,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 0
+                ),
+                '5-8325-75E' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => 0,
+                    'MAGAZYN' => 1,
                     'k99' => 0
                 ),
 //                '5-30025-BEZOWY-38' => array (
