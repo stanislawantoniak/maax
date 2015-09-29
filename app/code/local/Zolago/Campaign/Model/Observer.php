@@ -53,6 +53,22 @@ class Zolago_Campaign_Model_Observer
 
     }
 
+    /**
+     * Set attributes to products according to valid campaigns
+     * attributes to set
+     *
+     * for campaigns type=info: campaign_info_id
+     *
+     * for campaigns type=sale or promotion:
+     * campaign_regular_id,~A
+     * special_price,
+     * campaign_strikeout_price_type,
+     * special_from_date, special_to_date,
+     * product_flag
+     *
+     *
+     * @throws Exception
+     */
     static function setProductAttributes()
     {
 
@@ -61,12 +77,12 @@ class Zolago_Campaign_Model_Observer
         /* @var $modelCampaign Zolago_Campaign_Model_Campaign */
         $modelCampaign = Mage::getModel('zolagocampaign/campaign');
 
-        /* @var $model Zolago_Campaign_Model_Resource_Campaign */
-        $model = Mage::getResourceModel('zolagocampaign/campaign');
+        /* @var $modelCampaignResource Zolago_Campaign_Model_Resource_Campaign */
+        $modelCampaignResource = $modelCampaign->getResource();
 
         //1. Set campaign attributes
         //info campaign
-        $campaignInfoData = $model->getUpDateCampaignsInfo(); //Products need to be updated
+        $campaignInfoData = $modelCampaignResource->getUpDateCampaignsInfo(); //Products need to be updated
 
 
         //Reformat by product_id
@@ -76,7 +92,7 @@ class Zolago_Campaign_Model_Observer
             unset($campaignInfoData);
         }
 
-        $campaignInfo = $model->getUpDateCampaignsInfoPerProduct($productIdsToUpdate);
+        $campaignInfo = $modelCampaignResource->getUpDateCampaignsInfoPerProduct($productIdsToUpdate);
 
 
         //Reformat by product_id
@@ -84,7 +100,6 @@ class Zolago_Campaign_Model_Observer
         foreach($campaignInfo as $campaignInfoData){
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
-            //$productsIdsPullToSolr[] = $campaignInfoData["product_id"];
         }
 
         //set attributes
@@ -106,7 +121,8 @@ class Zolago_Campaign_Model_Observer
         }
 
         //sales/promo campaign
-        $campaignSalesPromo = $model->getUpDateCampaignsSalePromotion();
+        $campaignSalesPromo = $modelCampaignResource->getUpDateCampaignsSalePromotion();
+
 
         $dataToUpdate = array();
         if (!empty($campaignSalesPromo)) {
