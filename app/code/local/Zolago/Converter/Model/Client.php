@@ -4,7 +4,7 @@ class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
     const URL_KEY_BATCH = "{{keys}}";
-    const PRICE_BATCH_SIZE = 250; //TODO make configurable in admin
+    const PRICE_BATCH_SIZE = 10; //TODO make configurable in admin
 
     static protected $_priceRegistry;
 
