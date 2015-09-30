@@ -129,7 +129,7 @@ class Zolago_Converter_Model_Client {
         $result = $this->_makeConnection($url);
         Mage::log($result, null, "set_log_4_1_X.log");
         if (isset($result['error'])) {
-            Mage::log(implode(' ,', $result));
+            Mage::log(implode(' ,', $result), null, "getPriceBatchRequestError.log");
             return $priceBatch;
         }
 
