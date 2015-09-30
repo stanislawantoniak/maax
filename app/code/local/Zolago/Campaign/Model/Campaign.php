@@ -353,43 +353,35 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         //3.1. Recover (set to null) attributes campaign_regular_id, special_price,special_from_date,special_to_date,campaign_strikeout_price_type,product_flag
         $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
         $productIdsSalePromotionUpdated = $productAttributeCampaignModel->unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate);
-        $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated['to_update']);
-        $setProductsAsAssigned = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated['to_set_processed']);
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
 
 
         //4. remove products with status Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE
-        if (!empty($productsToDeleteFromTable)) {
-            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
-                foreach ($productIds as $productId) {
-                    $resourceModel->deleteProductsFromTable($campaignId, $productId);
-                }
+//        if (!empty($productsToDeleteFromTable)) {
+//            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
+//                foreach ($productIds as $productId) {
+//                    $resourceModel->deleteProductsFromTable($campaignId, $productId);
+//                }
+//            }
+//        }
+
+        //5. reindex
+        // Better performance
+        $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+        /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+        $indexer->reindexEntities($productIdsToUpdate);
+
+        $numberQ = 20;
+        if (count($productIdsToUpdate) > $numberQ) {
+            $productsToReindexC = array_chunk($productIdsToUpdate, $numberQ);
+            foreach ($productsToReindexC as $productsToReindexCItem) {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+
             }
+            unset($productsToReindexCItem);
+        } else {
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
         }
-
-        //4.1 Set products as processed
-        if (!empty($setProductsAsAssigned)) {
-            foreach ($setProductsAsAssigned as $campaignId => $productsAssignedIds) {
-                $resourceModel->setProductsAsProcessedByCampaign($campaignId, $productsAssignedIds);
-            }
-        }
-
-            //5. reindex
-            // Better performance
-            $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
-            /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-            $indexer->reindexEntities($productIdsToUpdate);
-
-            $numberQ = 20;
-            if (count($productIdsToUpdate) > $numberQ) {
-                $productsToReindexC = array_chunk($productIdsToUpdate, $numberQ);
-                foreach ($productsToReindexC as $productsToReindexCItem) {
-                    Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
-
-                }
-                unset($productsToReindexCItem);
-            } else {
-                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
-            }
 //
 //
 //            //6. push to solr

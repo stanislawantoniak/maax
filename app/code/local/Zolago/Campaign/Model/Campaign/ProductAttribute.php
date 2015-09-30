@@ -526,6 +526,14 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $configurableRModel->recoverProductOptionsBasedOnSimples($recoverOptionsProducts);
         }
 
-        return array("to_update" => $productIdsToUpdate, "to_set_processed" => $setProductsAsAssigned);
+        //4. Set products as processed
+        if (!empty($setProductsAsAssigned)) {
+            /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+            $resourceModel = $this->getResource();
+            foreach ($setProductsAsAssigned as $campaignId => $productsAssignedIds) {
+                $resourceModel->setProductsAsProcessedByCampaign($campaignId, $productsAssignedIds);
+            }
+        }
+        return $productIdsToUpdate;
     }
 }
