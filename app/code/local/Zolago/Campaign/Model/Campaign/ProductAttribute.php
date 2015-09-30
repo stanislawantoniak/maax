@@ -206,7 +206,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             return $productsIdsPullToSolr; //Nothing to update
         }
         $ids = array_keys($salesPromoProductsData);
-        //krumo($salesPromoProductsData);
 
         //1. Get collection of configurable products
         /* @var $collectionS Mage_Catalog_Model_Resource_Product_Collection */
@@ -237,7 +236,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $childProductsByAttribute = $configModel->getUsedProductsByAttribute($ids);
 
-        //die("test9");
+
         foreach ($collection as $_product) {
             $productId = $_product->getId();
             $campaignDataForConfigurableProduct = isset($salesPromoProductsData[$productId]) ? $salesPromoProductsData[$productId] : false;
@@ -254,7 +253,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $childProducts = $childProductsByAttribute[$productId];
 
             foreach ($childProducts as $_child) {
-                //krumo($_child->getData());
+
                 $productsData[$productId][$_child["id"]] = array(
                     'sku' => $_child["sku"],
                     'skuv' => $_child["skuv"],

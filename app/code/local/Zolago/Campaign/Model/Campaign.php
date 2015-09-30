@@ -356,16 +356,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
 
 
-        //4. remove products with status Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE
-//        if (!empty($productsToDeleteFromTable)) {
-//            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
-//                foreach ($productIds as $productId) {
-//                    $resourceModel->deleteProductsFromTable($campaignId, $productId);
-//                }
-//            }
-//        }
-
-        //5. reindex
+        //4. reindex
         // Better performance
         $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
         /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
@@ -382,15 +373,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         } else {
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
         }
-//
-//
-//            //6. push to solr
-            Mage::dispatchEvent(
-                "catalog_converter_price_update_after",
-                array(
-                    "product_ids" => $productIdsToUpdate
-                )
-            );
+
+
+        //5. push to solr
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productIdsToUpdate
+            )
+        );
 
 
     }
@@ -429,6 +420,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //1. Update attributes for configurable visible products
+        //Mage::log("Update attributes for configurable visible products----------------", null, "set_log_2.log");
         $configurableUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToConfigurableVisibleProducts($salesPromoProductsData,$websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$configurableUpdated);
 
