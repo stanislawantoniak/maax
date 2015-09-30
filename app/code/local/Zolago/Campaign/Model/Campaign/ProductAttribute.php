@@ -385,7 +385,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         }
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
-        Mage::log($dataToUpdate, null, "set_log.log");
+        Mage::log($dataToUpdate, null, "set_log_FINAL.log");
         if(!empty($dataToUpdate)){
             foreach($dataToUpdate as $attributeName => $data){
                 foreach($data as $value => $idsToUpdate){
