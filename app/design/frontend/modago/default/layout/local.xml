@@ -142,6 +142,9 @@
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
+			<action method="addCss">
+				<stylesheet>css/gh.css</stylesheet>
+			</action>
 
 
 			<action method="addJs">
