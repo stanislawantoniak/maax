@@ -207,7 +207,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             return $productsIdsPullToSolr; //Nothing to update
         }
         $ids = array_keys($salesPromoProductsData);
-        //krumo($salesPromoProductsData);
 
         //1. Get collection of configurable products
         /* @var $collectionS Mage_Catalog_Model_Resource_Product_Collection */
