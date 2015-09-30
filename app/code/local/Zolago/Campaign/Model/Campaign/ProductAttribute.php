@@ -320,8 +320,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         //5. Set Campaign attributes to configurable
         $productsIdsPullToSolr = $this->setSpecialPriceToConfigurableByChildren($salesPromoProductsData,$finalSpecialPricesForChildren, $skuSizeRelation, $websiteId);
 
-        die("test6.1");
-
         return $productsIdsPullToSolr;
     }
 
