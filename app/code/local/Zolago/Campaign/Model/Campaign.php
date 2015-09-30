@@ -488,7 +488,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //1. Update attributes for configurable visible products
-        Mage::log("Update attributes for configurable visible products----------------", null, "set_log_2.log");
+        //Mage::log("Update attributes for configurable visible products----------------", null, "set_log_2.log");
         $configurableUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToConfigurableVisibleProducts($salesPromoProductsData,$websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$configurableUpdated);
 

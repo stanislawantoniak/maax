@@ -217,7 +217,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection->addFieldToFilter('entity_id', array('in' => $ids));
-        Mage::log($collection->getSize(), null, "set_log_2.log");
+        //Mage::log($collection->getSize(), null, "set_log_2.log");
         if($collection->getSize() <= 0){
             return $productsIdsPullToSolr; //Nothing to update
         }
@@ -240,8 +240,8 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $configurableProductIds = array();
 
         $childProductsByAttribute = $configModel->getUsedProductsByAttribute($attributeSizeId, $ids);
-        Mage::log("childProductsByAttribute", null, "set_log_2_1.log");
-        Mage::log($childProductsByAttribute, null, "set_log_2_1.log");
+        //Mage::log("childProductsByAttribute", null, "set_log_2_1.log");
+        //Mage::log($childProductsByAttribute, null, "set_log_2_1.log");
         foreach ($collection as $_product) {
             $productId = $_product->getId();
             $campaignDataForConfigurableProduct = isset($salesPromoProductsData[$productId]) ? $salesPromoProductsData[$productId] : false;
@@ -273,7 +273,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             unset($child);
         }
 
-        Mage::log($converterBatchData, null, "set_log_2_2.log");
+        //Mage::log($converterBatchData, null, "set_log_2_2.log");
 
         if (empty($converterBatchData)) {
             return $productsIdsPullToSolr;
@@ -285,7 +285,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 $actualSpecialPricesForChildren +=  $converter->getPriceBatch($vendorExternalId, $vendorProductsData);
             }
         }
-        Mage::log($actualSpecialPricesForChildren, null, "set_log_2_3.log");
+        //Mage::log($actualSpecialPricesForChildren, null, "set_log_2_3.log");
 
         //4. Collect product ids with actual prices
         $productIdsWithActualPrices = array();

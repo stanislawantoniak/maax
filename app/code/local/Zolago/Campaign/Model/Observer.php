@@ -167,7 +167,7 @@ class Zolago_Campaign_Model_Observer
         //2. Set options
         /* @var $modelCampaign Zolago_Campaign_Model_Campaign */
         $modelCampaign = Mage::getModel('zolagocampaign/campaign');
-        Mage::log($salesPromoProductsData, null, "set_log_1.log");
+        //Mage::log($salesPromoProductsData, null, "set_log_1.log");
         foreach ($salesPromoProductsData as $websiteId => $salesPromoProductsDataH) {
             $productIdsSPUpdated = $modelCampaign->setProductOptionsByCampaign($salesPromoProductsDataH, $websiteId);
             if(!empty($productIdsSPUpdated)){
