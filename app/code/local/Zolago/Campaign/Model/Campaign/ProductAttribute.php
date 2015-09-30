@@ -258,7 +258,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             }
             $childProducts = $childProductsByAttribute[$productId];
 
-            //die("test9");
             foreach ($childProducts as $_child) {
                 //krumo($_child->getData());
                 $productsData[$productId][$_child["id"]] = array(
@@ -338,7 +337,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
 
         $pricesData = array();
-        //krumo($finalSpecialPricesForChildren);
+
         foreach ($finalSpecialPricesForChildren as $parentProdId => $actualSpecialPrices) {
             $minPriceForProduct = min(array_values($actualSpecialPrices));
 
@@ -365,22 +364,32 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $aM = Mage::getSingleton('catalog/product_action');
 
             foreach ($storesToUpdate as $storeId) {
-                $aM->updateAttributesPure(
-                    array($parentProdId),
-                    array(
-                        'special_price' => $minPriceForProduct,
-
-                        'campaign_strikeout_price_type' => $dataConfigurableProduct['campaign_strikeout_price_type'],
-                        'campaign_regular_id' => $dataConfigurableProduct['campaign_id'],
-                        'special_from_date' => !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '',
-                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : '',
-
-                        'product_flag' => $productFlag
-                    ),
-                    $storeId
-                );
+//                $aM->updateAttributesPure(
+//                    array($parentProdId),
+//                    array(
+//                        'special_price' => $minPriceForProduct,
+//
+//                        'campaign_strikeout_price_type' => $dataConfigurableProduct['campaign_strikeout_price_type'],
+//                        'campaign_regular_id' => $dataConfigurableProduct['campaign_id'],
+//                        'special_from_date' => !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '',
+//                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : '',
+//
+//                        'product_flag' => $productFlag
+//                    ),
+//                    $storeId
+//                );
             }
+            $campaignStrikeoutPriceType = $dataConfigurableProduct['campaign_strikeout_price_type'];
+            $campaignRegularId = $dataConfigurableProduct['campaign_id'];
+            $specialFromDate = !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '';
+            $specialToDate = !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : '';
 
+            $dataToUpdate["special_price"][(string)$minPriceForProduct][] = $parentProdId;
+            $dataToUpdate["campaign_strikeout_price_type"][$campaignStrikeoutPriceType][] = $parentProdId;
+            $dataToUpdate["campaign_regular_id"][$campaignRegularId][] = $parentProdId;
+            $dataToUpdate["special_from_date"][(string)$specialFromDate][] = $parentProdId;
+            $dataToUpdate["special_to_date"][(string)$specialToDate][] = $parentProdId;
+            $dataToUpdate["product_flag"][$productFlag][] = $parentProdId;
 
             /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
             $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
@@ -388,17 +397,28 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataConfigurableProduct['campaign_id']), $parentProdId);
             $productsIdsPullToSolr[$parentProdId] = $parentProdId;
 
-            //set null to attribute for default store id (required for good quote calculation)
-            $aM->updateAttributesPure(array_values($productsIdsPullToSolr),
-                array(
-                    'special_price' => null,
-                    'campaign_regular_id' => null,
-                    'product_flag' => null,
-                    'campaign_strikeout_price_type' => null
-                ),
-                Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
-            );
         }
+
+        if(!empty($dataToUpdate)){
+            foreach($dataToUpdate as $attributeName => $data){
+                foreach($data as $value => $idsToUpdate){
+                    foreach ($storesToUpdate as $storeId) {
+                        $aM->updateAttributesPure($idsToUpdate,array($attributeName => $value),$storeId);
+                    }
+                }
+            }
+        }
+        //set null to attribute for default store id (required for good quote calculation)
+        $aM->updateAttributesPure(array_values($productsIdsPullToSolr),
+            array(
+                'special_price' => null,
+                'campaign_regular_id' => null,
+                'product_flag' => null,
+                'campaign_strikeout_price_type' => null
+            ),
+            Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+        );
+
         //6. Set configurable options based on simple prices
 
         $this->setOptionsBasedOnCampaign($pricesData,$skuSizeRelation, $websiteId);
@@ -419,7 +439,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         /* @var $configResourceModel   Zolago_Catalog_Model_Resource_Product_Configurable */
         $configResourceModel = Mage::getResourceModel('zolagocatalog/product_configurable');
         $superAttributes = $configResourceModel->getSuperAttributes($parentIds);
-
+        $optionsData = array();
         foreach ($skuSizeRelation as $parentProdId => $skuSizeRelations) {
             Mage::log("Super attribute for product_id={$parentProdId}");
             if(!isset($superAttributes[$parentProdId]['super_attribute'])){
