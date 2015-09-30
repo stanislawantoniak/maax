@@ -116,8 +116,9 @@ class Zolago_Converter_Model_Client {
         }
         $keyParts = array();
         foreach ($vendorProductsData as $vendorSku => $priceType) {
-            $keyParts[] = "\"" . $vendorExternalId . ":" . trim($vendorSku) . "\"";
-            unset($vendorSku);
+            if(!empty($vendorSku)){  //should FIX http://85.194.243.53:8092/modago/_design/read/_view/price?keys=["5:"]
+                $keyParts[] = "\"" . $vendorExternalId . ":" . trim($vendorSku) . "\"";
+            }
         }
         if (empty($keyParts)) {
             return $priceBatch;
