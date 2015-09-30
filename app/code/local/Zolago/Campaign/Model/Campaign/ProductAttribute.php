@@ -385,7 +385,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
             $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
             //TODO uncomment after test
-            //$resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataConfigurableProduct['campaign_id']), $parentProdId);
+            $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataConfigurableProduct['campaign_id']), $parentProdId);
             $productsIdsPullToSolr[$parentProdId] = $parentProdId;
 
             //set null to attribute for default store id (required for good quote calculation)
