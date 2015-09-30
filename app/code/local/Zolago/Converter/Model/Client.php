@@ -4,6 +4,7 @@ class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
     const URL_KEY_BATCH = "{{keys}}";
+    const PRICE_BATCH_SIZE = 300; //TODO make configurable in admin
 
     static protected $_priceRegistry;
 
@@ -83,12 +84,14 @@ class Zolago_Converter_Model_Client {
             return $priceBatch;
         }
 
-        $numberQ = 300;
+        $numberQ = self::PRICE_BATCH_SIZE;
+        Mage::log(count($vendorProductsData), null, "set_log_4.log");
         if (count($vendorProductsData) >= $numberQ) {
             $priceBatchAll = array();
             $vendorProductsDataBatch = array_chunk($vendorProductsData, $numberQ, true);
             foreach ($vendorProductsDataBatch as $vendorProductsDataBatchItem) {
                 $response = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsDataBatchItem);
+                Mage::log($response, null, "set_log_4_1.log");
                 if(isset($response[$vendorExternalId])){
                     $priceBatchAll = array_merge($priceBatchAll,$response[$vendorExternalId]);
                 }
@@ -97,6 +100,7 @@ class Zolago_Converter_Model_Client {
             $priceBatch[$vendorExternalId] = $priceBatchAll;
         } else {
             $priceBatch = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsData);
+            Mage::log($priceBatch, null, "set_log_4_2.log");
         }
 
         return $priceBatch;
