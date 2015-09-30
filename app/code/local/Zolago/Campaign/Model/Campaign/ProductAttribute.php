@@ -236,7 +236,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $childProductsByAttribute = $configModel->getUsedProductsByAttribute($ids);
 
-        
+
         foreach ($collection as $_product) {
             $productId = $_product->getId();
             $campaignDataForConfigurableProduct = isset($salesPromoProductsData[$productId]) ? $salesPromoProductsData[$productId] : false;
@@ -253,7 +253,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $childProducts = $childProductsByAttribute[$productId];
 
             foreach ($childProducts as $_child) {
-                
+
                 $productsData[$productId][$_child["id"]] = array(
                     'sku' => $_child["sku"],
                     'skuv' => $_child["skuv"],
