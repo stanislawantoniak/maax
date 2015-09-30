@@ -426,12 +426,12 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $superAttributes = $configResourceModel->getSuperAttributes($parentIds);
         $optionsData = array();
         foreach ($skuSizeRelation as $parentProdId => $skuSizeRelations) {
-            Mage::log("Super attribute for product_id={$parentProdId}");
+            //Mage::log("Super attribute for product_id={$parentProdId}");
             if(!isset($superAttributes[$parentProdId]['super_attribute'])){
-                Mage::log("No super attribute for product_id={$parentProdId}");
+                Mage::log("No super attribute for product_id={$parentProdId}", null, "super_attribute_bad.log");
                 continue;
             }
-            Mage::log("Super attribute for product_id={$parentProdId}");
+            //Mage::log("Super attribute for product_id={$parentProdId}");
 
             $superAttributeId = $superAttributes[$parentProdId]['super_attribute'];
             foreach ($skuSizeRelations as $childProdId => $size) {
@@ -441,8 +441,8 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                     $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
                 }
             }
-            Mage::log($optionsData);
-            Mage::log("---------------------");
+            //Mage::log($optionsData);
+            //Mage::log("---------------------");
 
         }
 
