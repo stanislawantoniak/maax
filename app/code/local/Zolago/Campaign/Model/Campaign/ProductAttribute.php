@@ -360,25 +360,8 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             } elseif ($dataConfigurableProduct['campaign_type'] == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
                 $productFlag = Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
             }
-            /* @var $aM Zolago_Catalog_Model_Product_Action */
-            $aM = Mage::getSingleton('catalog/product_action');
 
-            foreach ($storesToUpdate as $storeId) {
-//                $aM->updateAttributesPure(
-//                    array($parentProdId),
-//                    array(
-//                        'special_price' => $minPriceForProduct,
-//
-//                        'campaign_strikeout_price_type' => $dataConfigurableProduct['campaign_strikeout_price_type'],
-//                        'campaign_regular_id' => $dataConfigurableProduct['campaign_id'],
-//                        'special_from_date' => !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '',
-//                        'special_to_date' => !empty($dataConfigurableProduct['date_to']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_to'])) : '',
-//
-//                        'product_flag' => $productFlag
-//                    ),
-//                    $storeId
-//                );
-            }
+
             $campaignStrikeoutPriceType = $dataConfigurableProduct['campaign_strikeout_price_type'];
             $campaignRegularId = $dataConfigurableProduct['campaign_id'];
             $specialFromDate = !empty($dataConfigurableProduct['date_from']) ? date('Y-m-d', strtotime($dataConfigurableProduct['date_from'])) : '';
@@ -398,6 +381,8 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $productsIdsPullToSolr[$parentProdId] = $parentProdId;
 
         }
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
 
         if(!empty($dataToUpdate)){
             foreach($dataToUpdate as $attributeName => $data){
