@@ -6,43 +6,81 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
     /**
      * Light version of Mage_Catalog_Model_Product_Type_Configurable::getUsedProducts
      * for multiple products
-     * @param $attributeId
+     * //TODO change name to getUsedProductsByAttributeSize
      * @param $productIds
+     *
+     * @return array
      */
-    public function getUsedProductsByAttribute($attributeId, $productIds)
+
+    public function getUsedProductsByAttribute($productIds)
     {
+
+//        $usedProducts = array(
+//            'parent_id1' => array(
+//                'child_1' => array("id" => 'child_1_id', "sku" => 'child_1_sku', "skuv" => 'child_1_skuv', "size" => 'child_1_size', "price" => 'child_1_price'),
+//                'child_2' => array("id" => 'child_2_id', "sku" => 'child_2_sku', "skuv" => 'child_2_skuv', "size" => 'child_2_size', "price" => 'child_2_price'),
+//
+//            ),
+//            'parent_id2' => array(
+//            ...
+//
+//        )
+//    );
         $usedProducts = array();
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
 
+        $attributeSize = Mage::getResourceModel('catalog/product')
+            ->getAttribute('size');
+        $attributeSizeId = $attributeSize->getAttributeId();
+
+        $attributePrice = Mage::getResourceModel('catalog/product')
+            ->getAttribute('price');
+        $attributePriceId = $attributePrice->getAttributeId();
+
+        $attributeVendorSku = Mage::getResourceModel('catalog/product')
+            ->getAttribute('skuv');
+        $attributeVendorSkuId = $attributeVendorSku->getAttributeId();
 
         $collection->getSelect()
             ->joinInner(
                 array("link_table" => 'catalog_product_super_link'),
                 "e.entity_id = link_table.product_id",
                 array("link_table.parent_id")
-            )->joinInner(
+            )
+            ->joinInner(
                 array("at_size" => 'catalog_product_entity_int'),
                 "e.entity_id = at_size.entity_id",
                 array("size" => "at_size.value")
             )
             ->joinInner(
-                array("sku_vendor" => 'catalog_product_entity_varchar'),
-                "e.entity_id = sku_vendor.entity_id",
-                array("skuv" => "sku_vendor.value")
+                array("at_price" => 'catalog_product_entity_decimal'),
+                "e.entity_id = at_price.entity_id",
+                array("price" => "at_price.value")
             )
-            ->where("at_size.attribute_id=?", $attributeId)
-            ->where("sku_vendor.attribute_id=?", 316)
+            ->joinInner(
+                array("at_sku_vendor" => 'catalog_product_entity_varchar'),
+                "e.entity_id = at_sku_vendor.entity_id",
+                array("skuv" => "at_sku_vendor.value")
+            )
+            ->where("at_size.attribute_id=?", $attributeSizeId)
+            ->where("at_price.attribute_id=?", $attributePriceId)
+            ->where("at_sku_vendor.attribute_id=?", $attributeVendorSkuId)
+
             ->where("at_size.store_id=?", 0)
+            ->where("at_price.store_id=?", 0)
+            ->where("at_sku_vendor.store_id=?", 0)
+
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
             ->where("at_size.value IS NOT NULL");
 
         foreach ($collection as $product) {
             $usedProducts[$product->getParentId()][$product->getId()] = array(
-                "id" => $product->getId(),
-                "sku" => $product->getSku(),
-                "skuv" => $product->getSkuv(),
-                "size" => $product->getSize(),
+                "id" => $product->getId(),      //Simple product id
+                "sku" => $product->getSku(),    //Simple product sku
+                "skuv" => $product->getSkuv(),  //Simple product skuv
+                "size" => $product->getSize(),  //Simple product size
+                "price" => $product->getPrice() //Simple product price
             );
         }
 

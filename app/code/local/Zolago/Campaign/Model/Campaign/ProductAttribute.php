@@ -192,8 +192,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
      * Set prices from converter to simple products
      *
      * @param $salesPromoProductsData
-     * @param $ids
-     * @param $storesToUpdate
+     * @param $websiteId
      * @return array
      */
     public function setPromoCampaignAttributesToConfigurableVisibleProducts($salesPromoProductsData, $websiteId)
@@ -223,10 +222,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             return $productsIdsPullToSolr; //Nothing to update
         }
 
-        $attributeSize = Mage::getResourceModel('catalog/product')
-            ->getAttribute('size');
-        $attributeSizeId = $attributeSize->getAttributeId();
-
         //2. Discover simple products attached to configurable
         //2.1. Collect data to $converterBatchData before ask converter prices
         $converterBatchData = array();
@@ -240,7 +235,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $configurableProductIds = array();
 
-        $childProductsByAttribute = $configModel->getUsedProductsByAttribute($attributeSizeId, $ids);
+        $childProductsByAttribute = $configModel->getUsedProductsByAttribute($ids);
 
         //die("test9");
         foreach ($collection as $_product) {
@@ -274,7 +269,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             unset($child);
         }
 
-        //die("XXX");
+
         if (empty($converterBatchData)) {
             return $productsIdsPullToSolr;
         }
@@ -431,7 +426,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 Mage::log("No super attribute for product_id={$parentProdId}", null, "super_attribute_bad.log");
                 continue;
             }
-            //Mage::log("Super attribute for product_id={$parentProdId}");
 
             $superAttributeId = $superAttributes[$parentProdId]['super_attribute'];
             foreach ($skuSizeRelations as $childProdId => $size) {
@@ -441,8 +435,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                     $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
                 }
             }
-            //Mage::log($optionsData);
-            //Mage::log("---------------------");
 
         }
 
@@ -451,5 +443,90 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $campaignResourceModel = Mage::getResourceModel('zolagocampaign/campaign');
             $campaignResourceModel->insertOptionsBasedOnCampaign($optionsData);
         }
+    }
+
+
+    /**
+     *
+     * Recover (set to null) attributes
+     * campaign_regular_id,
+     * special_price,special_from_date,special_to_date,
+     * campaign_strikeout_price_type,
+     * product_flag
+     *
+     * @param $dataToUpdate
+     */
+    public function unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate){
+
+        $productIdsToUpdate = array();
+
+        $updateCollector = array();
+
+        foreach ($dataToUpdate as $websiteId => $dataToUpdateCampaigns) {
+            foreach ($dataToUpdateCampaigns as $type => $campaignData) {
+                //unset products campaign attributes
+                foreach ($campaignData as $campaignId => $productIds) {
+                    $productIdsToUpdate = array_merge($productIdsToUpdate, $productIds);
+                    if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+
+                        if(!isset($updateCollector[$websiteId])){
+                            $updateCollector[$websiteId] = array();
+                        }
+                        $updateCollector[$websiteId] = array_merge($updateCollector[$websiteId], $productIds);
+
+                        if (isset($recoverOptionsProducts[$websiteId])) {
+                            $recoverOptionsProducts[$websiteId] = array_merge($recoverOptionsProducts[$websiteId], $productIds);
+                        } else {
+                            $recoverOptionsProducts[$websiteId] = $productIds;
+                        }
+                        $setProductsAsAssigned[$campaignId] = $productIds;
+
+                    }
+                }
+                unset($campaignId);
+            }
+        }
+
+        if(!empty($updateCollector)){
+            $websiteIdsToUpdate = array_keys($dataToUpdate);
+            /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
+            $zolagocatalogHelper = Mage::helper('zolagocatalog');
+            $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
+
+            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
+            $actionModel = Mage::getSingleton('catalog/product_action');
+
+            //unset special price
+            //unset special price dates
+            //unset SRP price
+            $attributesData = array(
+                self::ZOLAGO_CAMPAIGN_ID_CODE => null,
+                'special_price' => '',
+                'special_from_date' => '',
+                'special_to_date' => '',
+                'campaign_strikeout_price_type' => '',
+                'product_flag' => null
+            );
+
+
+            foreach($updateCollector as $website => $productsIds){
+                if(!isset($stores))
+                    continue;
+
+                foreach ($stores[$websiteId] as $store) {
+                    $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
+                }
+            }
+        }
+
+        //3.2. Recover options for configurable products
+        if (!empty($recoverOptionsProducts)) {
+            //recover options
+            /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
+            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+            $configurableRModel->recoverProductOptionsBasedOnSimples($recoverOptionsProducts);
+        }
+
+        return array("to_update" => $productIdsToUpdate, "to_set_processed" => $setProductsAsAssigned);
     }
 }
