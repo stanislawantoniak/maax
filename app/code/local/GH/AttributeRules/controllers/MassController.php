@@ -12,19 +12,21 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
      * Note: apply rules to selected
      */
     public function autofillAction() {
+        // Input data
+        $req = $this->getRequest();
+        $all = $req->getParam("all", 0);
+        $global = (int)$req->getParam("global", 0); // All products flag on grid
+        $attributes = $req->getParam("attributes", array());
+        $values = $req->getParam("values", array());
+        $rules = $req->getParam("rules", array());
+        $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+        $productIds = $req->getParam("product_ids");
+        $attributeSetId = $req->getParam("attribute_set_id");
+        $query = $req->getParams();
+        $static = $req->getParam("static");
+
         try {
-            $req = $this->getRequest();
-            $all = $req->getParam("all", 0);
-            $allProductsFlag = (int)$req->getParam("all_products_flag", 0);
-            $attributes = $req->getParam("attributes", array());
-            $values = $req->getParam("values", array());
-            $rules = $req->getParam("rules", array());
-            $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
             $store = Mage::app()->getStore($storeId);
-            $productIds = $req->getParam("product_ids");
-            $attributeSetId = $req->getParam("attribute_set_id");
-            $query = $req->getParams();
-            $static = $req->getParam("static");
 
             if (!$attributeSetId) {
                 Mage::throwException(Mage::helper("gh_attributerules")->__("Technical error: no attribute set id specified"));
@@ -39,7 +41,7 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             if (is_array($productIds) && count($productIds)) {
                 $productIds = array_filter(array_unique($productIds));
             }
-            if (!(is_array($productIds) && count($productIds)) || $allProductsFlag) {
+            if (!(is_array($productIds) && count($productIds)) || $global) {
                 $restQuery = $this->_getRestQuery($query);
                 $collection = $this->_getCollection();
                 foreach($restQuery as $key => $value){
@@ -56,7 +58,11 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
             $collection->addVendorFilter($this->getVendor());
             if (!$all) { // If all is NOT selected
-                $collection->addRuleIdFilter($rules);
+                if (is_array($rules) && !empty($rules)) {
+                    $collection->addRuleIdFilter($rules);
+                } else {
+                    Mage::throwException(Mage::helper("gh_attributerules")->__("Please select any rules"));
+                }
             }
             $collection->load();
             // --Collecting rules
@@ -244,15 +250,19 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             }
         } catch (Exception $e) {
             $result = array(
-                'status' => 0,
-                'message'=> $this->__($e->getMessage()),
+                'status'        => 0,
+                'message'       => $this->__($e->getMessage()),
+                'changed_ids'	=> array(),
+				'global'		=> $global
             );
         }
 
         if (!isset($result)) {
             $result = array(
-                'status' => 1,
-                'message'=> Mage::helper("gh_attributerules")->__("Autofill rules processed %s products", isset($ids) ? count($ids) : 0)
+                'status'        => 1,
+                'message'       => Mage::helper("gh_attributerules")->__("Autofill rules processed %s products", isset($ids) ? count($ids) : 0),
+                'changed_ids'   => $productIds,
+                'global'        => $global
             );
         }
 

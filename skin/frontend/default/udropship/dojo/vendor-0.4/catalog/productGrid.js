@@ -27,11 +27,12 @@ define([
 	"vendor/grid/PopupEditor",
 	'vendor/catalog/productGrid/mass/status',
 	'vendor/catalog/productGrid/mass/attribute',
+	'vendor/catalog/productGrid/mass/attributeRules',
 	"vendor/misc"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, 
 	Selection, Selector, Keyboard, declare, dom, domConstruct, on, query, 
 	put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid, 
-	PopupEditor, status, attrbiute,  misc){
+	PopupEditor, status, attrbiute, attributeRules, misc){
 	
 	var grid,store,
 		massAttribute,
@@ -785,13 +786,19 @@ define([
 
     window.attributeRules = {
         _tmpRemoveBtn: null,
+        _attributeRules: {},
 
-        init: function() {
+        init: function(grid) {
+            this._attributeRules = new attributeRules(grid, this.getFormActionUrl());
             this.attachLogicShowDetails();
             this.attachLogicGroupCheckbox();
             this.attachLogicSubmitButton();
             this.attachLogicOnOpen();
             this.attachLogicRemoveRule();
+        },
+
+        getFormActionUrl: function() {
+            return this.getModal().find("form:eq(0)").prop("action");
         },
 
         setSpinner: function() {
@@ -810,7 +817,7 @@ define([
             }).success(function(data, textStatus, jqXHR) {
                 var form = jQuery(data).find("form:eq(0)");
                 jQuery("#showAttributeRules").html(form); // replace only "inside" html of modal
-                window.attributeRules.init();
+                window.attributeRules.init(window.grid);
                 FormComponents.initUniform();// Attach checkbox style
             }).always(function () {
                 jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
@@ -867,7 +874,7 @@ define([
         setDataFromGrid: function() {
             this._setDataFormGridQuery();
             this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
-            this.getModal().find("input[type=hidden][name=all_products_flag]").val(this.getAllProductsFlag());
+            this.getModal().find("input[type=hidden][name=global]").val(this.getAllProductsFlag());
             var ids = this.getProductIds();
             if (this.getAllProductsFlag()) {
                 ids = "";// smaller post
@@ -908,6 +915,7 @@ define([
                 window.attributeRules.setDataFromGrid();
                 window.attributeRules._attachLogicSubmitButtonOnChange();
             });
+            window.attributeRules.setDataFromGrid();
         },
 
         _attachLogicSubmitButtonOnChange: function() {
@@ -947,26 +955,10 @@ define([
                 var form = event.target;
 
                 misc.startLoading();
-                jQuery.ajax({
-                    type: "POST",
-                    url: jQuery(form).prop("action"),
-                    data: form.serialize()
-                }).success(function(data, textStatus, jqXHR) {
-                    var status = data['status'];
-                    var msg = data['message'];
-
-                    // Close popup and show message
-                    window.attributeRules.closeModal();
-                    noty ({
-                        text: msg,
-                        type: status ? 'success' : 'error',
-                        timeout: 10000
+                window.attributeRules._attributeRules.send(form.serialize())
+                    .always(function () {
+                        misc.stopLoading();
                     });
-                    // Refresh grid
-                    window.grid.refresh();
-                }).always(function() {
-                    misc.stopLoading();
-                });
             });
         },
 
@@ -1074,12 +1066,12 @@ define([
 			return this.columns;
 		},
 		startup: function(container){
-			initGrid(
+			var _grid = initGrid(
 					this.getColumns(),  
 					container
 			);
 
-            window.attributeRules.init();
+            window.attributeRules.init(_grid);
 
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked
