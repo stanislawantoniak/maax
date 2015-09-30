@@ -253,7 +253,7 @@ class Zolago_Converter_Model_Client {
 
             $return = curl_exec($process);
             Mage::log("curl_exec result", null, "set_log_4_1_X.log");
-            Mage::log(print_r($return,null), null, "set_log_4_1_X.log");
+            Mage::log($return, null, "set_log_4_1_X.log");
             curl_close($process);
         }  catch (Exception $e) {
             Mage::logException($e);
