@@ -235,6 +235,7 @@ class Zolago_Converter_Model_Client {
     protected function _makeConnection($url) {
         $return = null;
         try {
+            Mage::log("strlen: " . strlen($url), null, "set_log_4_1_X.log");
             $process = curl_init($url);
             curl_setopt($process, CURLOPT_HTTPHEADER, array(
                             'Accept: application/json'
