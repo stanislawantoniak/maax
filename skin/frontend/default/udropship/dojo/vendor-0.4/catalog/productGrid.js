@@ -550,7 +550,7 @@ define([
             e.deferred.resolve();
             if (e.useSaveAsRule) {
                 // Get current attributes mapper block by ajax with spinner
-                attributeRules.updateModal();
+                window.attributeRules.updateModal();
             }
         }, function () {
             e.deferred.reject();
@@ -785,7 +785,6 @@ define([
 
     window.attributeRules = {
         _tmpRemoveBtn: null,
-        _tmpModalData: {},
 
         init: function() {
             this.attachLogicShowDetails();
@@ -796,31 +795,21 @@ define([
         },
 
         setSpinner: function() {
-            this._tmpModalData = {
-                "class": this.getModal().attr("class"),
-                "style": this.getModal().attr("style")
-            };
             var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
             this.getModal().find(".modal-body").html(spinner);
         },
 
         /**
          * Update html by ajax auto fill attributes modal
-         * @param useSpinner by default true
          */
-        updateModal: function(useSpinner) {
-            useSpinner = typeof useSpinner !== 'undefined' ? useSpinner : true;
-            if (useSpinner) {
-                this.setSpinner();
-            }
+        updateModal: function() {
+            this.setSpinner();
             jQuery.ajax({
                 cache: false,
                 url: "/udprod/vendor_product/manageattributes"
             }).success(function(data, textStatus, jqXHR) {
-                jQuery("#showAttributeRules").replaceWith(data);
-                window.attributeRules.getModal().attr("class", window.attributeRules._tmpModalData.class);
-                window.attributeRules.getModal().attr("style", window.attributeRules._tmpModalData.style);
-                window.attributeRules._tmpModalData = {};
+                var form = jQuery(data).find("form:eq(0)");
+                jQuery("#showAttributeRules").html(form); // replace only "inside" html of modal
                 window.attributeRules.init();
                 FormComponents.initUniform();// Attach checkbox style
             }).always(function () {
@@ -854,7 +843,7 @@ define([
                                 window.attributeRules.setSpinner();
                                 jQuery.ajax({
                                     type: "GET",
-                                    url: window.attributeRules._tmpRemoveBtn .prop("href"),
+                                    url: window.attributeRules._tmpRemoveBtn.prop("href"),
                                     cache: false
                                 }).success(function(data, textStatus, jqXHR) {
                                     //var status = data['status'];
@@ -866,7 +855,7 @@ define([
                                     //});
                                 }).always(function() {
                                     window.attributeRules._tmpRemoveBtn = null;
-                                    window.attributeRules.updateModal(false);
+                                    window.attributeRules.updateModal();
                                 });
                             }
                         }
@@ -983,6 +972,10 @@ define([
 
         closeModal: function() {
             this.getModal().find(".modal-header button.close").click();
+        },
+
+        openModal: function() {
+            jQuery("a[data-target=#showAttributeRules]").click();
         },
 
         getSubmitBtn: function() {
