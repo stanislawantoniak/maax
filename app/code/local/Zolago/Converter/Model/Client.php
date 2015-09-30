@@ -111,7 +111,9 @@ class Zolago_Converter_Model_Client {
         Mage::log("Vendor id={$vendorExternalId}", null, "set_log_4_1_X.log");
         //Mage::log($vendorProductsData, null, "set_log_4_1_X.log");
         $priceBatch = array();
-
+        if (empty($vendorProductsData)) { //should FIX http://85.194.243.53:8092/modago/_design/read/_view/price?keys=["5:"]
+            return $priceBatch;
+        }
         $keyParts = array();
         foreach ($vendorProductsData as $vendorSku => $priceType) {
             $keyParts[] = "\"" . $vendorExternalId . ":" . trim($vendorSku) . "\"";
