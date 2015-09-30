@@ -39,6 +39,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
         foreach ($collection as $product) {
             $usedProducts[$product->getParentId()][$product->getId()] = array(
+                "id" => $product->getId(),
                 "sku" => $product->getSku(),
                 "skuv" => $product->getSkuv(),
                 "size" => $product->getSize(),
