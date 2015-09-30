@@ -108,6 +108,8 @@ class Zolago_Converter_Model_Client {
     }
 
     public function getPriceBatchRequest($vendorExternalId, $vendorProductsData){
+        Mage::log("Vendor id={$vendorExternalId}", null, "set_log_4_1_X.log");
+        Mage::log($vendorProductsData, null, "set_log_4_1_X.log");
         $priceBatch = array();
 
         $keyParts = array();
@@ -123,7 +125,7 @@ class Zolago_Converter_Model_Client {
         $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
 
         $result = $this->_makeConnection($url);
-
+        Mage::log($result, null, "set_log_4_1_X.log");
         if (isset($result['error'])) {
             Mage::log(implode(' ,', $result));
             return $priceBatch;
@@ -143,7 +145,7 @@ class Zolago_Converter_Model_Client {
                 }
             }
         }
-
+        Mage::log("-------------------------------------------------", null, "set_log_4_1_X.log");
         return $priceBatch;
     }
 
