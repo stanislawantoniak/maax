@@ -16,4 +16,12 @@ class GH_AttributeRules_Model_AttributeRule extends Mage_Core_Model_Abstract
         $this->_init('gh_attributerules/attributeRule');
     }
 
+    /**
+     * Return unserialized filter
+     *
+     * @return mixed
+     */
+    public function getFilterArray() {
+        return unserialize($this->getData("filter"));
+    }
 }

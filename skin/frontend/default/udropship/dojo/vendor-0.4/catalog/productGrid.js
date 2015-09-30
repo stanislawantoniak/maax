@@ -85,7 +85,7 @@ define([
 		if(resetFilters){
 			resetFilters.className = i ? "remove-filters" : "hidden";
 		}
-	}
+	};
 
 	/**
 	 * Handle reset filters button
@@ -187,7 +187,7 @@ define([
 		
 		modal.modal("show");
 		e.preventDefault();
-	}
+	};
 		
 	/**
 	 * @param {mixed} value
@@ -477,7 +477,7 @@ define([
 			}else{
 				columnSets[1][0].push(column);
 			}
-		};
+		}
 		
 		
 		return columnSets;
@@ -521,8 +521,6 @@ define([
 			dataObject.attribute_mode[field] = e.mode;
 			dataObject[field] = value;
 			dataObject.changed = [field];
-            // Add info about 'Save as rule'
-            dataObject.save_as_rule = e.useSaveAsRule;
 
 			store.put(dataObject).then(function(){
 				e.deferred.resolve();
@@ -535,7 +533,7 @@ define([
 			return;
 		}
 		
-		// Start overlay loading visible progress 
+		// Start overlay loading visible progress
 		misc.startLoading();
 		
 		// Handle by mass action object
@@ -547,32 +545,40 @@ define([
 		req["save_as_rule"] = e.useSaveAsRule;
 
 		massAttribute.setFocusedCell(e.cell);
-	
-		massAttribute.send(req).then(function(){
-			e.deferred.resolve();
+
+        massAttribute.send(req).then(function () {
+            e.deferred.resolve();
 
             // Spinner for ajax loading current attributes mapper block
-            var spinner = jQuery("<div>").css('text-align','center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
-            attributeRules.getModal().find(".modal-body").html(spinner);
-            // Get current attributes mapper block by ajax
-            jQuery.ajax({
-                cache: false,
-                url: "/udprod/vendor_product/manageattributes",
-                error: function(jqXhr, status, error) {
-                    console.log("Error: ajax can't get udprod/vendor_product/manageattributes");
-                },
-                success: function(data, status) {
-                    jQuery("#showAttributeRules").replaceWith(data);
-                    attributeRules.init();
-                    FormComponents.initUniform();// Attach checkbox style
-                }
-            });
+            if (e.useSaveAsRule) {
+                var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+                attributeRules.getModal().find(".modal-body").html(spinner);
+                // Get current attributes mapper block by ajax
+                jQuery.ajax({
+                    cache: false,
+                    url: "/udprod/vendor_product/manageattributes",
+                    error: function (jqXhr, status, error) {
+                        console.log("Error: ajax can't get udprod/vendor_product/manageattributes");
+                    },
+                    success: function (data, status) {
+                        jQuery("#showAttributeRules").replaceWith(data);
+                        attributeRules.init();
+                        FormComponents.initUniform();// Attach checkbox style
+                    }
+                }).done(function () {
+                    jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
+                    misc.stopLoading();
+                });
+            }
 
-		}, function(){
-			e.deferred.reject();
-		}).always(function(){
-			misc.stopLoading();
-		});
+
+        }, function () {
+            e.deferred.reject();
+        }).always(function () {
+            if (!e.useSaveAsRule) {
+                misc.stopLoading();
+            }
+        });
 
 	};
 	
@@ -611,7 +617,7 @@ define([
 			}
 		}
 		editors[field].open(cell, e);
-	}
+	};
 
 
     var handleSelectAll = function(e){
@@ -624,7 +630,7 @@ define([
             grid.clearSelection();
         }
 
-    }
+    };
 	
 	on(document.body, "click", function(e){
 		var el = jQuery(e.target);
@@ -665,7 +671,7 @@ define([
 		}else{
 			grid.select(row);
 		}
-	}
+	};
 	/**
 	 * @param {Evented} e
 	 * @returns {void}
@@ -685,7 +691,7 @@ define([
 				e.preventDefault();
 			}
 		}
-	}
+	};
 	
 	////////////////////////////////////////////////////////////////////////////
 	// Mass actions
@@ -709,6 +715,13 @@ define([
 			misc.startLoading();
 			massConfirm.trigger(e).always(misc.stopLoading);
 		});
+
+        // Open popup with autofill rules table
+        jQuery("#massAttributeRules").click(function() {
+            jQuery("a[data-target=#showAttributeRules]").click();
+        });
+
+
 	};
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -775,10 +788,10 @@ define([
 
 		// listen for selection
 		grid.on("dgrid-deselect", updateMassButton);
-		
+
 		// listen for refresh if selected
 		grid.on("dgrid-refresh-complete", updateMassButton);
-		
+
 		// listen for editable
 		if(editDbClick){
 			grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
@@ -789,15 +802,133 @@ define([
 //        grid.on("th.field-0-0-0:click", handleSelectAll);
 		
 		registerMassactions(grid);
-		
-		
 		return window.grid;
 	};
 
-    var attributeRules = {
+    window.attributeRules = {
         init: function() {
             this.attachLogicShowDetails();
             this.attachLogicGroupCheckbox();
+            this.attachLogicSubmitButton();
+            this.attachLogicOnOpen();
+        },
+
+        setDataFromGrid: function() {
+            this._setDataFormGridQuery();
+            this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
+            this.getModal().find("input[type=hidden][name=all_products_flag]").val(this.getAllProductsFlag());
+            var ids = this.getProductIds();
+            if (this.getAllProductsFlag()) {
+                ids = "";// smaller post
+            }
+            this.getModal().find("input[type=hidden][name=product_ids]").val(ids);
+        },
+
+        _setDataFormGridQuery: function() {
+            var query = jQuery.extend({}, this.getGridQuery()); // Copy
+            delete query.store_id;
+            delete query.attribute_set_id;
+
+            var div = this.getForm().find("div.query-from-grid").html("");
+            jQuery.map(query, function(val,i) {
+                var div = window.attributeRules.getForm().find("div.query-from-grid");
+                div.append(jQuery("<input>").prop("name", i).attr("value", val).prop("type", "hidden"));
+            });
+        },
+
+        getGridQuery: function() {
+            return window.grid.query;
+        },
+
+        getProductIds: function() {
+            return window.grid.getSelectedIds().join();
+        },
+
+        getAllProductsFlag: function() {
+            return window.grid.getCheckAll() ? 1 : 0;
+        },
+
+        getAttributeSetId: function() {
+            return window.grid.baseQuery["attribute_set_id"];
+        },
+
+        attachLogicOnOpen: function() {
+            jQuery("a[data-target=#showAttributeRules]").click(function() {
+                window.attributeRules.setDataFromGrid();
+                window.attributeRules._attachLogicSubmitButtonOnChange();
+            });
+        },
+
+        _attachLogicSubmitButtonOnChange: function() {
+            var modal = window.attributeRules.getModal();
+            var btn = window.attributeRules.getSubmitBtn();
+
+            btn.closest("div.tooltip-wrapper").tooltip('destroy');
+
+            if (!window.attributeRules.getProductIds().length) {
+                btn.closest("div.tooltip-wrapper").attr("title", btn.closest("div.tooltip-wrapper").attr("data-title-products"));
+            }
+            if (!modal.find("input[type=checkbox]:checked").length) {
+                btn.closest("div.tooltip-wrapper").attr("title", btn.closest("div.tooltip-wrapper").attr("data-title-rules"));
+            }
+
+            if (modal.find("input[type=checkbox]:checked").length && window.attributeRules.getProductIds().length) {
+                btn.closest("div.tooltip-wrapper").tooltip('destroy');
+                btn.attr("disabled", false);
+            } else {
+                btn.closest("div.tooltip-wrapper").tooltip();
+                btn.attr("disabled", true);
+            }
+        },
+
+        attachLogicSubmitButton: function() {
+            // If any checkbox checked then make submit button available
+            // only if on grid any products selected
+            this.getModal().find("input[type=checkbox]").on("change", function () {
+                window.attributeRules._attachLogicSubmitButtonOnChange();
+            });
+            this._attachLogicSubmitButtonOnChange();
+            // Mail logic for submit
+            this.getForm().submit(function( event ) {
+                // Stop form from submitting normally
+                event.preventDefault();
+
+                var form = event.target;
+
+                misc.startLoading();
+                jQuery.ajax({
+                    type: "POST",
+                    url: jQuery(form).prop("action"),
+                    data: form.serialize()
+                }).success(function(data, textStatus, jqXHR) {
+                    var status = data['status'];
+                    var msg = data['message'];
+
+                    // Close popup and show message
+                    window.attributeRules.closeModal();
+                    noty ({
+                        text: msg,
+                        type: status ? 'success' : 'error',
+                        timeout: 10000
+                    });
+                    // Refresh grid
+                    window.grid.refresh();
+                }).always(function() {
+                    misc.stopLoading();
+                });
+            });
+        },
+
+        closeModal: function() {
+            this.getModal().find(".modal-header button.close").click();
+        },
+
+        getSubmitBtn: function() {
+            return this.getModal().find("button[type=submit]");
+        },
+
+        getForm: function() {
+            return this.getModal().find("form").first();
         },
 
         attachLogicShowDetails: function() {
@@ -810,6 +941,7 @@ define([
         },
 
         attachLogicGroupCheckbox: function() {
+			var modal = this.getModal();
             this.getModal().find("input[type=checkbox]").on("change", function(e, eventFromChildren) {
                 var selector = jQuery(e.target).attr("data-checkbox-group-target");
 
@@ -828,7 +960,8 @@ define([
 
                 // If all children checked/unchecked,  set checked/unchecked state for parent
                 var parentSelector = jQuery(e.target).attr("data-checkbox-group-parent");
-                if (parentSelector) {
+
+                if (parentSelector && parentSelector !== "#attr-select-all") {
                     var parent = jQuery(parentSelector);
                     var allChild = jQuery(parent.attr("data-checkbox-group-target"));
                     var allCheckedChild = jQuery(parent.attr("data-checkbox-group-target") + ":checked");
@@ -852,6 +985,24 @@ define([
                     }
 
                 }
+
+
+
+				// Check/ uncheck all
+				var attrSelectAll = modal.find("#attr-select-all");
+				var allItemsChecked = [];
+
+				modal.find("input[type=checkbox]:not(#attr-select-all)").each(function(i, element){
+					allItemsChecked.push(jQuery(element).prop('checked'));
+				});
+
+				if (jQuery.inArray(false, allItemsChecked) == -1) {
+					attrSelectAll.prop('checked', true).closest('span').addClass('checked');
+				} else {
+					attrSelectAll.prop('checked', false).closest('span').removeClass('checked');
+				}
+
+				// --- Check/ uncheck all
             });
         },
 
@@ -873,7 +1024,7 @@ define([
 					container
 			);
 
-            attributeRules.init();
+            window.attributeRules.init();
 
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked
@@ -881,10 +1032,12 @@ define([
                 var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
                 if (this.value == 'sub') {
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
+                    checkbox.css("color", "#C8C8C8").attr("disabled", true);
                 } else {
 					var checked = jQuery(this).closest('form').find('.checkbox.selection').find('input');
 					if (checked.prop('checked')) {
 	                    checkbox.find('input').attr("disabled", false);
+                        checkbox.css("color", "").attr("disabled", false);
 					}
                 }
             });
@@ -894,10 +1047,12 @@ define([
                 var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
                 if (!jQuery(this).prop("checked")) {					
                     checkbox.find('input').attr("disabled", true).prop('checked', false);
+                    checkbox.css("color", "#C8C8C8").attr("disabled", true);
                 } else {
 					var radio = jQuery(this).closest('form').find('input[type=radio][name=mode]:checked');
 					if (radio.val() != 'sub') {
 	                    checkbox.find('input').attr("disabled", false);
+                        checkbox.css("color", "").attr("disabled", false);
 					}
                 }
             });
