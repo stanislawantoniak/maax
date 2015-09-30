@@ -259,7 +259,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $childProducts = $childProductsByAttribute[$productId];
 
             foreach ($childProducts as $_child) {
-                //krumo($_child->getData());
+                
                 $productsData[$productId][$_child["id"]] = array(
                     'sku' => $_child["sku"],
                     'skuv' => $_child["skuv"],
@@ -286,6 +286,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 $actualSpecialPricesForChildren +=  $converter->getPriceBatch($vendorExternalId, $vendorProductsData);
             }
         }
+        Mage::log($actualSpecialPricesForChildren, null, "set_log_2_3.log");
 
         //4. Collect product ids with actual prices
         $productIdsWithActualPrices = array();
