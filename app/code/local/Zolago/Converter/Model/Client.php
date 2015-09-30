@@ -4,7 +4,7 @@ class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
     const URL_KEY_BATCH = "{{keys}}";
-    const PRICE_BATCH_SIZE = 200; //TODO make configurable in admin
+    const PRICE_BATCH_SIZE = 500; //TODO make configurable in admin
 
     static protected $_priceRegistry;
 
@@ -109,7 +109,7 @@ class Zolago_Converter_Model_Client {
 
     public function getPriceBatchRequest($vendorExternalId, $vendorProductsData){
         Mage::log("Vendor id={$vendorExternalId}", null, "set_log_4_1_X.log");
-        Mage::log($vendorProductsData, null, "set_log_4_1_X.log");
+        //Mage::log($vendorProductsData, null, "set_log_4_1_X.log");
         $priceBatch = array();
 
         $keyParts = array();
