@@ -100,6 +100,10 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                                 ));
                                 continue;
                             }
+                            if (isset($condition['null'])) {
+                                $this->_addNull($prodColl, $attr, $condition['null']);
+                                continue;
+                            }
                             if (isset($condition["regexp"])) {
                                 $this->_addRegexp($prodColl, $attr, $condition["regexp"]);
                                 continue;
@@ -296,12 +300,29 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
     }
 
     /**
+     * Add filter for empty values
+     *
+     * @param Zolago_Catalog_Model_Resource_Vendor_Product_Collection $collection
+     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param array $value
+     * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
+     */
+    protected function _addNull($collection, $attribute, $value) {
+        $collection->addFieldToFilter(array(
+            array("attribute" => $attribute->getAttributeCode(), "filter" => array("null" => true)),
+            array("attribute" => $attribute->getAttributeCode(), "filter" => array("eq" => ""))
+        ));
+        return $collection;
+    }
+
+    /**
      * Add filter for multiselect attributes by regexp
      * Inspired by @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition()
      *
      * @param Zolago_Catalog_Model_Resource_Vendor_Product_Collection $collection
      * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
      * @param array $value
+     * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
      */
     protected function _addRegexp($collection, $attribute, $value) {
 
@@ -319,6 +340,7 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
         }
         // Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678)
         $collection->getSelect()->where($valueExpr . " REGEXP ?", $value);
+        return $collection;
     }
 
     public function removeruleAction() {
