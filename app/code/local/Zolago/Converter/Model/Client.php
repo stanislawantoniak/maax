@@ -241,7 +241,15 @@ class Zolago_Converter_Model_Client {
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
-            curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
+            //curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
+
+            //TEST OPTIONS
+            curl_setopt($process, CURLOPT_AUTOREFERER, true);
+            curl_setopt($process, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($process, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($process, CURLOPT_VERBOSE, 1);
+            //--TEST OPTIONS
+
             $return = curl_exec($process);
             Mage::log("curl_exec result", null, "set_log_4_1_X.log");
             Mage::log($return, null, "set_log_4_1_X.log");
