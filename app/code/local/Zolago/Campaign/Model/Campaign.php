@@ -357,13 +357,13 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //4. remove products with status Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE
-        if (!empty($productsToDeleteFromTable)) {
-            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
-                foreach ($productIds as $productId) {
-                    $resourceModel->deleteProductsFromTable($campaignId, $productId);
-                }
-            }
-        }
+//        if (!empty($productsToDeleteFromTable)) {
+//            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
+//                foreach ($productIds as $productId) {
+//                    $resourceModel->deleteProductsFromTable($campaignId, $productId);
+//                }
+//            }
+//        }
 
         //5. reindex
         // Better performance
