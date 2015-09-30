@@ -84,7 +84,7 @@ class Zolago_Converter_Model_Client {
             return $priceBatch;
         }
 
-        $numberQ = self::PRICE_BATCH_SIZE;
+        $numberQ = $this->getConfig('url_price_batch_size');
         //Mage::log(count($vendorProductsData), null, "set_log_4.log");
         if (count($vendorProductsData) >= $numberQ) {
             $priceBatchAll = array();
