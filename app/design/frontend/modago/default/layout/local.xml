@@ -4,6 +4,8 @@
 	<default>
 
 		<reference name="head">
+    		<remove name="optional_zip_countries"/>
+    		<remove name="product.tooltip"/>
 			<action method="setTemplate">
 				<template>page/html/head.phtml</template>
 			</action>
@@ -248,7 +250,16 @@
 				<stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
 			</action>
 
-			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
+			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml">
+        	    <action method="setCacheLifetime">
+	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
+                </action>
+			</block>
+		    <block name="js_cookies">
+        	    <action method="setCacheLifetime">
+	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
+                </action>		        
+		    </block>
 
             <remove name="salesmanago_tracking"/>
 		</reference>
@@ -284,7 +295,7 @@
             </action>
         </reference>
         <reference name="before_content">
-            <block type="core/template"  name="header_menu" template="page/html/header/header_menu.phtml">
+            <block type="zolagomodago/page_html_header_menu"  name="header_menu">
                 <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
         </reference>
@@ -427,7 +438,7 @@
 					<block type="zolagocms/component_boxes" name="boxes" before="-"/>
 				</block>
 				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml">
-					<block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>
+					<block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
 				</block>
 				<block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
 				<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
@@ -522,7 +533,7 @@
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
 				<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
-            <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
+            <block type="zolagomodago/page_html_header_menu" name="header_menu">
                 <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
             </block>
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
@@ -549,7 +560,7 @@
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        
         </reference>
 
 	</solrbridge_solrsearch_category_view>
@@ -629,7 +640,7 @@
                 </block>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        
         </reference>
     </solrsearch_index_index>
 
@@ -683,7 +694,7 @@
 			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits" template="page/html/benefits.phtml"/>        		
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        		
 		</reference>
 
 		<reference name="product.info.addto">

@@ -5,6 +5,13 @@
  */
 
 class Zolago_Modago_Block_Page_Aside extends Zolago_Modago_Block_Catalog_Category
-{
+{    
+    /**
+     * use cache     
+     */
+    protected function _construct() {
+        $this->setCacheLifetime(Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL);
+    }
+                        
 
 } 
