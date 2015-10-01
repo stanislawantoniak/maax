@@ -78,7 +78,7 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 					'product_id'    => $productId,
 					'date'          => $cpc['date'],
 					'type_id'       => $type->getId(),
-					'cost'          => $cpc['cost'],
+					'cost'          => str_replace(',','.',$cpc['cost']),
 					'click_count'   => $cpc['click_count'],
 					'billing_cost'  => round(($cpc['cost'] + ($cpc['cost'] * ($vendor->getCpcCommission()/100))),2,PHP_ROUND_HALF_UP)
 				);
@@ -98,6 +98,8 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 	}
 
 	protected function getClientIp() {
+		Mage::log($_SERVER['REMOTE_ADDR'],null,'client_ip.log');
+
 		$ipaddress = '';
 		if ($_SERVER['HTTP_CLIENT_IP'])
 			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
