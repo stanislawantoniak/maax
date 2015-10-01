@@ -446,7 +446,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
 
     /**
-     *
      * Recover (set to null) attributes
      * campaign_regular_id,
      * special_price,special_from_date,special_to_date,
@@ -454,8 +453,10 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
      * product_flag
      *
      * @param $dataToUpdate
+     * @param $productsToDeleteFromTable
+     * @return array
      */
-    public function unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate){
+    public function unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable = array()){
 
         $productIdsToUpdate = array();
 
@@ -526,7 +527,14 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $configurableRModel->recoverProductOptionsBasedOnSimples($recoverOptionsProducts);
         }
 
-        //4. Set products as processed
+        //4.1 Delete products with status 2
+        if (!empty($productsToDeleteFromTable)) {
+            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
+                $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
+            }
+        }
+
+        //4.2 Set products as processed
         if (!empty($setProductsAsAssigned)) {
             /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
             $resourceModel = $this->getResource();

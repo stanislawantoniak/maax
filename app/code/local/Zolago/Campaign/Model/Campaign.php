@@ -351,8 +351,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         //3. Recover products from SALE and PROMOTION campaigns
 
         //3.1. Recover (set to null) attributes campaign_regular_id, special_price,special_from_date,special_to_date,campaign_strikeout_price_type,product_flag
+        // and recover options for configurable
+        /* @var $productAttributeCampaignModel Zolago_Campaign_Model_Campaign_ProductAttribute */
         $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
-        $productIdsSalePromotionUpdated = $productAttributeCampaignModel->unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate);
+        $productIdsSalePromotionUpdated = $productAttributeCampaignModel->unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable);
         $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
 
 
@@ -522,7 +524,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      * @param $productsToDeleteFromTable
      * @return array
      */
-    public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable)
+    public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable = array())
     {
 
         $productIdsUpdated = array();
@@ -586,7 +588,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //Delete products with status 2
-
         if (!empty($productsToDeleteFromTable)) {
             foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
                 $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
