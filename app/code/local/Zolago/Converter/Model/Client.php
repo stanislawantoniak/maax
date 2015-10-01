@@ -252,7 +252,7 @@ class Zolago_Converter_Model_Client {
             Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
             Mage::log("CONVERTER GET PRICE BATCH ERROR NO: " . curl_errno($process));
             if(curl_errno($process) == 56){
-                Mage::getSingleton('core/session')->addError('Converter price batch size is too big');
+                Mage::log("CONVERTER GET PRICE IS TOO BIG");
             }
 
             curl_close($process);
