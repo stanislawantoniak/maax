@@ -127,7 +127,7 @@ class Zolago_Converter_Model_Client {
         Mage::log("_makeConnection result is_array " . is_array($result), null, "_makeConnection.log");
 
         if(!is_array($result)){
-            Mage::log("ALAAAAAAAAARM: make split", null, "_makeConnection.log");
+            Mage::log("ALAAAAAAAAARM", null, "_makeConnection.log");
             //return $this->getPriceBatchRequest($vendorExternalId, array_slice($vendorProductsData, 0, 1));
         }
 
@@ -225,7 +225,7 @@ class Zolago_Converter_Model_Client {
      */
     protected function _replaceUrlKey($url, $key, $placeholder = FALSE) {
         if($placeholder){
-            return urldecode(str_replace($placeholder, urlencode($key), $url));
+            return str_replace($placeholder, urlencode($key), $url);
         }
         return str_replace(self::URL_KEY, urlencode($key), $url);
     }
