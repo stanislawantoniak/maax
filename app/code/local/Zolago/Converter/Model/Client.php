@@ -232,18 +232,19 @@ class Zolago_Converter_Model_Client {
             $process = curl_init($url);
             //Mage::log($url, null, "_makeConnection.log");
             curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            //Mage::log($url, null, "_makeConnection.log");
-            curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($url)));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
 
-            Mage::log("CONVERTER GET PRICE BATCH ERROR NO: " . curl_errno($process));
-            if(curl_errno($process) == 56){
-                Mage::log("CONVERTER GET PRICE IS TOO BIG");
+            if(curl_errno($process) > 0){
+                Mage::log("CONVERTER CONNECT ERROR NO: " . curl_errno($process));
+                if(curl_errno($process) == 56){
+                    Mage::log("CONVERTER GET PRICE IS TOO BIG");
+                }
             }
+
 
             curl_close($process);
         }  catch (Exception $e) {
