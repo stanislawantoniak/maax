@@ -143,6 +143,9 @@
 	    			<template>page/page_boot_grid4.phtml</template>
 		    	</action>
         </reference>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
+        </reference>
 		 
 		<reference name="content">
 			<block name="mass" type="zolagocatalog/vendor_product" template="zolagocatalog/product.phtml">
