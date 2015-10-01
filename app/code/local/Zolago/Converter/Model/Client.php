@@ -112,14 +112,13 @@ class Zolago_Converter_Model_Client {
         $keyParts = array();
         foreach ($vendorProductsData as $vendorSku => $priceType) {
             if(!empty($vendorSku)){  //should FIX http://85.194.243.53:8092/modago/_design/read/_view/price?keys=["5:"]
-                $keyParts[] = "\"" . $vendorExternalId . ":" . trim($vendorSku) . "\"";
+                $keyParts[] = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
             }
         }
         if (empty($keyParts)) {
             return $priceBatch;
         }
         $keys = "[" . implode(",", $keyParts) . "]";
-
         $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
 
         $result = $this->_makeConnection($url);
@@ -217,7 +216,7 @@ class Zolago_Converter_Model_Client {
      */
     protected function _replaceUrlKey($url, $key, $placeholder = FALSE) {
         if($placeholder){
-            return urldecode(str_replace($placeholder, urlencode($key), $url));
+            return str_replace($placeholder, urlencode($key), $url);
         }
         return str_replace(self::URL_KEY, urlencode($key), $url);
     }
@@ -231,18 +230,20 @@ class Zolago_Converter_Model_Client {
         $return = null;
         try {
             $process = curl_init($url);
-            Mage::log($url, null, "_makeConnection.log");
-            curl_setopt($process, CURLOPT_HTTPHEADER, array(
-                            'Accept: application/json'
-                        ));
+            //Mage::log($url, null, "_makeConnection.log");
+            curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
-            Mage::log("curl_exec", null, "_makeConnection.log");
-            Mage::log($return, null, "_makeConnection.log");
-            Mage::log("---------------------------", null, "_makeConnection.log");
+
+            Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
+            Mage::log("CONVERTER GET PRICE BATCH ERROR NO: " . curl_errno($process));
+            if(curl_errno($process) == 56){
+                Mage::log("CONVERTER GET PRICE IS TOO BIG");
+            }
+
             curl_close($process);
         }  catch (Exception $e) {
             Mage::logException($e);
