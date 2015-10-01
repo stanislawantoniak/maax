@@ -21,7 +21,7 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 
 			$configToken = Mage::getStoreConfig('zolagoconverter/marketing/token');
 			$configIp = Mage::getStoreConfig('zolagoconverter/marketing/ip');
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
+			$ip = $this->getClientIp();
 
 			if($ip !== $configIp) {
 				Mage::throwException("Invalid marketing server's IP address! Should be $configIp but $ip was provided");
@@ -95,5 +95,24 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 			Mage::logException($e);
 			echo 'ERR';
 		}
+	}
+
+	protected function getClientIp() {
+		$ipaddress = '';
+		if ($_SERVER['HTTP_CLIENT_IP'])
+			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+		else if($_SERVER['HTTP_X_FORWARDED_FOR'])
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		else if($_SERVER['HTTP_X_FORWARDED'])
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+		else if($_SERVER['HTTP_FORWARDED_FOR'])
+			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+		else if($_SERVER['HTTP_FORWARDED'])
+			$ipaddress = $_SERVER['HTTP_FORWARDED'];
+		else if($_SERVER['REMOTE_ADDR'])
+			$ipaddress = $_SERVER['REMOTE_ADDR'];
+		else
+			$ipaddress = 'UNKNOWN';
+		return $ipaddress;
 	}
 }
