@@ -127,7 +127,7 @@ class Zolago_Converter_Model_Client {
         Mage::log("_makeConnection result is_array " . is_array($result), null, "_makeConnection.log");
 
         if(!is_array($result)){
-            Mage::log("ALAAAAAAAAARM", null, "_makeConnection.log");
+            Mage::log("ALAAAAAAAAARM: make split", null, "_makeConnection.log");
             $this->getPriceBatchRequest($vendorExternalId, array_slice($vendorProductsData, 0, 5));
         }
 
