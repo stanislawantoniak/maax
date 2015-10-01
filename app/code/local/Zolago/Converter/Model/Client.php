@@ -239,6 +239,8 @@ class Zolago_Converter_Model_Client {
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
+            Mage::log("curl_exec", null, "_makeConnection.log");
+            Mage::log($return, null, "_makeConnection.log");
             curl_close($process);
         }  catch (Exception $e) {
             Mage::logException($e);
