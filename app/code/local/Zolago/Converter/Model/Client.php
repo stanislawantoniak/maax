@@ -254,7 +254,7 @@ class Zolago_Converter_Model_Client {
             Mage::logException($e);
         }
 
-        Mage::log("RETURN " . strlen($return), null, "_makeConnection.log");
+        Mage::log("RETURN length" . strlen($return), null, "_makeConnection.log");
 
         return Zend_Json::decode($return);
     }
