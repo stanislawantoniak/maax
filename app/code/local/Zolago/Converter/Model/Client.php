@@ -124,7 +124,7 @@ class Zolago_Converter_Model_Client {
         $result = $this->_makeConnection($url);
 
         if (isset($result['error'])) {
-            Mage::log(implode(' ,', $result));
+            Mage::log(implode(' ,', $result), null, "getPriceBatchRequestError.log");
             return $priceBatch;
         }
 
@@ -231,11 +231,12 @@ class Zolago_Converter_Model_Client {
         try {
             $process = curl_init($url);
             //Mage::log($url, null, "_makeConnection.log");
+            curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            //Mage::log($url, null, "_makeConnection.log");
             curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($url)));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
-
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
 
@@ -249,8 +250,6 @@ class Zolago_Converter_Model_Client {
         }  catch (Exception $e) {
             Mage::logException($e);
         }
-
-        //Mage::log("RETURN length " . strlen($return), null, "_makeConnection.log");
 
         return Zend_Json::decode($return);
     }
