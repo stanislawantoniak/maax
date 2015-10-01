@@ -236,7 +236,7 @@ class Zolago_Converter_Model_Client {
                             'Accept: application/json'
                         ));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
-            curl_setopt($process, CURLOPT_TIMEOUT, 60);
+            curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
