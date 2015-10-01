@@ -4,6 +4,7 @@ class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
     const URL_KEY_BATCH = "{{keys}}";
+    const PRICE_BATCH_SIZE = 200;
 
     static protected $_priceRegistry;
 
@@ -83,7 +84,8 @@ class Zolago_Converter_Model_Client {
             return $priceBatch;
         }
 
-        $numberQ = $this->getConfig('url_price_batch_size');
+        $urlPriceBatchSize = $this->getConfig('url_price_batch_size');
+        $numberQ = !empty($urlPriceBatchSize) ? $urlPriceBatchSize : self::PRICE_BATCH_SIZE;
         //Mage::log(count($vendorProductsData), null, "set_log_4.log");
         if (count($vendorProductsData) >= $numberQ) {
             $priceBatchAll = array();
