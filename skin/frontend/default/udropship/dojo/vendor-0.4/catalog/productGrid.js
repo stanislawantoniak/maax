@@ -1061,15 +1061,16 @@ define([
             // Adding tooltip's to grid column header
             jQuery(this.getColumns()).each(function(idx, elem) {
                 if (elem.field && elem.title) {
-                    var item = jQuery(".header.field-" + elem.field).attr("title", elem.title);
-                    jQuery(item).tooltip({
-                        container: "body",
-                        animation: false,
-                        placement: "top",
-                        trigger: "hover",
-                        delay: {"show": 0, "hide": 0}
-                    });
+                    jQuery(".header.field-" + elem.field).attr("title", elem.title).attr("data-tooltip-header", "true");
                 }
+            });
+            jQuery(".dgrid-selector[role=columnheader]").attr("title", Translator.translate("Selection")).attr("data-tooltip-header", "true");
+            jQuery("[data-tooltip-header=true]").tooltip({
+                container: "body",
+                animation: false,
+                placement: "top",
+                trigger: "hover",
+                delay: {"show": 0, "hide": 0}
             });
             return this;
 		}

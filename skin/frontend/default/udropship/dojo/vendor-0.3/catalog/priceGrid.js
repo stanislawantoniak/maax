@@ -169,13 +169,16 @@ define([
 	window.priceGrid = grid = new PriceGrid({
 		columns: {
 			selector: selector({ 
-				label: ''
+				label: '',
+                title: Translator.translate("Selection"),
+                className: "header"
 			}),
 			expander: {
 				label: '',
+                title: Translator.translate("Unwrapping"),
 				get: lang.hitch(updater, updater.cellRender),
 				sortable: false,
-				className: 'expander',
+				className: 'expander header',
 				renderHeaderCell: function(node){
 					on(node, "click", function(){
 						updater.toggleExpandAll();
@@ -191,6 +194,7 @@ define([
 			name: {
 				label: Translator.translate("Name"),
 				field: "name",
+                className: "header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("text", "name"),
@@ -203,7 +207,7 @@ define([
 			skuv: {
 				label: Translator.translate("SKU"),
 				field: "skuv",			
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("text", "skuv"),
@@ -216,7 +220,7 @@ define([
 			price: {
 				label: Translator.translate("Price"),
 				field: "display_price",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "display_price"),
@@ -236,7 +240,7 @@ define([
 			campaign_regular_id: {
 				label: Translator.translate("Price type"),
 				field: "campaign_regular_id",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "campaign_regular_id", {options: campainRegularIdOptions}),
@@ -257,7 +261,7 @@ define([
 			price_margin: {
 				label: Translator.translate("Margin"),
 				field: "price_margin",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "price_margin"),
@@ -282,7 +286,7 @@ define([
 			converter_price_type: {
 				label: Translator.translate("Price source"),
 				field: "converter_price_type",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
@@ -309,13 +313,13 @@ define([
 			msrp: {
 				label: Translator.translate("Msrp"),
 				field: "msrp",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium signle-price-edit popup-trigger",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger header",
 						formatter: function(value){
 							if(value!==null){
 								return misc.currency(value);
@@ -334,7 +338,7 @@ define([
 			converter_msrp_type: {
 				label: Translator.translate("MSRP Source"),
 				field: "converter_msrp_type",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "converter_msrp_type", {options: converterMsrpTypeOptions}),
@@ -361,7 +365,7 @@ define([
 			is_new: editor({
 				label: Translator.translate("New"),
 				field: "is_new",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					editor({
 						editor: "select",
@@ -386,7 +390,7 @@ define([
 			is_bestseller: {
 				label: Translator.translate("Best"),
 				field: "is_bestseller",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					editor({
 						editor: "select",
@@ -411,7 +415,7 @@ define([
 			product_flag: {
 				label: Translator.translate("Flag"),
 				field: "product_flag",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
@@ -432,7 +436,7 @@ define([
 			is_in_stock: {
 				label: Translator.translate("In stock"),
 				field: "is_in_stock",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "is_in_stock", {options: boolOptions}),
@@ -453,7 +457,7 @@ define([
 			variant_qty: {
 				label: Translator.translate("Variants"),
 				field: "available_child_count",
-				className: "column-center",
+				className: "column-center header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "available_child_count"),
@@ -472,7 +476,7 @@ define([
 			stock_qty: {
 				label: Translator.translate("Stock Qty"),
 				field: "stock_qty",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
@@ -486,7 +490,7 @@ define([
 			politics: {
 				label: Translator.translate("Manually disabled"), 
 				field: "politics",
-				className: "column-medium",				
+				className: "column-medium header",
 				children: [
 					editor({
 						editor: "select",
@@ -511,7 +515,7 @@ define([
 			status: { 
 				label: "Status", 
 				field: "status",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					editor({
 						editor: "select",
@@ -536,7 +540,7 @@ define([
             description_status: {
                 label: Translator.translate("Description status"),
                 field: "description_status",
-                className: "column-medium",
+                className: "column-medium header",
                 children: [
                     {
                         renderHeaderCell: filterRendererFacory("select", "description_status", {options: descriptionStatusOptions}),
@@ -557,7 +561,7 @@ define([
 			type_id: { 
 				label: Translator.translate("Type"), 
 				field: "type_id",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "type_id", {options: typeIdOptions}),
@@ -781,15 +785,18 @@ define([
 	updateSelectionButtons();
 	updateMassButton();
 
-    jQuery('#grid-holder-header tr:eq(1) .dgrid-cell[role="columnheader"]').each(function(idx, elem){
-        jQuery(elem).attr('title', jQuery(elem).html());
-        jQuery(elem).tooltip({
-            container: "body",
-            animation: false,
-            placement: "top",
-            trigger: "hover",
-            delay: {"show": 0, "hide": 0}
-        });
+    jQuery.map(window.priceGrid.columns, function (elem, i) {
+        if (elem.field) {
+            var title = elem.title ? elem.title : elem.label;
+            jQuery(".field-" + elem.field).attr("title", title).attr("data-tooltip-header", "true");
+        }
+    });
+    jQuery("[data-tooltip-header=true]").tooltip({
+        container: "body",
+        animation: false,
+        placement: "top",
+        trigger: "hover",
+        delay: {"show": 0, "hide": 0}
     });
 
 	return grid; 
