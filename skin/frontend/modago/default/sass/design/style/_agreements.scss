@@ -67,6 +67,17 @@
 	}
 }
 
+.checkout_agreements .dotpay_agreement_container {
+	text-align: right !important;
+	padding-right: 0 !important;
+	#dotpay_agreement-error {
+		text-align: right !important;
+	}
+	.dotpay_agreement-label {
+		white-space: nowrap;
+	}
+}
+
 #tos_agreement_container_registration {
 	margin-bottom: 13px !important;
 }
