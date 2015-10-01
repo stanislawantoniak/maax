@@ -123,7 +123,8 @@ class Zolago_Converter_Model_Client {
         $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
 
         $result = $this->_makeConnection($url);
-
+        Mage::log("_makeConnection result: ", null, "_makeConnection.log");
+        Mage::log($result, null, "_makeConnection.log");
         if (isset($result['error'])) {
             Mage::log(implode(' ,', $result));
             return $priceBatch;
