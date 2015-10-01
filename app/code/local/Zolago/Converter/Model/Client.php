@@ -248,7 +248,8 @@ class Zolago_Converter_Model_Client {
             Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
 
             Mage::log("---------------------------", null, "_makeConnection.log");
-            //curl_close($process);
+            curl_close($process);
+            return $return;
         }  catch (Exception $e) {
             Mage::logException($e);
         }
