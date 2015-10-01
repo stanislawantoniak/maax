@@ -319,7 +319,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium signle-price-edit popup-trigger header",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger",
 						formatter: function(value){
 							if(value!==null){
 								return misc.currency(value);
@@ -788,7 +788,7 @@ define([
     jQuery.map(window.priceGrid.columns, function (elem, i) {
         if (elem.field) {
             var title = elem.title ? elem.title : elem.label;
-            jQuery(".field-" + elem.field).attr("title", title).attr("data-tooltip-header", "true");
+            jQuery(".header.field-" + elem.field).attr("title", title).attr("data-tooltip-header", "true");
         }
     });
     jQuery("[data-tooltip-header=true]").tooltip({
