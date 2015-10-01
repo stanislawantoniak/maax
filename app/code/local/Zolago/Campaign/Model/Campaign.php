@@ -358,6 +358,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
 
 
+        $productIdsToUpdate = array_unique($productIdsToUpdate);
         //4. reindex
         // Better performance
         $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
