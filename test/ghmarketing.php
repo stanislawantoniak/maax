@@ -29,7 +29,7 @@ $postData = array(
 try {
 	$ch = curl_init();
 
-	curl_setopt($ch, CURLOPT_USERPWD, 'kopytko:testtest1234');
+	curl_setopt($ch, CURLOPT_USERPWD, 'zolago:kopytko1234');
 	curl_setopt($ch, CURLOPT_URL, "http://dev01.lorante.com/ghmarketing/load/index");
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
