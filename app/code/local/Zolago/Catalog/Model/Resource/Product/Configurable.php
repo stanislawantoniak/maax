@@ -421,6 +421,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function recoverProductOptionsBasedOnSimples($recoverOptionsProducts)
     {
+krumo($recoverOptionsProducts);
 
         if (empty($recoverOptionsProducts)) {
             return;
@@ -442,7 +443,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         /* @var $configModel  Zolago_Catalog_Model_Product_Type_Configurable */
         $configModel = Mage::getModel('zolagocatalog/product_type_configurable');
-        $childProductsByAttribute = $configModel->getUsedProductsByAttribute($parentIds);
 
         $dataToUpdate = array();
 
@@ -455,6 +455,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             if(!isset($dataToUpdate[$websiteId])){
                 $dataToUpdate[$websiteId] = array();
             }
+            $firstStore = array_shift($stores[$websiteId]);
+            $childProductsByAttribute = $configModel->getUsedSizePriceRelations($firstStore, $parentIds);
 
             foreach ($parentIds as $parentId) {
 

@@ -6,12 +6,10 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
     /**
      * Light version of Mage_Catalog_Model_Product_Type_Configurable::getUsedProducts
      * for multiple products
-     * //TODO change name to getUsedProductsByAttributeSize
-     * @param $productIds
      *
+     * @param $productIds
      * @return array
      */
-
     public function getUsedProductsByAttribute($productIds)
     {
 
@@ -27,6 +25,68 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 //        )
 //    );
         $usedProducts = array();
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+
+        $attributeSize = Mage::getResourceModel('catalog/product')
+            ->getAttribute('size');
+        $attributeSizeId = $attributeSize->getAttributeId();
+
+
+        $attributeVendorSku = Mage::getResourceModel('catalog/product')
+            ->getAttribute('skuv');
+        $attributeVendorSkuId = $attributeVendorSku->getAttributeId();
+
+        $collection->getSelect()
+            ->joinInner(
+                array("link_table" => 'catalog_product_super_link'),
+                "e.entity_id = link_table.product_id",
+                array("link_table.parent_id")
+            )
+            ->joinInner(
+                array("at_size" => 'catalog_product_entity_int'),
+                "e.entity_id = at_size.entity_id",
+                array("size" => "at_size.value")
+            )
+            ->joinInner(
+                array("at_sku_vendor" => 'catalog_product_entity_varchar'),
+                "e.entity_id = at_sku_vendor.entity_id",
+                array("skuv" => "at_sku_vendor.value")
+            )
+            ->where("at_size.attribute_id=?", $attributeSizeId)
+            ->where("at_sku_vendor.attribute_id=?", $attributeVendorSkuId)
+
+            ->where("at_size.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
+            ->where("at_sku_vendor.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
+
+            ->where("link_table.parent_id IN(?)", $productIds)
+            ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
+            ->where("at_size.value IS NOT NULL");
+
+        foreach ($collection as $product) {
+            $usedProducts[$product->getParentId()][$product->getId()] = array(
+                "id" => $product->getId(),      //Simple product id
+                "sku" => $product->getSku(),    //Simple product sku
+                "skuv" => $product->getSkuv(),  //Simple product skuv
+                "size" => $product->getSize(),  //Simple product size
+                "price" => $product->getPrice() //Simple product price
+            );
+        }
+
+        return $usedProducts;
+
+    }
+
+
+    /**
+     * Get relation size-price for store
+     * @param $store
+     * @param $productIds
+     * @return array
+     */
+    public function getUsedSizePriceRelations($store, $productIds)
+    {
+
+        $sizePriceRelations = array();
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
 
         $attributeSize = Mage::getResourceModel('catalog/product')
@@ -66,16 +126,16 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             ->where("at_price.attribute_id=?", $attributePriceId)
             ->where("at_sku_vendor.attribute_id=?", $attributeVendorSkuId)
 
-            ->where("at_size.store_id=?", 0)
-            ->where("at_price.store_id=?", 0)
-            ->where("at_sku_vendor.store_id=?", 0)
+            ->where("at_size.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
+            ->where("at_sku_vendor.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
+            ->where("at_price.store_id=?", $store)
 
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
             ->where("at_size.value IS NOT NULL");
 
         foreach ($collection as $product) {
-            $usedProducts[$product->getParentId()][$product->getId()] = array(
+            $sizePriceRelations[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
                 "sku" => $product->getSku(),    //Simple product sku
                 "skuv" => $product->getSkuv(),  //Simple product skuv
@@ -84,7 +144,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             );
         }
 
-        return $usedProducts;
+        return $sizePriceRelations;
 
     }
 
