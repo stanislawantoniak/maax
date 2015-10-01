@@ -238,7 +238,6 @@ class Zolago_Converter_Model_Client {
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
 
-            Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
             Mage::log("CONVERTER GET PRICE BATCH ERROR NO: " . curl_errno($process));
             if(curl_errno($process) == 56){
                 Mage::log("CONVERTER GET PRICE IS TOO BIG");
