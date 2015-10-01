@@ -236,7 +236,7 @@ class Zolago_Converter_Model_Client {
         $return = null;
         try {
             $process = curl_init($url);
-            Mage::log($url, null, "_makeConnection.log");
+            //Mage::log($url, null, "_makeConnection.log");
             curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($url)));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
@@ -245,9 +245,9 @@ class Zolago_Converter_Model_Client {
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
             Mage::log($process, null, "_makeConnection.log");
-            Mage::log("STRLEN ". strlen($url), null, "_makeConnection.log");
-            Mage::log("curl_exec", null, "_makeConnection.log");
-            Mage::log((string)$return, null, "_makeConnection.log");
+            //Mage::log("STRLEN ". strlen($url), null, "_makeConnection.log");
+            //Mage::log("curl_exec", null, "_makeConnection.log");
+            //Mage::log((string)$return, null, "_makeConnection.log");
 
             Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
             Mage::logException("ERROR NO: " . curl_errno($process));
@@ -257,7 +257,7 @@ class Zolago_Converter_Model_Client {
             Mage::logException($e);
         }
 
-        Mage::log("RETURN length " . strlen($return), null, "_makeConnection.log");
+        //Mage::log("RETURN length " . strlen($return), null, "_makeConnection.log");
 
         return Zend_Json::decode($return);
     }
