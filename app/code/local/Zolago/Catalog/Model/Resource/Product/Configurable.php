@@ -421,7 +421,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function recoverProductOptionsBasedOnSimples($recoverOptionsProducts)
     {
-krumo($recoverOptionsProducts);
+
 
         if (empty($recoverOptionsProducts)) {
             return;
