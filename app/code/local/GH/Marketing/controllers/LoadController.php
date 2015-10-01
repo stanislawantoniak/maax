@@ -21,7 +21,7 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 
 			$configToken = Mage::getStoreConfig('zolagoconverter/marketing/token');
 			$configIp = Mage::getStoreConfig('zolagoconverter/marketing/ip');
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
 
 			if($ip !== $configIp) {
 				Mage::throwException("Invalid marketing server's IP address! Should be $configIp but $ip was provided");
