@@ -9,4 +9,8 @@ class GH_Marketing_Model_Marketing_Cost_Type extends Mage_Core_Model_Abstract {
         $this->_init("ghmarketing/marketing_cost_type");
     }
 
+    public function loadByCode($code) {
+        return $this->getResourceCollection()->addFieldToFilter('code',$code)->getFirstItem();
+    }
+
 }
