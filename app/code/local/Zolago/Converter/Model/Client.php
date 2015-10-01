@@ -123,12 +123,6 @@ class Zolago_Converter_Model_Client {
 
         $result = $this->_makeConnection($url);
 
-        if(!is_array($result)){
-            Mage::log("ALAAAAAAAAARM", null, "_makeConnection.log");
-            //return $this->getPriceBatchRequest($vendorExternalId, array_slice($vendorProductsData, 0, 1));
-        }
-
-
         if (isset($result['error'])) {
             Mage::log(implode(' ,', $result));
             return $priceBatch;
@@ -244,10 +238,6 @@ class Zolago_Converter_Model_Client {
 
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
-            Mage::log($process, null, "_makeConnection.log");
-            //Mage::log("STRLEN ". strlen($url), null, "_makeConnection.log");
-            //Mage::log("curl_exec", null, "_makeConnection.log");
-            //Mage::log((string)$return, null, "_makeConnection.log");
 
             Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
             Mage::log("CONVERTER GET PRICE BATCH ERROR NO: " . curl_errno($process));
