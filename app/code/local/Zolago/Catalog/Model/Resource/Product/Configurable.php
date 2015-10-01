@@ -886,6 +886,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         if($collection->getSize() <= 0){
             return $productsIdsPullToSolr; //Nothing to update
         }
+        $productsIdsPullToSolr = $parentProductIds;
 
         //2. Find out products, which msrp should be recovered
         $idsToSetMSRP = array();
@@ -918,11 +919,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             //recover options
             /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
             $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-            $priceUpdated = $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
-            $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$priceUpdated);
-
-            $msrpUpdated =$configurableRModel->recoverProductMSRPBasedOnSimples($recoverMSRP);
-            $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$msrpUpdated);
+            $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
+            $configurableRModel->recoverProductMSRPBasedOnSimples($recoverMSRP);
         }
 
         return $productsIdsPullToSolr;
