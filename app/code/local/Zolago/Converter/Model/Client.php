@@ -124,7 +124,7 @@ class Zolago_Converter_Model_Client {
 
         $result = $this->_makeConnection($url);
         Mage::log("_makeConnection result: " .(string)$result, null, "_makeConnection.log");
-        Mage::log("_makeConnection result length " . strlen($result), null, "_makeConnection.log");
+        Mage::log("_makeConnection result length " . (int)strlen($result), null, "_makeConnection.log");
         Mage::log("---------------------------", null, "_makeConnection.log");
 
         if (isset($result['error'])) {
