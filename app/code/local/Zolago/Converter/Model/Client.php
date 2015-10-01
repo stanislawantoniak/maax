@@ -240,6 +240,7 @@ class Zolago_Converter_Model_Client {
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
+            Mage::log("STRLEN ". strlen($url), null, "_makeConnection.log");
             Mage::log("curl_exec", null, "_makeConnection.log");
             Mage::log($return, null, "_makeConnection.log");
             Mage::log("---------------------------", null, "_makeConnection.log");
