@@ -10,7 +10,7 @@ class Zolago_Pos_Model_Form_Fieldset_Ups extends Zolago_Common_Model_Form_Fields
     protected function _addFieldUseUps() {
         $this->_fieldset->addField('use_orbaups', 'select', array(
                                        'name'          => 'use_orbaups',
-                                       'label'         => $this->_helper->__('Use UPS'),
+                                       'label'         => $this->_helper->__("Use this UPS setting"),
                                        'values'		   => Mage::getSingleton("adminhtml/system_config_source_yesno")->toOptionArray(),
                                        'required'      => false,
 									   'class'		   => "form-control"
