@@ -232,14 +232,13 @@ class Zolago_Converter_Model_Client {
         try {
             $process = curl_init($url);
             Mage::log($url, null, "_makeConnection.log");
-            curl_setopt($process, CURLOPT_HTTPHEADER, array(
-                            'Accept: application/json'
-                        ));
+            curl_setopt($process, CURLOPT_HTTPHEADER, array('Accept: application/json'));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
+            Mage::log($process, null, "_makeConnection.log");
             Mage::log("STRLEN ". strlen($url), null, "_makeConnection.log");
             Mage::log("curl_exec", null, "_makeConnection.log");
             Mage::log((string)$return, null, "_makeConnection.log");
