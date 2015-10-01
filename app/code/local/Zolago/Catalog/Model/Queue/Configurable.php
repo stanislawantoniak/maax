@@ -78,6 +78,16 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $configurableProducts = array_keys($configurableSimpleRelation);
 
 
+        $productsIdsPullToSolr = array();
+
+        //1. Set attributes price, msrp, options
+//        $websites = Mage::app()->getWebsites();
+//        foreach ($websites as $website) {
+//            $productsIdsPullToSolrForWebsite = $zolagoCatalogModelProductConfigurableData->updateConfigurableProductsValues($website, $configurableProducts);
+//            $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
+//        }
+
+
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
         //--super attribute ids

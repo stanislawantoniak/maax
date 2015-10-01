@@ -270,50 +270,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
 
-    /**
-     * @param $productConfigurableId
-     * @param $superAttributeId
-     * @param $productMinPrice
-     * @param $storeId
-     * @param $websiteId
-     */
-    public function insertProductSuperAttributePricing(
-        $productConfigurableId, $superAttributeId, $productMinPrice, $store
-    ) {
-
-        $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-
-        if (!empty($productRelations)) {
-            $insert = array();
-            foreach ($productRelations as $productRelation) {
-
-                $size = $productRelation['child_size'];
-                $price = $productRelation['child_price'];
-                $website = $productRelation['website'];
-
-                $priceIncrement = number_format(Mage::app()->getLocale()->getNumber($price - $productMinPrice), 2);
-
-                $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
-            }
-
-            if (!empty($insert)) {
-                $lineQuery = implode(",", $insert);
-
-                $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
-
-                $insertQuery = sprintf(
-                    "
-                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
-                    VALUES %s
-                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
-                    ", $catalogProductSuperAttributePricingTable, $lineQuery
-                );
-
-                $this->_getWriteAdapter()->query($insertQuery);
-
-            }
-        }
-    }
 
     public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
     {
@@ -790,5 +746,53 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         return $msrp;
     }
+
+
+    /**
+     *
+     * Update configurable products values
+     * 1. price=min(child1_price,child2_price,...) (if product not in valid SALE or PROMOTION campaign)
+     * 2. msrp=min(child1_msrp,child2_msrp,...)
+     * 3. configurable product options
+     * for website
+     *
+     * @param $website
+     * @param $parentIds
+     * @return array
+     */
+//    public function updateConfigurableProductsValues($website, $parentIds){
+//        $productsIdsPullToSolr = array();
+//
+//        //1. Filter valid campaign products
+//
+//        //1.1. Get collection of configurable products NOT IN SALE or PROMOTION
+//        /* @var $collectionS Mage_Catalog_Model_Resource_Product_Collection */
+//        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+//        $collection->addAttributeToSelect('skuv');
+//        $collection->addAttributeToSelect('product_flag');
+//        $collection->addAttributeToSelect('price');
+//
+//        $collection->addAttributeToSelect(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_MSRP_CODE);
+//        $collection->addAttributeToSelect(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE);
+//
+//        $collection->addAttributeToSelect("udropship_vendor");
+//        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+//        $collection->addFieldToFilter('entity_id', array('in' => $parentIds));
+//        $collection->addFieldToFilter('product_flag', array('null' => true));
+//
+//        $parentProductIds = $collection->getAllIds();
+//        krumo($parentProductIds);
+//        if($collection->getSize() <= 0){
+//            return $productsIdsPullToSolr; //Nothing to update
+//        }
+//
+//        //super attribute ids
+//        $superAttributes = $this->getSuperAttributes($parentIds);
+//        //--super attribute ids
+//
+//
+//
+//        return $productsIdsPullToSolr;
+//    }
 
 }
