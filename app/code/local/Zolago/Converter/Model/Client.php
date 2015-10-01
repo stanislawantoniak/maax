@@ -124,6 +124,7 @@ class Zolago_Converter_Model_Client {
 
         $result = $this->_makeConnection($url);
         Mage::log("_makeConnection result: " .(string)$result, null, "_makeConnection.log");
+        Mage::log("---------------------------", null, "_makeConnection.log");
 
         if (isset($result['error'])) {
             Mage::log(implode(' ,', $result));
@@ -247,12 +248,13 @@ class Zolago_Converter_Model_Client {
 
             Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
 
-            Mage::log("---------------------------", null, "_makeConnection.log");
+
             curl_close($process);
-            return $return;
         }  catch (Exception $e) {
             Mage::logException($e);
         }
+
+        Mage::log("RETURN", null, "_makeConnection.log");
 
         return Zend_Json::decode($return);
     }
