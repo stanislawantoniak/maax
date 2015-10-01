@@ -309,7 +309,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $resourceModel->setRebuildProductInValidCampaign($anotherCampaignProducts);
         }
 
-        //Reformat by product_id
+        //Reformat by product_id for INFO campaigns
         $reformattedDataInfo = array();
         foreach($notValidCampaigns as $notValidCampaignsData){
             if ($notValidCampaignsData["type"] == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
@@ -319,11 +319,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
 
 
+        $productIdsToUpdate = array();
+        //2. Recover products from INFO campaigns
         if (!empty($reformattedDataInfo)) {
             /* @var $actionModel Zolago_Catalog_Model_Product_Action */
             $actionModel = Mage::getSingleton('catalog/product_action');
-
-            $productIdsToUpdate = array();
 
             /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
             $zolagocatalogHelper = Mage::helper('zolagocatalog');
@@ -333,7 +333,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 return;
             }
 
-            $recoverOptionsProducts = array();
+
 
             //Recover campaign_info_id attribute
             foreach ($reformattedDataInfo as $websiteId => $dataToUpdateInfo) {
@@ -343,114 +343,48 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                     $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsInfoUpdated);
                 }
             }
-
-
-
-
-
-            foreach($dataToUpdate as $websiteId => $dataToUpdateCampaigns){
-                $storesOfWebsite = (isset($stores[$websiteId]) && !empty($stores[$websiteId])) ? $stores[$websiteId] : false;
-                if(!$storesOfWebsite){
-                    continue;
-                }
-                $infoUpdate = array();
-                foreach ($dataToUpdateCampaigns as $type => $campaignData) {
-
-                    //unset products campaign attributes
-                    foreach ($campaignData as $campaignId => $productIds) {
-                        $productIdsToUpdate = array_merge($productIdsToUpdate, $productIds);
-                        if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
-                            $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => null);
-                            foreach ($storesOfWebsite as $store) {
-                                $actionModel
-                                    ->updateAttributesPure($productIds, $attributesData, (int)$store);
-                            }
-                            unset($store);
-                            if(isset($recoverOptionsProducts[$websiteId])){
-                                $recoverOptionsProducts[$websiteId] = array_merge($recoverOptionsProducts[$websiteId],$productIds);
-                            } else {
-                                $recoverOptionsProducts[$websiteId] = $productIds;
-                            }
-                            $setProductsAsAssigned[$campaignId] = $productIds;
-
-                        }
-                    }
-                    unset($campaignId);
-                    unset($attributesData);
-
-                    //unset special price
-                    //unset special price dates
-                    //unset SRP price
-                    $attributesData = array(
-                        'special_price' => '',
-                        'special_from_date' => '',
-                        'special_to_date' => '',
-                        'campaign_strikeout_price_type' => '',
-                        'product_flag' => null
-                    );
-                    foreach ($storesOfWebsite as $store) {
-                        $actionModel
-                            ->updateAttributesPure($productIdsToUpdate, $attributesData, (int)$store);
-                    }
-                    unset($store);
-                }
-            }
-            unset($campaignId);
-            unset($productId);
-            unset($productIds);
-
-
-            //3. unset options
-            if (!empty($recoverOptionsProducts)) {
-                //recover options
-                /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
-                $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-                $configurableRModel->setProductOptionsBasedOnSimples($recoverOptionsProducts);
-            }
-
-            //4. remove products with status Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE
-            if (!empty($productsToDeleteFromTable)) {
-                foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
-                    foreach ($productIds as $productId) {
-                        $resourceModel->deleteProductsFromTable($campaignId, $productId);
-                    }
-                }
-            }
-
-            //4.1 Set products as processed
-            if (!empty($setProductsAsAssigned)) {
-                foreach ($setProductsAsAssigned as $campaignId => $productsAssignedIds) {
-                    $resourceModel->setProductsAsProcessedByCampaign($campaignId, $productsAssignedIds);
-                }
-            }
-
-            //5. reindex
-            // Better performance
-            $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
-            /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-            $indexer->reindexEntities($productIdsToUpdate);
-
-            $numberQ = 20;
-            if (count($productIdsToUpdate) > $numberQ) {
-                $productsToReindexC = array_chunk($productIdsToUpdate, $numberQ);
-                foreach ($productsToReindexC as $productsToReindexCItem) {
-                    Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
-
-                }
-                unset($productsToReindexCItem);
-            } else {
-                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
-            }
-//
-//
-//            //6. push to solr
-            Mage::dispatchEvent(
-                "catalog_converter_price_update_after",
-                array(
-                    "product_ids" => $productIdsToUpdate
-                )
-            );
         }
+
+
+
+
+        //3. Recover products from SALE and PROMOTION campaigns
+
+        //3.1. Recover (set to null) attributes campaign_regular_id, special_price,special_from_date,special_to_date,campaign_strikeout_price_type,product_flag
+        // and recover options for configurable
+        /* @var $productAttributeCampaignModel Zolago_Campaign_Model_Campaign_ProductAttribute */
+        $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
+        $productIdsSalePromotionUpdated = $productAttributeCampaignModel->unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable);
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
+
+
+        //4. reindex
+        // Better performance
+        $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+        /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+        $indexer->reindexEntities($productIdsToUpdate);
+
+        $numberQ = 20;
+        if (count($productIdsToUpdate) > $numberQ) {
+            $productsToReindexC = array_chunk($productIdsToUpdate, $numberQ);
+            foreach ($productsToReindexC as $productsToReindexCItem) {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+
+            }
+            unset($productsToReindexCItem);
+        } else {
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
+        }
+
+
+        //5. push to solr
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productIdsToUpdate
+            )
+        );
+
 
     }
 
@@ -497,6 +431,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
     /**
+     * @param $attributeCode
+     * @param bool|false $byLabel
      * @return array
      */
     public function getOptionsData($attributeCode, $byLabel = false)
@@ -588,7 +524,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      * @param $productsToDeleteFromTable
      * @return array
      */
-    public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable)
+    public function recoverInfoCampaignsToProduct($dataToUpdate, $stores, $productsToDeleteFromTable = array())
     {
 
         $productIdsUpdated = array();
@@ -652,7 +588,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
         //Delete products with status 2
-
         if (!empty($productsToDeleteFromTable)) {
             foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
                 $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);

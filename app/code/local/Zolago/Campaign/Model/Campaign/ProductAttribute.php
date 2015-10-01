@@ -192,8 +192,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
      * Set prices from converter to simple products
      *
      * @param $salesPromoProductsData
-     * @param $ids
-     * @param $storesToUpdate
+     * @param $websiteId
      * @return array
      */
     public function setPromoCampaignAttributesToConfigurableVisibleProducts($salesPromoProductsData, $websiteId)
@@ -217,14 +216,10 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection->addFieldToFilter('entity_id', array('in' => $ids));
-        //Mage::log($collection->getSize(), null, "set_log_2.log");
+
         if($collection->getSize() <= 0){
             return $productsIdsPullToSolr; //Nothing to update
         }
-
-        $attributeSize = Mage::getResourceModel('catalog/product')
-            ->getAttribute('size');
-        $attributeSizeId = $attributeSize->getAttributeId();
 
         //2. Discover simple products attached to configurable
         //2.1. Collect data to $converterBatchData before ask converter prices
@@ -239,9 +234,9 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $configurableProductIds = array();
 
-        $childProductsByAttribute = $configModel->getUsedProductsByAttribute($attributeSizeId, $ids);
-        //Mage::log("childProductsByAttribute", null, "set_log_2_1.log");
-        //Mage::log($childProductsByAttribute, null, "set_log_2_1.log");
+        $childProductsByAttribute = $configModel->getUsedProductsByAttribute($ids);
+
+
         foreach ($collection as $_product) {
             $productId = $_product->getId();
             $campaignDataForConfigurableProduct = isset($salesPromoProductsData[$productId]) ? $salesPromoProductsData[$productId] : false;
@@ -258,7 +253,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $childProducts = $childProductsByAttribute[$productId];
 
             foreach ($childProducts as $_child) {
-                
+
                 $productsData[$productId][$_child["id"]] = array(
                     'sku' => $_child["sku"],
                     'skuv' => $_child["skuv"],
@@ -273,7 +268,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             unset($child);
         }
 
-        //Mage::log($converterBatchData, null, "set_log_2_2.log");
 
         if (empty($converterBatchData)) {
             return $productsIdsPullToSolr;
@@ -285,7 +279,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 $actualSpecialPricesForChildren +=  $converter->getPriceBatch($vendorExternalId, $vendorProductsData);
             }
         }
-        //Mage::log($actualSpecialPricesForChildren, null, "set_log_2_3.log");
 
         //4. Collect product ids with actual prices
         $productIdsWithActualPrices = array();
@@ -384,7 +377,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         }
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
-        Mage::log($dataToUpdate, null, "set_log_FINAL.log");
+
         if(!empty($dataToUpdate)){
             foreach($dataToUpdate as $attributeName => $data){
                 foreach($data as $value => $idsToUpdate){
@@ -432,7 +425,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 Mage::log("No super attribute for product_id={$parentProdId}", null, "super_attribute_bad.log");
                 continue;
             }
-            //Mage::log("Super attribute for product_id={$parentProdId}");
 
             $superAttributeId = $superAttributes[$parentProdId]['super_attribute'];
             foreach ($skuSizeRelations as $childProdId => $size) {
@@ -442,8 +434,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                     $optionsData[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
                 }
             }
-            //Mage::log($optionsData);
-            //Mage::log("---------------------");
 
         }
 
@@ -452,5 +442,106 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $campaignResourceModel = Mage::getResourceModel('zolagocampaign/campaign');
             $campaignResourceModel->insertOptionsBasedOnCampaign($optionsData);
         }
+    }
+
+
+    /**
+     * Recover (set to null) attributes
+     * campaign_regular_id,
+     * special_price,special_from_date,special_to_date,
+     * campaign_strikeout_price_type,
+     * product_flag
+     *
+     * @param $dataToUpdate
+     * @param $productsToDeleteFromTable
+     * @return array
+     */
+    public function unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable = array()){
+
+        $productIdsToUpdate = array();
+
+        $updateCollector = array();
+
+        foreach ($dataToUpdate as $websiteId => $dataToUpdateCampaigns) {
+            foreach ($dataToUpdateCampaigns as $type => $campaignData) {
+                //unset products campaign attributes
+                foreach ($campaignData as $campaignId => $productIds) {
+                    $productIdsToUpdate = array_merge($productIdsToUpdate, $productIds);
+                    if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+
+                        if(!isset($updateCollector[$websiteId])){
+                            $updateCollector[$websiteId] = array();
+                        }
+                        $updateCollector[$websiteId] = array_merge($updateCollector[$websiteId], $productIds);
+
+                        if (isset($recoverOptionsProducts[$websiteId])) {
+                            $recoverOptionsProducts[$websiteId] = array_merge($recoverOptionsProducts[$websiteId], $productIds);
+                        } else {
+                            $recoverOptionsProducts[$websiteId] = $productIds;
+                        }
+                        $setProductsAsAssigned[$campaignId] = $productIds;
+
+                    }
+                }
+                unset($campaignId);
+            }
+        }
+
+        if(!empty($updateCollector)){
+            $websiteIdsToUpdate = array_keys($dataToUpdate);
+            /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
+            $zolagocatalogHelper = Mage::helper('zolagocatalog');
+            $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
+
+            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
+            $actionModel = Mage::getSingleton('catalog/product_action');
+
+            //unset special price
+            //unset special price dates
+            //unset SRP price
+            $attributesData = array(
+                self::ZOLAGO_CAMPAIGN_ID_CODE => null,
+                'special_price' => '',
+                'special_from_date' => '',
+                'special_to_date' => '',
+                'campaign_strikeout_price_type' => '',
+                'product_flag' => null
+            );
+
+
+            foreach($updateCollector as $website => $productsIds){
+                if(!isset($stores))
+                    continue;
+
+                foreach ($stores[$websiteId] as $store) {
+                    $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
+                }
+            }
+        }
+
+        //3.2. Recover options for configurable products
+        if (!empty($recoverOptionsProducts)) {
+            //recover options
+            /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
+            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+            $configurableRModel->recoverProductOptionsBasedOnSimples($recoverOptionsProducts);
+        }
+
+        //4.1 Delete products with status 2
+        if (!empty($productsToDeleteFromTable)) {
+            foreach ($productsToDeleteFromTable as $campaignId => $productIds) {
+                $this->getResource()->deleteProductsFromTableMass($campaignId, $productIds);
+            }
+        }
+
+        //4.2 Set products as processed
+        if (!empty($setProductsAsAssigned)) {
+            /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
+            $resourceModel = $this->getResource();
+            foreach ($setProductsAsAssigned as $campaignId => $productsAssignedIds) {
+                $resourceModel->setProductsAsProcessedByCampaign($campaignId, $productsAssignedIds);
+            }
+        }
+        return $productIdsToUpdate;
     }
 }

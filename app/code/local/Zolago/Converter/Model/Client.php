@@ -4,7 +4,6 @@ class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
     const URL_KEY_BATCH = "{{keys}}";
-    const PRICE_BATCH_SIZE = 100; //TODO make configurable in admin
 
     static protected $_priceRegistry;
 
@@ -84,14 +83,13 @@ class Zolago_Converter_Model_Client {
             return $priceBatch;
         }
 
-        $numberQ = self::PRICE_BATCH_SIZE;
+        $numberQ = $this->getConfig('url_price_batch_size');
         //Mage::log(count($vendorProductsData), null, "set_log_4.log");
         if (count($vendorProductsData) >= $numberQ) {
             $priceBatchAll = array();
             $vendorProductsDataBatch = array_chunk($vendorProductsData, $numberQ, true);
             foreach ($vendorProductsDataBatch as $vendorProductsDataBatchItem) {
                 $response = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsDataBatchItem);
-                //Mage::log($response, null, "set_log_4_1.log");
                 if(isset($response[$vendorExternalId])){
                     $priceBatchAll = array_merge($priceBatchAll,$response[$vendorExternalId]);
                 }
@@ -100,7 +98,6 @@ class Zolago_Converter_Model_Client {
             $priceBatch[$vendorExternalId] = $priceBatchAll;
         } else {
             $priceBatch = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsData);
-            //Mage::log($priceBatch, null, "set_log_4_2.log");
         }
 
         return $priceBatch;
@@ -108,8 +105,6 @@ class Zolago_Converter_Model_Client {
     }
 
     public function getPriceBatchRequest($vendorExternalId, $vendorProductsData){
-        //Mage::log("Vendor id={$vendorExternalId}", null, "set_log_4_1_X.log");
-        //Mage::log($vendorProductsData, null, "set_log_4_1_X.log");
         $priceBatch = array();
         if (empty($vendorProductsData)) { //should FIX http://85.194.243.53:8092/modago/_design/read/_view/price?keys=["5:"]
             return $priceBatch;
@@ -126,11 +121,11 @@ class Zolago_Converter_Model_Client {
         $keys = "[" . implode(",", $keyParts) . "]";
 
         $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
-        //Mage::log($url, null, "set_log_4_1_X.log");
+
         $result = $this->_makeConnection($url);
-        //Mage::log($result, null, "set_log_4_1_X.log");
+
         if (isset($result['error'])) {
-            //Mage::log(implode(' ,', $result), null, "getPriceBatchRequestError.log");
+            Mage::log(implode(' ,', $result));
             return $priceBatch;
         }
 
@@ -148,7 +143,7 @@ class Zolago_Converter_Model_Client {
                 }
             }
         }
-        //Mage::log("-------------------------------------------------", null, "set_log_4_1_X.log");
+
         return $priceBatch;
     }
 
@@ -235,8 +230,8 @@ class Zolago_Converter_Model_Client {
     protected function _makeConnection($url) {
         $return = null;
         try {
-            //Mage::log("strlen: " . strlen($url), null, "set_log_4_1_X.log");
             $process = curl_init($url);
+            Mage::log($url, null, "_makeConnection.log");
             curl_setopt($process, CURLOPT_HTTPHEADER, array(
                             'Accept: application/json'
                         ));
@@ -244,17 +239,10 @@ class Zolago_Converter_Model_Client {
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
-
-            //TEST OPTIONS
-//            curl_setopt($process, CURLOPT_RETURNTRANSFER, 1);
-//            curl_setopt($process, CURLOPT_HEADER, 0);
-//            curl_setopt($process, CURLOPT_FOLLOWLOCATION, 1);
-//            curl_setopt($process, CURLOPT_VERBOSE, 1);
-            //--TEST OPTIONS
-
             $return = curl_exec($process);
-            Mage::log("curl_exec result", null, "set_log_4_1_X.log");
-            Mage::log($return, null, "set_log_4_1_X.log");
+            Mage::log("curl_exec", null, "_makeConnection.log");
+            Mage::log($return, null, "_makeConnection.log");
+            Mage::log("---------------------------", null, "_makeConnection.log");
             curl_close($process);
         }  catch (Exception $e) {
             Mage::logException($e);
