@@ -119,12 +119,9 @@ class Zolago_Converter_Model_Client {
             return $priceBatch;
         }
         $keys = "[" . implode(",", $keyParts) . "]";
-
         $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
 
         $result = $this->_makeConnection($url);
-        Mage::log("_makeConnection result: " .(string)$result, null, "_makeConnection.log");
-        Mage::log("_makeConnection result is_array " . is_array($result), null, "_makeConnection.log");
 
         if(!is_array($result)){
             Mage::log("ALAAAAAAAAARM", null, "_makeConnection.log");
@@ -253,7 +250,7 @@ class Zolago_Converter_Model_Client {
             Mage::log((string)$return, null, "_makeConnection.log");
 
             Mage::log("ERROR NO: " . curl_errno($process), null, "_makeConnection.log");
-
+            Mage::logException("ERROR NO: " . curl_errno($process));
 
             curl_close($process);
         }  catch (Exception $e) {
