@@ -47,6 +47,7 @@
                         </url_price_batch>
                         <url_price_batch_size translate="label">
                             <label>Price Batch size</label>
+                            <comment>Max 200 to avoid CURL connection errors</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
