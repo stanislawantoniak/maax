@@ -128,8 +128,9 @@ class Zolago_Converter_Model_Client {
 
         if(!is_array($result)){
             Mage::log("ALAAAAAAAAARM", null, "_makeConnection.log");
+            $this->getPriceBatchRequest($vendorExternalId, array_slice($vendorProductsData, 0, 1));
         }
-        Mage::log("---------------------------", null, "_makeConnection.log");
+
 
         if (isset($result['error'])) {
             Mage::log(implode(' ,', $result));
