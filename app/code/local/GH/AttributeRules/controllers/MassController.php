@@ -29,10 +29,10 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             $store = Mage::app()->getStore($storeId);
 
             if (!$attributeSetId) {
-                Mage::throwException(Mage::helper("gh_attributerules")->__("Technical error: no attribute set id specified"));
+                Mage::throwException("Technical error: no attribute set id specified");
             }
             if (!$this->getVendor()->getId()) {
-                Mage::throwException(Mage::helper("gh_attributerules")->__("Security notice: You have no right to do this action"));
+                Mage::throwException("Security notice: You have no right to do this action");
             }
 
             if (is_string($productIds)) {
@@ -61,14 +61,14 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 if (is_array($rules) && !empty($rules)) {
                     $collection->addRuleIdFilter($rules);
                 } else {
-                    Mage::throwException(Mage::helper("gh_attributerules")->__("Please select any rules"));
+                    Mage::throwException("Please select any rules");
                 }
             }
             $collection->load();
             // --Collecting rules
 
             if (!$collection->count()) {
-                Mage::throwException(Mage::helper("gh_attributerules")->__("Please select any rules"));
+                Mage::throwException("Please select any rules");
             }
 
             $usedAttr = array(); // Used attributes
@@ -255,7 +255,7 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
         } catch (Exception $e) {
             $result = array(
                 'status'        => 0,
-                'message'       => $this->__($e->getMessage()),
+                'message'       => Mage::helper("gh_attributerules")->__($e->getMessage()),
                 'changed_ids'	=> array(),
 				'global'		=> $global
             );
