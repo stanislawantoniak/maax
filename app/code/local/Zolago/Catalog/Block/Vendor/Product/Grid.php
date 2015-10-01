@@ -74,13 +74,14 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		}
 		
 		$out = array(
-			"label" => $columnObject->getHeader(),
-			"required" => $columnObject->getRequired(),
-			"field" => $columnObject->getIndex(),
-			"type" => $columnObject->getType(), 
-			"fixed" => $columnObject->getFixed(),
-			"sortable" => $columnObject->getSortable(),
-			"className" => implode(" ", $headerClass)
+			"label"     => $columnObject->getHeader(),
+			"required"  => $columnObject->getRequired(),
+			"field"     => $columnObject->getIndex(),
+			"type"      => $columnObject->getType(),
+			"fixed"     => $columnObject->getFixed(),
+			"sortable"  => $columnObject->getSortable(),
+			"className" => implode(" ", $headerClass),
+            "title"     => $columnObject->getHeader() . ($columnObject->getRequired() ? " *" : "")
 		);
 		
 		
@@ -96,7 +97,7 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			
 			// Set value 
 			$filterHeaderOptions = array(
-				"valueType"		=> $columnObject->getType()
+				"valueType"		=> $columnObject->getType(),
 			);
 			
 			// Renderer opts - assoc
@@ -112,10 +113,13 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			// Filter column
 			$out["children"] = array(
 				array(
+                    /** renderHeaderCell passed as args called by js in: */
+                    /** @see skin/frontend/default/udropship/dojo/vendor-0.3/grid/filter.js */
+                    /** @see skin/frontend/default/udropship/dojo/vendor-0.4/grid/filter.js */
 					"renderHeaderCell"  => array(
-						$this->_getFilterType($columnObject), 
-						$this->_getFilterIndex($columnObject), 
-						$filterHeaderOptions
+						$this->_getFilterType($columnObject),   // type
+						$this->_getFilterIndex($columnObject),  // name
+						$filterHeaderOptions                    // config
 					),
 					"filterable"		=> 1,
 					"sortable"			=> false,
@@ -130,13 +134,16 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		
 		switch ($columnObject->getIndex()) {
 			case "status":
-				$out['label'] = $this->__("St.");
+				$out['label'] = Mage::helper("zolagocatalog")->__("St.");
+				$out['title'] = Mage::helper("zolagocatalog")->__("Product status") . ($columnObject->getRequired() ? " *" : "");
 			break;
 			case "thumbnail":
-				$out['label'] = $this->__("Img.");
+				$out['label'] = Mage::helper("zolagocatalog")->__("Img.");
+                $out['title'] = Mage::helper("zolagocatalog")->__("Images") . ($columnObject->getRequired() ? " *" : "");
 			break;
             case "description_status":
                 $out['label'] = Mage::helper("zolagocatalog")->__("Description status");
+                $out['title'] = Mage::helper("zolagocatalog")->__("Description status") . ($columnObject->getRequired() ? " *" : "");
             break;
 		}
 		

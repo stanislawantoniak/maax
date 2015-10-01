@@ -251,6 +251,26 @@
         color: #4d7496;
         font-weight: bold;
     }
+    #grid-holder .header.field-required {
+        background-color: #FFFFE2;
+
+        background: -moz-linear-gradient(top, #FFFFE2 0%, #eeeeee 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFE2), color-stop(100%,#eeeeee));
+        background: -webkit-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: -o-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: -ms-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+    }
+    #grid-holder .header.field-required:hover {
+        background-color: #FFFFE2;
+
+        background: -moz-linear-gradient(top, #FFFFEF 0%, #eeeeee 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFEF), color-stop(100%,#eeeeee));
+        background: -webkit-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: -o-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: -ms-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+    }
 	
 	/** Fix tooltip **/
 	.tooltip-inner{
@@ -283,8 +303,8 @@
 	}
 </style>
 <script type="text/javascript">
-	require(['vendor/catalog/productGrid', 'vendor/catalog/productGrid/mass/status'], function(productGrid, status){
+	require(['vendor/catalog/productGrid'], function(productGrid) {
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
-		productGrid.startup("grid-holder");
+        window.productGrid = productGrid.startup("grid-holder");
 	});
 </script>
