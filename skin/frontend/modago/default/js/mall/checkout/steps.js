@@ -1903,6 +1903,7 @@
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
+                jQuery('.checkout_agreement_vendors').tooltip();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					var checkout_agreements = jQuery('.checkout_agreements'),
 						checkout_agreements_mobile = jQuery('.checkout_agreements_mobile'),

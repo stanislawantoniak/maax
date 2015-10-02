@@ -57,12 +57,37 @@
 }
 
 .checkout_agreements, .checkout_agreements_mobile {
+	* {
+		font-size: 14px !important;
+	}
 	@media(max-width: $screen-sm-max) {
 		padding: 0;
 	}
 	form {
 		.form-group.form-checkbox{
 			margin-left: 0 !important;
+		}
+	}
+	.checkout_agreement_vendors {
+		padding-left: 20px;
+		background: $btnCheck;
+		@include sprite($btnCheck, checked);
+		background-repeat: no-repeat;
+		position: relative;
+		&:before {
+			content: '';
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(255,255,255,.6);
+		}
+	}
+	.tooltip {
+		left: 15px !important;
+		@media(max-width: $screen-md-max) {
+			left: 0 !important;
 		}
 	}
 }
