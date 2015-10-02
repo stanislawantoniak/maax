@@ -90,7 +90,8 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             "header" => Mage::helper("ghmarketing")->__("Date"),
             "align" => "right",
             "type" => "date",
-            "width" => "100px"
+            "width" => "100px",
+            "filter_condition_callback" => array($this, "_marketingCostDate")
         ));
         $this->addColumn("type_id", array(
             "index" => "type_id",
@@ -146,6 +147,35 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
     }
 
 
+
+    /**
+     * @param $collection
+     * @param $column
+     * @return $this
+     */
+    protected function _marketingCostDate($collection, $column)
+    {
+        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+        $value = $column->getFilter()->getValue();
+        if (!$value)
+            return $this;
+
+        $from = isset($value["orig_from"]) ? date("Y-m-d H:i:s", strtotime($value["orig_from"])) : false;
+        $to = isset($value["orig_to"]) ? date("Y-m-d H:i:s", strtotime($value["orig_to"])) : false;
+
+        if ($from && $to) {
+            $collection->getSelect()->where("marketing_cost.date BETWEEN '{$from}' AND '{$to}' ");
+            return $this;
+        } elseif ($from) {
+            $collection->getSelect()->where("marketing_cost.date >= '{$from}' ");
+            return $this;
+        } elseif ($to) {
+            $collection->getSelect()->where("marketing_cost.date <= '{$to}' ");
+            return $this;
+        }
+        return $this;
+    }
+
     /**
      * @param $collection
      * @param $column
@@ -159,6 +189,8 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             return $this;
 
         $collection->getSelect()->where("marketing_cost.type_id=? ", $value);
+
+        return $this;
     }
 
     /**
@@ -186,6 +218,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             $collection->getSelect()->where("marketing_cost.billing_cost <= {$to}");
             return $this;
         }
+        return $this;
     }
     /**
      * @param $collection
@@ -212,6 +245,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             $collection->getSelect()->where("marketing_cost.cost <= {$to}");
             return $this;
         }
+        return $this;
     }
 
 
@@ -240,6 +274,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             $collection->getSelect()->where("click_count <= {$to}");
             return $this;
         }
+        return $this;
     }
 
 
@@ -256,6 +291,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             return $this;
 
         $collection->getSelect()->where("vendors.vendor_name LIKE ? ", "%{$value}%");
+        return $this;
     }
 
 
@@ -276,6 +312,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         $equalId = new Zend_Db_Expr("ghstatements.id='{$value}' ");
 
         $collection->getSelect()->where("{$likeName} OR {$equalId}");
+        return $this;
     }
 
 }
