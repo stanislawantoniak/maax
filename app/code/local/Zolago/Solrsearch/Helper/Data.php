@@ -542,7 +542,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
             $customerGroupId,
             $product->getId()
         );
-        $product->setData("set_calculated_final_price", $finalPrice);
+        $product->setData("calculated_final_price", $finalPrice);
         return $product;
     }
 
