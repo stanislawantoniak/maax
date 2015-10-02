@@ -9,6 +9,7 @@
         <dl>
         <dt><?php echo $_section['title'] ?></dt>
         <?php foreach ($_section['tabs'] as $tabId => $order): ?>
+        <?php if (empty($tabs[$tabId])) continue; ?>
         <?php $_tab = $tabs[$tabId] ?>
         <?php if (!$this->canShowTab($_tab)): continue;  endif; ?>
         <dd <?php if($this->getTabIsHidden($_tab)): ?> style="display:none"<?php endif; ?>>
