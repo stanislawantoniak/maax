@@ -64,4 +64,22 @@
             </modules>
         </translate>
     </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ghmarketing before="Mage_Adminhtml">GH_Marketing_Adminhtml</ghmarketing>
+                    </modules>
+                </args>
+            </adminhtml>
+            <ghmarketing>
+                <use>admin</use>
+                <args>
+                    <module>GH_Marketing_Adminhtml</module>
+                    <frontName>ghmarketing</frontName>
+                </args>
+            </ghmarketing>
+        </routers>
+    </admin>
 </config>
