@@ -363,7 +363,11 @@ class GH_Statements_Model_Observer
 			    ->addFieldToFilter('shipped_date', array('notnull' => true))
 			    ->addFieldToFilter('shipped_date', array('lteq' => $yesterday))
 			    ->addFieldToFilter('parent_id',array('in'=>$ordersShipmentsIds))
-		        ->addFieldToFilter('udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)));
+		        ->addFieldToFilter('udropship_status',array('in'=>array(
+			        Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
+			        Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+			        Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
+		        )));
 
 		    //not all shipments selected in previous loop will be adequate to update so we have to collect shipments ids once again based on loaded trackings
 		    $ordersShipmentsIdsToUpdate = array();
@@ -410,7 +414,11 @@ class GH_Statements_Model_Observer
 			    ->addFieldToFilter('main_table.gallery_shipping_source', 1)
                 ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
                 ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
-			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)))
+			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(
+				    Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
+				    Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+				    Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
+			    )))
 			    ->getSelect()
 			        ->join(
 				        'urma_rma',
@@ -536,48 +544,23 @@ class GH_Statements_Model_Observer
                     'udpo_increment_id', 'increment_id', 'created_at')
             )
             ->where('urma_rma.udropship_vendor = ' . $statement->getVendorId());
-        $rmaItemsColl->addFieldToFilter('urma_rma.rma_status',Zolago_Rma_Model_Rma_Status::STATUS_CLOSED_ACCEPTED);
+        $rmaItemsColl->addFieldToFilter(
+            array('urma_rma.rma_status', 'urma_rma.rma_type'),
+            array(Zolago_Rma_Model_Rma_Status::STATUS_CLOSED_ACCEPTED, Zolago_Rma_Model_Rma::RMA_TYPE_RETURN));
         $rmaItemsColl->addFieldToFilter('urma_rma.updated_at', array('lteq' => $yesterday));
 
-	    //store already loaded rmas in arrays to prevent double loading them on different rma items
-	    $rmas = array();
-	    $pos = array();
 
         foreach ($rmaItemsColl as $rmaItem) {
             /** @var Zolago_Rma_Model_Rma_Item $rmaItem */
-	        if (!$rmaItem->getProductId()) {
-		        continue; // Shipping cost
-	        }
-
-	        /** @var Zolago_Rma_Model_Rma $rma */
-	        $rmaId = $rmaItem->getParentId();
-	        if(!isset($rmas[$rmaId])) {
-		        $rma = Mage::getModel('zolagorma/rma')->load($rmaId);
-		        $rmas[$rmaId] = $rma;
-	        } else {
-		        $rma = $rmas[$rmaId];
-	        }
-
-	        Mage::log($rma->getData(),null,'dupa.log');
-
-	        /** @var Zolago_Po_Model_Po_Item $poItem */
-	        $poItem = $rmaItem->getPoItem();
-
-	        /** @var Zolago_Po_Model_Po $po */
-	        $poId = $poItem->getParentId();
-	        if(!isset($pos[$poId])) {
-		        $po = $rma->getPo();
-		        $pos[$poId] = $po;
-	        } else {
-		        $po = $pos[$poId];
-	        }
-
-	        //undelivered cod order
-	        $packageReturned = $rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $po->isCod();
-
-            if (!floatval($rmaItem->getReturnedValue()) && !$packageReturned) {
+            if (!$rmaItem->getProductId()) {
+                continue; // Shipping const
+            }
+            if (!floatval($rmaItem->getReturnedValue()) && $rmaItem->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_STANDARD) {
                 continue; // No value to return
             }
+
+            $poItem = $rmaItem->getPoItem();
+            $po = Mage::getModel('zolagopo/po')->load($rmaItem->getUdpoId());
 
             $data = array();
             $data["statement_id"]           = $statement->getId();
@@ -590,10 +573,7 @@ class GH_Statements_Model_Observer
             $data["reason"]                 = $rmaItem->getItemConditionName();
             $data["payment_method"]         = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
             $data["payment_channel_owner"]  = $po->getPaymentChannelOwner();
-
-	        //if rma type is returned package and po was shipped using cod then return 100% of provision - assume that return value = sell value
-            $data["approved_refund_amount"] = !$packageReturned ? $rmaItem->getReturnedValue() : $poItem->getFinalItemPrice();
-
+            $data["approved_refund_amount"] = $rmaItem->getReturnedValue();
             $data["price"]                  = $poItem->getPriceInclTax();       // Sprzedaż przed zniżką (zł)
             $data["discount_amount"]        = $poItem->getDiscountAmount();     // Zniżka (zł)
             $data["final_price"]            = $poItem->getFinalItemPrice();     // Sprzedaż w zł
