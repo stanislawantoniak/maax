@@ -8,6 +8,8 @@
 	}
 	@media(max-width: $screen-sm-max) {
 		padding: 30px;
+	}
+	@media(max-width: $screen-xs-max) {
 		margin-top: 15px;
 	}
 	@media(max-width: 479px) {
@@ -162,6 +164,11 @@
 #about-register {
 	margin-top: 15px;
 	padding: 20px 70px 30px 70px;
+	@media(min-width: $screen-md-min) {
+		background: white url('../images/help/promolabels.png') no-repeat;
+		background-size: 360px auto;
+		background-position: 95% 0;
+	}
 	@media(max-width: $screen-md-max) {
 		padding-left: 40px;
 	}
@@ -247,7 +254,10 @@
 				margin-bottom: 15px;
 			}
 			.about-register-agreement {
-				margin-left: 0 !important
+				margin-left: 0 !important;
+				@media(min-width: $screen-md-min) {
+					max-width: 525px !important;
+				}
 			}
 		}
 		.about-register-actions {
@@ -261,7 +271,7 @@
 				a {
 					text-decoration: underline;
 				}
-				@media(max-width: 360px) {
+				@media(max-width: 479px) {
 					margin-top: 15px;
 					font-size: 15px;
 				}

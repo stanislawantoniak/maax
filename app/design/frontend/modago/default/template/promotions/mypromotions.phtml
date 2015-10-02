@@ -17,12 +17,12 @@ $galleryLogo = $this->getGalleryLogo();
 				<div class="container-fluid">
 					<div class="row">
 						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-logged-in">
-							<?php //Do not remove, only hide (by Staszek) ?>
-							<!--							<header class="title-section">-->
-							<!--								--><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_list_header')->toHtml(); ?>
-							<!--							</header>-->
-
-
+							<?php /* Do not remove, only hide (by Staszek)
+								<header class="title-section">
+									<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_list_header')->toHtml(); ?>
+								</header>
+                            */
+							?>
 							<?php if (count($list)): ?>
 								<div id="promo_list">
 									<?php $n = 1; ?>
@@ -31,7 +31,8 @@ $galleryLogo = $this->getGalleryLogo();
 										<?php $couponId = $item->getCouponId(); ?>
 
 										<div class="promo_item col-xs-4 col-sm-4 col-md-3 col-lg-3" data-couponId="<?php echo $couponId; ?>">
-											<div class="promo_item_box" onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal" data-target="#myPromotionsModal" >
+											<div class="promo_item_box" onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal"
+											     data-target="#myPromotionsModal">
 
 												<div class="promo_info">
 													<?php $imageName = $ruleItem->getCouponImage(); ?>
@@ -39,10 +40,10 @@ $galleryLogo = $this->getGalleryLogo();
 													<?php $imageResized = $helper->getResizedPromotionImage($imageName); ?>
 
 													<figure class="promo_img">
-														<img src="<?php echo $imageResized; ?>" alt="<?php echo $ruleItem->getName(); ?>" />
+														<img src="<?php echo $imageResized; ?>" alt="<?php echo $ruleItem->getName(); ?>"/>
 													</figure>
 
-													<?php $logoUrl = ($logoVendor = $ruleItem->getLogoVendor()) ? $logoVendor :$galleryLogo; ?>
+													<?php $logoUrl = ($logoVendor = $ruleItem->getLogoVendor()) ? $logoVendor : $galleryLogo; ?>
 													<div class="promo_logo">
 														<div class="promo_logo_img" style="background-image: url(<?php echo $logoUrl; ?>)"></div>
 													</div>
@@ -58,12 +59,14 @@ $galleryLogo = $this->getGalleryLogo();
 														></i>
 
 
-													<h3 class="promo_name" title="<?php echo $ruleItem->getName(); ?>" data-promo-name="<?php echo $ruleItem->getName(); ?>">
+													<h3 class="promo_name" title="<?php echo $ruleItem->getName(); ?>"
+													    data-promo-name="<?php echo $ruleItem->getName(); ?>">
 														<?php echo $ruleItem->getName(); ?>
 													</h3>
 
 													<div class="promo_see_more">
-														<a onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal" data-target="#myPromotionsModal">
+														<a onclick="Mall.promotions(<?php echo $couponId; ?>);" data-toggle="modal"
+														   data-target="#myPromotionsModal">
 															<?php echo $helperModago->__("See more"); ?> &gt;&gt;
 														</a>
 													</div>
@@ -72,52 +75,79 @@ $galleryLogo = $this->getGalleryLogo();
 											</div>
 										</div>
 
-										<?php if(($n % 3) == 0): ?><div class="clearfix visible-sm visible-xs"></div><?php endif; ?>
-										<?php if(($n % 4) == 0): ?><div class="clearfix visible-md visible-lg"></div><?php endif; ?>
+										<?php if (($n % 3) == 0): ?>
+											<div class="clearfix visible-sm visible-xs"></div><?php endif; ?>
+										<?php if (($n % 4) == 0): ?>
+											<div class="clearfix visible-md visible-lg"></div><?php endif; ?>
 
-										<?php unset($ruleItem); unset($logoVendor); unset($couponId); ?>
+										<?php unset($ruleItem);
+										unset($logoVendor);
+										unset($couponId); ?>
 										<?php $n++; ?>
 									<?php endforeach; ?>
 								</div>
-							<?php else: ?>
-								<div id="no_promo_list">
-									<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_nocoupons')->toHtml(); ?>
-								</div>
 							<?php endif; ?>
+							<?php echo $this->getCmsBlock(); ?>
+							<?php if(!$this->isSubscribed()): ?>
+								<div class="modal fade bs-example-modal-lg in" id="mypromotions-newsletter-popup" tabindex="-1" role="dialog">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" onclick="Mall.refresh();"></button>
+											</div>
+											<?php echo  $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_newsletter_popup')->toHtml(); ?>
+										</div>
+									</div>
+								</div>
+								<a id="mypromotions-newsletter-popup-open" data-toggle="modal" data-target="#mypromotions-newsletter-popup"></a>
+							<?php endif; ?>
+						</section>
+					</div>
+				</div>
+
+				<?php else: //not logged in ?>
+				<div class="container-fluid">
+					<div class="row">
+						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-not-logged-in">
+							<div id="promo_list" style="pointer-events: none;">
+								<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_fake_coupons')->toHtml(); ?>
+							</div>
+						</section>
+					</div>
+				</div>
+					<?php if ($this->isPersistent()): //not logged in but has persistent ?>
+						<?php echo $this->getCmsBlock(); ?>
+					<div class="hidden mypromotions-persistent-register">
+						<?php echo $this->getLayout()->createBlock('zolagomodago/promotions_register')->setData('displayOverride',true)->setTemplate('promotions/register.phtml')->toHtml(); ?>
+					</div>
+					<?php else: //not logged in and no persistent ?>
+						<?php echo $this->getLayout()->createBlock('zolagomodago/promotions_register')->setTemplate('promotions/register.phtml')->toHtml(); ?>
+					<?php endif; ?>
+				<?php endif; ?>
+
+				<?php /* if (!$this->isSubscribed() && $helper->areCouponsForCustomerAvailable($this->getCustomerId())): ?>
+					<div class="container-fluid">
+						<div class="row">
+							<section class="main bg-w mypromotions-cms col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-push-2 col-md-push-1">
+								<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_notsubscribed')->toHtml(); ?>
+								<div class="row">
+									<?php echo $this->getChildHtml('mypromotions.newsletter'); ?>
+								</div>
 							</section>
 						</div>
 					</div>
-
-				<?php if(!$this->isSubscribed() && $helper->areCouponsForCustomerAvailable($this->getCustomerId())): ?>
-<!--					<div class="container-fluid">-->
-<!--						<div class="row">-->
-<!--							<section class="main bg-w mypromotions-cms col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-push-2 col-md-push-1">-->
-<!--								--><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_notsubscribed')->toHtml(); ?>
-<!--								<div class="row">-->
-<!--									--><?php //echo $this->getChildHtml('mypromotions.newsletter'); ?>
-<!--								</div>-->
-<!--							</section>-->
-<!--						</div>-->
-<!--					</div>-->
-				<?php endif; ?>
+				<?php endif; */ ?>
 				<?php //echo $this->getCmsBlock(); // Do not remove, only hide (by Staszek) ?>
-
-			<?php elseif ($this->isPersistent()): ?>
-				<?php echo $this->getChildHtml('mypromotions.gotologin'); ?>
-				<?php echo $this->getCmsBlock(); ?>
-				<?php echo $this->getChildHtml('mypromotions.gotoregister'); ?>
-			<?php
-			else: ?>
-				<?php echo $this->getCmsBlock(); ?>
-				<?php echo $this->getChildHtml('mypromotions.register'); ?>
-				<?php echo $this->getChildHtml('mypromotions.gotologin'); ?>
-			<?php endif; ?>
 		</div>
 	</div>
+	<?php if(!$this->isLogged()): ?>
+	<div id="mypromotions-list-fadeout"></div>
+	<div id="mypromotions-list-overlay"></div>
+	<?php endif; ?>
 </div>
 
 
-<?php if ($this->isLogged()): ?>
+<?php if ($this->isLogged() && count($this->getPromotionList())): ?>
 	<div class="modal fade" id="myPromotionsModal">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -126,7 +156,7 @@ $galleryLogo = $this->getGalleryLogo();
 					<!--promotion content-->
 					<div class='row'>
 						<div class="col-xs-12 hidden-xs promo-banner-wrapper">
-<!--							BANNER-->
+							<!--							BANNER-->
 						</div>
 
 						<div class='col-xs-12 promo-line'>
@@ -168,13 +198,13 @@ $galleryLogo = $this->getGalleryLogo();
 								</div>
 								<div class="clearfix"></div>
 								<div class="promo-link">
-									<a class='button button-primary medium link' >
+									<a class='button button-primary medium link'>
 										<?php echo $helper->__("See the products covered by discount"); ?></a>
 								</div>
 							</div>
 							<div class='col-lg-5 col-md-5 col-sm-5 col-xs-12 pull-right'>
 								<div class="promo-text">
-									<div  class="promo-text-how-to">
+									<div class="promo-text-how-to">
 										<?php
 										echo $this
 											->getLayout()
@@ -194,4 +224,12 @@ $galleryLogo = $this->getGalleryLogo();
 			</div>
 		</div>
 	</div>
+<?php endif; ?>
+
+<?php if(!$this->isLogged()): ?>
+<script>
+	jQuery(document).ready(function() {
+		Mall.promotions.initNotLogged();
+	});
+</script>
 <?php endif; ?>

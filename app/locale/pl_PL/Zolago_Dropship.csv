@@ -214,5 +214,13 @@
 "UPS Rates","Cennik przesyłek UPS"
 "Envelope","Koperta"
 "Shipment charge","Opłata za przesyłkę"
-
-
+"Basic settings", "Ustawienia podstawowe"
+"Vendor rights", "Uprawnienia sprzedawcy"
+"Logistics parameters", "Parametry logistyki - sprzedawca"
+"Shops/Brandshops rights", "Uprawnienia do sklepów/marek"
+"Vendor data", "Dane sprzedawcy"
+"Transaction data", "Dane transakcyjne"
+"CPC commission percent","Marża na koszty CPC"
+"Marketing settings","Ustawienia marketingowe"
+"Server IP","IP serwera"
+"Security token","Token zabezpieczający"

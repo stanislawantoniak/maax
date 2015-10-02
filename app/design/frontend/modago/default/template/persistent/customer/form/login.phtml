@@ -14,6 +14,9 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 						<?php if($_isCheckout):?>
 							<input name="is_checkout" type="hidden" value="1"/>
 						<?php endif;?>
+						<?php if($this->getRequest()->getParam('redirect')): ?>
+							<input name="redirect" type="hidden" value="<?php echo $this->getRequest()->getParam('redirect'); ?>" />
+						<?php endif; ?>
 						<section class="section clearfix">
 							<header class="title-section">
 								<h2><?php echo $_hlp->__('Do you have account already?') ?></h2>

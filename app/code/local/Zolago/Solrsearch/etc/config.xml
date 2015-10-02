@@ -92,6 +92,16 @@
                 </observers>
             </catalog_converter_price_update_after>
 
+            <!-- When vendor mass update attributes by attribute rules mapper -->
+            <mass_autofill_attribute_rules_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </mass_autofill_attribute_rules_after>
+
             <!-- When vendor change price from grid -->
             <vendor_manual_save_price_after>
                 <observers>

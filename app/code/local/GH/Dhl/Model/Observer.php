@@ -30,6 +30,7 @@ class GH_Dhl_Model_Observer
                 'label' => Mage::helper('ghdhl')->__('DHL Account Access settings'),
                 'content' => $ghDHLBlock
             ));
+            $block->addTabToSection('ghdhl_section','logistic',30);
         }
     }
 

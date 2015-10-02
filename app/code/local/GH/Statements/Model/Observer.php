@@ -163,7 +163,7 @@ class GH_Statements_Model_Observer
 
         $dateModel = Mage::getModel('core/date');
         $today     = $dateModel->date('Y-m-d');
-        $yesterday = strtotime('yesterday',strtotime($today));
+	    $yesterday = date('Y-m-d',strtotime('yesterday',strtotime($today)));
         if ($statement->getForceCustomDate()) {
             $yesterday = $statement->getForceCustomDate();
         }
