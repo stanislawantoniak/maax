@@ -31,14 +31,10 @@ class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template
      */
 
     protected function _prepareBlock() {
-        $key = 'html_header_navigation';
-        if (!($html = $this->_getApp()->loadCache($key)) || 
-            !$this->_getApp()->useCache(self::CACHE_GROUP)) {
-            $html = $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-            if ($this->_getApp()->useCache(self::CACHE_GROUP)) {
-                $this->_getApp()->saveCache($html,$key,array(self::CACHE_GROUP),Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL);
-            }
-        }
+        $lambda = function ($foo) {
+            return Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+        };
+        $html = Mage::helper('zolagocommon')->getCache('html_header_navigation',self::CACHE_GROUP,$lambda,array());
         return $html;
     }
 }
