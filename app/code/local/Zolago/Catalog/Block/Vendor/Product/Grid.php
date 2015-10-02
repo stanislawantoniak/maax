@@ -71,6 +71,9 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		if($columnObject->getRequired()){
 			$classes[] = "field-required";
 			$headerClass[] = "field-required";
+            if (!in_array($columnObject->getIndex(), array("name", "status", "thumbnail"))) {
+                $headerClass[] = "field-required-highlight";
+            }
 		}
 		
 		$out = array(
@@ -150,7 +153,7 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		
 		return $out;
 	}
-	
+
 	/**
 	 * Map filter for index
 	 * @param Varien_Object $column
