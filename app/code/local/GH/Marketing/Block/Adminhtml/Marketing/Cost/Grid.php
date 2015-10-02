@@ -88,7 +88,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         ));
         $this->addColumn("product_name", array(
             "index" => "product_name",
-            "header" => Mage::helper("ghmarketing")->__("Product"),
+            "header" => Mage::helper("ghmarketing")->__("Product name"),
             "align" => "right",
             "type" => "text",
             "width" => "200px",
