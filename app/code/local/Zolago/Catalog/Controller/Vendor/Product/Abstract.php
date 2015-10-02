@@ -180,9 +180,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			// Proces enuberable attributes
 			if($this->getGridModel()->isAttributeEnumerable($attribute)){
 				// Process null
-				if($value===self::NULL_VALUE){
-					return array("null"=>true);
-				}
+                if ($value === self::NULL_VALUE) {
+                    $this->_getCollection()->addFieldToFilter(array(
+                        array("attribute" => $attribute->getAttributeCode(), "filter" => array("null" => true)),
+                        array("attribute" => $attribute->getAttributeCode(), "filter" => array("eq" => ""))
+                    ));
+                    return null;
+                }
 				// Process multiply select
 				if($attribute->getFrontendInput()=="multiselect"){
 					/**

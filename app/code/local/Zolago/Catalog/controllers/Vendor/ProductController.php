@@ -122,6 +122,7 @@ class Zolago_Catalog_Vendor_ProductController
      * Add name filter,
      * Add regexp for multiselect attributes
      * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
+     * @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition()
      *
      * @param $restQuery
      * @return mixed
@@ -134,9 +135,27 @@ class Zolago_Catalog_Vendor_ProductController
         if (isset($inParams["name"])) {
             $restQuery["name"] = array("like" => "%".$inParams["name"]."%");
         }
+        // Null (empty)
+        foreach($this->_getAvailableQueryParams() as $key){
+            $attribute=$this->getGridModel()->getAttribute($key);
+            if ($attribute && $this->getGridModel()->isAttributeEnumerable($attribute) && $attribute->getAttributeCode() != "name") {
+                if (isset($inParams[$key])) {
+                    $value = $inParams[$key];
+                    if (is_string($value) && trim($value) == "") {
+                        continue;
+                    } elseif (is_array($value)) {
+                        continue;
+                    }
+                    if ($value === self::NULL_VALUE) {
+                        $restQuery[$key] = array("null" => true);
+                    }
+                }
+            }
+        }
+        // Regexp for multi select attributes
         $multi = $this->_getRestQueryAttributesByFrontendInput("multiselect");
         foreach ($multi as $code => $attr) {
-            if (isset($inParams[$code])) {
+            if (isset($inParams[$code]) && $inParams[$code] !== self::NULL_VALUE) {
                 /** @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition() */
                 $restQuery[$code] = array("regexp" => "[[:<:]]".$inParams[$code]."[[:>:]]");
             }

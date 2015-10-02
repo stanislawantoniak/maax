@@ -27,11 +27,12 @@ define([
 	"vendor/grid/PopupEditor",
 	'vendor/catalog/productGrid/mass/status',
 	'vendor/catalog/productGrid/mass/attribute',
+	'vendor/catalog/productGrid/mass/attributeRules',
 	"vendor/misc"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, 
 	Selection, Selector, Keyboard, declare, dom, domConstruct, on, query, 
 	put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid, 
-	PopupEditor, status, attrbiute,  misc){
+	PopupEditor, status, attrbiute, attributeRules, misc){
 	
 	var grid,store,
 		massAttribute,
@@ -43,7 +44,7 @@ define([
 			attribute_set_id: switcher.value,
 			store_id: 0
 		};
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	// Filtering
 	////////////////////////////////////////////////////////////////////////////
@@ -548,36 +549,14 @@ define([
 
         massAttribute.send(req).then(function () {
             e.deferred.resolve();
-
-            // Spinner for ajax loading current attributes mapper block
             if (e.useSaveAsRule) {
-                var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
-                attributeRules.getModal().find(".modal-body").html(spinner);
-                // Get current attributes mapper block by ajax
-                jQuery.ajax({
-                    cache: false,
-                    url: "/udprod/vendor_product/manageattributes",
-                    error: function (jqXhr, status, error) {
-                        console.log("Error: ajax can't get udprod/vendor_product/manageattributes");
-                    },
-                    success: function (data, status) {
-                        jQuery("#showAttributeRules").replaceWith(data);
-                        attributeRules.init();
-                        FormComponents.initUniform();// Attach checkbox style
-                    }
-                }).done(function () {
-                    jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
-                    misc.stopLoading();
-                });
+                // Get current attributes mapper block by ajax with spinner
+                window.attributeRules.updateModal();
             }
-
-
         }, function () {
             e.deferred.reject();
         }).always(function () {
-            if (!e.useSaveAsRule) {
-                misc.stopLoading();
-            }
+            misc.stopLoading();
         });
 
 	};
@@ -806,17 +785,96 @@ define([
 	};
 
     window.attributeRules = {
-        init: function() {
+        _tmpRemoveBtn: null,
+        _attributeRules: {},
+
+        init: function(grid) {
+            this._attributeRules = new attributeRules(grid, this.getFormActionUrl());
             this.attachLogicShowDetails();
             this.attachLogicGroupCheckbox();
             this.attachLogicSubmitButton();
             this.attachLogicOnOpen();
+            this.attachLogicRemoveRule();
+        },
+
+        getFormActionUrl: function() {
+            return this.getModal().find("form:eq(0)").prop("action");
+        },
+
+        setSpinner: function() {
+            var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+            this.getModal().find(".modal-body").html(spinner);
+        },
+
+        /**
+         * Update html by ajax auto fill attributes modal
+         */
+        updateModal: function() {
+            this.setSpinner();
+            jQuery.ajax({
+                cache: false,
+                url: "/udprod/vendor_product/manageattributes"
+            }).success(function(data, textStatus, jqXHR) {
+                var form = jQuery(data).find("form:eq(0)");
+                jQuery("#showAttributeRules").html(form); // replace only "inside" html of modal
+                window.attributeRules.init(window.grid);
+                FormComponents.initUniform();// Attach checkbox style
+            }).always(function () {
+                jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
+            });
+        },
+
+        attachLogicRemoveRule: function() {
+            this.getModal().find(".btn-remove-rule[data-action=remove]").tooltip();
+
+            this.getModal().find(".btn-remove-rule[data-action=remove]").click(function(e) {
+                e.preventDefault();
+
+                window.attributeRules._tmpRemoveBtn = jQuery(this);
+
+                bootbox.dialog({
+                    title: Translator.translate("Delete autofill rule?"),
+                    message: Translator.translate("Are you sure you want to delete this rule?"),
+                    onEscape: true,
+                    buttons: {
+                        cancel: {
+                            label: Translator.translate("Cancel"),
+                            className: "btn-default",
+                            callback: function() {}
+                        },
+                        success: {
+                            label:  Translator.translate("Remove autofill rule"),
+                            className: "btn-primary",
+                            callback: function() {
+                                // Add spinner
+                                window.attributeRules.setSpinner();
+                                jQuery.ajax({
+                                    type: "GET",
+                                    url: window.attributeRules._tmpRemoveBtn.prop("href"),
+                                    cache: false
+                                }).success(function(data, textStatus, jqXHR) {
+                                    //var status = data['status'];
+                                    //var msg = data['message'];
+                                    //noty({
+                                    //    text: msg,
+                                    //    type: status ? 'success' : 'error',
+                                    //    timeout: 10000
+                                    //});
+                                }).always(function() {
+                                    window.attributeRules._tmpRemoveBtn = null;
+                                    window.attributeRules.updateModal();
+                                });
+                            }
+                        }
+                    }
+                }).css("top","20px");
+            });
         },
 
         setDataFromGrid: function() {
             this._setDataFormGridQuery();
             this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
-            this.getModal().find("input[type=hidden][name=all_products_flag]").val(this.getAllProductsFlag());
+            this.getModal().find("input[type=hidden][name=global]").val(this.getAllProductsFlag());
             var ids = this.getProductIds();
             if (this.getAllProductsFlag()) {
                 ids = "";// smaller post
@@ -857,6 +915,7 @@ define([
                 window.attributeRules.setDataFromGrid();
                 window.attributeRules._attachLogicSubmitButtonOnChange();
             });
+            window.attributeRules.setDataFromGrid();
         },
 
         _attachLogicSubmitButtonOnChange: function() {
@@ -896,31 +955,19 @@ define([
                 var form = event.target;
 
                 misc.startLoading();
-                jQuery.ajax({
-                    type: "POST",
-                    url: jQuery(form).prop("action"),
-                    data: form.serialize()
-                }).success(function(data, textStatus, jqXHR) {
-                    var status = data['status'];
-                    var msg = data['message'];
-
-                    // Close popup and show message
-                    window.attributeRules.closeModal();
-                    noty ({
-                        text: msg,
-                        type: status ? 'success' : 'error',
-                        timeout: 10000
+                window.attributeRules._attributeRules.send(form.serialize())
+                    .always(function () {
+                        misc.stopLoading();
                     });
-                    // Refresh grid
-                    window.grid.refresh();
-                }).always(function() {
-                    misc.stopLoading();
-                });
             });
         },
 
         closeModal: function() {
             this.getModal().find(".modal-header button.close").click();
+        },
+
+        openModal: function() {
+            jQuery("a[data-target=#showAttributeRules]").click();
         },
 
         getSubmitBtn: function() {
@@ -1019,13 +1066,13 @@ define([
 		getColumns: function(){
 			return this.columns;
 		},
-		startup: function(container) {
-			initGrid(
+		startup: function(container){
+			var _grid = initGrid(
 					this.getColumns(),  
 					container
 			);
 
-            window.attributeRules.init();
+            window.attributeRules.init(_grid);
 
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked
