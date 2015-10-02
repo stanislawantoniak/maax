@@ -3,6 +3,11 @@
 <?php /* @var $this Unirgy_DropshipMicrosite_Block_Frontend_VendorProducts */ ?>
 <?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List */ ?>
 <?php
+$imgUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . "catalog/product/cache/";
+/** @var Zend_Currency $currency */
+$currency = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrency()->getCode());
+$symbol = " " . $currency->getSymbol();
+
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 19.08.2014
@@ -61,7 +66,7 @@ $_products = $_cache['products'];
 													<a href="<?php echo $product[2]; ?>" data-entity="<?php echo $product[0]; ?>">
 														<figure class="img_product" style="padding-bottom: <?php echo $product[8]; ?>%">
 															<img
-																src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . "catalog/product/cache/" . $product[7]; ?>"
+																src="<?php echo $imgUrl . $product[7]; ?>"
 																alt="<?php echo $product[1]; ?>"
 																class="img-responsive"/>
 														</figure>
@@ -73,14 +78,14 @@ $_products = $_cache['products'];
 
 														<div class="price clearfix">
 															<div class="col-price">
-																<?php if ($product[3] != $product[4]) : ?>
-																	<span class="old">
-                                                    <?php echo $this->helper('core')->currency($product[3], true, false); ?>
-                                                </span>
-																<?php endif; ?>
-																<span>
-                                                <?php echo $this->helper('core')->currency($product[4], true, false); ?>
-                                            </span>
+                                                            <?php if ($product[3] != $product[4]) : ?>
+                                                                <span class="old">
+                                                                    <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
+                                                                </span>
+                                                            <?php endif; ?>
+                                                                <span>
+                                                                    <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
+                                                                </span>
 															</div>
 															<?php
 															// like count
