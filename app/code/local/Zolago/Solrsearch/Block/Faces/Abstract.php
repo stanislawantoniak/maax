@@ -8,6 +8,10 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	protected $_solrData;
 	protected $_filterQuery;
 	protected $_solrModel;
+	
+	protected $_active;
+
+	protected $_allItems;
 
 	public function __construct()
 	{
@@ -15,20 +19,44 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	}
 	
 	
-	public function getAllItems() {
-		$data = parent::getAllItems();
+    /**
+     * preparing item (calcuate all values before display)
+     * @param 
+     * @return 
+     */
 
-		// Do not add active ranges to items
-		if($this instanceof Zolago_Solrsearch_Block_Faces_Price){
-			return $data;
-		}
-		
-		foreach($this->getActiveItems() as $item){
-			if(!isset($data[$item])){
-				$data[$item] = 0;
-			}
-		}
-		return $data;
+	protected function _prepareItemValue($key,$val) {
+	    return array (
+		        'item' => $key,
+		        'count' => $val,
+		        'itemId' => $this->getItemId($key),
+		        'url' => $this->getItemUrl($key),
+		        'params' => $this->getItemJson($key),
+		        'active' => $this->isItemActive($key),
+		        'name' => $this->getItemName($key),
+		        'value' => $this->getItemValue($key),
+		        
+        );	        
+	}
+	
+	public function getAllItems() {
+	    if (is_null($this->_allItems)) {
+            $raw = parent::getAllItems();
+            $data = array();
+	    	foreach ($raw as $key => $val) {
+    		    $data[$key] = $this->_prepareItemValue($key,$val);
+	    	}
+    		// Do not add active ranges to items
+	    	if(!($this instanceof Zolago_Solrsearch_Block_Faces_Price)){
+        		foreach($this->_getActive() as $item){
+	        		if(!isset($data[$item])){
+    	    			$data[$item] = $this->_prepareItemValue($item,0);
+	    	    	}
+                }                
+	    	}
+	    	$this->_allItems = $data;
+        }
+        return $this->_allItems;
 	}
 	
 	public function getActiveItems() {
@@ -43,7 +71,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	public function getItems() {
 		if(!$this->hasData("items")){
 			$hiddenItems = array();
-			$items = $this->getAllItems();
+			$items = $this->getAllItems();			
 			if($this->getFilterModel()){
 				$items =  $this->filterAndSortOptions(
 						$this->getAllItems(), 
@@ -66,16 +94,17 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return array();
 	}
 
+	
+	protected function _getActive() {
+	    if (is_null($this->_active)) {
+	    	$active = $this->getActiveItems();
+	    	$this->_active = is_array($active)? $active:array($active);	        
+	    }
+	    return $this->_active;
+	}
+	
 	public function isItemActive($item) {
-		$filterQuery = $this->getFilterQuery();
-		if (isset($filterQuery[$this->getFacetKey()])) {
-			if(is_array($filterQuery[$this->getFacetKey()])){
-				return in_array((string)$item, $filterQuery[$this->getFacetKey()]);
-			}
-			
-			return trim($filterQuery[$this->getFacetKey()])==trim($item);
-		}
-		return false;
+		return in_array((string)$item, $this->_getActive());
 	}
 	
 	/**
@@ -83,7 +112,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	 * @return string
 	 */
 	public function getItemClass($item) {
-		return $this->isItemActive($item) ? "active" : "inactive";
+		return $item['active'] ? "active" : "inactive";
 	}
 	
 	/**
@@ -136,7 +165,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
     }
 
 	public function getFacesUrl($params=array(), $paramss=NULL)
-    {
+    {        
 		return $this->getFilterContainer()->getFacesUrl($params, $paramss);
     }
 	
@@ -146,7 +175,6 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
     }
 	
 	public function getItemUrl($item, $param = array()) {
-
         /** @var $this Zolago_Solrsearch_Block_Faces_Abstract */
 		$face_key = $this->getAttributeCode();        
 		if($this->isItemActive($item)){
@@ -195,7 +223,20 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		{
 			$source = $this->getAttributeSource($this->getAttributeCode());
 			if($source){
-				$this->setData("all_options", $source->getAllOptions(true));
+			    //cache
+			    $key = 'block_faces_abstract_options_'.$this->getAttributeCode();
+			    if (!($optionsSerialize = $this->_getApp()->loadCache($key)) ||
+			        !$this->_getApp()->useCache(self::CACHE_GROUP)) {
+                    
+                    $options = $source->getAllOptions(true);
+                    if ($this->_getApp()->useCache(self::CACHE_GROUP)) {
+                        $this->_getApp()->saveCache(serialize($options),$key,array(self::CACHE_GROUP),Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL);
+                    }
+                } 
+                if ($optionsSerialize) {
+                    $options = unserialize($optionsSerialize);
+                }
+				$this->setData("all_options", $options);
 			}else{
 				$this->setData("all_options", array());
 			}
@@ -251,7 +292,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 					&& $filter->getCanShowMore()){
 					// Multiselect active - show all fileds, after specified fields
 					$extraAdded[$option['label']] = $allItems[$option['label']];
-				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+				}elseif($this->isFilterActive() && $option['label']['active']){
 					// Add olny one item
 					$out[$option['label']] = $allItems[$option['label']];
 				}
@@ -263,7 +304,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				if($filter->getShowMultiple() || !$this->isFilterActive()){
 					// No specified values - show all - if none active or filter is multiple
 					$out[$option['label']] = $allItems[$option['label']];
-				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+				}elseif($this->isFilterActive() && $option['label']['active']){
 					// if filter is single and item active - add only this one
 					$out[$option['label']] = $allItems[$option['label']];
 					break;
@@ -293,6 +334,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 
 	// Can show filter block
 	public function getCanShow() {
+	    return true;
 		if($this->getFilterModel()){
 			// Has visible items
 			if($this->getCanShowItems()){
@@ -316,8 +358,8 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return $this->_getCanShow($this->getHiddenItems());
 	}
 	// Can show item
-	public function getCanShowItem($item, $count) {
-		return $count>0 || $this->isItemActive($item);
+	public function getCanShowItem($item) {
+		return $item['count']>0 || $item['active'];
 	}
 	
 	protected function _getCanShow(array $what) {

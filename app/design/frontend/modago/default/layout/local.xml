@@ -255,11 +255,11 @@
 	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
                 </action>
 			</block>
-		    <block name="js_cookies">
+		    <reference name="js_cookies">
         	    <action method="setCacheLifetime">
 	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
                 </action>		        
-		    </block>
+		    </reference>
 
             <remove name="salesmanago_tracking"/>
 		</reference>
