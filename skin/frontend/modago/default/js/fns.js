@@ -203,7 +203,7 @@ jQuery.noConflict();
 			hide_panel.find('i').removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
 		});
 
-		$('.sidebar-secound').on('click', 'h2.open', function(){
+		$('.sidebar-second').on('click', 'h2.open', function(){
 			var ww = $(window).innerWidth();
 			if(ww <=767) {
 				$(this).closest('header').next('.panel-group').toggle(50);
@@ -249,7 +249,7 @@ jQuery.noConflict();
 					podziekowanieNieudaneViewSummary.closest('.block_info_order').next('.table-summary-product').show();
 					podziekowanieNieudaneViewSummary.closest('.panel-body').next('.panel-footer').show();
 
-					var sidebarSecoundHeader = $('.sidebar-secound').find('header');
+					var sidebarSecoundHeader = $('.sidebar-second').find('header');
 					sidebarSecoundHeader.removeClass('open');
 					sidebarSecoundHeader.next('.panel-group').show();
 					$('#checkout.podsumowanie #content-main').find('#order-show-products').addClass('hidden');
