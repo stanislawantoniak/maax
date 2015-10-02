@@ -64,4 +64,40 @@
             </modules>
         </translate>
     </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <GH_Marketing>
+                    <files>
+                        <default>GH_Marketing.csv</default>
+                    </files>
+                </GH_Marketing>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <ghmarketing>
+                    <file>ghmarketing.xml</file>
+                </ghmarketing>
+            </updates>
+        </layout>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ghmarketing before="Mage_Adminhtml">GH_Marketing_Adminhtml</ghmarketing>
+                    </modules>
+                </args>
+            </adminhtml>
+            <ghmarketing>
+                <use>admin</use>
+                <args>
+                    <module>GH_Marketing_Adminhtml</module>
+                    <frontName>ghmarketing</frontName>
+                </args>
+            </ghmarketing>
+        </routers>
+    </admin>
 </config>

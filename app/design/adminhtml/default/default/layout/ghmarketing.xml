@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<layout>
+    <ghmarketing_update_menu>
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/marketing</menupath></action>
+        </reference>
+    </ghmarketing_update_menu>
+    <adminhtml_marketing_cost_index>
+        <update handle="ghmarketing_update_menu"/>
+        <reference name="content">
+            <block type="ghmarketing/adminhtml_marketing_cost" name="ghmarketing_marketing_cost" template="ghmarketing/marketing/cost.phtml">
+                <block type="ghmarketing/adminhtml_marketing_cost_grid" name="ghmarketing_marketing_cost_grid"/>
+            </block>
+        </reference>
+    </adminhtml_marketing_cost_index>
+</layout>
