@@ -262,6 +262,13 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
+                    <cpc_commission>
+                        <label>CPC commission percent</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>100</position>
+                        <only_admin>1</only_admin>
+                    </cpc_commission>
 
 
                     <!--GH API-->
