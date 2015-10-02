@@ -8,8 +8,17 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
     public function _construct()
     {
+        $this->setLimit(3000);
         //parent::_construct();
         $this->_init('zolagocatalog/queue_configurable');
+    }
+
+    /**
+     * @param int $limit
+     */
+    public function setLimit($limit)
+    {
+        $this->_limit = $limit;
     }
 
     /**
@@ -34,6 +43,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         return count($this->_collection);
     }
+
+
     protected function _execute()
     {
         $collection = $this->_collection;
