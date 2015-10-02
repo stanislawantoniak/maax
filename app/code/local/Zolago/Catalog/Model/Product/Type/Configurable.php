@@ -77,6 +77,8 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
     }
 
 
+
+
     /**
      * Get relation size-price for store
      * @param $store
@@ -147,5 +149,54 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
         return $sizePriceRelations;
 
     }
+
+
+    /**
+     * Get children MSRP for store
+     * @param $store
+     * @param $productIds
+     * @return array
+     */
+    public function getMSRPForChildren($store, $productIds)
+    {
+
+        $mSRPForChildren = array();
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+
+
+        $attributeMSRP = Mage::getResourceModel('catalog/product')
+            ->getAttribute('msrp');
+        $attributeMSRPId = $attributeMSRP->getAttributeId();
+
+
+        $collection->getSelect()
+            ->joinInner(
+                array("link_table" => 'catalog_product_super_link'),
+                "e.entity_id = link_table.product_id",
+                array("link_table.parent_id")
+            )
+            ->joinInner(
+                array("at_msrp" => 'catalog_product_entity_decimal'),
+                "e.entity_id = at_msrp.entity_id",
+                array("msrp" => "at_msrp.value")
+            )
+
+            ->where("at_msrp.attribute_id=?", $attributeMSRPId)
+            ->where("at_msrp.store_id=?", $store)
+
+            ->where("link_table.parent_id IN(?)", $productIds);
+
+        foreach ($collection as $product) {
+            $mSRPForChildren[$product->getParentId()][$product->getId()] = array(
+                "id" => $product->getId(),      //Simple product id
+                "sku" => $product->getSku(),    //Simple product sku
+                "msrp" => $product->getMsrp() //Simple product msrp
+            );
+        }
+
+        return $mSRPForChildren;
+
+    }
+
 
 }
