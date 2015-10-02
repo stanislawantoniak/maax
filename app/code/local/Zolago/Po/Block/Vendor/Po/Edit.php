@@ -305,8 +305,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		
 		$collection->setOrder("created_at", "DESC");
 		$this->setShipmentsCollection($collection);
-		$this->setCustomCurrentShipping($collection->getFirstItem());
 
+		/** @var Mage_Sales_Model_Order_Shipment $customCurrentShipping */
+		$customCurrentShipping = $collection->getFirstItem();
+		$this->setCustomCurrentShipping($customCurrentShipping);
 	}
 	
 	public function getCurrentTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
