@@ -208,7 +208,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $ids = array_keys($salesPromoProductsData);
 
         //1. Get collection of configurable products
-        /* @var $collectionS Mage_Catalog_Model_Resource_Product_Collection */
+        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToSelect('skuv');
         $collection->addAttributeToSelect("udropship_vendor");
@@ -524,7 +524,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             //recover options
             /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
             $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-            $configurableRModel->recoverProductOptionsBasedOnSimples($recoverOptionsProducts);
+            $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
         }
 
         //4.1 Delete products with status 2

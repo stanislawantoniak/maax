@@ -270,50 +270,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
 
-    /**
-     * @param $productConfigurableId
-     * @param $superAttributeId
-     * @param $productMinPrice
-     * @param $storeId
-     * @param $websiteId
-     */
-    public function insertProductSuperAttributePricing(
-        $productConfigurableId, $superAttributeId, $productMinPrice, $store
-    ) {
-
-        $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-
-        if (!empty($productRelations)) {
-            $insert = array();
-            foreach ($productRelations as $productRelation) {
-
-                $size = $productRelation['child_size'];
-                $price = $productRelation['child_price'];
-                $website = $productRelation['website'];
-
-                $priceIncrement = number_format(Mage::app()->getLocale()->getNumber($price - $productMinPrice), 2);
-
-                $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
-            }
-
-            if (!empty($insert)) {
-                $lineQuery = implode(",", $insert);
-
-                $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
-
-                $insertQuery = sprintf(
-                    "
-                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
-                    VALUES %s
-                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
-                    ", $catalogProductSuperAttributePricingTable, $lineQuery
-                );
-
-                $this->_getWriteAdapter()->query($insertQuery);
-
-            }
-        }
-    }
 
     public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
     {
@@ -414,12 +370,12 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
 
     /**
-     * Recover configurable product options if campaign not valid
-     * to options which were before campaign
+     * Set parent_price=min(child1_price,child2_price,...)
+     * and options
      *
      * @param $recoverOptionsProducts
      */
-    public function recoverProductOptionsBasedOnSimples($recoverOptionsProducts)
+    public function recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts)
     {
 
 
@@ -497,6 +453,76 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
 
     /**
+     * Set parent_msrp=min(child1_msrp,child2_msrp,...)
+     *
+     * @param $recoverMSRP array(website_id1 => array(parent_product_id1, parent_product_id_2, ...), website_id2 => array(...))
+     */
+    public function recoverProductMSRPBasedOnSimples($recoverMSRP)
+    {
+        if (empty($recoverMSRP)) {
+            return;
+        }
+
+        $websiteIdsToUpdate = array_keys($recoverMSRP);
+        /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
+        $zolagocatalogHelper = Mage::helper('zolagocatalog');
+        $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
+
+
+        $parentIds = array();
+        /* @var $configResourceModel   Zolago_Catalog_Model_Resource_Product_Configurable */
+        $configResourceModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+        foreach ($recoverMSRP as $websiteId => $parentIdsPerWebsite) {
+            $parentIds = array_merge($parentIdsPerWebsite, $parentIdsPerWebsite);
+        }
+
+        /* @var $configModel  Zolago_Catalog_Model_Product_Type_Configurable */
+        $configModel = Mage::getModel('zolagocatalog/product_type_configurable');
+
+        $dataToUpdate = array();
+
+        //1. Collect data before update
+        foreach ($recoverMSRP as $websiteId => $parentIds) {
+            if (empty($parentIds)) {
+                //Nothing to recover
+                continue;
+            }
+            if (!isset($dataToUpdate[$websiteId])) {
+                $dataToUpdate[$websiteId] = array();
+            }
+            $firstStore = array_shift($stores[$websiteId]);
+            $childProductsMSRP = $configModel->getMSRPForChildren($firstStore, $parentIds);
+
+            foreach ($parentIds as $parentId) {
+                $msrpRelation = isset($childProductsMSRP[$parentId]) ? $childProductsMSRP[$parentId] : false;
+
+                if ($msrpRelation) {
+                    $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductMSRP($parentId, $msrpRelation, $websiteId));
+                }
+            }
+        }
+
+        //2. Update
+        $options = array();
+        if (!empty($dataToUpdate)) {
+            /* @var $aM Zolago_Catalog_Model_Product_Action */
+            $aM = Mage::getSingleton('catalog/product_action');
+
+            foreach ($dataToUpdate as $website => $data) {
+                foreach ($data as $value => $productIds) {
+                    if (!isset($stores[$website]))
+                        continue;
+
+                    foreach ($stores[$website] as $store) {
+                        $aM->updateAttributesPure($productIds, array("msrp" => (string)$value), $store);
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
      * Collect min price for configurable and options
      *
      * @param $productConfigurableId
@@ -540,6 +566,38 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         return $dataToUpdate;
     }
 
+    /**
+     * Collect min msrp for configurable
+     *
+     * @param $productConfigurableId
+     * @param $msrpRelation
+     * @param $websiteId
+     * @return array
+     */
+    public function collectConfigurableProductMSRP($productConfigurableId, $msrpRelation, $websiteId)
+    {
+        $dataToUpdate = array();
+
+        if (empty($productConfigurableId)) {
+            return $dataToUpdate; //Nothing to update
+        }
+
+        $insert = array();
+
+        //1. Collect price
+        $productMinPrice = array();
+        foreach ($msrpRelation as $item) {
+            $productMinPrice[] = $item['msrp'];
+        }
+
+        $productMinimalPrice = min($productMinPrice);
+        $productMinimalPrice = number_format(Mage::app()->getLocale()->getNumber($productMinimalPrice), 2);
+        if(!empty($productMinimalPrice)){
+            $dataToUpdate[$productMinimalPrice][$websiteId] = $productConfigurableId;
+        }
+
+        return $dataToUpdate;
+    }
 
     /*
      * Inset product options
@@ -789,6 +847,83 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         return $msrp;
+    }
+
+
+    /**
+     *
+     * Update configurable products values
+     * 1. price=min(child1_price,child2_price,...) (if product not in valid SALE or PROMOTION campaign)
+     * 2. msrp=min(child1_msrp,child2_msrp,...)
+     * 3. configurable product options
+     * for website
+     *
+     * @param $parentIds
+     * @return array
+     */
+    public function updateConfigurableProductsValues($parentIds){
+        $productsIdsPullToSolr = array();
+
+        //1. Filter valid campaign products
+
+        //1.1. Get collection of configurable products NOT IN SALE or PROMOTION
+        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+        $collection->addAttributeToSelect('skuv');
+        $collection->addAttributeToSelect('product_flag');
+        $collection->addAttributeToSelect('price');
+
+        $collection->addAttributeToSelect(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_MSRP_CODE);
+        $collection->addAttributeToSelect(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE);
+
+        $collection->addAttributeToSelect("udropship_vendor");
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        $collection->addFieldToFilter('entity_id', array('in' => $parentIds));
+        $collection->addFieldToFilter('product_flag', array('null' => true));
+
+        $parentProductIds = $collection->getAllIds();
+
+        if($collection->getSize() <= 0){
+            return $productsIdsPullToSolr; //Nothing to update
+        }
+        $productsIdsPullToSolr = $parentProductIds;
+
+        //2. Find out products, which msrp should be recovered
+        $idsToSetMSRP = array();
+        foreach($collection as $_product){
+            //if Converter Msrp Type = From file
+            if ($_product->getData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE) == Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO) {
+                $idsToSetMSRP[] = $_product->getId();
+            }
+        }
+
+        //3. Prepare products per website array before recover
+        $recoverOptionsProducts = array();
+        $recoverMSRP = array();
+        $websites = Mage::app()->getWebsites();
+
+        foreach ($websites as $website) {
+            if (!isset($recoverOptionsProducts[$website->getId()]))
+                $recoverOptionsProducts[$website->getId()] = array();
+
+            if (!isset($recoverMSRP[$website->getId()]))
+                $recoverMSRP[$website->getId()] = array();
+
+            $recoverOptionsProducts[$website->getId()] = $parentProductIds;
+            $recoverMSRP[$website->getId()] = $parentProductIds;
+        }
+
+
+        //4. Recover options for configurable products
+        if (!empty($recoverOptionsProducts)) {
+            //recover options
+            /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
+            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+            $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
+            $configurableRModel->recoverProductMSRPBasedOnSimples($recoverMSRP);
+        }
+
+        return $productsIdsPullToSolr;
     }
 
 }
