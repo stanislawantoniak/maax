@@ -83,7 +83,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             "header" => Mage::helper("ghmarketing")->__("Product SKU"),
             "align" => "right",
             "type" => "text",
-            "width" => "100px",
+            "width" => "120px",
             "filter_condition_callback" => array($this, "_marketingCostProductSku")
         ));
         $this->addColumn("product_name", array(
@@ -91,7 +91,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             "header" => Mage::helper("ghmarketing")->__("Product"),
             "align" => "right",
             "type" => "text",
-            "width" => "100px",
+            "width" => "200px",
             "filter_condition_callback" => array($this, "_marketingCostProductName")
         ));
         $this->addColumn("vendor_name", array(
