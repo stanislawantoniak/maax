@@ -1,4 +1,7 @@
-<?php $key = $this->getFacetKey(); ?>
+<?php
+$key = $this->getFacetKey();
+$baseMediaUrl = Mage::getBaseUrl("media") . "/m-image/";
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -41,7 +44,7 @@
 					                <label for="<?php echo $item['itemId'];?>">
 						                <a href="<?php echo $item['url']; ?>"
 						                   class="listing-link">
-							                <img alt="" <?php if (!empty($_image)): ?>src="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>/>
+							                <img alt="" <?php if (!empty($_image)): ?>src="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?>/>
 						                </a>
 									</label>
 								</div>
@@ -85,7 +88,7 @@
 					                <label for="<?php echo $item['itemId']?>">
 						                <a href="<?php echo $item['url']; ?>"
 						                   class="listing-link">
-							                <img alt="" <?php if (!empty($_image)): ?>src="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>/>
+							                <img alt="" <?php if (!empty($_image)): ?>src="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?>/>
 						                </a>
 									</label>
 								</div>
