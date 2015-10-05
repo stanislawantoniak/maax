@@ -106,7 +106,8 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 
         $params = $this->getRequest()->getParams();
         // keep only existing filters
-        $codeList = $this->getFilterCollection($category_id)+array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id');
+        $codeList = $this->getFilterCollection($category_id);
+        $codeList = array_merge($codeList,array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id'));
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
                 if (!in_array($key,$codeList)) {
@@ -178,6 +179,10 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         return ($count > 0) ? true : false;
     }
 
+    public function getCanShow() {
+        return true; // category always visible
+    }
+
 	/**
 	 * @param array $data
 	 * @param bool $show_brothers if true solr gets two querys (first about current category, second about brothers), if false is only one query
@@ -202,6 +207,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         // Checking is root category
         $isRootCategory = false;
         if (!$category && !$category->getId()) {
+            $modelCC = Mage::getModel('catalog/category');
             $category = $modelCC->load($rootCategoryId);
             $isRootCategory = TRUE;
         }
