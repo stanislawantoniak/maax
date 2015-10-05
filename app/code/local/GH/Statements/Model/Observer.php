@@ -493,6 +493,7 @@ class GH_Statements_Model_Observer
 				foreach ($ordersTracksCollection as $orderTrack) {
 					/** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
 					$orderTrack->setStatementId($statement->getId());
+					$orderTrack->setWebApi(true);
 					$orderTrack->save();
 				}
 			}
@@ -501,6 +502,7 @@ class GH_Statements_Model_Observer
 				foreach($rmasTracksCollection as $rmaTrack) {
 					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
 					$rmaTrack->setStatementId($statement->getId());
+					$orderTrack->setWebApi(true);
 					$rmaTrack->save();
 				}
 			}
