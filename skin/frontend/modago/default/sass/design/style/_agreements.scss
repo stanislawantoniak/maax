@@ -83,6 +83,16 @@
 			left: 0;
 			background-color: rgba(255,255,255,.6);
 		}
+		&:after {
+			content: '';
+			position: absolute;
+			height: 98%;
+			margin-top: 15px;
+			background-color: white;
+			width: 20px;
+			top: 0;
+			left: 0;
+		}
 	}
 	.tooltip {
 		left: 15px !important;
