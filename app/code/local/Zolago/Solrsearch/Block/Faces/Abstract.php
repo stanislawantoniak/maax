@@ -228,6 +228,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
         {
             $source = $this->getAttributeSource($this->getAttributeCode());
             if($source) {
+                // @todo - posprzątać to cudo
+                if (method_exists($source, "setUseCustomOptions")) {
+                    $source->setUseCustomOptions(true);
+                    
+                }
                 //cache
                 $key = 'block_faces_abstract_options_'.$this->getAttributeCode();
                 if (!($optionsSerialize = $this->_getApp()->loadCache($key)) ||
@@ -262,63 +267,66 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
             return $allItems;
         }
         $out = array();
-        $source = $this->getAttributeSource($this->getAttributeCode());
-        if (method_exists($source, "setUseCustomOptions")) {
-            $source->setUseCustomOptions(true);
-            $this->unsetData("all_options");
-        }
         $allSourceOptions = $this->getAllOptions();
         $extraAdded = array();
+        $labelAsValue = $filter->getCustomShowFlag(); // special for campaigns
+        
         // Options are sorted via admin panel
+        
 
         foreach($allSourceOptions as $option) {
+            if ($labelAsValue && isset($option['value'])) {
+                $label = $option['value']; // campaigns
+            } else {
+                $label = $option['label']; // other filters
+            }
             // Option not in available result colleciotn
-            if(!isset($option['label']) ||
-                    !isset($allItems[$option['label']])) {
+            if(!isset($label) ||
+                    !isset($allItems[$label])) {
                 continue;
             }
-            $count = $allItems[$option['label']]['count']; 
+            $count = $allItems[$label]['count']; 
 
             if($filter && $filter->getUseSpecifiedOptions()) {
                 // Force show all items is filter is active and multiple
                 $specifiedIds = $filter->getSpecifiedOptions();
                 // Active single mode filter
                 if(!$filter->getShowMultiple() && $this->isFilterActive()) {
-                    if($this->isItemActive ($option['label'])) {
-                        $out[$option['label']] = $allItems[$option['label']];
-                        $count = $allItems[$option['label']]['count'];
+                    if($allItems[$label]['active']) {
+                        $out[$label] = $allItems[$label];
+                        $count = $allItems[$label]['count'];
                         $this->_maxCount = ($count>$this->_maxCount)? $count: $this->_maxCount;
                         break;
                     }
                 } else {
                     if(in_array($option['value'], $specifiedIds)) {
                         // Option specified - move to items
-                        $out[$option['label']] = $allItems[$option['label']];
+                        $out[$label] = $allItems[$label];
                         $this->_maxCount = ($count>$this->_maxCount)? $count: $this->_maxCount;
                     } elseif($this->isFilterActive() && $filter->getShowMultiple()
                            && $filter->getCanShowMore()) {
                         // Multiselect active - show all fileds, after specified fields
-                        $extraAdded[$option['label']] = $allItems[$option['label']];
+                        $extraAdded[$label] = $allItems[$label];
                         $this->_maxCount = ($count>$this->_maxCount)? $count: $this->_maxCount;
-                    } elseif($this->isFilterActive() && $option['label']['active']) {
+                    } elseif($this->isFilterActive() && $allItems[$label]['active']) {
                         // Add olny one item
-                        $out[$option['label']] = $allItems[$option['label']];
+                        $out[$label] = $allItems[$label];
                         $this->_maxCount = ($count>$this->_maxCount)? $count: $this->_maxCount;
                     } else {
                         // Option non specified move to hidden
-                        $hiddenItems[$option['label']] = $allItems[$option['label']];
+                        $hiddenItems[$label] = $allItems[$label];
                         $this->_maxCountHidden = ($count>$this->_maxCountHidden)? $count: $this->_maxCountHidden;
                     }
                 }
             } else {
                 if($filter->getShowMultiple() || !$this->isFilterActive()) {
                     // No specified values - show all - if none active or filter is multiple
-                    $out[$option['label']] = $allItems[$option['label']];
+                    $out[$label] = $allItems[$label];
                     $this->_maxCount = ($count>$this->_maxCount)? $count: $this->_maxCount;
                 }
-                elseif($this->isFilterActive() && $option['label']['active']) {
+                elseif($this->isFilterActive() && $allItems[$label]['active']) {
                     // if filter is single and item active - add only this one
-                    $out[$option['label']] = $allItems[$option['label']];
+                    $out[$label] = $allItems[$label];
                     $this->_maxCount = ($count>$this->_maxCount)? $count: $this->_maxCount;
                     break;
                 }
