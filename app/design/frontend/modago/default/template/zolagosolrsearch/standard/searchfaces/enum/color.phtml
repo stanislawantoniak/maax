@@ -1,5 +1,8 @@
-<?php /** @var $this Zolago_Solrsearch_Block_Faces_Enum_Color */ ?>
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var $this Zolago_Solrsearch_Block_Faces_Enum_Color */
+$key = $this->getFacetKey();
+$baseMediaUrl = Mage::getBaseUrl("media") . "/m-image/";
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -25,11 +28,11 @@
             ?>
             <label title="<?php echo $item['item'] ?>"
                    for="<?php echo $item['itemId'];?>"
-                   <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>
+                   <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?>
                    data-param='<?php echo $item['params'];?>'
                    data-color="<?php echo $_color?>"
                    data-url="<?php echo $item['url'] ?>"
-                   <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
+                   <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?>>
                 <input type="checkbox" 
 					name="<?php echo $item['name'];?>"
 					value="<?php echo $item['value'];?>"
@@ -58,7 +61,7 @@
                     $isOptionSelected = true;
                 }
                 ?>
-                <label title="<?php echo $item ?>" data-state="hidden" for="<?php echo $item['itemId']?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $item['params'];?>' data-color="<?php echo $_color?>" data-url="<?php echo $item['url'] ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
+                <label title="<?php echo $item ?>" data-state="hidden" for="<?php echo $item['itemId']?>" <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?> data-param='<?php echo $item['params'];?>' data-color="<?php echo $_color?>" data-url="<?php echo $item['url'] ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?> style="display: none;">
                     <input type="checkbox" 
 						name="<?php echo $item['name'];?>"
 						value="<?php echo $item['value']?>"
