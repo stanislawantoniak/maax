@@ -87,7 +87,9 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 
 			<div class="row hidden-xs">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements">
-					<div class="checkout_agreement_vendors" data-original-title="<?php echo $_helper->__("This agreement is required"); ?>" data-placement="bottom">
+					<div class="checkout_agreement_vendors"
+					     data-original-title="<?php echo $_helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+					     data-placement="bottom">
 						<div class="agreement-nocheck-checkout">
 							<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
 						</div>
