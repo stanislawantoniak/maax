@@ -9,7 +9,7 @@
         <models>
             <ghregulation>
                 <class>GH_Regulation_Model</class>
-                <resourceModel>gh_regulation_resource</resourceModel>
+                <resourceModel>ghregulation_resource</resourceModel>
             </ghregulation>
             <ghregulation_resource>
                 <class>GH_Regulation_Model_Resource</class>
