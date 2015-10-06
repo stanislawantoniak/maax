@@ -19,7 +19,6 @@ class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template
             //when vendor(brandshop) show navigation only on the cms categories
             if($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
                 echo $this->_prepareBlock(); 
-                $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
             }
         } else {
             echo $this->_prepareBlock();
@@ -31,14 +30,17 @@ class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template
      */
 
     protected function _prepareBlock() {
-        $key = 'html_header_navigation';
-        if (!($html = $this->_getApp()->loadCache($key)) || 
-            !$this->_getApp()->useCache(self::CACHE_GROUP)) {
-            $html = $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-            if ($this->_getApp()->useCache(self::CACHE_GROUP)) {
-                $this->_getApp()->saveCache($html,$key,array(self::CACHE_GROUP),Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL);
-            }
-        }
-        return $html;
+        $lambda = function ($foo) {
+            return Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
+        };
+        $request = Mage::app()->getRequest();
+        $module  = $request->getModuleName();
+        $name    = $request->getControllerName();
+        $action  = $request->getActionName();
+
+        $html = Mage::helper('zolagocommon')->getCache('html_header_navigation',self::CACHE_GROUP,$lambda,array());
+        $script = "<script>Mall.Navigation.currentCategoryId.push('".(Mage::registry('current_category') ? Mage::registry('current_category')->getId() : $module."/".$name."/".$action)."');</script>";
+
+        return $html.$script;
     }
 }

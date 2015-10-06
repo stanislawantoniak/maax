@@ -3,6 +3,9 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	const XML_PATH_DEFAULT_IDENTITY = "sales_email/order/identity";
 	
+	protected $_isGoogleBot;
+	
+	protected $_app;
 	/**
 	 * Check is top customer data for varnish request
 	 * @return boolean
@@ -109,15 +112,19 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return boolean
 	 */
 	public function isGoogleBot(){
-	    $userAgent = empty($_SERVER['HTTP_USER_AGENT'])? null:$_SERVER['HTTP_USER_AGENT'];
-	    if (empty($userAgent)) {
-	        return false;
-	    }
-	    $crawlers = 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|' .
-	        'AcioRobot|ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|bingbot|' .
-            'GeonaBot|Gigabot|Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby';
-        $isCrawler = (preg_match("/$crawlers/", $userAgent) > 0);	
-        return $isCrawler;
+	    if (is_null($this->_isGoogleBot)) {
+	        $userAgent = empty($_SERVER['HTTP_USER_AGENT'])? null:$_SERVER['HTTP_USER_AGENT'];
+    	    if (empty($userAgent)) {
+    	        $isCrawler = false;
+	        } else {
+        	    $crawlers = 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|' .
+	                'AcioRobot|ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|bingbot|' .
+                    'GeonaBot|Gigabot|Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby';
+                $isCrawler = (preg_match("/$crawlers/", $userAgent) > 0);	
+            }
+            $this->_isGoogleBot = $isCrawler;
+        }
+        return $this->_isGoogleBot;;
     }
 	
 	/**
@@ -204,4 +211,33 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		return strtr($string,$chars);
 	}
+	
+	protected function _getApp() {
+        if (!$this->_app) {
+            $this->_app = Mage::app();
+        }
+        return $this->_app;	    
+	}
+    /**
+     * cache helper function (uses lambda)
+     * 
+     * @param string $key
+     * @param string $group 
+     * @param function $function
+     * @param array $params
+     * @param int $ttl
+     * @return mixed
+     */
+     public function getCache($key,$group,$function,$params,$ttl = Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL) {
+         if (!($out = $this->_getApp()->loadCache($key)) ||
+             !$this->_getApp()->useCache($group)) {
+             $out = $function($params);
+             if ($this->_getApp()->useCache($group)) {
+                 $this->_getApp()->saveCache($out,$key,array($group),$ttl);
+             }                                                     
+         }
+         return $out;
+                             
+     }
+
 }

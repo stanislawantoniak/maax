@@ -23,24 +23,23 @@ $helper = Mage::helper("zolagosolrsearch");
         </h3>
 		<div class="content" id="filter_category">
 			<dl>
-			<?php foreach ($this->getAllItems() as $item=>$count):?>
-				<?php if (is_array($count)): ?>
-					<?php if($count['is_root_category']): ?>
-						<?php foreach($count['children'] as $child_item=>$children_count): ?>
-							<?php if($this->getCanShowItem($child_item, $children_count)): ?>
-								<dd><?php $this->getItemUrl($child_item) ?><a data-params='<?php echo $this->getItemJson($item);?>' href="<?php echo $this->getItemUrl($child_item) ?>" class="simpleChild"><span><?php echo $this->getItemText($child_item); ?></span>&nbsp;<span class="suffix">(<?php echo $children_count ?>)</span></a></dd>
+			<?php $item = $this->getAllItems();?>
+				<?php if (is_array($item)): ?>
+					<?php if($item['is_root_category']): ?>
+						<?php foreach($item['children'] as $child_item=>$child_val): ?>
+							<?php if($this->getCanShowItem($child_val['count'])): ?>							    
+								<dd><a data-params='<?php echo $item['params'];?>' href="<?php echo $child_val['url']; ?>" class="simpleChild"><span><?php echo $child_val['text']; ?></span>&nbsp;<span class="suffix">(<?php echo $child_val['count']; ?>)</span></a></dd>
 							<?php endif;?>
 						<?php endforeach; ?>
 					<?php else: ?>
-					<dt><?php echo $this->getItemText($item); ?>&nbsp;<span>(<?php echo $count['total'] ?>)</span></dt>
-						<?php foreach($count['children'] as $child_item=>$children_count): ?>
-							<?php if($this->getCanShowItem($child_item, $children_count)): ?>
-								<dd><a data-params='<?php echo $this->getItemJson($item);?>' href="<?php echo $this->getItemUrl($child_item) ?>" class="simpleChild"><span><?php echo $this->getItemText($child_item); ?></span>&nbsp;<span class="suffix">(<?php echo $children_count ?>)</span></a></dd>
+					<dt><?php echo $item['text']; ?>&nbsp;<span>(<?php echo $item['total'] ?>)</span></dt>
+						<?php foreach($item['children'] as $child_item=>$child_val): ?>
+							<?php if($this->getCanShowItem($child_val['count'])): ?>
+								<dd><a data-params='<?php echo $item['params'];?>' href="<?php echo $child_val['url'] ?>" class="simpleChild"><span><?php echo $child_val['text']; ?></span>&nbsp;<span class="suffix">(<?php echo $child_val['count']; ?>)</span></a></dd>
 							<?php endif;?>
 						<?php endforeach; ?>
 						<?php endif; ?>
 				<?php endif; ?>
-			<?php endforeach; ?>
 			</dl>
 			<div class="action clearfix">
 			<?php if($backUrl != null) : ?>
