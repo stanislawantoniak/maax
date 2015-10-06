@@ -7,11 +7,11 @@
     </modules>
     <global>
         <models>
-            <gh_regulation>
+            <ghregulation>
                 <class>GH_Regulation_Model</class>
-                <resourceModel>gh_regulation_resource</resourceModel>
-            </gh_regulation>
-            <gh_regulation_resource>
+                <resourceModel>ghregulation_resource</resourceModel>
+            </ghregulation>
+            <ghregulation_resource>
                 <class>GH_Regulation_Model_Resource</class>
                 <entities>
                     <regulation_kind>
@@ -30,24 +30,24 @@
                         <table>gh_regulation_vendor_kind</table>
                     </regulation_vendor_kind>
                 </entities>
-            </gh_regulation_resource>
+            </ghregulation_resource>
         </models>
         <blocks>
-            <gh_regulation>
+            <ghregulation>
                 <class>GH_Regulation_Block</class>
-            </gh_regulation>
+            </ghregulation>
         </blocks>
         <helpers>
-            <gh_regulation>
+            <ghregulation>
                 <class>GH_Regulation_Helper</class>
-            </gh_regulation>
+            </ghregulation>
         </helpers>
         <resources>
-            <gh_regulation_setup>
+            <ghregulation_setup>
                 <setup>
                     <module>GH_Regulation</module>
                 </setup>
-            </gh_regulation_setup>
+            </ghregulation_setup>
         </resources>
     </global>
 </config>

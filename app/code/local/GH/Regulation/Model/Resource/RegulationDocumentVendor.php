@@ -8,7 +8,7 @@ class GH_Regulation_Model_Resource_RegulationDocumentVendor extends Mage_Core_Mo
 
     protected function _construct()
     {
-        $this->_init('gh_regulation/regulation_document_vendor', 'id');
+        $this->_init('ghregulation/regulation_document_vendor', 'id');
     }
 
 }

@@ -8,7 +8,7 @@ class GH_Regulation_Model_Resource_RegulationDocumentVendor_Collection extends M
 
     protected function _construct()
     {
-        $this->_init('gh_regulation/regulation_document_vendor');
+        $this->_init('ghregulation/regulation_document_vendor');
     }
 
 }

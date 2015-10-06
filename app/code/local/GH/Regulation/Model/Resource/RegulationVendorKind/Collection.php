@@ -8,7 +8,7 @@ class GH_Regulation_Model_Resource_RegulationVendorKind_Collection extends Mage_
 
     protected function _construct()
     {
-        $this->_init('gh_regulation/regulation_vendor_kind');
+        $this->_init('ghregulation/regulation_vendor_kind');
     }
 
 }

@@ -8,7 +8,7 @@ class GH_Regulation_Model_Resource_RegulationType extends Mage_Core_Model_Resour
 
     protected function _construct()
     {
-        $this->_init('gh_regulation/regulation_type', 'regulation_type_id');
+        $this->_init('ghregulation/regulation_type', 'regulation_type_id');
     }
 
 }
