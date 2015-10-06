@@ -53,6 +53,18 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
     }
 
     /**
+     * @param GH_AttributeRules_Model_AttributeRule $rule
+     * @return string
+     */
+    public function getRemoveRuleUrl($rule) {
+        return $this->getUrl("ghattributerules/mass/removerule",
+            array(
+                "_query" => array("id" => $rule->getId()),
+                "_secure" => true
+            ));
+    }
+
+    /**
      * @return Zolago_Dropship_Model_Vendor
      */
     public function getVendor() {

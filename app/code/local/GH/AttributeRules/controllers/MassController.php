@@ -12,25 +12,27 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
      * Note: apply rules to selected
      */
     public function autofillAction() {
+        // Input data
+        $req = $this->getRequest();
+        $all = $req->getParam("all", 0);
+        $global = (int)$req->getParam("global", 0); // All products flag on grid
+        $attributes = $req->getParam("attributes", array());
+        $values = $req->getParam("values", array());
+        $rules = $req->getParam("rules", array());
+        $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+        $productIds = $req->getParam("product_ids");
+        $attributeSetId = $req->getParam("attribute_set_id");
+        $query = $req->getParams();
+        $static = $req->getParam("static");
+
         try {
-            $req = $this->getRequest();
-            $all = $req->getParam("all", 0);
-            $allProductsFlag = (int)$req->getParam("all_products_flag", 0);
-            $attributes = $req->getParam("attributes", array());
-            $values = $req->getParam("values", array());
-            $rules = $req->getParam("rules", array());
-            $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
             $store = Mage::app()->getStore($storeId);
-            $productIds = $req->getParam("product_ids");
-            $attributeSetId = $req->getParam("attribute_set_id");
-            $query = $req->getParams();
-            $static = $req->getParam("static");
 
             if (!$attributeSetId) {
-                Mage::throwException(Mage::helper("gh_attributerules")->__("Technical error: no attribute set id specified"));
+                Mage::throwException("Technical error: no attribute set id specified");
             }
             if (!$this->getVendor()->getId()) {
-                Mage::throwException(Mage::helper("gh_attributerules")->__("Security notice: You have no right to do this action"));
+                Mage::throwException("Security notice: You have no right to do this action");
             }
 
             if (is_string($productIds)) {
@@ -39,7 +41,7 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             if (is_array($productIds) && count($productIds)) {
                 $productIds = array_filter(array_unique($productIds));
             }
-            if (!(is_array($productIds) && count($productIds)) || $allProductsFlag) {
+            if (!(is_array($productIds) && count($productIds)) || $global) {
                 $restQuery = $this->_getRestQuery($query);
                 $collection = $this->_getCollection();
                 foreach($restQuery as $key => $value){
@@ -56,13 +58,17 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             $collection = Mage::getResourceModel("gh_attributerules/attributeRule_collection");
             $collection->addVendorFilter($this->getVendor());
             if (!$all) { // If all is NOT selected
-                $collection->addRuleIdFilter($rules);
+                if (is_array($rules) && !empty($rules)) {
+                    $collection->addRuleIdFilter($rules);
+                } else {
+                    Mage::throwException("Please select any rules");
+                }
             }
             $collection->load();
             // --Collecting rules
 
             if (!$collection->count()) {
-                Mage::throwException(Mage::helper("gh_attributerules")->__("Please select any rules"));
+                Mage::throwException("Please select any rules");
             }
 
             $usedAttr = array(); // Used attributes
@@ -92,6 +98,10 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                                     array("attribute" => "name", "filter" => $condition),
                                     array("attribute" => "skuv", "filter" => $condition)
                                 ));
+                                continue;
+                            }
+                            if (isset($condition['null'])) {
+                                $this->_addNull($prodColl, $attr, $condition['null']);
                                 continue;
                             }
                             if (isset($condition["regexp"])) {
@@ -244,15 +254,19 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
             }
         } catch (Exception $e) {
             $result = array(
-                'status' => 0,
-                'message'=> $this->__($e->getMessage()),
+                'status'        => 0,
+                'message'       => Mage::helper("gh_attributerules")->__($e->getMessage()),
+                'changed_ids'	=> array(),
+				'global'		=> $global
             );
         }
 
         if (!isset($result)) {
             $result = array(
-                'status' => 1,
-                'message'=> Mage::helper("gh_attributerules")->__("Autofill rules processed %s products", isset($ids) ? count($ids) : 0)
+                'status'        => 1,
+                'message'       => Mage::helper("gh_attributerules")->__("Autofill rules processed %s products", isset($ids) ? count($ids) : 0),
+                'changed_ids'   => $productIds,
+                'global'        => $global
             );
         }
 
@@ -286,12 +300,29 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
     }
 
     /**
+     * Add filter for empty values
+     *
+     * @param Zolago_Catalog_Model_Resource_Vendor_Product_Collection $collection
+     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param array $value
+     * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
+     */
+    protected function _addNull($collection, $attribute, $value) {
+        $collection->addFieldToFilter(array(
+            array("attribute" => $attribute->getAttributeCode(), "filter" => array("null" => true)),
+            array("attribute" => $attribute->getAttributeCode(), "filter" => array("eq" => ""))
+        ));
+        return $collection;
+    }
+
+    /**
      * Add filter for multiselect attributes by regexp
      * Inspired by @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition()
      *
      * @param Zolago_Catalog_Model_Resource_Vendor_Product_Collection $collection
      * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
      * @param array $value
+     * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
      */
     protected function _addRegexp($collection, $attribute, $value) {
 
@@ -309,5 +340,35 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
         }
         // Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678)
         $collection->getSelect()->where($valueExpr . " REGEXP ?", $value);
+        return $collection;
+    }
+
+    public function removeruleAction() {
+        $ruleId = $this->getRequest()->getQuery("id");
+        $vendor = $this->getVendor();
+
+        /** @var GH_AttributeRules_Model_AttributeRule $rule */
+        $rule = Mage::getModel("gh_attributerules/attributeRule")->load($ruleId);
+        if ($rule->getId() && $rule->getVendorId() == $vendor->getId()) {
+            $rule->delete();
+            $result = array(
+                'status' => 1,
+                'message'=> Mage::helper("gh_attributerules")->__("Rule removed")
+            );
+        } elseif (!$rule->getId()) {
+            $result = array(
+                'status' => 1,
+                'message'=> Mage::helper("gh_attributerules")->__("Rule removed")
+            );
+        } else {
+            $result = array(
+                'status' => 0,
+                'message'=> Mage::helper("gh_attributerules")->__("This autofill rule don't belongs to you")
+            );
+        }
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('Content-type', 'application/json')
+            ->setBody(Mage::helper('core')->jsonEncode($result));
     }
 }

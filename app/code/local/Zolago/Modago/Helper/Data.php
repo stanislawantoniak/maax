@@ -61,6 +61,8 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getUrl('udqa/customer/post');
     }
 
+    protected $_checkoutVendors = array();
+
 	public function getAgreementHtml($type) {
 		$types = array('tos','newsletter','sms','policy','register_info','dotpay','checkout');
 		if(!in_array($type,$types)) {
@@ -83,11 +85,13 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 
 		if($type == "checkout") {
-			$vendorsLegalEntites = Mage::registry('checkoutVendors');
-			Mage::unregister('checkoutVendors');
+            if(!$this->_checkoutVendors) {
+                $this->_checkoutVendors = Mage::registry('checkoutVendors');
+                Mage::unregister('checkoutVendors');
+            }
 
-			if(is_array($vendorsLegalEntites)) {
-				$return = str_replace("{vendors}",implode(", ",$vendorsLegalEntites),$return);
+			if(is_array($this->_checkoutVendors) && count($this->_checkoutVendors)) {
+				$return = str_replace("{vendors}",implode(", ",$this->_checkoutVendors),$return);
 			}
 		}
 

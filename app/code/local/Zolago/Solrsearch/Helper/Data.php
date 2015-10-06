@@ -16,7 +16,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @var array
 	 */
 	protected $_solrToMageMap = array(
-		"products_id" => "id",
+		"products_id" => "entity_id",
         "url_path_varchar" => "current_url",
 		"product_type_static" => "type_id",
 		"name_varchar" => "name",
@@ -517,12 +517,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach ($this->_solrToMageMap as $solr => $mage) {
 			if (isset($item[$solr])) {
-				$product->setDataUsingMethod($mage, $item[$solr]);
+                $product->setData($mage, $item[$solr]);
 			}
 		}
-
-		$product->setId((int) $product->getId());
-
 		return $product;
 	}
 
@@ -545,7 +542,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
             $customerGroupId,
             $product->getId()
         );
-        $product->setCalculatedFinalPrice($finalPrice);
+        $product->setData("set_calculated_final_price", $finalPrice);
         return $product;
     }
 

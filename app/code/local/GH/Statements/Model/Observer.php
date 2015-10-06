@@ -363,7 +363,11 @@ class GH_Statements_Model_Observer
 			    ->addFieldToFilter('shipped_date', array('notnull' => true))
 			    ->addFieldToFilter('shipped_date', array('lteq' => $yesterday))
 			    ->addFieldToFilter('parent_id',array('in'=>$ordersShipmentsIds))
-		        ->addFieldToFilter('udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)));
+		        ->addFieldToFilter('udropship_status',array('in'=>array(
+			        Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
+			        Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+			        Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
+		        )));
 
 		    //not all shipments selected in previous loop will be adequate to update so we have to collect shipments ids once again based on loaded trackings
 		    $ordersShipmentsIdsToUpdate = array();
@@ -410,7 +414,11 @@ class GH_Statements_Model_Observer
 			    ->addFieldToFilter('main_table.gallery_shipping_source', 1)
                 ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
                 ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
-			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED)))
+			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(
+				    Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
+				    Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+				    Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
+			    )))
 			    ->getSelect()
 			        ->join(
 				        'urma_rma',
