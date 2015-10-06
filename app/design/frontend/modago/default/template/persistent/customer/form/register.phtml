@@ -5,13 +5,8 @@ $modagoHelper = Mage::helper('zolagomodago');
 ?>
 <div id="content" class="container-fluid">
 	<div class="account-create row">
-		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-9 sidebar-create"
-		     style="padding-left: 0">
-			<section class="p main bg-w hidden-sm hidden-xs">
-				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-register-right')->toHtml(); ?>
-			</section>
-		</div>
-		<div id="content-main" class="col-lg-9 col-md-9 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-3 section">
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-register-right')->toHtml(); ?>
+		<div id="content-main" class="col-lg-9 col-md-8 col-sm-8 col-xs-12 col-lg-pull-3 col-md-pull-4 col-sm-pull-4 section">
 			<section class="main bg-w">
 				<header class="title-section">
 					<h2><?php echo $this->__('Create an Account') ?></h2>
