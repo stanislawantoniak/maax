@@ -407,13 +407,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                     break;
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_RETURNED:
                     $status = $this->__('Returned');
-                    $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+                    $track->setUdropshipStatus(Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED);
                     $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
                     $shipped = false;
                     break;
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_WRONG:
                     $status = $this->__('Canceled');
-                    $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+                    $track->setUdropshipStatus(Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED);
                     $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
                     $shipped = false;
                     break;

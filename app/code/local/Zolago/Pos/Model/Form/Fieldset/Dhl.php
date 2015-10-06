@@ -10,7 +10,7 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
     protected function _addFieldUseDhl() {
         $this->_fieldset->addField('use_dhl', 'select', array(
                                        'name'          => 'use_dhl',
-                                       'label'         => $this->_helper->__('Use DHL'),
+                                       'label'         => $this->_helper->__('Use this DHL setting'),
                                        'values'		   => Mage::getSingleton("adminhtml/system_config_source_yesno")->toOptionArray(),
                                        'required'      => false,
 									   'class'		   => "form-control"

@@ -71,6 +71,9 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 			case Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED:
 				return $this->__("Shipped");
 				break;
+			case Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED:
+				return $this->__("Undelivered");
+				break;
 		}
 		return $tracking;
 	}

@@ -3,7 +3,8 @@
 class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_Db_Abstract
 {
 
-    const PRODUCTS_COUNT_TO_SET_PRODUCTS = 2000;
+    const PRODUCTS_COUNT_TO_SET_PRODUCTS_INFO = 2000;
+    const PRODUCTS_COUNT_TO_SET_PRODUCTS_SALE = 1500;
     const PRODUCTS_COUNT_TO_UNSET_PRODUCTS = 2000;
 
     const CAMPAIGN_PRODUCTS_UNPROCESSED = 0;
@@ -735,7 +736,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign_product.product_id ASC');
         $select->group("campaign_product.product_id");
-        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS_INFO);
 
         return $this->getReadConnection()->fetchAll($select);
     }
@@ -876,7 +877,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("products_visibility.value<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
         $select->where("campaign.date_from IS NOT NULL AND campaign.date_to IS NOT NULL ");
         $select->order('campaign_product.product_id ASC');
-        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS);
+        $select->limit(self::PRODUCTS_COUNT_TO_SET_PRODUCTS_SALE);
 
         return $this->getReadConnection()->fetchAll($select);
     }
