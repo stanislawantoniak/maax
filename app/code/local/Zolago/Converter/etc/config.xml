@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Converter>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</Zolago_Converter>
 	</modules>
 	<global>
@@ -54,14 +54,17 @@
 			</modules>
 		</translate>
 	</adminhtml>
-	<default>
-		<zolagoconverter>
-			<config>
-				<url_stock>http://37.187.244.141:8092/zolago/_design/read/_view/stock?key={{key}}</url_stock>
-                <url_price>http://37.187.244.141:8092/zolago/_design/read/_view/price?key={{key}}</url_price>
-				<login>zolago</login>
-				<password></password>
-			</config>
-		</zolagoconverter>
-	</default>
+    <default>
+        <zolagoconverter>
+            <config>
+                <url_stock>http://85.194.243.53:8092/modago/_design/read/_view/stock?key={{key}}</url_stock>
+                <url_price>http://85.194.243.53:8092/modago/_design/read/_view/price?key={{key}}</url_price>
+                <url_price_batch>http://85.194.243.53:8092/modago/_design/read/_view/price?keys={{keys}}
+                </url_price_batch>
+                <url_price_batch_size>200</url_price_batch_size>
+                <login>modago</login>
+                <password></password>
+            </config>
+        </zolagoconverter>
+    </default>
 </config>

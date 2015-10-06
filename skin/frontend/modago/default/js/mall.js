@@ -1,3 +1,4 @@
+
 /**
  * Created by pawelchyl on 11.07.2014.
  */
@@ -1558,6 +1559,7 @@ Mall.showAgreement = function(target) {
 	jQuery(target).hide();
 	jQuery(target).parent().find('.agreement-more').show();
 	jQuery(target).parent().find('.agreement-less-btn').show();
+    jQuery('.checkout_agreement_vendors').tooltip('show');
 	jQuery(window).resize();
 	return false;
 };

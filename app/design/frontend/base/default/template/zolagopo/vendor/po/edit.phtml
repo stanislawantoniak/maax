@@ -3,7 +3,8 @@
 <?php $_po					= $this->getPo(); ?>
 <?php $_shippingMethod		= $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
-<?php $_currentShipping		= $this->getCustomCurrentShipping();?>
+<?php /** @var Mage_Sales_Model_Order_Shipment $_currentShipping */
+$_currentShipping		= $this->getCustomCurrentShipping();?>
 <?php $_alerts				= $this->getAlerts($_po);?>
 <?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
 <?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
@@ -14,6 +15,8 @@
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 ?>
+<?php /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
+$_tracking = $this->getCurrentTracking($_currentShipping); ?>
 
 <div class="container">
 	<!--=== Page Header ===-->
@@ -381,7 +384,8 @@ $_modagoHlp = Mage::helper("zolagocommon");
 						<i class="icon-plane"></i> 
 						<?php echo $_hlp->__("Shipment");?>
 					</h4>	
-					<?php if($_currentShipping && $_currentShipping->getId() && $_statusModel->isCancelShippingAvailable($_po)):?>
+					<?php if($_currentShipping && $_currentShipping->getId() && $_statusModel->isCancelShippingAvailable($_po) &&
+						(!$_tracking || ($_tracking->getId() && is_null($_tracking->getData('shipped_date'))))):?>
 						<?php if($_aggregated->getId()):?>
 							<?php $_msg = "Proceeding will cancel the shipment. It will remove dispatch ref. Are you sure?";?>
 						<?php else:?>
@@ -399,7 +403,6 @@ $_modagoHlp = Mage::helper("zolagocommon");
 					<?php endif; ?>
 				</div>
 				<div class="widget-content bottom-info shipping-info">
-					<?php $_tracking = $this->getCurrentTracking($_currentShipping);?>
 					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="row">
 						<div class="col-md-6">

@@ -4,6 +4,9 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 {
     const VENDOR_TYPE_BRANDSHOP = 2;
     const VENDOR_TYPE_STANDARD = 1;
+
+    const TRACK_STATUS_UNDELIVERED = 'U';
+
 	public function toOptionHash($selector=false){
 	    switch ($this->getPath()) {
 	        case 'allvendorswithempty':
