@@ -20,30 +20,46 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         $resourceModel = Mage::getResourceModel("ghmarketing/marketing_cost");
 
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-        $collection = Mage::getResourceModel('catalog/product_collection');
-        $collection->addAttributeToSelect("name");
+        $collection = Mage::getResourceModel('ghmarketing/marketing_cost_collection');
+
         $collection->getSelect()
-            ->join(
-                array("marketing_cost" => $resourceModel->getTable("ghmarketing/marketing_cost")),
-                "e.entity_id = marketing_cost.product_id"
+            ->joinLeft(
+                array("products" => $resourceModel->getTable("catalog/product")),
+                "products.entity_id = main_table.product_id",
+                array(
+                    "product_sku" => "products.sku")
+            );
+        $collection->getSelect()
+            ->joinLeft(
+                array("products_name" => Mage::getResourceModel("catalog/product")->getTable('catalog_product_entity_varchar')),
+                "products_name.entity_id = main_table.product_id",
+                array("product_name" => "products_name.value")
             );
         $collection->getSelect()
             ->join(
                 array("marketing_cost_type" => $resourceModel->getTable("ghmarketing/marketing_cost_type")),
-                "marketing_cost_type.marketing_cost_type_id = marketing_cost.type_id"
+                "marketing_cost_type.marketing_cost_type_id = main_table.type_id"
             );
+
         $collection->getSelect()
             ->join(
                 array("vendors" => $resourceModel->getTable("udropship/vendor")),
-                "marketing_cost.vendor_id=vendors.vendor_id",
+                "main_table.vendor_id=vendors.vendor_id",
                 array("vendor_name" => "vendors.vendor_name")
             );
         $collection->getSelect()
             ->joinLeft(
                 array("ghstatements" => $resourceModel->getTable("ghstatements/statement")),
-                "marketing_cost.statement_id=ghstatements.id",
+                "main_table.statement_id=ghstatements.id",
                 array("link_param" => "ghstatements.id","link_name" => "ghstatements.name")
             );
+
+        $attributeName = Mage::getResourceModel('catalog/product')
+            ->getAttribute('name');
+        $attributeNameId = $attributeName->getAttributeId();
+
+        $collection->getSelect()->where("products_name.attribute_id=?",$attributeNameId);
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -62,19 +78,21 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             "width" => "10px"
         ));
 
-        $this->addColumn("sku", array(
-            "index" => "sku",
+        $this->addColumn("product_sku", array(
+            "index" => "product_sku",
             "header" => Mage::helper("ghmarketing")->__("Product SKU"),
             "align" => "right",
             "type" => "text",
-            "width" => "100px"
+            "width" => "120px",
+            "filter_condition_callback" => array($this, "_marketingCostProductSku")
         ));
-        $this->addColumn("name", array(
-            "index" => "name",
-            "header" => Mage::helper("ghmarketing")->__("Product"),
+        $this->addColumn("product_name", array(
+            "index" => "product_name",
+            "header" => Mage::helper("ghmarketing")->__("Product name"),
             "align" => "right",
             "type" => "text",
-            "width" => "100px"
+            "width" => "200px",
+            "filter_condition_callback" => array($this, "_marketingCostProductName")
         ));
         $this->addColumn("vendor_name", array(
             "index" => "vendor_name",
@@ -97,6 +115,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
             "index" => "type_id",
             "header" => Mage::helper("ghmarketing")->__("Cost type"),
             "align" => "right",
+            "width" => "100px",
             "type" => "options",
             "options" => Mage::getSingleton('ghmarketing/source')->setPath('cost_type')->toOptionHash(),
             "filter_condition_callback" => array($this, "_marketingCostType")
@@ -146,7 +165,39 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         return parent::_prepareColumns();
     }
 
+    /**
+     * @param $collection
+     * @param $column
+     * @return $this
+     */
+    protected function _marketingCostProductSku($collection, $column)
+    {
+        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+        $value = $column->getFilter()->getValue();
+        if (!$value)
+            return $this;
 
+        $collection->getSelect()->where("products.sku LIKE ? ", "%{$value}%");
+        return $this;
+    }
+
+    /**
+     * @param $collection
+     * @param $column
+     * @return $this
+     */
+    protected function _marketingCostProductName($collection, $column)
+    {
+        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+        $value = $column->getFilter()->getValue();
+
+        if (!$value)
+            return $this;
+
+        $collection->getSelect()->where("products_name.value LIKE ? ", "%{$value}%");
+
+        return $this;
+    }
 
     /**
      * @param $collection
@@ -164,13 +215,13 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         $to = isset($value["orig_to"]) ? date("Y-m-d H:i:s", strtotime($value["orig_to"])) : false;
 
         if ($from && $to) {
-            $collection->getSelect()->where("marketing_cost.date BETWEEN '{$from}' AND '{$to}' ");
+            $collection->getSelect()->where("date BETWEEN '{$from}' AND '{$to}' ");
             return $this;
         } elseif ($from) {
-            $collection->getSelect()->where("marketing_cost.date >= '{$from}' ");
+            $collection->getSelect()->where("date >= '{$from}' ");
             return $this;
         } elseif ($to) {
-            $collection->getSelect()->where("marketing_cost.date <= '{$to}' ");
+            $collection->getSelect()->where("date <= '{$to}' ");
             return $this;
         }
         return $this;
@@ -188,7 +239,7 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         if (!$value)
             return $this;
 
-        $collection->getSelect()->where("marketing_cost.type_id=? ", $value);
+        $collection->getSelect()->where("main_table.type_id=? ", $value);
 
         return $this;
     }
@@ -209,13 +260,13 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         $to = isset($value["to"]) ? $value["to"] : false;
 
         if ($from && $to) {
-            $collection->getSelect()->where("marketing_cost.billing_cost BETWEEN {$from} AND {$to}");
+            $collection->getSelect()->where("billing_cost BETWEEN {$from} AND {$to}");
             return $this;
         } elseif ($from) {
-            $collection->getSelect()->where("marketing_cost.billing_cost >= {$from}");
+            $collection->getSelect()->where("billing_cost >= {$from}");
             return $this;
         } elseif ($to) {
-            $collection->getSelect()->where("marketing_cost.billing_cost <= {$to}");
+            $collection->getSelect()->where("billing_cost <= {$to}");
             return $this;
         }
         return $this;
@@ -236,13 +287,13 @@ class GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid extends Mage_Adminhtml_Bl
         $to = isset($value["to"]) ? $value["to"] : false;
 
         if ($from && $to) {
-            $collection->getSelect()->where("marketing_cost.cost BETWEEN {$from} AND {$to}");
+            $collection->getSelect()->where("cost BETWEEN {$from} AND {$to}");
             return $this;
         } elseif ($from) {
-            $collection->getSelect()->where("marketing_cost.cost >= {$from}");
+            $collection->getSelect()->where("cost >= {$from}");
             return $this;
         } elseif ($to) {
-            $collection->getSelect()->where("marketing_cost.cost <= {$to}");
+            $collection->getSelect()->where("cost <= {$to}");
             return $this;
         }
         return $this;
