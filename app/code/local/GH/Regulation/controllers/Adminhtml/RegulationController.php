@@ -89,7 +89,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
                 $this->_getSession()->addException($e, Mage::helper('ghregulation')->__('An error occurred while deleting this kind of document.'));
             }
             if ($success) {
-                $this->_getSession()->addSuccess(Mage::helper('ghregulation')->__('Document kind "%s" was deleted.',$name));
+                $this->_getSession()->addSuccess(Mage::helper('ghregulation')->__('Document kind &quot;%s&quot; was deleted.',$name));
             }
         }
         return $this->_redirect('*/*/kind');
