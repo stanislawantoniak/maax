@@ -25,12 +25,20 @@ class Gh_Regulation_Block_Adminhtml_Kind_Grid extends Mage_Adminhtml_Block_Widge
             "header"    => Mage::helper("ghregulation")->__("Document kind name"),
         ));
         $this->addColumn('action', array(
-            'header'    => Mage::helper('ghregulation')->__('Action'),
+            'header'    => Mage::helper('ghregulation')->__('Remove'),
             'width'     => '100px',
             'type'      => 'action',
-			"renderer"	=> Mage::getConfig()->getBlockClassName("zolagomapper/adminhtml_mapper_grid_column_renderer_action"),
+            'getter'    => 'getRegulationKindId',
+            'actions' 	=> array(
+                array(
+                    'caption' => Mage::helper('ghregulation')->__('Remove'),
+                    'url'	  => array('base' => '*/*/deleteKind'),
+                    'field'   => 'regulation_kind_id',
+                    'confirm' => Mage::helper('ghregulation')->__('Are you sure?'),
+                ),
+            ),
             'filter' => false,
-            'sortable' => false,
+            'sortable' => false,            
         ));
         return parent::_prepareColumns();
     }

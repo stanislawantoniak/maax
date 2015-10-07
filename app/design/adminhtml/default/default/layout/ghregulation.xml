@@ -29,13 +29,15 @@
             </block>
         </reference>
     </adminhtml_regulation_list>
-    <!--
-    <adminhtml_mapper_edit>
-        <update handle="zolagomapper_update_menu"/>
+    <adminhtml_regulation_editkind>
+        <update handle="ghregulation_update_menu"/>
         <reference name="content">
-            <block type="zolagomapper/adminhtml_mapper_edit" name="zolagomapper_mapper" template="zolagomapper/mapper/edit.phtml"/>
+            <block type="ghregulation/adminhtml_kind_edit" name="ghregulation_kind_edit" template="ghregulation/kind/edit.phtml">
+                <block type="ghregulation/adminhtml_kind_edit_form" name="form"/>
+            </block>
         </reference>
-    </adminhtml_mapper_edit>
+    </adminhtml_regulation_editkind>
+    <!--
     <adminhtml_mapper_run>
         <update handle="zolagomapper_update_menu"/>
         <reference name="content">
