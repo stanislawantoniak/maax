@@ -69,6 +69,15 @@
                 </ghregulation>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <GH_Regulation>
+                    <files>
+                        <default>GH_Regulation.csv</default>
+                    </files>
+                </GH_Regulation>
+            </modules>
+        </translate>
     </adminhtml>
     <frontend>
         <routers>
