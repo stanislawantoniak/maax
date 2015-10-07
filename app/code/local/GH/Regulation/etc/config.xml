@@ -76,9 +76,16 @@
                 <use>standard</use>
                 <args>
                     <module>GH_Regulation</module>
-                    <frontName>ghregulation</frontName>
+                    <frontName>regulation</frontName>
                 </args>
             </ghregulation>
+            <udropship>
+                <args>
+                    <modules>
+                        <GH_Regulation before="Unirgy_Dropship">GH_Regulation_Dropship</GH_Regulation>
+                    </modules>
+                </args>
+            </udropship>
         </routers>
         <translate>
             <modules>
@@ -89,5 +96,12 @@
                 </GH_Regulation>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <ghregulation>
+                    <file>ghregulation.xml</file>
+                </ghregulation>
+            </updates>
+        </layout>
     </frontend>
 </config>
