@@ -82,7 +82,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop extends Mage_Adminhtml_Bl
             'index'         => 'vendor_id',
         ));
 
-        $this->addColumn('vendor_name', array(
+        $this->addColumn('brandshop_grid_vendor_name', array(
             'header'        => Mage::helper('zolagodropship')->__('Vendor name'),
             'align'         => 'left',
             'width'         => '100px',

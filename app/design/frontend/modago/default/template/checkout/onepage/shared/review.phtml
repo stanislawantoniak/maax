@@ -87,33 +87,31 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 
 			<div class="row hidden-xs">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements">
-					<form>
-						<div class="col-md-6">
-							<div class="checkout_agreement_vendors">
-								<div class="agreement-nocheck-checkout">
-									<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
-								</div>
-							</div>
-							<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
-								<div class="form-group form-checkbox small text-align-left">
-									<input type="checkbox" id="tos_agreement_checkout" class="css-checkbox required"
-									       required="true"
-									       name="tos_agreement_checkout"
-									       aria-required="true">
-									<label for="tos_agreement_checkout" class="css-label tos_agreement_checkout-label control-label required">
-										<?php echo $modagoHelper->getAgreementHtml('policy') ?>
-									</label>
-								</div>
-							<?php endif; ?>
+					<div class="checkout_agreement_vendors"
+					     data-original-title="<?php echo $_helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+					     data-placement="bottom">
+						<div class="agreement-nocheck-checkout">
+							<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
 						</div>
-						<div class="col-md-6 dotpay_agreement_container">
-							<div class="form-group form-checkbox small text-align-right">
-								<input type="checkbox" id="dotpay_agreement" class="css-checkbox dotpay_agreement"
-								       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
-								<label for="dotpay_agreement" class="css-label dotpay_agreement-label">
-									<?php echo $modagoHelper->getAgreementHtml('dotpay') ?>
-								</label>
-							</div>
+					</div>
+					<form>
+						<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="tos_agreement_checkout" class="css-checkbox required"
+							       required="true"
+							       name="tos_agreement_checkout"
+							       aria-required="true">
+							<label for="tos_agreement_checkout" class="css-label tos_agreement_checkout-label control-label required">
+								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+							</label>
+						</div>
+						<?php endif; ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="dotpay_agreement" class="css-checkbox dotpay_agreement"
+							       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
+							<label for="dotpay_agreement" class="css-label dotpay_agreement-label">
+								<?php echo $modagoHelper->getAgreementHtml('dotpay') ?>
+							</label>
 						</div>
 					</form>
 				</div>
@@ -202,7 +200,9 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 		</section>
 		<div class="main bg-w visible-xs opened-panel-group">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements_mobile">
-				<div class="checkout_agreement_vendors">
+				<div class="checkout_agreement_vendors"
+				     data-original-title="<?php echo $_helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+				     data-placement="bottom">
 					<div class="agreement-nocheck-checkout">
 						<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
 					</div>

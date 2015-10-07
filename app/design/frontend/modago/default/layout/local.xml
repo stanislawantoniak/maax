@@ -253,11 +253,7 @@
 				<stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
 			</action>
 
-			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml">
-        	    <action method="setCacheLifetime">
-	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
-                </action>
-			</block>
+			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
 		    <reference name="js_cookies">
         	    <action method="setCacheLifetime">
 	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->

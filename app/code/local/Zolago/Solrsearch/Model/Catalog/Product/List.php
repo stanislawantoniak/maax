@@ -18,6 +18,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
     const DEFAULT_LOAD_MORE_OFFSET = 100; //TODO remove
     const DEFAULT_PIXELS_BEFORE_APPEND = 2500; //TODO remove
 
+    protected $_actualMode;
+    
     /**
      * @return string
      */
@@ -32,11 +34,16 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      * @return int
      */
     public function getMode() {
-        $queryText = Mage::helper('solrsearch')->getParam('q');
-        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
-            return self::MODE_CATEGORY;
+        if (is_null($this->_actualMode)) {
+            $queryText = Mage::helper('solrsearch')->getParam('q');
+            if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
+                $mode = self::MODE_CATEGORY;
+            } else {
+                $mode = self::MODE_SEARCH;
+            }
+            $this->_actualMode = $mode;
         }
-        return self::MODE_SEARCH;
+        return $this->_actualMode;
     }
 
     /**
