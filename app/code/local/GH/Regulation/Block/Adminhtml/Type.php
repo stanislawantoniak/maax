@@ -1,12 +1,9 @@
 <?php
-class GH_Regulation_Block_Adminhtml_Type extends Mage_Adminhtml_Block_Widget_Container {
+class GH_Regulation_Block_Adminhtml_Type extends GH_Regulation_Block_Adminhtml_Abstract {
  
     protected function _prepareLayout() {
-        $this->_addButton('add_new', array(
-            'label'   => Mage::helper('ghregulation')->__('Create new type of document'),
-            'onclick' => "setLocation('{$this->getUrl('*/*/newType')}')",
-            'class'   => 'add'
-        ));
+        $this->setData('button_label',Mage::helper('ghregulation')->__('Create new type of document'));
+        $this->setData('button_url','*/*/newType');
         return parent::_prepareLayout();
     }
 
