@@ -50,6 +50,26 @@
             </ghregulation_setup>
         </resources>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <GH_Regulation before="Mage_Adminhtml">GH_Regulation_Adminhtml</GH_Regulation>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <ghregulation>
+                    <file>ghregulation.xml</file>
+                </ghregulation>
+            </updates>
+        </layout>
+    </adminhtml>
     <frontend>
         <routers>
             <ghregulation>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<layout>
+    <ghregulation_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>sales/udropship/ghregulation</menupath></action>
+        </reference>
+    </ghregulation_update_menu>
+    <adminhtml_regulation_kind>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_kind" name="ghregulation_kind" template="ghregulation/kind.phtml">
+                <block type="ghregulation/adminhtml_kind_grid" name="ghregulation_kind_grid"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_kind>
+    <adminhtml_regulation_type>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_type" name="ghregulation_type" template="ghregulation/type.phtml">
+                <block type="ghregulation/adminhtml_type_grid" name="ghregulation_type_grid"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_type>
+    <adminhtml_regulation_list>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_list" name="ghregulation_list" template="ghregulation/list.phtml">
+                <block type="ghregulation/adminhtml_list_grid" name="ghregulation_list_grid"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_list>
+    <!--
+    <adminhtml_mapper_edit>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="zolagomapper/adminhtml_mapper_edit" name="zolagomapper_mapper" template="zolagomapper/mapper/edit.phtml"/>
+        </reference>
+    </adminhtml_mapper_edit>
+    <adminhtml_mapper_run>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="zolagomapper/adminhtml_mapper_run" name="zolagomapper_mapper" template="zolagomapper/mapper/run.phtml"/>
+        </reference>
+    </adminhtml_mapper_run>
+    -->
+</layout>
