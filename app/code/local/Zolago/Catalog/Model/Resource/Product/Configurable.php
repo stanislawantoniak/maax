@@ -653,6 +653,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         } catch (Exception $e) {
             Mage::logException($e);
+            Mage::log($e->getMessage(), null, "_insertProductOptions.log");
         }
     }
 
