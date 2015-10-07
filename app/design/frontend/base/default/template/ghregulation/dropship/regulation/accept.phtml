@@ -2,6 +2,7 @@
 /**/
 $_session = Mage::getSingleton('udropship/session');
 $_vendor = Mage::registry('reset_vendor');
+$_helper = Mage::helper("ghregulation");
 ?>
 <div class="col-md-12">
     <div class="">
@@ -9,26 +10,46 @@ $_vendor = Mage::registry('reset_vendor');
             <!--=== Page Header ===-->
             <div class="page-header">
                 <div class="page-title">
-                    <h3>Akceptacja regulaminu</h3>
+                    <h3><?php echo $_helper->__("Accept regulation"); ?></h3>
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" method="post">
+                    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                    <form class="form-horizontal" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
                         <div class="widget box">
                             <div class="widget-header">
                                 <h4>Download documents</h4>
                             </div>
                             <div class="widget-content">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">File:</label>
-                                    <div class="col-md-9">
-                                        <input type="file" data-style="fileinput" />
+                                    <label class="col-md-4 control-label">File:</label>
+
+                                    <div class="col-md-8">
+                                        <input type="file" data-style="fileinput-custom"  name="regulation_document[]"  multiple />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Akceptacja następuje na podstawie pełnomocnictwa</label>
+
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="uniform"  name="pelnomocnictwo" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Akceptuję postanowienia regulaminu</label>
+
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="uniform"  name="accept_regulations" />
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                                <span><span><?php echo $_helper->__("Accept regulations"); ?></span></span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -36,3 +57,24 @@ $_vendor = Mage::registry('reset_vendor');
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    jQuery('[data-style="fileinput-custom"]').each(function () {
+        var $input = jQuery(this);
+        $input.fileInput(jQuery.extend({}, jQuery.fn.fileInput.defaults,
+            {
+                placeholder: '',
+                buttontext: '<?php echo $_helper->__('Browse'); ?>',
+                inputsize: 'width-xxlarge'
+            }
+        ));
+    });
+
+    jQuery("[name='regulation_document[]']").change(function () {
+        if (jQuery(this).val().length > 0) {
+            jQuery("[name='pelnomocnictwo']").prop("disabled", false).parents("div.checker").removeClass("disabled");
+        } else {
+            jQuery("[name='pelnomocnictwo']").prop("disabled", true).parents("div.checker").addClass("disabled");
+        }
+    });
+</script>
