@@ -418,8 +418,6 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 		$collection->getSelect()->where("main_table.transaction_id = ?", $transaction_id);
 
-		Mage::log((string)$collection->getSelect(), null, 'allocationsmysql.log');
-
 		return $collection;
 	}
 

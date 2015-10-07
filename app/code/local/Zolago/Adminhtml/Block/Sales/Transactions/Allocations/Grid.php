@@ -52,11 +52,6 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Allocations_Grid extends Mage_Ad
 	{
 		$this->setCollection($this->getAllocations());
 
-		foreach($this->getCollection() as $allocation) {
-			Mage::log($allocation->getData(),null,'allocations_data.log');
-			break;
-		}
-
 		return parent::_prepareCollection();
 	}
 
@@ -89,8 +84,8 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Allocations_Grid extends Mage_Ad
 			'header'    => $_helper->__('Amount'),
 			'index'     => 'allocation_amount',
 			'sortable'  => false,
-			'type'      => 'text',
-			'escape'    => true
+			'type'      => 'currency',
+			'currency_code'  => Mage::registry('current_transaction')->getOrder()->getOrderCurrency()->getCurrencyCode(),
 		));
 
 		$this->addColumn('allocation_type', array(
@@ -165,7 +160,13 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Allocations_Grid extends Mage_Ad
 			'escape'    => true
 		));
 
-
+		$this->addColumn('primary', array(
+			'header'    => $_helper->__('Primary'),
+			'index'     => 'primary',
+			'sortable'  => false,
+			'type'      => 'options',
+			'options' => array('1' => $_adminHelper->__('Yes'), '0' => $_adminHelper->__('No'))
+		));
 
 		return parent::_prepareColumns();
 	}
