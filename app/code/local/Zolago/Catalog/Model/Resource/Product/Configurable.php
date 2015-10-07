@@ -548,15 +548,14 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         $productMinimalPrice = min($productMinPrice);
-        $productMinimalPrice = number_format(Mage::app()->getLocale()->getNumber($productMinimalPrice), 2);
-        $dataToUpdate["price"][$productMinimalPrice][$websiteId] = $productConfigurableId;
+        $dataToUpdate["price"][number_format(Mage::app()->getLocale()->getNumber($productMinimalPrice), 2)][$websiteId] = $productConfigurableId;
 
         //2. Collect options
         foreach ($priceSizeRelation as $productRelation) {
             $size = $productRelation['size'];
             $price = $productRelation['price'];
 
-            $priceIncrement = number_format(Mage::app()->getLocale()->getNumber($price - $productMinimalPrice), 2);
+            $priceIncrement = Mage::app()->getLocale()->getNumber($price - $productMinimalPrice);
             $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
         }
 
