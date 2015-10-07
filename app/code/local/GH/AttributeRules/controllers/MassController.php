@@ -78,6 +78,9 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 // Collecting attributes to update
                 $filter = $rule->getFilterArray();
                 $ruleAttr = $gridModel->getAttribute($rule->getColumn());
+                if (!$this->getGridModel()->isAttributeEditable($ruleAttr) || ($ruleAttr->getIsRequired() && trim($rule->getValue()) == "")) {
+                    continue; // Skip not editable on grid or empty value when required
+                }
                 $usedAttr[$ruleAttr->getAttributeCode()] = $ruleAttr;
 
                 // Preparing product collection
@@ -113,9 +116,6 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                     }
                 }
                 foreach ($prodColl->getAllIds() as $id) {
-                    if (!$this->getGridModel()->isAttributeEditable($ruleAttr) || ($ruleAttr->getIsRequired() && trim($rule->getValue()) == "")) {
-                        continue; // Skip not editable on grid or empty value when required
-                    }
                     if ($ruleAttr->getFrontendInput() == "multiselect") {
                         $dataByProduct[(int)$id][$ruleAttr->getAttributeCode()][] = $rule->getValue();
                     } elseif ($ruleAttr->getFrontendInput() == "select") {
