@@ -50,23 +50,44 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
     /**
      * save edited kind of documents
      */
-     public function saveKindAction() {
+     public function saveKindAction() { 
+         return $this->_saveAction('regulation_kind_id','ghregulation_current_kind','ghregulation/regulation_kind','ghregulation_kind_form_data','*/*/kind');  
+     }
+     
+    /**
+     * save edited type of document
+     */
+     public function saveTypeAction() { 
+         return $this->_saveAction('regulation_type_id','ghregulation_current_type','ghregulation/regulation_type','ghregulation_type_form_data','*/*/type');  
+     }
+
+    /**
+     * saving forms
+     *
+     * @param string $requestParam name of object primary key
+     * @param string $registerKey 
+     * @param string $modelName
+     * @param string $formData name of html edit form 
+     * @param string $urlPattern redirect url after success save
+     */
+
+     protected function _saveAction($requestParam,$registerKey,$modelName,$formData,$urlPattern) {     
          try {
              $request = $this->getRequest();
-             $id = $request->getParam('regulation_kind_id',null);
-             $model = $this->_getModel('ghregulation_current_kind','ghregulation/regulation_kind',$id);
+             $id = $request->getParam($requestParam,null);
+             $model = $this->_getModel($registerKey,$modelName,$id);
              $data = $request->getPost();
              $model->addData($data);
              $model->save();
-             $this->_getSession()->setData('ghregulation_kind_form_data', null);             
-             $url = $this->getUrl('*/*/kind');
+             $this->_getSession()->setData($formData, null);             
+             $url = $this->getUrl($urlPattern);
              return $this->_redirectUrl($url);
          } catch (Exception $e) {
              Mage::logException($e);
              $this->_getSession()->addException($e, $e->getMessage());
-             $this->_getSession()->setData('ghregulation_kind_form_data', $this->getRequest()->getParams());                                     
+             $this->_getSession()->setData($formData, $this->getRequest()->getParams());                                     
          }
-         $this->_redirectReferer();
+         return $this->_redirectReferer();
      }
      
     /**
@@ -98,9 +119,34 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
      * edit kind
      */
     public function editKindAction() {
-        $id = $this->getRequest()->getParam('regulation_kind_id',null);
-        $model = $this->_getModel('ghregulation_current_kind','ghregulation/regulation_kind',$id);
-		if ($values = $this->_getSession()->getData('regulation_kind_form_data', true)) {
+        return $this->_editAction('regulation_kind_id','ghregulation_current_kind','ghregulation/regulation_kind','regulation_kind_form_data');
+    }
+    /**
+     * new type
+     */
+     public function newTypeAction() {
+         $this->_forward('editType');
+     }
+    /**
+     * edit type
+     */
+    public function editTypeAction() {
+        return $this->_editAction('regulation_type_id','ghregulation_current_type','ghregulation/regulation_type','regulation_type_form_data');
+    }
+    
+    /**
+     * edit type of documents 
+     *
+     * @param string $paramName request param with object id
+     * @param string $registerKey
+     * @param string $modelName
+     * @param strign $formData
+     */
+
+    protected function _editAction($paramName,$registerKey,$modelName,$formData) {
+        $id = $this->getRequest()->getParam($paramName,null);
+        $model = $this->_getModel($registerKey,$modelName,$id);
+		if ($values = $this->_getSession()->getData($formData, true)) {
 			$model->addData($values);
         }		
 		$this->loadLayout();

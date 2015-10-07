@@ -37,6 +37,14 @@
             </block>
         </reference>
     </adminhtml_regulation_editkind>
+    <adminhtml_regulation_edittype>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_type_edit" name="ghregulation_type_edit" template="ghregulation/type/edit.phtml">
+                <block type="ghregulation/adminhtml_type_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_edittype>
     <!--
     <adminhtml_mapper_run>
         <update handle="zolagomapper_update_menu"/>
