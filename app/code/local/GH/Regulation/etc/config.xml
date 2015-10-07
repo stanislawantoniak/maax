@@ -70,4 +70,24 @@
             </updates>
         </layout>
     </adminhtml>
+    <frontend>
+        <routers>
+            <ghregulation>
+                <use>standard</use>
+                <args>
+                    <module>GH_Regulation</module>
+                    <frontName>ghregulation</frontName>
+                </args>
+            </ghregulation>
+        </routers>
+        <translate>
+            <modules>
+                <GH_Regulation>
+                    <files>
+                        <default>GH_Regulation.csv</default>
+                    </files>
+                </GH_Regulation>
+            </modules>
+        </translate>
+    </frontend>
 </config>
