@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class GH_Regulation_Model_RegulationType
+ * Class GH_Regulation_Model_Regulation_Type
  */
-class GH_Regulation_Model_RegulationType extends Mage_Core_Model_Abstract
+class GH_Regulation_Model_Regulation_Type extends Mage_Core_Model_Abstract
 {
 
     protected function _construct()
