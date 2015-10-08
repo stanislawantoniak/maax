@@ -71,7 +71,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Marketing
         ));
         $this->addColumn("value", array(
             "index" => "value",
-            "header" => Mage::helper("ghstatements")->__("Marketing amount"),
+            "header" => $_hlp->__("Marketing amount"),
             'type' => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
