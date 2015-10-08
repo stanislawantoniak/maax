@@ -17,37 +17,46 @@ $_helper = Mage::helper("ghregulation");
             <div class="row">
                 <div class="col-md-12">
                     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-                    <form class="form-horizontal" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
                         <div class="widget box">
                             <div class="widget-header">
                                 <h4>Download documents</h4>
                             </div>
                             <div class="widget-content">
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">File:</label>
+<!--                                    <label class="col-md-4 control-label">File:</label>-->
+<!---->
+<!--                                    <div class="col-md-8">-->
+<!--                                        <input type="file" data-style="fileinput-custom"  name="regulation_document[]" />-->
+<!--                                    </div>-->
 
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4"></div>
                                     <div class="col-md-8">
-                                        <input type="file" data-style="fileinput-custom"  name="regulation_document[]"  multiple />
+                                        <div class="add_regulation_document"></div>
+                                        <a id="add_regulation_document" class="btn btn-primary" href=""> + </a>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Akceptacja następuje na podstawie pełnomocnictwa</label>
-
+                                    <div class="col-md-4"></div>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="uniform"  name="pelnomocnictwo" disabled />
+                                        <label class="css-label">Akceptacja następuje na podstawie pełnomocnictwa</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Akceptuję postanowienia regulaminu</label>
-
+                                    <div class="col-md-4"></div>
                                     <div class="col-md-8">
-                                        <input type="checkbox" class="uniform"  name="accept_regulations" />
+                                        <input type="checkbox" class="uniform"  name="accept_regulations"  />
+                                        <label class="css-label">Akceptuję postanowienia regulaminu</label>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                            <button type="submit" id="filter_submit" class="btn btn-primary pull-right" disabled>
                                 <span><span><?php echo $_helper->__("Accept regulations"); ?></span></span>
                             </button>
                         </div>
@@ -59,22 +68,104 @@ $_helper = Mage::helper("ghregulation");
 </div>
 
 <script type="text/javascript">
-    jQuery('[data-style="fileinput-custom"]').each(function () {
-        var $input = jQuery(this);
-        $input.fileInput(jQuery.extend({}, jQuery.fn.fileInput.defaults,
-            {
-                placeholder: '',
-                buttontext: '<?php echo $_helper->__('Browse'); ?>',
-                inputsize: 'width-xxlarge'
+    jQuery("#accept_regulation_documents_form").validate({
+        rules: {
+            accept_regulations: {
+                required: true
             }
-        ));
+        },
+        errorPlacement: function($error, $element){
+            $element.closest("div[class^='col-']").append($error);
+        }
     });
 
-    jQuery("[name='regulation_document[]']").change(function () {
-        if (jQuery(this).val().length > 0) {
+    jQuery("#add_regulation_document").click(function(e){
+        e.preventDefault();
+        appendUploadDocumentField();
+    });
+
+    function appendUploadDocumentField(){
+        jQuery(".add_regulation_document")
+            .append('<div class="col-md-8">' +
+            '<input type="file" data-style="fileinput-custom"  name="regulation_document[]" onchange="regulationDocumentCallback(this);" />' +
+            '</div>');
+        //initFileUpload();
+    }
+
+//    function initFileUpload(){
+//        jQuery('[data-style="fileinput-custom"]').each(function () {
+//            var $input = jQuery(this);
+//            $input.fileInput(jQuery.extend({}, jQuery.fn.fileInput.defaults,
+//                {
+//                    placeholder: '',
+//                    buttontext: '<?php //echo $_helper->__('Browse'); ?>//',
+//                    inputsize: 'width-xxlarge'
+//                }
+//            ));
+//        });
+//    }
+
+    function regulationDocumentCallback(element) {
+
+        //validate documents
+        var valid = validateUploadedDocument(element);
+
+        if (jQuery(element).val().length > 0 && valid) {
             jQuery("[name='pelnomocnictwo']").prop("disabled", false).parents("div.checker").removeClass("disabled");
         } else {
             jQuery("[name='pelnomocnictwo']").prop("disabled", true).parents("div.checker").addClass("disabled");
         }
-    });
+
+        if(valid){
+            jQuery("button[type='submit']").prop("disabled", false);
+        }
+    }
+
+    /**
+     * Validate uploaded documents
+     * 1. Only formats allowed jpeg, jpg, png, pdf
+     * @param element
+     * @returns {boolean}
+     */
+    function validateUploadedDocument(element) {
+        //1. validate extension
+        var file = jQuery(element)[0].files[0];
+
+        var valid = validateUploadedDocumentExtension(element);
+
+        console.log(file);
+        return valid;
+    }
+
+    function validateUploadedDocumentExtension(element) {
+        var valid = false;
+
+        var file = jQuery(element)[0].files[0];
+
+        //1. validate extension
+        var fileExtension = ['image/jpeg', 'image/png', 'application/pdf'];
+        if (jQuery.inArray(file.type, fileExtension) == -1) {
+            noty({
+                text: "<?php echo $_helper->__('Only formats are allowed : '); ?>" + fileExtension.join(', '),
+                type: 'error',
+                timeout: 5000
+            });
+
+        } else {
+            valid = true;
+            jQuery(element).closest("div[class^='col-']").css({border: "1px solid green"});
+        }
+        return valid;
+    }
+
+
+
 </script>
+<style>
+    label.error {
+        color: #e84c3d;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 1 !important;
+    }
+</style>
