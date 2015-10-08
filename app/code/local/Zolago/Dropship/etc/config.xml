@@ -116,6 +116,13 @@
 		        </fieldsets>
 		    </courier>
             <vendor>
+                <fieldsets>
+                    <vendor_preferences>
+                        <legend>Addresses</legend>
+                        <position>1</position>
+                        <hidden>true</hidden>
+                    </vendor_preferences>
+                </fieldsets>
                 <fields>
 	                <legal_entity>
 		                <label>Legal entity</label>
