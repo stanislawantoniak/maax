@@ -5,21 +5,15 @@ class Gh_Regulation_Block_Adminhtml_Type_Grid extends Mage_Adminhtml_Block_Widge
     public function __construct() {
         parent::__construct();
         $this->setId('ghregulation_type_grid');
-        $this->setDefaultSort('regulation_type_id');
+        $this->setDefaultSort('kind_name');
         $this->setDefaultDir('desc');
         $this->setSaveParametersInSession(true);
     }
 
-    protected function _prepareCollection(){
+    protected function _prepareCollection() {
+        /** @var GH_Regulation_Model_Resource_Regulation_Type_Collection $collection */
         $collection = Mage::getResourceModel('ghregulation/regulation_type_collection');
-        $kindTable = $collection->getTable('ghregulation/regulation_kind');
-        $collection->getSelect()
-            ->join(
-                array('kind' => $kindTable),
-                "main_table.regulation_kind_id = kind.regulation_kind_id",
-                array("kind_name" => "kind.name")
-            );
-		$collection->setFlag('abstract', true);
+        $collection->joinKind();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -30,7 +24,7 @@ class Gh_Regulation_Block_Adminhtml_Type_Grid extends Mage_Adminhtml_Block_Widge
             "header"    => Mage::helper("ghregulation")->__("Document type name"),
         ));
         $this->addColumn("kind", array(
-            "index"     =>"main_table.regulation_kind_id",
+            "index"     =>"kind_name",
             "header"    => Mage::helper("ghregulation")->__("Document kind name"),
             "type" 		=> "options",
             "options"	=> $this->_getKindOptions(),
