@@ -894,6 +894,10 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 unset($parentProductIds[$_product->getId()]);
         }
         $parentProductIds = array_values($parentProductIds);
+
+        if(empty($parentProductIds)){
+            return $productsIdsPullToSolr; //Nothing to update
+        }
         $productsIdsPullToSolr = $parentProductIds;
 
         //2. Find out products, which msrp should be recovered
