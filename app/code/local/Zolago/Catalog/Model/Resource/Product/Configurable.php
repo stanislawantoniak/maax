@@ -396,7 +396,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             $parentIds = array_merge($parentIdsPerWebsite,$parentIdsPerWebsite);
         }
         $superAttributes = $configResourceModel->getSuperAttributes($parentIds);
-
+        Mage::log($superAttributes, null, "_configurable3.log");
         /* @var $configModel  Zolago_Catalog_Model_Product_Type_Configurable */
         $configModel = Mage::getModel('zolagocatalog/product_type_configurable');
 
@@ -413,7 +413,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             }
             $firstStore = array_shift($stores[$websiteId]);
             $childProductsByAttribute = $configModel->getUsedSizePriceRelations($firstStore, $parentIds);
-
+            Mage::log($childProductsByAttribute, null, "_configurable4.log");
             foreach ($parentIds as $parentId) {
 
                 $superAttributeId = isset($superAttributes[$parentId]) ? $superAttributes[$parentId]['super_attribute'] : false;
@@ -562,7 +562,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
 
         $dataToUpdate["options"] = array_unique($insert);
-
+        Mage::log($dataToUpdate, null, "_configurable5.log");
         return $dataToUpdate;
     }
 
@@ -882,7 +882,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $collection->addFieldToFilter('product_flag', array('null' => true));
 
         $parentProductIds = $collection->getAllIds();
-
+        Mage::log($parentProductIds, null, "_configurable1.log");
         if($collection->getSize() <= 0){
             return $productsIdsPullToSolr; //Nothing to update
         }
@@ -912,6 +912,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             $recoverOptionsProducts[$website->getId()] = $parentProductIds;
             $recoverMSRP[$website->getId()] = $parentProductIds;
         }
+        Mage::log($recoverOptionsProducts, null, "_configurable2.log");
 
 
         //4. Recover options for configurable products
