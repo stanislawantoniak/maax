@@ -10,16 +10,14 @@ class Gh_Regulation_Block_Adminhtml_Kind_Grid extends Mage_Adminhtml_Block_Widge
         $this->setSaveParametersInSession(true);
     }
 
-    protected function _prepareCollection(){
+    protected function _prepareCollection() {
+        /** @var GH_Regulation_Model_Resource_Regulation_Kind_Collection $collection */
         $collection = Mage::getResourceModel('ghregulation/regulation_kind_collection');
-		$collection->setFlag('abstract', true);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
     protected function _prepareColumns() {
-
-		
         $this->addColumn("name", array(
             "index"     =>"name",
             "header"    => Mage::helper("ghregulation")->__("Document kind name"),
@@ -38,17 +36,16 @@ class Gh_Regulation_Block_Adminhtml_Kind_Grid extends Mage_Adminhtml_Block_Widge
                 ),
             ),
             'filter' => false,
-            'sortable' => false,            
+            'sortable' => false,
         ));
         return parent::_prepareColumns();
     }
 
-
     public function getRowUrl($row){
-		if($row->getId()){
-			return $this->getUrl('*/*/editKind', array('regulation_kind_id'=>$row->getId()));
-		}
-        return $this->getUrl('*/*/newKind', array('back'=>'kind'));
+        if ($row->getId()) {
+            return $this->getUrl('*/*/editKind', array('regulation_kind_id' => $row->getId()));
+        }
+        return $this->getUrl('*/*/newKind', array('back' => 'kind'));
     }
 
 }
