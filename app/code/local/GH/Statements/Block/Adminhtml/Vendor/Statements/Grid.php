@@ -108,6 +108,16 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         ));
         /*Totals*/
 
+        /*Marketing*/
+        $this->addColumn("marketing_value", array(
+            "index" => "marketing_value",
+            "header" => Mage::helper("ghstatements")->__("Marketing: Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        /*Marketing*/
+
         $this->addColumn('edit',
             array(
                 'header' => Mage::helper('ghstatements')->__('Edit'),

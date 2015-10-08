@@ -45,6 +45,12 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tabs extends Mage_Adm
             'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_rma')
                 ->toHtml(),
         ));
+        $this->addTab('statement_marketing_information', array(
+            'label' => Mage::helper('ghstatements')->__('Marketing'),
+            'title' => Mage::helper('ghstatements')->__('Marketing'),
+            'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_marketing')
+                ->toHtml(),
+        ));
         return parent::_beforeToHtml();
     }
 }
