@@ -891,9 +891,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         //Do not update campaign products
         foreach ($collection as $_product) {
-            if ($_product->getProductFlag()) {
+            if ($_product->getProductFlag())
                 unset($parentProductIds[$_product->getId()]);
-            }
         }
 
         $productsIdsPullToSolr = $parentProductIds;
