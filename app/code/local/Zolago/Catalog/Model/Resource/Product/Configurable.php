@@ -865,7 +865,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $productsIdsPullToSolr = array();
 
         //1. Filter valid campaign products
-
+        Mage::log($parentIds, null, "_configurable1.1.log");
         //1.1. Get collection of configurable products NOT IN SALE or PROMOTION
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
@@ -879,7 +879,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $collection->addAttributeToSelect("udropship_vendor");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection->addFieldToFilter('entity_id', array('in' => $parentIds));
-        $collection->addFieldToFilter('product_flag', array('null' => true));
+        //$collection->addFieldToFilter('product_flag', array('null' => true));
 
         $parentProductIds = $collection->getAllIds();
         Mage::log($parentProductIds, null, "_configurable1.log");
