@@ -104,6 +104,22 @@ class GH_Regulation_Dropship_VendorController
         //die("test");
     }
 
+    /**
+     * Save vendor document bt AJAX
+     */
+    public function saveVendorDocumentPostAction()
+    {
+        if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
+            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER;
+            $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
+
+            $name = $_FILES["regulation_document"]["name"];
+            $path = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
+            //echo $name;
+            //echo $path;
+        }
+    }
+
 
     public function regulationexpiredAction()
     {

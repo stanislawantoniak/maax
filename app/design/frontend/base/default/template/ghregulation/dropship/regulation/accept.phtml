@@ -32,7 +32,7 @@ $_helper = Mage::helper("ghregulation");
 
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <input type="checkbox" class="uniform"  name="pelnomocnictwo" disabled />
+                                        <input type="checkbox" class="uniform"  name="pelnomocnictwo" />
                                         <label class="css-label">Akceptacja następuje na podstawie pełnomocnictwa</label>
                                     </div>
                                 </div>
@@ -46,11 +46,9 @@ $_helper = Mage::helper("ghregulation");
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="col-md-12"></div>
-                                        <div class="add_regulation_document col-md-12">
+                                        <div class="add_regulation_document hidden col-md-12">
                                             Załącz skan pełnomocnictwa
-                                            <input type="file" data-style="fileinput-custom"
-                                                   name="regulation_document[]"
-                                                   onchange="regulationDocumentCallback(this);"/>
+                                            <input type="file" data-style="fileinput-custom" name="regulation_document" />
                                         </div>
                                     </div>
                                 </div>
@@ -75,15 +73,22 @@ $_helper = Mage::helper("ghregulation");
     }
 </style>
 <script type="text/javascript">
+    jQuery(document).ready(function () {
+        handlePelnomocnictwoCheck();
+        jQuery("[name='pelnomocnictwo']").change(function () {
+            handlePelnomocnictwoCheck();
+        });
+    });
+
     jQuery("#accept_regulation_documents_form").validate({
         rules: {
             accept_regulations: {
                 required: true
             },
-            'regulation_document[]': {extension: 'jpe?g,png,pdf'}
+            'regulation_document': {extension: 'jpe?g,png,pdf'}
         },
         messages: {
-            'regulation_document[]': {
+            'regulation_document': {
                 extension: '<?php echo $_helper->__("File must be JPG, PNG or PDF"); ?>'
             }
         },
@@ -92,18 +97,32 @@ $_helper = Mage::helper("ghregulation");
         }
     });
 
-
-
-    function regulationDocumentCallback(element) {
-        //validate documents
-
-        validateUploadedDocument(element);
-        if (jQuery(element).val().length > 0 && jQuery("[name='regulation_document[]']").valid()) {
-            jQuery("[name='pelnomocnictwo']").prop("disabled", false).parents("div.checker").removeClass("disabled");
+    function handlePelnomocnictwoCheck() {
+        if (jQuery("[name='pelnomocnictwo']").is(":checked")) {
+            jQuery(".add_regulation_document").removeClass("hidden");
         } else {
-            jQuery("[name='pelnomocnictwo']").prop("disabled", true).parents("div.checker").addClass("disabled");
+            jQuery(".add_regulation_document").addClass("hidden");
         }
     }
+
+    jQuery("input[name=regulation_document]").on('change', function (e) {
+        e.preventDefault();
+        var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
+        console.log(formData);
+
+
+        jQuery.ajax({
+            url: '/udropship/vendor/saveVendorDocumentPost',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json'
+        }).done(function(data){
+            console.log(data);
+        });
+    });
 
     jQuery(document).on('click',"button[type=submit]", function (e) {
         e.preventDefault();
@@ -115,52 +134,7 @@ $_helper = Mage::helper("ghregulation");
                 }
             });
         }
-
-
     });
-
-    /**
-     * Validate uploaded documents
-     * 1. Only formats allowed jpeg, jpg, png, pdf
-     * @param element
-     * @returns {boolean}
-     */
-    function validateUploadedDocument(element) {
-        //1. validate file name repeat
-        var valid;
-        var fileNames = [];
-        var lastUploadedFile = jQuery(element)[0].files[0];
-        jQuery("[name='regulation_document[]']").each(function (i, elem) {
-            var file = jQuery(elem)[0].files[0];
-
-            if (typeof(file) !== "undefined") {
-                fileNames.push(file.name);
-            }
-        });
-
-        var obj = {};
-        for (var i = 0, j = fileNames.length; i < j; i++) {
-            obj[fileNames[i]] = (obj[fileNames[i]] || 0) + 1;
-        }
-
-        var uploaded = false;
-        jQuery.each(obj, function (i, val) {
-            if (val > 1) {
-                uploaded = true;
-            }
-        });
-
-        if (uploaded) {
-            noty({
-                text: "<?php echo $_helper->__('File with this name already uploaded'); ?>",
-                type: 'error',
-                timeout: 5000
-            });
-        }
-
-
-        return valid;
-    }
 </script>
 <style>
     label.error {
