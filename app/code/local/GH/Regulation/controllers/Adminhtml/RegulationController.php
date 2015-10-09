@@ -214,10 +214,6 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
     public function saveDocumentAction() {
         $helper = Mage::helper("ghregulation");
         try {
-            if (isset($_FILES['file'])) {
-                $file = $_FILES['file'];
-            }
-
             $request = $this->getRequest();
             $id = $request->getParam('id', null);
             /** @var GH_Regulation_Model_Regulation_Document $model */
@@ -225,7 +221,20 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             $data = $request->getPost();
             $model->addData($data);
 
-            // todo save file and set document_link
+            if (isset($_FILES['file']) && isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
+                $file = $_FILES['file'];
+                $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER;
+                $allowed = GH_Regulation_Helper_Data::getAllowedRegulationDocumentTypes();
+                $path = Mage::helper("ghregulation")->saveRegulationDocument($file, $folder, $allowed);
+                $dl = array(
+                    "raw_name"  => $_FILES['file']['name'],
+                    "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
+                    "path"      => $path
+                );
+                $model->setData("document_link", serialize($dl));
+            } elseif (empty($id)) {
+                Mage::throwException("Wrong document file");
+            }
 
             $model->save();
             $url = $this->getUrl('*/*/list');
