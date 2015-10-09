@@ -10,9 +10,11 @@ class GH_Regulation_Block_Adminhtml_List_Edit_Form extends Mage_Adminhtml_Block_
         $helper = Mage::helper('ghregulation');
         $model = $this->getModel();
 
+        // Note: form is generated manually
+        /** @see app/design/adminhtml/default/default/template/ghregulation/list/edit.phtml */
         $form = new Varien_Data_Form(array(
-                'id'      => 'edit_form',
-                'action'  => $this->getUrl('ghrewrite/csv/import'),
+                'id'      => 'regulation_document_edit_form',
+                'action'  => $this->getUrl('*/*/saveDocument'),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data'
             )
@@ -26,7 +28,7 @@ class GH_Regulation_Block_Adminhtml_List_Edit_Form extends Mage_Adminhtml_Block_
 
         $fieldset->addField('file', 'file', array(
             'label' => $helper->__('File'),
-            'required' => true,
+            'required' => $this->_isNew(),
             'name' => 'file',
         ));
 
