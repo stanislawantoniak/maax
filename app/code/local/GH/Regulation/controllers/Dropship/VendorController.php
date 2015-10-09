@@ -104,6 +104,39 @@ class GH_Regulation_Dropship_VendorController
         //die("test");
     }
 
+    public function getDocumentAction() {
+        $documentId = $this->getRequest()->getParam('id');
+        if($documentId) {
+            /** @var Gh_Regulation_Model_Regulation_Document $document */
+            $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
+            if($document->getId()) {
+                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS .$document->getPath();
+                if(is_file($path) && is_readable ($path)) {
+                    $this->_sendFile($path,$document->getFileName());
+                    return;
+                }
+            }
+        }
+        $this->norouteAction(); //404
+        return;
+    }
+
+    protected function _sendFile($filepath,$filename = null) {
+        $filename = is_null($filename) ? basename($filepath) : $filename;
+
+        $this->getResponse()
+            ->setHttpResponseCode(200)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            //->setHeader ( 'Content-type', 'application/pdf', true ) /*  View in browser */
+            ->setHeader('Content-type', 'application/force-download') /*  Download        */
+            ->setHeader('Content-Length', filesize($filepath))
+            ->setHeader('Content-Disposition', 'inline' . '; filename=' . $filename);
+        $this->getResponse()->clearBody();
+        $this->getResponse()->sendHeaders();
+        readfile($filepath);
+    }
+
 
     public function regulationexpiredAction()
     {

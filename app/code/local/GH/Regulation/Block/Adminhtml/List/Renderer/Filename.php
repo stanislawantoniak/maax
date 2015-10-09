@@ -9,7 +9,8 @@ class GH_Regulation_Block_Adminhtml_List_Renderer_Filename extends Mage_Adminhtm
     public function render(Varien_Object $row) {
         /** @var GH_Regulation_Model_Regulation_Document $row */
         $value = $row->getFileName();
-        return '<span>' . $value . " [dev tutaj link to pliku] ".'</span>';
+
+        return "<a href=\"{$row->getAdminUrl()}\">{$value}</a>";
     }
 
 }
