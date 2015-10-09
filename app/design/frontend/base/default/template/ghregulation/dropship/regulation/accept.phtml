@@ -1,5 +1,6 @@
 <?php
-/**/
+/* @var $this GH_Regulation_Block_Dropship_Regulation_Accept */
+
 $_session = Mage::getSingleton('udropship/session');
 $_vendor = Mage::registry('reset_vendor');
 $_helper = Mage::helper("ghregulation");
@@ -82,7 +83,7 @@ $_helper = Mage::helper("ghregulation");
         },
         messages: {
             'regulation_document[]': {
-                extension: "File must be JPG, PNG or PDF"
+                extension: '<?php echo $_helper->__("File must be JPG, PNG or PDF"); ?>'
             }
         },
         errorPlacement: function (error, element) {
