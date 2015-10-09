@@ -278,6 +278,89 @@ if (typeof connect_brandJsObject != "undefined") {
     connect_brandJsObject.initGrid();
 
 }
+if (typeof connect_kindJsObject != "undefined") {
+    if (!$('vendor_kind').value) {
+        $('vendor_kind').value = '{}';
+    }
+    var vendorKind = $('vendor_kind').value.evalJSON();
+
+    function changeVendorKindProperty() {
+        if (!vendorKind[this.kindId]) {
+            vendorKind[this.kindId] = {};
+        }
+        if (!this.name) {
+            return;
+        }
+        var fname = this.name.replace(/^_/, '');
+        vendorKind[this.kindId][fname] = this.value;
+        highlightKindRow(this);
+        $('vendor_kind').value = Object.toJSON(vendorKind);
+    }
+
+    function highlightKindRow(input, changed) {
+        return; // disabled until done properly
+        $(input).up('tr').select('td').each(function (el) {
+            el.style.backgroundColor = changed || typeof changed=='undefined' ? '#ffb' : '';
+        });
+    }
+
+    connect_kindJsObject.initCallback = function(self) {
+        self.initGridRows && self.initGridRows();
+    }
+
+    connect_kindJsObject.initRowCallback = function(self, row) {
+        var inputs = $(row).select('input', 'select'), id, selected, fname;
+        for (var i=0; i<inputs.length; i++) {
+            if (inputs[i].type=='checkbox' && inputs[i].name=='') {
+                id = inputs[i].value;
+                if (vendorKind[id] && (typeof vendorKind[id]['on'] !== 'undefined')) {
+                    selected = vendorKind[id]['on'];
+                    inputs[i].checked = selected;
+                    highlightKindRow(inputs[i]);
+                } else {
+                    selected = inputs[i].checked;
+                }
+            } else {
+                inputs[i].disabled = !selected;
+                inputs[i].kindId = id;
+                fname = inputs[i].name.replace(/^_/, '');
+                if (vendorKind[id] && vendorKind[id][fname]) {
+                    inputs[i].value = vendorKind[id][fname];
+                }
+                $(inputs[i]).observe('change', changevendorKindProperty);
+            }
+        }
+    }
+
+    connect_kindJsObject.checkboxCheckCallback = function(grid, element, checked){
+        $(element).up('tr').select('input', 'select').each(function (el) {
+            if (el.type=='checkbox' && el.name=='') {
+                if (!vendorKind[el.value]) {
+                    vendorKind[el.value] = {};
+                }
+                vendorKind[el.value]['on'] = checked;
+                highlightKindRow(element);
+            } else {
+                el.disabled = !checked;
+            }
+        });
+        $('vendor_kind').value = Object.toJSON(vendorKind);
+    }
+
+    connect_kindJsObject.rowClickCallback = function(grid, event){
+        var trElement = Event.findElement(event, 'tr');
+        var isInput   = Event.element(event).tagName.match(/(input|select|option)/i);
+        if(trElement){
+            var checkbox = Element.getElementsBySelector(trElement, 'input');
+            if(checkbox[0]){
+                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                connect_kindJsObject.setCheckboxChecked(checkbox[0], checked);
+            }
+        }
+    }
+    connect_kindJsObject.initGrid();
+
+}
 if (typeof udropship_vendor_productsJsObject != "undefined") {
     if (!$('vendor_products').value) {
         $('vendor_products').value = '{}';

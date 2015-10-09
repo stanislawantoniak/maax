@@ -61,6 +61,9 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
                 if ($r->getParam('vendor_attributeset')) {
                     $this->_saveAttributeSet(Zend_Json::decode($r->getParam('vendor_attributeset')),$id);                    
                 }
+                if ($r->getParam('vendor_kind')) {
+                    $this->_saveKinds(Zend_Json::decode($r->getParam('vendor_kind')),$id);
+                }
 
                 //TODO
                 if ($r->getParam('dhl_vendor')) {
@@ -126,26 +129,32 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
      * saving vendor permissions to brand
      * @param array $brands 
      * @param int $vendor_id
-     * @return 
      */
      protected function _saveBrands($brands,$vendor_id) {
         $this->_saveParams($brands,$vendor_id,'zolagosizetable/vendor_brand','brand_id');
      }
     /**
      * saving vendor permissions to attribute sets
-     * @param array $attributesets
+     * @param array $attributeset
      * @param int $vendor_id
-     * @return 
      */
      protected function _saveAttributeSet($attributeset,$vendor_id) {
         $this->_saveParams($attributeset,$vendor_id,'zolagosizetable/vendor_attribute_set','attribute_set_id');
      }
 
     /**
-     * saving vendor permissions to attribute sets
-     * @param array $attributesets
+     * saving vendor permissions to regulation kind
+     * @param array $kinds
      * @param int $vendor_id
-     * @return
+     */
+    protected function _saveKinds($kinds,$vendor_id) {
+        $this->_saveParams($kinds,$vendor_id,'ghregulation/regulation_vendor_kind','regulation_kind_id');
+    }
+
+    /**
+     * saving vendor permissions to attribute sets
+     * @param array $dhl
+     * @param int $vendor_id
      */
     protected function _saveDhlVendor($dhl, $vendor_id)
     {
