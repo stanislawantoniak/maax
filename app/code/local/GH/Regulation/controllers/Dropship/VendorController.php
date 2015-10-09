@@ -13,8 +13,8 @@ class GH_Regulation_Dropship_VendorController
     public function acceptAction()
     {
         try {
-            $id      = $this->getRequest()->getParam('id', false);
-            $key     = $this->getRequest()->getParam('key', false);
+            $id = $this->getRequest()->getParam('id', false);
+            $key = $this->getRequest()->getParam('key', false);
 
             if (empty($id) || empty($key)) {
                 throw new Exception($this->__('Bad request.'));
@@ -40,9 +40,8 @@ class GH_Regulation_Dropship_VendorController
                     $vendor->setPassword($password);
                     $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
                     $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
-                    Mage::getResourceSingleton('udropship/helper')->updateModelFields($vendor, array('confirmation','password_hash','password_enc'));
-                }
-                catch (Exception $e) {
+                    Mage::getResourceSingleton('udropship/helper')->updateModelFields($vendor, array('confirmation', 'password_hash', 'password_enc'));
+                } catch (Exception $e) {
                     throw new Exception($this->__('Failed to confirm vendor account.'));
                 }
 
@@ -50,12 +49,10 @@ class GH_Regulation_Dropship_VendorController
                 $this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
                 $this->_redirect('udropship/vendor/');
                 return;
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 throw new Exception($this->__('Wrong vendor account specified.'));
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             // die unhappy
             $this->_getSession()->addError($e->getMessage());
             $this->_redirect('udropship/vendor/');
@@ -80,7 +77,7 @@ class GH_Regulation_Dropship_VendorController
             }
             if (!empty($documents)) {
                 foreach ($documents as $regulationDocument) {
-                    $this->_saveRegulationDocument($regulationDocument, $folder, $allowedRegulationDocumentTypes);
+                    Mage::helper("ghregulation")->saveRegulationDocument($regulationDocument, $folder, $allowedRegulationDocumentTypes);
                 }
             }
             //krumo($documents);
@@ -89,56 +86,4 @@ class GH_Regulation_Dropship_VendorController
         //die("test");
     }
 
-
-    /**
-     * @param $file
-     * @param $folder
-     * @param $allowedRegulationDocumentTypes
-     * @return string
-     */
-    protected function _saveRegulationDocument($file, $folder, $allowedRegulationDocumentTypes)
-    {
-        $path = "";
-
-        $tmpName = $file["tmp_name"];
-        $name = $file["name"];
-        $type = $file["type"];
-        $size = $file["size"];
-
-
-        if (!in_array($type, $allowedRegulationDocumentTypes)) {
-            return $path;
-        }
-
-        if (!empty($name)) {
-            $imageName = $this->cleanFileName($name);
-            $uniqName = uniqid() . "_" . $imageName;
-
-            $image = md5_file($tmpName);
-            $image = md5(mt_rand() . $image);
-            $safeFolderPath = $image[0] . "/" . $image[1] . "/";
-
-            mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
-            $path = $safeFolderPath . $uniqName;
-            try {
-                move_uploaded_file($tmpName, Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $uniqName);
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
-
-        }
-        return $path;
-    }
-
-    /**
-     * Clean file name
-     * @param $string
-     * @return mixed
-     */
-    function cleanFileName($string)
-    {
-        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-        $string = preg_replace('/[^.A-Za-z0-9\-]/', '', $string); // Removes special chars.
-        return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
-    }
 }
