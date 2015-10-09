@@ -27,15 +27,15 @@ class Gh_Regulation_Block_Adminhtml_List_Grid extends Mage_Adminhtml_Block_Widge
         ));
         $this->addColumn("date", array(
             "index"  => "date",
-            "header" => Mage::helper("ghregulation")->__("Date from"),
+            "header" => Mage::helper("ghregulation")->__("Is valid from"),
         ));
         $this->addColumn("kind_name", array(
             "index"  => "kind_name",
-            "header" => Mage::helper("ghregulation")->__("Document kind name"),
+            "header" => Mage::helper("ghregulation")->__("Kind"),
         ));
         $this->addColumn("type_name", array(
             "index"  => "type_name",
-            "header" => Mage::helper("ghregulation")->__("Document type name"),
+            "header" => Mage::helper("ghregulation")->__("Type"),
         ));
         $this->addColumn('action', array(
             'header'  => Mage::helper('ghregulation')->__('Remove'),

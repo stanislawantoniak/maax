@@ -170,4 +170,11 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
          $this->renderLayout();
      }
 
+    public function newDocumentAction() {
+        $this->_forward('editDocument');
+    }
+
+    public function editDocumentAction() {
+        $this->_editAction('id', 'ghregulation_current_document', 'ghregulation/regulation_document', 'regulation_document_form_data');
+    }
 }

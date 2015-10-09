@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <layout>
+    <adminhtml_regulation_editdocument>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_list_edit" name="ghregulation_document_edit" template="ghregulation/list/edit.phtml">
+                <block type="ghregulation/adminhtml_list_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_editdocument>
     <ghregulation_update_menu>      
         <reference name="menu">
             <action method="setActive"><menupath>sales/udropship/ghregulation</menupath></action>
@@ -45,12 +53,4 @@
             </block>
         </reference>
     </adminhtml_regulation_edittype>
-    <!--
-    <adminhtml_mapper_run>
-        <update handle="zolagomapper_update_menu"/>
-        <reference name="content">
-            <block type="zolagomapper/adminhtml_mapper_run" name="zolagomapper_mapper" template="zolagomapper/mapper/run.phtml"/>
-        </reference>
-    </adminhtml_mapper_run>
-    -->
 </layout>
