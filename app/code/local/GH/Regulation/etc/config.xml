@@ -118,4 +118,11 @@
             </updates>
         </layout>
     </frontend>
+    <default>
+        <udropship>
+            <microsite>
+                <confirmation_token_expiration_time>168</confirmation_token_expiration_time>
+            </microsite>
+        </udropship>
+    </default>
 </config>
