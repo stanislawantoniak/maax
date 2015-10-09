@@ -137,20 +137,42 @@ class GH_Regulation_Dropship_VendorController
         readfile($filepath);
     }
 
+    function deleteDirectory($dir) {
+        system('rm -rf ' . escapeshellarg($dir), $retval);
+        return $retval == 0; // UNIX commands return zero on success
+    }
+
     /**
      * Save vendor document bt AJAX
      */
     public function saveVendorDocumentPostAction()
     {
+        //TODO bad code to refactor
+        Mage::log($_POST);
+        $result = array(
+            "result" => 0,
+            "content" => array()
+        );
         if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
-            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER;
+            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_".(int)$_POST["vendor"];
+
+            $dirname = Mage::getBaseDir('media') .DS. $folder . DS;
+            $this->deleteDirectory($dirname);
             $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
 
             $name = $_FILES["regulation_document"]["name"];
             $path = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
-            //echo $name;
-            //echo $path;
+            if($path){
+                $result = array(
+                    "result" => 1,
+                    "content" => array(
+                        'name' => $name,
+                        'link' => Mage::getBaseUrl('media') . $folder . DS . $path
+                    )
+                );
+            }
         }
+        echo json_encode($result);
     }
 
 

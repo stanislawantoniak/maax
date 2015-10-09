@@ -31,6 +31,7 @@ $_helper = Mage::helper("ghregulation");
                                 </div>
 
                                 <div class="form-group">
+                                    <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
                                     <div class="col-md-12">
                                         <input type="checkbox" class="uniform"  name="pelnomocnictwo" />
                                         <label class="css-label">Akceptacja następuje na podstawie pełnomocnictwa</label>
@@ -49,6 +50,7 @@ $_helper = Mage::helper("ghregulation");
                                         <div class="add_regulation_document hidden col-md-12">
                                             Załącz skan pełnomocnictwa
                                             <input type="file" data-style="fileinput-custom" name="regulation_document" />
+                                            <div class="add_regulation_document_preview"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -107,6 +109,7 @@ $_helper = Mage::helper("ghregulation");
 
     jQuery("input[name=regulation_document]").on('change', function (e) {
         e.preventDefault();
+        jQuery(".add_regulation_document_preview").html("");
         var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
         console.log(formData);
 
@@ -118,9 +121,16 @@ $_helper = Mage::helper("ghregulation");
             cache: false,
             contentType: false,
             processData: false,
-            dataType: 'json'
-        }).done(function(data){
-            console.log(data);
+            //dataType: 'json',
+            'success': function(response) {},
+            'error': function(response) {}
+        }).done(function(response){
+            console.log(response);
+            var result = jQuery.parseJSON(response);
+            console.log(result);
+            if (result.result == 1) {
+                jQuery(".add_regulation_document_preview").html('<a href="' + result.content.link + '" target="_blank">' + result.content.name + '</a>');
+            }
         });
     });
 
