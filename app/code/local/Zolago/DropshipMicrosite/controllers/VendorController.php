@@ -81,7 +81,8 @@ class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite
 				Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
 				$this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
 //				$this->_redirect('udropship/vendor/');
-				$this->_redirect('udropship/vendor/accept');
+
+				$this->_redirect('udropship/vendor/accept', array("id" => $vendor->getId()));
 				return;
 			}
 			catch (Exception $e) {

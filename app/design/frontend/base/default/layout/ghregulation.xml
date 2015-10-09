@@ -13,6 +13,7 @@
                 <type>skin_js</type>
                 <name>../../../frontend/default/udropship/js/plugins/fileinput/fileinput.js</name>
             </action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
         </reference>
         <reference name="root">
             <action method="setTemplate">
