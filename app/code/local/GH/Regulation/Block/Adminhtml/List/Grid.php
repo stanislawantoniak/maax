@@ -24,6 +24,7 @@ class Gh_Regulation_Block_Adminhtml_List_Grid extends Mage_Adminhtml_Block_Widge
         $this->addColumn("document_link", array(
             "index" => "document_link",
             "header" => Mage::helper("ghregulation")->__("Document"),
+            "renderer" => 'GH_Regulation_Block_Adminhtml_List_Renderer_Filename'
         ));
         $this->addColumn("date", array(
             "index"  => "date",

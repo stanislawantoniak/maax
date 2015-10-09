@@ -61,6 +61,34 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
      }
 
     /**
+     * Delete document type
+     *
+     * @return $this|Mage_Core_Controller_Varien_Action
+     */
+    public function deleteTypeAction() {
+        $id = $this->getRequest()->getParam('regulation_type_id', null);
+        $model = $this->_getModel('ghregulation_current_type', 'ghregulation/regulation_type', $id);
+        if ($model->getId()) {
+            $success = false;
+            try {
+                $name = $model->getData('name');
+                $model->delete();
+                $success = true;
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->_getSession()->addException($e, Mage::helper('ghregulation')->__('An error occurred while deleting this type of document.'));
+            }
+            if ($success) {
+                $this->_getSession()->addSuccess(Mage::helper('ghregulation')->__('Document type &quot;%s&quot; was deleted.', $name));
+            }
+        }
+        return $this->_redirect('*/*/type');
+    }
+
+    /**
      * saving forms
      *
      * @param string $requestParam name of object primary key
@@ -70,7 +98,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
      * @param string $urlPattern redirect url after success save
      * @return Mage_Adminhtml_Controller_Action
      */
-     protected function _saveAction($requestParam,$registerKey,$modelName,$formData,$urlPattern) {     
+    protected function _saveAction($requestParam, $registerKey, $modelName, $formData, $urlPattern) {
          try {
              $request = $this->getRequest();
              $id = $request->getParam($requestParam,null);
@@ -163,7 +191,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
      }
 
     /**
-     * show list grid
+     * show list grid (documents list)
      */
      public function listAction() {
          $this->loadLayout();
@@ -176,5 +204,76 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
 
     public function editDocumentAction() {
         $this->_editAction('id', 'ghregulation_current_document', 'ghregulation/regulation_document', 'regulation_document_form_data');
+    }
+
+    /**
+     * Save document
+     *
+     * @return Mage_Adminhtml_Controller_Action
+     */
+    public function saveDocumentAction() {
+        $helper = Mage::helper("ghregulation");
+        try {
+            $request = $this->getRequest();
+            $id = $request->getParam('id', null);
+            /** @var GH_Regulation_Model_Regulation_Document $model */
+            $model = $this->_getModel('ghregulation_current_document', 'ghregulation/regulation_document', $id);
+            $data = $request->getPost();
+            $model->addData($data);
+
+            if (isset($_FILES['file']) && isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
+                $file = $_FILES['file'];
+                $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER;
+                $allowed = GH_Regulation_Helper_Data::getAllowedRegulationDocumentTypes();
+                $path = Mage::helper("ghregulation")->saveRegulationDocument($file, $folder, $allowed);
+                $dl = array(
+                    "raw_name"  => $_FILES['file']['name'],
+                    "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
+                    "path"      => $path
+                );
+                $model->setData("document_link", serialize($dl));
+            } elseif (empty($id)) {
+                Mage::throwException("Wrong document file");
+            }
+
+            $model->save();
+            $url = $this->getUrl('*/*/list');
+            $this->_getSession()->setData('ghregulation_document_form_data', null);
+            return $this->_redirectUrl($url);
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addException($e, $helper->__($e->getMessage()));
+            $this->_getSession()->setData('ghregulation_document_form_data', $this->getRequest()->getParams());
+        }
+        return $this->_redirectReferer();
+    }
+
+    /**
+     * Delete document
+     *
+     * @return $this|Mage_Core_Controller_Varien_Action
+     */
+    public function deleteDocumentAction() {
+        $id = $this->getRequest()->getParam('id', null);
+        /** @var GH_Regulation_Model_Regulation_Document $model */
+        $model = $this->_getModel('ghregulation_current_document', 'ghregulation/regulation_document', $id);
+        if ($model->getId()) {
+            $success = false;
+            try {
+                $name = $model->getFileName();
+                $model->delete();
+                $success = true;
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->_getSession()->addException($e, Mage::helper('ghregulation')->__('An error occurred while deleting this document.'));
+            }
+            if ($success) {
+                $this->_getSession()->addSuccess(Mage::helper('ghregulation')->__('Document &quot;%s&quot; was deleted.', $name));
+            }
+        }
+        return $this->_redirect('*/*/list');
     }
 }

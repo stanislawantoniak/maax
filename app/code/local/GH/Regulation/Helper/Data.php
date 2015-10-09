@@ -6,8 +6,9 @@
 class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const REGULATION_DOCUMENT_FOLDER = "vendor_regulation";
+    const REGULATION_DOCUMENT_ADMIN_FOLDER = "admin_regulation";
 
-    public function getAllowedRegulationDocumentTypes()
+    public static function getAllowedRegulationDocumentTypes()
     {
         return array("image/png", "image/jpg", "application/pdf");
     }
@@ -60,7 +61,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
      * @param $string
      * @return mixed
      */
-    function cleanFileName($string)
+    public static function cleanFileName($string)
     {
         $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
         $string = preg_replace('/[^.A-Za-z0-9\-]/', '', $string); // Removes special chars.

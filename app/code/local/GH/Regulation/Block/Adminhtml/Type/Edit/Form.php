@@ -50,6 +50,7 @@ class GH_Regulation_Block_Adminhtml_Type_Edit_Form extends Mage_Adminhtml_Block_
         }
         return $out;
     }
+
     protected function _isNew() {
         return !(int)$this->getDataObject()->getId();
     }
