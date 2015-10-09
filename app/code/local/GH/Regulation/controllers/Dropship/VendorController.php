@@ -32,23 +32,40 @@ class GH_Regulation_Dropship_VendorController
                     throw new Exception($this->__('Wrong confirmation key.'));
                 }
                 //Check if token not expired
-                die("test");
-                // activate customer
-                try {
-                    $vendor->setConfirmation(null);
-                    $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
-                    $vendor->setPassword($password);
-                    $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
-                    $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
-                    Mage::getResourceSingleton('udropship/helper')->updateModelFields($vendor, array('confirmation', 'password_hash', 'password_enc'));
-                } catch (Exception $e) {
-                    throw new Exception($this->__('Failed to confirm vendor account.'));
+
+                if ($vendor->getConfirmation() && $vendor->getConfirmationSent()) {
+                    /* Vendor account confirmation token life time */
+                    $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+
+                    $localeTime = Mage::getModel('core/date')->timestamp(time());
+                    $secPastSinceConfirmation = $localeTime - strtotime($vendor->getConfirmationSentDate());
+                    $hoursPastSinceConfirmation = $secPastSinceConfirmation / 60 / 60;
+
+                    if ($hoursPastSinceConfirmation > $confirmationTokenExpirationTime) {
+                        //If token expired redirect to cms page with info "Contact with GALLERY to get new confirmation email"
+
+                        $this->_redirect('udropship/vendor/regulationexpired');
+                        return;
+                    }
                 }
 
-                Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
-                $this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
-                $this->_redirect('udropship/vendor/');
-                return;
+
+                // activate customer
+//                try {
+//                    $vendor->setConfirmation(null);
+//                    $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
+//                    $vendor->setPassword($password);
+//                    $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
+//                    $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
+//                    Mage::getResourceSingleton('udropship/helper')->updateModelFields($vendor, array('confirmation', 'password_hash', 'password_enc'));
+//                } catch (Exception $e) {
+//                    throw new Exception($this->__('Failed to confirm vendor account.'));
+//                }
+//
+//                Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
+//                $this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
+//                $this->_redirect('udropship/vendor/');
+//                return;
             } catch (Exception $e) {
                 throw new Exception($this->__('Wrong vendor account specified.'));
             }
@@ -58,6 +75,7 @@ class GH_Regulation_Dropship_VendorController
             $this->_redirect('udropship/vendor/');
             return;
         }
+        return $this->_renderPage();
     }
 
     public function acceptPostAction()
@@ -84,6 +102,12 @@ class GH_Regulation_Dropship_VendorController
         }
 
         //die("test");
+    }
+
+
+    public function regulationexpiredAction()
+    {
+        return $this->_renderPage();
     }
 
 }
