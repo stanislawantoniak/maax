@@ -116,7 +116,7 @@ class Zolago_Catalog_Model_Observer
             : 0;
         $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : null;
         $msrpType = (isset($attributesData['converter_msrp_type']) && $attributesData['converter_msrp_type'] == 0)? 1:0;
-        $productIdsLog = implode(",", $productIds);
+
         if (!empty($converterPriceType) || !is_null($priceMargin) || !empty($msrpType)) {
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);

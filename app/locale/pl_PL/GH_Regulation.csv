@@ -1,3 +1,8 @@
+"An error occurred while deleting this type of document.","An error occurred while deleting this type of document."
+"Document type &quot;%s&quot; was deleted.","Typ dokumentu &quot;%s&quot; został usunięty."
+"An error occurred while deleting this document.","An error occurred while deleting this document."
+"Document &quot;%s&quot; was deleted.","Dokument &quot;%s&quot; został usunięty."
+"Wrong document file","Niepoprawny plik"
 "Kind","Rodzaj"
 "Type","Typ"
 "Edit document: %s","Edycja dokumentu: %s"
