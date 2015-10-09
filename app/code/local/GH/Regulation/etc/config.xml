@@ -31,6 +31,11 @@
                     </regulation_vendor_kind>
                 </entities>
             </ghregulation_resource>
+            <umicrosite>
+                <rewrite>
+                    <observer>GH_Regulation_Model_DropshipMicrosite_Observer</observer>
+                </rewrite>
+            </umicrosite>
         </models>
         <blocks>
             <ghregulation>
