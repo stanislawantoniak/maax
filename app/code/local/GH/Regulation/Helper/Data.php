@@ -10,11 +10,8 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
     public static function getAllowedRegulationDocumentTypes()
     {
-        return array("image/png", "image/jpg", "application/pdf");
+        return array("image/png", "image/jpg", "image/jpeg", "application/pdf");
     }
-
-
-
 
     /**
      * @param $file
@@ -44,8 +41,10 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             $image = md5(mt_rand() . $image);
             $safeFolderPath = $image[0] . "/" . $image[1] . "/";
 
-            mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
+            @mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
+
             $path = $safeFolderPath . $uniqName;
+
             try {
                 move_uploaded_file($tmpName, Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $uniqName);
             } catch (Exception $e) {
@@ -63,8 +62,9 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public static function cleanFileName($string)
     {
-        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-        $string = preg_replace('/[^.A-Za-z0-9\-]/', '', $string); // Removes special chars.
-        return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+        $string = str_replace(' ', '_', $string); // Replaces all spaces with hyphens.
+        $string = preg_replace('/[^.A-Za-z0-9\-\_]/', '', $string); // Removes special chars.
+        $string = preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+        return preg_replace('/_+/', '_', $string); // Replaces multiple underscores with single one.
     }
 }
