@@ -114,7 +114,7 @@ $_helper = Mage::helper("ghregulation");
         messages: {
             'regulation_document': {
                 extension: '<?php echo $_helper->__("File must be JPG, PNG or PDF"); ?>',
-                fileSize: '<?php echo $_helper->__("File too large. File must be less than %s megabytes.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE); ?>'
+                fileSize: '<?php echo $_helper->__("File too large. File must be less than %sMB.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE); ?>'
             }
         },
         errorPlacement: function (error, element) {
@@ -154,7 +154,7 @@ $_helper = Mage::helper("ghregulation");
                 jQuery("[name=regulation_document_path]").val(response.content.link);
             }
             if (response.status == 0) {
-                jQuery(".add_regulation_document_preview").html(response.content);
+                //jQuery(".add_regulation_document_preview").html(response.content);
                 jQuery("[name=regulation_document_path]").val("");
             }
         });
