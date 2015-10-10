@@ -14,6 +14,7 @@ $_helper = Mage::helper("ghregulation");
                 <div class="col-md-12">
                     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
                     <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
+                        <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
                         <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
                         <div class="widget box">
                             <div class="widget-header" style="text-align: center;">
@@ -45,9 +46,13 @@ $_helper = Mage::helper("ghregulation");
                                     <div class="col-md-12">
                                         <div class="col-md-12"></div>
                                         <div class="add_regulation_document hidden col-md-12">
-                                            <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
-                                            <input type="file" data-style="fileinput-custom" name="regulation_document" />
-                                            <div class="add_regulation_document_preview"></div>
+                                            <label class="css-label">
+                                                <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
+                                                <input type="file" data-style="fileinput-custom" name="regulation_document" />
+
+                                                <input type="text"  name="regulation_document_path" value="" />
+                                                <div class="add_regulation_document_preview"></div>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -127,6 +132,8 @@ $_helper = Mage::helper("ghregulation");
     jQuery("input[name=regulation_document]").on('change', function (e) {
         e.preventDefault();
         jQuery(".add_regulation_document_preview").html("");
+        jQuery("[name=regulation_document_path]").val("");
+
         var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
 
         jQuery.ajax({
@@ -138,12 +145,16 @@ $_helper = Mage::helper("ghregulation");
             processData: false,
             //dataType: 'json',
             'success': function(response) {},
-            'error': function(response) {}
+            'error': function(response) {console.log("ERR: " + response);}
         }).done(function(response){
-            console.log(response.status);
             if (response.status == 1) {
                 jQuery(".add_regulation_document_preview")
                     .html('<a href="' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
+                jQuery("[name=regulation_document_path]").val(response.content.link);
+            }
+            if (response.status == 0) {
+                jQuery(".add_regulation_document_preview").html('ERR');
+                jQuery("[name=regulation_document_path]").val("");
             }
         });
     });

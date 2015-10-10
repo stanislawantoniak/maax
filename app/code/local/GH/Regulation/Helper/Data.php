@@ -30,7 +30,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         $name = $file["name"];
         $type = $file["type"];
         $size = $file["size"];
-
+Mage::log($type);
 
         if (!in_array($type, $allowedRegulationDocumentTypes)) {
             return $path;

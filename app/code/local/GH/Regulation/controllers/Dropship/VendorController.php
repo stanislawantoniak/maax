@@ -80,39 +80,82 @@ class GH_Regulation_Dropship_VendorController
 
     public function acceptPostAction()
     {
-        $params = $this->getRequest()->getPost();
-        //krumo($params);
-        //krumo($_FILES);
-
-        if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
-            $documents = array();
-            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER;
-            $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
-            foreach ($_FILES["regulation_document"] as $documentDataName => $regulationDocumentData) {
-                for ($i = 0; $i < count($regulationDocumentData); $i++) {
-                    $documents[$i][$documentDataName] = $regulationDocumentData[$i];
-                }
-            }
-            if (!empty($documents)) {
-                foreach ($documents as $regulationDocument) {
-                    Mage::helper("ghregulation")->saveRegulationDocument($regulationDocument, $folder, $allowedRegulationDocumentTypes);
-                }
-            }
-            //krumo($documents);
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirectReferer();
+        }
+        Mage::log($_POST);
+        $_helper = Mage::helper("ghregulation");
+        if (empty($_POST)) {
+            $this->_getSession()->addError($_helper->__("Some error occurred"));
+            return $this->_redirectReferer();
+        }
+        // Form key valid?
+        $formKey = Mage::getSingleton('core/session')->getFormKey();
+        $formKeyPost = $this->getRequest()->getParam('form_key');
+        if ($formKey != $formKeyPost) {
+            return $this->_redirectReferer();
         }
 
+
+        $vendorId = $this->getRequest()->getPost('vendor', false);
+        $acceptRegulations = $this->getRequest()->getPost('accept_regulations', false);
+
+        $accept_regulations_single = $this->getRequest()->getPost('accept_regulations_single', false);
+        $accept_regulations_proxy = $this->getRequest()->getPost('accept_regulations_proxy', false);
+Mage::log($vendorId);
+        if (!$vendorId) {
+            $this->_getSession()->addError($_helper->__("Undefined vendor"));
+            return $this->_redirectReferer();
+        }
+
+        if (!$acceptRegulations) {
+            $this->_getSession()->addError($_helper->__("Please check Accept Regulation checkbox"));
+            return $this->_redirectReferer();
+        }
+        if (!$accept_regulations_single && !$accept_regulations_proxy) {
+            $this->_getSession()->addError($_helper->__("One of the options should be checked"));
+            return $this->_redirectReferer();
+        }
+        //krumo($vendorId);
+        Mage::log($_FILES);
+
+        if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
+            $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
+            $file = $_FILES["regulation_document"];
+
+            $name = $file["name"];
+            $type = $file["type"];
+            $size = $file["size"];
+            Mage::log($type);
+            Mage::log($size);
+
+            if (round($size / 1048576, 1) >= 5) { //5MG
+                $this->_getSession()->addError($_helper->__("File too large. File must be less than 5 megabytes."));
+                return $this->_redirectReferer();
+            }
+
+
+            if (!in_array($type, $allowedRegulationDocumentTypes)) {
+                $this->_getSession()->addError($_helper->__("File must be JPG, PNG or PDF"));
+                return $this->_redirectReferer();
+            }
+
+        }
         //die("test");
+
+
     }
 
-    public function getDocumentAction() {
+    public function getDocumentAction()
+    {
         $documentId = $this->getRequest()->getParam('id');
-        if($documentId) {
+        if ($documentId) {
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
-            if($document->getId()) {
-                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS .$document->getPath();
-                if(is_file($path) && is_readable ($path)) {
-                    $this->_sendFile($path,$document->getFileName());
+            if ($document->getId()) {
+                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $document->getPath();
+                if (is_file($path) && is_readable($path)) {
+                    $this->_sendFile($path, $document->getFileName());
                     return;
                 }
             }
@@ -121,7 +164,8 @@ class GH_Regulation_Dropship_VendorController
         return;
     }
 
-    protected function _sendFile($filepath,$filename = null) {
+    protected function _sendFile($filepath, $filename = null)
+    {
         $filename = is_null($filename) ? basename($filepath) : $filename;
 
         $this->getResponse()
@@ -129,7 +173,7 @@ class GH_Regulation_Dropship_VendorController
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             //->setHeader ( 'Content-type', 'application/pdf', true ) /*  View in browser */
-            ->setHeader('Content-type', 'application/force-download') /*  Download        */
+            ->setHeader('Content-type', 'application/force-download')/*  Download        */
             ->setHeader('Content-Length', filesize($filepath))
             ->setHeader('Content-Disposition', 'inline' . '; filename=' . $filename);
         $this->getResponse()->clearBody();
@@ -161,22 +205,28 @@ class GH_Regulation_Dropship_VendorController
             "status" => 0,
             "content" => array()
         );
+        Mage::log($_FILES["regulation_document"]);
         if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
-            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_".(int)$_POST["vendor"];
+            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$_POST["vendor"];
 
-            $dirname = Mage::getBaseDir('media') .DS. $folder . DS;
+            $dirname = Mage::getBaseDir('media') . DS . $folder . DS;
             $this->deleteDirectory($dirname);
             $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
 
             $name = $_FILES["regulation_document"]["name"];
             $path = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
-            if($path){
+            if ($path) {
                 $result = array(
                     "status" => 1,
                     "content" => array(
                         'name' => $name,
                         'link' => Mage::getBaseUrl('media') . $folder . DS . $path
                     )
+                );
+            } else {
+                $result = array(
+                    "status" => 0,
+                    "content" => "ERR"
                 );
             }
         }
