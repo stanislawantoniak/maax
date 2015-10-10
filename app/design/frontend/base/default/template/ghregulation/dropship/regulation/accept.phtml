@@ -64,7 +64,7 @@ $_helper = Mage::helper("ghregulation");
                             <?php if($docs->getSize() > 0): ?>
                                 <div class="col-md-12">
                                     <div class="col-md-12">
-                                        <p>Pobierz regulaminy aby zapoznać się z ich treścią:</p>
+                                        <p><?php echo $_helper->__("Pobierz regulaminy aby zapoznać się z ich treścią:"); ?></p>
                                         <ul class="regulation-docs-list">
                                             <?php foreach ($docs as $doc): ?>
                                                 <?php $data = unserialize($doc->getDocumentLink()); ?>
