@@ -251,6 +251,8 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $this->_overrideConfigData();
         
         $keys = array (
+            'regulation_accept_document_date',
+            'regulation_accept_document_data',
             'new_order_notifications',
             'notify_by_udpo_status',
             'vendor_type',
@@ -267,9 +269,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'sequence',
             'url_key',
             'logo',
-	        'legal_entity',
-            'gh_regulation_accept_document_date',
-            'gh_regulation_accept_document_data'
+	        'legal_entity'
         );        
         $this->_addFieldsToFieldset($keys,$fieldset);
 

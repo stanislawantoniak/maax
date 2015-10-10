@@ -136,7 +136,53 @@ class GH_Regulation_Dropship_VendorController
             }
 
         }
-        //die("test");
+
+        // activate customer
+        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+
+        try {
+            $vendor->setConfirmation(null);
+            $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
+            $vendor->setPassword($password);
+            $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
+            $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
+
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $localeTimeF = date("Y-m-d H:i:s", $localeTime);
+            Mage::log($localeTimeF, null, "save.log");
+            $vendor->setData("regulation_accept_document_date", $localeTimeF);
+
+            $gh_regulation_accept_document_data = array(
+                "IP" => $_SERVER['REMOTE_ADDR'],
+                "document" => $_POST["regulation_document_path"],
+                "accept_regulations_single" => isset($_POST['accept_regulations_single']) ? 1 : 0,
+                "accept_regulations_proxy" => isset($_POST['accept_regulations_proxy']) ? 1 : 0,
+                "accept_regulations" => isset($_POST['accept_regulations']) ? 1 : 0
+            );
+
+            $vendor->setData("regulation_accept_document_data", json_encode($gh_regulation_accept_document_data));
+            Mage::log($vendor->getData(), null, "save.log");
+            Mage::getResourceSingleton('udropship/helper')
+                ->updateModelFields(
+                    $vendor,
+                    array(
+                        'confirmation',
+                        'password_hash',
+                        'password_enc',
+                        "regulation_accept_document_date",
+                        "regulation_accept_document_data"
+                    )
+                );
+
+        } catch (Exception $e) {
+            throw new Exception($this->__('Failed to confirm vendor account.'));
+        }
+
+        Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
+        $this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
+        $this->_redirect('udropship/vendor/');
+        return;
 
 
     }

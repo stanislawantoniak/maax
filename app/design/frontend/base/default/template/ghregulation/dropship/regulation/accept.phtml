@@ -146,7 +146,7 @@ $_helper = Mage::helper("ghregulation");
             processData: false,
             //dataType: 'json',
             'success': function(response) {},
-            'error': function(response) {console.log("ERR: " + response);}
+            'error': function(response) {}
         }).done(function(response){
             if (response.status == 1) {
                 jQuery(".add_regulation_document_preview")
