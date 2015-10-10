@@ -131,7 +131,7 @@ class GH_Regulation_Dropship_VendorController
             }
 
             if (round($size / 1048576, 1) >= GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
-                $this->_getSession()->addError($_helper->__("File too large. File must be less than 5 megabytes."));
+                $this->_getSession()->addError($_helper->__("File too large. File must be less than %s megabytes.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE));
                 return $this->_redirectReferer();
             }
 

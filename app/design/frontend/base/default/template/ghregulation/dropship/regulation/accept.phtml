@@ -109,11 +109,12 @@ $_helper = Mage::helper("ghregulation");
             accept_regulations: {
                 required: true
             },
-            'regulation_document': {extension: 'jpe?g,png,pdf'}
+            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: 5}
         },
         messages: {
             'regulation_document': {
-                extension: '<?php echo $_helper->__("File must be JPG, PNG or PDF"); ?>'
+                extension: '<?php echo $_helper->__("File must be JPG, PNG or PDF"); ?>',
+                fileSize: '<?php echo $_helper->__("File too large. File must be less than %s megabytes.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE); ?>'
             }
         },
         errorPlacement: function (error, element) {

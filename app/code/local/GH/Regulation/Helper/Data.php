@@ -39,7 +39,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             return $result;
         }
         if (round($size / 1048576, 1) >= self::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
-            $result = array("status" => 0, "message" => $_helper->__("File too large. File must be less than 5 megabytes."));
+            $result = array("status" => 0, "message" => $_helper->__("File too large. File must be less than %s megabytes.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE));
             return $result;
         }
 
