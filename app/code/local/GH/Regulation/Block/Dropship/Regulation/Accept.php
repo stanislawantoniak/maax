@@ -35,6 +35,13 @@ class GH_Regulation_Block_Dropship_Regulation_Accept extends Mage_Core_Block_Tem
     }
 
     /**
+     * @return mixed
+     */
+    public function getDocumentsList(){
+        return Mage::getModel("ghregulation/regulation_document")->getAcceptDocumentsList();
+    }
+
+    /**
      * @return string
      */
     public function getSaveVendorDocumentUrl() {

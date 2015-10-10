@@ -238,6 +238,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
 
                 $dl = array(
                     "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
+                    "type" => $_FILES['file']['type'],
                     "path"      => $path
                 );
                 $model->setData("document_link", serialize($dl));

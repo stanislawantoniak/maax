@@ -150,7 +150,7 @@ class GH_Regulation_Dropship_VendorController
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
             $localeTimeF = date("Y-m-d H:i:s", $localeTime);
-            Mage::log($localeTimeF, null, "save.log");
+
             $vendor->setData("regulation_accept_document_date", $localeTimeF);
 
             $gh_regulation_accept_document_data = array(
