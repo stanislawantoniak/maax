@@ -124,8 +124,7 @@ class GH_Regulation_Dropship_VendorController
             $name = $file["name"];
             $type = $file["type"];
             $size = $file["size"];
-            Mage::log($type);
-            Mage::log($size);
+
             if (!in_array($type, $allowedRegulationDocumentTypes)) {
                 $this->_getSession()->addError($_helper->__("File must be JPG, PNG or PDF"));
                 return $this->_redirectReferer();
