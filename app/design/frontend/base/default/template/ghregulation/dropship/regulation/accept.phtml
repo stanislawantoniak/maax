@@ -5,8 +5,8 @@ $_session = Mage::getSingleton('udropship/session');
 $_vendor = Mage::registry('reset_vendor');
 $_helper = Mage::helper("ghregulation");
 
-
 ?>
+<link rel="stylesheet" href="<?php echo Mage::getBaseUrl(); ?>skin/frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
 <div class="col-md-8 col-md-offset-2">
     <div class="">
         <div style="margin-top:100px;">
@@ -14,44 +14,67 @@ $_helper = Mage::helper("ghregulation");
                 <div class="col-md-12">
                     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
                     <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
                         <div class="widget box">
                             <div class="widget-header" style="text-align: center;">
                                 <h4><?php echo $_helper->__("Accept regulation"); ?></h4>
                             </div>
                             <div class="widget-content">
-                                <div class="form-group">
-                                    <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <span class="col-md-12">
                                         <?php echo $this->getAcceptBlock(); ?>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-12">
                                     <div class="col-md-12">
                                         <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
                                     </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
-                                    <div class="col-md-12">
-                                        <input type="checkbox" class="uniform"  name="pelnomocnictwo" />
-                                        <label class="css-label">Akceptacja następuje na podstawie pełnomocnictwa</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
 
                                     <div class="col-md-12">
-                                        <input type="checkbox" class="uniform"  name="accept_regulations"  />
-                                        <label class="css-label">Akceptuję postanowienia regulaminu</label>
+                                        <label class="css-label">
+                                            <input type="checkbox" class="uniform"  name="accept_regulations_single"  />
+                                            <?php echo $_helper->__("Jestem upoważniony do jednoosobowego reprezentowania %s", $this->getVendor()->getCompanyName()); ?>
+                                        </label>
+
+                                        <label class="css-label">
+                                            <input type="checkbox" class="uniform"  name="accept_regulations_proxy" />
+                                            <?php echo $_helper->__("Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."); ?>
+                                        </label>
                                     </div>
-                                </div>
-                                <div class="form-group">
+
                                     <div class="col-md-12">
                                         <div class="col-md-12"></div>
                                         <div class="add_regulation_document hidden col-md-12">
-                                            Załącz skan pełnomocnictwa
+                                            <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
                                             <input type="file" data-style="fileinput-custom" name="regulation_document" />
                                             <div class="add_regulation_document_preview"></div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <p>Pobierz regulaminy aby zapoznać się z ich treścią:</p>
+                                        <ul class="regulation-docs-list">
+                                            <li><i class="fa fa-file-pdf-o fa-lg"></i> Regulamin  serwisu MODAGO dla sprzedawców  pobierz</li>
+                                            <li><i class="fa fa-file-pdf-o fa-lg"></i> Załącznik nr 1 – Cennik usług MODAGO  pobierz</li>
+                                            <li><i class="fa fa-file-pdf-o fa-lg"></i> Załącznik nr 2 – Cennik usług kurierskich  pobierz</li>
+                                            <li><i class="fa fa-file-pdf-o fa-lg"></i> Załącznik nr 3 - Regulamin  serwisu MODAGO dla Klientów  pobierz</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <p>
+                                            <?php echo $_helper->__("Ja %s %s  oświadczam, że", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="css-label">
+                                            <input type="checkbox" class="uniform" name="accept_regulations"/>
+                                            <?php echo $_helper->__("zapoznałem się regulaminem MODAGO wraz z jego załącznikami oraz akceptuję jego treść co jest jednoznaczne z podpisaniem umowy pomiędzy Zolago Group Sp.z o.o. a %s o świadczeniu usług zgodnie z postanowieniami Regulaminu.", $this->getVendor()->getCompanyName()); ?>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -67,18 +90,12 @@ $_helper = Mage::helper("ghregulation");
         </div>
     </div>
 </div>
-<style>
-    .file-pdf {
-        content: url(/skin/frontend/base/default/images/icons/File-Types-Pdf-Icon.png);
-        display: inline-block;
-        height: 20px;
-    }
-</style>
+
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        handlePelnomocnictwoCheck();
-        jQuery("[name='pelnomocnictwo']").change(function () {
-            handlePelnomocnictwoCheck();
+        handleProxyCheck();
+        jQuery("[name='accept_regulations_proxy']").change(function () {
+            handleProxyCheck();
         });
     });
 
@@ -95,12 +112,12 @@ $_helper = Mage::helper("ghregulation");
             }
         },
         errorPlacement: function (error, element) {
-            element.closest("div[class^='col-']").append(error);
+            element.closest("[class='css-label']").append(error);
         }
     });
 
-    function handlePelnomocnictwoCheck() {
-        if (jQuery("[name='pelnomocnictwo']").is(":checked")) {
+    function handleProxyCheck() {
+        if (jQuery("[name='accept_regulations_proxy']").is(":checked")) {
             jQuery(".add_regulation_document").removeClass("hidden");
         } else {
             jQuery(".add_regulation_document").addClass("hidden");
@@ -111,11 +128,9 @@ $_helper = Mage::helper("ghregulation");
         e.preventDefault();
         jQuery(".add_regulation_document_preview").html("");
         var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
-        console.log(formData);
-
 
         jQuery.ajax({
-            url: '/udropship/vendor/saveVendorDocumentPost',
+            url: '<?php echo $this->getSaveVendorDocumentUrl(); ?>',
             type: 'POST',
             data: formData,
             cache: false,
@@ -125,11 +140,10 @@ $_helper = Mage::helper("ghregulation");
             'success': function(response) {},
             'error': function(response) {}
         }).done(function(response){
-            console.log(response);
-            var result = jQuery.parseJSON(response);
-            console.log(result);
-            if (result.result == 1) {
-                jQuery(".add_regulation_document_preview").html('<a href="' + result.content.link + '" target="_blank">' + result.content.name + '</a>');
+            console.log(response.status);
+            if (response.status == 1) {
+                jQuery(".add_regulation_document_preview")
+                    .html('<a href="' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
             }
         });
     });

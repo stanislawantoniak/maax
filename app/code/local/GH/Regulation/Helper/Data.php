@@ -8,6 +8,9 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     const REGULATION_DOCUMENT_FOLDER = "vendor_regulation";
     const REGULATION_DOCUMENT_ADMIN_FOLDER = "admin_regulation";
 
+    /**
+     * @return array
+     */
     public static function getAllowedRegulationDocumentTypes()
     {
         return array("image/png", "image/jpg", "image/jpeg", "application/pdf");

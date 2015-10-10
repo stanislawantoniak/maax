@@ -137,8 +137,18 @@ class GH_Regulation_Dropship_VendorController
         readfile($filepath);
     }
 
-    function deleteDirectory($dir) {
-        system('rm -rf ' . escapeshellarg($dir), $retval);
+    /**
+     * Delete accept directory for vendor
+     * @param $dir
+     * @return bool
+     */
+    function deleteDirectory($dir)
+    {
+        try {
+            system('rm -rf ' . escapeshellarg($dir), $retval);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
         return $retval == 0; // UNIX commands return zero on success
     }
 
@@ -147,10 +157,8 @@ class GH_Regulation_Dropship_VendorController
      */
     public function saveVendorDocumentPostAction()
     {
-        //TODO bad code to refactor
-        Mage::log($_POST);
         $result = array(
-            "result" => 0,
+            "status" => 0,
             "content" => array()
         );
         if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
@@ -164,7 +172,7 @@ class GH_Regulation_Dropship_VendorController
             $path = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
             if($path){
                 $result = array(
-                    "result" => 1,
+                    "status" => 1,
                     "content" => array(
                         'name' => $name,
                         'link' => Mage::getBaseUrl('media') . $folder . DS . $path
@@ -172,7 +180,10 @@ class GH_Regulation_Dropship_VendorController
                 );
             }
         }
-        echo json_encode($result);
+        $this->getResponse()
+            ->clearHeaders()
+            ->setHeader('Content-type', 'application/json')
+            ->setBody(Mage::helper('core')->jsonEncode($result));
     }
 
 
