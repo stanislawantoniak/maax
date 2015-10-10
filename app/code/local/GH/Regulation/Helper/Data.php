@@ -8,6 +8,8 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     const REGULATION_DOCUMENT_FOLDER = "vendor_regulation";
     const REGULATION_DOCUMENT_ADMIN_FOLDER = "admin_regulation";
 
+    const REGULATION_DOCUMENT_MAX_SIZE = 5; //MB
+
     /**
      * @return array
      */
@@ -20,20 +22,25 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
      * @param $file
      * @param $folder
      * @param $allowedRegulationDocumentTypes
-     * @return string
+     * @return array
      */
     public function saveRegulationDocument($file, $folder, $allowedRegulationDocumentTypes)
     {
-        $path = "";
+        $_helper = Mage::helper("ghregulation");
+        $result = array("status" => 0, "message" => "", "content" => array());
 
         $tmpName = $file["tmp_name"];
         $name = $file["name"];
         $type = $file["type"];
         $size = $file["size"];
-Mage::log($type);
 
         if (!in_array($type, $allowedRegulationDocumentTypes)) {
-            return $path;
+            $result = array("status" => 0, "message" => $_helper->__("File must be JPG, PNG or PDF"));
+            return $result;
+        }
+        if (round($size / 1048576, 1) >= self::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
+            $result = array("status" => 0, "message" => $_helper->__("File too large. File must be less than 5 megabytes."));
+            return $result;
         }
 
         if (!empty($name)) {
@@ -47,15 +54,15 @@ Mage::log($type);
             @mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
 
             $path = $safeFolderPath . $uniqName;
-
+            $result = array("status" => 1, "content" => array("path" => $path, "name" => $name));
             try {
                 move_uploaded_file($tmpName, Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $uniqName);
             } catch (Exception $e) {
                 Mage::logException($e);
             }
-
         }
-        return $path;
+
+        return $result;
     }
 
     /**

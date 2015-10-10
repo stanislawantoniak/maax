@@ -153,7 +153,7 @@ $_helper = Mage::helper("ghregulation");
                 jQuery("[name=regulation_document_path]").val(response.content.link);
             }
             if (response.status == 0) {
-                jQuery(".add_regulation_document_preview").html('ERR');
+                jQuery(".add_regulation_document_preview").html(response.content);
                 jQuery("[name=regulation_document_path]").val("");
             }
         });

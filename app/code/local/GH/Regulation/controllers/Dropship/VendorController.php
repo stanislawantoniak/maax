@@ -102,7 +102,7 @@ class GH_Regulation_Dropship_VendorController
 
         $accept_regulations_single = $this->getRequest()->getPost('accept_regulations_single', false);
         $accept_regulations_proxy = $this->getRequest()->getPost('accept_regulations_proxy', false);
-Mage::log($vendorId);
+        Mage::log($vendorId);
         if (!$vendorId) {
             $this->_getSession()->addError($_helper->__("Undefined vendor"));
             return $this->_redirectReferer();
@@ -116,8 +116,6 @@ Mage::log($vendorId);
             $this->_getSession()->addError($_helper->__("One of the options should be checked"));
             return $this->_redirectReferer();
         }
-        //krumo($vendorId);
-        Mage::log($_FILES);
 
         if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
             $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
@@ -128,15 +126,13 @@ Mage::log($vendorId);
             $size = $file["size"];
             Mage::log($type);
             Mage::log($size);
-
-            if (round($size / 1048576, 1) >= 5) { //5MG
-                $this->_getSession()->addError($_helper->__("File too large. File must be less than 5 megabytes."));
+            if (!in_array($type, $allowedRegulationDocumentTypes)) {
+                $this->_getSession()->addError($_helper->__("File must be JPG, PNG or PDF"));
                 return $this->_redirectReferer();
             }
 
-
-            if (!in_array($type, $allowedRegulationDocumentTypes)) {
-                $this->_getSession()->addError($_helper->__("File must be JPG, PNG or PDF"));
+            if (round($size / 1048576, 1) >= GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
+                $this->_getSession()->addError($_helper->__("File too large. File must be less than 5 megabytes."));
                 return $this->_redirectReferer();
             }
 
@@ -214,19 +210,20 @@ Mage::log($vendorId);
             $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
 
             $name = $_FILES["regulation_document"]["name"];
-            $path = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
-            if ($path) {
+            $result = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
+            if ($result["status"] == 1) {
                 $result = array(
                     "status" => 1,
                     "content" => array(
-                        'name' => $name,
-                        'link' => Mage::getBaseUrl('media') . $folder . DS . $path
+                        'name' => $result["content"]["name"],
+                        'link' => Mage::getBaseUrl('media') . $folder . DS . $result["content"]["path"]
                     )
                 );
-            } else {
+            }
+            if ($result["status"] == 0) {
                 $result = array(
                     "status" => 0,
-                    "content" => "ERR"
+                    "content" => $result["message"]
                 );
             }
         }
