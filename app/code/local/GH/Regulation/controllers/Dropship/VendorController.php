@@ -178,16 +178,18 @@ class GH_Regulation_Dropship_VendorController
         } catch (Exception $e) {
             throw new Exception($this->__('Failed to confirm vendor account.'));
         }
+        $accept_attachments = array();
+        if(isset($_POST["regulation_document_path"]) && !empty($_POST["regulation_document_path"])){
+            $accept_attachments[] = array(
+                'filename' => $name,
+                'content' => file_get_contents(Mage::getBaseDir("media"). DS. $_POST["regulation_document_path"]),
+                'type' => $type,
+            );
+        }
+        if (!empty($accept_attachments)) {
+            $vendor->setData("accept_attachments", $accept_attachments);
+        }
 
-        $vendor->setData("accept_attachments",
-            array(
-                array(
-                    'filename' => $name,
-                    'content' => file_get_contents(Mage::getBaseDir("media"). DS. $_POST["regulation_document_path"]),
-                    'type' => $type,
-                )
-            )
-        );
         Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
         $this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
         $this->_redirect('udropship/vendor/');
