@@ -179,12 +179,25 @@ class GH_Regulation_Dropship_VendorController
             throw new Exception($this->__('Failed to confirm vendor account.'));
         }
         $accept_attachments = array();
+        //uploaded document by vendor
         if(isset($_POST["regulation_document_path"]) && !empty($_POST["regulation_document_path"])){
             $accept_attachments[] = array(
                 'filename' => $name,
                 'content' => file_get_contents(Mage::getBaseDir("media"). DS. $_POST["regulation_document_path"]),
                 'type' => $type,
             );
+        }
+        //our documents
+        $docs = Mage::getModel("ghregulation/regulation_document")->getAcceptDocumentsList();
+        if ($docs->getSize() > 0) {
+            foreach ($docs as $doc) {
+                $data = unserialize($doc->getDocumentLink());
+                $accept_attachments[] = array(
+                    'filename' => $data['file_name'],
+                    'content' => file_get_contents(Mage::getBaseDir("media") . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $data['path']),
+                    'type' => $data['type'],
+                );
+            }
         }
         if (!empty($accept_attachments)) {
             $vendor->setData("accept_attachments", $accept_attachments);
