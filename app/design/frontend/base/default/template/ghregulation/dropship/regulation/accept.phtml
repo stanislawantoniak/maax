@@ -22,16 +22,17 @@ $_helper = Mage::helper("ghregulation");
                             </div>
                             <div class="widget-content">
                                 <div class="col-md-12">
-                                    <span class="col-md-12">
+                                    <div class="col-md-12">
                                         <?php echo $this->getAcceptBlock(); ?>
                                     </div>
                                 </div>
+                            <div class="widget-content">
                                 <div class="col-md-12">
-                                    <div class="col-md-12">
-                                        <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
-                                    </div>
 
-                                    <div class="col-md-12">
+                                        <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
+
+
+
                                         <label class="css-label">
                                             <input type="checkbox" class="uniform"  name="accept_regulations_single"  />
                                             <?php echo $_helper->__("Jestem upoważniony do jednoosobowego reprezentowania %s", $this->getVendor()->getCompanyName()); ?>
@@ -41,47 +42,52 @@ $_helper = Mage::helper("ghregulation");
                                             <input type="checkbox" class="uniform"  name="accept_regulations_proxy" />
                                             <?php echo $_helper->__("Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."); ?>
                                         </label>
-                                    </div>
 
-                                    <div class="col-md-12">
+
+
                                         <div class="col-md-12"></div>
                                         <div class="add_regulation_document hidden col-md-12">
                                             <label class="css-label">
                                                 <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
                                                 <input type="file" data-style="fileinput-custom" name="regulation_document" />
 
-                                                <input type="text"  name="regulation_document_path" value="" />
+                                                <input type="hidden"  name="regulation_document_path" value="" />
                                                 <div class="add_regulation_document_preview"></div>
                                             </label>
                                         </div>
-                                    </div>
+
                                 </div>
+                            </div>
+
                             <?php
                             /* @var $docs GH_Regulation_Model_Resource_Regulation_Document_Collection */
                             $docs = $this->getDocumentsList();
-
                             ?>
+
+
                             <?php if($docs->getSize() > 0): ?>
-                                <div class="col-md-12">
-                                    <div class="col-md-12">
-                                        <p><?php echo $_helper->__("Pobierz regulaminy aby zapoznać się z ich treścią:"); ?></p>
-                                        <ul class="regulation-docs-list">
-                                            <?php foreach ($docs as $doc): ?>
-                                                <?php $data = unserialize($doc->getDocumentLink()); ?>
-                                                <li>
-                                                    <?php if($data['type'] == "application/pdf"): ?>
-                                                        <i class="fa fa-file-pdf-o fa-lg"></i>
-                                                    <?php else: ?>
-                                                    <?php endif;?>
-                                                    <?php echo $doc->getName(); ?>  <a href="<?php echo $data['path']; ?>" download="<?php echo $data['file_name']; ?>">pobierz</a>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    </div>
+                                <div class="widget-content">
+
+                                        <div class="col-md-12">
+                                            <p><?php echo $_helper->__("Pobierz regulaminy aby zapoznać się z ich treścią:"); ?></p>
+                                            <ul class="regulation-docs-list">
+                                                <?php foreach ($docs as $doc): ?>
+                                                    <?php $data = unserialize($doc->getDocumentLink()); ?>
+                                                    <li>
+                                                        <?php if($data['type'] == "application/pdf"): ?>
+                                                            <i class="fa fa-file-pdf-o fa-lg"></i>
+                                                        <?php else: ?>
+                                                        <?php endif;?>
+                                                        <?php echo $doc->getName(); ?>  <a href="<?php echo $data['path']; ?>" download="<?php echo $data['file_name']; ?>">pobierz</a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+
                                 </div>
                             <?php endif; ?>
+                            <div class="widget-content">
 
-                                <div class="col-md-12">
                                     <div class="col-md-12">
                                         <p>
                                             <?php echo $_helper->__("Ja %s %s  oświadczam, że", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
@@ -93,9 +99,9 @@ $_helper = Mage::helper("ghregulation");
                                             <?php echo $_helper->__("zapoznałem się regulaminem MODAGO wraz z jego załącznikami oraz akceptuję jego treść co jest jednoznaczne z podpisaniem umowy pomiędzy Zolago Group Sp.z o.o. a %s o świadczeniu usług zgodnie z postanowieniami Regulaminu.", $this->getVendor()->getCompanyName()); ?>
                                         </label>
                                     </div>
-                                </div>
+
+
                             </div>
-                        </div>
                         <div class="form-actions">
                             <button type="submit" id="filter_submit" class="btn btn-primary pull-right" >
                                 <span><span><?php echo $_helper->__("Accept regulations"); ?></span></span>
@@ -121,7 +127,7 @@ $_helper = Mage::helper("ghregulation");
             accept_regulations: {
                 required: true
             },
-            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: 5}
+            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: 5, required:'[name=accept_regulations_proxy]:checked'}
         },
         messages: {
             'regulation_document': {
