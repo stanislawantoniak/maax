@@ -77,9 +77,12 @@ class GH_Regulation_Model_DropshipMicrosite_Observer extends Unirgy_DropshipMicr
                     || !$vendor->getSendConfirmationEmail()
                 ) && $vendor->getStatus() != Unirgy_Dropship_Model_Source::VENDOR_STATUS_REJECTED
             ) {
-                $vendor->setPassword($this->_vendorPassword);
-                Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
-                $vendor->setPassword('');
+                if($vendor->getStatus() != Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE){
+                    $vendor->setPassword($this->_vendorPassword);
+                    Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
+                    $vendor->setPassword('');
+                }
+
             }
             Mage::getModel('umicrosite/registration')->load($vendor->getRegId())->delete();
         }
