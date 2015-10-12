@@ -32,6 +32,13 @@ class GH_Regulation_Block_Adminhtml_List_Edit_Form extends Mage_Adminhtml_Block_
             'name' => 'file',
         ));
 
+        if (!$this->_isNew()) {
+            $fieldset->addField('show_file', 'note', array(
+                'label' => $helper->__('Uploaded file:'),
+                'text' => "<a href='" . $model->getAdminUrl() . "'>" . $model->getFileName() . "</a>"
+            ));
+        }
+
         $fieldset->addField('regulation_type_id', 'select', array(
             'name' => 'regulation_type_id',
             'required' => true,

@@ -212,7 +212,8 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
      * @return Mage_Adminhtml_Controller_Action
      */
     public function saveDocumentAction() {
-        $helper = Mage::helper("ghregulation");
+        /** @var GH_Regulation_Helper_Data $hlp */
+        $hlp = Mage::helper("ghregulation");
         try {
             $request = $this->getRequest();
             $id = $request->getParam('id', null);
@@ -223,11 +224,18 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
 
             if (isset($_FILES['file']) && isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
                 $file = $_FILES['file'];
-                $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER;
-                $allowed = GH_Regulation_Helper_Data::getAllowedRegulationDocumentTypes();
-                $path = Mage::helper("ghregulation")->saveRegulationDocument($file, $folder, $allowed);
+
+
+                $folder = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
+                $allowed = $hlp::getAllowedRegulationDocumentTypes();
+                $result = $hlp->saveRegulationDocument($file, $folder, $allowed);
+                $path = $result["content"]["path"];
+
+                if(!$path) {
+                    Mage::throwException("Invalid file type (".$file['type'].")");
+                }
+
                 $dl = array(
-                    "raw_name"  => $_FILES['file']['name'],
                     "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
                     "path"      => $path
                 );
@@ -242,7 +250,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             return $this->_redirectUrl($url);
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addException($e, $helper->__($e->getMessage()));
+            $this->_getSession()->addException($e, $hlp->__($e->getMessage()));
             $this->_getSession()->setData('ghregulation_document_form_data', $this->getRequest()->getParams());
         }
         return $this->_redirectReferer();
@@ -275,5 +283,38 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             }
         }
         return $this->_redirect('*/*/list');
+    }
+
+    public function getDocumentAction() {
+        $documentId = $this->getRequest()->getParam('id');
+        if($documentId) {
+            /** @var Gh_Regulation_Model_Regulation_Document $document */
+            $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
+            if($document->getId()) {
+                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS .$document->getPath();
+                if(is_file($path) && is_readable ($path)) {
+                    $this->_sendFile($path,$document->getFileName());
+                    return;
+                }
+            }
+        }
+        $this->norouteAction(); //404
+        return;
+    }
+
+    protected function _sendFile($filepath,$filename = null) {
+        $filename = is_null($filename) ? basename($filepath) : $filename;
+
+        $this->getResponse()
+            ->setHttpResponseCode(200)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            //->setHeader ( 'Content-type', 'application/pdf', true ) /*  View in browser */
+            ->setHeader('Content-type', 'application/force-download') /*  Download        */
+            ->setHeader('Content-Length', filesize($filepath))
+            ->setHeader('Content-Disposition', 'inline' . '; filename=' . $filename);
+        $this->getResponse()->clearBody();
+        $this->getResponse()->sendHeaders();
+        readfile($filepath);
     }
 }

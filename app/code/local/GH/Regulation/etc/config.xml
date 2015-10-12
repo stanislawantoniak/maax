@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Regulation>
-            <version>0.1.3</version>
+            <version>0.1.5</version>
         </GH_Regulation>
     </modules>
     <global>
@@ -54,6 +54,15 @@
                 </setup>
             </ghregulation_setup>
         </resources>
+        <template>
+            <email>
+                <udropship_microsite_regulation_accepted_template  module="umicrosite">
+                    <label>Dropship Vendor Regulation Accepted Email</label>
+                    <file>umicrosite_regulation_accepted.html</file>
+                    <type>html</type>
+                </udropship_microsite_regulation_accepted_template>
+            </email>
+        </template>
     </global>
     <admin>
         <routers>
@@ -148,6 +157,7 @@
         <udropship>
             <microsite>
                 <confirmation_token_expiration_time>168</confirmation_token_expiration_time>
+                <regulation_accepted_template>udropship_microsite_regulation_accepted_template</regulation_accepted_template>
             </microsite>
         </udropship>
     </default>

@@ -137,6 +137,20 @@ jQuery.validator.addMethod("imageSize", function(value, element,param) {
     return result;
 }, Translator.translate("Image is too big"));
 
+	jQuery.validator.addMethod("fileSize", function (value, element, param) {
+		var result = 1;
+		var F = element.files;
+		if (jQuery.type(F[0]) !== "undefined") {
+			result = 0;
+
+			if (jQuery.type(F[0]) !== "undefined" && ( (F[0].size / 1048576).toFixed(2) < param) ) {
+				result = 1;
+			}
+		}
+
+		return result;
+	}, Translator.translate("Image is too big"));
+
 jQuery.validator.addMethod("postcodeWithReplace", function(value, elem, params){
 
 

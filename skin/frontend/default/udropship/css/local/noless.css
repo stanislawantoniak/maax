@@ -577,3 +577,10 @@
 #showAttributeRules div.tooltip-wrapper {
     display: inline-block;
 }
+.regulation-docs-list {
+    padding-left: 0px;
+}
+.regulation-docs-list li {
+    list-style: none;
+	margin-bottom: 5px;
+}
