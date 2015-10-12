@@ -62,21 +62,23 @@ $_helper = Mage::helper("ghregulation");
                             ?>
 
 
-                            <?php if($docs->getSize() > 0): ?>
+                            <?php if ($docs->getSize() > 0): ?>
+                                <?php $path = Mage::getBaseUrl("media") . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS; ?>
                                 <div class="widget-content">
-
-                                        <div class="col-md-12">
-                                            <p><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></p>
-                                            <ul class="regulation-docs-list">
-                                                <?php foreach ($docs as $doc):?>
-                                                    <?php $data = unserialize($doc->getDocumentLink()); ?>
-                                                    <li>
-                                                        <i class="fa fa-file-pdf-o fa-lg"></i>
-                                                        <?php echo $doc->getName(); ?>  <a href="<?php echo $data['path']; ?>" download="<?php echo $data['file_name']; ?>">pobierz</a>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ul>
-                                        </div>
+                                    <div class="col-md-12">
+                                        <p><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></p>
+                                        <ul class="regulation-docs-list">
+                                            <?php foreach ($docs as $doc): ?>
+                                                <?php $data = unserialize($doc->getDocumentLink()); ?>
+                                                <li>
+                                                    <i class="fa fa-file-pdf-o fa-lg"></i>
+                                                    <?php echo $doc->getName(); ?> <a
+                                                        href="<?php echo $path . $data['path']; ?>"
+                                                        download="<?php echo $data['file_name']; ?>">pobierz</a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
 
                                 </div>
                             <?php endif; ?>
