@@ -151,14 +151,14 @@ class GH_Regulation_Dropship_VendorController
 
                 $vendor->setData("regulation_accepted", 1);
 
-                $gh_regulation_accept_document_data = array(
+                $ghRegulationAcceptDocumentData = array(
                     "IP" => $_SERVER['REMOTE_ADDR'],
                     "document" => $_POST["regulation_document_path"],
                     "accept_regulations_role" => $acceptRegulationsRole,
                     "accept_regulations" => isset($_POST['accept_regulations']) ? 1 : 0
                 );
 
-                $vendor->setData("regulation_accept_document_data", json_encode($gh_regulation_accept_document_data));
+                $vendor->setData("regulation_accept_document_data", json_encode($ghRegulationAcceptDocumentData));
 
                 Mage::getResourceSingleton('udropship/helper')
                     ->updateModelFields(
@@ -176,10 +176,10 @@ class GH_Regulation_Dropship_VendorController
             } catch (Exception $e) {
                 throw new Exception($this->__('Failed to confirm vendor account.'));
             }
-            $accept_attachments = array();
+            $acceptAttachments = array();
             //uploaded document by vendor
             if (isset($_POST["regulation_document_path"]) && !empty($_POST["regulation_document_path"])) {
-                $accept_attachments[] = array(
+                $acceptAttachments[] = array(
                     'filename' => $name,
                     'content' => file_get_contents(Mage::getBaseDir("media") . DS . $_POST["regulation_document_path"]),
                     'type' => $type,
@@ -190,15 +190,15 @@ class GH_Regulation_Dropship_VendorController
             if ($docs->getSize() > 0) {
                 foreach ($docs as $doc) {
                     $data = unserialize($doc->getDocumentLink());
-                    $accept_attachments[] = array(
+                    $acceptAttachments[] = array(
                         'filename' => $data['file_name'],
                         'content' => file_get_contents(Mage::getBaseDir("media") . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $data['path']),
                         'type' => $data['type'],
                     );
                 }
             }
-            if (!empty($accept_attachments)) {
-                $vendor->setData("accept_attachments", $accept_attachments);
+            if (!empty($acceptAttachments)) {
+                $vendor->setData("accept_attachments", $acceptAttachments);
             }
 
 
