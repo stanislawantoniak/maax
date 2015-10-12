@@ -70,10 +70,7 @@ $_helper = Mage::helper("ghregulation");
                                                 <?php foreach ($docs as $doc): ?>
                                                     <?php $data = unserialize($doc->getDocumentLink()); ?>
                                                     <li>
-                                                        <?php if($data['type'] == "application/pdf"): ?>
-                                                            <i class="fa fa-file-pdf-o fa-lg"></i>
-                                                        <?php else: ?>
-                                                        <?php endif;?>
+                                                        <i class="fa fa-file-pdf-o fa-lg"></i>
                                                         <?php echo $doc->getName(); ?>  <a href="<?php echo $data['path']; ?>" download="<?php echo $data['file_name']; ?>">pobierz</a>
                                                     </li>
                                                 <?php endforeach; ?>
