@@ -102,7 +102,7 @@ class Unirgy_Dropship_Controller_VendorAbstract extends Mage_Core_Controller_Fro
                     $this->_loginPostRedirect();
                 }
             }
-            if (!preg_match('#^(login|logout|password|setlocale|accept|confirmRegulation|regulationexpired|saveVendorDocumentPost|acceptPost)#i', $action)) {
+            if (!preg_match('#^(login|logout|password|setlocale|accept|confirmRegulation|regulationexpired|regulationaccepted|saveVendorDocumentPost|acceptPost)#i', $action)) {
                 $this->_forward('login', 'vendor', 'udropship');
             }
         } else {

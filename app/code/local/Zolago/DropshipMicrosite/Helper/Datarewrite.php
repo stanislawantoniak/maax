@@ -33,7 +33,11 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosi
         return $this;
     }
 
-    public function sendVendorWelcomeEmail($vendor)
+    /**
+     * @param $vendor
+     * @return $this
+     */
+    public function sendVendorRegulationAcceptedEmail($vendor)
     {
         $store = Mage::app()->getDefaultStoreView();
         Mage::helper('udropship')->setDesignStore($store);
@@ -44,7 +48,7 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosi
         $mailer->sendEmailTemplate(
             $vendor->getEmail(),
             $vendor->getVendorName(),
-            $store->getConfig('udropship/microsite/welcome_template'),
+            $store->getConfig('udropship/microsite/regulation_accepted_template'),
             array(
                 'store_name' => $store->getName(),
                 'vendor' => $vendor,
@@ -55,6 +59,31 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosi
             $store->getConfig('udropship/vendor/vendor_email_identity'),
             null,
             $confirmation_email_send_copy_to
+        );
+        Mage::helper('udropship')->setDesignStore();
+
+        return $this;
+    }
+
+    public function sendVendorWelcomeEmail($vendor)
+    {
+        $store = Mage::app()->getDefaultStoreView();
+        Mage::helper('udropship')->setDesignStore($store);
+
+        /** @var Zolago_Common_Helper_Data $mailer */
+        $mailer = Mage::helper('zolagocommon');
+
+        $mailer->sendEmailTemplate(
+            $vendor->getEmail(),
+            $vendor->getVendorName(),
+            $store->getConfig('udropship/microsite/welcome_template'),
+            array(
+                'store_name' => $store->getName(),
+                'vendor' => $vendor,
+                'use_attachments' => true
+            ),
+            $store->getId(),
+            $store->getConfig('udropship/vendor/vendor_email_identity')
         );
         Mage::helper('udropship')->setDesignStore();
 
