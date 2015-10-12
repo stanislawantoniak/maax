@@ -284,8 +284,8 @@ class GH_Regulation_Dropship_VendorController
                 $result = array(
                     "status" => 1,
                     "content" => array(
-                        'name' => $result["content"]["name"],
-                        'link' => Mage::getBaseUrl("media").$folder . DS . $result["content"]["path"]
+                        'name' => $name,
+                        'link' => $folder . DS . $result["content"]["path"]
                     )
                 );
             }

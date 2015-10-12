@@ -7,7 +7,7 @@ $_helper = Mage::helper("ghregulation");
 
 ?>
 <link rel="stylesheet" href="<?php echo Mage::getBaseUrl(); ?>skin/frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
-<div class="col-md-8 col-md-offset-2">
+<div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <div class="">
         <div style="margin-top:100px;">
             <div class="row">
@@ -22,37 +22,36 @@ $_helper = Mage::helper("ghregulation");
                             </div>
                             <div class="widget-content">
                                 <div class="col-md-12">
-                                    <div class="col-md-12">
-                                        <?php echo $this->getAcceptBlock(); ?>
-                                    </div>
+                                    <?php echo $this->getAcceptBlock(); ?>
                                 </div>
+                            </div>
                             <div class="widget-content">
                                 <div class="col-md-12">
-                                        <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
+                                    <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
 
+                                    <label class="css-label col-md-12">
+                                        <input type="checkbox" class="uniform" name="accept_regulations_single"/>
+                                        <?php echo $_helper->__("Jestem upoważniony do jednoosobowego reprezentowania %s", $this->getVendor()->getCompanyName()); ?>
+                                    </label>
+
+                                    <label class="css-label col-md-12">
+                                        <input type="checkbox" class="uniform" name="accept_regulations_proxy"/>
+                                        <?php echo $_helper->__("Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."); ?>
+                                    </label>
+
+
+                                    <div class="col-md-12"></div>
+                                    <div class="add_regulation_document hidden col-md-12">
                                         <label class="css-label">
-                                            <input type="checkbox" class="uniform"  name="accept_regulations_single"  />
-                                            <?php echo $_helper->__("Jestem upoważniony do jednoosobowego reprezentowania %s", $this->getVendor()->getCompanyName()); ?>
+                                            <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
+                                            <input type="file" data-style="fileinput-custom"
+                                                   name="regulation_document"/>
+
+                                            <input type="hidden" name="regulation_document_path" value=""/>
+
+                                            <div class="add_regulation_document_preview"></div>
                                         </label>
-
-                                        <label class="css-label">
-                                            <input type="checkbox" class="uniform"  name="accept_regulations_proxy" />
-                                            <?php echo $_helper->__("Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."); ?>
-                                        </label>
-
-
-
-                                        <div class="col-md-12"></div>
-                                        <div class="add_regulation_document hidden col-md-12">
-                                            <label class="css-label">
-                                                <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
-                                                <input type="file" data-style="fileinput-custom" name="regulation_document" />
-
-                                                <input type="hidden"  name="regulation_document_path" value="" />
-                                                <div class="add_regulation_document_preview"></div>
-                                            </label>
-                                        </div>
-
+                                    </div>
                                 </div>
                             </div>
 
@@ -84,20 +83,17 @@ $_helper = Mage::helper("ghregulation");
                                 </div>
                             <?php endif; ?>
                             <div class="widget-content">
-
-                                    <div class="col-md-12">
-                                        <p>
-                                            <?php echo $_helper->__("Ja %s %s  oświadczam, że", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
-                                        </p>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="css-label">
-                                            <input type="checkbox" class="uniform" name="accept_regulations"/>
-                                            <?php echo $_helper->__("zapoznałem się regulaminem MODAGO wraz z jego załącznikami oraz akceptuję jego treść co jest jednoznaczne z podpisaniem umowy pomiędzy Zolago Group Sp.z o.o. a %s o świadczeniu usług zgodnie z postanowieniami Regulaminu.", $this->getVendor()->getCompanyName()); ?>
-                                        </label>
-                                    </div>
-
-
+                                <div class="col-md-12">
+                                    <p>
+                                        <?php echo $_helper->__("Ja %s %s  oświadczam, że", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
+                                    </p>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="css-label col-md-12">
+                                        <input type="checkbox" class="uniform" name="accept_regulations"/>
+                                        <?php echo $_helper->__("zapoznałem się regulaminem MODAGO wraz z jego załącznikami oraz akceptuję jego treść co jest jednoznaczne z podpisaniem umowy pomiędzy Zolago Group Sp.z o.o. a %s o świadczeniu usług zgodnie z postanowieniami Regulaminu.", $this->getVendor()->getCompanyName()); ?>
+                                    </label>
+                                </div>
                             </div>
                         <div class="form-actions">
                             <button type="submit" id="filter_submit" class="btn btn-primary pull-right" >
@@ -165,7 +161,7 @@ $_helper = Mage::helper("ghregulation");
         }).done(function(response){
             if (response.status == 1) {
                 jQuery(".add_regulation_document_preview")
-                    .html('<a href="' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
+                    .html('<a href="' + '<?php echo Mage::getBaseUrl("media"); ?>' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
                 jQuery("[name=regulation_document_path]").val(response.content.link);
             }
             if (response.status == 0) {
