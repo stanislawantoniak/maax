@@ -100,9 +100,8 @@ class GH_Regulation_Dropship_VendorController
         $vendorId = $this->getRequest()->getPost('vendor', false);
         $acceptRegulations = $this->getRequest()->getPost('accept_regulations', false);
 
-        $accept_regulations_single = $this->getRequest()->getPost('accept_regulations_single', false);
-        $accept_regulations_proxy = $this->getRequest()->getPost('accept_regulations_proxy', false);
-        Mage::log($vendorId);
+        $acceptRegulationsRole = $this->getRequest()->getPost('accept_regulations_role', false);
+
         if (!$vendorId) {
             $this->_getSession()->addError($_helper->__("Undefined vendor"));
             return $this->_redirectReferer();
@@ -110,10 +109,6 @@ class GH_Regulation_Dropship_VendorController
 
         if (!$acceptRegulations) {
             $this->_getSession()->addError($_helper->__("Please check Accept Regulation checkbox"));
-            return $this->_redirectReferer();
-        }
-        if (!$accept_regulations_single && !$accept_regulations_proxy) {
-            $this->_getSession()->addError($_helper->__("One of the options should be checked"));
             return $this->_redirectReferer();
         }
 

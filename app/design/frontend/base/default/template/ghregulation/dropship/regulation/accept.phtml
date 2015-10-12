@@ -30,12 +30,12 @@ $_helper = Mage::helper("ghregulation");
                                     <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
 
                                     <label class="css-label col-md-12">
-                                        <input type="checkbox" class="uniform" name="accept_regulations_single"/>
+                                        <input type="radio" class="" name="accept_regulations_role" value="single"/>
                                         <?php echo $_helper->__("Jestem upoważniony do jednoosobowego reprezentowania %s", $this->getVendor()->getCompanyName()); ?>
                                     </label>
 
                                     <label class="css-label col-md-12">
-                                        <input type="checkbox" class="uniform" name="accept_regulations_proxy"/>
+                                        <input type="radio" class="" name="accept_regulations_role" value="proxy"/>
                                         <?php echo $_helper->__("Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."); ?>
                                     </label>
 
@@ -106,9 +106,9 @@ $_helper = Mage::helper("ghregulation");
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        handleProxyCheck();
-        jQuery("[name='accept_regulations_proxy']").change(function () {
-            handleProxyCheck();
+        handleProxyCheck(jQuery("[name='accept_regulations_role']"));
+        jQuery("[name='accept_regulations_role']").change(function () {
+                handleProxyCheck(jQuery(this));
         });
     });
 
@@ -117,7 +117,10 @@ $_helper = Mage::helper("ghregulation");
             accept_regulations: {
                 required: true
             },
-            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: 5, required:'[name=accept_regulations_proxy]:checked'}
+            accept_regulations_role: {
+                required: true
+            },
+            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: 5, required:'[name=accept_regulations_role][value=proxy]'}
         },
         messages: {
             'regulation_document': {
@@ -126,16 +129,17 @@ $_helper = Mage::helper("ghregulation");
             }
         },
         errorPlacement: function (error, element) {
-            element.closest("[class='css-label']").append(error);
+            element.closest("[class^='col-']").append(error);
         }
     });
 
-    function handleProxyCheck() {
-        if (jQuery("[name='accept_regulations_proxy']").is(":checked")) {
+    function handleProxyCheck(element) {
+        if(element.val() == "proxy"){
             jQuery(".add_regulation_document").removeClass("hidden");
         } else {
             jQuery(".add_regulation_document").addClass("hidden");
         }
+
     }
 
     jQuery("input[name=regulation_document]").on('change', function (e) {
