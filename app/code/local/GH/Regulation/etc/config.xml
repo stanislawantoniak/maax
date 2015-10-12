@@ -92,6 +92,14 @@
                     </ghregulation>
                 </observers>
             </udropship_adminhtml_vendor_tabs_after>
+            <udropship_vendor_save_after>
+                <observers>
+                    <ghregulation>
+                        <class>ghregulation/observer</class>
+                        <method>udropship_vendor_save_after</method>
+                    </ghregulation>
+                </observers>
+            </udropship_vendor_save_after>
             <udropship_adminhtml_vendor_edit_prepare_form>
                 <observers>
                     <ghregulation>

@@ -16,6 +16,55 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
             ->toHtml()
         );        
     }
+    public function kindEditAction() {
+        $_hlp = Mage::helper('ghregulation');
+        $this->_title($_hlp->__('Regulations'))
+             ->_title($_hlp->__('Dropship'))
+             ->_title($_hlp->__('Edit vendor documents'));
+        $this->loadLayout();
+        $this->_addContent($this->getLayout()->createBlock('ghregulation/adminhtml_kind_edit_vendor'));
+        $this->renderLayout();
+    }
+    public function kindSaveAction() {
+        
+        $request = $this->getRequest();
+        $vendorId = $request->getParam('vendor_id');
+        $type = $request->getParam('regulation_type_id');
+        $date = $request->getParam('date');
+        $model = Mage::getModel('ghregulation/regulation_document_vendor');
+        $model->setData('vendor_id',$vendorId);
+        $model->setData('date',$date);
+        $model->setData('regulation_type_id',$type);
+        try {
+            $model->save();
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('ghregulation')->__('Document saved.'));
+        } catch (Exception $xt) {
+            Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());            
+            Mage::logException($xt);
+        }
+        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'regulation_type'));
+        
+    }
+    
+    /**
+     * delete document type from vendor
+     */
+    public function typeDeleteAction() {
+        $request = $this->getRequest();
+        $vendorId = $request->getParam('vendor_id');
+        $documentVendorId = $request->getParam('document_vendor_id');
+        $model = Mage::getModel('ghregulation/regulation_document_vendor')->load($documentVendorId);
+        try {
+            $model->delete();
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('ghregulation')->__('Document removed.'));
+        } catch (Exception $xt) {
+            Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());            
+            Mage::logException($xt);
+        }
+        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'regulation_type'));
+                
+    }
+
     public function brandshopEditAction()
     {
         $_hlp = Mage::helper('adminhtml');
@@ -60,9 +109,6 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
                 }
                 if ($r->getParam('vendor_attributeset')) {
                     $this->_saveAttributeSet(Zend_Json::decode($r->getParam('vendor_attributeset')),$id);                    
-                }
-                if ($r->getParam('vendor_kind')) {
-                    $this->_saveKinds(Zend_Json::decode($r->getParam('vendor_kind')),$id);
                 }
 
                 //TODO
@@ -142,14 +188,6 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $this->_saveParams($attributeset,$vendor_id,'zolagosizetable/vendor_attribute_set','attribute_set_id');
      }
 
-    /**
-     * saving vendor permissions to regulation kind
-     * @param array $kinds
-     * @param int $vendor_id
-     */
-    protected function _saveKinds($kinds,$vendor_id) {
-        $this->_saveParams($kinds,$vendor_id,'ghregulation/regulation_vendor_kind','regulation_kind_id');
-    }
 
     /**
      * saving vendor permissions to attribute sets

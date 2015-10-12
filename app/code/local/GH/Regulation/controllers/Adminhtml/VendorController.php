@@ -10,5 +10,4 @@ class Gh_Regulation_Adminhtml_VendorController extends Mage_Adminhtml_Controller
         $block->setUseAjax(true);
         $this->getResponse()->setBody($block->toHtml());
     }
-
 }
