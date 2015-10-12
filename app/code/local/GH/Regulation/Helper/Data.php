@@ -8,7 +8,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     const REGULATION_DOCUMENT_FOLDER = "vendor_regulation";
     const REGULATION_DOCUMENT_ADMIN_FOLDER = "admin_regulation";
 
-    const REGULATION_DOCUMENT_MAX_SIZE = 0.00001; //MB
+    const REGULATION_DOCUMENT_MAX_SIZE = 5; //MB
 
     /**
      * @return array
