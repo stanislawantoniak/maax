@@ -67,6 +67,7 @@ class GH_Regulation_Dropship_VendorController
         $vendorId = $req->getPost('vendor', false);
         $acceptRegulations = $req->getPost('accept_regulations', false);
         $acceptRegulationsRole = $req->getPost('accept_regulations_role', false);
+        $regulationDocumentNewName = $req->getPost('regulation_document_new_name', false);
 
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
@@ -123,6 +124,11 @@ class GH_Regulation_Dropship_VendorController
             throw new Exception($this->__('Wrong confirmation key.'));
         }
 
+        $newName = $regulationDocumentNewName;
+        $image = md5($newName);
+        $safeFolderPath = $image[0] . "/" . $image[1] . "/";
+        $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId;
+
         try {
             $vendor->setConfirmation(null);
             $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
@@ -139,7 +145,7 @@ class GH_Regulation_Dropship_VendorController
 
             $ghRegulationAcceptDocumentData = array(
                 "IP" => $_SERVER['REMOTE_ADDR'],
-                "document" => $_POST["regulation_document_path"], //todo
+                "document" => Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $newName,
                 "accept_regulations_role" => $acceptRegulationsRole,
                 "accept_regulations" => isset($_POST['accept_regulations']) ? 1 : 0
             );
@@ -164,12 +170,7 @@ class GH_Regulation_Dropship_VendorController
         }
         $acceptAttachments = array();
         //uploaded document by vendor
-        if (isset($_POST["regulation_document_new_name"]) && !empty($_POST["regulation_document_new_name"])) {
-
-            $newName = $_POST["regulation_document_new_name"];
-            $image = md5($newName);
-            $safeFolderPath = $image[0] . "/" . $image[1] . "/";
-            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId;
+        if ($regulationDocumentNewName && !empty($regulationDocumentNewName)) {
 
             $acceptAttachments[] = array(
                 'filename' => $name,
