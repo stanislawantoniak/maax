@@ -48,24 +48,6 @@ class GH_Regulation_Dropship_VendorController
                         return;
                     }
                 }
-
-
-                // activate customer
-//                try {
-//                    $vendor->setConfirmation(null);
-//                    $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
-//                    $vendor->setPassword($password);
-//                    $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
-//                    $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
-//                    Mage::getResourceSingleton('udropship/helper')->updateModelFields($vendor, array('confirmation', 'password_hash', 'password_enc'));
-//                } catch (Exception $e) {
-//                    throw new Exception($this->__('Failed to confirm vendor account.'));
-//                }
-//
-//                Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
-//                $this->_getSession()->addSuccess("You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.");
-//                $this->_redirect('udropship/vendor/');
-//                return;
             } catch (Exception $e) {
                 throw new Exception($this->__('Wrong vendor account specified.'));
             }
