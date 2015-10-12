@@ -42,10 +42,32 @@ class GH_Regulation_Model_Regulation_Document extends Mage_Core_Model_Abstract
         return Mage::helper("adminhtml")->getUrl("adminhtml/regulation/getDocument",array('id'=>$documentId));
     }
 
-    public function getVendorUrl($documentId = null) {
-        if(is_null($documentId)) {
+    public function getVendorUrl($documentId = null)
+    {
+        if (is_null($documentId)) {
             $documentId = $this->getId();
         }
-        return Mage::getUrl('dropship/regulation/getDocument',array('id'=>$documentId));
+        return Mage::getUrl('dropship/regulation/getDocument', array('id' => $documentId));
+    }
+
+    /**
+     * @return GH_Regulation_Model_Resource_Regulation_Document_Collection
+     */
+    public function getAcceptDocumentsList()
+    {
+        $localeTime = Mage::getModel('core/date')->timestamp(time());
+        $localeTimeF = date("Y-m-d H:i:s", $localeTime);
+
+        $collection = $this->getCollection();
+        $collection->getSelect()
+            ->join(
+                array('regulation_type' => 'gh_regulation_type'),
+                'main_table.regulation_type_id = regulation_type.regulation_type_id')
+            ->join(
+                array('regulation_vendor_kind' => 'gh_regulation_vendor_kind'),
+                'regulation_type.regulation_kind_id = regulation_vendor_kind.regulation_kind_id')
+            ->group("regulation_vendor_kind.regulation_kind_id")
+            ->where("main_table.date<=?", $localeTimeF);
+        return $collection;
     }
 }

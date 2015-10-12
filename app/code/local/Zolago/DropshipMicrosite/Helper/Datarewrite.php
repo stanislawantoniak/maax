@@ -40,6 +40,7 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosi
 
         /** @var Zolago_Common_Helper_Data $mailer */
         $mailer = Mage::helper('zolagocommon');
+        $confirmation_email_send_copy_to = Mage::getStoreConfig('udropship/microsite/confirmation_email_send_copy_to');
         $mailer->sendEmailTemplate(
             $vendor->getEmail(),
             $vendor->getVendorName(),
@@ -47,10 +48,13 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosi
             array(
                 'store_name' => $store->getName(),
                 'vendor' => $vendor,
-                'use_attachments' => true
+                'use_attachments' => true,
+                "_ATTACHMENTS" => $vendor->getData("accept_attachments")
             ),
             $store->getId(),
-            $store->getConfig('udropship/vendor/vendor_email_identity')
+            $store->getConfig('udropship/vendor/vendor_email_identity'),
+            null,
+            $confirmation_email_send_copy_to
         );
         Mage::helper('udropship')->setDesignStore();
 

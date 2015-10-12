@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.8</version>
+			<version>0.0.9</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -609,18 +609,18 @@
                     </custom_design>
 
 
-                    <gh_regulation_accept_document_date translate="label">
-                        <label>Regulation Document Date</label>
+                    <regulation_accept_document_date translate="label">
+                        <label>Regulation Document Accept Date</label>
                         <type>text</type>
                         <fieldset>vendor_form</fieldset>
-                        <position>800</position>
-                    </gh_regulation_accept_document_date>
-                    <gh_regulation_accept_document_data translate="label">
-                        <label>Regulation Document Data</label>
-                        <type>text</type>
+                        <position>0</position>
+                    </regulation_accept_document_date>
+                    <regulation_accept_document_data translate="label">
+                        <label>Regulation Document Accept Data</label>
+                        <type>textarea</type>
                         <fieldset>vendor_form</fieldset>
-                        <position>801</position>
-                    </gh_regulation_accept_document_data>
+                        <position>0</position>
+                    </regulation_accept_document_data>
 				</fields>
 			</vendor>
 		</udropship>

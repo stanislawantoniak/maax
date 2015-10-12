@@ -228,7 +228,8 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
 
                 $folder = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
                 $allowed = $hlp::getAllowedRegulationDocumentTypes();
-                $path = $hlp->saveRegulationDocument($file, $folder, $allowed);
+                $result = $hlp->saveRegulationDocument($file, $folder, $allowed);
+                $path = $result["content"]["path"];
 
                 if(!$path) {
                     Mage::throwException("Invalid file type (".$file['type'].")");
@@ -236,6 +237,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
 
                 $dl = array(
                     "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
+                    "type" => $_FILES['file']['type'],
                     "path"      => $path
                 );
                 $model->setData("document_link", serialize($dl));
