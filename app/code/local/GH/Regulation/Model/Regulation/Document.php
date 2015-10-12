@@ -47,7 +47,7 @@ class GH_Regulation_Model_Regulation_Document extends Mage_Core_Model_Abstract
         if (is_null($documentId)) {
             $documentId = $this->getId();
         }
-        return Mage::getUrl('dropship/regulation/getDocument', array('id' => $documentId));
+        return Mage::getUrl('udropship/regulation/getDocument', array('id' => $documentId));
     }
 
     /**

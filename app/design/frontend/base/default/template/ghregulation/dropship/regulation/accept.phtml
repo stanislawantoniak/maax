@@ -16,6 +16,7 @@ $_helper = Mage::helper("ghregulation");
                     <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
                         <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
                         <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
+                        <input type="hidden" name="key" value="<?php echo $this->getRequest()->getParam('key'); ?>" />
                         <div class="widget box">
                             <div class="widget-header" style="text-align: center;">
                                 <h4><?php echo $_helper->__("Accept regulation"); ?></h4>
@@ -47,7 +48,7 @@ $_helper = Mage::helper("ghregulation");
                                             <input type="file" data-style="fileinput-custom"
                                                    name="regulation_document"/>
 
-                                            <input type="hidden" name="regulation_document_path" value=""/>
+                                            <input type="hidden" name="regulation_document_new_name" value=""/>
 
                                             <div class="add_regulation_document_preview"></div>
                                         </label>
@@ -148,7 +149,7 @@ $_helper = Mage::helper("ghregulation");
     jQuery("input[name=regulation_document]").on('change', function (e) {
         e.preventDefault();
         jQuery(".add_regulation_document_preview").html("");
-        jQuery("[name=regulation_document_path]").val("");
+        jQuery("[name=regulation_document_new_name]").val("");
 
         var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
 
@@ -165,12 +166,12 @@ $_helper = Mage::helper("ghregulation");
         }).done(function(response){
             if (response.status == 1) {
                 jQuery(".add_regulation_document_preview")
-                    .html('<a href="' + '<?php echo Mage::getBaseUrl("media"); ?>' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
-                jQuery("[name=regulation_document_path]").val(response.content.link);
+                    .html('<a href="' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
+                jQuery("[name=regulation_document_new_name]").val(response.content.new_name);
             }
             if (response.status == 0) {
                 //jQuery(".add_regulation_document_preview").html(response.content);
-                jQuery("[name=regulation_document_path]").val("");
+                jQuery("[name=regulation_document_new_name]").val("");
             }
         });
     });
