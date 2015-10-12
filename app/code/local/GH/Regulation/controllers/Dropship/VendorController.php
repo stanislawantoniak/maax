@@ -62,11 +62,21 @@ class GH_Regulation_Dropship_VendorController
 
     public function acceptPostAction()
     {
+        $req = $this->getRequest();
+        $key = $req->getParam('key', false);
+        $vendorId = $req->getPost('vendor', false);
+        $acceptRegulations = $req->getPost('accept_regulations', false);
+        $acceptRegulationsRole = $req->getPost('accept_regulations_role', false);
+
+        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+
+        /** @var GH_Regulation_Helper_Data $_helper */
+        $_helper = Mage::helper("ghregulation");
+
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
-
-        $_helper = Mage::helper("ghregulation");
         if (empty($_POST)) {
             $this->_getSession()->addError($_helper->__("Security error"));
             return $this->_redirectReferer();
@@ -77,12 +87,6 @@ class GH_Regulation_Dropship_VendorController
         if ($formKey != $formKeyPost) {
             return $this->_redirectReferer();
         }
-
-
-        $vendorId = $this->getRequest()->getPost('vendor', false);
-        $acceptRegulations = $this->getRequest()->getPost('accept_regulations', false);
-
-        $acceptRegulationsRole = $this->getRequest()->getPost('accept_regulations_role', false);
 
         if (!$vendorId) {
             $this->_getSession()->addError($_helper->__("Undefined vendor"));
@@ -107,7 +111,7 @@ class GH_Regulation_Dropship_VendorController
                 return $this->_redirectReferer();
             }
 
-            if (round($size /(1024*1024) , 1) >= GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
+            if (round($size / (1024 * 1024), 1) >= GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
                 $this->_getSession()->addError($_helper->__("File too large. File must be less than %sMB.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE));
                 return $this->_redirectReferer();
             }
@@ -115,80 +119,84 @@ class GH_Regulation_Dropship_VendorController
         }
 
         // activate customer
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
-        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
-        $regulationAccepted = $vendor->getData("regulation_accepted");
+        if ($vendor->getConfirmation() !== $key) {
+            throw new Exception($this->__('Wrong confirmation key.'));
+        }
 
-            try {
-                $vendor->setConfirmation(null);
-                $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
-                $vendor->setPassword($password);
-                $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
-                $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
+        try {
+            $vendor->setConfirmation(null);
+            $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
+            $vendor->setPassword($password);
+            $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
+            $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
 
-                $localeTime = Mage::getModel('core/date')->timestamp(time());
-                $localeTimeF = date("Y-m-d H:i:s", $localeTime);
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $localeTimeF = date("Y-m-d H:i:s", $localeTime);
 
-                $vendor->setData("regulation_accept_document_date", $localeTimeF);
+            $vendor->setData("regulation_accept_document_date", $localeTimeF);
 
-                $vendor->setData("regulation_accepted", 1);
+            $vendor->setData("regulation_accepted", 1);
 
-                $ghRegulationAcceptDocumentData = array(
-                    "IP" => $_SERVER['REMOTE_ADDR'],
-                    "document" => $_POST["regulation_document_path"],
-                    "accept_regulations_role" => $acceptRegulationsRole,
-                    "accept_regulations" => isset($_POST['accept_regulations']) ? 1 : 0
+            $ghRegulationAcceptDocumentData = array(
+                "IP" => $_SERVER['REMOTE_ADDR'],
+                "document" => $_POST["regulation_document_path"], //todo
+                "accept_regulations_role" => $acceptRegulationsRole,
+                "accept_regulations" => isset($_POST['accept_regulations']) ? 1 : 0
+            );
+
+            $vendor->setData("regulation_accept_document_data", json_encode($ghRegulationAcceptDocumentData));
+
+            Mage::getResourceSingleton('udropship/helper')
+                ->updateModelFields(
+                    $vendor,
+                    array(
+                        'confirmation',
+                        'password_hash',
+                        'password_enc',
+                        "regulation_accept_document_date",
+                        "regulation_accept_document_data",
+                        "regulation_accepted"
+                    )
                 );
 
-                $vendor->setData("regulation_accept_document_data", json_encode($ghRegulationAcceptDocumentData));
+        } catch (Exception $e) {
+            throw new Exception($this->__('Failed to confirm vendor account.'));
+        }
+        $acceptAttachments = array();
+        //uploaded document by vendor
+        if (isset($_POST["regulation_document_new_name"]) && !empty($_POST["regulation_document_new_name"])) {
 
-                Mage::getResourceSingleton('udropship/helper')
-                    ->updateModelFields(
-                        $vendor,
-                        array(
-                            'confirmation',
-                            'password_hash',
-                            'password_enc',
-                            "regulation_accept_document_date",
-                            "regulation_accept_document_data",
-                            "regulation_accepted"
-                        )
-                    );
+            $newName = $_POST["regulation_document_new_name"];
+            $image = md5($newName);
+            $safeFolderPath = $image[0] . "/" . $image[1] . "/";
+            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId;
 
-            } catch (Exception $e) {
-                throw new Exception($this->__('Failed to confirm vendor account.'));
-            }
-            $acceptAttachments = array();
-            //uploaded document by vendor
-            if (isset($_POST["regulation_document_path"]) && !empty($_POST["regulation_document_path"])) {
+            $acceptAttachments[] = array(
+                'filename' => $name,
+                'content' => file_get_contents(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $newName),
+                'type' => $type,
+            );
+        }
+        //our documents
+        $docs = Mage::getModel("ghregulation/regulation_document")->getAcceptDocumentsList();
+        if ($docs->getSize() > 0) {
+            foreach ($docs as $doc) {
+                $data = unserialize($doc->getDocumentLink());
                 $acceptAttachments[] = array(
-                    'filename' => $name,
-                    'content' => file_get_contents(Mage::getBaseDir("media") . DS . $_POST["regulation_document_path"]),
-                    'type' => $type,
+                    'filename' => $data['file_name'],
+                    'content' => file_get_contents(Mage::getBaseDir("media") . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $data['path']),
+                    'type' => $data['type'],
                 );
             }
-            //our documents
-            $docs = Mage::getModel("ghregulation/regulation_document")->getAcceptDocumentsList();
-            if ($docs->getSize() > 0) {
-                foreach ($docs as $doc) {
-                    $data = unserialize($doc->getDocumentLink());
-                    $acceptAttachments[] = array(
-                        'filename' => $data['file_name'],
-                        'content' => file_get_contents(Mage::getBaseDir("media") . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $data['path']),
-                        'type' => $data['type'],
-                    );
-                }
-            }
-            if (!empty($acceptAttachments)) {
-                $vendor->setData("accept_attachments", $acceptAttachments);
-            }
+        }
+        if (!empty($acceptAttachments)) {
+            $vendor->setData("accept_attachments", $acceptAttachments);
+        }
 
-
-            //send Accept email
-            Mage::helper('umicrosite')->sendVendorRegulationAcceptedEmail($vendor);
-            $this->_redirect('udropship/vendor/regulationaccepted');
-            return;
-
+        //send Accept email
+        Mage::helper('umicrosite')->sendVendorRegulationAcceptedEmail($vendor);
+        $this->_redirect('udropship/vendor/regulationaccepted');
+        return;
     }
 
 
@@ -203,6 +211,46 @@ class GH_Regulation_Dropship_VendorController
                 $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $document->getPath();
                 if (is_file($path) && is_readable($path)) {
                     $this->_sendFile($path, $document->getFileName());
+                    return;
+                }
+            }
+        }
+        $this->norouteAction(); //404
+        return;
+    }
+
+    public function getVendorUploadedDocumentAction() {
+        $req = $this->getRequest();
+        $fileName = $req->getParam('file', false);
+        $vendorId = $req->getParam('vendor', false);
+        $key    = $req->getParam('key', false); // Token
+
+        // If no vendor ID maybe vendor is logged in
+        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+        if (!$vendor->getId()) {
+            /** @var Zolago_Dropship_Model_Vendor $vendor */
+            $vendor = $this->_getSession()->getVendor();
+            $vendorId = $vendor->getId();
+        }
+
+        if (!empty($fileName) || $vendorId) {
+
+            /* Vendor account confirmation token life time */
+            $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $secPastSinceConfirmation = $localeTime - strtotime($vendor->getConfirmationSentDate());
+            $hoursPastSinceConfirmation = $secPastSinceConfirmation / 60 / 60;
+
+            if ($hoursPastSinceConfirmation < $confirmationTokenExpirationTime && !$this->_getSession()->isLoggedIn() && $vendor->getConfirmation() == $key
+                || $this->_getSession()->isLoggedIn()) {
+
+                $path  = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId . DS;
+                $image = md5($fileName);
+                $path .= $image[0] . "/" . $image[1] . "/" . $fileName;
+                if (is_file($path) && is_readable($path)) {
+                    $this->_sendFile($path, $fileName);
                     return;
                 }
             }
@@ -248,26 +296,43 @@ class GH_Regulation_Dropship_VendorController
      */
     public function saveVendorDocumentPostAction()
     {
+        /** @var GH_Regulation_Helper_Data $helper */
+        $helper = Mage::helper("ghregulation");
+
+        $req = $this->getRequest();
+        $vendorId = $req->getParam('vendor', false);
+        $key = $req->getParam('key', false);
+        $errorFlag = false;
+
+        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+
         $result = array(
             "status" => 0,
             "content" => array()
         );
 
-        if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
-            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$_POST["vendor"];
+        if (!$vendor->getId() || $vendor->getConfirmation() != $key) {
+            $errorFlag = true;
+            $result['content'] = $helper->__("Security issue: you have no access for this action");
+        }
+
+        if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"]) && !$errorFlag) {
+            $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId;
 
             $dirname = Mage::getBaseDir('media') . DS . $folder . DS;
             $this->deleteDirectory($dirname);
-            $allowedRegulationDocumentTypes = Mage::helper("ghregulation")->getAllowedRegulationDocumentTypes();
+            $allowedRegulationDocumentTypes = $helper->getAllowedRegulationDocumentTypes();
 
-            $name = $_FILES["regulation_document"]["name"];
-            $result = Mage::helper("ghregulation")->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
+            $result = $helper->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
             if ($result["status"] == 1) {
+                $url = $helper->getVendorUploadedDocumentUrl((int)$vendorId, $result['content']['new_name'], $key);
                 $result = array(
                     "status" => 1,
                     "content" => array(
-                        'name' => $name,
-                        'link' => $folder . DS . $result["content"]["path"]
+                        'name' => $result['content']['name'],
+                        'new_name' => $result['content']['new_name'],
+                        'link' => $url
                     )
                 );
             }

@@ -8,7 +8,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     const REGULATION_DOCUMENT_FOLDER = "vendor_regulation";
     const REGULATION_DOCUMENT_ADMIN_FOLDER = "admin_regulation";
 
-    const REGULATION_DOCUMENT_MAX_SIZE = 5; //MB
+    const REGULATION_DOCUMENT_MAX_SIZE = 0.00001; //MB
 
     /**
      * @return array
@@ -44,19 +44,16 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         if (!empty($name)) {
-            $imageName = $this->cleanFileName($name);
-            $uniqName = uniqid() . "_" . $imageName;
-
-            $image = md5_file($tmpName);
-            $image = md5(mt_rand() . $image);
+            $newName = $this->cleanFileName($name);
+            $image = md5($newName);
             $safeFolderPath = $image[0] . "/" . $image[1] . "/";
 
             @mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
 
-            $path = $safeFolderPath . $uniqName;
-            $result = array("status" => 1, "content" => array("path" => $path, "name" => $name));
+            $path = $safeFolderPath . $newName;
+            $result = array("status" => 1, "content" => array("path" => $path, "name" => $name, "new_name" => $newName));
             try {
-                move_uploaded_file($tmpName, Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $uniqName);
+                move_uploaded_file($tmpName, Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $newName);
             } catch (Exception $e) {
                 Mage::logException($e);
             }
@@ -97,5 +94,21 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         $string = preg_replace('/[^.A-Za-z0-9\-\_]/', '', $string); // Removes special chars.
         $string = preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
         return preg_replace('/_+/', '_', $string); // Replaces multiple underscores with single one.
+    }
+
+    /**
+     * Return url for file uploaded by vendor on regulation acceptation steep
+     *
+     * @param $vendorId
+     * @param $fileName
+     * @param null $token
+     * @return string
+     */
+    public function getVendorUploadedDocumentUrl($vendorId, $fileName, $token = null) {
+        return Mage::getUrl('udropship/vendor/getVendorUploadedDocument', array(
+            'vendor' => $vendorId,
+            'file'   => $fileName,
+            'key'    => $token
+        ));
     }
 }
