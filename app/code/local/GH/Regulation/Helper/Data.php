@@ -65,6 +65,27 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
+    public function getVendorDocuments($vendorId,$idsOnly = false) {
+        /** @var GH_Regulation_Model_Regulation_Vendor_Kind $vendorKindModel */
+        $vendorKindModel = Mage::getModel('ghregulation/regulation_vendor_kind');
+        /** @var GH_Regulation_Model_Resource_Regulation_Vendor_Kind_Collection $vendorKindCollection */
+        $vendorKindCollection = $vendorKindModel->getCollection();
+        $vendorKindCollection
+            ->addFieldToFilter('vendor_id',$vendorId)
+            ->getSelect()
+                ->columns('regulation_kind_id');
+        if($vendorKindCollection->getSize()) {
+            $vendorKinds = array();
+            foreach($vendorKindCollection as $vendorKind) {
+                $vendorKinds[] = $vendorKind->getRegulationKindId();
+            }
+        }
+
+        /** @var GH_Regulation_Model_Regulation_Kind $kindModel */
+        $kindModel = Mage::getModel('ghregulation/regulation_kind');
+        //$kindCollections;
+    }
+
     /**
      * Clean file name
      * @param $string
