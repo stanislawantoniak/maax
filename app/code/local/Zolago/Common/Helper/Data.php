@@ -42,6 +42,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
             /** @var Mage_Core_Model_Email_Info $emailInfo */
 			$emailInfo = Mage::getModel('core/email_info');
 			$emailInfo->addTo($email, $name);
+			$emailInfo->addBcc($bcc);
 			$mailer->addEmailInfo($emailInfo);
 
 			// Set all required params and send emails
