@@ -212,7 +212,8 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
      * @return Mage_Adminhtml_Controller_Action
      */
     public function saveDocumentAction() {
-        $helper = Mage::helper("ghregulation");
+        /** @var GH_Regulation_Helper_Data $hlp */
+        $hlp = Mage::helper("ghregulation");
         try {
             $request = $this->getRequest();
             $id = $request->getParam('id', null);
@@ -224,8 +225,6 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             if (isset($_FILES['file']) && isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
                 $file = $_FILES['file'];
 
-                /** @var GH_Regulation_Helper_Data $hlp */
-                $hlp = Mage::helper("ghregulation");
 
                 $folder = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
                 $allowed = $hlp::getAllowedRegulationDocumentTypes();
@@ -252,7 +251,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             return $this->_redirectUrl($url);
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addException($e, $helper->__($e->getMessage()));
+            $this->_getSession()->addException($e, $hlp->__($e->getMessage()));
             $this->_getSession()->setData('ghregulation_document_form_data', $this->getRequest()->getParams());
         }
         return $this->_redirectReferer();
