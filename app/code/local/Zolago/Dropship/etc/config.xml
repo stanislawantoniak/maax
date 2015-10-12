@@ -609,6 +609,13 @@
                     </custom_design>
 
 
+                    <regulation_accepted>
+                        <label>Is Regulation Document Accepted</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>vendor_info</fieldset>
+                        <position>0</position>
+                    </regulation_accepted>
                     <regulation_accept_document_date translate="label">
                         <label>Regulation Document Accept Date</label>
                         <type>text</type>
