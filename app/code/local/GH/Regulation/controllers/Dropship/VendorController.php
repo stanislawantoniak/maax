@@ -270,7 +270,7 @@ class GH_Regulation_Dropship_VendorController
             "status" => 0,
             "content" => array()
         );
-        Mage::log($_FILES["regulation_document"]);
+
         if (isset($_FILES["regulation_document"]) && !empty($_FILES["regulation_document"])) {
             $folder = GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$_POST["vendor"];
 
@@ -285,7 +285,7 @@ class GH_Regulation_Dropship_VendorController
                     "status" => 1,
                     "content" => array(
                         'name' => $result["content"]["name"],
-                        'link' => $folder . DS . $result["content"]["path"]
+                        'link' => Mage::getBaseUrl("media").$folder . DS . $result["content"]["path"]
                     )
                 );
             }
