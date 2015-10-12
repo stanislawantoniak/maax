@@ -123,7 +123,7 @@ $_helper = Mage::helper("ghregulation");
             accept_regulations_role: {
                 required: true
             },
-            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: 5, required:'[name=accept_regulations_role][value=proxy]'}
+            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: <?php echo GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE; ?>, required:'[name=accept_regulations_role][value=proxy]'}
         },
         messages: {
             'regulation_document': {
