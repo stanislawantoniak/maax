@@ -27,23 +27,23 @@ $_helper = Mage::helper("ghregulation");
                             </div>
                             <div class="widget-content">
                                 <div class="col-md-12">
-                                    <p><?php echo $_helper->__("Ja %s oświadczam, że:", $this->getVendor()->getCompanyName()); ?></p>
+                                    <p><?php echo $_helper->__("I %s declare:", $this->getVendor()->getCompanyName()); ?></p>
 
                                     <label class="css-label col-md-12">
                                         <input type="radio" class="" name="accept_regulations_role" value="single"/>
-                                        <?php echo $_helper->__("Jestem upoważniony do jednoosobowego reprezentowania %s", $this->getVendor()->getCompanyName()); ?>
+                                        <?php echo $_helper->__("I am authorized to represent single %s", $this->getVendor()->getCompanyName()); ?>
                                     </label>
 
                                     <label class="css-label col-md-12">
                                         <input type="radio" class="" name="accept_regulations_role" value="proxy"/>
-                                        <?php echo $_helper->__("Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."); ?>
+                                        <?php echo $_helper->__("I have power to accept the regulations MODAGO."); ?>
                                     </label>
 
 
                                     <div class="col-md-12"></div>
                                     <div class="add_regulation_document hidden col-md-12">
                                         <label class="css-label">
-                                            <?php echo $_helper->__("Załącz skan pełnomocnictwa"); ?>
+                                            <?php echo $_helper->__("Upload a scan of regulations"); ?>
                                             <input type="file" data-style="fileinput-custom"
                                                    name="regulation_document"/>
 
@@ -66,7 +66,7 @@ $_helper = Mage::helper("ghregulation");
                                 <div class="widget-content">
 
                                         <div class="col-md-12">
-                                            <p><?php echo $_helper->__("Pobierz regulaminy aby zapoznać się z ich treścią:"); ?></p>
+                                            <p><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></p>
                                             <ul class="regulation-docs-list">
                                                 <?php foreach ($docs as $doc):?>
                                                     <?php $data = unserialize($doc->getDocumentLink()); ?>
@@ -83,13 +83,13 @@ $_helper = Mage::helper("ghregulation");
                             <div class="widget-content">
                                 <div class="col-md-12">
                                     <p>
-                                        <?php echo $_helper->__("Ja %s %s  oświadczam, że", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
+                                        <?php echo $_helper->__("I %s %s  declare", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
                                     </p>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="css-label col-md-12">
                                         <input type="checkbox" class="uniform" name="accept_regulations"/>
-                                        <?php echo $_helper->__("zapoznałem się regulaminem MODAGO wraz z jego załącznikami oraz akceptuję jego treść co jest jednoznaczne z podpisaniem umowy pomiędzy Zolago Group Sp.z o.o. a %s o świadczeniu usług zgodnie z postanowieniami Regulaminu.", $this->getVendor()->getCompanyName()); ?>
+                                        <?php echo $_helper->__("I accept the regulations", $this->getVendor()->getCompanyName()); ?>
                                     </label>
                                 </div>
                             </div>
