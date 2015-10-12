@@ -86,7 +86,7 @@ class GH_Regulation_Dropship_VendorController
 
         $_helper = Mage::helper("ghregulation");
         if (empty($_POST)) {
-            $this->_getSession()->addError($_helper->__("Some error occurred"));
+            $this->_getSession()->addError($_helper->__("Security error"));
             return $this->_redirectReferer();
         }
         // Form key valid?
@@ -125,7 +125,7 @@ class GH_Regulation_Dropship_VendorController
                 return $this->_redirectReferer();
             }
 
-            if (round($size / 1048576, 1) >= GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
+            if (round($size / 1024*1024, 1) >= GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
                 $this->_getSession()->addError($_helper->__("File too large. File must be less than %sMB.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE));
                 return $this->_redirectReferer();
             }
