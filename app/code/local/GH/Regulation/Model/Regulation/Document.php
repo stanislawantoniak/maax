@@ -65,7 +65,13 @@ class GH_Regulation_Model_Regulation_Document extends Mage_Core_Model_Abstract
                 'main_table.regulation_type_id = regulation_type.regulation_type_id')
             ->join(
                 array('regulation_vendor_kind' => 'gh_regulation_vendor_kind'),
-                'regulation_type.regulation_kind_id = regulation_vendor_kind.regulation_kind_id')
+                'regulation_type.regulation_kind_id = regulation_vendor_kind.regulation_kind_id'
+                )
+            ->join(
+                array('regulation_kind' => 'gh_regulation_kind'),
+                'regulation_vendor_kind.regulation_kind_id = regulation_kind.regulation_kind_id',
+                array("*")
+            )
             ->group("regulation_vendor_kind.regulation_kind_id")
             ->where("main_table.date<=?", $localeTimeF);
         return $collection;
