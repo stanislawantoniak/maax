@@ -65,7 +65,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
-    public function getVendorDocuments($vendor = 5,$idsOnly = false) { //todo: remove 5 - testing value
+    public function getVendorDocuments($vendor,$idsOnly = false) {
         if(!$vendor instanceof Zolago_Dropship_Model_Vendor) {
             $vendor = Mage::getModel('udropship/vendor')->load($vendor);
         }
