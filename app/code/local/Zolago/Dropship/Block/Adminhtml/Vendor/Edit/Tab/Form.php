@@ -90,6 +90,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
                 'label'     => $hlp->__('Send Reject Email'),
                 'options'   => Mage::getSingleton('udropship/source')->setPath('yesno')->toOptionHash(true),
             ));
+            /*
             $fieldset->addField('send_confirmation_email', 'select', array(
                 'name'      => 'send_confirmation_email',
                 'label'     => $vendor && $vendor->getConfirmationSent()
@@ -99,6 +100,28 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
                 'note'      => $vendor && $vendor->getConfirmationSent()
                     ? $hlp->__('Resending confirmation email will reset password (revoke old one). New password will be sent to vendor in separate email once he click at the link in this confirmation email.')
                     : $hlp->__('Send Confirmation Email. Password will be sent to vendor in separate email once he click at the link in this confirmation email.'),
+            ));
+            */
+
+            //Send Confirmation Email Button
+            $fieldset->addType('action_button', 'Zolago_Dropship_Block_Form_Renderer_Actionbutton');
+            $fieldset->addField('send_confirmation_email_button', 'action_button', array(
+                'name' => 'send_confirmation_email_button',
+                'label' => $vendor && $vendor->getConfirmationSent()
+                    ? $hlp->__('Resend Confirmation Email')
+                    : $hlp->__('Send Confirmation Email'),
+
+                'note'      => $vendor && $vendor->getConfirmationSent()
+                    ? $hlp->__('Resending confirmation email will reset password (revoke old one). New password will be sent to vendor in separate email once he click at the link in this confirmation email.')
+                    : $hlp->__('Send Confirmation Email. Password will be sent to vendor in separate email once he click at the link in this confirmation email.'),
+                "disabled" =>true
+            ));
+
+            $fieldset->addField('send_regulation_accept_button', 'action_button', array(
+                'name' => 'send_regulation_accept_button',
+                'label' => $hlp->__('Send Regulations For Acceptance'),
+                'note'      => $hlp->__('Send Regulations For Acceptance.'),
+                "disabled" =>true
             ));
         }
 
