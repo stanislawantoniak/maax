@@ -164,24 +164,30 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $id = $observer->getEvent()->getId();
         $v = Mage::helper('udropship')->getVendor($id);
 
-        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs
-                || !Mage::app()->getRequest()->getParam('id', 0)
-           ) {
+        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs)
             return;
-        }
+
+        //Addresses
         if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
             $addressBlock = Mage::app()
-                            ->getLayout()
-                            ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_addresses', 'vendor.address.form')
-                            ->setVendorId($v)
-                            ->toHtml();
+                ->getLayout()
+                ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_addresses', 'vendor.address.form')
+                ->setVendorId($v)
+                ->toHtml();
 
             $block->addTab('address_section', array(
-                               'label'     => Mage::helper('zolagodropship')->__('Address'),
-                               'after'     => 'form_section',
-                               'content'	=> $addressBlock
-                           ));
-            $block->addTabToSection('address_section','vendor_data',10);
+                'label' => Mage::helper('zolagodropship')->__('Address'),
+                'after' => 'form_section',
+                'content' => $addressBlock
+            ));
+            $block->addTabToSection('address_section', 'vendor_data', 10);
+        }
+
+        if (!Mage::app()->getRequest()->getParam('id', 0))
+            return;
+
+        //Couriers
+        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
             $courierBlock = Mage::app()
                             ->getLayout()
                             ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_couriers', 'vendor.courier.form')

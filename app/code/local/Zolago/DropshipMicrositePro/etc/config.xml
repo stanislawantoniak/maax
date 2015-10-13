@@ -173,6 +173,15 @@
 				</args>
 			</udmspro>
 		</routers>
+        <translate>
+            <modules>
+                <Zolago_DropshipMicrositePro>
+                    <files>
+                        <default>Zolago_DropshipMicrositePro.csv</default>
+                    </files>
+                </Zolago_DropshipMicrositePro>
+            </modules>
+        </translate>
 		<events>
 			<controller_action_layout_load_before>
             	<observers>
