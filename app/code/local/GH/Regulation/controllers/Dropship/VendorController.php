@@ -141,10 +141,6 @@ class GH_Regulation_Dropship_VendorController
 
         try {
             $vendor->setConfirmation(null);
-            $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
-            $vendor->setPassword($password);
-            $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
-            $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
             $localeTimeF = date("Y-m-d H:i:s", $localeTime);
@@ -167,8 +163,6 @@ class GH_Regulation_Dropship_VendorController
                     $vendor,
                     array(
                         'confirmation',
-                        'password_hash',
-                        'password_enc',
                         "regulation_accept_document_date",
                         "regulation_accept_document_data",
                         "regulation_accepted"
@@ -178,6 +172,7 @@ class GH_Regulation_Dropship_VendorController
         } catch (Exception $e) {
             throw new Exception($this->__('Failed to confirm vendor account.'));
         }
+
         $acceptAttachments = array();
         //uploaded document by vendor
         if ($regulationDocumentNewName && !empty($regulationDocumentNewName)) {
@@ -192,7 +187,8 @@ class GH_Regulation_Dropship_VendorController
         /** @var GH_Regulation_Model_Resource_Regulation_Document $docModel */
         $docModel = Mage::getResourceModel("ghregulation/regulation_document");
         $docs = $docModel->getDocumentsToAccept($vendor);
-        if ($docs->getSize() > 0) {
+
+        if (count($docs) > 0) {
             /** @var GH_Regulation_Model_Regulation_Document $doc */
             foreach ($docs as $doc) {
                 $acceptAttachments[] = array(

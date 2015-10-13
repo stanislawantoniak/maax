@@ -26,6 +26,9 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $this->renderLayout();
     }
 
+    /**
+     * Send link to accept regulations
+     */
     public function sendConfirmationEmailAction(){
         $request = $this->getRequest();
         $vendorId = $request->getParam('id');
