@@ -78,6 +78,9 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 // Collecting attributes to update
                 $filter = $rule->getFilterArray();
                 $ruleAttr = $gridModel->getAttribute($rule->getColumn());
+                if (!$this->getGridModel()->isAttributeEditable($ruleAttr) || ($ruleAttr->getIsRequired() && trim($rule->getValue()) == "")) {
+                    continue; // Skip not editable on grid or empty value when required
+                }
                 $usedAttr[$ruleAttr->getAttributeCode()] = $ruleAttr;
 
                 // Preparing product collection
@@ -85,7 +88,7 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 if (count($productIds)) {
                     $prodColl->addIdFilter($productIds);
                 } else {
-                    continue;
+                    break; // Filtering must be
                 }
                 // --Preparing product collection
                 if ($filter) { // Some filter, process for it
@@ -94,10 +97,10 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
                             $attr = $gridModel->getAttribute($key);
                             if ($attr->getAttributeCode() == "name") {
-                                $prodColl->addFieldToFilter(array(
+                                $prodColl->addAttributeToFilter(array(
                                     array("attribute" => "name", "filter" => $condition),
                                     array("attribute" => "skuv", "filter" => $condition)
-                                ));
+                                ), null, 'left');
                                 continue;
                             }
                             if (isset($condition['null'])) {
@@ -121,138 +124,144 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 }
                 // --Collecting attributes to update
             }
-            // dataByProduct now look like:
-            // array
-            //  32929 =>
-            //    array
-            //      'child_age' =>
-            //        array
-            //          0 => string '1992'
-            //          1 => string '1991'
-            //      'color' =>
-            //        array
-            //          0 => string '8'
-            //      'manufacturer' =>
-            //        array
-            //          0 => string '2025'
-            //  32934 =>
-            //    array
-            //      'manufacturer' =>
-            //        array
-            //          0 => string '1035'
-            //  32938 =>
-            //    array
-            //      'manufacturer' =>
-            //        array
-            //          0 => string '1035'
-            //      'color' =>
-            //        array
-            //          0 => string '737'
+
+            // Skip if nothing to update
+            if (!empty($dataByProduct)) {
+                // dataByProduct now look like:
+                // array
+                //  32929 =>
+                //    array
+                //      'child_age' =>
+                //        array
+                //          0 => string '1992'
+                //          1 => string '1991'
+                //      'color' =>
+                //        array
+                //          0 => string '8'
+                //      'manufacturer' =>
+                //        array
+                //          0 => string '2025'
+                //  32934 =>
+                //    array
+                //      'manufacturer' =>
+                //        array
+                //          0 => string '1035'
+                //  32938 =>
+                //    array
+                //      'manufacturer' =>
+                //        array
+                //          0 => string '1035'
+                //      'color' =>
+                //        array
+                //          0 => string '737'
 
 
-            // Load product collection with used attributes
-            $prodColl = $this->_prepareBasicCollectionForUpdate($store, $attributeSetId);
-            $prodColl->addAttributeToSelect(array_keys($usedAttr), "left");
+                // Load product collection with used attributes
+                $prodColl = $this->_prepareBasicCollectionForUpdate($store, $attributeSetId);
+                $prodColl->addAttributeToSelect(array_keys($usedAttr), "left");
+                $prodColl->addIdFilter($productIds);
 
-            // Merge current attributes for product (should work like add for multiselect, set for select)
-            $dataForUpdate = array();
-            $prodDatas = $prodColl->getData(); // No load for better performance
-            foreach ($prodDatas as $product) {
-                foreach ($usedAttr as $attr) {
-                    $code = $attr->getAttributeCode();
-                    $prodId = (int)$product["entity_id"];
-                    if ($attr->getFrontendInput() == "multiselect") {
-                        if (isset($dataByProduct[$prodId]) && isset($dataByProduct[$prodId][$code])) {
-                            $tmp = array_filter(explode(",", $product[$code]));
-                            $newValue = array_unique(array_merge(!empty($tmp) ? $tmp : array(), $dataByProduct[$prodId][$code]));
-                            sort($newValue);
-                            $dataForUpdate[$prodId][$attr->getAttributeCode()] =
-                                implode(",", $newValue);
-                        }
-                    } elseif ($attr->getFrontendInput() == "select") {
-                        if (isset($dataByProduct[$prodId]) && isset($dataByProduct[$prodId][$code])) {
-                            $dataForUpdate[$prodId][$attr->getAttributeCode()] = implode(",", $dataByProduct[$prodId][$code]);
+                // Merge current attributes for product (should work like add for multiselect, set for select)
+                $dataForUpdate = array();
+                $prodDatas = $prodColl->getData(); // No load for better performance
+                foreach ($prodDatas as $product) {
+                    foreach ($usedAttr as $attr) {
+                        $code = $attr->getAttributeCode();
+                        $prodId = (int)$product["entity_id"];
+                        if ($attr->getFrontendInput() == "multiselect") {
+                            if (isset($dataByProduct[$prodId]) && isset($dataByProduct[$prodId][$code])) {
+                                $tmp = array_filter(explode(",", $product[$code]));
+                                $newValue = array_unique(array_merge(!empty($tmp) ? $tmp : array(), $dataByProduct[$prodId][$code]));
+                                sort($newValue);
+                                $dataForUpdate[$prodId][$attr->getAttributeCode()] =
+                                    implode(",", $newValue);
+                            }
+                        } elseif ($attr->getFrontendInput() == "select") {
+                            if (isset($dataByProduct[$prodId]) && isset($dataByProduct[$prodId][$code])) {
+                                $dataForUpdate[$prodId][$attr->getAttributeCode()] = implode(",", $dataByProduct[$prodId][$code]);
+                            }
                         }
                     }
                 }
-            }
-            // Now we have merged old values and new values like:
-            // array
-            //  32929 =>
-            //    array
-            //      'child_age' => string '1987,1991,1992' // NOTE: 1987 was on product previously
-            //      'color' => string '737'
-            //      'manufacturer' => string '2025'
-            //  32934 =>
-            //    array
-            //      'manufacturer' => string '1035'
-            //  32938 =>
-            //    array
-            //      'color' => string '737'
-            //      'manufacturer' => string '1035'
+                // Now we have merged old values and new values like:
+                // array
+                //  32929 =>
+                //    array
+                //      'child_age' => string '1987,1991,1992' // NOTE: 1987 was on product previously
+                //      'color' => string '737'
+                //      'manufacturer' => string '2025'
+                //  32934 =>
+                //    array
+                //      'manufacturer' => string '1035'
+                //  32938 =>
+                //    array
+                //      'color' => string '737'
+                //      'manufacturer' => string '1035'
 
 
-            $dataForReindex = array();
-            foreach ($dataForUpdate as $productId => $attribs) {
-                foreach ($attribs as $code => $value) {
-                    $dataForReindex[$code][$value][] = $productId;
-                }
-            }
-            // $dataForReindex now looks like:
-            // array
-            //  'child_age' =>
-            //    array
-            //      '1987,1991,1992' =>
-            //        array
-            //          0 => int 32929
-            //  'color' =>
-            //    array (size=1)
-            //      737 =>
-            //        array
-            //          0 => int 32929
-            //          1 => int 32938
-            //  'manufacturer' =>
-            //    array
-            //      2025 =>
-            //        array
-            //          0 => int 32929
-            //      1035 =>
-            //        array
-            //          0 => int 32934
-            //          1 => int 32938
-
-
-            // Update Attributes No Index
-            /** @var Zolago_Catalog_Model_Product_Action $productAction */
-            $productAction = Mage::getSingleton('catalog/product_action');
-
-            $idsForReindex = array();
-
-            foreach ($dataForReindex as $code => $item) {
-                foreach ($item as $value => $ids) {
-                    if (!empty($ids)) {
-                        $idsForReindex = array_merge($idsForReindex, $ids);
-                        $productAction->updateAttributesPure($ids, array($code => $value), $storeId);
+                $dataForReindex = array();
+                foreach ($dataForUpdate as $productId => $attribs) {
+                    foreach ($attribs as $code => $value) {
+                        $dataForReindex[$code][$value][] = $productId;
                     }
                 }
-            }
+                // $dataForReindex now looks like:
+                // array
+                //  'child_age' =>
+                //    array
+                //      '1987,1991,1992' =>
+                //        array
+                //          0 => int 32929
+                //  'color' =>
+                //    array (size=1)
+                //      737 =>
+                //        array
+                //          0 => int 32929
+                //          1 => int 32938
+                //  'manufacturer' =>
+                //    array
+                //      2025 =>
+                //        array
+                //          0 => int 32929
+                //      1035 =>
+                //        array
+                //          0 => int 32934
+                //          1 => int 32938
 
-            if (!empty($idsForReindex)) {
-                $ids = array_unique($idsForReindex);
 
-                $indexer = new Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source();
-                /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-                $indexer->reindexEntities($ids);
+                // Update Attributes No Index
+                /** @var Zolago_Catalog_Model_Product_Action $productAction */
+                $productAction = Mage::getSingleton('catalog/product_action');
 
-                // Push to solr and ban varnish
-                Mage::dispatchEvent(
-                    "mass_autofill_attribute_rules_after",
-                    array(
-                        "product_ids" => $ids
-                    )
-                );
+                $idsForReindex = array();
+
+                foreach ($dataForReindex as $code => $item) {
+                    foreach ($item as $value => $ids) {
+                        if (!empty($ids)) {
+                            $idsForReindex = array_merge($idsForReindex, $ids);
+                            $productAction->updateAttributesPure($ids, array($code => $value), $storeId);
+                        }
+                    }
+                }
+
+                if (!empty($idsForReindex)) {
+                    $ids = array_unique($idsForReindex);
+
+                    $indexer = new Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source();
+                    /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+                    $indexer->reindexEntities($ids);
+
+                    // Push to solr and ban varnish
+                    Mage::dispatchEvent(
+                        "mass_autofill_attribute_rules_after",
+                        array(
+                            "product_ids" => $ids
+                        )
+                    );
+                }
             }
         } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(500);
             $result = array(
                 'status'        => 0,
                 'message'       => Mage::helper("gh_attributerules")->__($e->getMessage()),
@@ -308,10 +317,10 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
      * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
      */
     protected function _addNull($collection, $attribute, $value) {
-        $collection->addFieldToFilter(array(
+        $collection->addAttributeToFilter(array(
             array("attribute" => $attribute->getAttributeCode(), "filter" => array("null" => true)),
             array("attribute" => $attribute->getAttributeCode(), "filter" => array("eq" => ""))
-        ));
+        ), null, 'left');
         return $collection;
     }
 

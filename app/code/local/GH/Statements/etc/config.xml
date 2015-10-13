@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.1.3</version>
+            <version>0.1.4</version>
         </GH_Statements>
     </modules>
     <global>
@@ -40,6 +40,9 @@
                     <rma>
                         <table>gh_statements_rma</table>
                     </rma>
+                    <marketing>
+                        <table>gh_statements_marketing</table>
+                    </marketing>
                 </entities>
             </ghstatements_resource>
         </models>
