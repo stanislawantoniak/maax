@@ -28,8 +28,11 @@ class GH_AttributeRules_Model_Observer
         $attribute = $this->_getAttribute($attributeCode);
         $frontendInput = $attribute->getFrontendInput();
 
-        if ($saveAsRule == "false") {
+        if ($saveAsRule == "false" || !$saveAsRule) {
             return;
+        }
+        if (!Mage::getSingleton('zolagocatalog/vendor_product_grid')->isAttributeEditable($attribute) || ($attribute->getIsRequired() && trim($attributeValue) == "")) {
+            return; // Skip not editable on grid or empty value when required
         }
 
         if (
