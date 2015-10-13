@@ -100,4 +100,11 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 			echo 'ERR';
 		}
 	}
+
+	public function testAction() {
+		/** @var GH_Regulation_Helper_Data $lol */
+		$lol = Mage::helper('ghregulation');
+		var_dump($lol->getVendorDocuments());
+		die();
+	}
 }
