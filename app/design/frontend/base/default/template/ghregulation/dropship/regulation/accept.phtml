@@ -180,9 +180,21 @@ $_helper = Mage::helper("ghregulation");
         e.preventDefault();
 
         if(jQuery("form#accept_regulation_documents_form").valid()){
-            bootbox.confirm('<?php echo $_helper->__("Are you sure?"); ?>', function (result) {
-                if (result) {
-                    jQuery("form#accept_regulation_documents_form").submit();
+            bootbox.confirm({
+                title: '',
+                message: '<?php echo $_helper->__("Are you sure?"); ?>',
+                buttons: {
+                    'cancel': {
+                        label: '<?php echo $_helper->__("Cancel"); ?>'
+                    },
+                    'confirm': {
+                        label: '<?php echo $_helper->__("Save"); ?>'
+                    }
+                },
+                callback: function(result) {
+                    if (result) {
+                        jQuery("form#accept_regulation_documents_form").submit();
+                    }
                 }
             });
         }
