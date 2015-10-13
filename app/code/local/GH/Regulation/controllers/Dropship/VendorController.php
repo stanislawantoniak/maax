@@ -1,20 +1,24 @@
 <?php
 
 /**
- * /**
+ * Flow:
+ * TODO: write flow description + put this on wiki
+ *
  * Class GH_Regulation_VendorController
  */
 class GH_Regulation_Dropship_VendorController
     extends Zolago_Dropship_Controller_Vendor_Abstract
 {
     /**
-     *
+     * This is regulation document accept page for not jet active vendor
+     * It's show only when data vendor is valid
+     * and token it's not expired
      */
     public function acceptAction()
     {
         try {
-            $id = $this->getRequest()->getParam('id', false);
-            $key = $this->getRequest()->getParam('key', false);
+            $id = $this->getRequest()->getParam('id', false);   // Vendor id
+            $key = $this->getRequest()->getParam('key', false); // Token
 
             if (empty($id) || empty($key)) {
                 throw new Exception($this->__('Bad request.'));
@@ -60,6 +64,12 @@ class GH_Regulation_Dropship_VendorController
         return $this->_renderPage();
     }
 
+    /**
+     * Save information about that not jet active vendor
+     * accept our regulation
+     *
+     * @throws Exception
+     */
     public function acceptPostAction()
     {
         $req = $this->getRequest();
@@ -179,14 +189,16 @@ class GH_Regulation_Dropship_VendorController
             );
         }
         //our documents
-        $docs = Mage::getModel("ghregulation/regulation_document")->getAcceptDocumentsList();
+        /** @var GH_Regulation_Model_Resource_Regulation_Document $docModel */
+        $docModel = Mage::getResourceModel("ghregulation/regulation_document");
+        $docs = $docModel->getDocumentsToAccept($vendor);
         if ($docs->getSize() > 0) {
+            /** @var GH_Regulation_Model_Regulation_Document $doc */
             foreach ($docs as $doc) {
-                $data = unserialize($doc->getDocumentLink());
                 $acceptAttachments[] = array(
-                    'filename' => $data['file_name'],
-                    'content' => file_get_contents(Mage::getBaseDir("media") . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $data['path']),
-                    'type' => $data['type'],
+                    'filename' => $doc->getFileName(),
+                    'content' => file_get_contents($doc->getPath()),
+                    'type' => mime_content_type($doc->getPath()),
                 );
             }
         }
@@ -209,7 +221,7 @@ class GH_Regulation_Dropship_VendorController
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
             if ($document->getId()) {
-                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $document->getPath();
+                $path = $document->getPath();
                 if (is_file($path) && is_readable($path)) {
                     $this->_sendFile($path, $document->getFileName());
                     return;
@@ -218,6 +230,19 @@ class GH_Regulation_Dropship_VendorController
         }
         $this->norouteAction(); //404
         return;
+    }
+
+    /**
+     * Get regulation document for not jet active vendor
+     */
+    public function getDocumentByTokenAction() {
+        //TODO
+        $req = $this->getRequest();
+        $vendorId       = $req->getParam('vendor');
+        $token          = $req->getParam('token');
+        $documentId     = $req->getParam('id');
+
+        $this->getDocumentAction();
     }
 
     public function getVendorUploadedDocumentAction() {
