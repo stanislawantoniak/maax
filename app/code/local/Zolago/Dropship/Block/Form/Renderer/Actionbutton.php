@@ -12,7 +12,7 @@ class Zolago_Dropship_Block_Form_Renderer_Actionbutton
     {
         $hlp = Mage::helper('udropship');
         $classDisabled = $this->getDisabled() ? "disabled" : "";
-        $html = '<button class="scalable '.$classDisabled.' save" disabled="'.$this->getDisabled().'" name="'.$this->getName().'" type="button" title="'.$hlp->__('Send').'" ><span>'.$hlp->__('Send').'</span></button>';
+        $html = '<button class="scalable '.$classDisabled.' save" disabled="'.$this->getDisabled().'" name="'.$this->getName().'" type="button"><span>'.$hlp->__('Send').'</span></button>';
         return $html;
     }
 }
