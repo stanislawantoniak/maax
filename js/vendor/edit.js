@@ -22,7 +22,7 @@ jQuery(document).ready(function () {
             jQuery("[name=send_regulation_accept_button]")
                 .prop("disabled", true)
                 .addClass("disabled")
-                .attr("title", "wyślij prośbę o akceptację regulaminu aktywny - gdy regulamin niezaakceptowany");
+                .attr("title", "przycisk wyślij prośbę o akceptację regulaminu aktywny gdy regulamin niezaakceptowany");
             //pozwalamy na przełączenie statusu na aktywny - gdy regulamin zaakceptowany
             jQuery("[name=status1] option[value='A']").prop("disabled", false);
         }
@@ -41,7 +41,7 @@ jQuery(document).ready(function () {
             jQuery("[name=send_confirmation_email_button]")
                 .prop("disabled", true)
                 .addClass("disabled")
-                .attr("title", "zresetuj hasło  aktywny  - gdy vendor aktywny");
+                .attr("title", "Przycisk zresetuj hasło  aktywny gdy vendor aktywny");
 
         }
     }).change();
