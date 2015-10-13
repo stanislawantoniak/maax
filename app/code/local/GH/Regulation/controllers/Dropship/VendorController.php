@@ -209,7 +209,7 @@ class GH_Regulation_Dropship_VendorController
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
             if ($document->getId()) {
-                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $document->getPath();
+                $path = $document->getPath();
                 if (is_file($path) && is_readable($path)) {
                     $this->_sendFile($path, $document->getFileName());
                     return;
@@ -218,6 +218,19 @@ class GH_Regulation_Dropship_VendorController
         }
         $this->norouteAction(); //404
         return;
+    }
+
+    /**
+     * Get regulation document for not jet active vendor
+     */
+    public function getDocumentByTokenAction() {
+        //TODO
+        $req = $this->getRequest();
+        $vendorId       = $req->getParam('vendor');
+        $token          = $req->getParam('token');
+        $documentId     = $req->getParam('id');
+
+        $this->getDocumentAction();
     }
 
     public function getVendorUploadedDocumentAction() {

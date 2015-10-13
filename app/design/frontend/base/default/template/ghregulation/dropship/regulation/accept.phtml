@@ -5,6 +5,10 @@ $_session = Mage::getSingleton('udropship/session');
 $_vendor = Mage::registry('reset_vendor');
 $_helper = Mage::helper("ghregulation");
 
+$token = $this->getRequest()->getParam('key');
+/* @var $docs GH_Regulation_Model_Resource_Regulation_Document_Collection */
+$docs = $this->getDocumentsList();
+
 ?>
 <link rel="stylesheet" href="<?php echo Mage::getBaseUrl(); ?>skin/frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
 <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
@@ -16,7 +20,7 @@ $_helper = Mage::helper("ghregulation");
                     <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
                         <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
                         <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
-                        <input type="hidden" name="key" value="<?php echo $this->getRequest()->getParam('key'); ?>" />
+                        <input type="hidden" name="key" value="<?php echo $token; ?>" />
                         <div class="widget box">
                             <div class="widget-header" style="text-align: center;">
                                 <h4><?php echo $_helper->__("Accept regulation"); ?></h4>
@@ -40,7 +44,6 @@ $_helper = Mage::helper("ghregulation");
                                         <?php echo $_helper->__("I have power to accept the regulations MODAGO."); ?>
                                     </label>
 
-
                                     <div class="col-md-12"></div>
                                     <div class="add_regulation_document hidden col-md-12">
                                         <label class="css-label">
@@ -55,32 +58,22 @@ $_helper = Mage::helper("ghregulation");
                                     </div>
                                 </div>
                             </div>
-
-                            <?php
-                            /* @var $docs GH_Regulation_Model_Resource_Regulation_Document_Collection */
-                            $docs = $this->getDocumentsList();
-
-                            ?>
-
-
                             <?php if ($docs->getSize() > 0): ?>
-                                <?php $path = Mage::getBaseUrl("media") . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS; ?>
                                 <div class="widget-content">
                                     <div class="col-md-12">
                                         <p><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></p>
                                         <ul class="regulation-docs-list">
-                                            <?php foreach ($docs as $doc): ?>
-                                                <?php $data = unserialize($doc->getDocumentLink()); ?>
+                                            <?php /** @var GH_Regulation_Model_Regulation_Document $doc */
+                                            foreach ($docs as $doc): ?>
                                                 <li>
                                                     <i class="fa fa-file-pdf-o fa-lg"></i>
-                                                    <?php echo $doc->getName(); ?> <a
-                                                        href="<?php echo $path . $data['path']; ?>"
-                                                        download="<?php echo $data['file_name']; ?>">pobierz</a>
+                                                    <?php echo ucfirst($doc->getName()); ?> <a
+                                                        href="<?php echo $doc->getVendorUrlByToken($token, $doc->getId(), $this->getVendor()->getId()); ?>"
+                                                        download="<?php echo $doc->getFileName(); ?>"><?php echo $_helper->__("download"); ?></a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
                                     </div>
-
                                 </div>
                             <?php endif; ?>
                             <div class="widget-content">
