@@ -19,8 +19,6 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
         <div id="statement_form" class="fieldset ">
             <div class="hor-scroll">
                 <table cellspacing="0" class="form-list">
-                    <tbody>
-
                     <tr>
                         <td class="label"><label for="statement_id"><b><?php echo $_helper->__("Statement ID"); ?></b></label>
                         </td>
@@ -110,8 +108,6 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
-                    </tbody>
-                    <tfoot>
                     <tr>
                         <td>&nbsp;</td>
                     </tr>
@@ -123,8 +119,8 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                         <td class="value">
                             <span id="tracking_charge_subtotal">
-                                <b><?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('tracking_charge_subtotal')); ?></b>
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('tracking_charge_subtotal')); ?>
                             </span>
                         </td>
                     </tr>
@@ -136,12 +132,27 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                         <td class="value">
                             <span id="tracking_charge_total">
-                                <b><?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('tracking_charge_total')); ?></b>
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('tracking_charge_total')); ?>
                             </span>
                         </td>
                     </tr>
-                    </tfoot>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="marketing_value">
+                                <b><?php echo $_helper->__("Marketing: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="marketing_value">
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('marketing_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

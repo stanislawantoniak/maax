@@ -253,6 +253,7 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 );
             }
         } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(500);
             $result = array(
                 'status'        => 0,
                 'message'       => Mage::helper("gh_attributerules")->__($e->getMessage()),

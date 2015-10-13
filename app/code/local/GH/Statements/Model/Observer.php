@@ -53,6 +53,7 @@ class GH_Statements_Model_Observer
 	                $statementTotals->rma = self::processStatementsRma($statement);
 	                $statementTotals->refund = self::processStatementsRefunds($statement);
 	                $statementTotals->track = self::processStatementsTracks($statement);
+	                $statementTotals->marketing = self::processStatementsMarketing($statement);
 
 	                self::populateStatement($statement, $statementTotals);
                 } catch(Mage_Core_Exception $e) {
@@ -90,6 +91,7 @@ class GH_Statements_Model_Observer
         /** @var GH_Statements_Model_Statement $statement */
         $statement = Mage::getModel('ghstatements/statement');
         $statement->setData(array(
+	        "vendor"            => $vendor,
             "vendor_id"         => (int)$vendor->getId(),
             "calendar_id"       => (int)$calendarItem->getCalendarId(),
             "event_date"        => $calendarItem->getEventDate(),
@@ -132,6 +134,10 @@ class GH_Statements_Model_Observer
             $data["tracking_charge_subtotal"]   = $statementTotals->track->netto;
             $data["tracking_charge_total"]      = $statementTotals->track->brutto;
         }
+	    // Marketing
+	    if(!empty($statementTotals->marketing)) {
+		    $data["marketing_value"]            = $statementTotals->marketing->amount;
+	    }
         if (!empty($data)) {
             $statement->addData($data);
             $statement->save();
@@ -645,6 +651,86 @@ class GH_Statements_Model_Observer
         $rmaStatementTotals->amount = $amount;
         return $rmaStatementTotals;
     }
+
+	public static function processStatementsMarketing($statement) {
+		$marketingStatementTotals = new stdClass();
+		$marketingStatementValue = 0;
+
+		$dateModel = Mage::getModel('core/date');
+		$today     = $dateModel->date('Y-m-d');
+		$yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
+
+		if ($statement->getForceCustomDate()) {
+			$yesterday = $statement->getForceCustomDate() . ' 23:59:59';
+		}
+
+		/** @var Gh_Marketing_Model_Marketing_Cost $marketingModel */
+		$marketingModel = Mage::getModel('ghmarketing/marketing_cost');
+
+		/** @var Gh_Marketing_Model_Resource_Marketing_Cost_Collection $collection */
+		$collection = $marketingModel->getCollection();
+		$collection
+			->addFieldToFilter('statement_id',array('null' => true))
+			->addFieldToFilter('date',array('lteq' => $yesterday))
+			->addFieldToFilter('vendor_id',$statement->getVendorId())
+			->getSelect()->join(
+				'gh_marketing_cost_type',
+				'main_table.type_id = gh_marketing_cost_type.marketing_cost_type_id',
+				array('gh_marketing_cost_type.name as type_name')
+			);
+
+		$marketingCostStatementData = array();
+
+		if($collection->getSize()) {
+			$vendorCpcCommision = $statement->getVendor()->getCpcCommission();
+			$products = array();
+
+			foreach($collection as $marketingCost) {
+				/** @var Gh_Marketing_Model_Marketing_Cost $marketingCost */
+
+				$marketingCost
+					->setBillingCost(
+						round(($marketingCost->getCost() + ($marketingCost->getCost() * ($vendorCpcCommision / 100))), 2, PHP_ROUND_HALF_UP)
+					)
+					->setStatementId($statement->getId())
+					->save();
+
+				$productId = $marketingCost->getProductId();
+				if(!isset($products[$productId])) {
+					$product = Mage::getModel('catalog/product')->load($productId);
+					$products[$productId] = $product;
+				} else {
+					$product = $products[$productId];
+				}
+
+				$marketingCostStatementData[] = array(
+					'statement_id'              => $statement->getId(),
+					'product_id'                => $marketingCost->getProductId(),
+					'product_sku'               => $product->getSku(),
+					'product_vendor_sku'        => $product->getSkuv(),
+					'product_name'              => $product->getName(),
+					'marketing_cost_type_id'    => $marketingCost->getTypeId(),
+					'marketing_cost_type_name'  => $marketingCost->getTypeName(),
+					'date'                      => $marketingCost->getDate(),
+					'value'                     => $marketingCost->getBillingCost()
+				);
+
+				$marketingStatementValue += $marketingCost->getBillingCost();
+			}
+		}
+
+		if(count($marketingCostStatementData)) {
+			/** @var Gh_Statements_Model_Marketing $marketingStatementModel */
+			$marketingStatementModel = Mage::getModel('ghstatements/marketing');
+			/** @var GH_Statements_Model_Resource_Marketing $marketingStatementsResource */
+			$marketingStatementsResource = $marketingStatementModel->getResource();
+			$marketingStatementsResource->appendMarketings($marketingCostStatementData);
+		}
+
+		$marketingStatementTotals->amount = $marketingStatementValue;
+
+		return $marketingStatementTotals;
+	}
 
     /**
      * This check if statement for vendor and event date is in table
