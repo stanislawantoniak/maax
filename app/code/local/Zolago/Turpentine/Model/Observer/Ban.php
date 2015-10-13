@@ -34,6 +34,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
         $results = $this->_getVarnishAdmin()->flushMultiUrl($urlPatterns['regex']);
 
         if ($this->_checkMultiResults($results) && $cronHelper->getCrawlerEnabled()) {
+
             $origStore = Mage::app()->getStore();
             $urls = array();
             foreach (Mage::app()->getStores() as $storeId => $store) {

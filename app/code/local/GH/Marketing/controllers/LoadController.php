@@ -60,7 +60,6 @@ class GH_Marketing_LoadController extends Mage_Core_Controller_Front_Action
 						$vendors[$vendorId] = $vendor;
 					}
 
-					//todo: validate type
 					if (!isset($types[$cpc['type']])) {
 						/** @var GH_Marketing_Model_Marketing_Cost_Type $typeModel */
 						$typeModel = Mage::getModel("ghmarketing/marketing_cost_type");

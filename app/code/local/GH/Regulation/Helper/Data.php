@@ -50,10 +50,13 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
             @mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
 
-            $path = $safeFolderPath . $newName;
-            $result = array("status" => 1, "content" => array("path" => $path, "name" => $name, "new_name" => $newName));
+            $path = Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $newName;
+            $result = array("status" => 1, "content" => array(
+                "path"      => $path,
+                "name"      => $name,
+                "new_name"  => $newName));
             try {
-                move_uploaded_file($tmpName, Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $newName);
+                move_uploaded_file($tmpName, $path);
             } catch (Exception $e) {
                 Mage::logException($e);
             }

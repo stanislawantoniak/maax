@@ -114,6 +114,22 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
     }
 
     /**
+     * marketingGrid ajax block response
+     */
+    public function marketingGridAction()
+    {
+        $this->getResponse()->setBody(
+            $this->getLayout()
+                ->createBlock(
+                    'ghstatements/adminhtml_vendor_statements_edit_tab_marketing',
+                    'ghstatements.statement.marketing'
+                )
+                ->setStatementId($this->getRequest()->getParam('id'))
+                ->toHtml()
+        );
+    }
+
+    /**
      * Manually trigger gh_statements cron with custom date (today)
      * @return Mage_Adminhtml_Controller_Action
      */
