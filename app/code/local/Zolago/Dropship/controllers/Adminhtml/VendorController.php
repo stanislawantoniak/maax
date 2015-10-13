@@ -25,6 +25,62 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $this->_addContent($this->getLayout()->createBlock('ghregulation/adminhtml_kind_edit_vendor'));
         $this->renderLayout();
     }
+
+    public function sendConfirmationEmailAction(){
+        $request = $this->getRequest();
+        $vendorId = $request->getParam('id');
+
+        try {
+            /* @var $vendor Unirgy_Dropship_Model_Vendor */
+            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+            $vendor->setConfirmation(md5(uniqid()));
+            $vendor->setConfirmationSent(1);
+            $localeTime = Mage::getModel('core/date')->timestamp(time());
+            $localeTimeF = date("Y-m-d H:i:s", $localeTime);
+
+            $vendor->setData("confirmation_sent_date", $localeTimeF);
+            Mage::getResourceSingleton('udropship/helper')
+                ->updateModelFields(
+                    $vendor,
+                    array('confirmation', 'confirmation_sent', 'confirmation_sent_date')
+                );
+            Mage::helper('udmspro')->sendVendorConfirmationEmail($vendor);
+
+            Mage::getSingleton('adminhtml/session')
+                ->addSuccess(Mage::helper('zolagodropship')->__('Regulation Accept Request sent.'));
+
+        } catch (Exception $xt) {
+            Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());
+            Mage::logException($xt);
+        }
+        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId));
+    }
+    /**
+     * resetPassword
+     */
+    public function resetPasswordAction(){
+        $request = $this->getRequest();
+        $vendorId = $request->getParam('id');
+
+        try {
+            /* @var $vendor Unirgy_Dropship_Model_Vendor */
+            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+            $vendor->setConfirmation(null);
+            $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
+            $vendor->setPassword($password);
+            $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
+            $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
+            Mage::getResourceSingleton('udropship/helper')->updateModelFields($vendor, array('confirmation','password_hash','password_enc'));
+            Mage::helper("umicrosite")->sendVendorWelcomeEmail($vendor);
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zolagodropship')->__('Password reseted and sent to vendor via email.'));
+
+        } catch (Exception $xt) {
+            Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());
+            Mage::logException($xt);
+        }
+        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId));
+
+    }
     public function kindSaveAction() {
         
         $request = $this->getRequest();
