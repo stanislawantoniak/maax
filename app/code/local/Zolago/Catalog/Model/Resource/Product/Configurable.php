@@ -548,15 +548,14 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         $productMinimalPrice = min($productMinPrice);
-        $productMinimalPrice = number_format(Mage::app()->getLocale()->getNumber($productMinimalPrice), 2);
-        $dataToUpdate["price"][$productMinimalPrice][$websiteId] = $productConfigurableId;
+        $dataToUpdate["price"][number_format(Mage::app()->getLocale()->getNumber($productMinimalPrice), 2)][$websiteId] = $productConfigurableId;
 
         //2. Collect options
         foreach ($priceSizeRelation as $productRelation) {
             $size = $productRelation['size'];
             $price = $productRelation['price'];
 
-            $priceIncrement = number_format(Mage::app()->getLocale()->getNumber($price - $productMinimalPrice), 2);
+            $priceIncrement = Mage::app()->getLocale()->getNumber($price - $productMinimalPrice);
             $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$websiteId})";
         }
 
@@ -879,18 +878,31 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $collection->addAttributeToSelect("udropship_vendor");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection->addFieldToFilter('entity_id', array('in' => $parentIds));
-        $collection->addFieldToFilter('product_flag', array('null' => true));
+        //$collection->addFieldToFilter('product_flag', array('null' => true));
 
         $parentProductIds = $collection->getAllIds();
 
+        $parentProductIds = array_combine($parentProductIds, $parentProductIds);
+
         if($collection->getSize() <= 0){
+            return $productsIdsPullToSolr; //Nothing to update
+        }
+
+        //Do not update campaign products
+        foreach ($collection as $_product) {
+            if ($_product->getProductFlag())
+                unset($parentProductIds[$_product->getId()]);
+        }
+        $parentProductIds = array_values($parentProductIds);
+
+        if(empty($parentProductIds)){
             return $productsIdsPullToSolr; //Nothing to update
         }
         $productsIdsPullToSolr = $parentProductIds;
 
         //2. Find out products, which msrp should be recovered
         $idsToSetMSRP = array();
-        foreach($collection as $_product){
+        foreach ($collection as $_product) {
             //if Converter Msrp Type = From file
             if ($_product->getData(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE) == Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_AUTO) {
                 $idsToSetMSRP[] = $_product->getId();

@@ -63,20 +63,23 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		// Join stock item from stocak index
 		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId(); 
-		$this->joinTable(
-				$stockStatusTable, 
-				'product_id=entity_id',
-				array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)')), 
-				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).
-				    ' AND '.$adapter->quoteInto("{{table}}.website_id=?",$websiteId),
-				'left'
-		);
+		$select->joinLeft(
+		    array('cataloginventory_stock_status' => $stockStatusTable),
+				'(cataloginventory_stock_status.product_id=e.entity_id) AND ('.$adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).
+				    ' AND '.$adapter->quoteInto("cataloginventory_stock_status.website_id=?",$websiteId).')',
+				    array()
+		//	array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
+        );
+		$this->addExpressionAttributeToSelect('is_in_stock', 
+		        new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
+		        array()
+        );
+
 		$select->join(
 				array('cataloginventory_stock_table' => $stockTable), 
 				"e.entity_id = cataloginventory_stock_table.product_id", 
 				array()
         );
-		
 		$this->addExpressionAttributeToSelect('politics', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (cataloginventory_stock_table.manage_stock = 1 AND cataloginventory_stock_table.is_in_stock = 0) , (cataloginventory_stock_table.min_qty>999999) )", array());
 		// Join all childs count
