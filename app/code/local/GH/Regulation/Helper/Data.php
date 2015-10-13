@@ -198,20 +198,22 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             $kindName = $kinds[$kindId];
             $returnDocuments[$kindName] = array();
             foreach($types as $typeTimeframe) {
-                $tmpDocuments = array();
-                foreach($preReturnDocuments[$kindId][$typeTimeframe['type']] as $finalDocument) {
-                    if(strtotime($finalDocument['date']) <= strtotime($typeTimeframe['start'])) {
-                        $tmpDocuments[0] = $finalDocument;
-                        continue;
-                    } elseif(strtotime($finalDocument['date']) <= strtotime($typeTimeframe['end'])) {
-                        $tmpDocuments[] = $finalDocument;
-                        continue;
+                if (isset($preReturnDocuments[$kindId][$typeTimeframe['type']])) {
+                    $tmpDocuments = array();
+                    foreach ($preReturnDocuments[$kindId][$typeTimeframe['type']] as $finalDocument) {
+                        if (strtotime($finalDocument['date']) <= strtotime($typeTimeframe['start'])) {
+                            $tmpDocuments[0] = $finalDocument;
+                            continue;
+                        } elseif (strtotime($finalDocument['date']) <= strtotime($typeTimeframe['end'])) {
+                            $tmpDocuments[] = $finalDocument;
+                            continue;
+                        }
+                        break; //breaks loop because all documents for this timeframe has been assigned - no need to process next ones
                     }
-                    break; //breaks loop because all documents for this timeframe has been assigned - no need to process next ones
+                    $returnDocuments[$kindName] = array_merge($returnDocuments[$kindName], $tmpDocuments);
                 }
-                $returnDocuments[$kindName] = array_merge($returnDocuments[$kindName],$tmpDocuments);
+                $returnDocuments[$kindName] = array_reverse($returnDocuments[$kindName]);
             }
-            $returnDocuments[$kindName] = array_reverse($returnDocuments[$kindName]);
         }
 
         if($idsOnly) {
