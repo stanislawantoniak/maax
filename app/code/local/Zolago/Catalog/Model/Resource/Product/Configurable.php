@@ -632,6 +632,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function _insertProductOptions(array $insert)
     {
+        Mage::log($insert, null, "_insertProductOptions.log");
         if (empty($insert)) {
             return;
         }
@@ -651,6 +652,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         } catch (Exception $e) {
             Mage::logException($e);
+            Mage::log($e->getMessage(), null, "_insertProductOptions.log");
         }
     }
 
