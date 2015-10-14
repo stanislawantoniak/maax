@@ -56,13 +56,15 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
             @mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
 
-            $path = Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath . $newName;
+            $path = $folder . DS . $safeFolderPath . $newName;
+            $fullPath = Mage::getBaseDir('media') . DS . $path;
             $result = array("status" => 1, "content" => array(
                 "path"      => $path,
+                "full_path" => $fullPath,
                 "name"      => $name,
                 "new_name"  => $newName));
             try {
-                move_uploaded_file($tmpName, $path);
+                move_uploaded_file($tmpName, $fullPath);
             } catch (Exception $e) {
                 Mage::logException($e);
             }
@@ -71,6 +73,37 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
+    /**
+     * gets all regulation documents for provided vendor
+     * example output when $idsOnly = false (chronological order from newest to oldest, first in each kind is currently active):
+     *  array (
+     *      'Regulamin (document kind name)' => array(
+     *          [0] => array (
+     *              'type' => 2, (document type id)
+     *              'filename' => "regulamin.pdf",
+     *              'url' => "http://(...)", //GH_Regulation_Model_Document::getVendorUrl()
+     *              'date' => "2015-10-25" //document start date
+     *          ),
+     *          [1] => array(...),
+     *          [2] => array(...)
+     *      )
+     *      'Another document kind name' = array(...)
+     *  );
+     *
+     * example output when $idsOnly = true (array of document ids valid for vendor):
+     *  array(
+     *      [0] => "12",
+     *      [1] => "45",
+     *      [2] => "3",
+     *      [...] => ...
+     *  );
+     *
+     * returns an empty array if no vendor documents can be returned
+     *
+     * @param Zolago_Dropship_Model_Vendor|int $vendor
+     * @param bool $idsOnly
+     * @return array
+     */
     public function getVendorDocuments($vendor,$idsOnly = false) {
         if(!$vendor instanceof Zolago_Dropship_Model_Vendor) {
             $vendor = Mage::getModel('udropship/vendor')->load($vendor);
@@ -253,6 +286,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * Return url for file uploaded by vendor on regulation acceptation steep
+     * in udropship front
      *
      * @param $vendorId
      * @param $fileName
@@ -264,6 +298,21 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             'vendor' => $vendorId,
             'file'   => $fileName,
             'key'    => $token
+        ));
+    }
+
+    /**
+     * Return url for file uploaded by vendor on regulation acceptation steep
+     * in adminhtml
+     *
+     * @param $vendorId
+     * @param $fileName
+     * @return mixed
+     */
+    public function getVendorUploadedDocumentUrlForAdmin($vendorId, $fileName) {
+        return Mage::helper("adminhtml")->getUrl("adminhtml/regulation/getVendorUploadedDocument", array(
+            'vendor' => $vendorId,
+            'file'   => $fileName
         ));
     }
 }

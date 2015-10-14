@@ -193,8 +193,8 @@ class GH_Regulation_Dropship_VendorController
             foreach ($docs as $doc) {
                 $acceptAttachments[] = array(
                     'filename' => $doc->getFileName(),
-                    'content' => file_get_contents($doc->getPath()),
-                    'type' => mime_content_type($doc->getPath()),
+                    'content' => file_get_contents($doc->getFullPath()),
+                    'type' => mime_content_type($doc->getFullPath()),
                 );
             }
         }
@@ -209,7 +209,12 @@ class GH_Regulation_Dropship_VendorController
     }
 
 
-
+    /**
+     * triggers document download based on provided id in request
+     *
+     * checks if document has rights to this document id and if document with this id exists
+     * if everything is ok then download should start, if sth is wrong then returns 404
+     */
     public function getDocumentAction()
     {
         $documentId = $this->getRequest()->getParam('id');
@@ -228,7 +233,7 @@ class GH_Regulation_Dropship_VendorController
                 && $vendor->getId() //vendor is logged in
                 && in_array($document->getId(),$helper->getVendorDocuments($vendor->getId(),true)) //vendor has rights to provided document
             ) {
-                $path = $document->getPath();
+                $path = $document->getFullPath();
                 if (is_file($path) && is_readable($path)) {
                     $this->_sendFile($path, $document->getFileName());
                     return;
@@ -241,6 +246,7 @@ class GH_Regulation_Dropship_VendorController
 
     /**
      * Get regulation document for not jet active vendor
+     * checks if token is correct and not expired then proceeds to $this->getDocumentAction()
      */
     public function getDocumentByTokenAction() {
         $req = $this->getRequest();
@@ -277,7 +283,7 @@ class GH_Regulation_Dropship_VendorController
         $req = $this->getRequest();
         $fileName = $req->getParam('file', false);
         $vendorId = $req->getParam('vendor', false);
-        $key    = $req->getParam('key', false); // Token
+        $key      = $req->getParam('key', false); // Token
 
         // If no vendor ID maybe vendor is logged in
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
