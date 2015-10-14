@@ -15,21 +15,31 @@ class GH_Regulation_Model_Resource_Regulation_Document extends Mage_Core_Model_R
      * Return documents which not jet active vendor need to accept
      *
      * @param $vendor
+     * @param bool $asCollection
      * @return array
      */
-    public function getDocumentsToAccept($vendor)
+    public function getDocumentsToAccept($vendor, $asCollection = false)
     {
         $vendor = $this->getVendor($vendor);
         /** @var GH_Regulation_Helper_Data $helper */
         $helper = Mage::helper("ghregulation");
         $data = $helper->getVendorDocuments($vendor);
 
+        $ids = array();
         $result = array();
         foreach ($data as $kindName => $docs) {
             foreach ($docs as $doc) {
+                $ids[] = $doc['id'];
                 $result[] = array_merge(array("name" => $kindName), $doc);
                 break;
             }
+        }
+
+        if ($asCollection) {
+            /** @var GH_Regulation_Model_Resource_Regulation_Document_Collection $coll */
+            $coll = Mage::getResourceModel("ghregulation/regulation_document_collection");
+            $coll->addFieldToFilter('id' ,array('in' => array_unique($ids)));
+            return $coll;
         }
         return $result;
     }
