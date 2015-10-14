@@ -5,8 +5,14 @@ $_session = Mage::getSingleton('udropship/session');
 $_vendor = Mage::registry('reset_vendor');
 $_helper = Mage::helper("ghregulation");
 
+$token = $this->getRequest()->getParam('key');
+/* @var $docs GH_Regulation_Model_Resource_Regulation_Document_Collection */
+$docs = $this->getDocumentsToAccept();
+/** @var GH_Regulation_Model_Regulation_Document $docModel */
+$docModel = Mage::getSingleton("ghregulation/regulation_document");
+
 ?>
-<link rel="stylesheet" href="<?php echo Mage::getBaseUrl(); ?>skin/frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
 <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <div class="">
         <div style="margin-top:100px;">
@@ -16,7 +22,7 @@ $_helper = Mage::helper("ghregulation");
                     <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
                         <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
                         <input type="hidden" name="vendor" value="<?php echo $this->getVendor()->getId(); ?>" />
-                        <input type="hidden" name="key" value="<?php echo $this->getRequest()->getParam('key'); ?>" />
+                        <input type="hidden" name="key" value="<?php echo $token; ?>" />
                         <div class="widget box">
                             <div class="widget-header" style="text-align: center;">
                                 <h4><?php echo $_helper->__("Accept regulation"); ?></h4>
@@ -31,56 +37,41 @@ $_helper = Mage::helper("ghregulation");
                                     <p><?php echo $_helper->__("I %s declare:", $this->getVendor()->getCompanyName()); ?></p>
 
                                     <label class="css-label col-md-12">
-                                        <input type="radio" class="" name="accept_regulations_role" value="single"/>
+                                        <input type="radio" class="" name="accept_regulations_role" value="<?php echo GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE; ?>" checked/>
                                         <?php echo $_helper->__("I am authorized to represent single %s", $this->getVendor()->getCompanyName()); ?>
                                     </label>
 
                                     <label class="css-label col-md-12">
-                                        <input type="radio" class="" name="accept_regulations_role" value="proxy"/>
+                                        <input type="radio" class="" name="accept_regulations_role" value="<?php echo GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_PROXY; ?>"/>
                                         <?php echo $_helper->__("I have power to accept the regulations MODAGO."); ?>
                                     </label>
-
 
                                     <div class="col-md-12"></div>
                                     <div class="add_regulation_document hidden col-md-12">
                                         <label class="css-label">
                                             <?php echo $_helper->__("Upload a scan of regulations"); ?>
-                                            <input type="file" data-style="fileinput-custom"
-                                                   name="regulation_document"/>
-
-                                            <input type="hidden" name="regulation_document_new_name" value=""/>
-
+                                            <input type="file" data-style="fileinput-custom" name="regulation_document"/>
                                             <div class="add_regulation_document_preview"></div>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-
-                            <?php
-                            /* @var $docs GH_Regulation_Model_Resource_Regulation_Document_Collection */
-                            $docs = $this->getDocumentsList();
-
-                            ?>
-
-
-                            <?php if ($docs->getSize() > 0): ?>
-                                <?php $path = Mage::getBaseUrl("media") . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS; ?>
+                            <?php if (!empty($docs)): ?>
                                 <div class="widget-content">
                                     <div class="col-md-12">
                                         <p><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></p>
                                         <ul class="regulation-docs-list">
                                             <?php foreach ($docs as $doc): ?>
-                                                <?php $data = unserialize($doc->getDocumentLink()); ?>
                                                 <li>
                                                     <i class="fa fa-file-pdf-o fa-lg"></i>
-                                                    <?php echo $doc->getName(); ?> <a
-                                                        href="<?php echo $path . $data['path']; ?>"
-                                                        download="<?php echo $data['file_name']; ?>">pobierz</a>
+                                                    <?php echo ucfirst($doc['name']); // Kind name ?> <a
+                                                        href="<?php echo $docModel->getVendorUrlByToken($token, $doc['id'], $this->getVendor()->getId()); ?>"
+                                                        download="<?php echo $doc['filename']; ?>"
+                                                        target="_blank"><?php echo $_helper->__("download"); ?></a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
                                     </div>
-
                                 </div>
                             <?php endif; ?>
                             <div class="widget-content">
@@ -96,7 +87,7 @@ $_helper = Mage::helper("ghregulation");
                                     </label>
                                 </div>
                             </div>
-                        <div class="form-actions">
+                        <div class="form-actions" style="margin-bottom: 0px;margin-left: 0;margin-right: 0;">
                             <button type="submit" id="filter_submit" class="btn btn-primary pull-right" >
                                 <span><span><?php echo $_helper->__("Accept regulations"); ?></span></span>
                             </button>
@@ -149,7 +140,6 @@ $_helper = Mage::helper("ghregulation");
     jQuery("input[name=regulation_document]").on('change', function (e) {
         e.preventDefault();
         jQuery(".add_regulation_document_preview").html("");
-        jQuery("[name=regulation_document_new_name]").val("");
 
         var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
 
@@ -166,12 +156,10 @@ $_helper = Mage::helper("ghregulation");
         }).done(function(response){
             if (response.status == 1) {
                 jQuery(".add_regulation_document_preview")
-                    .html('<a href="' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
-                jQuery("[name=regulation_document_new_name]").val(response.content.new_name);
+                    .html('<a href="' + response.content.link + '" target="_blank" download="'+ response.content.new_name + '">' + response.content.name + '</a>');
             }
             if (response.status == 0) {
                 //jQuery(".add_regulation_document_preview").html(response.content);
-                jQuery("[name=regulation_document_new_name]").val("");
             }
         });
     });
@@ -188,11 +176,12 @@ $_helper = Mage::helper("ghregulation");
                         label: '<?php echo $_helper->__("Cancel"); ?>'
                     },
                     'confirm': {
-                        label: '<?php echo $_helper->__("Save"); ?>'
+                        label: '<?php echo $_helper->__("Accept"); ?>'
                     }
                 },
                 callback: function(result) {
                     if (result) {
+                        jQuery("input[name=regulation_document]").remove(); // no twice time sending
                         jQuery("form#accept_regulation_documents_form").submit();
                     }
                 }

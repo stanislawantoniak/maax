@@ -223,20 +223,20 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             $model->addData($data);
 
             if (isset($_FILES['file']) && isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
-                $file = $_FILES['file'];
 
-
-                $folder = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
+                $file    = $_FILES['file'];
+                $folder  = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
                 $allowed = $hlp::getAllowedRegulationDocumentTypes();
-                $result = $hlp->saveRegulationDocument($file, $folder, $allowed);
-                $path = $result["content"]["path"];
+                $result  = $hlp->saveRegulationDocument($file, $folder, $allowed, true);
+                $path    = $result["content"]["path"];
+                $newName = $result["content"]["new_name"];
 
                 if(!$path) {
                     Mage::throwException("Invalid file type (".$file['type'].")");
                 }
 
                 $dl = array(
-                    "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
+                    "file_name" => $newName,
                     "path"      => $path
                 );
                 $model->setData("document_link", serialize($dl));
@@ -285,17 +285,41 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
         return $this->_redirect('*/*/list');
     }
 
+    /**
+     * Get regulation document uploaded by admin
+     */
     public function getDocumentAction() {
         $documentId = $this->getRequest()->getParam('id');
         if($documentId) {
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
             if($document->getId()) {
-                $path = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS .$document->getPath();
+                $path = $document->getFullPath();
                 if(is_file($path) && is_readable ($path)) {
-                    $this->_sendFile($path,$document->getFileName());
+                    $this->_sendFile($path, $document->getFileName());
                     return;
                 }
+            }
+        }
+        $this->norouteAction(); //404
+        return;
+    }
+
+    /**
+     * Get regulation document uploaded by vendor
+     */
+    public function getVendorUploadedDocumentAction() {
+        $req = $this->getRequest();
+        $vendorId = $req->getParam('vendor', false);
+        $fileName = $req->getParam('file', false);
+
+        if (!empty($vendorId) && !empty($fileName)) {
+            $path  = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId . DS;
+            $image = md5($fileName);
+            $path .= $image[0] . "/" . $image[1] . "/" . $fileName;
+            if (is_file($path) && is_readable($path)) {
+                $this->_sendFile($path, $fileName);
+                return;
             }
         }
         $this->norouteAction(); //404

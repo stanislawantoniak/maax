@@ -79,7 +79,8 @@ class GH_Regulation_Model_DropshipMicrosite_Observer extends Unirgy_DropshipMicr
             ) {
                 if($vendor->getStatus() != Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE){
                     $vendor->setPassword($this->_vendorPassword);
-                    Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
+                    //Email with password should not be send on REGISTRATION stage in any case
+                    //Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
                     $vendor->setPassword('');
                 }
 
@@ -93,11 +94,11 @@ class GH_Regulation_Model_DropshipMicrosite_Observer extends Unirgy_DropshipMicr
                 $localeTime = Mage::getModel('core/date')->timestamp(time());
                 $localeTimeF = date("Y-m-d H:i:s", $localeTime);
 
-                $vendor->setData("confirmation_sent_date", $localeTimeF);
+                $vendor->setData("regulation_confirm_request_sent_date", $localeTimeF);
                 Mage::getResourceSingleton('udropship/helper')
                     ->updateModelFields(
                         $vendor,
-                        array('confirmation', 'confirmation_sent', 'confirmation_sent_date')
+                        array('confirmation', 'confirmation_sent', 'regulation_confirm_request_sent_date')
                     );
                 Mage::helper('udmspro')->sendVendorConfirmationEmail($vendor);
             } elseif ($vendor->getSendRejectEmail()) {

@@ -225,3 +225,8 @@
 "Marketing settings","Ustawienia marketingowe"
 "Server IP","IP serwera"
 "Security token","Token zabezpieczający"
+"Status can be set to Active if regulations accepted","Pozwalamy na przełączenie statusu na aktywny - gdy regulamin zaakceptowany"
+"Reset password button is active when vendor have status ACTIVE","Przycisk zresetuj hasło  aktywny  - gdy vendor aktywny"
+"Send Reset password mail to vendor","Zresetuj hasło"
+"Send regulation accept request button active when regulations accepted","Przycisk wyślij prośbę o akceptację regulaminu aktywny gdy regulamin niezaakceptowany"
+"Send regulation accept request","Wyślij prośbę o akceptację regulaminu"

@@ -6,6 +6,7 @@
  * @method Zolago_Payment_Model_Allocation setAllocationAmount(float $amount)
  * @method int getTransactionId()
  * @method Zolago_Payment_Model_Allocation setTransactionId(int $id)
+ * @method int getPrimary()
  */
 class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
@@ -394,6 +395,33 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	}
 
 	/**
+	 * gets all allocations for single transaction
+	 * @param int|Mage_Sales_Model_Order_Payment_Transaction $transaction_id
+	 * @return Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getTransactionAllocations($transaction_id) {
+		$transaction_id = $this->getRealTransactionId($transaction_id);
+
+		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
+		$collection = $this->getCollection();
+
+		$collection
+			->joinOperators()
+			->joinPos()
+			->joinRmas()
+			->joinTransactions()
+			->joinRefundTransactions()
+			->joinVendors()
+			->joinCustomers()
+			->getSelect()
+				->order('main_table.created_at',Zend_Db_Select::SQL_ASC);
+
+		$collection->getSelect()->where("main_table.transaction_id = ?", $transaction_id);
+
+		return $collection;
+	}
+
+	/**
 	 * @return bool
 	 */
 	protected function isOperatorMode() {
@@ -442,6 +470,17 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			return $po->getId();
 		}
 		return $po;
+	}
+
+	/**
+	 * @param int|Mage_Sales_Model_Order_Payment_Transaction $transaction
+	 * @return int
+	 */
+	protected function getRealTransactionId($transaction) {
+		if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
+			return $transaction->getId();
+		}
+		return $transaction;
 	}
 
 	/**

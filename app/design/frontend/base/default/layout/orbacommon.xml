@@ -14,9 +14,6 @@
             <action method="setTemplate">
                 <template>orbacommon/js/lib.phtml</template>
             </action>
-            <action method="setCacheLifetime">
-               <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
-            </action>                                                                
         </reference>
     </orbacommon_js_lib>
 </layout>
