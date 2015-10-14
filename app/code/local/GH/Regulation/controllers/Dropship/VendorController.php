@@ -209,7 +209,12 @@ class GH_Regulation_Dropship_VendorController
     }
 
 
-
+    /**
+     * triggers document download based on provided id in request
+     *
+     * checks if document has rights to this document id and if document with this id exists
+     * if everything is ok then download should start, if sth is wrong then returns 404
+     */
     public function getDocumentAction()
     {
         $documentId = $this->getRequest()->getParam('id');
@@ -241,6 +246,7 @@ class GH_Regulation_Dropship_VendorController
 
     /**
      * Get regulation document for not jet active vendor
+     * checks if token is correct and not expired then proceeds to $this->getDocumentAction()
      */
     public function getDocumentByTokenAction() {
         $req = $this->getRequest();
