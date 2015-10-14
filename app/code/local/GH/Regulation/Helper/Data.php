@@ -10,12 +10,36 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
     const REGULATION_DOCUMENT_MAX_SIZE = 5; //MB
 
+    const REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE = 'single';
+    const REGULATION_DOCUMENT_VENDOR_ROLE_PROXY  = 'proxy';
+
     /**
      * @return array
      */
     public static function getAllowedRegulationDocumentTypes()
     {
         return array("image/png", "image/jpg", "image/jpeg", "application/pdf");
+    }
+
+    /**
+     * Return mime type from allowed types for specific $filename
+     * NOTE: This is not validation function
+     * @param string $filename
+     * @return string
+     */
+    public function getMimeTypeFromFileName($filename) {
+        $ext = substr($filename, -4);
+        if ($ext == 'jpeg') {
+            return 'image/jpeg';
+        }
+        $ext = substr($filename, -3);
+        if ($ext == 'jpg') {
+            return 'image/jpg';
+        }
+        if ($ext == 'png') {
+            return 'image/png';
+        }
+        return 'application/pdf';
     }
 
     /**
