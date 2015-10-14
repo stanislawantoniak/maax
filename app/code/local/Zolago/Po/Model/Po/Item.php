@@ -49,12 +49,6 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 		return Mage::helper("catalog/image")->init($product, 'thumbnail');
 	}
 	
-	/**
-	 * @return float
-	 */
-	public function getDiscount() {
-		return round($this->getDiscountAmount()/$this->getQty(), 4);
-	}
 	
 	/**
 	 * Overrride if we have no order item 
@@ -132,17 +126,15 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	   return parent::_beforeSave();
    }
    
-   
-	public function getFinalProductPrice() {
-		return $this->getPriceInclTax() + (-1 * $this->getDiscountAmount()/$this->getQty());
+	/**
+	 * @return float
+	 */
+	public function getDiscount() {
+		return round($this->getDiscountAmount()/$this->getQty(), 4);
 	}
-	
-	public function getProductDiscountPrice() {
-		return $this->getFinalProductPrice();
-	}
-	
+   		
 	public function getFinalItemPrice() {
-		return $this->getPriceInclTax() - $this->getDiscount();
+		return round($this->getPriceInclTax() - $this->getDiscount(),4);
 	}
    
    public function getConfigurableText() {
