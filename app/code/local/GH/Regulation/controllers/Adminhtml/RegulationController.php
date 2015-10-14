@@ -228,7 +228,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
 
                 $folder = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
                 $allowed = $hlp::getAllowedRegulationDocumentTypes();
-                $result = $hlp->saveRegulationDocument($file, $folder, $allowed);
+                $result = $hlp->saveRegulationDocument($file, $folder, $allowed, true);
                 $path = $result["content"]["path"];
 
                 if(!$path) {
