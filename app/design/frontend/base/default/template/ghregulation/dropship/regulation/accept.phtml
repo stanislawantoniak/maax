@@ -12,7 +12,7 @@ $docs = $this->getDocumentsToAccept();
 $docModel = Mage::getSingleton("ghregulation/regulation_document");
 
 ?>
-<link rel="stylesheet" href="<?php echo Mage::getBaseUrl(); ?>skin/frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
 <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <div class="">
         <div style="margin-top:100px;">
@@ -37,7 +37,7 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
                                     <p><?php echo $_helper->__("I %s declare:", $this->getVendor()->getCompanyName()); ?></p>
 
                                     <label class="css-label col-md-12">
-                                        <input type="radio" class="" name="accept_regulations_role" value="single"/>
+                                        <input type="radio" class="" name="accept_regulations_role" value="single" checked/>
                                         <?php echo $_helper->__("I am authorized to represent single %s", $this->getVendor()->getCompanyName()); ?>
                                     </label>
 
@@ -50,11 +50,7 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
                                     <div class="add_regulation_document hidden col-md-12">
                                         <label class="css-label">
                                             <?php echo $_helper->__("Upload a scan of regulations"); ?>
-                                            <input type="file" data-style="fileinput-custom"
-                                                   name="regulation_document"/>
-
-                                            <input type="hidden" name="regulation_document_new_name" value=""/>
-
+                                            <input type="file" data-style="fileinput-custom" name="regulation_document"/>
                                             <div class="add_regulation_document_preview"></div>
                                         </label>
                                     </div>
@@ -70,7 +66,8 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
                                                     <i class="fa fa-file-pdf-o fa-lg"></i>
                                                     <?php echo ucfirst($doc['name']); // Kind name ?> <a
                                                         href="<?php echo $docModel->getVendorUrlByToken($token, $doc['id'], $this->getVendor()->getId()); ?>"
-                                                        download="<?php echo $doc['filename']; ?>"><?php echo $_helper->__("download"); ?></a>
+                                                        download="<?php echo $doc['filename']; ?>"
+                                                        target="_blank"><?php echo $_helper->__("download"); ?></a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
@@ -143,7 +140,6 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
     jQuery("input[name=regulation_document]").on('change', function (e) {
         e.preventDefault();
         jQuery(".add_regulation_document_preview").html("");
-        jQuery("[name=regulation_document_new_name]").val("");
 
         var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
 
@@ -160,12 +156,10 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
         }).done(function(response){
             if (response.status == 1) {
                 jQuery(".add_regulation_document_preview")
-                    .html('<a href="' + response.content.link + '" target="_blank">' + response.content.name + '</a>');
-                jQuery("[name=regulation_document_new_name]").val(response.content.new_name);
+                    .html('<a href="' + response.content.link + '" target="_blank" download="'+ response.content.new_name + '">' + response.content.name + '</a>');
             }
             if (response.status == 0) {
                 //jQuery(".add_regulation_document_preview").html(response.content);
-                jQuery("[name=regulation_document_new_name]").val("");
             }
         });
     });
