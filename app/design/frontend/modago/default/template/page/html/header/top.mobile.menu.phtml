@@ -1,8 +1,0 @@
-<?php
-/**
- * Used in cms block: navigation-main-wrapper
- */
-
-if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
-    echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-mobile')->toHtml();
-}
