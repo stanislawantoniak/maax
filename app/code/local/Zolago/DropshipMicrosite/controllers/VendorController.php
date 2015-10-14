@@ -48,7 +48,8 @@ class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite
 			$this->_redirect('udropship/vendor/');
 			return;
 		}
-
+		$this->_forward("accept", "vendor", "udropship");
+		return;
 		try {
 			$id      = $this->getRequest()->getParam('id', false);
 			$key     = $this->getRequest()->getParam('key', false);
@@ -65,11 +66,7 @@ class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite
 				if ($vendor->getConfirmation() !== $key) {
 					throw new Exception($this->__('Wrong confirmation key.'));
 				}
-				$regulationAccepted = $vendor->getData("regulation_accepted");
-				if(!$regulationAccepted){
-					$this->_forward("accept", "vendor", "udropship");
-					return;
-				}
+
 				// activate customer
 				try {
 					$vendor->setConfirmation(null);

@@ -619,16 +619,14 @@
                     </regulation_accepted>
                     <regulation_confirm_request_sent_date>
                         <label>Regulation: Confirmation Request Sent (Date)</label>
-                        <type>text</type>
+                        <type>label</type>
                         <fieldset>vendor_form</fieldset>
-                        <disabled>1</disabled>
                         <position>0</position>
                     </regulation_confirm_request_sent_date>
                     <regulation_accept_document_date translate="label">
                         <label>Regulation: Document Accepted (Date)</label>
-                        <type>text</type>
+                        <type>label</type>
                         <fieldset>vendor_form</fieldset>
-                        <disabled>1</disabled>
                         <position>0</position>
                     </regulation_accept_document_date>
                     <regulation_accept_document_data translate="label">
