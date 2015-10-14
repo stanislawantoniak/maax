@@ -19,12 +19,18 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Saving regulation document $file to specific $folder in media dir
+     * Validation allow only $allowedRegulationDocumentTypes types
+     * @see GH_Regulation_Helper_Data::getAllowedRegulationDocumentTypes()
+     * Param $useRandom move saved file to 'random' dir
+     *
      * @param $file
      * @param $folder
      * @param $allowedRegulationDocumentTypes
+     * @param bool $useRandom
      * @return array
      */
-    public function saveRegulationDocument($file, $folder, $allowedRegulationDocumentTypes)
+    public function saveRegulationDocument($file, $folder, $allowedRegulationDocumentTypes, $useRandom = true)
     {
         $_helper = Mage::helper("ghregulation");
         $result = array("status" => 0, "message" => "", "content" => array());
@@ -38,14 +44,14 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             $result = array("status" => 0, "message" => $_helper->__("File must be JPG, PNG or PDF"));
             return $result;
         }
-        if (round($size / 1048576, 1) >= self::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
+        if (round($size / (1024*1024), 1) >= self::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
             $result = array("status" => 0, "message" => $_helper->__("File too large. File must be less than %sMB.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE));
             return $result;
         }
 
         if (!empty($name)) {
             $newName = $this->cleanFileName($name);
-            $image = md5($newName);
+            $image = md5($newName . ($useRandom ? mt_rand() : ''));
             $safeFolderPath = $image[0] . "/" . $image[1] . "/";
 
             @mkdir(Mage::getBaseDir('media') . DS . $folder . DS . $safeFolderPath, 0777, true);
