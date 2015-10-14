@@ -47,24 +47,24 @@ class Unirgy_Dropship_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_W
             $resetPasswordLink = $this->getUrl('*/*/resetPassword', array('id' => $this->getRequest()->getParam($this->_objectId)));
             $resetPasswordBefore = "Are you sure you want to reset vendor password?";
             $this->_addButton('send_confirmation_email_button', array(
-                'label' => Mage::helper('adminhtml')->__('Reset Password'),
+                'label' => Mage::helper('adminhtml')->__('Send Reset password mail to vendor'),
                 'class' => 'save',
                 "name" => "send_confirmation_email_button",
                 "disabled" => ($model && $model->getStatus() == "A") ? false : true,
                 "onclick" => "deleteConfirm('{$resetPasswordBefore}','{$resetPasswordLink}')",
-                "title" => $hlp->__("przycisk zresetuj hasło  aktywny  - gdy vendor aktywny"),
+                "title" => $hlp->__("Reset password button is active when vendor have status ACTIVE"),
             ), 0);
 
             //wyślij prośbę o akceptację regulaminu aktywny - gdy regulamin niezaakceptowany
             $sendRegulationLink = $this->getUrl('*/*/sendConfirmationEmail', array('id' => $this->getRequest()->getParam($this->_objectId)));
             $sendRegulationBefore = "Are you sure you want to send regulations accept email?";
             $this->_addButton('send_regulation_accept_button', array(
-                'label' => Mage::helper('adminhtml')->__('Wyślij prośbę o akceptację regulaminu'),
+                'label' => Mage::helper('adminhtml')->__('Send regulation accept request'),
                 'class' => 'save',
                 "name" => "send_regulation_accept_button",
                 "onclick" => "deleteConfirm('{$sendRegulationBefore}','{$sendRegulationLink}')",
                 "disabled" => $model && $model->getRegulationAccepted() ? true : false,
-                "title" => $hlp->__("przycisk wyślij prośbę o akceptację regulaminu aktywny gdy regulamin niezaakceptowany"),
+                "title" => $hlp->__("Send regulation accept request button active when regulations accepted"),
             ), 1);
 
         } elseif (($sessVD = Mage::getSingleton('adminhtml/session')->getData('uvendor_edit_data', true))) {

@@ -79,7 +79,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
             'options' => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
             'field_config' => $udVendorStatusFC,
             'onchange' => 'checkSelectedItem(this.value)',
-            'note' => "pozwalamy na przełączenie statusu na aktywny - gdy regulamin zaakceptowany"
+            'note' => $hlp->__("Status can be set to Active if regulations accepted")
 
         ))
             ->setAfterElementHtml("
