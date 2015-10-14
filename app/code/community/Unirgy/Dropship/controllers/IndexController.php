@@ -4,7 +4,7 @@ class Unirgy_Dropship_IndexController extends Mage_Core_Controller_Front_Action
 {
     public function indexAction()
     {
-        $this->_forward('index', 'vendor');
+        $this->_forward('index', 'vendor', "udropship");
     }
     public function vendorAutocompleteAction()
     {
