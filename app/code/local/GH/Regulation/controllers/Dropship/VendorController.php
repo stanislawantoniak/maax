@@ -25,7 +25,7 @@ class GH_Regulation_Dropship_VendorController
             }
             try {
 
-                /* @var $vendor Unirgy_Dropship_Model_Vendor */
+                /* @var $vendor Zolago_Dropship_Model_Vendor */
                 $vendor = Mage::getModel('udropship/vendor')->load($id);
 
 
@@ -40,11 +40,12 @@ class GH_Regulation_Dropship_VendorController
                 if ($vendor->getConfirmation() && $vendor->getConfirmationSent()) {
                     /* Vendor account confirmation token life time */
                     $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+                    Mage::log($confirmationTokenExpirationTime);
 
                     $localeTime = Mage::getModel('core/date')->timestamp(time());
-                    $secPastSinceConfirmation = $localeTime - strtotime($vendor->getConfirmationSentDate());
+                    $secPastSinceConfirmation = $localeTime - strtotime($vendor->getRegulationConfirmRequestSentDate());
                     $hoursPastSinceConfirmation = $secPastSinceConfirmation / 60 / 60;
-
+                    Mage::log($hoursPastSinceConfirmation);
                     if ($hoursPastSinceConfirmation > $confirmationTokenExpirationTime) {
                         //If token expired redirect to cms page with info "Contact with GALLERY to get new confirmation email"
 

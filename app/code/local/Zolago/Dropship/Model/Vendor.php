@@ -5,6 +5,11 @@
  * @method string getVendorName()
  * @method string getStatementsCalendar()
  * @method string getUrlKey()
+ *
+ * @method string getRegulationAcceptDocumentDate()
+ * @method string getRegulationAcceptDocumentData()
+ * @method int getRegulationAccepted()
+ * @method string getRegulationConfirmRequestSentDate()
  */
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {

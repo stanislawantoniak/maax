@@ -41,11 +41,11 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
             $localeTime = Mage::getModel('core/date')->timestamp(time());
             $localeTimeF = date("Y-m-d H:i:s", $localeTime);
 
-            $vendor->setData("confirmation_sent_date", $localeTimeF);
+            $vendor->setData("regulation_confirm_request_sent_date", $localeTimeF);
             Mage::getResourceSingleton('udropship/helper')
                 ->updateModelFields(
                     $vendor,
-                    array('confirmation', 'confirmation_sent', 'confirmation_sent_date')
+                    array('confirmation', 'confirmation_sent', 'regulation_confirm_request_sent_date')
                 );
             Mage::helper('udmspro')->sendVendorConfirmationEmail($vendor);
 

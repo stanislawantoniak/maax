@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.10</version>
+			<version>0.0.11</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -609,25 +609,35 @@
                     </custom_design>
 
 
+                    <!--Regulation-->
                     <regulation_accepted>
-                        <label>Is Regulation Document Accepted</label>
+                        <label>Regulation: Is Regulations Accepted</label>
                         <type>select</type>
                         <source>yesno</source>
                         <fieldset>vendor_info</fieldset>
                         <position>0</position>
                     </regulation_accepted>
-                    <regulation_accept_document_date translate="label">
-                        <label>Regulation Document Accept Date</label>
+                    <regulation_confirm_request_sent_date>
+                        <label>Regulation: Confirmation Request Sent (Date)</label>
                         <type>text</type>
                         <fieldset>vendor_form</fieldset>
+                        <disabled>1</disabled>
+                        <position>0</position>
+                    </regulation_confirm_request_sent_date>
+                    <regulation_accept_document_date translate="label">
+                        <label>Regulation: Document Accepted (Date)</label>
+                        <type>text</type>
+                        <fieldset>vendor_form</fieldset>
+                        <disabled>1</disabled>
                         <position>0</position>
                     </regulation_accept_document_date>
                     <regulation_accept_document_data translate="label">
-                        <label>Regulation Document Accept Data</label>
+                        <label>Regulation: Document Accepted Details</label>
                         <type>textarea</type>
                         <fieldset>vendor_form</fieldset>
                         <position>0</position>
                     </regulation_accept_document_data>
+                    <!--Regulation-->
 				</fields>
 			</vendor>
 		</udropship>
