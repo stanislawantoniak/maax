@@ -633,8 +633,9 @@
                     </regulation_accept_document_date>
                     <regulation_accept_document_data translate="label">
                         <label>Regulation: Document Accepted Details</label>
-                        <type>textarea</type>
+                        <type>hidden</type>
                         <fieldset>vendor_form</fieldset>
+                        <frontend_model>zolagodropship/adminhtml_vendor_helper_form_regulation</frontend_model>
                         <position>0</position>
                     </regulation_accept_document_data>
                     <!--Regulation-->

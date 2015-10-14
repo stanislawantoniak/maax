@@ -79,7 +79,8 @@ class GH_Regulation_Model_DropshipMicrosite_Observer extends Unirgy_DropshipMicr
             ) {
                 if($vendor->getStatus() != Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE){
                     $vendor->setPassword($this->_vendorPassword);
-                    Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
+                    //Email with password should not be send on REGISTRATION stage in any case
+                    //Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);
                     $vendor->setPassword('');
                 }
 

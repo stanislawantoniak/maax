@@ -1,0 +1,19 @@
+<?php
+/** @var $this Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Regulation */
+
+$_element = $this->getElement();
+
+$_htmlId = $_element->getHtmlId();
+$_htmlClass = $_element->getClass();
+$_htmlName = $_element->getName();
+$_readonly = $_element->getReadonly();
+$_value = $_element->getValue();
+
+if(!empty($_value)){
+    $_valueDecoded = json_decode($_value);
+}
+
+?>
+
+<!--<input id="regulation_accept_document_data" name="regulation_accept_document_data" value="" class="" type="hidden">-->
+<input id="<?php echo $_htmlId; ?>" name="<?php echo $_htmlName; ?>" value='<?php echo $_value; ?>' class="" type="hidden" />
