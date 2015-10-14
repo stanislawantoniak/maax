@@ -32,7 +32,6 @@
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- Observer model -->
 					<observer>Zolago_Dropship_Model_Observer</observer>
-                    <observer>Zolago_Dropship_Model_Observer</observer>
                 </rewrite>
 			</udropship>
 			<udropship_mysql4>
@@ -75,6 +74,7 @@
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
                     <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
                     <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
+                    <adminhtml_vendor_edit>Zolago_Dropship_Block_Dropship_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
                 </rewrite>
 			</udropship>
 		</blocks>

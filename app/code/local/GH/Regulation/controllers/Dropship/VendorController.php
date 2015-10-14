@@ -1,20 +1,24 @@
 <?php
 
 /**
- * /**
+ * Flow:
+ * TODO: write flow description + put this on wiki
+ *
  * Class GH_Regulation_VendorController
  */
 class GH_Regulation_Dropship_VendorController
     extends Zolago_Dropship_Controller_Vendor_Abstract
 {
     /**
-     *
+     * This is regulation document accept page for not jet active vendor
+     * It's show only when data vendor is valid
+     * and token it's not expired
      */
     public function acceptAction()
     {
         try {
-            $id = $this->getRequest()->getParam('id', false);
-            $key = $this->getRequest()->getParam('key', false);
+            $id = $this->getRequest()->getParam('id', false);   // Vendor id
+            $key = $this->getRequest()->getParam('key', false); // Token
 
             if (empty($id) || empty($key)) {
                 throw new Exception($this->__('Bad request.'));
@@ -60,6 +64,12 @@ class GH_Regulation_Dropship_VendorController
         return $this->_renderPage();
     }
 
+    /**
+     * Save information about that not jet active vendor
+     * accept our regulation
+     *
+     * @throws Exception
+     */
     public function acceptPostAction()
     {
         $req = $this->getRequest();
@@ -131,10 +141,6 @@ class GH_Regulation_Dropship_VendorController
 
         try {
             $vendor->setConfirmation(null);
-            $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');
-            $vendor->setPassword($password);
-            $vendor->setPasswordEnc(Mage::helper('core')->encrypt($password));
-            $vendor->setPasswordHash(Mage::helper('core')->getHash($password, 2));
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
             $localeTimeF = date("Y-m-d H:i:s", $localeTime);
@@ -157,8 +163,6 @@ class GH_Regulation_Dropship_VendorController
                     $vendor,
                     array(
                         'confirmation',
-                        'password_hash',
-                        'password_enc',
                         "regulation_accept_document_date",
                         "regulation_accept_document_data",
                         "regulation_accepted"
@@ -168,6 +172,7 @@ class GH_Regulation_Dropship_VendorController
         } catch (Exception $e) {
             throw new Exception($this->__('Failed to confirm vendor account.'));
         }
+
         $acceptAttachments = array();
         //uploaded document by vendor
         if ($regulationDocumentNewName && !empty($regulationDocumentNewName)) {
@@ -179,14 +184,17 @@ class GH_Regulation_Dropship_VendorController
             );
         }
         //our documents
-        $docs = Mage::getModel("ghregulation/regulation_document")->getAcceptDocumentsList();
-        if ($docs->getSize() > 0) {
+        /** @var GH_Regulation_Model_Resource_Regulation_Document $docModel */
+        $docModel = Mage::getResourceModel("ghregulation/regulation_document");
+        $docs = $docModel->getDocumentsToAccept($vendor);
+
+        if (count($docs) > 0) {
+            /** @var GH_Regulation_Model_Regulation_Document $doc */
             foreach ($docs as $doc) {
-                $data = unserialize($doc->getDocumentLink());
                 $acceptAttachments[] = array(
-                    'filename' => $data['file_name'],
-                    'content' => file_get_contents(Mage::getBaseDir("media") . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_ADMIN_FOLDER . DS . $data['path']),
-                    'type' => $data['type'],
+                    'filename' => $doc->getFileName(),
+                    'content' => file_get_contents($doc->getPath()),
+                    'type' => mime_content_type($doc->getPath()),
                 );
             }
         }

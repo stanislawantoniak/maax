@@ -26,17 +26,40 @@ class Unirgy_Dropship_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_W
 
         $this->_updateButton('save', 'label', Mage::helper('udropship')->__('Save Vendor'));
         $this->_updateButton('save_continue', 'label', Mage::helper('udropship')->__('Save and Continue Edit'));
+
         $this->_addButton('save_continue', array(
             'label'     => Mage::helper('adminhtml')->__('Save and Continue Edit'),
             'onclick'   => '$(\'save_continue\').value=1; editForm.submit();',
             'class'     => 'save',
         ), 10);
+
         $this->_updateButton('delete', 'label', Mage::helper('udropship')->__('Delete Vendor'));
 
         if( $this->getRequest()->getParam($this->_objectId) ) {
             $model = Mage::getModel('udropship/vendor')
                 ->load($this->getRequest()->getParam($this->_objectId));
             Mage::register('vendor_data', $model);
+
+            $resetPasswordLink = $this->getUrl('*/*/resetPassword', array('id' => $this->getRequest()->getParam($this->_objectId)));
+            $resetPasswordBefore = "Are you sure you want to send confirmation email?";
+            $this->_addButton('send_confirmation_email_button', array(
+                'label'     => Mage::helper('adminhtml')->__('Reset Password'),
+                'class'     => 'save',
+                "name" => "send_confirmation_email_button",
+                "onclick" => "deleteConfirm('{$resetPasswordBefore}','{$resetPasswordLink}')"
+
+            ), 0);
+
+            $sendRegulationLink = $this->getUrl('*/*/sendConfirmationEmail', array('id' => $this->getRequest()->getParam($this->_objectId)));
+            $sendRegulationBefore = "Are you sure you want to send regulations accept email?";
+            $this->_addButton('send_regulation_accept_button', array(
+                'label'     => Mage::helper('adminhtml')->__('Send Regulations'),
+                'class'     => 'save',
+                "name" => "send_regulation_accept_button",
+                "onclick" => "deleteConfirm('{$sendRegulationBefore}','{$sendRegulationLink}')"
+
+            ), 1);
+
         } elseif (($sessVD = Mage::getSingleton('adminhtml/session')->getData('uvendor_edit_data', true))) {
         	unset($sessVD['logo']);
             if (Mage::registry('vendor_data')) {
@@ -45,7 +68,7 @@ class Unirgy_Dropship_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_W
                 Mage::register('vendor_data', Mage::getModel('udropship/vendor')->setData($sessVD));
             }
         }
-#var_dump(Mage::registry('vendor_data')); exit;
+
     }
 
     public function getHeaderText()

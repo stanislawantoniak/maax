@@ -90,16 +90,6 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
                 'label'     => $hlp->__('Send Reject Email'),
                 'options'   => Mage::getSingleton('udropship/source')->setPath('yesno')->toOptionHash(true),
             ));
-            $fieldset->addField('send_confirmation_email', 'select', array(
-                'name'      => 'send_confirmation_email',
-                'label'     => $vendor && $vendor->getConfirmationSent()
-                    ? $hlp->__('Resend Confirmation Email')
-                    : $hlp->__('Send Confirmation Email'),
-                'options'   => Mage::getSingleton('udropship/source')->setPath('yesno')->toOptionHash(true),
-                'note'      => $vendor && $vendor->getConfirmationSent()
-                    ? $hlp->__('Resending confirmation email will reset password (revoke old one). New password will be sent to vendor in separate email once he click at the link in this confirmation email.')
-                    : $hlp->__('Send Confirmation Email. Password will be sent to vendor in separate email once he click at the link in this confirmation email.'),
-            ));
         }
 
         $fieldset->addField('carrier_code', 'select', array(
