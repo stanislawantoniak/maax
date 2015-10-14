@@ -270,7 +270,7 @@ class GH_Regulation_Dropship_VendorController
                     $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
 
                     $localeTime = Mage::getModel('core/date')->timestamp(time());
-                    $secPastSinceConfirmation = $localeTime - strtotime($vendor->getConfirmationSentDate());
+                    $secPastSinceConfirmation = $localeTime - strtotime($vendor->getRegulationConfirmRequestSentDate());
                     $hoursPastSinceConfirmation = $secPastSinceConfirmation / 60 / 60;
 
                     if ($hoursPastSinceConfirmation < $confirmationTokenExpirationTime) {
