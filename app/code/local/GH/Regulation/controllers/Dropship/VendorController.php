@@ -208,7 +208,18 @@ class GH_Regulation_Dropship_VendorController
         if ($documentId) {
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
-            if ($document->getId()) {
+            /** @var GH_Regulation_Helper_Data $helper */
+            $helper = Mage::helper('ghregulation');
+
+            /** @var Zolago_Dropship_Model_Session $vendorSession */
+            $vendorSession = Mage::getSingleton('udropship/session');
+
+            $vendor = $vendorSession->getVendor();
+
+            if ($document->getId() //document exists
+                && $vendor->getId() //vendor is logged in
+                && in_array($document->getId(),$helper->getVendorDocuments($vendor->getId(),true)) //vendor has rights to provided document
+            ) {
                 $path = $document->getPath();
                 if (is_file($path) && is_readable($path)) {
                     $this->_sendFile($path, $document->getFileName());
@@ -224,13 +235,34 @@ class GH_Regulation_Dropship_VendorController
      * Get regulation document for not jet active vendor
      */
     public function getDocumentByTokenAction() {
-        //TODO
         $req = $this->getRequest();
         $vendorId       = $req->getParam('vendor');
         $token          = $req->getParam('token');
-        $documentId     = $req->getParam('id');
+        //$documentId     = $req->getParam('id'); //its read by $this->getDocumentAction()
 
-        $this->getDocumentAction();
+        if (!empty($vendorId) && !empty($token)) { //vendor id and token was provided
+            /* @var $vendor Zolago_Dropship_Model_Vendor */
+            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+
+            if ($vendor && $vendor->getId() && $vendor->getConfirmation() === $token) { //correct vendor id and its token
+
+                if ($vendor->getConfirmationSent()) { //vendor has received confirmation email
+                    /* Vendor account confirmation token life time */
+                    $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+
+                    $localeTime = Mage::getModel('core/date')->timestamp(time());
+                    $secPastSinceConfirmation = $localeTime - strtotime($vendor->getConfirmationSentDate());
+                    $hoursPastSinceConfirmation = $secPastSinceConfirmation / 60 / 60;
+
+                    if ($hoursPastSinceConfirmation < $confirmationTokenExpirationTime) {
+                        //If token is not expired proceed with document download
+                        $this->getDocumentAction();
+                        return;
+                    }
+                }
+            }
+        }
+        $this->norouteAction();
     }
 
     public function getVendorUploadedDocumentAction() {
