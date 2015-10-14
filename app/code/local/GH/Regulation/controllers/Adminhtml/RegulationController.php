@@ -223,20 +223,20 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             $model->addData($data);
 
             if (isset($_FILES['file']) && isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
-                $file = $_FILES['file'];
 
-
-                $folder = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
+                $file    = $_FILES['file'];
+                $folder  = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
                 $allowed = $hlp::getAllowedRegulationDocumentTypes();
-                $result = $hlp->saveRegulationDocument($file, $folder, $allowed, true);
-                $path = $result["content"]["path"];
+                $result  = $hlp->saveRegulationDocument($file, $folder, $allowed, true);
+                $path    = $result["content"]["path"];
+                $newName = $result["content"]["new_name"];
 
                 if(!$path) {
                     Mage::throwException("Invalid file type (".$file['type'].")");
                 }
 
                 $dl = array(
-                    "file_name" => GH_Regulation_Helper_Data::cleanFileName($_FILES['file']['name']),
+                    "file_name" => $newName,
                     "path"      => $path
                 );
                 $model->setData("document_link", serialize($dl));
@@ -291,7 +291,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
             if($document->getId()) {
-                $path = $document->getPath();
+                $path = $document->getFullPath();
                 if(is_file($path) && is_readable ($path)) {
                     $this->_sendFile($path, $document->getFileName());
                     return;

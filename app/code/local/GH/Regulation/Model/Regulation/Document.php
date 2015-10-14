@@ -31,7 +31,7 @@ class GH_Regulation_Model_Regulation_Document extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Get path to file
+     * Get relative path to file (without media dir)
      *
      * @return mixed
      */
@@ -43,6 +43,15 @@ class GH_Regulation_Model_Regulation_Document extends Mage_Core_Model_Abstract
             }
         }
         return $this->getData('path');
+    }
+
+    /**
+     * Get full path to file
+     *
+     * @return string
+     */
+    public function getFullPath() {
+        return Mage::getBaseDir('media') . DS . $this->getPath();
     }
 
     /**

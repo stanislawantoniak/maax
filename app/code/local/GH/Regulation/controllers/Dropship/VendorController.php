@@ -193,8 +193,8 @@ class GH_Regulation_Dropship_VendorController
             foreach ($docs as $doc) {
                 $acceptAttachments[] = array(
                     'filename' => $doc->getFileName(),
-                    'content' => file_get_contents($doc->getPath()),
-                    'type' => mime_content_type($doc->getPath()),
+                    'content' => file_get_contents($doc->getFullPath()),
+                    'type' => mime_content_type($doc->getFullPath()),
                 );
             }
         }
@@ -228,7 +228,7 @@ class GH_Regulation_Dropship_VendorController
                 && $vendor->getId() //vendor is logged in
                 && in_array($document->getId(),$helper->getVendorDocuments($vendor->getId(),true)) //vendor has rights to provided document
             ) {
-                $path = $document->getPath();
+                $path = $document->getFullPath();
                 if (is_file($path) && is_readable($path)) {
                     $this->_sendFile($path, $document->getFileName());
                     return;
