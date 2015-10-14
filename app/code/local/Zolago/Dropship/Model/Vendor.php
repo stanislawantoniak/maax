@@ -6,6 +6,8 @@
  * @method string getStatementsCalendar()
  * @method string getUrlKey()
  *
+ * @method string getStatus()
+ *
  * @method string getRegulationAcceptDocumentDate()
  * @method string getRegulationAcceptDocumentData()
  * @method int getRegulationAccepted()
