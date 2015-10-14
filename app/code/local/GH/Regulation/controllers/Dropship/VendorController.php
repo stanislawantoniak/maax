@@ -283,7 +283,7 @@ class GH_Regulation_Dropship_VendorController
         $req = $this->getRequest();
         $fileName = $req->getParam('file', false);
         $vendorId = $req->getParam('vendor', false);
-        $key    = $req->getParam('key', false); // Token
+        $key      = $req->getParam('key', false); // Token
 
         // If no vendor ID maybe vendor is logged in
         /* @var $vendor Unirgy_Dropship_Model_Vendor */

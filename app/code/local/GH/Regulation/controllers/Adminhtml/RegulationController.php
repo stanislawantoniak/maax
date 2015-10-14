@@ -285,6 +285,9 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
         return $this->_redirect('*/*/list');
     }
 
+    /**
+     * Get regulation document uploaded by admin
+     */
     public function getDocumentAction() {
         $documentId = $this->getRequest()->getParam('id');
         if($documentId) {
@@ -296,6 +299,27 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
                     $this->_sendFile($path, $document->getFileName());
                     return;
                 }
+            }
+        }
+        $this->norouteAction(); //404
+        return;
+    }
+
+    /**
+     * Get regulation document uploaded by vendor
+     */
+    public function getVendorUploadedDocumentAction() {
+        $req = $this->getRequest();
+        $vendorId = $req->getParam('vendor', false);
+        $fileName = $req->getParam('file', false);
+
+        if (!empty($vendorId) && !empty($fileName)) {
+            $path  = Mage::getBaseDir('media') . DS . GH_Regulation_Helper_Data::REGULATION_DOCUMENT_FOLDER . DS . "accept_" . (int)$vendorId . DS;
+            $image = md5($fileName);
+            $path .= $image[0] . "/" . $image[1] . "/" . $fileName;
+            if (is_file($path) && is_readable($path)) {
+                $this->_sendFile($path, $fileName);
+                return;
             }
         }
         $this->norouteAction(); //404

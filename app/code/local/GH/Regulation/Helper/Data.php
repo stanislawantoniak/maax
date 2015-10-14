@@ -286,6 +286,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * Return url for file uploaded by vendor on regulation acceptation steep
+     * in udropship front
      *
      * @param $vendorId
      * @param $fileName
@@ -297,6 +298,21 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             'vendor' => $vendorId,
             'file'   => $fileName,
             'key'    => $token
+        ));
+    }
+
+    /**
+     * Return url for file uploaded by vendor on regulation acceptation steep
+     * in adminhtml
+     *
+     * @param $vendorId
+     * @param $fileName
+     * @return mixed
+     */
+    public function getVendorUploadedDocumentUrlForAdmin($vendorId, $fileName) {
+        return Mage::helper("adminhtml")->getUrl("adminhtml/regulation/getVendorUploadedDocument", array(
+            'vendor' => $vendorId,
+            'file'   => $fileName
         ));
     }
 }
