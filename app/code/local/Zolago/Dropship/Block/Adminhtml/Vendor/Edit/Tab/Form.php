@@ -68,14 +68,29 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
             $udVendorStatusType = 'select';
         }
 
+        $regulationAccepted = (int)($vendor && $vendor->getRegulationAccepted());
+
+        //pozwalamy na przełączenie statusu na aktywny - gdy regulamin zaakceptowany
         $fieldset->addField('status', $udVendorStatusType, array(
-            'name'      => 'status1',
-            'label'     => $hlp->__('Status'),
-            'class'     => 'required-entry',
-            'required'  => true,
-            'options'   => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
-            'field_config' => $udVendorStatusFC
-        ));
+            'name' => 'status1',
+            'label' => $hlp->__('Status'),
+            'class' => 'required-entry',
+            'required' => true,
+            'options' => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
+            'field_config' => $udVendorStatusFC,
+            'onchange' => 'checkSelectedItem(this.value)',
+            'note' => $hlp->__("Status can be set to Active if regulations accepted")
+
+        ))
+            ->setAfterElementHtml("
+                         <script type=\"text/javascript\">
+                            var regulationAccepted = '" . $regulationAccepted . "';
+                            console.log(regulationAccepted);
+
+                            if(regulationAccepted == 0){
+                                jQuery(\"[name=status1] option[value='A']\").prop(\"disabled\", true);
+                            }
+                         </script>");
 
         if (Mage::helper('udropship')->isModuleActive('udmspro')) {
             $fieldset->addField('reject_reason', 'textarea', array(

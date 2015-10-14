@@ -384,7 +384,7 @@ class GH_Regulation_Dropship_VendorController
             $this->deleteDirectory($dirname);
             $allowedRegulationDocumentTypes = $helper->getAllowedRegulationDocumentTypes();
 
-            $result = $helper->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes);
+            $result = $helper->saveRegulationDocument($_FILES["regulation_document"], $folder, $allowedRegulationDocumentTypes, false);
             if ($result["status"] == 1) {
                 $url = $helper->getVendorUploadedDocumentUrl((int)$vendorId, $result['content']['new_name'], $key);
                 $result = array(
