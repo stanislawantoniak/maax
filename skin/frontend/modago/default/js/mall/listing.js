@@ -825,7 +825,7 @@ Mall.listing = {
 		this._current_url = content.url;
 		this._pushHistoryState(ajaxKey,ajaxData);
 
-		if(content.document_title.length && content.document_title != document.title) {
+		if(typeof content.document_title != "undefined" && content.document_title.length && content.document_title != document.title) {
 			try {
 				document.getElementsByTagName('title')[0].innerHTML = content.document_title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
 			} catch(e){}
@@ -1057,6 +1057,7 @@ Mall.listing = {
 				scrollButtons:{
 					enable:true
 				},
+				mouseWheel:{ scrollAmount: 50 },
 				advanced:{
 					updateOnBrowserResize:true
 				} // removed extra commas
@@ -1421,6 +1422,8 @@ Mall.listing = {
 			Mall.listing.pageChangeUri = false;
 			Mall.listing._pushHistoryState(ajaxKey,ajaxData);
 
+			//include header in order to keep active filters header labels always up to date
+			data.content.header = Mall.listing.getHeader().prop("outerHTML");
 			Mall.listing._ajaxCache[ajaxKey] = data;
 
 			Mall.listing.hideAjaxLoading();
