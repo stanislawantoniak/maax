@@ -76,10 +76,13 @@ class Zolago_Catalog_Vendor_ProductController
 					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
 						$ids, 
-						array("description_status" => $this->_getSession()->getVendor()->getData("review_status")),
+						array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
+						      "url_key"			   => ''   // new url keys
+						),
 						$storeId, 
 						array("check_editable"=>false)
 					);
+					$this->_generateUrlKeys($ids);
 				break;
 				default:
 				    Mage::throwException("Invaild mass method");
@@ -107,6 +110,7 @@ class Zolago_Catalog_Vendor_ProductController
                 )
             );
 		} catch (Exception $ex) {
+		    Mage::logException($ex);
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
@@ -116,6 +120,16 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_prepareRestResponse();
 	}
 
+    /**
+     * re-generate short url for products 
+     *
+     * @param array $ids
+     */
+     protected function _generateUrlKeys($ids) {
+         foreach ($ids as $id) {
+             Mage::getSingleton('catalog/url')->refreshProductRewrite($id);
+         }
+     }
     /**
      * Prepare rest query from params for saving conditions in attributes mapper
      * Remove "from" and "to" (images count),
