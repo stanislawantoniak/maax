@@ -61,4 +61,10 @@ class GH_Regulation_Block_Dropship_Regulation_Accept extends Mage_Core_Block_Tem
         return $vendor;
     }
 
+    public function maxUploadInMB() {
+        /* @var $ghCommonHelper GH_Common_Helper_Data */
+        $ghCommonHelper = Mage::helper('ghcommon');
+        $minByte = $ghCommonHelper->getMaxUploadFileSize();
+        return round($minByte / (1024*1024), 1, PHP_ROUND_HALF_DOWN); // to MB
+    }
 }

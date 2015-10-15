@@ -1,0 +1,27 @@
+<?php
+class GH_Common_Helper_Data extends Mage_Core_Helper_Abstract {
+
+    /**
+     * Return max file size for upload file (in Byte)
+     */
+    public static function getMaxUploadFileSize() {
+        return min(GH_Common_Helper_Data::getIniByteValue('post_max_size'), GH_Common_Helper_Data::getIniByteValue('upload_max_filesize'));
+    }
+
+    /**
+     * Common use with post_max_size & upload_max_filesize
+     *
+     * @param $setting
+     * @return int|string
+     */
+    public static function getIniByteValue($setting) {
+        $val = trim(ini_get($setting));
+        $last = strtolower($val[strlen($val)-1]);
+        switch($last) {
+            case 'g': $val *= 1024;
+            case 'm': $val *= 1024;
+            case 'k': $val *= 1024;
+        }
+        return $val;
+    }
+}

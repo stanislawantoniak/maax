@@ -10,7 +10,7 @@ $token = $this->getRequest()->getParam('key');
 $docs = $this->getDocumentsToAccept();
 /** @var GH_Regulation_Model_Regulation_Document $docModel */
 $docModel = Mage::getSingleton("ghregulation/regulation_document");
-
+$maxSize = $this->maxUploadInMB();
 ?>
 <link rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
 <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
@@ -87,10 +87,12 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
                                     </label>
                                 </div>
                             </div>
-                        <div class="form-actions" style="margin-bottom: 0px;margin-left: 0;margin-right: 0;">
-                            <button type="submit" id="filter_submit" class="btn btn-primary pull-right" >
-                                <span><span><?php echo $_helper->__("Accept regulations"); ?></span></span>
-                            </button>
+                        <div class="form-actions text-right" style="margin-bottom: 0px;margin-left: 0;margin-right: 0;">
+                            <div class="submit-tooltip-wrapper" data-title="<?php echo $_helper->__("File is now uploading. It can take a while"); ?>">
+                                <button type="submit" id="filter_submit" class="btn btn-primary pull-right" >
+                                    <span><span><?php echo $_helper->__("Accept regulations"); ?></span></span>
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -103,7 +105,7 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
     jQuery(document).ready(function () {
         handleProxyCheck(jQuery("[name='accept_regulations_role']"));
         jQuery("[name='accept_regulations_role']").change(function () {
-                handleProxyCheck(jQuery(this));
+            handleProxyCheck(jQuery(this));
         });
     });
 
@@ -115,12 +117,12 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
             accept_regulations_role: {
                 required: true
             },
-            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: <?php echo GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE; ?>, required:'[name=accept_regulations_role][value=proxy]'}
+            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: <?php echo $maxSize; ?>, required:'[name=accept_regulations_role][value=proxy]'}
         },
         messages: {
             'regulation_document': {
                 extension: '<?php echo $_helper->__("File must be JPG, PNG or PDF"); ?>',
-                fileSize: '<?php echo $_helper->__("File too large. File must be less than %sMB.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE); ?>'
+                fileSize: '<?php echo $_helper->__("File too large. File must be less than %sMB.", $maxSize); ?>'
             }
         },
         errorPlacement: function (error, element) {
@@ -133,35 +135,54 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
             jQuery(".add_regulation_document").removeClass("hidden");
         } else {
             jQuery(".add_regulation_document").addClass("hidden");
+            jQuery(".add_regulation_document_preview").html('');
+            jQuery("label[for=regulation_document]").remove();
         }
+    }
 
+    function disableSubmitBtn() {
+        jQuery("#filter_submit").attr("disabled", true);
+        jQuery(".submit-tooltip-wrapper").tooltip({position: "bottom"});
+    }
+
+    function enableSubmitBtn() {
+        jQuery("#filter_submit").attr("disabled", false);
+        jQuery(".submit-tooltip-wrapper").tooltip('destroy');
     }
 
     jQuery("input[name=regulation_document]").on('change', function (e) {
         e.preventDefault();
-        jQuery(".add_regulation_document_preview").html("");
+        jQuery(".add_regulation_document_preview").html('');
+        jQuery("label[for=regulation_document]").remove();
 
-        var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
-
-        jQuery.ajax({
-            url: '<?php echo $this->getSaveVendorDocumentUrl(); ?>',
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            //dataType: 'json',
-            'success': function(response) {},
-            'error': function(response) {}
-        }).done(function(response){
-            if (response.status == 1) {
-                jQuery(".add_regulation_document_preview")
-                    .html('<a href="' + response.content.link + '" target="_blank" download="'+ response.content.new_name + '">' + response.content.name + '</a>');
-            }
-            if (response.status == 0) {
-                //jQuery(".add_regulation_document_preview").html(response.content);
-            }
-        });
+        if (jQuery(this).val()) {
+            jQuery(".add_regulation_document_preview").html('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+            disableSubmitBtn();
+            var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
+            jQuery.ajax({
+                url: '<?php echo $this->getSaveVendorDocumentUrl(); ?>',
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function (response) {
+                if (response.status == 1) {
+                    jQuery(".add_regulation_document_preview")
+                        .html('<a href="' + response.content.link + '" target="_blank" download="' + response.content.new_name + '">' + response.content.name + '</a>');
+                }
+                if (response.status == 0) {
+                    //jQuery(".add_regulation_document_preview").html(response.content);
+                }
+            }).fail(function () {
+                jQuery(".add_regulation_document_preview").html('');
+                enableSubmitBtn();
+            }).always(function () {
+                jQuery("form#accept_regulation_documents_form input[name=regulation_document]").valid();
+                enableSubmitBtn();
+            });
+        }
+        jQuery("form#accept_regulation_documents_form input[name=regulation_document]").valid();
     });
 
     jQuery(document).on('click',"button[type=submit]", function (e) {
@@ -195,5 +216,8 @@ $docModel = Mage::getSingleton("ghregulation/regulation_document");
         font-size: 12px;
         font-weight: normal;
         line-height: 1 !important;
+    }
+    .submit-tooltip-wrapper {
+        display: inline-block;
     }
 </style>

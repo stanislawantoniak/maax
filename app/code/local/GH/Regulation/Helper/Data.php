@@ -8,8 +8,6 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     const REGULATION_DOCUMENT_FOLDER = "vendor_regulation";
     const REGULATION_DOCUMENT_ADMIN_FOLDER = "admin_regulation";
 
-    const REGULATION_DOCUMENT_MAX_SIZE = 5; //MB
-
     const REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE = 'single';
     const REGULATION_DOCUMENT_VENDOR_ROLE_PROXY  = 'proxy';
 
@@ -57,6 +55,8 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
     public function saveRegulationDocument($file, $folder, $allowedRegulationDocumentTypes, $useRandom = true)
     {
         $_helper = Mage::helper("ghregulation");
+        /* @var $ghCommonHelper GH_Common_Helper_Data */
+        $ghCommonHelper = Mage::helper('ghcommon');
         $result = array("status" => 0, "message" => "", "content" => array());
 
         $tmpName = $file["tmp_name"];
@@ -68,8 +68,8 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             $result = array("status" => 0, "message" => $_helper->__("File must be JPG, PNG or PDF"));
             return $result;
         }
-        if (round($size / (1024*1024), 1) >= self::REGULATION_DOCUMENT_MAX_SIZE) { //5MB
-            $result = array("status" => 0, "message" => $_helper->__("File too large. File must be less than %sMB.", GH_Regulation_Helper_Data::REGULATION_DOCUMENT_MAX_SIZE));
+        if ($size >= $ghCommonHelper->getMaxUploadFileSize()) { //5MB
+            $result = array("status" => 0, "message" => $_helper->__("File too large. File must be less than %sMB.", round($ghCommonHelper->getMaxUploadFileSize() / (1024*1024), 1)));
             return $result;
         }
 

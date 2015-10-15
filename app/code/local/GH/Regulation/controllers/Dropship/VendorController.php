@@ -16,12 +16,13 @@ class GH_Regulation_Dropship_VendorController
      */
     public function acceptAction()
     {
+        $helper = $this->getHelperData();
         try {
             $id = $this->getRequest()->getParam('id', false);   // Vendor id
             $key = $this->getRequest()->getParam('key', false); // Token
 
             if (empty($id) || empty($key)) {
-                throw new Exception($this->__('Bad request.'));
+                throw new Exception('Bad request.');
             }
             try {
 
@@ -33,7 +34,7 @@ class GH_Regulation_Dropship_VendorController
                     throw new Exception('Failed to load vendor by id.');
                 }
                 if ($vendor->getConfirmation() !== $key) {
-                    throw new Exception($this->__('Wrong confirmation key.'));
+                    throw new Exception('Wrong confirmation key.');
                 }
                 //Check if token not expired
 
@@ -61,7 +62,7 @@ class GH_Regulation_Dropship_VendorController
             $this->_redirect('udropship/vendor/');
             return;
         }
-        return $this->_renderPage();
+        $this->_renderPage(null, null, $helper->__("Accept regulation"));
     }
 
     /**
@@ -77,8 +78,7 @@ class GH_Regulation_Dropship_VendorController
         $vendorId = $req->getPost('vendor', false);
         $acceptRegulations = $req->getPost('accept_regulations', false);
         $acceptRegulationsRole = $req->getPost('accept_regulations_role', false);
-        /** @var GH_Regulation_Helper_Data $_helper */
-        $_helper = Mage::helper("ghregulation");
+        $_helper = $this->getHelperData();
 
         try {
             /* @var $vendor Zolago_Dropship_Model_Vendor */
@@ -182,6 +182,7 @@ class GH_Regulation_Dropship_VendorController
             // Send accept email
             Mage::helper('umicrosite')->sendVendorRegulationAcceptedEmail($vendor);
             $this->_redirect('udropship/vendor/regulationaccepted');
+            /** @see GH_Regulation_Dropship_VendorController::regulationacceptedAction() */
         } catch (GH_Common_Exception $e) {
             if ($e->getMessage())
                 $this->_getSession()->addError($_helper->__($e->getMessage()));
@@ -207,8 +208,7 @@ class GH_Regulation_Dropship_VendorController
         if ($documentId) {
             /** @var Gh_Regulation_Model_Regulation_Document $document */
             $document = Mage::getModel('ghregulation/regulation_document')->load($documentId);
-            /** @var GH_Regulation_Helper_Data $helper */
-            $helper = Mage::helper('ghregulation');
+            $helper = $this->getHelperData();
 
             /** @var Zolago_Dropship_Model_Session $vendorSession */
             $vendorSession = Mage::getSingleton('udropship/session');
@@ -348,9 +348,7 @@ class GH_Regulation_Dropship_VendorController
      */
     public function saveVendorDocumentPostAction()
     {
-        /** @var GH_Regulation_Helper_Data $helper */
-        $helper = Mage::helper("ghregulation");
-
+        $helper = $this->getHelperData();
         $req = $this->getRequest();
         $vendorId = $req->getParam('vendor', false);
         $key = $req->getParam('key', false);
@@ -403,7 +401,7 @@ class GH_Regulation_Dropship_VendorController
             } else {
                 $result = array(
                     "status"  => 0,
-                    "content" => $result["message"]
+                    "content" => $saveData["message"]
                 );
             }
         }
@@ -413,14 +411,56 @@ class GH_Regulation_Dropship_VendorController
             ->setBody(Mage::helper('core')->jsonEncode($result));
     }
 
-
-    public function regulationacceptedAction(){
-        return $this->_renderPage();
+    public function regulationacceptedAction() {
+        $helper = $this->getHelperData();
+        $this->_renderPage(null, null, $helper->__("Regulations accepted"));
     }
 
-    public function regulationexpiredAction()
+    public function regulationexpiredAction() {
+        $helper = $this->getHelperData();
+        $this->_renderPage(null, null, $helper->__("Regulations expired"));
+    }
+
+    /**
+     * @return GH_Regulation_Helper_Data
+     */
+    public function getHelperData() {
+        return Mage::helper("ghregulation");
+    }
+
+    protected function _renderPage($handles=null, $active=null, $title = null)
     {
-        return $this->_renderPage();
-    }
+        $this->_setTheme();
+        $this->loadLayout($handles);
+        $root = $this->getLayout()->getBlock('root');
 
+        if ($root) {
+            $root->addBodyClass('udropship-vendor');
+        }
+        if ($active && ($header = $this->getLayout()->getBlock('header'))) {
+            $header->setActivePage($active);
+        }
+        if (!empty($title)) {
+            $head = $this->getLayout()->getBlock('head');
+            $head->setTitle($title);
+        }
+        /*
+        if (version_compare(Mage::getVersion(), '1.4.0.0', '<')) {
+            $pager = $this->getLayout()->getBlock('shipment.grid.toolbar');
+            if (!$pager) {
+                $pager = $this->getLayout()->getBlock('product.grid.toolbar');
+            }
+            if ($pager) {
+                $pager->setTemplate('page/html/pager13.phtml');
+            }
+        }
+        */
+        $this->_initLayoutMessages('udropship/session');
+        if (is_array($this->_extraMessageStorages) && !empty($this->_extraMessageStorages)) {
+            foreach ($this->_extraMessageStorages as $ilm) {
+                $this->_initLayoutMessages($ilm);
+            }
+        }
+        $this->renderLayout();
+    }
 }
