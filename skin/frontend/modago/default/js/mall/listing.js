@@ -162,7 +162,8 @@ Mall.listing = {
 				query: this.getQuery(),
 				sort: this.getSort(),
 				dir: this.getDir(),
-				url: document.location.href
+				url: document.location.href,
+				document_title: document.title
 			},
 			ajaxData = Mall.listing.getQueryParamsAsArray(),
 			ajaxKey = Mall.listing.getAjaxHistoryKey(ajaxData),
@@ -616,19 +617,23 @@ Mall.listing = {
 		if(!window.onpopstate) {
 			var self = this;
 			window.onpopstate = function() {
-				//uncheck all filters
-				jQuery("input[type=checkbox]").prop('checked', false);
 				//check url for selected filters
 				var filters = self._getUrlObjects(),
 					sort = false,
 					dir = false;
 				if (Object.keys(filters).length) {
+					//uncheck all filters
+					jQuery("input[type=checkbox]").prop('checked', false);
 					for (var filter in filters) {
 						if(filters.hasOwnProperty(filter)) {
 							for (var key in filters[filter]) {
 								if(filters[filter].hasOwnProperty(key)) {
 									var value = filters[filter][key];
 									if (key.substring(0, 2) == 'fq') {
+										var importantKeyPart = key.match(/fq\[(.*?)\]/)[1];
+										if(typeof importantKeyPart != "undefined") {
+											key = "fq["+importantKeyPart+"][]";
+										}
 										jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
 										if (key == "fq[price]") {
 											// Set values of range
@@ -656,8 +661,8 @@ Mall.listing = {
 						self.setSort(sort);
 						self.setDir(dir);
 					} else {
-						self.setSort('');
-						self.setDir('');
+						self.setSort('wishlist_count');
+						self.setDir('desc');
 					}
 					self.setSortSelect();
 				}
@@ -819,6 +824,12 @@ Mall.listing = {
 		// Set pushstate
 		this._current_url = content.url;
 		this._pushHistoryState(ajaxKey,ajaxData);
+
+		if(content.document_title.length && content.document_title != document.title) {
+			try {
+				document.getElementsByTagName('title')[0].innerHTML = content.document_title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
+			} catch(e){}
+		}
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
@@ -1362,9 +1373,11 @@ Mall.listing = {
 		var start = Mall.listing.getStart();
 
 		if (!Mall.isGoogleBot()) {
-			Mall.listing.pageChangeForceObject = {
-				start: start
-			};
+			if(start) {
+				Mall.listing.pageChangeForceObject = {
+					start: start
+				};
+			}
 
 			var params = Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
 				ajaxKey = Mall.listing.getAjaxHistoryKey(params);
@@ -1372,6 +1385,9 @@ Mall.listing = {
 			if(typeof Mall.listing._ajaxCache[ajaxKey] != "undefined") {
 				Mall.listing.goToNextPage(Mall.listing._ajaxCache[ajaxKey]);
 			} else {
+				if(!start) {
+					params["start"] = 1;
+				}
 
 				Mall.listing.showAjaxLoading();
 				// Ajax load
@@ -1410,7 +1426,7 @@ Mall.listing = {
 			Mall.listing.hideAjaxLoading();
 
 		} else {
-			console.log("Something went wrong, try again later | appendToQueueCallback");
+			console.log("Something went wrong, please contact support");
 		}
 	},
 
@@ -1983,12 +1999,17 @@ Mall.listing = {
 			names = [];
 
 		data.forEach(function(entry) {
-			out.push(entry.name+"="+entry.value);
-			names.push(entry.name);
+			if((entry.name == 'start' && entry.value > 1) || entry.name != 'start') {
+				out.push(entry.name + "=" + entry.value);
+				names.push(entry.name);
+			}
 		});
 
 		if(names.indexOf("start") == -1) {
-			out.push("start="+Mall.listing.getStart());
+			var start = Mall.listing.getStart();
+			if (start > 1) {
+				out.push("start=" + start);
+			}
 		}
 
 		return out.join("|");
@@ -2296,9 +2317,8 @@ Mall.listing = {
 	getStart: function() {
 		var href = Mall.listing.pageChangeUri ? Mall.listing.pageChangeUri : window.location.href;
 		var start = Mall.getUrlPart('start',href);
-		start = start ? start : 1;
 
-		return start;
+		return start ? start : 1;
 	},
 
 	/* Functions that set and get current category id */

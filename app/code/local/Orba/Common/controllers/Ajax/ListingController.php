@@ -86,6 +86,23 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
         }
         Mage::register($categoryWithFiltersKey, $url);
 
+	    //title
+	    $campaign = $category->getCurrentCampaign();
+	    if($campaign){
+		    $title = $campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName();
+	    } else {
+		    /** @var GH_Rewrite_Helper_Data $_rewriteHlp */
+		    $_rewriteHlp = Mage::helper("ghrewrite");
+		    $rewriteData = $_rewriteHlp->getCategoryRewriteData();
+		    if ($rewriteData && count($rewriteData) && isset($rewriteData['title']) && !empty($rewriteData['title'])) {
+			    $title = $rewriteData['title'];
+		    } elseif($category->getMetaTitle()) {
+			    $title = $category->getMetaTitle();
+		    } else {
+			    $title = Mage::app()->getStore()->getName();
+		    }
+	    }
+
 /*        $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
         $path = $breadcrumbs->getPathProp();
         $title = array();
@@ -109,7 +126,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             "url" => $url,
             "header" => $this->_cleanUpHtml($header->toHtml()),
             "filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
-            //"category_head_title" => $title, //todo: fix titles for pushstates
+            "document_title" => $title,
             "reload_to_cms" => $reloadToCms,
             "listing_type" => $type
         ));
