@@ -154,12 +154,9 @@ Mall.listing = {
 	_rediscoverCache: function(){
 		var content = {
 				filters: this.getFilters().prop("outerHTML"),
-				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
 				pager: this.getPager().prop("outerHTML"),
-                category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
                 header: this.getHeader().prop("outerHTML"),
-                category_head_title: jQuery("head title").html(),
 				products: this.getInitProducts(),
 				total: this.getTotal(),
 				query: this.getQuery(),
@@ -810,33 +807,10 @@ Mall.listing = {
 			this.initFilterEvents(filters);
 		}
 
-
 		var header = jQuery(content.header);
 		if(header.length) {
 			this.getHeader().replaceWith(jQuery(content.header));
 		}
-
-		var breadcrumbs = this.getHeader().find('#breadcrumbs-header'),
-			breadcrumbsContent = content.breadcrumbs;
-
-		if(typeof breadcrumbsContent != "undefined" && breadcrumbsContent.length) {
-			this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
-		}
-
-		var active = jQuery(content.active);
-
-		if(active.length) {
-			this.getActive().replaceWith(jQuery(content.active));
-		}
-
-
-        //Category with filters
-        var categoryWithFilters = jQuery(content.category_with_filters);
-        this.getCategoryWithFilters().replaceWith(categoryWithFilters);
-
-        //category_head_title
-        var category_head_title = content.category_head_title;
-        jQuery("head title").html(category_head_title);
 
 		// Finally product
 		this.replaceProducts(content);
