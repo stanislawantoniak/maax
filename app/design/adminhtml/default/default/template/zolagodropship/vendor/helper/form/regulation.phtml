@@ -8,6 +8,9 @@ $_htmlClass = $_element->getClass();
 $_htmlName = $_element->getName();
 $_readonly = $_element->getReadonly();
 $_value = $_element->getValue();
+krumo(json_decode($_value));
+
+$_hlp = Mage::helper("ghregulation");
 ?>
 
 <input id="<?php echo $_htmlId; ?>"
@@ -18,9 +21,24 @@ $_value = $_element->getValue();
 
 <?php if (!empty($_value)): ?>
     <?php $_valueDecoded = json_decode($_value); ?>
+    <div><b>IP: <?php echo $_valueDecoded->IP; ?></b></div>
+
+    <div>
+        <?php switch ($_valueDecoded->accept_regulations_role) {
+            case GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE:
+                echo $_hlp->__("I am authorized to represent single");
+                break;
+            case GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_PROXY:
+                echo $_hlp->__("I have full powers to accept the regulations MODAGO.");
+                break;
+        } ?>
+    </div>
     <?php if (isset($_valueDecoded->document_name)) : ?>
-    <a href="<?php echo Mage::helper("ghregulation")->getVendorUploadedDocumentUrlForAdmin(Mage::app()->getRequest()->getParam("id"), $_valueDecoded->document_name); ?>">
-        <?php echo $_valueDecoded->document_name; ?>
-    </a>
+        <div>
+            <b><?php echo $_hlp->__("Scan of regulations"); ?></b>
+            <a href="<?php echo Mage::helper("ghregulation")->getVendorUploadedDocumentUrlForAdmin(Mage::app()->getRequest()->getParam("id"), $_valueDecoded->document_name); ?>">
+                <?php echo $_valueDecoded->document_name; ?>
+            </a>
+        </div>
     <?php endif; ?>
 <?php endif; ?>
