@@ -32,7 +32,7 @@ $_hlp = Mage::helper("ghregulation");
                 break;
         } ?>
     </div>
-    <?php if (isset($_valueDecoded->document_name)) : ?>
+    <?php if (!empty($_valueDecoded->document_name)) : ?>
         <div>
             <b><?php echo $_hlp->__("Scan of regulations"); ?></b>
             <a href="<?php echo Mage::helper("ghregulation")->getVendorUploadedDocumentUrlForAdmin(Mage::app()->getRequest()->getParam("id"), $_valueDecoded->document_name); ?>">
