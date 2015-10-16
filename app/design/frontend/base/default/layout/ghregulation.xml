@@ -47,6 +47,10 @@
             <action method="setTemplate">
                 <template>unirgy/dropship/vendor/header_reg.phtml</template>
             </action>
+            <action method="setData">
+                <name>disable_swich_locale</name>
+                <value>1</value>
+            </action>
         </reference>
         <reference name="content">
             <block type="ghregulation/dropship_regulation_accept"
@@ -67,6 +71,10 @@
         <reference name="header">
             <action method="setTemplate">
                 <template>unirgy/dropship/vendor/header_reg.phtml</template>
+            </action>
+            <action method="setData">
+                <name>disable_swich_locale</name>
+                <value>1</value>
             </action>
         </reference>
         <reference name="content">
