@@ -74,7 +74,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         if (!empty($name)) {
-            $newName = $this->cleanFileName($name);
+            $newName = GH_Common_Helper_Data::cleanFileName($name);
             $image = md5($newName . ($useRandom ? mt_rand() : ''));
             $safeFolderPath = $image[0] . "/" . $image[1] . "/";
 
@@ -83,10 +83,10 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             $path = $folder . DS . $safeFolderPath . $newName;
             $fullPath = Mage::getBaseDir('media') . DS . $path;
             $result = array("status" => 1, "content" => array(
-                "path"      => $path,
+                "path" => $path,
                 "full_path" => $fullPath,
-                "name"      => $name,
-                "new_name"  => $newName));
+                "name" => $name,
+                "new_name" => $newName));
             try {
                 move_uploaded_file($tmpName, $fullPath);
             } catch (Exception $e) {
@@ -295,18 +295,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
-    /**
-     * Clean file name
-     * @param $string
-     * @return mixed
-     */
-    public static function cleanFileName($string)
-    {
-        $string = str_replace(' ', '_', $string); // Replaces all spaces with hyphens.
-        $string = preg_replace('/[^.A-Za-z0-9\-\_]/', '', $string); // Removes special chars.
-        $string = preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
-        return preg_replace('/_+/', '_', $string); // Replaces multiple underscores with single one.
-    }
+
 
     /**
      * Return url for file uploaded by vendor on regulation acceptation steep

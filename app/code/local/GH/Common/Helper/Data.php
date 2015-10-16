@@ -24,4 +24,18 @@ class GH_Common_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $val;
     }
+
+
+    /**
+     * Clean file name
+     * @param $string
+     * @return mixed
+     */
+    public static function cleanFileName($string)
+    {
+        $string = str_replace(' ', '_', $string); // Replaces all spaces with hyphens.
+        $string = preg_replace('/[^.A-Za-z0-9\-\_]/', '', $string); // Removes special chars.
+        $string = preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+        return preg_replace('/_+/', '_', $string); // Replaces multiple underscores with single one.
+    }
 }
