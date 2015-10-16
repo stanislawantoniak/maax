@@ -10,7 +10,10 @@ $_readonly = $_element->getReadonly();
 $_value = $_element->getValue();
 ?>
 
-<input id="<?php echo $_htmlId; ?>" name="<?php echo $_htmlName; ?>" value='<?php echo $_value; ?>' class=""
+<input id="<?php echo $_htmlId; ?>"
+       name="<?php echo $_htmlName; ?>"
+       value='<?php echo $_value; ?>'
+       class="<?php echo $_htmlClass; ?>"
        type="hidden"/>
 
 <?php if (!empty($_value)): ?>
