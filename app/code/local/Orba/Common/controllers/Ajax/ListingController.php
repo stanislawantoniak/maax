@@ -127,6 +127,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             "header" => $this->_cleanUpHtml($header->toHtml()),
             "filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "document_title" => $title,
+	        "category_with_filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
             "reload_to_cms" => $reloadToCms,
             "listing_type" => $type
         ));

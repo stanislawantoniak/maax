@@ -156,6 +156,7 @@ Mall.listing = {
 				filters: this.getFilters().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
 				pager: this.getPager().prop("outerHTML"),
+                category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
                 header: this.getHeader().prop("outerHTML"),
 				products: this.getInitProducts(),
 				total: this.getTotal(),
@@ -816,6 +817,10 @@ Mall.listing = {
 		if(header.length) {
 			this.getHeader().replaceWith(jQuery(content.header));
 		}
+
+		//Category with filters
+		var categoryWithFilters = jQuery(content.category_with_filters);
+		this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
 		// Finally product
 		this.replaceProducts(content);
