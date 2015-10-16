@@ -106,6 +106,22 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     /**
+     * Clean product name:
+     * - replace multiple space with single one
+     * - trim
+     * - escape html
+     *
+     * @param $text
+     * @return string
+     */
+    public static function cleanProductName($text) {
+        $text = preg_replace('/ +/', ' ', $text);
+        $text = trim($text);
+        $text = Mage::helper('core')->escapeHtml($text);
+        return $text;
+    }
+
+    /**
      * return shorted to $n letters escaped name of product for visual purpose
      *
      * @param $name
@@ -120,7 +136,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $productName;
     }
-    
+
     /**
      * prepare move up url for category including landing page context
      * @param Mage_Catalog_Model_Category $category

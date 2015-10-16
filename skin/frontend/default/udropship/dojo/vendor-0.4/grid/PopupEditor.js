@@ -1,16 +1,15 @@
 define([
-	"dojo/_base/declare",
-	"put-selector/put",
-	"dojo/on",
-	"dojo/query",
-    "dojo/_base/lang",
-	"dojo/dom-class",
-	"dojo/query",
-	"dojo/dom-style",
-	"dojo/NodeList-traverse",
-	"dojo/Evented",
-	"dojo/Deferred"
-], function(declare, put, on, query, lang, domClass, query, domStyle, nodeList, Evented, Deferred){
+	"dojo/_base/declare",    // declare
+	"put-selector/put",      // put
+	"dojo/on",               // on
+	"dojo/query",            // query
+    "dojo/_base/lang",       // lang
+	"dojo/dom-class",        // domClass
+	"dojo/dom-style",        // domStyle
+	"dojo/NodeList-traverse",// nodeList
+	"dojo/Evented",          // Evented
+	"dojo/Deferred"          // Deferred
+], function(declare, put, on, query, lang, domClass, domStyle, nodeList, Evented, Deferred){
 	
 	var PLACEMENT_SCROLLER = "dgrid-scroller";
 	var EDITOR_CLASS = "dgrid-editors";
@@ -42,18 +41,20 @@ define([
 		 */
 		constructor: function(column, placement){
 			var placementDom,
-				self = this;
+				self = this,
+                parentColumnFieldName;
 			
 			this.column = column;
 			this.grid = column.grid;
 			
 			if(column.parentColumn){
 				this.parentColumn = column.parentColumn;
+                parentColumnFieldName = ".editor-field-" + column.parentColumn.field;
 			}else{
 				this.parentColumn = column;
 			}
 			
-			this.content = put("div.editor.hidden");
+			this.content = put("div.editor.hidden" + parentColumnFieldName);
 			
 			this._close = put("a.close", "×");
 			this._form = this._buildForm();
@@ -104,8 +105,12 @@ define([
             }
 
 
-			if(this.parentColumn.type!="multiselect"){
-				this.setValue(cellObj.row.data[this.column.field]);
+			if(this.parentColumn.type!="multiselect") {
+                var value = cellObj.row.data[this.column.field];
+                if (this.parentColumn.htmlspecialcharsDecode) {
+                    value = jQuery('<textarea>').html(value).text(); // Trick for htmlspecialchars_decode
+                }
+				this.setValue(value);
 			}else{
 				this.setValue(null);
 			}
@@ -249,17 +254,37 @@ define([
         },
 
         /**
+         * Return array of blocked elements for mass actions
+         * Common use in use-selection or use-save-as-rule
+         *
+         * @returns {Array}
+         */
+        getBlockedFieldForMass: function() {
+            var attr = [];
+            attr.push('name');// Product name attr
+            return attr;
+        },
+
+        /**
+         * Return true if attr is blocked for mass actions
+         * @returns {boolean}
+         */
+        isAttrNotBlockedForMass: function() {
+            return this.getBlockedFieldForMass().indexOf(this.column.parentColumn.field) != -1;
+        },
+
+        /**
          * @returns {Boolean|boolean}
          */
 		canShowUseSelection: function(){
-			return this._canShowByCheckAllAndSelectedIds();
+			return this._canShowByCheckAllAndSelectedIds() && !this.isAttrNotBlockedForMass();
 		},
 
         /**
          * @returns {Boolean|boolean}
          */
         canShowSaveAsRule: function() {
-            return this._canShowByCheckAllAndSelectedIds();
+            return this._canShowByCheckAllAndSelectedIds() && !this.isAttrNotBlockedForMass();
         },
 
 		/**

@@ -95,6 +95,11 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		if($columnObject->getType() == "price"){
 			$out['currencyCode'] = $columnObject->getCurrencyCode();
 		}
+        // Force decode htmlspecialchars input value in grid editor
+        /** @see skin/frontend/default/udropship/dojo/vendor-0.4/grid/PopupEditor.js::open() */
+        if ($columnObject->getHtmlspecialcharsDecode()) {
+            $out['htmlspecialcharsDecode'] = true;
+        }
 		
 		if($columnObject->getFilter()!==false){
 			

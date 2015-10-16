@@ -360,8 +360,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		// Collect validation data
 		$notAllowed = array();
 		$missings = array();
-		$childProds = array();
-		foreach($attributesData as $attributeCode=>$value){		    
+		$descriptionChildProds = array();
+		$nameChildProds = array();
+        /** @var Zolago_Catalog_Model_Resource_Product $resProduct */
+        $resProduct = Mage::getResourceModel('catalog/product');
+		foreach($attributesData as $attributeCode=>$value){
 			$attribute = $this->getGridModel()->getAttribute($attributeCode);
 			$attributesObjects[$attributeCode] = $attribute;
 			// special check for brandshop
@@ -381,13 +384,21 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			        }
 			    }			    
 			}
+            // special check for description status
 			if ($attributeCode == 'description_status') {
 			    // add child 
-			    $list = Mage::getResourceModel('catalog/product')->getRelatedProducts($productIds);
+			    $list = $resProduct->getRelatedProducts($productIds);
 			    foreach ($list as $item) {
-			        $childProds[$item['product_id']] = $item['product_id'];
+                    $descriptionChildProds[$item['product_id']] = $item['product_id'];
 			    }
                 			    
+            }
+            // special check for product name
+            if ($attributeCode == 'name') {
+                $list = $resProduct->getRelatedProducts($productIds);
+                foreach ($list as $item) {
+                    $nameChildProds[$item['product_id']] = $item['product_id'];
+                }
             }
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
@@ -462,15 +473,35 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			}
 		}	
 		// if children exists update the children (only description_status)
-		if ($childProds) {
+		if ($descriptionChildProds) {
 		    $childAttributes = array(
 		        'description_status' => $attributesData['description_status']
             );
-            
 	    	Mage::getSingleton('catalog/product_action')
-    			->updateAttributes($childProds, $childAttributes, $store->getId());
-		}	
-		// Write attribs & make reindex
+    			->updateAttributes($descriptionChildProds, $childAttributes, $store->getId());
+		}
+        // if children exists update the children (only product name)
+        if ($nameChildProds) {
+            // Simple collection
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $collection */
+            $collection = Mage::getResourceModel("zolagocatalog/product_collection");
+            $collection->addFieldToFilter("entity_id", array("in" => $nameChildProds));
+            $collection->setStoreId($store->getId());
+            $collection->joinAttribute('size', 'catalog_product/size', 'entity_id', null, 'left');
+            $collection->load();
+            // make produt name for simple products like: <name from configurable><space><size text>
+            $sizeAttr = $this->getGridModel()->getAttribute('size');
+            $attrSource = $sizeAttr->getSource();
+            foreach ($collection as $product) {
+                $size = $attrSource->getOptionText($product->getData('size'));
+                $childAttributes = array(
+                    'name' => $attributesData['name'] . ' ' . $size
+                );
+                Mage::getSingleton('catalog/product_action')
+                    ->updateAttributes(array($product->getId()), $childAttributes, $store->getId());
+            }
+        }
+        // Write attribs & make reindex
 		Mage::getSingleton('catalog/product_action')
 			->updateAttributes($productIds, $attributesData, $store->getId());
 		
@@ -490,7 +521,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
-					$attributeData[$attribute] = ($attribute == "description" || $attribute == "short_description") ? Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]) : $data[$attribute];
+                    if ($attribute == "description" || $attribute == "short_description") {
+                        // Clear descriptions
+                        $attributeData[$attribute] = Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]);
+                    } elseif ($attribute == "name") {
+                        // Clear product name
+                        $attributeData[$attribute] = Mage::helper("zolagocatalog")->cleanProductName($data[$attribute]);
+                    }
 				}
 			}
 			if($attributeData){

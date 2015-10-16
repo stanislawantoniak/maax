@@ -34,15 +34,16 @@ class GH_AttributeRules_Model_Observer
         if (!Mage::getSingleton('zolagocatalog/vendor_product_grid')->isAttributeEditable($attribute) || ($attribute->getIsRequired() && trim($attributeValue) == "")) {
             return; // Skip not editable on grid or empty value when required
         }
+        if (Mage::helper("zolagocatalog/attribute")->isAttrNotBlockedForMass($attributeCode)) {
+            return; // Skip blocked attribute for mass change (like product name)
+        }
 
-        if (
-            //IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode [~remove mode])
+        if (//IF multiselect SET rules only for "add" and "set" mode (Do NOT save for "sub" mode [~remove mode])
             ($frontendInput == 'multiselect' && !in_array($attributeMode, array("add", "set")))
             ||
             //Do not save empty value if mode "add"
             (empty($attributeValue) && $frontendInput == 'multiselect' && in_array($attributeMode, array("add")))
         ) {
-
             return;
         }
 

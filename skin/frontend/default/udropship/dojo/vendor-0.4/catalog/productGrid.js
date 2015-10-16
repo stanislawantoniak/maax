@@ -1,42 +1,41 @@
 define([
-	"dgrid/Grid",
-	"dgrid/OnDemandGrid",
-	"dgrid/extensions/Pagination",
-	"dgrid/extensions/CompoundColumns",
-	"vendor/grid/ColumnSet",
-    'vendor/grid/Selection',
-    'dgrid/Selector',
-	"dgrid/Keyboard",
-	"dojo/_base/declare",
-	"dojo/dom",
-	"dojo/dom-construct",
-	"dojo/on",
-	"dojo/query",
-	"put-selector/put",
-	"dojo/dom-class",
-	"dojo/request/xhr",
+	"dgrid/Grid",                       // BaseGrid
+	"dgrid/OnDemandGrid",               // Grid
+	"dgrid/extensions/Pagination",      // Pagination
+	"dgrid/extensions/CompoundColumns", // CompoundColumns
+	"vendor/grid/ColumnSet",            // ColumnSet
+    'vendor/grid/Selection',            // Selection
+    'dgrid/Selector',                   // Selector
+	"dgrid/Keyboard",                   // Keyboard
+	"dojo/_base/declare",               // declare
+	"dojo/dom",                         // dom
+	"dojo/dom-construct",               // domConstruct
+	"dojo/on",                          // on
+	"dojo/query",                       // query
+	"put-selector/put",                 // put
+	"dojo/dom-class",                   // domClass
+	"dojo/request/xhr",                 // xhr
 	// stores 
-	"dstore/Rest",
-	"dstore/Trackable",
-	"dstore/Cache",
-	
-    "dojo/_base/lang",
-	
-	"vendor/grid/filter",
-	"vendor/grid/QueryGrid",
-	"vendor/grid/PopupEditor",
-	'vendor/catalog/productGrid/mass/status',
-	'vendor/catalog/productGrid/mass/attribute',
-	'vendor/catalog/productGrid/mass/attributeRules',
-	"vendor/misc"
+	"dstore/Rest",                      // Rest
+	"dstore/Trackable",                 // Trackable
+	"dstore/Cache",                     // Cache
+    "dojo/_base/lang",                  // lang
+	"vendor/grid/filter",               // filter
+	"vendor/grid/QueryGrid",            // QueryGrid
+	"vendor/grid/PopupEditor",          // PopupEditor
+	'vendor/catalog/productGrid/mass/status',        // status
+	'vendor/catalog/productGrid/mass/attribute',     // attrbiute
+	'vendor/catalog/productGrid/mass/attributeRules',// attributeRules
+	"vendor/misc"//misc
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, 
 	Selection, Selector, Keyboard, declare, dom, domConstruct, on, query, 
 	put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid, 
 	PopupEditor, status, attrbiute, attributeRules, misc){
 	
-	var grid,store,
+	var grid,
+        store,
 		massAttribute,
-		editDbClick = false, // Congiure click type
+		editDbClick = false, // Configure click type
 		massUrl = "/udprod/vendor_product/mass",
 		resetFilters = query("#remove-filters")[0],
 		switcher = query("#attribute_set_id")[0],
@@ -271,13 +270,13 @@ define([
 	 * @returns {string}
 	 */
 	var rendererName = function (item, value, node, options){
-		var content = put("div");
-		put(content, "p", {
+		var content = put("div.editable");
+		put(content, "p.editable", {
 			innerHTML: item.name
 		});
 		put(content, "p", {
 			innerHTML: Translator.translate("SKU") + ": " + escape(item.skuv),
-			className: "info"
+			className: "info editable"
 		});
 		put(node, content);
 	};
@@ -578,7 +577,7 @@ define([
 		}
 		// Enter click - skip all keys except enter
 		if(e instanceof KeyboardEvent){
-			if(e.keyCode==13){
+			if(e.keyCode==13){ // Enter key
 				// Prevent click if editor focused before
 				// @todo investigate event flow
 				e.preventDefault();
@@ -610,7 +609,10 @@ define([
         }
 
     };
-	
+
+    /**
+     * Closing(hiding) editors if click somewhere on page (if it's not editor and cell)
+     */
 	on(document.body, "click", function(e){
 		var el = jQuery(e.target);
 		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
@@ -628,7 +630,7 @@ define([
 				break;
 			}
 		}
-		if(e.keyCode==27 && hasOpen){
+		if(e.keyCode==27 && hasOpen){ // Escape key
 			hideAllEditors(true);
 			e.preventDefault();
 		}
@@ -661,7 +663,7 @@ define([
 			if(domClass.contains(e.target, "dgrid-selector")){
 				return;
 			}
-			if(e.keyCode==32){
+			if(e.keyCode==32){ // Space key
 				toggleRowSelection(e);
 			}
 		}else if(e instanceof MouseEvent){

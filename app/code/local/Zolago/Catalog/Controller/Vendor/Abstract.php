@@ -110,9 +110,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
                     } else {
                         $data['message']['text'] = $helper->__("Product %s can not change status to enabled.", $product->getName());
                     }
-
                     $data['message']['type']    = 'warning';
-//                    $data['message']['timeout'] = '10000';
                 } else {
                     $this->_processAttributresSave(array($productId), $attributeData, $storeId, $data);
 
