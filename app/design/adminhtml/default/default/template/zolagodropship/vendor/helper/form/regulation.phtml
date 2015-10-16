@@ -18,7 +18,9 @@ $_value = $_element->getValue();
 
 <?php if (!empty($_value)): ?>
     <?php $_valueDecoded = json_decode($_value); ?>
+    <?php if (isset($_valueDecoded->document_name)) : ?>
     <a href="<?php echo Mage::helper("ghregulation")->getVendorUploadedDocumentUrlForAdmin(Mage::app()->getRequest()->getParam("id"), $_valueDecoded->document_name); ?>">
         <?php echo $_valueDecoded->document_name; ?>
     </a>
+    <?php endif; ?>
 <?php endif; ?>
