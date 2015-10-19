@@ -44,7 +44,7 @@ class GH_Regulation_Dropship_VendorController
 
                 $docs = Mage::helper("ghregulation")->getDocumentsToAccept($vendor);
                 if (empty($docs)) {
-                    $this->_getSession()->addError("Security error");
+                    $this->_getSession()->addError(Mage::helper("zolagodropshipmicrosite")->__('Wrong confirmation key.'));
                     return $this->_redirect('udropship/vendor/');
                 }
                 //Check if token not expired
