@@ -65,7 +65,7 @@ class GH_Regulation_Dropship_VendorController
                     }
                 }
             } catch (Exception $e) {
-                throw new Exception($this->__('Wrong vendor account specified.'));
+                throw new Exception($this->__('Wrong confirmation key.'));
             }
         } catch (Exception $e) {
             // die unhappy
