@@ -127,9 +127,12 @@ class GH_Regulation_Dropship_VendorController
             $vendor->setConfirmation(null);
 
             $currentData = $vendor->getDecodedRegulationAcceptDocumentData();
-            $currentData["IP"]                      = $_SERVER['REMOTE_ADDR'];
+            $currentData["IP"] = $_SERVER['REMOTE_ADDR'];
             $currentData["accept_regulations_role"] = $acceptRegulationsRole;
-            $currentData["accept_regulations"]      = 1;
+            $currentData["accept_regulations"] = 1;
+            $currentData["accept_regulations_vendor_login"] = $vendor->getEmail();
+            $currentData["accept_regulations_declared_by_first_name"] = $this->getVendor()->getExecutiveFirstname();
+            $currentData["accept_regulations_declared_by_last_name"] = $this->getVendor()->getExecutiveLastname();
 
             if ($acceptRegulationsRole == GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE) {
                 // If he upload something and change his mind
