@@ -431,7 +431,7 @@ class GH_Regulation_Dropship_VendorController
             return $return;
         }
         $helper = $this->getHelperData();
-        $this->_renderPage(null, null, $helper->__("Regulations accepted"));
+        $this->_renderPage(null, null, $helper->__("Thank you for accepting regulations"));
         /** @see app/design/frontend/base/default/template/ghregulation/dropship/regulation/accepted.phtml */
     }
 
