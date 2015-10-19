@@ -20,6 +20,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
             'legend' => $item->getName(),
         ));
         $fieldset->addType('document_list','GH_Regulation_Block_Adminhtml_Dropship_Settings_Type_List');
+        /*
         $fieldset->addField('active_'.$item->getId(),'checkbox',array(
             'label' => $hlp->__('Is active'),
             'name' => 'vendor_kind[]',            
@@ -27,6 +28,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
             'value' => $item->getRegulationKindId(),
             
         ));
+        */ 
         $fieldset->addField('typelist_'.$item->getId(),'document_list',array(
             'label' => $hlp->__('Document type list'),            
             'createUrl' => $this->getUrl('*/*/kindEdit',array('kind_id'=> $item->getId(),'id'=>$this->getRequest()->get('id'))),
@@ -42,13 +44,14 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
         $vendorId = $this->getRequest()->get('id');
         
         $list = Mage::getResourceModel('ghregulation/regulation_kind_collection');
+        /*
         $list->getSelect()->
             joinLeft(
                 array ('vendor_kind' => Mage::getSingleton('core/resource')->getTableName('ghregulation/regulation_vendor_kind')),
                 'vendor_kind.regulation_kind_id = main_table.regulation_kind_id AND vendor_kind.vendor_id = '.$vendorId,
                 array('is_active' => 'IF(ISNULL(vendor_kind.regulation_kind_id),0,1)')
             );
-        
+        */ // not use vendor_kind
         foreach ($list as $key => $item) {
             $this->_createFieldset($item);
         }

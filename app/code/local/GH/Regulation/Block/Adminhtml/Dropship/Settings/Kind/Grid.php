@@ -62,13 +62,15 @@ class Gh_Regulation_Block_Adminhtml_Dropship_Settings_Kind_Grid extends Mage_Adm
 	 * @return array
 	 */
 	protected function _getSelectedKind()
-	{
+	{	
+	    /*
 		$vendorId = $this->getVendorId();
 		$collection = Mage::getModel('ghregulation/regulation_vendor_kind')->getCollection();
 		$collection->getSelect()
 			->columns(array('regulation_kind_id'))
 			->where('main_table.vendor_id = ' . $vendorId);
-
+        */ // do not use vendor_kind
+        $collection = Mage::getResourceModel('ghregulation/regulation_kind');
 		$kinds = array();
 		foreach ($collection as $kind) {
 			$kinds[] = $kind->getData('regulation_kind_id');

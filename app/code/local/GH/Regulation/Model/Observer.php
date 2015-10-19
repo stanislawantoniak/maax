@@ -44,11 +44,11 @@ class Gh_Regulation_Model_Observer
 	public function udropship_adminhtml_vendor_edit_prepare_form($observer) {
 	}
 	public function udropship_vendor_save_after($observer) {
+	    /*
 		$front_controller = Mage::app()->getFrontController();		
 		if($front_controller->getRequest()->isPost()){			
 			$params = $front_controller->getRequest()->getParams();			
-			if(key_exists('vendor_kind', $params)){
-				
+			if(key_exists('vendor_kind', $params)){				
 				$vendor_kind = $params['vendor_kind'];
             } else {
                 $vendor_kind = array();
@@ -70,7 +70,7 @@ class Gh_Regulation_Model_Observer
     		    $connection->query($query);
     		}
 		}
-		
+		*/ // nie ustawiamy czy aktywny czy nie
 		return $this;
 
 	}
