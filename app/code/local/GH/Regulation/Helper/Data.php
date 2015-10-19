@@ -328,4 +328,13 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             'file'   => $fileName
         ));
     }
+
+
+    /**
+     * @param $vendor
+     * @return array
+     */
+    public function getDocumentsToAccept($vendor) {
+        return Mage::getResourceModel("ghregulation/regulation_document")->getDocumentsToAccept($vendor);
+    }
 }

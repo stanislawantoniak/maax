@@ -36,6 +36,12 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         try {
             /* @var $vendor Unirgy_Dropship_Model_Vendor */
             $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+            $docs = Mage::helper("ghregulation")->getDocumentsToAccept($vendor);
+            if (empty($docs))
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper("zolagodropship")->__("Vendor does not have assigned documents"));
+
+            return $this->_redirect('udropshipadmin/adminhtml_vendor/edit/', array('id' => $vendorId));
+
             $vendor->setConfirmation(md5(uniqid()));
             $vendor->setConfirmationSent(1);
             $localeTime = Mage::getModel('core/date')->timestamp(time());
