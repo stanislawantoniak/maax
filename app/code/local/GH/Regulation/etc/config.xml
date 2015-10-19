@@ -61,6 +61,11 @@
                     <file>umicrosite_regulation_accepted.html</file>
                     <type>html</type>
                 </udropship_microsite_regulation_accepted_template>
+                <udropship_microsite_regulation_confirm_template  module="umicrosite">
+                    <label>Dropship Vendor Regulation Confirm Email</label>
+                    <file>umicrosite_regulation_confirm.html</file>
+                    <type>html</type>
+                </udropship_microsite_regulation_confirm_template>
             </email>
         </template>
     </global>
