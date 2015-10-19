@@ -76,7 +76,7 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
         $first = (int)$request->getParam("start", 1);
 
         if ($first >= 1) {
-            if ($first >= $this->getTotalNum()) {
+            if ($first > $this->getTotalNum()) {
                 $first = self::DEFAULT_FIRST;
             }
             return $first;
@@ -112,7 +112,7 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
     public function getNextPageUrl()
     {
         $next = $this->getFirstNum() + $this->getLimit();
-        if ($next >= $this->getTotalNum()) {
+        if ($next > $this->getTotalNum()) {
             $next = self::DEFAULT_FIRST;
         }
         return $this->getPageUrl($next);
@@ -126,7 +126,7 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
     public function isLastEnabled()
     {
         $next = $this->getFirstNum() + $this->getLimit();
-        return ($next < $this->getTotalNum());
+        return ($next <= $this->getTotalNum());
     }
 
     public function getPagerUrl($params = array())

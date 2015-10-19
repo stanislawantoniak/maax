@@ -908,6 +908,8 @@ Mall.listing = {
 
 				self._current_url = me.attr('href');
 
+				self._removeActiveFilters = true;
+
 				if(!me.parent().hasClass('query-text-iks')) { //not search
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
@@ -1307,6 +1309,7 @@ Mall.listing = {
 		// show/hide clear button on filter select/deselect
 		var hiddenClass = 'hidden';
 		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
+			Mall.listing._removeActiveFilters = true;
 			e.preventDefault();
 			var me = jQuery(this).parents('.section'),
 				button = me.find('.action.clear');
@@ -1346,6 +1349,7 @@ Mall.listing = {
 		var clearBtnSelector = filtersId+' .action.clear a';
 		if(self.getPushStateSupport()) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				Mall.listing._removeActiveFilters = true;
 				e.preventDefault();
 				var me = jQuery(this);
 				self._current_url = me.attr('href');
