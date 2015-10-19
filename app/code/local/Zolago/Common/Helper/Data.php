@@ -36,7 +36,8 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 			if(is_null($sender)){
 				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
 			}
-
+            $templateParams['year'] = Mage::getModel('core/date')->date('Y');
+			
             /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
             /** @var Mage_Core_Model_Email_Info $emailInfo */
