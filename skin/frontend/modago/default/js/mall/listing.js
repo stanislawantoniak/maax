@@ -795,6 +795,11 @@ Mall.listing = {
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
 
+		if(typeof ajaxData == 'undefined' || typeof ajaxKey == 'undefined') {
+			ajaxData = Mall.listing.getQueryParamsAsArray();
+			ajaxKey = Mall.listing.getAjaxHistoryKey(ajaxData);
+		}
+
 		if(content.reload_to_cms){
 			//hack to reload cms page
 			window.location = content.url;
