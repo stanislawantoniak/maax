@@ -140,10 +140,14 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         $acceptDate = strtotime($vendor->getRegulationAcceptDocumentDate());
         $acceptDate = strtotime(date('Y-m-d',$acceptDate));
 
+/***********************/
+
+
         /** @var GH_Regulation_Model_Regulation_Vendor_Kind $vendorKindModel */
-        $vendorKindModel = Mage::getModel('ghregulation/regulation_vendor_kind');
+//        $vendorKindModel = Mage::getModel('ghregulation/regulation_vendor_kind');
         /** @var GH_Regulation_Model_Resource_Regulation_Vendor_Kind_Collection $vendorKindCollection */
-        $vendorKindCollection = $vendorKindModel->getCollection();
+//        $vendorKindCollection = $vendorKindModel->getCollection();
+        /* 
         $vendorKindCollection
             ->addFieldToFilter('vendor_id',$vendor->getId())
             ->getSelect()
@@ -151,7 +155,6 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
                     'gh_regulation_kind',
                     'main_table.regulation_kind_id = gh_regulation_kind.regulation_kind_id',
                     'gh_regulation_kind.name as regulation_kind_name');
-
         if($vendorKindCollection->getSize()) {
             $vendorKinds = array(); //gathers kinds assigned to vendor
             $kinds = array(); //gathers kinds names
@@ -161,6 +164,18 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             }
         } else {
             return array(); //vendor has no selected document kinds
+        }
+
+        */ // do not use vendor_kind
+        
+        
+/***************************/
+        $kindCollection = Mage::getResourceModel('ghregulation/regulation_kind_collection');
+        $vendorKinds = array();
+        $kinds = array();
+        foreach ($kindCollection as $kind) {
+            $vendorKinds[] = $kind->getRegulationKindId();
+            $kinds[$kind->getRegulationKindId()] = $kind->getName();
         }
 
         /** @var GH_Regulation_Model_Regulation_Type $typeModel */
