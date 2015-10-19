@@ -34,6 +34,7 @@ class GH_Regulation_Model_Resource_Regulation_Document extends Mage_Core_Model_R
                 break;
             }
         }
+        ksort($result);
 
         if ($asCollection) {
             /** @var GH_Regulation_Model_Resource_Regulation_Document_Collection $coll */
