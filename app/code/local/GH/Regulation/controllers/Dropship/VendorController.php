@@ -41,6 +41,12 @@ class GH_Regulation_Dropship_VendorController
                 if ($vendor->getConfirmation() !== $key) {
                     throw new Exception('Wrong confirmation key.');
                 }
+
+                $docs = Mage::helper("ghregulation")->getDocumentsToAccept($vendor);
+                if (empty($docs)) {
+                    $this->_getSession()->addError(Mage::helper("zolagodropshipmicrosite")->__('Wrong confirmation key.'));
+                    return $this->_redirect('udropship/vendor/');
+                }
                 //Check if token not expired
 
                 if ($vendor->getConfirmation() && $vendor->getConfirmationSent()) {
@@ -121,9 +127,12 @@ class GH_Regulation_Dropship_VendorController
             $vendor->setConfirmation(null);
 
             $currentData = $vendor->getDecodedRegulationAcceptDocumentData();
-            $currentData["IP"]                      = $_SERVER['REMOTE_ADDR'];
+            $currentData["IP"] = $_SERVER['REMOTE_ADDR'];
             $currentData["accept_regulations_role"] = $acceptRegulationsRole;
-            $currentData["accept_regulations"]      = 1;
+            $currentData["accept_regulations"] = 1;
+            $currentData["accept_regulations_vendor_login"] = $vendor->getEmail();
+            $currentData["accept_regulations_declared_by_first_name"] = $vendor->getExecutiveFirstname();
+            $currentData["accept_regulations_declared_by_last_name"] = $vendor->getExecutiveLastname();
 
             if ($acceptRegulationsRole == GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE) {
                 // If he upload something and change his mind
