@@ -886,6 +886,7 @@ Mall.listing = {
 		}
 	},
 
+	_removeActiveFilters: false, //tells ajax cache key builder to drop start parameter
 	initActiveEvents: function(scope) {
 		scope = scope || Mall.listing.getActiveId();
 		var self = this,
@@ -921,6 +922,7 @@ Mall.listing = {
 			});
 
 			remove.click(function() {
+				Mall.listing._removeActiveFilters = true;
 				var me = jQuery(this);
 
 				self._current_url = me.attr('href');
@@ -2012,17 +2014,21 @@ Mall.listing = {
 			names = [];
 
 		data.forEach(function(entry) {
-			if((entry.name == 'start' && entry.value > 1) || entry.name != 'start') {
+			if((entry.name == 'start' && entry.value > 1 && !Mall.listing._removeActiveFilters) || entry.name != 'start') {
 				out.push(entry.name + "=" + entry.value);
 				names.push(entry.name);
 			}
 		});
 
-		if(names.indexOf("start") == -1) {
+		if(names.indexOf("start") == -1 && !Mall.listing._removeActiveFilters) {
 			var start = Mall.listing.getStart();
 			if (start > 1) {
 				out.push("start=" + start);
 			}
+		}
+
+		if(Mall.listing._removeActiveFilters) {
+			Mall.listing._removeActiveFilters = false; //handles all filters removal and drops the start parameter from ajaxCache key
 		}
 
 		return out.join("|");
