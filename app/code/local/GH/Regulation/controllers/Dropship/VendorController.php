@@ -41,6 +41,12 @@ class GH_Regulation_Dropship_VendorController
                 if ($vendor->getConfirmation() !== $key) {
                     throw new Exception('Wrong confirmation key.');
                 }
+
+                $docs = Mage::helper("ghregulation")->getDocumentsToAccept($vendor);
+                if (empty($docs)) {
+                    $this->_getSession()->addError("Security error");
+                    return $this->_redirect('udropship/vendor/');
+                }
                 //Check if token not expired
 
                 if ($vendor->getConfirmation() && $vendor->getConfirmationSent()) {
