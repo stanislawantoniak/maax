@@ -16,6 +16,11 @@ class GH_Regulation_Dropship_VendorController
      */
     public function acceptAction()
     {
+        // Hard code for polish lang - for now we do not have translated regulation
+        if ($return = $this->forceSetLocalePolish()) {
+            return $return;
+        }
+
         $helper = $this->getHelperData();
         try {
             $id = $this->getRequest()->getParam('id', false);   // Vendor id
@@ -412,13 +417,23 @@ class GH_Regulation_Dropship_VendorController
     }
 
     public function regulationacceptedAction() {
+        // Hard code for polish lang - for now we do not have translated regulation
+        if ($return = $this->forceSetLocalePolish()) {
+            return $return;
+        }
         $helper = $this->getHelperData();
         $this->_renderPage(null, null, $helper->__("Regulations accepted"));
+        /** @see app/design/frontend/base/default/template/ghregulation/dropship/regulation/accepted.phtml */
     }
 
     public function regulationexpiredAction() {
+        // Hard code for polish lang - for now we do not have translated regulation
+        if ($return = $this->forceSetLocalePolish()) {
+            return $return;
+        }
         $helper = $this->getHelperData();
         $this->_renderPage(null, null, $helper->__("Regulations expired"));
+        /** @see app/design/frontend/base/default/template/ghregulation/dropship/regulation/expired.phtml */
     }
 
     /**
@@ -462,5 +477,20 @@ class GH_Regulation_Dropship_VendorController
             }
         }
         $this->renderLayout();
+    }
+
+    /**
+     * Hard code for polish lang - for now we do not have translated regulation
+     * @return false|Mage_Core_Controller_Varien_Action
+     */
+    public function forceSetLocalePolish() {
+        //
+        $locale = $this->_getSession()->getLocale();
+        if ($locale != 'pl_PL') {
+            $this->_getSession()->setLocale('pl_PL');
+            $currentUrl = Mage::helper('core/url')->getCurrentUrl();
+            return $this->_redirectUrl($currentUrl); // Make refresh page
+        }
+        return false;
     }
 }
