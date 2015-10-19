@@ -49,6 +49,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 					$session->loginById($vendor->getId());
 					$session->addSuccess($hlp->__('Your password has been reset.'));
 					$this->_redirect('*/*');
+					return;
 				} else {
 					$session->addError($hlp->__('Your vendor account is not active.'));
 					$this->_redirect('*/*/login');
@@ -62,6 +63,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 					$hlp->sendPasswordResetEmail($email);
 					$session->addSuccess($hlp->__('Thank you, password reset instructions have been sent to the email you have provided, if a vendor with such email exists.'));
 					$this->_redirect('*/*/login');
+					return;
 				} else {
 					$session->addError($hlp->__('Your vendor account is not active.'));
 					$this->_redirect('*/*/login');
