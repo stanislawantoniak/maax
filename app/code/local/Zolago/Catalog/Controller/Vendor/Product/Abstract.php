@@ -521,6 +521,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
+                    $attributeData[$attribute] = $data[$attribute];
                     if ($attribute == "description" || $attribute == "short_description") {
                         // Clear descriptions
                         $attributeData[$attribute] = Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]);
