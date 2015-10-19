@@ -1,6 +1,73 @@
 <?php
 class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Email
 {
+    
+    /**
+     * do not send email on test servers
+     *
+     * @param array $mail
+     * return array
+     */
+
+    protected function _allowSend($mail) { 
+        $out = $mail;
+        if (((string)Mage::getConfig()->getNode('global/test_server')) == 'true') {
+            $allowEmails = Mage::getConfig()->getNode('global/allow_emails');
+            if (!empty($allowEmails)) {
+                if (!is_array($mail)) {
+                    $mail = array($mail);
+                }
+                foreach ($mail as $key=>$item) {                    
+                    if (!is_array($item)) {
+                        $item = array($item);
+                    }
+                    foreach ($item as $itemKey=>$address) {
+                        if (!preg_match('/'.$allowEmails.'/',$address)) {
+                            unset($out[$key][$itemKey]);
+                            Mage::log(sprintf('Email not allowed to send (%s)',$address),null,'email_blocked.log');
+                        }
+                    }
+                    if (!count($out[$key])) {
+                        unset($out[$key]);
+                    }                    
+                }
+            } else {
+                return array();
+            }
+        }
+        return $out;
+    }
+    
+    
+    /**
+     * override bcc
+     */
+    
+    public function addBcc($bcc) {
+        if ($ret = $this->_allowSend($bcc)) {
+            return parent::addBcc($ret);
+        }
+        return $this;
+    }
+    
+    /**
+     * add CC to email
+     *
+     * @param array|string $cc email
+     * @param string $name 
+     */
+    
+    public function addCc($cc,$name='') {
+        if (!is_array($cc)) {
+            $cc = array($name => $cc);
+        }
+        if ($ret = $this->_allowSend($cc)) {
+            return $this->getMail()->addCc($ret);
+        }
+        return $this;
+    }
+    
+    
 	/**
      * Send mail to recipient
      *
