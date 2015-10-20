@@ -82,7 +82,6 @@ class Zolago_Catalog_Vendor_ProductController
 					$this->_processAttributresSave(
 						$ids, 
 						array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
-						      "url_key"			   => ''   // new url keys
 						),
 						$storeId, 
 						array("check_editable"=>false)
@@ -131,8 +130,15 @@ class Zolago_Catalog_Vendor_ProductController
      * @param array $ids
      */
      protected function _generateUrlKeys($ids) {
+         $string = Mage::getSingleton('catalog/product_url');
+         $url = Mage::getSingleton('catalog/url');
+         $url->setShouldSaveRewritesHistory(false);
+         $resource = $url->getResource();
          foreach ($ids as $id) {
-             Mage::getSingleton('catalog/url')->refreshProductRewrite($id);
+             $model = Mage::getModel('catalog/product')->load($id);
+             $model->setUrlKey($string->formatUrlKey($model->getName()));
+             $resource->saveProductAttribute($model,'url_key');
+             $url->refreshProductRewrite($id);
          }
      }
     /**
@@ -261,6 +267,7 @@ class Zolago_Catalog_Vendor_ProductController
 		$collection->setStoreId($storeId);
 		$collection->addIdFilter($productIds);
 		$collection->addAttributeToSelect('name');
+		$collection->addAttributeToSelect('description_status');
 		$collection->addAttributeToFilter("attribute_set_id", $attributeSetId);
 		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendor()->getId());
 		$collection->addAttributeToSelect('image');
@@ -271,6 +278,9 @@ class Zolago_Catalog_Vendor_ProductController
 		    }
 			if ($attributeValidation = $this->_validateRequiredAttributes($product, $storeId)) {
 			    $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Empty required attributes (%s)',$product->getName(),implode(',',$attributeValidation));
+			}
+			if ($this->_validateStatusAccepted($product)) {
+			    $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Product description already accepted', $product->getName());
 			}
 			if ($emptyValidation = $this->_validateEmptyImage($product)) {
 			    $errorProducts[] = sprintf('%s: %s',$product->getName(),implode(',',$emptyValidation));
@@ -331,6 +341,15 @@ class Zolago_Catalog_Vendor_ProductController
 		return $missingAttributes;
 	}
 	
+	
+    /**
+     * 
+     * @param type $product
+     * @return text
+     */
+    protected function _validateStatusAccepted($product) {
+        return ((int)$product->getDescriptionStatus() >= (int)$this->_getSession()->getVendor()->getData("review_status"));
+    }
 	/**
 	 * @param type $product
 	 * @return text
