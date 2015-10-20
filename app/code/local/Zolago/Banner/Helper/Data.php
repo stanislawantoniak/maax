@@ -30,31 +30,11 @@ class Zolago_Banner_Helper_Data extends Mage_Core_Helper_Abstract {
     /**
      * @return int|string
      */
-    public function getMaxFileSize(){
-        $uploadMaxFileSize= ini_get('upload_max_filesize');
-        return $this->returnKBytes($uploadMaxFileSize)-1;
-    }
-
-    /**
-     * @param $val
-     *
-     * @return int|string
-     */
-    function returnKBytes($val)
-    {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val) - 1]);
-        switch ($last) {
-            case "g":
-                $val *= 1024 *1024;
-                break;
-            case "m":
-                $val *= 1024;
-                break;
-            case "k":
-                $val *= 1;
-                break;
-        }
-        return $val;
+    public function getMaxFileSize() {
+        /* @var $ghCommonHelper GH_Common_Helper_Data */
+        $ghCommonHelper = Mage::helper('ghcommon');
+        $maxBytes = $ghCommonHelper->getMaxUploadFileSize();
+        $maxKBytes = $maxBytes * 1024;
+        return $maxKBytes - 1;
     }
 }

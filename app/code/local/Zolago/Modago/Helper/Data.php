@@ -97,4 +97,21 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 
 		return $return;
 	}
+	
+    /**
+     * returns cached cms block
+     *
+     * @param string $blockId cms block id
+     * @param string $groupId cache group
+     * @param string $cacheKeySuffix cache key suffix
+     * @return string
+     */
+     public function getCachedCmsBlock($blockId,$groupId,$cacheKeySuffix = '') {
+         $lambda = function($params) {
+             return Mage::app()->getLayout()->createBlock('cms/block')->setBlockId($params['blockId'])->toHtml();
+         };
+         $cacheKey = $blockId.'_'.$cacheKeySuffix;
+         return Mage::helper('zolagocommon')->getCache($cacheKey,$groupId,$lambda,array('blockId' => $blockId));
+         
+     }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_regulation_editdocument>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_list_edit" name="ghregulation_document_edit" template="ghregulation/list/edit.phtml">
+                <block type="ghregulation/adminhtml_list_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_editdocument>
+    <ghregulation_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>sales/udropship/ghregulation</menupath></action>
+        </reference>
+    </ghregulation_update_menu>
+    <adminhtml_regulation_kind>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_kind" name="ghregulation_kind" template="ghregulation/kind.phtml">
+                <block type="ghregulation/adminhtml_kind_grid" name="ghregulation_kind_grid"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_kind>
+    <adminhtml_regulation_type>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_type" name="ghregulation_type" template="ghregulation/type.phtml">
+                <block type="ghregulation/adminhtml_type_grid" name="ghregulation_type_grid"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_type>
+    <adminhtml_regulation_list>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_list" name="ghregulation_list" template="ghregulation/list.phtml">
+                <block type="ghregulation/adminhtml_list_grid" name="ghregulation_list_grid"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_list>
+    <adminhtml_regulation_editkind>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_kind_edit" name="ghregulation_kind_edit" template="ghregulation/kind/edit.phtml">
+                <block type="ghregulation/adminhtml_kind_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_editkind>
+    <adminhtml_regulation_edittype>
+        <update handle="ghregulation_update_menu"/>
+        <reference name="content">
+            <block type="ghregulation/adminhtml_type_edit" name="ghregulation_type_edit" template="ghregulation/type/edit.phtml">
+                <block type="ghregulation/adminhtml_type_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_regulation_edittype>
+</layout>

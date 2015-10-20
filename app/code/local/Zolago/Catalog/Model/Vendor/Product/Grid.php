@@ -144,7 +144,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"header"	=> $this->_getColumnLabel($thumbnail),
 				"filter"	=> true,
 				"sortable"	=> false,
-				"filterable "=>true
+				"filterable"=> true
 			);
 
 			// Name
@@ -156,8 +156,9 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"attribute" => $name,
 				"clickable" => true,
 				"required"  => true,
-				"filterable"=>true,
-				"header"	=> $this->_getColumnLabel($name)
+				"filterable"=> true,
+				"header"	=> $this->_getColumnLabel($name),
+                "htmlspecialchars_decode" => true
 			);
 
             // Status

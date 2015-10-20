@@ -1,0 +1,21 @@
+<div class="content-header">
+   <h3><?php echo $this->getHeaderText() ?></h3>
+   <p class="content-buttons form-buttons">
+        <?php echo $this->getButtonsHtml(); ?>
+    </p>
+</div>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="regulation_kind_edit_form">
+    <?php echo $this->getBlockHtml('formkey')?>
+    <?php echo $this->getChild('form')->toHtml(); ?>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var editForm = new varienForm('regulation_kind_edit_form');
+    var regulationKindControl = {
+        save: function() {
+            editForm.submit();
+            return false;
+        }
+    };
+    
+</script>

@@ -1,0 +1,26 @@
+<?php
+/* @var $this GH_Regulation_Block_Dropship_Regulation_Accept */
+
+$_helper = Mage::helper("ghregulation");
+?>
+<div class="col-md-8 col-md-offset-2">
+    <div class="">
+        <div style="margin-top:100px;">
+            <!--=== Page Header ===-->
+            <div class="page-header">
+                <div class="page-title">
+                    <h3><?php echo $_helper->__("Accept regulation"); ?></h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <?php echo $this->getLayout()
+                        ->createBlock("cms/block")
+                        ->setBlockId("vendor_regulations_accept_expired")
+                        ->toHtml(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

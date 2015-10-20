@@ -313,6 +313,18 @@
         </reference>
     </udropship_vendor_password>
 
+	<!--<udropship_vendor_accept>-->
+		<!--<update handle="udropship_vendor" />-->
+		<!--<update handle="bootstrap" />-->
+		<!--<update handle="forms"/>-->
+
+		<!--<reference name="root">-->
+			<!--<action method="setTemplate">-->
+				<!--<template>page/page_clear.phtml</template>-->
+			<!--</action>-->
+		<!--</reference>-->
+	<!--</udropship_vendor_accept>-->
+
 	<sales_order_shipment>
 		<reference name="shipment_items">
 			<action method="setTemplate">
@@ -329,5 +341,5 @@
 	</sales_order_printshipment>
 	
 	<!-- todo move it to new module-based xml layout -->
-	
+
 </layout>

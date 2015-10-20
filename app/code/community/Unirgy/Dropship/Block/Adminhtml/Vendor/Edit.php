@@ -24,19 +24,49 @@ class Unirgy_Dropship_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_W
         $this->_blockGroup = 'udropship';
         $this->_controller = 'adminhtml_vendor';
 
+        $hlp = Mage::helper('udropship');
+
         $this->_updateButton('save', 'label', Mage::helper('udropship')->__('Save Vendor'));
         $this->_updateButton('save_continue', 'label', Mage::helper('udropship')->__('Save and Continue Edit'));
+
         $this->_addButton('save_continue', array(
             'label'     => Mage::helper('adminhtml')->__('Save and Continue Edit'),
             'onclick'   => '$(\'save_continue\').value=1; editForm.submit();',
             'class'     => 'save',
         ), 10);
+
         $this->_updateButton('delete', 'label', Mage::helper('udropship')->__('Delete Vendor'));
 
         if( $this->getRequest()->getParam($this->_objectId) ) {
             $model = Mage::getModel('udropship/vendor')
                 ->load($this->getRequest()->getParam($this->_objectId));
             Mage::register('vendor_data', $model);
+
+
+            //zresetuj hasło  aktywny  - gdy vendor aktywny
+            $resetPasswordLink = $this->getUrl('*/*/resetPassword', array('id' => $this->getRequest()->getParam($this->_objectId)));
+            $resetPasswordBefore = "Are you sure you want to reset vendor password?";
+            $this->_addButton('send_confirmation_email_button', array(
+                'label' => Mage::helper('adminhtml')->__('Send Reset password mail to vendor'),
+                'class' => 'save',
+                "name" => "send_confirmation_email_button",
+                "disabled" => ($model && $model->getStatus() == "A") ? false : true,
+                "onclick" => "deleteConfirm('{$resetPasswordBefore}','{$resetPasswordLink}')",
+                "title" => $hlp->__("Reset password button is active when vendor have status ACTIVE"),
+            ), 0);
+
+            //wyślij prośbę o akceptację regulaminu aktywny - gdy regulamin niezaakceptowany
+            $sendRegulationLink = $this->getUrl('*/*/sendConfirmationEmail', array('id' => $this->getRequest()->getParam($this->_objectId)));
+            $sendRegulationBefore = "Are you sure you want to send regulations accept email?";
+            $this->_addButton('send_regulation_accept_button', array(
+                'label' => Mage::helper('adminhtml')->__('Send regulation accept request'),
+                'class' => 'save',
+                "name" => "send_regulation_accept_button",
+                "onclick" => "deleteConfirm('{$sendRegulationBefore}','{$sendRegulationLink}')",
+                "disabled" => $model && $model->getRegulationAccepted() ? true : false,
+                "title" => $hlp->__("Send regulation accept request button active when regulations accepted"),
+            ), 1);
+
         } elseif (($sessVD = Mage::getSingleton('adminhtml/session')->getData('uvendor_edit_data', true))) {
         	unset($sessVD['logo']);
             if (Mage::registry('vendor_data')) {
@@ -45,7 +75,7 @@ class Unirgy_Dropship_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_W
                 Mage::register('vendor_data', Mage::getModel('udropship/vendor')->setData($sessVD));
             }
         }
-#var_dump(Mage::registry('vendor_data')); exit;
+
     }
 
     public function getHeaderText()

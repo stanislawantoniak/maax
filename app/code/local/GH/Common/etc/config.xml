@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<GH_Common>
+			<version>0.0.1</version>
+		</GH_Common>
+	</modules>
+	<global>
+		<helpers>
+			<ghcommon>
+				<class>GH_Common_Helper</class>
+			</ghcommon>
+		</helpers>
+	</global>
+</config>

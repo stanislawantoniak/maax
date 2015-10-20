@@ -81,6 +81,9 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 if (!$this->getGridModel()->isAttributeEditable($ruleAttr) || ($ruleAttr->getIsRequired() && trim($rule->getValue()) == "")) {
                     continue; // Skip not editable on grid or empty value when required
                 }
+                if (Mage::helper("zolagocatalog/attribute")->isAttrNotBlockedForMass($ruleAttr)) {
+                    continue; // Skip blocked attribute for mass change (like product name)
+                }
                 $usedAttr[$ruleAttr->getAttributeCode()] = $ruleAttr;
 
                 // Preparing product collection

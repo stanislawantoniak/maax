@@ -154,18 +154,17 @@ Mall.listing = {
 	_rediscoverCache: function(){
 		var content = {
 				filters: this.getFilters().prop("outerHTML"),
-				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
 				pager: this.getPager().prop("outerHTML"),
                 category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
                 header: this.getHeader().prop("outerHTML"),
-                category_head_title: jQuery("head title").html(),
 				products: this.getInitProducts(),
 				total: this.getTotal(),
 				query: this.getQuery(),
 				sort: this.getSort(),
 				dir: this.getDir(),
-				url: document.location.href
+				url: document.location.href,
+				document_title: document.title
 			},
 			ajaxData = Mall.listing.getQueryParamsAsArray(),
 			ajaxKey = Mall.listing.getAjaxHistoryKey(ajaxData),
@@ -619,19 +618,23 @@ Mall.listing = {
 		if(!window.onpopstate) {
 			var self = this;
 			window.onpopstate = function() {
-				//uncheck all filters
-				jQuery("input[type=checkbox]").prop('checked', false);
 				//check url for selected filters
 				var filters = self._getUrlObjects(),
 					sort = false,
 					dir = false;
 				if (Object.keys(filters).length) {
+					//uncheck all filters
+					jQuery("input[type=checkbox]").prop('checked', false);
 					for (var filter in filters) {
 						if(filters.hasOwnProperty(filter)) {
 							for (var key in filters[filter]) {
 								if(filters[filter].hasOwnProperty(key)) {
 									var value = filters[filter][key];
 									if (key.substring(0, 2) == 'fq') {
+										var importantKeyPart = key.match(/fq\[(.*?)\]/)[1];
+										if(typeof importantKeyPart != "undefined") {
+											key = "fq["+importantKeyPart+"][]";
+										}
 										jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
 										if (key == "fq[price]") {
 											// Set values of range
@@ -659,8 +662,8 @@ Mall.listing = {
 						self.setSort(sort);
 						self.setDir(dir);
 					} else {
-						self.setSort('');
-						self.setDir('');
+						self.setSort('wishlist_count');
+						self.setDir('desc');
 					}
 					self.setSortSelect();
 				}
@@ -792,6 +795,11 @@ Mall.listing = {
 
 	rebuildContents: function(content,ajaxKey,ajaxData){
 
+		if(typeof ajaxData == 'undefined' || typeof ajaxKey == 'undefined') {
+			ajaxData = Mall.listing.getQueryParamsAsArray();
+			ajaxKey = Mall.listing.getAjaxHistoryKey(ajaxData);
+		}
+
 		if(content.reload_to_cms){
 			//hack to reload cms page
 			window.location = content.url;
@@ -810,33 +818,14 @@ Mall.listing = {
 			this.initFilterEvents(filters);
 		}
 
-
 		var header = jQuery(content.header);
 		if(header.length) {
 			this.getHeader().replaceWith(jQuery(content.header));
 		}
 
-		var breadcrumbs = this.getHeader().find('#breadcrumbs-header'),
-			breadcrumbsContent = content.breadcrumbs;
-
-		if(typeof breadcrumbsContent != "undefined" && breadcrumbsContent.length) {
-			this.getHeader().find('#breadcrumbs-header').html(content.breadcrumbs);
-		}
-
-		var active = jQuery(content.active);
-
-		if(active.length) {
-			this.getActive().replaceWith(jQuery(content.active));
-		}
-
-
-        //Category with filters
-        var categoryWithFilters = jQuery(content.category_with_filters);
-        this.getCategoryWithFilters().replaceWith(categoryWithFilters);
-
-        //category_head_title
-        var category_head_title = content.category_head_title;
-        jQuery("head title").html(category_head_title);
+		//Category with filters
+		var categoryWithFilters = jQuery(content.category_with_filters);
+		this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
 		// Finally product
 		this.replaceProducts(content);
@@ -845,6 +834,12 @@ Mall.listing = {
 		// Set pushstate
 		this._current_url = content.url;
 		this._pushHistoryState(ajaxKey,ajaxData);
+
+		if(typeof content.document_title != "undefined" && content.document_title.length && content.document_title != document.title) {
+			try {
+				document.getElementsByTagName('title')[0].innerHTML = content.document_title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
+			} catch(e){}
+		}
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
@@ -891,6 +886,7 @@ Mall.listing = {
 		}
 	},
 
+	_removeActiveFilters: false, //tells ajax cache key builder to drop start parameter
 	initActiveEvents: function(scope) {
 		scope = scope || Mall.listing.getActiveId();
 		var self = this,
@@ -912,6 +908,8 @@ Mall.listing = {
 
 				self._current_url = me.attr('href');
 
+				self._removeActiveFilters = true;
+
 				if(!me.parent().hasClass('query-text-iks')) { //not search
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
@@ -926,6 +924,7 @@ Mall.listing = {
 			});
 
 			remove.click(function() {
+				Mall.listing._removeActiveFilters = true;
 				var me = jQuery(this);
 
 				self._current_url = me.attr('href');
@@ -1072,6 +1071,7 @@ Mall.listing = {
 				scrollButtons:{
 					enable:true
 				},
+				mouseWheel:{ scrollAmount: 50 },
 				advanced:{
 					updateOnBrowserResize:true
 				} // removed extra commas
@@ -1309,6 +1309,7 @@ Mall.listing = {
 		// show/hide clear button on filter select/deselect
 		var hiddenClass = 'hidden';
 		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
+			Mall.listing._removeActiveFilters = true;
 			e.preventDefault();
 			var me = jQuery(this).parents('.section'),
 				button = me.find('.action.clear');
@@ -1348,6 +1349,7 @@ Mall.listing = {
 		var clearBtnSelector = filtersId+' .action.clear a';
 		if(self.getPushStateSupport()) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				Mall.listing._removeActiveFilters = true;
 				e.preventDefault();
 				var me = jQuery(this);
 				self._current_url = me.attr('href');
@@ -1388,9 +1390,11 @@ Mall.listing = {
 		var start = Mall.listing.getStart();
 
 		if (!Mall.isGoogleBot()) {
-			Mall.listing.pageChangeForceObject = {
-				start: start
-			};
+			if(start) {
+				Mall.listing.pageChangeForceObject = {
+					start: start
+				};
+			}
 
 			var params = Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
 				ajaxKey = Mall.listing.getAjaxHistoryKey(params);
@@ -1398,6 +1402,9 @@ Mall.listing = {
 			if(typeof Mall.listing._ajaxCache[ajaxKey] != "undefined") {
 				Mall.listing.goToNextPage(Mall.listing._ajaxCache[ajaxKey]);
 			} else {
+				if(!start) {
+					params["start"] = 1;
+				}
 
 				Mall.listing.showAjaxLoading();
 				// Ajax load
@@ -1431,12 +1438,14 @@ Mall.listing = {
 			Mall.listing.pageChangeUri = false;
 			Mall.listing._pushHistoryState(ajaxKey,ajaxData);
 
+			//include header in order to keep active filters header labels always up to date
+			data.content.header = Mall.listing.getHeader().prop("outerHTML");
 			Mall.listing._ajaxCache[ajaxKey] = data;
 
 			Mall.listing.hideAjaxLoading();
 
 		} else {
-			console.log("Something went wrong, try again later | appendToQueueCallback");
+			console.log("Something went wrong, please contact support");
 		}
 	},
 
@@ -2009,12 +2018,21 @@ Mall.listing = {
 			names = [];
 
 		data.forEach(function(entry) {
-			out.push(entry.name+"="+entry.value);
-			names.push(entry.name);
+			if((entry.name == 'start' && entry.value > 1 && !Mall.listing._removeActiveFilters) || entry.name != 'start') {
+				out.push(entry.name + "=" + entry.value);
+				names.push(entry.name);
+			}
 		});
 
-		if(names.indexOf("start") == -1) {
-			out.push("start="+Mall.listing.getStart());
+		if(names.indexOf("start") == -1 && !Mall.listing._removeActiveFilters) {
+			var start = Mall.listing.getStart();
+			if (start > 1) {
+				out.push("start=" + start);
+			}
+		}
+
+		if(Mall.listing._removeActiveFilters) {
+			Mall.listing._removeActiveFilters = false; //handles all filters removal and drops the start parameter from ajaxCache key
 		}
 
 		return out.join("|");
@@ -2322,9 +2340,8 @@ Mall.listing = {
 	getStart: function() {
 		var href = Mall.listing.pageChangeUri ? Mall.listing.pageChangeUri : window.location.href;
 		var start = Mall.getUrlPart('start',href);
-		start = start ? start : 1;
 
-		return start;
+		return start ? start : 1;
 	},
 
 	/* Functions that set and get current category id */
