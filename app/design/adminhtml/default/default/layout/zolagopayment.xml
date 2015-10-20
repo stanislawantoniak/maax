@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<layout>
+    <zolagopayment_update_menu>
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/vendor_payment</menupath></action>
+        </reference>
+    </zolagopayment_update_menu>
+
+    <adminhtml_vendor_payment_index>
+        <update handle="zolagopayment_update_menu"/>
+        <reference name="content">
+            <block type="zolagopayment/adminhtml_vendor_payment" name="zolagopayment_vendor_payment"
+                   template="zolagopayment/vendor/payment.phtml">
+                <block type="zolagopayment/adminhtml_vendor_payment_grid" name="zolagopayment_vendor_payment_grid"/>
+            </block>
+        </reference>
+    </adminhtml_vendor_payment_index>
+
+    <adminhtml_vendor_payment_edit>
+        <update handle="zolagopayment_update_menu"/>
+        <reference name="content">
+            <block type="zolagopayment/adminhtml_vendor_payment_edit" name="zolagopayment_vendor_payment_edit"
+                   template="zolagopayment/vendor/payment/edit.phtml"/>
+        </reference>
+    </adminhtml_vendor_payment_edit>
+</layout>

@@ -1,4 +1,15 @@
 <config>
+    <menu>
+        <vendors>
+            <children>
+                <vendor_payment>
+                    <title>Vendor Payments</title>
+                    <sort_order>111</sort_order>
+                    <action>adminhtml/vendor_payment/index</action>
+                </vendor_payment>
+            </children>
+        </vendors>
+    </menu>
     <acl>
         <resources>
             <admin>
@@ -14,6 +25,14 @@
                             </config>
                         </children>
                     </system>
+                    <vendors>
+                        <children>
+                            <vendor_payment>
+                                <title>Vendor Payments</title>
+                                <sort_order>45</sort_order>
+                            </vendor_payment>
+                        </children>
+                    </vendors>
                 </children>
             </admin>
         </resources>
