@@ -275,11 +275,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				$po->getStore()->formatPrice($newItem->getPriceInclTax(), false);
 		}
 		
-		if($oldItem->getProductDiscountPrice()!=$newItem->getProductDiscountPrice()){
+		if($oldItem->getFinalItemPrice()!=$newItem->getFinalItemPrice()){
 			$changeLog[] = Mage::helper('zolagopo')->__("Discount") . ": " . 
-				$po->getStore()->formatPrice($oldItem->getProductDiscountPrice(), false) .
+				$po->getStore()->formatPrice($oldItem->getFinalItemPrice(), false) .
 				"&rarr;" . 
-				$po->getStore()->formatPrice($newItem->getProductDiscountPrice(), false);
+				$po->getStore()->formatPrice($newItem->getFinalItemPrice(), false);
 		}
 		
 		if($oldItem->getQty()!=$newItem->getQty()){
