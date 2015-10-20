@@ -41,12 +41,12 @@
 		        <fields>
 		            <company_name>
 		                <label>Company name</label>
-		                <fieldset>vendor_info</fieldset>
+		                <fieldset>vendor_preferences</fieldset>
 		                <type>text</type>
 		            </company_name>
 		            <tax_no>
 		                <label>NIP</label>
-		                <fieldset>vendor_info</fieldset>
+		                <fieldset>vendor_preferences</fieldset>
 		                <type>text</type>
 		            </tax_no>
 		            <www>

@@ -278,6 +278,7 @@ if (typeof connect_brandJsObject != "undefined") {
     connect_brandJsObject.initGrid();
 
 }
+
 if (typeof udropship_vendor_productsJsObject != "undefined") {
     if (!$('vendor_products').value) {
         $('vendor_products').value = '{}';

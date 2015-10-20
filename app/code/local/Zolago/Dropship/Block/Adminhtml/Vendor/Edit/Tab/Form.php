@@ -68,14 +68,29 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
             $udVendorStatusType = 'select';
         }
 
+        $regulationAccepted = (int)($vendor && $vendor->getRegulationAccepted());
+
+        //pozwalamy na przełączenie statusu na aktywny - gdy regulamin zaakceptowany
         $fieldset->addField('status', $udVendorStatusType, array(
-            'name'      => 'status1',
-            'label'     => $hlp->__('Status'),
-            'class'     => 'required-entry',
-            'required'  => true,
-            'options'   => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
-            'field_config' => $udVendorStatusFC
-        ));
+            'name' => 'status1',
+            'label' => $hlp->__('Status'),
+            'class' => 'required-entry',
+            'required' => true,
+            'options' => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
+            'field_config' => $udVendorStatusFC,
+            'onchange' => 'checkSelectedItem(this.value)',
+            'note' => $hlp->__("Status can be set to Active if regulations accepted")
+
+        ))
+            ->setAfterElementHtml("
+                         <script type=\"text/javascript\">
+                            var regulationAccepted = '" . $regulationAccepted . "';
+                            console.log(regulationAccepted);
+
+                            if(regulationAccepted == 0){
+                                jQuery(\"[name=status1] option[value='A']\").prop(\"disabled\", true);
+                            }
+                         </script>");
 
         if (Mage::helper('udropship')->isModuleActive('udmspro')) {
             $fieldset->addField('reject_reason', 'textarea', array(
@@ -89,16 +104,6 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
                 'name'      => 'send_reject_email',
                 'label'     => $hlp->__('Send Reject Email'),
                 'options'   => Mage::getSingleton('udropship/source')->setPath('yesno')->toOptionHash(true),
-            ));
-            $fieldset->addField('send_confirmation_email', 'select', array(
-                'name'      => 'send_confirmation_email',
-                'label'     => $vendor && $vendor->getConfirmationSent()
-                    ? $hlp->__('Resend Confirmation Email')
-                    : $hlp->__('Send Confirmation Email'),
-                'options'   => Mage::getSingleton('udropship/source')->setPath('yesno')->toOptionHash(true),
-                'note'      => $vendor && $vendor->getConfirmationSent()
-                    ? $hlp->__('Resending confirmation email will reset password (revoke old one). New password will be sent to vendor in separate email once he click at the link in this confirmation email.')
-                    : $hlp->__('Send Confirmation Email. Password will be sent to vendor in separate email once he click at the link in this confirmation email.'),
             ));
         }
 

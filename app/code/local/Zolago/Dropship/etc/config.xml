@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.7</version>
+			<version>0.0.11</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -32,7 +32,6 @@
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- Observer model -->
 					<observer>Zolago_Dropship_Model_Observer</observer>
-                    <observer>Zolago_Dropship_Model_Observer</observer>
                 </rewrite>
 			</udropship>
 			<udropship_mysql4>
@@ -75,6 +74,7 @@
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
                     <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
                     <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
+                    <adminhtml_vendor_edit>Zolago_Dropship_Block_Dropship_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
                 </rewrite>
 			</udropship>
 		</blocks>
@@ -607,6 +607,36 @@
 						<only_admin>1</only_admin>
                         <position>700</position>
                     </custom_design>
+
+
+                    <!--Regulation-->
+                    <regulation_accepted>
+                        <label>Regulation: Is Regulations Accepted</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>vendor_info</fieldset>
+                        <position>0</position>
+                    </regulation_accepted>
+                    <regulation_confirm_request_sent_date>
+                        <label>Regulation: Confirmation Request Sent (Date)</label>
+                        <type>label</type>
+                        <fieldset>vendor_form</fieldset>
+                        <position>0</position>
+                    </regulation_confirm_request_sent_date>
+                    <regulation_accept_document_date translate="label">
+                        <label>Regulation: Document Accepted (Date)</label>
+                        <type>label</type>
+                        <fieldset>vendor_form</fieldset>
+                        <position>0</position>
+                    </regulation_accept_document_date>
+                    <regulation_accept_document_data translate="label">
+                        <label>Regulation: Document Accepted Details</label>
+                        <type>hidden</type>
+                        <fieldset>vendor_form</fieldset>
+                        <frontend_model>zolagodropship/adminhtml_vendor_helper_form_regulation</frontend_model>
+                        <position>0</position>
+                    </regulation_accept_document_data>
+                    <!--Regulation-->
 				</fields>
 			</vendor>
 		</udropship>
@@ -665,7 +695,7 @@
 				<args>
 					<modules>
 						<Zolago_Dropship before="Unirgy_Dropship">Zolago_Dropship</Zolago_Dropship>
-					</modules>
+                    </modules>
 				</args>
 			</udropship>
 		</routers>
