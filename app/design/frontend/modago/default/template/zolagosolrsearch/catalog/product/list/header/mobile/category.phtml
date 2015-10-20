@@ -5,7 +5,6 @@ $_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
-
 ?>
 
 <?php if($this->isContentMode()): ?>

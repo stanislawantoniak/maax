@@ -294,8 +294,8 @@
             </action>
         </reference>
         <reference name="before_content">
-            <block type="zolagomodago/page_html_header_menu"  name="header_menu">
-                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+            <block type="zolagomodago/page_html_header_menu"  name="header_menu" template="page/html/header/navigation.main.wrapper.phtml">
+                <block type="zolagomodago/catalog_category" name="acategory.main.menu.mobile" template="catalog/category/category.main.menu.mobile.phtml"/>                
             </block>
         </reference>
 		<reference name="before_body_end">
@@ -532,8 +532,8 @@
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
 				<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
-            <block type="zolagomodago/page_html_header_menu" name="header_menu">
-                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+            <block type="zolagomodago/page_html_header_menu" name="header_menu" template="page/html/header/navigation.main.wrapper.phtml">
+                <block type="zolagomodago/catalog_category" name="category.main.menu.mobile" template="catalog/category/category.main.menu.mobile.phtml"/>
             </block>
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>

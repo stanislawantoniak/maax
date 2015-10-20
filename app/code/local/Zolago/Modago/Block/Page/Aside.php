@@ -11,6 +11,8 @@ class Zolago_Modago_Block_Page_Aside extends Zolago_Modago_Block_Catalog_Categor
      */
     protected function _construct() {
         $this->setCacheLifetime(Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL);
+        $storeId = Mage::app()->getStore()->getId();
+        $this->setCacheKey('block_page_aside_'.$storeId);
     }
                         
 
