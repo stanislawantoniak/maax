@@ -86,7 +86,24 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
         }
         Mage::register($categoryWithFiltersKey, $url);
 
-        $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
+	    //title
+	    $campaign = $category->getCurrentCampaign();
+	    if($campaign){
+		    $title = $campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName();
+	    } else {
+		    /** @var GH_Rewrite_Helper_Data $_rewriteHlp */
+		    $_rewriteHlp = Mage::helper("ghrewrite");
+		    $rewriteData = $_rewriteHlp->getCategoryRewriteData();
+		    if ($rewriteData && count($rewriteData) && isset($rewriteData['title']) && !empty($rewriteData['title'])) {
+			    $title = $rewriteData['title'];
+		    } elseif($category->getMetaTitle()) {
+			    $title = $category->getMetaTitle();
+		    } else {
+			    $title = Mage::app()->getStore()->getName();
+		    }
+	    }
+
+/*        $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
         $path = $breadcrumbs->getPathProp();
         $title = array();
         foreach ($path as $name => $breadcrumb) {
@@ -98,21 +115,19 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
         if (!empty($rewriteData) && isset($rewriteData["title"]) && !empty($rewriteData["title"])) {
             $title = $rewriteData["title"];
-        }
+        }*/
 
-        $block = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
-        $block->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
-        $block->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
+	    $header = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
+	    $header->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
+	    $header->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
 
 
         $content = array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
             "url" => $url,
-            "header" => $this->_cleanUpHtml($block->toHtml()),
+            "header" => $this->_cleanUpHtml($header->toHtml()),
             "filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
-            "category_with_filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
-            "breadcrumbs" => $this->_cleanUpHtml($layout->createBlock("zolagocatalog/breadcrumbs")->toHtml()),
-            "active" => $this->_cleanUpHtml($layout->createBlock("zolagosolrsearch/active")->toHtml()),
-            "category_head_title" => $title,
+            "document_title" => $title,
+	        "category_with_filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
             "reload_to_cms" => $reloadToCms,
             "listing_type" => $type
         ));
