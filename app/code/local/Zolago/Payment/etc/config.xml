@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Payment>
-			<version>0.1.0</version>
+			<version>0.1.1</version>
 		</Zolago_Payment>
 	</modules>
 	<global>
@@ -25,6 +25,9 @@
 					<allocation>
 						<table>zolago_payment_allocation</table>
 					</allocation>
+					<vendor_payment>
+						<table>zolago_vendor_payment</table>
+					</vendor_payment>
 				</entities>
 			</zolagopayment_resource>
 		</models>
