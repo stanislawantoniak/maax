@@ -235,8 +235,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
         $blockName = (string)$node['name'];
         $_profilerKey = 'BLOCK: '.$blockName;
         Varien_Profiler::start($_profilerKey);
-        Mage::log($className);
-        Mage::log($blockName);
+
         $block = $this->addBlock($className, $blockName);
         if (!$block) {
             return $this;
