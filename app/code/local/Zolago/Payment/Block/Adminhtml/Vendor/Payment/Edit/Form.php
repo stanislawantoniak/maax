@@ -32,7 +32,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit_Form extends Mage_Admin
             'format' => 'yyyy-MM-dd',
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'time' => false,
-            'after_element_html' => Mage::helper('zolagopayment')->__('<small>Format (YYYY-MM-DD)</small>'),
+            'after_element_html' => "<small>".Mage::helper('zolagopayment')->__('Allowed format: yyyy-mm-dd'). "</small>",
         ));
         $fieldset->addField('cost', 'text', array(
             'label' => Mage::helper('zolagopayment')->__('Cost'),
