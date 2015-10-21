@@ -25,6 +25,9 @@
 					<allocation>
 						<table>zolago_payment_allocation</table>
 					</allocation>
+					<vendor_invoice>
+						<table>zolago_vendor_invoice</table>
+					</vendor_invoice>
 				</entities>
 			</zolagopayment_resource>
 		</models>
