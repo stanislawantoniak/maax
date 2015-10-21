@@ -1102,10 +1102,14 @@ Mall.Scrolltop = {
 		}
 	},
 	show: function() {
-		Mall.Scrolltop.scrollTop.addClass('show');
+		if(Mall.Scrolltop.scrollTop !== false) {
+			Mall.Scrolltop.scrollTop.addClass('show');
+		}
 	},
 	hide: function() {
-		Mall.Scrolltop.scrollTop.removeClass('show hover');
+		if(Mall.Scrolltop.scrollTop !== false) {
+			Mall.Scrolltop.scrollTop.removeClass('show hover');
+		}
 	},
 	hopToTop: function() {
 		var _ = Mall.Scrolltop;

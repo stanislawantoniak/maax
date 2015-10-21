@@ -71,7 +71,7 @@ $timer = microtime(true);
                 $new = !$id;
                 $data = $r->getParams();
                 $data['vendor_id'] = $id;
-                $data['status'] = $data['status1'];
+                $data['status'] = isset($data['status1']) ? $data['status1'] : 0;
 
                 $model = Mage::getModel('udropship/vendor');
                 if ($id) {

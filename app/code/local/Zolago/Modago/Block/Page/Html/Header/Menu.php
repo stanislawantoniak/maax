@@ -3,7 +3,7 @@
  * Front menu block class
  */
 class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template {
-
+    
     /**
      * Prepare html
      */
@@ -17,30 +17,35 @@ class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template
 
         if ($vendor && $vendor->isBrandshop()) {
             //when vendor(brandshop) show navigation only on the cms categories
-            if($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
-                echo $this->_prepareBlock(); 
+            if(!($category && $category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE)) {
+                return; // no menu
             }
-        } else {
-            echo $this->_prepareBlock();
         }
+        return parent::_toHtml();
     }
     
     /**
-     * create block from cache
+     * prepare javascript
      */
 
-    protected function _prepareBlock() {
-        $lambda = function ($foo) {
-            return Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml();
-        };
+    protected function getJavascript() {
         $request = Mage::app()->getRequest();
         $module  = $request->getModuleName();
         $name    = $request->getControllerName();
         $action  = $request->getActionName();
-
-        $html = Mage::helper('zolagocommon')->getCache('html_header_navigation',self::CACHE_GROUP,$lambda,array());
         $script = "<script>Mall.Navigation.currentCategoryId.push('".(Mage::registry('current_category') ? Mage::registry('current_category')->getId() : $module."/".$name."/".$action)."');</script>";
 
-        return $html.$script;
+        return $script;
+    }
+    
+    protected function getCategoryMobile() {
+        $lambda = function() {
+            return $this->getChildHtml('category.main.menu.mobile');
+        };
+        $currentCategory = Mage::registry('current_category');
+        if ($currentCategory) {
+            return Mage::helper('zolagocommon')->getCache('category_main_menu_mobile_'.$currentCategory->getId(),self::CACHE_GROUP,$lambda,array());
+        }
+        return '';
     }
 }

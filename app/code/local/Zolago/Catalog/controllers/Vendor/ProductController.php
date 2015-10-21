@@ -60,9 +60,14 @@ class Zolago_Catalog_Vendor_ProductController
 				case "attribute":
                     $attributeCode = key($request->getParam("attribute"));
                     $attributeValue = $request->getParam("attribute")[$attributeCode];
+                    if ($attributeCode == "description" || $attributeCode == "short_description") {
+                        $attributeValue = Mage::helper("zolagocatalog")->secureInvisibleContent($attributeValue);
+                    } elseif ($attributeCode == 'name') {
+                        $attributeValue = Mage::helper("zolagocatalog")->cleanProductName($attributeValue);
+                    }
 					$this->_processAttributresSave(
 						$ids, 
-						$request->getParam("attribute"), 
+						array($attributeCode => $attributeValue),
 						$storeId, 
 						array("attribute_mode"=>$request->getParam("attribute_mode"))
 					);

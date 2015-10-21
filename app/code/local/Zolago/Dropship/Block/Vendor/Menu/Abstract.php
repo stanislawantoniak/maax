@@ -11,8 +11,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	const ITEM_RMA		  = 'rma';
 	const ITEM_ADVERTISE = 'advertise';
 	const ITEM_SETTING	  = 'setting';
+	//const ITEM_REGULATIONS = "regulation";
 	const ITEM_STATEMENTS= 'statements';
-	
 	const ITEM_DIRECT_ORDER = "direct_order";
 	/**
 	 *array(
@@ -50,6 +50,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				self::ITEM_RMA			=>	$this->getRmaSection(),
 				self::ITEM_ADVERTISE	=>	$this->getAdvertiseSection(),
 				self::ITEM_SETTING		=>	$this->getSettingSection(),
+				//self::ITEM_REGULATIONS	=>	$this->getRegulationsSection(),
 				self::ITEM_STATEMENTS	=>	$this->getStatementsSection(),
 			);
 			foreach($sections as $key=>$section){
@@ -140,6 +141,47 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udqa/vendor')
 			);
 		}
+		return null;
+	}
+
+	/** Regulation section (visible only for vendors)
+	 * @return array|null
+	 */
+	public function getRegulationsSection()
+	{
+		$groupOne = array();
+
+		if (!$this->isOperatorMode()) {
+			if ($this->isModuleActive('ghregulation')
+				&& $this->isAllowed("ghregulation/vendor")
+			) {
+				$groupOne[] = array(
+					"active" => $this->isActive("ghregulation"),
+					"icon" => "icon-ok-circle",
+					"label" => $this->__('Acceptance of Rules'),
+					"url" => "#"
+				);
+				$groupOne[] = array(
+					"active" => $this->isActive("ghregulation"),
+					"icon" => "icon-certificate",
+					"label" => $this->__('Terms of cooperation'),
+					"url" => "#"
+				);
+			}
+
+			$grouped = $this->_processGroups($groupOne);
+
+			if (count($grouped)) {
+				return array(
+					"label" => $this->__("Terms of cooperation"),
+					"active" => $this->isActive(array("ghregulation")),
+					"icon" => "icon-flag",
+					"url" => "#",
+					"children" => $grouped
+				);
+			}
+		}
+
 		return null;
 	}
 	
