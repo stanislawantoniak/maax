@@ -54,6 +54,7 @@ class GH_Statements_Model_Observer
 	                $statementTotals->refund = self::processStatementsRefunds($statement);
 	                $statementTotals->track = self::processStatementsTracks($statement);
 	                $statementTotals->marketing = self::processStatementsMarketing($statement);
+	                $statementTotals->payment = self::processStatementsPayment($statement);
 
 	                self::populateStatement($statement, $statementTotals);
                 } catch(Mage_Core_Exception $e) {
@@ -137,6 +138,10 @@ class GH_Statements_Model_Observer
 	    // Marketing
 	    if(!empty($statementTotals->marketing)) {
 		    $data["marketing_value"]            = $statementTotals->marketing->amount;
+	    }
+	    // Payment
+	    if(!empty($statementTotals->payment)) {
+		    $data["payment_value"]              = $statementTotals->payment->amount;
 	    }
         if (!empty($data)) {
             $statement->addData($data);
@@ -730,6 +735,44 @@ class GH_Statements_Model_Observer
 		$marketingStatementTotals->amount = $marketingStatementValue;
 
 		return $marketingStatementTotals;
+	}
+
+	public static function processStatementsPayment($statement) {
+		$paymentStatementTotals = new stdClass();
+		$paymentStatementValue = 0;
+
+		$dateModel = Mage::getModel('core/date');
+		$today     = $dateModel->date('Y-m-d');
+		$yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
+
+		if ($statement->getForceCustomDate()) {
+			$yesterday = $statement->getForceCustomDate() . ' 23:59:59';
+		}
+
+		/** @var Zolago_Payment_Model_Vendor_Payment $paymentModel */
+		$paymentModel = Mage::getModel('zolagopayment/vendor_payment');
+
+		/** @var Zolago_Payment_Model_Resource_Vendor_Payment_Collection $collection */
+		$collection = $paymentModel->getCollection();
+		$collection
+			->addFieldToFilter('statement_id',array('null' => true))
+			->addFieldToFilter('date',array('lteq' => $yesterday))
+			->addFieldToFilter('vendor_id',$statement->getVendorId());
+
+		if($collection->getSize()) {
+
+			foreach($collection as $vendorPayment) {
+				/** @var Zolago_Payment_Model_Vendor_Payment $vendorPayment */
+				$vendorPayment->setData('statement_id',$statement->getId());
+				$vendorPayment->save();
+
+				$paymentStatementValue += $vendorPayment->getCost();
+			}
+		}
+
+		$paymentStatementTotals->amount = $paymentStatementValue;
+
+		return $paymentStatementTotals;
 	}
 
     /**

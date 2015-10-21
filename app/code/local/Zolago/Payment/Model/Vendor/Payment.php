@@ -4,10 +4,17 @@
  * Class Zolago_Payment_Model_Vendor_Payment
  *
  * @method int getVendorPaymentId()
+ * @method Zolago_Payment_Model_Vendor_Payment setVendorPaymentId()
  * @method string getDate()
- * @method string getCost()
+ * @method Zolago_Payment_Model_Vendor_Payment setDate()
+ * @method float getCost()
+ * @method Zolago_Payment_Model_Vendor_Payment setCost()
  * @method int getVendorId()
- * @method text getComment()
+ * @method Zolago_Payment_Model_Vendor_Payment setVendorId()
+ * @method string getComment()
+ * @method Zolago_Payment_Model_Vendor_Payment setComment()
+ * @method int getStatementId()
+ * @method Zolago_Payment_Model_Vendor_Payment setStatementId()
  *
  */
 class Zolago_Payment_Model_Vendor_Payment extends Mage_Core_Model_Abstract

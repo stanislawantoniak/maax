@@ -130,6 +130,22 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
     }
 
     /**
+     * paymentGrid ajax block response
+     */
+    public function paymentGridAction()
+    {
+        $this->getResponse()->setBody(
+            $this->getLayout()
+                ->createBlock(
+                    'ghstatements/adminhtml_vendor_statements_edit_tab_payment',
+                    'ghstatements.statement.payment'
+                )
+                ->setStatementId($this->getRequest()->getParam('id'))
+                ->toHtml()
+        );
+    }
+
+    /**
      * Manually trigger gh_statements cron with custom date (today)
      * @return Mage_Adminhtml_Controller_Action
      */
