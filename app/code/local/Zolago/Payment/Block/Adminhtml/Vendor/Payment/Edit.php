@@ -76,7 +76,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit extends Mage_Adminhtml_
     public function getHeaderText()
     {
         if ($this->getIsNew()) {
-            return Mage::helper('zolagopayment')->__('Edit %s Payment', $this->getModel()->getVendor()->getVendorName());
+            return Mage::helper('zolagopayment')->__('%s Payment', $this->getModel()->getVendor()->getVendorName());
         }
         return Mage::helper('zolagopayment')->__('New %s', $this->_getModelName());
     }

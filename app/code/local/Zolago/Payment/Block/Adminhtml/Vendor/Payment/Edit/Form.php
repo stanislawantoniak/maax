@@ -20,7 +20,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit_Form extends Mage_Admin
         ));
 
         $fieldset = $form->addFieldset('edit_form', array(
-                'legend' => Mage::helper('zolagopayment')->__('Info'),
+                'legend' => Mage::helper('zolagopayment')->__('General'),
                 'class' => 'fieldset-wide'
             )
         );
