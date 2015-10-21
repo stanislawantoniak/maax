@@ -1,5 +1,8 @@
-<?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Grid*/?>
-<?php $_hlp = Mage::helper("zolagocatalog");?>
+<?php
+/** @var $this Zolago_Catalog_Block_Vendor_Product_Grid */
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+?>
 <div class="container" id="content-wrapper">
 	<div id="grid-holder"></div>
 </div>
@@ -16,6 +19,12 @@
 		right:20px;
 		background: #f3f3f3;
 	}
+    @media (max-width: 1060px) {
+        #grid-holder {
+            top: 115px;
+        }
+    }
+
 	#grid-holder .dgrid-cell{
 		vertical-align: middle;
 	}
