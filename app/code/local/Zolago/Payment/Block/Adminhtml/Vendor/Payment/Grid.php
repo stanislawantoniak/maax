@@ -36,7 +36,8 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
             array(
                 'header' => Mage::helper('zolagopayment')->__('Date'),
                 'width' => '50px',
-                'index' => 'date'
+                'index' => 'date',
+                "type" => "date"
             )
         );
         $this->addColumn('vendor_id',
@@ -52,7 +53,11 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
             array(
                 'header' => $this->__('Cost'),
                 'width' => '50px',
-                'index' => 'cost'
+                'index' => 'cost',
+                'type'  => 'price',
+                'currency' => 'base_currency_code',
+                'currency_code' => Mage::getStoreConfig('currency/options/base')
+
             )
         );
         $this->addColumn('comment',
