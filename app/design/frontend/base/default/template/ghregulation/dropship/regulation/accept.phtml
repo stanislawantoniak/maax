@@ -34,14 +34,16 @@ $maxSize = $this->maxUploadInMB();
                             </div>
                             <div class="widget-content">
                                 <div class="col-md-12">
-                                    <p><?php echo $_helper->__("I %s declare:", $this->getVendor()->getCompanyName()); ?></p>
+                                    <p>
+                                       <b><?php echo $_helper->__("I %s %s  declare", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?></b>
+                                    </p>
 
-                                    <label class="css-label col-md-12">
+                                    <label class="css-label col-md-12" style="font-weight:normal">
                                         <input type="radio" class="" name="accept_regulations_role" value="<?php echo GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE; ?>" checked/>
                                         <?php echo $_helper->__("I am authorized to represent single %s", $this->getVendor()->getCompanyName()); ?>
                                     </label>
 
-                                    <label class="css-label col-md-12">
+                                    <label class="css-label col-md-12" style="font-weight:normal">
                                         <input type="radio" class="" name="accept_regulations_role" value="<?php echo GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_PROXY; ?>"/>
                                         <?php echo $_helper->__("I have full powers to accept the regulations MODAGO."); ?>
                                     </label>
@@ -60,15 +62,16 @@ $maxSize = $this->maxUploadInMB();
                                 <?php asort($docs); ?>
                                 <div class="widget-content">
                                     <div class="col-md-12">
-                                        <p><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></p>
+                                        <p><b><?php echo $_helper->__("Download the regulations to become familiar with their content:"); ?></b></p>
                                         <ul class="regulation-docs-list">
                                             <?php foreach ($docs as $doc): ?>
                                                 <li>
-                                                    <i class="fa fa-file-pdf-o fa-lg"></i>
-                                                    <?php echo ucfirst($doc['name']); // Kind name ?> <a
+                                                    <span class="red">&nbsp;
+                                                    <i class="fa fa-file-pdf-o fa-lg"></i></span>
+                                                    <a style="text-decoration:underline"  
                                                         href="<?php echo $docModel->getVendorUrlByToken($token, $doc['id'], $this->getVendor()->getId()); ?>"
                                                         download="<?php echo $doc['filename']; ?>"
-                                                        target="_blank"><?php echo $_helper->__("download"); ?></a>
+                                                        target="_blank"><?php echo ucfirst($doc['name']); // Kind name ?></a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
@@ -78,13 +81,16 @@ $maxSize = $this->maxUploadInMB();
                             <div class="widget-content">
                                 <div class="col-md-12">
                                     <p>
-                                        <?php echo $_helper->__("I %s %s  declare", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?>
+                                        <b><?php echo $_helper->__("I %s %s  declare", $this->getVendor()->getExecutiveFirstname(), $this->getVendor()->getExecutiveLastname()); ?></b>
                                     </p>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="css-label col-md-12">
-                                        <input type="checkbox" class="uniform" name="accept_regulations"/>
-                                        <?php echo $_helper->__("I accept the regulations", $this->getVendor()->getCompanyName()); ?>
+                                    <label class="checkbox" style="padding-left:40px">
+                                        <div class="checker" style="margin-left:-23px">
+                                            <span>
+                                                <input type="checkbox" class="uniform" name="accept_regulations" id="accept_checkbox"/>                                        
+                                            </span>
+                                        </div><?php echo $_helper->__("I accept the regulations", $this->getVendor()->getCompanyName()); ?>
                                     </label>
                                 </div>
                             </div>
@@ -118,7 +124,10 @@ $maxSize = $this->maxUploadInMB();
             accept_regulations_role: {
                 required: true
             },
-            'regulation_document': {extension: 'jpe?g,png,pdf', fileSize: <?php echo $maxSize; ?>, required:'[name=accept_regulations_role][value=proxy]'}
+            'regulation_document': {
+                extension: 'jpe?g,png,pdf', 
+                fileSize: <?php echo $maxSize; ?>, required:'[name=accept_regulations_role][value=proxy]'
+            } // 
         },
         messages: {
             'regulation_document': {
@@ -152,11 +161,17 @@ $maxSize = $this->maxUploadInMB();
     }
 
     jQuery("input[name=regulation_document]").on('change', function (e) {
+        var f; // validation status
         e.preventDefault();
         jQuery(".add_regulation_document_preview").html('');
         jQuery("label[for=regulation_document]").remove();
-
-        if (jQuery(this).val()) {
+        try {
+            f = jQuery("form#accept_regulation_documents_form input[name=regulation_document]").valid();
+        } catch(err) {
+            jQuery("input[name=regulation_document]").val('');
+            return;
+        }
+        if (jQuery(this).val() && f) {
             jQuery(".add_regulation_document_preview").html('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
             disableSubmitBtn();
             var formData = new FormData(jQuery('#accept_regulation_documents_form')[0]);
@@ -171,25 +186,31 @@ $maxSize = $this->maxUploadInMB();
                 if (response.status == 1) {
                     jQuery(".add_regulation_document_preview")
                         .html('<a href="' + response.content.link + '" target="_blank" download="' + response.content.new_name + '">' + response.content.name + '</a>');
-                }
-                if (response.status == 0) {
-                    //jQuery(".add_regulation_document_preview").html(response.content);
+                } else {
+                    if (response.content) {
+                        jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:");?> '+response.content+'</label>');                    
+                    } else {
+                        jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error: ").' '.$_helper->__("Internal server error."); ?></label>');                                            
+                    }
                     jQuery(".add_regulation_document_preview").html('');
+                    jQuery("input[name=regulation_document]").val('');
                 }
-            }).fail(function () {
+            }).fail(function (jqXHR,textStatus) {
+                if (jqXHR.status == 413) {
+                    jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:").' '.$_helper->__(" File too large."); ?></label>');                    
+                } else {
+                    jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error: ").' '.$_helper->__("Internal server error."); ?></label>');                    
+                }
                 jQuery(".add_regulation_document_preview").html('');
-                enableSubmitBtn();
+                jQuery("input[name=regulation_document]").val('');
             }).always(function () {
-                jQuery("form#accept_regulation_documents_form input[name=regulation_document]").valid();
-                enableSubmitBtn();
+                enableSubmitBtn();            
             });
         }
-        jQuery("form#accept_regulation_documents_form input[name=regulation_document]").valid();
     });
 
     jQuery(document).on('click',"button[type=submit]", function (e) {
         e.preventDefault();
-
         if(jQuery("form#accept_regulation_documents_form").valid()){
             bootbox.confirm({
                 title: '',

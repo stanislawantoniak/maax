@@ -227,6 +227,7 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
                 $file    = $_FILES['file'];
                 $folder  = $hlp::REGULATION_DOCUMENT_ADMIN_FOLDER;
                 $allowed = $hlp::getAllowedRegulationDocumentTypes();
+                $allowed[] = 'other'; // other files also allowed
                 $result  = $hlp->saveRegulationDocument($file, $folder, $allowed, true);
                 $path    = $result["content"]["path"];
                 $newName = $result["content"]["new_name"];

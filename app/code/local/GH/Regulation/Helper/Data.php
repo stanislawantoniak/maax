@@ -39,6 +39,23 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return 'application/pdf';
     }
+    
+    /**
+     * Return file type calculated from file name
+     *
+     * @param string $name
+     * @return string
+     */
+
+    public function getFileType($name) {
+        $ext = strtoupper(pathinfo($name,PATHINFO_EXTENSION));
+        if (preg_match('/^PDF$/',$ext)) return 'application/pdf';
+        if (preg_match('/^JP(EG|G|E)$/',$ext)) return 'image/jpeg';
+        if (preg_match('/^(X-)?PNG$/',$ext)) return 'image/png';
+        if (preg_match('/^GIF$/',$ext)) return 'image/gif';
+        if (preg_match('/^BMP$/',$ext)) return 'image/bmp';
+        return 'other';
+    }
 
     /**
      * Saving regulation document $file to specific $folder in media dir
@@ -61,9 +78,9 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
 
         $tmpName = $file["tmp_name"];
         $name = $file["name"];
-        $type = $file["type"];
         $size = $file["size"];
-
+        
+        $type = $this->getFileType($name);
         if (!in_array($type, $allowedRegulationDocumentTypes)) {
             $result = array("status" => 0, "message" => $_helper->__("File must be JPG, PNG or PDF"));
             return $result;

@@ -4,8 +4,8 @@
 $cms =
 	array(
 		array(
-			'title' => 'Vendor regulations  ACCEPTED text',
-			'identifier' => 'vendor_regulations_accept_accepted',
+			'title' => 'Vendor regulations accept text',
+			'identifier' => 'vendor_regulations_accept',
 			'content' =>
 				<<<EOD
 <p>Aby prowadzić sprzedaż w serwisie MODAGO musisz zaakceptować jego
@@ -16,20 +16,18 @@ $cms =
                                             firmy {{var vendor.company_name}} lub przez osobę posiadającą pełnomocnictwo
                                             do akceptacji regulaminu
                                             MODAGO wystawione przez osoby upoważnione do reprezentacji firmy.</p>
-<br/>
 
-                                        <p><b>Pobierz wzór pełnomocnictwa:</b></p>
-                                            <span>&nbsp;
+                                        <p class="css-label">Pobierz wzór pełnomocnictwa:</p>
+                                            <span>
                                             <span class="red">
                                                 <i class="fa fa-file-pdf-o fa-lg"></i>
                                             </span>
-                                            <a target="_blank" style="text-decoration:underline"
+                                            <a target="_blank"
                                                href="http://modago.pl/media/pdf/formularz_odstapienia_od_umowy.pdf">Pełnomocnictwo
                                                 do akceptacji
                                                 regulaminu MODAGO</a>
                                             </span>
                                         </p>
-
 EOD
 		,
 			'is_active' => 1,
