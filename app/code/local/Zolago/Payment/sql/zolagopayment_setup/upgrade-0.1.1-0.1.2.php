@@ -35,28 +35,28 @@ $table = $connection->newTable($tableVendorPayment)
     //--WFIRMA fields
 
     //pola odpowiadające za prowizje/transport/marketing/inne
-    ->addColumn('commission_netto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('commission_netto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
-    ->addColumn('commission_brutto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('commission_brutto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
-    ->addColumn('transport_netto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('transport_netto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
-    ->addColumn('transport_brutto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('transport_brutto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
     ->addColumn('marketing_netto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
-    ->addColumn('marketing_brutto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('marketing_brutto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
-    ->addColumn('other_netto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('other_netto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
-    ->addColumn('other_brutto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('other_brutto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
     //--pola odpowiadające za prowizje/transport/marketing/inne
