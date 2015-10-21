@@ -2,9 +2,33 @@
 
 /**
  * Class Zolago_Payment_Model_Vendor_Invoice
+ *
+ * @method int getVendorId()
+ * @method string getDate()
+ * @method string getSaleDate()
+ *
+ * @method int getWfirmaInvoiceId()
+ * @method string getWfirmaInvoiceNumber()
+ *
+ * @method string getCommissionNetto()
+ * @method string getCommissionBrutto()
+ *
+ * @method string getTransportNetto()
+ * @method string getTransportBrutto()
+ *
+ * @method string getMarketingNetto()
+ * @method string getMarketingBrutto()
+ *
+ * @method string getOtherNetto()
+ * @method string getOtherBrutto()
+ *
+ * @method int getIsInvoiceCorrection()
+ *
  */
 class Zolago_Payment_Model_Vendor_Invoice extends Mage_Core_Model_Abstract
 {
+    const INVOICE_TYPE_ORIGINAL = 0;
+    const INVOICE_TYPE_CORRECTION = 1;
 
     protected function _construct()
     {

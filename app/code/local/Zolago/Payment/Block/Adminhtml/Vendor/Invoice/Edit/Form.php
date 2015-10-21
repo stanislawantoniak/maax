@@ -35,6 +35,16 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
             )
         );
 
+        $fieldset->addField('is_invoice_correction', 'select', array(
+            'label' => $hlp->__('Invoice correction'),
+            'required' => true,
+            'name' => 'is_invoice_correction',
+            "options" => array(
+                Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_ORIGINAL => $hlp->__("No"),
+                Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_CORRECTION => $hlp->__("Yes")
+            )
+        ));
+
         $fieldset->addField('date', 'date', array(
             'label' => $hlp->__('Date'),
             'required' => true,

@@ -44,6 +44,18 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
                 'index' => 'vendor_invoice_id'
             )
         );
+        $this->addColumn('is_invoice_correction',
+            array(
+                'header' => $hlp->__('Invoice correction'),
+                'width' => '100px',
+                "type" => "options",
+                'index' => 'is_invoice_correction',
+                "options" => array(
+                    Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_ORIGINAL => $hlp->__("No"),
+                    Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_CORRECTION => $hlp->__("Yes")
+                )
+            )
+        );
         $this->addColumn('date',
             array(
                 'header' => $hlp->__('Date'),
@@ -63,14 +75,14 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
 
         $this->addColumn('Wfirma_invoice_id',
             array(
-                'header' => "wfirma ".$hlp->__('Invoice ID'),
+                'header' => "wfirma " . $hlp->__('Invoice ID'),
                 'width' => '50px',
                 'index' => 'wfirma_invoice_id'
             )
         );
         $this->addColumn('wfirma_invoice_number',
             array(
-                'header' => "Wfirma ".$hlp->__('Invoice #'),
+                'header' => "Wfirma " . $hlp->__('Invoice #'),
                 'width' => '50px',
                 'index' => 'wfirma_invoice_number'
             )
@@ -79,7 +91,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
 
         $this->addColumn('vendor_id',
             array(
-                'header' => $this->__('Vendor'),
+                'header' => $hlp->__('Vendor'),
                 'width' => '100px',
                 "type" => "options",
                 'index' => 'vendor_id',
@@ -105,7 +117,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
             "other_netto" => $hlp->__('Other netto'),
             "other_brutto" => $hlp->__('Other brutto')
         );
-        foreach($costFields as $name => $label){
+        foreach ($costFields as $name => $label) {
             $this->_addCostGridField($this, $name, $label);
         }
         //Cost
@@ -122,7 +134,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
                         'caption' => $hlp->__('Delete'),
                         'url' => array('base' => '*/*/delete'),
                         'field' => 'id',
-                        'confirm'  => $hlp->__('Are you sure?')
+                        'confirm' => $hlp->__('Are you sure?')
                     ),
                 ),
                 'filter' => false,
