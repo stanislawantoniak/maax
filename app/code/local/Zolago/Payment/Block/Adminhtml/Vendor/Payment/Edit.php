@@ -3,88 +3,92 @@
 /**
  * Class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit
  */
-class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit extends Mage_Adminhtml_Block_Widget
 {
 
-    public function __construct()
-    {
-        //$this->_objectId = 'id';
-
-        $this->_blockGroup = 'zolagopayment';
-        $this->_controller = 'adminhtml/vendor_payment';
-
-        $modelTitle = $this->_getModelTitle();
-        $this->_updateButton('save', 'label', $this->_getHelper()->__("Save $modelTitle"));
-        $this->_addButton('saveandcontinue', array(
-            'label' => $this->_getHelper()->__('Save and Continue Edit'),
-            'onclick' => 'saveAndContinueEdit()',
-            'class' => 'save',
-        ), -100);
-
-        $this->_formScripts[] = "
-            function saveAndContinueEdit(){
-                editForm.submit($('edit_form').action+'back/edit/');
-            }
-        ";
-        parent::__construct();
-    }
-
-    protected function _getHelper()
-    {
-        return Mage::helper('zolagopayment');
-    }
-
-    protected function _getModel()
+    /**
+     * @return Zolago_Payment_Model_Vendor_Payment
+     */
+    public function getModel()
     {
         return Mage::registry('zolagopayment_current_payment');
     }
 
-    protected function _getModelTitle()
+    protected function _prepareLayout()
     {
-        return $this->_getHelper()->__("Vendor Payment");
+        $this->setChild('back_button',
+            $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label' => Mage::helper('zolagopayment')->__('Back'),
+                    'onclick' => "window.location.href = '" . $this->getUrl('*/*') . "'",
+                    'class' => 'back'
+                ))
+        );
+
+        $this->setChild('save_button',
+            $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label' => Mage::helper('zolagopayment')->__('Save'),
+                    'onclick' => 'formControl.save();',
+                    'class' => 'save'
+                ))
+        );
+        $this->setChild('delete_button',
+            $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label' => Mage::helper('zolagopayment')->__('Delete'),
+                    'onclick' => 'formControl.remove();',
+                    'class' => 'delete'
+                ))
+        );
+        return parent::_prepareLayout();
+    }
+
+    public function getBackButtonHtml()
+    {
+        return $this->getChildHtml('back_button');
+    }
+
+
+    public function getSaveButtonHtml()
+    {
+        return $this->getChildHtml('save_button');
+    }
+
+    public function getDeleteButtonHtml()
+    {
+        return $this->getChildHtml('delete_button');
+    }
+
+    public function getIsNew()
+    {
+        return $this->getModel()->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function _getModelName()
+    {
+        return Mage::helper("zolagopayment")->__("Vendor Payment");
     }
 
     public function getHeaderText()
     {
-        $model = $this->_getModel();
-        $modelTitle = $this->_getModelTitle();
-
-        if ($model && $model->getId()) {
-            return $this->_getHelper()->__("Edit $modelTitle (ID: {$model->getId()})");
-        } else {
-            return $this->_getHelper()->__("New $modelTitle");
+        if ($this->getIsNew()) {
+            return Mage::helper('zolagopayment')->__('Edit %s Payment', $this->getModel()->getVendor()->getVendorName());
         }
+        return Mage::helper('zolagopayment')->__('New %s', $this->_getModelName());
     }
 
-
-    /**
-     * Get URL for back (reset) button
-     *
-     * @return string
-     */
-    public function getBackUrl()
+    public function getSaveUrl()
     {
-        return $this->getUrl('*/*/index');
+        return $this->getUrl('*/*/save', array("_current" => true));
     }
 
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', array($this->_objectId => $this->getRequest()->getParam($this->_objectId)));
+        return $this->getUrl('*/*/delete', array("_current" => true));
     }
-
-    /**
-     * Get form save URL
-     *
-     * @deprecated
-     * @see getFormActionUrl()
-     * @return string
-     */
-    public function getSaveUrl()
-    {
-        $this->setData('form_action_url', 'save');
-        Mage::log($this->getFormActionUrl());
-        return $this->getFormActionUrl();
-    }
-
 
 }

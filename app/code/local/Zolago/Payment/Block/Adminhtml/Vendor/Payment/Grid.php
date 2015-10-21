@@ -27,14 +27,14 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
 
         $this->addColumn('vendor_payment_id',
             array(
-                'header' => $this->__('ID'),
+                'header' => Mage::helper('zolagopayment')->__('ID'),
                 'width' => '50px',
                 'index' => 'vendor_payment_id'
             )
         );
         $this->addColumn('date',
             array(
-                'header' => $this->__('Date'),
+                'header' => Mage::helper('zolagopayment')->__('Date'),
                 'width' => '50px',
                 'index' => 'date'
             )
@@ -57,11 +57,31 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
         );
         $this->addColumn('comment',
             array(
-                'header' => $this->__('Comment'),
+                'header' => Mage::helper('zolagopayment')->__('Comment'),
                 'width' => '50px',
                 'index' => 'comment'
             )
         );
+
+        $this->addColumn('delete',
+            array(
+                'header' => Mage::helper('zolagopayment')->__('Delete'),
+                'width' => '50px',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
+                    array(
+                        'caption' => Mage::helper('zolagopayment')->__('Delete'),
+                        'url' => array('base' => '*/*/delete'),
+                        'field' => 'id',
+                        'confirm'  => Mage::helper('zolagopayment')->__('Are you sure?')
+                    ),
+                ),
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'stores',
+                'is_system' => true,
+            ));
 
 
         return parent::_prepareColumns();
