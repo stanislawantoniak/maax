@@ -52,8 +52,6 @@
 					</zolago_payment_allocation_observer>
 				</observers>
 			</zolagopayment_save_transaction_after>
-
-
 		</events>
 		<template>
 			<email>
@@ -91,6 +89,13 @@
 				</Zolago_Payment>
 			</modules>
 		</translate>
+        <layout>
+            <updates>
+                <zolagopayment>
+                    <file>zolagopayment.xml</file>
+                </zolagopayment>
+            </updates>
+        </layout>
 	</adminhtml>
 	<admin>
 		<routers>
@@ -99,7 +104,14 @@
 				<module>Zolago_Payment</module>
 				<frontname>payment</frontname>
 			</zolagopayment>
-		</routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <zolagopayment before="Mage_Adminhtml">Zolago_Payment_Adminhtml</zolagopayment>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
 	</admin>
 	<default>
 		<payment>

@@ -47,7 +47,7 @@ $table = $connection->newTable($tableVendorPayment)
     ->addColumn('transport_brutto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
         'nullable' => false,
     ))
-    ->addColumn('marketing_netto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
+    ->addColumn('marketing_netto', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'nullable' => false,
     ))
     ->addColumn('marketing_brutto', Varien_Db_Ddl_Table::TYPE_FLOAT, null, array(
@@ -68,7 +68,7 @@ $table = $connection->newTable($tableVendorPayment)
     ->addForeignKey(
         $installer->getFkName('zolagopayment/vendor_invoice', 'vendor_id', 'udropship/vendor', 'vendor_id'),
         'vendor_id', $installer->getTable('udropship/vendor'), 'vendor_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
+        Varien_Db_Ddl_Table::ACTION_RESTRICT, Varien_Db_Ddl_Table::ACTION_RESTRICT
     );
 
 $installer->getConnection()->createTable($table);
