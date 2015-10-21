@@ -8,27 +8,24 @@ $cms =
 			'identifier' => 'vendor_regulations_accept_accepted',
 			'content' =>
 				<<<EOD
-<p>Aby prowadzić sprzedaż w serwisie MODAGO musisz zaakceptować jego
-                                            regulamin.</p>
+<div class="col-md-8 col-md-offset-2">
+    <div class="">
+        <div style="margin-top:100px;">
+            <!--=== Page Header ===-->
+            <div class="page-header">
+                <div class="page-title">
+                    <h3>Zaakceptowali Państwo regulamin serwisu MODAGO.PL.</h3>
+                </div>
+            </div>
 
-                                        <p>Regulamin musi zostać zaakceptowany przez osobę upoważnioną do jednoosobowego
-                                            reprezentowania
-                                            firmy {{var vendor.company_name}} lub przez osobę posiadającą pełnomocnictwo
-                                            do akceptacji regulaminu
-                                            MODAGO wystawione przez osoby upoważnione do reprezentacji firmy.</p>
-<br/>
-
-                                        <p><b>Pobierz wzór pełnomocnictwa:</b></p>
-                                            <span>&nbsp;
-                                            <span class="red">
-                                                <i class="fa fa-file-pdf-o fa-lg"></i>
-                                            </span>
-                                            <a target="_blank" style="text-decoration:underline"
-                                               href="http://modago.pl/media/pdf/formularz_odstapienia_od_umowy.pdf">Pełnomocnictwo
-                                                do akceptacji
-                                                regulaminu MODAGO</a>
-                                            </span>
-                                        </p>
+            <div class="row">
+                <div class="col-md-12">
+                    Dziękujemy za akceptację regulaminu. Zweryfikujemy Państwa akceptację najszybciej jak to możliwe. 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 EOD
 		,

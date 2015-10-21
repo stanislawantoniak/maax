@@ -16,13 +16,14 @@ $cms =
                                             firmy {{var vendor.company_name}} lub przez osobę posiadającą pełnomocnictwo
                                             do akceptacji regulaminu
                                             MODAGO wystawione przez osoby upoważnione do reprezentacji firmy.</p>
+<br/>
 
-                                        <p class="css-label">Pobierz wzór pełnomocnictwa:</p>
-                                            <span>
+                                        <p><b>Pobierz wzór pełnomocnictwa:</b></p>
+                                            <span>&nbsp;
                                             <span class="red">
                                                 <i class="fa fa-file-pdf-o fa-lg"></i>
                                             </span>
-                                            <a target="_blank"
+                                            <a target="_blank" style="text-decoration:underline"
                                                href="http://modago.pl/media/pdf/formularz_odstapienia_od_umowy.pdf">Pełnomocnictwo
                                                 do akceptacji
                                                 regulaminu MODAGO</a>

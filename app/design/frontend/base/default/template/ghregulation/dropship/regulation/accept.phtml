@@ -190,16 +190,16 @@ $maxSize = $this->maxUploadInMB();
                     if (response.content) {
                         jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:");?> '+response.content+'</label>');                    
                     } else {
-                        jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error: ").' '.$_helper->__("Internal server error."); ?></label>');                                            
+                        jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:").' '.$_helper->__("Internal server error."); ?></label>');                                            
                     }
                     jQuery(".add_regulation_document_preview").html('');
                     jQuery("input[name=regulation_document]").val('');
                 }
             }).fail(function (jqXHR,textStatus) {
                 if (jqXHR.status == 413) {
-                    jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:").' '.$_helper->__(" File too large."); ?></label>');                    
+                    jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:").' '.$_helper->__("File too large."); ?></label>');                    
                 } else {
-                    jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error: ").' '.$_helper->__("Internal server error."); ?></label>');                    
+                    jQuery("div.add_regulation_document").append('<label class="error help-block" for="regulation_document" generated="true"><?php echo $_helper->__("Send file error:").' '.$_helper->__("Internal server error."); ?></label>');                    
                 }
                 jQuery(".add_regulation_document_preview").html('');
                 jQuery("input[name=regulation_document]").val('');
