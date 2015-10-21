@@ -61,16 +61,16 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
             )
         );
 
-        $this->addColumn('wfirma_invoice_id',
+        $this->addColumn('Wfirma_invoice_id',
             array(
-                'header' => $hlp->__('wfirma invoice ID'),
+                'header' => "wfirma ".$hlp->__('Invoice ID'),
                 'width' => '50px',
                 'index' => 'wfirma_invoice_id'
             )
         );
         $this->addColumn('wfirma_invoice_number',
             array(
-                'header' => $hlp->__('wfirma invoice #'),
+                'header' => "Wfirma ".$hlp->__('Invoice #'),
                 'width' => '50px',
                 'index' => 'wfirma_invoice_number'
             )

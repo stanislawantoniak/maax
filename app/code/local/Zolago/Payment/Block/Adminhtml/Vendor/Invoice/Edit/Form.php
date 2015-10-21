@@ -69,13 +69,13 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
             )
         );
         $fieldsetWfirma->addField('wfirma_invoice_id', 'text', array(
-            'label' => $hlp->__('wfirma invoice ID'),
+            'label' => $hlp->__('Invoice ID'),
             'required' => true,
             'name' => 'wfirma_invoice_id',
             'style' => 'max-width:100px;',
         ));
         $fieldsetWfirma->addField('wfirma_invoice_number', 'text', array(
-            'label' => $hlp->__('wfirma invoice #'),
+            'label' => $hlp->__('Invoice #'),
             'required' => true,
             'name' => 'wfirma_invoice_number',
             'style' => 'max-width:200px;',
@@ -127,7 +127,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
             'label' => $label,
             'required' => true,
             'name' => $name,
-            'style' => 'max-width:100px;',
+            'style' => 'max-width:100px;'
         ));
     }
 
