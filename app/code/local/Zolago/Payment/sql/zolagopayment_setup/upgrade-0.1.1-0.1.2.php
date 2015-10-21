@@ -29,7 +29,7 @@ $table = $connection->newTable($tableVendorPayment)
         'unsigned' => true,
         'nullable' => false
     ))
-    ->addColumn('wfirma_invoice_number', Varien_Db_Ddl_Table::TYPE_VARCHAR, null, array(
+    ->addColumn('wfirma_invoice_number', Varien_Db_Ddl_Table::TYPE_VARCHAR, 15, array(
         'nullable' => false,
     ))
     //--WFIRMA fields
