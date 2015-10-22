@@ -35,3 +35,7 @@
 "Vendor Payments","Wypłaty do sprzedawców"
 "New Vendor Payment","Nowa Wypłata do sprzedawcy"
 "Add new vendor payment","Nowa Wypłata do sprzedawcy"
+"Vendor Invoice not found","Faktura sprzedawcy nie istnieje"
+"Invoice has not been generated","Faktura nie została jeszcze wygenerowana"
+"Invoice already generated","Faktura została już wygenerowana"
+"Invoice has been generated successfully","Faktura została pomyślnie wygenerowana"
