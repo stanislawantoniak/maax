@@ -60,7 +60,11 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit_Form extends Mage_Admin
 
     protected function _getValues()
     {
-        return $this->_getModel()->getData();
+        $data = $this->_getModel()->getData();
+
+        $data['cost'] = number_format($data['cost'],2);
+
+        return $data;
     }
 
     /**
