@@ -3,6 +3,7 @@
 class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	protected $_client;
+	protected $_tax;
 
 	public function generateInvoice(Zolago_Payment_Model_Vendor_Invoice $invoice) {
 		$client = $this->getClient();
@@ -22,7 +23,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 							'id'    => $client->getItemIdCommission()
 						),
 						'price' => $invoice->getData('commission_brutto'),
-						'vat'   => 23, //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
+						'vat'   => $this->getTax(), //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
 						'count' => 1 //musi tu byc inaczej jest ustawiane 0
 					)
 				);
@@ -35,7 +36,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 							'id'    => $client->getItemIdTransport()
 						),
 						'price' => $invoice->getData('transport_brutto'),
-						'vat'   => 23, //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
+						'vat'   => $this->getTax(), //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
 						'count' => 1 //musi tu byc inaczej jest ustawiane 0
 					)
 				);
@@ -48,7 +49,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 							'id'    => $client->getItemIdMarketing()
 						),
 						'price' => $invoice->getData('marketing_brutto'),
-						'vat'   => 23, //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
+						'vat'   => $this->getTax(), //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
 						'count' => 1 //musi tu byc inaczej jest ustawiane 0
 					)
 				);
@@ -61,7 +62,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 							'id'    => $client->getItemIdCommission()
 						),
 						'price' => $invoice->getData('other_brutto'),
-						'vat'   => 23, //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
+						'vat'   => $this->getTax(), //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
 						'count' => 1 //musi tu byc inaczej jest ustawiane 0
 					)
 				);
@@ -227,5 +228,13 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 			$this->_client = Mage::getSingleton('ghwfirma/client');
 		}
 		return $this->_client;
+	}
+
+	public function getTax() {
+		if(!$this->_tax) {
+			$tax = Mage::helper('ghstatements')->getTax();
+			$this->_tax = ($tax * 100) - 100; //need percents so: 1.23 will be returned as 23
+		}
+		return $this->_tax;
 	}
 }
