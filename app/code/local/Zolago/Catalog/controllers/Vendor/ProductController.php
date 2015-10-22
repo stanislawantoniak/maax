@@ -80,13 +80,13 @@ class Zolago_Catalog_Vendor_ProductController
                     $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
 					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
-						$ids, 
+						$ids,
 						array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
 						),
-						$storeId, 
+						$storeId,
 						array("check_editable"=>false)
 					);
-					$this->_generateUrlKeys($ids);
+					$this->_generateUrlKeys($ids, $storeId);
 				break;
 				default:
 				    Mage::throwException("Invaild mass method");
@@ -128,14 +128,19 @@ class Zolago_Catalog_Vendor_ProductController
      * re-generate short url for products 
      *
      * @param array $ids
+     * @param int $storeId
      */
-     protected function _generateUrlKeys($ids) {
+     protected function _generateUrlKeys($ids, $storeId) {
+         /** @var Mage_Catalog_Model_Product_Url $string */
          $string = Mage::getSingleton('catalog/product_url');
+         /** @var Zolago_Catalog_Model_Url $url */
          $url = Mage::getSingleton('catalog/url');
          $url->setShouldSaveRewritesHistory(false);
          $resource = $url->getResource();
          foreach ($ids as $id) {
+             /** @var Zolago_Catalog_Model_Product $model */
              $model = Mage::getModel('catalog/product')->load($id);
+             $model->setData('store_id', $storeId); // Trick
              $model->setUrlKey($string->formatUrlKey($model->getName()));
              $resource->saveProductAttribute($model,'url_key');
              $url->refreshProductRewrite($id);
