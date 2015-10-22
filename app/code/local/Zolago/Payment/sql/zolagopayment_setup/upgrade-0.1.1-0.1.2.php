@@ -68,7 +68,7 @@ $table = $connection->newTable($tableVendorPayment)
     ->addForeignKey(
         $installer->getFkName('zolagopayment/vendor_invoice', 'vendor_id', 'udropship/vendor', 'vendor_id'),
         'vendor_id', $installer->getTable('udropship/vendor'), 'vendor_id',
-        Varien_Db_Ddl_Table::ACTION_RESTRICT, Varien_Db_Ddl_Table::ACTION_RESTRICT
+        Varien_Db_Ddl_Table::ACTION_RESTRICT, Varien_Db_Ddl_Table::ACTION_CASCADE
     );
 
 $installer->getConnection()->createTable($table);

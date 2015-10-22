@@ -80,13 +80,13 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
         );
         $fieldsetWfirma->addField('wfirma_invoice_id', 'text', array(
             'label' => $hlp->__('Invoice ID'),
-            'required' => true,
+            'required' => false,
             'name' => 'wfirma_invoice_id',
             'style' => 'max-width:100px;',
         ));
         $fieldsetWfirma->addField('wfirma_invoice_number', 'text', array(
             'label' => $hlp->__('Invoice #'),
-            'required' => true,
+            'required' => false,
             'name' => 'wfirma_invoice_number',
             'style' => 'max-width:200px;',
         ));
@@ -99,19 +99,19 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
         );
         $costFields = array(
             //1. commission
-            "commission_netto" => $hlp->__('Commission netto'),
+            //"commission_netto" => $hlp->__('Commission netto'),
             "commission_brutto" => $hlp->__('Commission brutto'),
 
             //2. transport
-            "transport_netto" => $hlp->__('Transport netto'),
-            "commission_brutto" => $hlp->__('Transport brutto'),
+            //"transport_netto" => $hlp->__('Transport netto'),
+            "transport_brutto" => $hlp->__('Transport brutto'),
 
             //3. marketing
-            "marketing_netto" => $hlp->__('Marketing netto'),
+            //"marketing_netto" => $hlp->__('Marketing netto'),
             "marketing_brutto" => $hlp->__('Marketing brutto'),
 
             //3. other
-            "other_netto" => $hlp->__('Other netto'),
+            //"other_netto" => $hlp->__('Other netto'),
             "other_brutto" => $hlp->__('Other brutto')
         );
         foreach ($costFields as $name => $label) {
