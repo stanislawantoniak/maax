@@ -106,7 +106,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
         );
         // Color attribute
         $collection->joinAttribute(
-            'product_color',
+            'color',
             'catalog_product/color',
             'entity_id',
             null,
@@ -115,7 +115,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
         );
         // Description status attribute
         $collection->joinAttribute(
-            'product_description_status',
+            'description_status',
             'catalog_product/description_status',
             'entity_id',
             null,
@@ -152,7 +152,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
                 'options' => $this->_getAttributeOptions('brandshop')
             ), 'udropship_vendor');
         // Color attribute
-        $this->addColumnAfter('product_color',
+        $this->addColumnAfter('color',
             array(
                 'header'=> $helper->__('Color'),
                 'index' => 'color',
@@ -160,13 +160,13 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
                 'options' => $this->_getAttributeOptions('color')
             ), 'brandshop');
         // Description status attribute
-        $this->addColumnAfter('product_description_status',
+        $this->addColumnAfter('description_status',
             array(
                 'header'=> $helper->__('Description status'),
                 'index' => 'description_status',
                 'type'  => 'options',
                 'options' => $this->_getAttributeOptions('description_status')
-            ), 'product_color');
+            ), 'color');
 
         return parent::_prepareColumns();
     }
