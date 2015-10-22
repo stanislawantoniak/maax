@@ -14,10 +14,10 @@ $maxSize = $this->maxUploadInMB();
 ?>
 <link rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css">
 <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
-    <div class="">
+    <div class="" style="width:900px; margin:auto">
         <div style="margin-top:100px;">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12">                    
                     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
                     <form class="form-horizontal" id="accept_regulation_documents_form" action="<?php echo $this->getUrl("*/*/acceptPost"); ?>" method="post" enctype="multipart/form-data">
                         <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
@@ -27,6 +27,7 @@ $maxSize = $this->maxUploadInMB();
                             <div class="widget-header" style="text-align: center;">
                                 <h4><?php echo $_helper->__("Accept regulation"); ?></h4>
                             </div>
+                            <br/>
                             <div class="widget-content">
                                 <div class="col-md-12">
                                     <?php echo $this->getAcceptBlock(); ?>
@@ -94,6 +95,7 @@ $maxSize = $this->maxUploadInMB();
                                     </label>
                                 </div>
                             </div>
+                            <br/>
                         <div class="form-actions text-right" style="margin-bottom: 0px;margin-left: 0;margin-right: 0;">
                             <div class="submit-tooltip-wrapper" data-title="<?php echo $_helper->__("File is now uploading. It can take a while"); ?>">
                                 <button type="submit" id="filter_submit" class="btn btn-primary pull-right" >
