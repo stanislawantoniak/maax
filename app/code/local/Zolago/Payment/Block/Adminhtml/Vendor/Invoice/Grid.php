@@ -143,6 +143,45 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
                 'is_system' => true,
             ));
 
+        $this->addColumn('generate',
+            array(
+                'header' => $hlp->__('Generate'),
+                'width' => '50px',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
+                    array(
+                        'caption' => $hlp->__('Generate'),
+                        'url' => array('base' => '*/*/generate'),
+                        'field' => 'id',
+                        'confirm' => $hlp->__('Generate invoice in wFirma system?')
+                    ),
+                ),
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'stores',
+                'is_system' => true,
+            ));
+
+        $this->addColumn('download',
+            array(
+                'header' => $hlp->__('Download'),
+                'width' => '50px',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
+                    array(
+                        'caption' => $hlp->__('Download'),
+                        'url' => array('base' => '*/*/download'),
+                        'field' => 'id'
+                    ),
+                ),
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'stores',
+                'is_system' => true,
+            ));
+
 
         return parent::_prepareColumns();
     }

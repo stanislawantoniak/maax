@@ -108,6 +108,69 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
         return $this->_redirect("*/*");
     }
 
+    public function generateAction()
+    {
+        $id = $this->getRequest()->getParam("id");
+        /** @var Zolago_Payment_Helper_Data $hlp */
+        $hlp = Mage::helper('zolagopayment');
+        /** @var GH_Wfirma_Helper_Data $wfirmaHlp */
+        $wfirmaHlp = Mage::helper('ghwfirma');
+        try {
+            /** @var Zolago_Payment_Model_Vendor_Invoice $model */
+            $model = Mage::getModel("zolagopayment/vendor_invoice")->load($id);
+            if (!$model->getId()) {
+                Mage::throwException("Vendor Invoice not found");
+            } elseif($model->getData('wfirma_invoice_id')) {
+                Mage::throwException("Invoice already generated");
+            } else {
+                $wfirmaHlp->generateInvoice($model);
+            }
+            $this->_getSession()->addSuccess(Mage::helper('zolagopayment')->__("Invoice has been generated"));
+
+        } catch(GH_Wfirma_Exception $e) {
+            $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
+            return $this->_redirectReferer();
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($hlp->__($e->getMessage()));
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
+            Mage::logException($e);
+        }
+        return $this->_redirect("*/*");
+    }
+
+    public function downloadAction()
+    {
+        $id = $this->getRequest()->getParam("id");
+        /** @var Zolago_Payment_Helper_Data $hlp */
+        $hlp = Mage::helper('zolagopayment');
+        /** @var GH_Wfirma_Helper_Data $wfirmaHlp */
+        $wfirmaHlp = Mage::helper('ghwfirma');
+        try {
+            /** @var Zolago_Payment_Model_Vendor_Invoice $model */
+            $model = Mage::getModel("zolagopayment/vendor_invoice")->load($id);
+            if (!$model->getId()) {
+                Mage::throwException("Vendor Invoice not found");
+            } elseif(!$model->getData('wfirma_invoice_id')) {
+                Mage::throwException("Invoice has not been generated");
+            } else {
+                $wfirmaHlp->getClient()->downloadInvoice($model->getData('wfirma_invoice_id'));
+            }
+
+        } catch(GH_Wfirma_Exception $e) {
+            $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
+            return $this->_redirectReferer();
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($hlp->__($e->getMessage()));
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
+            Mage::logException($e);
+        }
+        return true;
+    }
+
     /**
      * @param $modelId
      * @return Zolago_Payment_Model_Vendor_Invoice

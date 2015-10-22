@@ -45,13 +45,14 @@ class GH_Wfirma_Model_Client {
 	private $_outputFormat                  = 'json'; //other options as above
 	private $_allowedDataFormats            = array('xml','json','php');
 
-
 	private $_login                         = false;
 	private $_password                      = false;
 	private $_itemIdCommission              = false;
 	private $_itemIdTransport               = false;
 	private $_itemIdMarketing               = false;
 	private $_itemIdOther                   = false;
+
+	private $_helper;
 
 	public function __construct() {
 		//do nothing for now
@@ -112,7 +113,7 @@ class GH_Wfirma_Model_Client {
 			$this->_inputFormat = $format;
 			return true;
 		}
-		self::throwException('Invalid input format, allowed types: '.implode(", ",$this->_allowedDataFormats));
+		self::throwException($this->getHelper()->__('Invalid input format, allowed types:').' '.implode(", ",$this->_allowedDataFormats));
 	}
 
 	public function getOutputFormat() {
@@ -124,7 +125,7 @@ class GH_Wfirma_Model_Client {
 			$this->_inputFormat = $format;
 			return true;
 		}
-		self::throwException('Invalid output format, allowed types: '.implode(", ",$this->_allowedDataFormats));
+		self::throwException($this->getHelper()->__('Invalid output format, allowed types:').' '.implode(", ",$this->_allowedDataFormats));
 	}
 
 	public static function throwException($msg) {
@@ -133,6 +134,10 @@ class GH_Wfirma_Model_Client {
 
 	public static function log($data) {
 		Mage::log($data,null,'ghwfirma_client.log');
+	}
+
+	public static function logException($exception) {
+		Mage::logException($exception);
 	}
 
 	private function doRequest($moduleAction,$post=null) {
@@ -159,12 +164,15 @@ class GH_Wfirma_Model_Client {
 			}
 
 			if($result['status']['code'] !== self::RESULT_STATUS_CODE_OK) {
+				$helper = $this->getHelper();
 				if($result['status']['code'] == self::RESULT_STATUS_CODE_ERROR) {
 					//oznacza że walidacja nie przeszła - nie podano wymaganego pola, albo próbowano zmienić nieedytowalne
 					//w takim wypadku logowana jest cała zwrócona tablica, bo są tam dokładne informacje co zostało zrobione źle
 					self::log($result);
+					self::throwException($helper->__('wFirma api error occured:').' '.$result['status']['code'].'<br/>'.$helper->__('Check logs for more details'));
+				} else {
+					self::throwException($helper->__('wFirma api error occured:').' '.$result['status']['code']);
 				}
-				self::throwException('Error occured: '.$result['status']['code']);
 			}
 		}
 		//w innym wypadku wynik to plik xml albo pdf, wiec wiadomo co robic dalej (np $this->downloadInvoice())
@@ -196,7 +204,7 @@ class GH_Wfirma_Model_Client {
 
 	public function addInvoice($post) {
 		//dummy data
-		$postExample = array(
+		/*$postExample = array(
 			'invoices' => array(
 				'invoice' => array(
 					'contractor' => array(
@@ -254,7 +262,7 @@ class GH_Wfirma_Model_Client {
 					)
 				)
 			)
-		);
+		);*/
 
 		return $this->doRequest("invoices/add",$post);
 	}
@@ -405,5 +413,15 @@ class GH_Wfirma_Model_Client {
 	public function editContractor($contractorId,$post) {
 		//$post = array as in example above
 		return $this->doRequest("contractors/edit/$contractorId",$post);
+	}
+
+	/**
+	 * @return GH_Wfirma_Helper_Data
+	 */
+	public function getHelper() {
+		if(!$this->_helper) {
+			$this->_helper = Mage::helper('ghwfirma');
+		}
+		return $this->_helper;
 	}
 }

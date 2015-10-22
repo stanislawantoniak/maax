@@ -30,14 +30,22 @@ class Zolago_Payment_Model_Vendor_Invoice extends Mage_Core_Model_Abstract
     const INVOICE_TYPE_ORIGINAL = 0;
     const INVOICE_TYPE_CORRECTION = 1;
 
+    protected $_vendor = false;
+
     protected function _construct()
     {
         $this->_init('zolagopayment/vendor_invoice');
     }
 
+    /**
+     * @return Zolago_Dropship_Model_Vendor
+     */
     public function getVendor()
     {
-        return Mage::getModel("zolagodropship/vendor")->load($this->getVendorId());
+        if(!$this->_vendor) {
+            $this->_vendor = Mage::getModel("zolagodropship/vendor")->load($this->getVendorId());
+        }
+        return $this->_vendor;
     }
 
 
