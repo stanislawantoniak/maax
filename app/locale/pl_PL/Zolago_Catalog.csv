@@ -1,3 +1,4 @@
+"Products: ","Produktów: "
 "Product status","Status produktu"
 "Selection","Zaznaczenie"
 "Unwrapping","Rozwijanie"
@@ -143,6 +144,7 @@
 "Vendor %s", "Sprzedawca %s"
 "Brandshop", "Sklep"
 "Vendor","Sprzedawca"
+"Color","Kolor"
 "Mall", "Galeria handlowa"
 "narrow results","zawęź wyniki"
 "Go to Mall", "Przejdź do galerii handlowej"
@@ -234,3 +236,4 @@
 "Not accepted","Niezatwierdzony"
 "Waiting for acceptation by admin","Czeka na akceptację admina"
 "Accepted","Zatwierdzony"
+"%s: Product description already accepted", "%s: Opis produktu już zatwierdzony"
