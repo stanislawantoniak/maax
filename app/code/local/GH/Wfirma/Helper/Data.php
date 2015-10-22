@@ -224,7 +224,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function getClient() {
 		if(!$this->_client) {
-			$this->_client = Mage::getModel('ghwfirma/client');
+			$this->_client = Mage::getSingleton('ghwfirma/client');
 		}
 		return $this->_client;
 	}

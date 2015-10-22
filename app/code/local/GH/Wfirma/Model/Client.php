@@ -2,6 +2,7 @@
 class GH_Wfirma_Model_Client {
 
 	//authentication config paths
+	const API_URL_CONFIG_PATH               = 'ghwfirma/authentication/api_url';
 	const LOGIN_CONFIG_PATH                 = 'ghwfirma/authentication/login';
 	const PASSWORD_CONFIG_PATH              = 'ghwfirma/authentication/password';
 
@@ -40,11 +41,11 @@ class GH_Wfirma_Model_Client {
 
 
 
-	private $_apiUrl                        = 'https://api2.wfirma.pl/';
 	private $_inputFormat                   = 'json'; //other options: xml (default) and php (serialized php array),
 	private $_outputFormat                  = 'json'; //other options as above
 	private $_allowedDataFormats            = array('xml','json','php');
 
+	private $_apiUrl                        = false;
 	private $_login                         = false;
 	private $_password                      = false;
 	private $_itemIdCommission              = false;
@@ -101,6 +102,9 @@ class GH_Wfirma_Model_Client {
 	}
 
 	private function getApiUrl() {
+		if(!$this->_apiUrl) {
+			$this->_apiUrl = Mage::getStoreConfig(self::API_URL_CONFIG_PATH);
+		}
 		return $this->_apiUrl;
 	}
 
