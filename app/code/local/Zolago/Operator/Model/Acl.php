@@ -47,7 +47,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Mass editor
 	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
 	// Gh Attribute Rules
-	const RES_GH_ATTRIBUTE_RULES					= "ghattributerules/mass";
+	const RES_GH_ATTRIBUTE_RULES					= "udropship/mass";
 
 	// Mass editor
 	const RES_UDPROD_VENDOR_PRODUCT					= "udprod/vendor_product";
