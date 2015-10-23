@@ -65,6 +65,11 @@
 		                <fieldset>vendor_preferences</fieldset>
 		                <type>text</type>
 		            </contact_telephone>
+                    <rma_company_name>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA campany name</label>
+                        <type>text</type>
+                    </rma_company_name>
                     <rma_email>
                         <fieldset>vendor_preferences</fieldset>
                         <label>RMA contact data: Email</label>
