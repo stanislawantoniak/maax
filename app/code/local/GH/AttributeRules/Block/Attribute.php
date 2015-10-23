@@ -49,7 +49,7 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
      * @return string
      */
     public function getActionUrl() {
-        return $this->getUrl("ghattributerules/mass/autofill", array("_secure" => true));
+        return $this->getUrl("udropship/mass/autofill", array("_secure" => true));
     }
 
     /**
@@ -57,7 +57,7 @@ class GH_AttributeRules_Block_Attribute extends Mage_Core_Block_Template
      * @return string
      */
     public function getRemoveRuleUrl($rule) {
-        return $this->getUrl("ghattributerules/mass/removerule",
+        return $this->getUrl("udropship/mass/removerule",
             array(
                 "_query" => array("id" => $rule->getId()),
                 "_secure" => true

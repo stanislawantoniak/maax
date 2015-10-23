@@ -69,6 +69,13 @@
                     <frontName>ghattributerules</frontName>
                 </args>
             </gh_attributerules>
+            <udropship>
+                <args>
+                    <modules>
+                        <GH_AttributeRules before="Unirgy_Dropship">GH_AttributeRules</GH_AttributeRules>
+                    </modules>
+                </args>
+            </udropship>
         </routers>
     </frontend>
     <adminhtml>
