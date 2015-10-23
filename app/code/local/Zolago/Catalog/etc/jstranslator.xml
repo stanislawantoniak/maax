@@ -49,7 +49,7 @@
         <message>Type</message>
     </price-type>
     <price-politics translate="message" module="zolagocatalog">
-        <message>Manually disabled</message>
+        <message>Manual out-of-stock</message>
     </price-politics>
     <price-loading translate="message" module="zolagocatalog">
         <message>Loading...</message>
@@ -127,7 +127,7 @@
         <message>Mass status change</message>
     </mass-status-change>
     <mass-politics-change translate="message" module="zolagocatalog">
-        <message>Mass politics change</message>
+        <message>Stock policy mass change</message>
     </mass-politics-change>
     <empty translate="message" module="zolagocatalog">
         <message>empty</message>
