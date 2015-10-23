@@ -146,7 +146,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
         $data = $this->_getModel()->getData();
         foreach($data as $key=>$value) {
             if(strpos($key,'brutto') !== false || strpos($key,'brutto') !== false) {
-                $data[$key] = number_format($value, 2);
+                $data[$key] = number_format($value, 2, '.', '');
             }
         }
 
