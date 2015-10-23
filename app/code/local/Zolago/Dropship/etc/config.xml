@@ -122,11 +122,6 @@
                         <position>1</position>
                         <hidden>true</hidden>
                     </vendor_preferences>
-                    <to_vendor>
-                        <legend>to_vendor</legend>
-                        <position>1</position>
-                        <hidden>true</hidden>
-                    </to_vendor>
                     <company_contact_data>
                         <legend>Company contact data</legend>
                         <position>2</position>
@@ -134,18 +129,12 @@
                     </company_contact_data>
                 </fieldsets>
                 <fields>
-                    <rma_company_name>
-                        <fieldset>to_vendor</fieldset>
-                        <label>rma_company_name</label>
-                        <type>text</type>
-                        <position>0</position>
-                    </rma_company_name>
-                    <tax_no>
-                        <fieldset>to_vendor</fieldset>
-                        <label>tax_no</label>
-                        <type>text</type>
-                        <position>0</position>
-                    </tax_no>
+                    <!--<rma_company_name>-->
+                        <!--<fieldset>to_vendor</fieldset>-->
+                        <!--<label>rma_company_name</label>-->
+                        <!--<type>text</type>-->
+                        <!--<position>0</position>-->
+                    <!--</rma_company_name>-->
 
 	                <legal_entity>
 		                <label>Legal entity</label>

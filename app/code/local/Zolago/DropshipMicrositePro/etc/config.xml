@@ -70,12 +70,19 @@
 		                <type>text</type>
                         <position>1</position>
 		            </company_name>
-		            <!--<tax_no>-->
-		                <!--<label>NIP</label>-->
-		                <!--<fieldset>shipping_origin</fieldset>-->
-		                <!--<type>text</type>-->
-                        <!--<position>2</position>-->
-		            <!--</tax_no>-->
+
+                    <rma_company_name>
+                        <label>Company name</label>
+                        <fieldset>shipping_origin</fieldset>
+                        <type>text</type>
+                        <position>0</position>
+                    </rma_company_name>
+		            <tax_no>
+		                <label>NIP</label>
+		                <fieldset>shipping_origin</fieldset>
+		                <type>text</type>
+                        <position>2</position>
+		            </tax_no>
                     <!--Company registration data-->
 
                     <!--Company contact data-->
