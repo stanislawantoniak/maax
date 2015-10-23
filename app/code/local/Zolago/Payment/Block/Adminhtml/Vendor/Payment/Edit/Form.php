@@ -62,7 +62,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit_Form extends Mage_Admin
     {
         $data = $this->_getModel()->getData();
 
-        $data['cost'] = number_format($data['cost'],2);
+        $data['cost'] = number_format($data['cost'],2, '.', '');
 
         return $data;
     }
