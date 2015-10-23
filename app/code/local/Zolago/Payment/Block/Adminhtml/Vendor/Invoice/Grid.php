@@ -9,7 +9,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
     public function __construct()
     {
         parent::__construct();
-        $this->setId('grid_id');
+        $this->setId('vendor_invoice_grid_id');
         $this->setDefaultSort('date');
         $this->setDefaultDir('desc');
         $this->setSaveParametersInSession(true);
