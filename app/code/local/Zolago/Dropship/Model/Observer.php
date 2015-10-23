@@ -167,6 +167,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs)
             return;
 
+
         //Addresses
         if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
             $addressBlock = Mage::app()
