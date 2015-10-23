@@ -51,10 +51,14 @@
                         <legend>Main person responsible for system administration</legend>
                         <position>4</position>
                     </administrator_data>
-                    <rma_data>
-                        <legend>RMA address</legend>
-                        <position>5</position>
-                    </rma_data>
+                    <rma_contact_data>
+                        <legend>RMA contact data</legend>
+                        <position>6</position>
+                    </rma_contact_data>
+                    <rma_executive_data>
+                        <legend>RMA executive</legend>
+                        <position>7</position>
+                    </rma_executive_data>
 		        </fieldsets>
 		    </address>
 		    <vendor>
@@ -66,30 +70,12 @@
 		                <type>text</type>
                         <position>1</position>
 		            </company_name>
-                    <street>
-                        <label>Street and number</label>
-                        <fieldset>company_registration_data</fieldset>
-                        <type>text</type>
-                        <position>2</position>
-                    </street>
-                    <city>
-                        <label>City</label>
-                        <fieldset>company_registration_data</fieldset>
-                        <type>text</type>
-                        <position>3</position>
-                    </city>
-                    <zip>
-                        <label>Zip/Postal Code</label>
-                        <fieldset>company_registration_data</fieldset>
-                        <type>text</type>
-                        <position>4</position>
-                    </zip>
-		            <tax_no>
-		                <label>NIP</label>
-		                <fieldset>company_registration_data</fieldset>
-		                <type>text</type>
-                        <position>5</position>
-		            </tax_no>
+		            <!--<tax_no>-->
+		                <!--<label>NIP</label>-->
+		                <!--<fieldset>shipping_origin</fieldset>-->
+		                <!--<type>text</type>-->
+                        <!--<position>2</position>-->
+		            <!--</tax_no>-->
                     <!--Company registration data-->
 
                     <!--Company contact data-->
@@ -166,40 +152,46 @@
                     </administrator_telephone_mobile>
                     <!--Main person responsible for system administration-->
 
-                    <!--RMA address-->
-                    <rma_company_name>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>RMA campany name</label>
-                        <type>text</type>
-                    </rma_company_name>
+                    <!--RMA-->
+
+                    <!--RMA contact data-->
                     <rma_email>
-                        <fieldset>rma_data</fieldset>
-                        <label>RMA contact data: Email</label>
+                        <fieldset>rma_contact_data</fieldset>
+                        <label>Email</label>
                         <type>text</type>
+                        <position>1</position>
                     </rma_email>
                     <rma_telephone>
-                        <fieldset>rma_data</fieldset>
-                        <label>RMA contact data: Phone</label>
+                        <fieldset>rma_contact_data</fieldset>
+                        <label>Phone</label>
                         <type>text</type>
+                        <position>2</position>
                     </rma_telephone>
+                    <!--RMA contact data-->
+
+                    <!--RMA executive-->
                     <rma_executive_telephone>
-                        <fieldset>rma_data</fieldset>
-                        <label>RMA executive: Phone</label>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Phone</label>
                         <type>text</type>
+                        <position>1</position>
                     </rma_executive_telephone>
                     <rma_executive_telephone_mobile>
-                        <fieldset>rma_data</fieldset>
-                        <label>RMA executive: Mobile</label>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Mobile</label>
                         <type>text</type>
+                        <position>2</position>
                     </rma_executive_telephone_mobile>
                     <rma_executive_email>
-                        <fieldset>rma_data</fieldset>
-                        <label>RMA executive: Email</label>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Email</label>
                         <type>text</type>
+                        <position>3</position>
                     </rma_executive_email>
-                    <!--RMA address-->
+                    <!--RMA executive-->
 
 
+                    <!--RMA-->
 
 
                     <billing_email>
@@ -223,26 +215,7 @@
                         <label>Billing Zip/Postal Code</label>
                         <type>text</type>
                     </billing_zip>
-                    <administrator_firstname>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator first name</label>
-                        <type>text</type>
-                    </administrator_firstname>
-                    <administrator_lastname>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator last name</label>
-                        <type>text</type>
-                    </administrator_lastname>
-                    <administrator_telephone>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator phone</label>
-                        <type>text</type>
-                    </administrator_telephone>
-                    <administrator_telephone_mobile>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator phone mobile</label>
-                        <type>text</type>
-                    </administrator_telephone_mobile>
+
 		        </fields>
 		    </vendor>
 		</udropship>

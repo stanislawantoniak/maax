@@ -248,7 +248,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $block = $observer->getEvent()->getBlock();
         $form = $block->getForm();
         $fieldset = $form->getElement('vendor_form');
-        
+
         $this->_overrideConfigData();
         
         $keys = array (
@@ -303,6 +303,6 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'cpc_commission'
         );        
         $this->_addFieldsToFieldset($keys,$fieldset);
-        
+
     }
 }

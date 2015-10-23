@@ -183,7 +183,6 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
 
                 foreach (
                     array(
-                        'rma_company_name',
                         'dhl_rma',
                         'dhl_rma_account',
                         'dhl_rma_login',
@@ -200,7 +199,8 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                         'rma_telephone',
                         'rma_executive_telephone',
                         'rma_executive_telephone_mobile',
-                        'rma_executive_email'
+                        'rma_executive_email',
+                        'rma_company_name'
                     ) as $f) {
                     if (array_key_exists($f, $p)) {
                         $v->setData($f, $p[$f]);
