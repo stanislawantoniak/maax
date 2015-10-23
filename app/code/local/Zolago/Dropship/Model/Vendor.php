@@ -3,6 +3,7 @@
 /**
  * Class Zolago_Dropship_Model_Vendor
  * @method string getVendorName()
+ * @method string getCompanyName()
  * @method string getStatementsCalendar()
  * @method string getUrlKey()
  *

@@ -17,6 +17,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
             }
         }
         $this->_renderPage(null, "vendorsettings_info");
+        /** @see app/design/frontend/base/default/template/zolagodropship/vendor/settings/info.phtml */
     }
 
     public function shippingAction()
