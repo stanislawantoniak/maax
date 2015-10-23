@@ -3,6 +3,7 @@
 /**
  * Class Zolago_Dropship_Model_Vendor
  * @method string getVendorName()
+ * @method string getCompanyName()
  * @method string getStatementsCalendar()
  * @method string getUrlKey()
  *
@@ -198,13 +199,13 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     public function getRmaAddress() {
         $data = $this->getData();
         $address = array (
-                       'name' 		=> (empty($data['company_name']))? $data['vendor_name']:$data['company_name'],
+                       'name' 		=> (empty($data['rma_company_name']))? $data['company_name']:$data['rma_company_name'],
                        'city' 		=> $data['city'],
                        'postcode' 	=> $data['zip'],
                        'street' 	=> $data['street'],
                        'personName' => $data['vendor_attn'],
-                       'phone' 	=> $data['rma_executive_telephone_mobile'],
-                       'email' 	=> $data['rma_executive_email'],
+                       'phone' 	    => $data['rma_executive_telephone_mobile'],
+                       'email' 	    => $data['rma_executive_email'],
                        'country'	=> $data['country_id'],
                    );
         return $address;

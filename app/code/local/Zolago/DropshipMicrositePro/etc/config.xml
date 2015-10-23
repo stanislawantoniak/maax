@@ -108,7 +108,7 @@
 		                <label>Contact phone</label>
 		                <fieldset>company_contact_data</fieldset>
 		                <type>text</type>
-		            </contact_telephone>
+		            </contact_telephone>                    
                     <!--Company contact data-->
 
 
@@ -167,6 +167,11 @@
                     <!--Main person responsible for system administration-->
 
                     <!--RMA address-->
+                    <rma_company_name>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>RMA campany name</label>
+                        <type>text</type>
+                    </rma_company_name>
                     <rma_email>
                         <fieldset>rma_data</fieldset>
                         <label>RMA contact data: Email</label>
@@ -218,7 +223,26 @@
                         <label>Billing Zip/Postal Code</label>
                         <type>text</type>
                     </billing_zip>
-
+                    <administrator_firstname>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator first name</label>
+                        <type>text</type>
+                    </administrator_firstname>
+                    <administrator_lastname>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator last name</label>
+                        <type>text</type>
+                    </administrator_lastname>
+                    <administrator_telephone>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator phone</label>
+                        <type>text</type>
+                    </administrator_telephone>
+                    <administrator_telephone_mobile>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator phone mobile</label>
+                        <type>text</type>
+                    </administrator_telephone_mobile>
 		        </fields>
 		    </vendor>
 		</udropship>

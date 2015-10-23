@@ -17,6 +17,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
             }
         }
         $this->_renderPage(null, "vendorsettings_info");
+        /** @see app/design/frontend/base/default/template/zolagodropship/vendor/settings/info.phtml */
     }
 
     public function shippingAction()
@@ -182,13 +183,24 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
 
                 foreach (
                     array(
-                        'company_name',
-                        'dhl_rma', 'dhl_rma_account', 'dhl_rma_login', 'dhl_rma_password',
-                        'orbaups_rma', 'orbaups_rma_account', 'orbaups_rma_login', 'orbaups_rma_password',
+                        'rma_company_name',
+                        'dhl_rma',
+                        'dhl_rma_account',
+                        'dhl_rma_login',
+                        'dhl_rma_password',
+                        'orbaups_rma',
+                        'orbaups_rma_account',
+                        'orbaups_rma_login',
+                        'orbaups_rma_password',
                         'vendor_attn',
-                        'street', 'city', 'zip',
-                        'rma_email','rma_telephone','rma_executive_telephone',
-                        'rma_executive_telephone_mobile','rma_executive_email'
+                        'street',
+                        'city',
+                        'zip',
+                        'rma_email',
+                        'rma_telephone',
+                        'rma_executive_telephone',
+                        'rma_executive_telephone_mobile',
+                        'rma_executive_email'
                     ) as $f) {
                     if (array_key_exists($f, $p)) {
                         $v->setData($f, $p[$f]);
