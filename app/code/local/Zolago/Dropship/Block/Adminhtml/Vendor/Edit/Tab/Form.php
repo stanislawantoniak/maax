@@ -85,7 +85,6 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
             ->setAfterElementHtml("
                          <script type=\"text/javascript\">
                             var regulationAccepted = '" . $regulationAccepted . "';
-                            console.log(regulationAccepted);
 
                             if(regulationAccepted == 0){
                                 jQuery(\"[name=status1] option[value='A']\").prop(\"disabled\", true);
