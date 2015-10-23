@@ -125,7 +125,7 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             } else {
                 $wfirmaHlp->generateInvoice($model);
             }
-            $this->_getSession()->addSuccess(Mage::helper('zolagopayment')->__("Invoice has been generated"));
+            $this->_getSession()->addSuccess(Mage::helper('zolagopayment')->__("Invoice has been generated successfully"));
 
         } catch(GH_Wfirma_Exception $e) {
             $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
