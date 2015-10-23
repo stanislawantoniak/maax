@@ -59,25 +59,25 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Addresses extends Zolago_D
             'label'     => $hlp->__('Attention To'),
         ));
 
-        $fieldset->addField('street', 'textarea', array(
-            'name'      => 'street',
-            'label'     => $hlp->__('Street'),
-            'class'     => 'required-entry',
-            'required'  => true,
-            'style'     => 'height:50px',
-        ));
+//        $fieldset->addField('street', 'textarea', array(
+//            'name'      => 'street',
+//            'label'     => $hlp->__('Street'),
+//            'class'     => 'required-entry',
+//            'required'  => true,
+//            'style'     => 'height:50px',
+//        ));
 
-        $fieldset->addField('city', 'text', array(
-            'name'      => 'city',
-            'label'     => $hlp->__('City'),
-            'class'     => 'required-entry',
-            'required'  => true,
-        ));
+//        $fieldset->addField('city', 'text', array(
+//            'name'      => 'city',
+//            'label'     => $hlp->__('City'),
+//            'class'     => 'required-entry',
+//            'required'  => true,
+//        ));
 
-        $fieldset->addField('zip', 'text', array(
-            'name'      => 'zip',
-            'label'     => $hlp->__('Zip / Postal code'),
-        ));
+//        $fieldset->addField('zip', 'text', array(
+//            'name'      => 'zip',
+//            'label'     => $hlp->__('Zip / Postal code'),
+//        ));
 
         $country = $fieldset->addField('country_id', 'select',
             array(
