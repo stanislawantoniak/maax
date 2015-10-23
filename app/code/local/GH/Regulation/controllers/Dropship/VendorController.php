@@ -341,6 +341,15 @@ class GH_Regulation_Dropship_VendorController
         $this->getResponse()->sendHeaders();
         readfile($filepath);
     }
+    
+    
+    /**
+     * rules history
+     *
+     */
+     public function rulesAction() {
+         parent::_renderPage(null,'ghregulation');         
+     }
 
     /**
      * Delete accept directory for vendor

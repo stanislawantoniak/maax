@@ -1,0 +1,74 @@
+<?php
+$documentList = $this->getDocumentList();
+$hlp = Mage::helper('ghregulation');
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $hlp->__("Modago.pl regulation rules");?></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo $hlp->__("Regulation and attachments"); ?></h4>
+                    </div>
+                    <div class="widget-content">                        
+                        <?php foreach ($documentList as $key => $document) : ?>
+                        <?php $id = md5(json_encode($document)); ?>
+                            <div class="widget box">
+                                <div class="widget-header">
+                                    <h4>                                        
+                                        <i class="icon-file-text-alt"></i> 
+                                        <?php echo $key; ?>
+                                    </h4>
+                                </div>
+                                <div class="widget-content">                                    
+                                    <?php $actual = current($document); ?>
+                                    <div class="dd">
+                                    <ol class="dd-list">
+                                    <li class="dd-item"><div class="dd-handle"><?php echo $hlp->__('is valid from:').' '.$actual['date']; ?>&nbsp;&nbsp;&nbsp;
+                                    <a  href="<?php echo $actual['url'];?>"><?php echo $actual['filename'];?></a></div></li>
+                                    <ol id="history_<?php echo $id;?>" class="history dd-list">
+                                    <?php foreach ($document as $item) :?>
+                                            <li class="dd-item">
+                                                <div class="dd-handle">
+                                                <?php echo $hlp->__('is valid from:').' '.$item['date']; ?>&nbsp;&nbsp;&nbsp;
+                                                <a href="<?php echo $item['url']; ?>"><?php echo $item['filename']; ?></a>
+                                                </div>
+                                            </li>
+                                    <?php endforeach; ?>
+                                    </ol>
+                                    </ol>
+                                    </div>
+                                    <a class="history-click more" data-show="0" data-history="#history_<?php echo $id; ?>" href="javascript:void(0);">
+                                        <?php echo $hlp->__('show history'); ?>
+                                    </a>
+                                    
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+jQuery(".history").hide();
+jQuery(".history-click").click(function() {
+    var data_id = jQuery(this).data('history');
+    var show = jQuery(this).data('show');
+    if (show == 0) {
+        jQuery(data_id).show('blind');
+        jQuery(this).html("<?php echo $hlp->__('hide history');?>");
+        jQuery(this).data('show',1);
+    } else {
+        jQuery(data_id).hide('blind');
+        jQuery(this).html("<?php echo $hlp->__('show history');?>");
+        jQuery(this).data('show',0);
+    }
+});
+</script>

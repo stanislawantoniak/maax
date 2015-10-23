@@ -11,7 +11,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	const ITEM_RMA		  = 'rma';
 	const ITEM_ADVERTISE = 'advertise';
 	const ITEM_SETTING	  = 'setting';
-	//const ITEM_REGULATIONS = "regulation";
+	const ITEM_REGULATIONS = "regulation";
 	const ITEM_STATEMENTS= 'statements';
 	const ITEM_DIRECT_ORDER = "direct_order";
 	/**
@@ -50,7 +50,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				self::ITEM_RMA			=>	$this->getRmaSection(),
 				self::ITEM_ADVERTISE	=>	$this->getAdvertiseSection(),
 				self::ITEM_SETTING		=>	$this->getSettingSection(),
-				//self::ITEM_REGULATIONS	=>	$this->getRegulationsSection(),
+				self::ITEM_REGULATIONS	=>	$this->getRegulationsSection(),
 				self::ITEM_STATEMENTS	=>	$this->getStatementsSection(),
 			);
 			foreach($sections as $key=>$section){
@@ -159,14 +159,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 					"active" => $this->isActive("ghregulation"),
 					"icon" => "icon-ok-circle",
 					"label" => $this->__('Acceptance of Rules'),
-					"url" => "#"
+					"url" => $this->getUrl('udropship/vendor/rules'),
 				);
-				$groupOne[] = array(
+/*				$groupOne[] = array(
 					"active" => $this->isActive("ghregulation"),
 					"icon" => "icon-certificate",
 					"label" => $this->__('Terms of cooperation'),
 					"url" => "#"
-				);
+				); */
 			}
 
 			$grouped = $this->_processGroups($groupOne);
