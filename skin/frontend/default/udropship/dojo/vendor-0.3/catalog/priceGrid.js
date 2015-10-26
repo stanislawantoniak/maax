@@ -488,7 +488,7 @@ define([
 				]
 			},
 			politics: {
-				label: Translator.translate("Manually disabled"), 
+				label: Translator.translate("Manual out-of-stock"), 
 				field: "politics",
 				className: "column-medium header",
 				children: [

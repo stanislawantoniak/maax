@@ -17,7 +17,7 @@ class Zolago_Catalog_Model_Product_Source_Politics
                 ),
                 array (
                     'value' => self::FLAG_MANUAL_DISABLED,
-                    'label' => Mage::helper('zolagocatalog')->__('Manually disabled'),
+                    'label' => Mage::helper('zolagocatalog')->__('Manual out-of-stock'),
                 )
             );
         } 
