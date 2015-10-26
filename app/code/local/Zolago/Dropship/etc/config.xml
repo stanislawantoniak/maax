@@ -270,23 +270,35 @@
                     <!--RMA contact data-->
 
                     <!--RMA executive-->
+                    <rma_executive_firstname>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Name</label>
+                        <type>text</type>
+                        <position>1</position>
+                    </rma_executive_firstname>
+                    <rma_executive_lastname>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Surname</label>
+                        <type>text</type>
+                        <position>2</position>
+                    </rma_executive_lastname>
                     <rma_executive_telephone>
                         <fieldset>rma_executive_data</fieldset>
                         <label>Phone</label>
                         <type>text</type>
-                        <position>1</position>
+                        <position>3</position>
                     </rma_executive_telephone>
                     <rma_executive_telephone_mobile>
                         <fieldset>rma_executive_data</fieldset>
                         <label>Mobile</label>
                         <type>text</type>
-                        <position>2</position>
+                        <position>4</position>
                     </rma_executive_telephone_mobile>
                     <rma_executive_email>
                         <fieldset>rma_executive_data</fieldset>
                         <label>Email</label>
                         <type>text</type>
-                        <position>3</position>
+                        <position>5</position>
                     </rma_executive_email>
                     <!--RMA executive-->
 

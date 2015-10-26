@@ -101,12 +101,21 @@ $upsRma = $_vendor->getData('orbaups_rma');
                     </div>
                     <div class="widget-content fiters">
                         <div class="form-group">
-                            <label for="vendor_attn" class="col-md-3 control-label">
-                                <?php echo $helper->__("Name and surname");?>
+                            <label for="rma_executive_firstname" class="col-md-3 control-label">
+                                <?php echo $helper->__("Name");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="vendor_attn" name="vendor_attn" required value="<?php echo $_vendor->getData('vendor_attn'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_firstname" name="rma_executive_firstname" required value="<?php echo $_vendor->getData('rma_executive_firstname'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_executive_lastname" class="col-md-3 control-label">
+                                <?php echo $helper->__("Surname");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_lastname" name="rma_executive_lastname" required value="<?php echo $_vendor->getData('rma_executive_lastname'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">

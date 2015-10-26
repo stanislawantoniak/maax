@@ -203,7 +203,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
                        'city' 		=> $data['city'],
                        'postcode' 	=> $data['zip'],
                        'street' 	=> $data['street'],
-                       'personName' => $data['vendor_attn'],
+                       'personName' => $data['rma_executive_firstname'] . " " . $data['rma_executive_lastname'],
                        'phone' 	    => $data['rma_executive_telephone_mobile'],
                        'email' 	    => $data['rma_executive_email'],
                        'country'	=> $data['country_id'],
