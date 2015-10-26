@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.40</version>
+            <version>0.0.41</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -54,11 +54,15 @@
                     <product>Zolago_Catalog_Model_Product</product>
                     <url>Zolago_Catalog_Model_Url</url>
                     <category>Zolago_Catalog_Model_Category</category>
+                    <product_type_configurable>Zolago_Catalog_Model_Product_Type_Configurable
+                    </product_type_configurable>
                 </rewrite>
 			</catalog>
             <catalog_resource>
                 <rewrite>
                     <product>Zolago_Catalog_Model_Resource_Product</product>
+                    <category>Zolago_Catalog_Model_Resource_Category</category>
+                    <category_tree>Zolago_Catalog_Model_Resource_Category_Tree</category_tree>
                 </rewrite>
             </catalog_resource>
         </models>
@@ -66,6 +70,11 @@
             <zolagocatalog>
                 <class>Zolago_Catalog_Helper</class>
             </zolagocatalog>
+            <catalog>
+                <rewrite>
+                    <category>Zolago_Catalog_Helper_Category</category>
+                </rewrite>
+            </catalog>
         </helpers>
         <blocks>
             <zolagocatalog>
@@ -225,15 +234,6 @@
                     <model>zolagocatalog/observer::processPriceTypeQueue</model>
                 </run>
             </zolagocatalog_process_pricetype_queue>
-            <zolagocatalog_clear_configurable_queue>
-                <schedule>
-                    <!-- Run every 10 minutes -->
-                    <cron_expr>*/10 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagocatalog/observer::clearConfigurableQueue</model>
-                </run>
-            </zolagocatalog_clear_configurable_queue>
         </jobs>
     </crontab>
 </config>

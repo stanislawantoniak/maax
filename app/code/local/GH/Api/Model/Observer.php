@@ -32,6 +32,7 @@ class GH_Api_Model_Observer
                     'after'     => 'sizetable_attributeset',
                     'content'	=> $ghApiBlock
                 ));
+                $block->addTabToSection('ghapi_settings','logistic',70);
         }
     }
 

@@ -1,3 +1,4 @@
+
 /**
  * Created by pawelchyl on 11.07.2014.
  */
@@ -1101,10 +1102,14 @@ Mall.Scrolltop = {
 		}
 	},
 	show: function() {
-		Mall.Scrolltop.scrollTop.addClass('show');
+		if(Mall.Scrolltop.scrollTop !== false) {
+			Mall.Scrolltop.scrollTop.addClass('show');
+		}
 	},
 	hide: function() {
-		Mall.Scrolltop.scrollTop.removeClass('show hover');
+		if(Mall.Scrolltop.scrollTop !== false) {
+			Mall.Scrolltop.scrollTop.removeClass('show hover');
+		}
 	},
 	hopToTop: function() {
 		var _ = Mall.Scrolltop;
@@ -1264,6 +1269,7 @@ function initToggleSearch() {
 		dropdown.show();
 		toggle.parent().addClass("open");
 		toggle.css('pointer-events','none');
+        toggle.parent().toggleClass('not-open');
 	});
 
 	jQuery(document).click(function(e){
@@ -1272,6 +1278,7 @@ function initToggleSearch() {
 			toggle.parent().removeClass('open');
 			dropdown.hide();
 			toggle.css('pointer-events','');
+            toggle.parent().toggleClass('not-open');
 		}
 	});
 }
@@ -1348,6 +1355,7 @@ Mall.swipeOptions = {
 	swipeLeft:function(event) {
 		if (jQuery('body').hasClass('sb-open')) {
 			closeHamburgerMenu(event);
+            jQuery('#link_menu').toggleClass('not-open');
 		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
 			Mall.listing.closeMobileFilters();
 		}
@@ -1358,6 +1366,264 @@ Mall.swipeOptions = {
 	triggerOnTouchEnd: true,
 	excludedElements: "label, button, input, select, textarea, .noSwipe",
 	threshold: 5
+};
+
+
+/**
+ * Attaches events to products likes.
+ */
+Mall.delegateLikeEvents = function() {
+	if(!Mall.getIsBrowserMobile()) {
+		jQuery(document).delegate('div.like', 'mouseenter mouseleave', function (e) {
+			if (e.type === 'mouseenter') { //hover
+				var textLike;
+				if (jQuery(this).hasClass('liked')) {
+					textLike = 'Dodane do ulubionych';
+				} else {
+					textLike = 'Dodaj do ulubionych';
+				}
+				jQuery(this).find('.toolLike').show().text(textLike);
+			} else { //hover out
+				jQuery(this).find('.toolLike').hide().text('');
+			}
+		});
+		jQuery(document).delegate('div.like.liked', 'mousedown', function(e) {
+			var textLike = 'Usunięte z ulubionych';
+			jQuery(this).find('.toolLike').text(textLike);
+		});
+	}
+	jQuery(document).delegate('div.like .icoLike', 'mousedown', function(e) {
+		jQuery(this).animate({transform: 'scale(1.2)'}, 200);
+	});
+	jQuery(document).delegate('div.like .icoLike', 'mouseup', function(e) {
+		jQuery(this).animate({transform: 'scale(1)'}, 200);
+	});
+	jQuery(document).delegate('div.like','click',function(e) {
+		e.preventDefault();
+		var like = jQuery(this);
+		if(like.hasClass('liked')) { //unlike now
+			Mall.wishlist.removeFromSmallBlock(like);
+		} else { //like now
+			Mall.wishlist.addFromSmallBlock(like);
+		}
+		return false;
+	});
+};
+
+Mall.socialLogin = function(url,redirect) {
+	Mall.socialLoginInterval = Mall.isFirefox() ? 1000 : 150;
+	Mall.storeCheckoutValues();
+	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
+	Mall.isGuestCheckout = document.location.href.search('checkout/guest/index') !== -1;
+	Mall.pollTimer = window.setInterval(function () {
+		//check if window is in our domain
+		var socialLoginWindowUrl = false;
+		try {
+			socialLoginWindowUrl = Mall.socialLoginWindow.document.URL;
+		} catch(error) {
+			//do nothing - it means that popup is in different domain
+		}
+
+		//handle popup close
+		if(Mall.socialLoginWindow.closed && Mall.isGuestCheckout) {
+			//reload window if someone closed popup during guest checkout
+			window.location.reload();
+			window.clearInterval(Mall.pollTimer);
+		} else if(socialLoginWindowUrl && socialLoginWindowUrl.indexOf(redirect) > -1) {
+			//proceed only if popup is in our domain and is not closed
+
+			var elem = Mall.socialLoginWindow.document.getElementById('redirect');
+			var url  = elem.innerText ? elem.innerText : (elem.textContent ? elem.textContent : false);
+
+			Mall.socialLoginWindow.close();
+
+			if(url) {
+				window.location = url;
+			} else if(Mall.isGuestCheckout) { //always reload when window closes in checkout
+				window.location.reload();
+			}
+
+			//clear timer - always on the end because of mobile browsers (firefox for example)
+			window.clearInterval(Mall.pollTimer);
+		}
+
+
+	}, Mall.socialLoginInterval);
+};
+
+Mall.storeCheckoutValues = function() {
+	if(typeof localStorage != "undefined") {
+		var form = jQuery('form#co-address'),
+			dataToStore = {};
+
+		//firstname, lastname and email - propably not needed as they'll be filled by social login
+		dataToStore.account_firstname = form.find('#account_firstname').val();
+		dataToStore.account_lastname = form.find('#account_lastname').val();
+		dataToStore.account_email = form.find('#account_email').val();
+
+		//needed data
+		dataToStore.account_telephone = form.find('#account_telephone').val();
+
+		//ordering for someone else
+		dataToStore.orders_someone_else = form.find('#orders_someone_else:checked').length ? 1 : 0;
+		if (dataToStore.orders_someone_else) {
+			dataToStore.shipping_firstname = form.find('#shipping_firstname').val();
+			dataToStore.shipping_lastname = form.find('#shipping_lastname').val();
+			dataToStore.shipping_telephone = form.find('#shipping_telephone').val();
+		}
+
+		//address data
+		dataToStore.shipping_street = form.find('#shipping_street').val();
+		dataToStore.shipping_postcode = form.find('#shipping_postcode').val();
+		dataToStore.shipping_city = form.find('#shipping_city').val();
+		dataToStore.shipping_company = form.find('#shipping_company').val();
+
+		//need invoice
+		dataToStore.invoice_vat = form.find('#invoice_vat:checked').length ? 1 : 0;
+		if (dataToStore.invoice_vat) {
+			//same data as shipping
+			dataToStore.invoice_data_address = form.find('#invoice_data_address:checked').length ? 1 : 0;
+			if (!dataToStore.invoice_data_address) {
+				//invoice data
+				dataToStore.billing_company = form.find('#billing_company').val();
+				dataToStore.billing_vat_id = form.find('#billing_vat_id').val();
+				dataToStore.billing_street = form.find('#billing_street').val();
+				dataToStore.billing_postcode = form.find('#billing_postcode').val();
+				dataToStore.billing_city = form.find('#billing_city').val();
+			}
+		}
+
+		//password - propably not needed too
+		dataToStore.account_password = form.find('#account_password').val();
+
+		//agreements
+		dataToStore.agreement_tos = form.find('#agreement_tos:checked').length ? 1 : 0;
+		dataToStore.agreement_newsletter = form.find('#agreement_newsletter:checked').length ? 1 : 0;
+
+		localStorage.setItem('checkoutData', JSON.stringify(dataToStore));
+	}
+};
+
+Mall.restoreCheckoutValues = function() {
+	if(typeof localStorage != "undefined" && jQuery('form#co-address').length) {
+		var dataToRestore = localStorage.getItem('checkoutData');
+		if (dataToRestore) {
+			localStorage.removeItem('checkoutData');
+			dataToRestore = JSON.parse(dataToRestore);
+
+			jQuery.each(dataToRestore, function(id,val) {
+				//click checkbox and trigger change event
+				if(jQuery('#'+id).is(":checkbox")) {
+					var nowIsChecked = jQuery('#'+id+':checked').length ? 1 : 0;
+					if(nowIsChecked != val) {
+						jQuery('#'+id).click();
+					}
+				} else if(jQuery('#'+id).length && (jQuery('#'+id).is('input') || jQuery('#'+id).is('textarea'))) {
+					if(id != 'account_email' || (id == 'account_email' && !jQuery('#account_email').val())) {
+						jQuery('#' + id).val(val);
+					}
+				}
+			});
+		}
+	}
+};
+
+Mall.getUrlPart = function (name,url) {
+	var query_string = {};
+	if(!url) {
+		var query = window.location.search.substring(1);
+	} else if(url.indexOf('?') === -1) {
+		return false;
+	} else {
+		var query = url.split("?")[1];
+	}
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		// If first entry with this name
+		if (typeof query_string[pair[0]] === "undefined") {
+			query_string[pair[0]] = decodeURIComponent(pair[1]);
+			// If second entry with this name
+		} else if (typeof query_string[pair[0]] === "string") {
+			var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+			query_string[pair[0]] = arr;
+			// If third or later entry with this name
+		} else {
+			query_string[pair[0]].push(decodeURIComponent(pair[1]));
+		}
+	}
+	if(query_string[name]) {
+		return query_string[name];
+	} else {
+		return '';
+	}
+};
+
+Mall.showAgreement = function(target) {
+	jQuery(target).hide();
+	jQuery(target).parent().find('.agreement-more').show();
+	jQuery(target).parent().find('.agreement-less-btn').show();
+    jQuery('.checkout_agreement_vendors').tooltip('show');
+	jQuery(window).resize();
+	return false;
+};
+
+Mall.hideAgreement = function(target) {
+	jQuery(target).hide();
+	jQuery(target).parent().find('.agreement-more').hide();
+	jQuery(target).parent().find('.agreement-more-btn').show();
+	jQuery(window).resize();
+	return false;
+};
+
+Mall.preventAgreementClick = function() {
+	var target = jQuery('.agreement-btn');
+	if(target.length) {
+		target.click(function(e) {
+			e.preventDefault();
+			return false;
+		});
+	}
+};
+
+Mall.inspirationsSliderInit = function() {
+	var rwdInspiration = jQuery('#rwd-inspiration'),
+		rwdInspirationCarousel = rwdInspiration.find('.rwd-carousel');
+
+	if(!rwdInspiration.length || !rwdInspirationCarousel.length) {
+		return;
+	}
+
+	rwdInspirationCarousel.rwdCarousel({
+		items : 5, //10 items above 1000px browser width
+		itemsDesktop : [1000,4], //5 items between 1000px and 901px
+		itemsDesktopSmall : [900,4], // betweem 900px and 601px
+		itemsTablet: [767,3], //2 items between 600 and 0
+		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
+		pagination : false,
+		navigation: true,
+		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
+		rewindNav : false,
+		itemsScaleUp:true
+	});
+
+	// Custom Navigation Events
+	rwdInspiration.find(".next").click(function(){
+		rwdInspirationCarousel.trigger('rwd.next');
+	});
+	rwdInspiration.find(".prev").click(function(){
+		rwdInspirationCarousel.trigger('rwd.prev');
+	});
+	rwdInspiration.find(".play").click(function(){
+		rwdInspirationCarousel.trigger('rwd.play',1000); //rwd.play event accept autoPlay speed as second parameter
+	});
+	rwdInspiration.find(".stop").click(function(){
+		rwdInspirationCarousel.trigger('rwd.stop');
+	});
+};
+
+Mall.refresh = function() {
+    location.reload();
 };
 
 jQuery(document).ready(function() {
@@ -1374,6 +1640,8 @@ jQuery(document).ready(function() {
 
 	initToggleSearch();
     Mall.disableSearchNoQuery();
+
+    if (Mall.getIsBrowserMobile()) { jQuery('html').addClass('is-browser-mobile'); }
 
     //hack for vendor main page (turpentine shows global messages only one time)
     if(jQuery(".page-messages-block ul.messages").length > 0){
@@ -1480,4 +1748,19 @@ jQuery(document).ready(function() {
 			}
 		},200);
 	}
-});''
+
+	/**
+	 * HOMEPAGE
+	 */
+	Mall.inspirationsSliderInit();
+
+
+	//init like events
+	Mall.delegateLikeEvents();
+
+	//prevent link behavior on showmore in agreements
+	Mall.preventAgreementClick();
+
+	//restore checkout values on social login
+	setTimeout(Mall.restoreCheckoutValues,100);
+});

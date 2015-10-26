@@ -46,6 +46,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDPROD_VENDOR_IMAGE					= "udprod/vendor_image";
 	// Mass editor
 	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
+	// Gh Attribute Rules
+	const RES_GH_ATTRIBUTE_RULES					= "udropship/mass";
+
 	// Mass editor
 	const RES_UDPROD_VENDOR_PRODUCT					= "udprod/vendor_product";
 	// POS Manage
@@ -96,6 +99,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDPROD_VENDOR						=> "Product edit",
 		// Mass edit
 		self::RES_UDPROD_VENDOR_MASS				=> "Mass products",
+
+		// Gh Attribute Rules
+		self::RES_GH_ATTRIBUTE_RULES				=> "GH_ATTRIBUTE_RULES",
 		// Mass images
 		self::RES_UDPROD_VENDOR_PRODUCT				=> "Mass products v2",
 		// Mass images
@@ -186,6 +192,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         } else {
             $this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
         }
+
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, Zolago_Operator_Model_Acl::RES_GH_ATTRIBUTE_RULES);
 
 	}
 	

@@ -3,6 +3,9 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	const XML_PATH_DEFAULT_IDENTITY = "sales_email/order/identity";
 	
+	protected $_isGoogleBot;
+	
+	protected $_app;
 	/**
 	 * Check is top customer data for varnish request
 	 * @return boolean
@@ -33,12 +36,14 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 			if(is_null($sender)){
 				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
 			}
-
+            $templateParams['year'] = Mage::getModel('core/date')->date('Y');
+			
             /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
 			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
             /** @var Mage_Core_Model_Email_Info $emailInfo */
 			$emailInfo = Mage::getModel('core/email_info');
 			$emailInfo->addTo($email, $name);
+			$emailInfo->addBcc($bcc);
 			$mailer->addEmailInfo($emailInfo);
 
 			// Set all required params and send emails
@@ -109,15 +114,19 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return boolean
 	 */
 	public function isGoogleBot(){
-	    $userAgent = empty($_SERVER['HTTP_USER_AGENT'])? null:$_SERVER['HTTP_USER_AGENT'];
-	    if (empty($userAgent)) {
-	        return false;
-	    }
-	    $crawlers = 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|' .
-	        'AcioRobot|ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|bingbot|' .
-            'GeonaBot|Gigabot|Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby';
-        $isCrawler = (preg_match("/$crawlers/", $userAgent) > 0);	
-        return $isCrawler;
+	    if (is_null($this->_isGoogleBot)) {
+	        $userAgent = empty($_SERVER['HTTP_USER_AGENT'])? null:$_SERVER['HTTP_USER_AGENT'];
+    	    if (empty($userAgent)) {
+    	        $isCrawler = false;
+	        } else {
+        	    $crawlers = 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|' .
+	                'AcioRobot|ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|bingbot|' .
+                    'GeonaBot|Gigabot|Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby';
+                $isCrawler = (preg_match("/$crawlers/", $userAgent) > 0);	
+            }
+            $this->_isGoogleBot = $isCrawler;
+        }
+        return $this->_isGoogleBot;;
     }
 	
 	/**
@@ -204,4 +213,33 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		return strtr($string,$chars);
 	}
+	
+	protected function _getApp() {
+        if (!$this->_app) {
+            $this->_app = Mage::app();
+        }
+        return $this->_app;	    
+	}
+    /**
+     * cache helper function (uses lambda)
+     * 
+     * @param string $key
+     * @param string $group 
+     * @param function $function
+     * @param array $params
+     * @param int $ttl
+     * @return mixed
+     */
+     public function getCache($key,$group,$function,$params,$ttl = Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL) {
+         if (!($out = $this->_getApp()->loadCache($key)) ||
+             !$this->_getApp()->useCache($group)) {
+             $out = $function($params);
+             if ($this->_getApp()->useCache($group)) {
+                 $this->_getApp()->saveCache($out,$key,array($group),$ttl);
+             }                                                     
+         }
+         return $out;
+                             
+     }
+
 }

@@ -15,7 +15,7 @@ $_allowedLocale = array(
 	"en_US"=>array("symbol"=>$this->__("EN"), "name"=>$this->__("English"))
 );
 ?>
-
+<script>var _currentLocale = '<?php echo $_currentLocale;?>';</script>
 <header class="header navbar navbar-fixed-top" role="banner">
 	<!-- Top Navigation Bar -->
 	<div class="container">
@@ -33,10 +33,6 @@ $_allowedLocale = array(
 			<strong>Modago</strong>
 		</a>
 		<!-- /logo -->
-
-
-
-
 
 		<?php if($_session->isLoggedIn()):?>
             <!-- Sidebar Toggler -->
@@ -99,33 +95,32 @@ $_allowedLocale = array(
             </li>
             <!-- /HELP -->
 		</ul>
-        <?php else: ?>
+		<?php else: ?>
 
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Locale -->
+			<ul class="nav navbar-nav navbar-right">
+				<!-- Locale -->
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <?php foreach ($_allowedLocale as $locale => $info): ?>
-                                <?php if ($locale == $_currentLocale): ?>
-                                    <?php echo $this->escapeHtml($info['symbol']); ?>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                            <i class="icon-caret-down small"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <?php foreach ($_allowedLocale as $locale => $info): ?>
-                                <li>
-                                    <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
-                                        <?php echo $this->escapeHtml($info['name']); ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                    <!-- /Locale -->
-                </ul>
-
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<?php foreach ($_allowedLocale as $locale => $info): ?>
+							<?php if ($locale == $_currentLocale): ?>
+								<?php echo $this->escapeHtml($info['symbol']); ?>
+							<?php endif; ?>
+						<?php endforeach; ?>
+						<i class="icon-caret-down small"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<?php foreach ($_allowedLocale as $locale => $info): ?>
+							<li>
+								<a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
+									<?php echo $this->escapeHtml($info['name']); ?>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</li>
+				<!-- /Locale -->
+			</ul>
 		<?php endif; ?>
 		<!-- /Top Right Menu -->
 	</div>

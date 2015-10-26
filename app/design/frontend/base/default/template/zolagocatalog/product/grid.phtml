@@ -226,10 +226,15 @@
 	#grid-holder .editor h4{
 		margin-bottom: 10px;
 	}
-	#grid-holder .editor .selection{
+	#grid-holder .editor .selection,
+	#grid-holder .editor .save-as-rule{
 		display: none;
 	}
-	#grid-holder .editor.use-selection .selection{
+    #grid-holder .editor.editor-field-name {
+        width: 400px;
+    }
+	#grid-holder .editor.use-selection .selection,
+	#grid-holder .editor.use-save-as-rule .save-as-rule{
 		display: block;
 	}
 	#grid-holder .editor textarea{
@@ -248,6 +253,26 @@
         text-align: center;
         color: #4d7496;
         font-weight: bold;
+    }
+    #grid-holder .header.field-required-highlight {
+        background-color: #FFFFE2;
+
+        background: -moz-linear-gradient(top, #FFFFE2 0%, #eeeeee 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFE2), color-stop(100%,#eeeeee));
+        background: -webkit-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: -o-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: -ms-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+    }
+    #grid-holder .header.field-required-highlight:hover {
+        background-color: #FFFFE2;
+
+        background: -moz-linear-gradient(top, #FFFFEF 0%, #eeeeee 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFEF), color-stop(100%,#eeeeee));
+        background: -webkit-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: -o-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: -ms-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
     }
 	
 	/** Fix tooltip **/
@@ -281,8 +306,8 @@
 	}
 </style>
 <script type="text/javascript">
-	require(['vendor/catalog/productGrid', 'vendor/catalog/productGrid/mass/status'], function(productGrid, status){
+	require(['vendor/catalog/productGrid'], function(productGrid) {
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
-		productGrid.startup("grid-holder");
+        window.productGrid = productGrid.startup("grid-holder");
 	});
 </script>

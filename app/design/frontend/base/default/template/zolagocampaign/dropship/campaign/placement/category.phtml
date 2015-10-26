@@ -18,15 +18,15 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
     <div class="page-heading row">
         <div class="col-lg-12">
             <h3><?php echo $_helper->__('Manage placements on page') ?>: <span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
-            <p><?php echo $_helper->__('Dodawaj lub usuwaj ze strony, ustawiaj kolejność i priorytet reklam.') ?></p>
-            <p><?php echo $_helper->__('UWAGA! Nie musisz zapisywać zmian - każda zmiana poniżej od razu automaticznie wprowadzana jest na stronę serwisu.') ?></p>
+            <p><?php echo $_helper->__('Add or remove from page, select order and priority of ads.') ?></p>
+            <p><?php echo $_helper->__('NOTE! You do not need to save changes - every change is immediately automatically saved.') ?></p>
         </div>
     </div>
     <div class="page-heading row">
         <div class="container">
             <ol class="breadcrumb">
                 <li>
-                    <a href="/campaign/placement/index/">
+                    <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true))?>">
                         <?php echo $_helper->__('Manage placements') ?>
                     </a>
                 </li>
@@ -795,7 +795,7 @@ jQuery(function ($) {
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
-                url : "/campaign/vendor/getCampaignData",
+                url : '<?php echo Mage::getUrl("campaign/vendor/getCampaignData", array("_secure" => true))?>',
                 data: {id : campaign},
                 success: function(result){
 

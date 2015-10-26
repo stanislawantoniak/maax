@@ -180,9 +180,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			// Proces enuberable attributes
 			if($this->getGridModel()->isAttributeEnumerable($attribute)){
 				// Process null
-				if($value===self::NULL_VALUE){
-					return array("null"=>true);
-				}
+                if ($value === self::NULL_VALUE) {
+                    $this->_getCollection()->addFieldToFilter(array(
+                        array("attribute" => $attribute->getAttributeCode(), "filter" => array("null" => true)),
+                        array("attribute" => $attribute->getAttributeCode(), "filter" => array("eq" => ""))
+                    ));
+                    return null;
+                }
 				// Process multiply select
 				if($attribute->getFrontendInput()=="multiselect"){
 					/**
@@ -353,11 +357,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				throw new Mage_Core_Exception($helper->__("You are trying to edit not your product"));
 			}
 		}
-		
 		// Collect validation data
 		$notAllowed = array();
 		$missings = array();
-		foreach($attributesData as $attributeCode=>$value){		    
+		$descriptionChildProds = array();
+		$nameChildProds = array();
+        /** @var Zolago_Catalog_Model_Resource_Product $resProduct */
+        $resProduct = Mage::getResourceModel('catalog/product');
+		foreach($attributesData as $attributeCode=>$value){
 			$attribute = $this->getGridModel()->getAttribute($attributeCode);
 			$attributesObjects[$attributeCode] = $attribute;
 			// special check for brandshop
@@ -377,6 +384,22 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			        }
 			    }			    
 			}
+            // special check for description status
+			if ($attributeCode == 'description_status') {
+			    // add child 
+			    $list = $resProduct->getRelatedProducts($productIds);
+			    foreach ($list as $item) {
+                    $descriptionChildProds[$item['product_id']] = $item['product_id'];
+			    }
+                			    
+            }
+            // special check for product name
+            if ($attributeCode == 'name') {
+                $list = $resProduct->getRelatedProducts($productIds);
+                foreach ($list as $item) {
+                    $nameChildProds[$item['product_id']] = $item['product_id'];
+                }
+            }
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
 				$notAllowed[] = $attribute->getStoreLabel($vendorStoreId);
@@ -384,6 +407,8 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			if($checkRequired && $attribute->getIsRequired() && trim($value)==""){
 				$missings[] = $attribute->getStoreLabel($vendorStoreId);
 			}
+			
+			
 		}
 		// Validate grid permissions
 		if($notAllowed){
@@ -446,9 +471,37 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 					}
 				}
 			}
+		}	
+		// if children exists update the children (only description_status)
+		if ($descriptionChildProds) {
+		    $childAttributes = array(
+		        'description_status' => $attributesData['description_status']
+            );
+	    	Mage::getSingleton('catalog/product_action')
+    			->updateAttributes($descriptionChildProds, $childAttributes, $store->getId());
 		}
-
-		// Write attribs & make reindex
+        // if children exists update the children (only product name)
+        if ($nameChildProds) {
+            // Simple collection
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $collection */
+            $collection = Mage::getResourceModel("zolagocatalog/product_collection");
+            $collection->addFieldToFilter("entity_id", array("in" => $nameChildProds));
+            $collection->setStoreId($store->getId());
+            $collection->joinAttribute('size', 'catalog_product/size', 'entity_id', null, 'left');
+            $collection->load();
+            // make produt name for simple products like: <name from configurable><space><size text>
+            $sizeAttr = $this->getGridModel()->getAttribute('size');
+            $attrSource = $sizeAttr->getSource();
+            foreach ($collection as $product) {
+                $size = $attrSource->getOptionText($product->getData('size'));
+                $childAttributes = array(
+                    'name' => $attributesData['name'] . ' ' . $size
+                );
+                Mage::getSingleton('catalog/product_action')
+                    ->updateAttributes(array($product->getId()), $childAttributes, $store->getId());
+            }
+        }
+        // Write attribs & make reindex
 		Mage::getSingleton('catalog/product_action')
 			->updateAttributes($productIds, $attributesData, $store->getId());
 		
@@ -459,7 +512,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		$reposnse = $this->getResponse();
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
 		$storeId = 0;
-			
+
 		try{
 			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
@@ -468,7 +521,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
-					$attributeData[$attribute] = ($attribute == "description" || $attribute == "short_description") ? Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]) : $data[$attribute];
+                    $attributeData[$attribute] = $data[$attribute];
+                    if ($attribute == "description" || $attribute == "short_description") {
+                        // Clear descriptions
+                        $attributeData[$attribute] = Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]);
+                    } elseif ($attribute == "name") {
+                        // Clear product name
+                        $attributeData[$attribute] = Mage::helper("zolagocatalog")->cleanProductName($data[$attribute]);
+                    }
 				}
 			}
 			if($attributeData){
@@ -482,11 +542,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		} catch (Exception $ex) {
 			Mage::logException($ex);
 			$reposnse->setHttpResponseCode(500);
-			$reposnse->setBody("Some error occured");
+			$reposnse->setBody("Some error occurred");
 			return;
 		}
 
-		/** Inclue attribute set **/
+		/** Include attribute set **/
 		if(!$this->getRequest()->getParam("attribute_set_id")){
 			$this->getRequest()->setParam("attribute_set_id", $data['attribute_set_id']);
 		}

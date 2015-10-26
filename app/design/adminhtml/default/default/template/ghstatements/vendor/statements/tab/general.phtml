@@ -1,0 +1,160 @@
+<?php /* @var $this GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_General */ ?>
+
+<?php
+$_helper = Mage::helper('ghstatements');
+$statement = $this->getStatement();
+
+$vendorId = $statement->getVendorId();
+$vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+?>
+
+
+<div style="" id="statement_tabs_form_section_content">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend">
+                <?php echo $this->getTabLabel(); ?>
+            </h4>
+        </div>
+        <div id="statement_form" class="fieldset ">
+            <div class="hor-scroll">
+                <table cellspacing="0" class="form-list">
+                    <tr>
+                        <td class="label"><label for="statement_id"><b><?php echo $_helper->__("Statement ID"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="statement_id"><?php echo $statement->getId(); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="name"><b><?php echo $_helper->__("Name"); ?></b></label></td>
+                        <td class="value">
+                            <span id="name"><?php echo $statement->getName(); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="vendor_name"><b><?php echo $_helper->__("Vendor"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="vendor_name"><?php echo $vendor->getVendorName(); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label
+                                for="order_commission_value"><b><?php echo $_helper->__("Order: Commission Amount"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="order_commission_value">
+                                <?php echo Mage::helper('core')->formatPrice($statement->getData('order_commission_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="order_value"><b><?php echo $_helper->__("Order: Amount"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="order_value">
+                                <?php echo Mage::helper('core')->formatPrice($statement->getData('order_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="rma_commission_value">
+                                <b><?php echo $_helper->__("RMA: Commission Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="rma_commission_value">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('rma_commission_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="rma_value">
+                                <b><?php echo $_helper->__("RMA: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="rma_value">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('rma_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="refund_value">
+                                <b><?php echo $_helper->__("Refund: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="refund_value">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('refund_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="tracking_charge_subtotal">
+                                <b><?php echo $_helper->__("Tracking: Charge Subtotal"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="tracking_charge_subtotal">
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('tracking_charge_subtotal')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="tracking_charge_total">
+                                <b><?php echo $_helper->__("Tracking: Charge Total"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="tracking_charge_total">
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('tracking_charge_total')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="marketing_value">
+                                <b><?php echo $_helper->__("Marketing: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="marketing_value">
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('marketing_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,41 +1,41 @@
 define([
-	"dgrid/Grid",
-	"dgrid/OnDemandGrid",
-	"dgrid/extensions/Pagination",
-	"dgrid/extensions/CompoundColumns",
-	"vendor/grid/ColumnSet",
-    'vendor/grid/Selection',
-    'dgrid/Selector',
-	"dgrid/Keyboard",
-	"dojo/_base/declare",
-	"dojo/dom",
-	"dojo/dom-construct",
-	"dojo/on",
-	"dojo/query",
-	"put-selector/put",
-	"dojo/dom-class",
-	"dojo/request/xhr",
+	"dgrid/Grid",                       // BaseGrid
+	"dgrid/OnDemandGrid",               // Grid
+	"dgrid/extensions/Pagination",      // Pagination
+	"dgrid/extensions/CompoundColumns", // CompoundColumns
+	"vendor/grid/ColumnSet",            // ColumnSet
+    'vendor/grid/Selection',            // Selection
+    'dgrid/Selector',                   // Selector
+	"dgrid/Keyboard",                   // Keyboard
+	"dojo/_base/declare",               // declare
+	"dojo/dom",                         // dom
+	"dojo/dom-construct",               // domConstruct
+	"dojo/on",                          // on
+	"dojo/query",                       // query
+	"put-selector/put",                 // put
+	"dojo/dom-class",                   // domClass
+	"dojo/request/xhr",                 // xhr
 	// stores 
-	"dstore/Rest",
-	"dstore/Trackable",
-	"dstore/Cache",
-	
-    "dojo/_base/lang",
-	
-	"vendor/grid/filter",
-	"vendor/grid/QueryGrid",
-	"vendor/grid/PopupEditor",
-	'vendor/catalog/productGrid/mass/status',
-	'vendor/catalog/productGrid/mass/attribute',
-	"vendor/misc"
+	"dstore/Rest",                      // Rest
+	"dstore/Trackable",                 // Trackable
+	"dstore/Cache",                     // Cache
+    "dojo/_base/lang",                  // lang
+	"vendor/grid/filter",               // filter
+	"vendor/grid/QueryGrid",            // QueryGrid
+	"vendor/grid/PopupEditor",          // PopupEditor
+	'vendor/catalog/productGrid/mass/status',        // status
+	'vendor/catalog/productGrid/mass/attribute',     // attrbiute
+	'vendor/catalog/productGrid/mass/attributeRules',// attributeRules
+	"vendor/misc"//misc
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, 
 	Selection, Selector, Keyboard, declare, dom, domConstruct, on, query, 
 	put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid, 
-	PopupEditor, status, attrbiute,  misc){
+	PopupEditor, status, attrbiute, attributeRules, misc){
 	
-	var grid,store,
+	var grid,
+        store,
 		massAttribute,
-		editDbClick = false, // Congiure click type
+		editDbClick = false, // Configure click type
 		massUrl = "/udprod/vendor_product/mass",
 		resetFilters = query("#remove-filters")[0],
 		switcher = query("#attribute_set_id")[0],
@@ -43,7 +43,7 @@ define([
 			attribute_set_id: switcher.value,
 			store_id: 0
 		};
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	// Filtering
 	////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ define([
 		if(resetFilters){
 			resetFilters.className = i ? "remove-filters" : "hidden";
 		}
-	}
+	};
 
 	/**
 	 * Handle reset filters button
@@ -187,7 +187,7 @@ define([
 		
 		modal.modal("show");
 		e.preventDefault();
-	}
+	};
 		
 	/**
 	 * @param {mixed} value
@@ -270,13 +270,13 @@ define([
 	 * @returns {string}
 	 */
 	var rendererName = function (item, value, node, options){
-		var content = put("div");
-		put(content, "p", {
+		var content = put("div.editable");
+		put(content, "p.editable", {
 			innerHTML: item.name
 		});
 		put(content, "p", {
 			innerHTML: Translator.translate("SKU") + ": " + escape(item.skuv),
-			className: "info"
+			className: "info editable"
 		});
 		put(node, content);
 	};
@@ -428,7 +428,7 @@ define([
 		var columnSets = [
 			[
 				[
-					{ selector: 'checkbox', label: "+" }
+					{ selector: 'checkbox', label: "" }
 				]
 			], [
 				[
@@ -477,7 +477,7 @@ define([
 			}else{
 				columnSets[1][0].push(column);
 			}
-		};
+		}
 		
 		
 		return columnSets;
@@ -499,7 +499,7 @@ define([
 				editor.close(doFocus);
 			}
 		}
-	}
+	};
 	
 	/**
 	 * @param {Evented} e
@@ -513,7 +513,7 @@ define([
 			oldValue = dataObject[field];
 	
 		
-		// Use only single row
+		// Use only single row (if checkbox: 'Apply to selection' is unchecked)
 		if(!e.useSelection){
 			// Start overlay loading hidden progress 
 			misc.startLoading(false);
@@ -521,6 +521,7 @@ define([
 			dataObject.attribute_mode[field] = e.mode;
 			dataObject[field] = value;
 			dataObject.changed = [field];
+
 			store.put(dataObject).then(function(){
 				e.deferred.resolve();
 			}, function(ex){
@@ -528,11 +529,11 @@ define([
 				e.deferred.reject();
 			}).always(function(){
 				misc.stopLoading();
-			})
+			});
 			return;
 		}
 		
-		// Start overlay loading visible progress 
+		// Start overlay loading visible progress
 		misc.startLoading();
 		
 		// Handle by mass action object
@@ -540,18 +541,24 @@ define([
 		
 		req["attribute[" + field + "]"] = value;
 		req["attribute_mode[" + field + "]"] = e.mode;
-	
-		massAttribute.setFocusedCell(e.cell);
-	
-		massAttribute.send(req).then(function(){
-			e.deferred.resolve();
-		}, function(){
-			e.deferred.reject();
-		}).always(function(){
-			misc.stopLoading();
-		});
+        // Add info about 'Save as rule'
+		req["save_as_rule"] = e.useSaveAsRule;
 
-	}
+		massAttribute.setFocusedCell(e.cell);
+
+        massAttribute.send(req).then(function () {
+            e.deferred.resolve();
+            if (e.useSaveAsRule) {
+                // Get current attributes mapper block by ajax with spinner
+                window.attributeRules.updateModal();
+            }
+        }, function () {
+            e.deferred.reject();
+        }).always(function () {
+            misc.stopLoading();
+        });
+
+	};
 	
 	/**
 	 * @param {Object} e
@@ -570,7 +577,7 @@ define([
 		}
 		// Enter click - skip all keys except enter
 		if(e instanceof KeyboardEvent){
-			if(e.keyCode==13){
+			if(e.keyCode==13){ // Enter key
 				// Prevent click if editor focused before
 				// @todo investigate event flow
 				e.preventDefault();
@@ -588,7 +595,7 @@ define([
 			}
 		}
 		editors[field].open(cell, e);
-	}
+	};
 
 
     var handleSelectAll = function(e){
@@ -601,8 +608,11 @@ define([
             grid.clearSelection();
         }
 
-    }
-	
+    };
+
+    /**
+     * Closing(hiding) editors if click somewhere on page (if it's not editor and cell)
+     */
 	on(document.body, "click", function(e){
 		var el = jQuery(e.target);
 		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
@@ -620,7 +630,7 @@ define([
 				break;
 			}
 		}
-		if(e.keyCode==27 && hasOpen){
+		if(e.keyCode==27 && hasOpen){ // Escape key
 			hideAllEditors(true);
 			e.preventDefault();
 		}
@@ -642,7 +652,7 @@ define([
 		}else{
 			grid.select(row);
 		}
-	}
+	};
 	/**
 	 * @param {Evented} e
 	 * @returns {void}
@@ -653,7 +663,7 @@ define([
 			if(domClass.contains(e.target, "dgrid-selector")){
 				return;
 			}
-			if(e.keyCode==32){
+			if(e.keyCode==32){ // Space key
 				toggleRowSelection(e);
 			}
 		}else if(e instanceof MouseEvent){
@@ -662,7 +672,7 @@ define([
 				e.preventDefault();
 			}
 		}
-	}
+	};
 	
 	////////////////////////////////////////////////////////////////////////////
 	// Mass actions
@@ -673,19 +683,26 @@ define([
 	};
 	
 	var registerMassactions = function(grid){
-		massAttribute = (new status(grid, massUrl))
+		massAttribute = new status(grid, massUrl);
 		massAttribute.setMethod("attribute");
 		
 		var massConfirm = new status(grid, massUrl);
 		massConfirm.setMethod("confirm");
 		
-		var massDisable = new status(grid, massUrl)
+		var massDisable = new status(grid, massUrl);
 		massDisable.setMethod("disable");
 		
 		on(dom.byId("massConfirmProducts"), "click", function(e){
 			misc.startLoading();
 			massConfirm.trigger(e).always(misc.stopLoading);
 		});
+
+        // Open popup with autofill rules table
+        jQuery("#massAttributeRules").click(function() {
+            jQuery("a[data-target=#showAttributeRules]").click();
+        });
+
+
 	};
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -703,7 +720,7 @@ define([
 			noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
 
 			selectionMode: 'none',
-			//allowSelectAll: true,
+			allowSelectAll: true,
 			deselectOnRefresh: true,
 			
 			cellNavigation: true, /*false*/
@@ -752,10 +769,10 @@ define([
 
 		// listen for selection
 		grid.on("dgrid-deselect", updateMassButton);
-		
+
 		// listen for refresh if selected
 		grid.on("dgrid-refresh-complete", updateMassButton);
-		
+
 		// listen for editable
 		if(editDbClick){
 			grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
@@ -763,38 +780,348 @@ define([
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
 		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
 
-        grid.on("th.field-0-0-0:click", handleSelectAll);
+//        grid.on("th.field-0-0-0:click", handleSelectAll);
 		
 		registerMassactions(grid);
-		
-		
 		return window.grid;
 	};
-	
+
+    window.attributeRules = {
+        _tmpRemoveBtn: null,
+        _attributeRules: {},
+
+        init: function(grid) {
+            this._attributeRules = new attributeRules(grid, this.getFormActionUrl());
+            this.attachLogicShowDetails();
+            this.attachLogicGroupCheckbox();
+            this.attachLogicSubmitButton();
+            this.attachLogicOnOpen();
+            this.attachLogicRemoveRule();
+        },
+
+        getFormActionUrl: function() {
+            return this.getModal().find("form:eq(0)").prop("action");
+        },
+
+        setSpinner: function() {
+            var spinner = jQuery("<div>").css('text-align', 'center').append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+            this.getModal().find(".modal-body").html(spinner);
+        },
+
+        /**
+         * Update html by ajax auto fill attributes modal
+         */
+        updateModal: function() {
+            this.setSpinner();
+            jQuery.ajax({
+                cache: false,
+                url: "/udprod/vendor_product/manageattributes"
+            }).success(function(data, textStatus, jqXHR) {
+                var form = jQuery(data).find("form:eq(0)");
+                jQuery("#showAttributeRules").html(form); // replace only "inside" html of modal
+                window.attributeRules.init(window.grid);
+                FormComponents.initUniform();// Attach checkbox style
+            }).always(function () {
+                jQuery("input[type=checkbox][name=saveAsRule]").prop("checked",false);
+            });
+        },
+
+        attachLogicRemoveRule: function() {
+            this.getModal().find(".btn-remove-rule[data-action=remove]").tooltip();
+
+            this.getModal().find(".btn-remove-rule[data-action=remove]").click(function(e) {
+                e.preventDefault();
+
+                window.attributeRules._tmpRemoveBtn = jQuery(this);
+
+                bootbox.dialog({
+                    title: Translator.translate("Delete autofill rule?"),
+                    message: Translator.translate("Are you sure you want to delete this rule?"),
+                    onEscape: true,
+                    buttons: {
+                        cancel: {
+                            label: Translator.translate("Cancel"),
+                            className: "btn-default",
+                            callback: function() {}
+                        },
+                        success: {
+                            label:  Translator.translate("Remove autofill rule"),
+                            className: "btn-primary",
+                            callback: function() {
+                                // Add spinner
+                                window.attributeRules.setSpinner();
+                                jQuery.ajax({
+                                    type: "GET",
+                                    url: window.attributeRules._tmpRemoveBtn.prop("href"),
+                                    cache: false
+                                }).success(function(data, textStatus, jqXHR) {
+                                    //var status = data['status'];
+                                    //var msg = data['message'];
+                                    //noty({
+                                    //    text: msg,
+                                    //    type: status ? 'success' : 'error',
+                                    //    timeout: 10000
+                                    //});
+                                }).always(function() {
+                                    window.attributeRules._tmpRemoveBtn = null;
+                                    window.attributeRules.updateModal();
+                                });
+                            }
+                        }
+                    }
+                }).css("top","20px");
+            });
+        },
+
+        setDataFromGrid: function() {
+            this._setDataFormGridQuery();
+            this.getModal().find("input[type=hidden][name=attribute_set_id]").val(this.getAttributeSetId());
+            this.getModal().find("input[type=hidden][name=global]").val(this.getAllProductsFlag());
+            var ids = this.getProductIds();
+            if (this.getAllProductsFlag()) {
+                ids = "";// smaller post
+            }
+            this.getModal().find("input[type=hidden][name=product_ids]").val(ids);
+        },
+
+        _setDataFormGridQuery: function() {
+            var query = jQuery.extend({}, this.getGridQuery()); // Copy
+            delete query.store_id;
+            delete query.attribute_set_id;
+
+            var div = this.getForm().find("div.query-from-grid").html("");
+            jQuery.map(query, function(val,i) {
+                var div = window.attributeRules.getForm().find("div.query-from-grid");
+                div.append(jQuery("<input>").prop("name", i).attr("value", val).prop("type", "hidden"));
+            });
+        },
+
+        getGridQuery: function() {
+            return window.grid.query;
+        },
+
+        getProductIds: function() {
+            return window.grid.getSelectedIds().join();
+        },
+
+        getAllProductsFlag: function() {
+            return window.grid.getCheckAll() ? 1 : 0;
+        },
+
+        getAttributeSetId: function() {
+            return window.grid.baseQuery["attribute_set_id"];
+        },
+
+        attachLogicOnOpen: function() {
+            jQuery("a[data-target=#showAttributeRules]").click(function() {
+                window.attributeRules.setDataFromGrid();
+                window.attributeRules._attachLogicSubmitButtonOnChange();
+            });
+            window.attributeRules.setDataFromGrid();
+        },
+
+        _attachLogicSubmitButtonOnChange: function() {
+            var modal = window.attributeRules.getModal();
+            var btn = window.attributeRules.getSubmitBtn();
+
+            btn.closest("div.tooltip-wrapper").tooltip('destroy');
+
+            if (!window.attributeRules.getProductIds().length) {
+                btn.closest("div.tooltip-wrapper").attr("title", btn.closest("div.tooltip-wrapper").attr("data-title-products"));
+            }
+            if (!modal.find("input[type=checkbox]:checked").length) {
+                btn.closest("div.tooltip-wrapper").attr("title", btn.closest("div.tooltip-wrapper").attr("data-title-rules"));
+            }
+
+            if (modal.find("input[type=checkbox]:checked").length && window.attributeRules.getProductIds().length) {
+                btn.closest("div.tooltip-wrapper").tooltip('destroy');
+                btn.attr("disabled", false);
+            } else {
+                btn.closest("div.tooltip-wrapper").tooltip();
+                btn.attr("disabled", true);
+            }
+        },
+
+        attachLogicSubmitButton: function() {
+            // If any checkbox checked then make submit button available
+            // only if on grid any products selected
+            this.getModal().find("input[type=checkbox]").on("change", function () {
+                window.attributeRules._attachLogicSubmitButtonOnChange();
+            });
+            this._attachLogicSubmitButtonOnChange();
+            // Mail logic for submit
+            this.getForm().submit(function( event ) {
+                // Stop form from submitting normally
+                event.preventDefault();
+
+                var form = event.target;
+
+                misc.startLoading();
+                window.attributeRules._attributeRules.send(form.serialize())
+                    .always(function () {
+                        misc.stopLoading();
+                    });
+            });
+        },
+
+        closeModal: function() {
+            this.getModal().find(".modal-header button.close").click();
+        },
+
+        openModal: function() {
+            jQuery("a[data-target=#showAttributeRules]").click();
+        },
+
+        getSubmitBtn: function() {
+            return this.getModal().find("button[type=submit]");
+        },
+
+        getForm: function() {
+            return this.getModal().find("form").first();
+        },
+
+        attachLogicShowDetails: function() {
+            this.getModal().on("shown.bs.collapse", function(e) {
+                jQuery("[data-target='#" + e.target.id + "'] .btn i").removeClass("icon-plus").addClass("icon-minus");
+            });
+            this.getModal().on("hidden.bs.collapse", function(e) {
+                jQuery("[data-target='#" + e.target.id + "'] .btn i").removeClass("icon-minus").addClass("icon-plus");
+            });
+        },
+
+        attachLogicGroupCheckbox: function() {
+			var modal = this.getModal();
+            this.getModal().find("input[type=checkbox]").on("change", function(e, eventFromChildren) {
+                var selector = jQuery(e.target).attr("data-checkbox-group-target");
+
+                if (selector && !eventFromChildren) {
+                    // If parent checked/unchecked => set checked/unchecked state for children
+                    var target = jQuery(selector);
+                    if (e.target.checked) {
+                        target.prop('checked', true).closest('span').addClass('checked').closest('tr').addClass('checked');
+                        target.trigger("change");
+                    } else {
+                        target.prop('checked', false).closest('span').removeClass('checked').closest('tr').removeClass('checked');
+                        target.trigger("change");
+
+                    }
+                }
+
+                // If all children checked/unchecked,  set checked/unchecked state for parent
+                var parentSelector = jQuery(e.target).attr("data-checkbox-group-parent");
+
+                if (parentSelector && parentSelector !== "#attr-select-all") {
+                    var parent = jQuery(parentSelector);
+                    var allChild = jQuery(parent.attr("data-checkbox-group-target"));
+                    var allCheckedChild = jQuery(parent.attr("data-checkbox-group-target") + ":checked");
+
+                    var isAllChecked = allCheckedChild.length == allChild.length;
+
+                    if (isAllChecked) {
+                        if (parent.prop('checked') != true) {
+                            parent.prop('checked', true).closest('span').addClass('checked').closest('tr').addClass('checked');
+                            if (!eventFromChildren) {
+                                parent.trigger("change", [true]);
+                            }
+                        }
+                    } else {
+                        if (parent.prop('checked') != false) {
+                            parent.prop('checked', false).closest('span').removeClass('checked').closest('tr').removeClass('checked');
+                            if (!eventFromChildren) {
+                                parent.trigger("change", [true]);
+                            }
+                        }
+                    }
+
+                }
+
+
+
+				// Check/ uncheck all
+				var attrSelectAll = modal.find("#attr-select-all");
+				var allItemsChecked = [];
+
+				modal.find("input[type=checkbox]:not(#attr-select-all)").each(function(i, element){
+					allItemsChecked.push(jQuery(element).prop('checked'));
+				});
+
+				if (jQuery.inArray(false, allItemsChecked) == -1) {
+					attrSelectAll.prop('checked', true).closest('span').addClass('checked');
+				} else {
+					attrSelectAll.prop('checked', false).closest('span').removeClass('checked');
+				}
+
+				// --- Check/ uncheck all
+            });
+        },
+
+        getModal: function() {
+            return jQuery('#showAttributeRules');
+        }
+    };
 	
 	return {
 		setColumns: function(columns){
 			this.columns = columns;
+            return this;
 		},
 		getColumns: function(){
 			return this.columns;
 		},
 		startup: function(container){
-			initGrid(
+			var _grid = initGrid(
 					this.getColumns(),  
 					container
 			);
-            jQuery('.dgrid-cell.header[role="columnheader"]').each(function(idx, elem){
-                jQuery(elem).attr('title', jQuery(elem).html());
 
-                jQuery(elem).tooltip({
-                    container: "body",
-                    animation: false,
-                    placement: "top",
-                    trigger: "hover",
-                    delay: {"show": 0, "hide": 0}
-                });
+            window.attributeRules.init(_grid);
+
+            // For mapping attribute process, checkbox 'save as rule' need to be disabled when
+            // for multi select option delete is checked
+            jQuery(document).delegate('input[type=radio][name=mode]','change', function() {
+                var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
+                if (this.value == 'sub') {
+                    checkbox.find('input').attr("disabled", true).prop('checked', false);
+                    checkbox.css("color", "#C8C8C8").attr("disabled", true);
+                } else {
+					var checked = jQuery(this).closest('form').find('.checkbox.selection').find('input');
+					if (checked.prop('checked')) {
+	                    checkbox.find('input').attr("disabled", false);
+                        checkbox.css("color", "").attr("disabled", false);
+					}
+                }
             });
+            // For mapping attributes process, checkbox 'save as rule' need to be disabled when
+            // checkbox 'Apply to selection' is unchecked
+            jQuery(document).delegate('input[type=checkbox][name=selection]','change', function() {
+                var checkbox = jQuery(this).closest('form').find('.checkbox.save-as-rule');
+                if (!jQuery(this).prop("checked")) {					
+                    checkbox.find('input').attr("disabled", true).prop('checked', false);
+                    checkbox.css("color", "#C8C8C8").attr("disabled", true);
+                } else {
+					var radio = jQuery(this).closest('form').find('input[type=radio][name=mode]:checked');
+					if (radio.val() != 'sub') {
+	                    checkbox.find('input').attr("disabled", false);
+                        checkbox.css("color", "").attr("disabled", false);
+					}
+                }
+            });
+
+            // Adding tooltip's to grid column header
+            jQuery(this.getColumns()).each(function(idx, elem) {
+                if (elem.field && elem.title) {
+                    jQuery(".header.field-" + elem.field).attr("title", elem.title).attr("data-tooltip-header", "true");
+                }
+            });
+            jQuery(".dgrid-selector[role=columnheader]").attr("title", Translator.translate("Selection")).attr("data-tooltip-header", "true");
+            jQuery("[data-tooltip-header=true]").tooltip({
+                container: "body",
+                animation: false,
+                placement: "top",
+                trigger: "hover",
+                delay: {"show": 0, "hide": 0}
+            });
+            return this;
 		}
 	}; 
 });

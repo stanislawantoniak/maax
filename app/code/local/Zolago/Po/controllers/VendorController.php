@@ -1471,30 +1471,44 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     public function cancelShippingAction() {
         $r = $this->getRequest();
 
+        /** @var Zolago_Po_Helper_Data $_helper */
+        $_helper = Mage::helper("zolagopo");
+
         try {
             $udpo = $this->_registerPo();
             $statusModel = $udpo->getStatusModel();
             if(!$statusModel->isCancelShippingAvailable($udpo)) {
-                throw new Mage_Core_Exception(
-                    Mage::helper("zolagopo")->__("Status cannot be changed.")
-                );
+                throw new Mage_Core_Exception("Status cannot be changed.");
             }
+            /** @var Mage_Sales_Model_Order_Shipment $shipment */
             $shipment = Mage::getModel("sales/order_shipment")->load($r->getParam("shipping_id"));
+
+            //do not allow to cancel shipments that have already been sent
+            $track = $shipment->getTracksCollection()->setOrder("created_at", "DESC")->getFirstItem();
+            if($track && $track->getId() && !is_null($track->getData('shipped_date'))) {
+                Mage::throwException("You cannot cancel shipment that has been already sent.");
+            }
+
             /* @var $shipment Mage_Sales_Model_Order_Shipment */
             if($shipment->getId() && $shipment->getUdpoId()==$udpo->getId()) {
                 $udpoHlp = Mage::helper('udpo');
                 /* @var $udpoHlp Unirgy_DropshipPo_Helper_Data */
                 $udpoHlp->cancelShipment($shipment, true);
                 $udpo->getStatusModel()->processCancelShipment($udpo);
-                $this->_getSession()->addSuccess(Mage::helper('zolagopo')->__("Shipping canceled."));
+                $this->_getSession()->addSuccess($_helper->__("Shipping canceled."));
             } else {
-                throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Wrong shipment."));
+                throw new Mage_Core_Exception("Wrong shipment.");
             }
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            Mage::logException($e);
+            $this->_getSession()->addError(
+                $_helper->__($e->getMessage())
+            );
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+            $this->_getSession()->addError(
+                $_helper->__("There was a technical error. Please contact shop Administrator.")
+            );
         }
 
         return $this->_redirectReferer();

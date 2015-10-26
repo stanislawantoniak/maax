@@ -2,15 +2,13 @@
 
 class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
 {
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
-        /* @var $campaignModel Zolago_Campaign_Model_Resource_Campaign */
-        $campaignModel = Mage::getModel("zolagocampaign/campaign");
-        $campaigns = $campaignModel->getProductCampaignInfo();
-
-        $options = $this->_prepareCampaignOptions($campaigns);
-        if (is_null($this->_options)) {
-            $this->_options = $options;
+        if (!$this->_options) {
+            /* @var $campaignModel Zolago_Campaign_Model_Resource_Campaign */
+            $campaignModel = Mage::getModel("zolagocampaign/campaign");
+            $campaigns = $campaignModel->getProductCampaignInfo();
+            $this->_options = $this->_prepareCampaignOptions($campaigns);
         }
 
         return $this->_options;
@@ -27,11 +25,12 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Mode
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
                 $options[] = array(
-                    'label' => $campaign['campaign_name'],
+                    'label' => $campaign['name_customer'],
                     'value' => $campaign['campaign_id']
                 );
             }
         }
         return $options;
     }
+
 }

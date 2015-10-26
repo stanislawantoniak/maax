@@ -160,10 +160,20 @@ class GH_Api_Model_Soap_Client  {
      * @return void
      */
     protected function _query($name,$parameters) {
-        $client = new SoapClient(Mage::helper('ghapi')->getWsdlTestUrl(),array('trace'=>true));
+        $testFlag = (bool)Mage::getConfig()->getNode('global/test_server');
+        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'trace' => 1);
+        if ($testFlag) {
+            $url = Mage::helper('ghapi')->prepareWsdlUri(Mage::helper('ghapi')->getWsdlTestUrl(),$params);
+        } else {
+            $url = Mage::helper('ghapi')->getWsdlTestUrl();
+        }
+        $client = new SoapClient($url,$params);
         $data = array();
         try {
             $data = $client->$name($parameters);
+            if ($testFlag) {
+                 @unlink($url);   
+            }          
         } catch (Exception $xt) {
             Mage::logException($xt);
         }

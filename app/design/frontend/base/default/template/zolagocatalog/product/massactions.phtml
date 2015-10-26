@@ -1,3 +1,6 @@
+<?php
+/** @var $this Mage_Core_Block_Template */
+?>
 <div class="col-xs-4 main-actions">
 	<?php if($this->getParentBlock()->getCanShowGrid()):?>
 	<div style="position: relative;">
@@ -12,6 +15,12 @@
 				<?php echo Mage::helper("zolagocatalog")->__("Accept description"); ?>
 			</a>
 		</li>
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="#" id="massAttributeRules">
+                <i class="icon icon-puzzle-piece"></i>
+                <?php echo Mage::helper("gh_attributerules")->__("Apply rules");?>
+            </a>
+        </li>
 	</ul>
 	</div>
 	<?php endif;?>

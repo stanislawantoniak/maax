@@ -14,9 +14,9 @@ $modelStatuses = Mage::getModel("catalog/product_status");
     <strong><?php echo $this->__("Information");?>:</strong>
     <?php
     if ($this->getStatus() == Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_ENABLED) {
-        echo $this->__("This function will enable products on site for the selected products.");
+        echo $this->__("Proceeding will enable products in shop (they will be available for customers to buy). Product must have a price and the description accepted.");
     } else {
-        echo $this->__("This function will set products as invalid for the selected products.");
+        echo $this->__("Proceeding will set selected products as invalid. They will no longer be on offer in shop. Use this function only when you are sure they cannot be disabled otherways (like stock policy change).");
     }
     ?>
 </p>

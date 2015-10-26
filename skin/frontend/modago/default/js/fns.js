@@ -203,7 +203,7 @@ jQuery.noConflict();
 			hide_panel.find('i').removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
 		});
 
-		$('.sidebar-secound').on('click', 'h2.open', function(){
+		$('.sidebar-second').on('click', 'h2.open', function(){
 			var ww = $(window).innerWidth();
 			if(ww <=767) {
 				$(this).closest('header').next('.panel-group').toggle(50);
@@ -249,7 +249,7 @@ jQuery.noConflict();
 					podziekowanieNieudaneViewSummary.closest('.block_info_order').next('.table-summary-product').show();
 					podziekowanieNieudaneViewSummary.closest('.panel-body').next('.panel-footer').show();
 
-					var sidebarSecoundHeader = $('.sidebar-secound').find('header');
+					var sidebarSecoundHeader = $('.sidebar-second').find('header');
 					sidebarSecoundHeader.removeClass('open');
 					sidebarSecoundHeader.next('.panel-group').show();
 					$('#checkout.podsumowanie #content-main').find('#order-show-products').addClass('hidden');
@@ -354,35 +354,6 @@ jQuery.noConflict();
 			});
 		}
 
-		var itemProduct = $('.box_listing_product');
-		itemProduct.on('mouseenter', '.like', function(event) {
-			event.preventDefault();
-			var textLike;
-			if ($(this).hasClass('liked')) {
-				textLike = 'Dodane do ulubionych';
-			} else {
-				textLike = 'Dodaj do ulubionych';
-			}
-			$(this).find('.toolLike').show().text(textLike);
-		});
-		itemProduct.on('mouseleave mouseup', '.like', function(event) {
-			event.preventDefault();
-			$(this).find('.toolLike').hide().text('');
-		});
-		itemProduct.on('mousedown', '.like', function(event) {
-			event.preventDefault();
-			$(this).find('img:visible').animate({transform: 'scale(1.2)'}, 200);
-		});
-		itemProduct.on('mouseup', '.like', function(event) {
-			event.preventDefault();
-			$(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200)
-		});
-		itemProduct.on('mousedown', '.liked', function(event) {
-			event.preventDefault();
-			var textLike = 'Usunięte z ulubionych';
-			$(this).find('.toolLike').show().text(textLike);
-		});
-
 		init();
 		showSubMenuMobile();
 
@@ -450,14 +421,16 @@ jQuery.noConflict();
 			var screenHeight = $(window).height(),
 				body = $('body'),
 				htmlBody = $('html,body');
+            jQuery('#link_menu').toggleClass('not-open');
 			body.addClass('sb-open');
 			htmlBody.addClass('noscroll');
 			$('#sb-site').addClass('open');
 			$('.sb-slidebar').addClass('sb-active');
-			body.append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+			body.append('<div class="noscroll closeHamburgerMenu" style="width:100%; height:'+screenHeight+'px"></div>');
 			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
 			}
+			jQuery('.closeHamburgerMenu').click(closeHamburgerMenu);
 			jQuery(window).swipe(Mall.swipeOptions);
 		});
 
@@ -469,6 +442,7 @@ jQuery.noConflict();
 			htmlBody.removeClass('noscroll');
 			$('#sb-site').removeClass('open');
 			$('.sb-slidebar').removeClass('sb-active').find('.sb-submenu-active').removeClass('sb-submenu-active');
+			jQuery('.closeHamburgerMenu').off('click');
 			body.find('.noscroll').remove();
 			if(typeof Mall.listing != 'undefined') {
 				Mall.listing.positionFilters();
@@ -792,36 +766,6 @@ jQuery.noConflict();
 			rwd_banners.trigger('rwd.stop');
 		});
 
-		var rwd_inspiration = $("#rwd-inspiration .rwd-carousel");
-
-		rwd_inspiration.rwdCarousel({
-			items : 5, //10 items above 1000px browser width
-			itemsDesktop : [1000,4], //5 items between 1000px and 901px
-			itemsDesktopSmall : [900,3], // betweem 900px and 601px
-			itemsTablet: [600,3], //2 items between 600 and 0
-			itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
-			pagination : false,
-			navigation: true,
-			navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
-			rewindNav : false,
-			itemsScaleUp:true
-		});
-
-		// Custom Navigation Events
-		var rwdInspiration = $("#rwd-inspiration");
-		rwdInspiration.find(".next").click(function(){
-			rwd_inspiration.trigger('rwd.next');
-		});
-		rwdInspiration.find(".prev").click(function(){
-			rwd_inspiration.trigger('rwd.prev');
-		});
-		rwdInspiration.find(".play").click(function(){
-			rwd_inspiration.trigger('rwd.play',1000); //rwd.play event accept autoPlay speed as second parameter
-		});
-		rwdInspiration.find(".stop").click(function(){
-			rwd_inspiration.trigger('rwd.stop');
-		});
-
 		var rwd_complementary_product = $("#rwd-complementary-product .rwd-carousel");
 
 		rwd_complementary_product.rwdCarousel({
@@ -1008,185 +952,6 @@ jQuery.noConflict();
 		var connector = function(itemNavigation, carouselStage) {
 			return carouselStage.jcarousel('items').eq(itemNavigation.index());
 		};
-		var zoomGallery = $('#zoom_gallery');
-		carouselStage = zoomGallery.find('.carousel-stage').jcarousel();
-		carouselNavigation = zoomGallery.find('.carousel-navigation').jcarousel();
-
-		carouselStage.on('jcarousel:reload jcarousel:create', function () {
-			var width = carouselStage.innerWidth();
-			carouselStage.jcarousel('items').css('width', width + 'px');
-		});
-
-		// We loop through the items of the navigation carousel and set it up
-		// as a control for an item from the stage carousel.
-		carouselNavigation.jcarousel('items').each(function() {
-			var item = $(this);
-			var target = connector(item, carouselStage);
-
-			item
-				.on('jcarouselcontrol:active', function() {
-					carouselNavigation.jcarousel('scrollIntoView', this);
-					item.addClass('active');
-				})
-				.on('jcarouselcontrol:inactive', function() {
-					item.removeClass('active');
-				})
-				.jcarouselControl({
-					target: target,
-					carousel: carouselStage
-				});
-
-
-			// Setup controls for the stage carousel
-			zoomGallery.find('.prev-stage')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '-=1'
-				});
-
-			zoomGallery.find('.next-stage')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '+=1'
-				});
-
-			$(".carousel-stage").touchwipe({
-				wipeLeft: function() {
-					$(".carousel-stage").jcarousel('scroll', '+=1');
-					alert("right");
-				},
-				wipeRight: function() {
-					$(".carousel-stage").jcarousel('scroll', '-=1');
-					alert("left");
-				},
-				min_move_x: 100,
-				min_move_y: 100,
-				preventDefaultEvents: false
-
-			});
-
-			// Setup controls for the navigation carousel
-			zoomGallery.find('.prev-navigation')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '-=1'
-				});
-
-			zoomGallery.find('.next-navigation')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '+=1'
-				});
-			zoomGallery.find('.jcarousel-pagination')
-				.on('jcarouselpagination:active', 'a', function() {
-					$(this).addClass('active');
-				})
-				.on('jcarouselpagination:inactive', 'a', function() {
-					$(this).removeClass('active');
-				})
-				.jcarouselPagination();
-		});
-
-
-		/* =============================== CAROUSEL GALLERY Product MODAL ================================= */
-
-		connector = function(itemNavigation, carouselStage) {
-			return carouselStage.jcarousel('items').eq(itemNavigation.index());
-		};
-		$(function() {
-			// Setup the carousels. Adjust the options for both carousels here.
-			var carouselStage      = $('.carousel-stage-modd').jcarousel();
-			var carouselNavigation = $('.carousel-navigation-modd').jcarousel();
-
-			// We loop through the items of the navigation carousel and set it up
-			// as a control for an item from the stage carousel.
-			carouselNavigation.jcarousel('items').each(function() {
-				var item = $(this);
-
-				// This is where we actually connect to items.
-				var target = connector(item, carouselStage);
-
-				item
-					.on('jcarouselcontrol:active', function() {
-						carouselNavigation.jcarousel('scrollIntoView', this);
-						item.addClass('active');
-					})
-					.on('jcarouselcontrol:inactive', function() {
-						item.removeClass('active');
-					})
-					.jcarouselControl({
-						target: target,
-						carousel: carouselStage
-					});
-			});
-
-			// Setup controls for the stage carousel
-			$('.prev-stage-modd')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '-=1'
-				});
-
-			$('.next-stage-modd')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '+=1'
-				});
-
-			// Setup controls for the navigation carousel
-			$('.prev-navigation-modd')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '-=1'
-				});
-
-			$('.next-navigation-modd')
-				.on('jcarouselcontrol:inactive', function() {
-					$(this).addClass('inactive');
-				})
-				.on('jcarouselcontrol:active', function() {
-					$(this).removeClass('inactive');
-				})
-				.jcarouselControl({
-					target: '+=1'
-				});
-		});
-		/* =============================== END::// CAROUSEL GALLERY Product MODAL ================================= */
 
 	});
 })(jQuery);

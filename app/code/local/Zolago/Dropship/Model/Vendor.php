@@ -3,6 +3,15 @@
 /**
  * Class Zolago_Dropship_Model_Vendor
  * @method string getVendorName()
+ * @method string getStatementsCalendar()
+ * @method string getUrlKey()
+ *
+ * @method string getStatus()
+ *
+ * @method string getRegulationAcceptDocumentDate()
+ * @method string getRegulationAcceptDocumentData()
+ * @method int getRegulationAccepted()
+ * @method string getRegulationConfirmRequestSentDate()
  */
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
@@ -317,18 +326,95 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
         $hlp->setDesignStore();
     }
-    
-    /**
-     * list of vendors which can add product 
-     *
-     * @param 
-     * @return 
-     */
 
+    /**
+     * List of vendors which can add product
+     *
+     * @return Zolago_Dropship_Model_Resource_Vendor_Brandshop_Collection
+     */
     public function getCanAddProduct() {
+        /** @var Zolago_Dropship_Model_Vendor_Brandshop $model */
         $model = Mage::getModel('zolagodropship/vendor_brandshop');
+        /** @var Zolago_Dropship_Model_Resource_Vendor_Brandshop_Collection $collection */
         $collection = $model->getCollection();
         $collection->setCanAddFilter($this->getId());
         return $collection;    
+    }
+
+    /**
+     * Return IP from serialized RegulationAcceptDocumentData
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptIp() {
+        return $this->getCustomRegulationAcceptDocumentData('ip');
+    }
+
+    /**
+     * Return path to uploaded document in regulation accept process
+     * from json'ed RegulationAcceptDocumentData
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptDocumentPath() {
+        return $this->getCustomRegulationAcceptDocumentData('document_path');
+    }
+
+    public function getRegulationAcceptDocumentFullPath() {
+        return Mage::getBaseDir('media') . DS . $this->getRegulationAcceptDocumentPath();
+    }
+
+    /**
+     * Return file name to uploaded document in regulation accept process
+     * from serialized RegulationAcceptDocumentData
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptDocumentName() {
+        return $this->getCustomRegulationAcceptDocumentData('document_name');
+    }
+
+    /**
+     * Return role in regulation acceptation process
+     * @see GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE
+     * @see GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_PROXY
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptRole() {
+        return $this->getCustomRegulationAcceptDocumentData('accept_regulations_role');
+    }
+
+    /**
+     * Similar to function getRegulationAccepted()
+     * but taken from json'ed RegulationAcceptDocumentData
+     * @return int
+     */
+    public function getRegulationAcceptStatus() {
+        return (int)$this->getCustomRegulationAcceptDocumentData('accept_regulations');
+    }
+
+    /**
+     * @param $rawKey
+     * @return string|null
+     */
+    protected function getCustomRegulationAcceptDocumentData($rawKey) {
+        $key = 'regulation_accept_document_' . $rawKey;
+        if (!$this->hasData($key)) {
+            $data = (array)json_decode($this->getRegulationAcceptDocumentData());
+            if (!empty($data) && isset($data[$rawKey])) {
+                $this->setData($key, $data[$rawKey]);
+            }
+        }
+        return $this->getData($key);
+    }
+
+    /**
+     * Get decoded accept data
+     *
+     * @return array
+     */
+    public function getDecodedRegulationAcceptDocumentData() {
+        return (array)json_decode($this->getRegulationAcceptDocumentData());
     }
 }

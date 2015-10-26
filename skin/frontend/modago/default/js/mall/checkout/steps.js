@@ -1466,6 +1466,7 @@
 			_sidebarAddressesTemplate: "",
 	        _previous_payment: false,
 	        _previous_provider: false,
+	        _payment_is_dotpay: false,
 			
             handleChangePaymentMethodClick: function (e) {
 
@@ -1576,6 +1577,8 @@
 
                 if (paymentMemberName === paymentMethodNameAttr) {
                     var paymentMethodCode = jQuery(e.target).val();
+	                Mall.Checkout.steps.shippingpayment._payment_is_dotpay = false;
+
 
                     if (!(paymentMethodCode === "zolagopayment_gateway" || paymentMethodCode === "zolagopayment_cc")) {
                         paymentMethodName = jQuery(e.target).data("payment-method");
@@ -1599,6 +1602,7 @@
                     paymentMethodName = jQuery(e.target).closest('.panel.payment-selected').find('input[name="payment[method]"]').data("payment-method");
                     var providerName = jQuery(e.target).data("bank-name");
                     var bankLogoUrl = jQuery(e.target).closest('.provider-item').find('.payment-provider-logo-wrapper img').attr("src");
+	                Mall.Checkout.steps.shippingpayment._payment_is_dotpay = true;
 
                     //replace
                     self.renderPaymentSelected(paymentMethodName,providerName,bankLogoUrl);
@@ -1899,7 +1903,16 @@
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this._reviewInfoTemplate = this.getReviewInfo().html();
+                jQuery('.checkout_agreement_vendors').tooltip();
 				this.content.find("[id^=step-2-submit]").click(function(){
+					var checkout_agreements = jQuery('.checkout_agreements'),
+						checkout_agreements_mobile = jQuery('.checkout_agreements_mobile'),
+						checkout_agreements_to_check = checkout_agreements.is(':visible') ? checkout_agreements : checkout_agreements_mobile;
+
+					if(!checkout_agreements_to_check.find('form').valid()) {
+						return;
+					}
+
                     jQuery("button[id*='-prev']").prop("disabled", false);
 
                     //disable prev buttons
@@ -1955,6 +1968,43 @@
 					this.getReviewInfoTemplate()
 				);
 				this._prepareTotals(checkout);
+
+				// Prepare dotpay agreement
+				var dotpayAgreement = jQuery(".dotpay_agreement");
+
+				dotpayAgreement.each(function() {
+					var dotpayAgreementContainer = jQuery(this).parent(),
+						current = jQuery(this);
+					if(Mall.Checkout.steps.shippingpayment._payment_is_dotpay) {
+						dotpayAgreementContainer.show();
+						current.prop('disabled',false);
+					} else {
+						dotpayAgreementContainer.hide();
+						current.prop('disabled',true);
+					}
+				});
+
+				//prepare last step agreements validation
+				var form = jQuery('.checkout_agreements').find('form'),
+					form_mobile = jQuery('.checkout_agreements_mobile').find('form');
+
+				form.find('.has-feedback').each(function() {
+					var elemToCleanup = jQuery(this);
+					elemToCleanup.removeClass('has-feedback has-error has-success');
+					elemToCleanup.find('.error').remove();
+					elemToCleanup.find('i').remove();
+				});
+
+				form_mobile.find('.has-feedback').each(function() {
+					var elemToCleanup = jQuery(this);
+					elemToCleanup.removeClass('has-feedback has-error has-success');
+					elemToCleanup.find('.error').remove();
+					elemToCleanup.find('i').remove();
+				});
+
+				Mall.validate.init();
+				form.validate(Mall.validate._default_validation_options);
+				form_mobile.validate(Mall.validate._default_validation_options);
 			},
 			
 			_prepareTotals: function(checkout){

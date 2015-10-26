@@ -79,14 +79,14 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
 			"header"	=>	$_helper->__("Minimal stock"),
 		));
 		$this->addColumn("actions", array(
-                'header'    => Mage::helper('zolagopos')->__('Action'),
+                'header'    => $_helper->__('Action'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
                 'width'     => '50px',
                 'type'      => 'action',
 				'index'		=> 'pos_id',
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'pos_id',
-				'link_label'=> 'Edit',
+				'link_label'=> $_helper->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false

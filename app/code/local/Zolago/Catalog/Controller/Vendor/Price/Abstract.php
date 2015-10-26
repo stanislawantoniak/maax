@@ -93,6 +93,8 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
     }
 
     /**
+     * set attributes from price grid
+     *
      * @param array $productIds
      * @param array $attributes
      * @param int $storeId
@@ -127,6 +129,21 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
                 $inventoryData['politics'] = $value;
                 unset($attributes[$attributeCode]);
                 break;
+            case "status":
+                // change status in child products
+                $list = Mage::getResourceModel('catalog/product')->getRelatedProducts($productIds);
+                $childProds = array();
+                foreach ($list as $item) {
+                    $childProds[$item['product_id']] = $item['product_id'];
+                }
+        		if ($childProds) {
+		            $childAttributes = array(
+		                'status' => $attributes['status']
+		                );            
+                    Mage::getSingleton('catalog/product_action')
+		                ->updateAttributes($childProds, $childAttributes, $storeId);
+                }	
+                break;                                                                                    
             }
         }
 

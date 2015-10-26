@@ -7,8 +7,9 @@ class GH_Statements_Block_Adminhtml_Calendar_Item_Grid extends Mage_Adminhtml_Bl
     {
         parent::__construct();
         $this->setId('ghstatements_calendar_item_grid');
-        $this->setDefaultSort('item_id');
+        $this->setDefaultSort('date');
         $this->setDefaultDir('desc');
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection()
@@ -26,15 +27,17 @@ class GH_Statements_Block_Adminhtml_Calendar_Item_Grid extends Mage_Adminhtml_Bl
         $this->addColumn("id", array(
             "index" => "item_id",
             "header" => Mage::helper("ghstatements")->__("ID"),
-            "align" => "right",
+            "align" => "left",
             "type" => "number",
-            "width" => "40px",
+            "width" => "5px",
             "sortable" => false,
             "filter" => false,
         ));
         $this->addColumn("date", array(
             "index" => "event_date",
             "header" => Mage::helper("ghstatements")->__("Event date"),
+            "type" => "date",
+            "width" => "500px",
         ));
 
         return parent::_prepareColumns();

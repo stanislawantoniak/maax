@@ -360,7 +360,7 @@ table.foot-empty-cells tfoot td:empty {
 .udropship-vendor_settings-rma .widget.box .widget-header h4 {
   margin: 10px 0;
 }
-#control-battons div div {                   
+#control-battons div div {
     float: left;
 	margin-top:12px;
 	margin-left:8px;
@@ -515,4 +515,12 @@ table.foot-empty-cells tfoot td:empty {
     height: 25px;
     display: inline-block;
     background-size: 25px;
+}
+@media screen and (min-width: 768px) {
+	#shippingModal .modal-dialog {
+		width: 730px;
+	}
+}
+.no-padding-left {
+    padding-left: 0;
 }

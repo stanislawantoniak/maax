@@ -4,6 +4,8 @@
 	<default>
 
 		<reference name="head">
+    		<remove name="optional_zip_countries"/>
+    		<remove name="product.tooltip"/>
 			<action method="setTemplate">
 				<template>page/html/head.phtml</template>
 			</action>
@@ -140,6 +142,9 @@
 			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
+			<action method="addCss">
+				<stylesheet>css/gh.css</stylesheet>
+			</action>
 
 
 			<action method="addJs">
@@ -240,7 +245,20 @@
                 <script>js/mall/navigation.js</script>
             </action>
 
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/cookiebar/jquery.cookiebar.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
+			</action>
+
 			<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
+		    <reference name="js_cookies">
+        	    <action method="setCacheLifetime">
+	    	        <lifetime>3600</lifetime> <!-- Cache Lifetime of 1 hour -->
+                </action>		        
+		    </reference>
 
             <remove name="salesmanago_tracking"/>
 		</reference>
@@ -250,6 +268,9 @@
 				<template>page/1column.phtml</template>
 			</action>
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
+			<action method="addBodyClass">
+				<value>gh-cookiebar</value>
+			</action>
 		</reference>
 
         <reference name="header">
@@ -273,19 +294,13 @@
             </action>
         </reference>
         <reference name="before_content">
-            <block type="core/template"  name="header_menu" template="page/html/header/header_menu.phtml">
-                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+            <block type="zolagomodago/page_html_header_menu"  name="header_menu" template="page/html/header/navigation.main.wrapper.phtml">
+                <block type="zolagomodago/catalog_category" name="acategory.main.menu.mobile" template="catalog/category/category.main.menu.mobile.phtml"/>                
             </block>
         </reference>
-
-		<reference name="footer">
-			<block type="zolagomodago/page_footer_links" name="footer.links" template="page/html/footer/links.phtml">
-				<block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml"/>
-			</block>
-		</reference>
-
 		<reference name="before_body_end">
 			<block type="zolagomodago/page_html_scrolltop" name="scrolltop" template="page/html/scrolltop.phtml" />
+			<block type="core/template"  name="cookie_bar" template="page/html/cookie_bar.phtml" />
 		</reference>
 		<!-- remove cart link - better performance-->
 		<remove name="checkout_cart_link"/>
@@ -307,9 +322,6 @@
 			<action method="setIsHandle">
 				<applied>1</applied>
 			</action>
-		</reference>
-		<reference name="footer">
-
 		</reference>
 	</page_empty>
 
@@ -408,6 +420,12 @@
 			</action>
 			<block type="cms/page" name="cms_page"/>
 		</reference>
+		<reference name="root">
+			<remove name="global_messages" />
+			<action method="addBodyClass">
+				<value>lower-breadcrumbs</value>
+			</action>
+		</reference>
 	</cms_page>
 
 	<zolagomodago_index_index>
@@ -418,9 +436,9 @@
 					<block type="zolagocms/component_slider" name="slider" before="-"/>
 					<block type="zolagocms/component_boxes" name="boxes" before="-"/>
 				</block>
-				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml"/>
-				<block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/home/vendor/category/banner.phtml"/>
-
+				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml">
+					<block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
+				</block>
 				<block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
 				<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
 				<block type="zolagomodago/home_vendor" name="zolago_modago_home_popularvendors" template="home/popularvendors.phtml"/>
@@ -435,7 +453,6 @@
 				<value>nobreadcrumbs</value>
 			</action>
 		</reference>
-
 	</zolagomodago_index_index>
 
     <zolagomodago_brands_index>
@@ -513,26 +530,36 @@
         <reference name="content">
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header_m" template="zolagosolrsearch/catalog/product/list/header/mobile/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+				<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
-            <block type="core/template" name="header_menu" template="page/html/header/header_menu.phtml">
-                <block type="zolagomodago/page_header_navmobilemenu" name="navigation_main_mobile" template="page/html/header/top.mobile.menu.phtml" />
+            <block type="zolagomodago/page_html_header_menu" name="header_menu" template="page/html/header/navigation.main.wrapper.phtml">
+                <block type="zolagomodago/catalog_category" name="category.main.menu.mobile" template="catalog/category/category.main.menu.mobile.phtml"/>
             </block>
             <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
                 <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+				<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
             </block>
 
-            <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar"/>
-            <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
-                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
-                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list" />
+            <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar">
+				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+
+			</block>
+
+
+
+			<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
+				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+
+				<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+                <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager_full" template="zolagosolrsearch/catalog/product/list/pager-full.phtml"/>
+				</block>
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
-                <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
-	            <!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        
         </reference>
 
 	</solrbridge_solrsearch_category_view>
@@ -604,11 +631,15 @@
                     <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
                 </block>
 
-                <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar"/>
+                <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar">
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+				</block>
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
                 </block>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        
         </reference>
     </solrsearch_index_index>
 
@@ -662,6 +693,7 @@
 			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        		
 		</reference>
 
 		<reference name="product.info.addto">
@@ -876,6 +908,12 @@
 					<block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
 					<block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
 					<block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/address/password.phtml"/>
+					<block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml" >
+						<block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" template="sociallogin/google/button.phtml" />
+						<block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" template="sociallogin/facebook/button.phtml" />
+						<block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" template="sociallogin/twitter/button.phtml" />
+						<block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button" template="sociallogin/linkedin/button.phtml" />
+					</block>
 				</block>
 				<block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
 					<block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" as="shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
@@ -1337,7 +1375,10 @@
 			</action>
 		</reference>
 		<reference name="my.account.wrapper">
-			<block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml"/>
+			<block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml">
+				<block type="sociallogin/google_button" name="social-login-google" template="sociallogin/google/button.phtml" />
+				<block type="sociallogin/facebook_button" name="social-login-facebook" template="sociallogin/facebook/button.phtml" />
+			</block>
 		</reference>
         <reference name="content">
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
@@ -1370,6 +1411,14 @@
 
 	<customer_account_create>
 		<update handle="zolago_modago_customer_handle" />
+		<reference name="customer_form_register">
+			<block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml" >
+				<block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" />
+				<block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" />
+				<block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" />
+				<block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button"/>
+			</block>
+		</reference>
 	</customer_account_create>
 	
 	
@@ -1778,13 +1827,43 @@
             <action method="addBodyClass">
                 <value>lower-breadcrumbs</value>
             </action>
-        </reference>
+			<action method="addBodyClass">
+				<value>your-promotions</value>
+			</action>
+			<action method="unsetChild">
+				<name>breadcrumbs</name>
+			</action>
+		</reference>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>Home</crumbName>
+				<crumbInfo>
+					<label>Home</label>
+					<title>Home</title>
+					<link>/</link>
+				</crumbInfo>
+			</action>
+			<action method="addCrumb">
+				<crumbName>mypromotions</crumbName>
+				<crumbInfo>
+					<label>Your coupons</label>
+					<title>Your coupons</title>
+				</crumbInfo>
+			</action>
+		</reference>
         <reference name="head">
             <action method="setTitle" translate="title">
-                <title>My promotions</title>
+                <title>Your coupons</title>
             </action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/promotions.js</script>
+			</action>
         </reference>
         <reference name="content">
+			<block type="zolagomodago/mypromotions_header" name="zolago_modago_mypromotions_header" template="promotions/mypromotions/header.phtml">
+				<block type="page/html_breadcrumbs" name="mypromotions_breadcrumbs"/>
+			</block>
             <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
 				<block type="zolagomodago/promotions_login" name="mypromotions.login" template="promotions/login.phtml">
 					<block type="cms/block" name="promotions.login.header" as="login-header">
@@ -1814,7 +1893,6 @@
             <action method="unsetChild">
                 <name>breadcrumbs</name>
             </action>
-
         </reference>
 
         <remove name="my.account.wrapper"/>

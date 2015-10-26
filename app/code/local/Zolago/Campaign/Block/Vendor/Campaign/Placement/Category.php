@@ -84,7 +84,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryId = $this->getCategoryId();
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
-        $placements = $campaign->getCategoryPlacements($categoryId, $vendorId);
+
+        /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
+        $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
+        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(),  FALSE, false);
 
         $placementsByType = array();
         if (!empty($placements)) {
@@ -122,7 +125,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 /* @var $statuses Zolago_Campaign_Model_Campaign_PlacementStatus */
                 $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')
                     ->statusOptionsData($placement['campaign_id'], $showEditLink);
-                Mage::log($statuses, null, "campaign.log");
+
 
                 $now = Mage::getModel('core/date')->timestamp(time());
                 if (!empty($dateTo) && !empty($dateFrom)) {

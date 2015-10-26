@@ -1,13 +1,12 @@
 <?php /** @var Mage_Customer_Block_Form_Register $this */ ?>
+<?php
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+?>
 <div id="content" class="container-fluid">
 	<div class="account-create row">
-		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-9 sidebar-create"
-		     style="padding-left: 0">
-			<section class="p main bg-w hidden-sm hidden-xs">
-				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-register-right')->toHtml(); ?>
-			</section>
-		</div>
-		<div id="content-main" class="col-lg-9 col-md-9 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-3 section">
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-register-right')->toHtml(); ?>
+		<div id="content-main" class="col-lg-9 col-md-8 col-sm-8 col-xs-12 col-lg-pull-3 col-md-pull-4 col-sm-pull-4 section">
 			<section class="main bg-w">
 				<header class="title-section">
 					<h2><?php echo $this->__('Create an Account') ?></h2>
@@ -15,56 +14,59 @@
 				<div class="row">
 					<form autocomplete="off" action="<?php echo $this->getPostActionUrl() ?>" class="form"
 					      id="createAccountForm" method="post" role="form" novalidate="novalidate">
-						<div class="col-lg-6 col-md-7 col-sm-7 col-xs-12">
+						<div class="col-lg-6 col-md-7 col-sm-11 col-xs-12">
 							<div class="form-group clearfix">
 								<div class="row">
-									<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+									<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
 									       for="account_email">
 										<?php echo $this->__('Email Address'); ?>
 									</label>
-									<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 control-label required">
-										<input type="email" value="" class="form-control hint email"
+									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 control-label required">
+										<input type="email" value="" class="form-control email"
 										       required="true" id="account_email" title=""
 										       name="email" data-original-title="<?php echo $this->__("Please enter email."); ?>"
 										       aria-required="true"/>
 									</div>
 								</div>
 							</div>
-							<div class="form-group clearfix border-top">
+							<div class="form-group clearfix">
 								<div class="row">
-									<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label required"
+									<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label required"
 									       for="account_password">
 										<?php echo $this->__('Password'); ?>
 									</label>
-									<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 										<input type="password" class="form-control hint password"
 										       required="true" id="account_password" title=""
-										       name="password" data-original-title="<?php echo $this->__("Please enter password."); ?>"
-										       aria-required="true"/>
+										       name="password" data-original-title="<?php echo $this->__("Password needs to have at least 6 characters"); ?>"
+										       data-placement="bottom" aria-required="true"/>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-5 col-sm-5 col-xs-12">
-							<?php //todo: social login ?>
+						<div class="col-lg-6 col-md-5 col-sm-12 col-xs-12">
+                            <?php echo $this->getChildHtml('ced_sociallogin_register'); ?>
 						</div>
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group form-checkbox small text-align-left">
-								<input type="checkbox" id="is_subscribed" class="css-checkbox" checked="checked"
+							<div class="agreement-nocheck-registration">
+								<?php echo $modagoHelper->getAgreementHtml('register_info') ?>
+							</div>
+							<div class="form-group form-checkbox small text-align-left" id="tos_agreement_container_registration">
+								<input type="checkbox" id="agreement" class="css-checkbox required"
+									   required="true"
+									   name="agreement"
+									   aria-required="true">
+								<label for="agreement" class="css-label agreement-label control-label required">
+									<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+								</label>
+							</div>
+							<div class="form-group form-checkbox small text-align-left" id="newsletter_agreement_container_registration">
+								<input type="checkbox" id="is_subscribed" class="css-checkbox"
 								       name="is_subscribed" style="opacity: 0; visibility: visible;">
 								<label for="is_subscribed" class="css-label agreement-label">
-                                    <?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?>
-                                </label>
+									<?php echo $modagoHelper->getAgreementHtml('newsletter') ?>
+								</label>
 							</div>
-                        <div class="form-group form-checkbox small text-align-left">
-                            <input type="checkbox" id="agreement" class="css-checkbox required"
-                                   required="true" style="opacity: 0; visibility: visible;"
-                                   name="agreement"
-                                   aria-required="true">
-                            <label for="agreement" class="css-label agreement-label control-label required">
-                                <?php echo Mage::getStoreConfig('customer/agreements/policy'); ?>
-                            </label>
-                        </div>
 						</div>
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<div class="row action">
@@ -106,8 +108,8 @@
 		"<?php echo $this->__("Please enter correct email."); ?>"
 	);
 	Mall.translate.add(
-		"You must agree to our Terms of Service",
-		"<?php echo $this->__("You must agree to our Terms of Service"); ?>"
+		"You must accept our Terms of Service",
+		"<?php echo $this->__("You must accept our Terms of Service"); ?>"
 	);
 </script>
 <?php //Old registration form: ?>

@@ -73,16 +73,16 @@
     margin:2px;
 }
 
-#zolagocampaign_campaign_product_grid .form-group {
-    margin: 0px;
+#vendor_campaign_product_grid .form-group {
+    margin: 0 5px;
     border-top: none;
 }
+#zolagocampaign_campaign_banner_grid .form-group {
+    margin: 0 5px;
+}
 
-#edit-campaign .form-group label[for=url_typeurl_type_manual_link],
-#edit-campaign .form-group label[for=url_typeurl_type_landing_page],
 
-#edit-campaign .form-group label[for=strikeout_type1],
-#edit-campaign .form-group label[for=strikeout_type2] {
+#edit-campaign .form-group .radio-buttons label {
     position: relative;
     top: -2px;
     margin: 0 8px 0 4px;
@@ -517,4 +517,72 @@
 }
 .radio-buttons {
     padding-top: 7px;
+}
+.form-horizontal .form-group.subsection {
+	background: #f9f9f9 none repeat scroll 0 0;
+	margin-left: -10px;
+	margin-right: -10px;
+	padding: 10px;
+}
+.form-horizontal .form-group.subsection .control-label {
+	padding: 0;
+}
+
+
+#showAttributeRules .hiddenRow.in {
+	display: table-cell !important
+}
+#showAttributeRules table.table {
+	margin-bottom: 0 !important;
+}
+#showAttributeRules .checkbox-column {
+	width: 3%;
+}
+#showAttributeRules .show-details-column-short {
+	width: 4% !important;
+}
+#showAttributeRules .show-details-column {
+	width: 4.5% !important;
+	border-right: none;
+}
+#showAttributeRules .attribute-column {
+	border-left: none;
+}
+.accordion-toggle {
+	cursor: pointer;
+}
+.prefix-lvl-1 {
+	border: none;
+	width: 4%;
+}
+.prefix-lvl-2 {
+	border: none;
+	width: 7%;
+}
+.table-lvl-1 tr:first-child > td {
+	border-top: none;
+}
+#showAttributeRules .collapsing {
+	-webkit-transition: 0.01s;
+	transition: 0.01s;
+}
+
+#showAttributeRules-trigger {
+	color: #4d7496;
+	background-color: #ffffff;
+	border: none;
+	font-size: 11px !important;
+	padding: 0;
+	cursor: pointer;
+}
+
+#showAttributeRules div.tooltip-wrapper {
+    display: inline-block;
+}
+.regulation-docs-list {
+    padding-left: 0px;
+}
+.regulation-docs-list li {
+    list-style: none;
+	margin-bottom: 5px;
 }

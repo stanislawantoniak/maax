@@ -45,7 +45,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
 		try {
 			$rma = $this->_registerRma();
-			if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
+			if(($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $rma->getPo()->isCod())) {
+				Mage::throwException($hlp->__("Refund is not possible because order was sent using COD and client didn't receive the package."));
+			} else if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
 				$invalidItems = array();
 				$validItems = array();
 				$returnAmount = 0;
@@ -87,6 +89,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						$this->_throwRefundTooMuchAmountException();
 					}
 
+					$refundStatementModel = false;
 					if($po->isPaymentDotpay()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
@@ -94,6 +97,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						if($result === false) {
 							$this->_throwRefundTooMuchAmountException();
 						}
+
+						/** @var GH_Statements_Model_Refund $refundStatementModel */
+						$refundStatementModel = Mage::getModel('ghstatements/refund');
 					}
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
@@ -112,7 +118,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					$vendorSession = Mage::getSingleton('udropship/session');
 					$commentData['vendor_id'] = $vendorSession->getVendorId();
 					if($vendorSession->isOperatorMode()) {
-						$commentData['operator_id'] = $vendorSession->getOperator()->getId();
+						$operator = $vendorSession->getOperator();
+						$commentData['operator_id'] = $operator->getId();
+						if($refundStatementModel) {
+							$refundStatementModel
+								->setOperatorId($operator->getId())
+								->setOperatorName($operator->getFirstname()." ".$operator->getLastname()." (".$operator->getEmail().")");
+						}
 					}
 
 					if(!$po->isPaymentDotpay()) {
@@ -136,6 +148,18 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
 							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
 						}
+					}
+
+					if($po->isPaymentDotpay() && $refundStatementModel) {
+						$refundStatementModel
+							->setPoId($po->getId())
+							->setPoIncrementId($po->getIncrementId())
+							->setRmaId($rma->getId())
+							->setRmaIncrementId($rma->getIncrementId())
+							->setDate(Mage::getModel('core/date')->date('Y-m-d'))
+							->setVendorId($po->getVendor()->getId())
+							->setValue($returnAmount)
+							->save();
 					}
 
 					$po->saveComments();

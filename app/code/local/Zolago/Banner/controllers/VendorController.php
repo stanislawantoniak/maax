@@ -13,8 +13,25 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
     public function editAction() {
         Mage::register('as_frontend', true);
+
+        $bannerType = $this->getRequest()->getParam('type', "");
+
+        /* @var $_zolagoDropshipHelper Zolago_Dropship_Helper_Data */
+        $_zolagoDropshipHelper = Mage::helper("zolagodropship");
+
+        //restrict for not LOCAL VENDOR
+        /* @var $bannerTypeModel Zolago_Banner_Model_Banner_Type */
+        $bannerTypeModel = Mage::getModel("zolagobanner/banner_type");
+        $isAvailableType = $bannerTypeModel->isTypeDefinitionAvailableVorLocalVendor($bannerType);
+
+        if(!$isAvailableType && !$_zolagoDropshipHelper->isLocalVendor()){
+            //only Local vendor can edit Landing page Banners
+            return $this->_redirect("campaign/vendor/index");
+        }
+
         $campaignId = $this->getRequest()->getParam('campaign_id',null);
         $bannerId = $this->getRequest()->getParam('id',null);
+
         $banner = $this->_initModel($bannerId);
         $vendor = $this->_getSession()->getVendor();
 
@@ -179,7 +196,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                                 $image = md5(mt_rand() . $image);
                                 $folder = $image[0] . "/" . $image[1] . "/" . $image[2] . "/";
 
-                                mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
+                                @mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
 
                                 $path = Mage::getBaseDir() . "/media/banners/" . $folder . $uniqName;
                                 try {
@@ -190,6 +207,19 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                                 $bannerContentToSave['image'][$n]['path'] = "/banners/" . $folder . $uniqName;
                             } elseif (isset($data['image']) && !empty($data['image'])) {
                                 $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
+                            }
+
+                            // Only Inspiration need to be resize ( box and sliders not )
+                            $type = $banner->getType();
+                            if (Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION == $type) {
+                                $_path = $bannerContentToSave['image'][$n]['path'];
+                                $imageBoxPath = Mage::getBaseDir('media') . $_path;
+                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::getImageResizePath($banner->getType()) . $_path;
+                                Mage::getModel("zolagobanner/banner")->scaleImage(
+                                    $imageBoxPath,
+                                    $imageBoxResizePath,
+                                    Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::BANNER_INSPIRATION_WIDTH,
+                                    Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner::BANNER_INSPIRATION_HEIGHT);
                             }
                         }
                         unset($n);

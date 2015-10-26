@@ -16,7 +16,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @var array
 	 */
 	protected $_solrToMageMap = array(
-		"products_id" => "id",
+		"products_id" => "entity_id",
+        "url_path_varchar" => "current_url",
 		"product_type_static" => "type_id",
 		"name_varchar" => "name",
 		"store_id" => "store_id",
@@ -33,10 +34,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"product_rating_int" => "product_rating",
 		"is_bestseller_int" => "is_bestseller",
 		"product_flag_int" => "product_flag",
+        "price_decimal" => "price",
+        "msrp_decimal" => "msrp",
 		"special_price_decimal" => "special_price",
 		"special_from_date_varchar" => "special_from_date",
 		"special_to_date_varchar" => "special_to_date",
         "campaign_regular_id_int" => "campaign_regular_id",
+        "campaign_info_id_varchar" => "campaign_info_id",
         "campaign_strikeout_price_type_int" => "campaign_strikeout_price_type",
 		"udropship_vendor_id_int" => "udropship_vendor",
 		"udropship_vendor_logo_varchar" => "udropship_vendor_logo",
@@ -504,7 +508,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 * Map solr docuemnt data to local ORM product
+	 * Map solr document data to local ORM product
 	 * @param array $item
 	 * @param Mage_Catalog_Model_Product $product
 	 * @return Mage_Catalog_Model_Product
@@ -513,14 +517,34 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach ($this->_solrToMageMap as $solr => $mage) {
 			if (isset($item[$solr])) {
-				$product->setDataUsingMethod($mage, $item[$solr]);
+                $product->setData($mage, $item[$solr]);
 			}
 		}
-
-		$product->setId((int) $product->getId());
-
 		return $product;
 	}
+
+    /**
+     * Set price for current user from solr data
+     *
+     * @param array $item
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Product
+     */
+    public function mapSolrDocPriceToProduct(array $item, Mage_Catalog_Model_Product $product) {
+        $customerGroupId = Mage::getSingleton('customer/session')->getCustomerGroupId();
+        $finalPrice = $product->getPriceModel()->calculatePrice(
+            $product->getData("price"),             // basePrice
+            $product->getData("special_price"),     // specialPrice
+            $product->getData("special_from_date"), // specialPriceFrom
+            $product->getData("special_to_date"),   // specialPriceTo
+            null,                                   // rulePrice - not decided yet, for now not used
+            $product->getData("website_id"),        // websiteId,
+            $customerGroupId,
+            $product->getId()
+        );
+        $product->setData("calculated_final_price", $finalPrice);
+        return $product;
+    }
 
 	/**
 	 * @return array
@@ -678,6 +702,19 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
          $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
          return $prefix.'_price_decimal';
     } 
-
+    
+    /**
+     * check if we are in search context
+     *
+     * @return bool
+     */
+     public function isSearchContext() {
+        $request = Mage::app()->getRequest();
+        return (
+            $request->getModuleName() == "search" &&
+            $request->getControllerName() == "index" &&
+            $request->getActionName() == "index"
+        );
+     }
 
 }

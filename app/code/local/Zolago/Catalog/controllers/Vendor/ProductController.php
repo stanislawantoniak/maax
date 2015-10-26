@@ -23,24 +23,26 @@ class Zolago_Catalog_Vendor_ProductController
 		$method = $request->getParam("method");
 		$productIds = $request->getParam("product_ids");
 		$attributeSetId = $request->getParam("attribute_set_id");
+        $saveAsRule = $request->getParam("save_as_rule");
+		$attributeMode = $request->getParam("attribute_mode");
 		$storeId = $this->_getStoreId();
 		$global = false;
-		
+
 		if(is_string($productIds)){
 			$productIds = explode(",", $productIds);
 		}
-		
+        $restQuery = $this->_getRestQuery();
 		if(is_array($productIds) && count($productIds)){
 			$ids = array_unique($productIds);
 		}else{
 			$collection = $this->_getCollection();
-			foreach($this->_getRestQuery() as $key=>$value){
+			foreach($restQuery as $key=>$value){
 				$collection->addAttributeToFilter($key, $value);
 			}
 			$global = true;
 			$ids = $collection->getAllIds();
 		}
-		
+
 		try{
 			array_walk($ids, function($value){
 				return (int)$value;
@@ -56,9 +58,16 @@ class Zolago_Catalog_Vendor_ProductController
 				 *Handle mass save
 				 */
 				case "attribute":
+                    $attributeCode = key($request->getParam("attribute"));
+                    $attributeValue = $request->getParam("attribute")[$attributeCode];
+                    if ($attributeCode == "description" || $attributeCode == "short_description") {
+                        $attributeValue = Mage::helper("zolagocatalog")->secureInvisibleContent($attributeValue);
+                    } elseif ($attributeCode == 'name') {
+                        $attributeValue = Mage::helper("zolagocatalog")->cleanProductName($attributeValue);
+                    }
 					$this->_processAttributresSave(
 						$ids, 
-						$request->getParam("attribute"), 
+						array($attributeCode => $attributeValue),
 						$storeId, 
 						array("attribute_mode"=>$request->getParam("attribute_mode"))
 					);
@@ -67,6 +76,8 @@ class Zolago_Catalog_Vendor_ProductController
 				 * Handle status change
 				 */
 				case "confirm":
+                    $attributeCode = "description_status";
+                    $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
 					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
 						$ids, 
@@ -79,19 +90,102 @@ class Zolago_Catalog_Vendor_ProductController
 				    Mage::throwException("Invaild mass method");
 			
 			}
+            /**
+             * Save Rule
+             * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
+             */
+            $_restQuery = $this->processRestQueryForSave($restQuery);
+            Mage::dispatchEvent(
+                "change_product_attribute_after",
+                array(
+                    'store_id'          => $storeId,
+                    "attribute_code"    => $attributeCode,
+                    "vendor"            => $this->getVendor(),
+                    "attribute_mode"    => $attributeMode[$attributeCode],
+                    "attribute_value"   => $attributeValue,
+                    "rest_query"        => $_restQuery,
+                    "raw_rest_query"    => $restQuery,
+                    "save_as_rule"      => $saveAsRule,
+                    "method"            => $method,
+                    "product_ids"       => $productIds,
+                    "attribute_set_id"  => $attributeSetId
+                )
+            );
 		} catch (Exception $ex) {
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
 		}
-		
-		
+
 		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
 		$this->_prepareRestResponse();
 	}
-	
-	
-	
+
+    /**
+     * Prepare rest query from params for saving conditions in attributes mapper
+     * Remove "from" and "to" (images count),
+     * Add name filter,
+     * Add regexp for multiselect attributes
+     * @see GH_AttributeRules_Model_Observer::saveProductAttributeRule()
+     * @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition()
+     *
+     * @param $restQuery
+     * @return mixed
+     */
+	protected function processRestQueryForSave($restQuery) {
+        // Clear images count filter
+        unset($restQuery["images_count"]);
+        // Add custom filter by name
+        $inParams = $this->getRequest()->getQuery();
+        if (isset($inParams["name"])) {
+            $restQuery["name"] = array("like" => "%".$inParams["name"]."%");
+        }
+        // Null (empty)
+        foreach($this->_getAvailableQueryParams() as $key){
+            $attribute=$this->getGridModel()->getAttribute($key);
+            if ($attribute && $this->getGridModel()->isAttributeEnumerable($attribute) && $attribute->getAttributeCode() != "name") {
+                if (isset($inParams[$key])) {
+                    $value = $inParams[$key];
+                    if (is_string($value) && trim($value) == "") {
+                        continue;
+                    } elseif (is_array($value)) {
+                        continue;
+                    }
+                    if ($value === self::NULL_VALUE) {
+                        $restQuery[$key] = array("null" => true);
+                    }
+                }
+            }
+        }
+        // Regexp for multi select attributes
+        $multi = $this->_getRestQueryAttributesByFrontendInput("multiselect");
+        foreach ($multi as $code => $attr) {
+            if (isset($inParams[$code]) && $inParams[$code] !== self::NULL_VALUE) {
+                /** @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition() */
+                $restQuery[$code] = array("regexp" => "[[:<:]]".$inParams[$code]."[[:>:]]");
+            }
+        }
+        return $restQuery;
+    }
+
+    /**
+     * Get available query params attributes filtered by fronted input type
+     *
+     * @param string $type like "select" or "multiselect"
+     * @return array
+     */
+    protected function _getRestQueryAttributesByFrontendInput($type) {
+        $out = array();
+        foreach($this->getGridModel()->getColumns() as $column) {
+            if($column->getAttribute() &&
+                $column->getAttribute()->getFrontendInput() == $type &&
+                $column->getFilterable() !== false ) {
+                $out[$column->getAttribute()->getAttributeCode()] = $column->getAttribute();
+            }
+        }
+        return $out;
+    }
+
 	/**
 	 * Save hidden columns
 	 */
@@ -254,4 +348,8 @@ class Zolago_Catalog_Vendor_ProductController
          return $errors;
      }
 
+    public function manageattributesAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

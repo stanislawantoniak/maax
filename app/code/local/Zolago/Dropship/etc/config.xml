@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.6</version>
+			<version>0.0.11</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -32,7 +32,6 @@
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- Observer model -->
 					<observer>Zolago_Dropship_Model_Observer</observer>
-                    <observer>Zolago_Dropship_Model_Observer</observer>
                 </rewrite>
 			</udropship>
 			<udropship_mysql4>
@@ -68,11 +67,14 @@
 			</zolagodropship>
 			<udropship>
 				<rewrite>
+				    <adminhtml_vendor_edit_tab_form>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form</adminhtml_vendor_edit_tab_form>
+				    <adminhtml_vendor_edit_tabs>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs</adminhtml_vendor_edit_tabs>
 					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
                     <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
                     <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
+                    <adminhtml_vendor_edit>Zolago_Dropship_Block_Dropship_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
                 </rewrite>
 			</udropship>
 		</blocks>
@@ -91,14 +93,18 @@
 		<udropship>
 		    <courier>
 		        <fieldsets>		            
+			        <dhl_rates>
+				        <legend>DHL Rates</legend>
+				        <position>130</position>
+			        </dhl_rates>
                     <dhl>
                         <legend>DHL</legend>
                         <position>140</position>
                     </dhl>
-			        <dhl_rates>
-				        <legend>DHL Rates</legend>
-				        <position>150</position>
-			        </dhl_rates>
+                    <orbaups_rates>
+                        <legend>UPS Rates</legend>
+                        <position>150</position>
+                    </orbaups_rates>
                     <orbaups>
                         <legend>UPS</legend>
                         <position>160</position>
@@ -110,7 +116,21 @@
 		        </fieldsets>
 		    </courier>
             <vendor>
+                <fieldsets>
+                    <vendor_preferences>
+                        <legend>Addresses</legend>
+                        <position>1</position>
+                        <hidden>true</hidden>
+                    </vendor_preferences>
+                </fieldsets>
                 <fields>
+	                <legal_entity>
+		                <label>Legal entity</label>
+		                <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>
+		                <type>textarea</type>
+		                <fieldset>vendor_info</fieldset>
+		                <position>10</position>
+	                </legal_entity>
                     <new_order_notifications>                    
                         <fieldset>vendor_info</fieldset>
                     </new_order_notifications>
@@ -118,7 +138,7 @@
                         <fieldset>vendor_info</fieldset>
                     </notify_by_udpo_status>
                     <url_key>
-                        <fieldset>vendor_ifno</fieldset>
+                        <fieldset>vendor_info</fieldset>
                     </url_key>
                     <logo>
                         <fieldset>vendor_info</fieldset>
@@ -249,6 +269,13 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
+                    <cpc_commission>
+                        <label>CPC commission percent</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>100</position>
+                        <only_admin>1</only_admin>
+                    </cpc_commission>
 
 
                     <!--GH API-->
@@ -371,10 +398,6 @@
 							<dhl_account>1</dhl_account>
 							<dhl_ecas>1</dhl_ecas>
 							<dhl_terminal>1</dhl_terminal>
-							<dhl_insurance_charge_amount>1</dhl_insurance_charge_amount>
-							<dhl_insurance_charge_percent>1</dhl_insurance_charge_percent>
-							<dhl_cod_charge_amount>1</dhl_cod_charge_amount>
-							<dhl_cod_charge_percent>1</dhl_cod_charge_percent>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
@@ -411,25 +434,25 @@
                     <dhl_insurance_charge_amount>
                         <label>Insurance charge amount</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>51</position>
                     </dhl_insurance_charge_amount>
                     <dhl_insurance_charge_percent>
                         <label>Insurance charge %</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>52</position>
                     </dhl_insurance_charge_percent>
                     <dhl_cod_charge_amount>
                         <label>COD charge amount</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>53</position>
                     </dhl_cod_charge_amount>
                     <dhl_cod_charge_percent>
                         <label>COD charge %</label>
                         <type>text</type>
-                        <fieldset>dhl</fieldset>
+                        <fieldset>dhl_rates</fieldset>
                         <position>54</position>
                     </dhl_cod_charge_percent>
                     <use_orbaups>
@@ -442,10 +465,6 @@
                             <orbaups_login>1</orbaups_login>
                             <orbaups_password>1</orbaups_password>
 							<orbaups_account>1</orbaups_account>
-							<orbaups_insurance_charge_amount>1</orbaups_insurance_charge_amount>
-							<orbaups_insurance_charge_percent>1</orbaups_insurance_charge_percent>
-							<orbaups_cod_charge_percent>1</orbaups_cod_charge_percent>
-							<orbaups_cod_charge_amount>1</orbaups_cod_charge_amount>
                         </depend_fields>
                         <position>55</position>
                     </use_orbaups>
@@ -470,25 +489,25 @@
                     <orbaups_insurance_charge_amount>
                         <label>Insurance charge amount</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>90</position>
                     </orbaups_insurance_charge_amount>
                     <orbaups_insurance_charge_percent>
                         <label>Insurance charge %</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>95</position>
                     </orbaups_insurance_charge_percent>
                     <orbaups_cod_charge_amount>
                         <label>COD charge amount</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>100</position>
                     </orbaups_cod_charge_amount>
                     <orbaups_cod_charge_percent>
                         <label>COD charge %</label>
                         <type>text</type>
-                        <fieldset>orbaups</fieldset>
+                        <fieldset>orbaups_rates</fieldset>
                         <position>110</position>
                     </orbaups_cod_charge_percent>
                     <!-- Rma -->
@@ -588,6 +607,36 @@
 						<only_admin>1</only_admin>
                         <position>700</position>
                     </custom_design>
+
+
+                    <!--Regulation-->
+                    <regulation_accepted>
+                        <label>Regulation: Is Regulations Accepted</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>vendor_info</fieldset>
+                        <position>0</position>
+                    </regulation_accepted>
+                    <regulation_confirm_request_sent_date>
+                        <label>Regulation: Confirmation Request Sent (Date)</label>
+                        <type>label</type>
+                        <fieldset>vendor_form</fieldset>
+                        <position>0</position>
+                    </regulation_confirm_request_sent_date>
+                    <regulation_accept_document_date translate="label">
+                        <label>Regulation: Document Accepted (Date)</label>
+                        <type>label</type>
+                        <fieldset>vendor_form</fieldset>
+                        <position>0</position>
+                    </regulation_accept_document_date>
+                    <regulation_accept_document_data translate="label">
+                        <label>Regulation: Document Accepted Details</label>
+                        <type>hidden</type>
+                        <fieldset>vendor_form</fieldset>
+                        <frontend_model>zolagodropship/adminhtml_vendor_helper_form_regulation</frontend_model>
+                        <position>0</position>
+                    </regulation_accept_document_data>
+                    <!--Regulation-->
 				</fields>
 			</vendor>
 		</udropship>
@@ -646,7 +695,7 @@
 				<args>
 					<modules>
 						<Zolago_Dropship before="Unirgy_Dropship">Zolago_Dropship</Zolago_Dropship>
-					</modules>
+                    </modules>
 				</args>
 			</udropship>
 		</routers>

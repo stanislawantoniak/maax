@@ -34,8 +34,10 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         return count($this->_collection);
     }
+
     protected function _execute()
     {
+
         $collection = $this->_collection;
         $collection->setOrder('insert_date','ASC');
 
@@ -66,10 +68,11 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
             $storeId[] = $_storeId;
         }
-        $zolagoCatalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
+        /* @var $zolagoCatalogProductConfigurableModel Zolago_Catalog_Model_Resource_Product_Configurable */
+        $zolagoCatalogProductConfigurableModel = Mage::getResourceModel('zolagocatalog/product_configurable');
 
         //define parent products (configurable) by child (simple)
-        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
+        $configurableSimpleRelation = $zolagoCatalogProductConfigurableModel->getConfigurableSimpleRelation($listUpdatedProducts);
 
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");
@@ -78,79 +81,45 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $configurableProducts = array_keys($configurableSimpleRelation);
 
 
-        //super attribute ids
-        $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
-        //--super attribute ids
+        $productsIdsPullToSolr = array();
 
-        $productsConfigurableIds = array();
-        foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
-            $superAttributeId = isset($superAttributes[$productConfigurableId])
-                ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
-            if ($superAttributeId) {
-                $productsConfigurableIds[] = $productConfigurableId;
-            }
-        }
-        $campaignResModel = Mage::getResourceModel('zolagocampaign/campaign'); /** @var $campaignResModel Zolago_Campaign_Model_Resource_Campaign*/
-        $listProductsIds = array_merge($listProductsIds, $productsConfigurableIds);
-        $productConfigurableIdsForCampaignCheck = $campaignResModel->getIsProductsInValidCampaign($listProductsIds);
+        //1. Set attributes price, msrp, options
+        $productsIdsPullToSolrForWebsite = $zolagoCatalogProductConfigurableModel->updateConfigurableProductsValues($configurableProducts);
+        $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
+        $zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
 
 
-        $productConfigurableIds = array();
-
-        foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
-            $superAttributeId = isset($superAttributes[$productConfigurableId])
-                ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
-            if ($superAttributeId) {
-                //update configurable product price
-
-                //if product is in campaign(promo or sale)
-                //here attr price should not be touched
-                if (!in_array($productConfigurableId, $productConfigurableIdsForCampaignCheck) ) {
-                    $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricingApp(
-                        $productConfigurableId, $superAttributeId, $storeId
-                    );
-                }
-
-                $productConfigurableIds[$productConfigurableId] = $productConfigurableId;
-            }
-
-        }
-        $zolagoCatalogModelProductConfigurableData->removeUpdatedRows($listUpdatedQueue);
-        //1. reindex prices
-        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
-
-        //1. reindex products
+        //2. reindex products
         //to avoid long queries make number of queries
 //        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
         $numberQ = 100;
-        if (count($productsToReindex) > $numberQ) {
-            $productsToReindexC = array_chunk($productsToReindex, $numberQ);
+        if (count($productsIdsPullToSolr) > $numberQ) {
+            $productsToReindexC = array_chunk($productsIdsPullToSolr, $numberQ);
             foreach ($productsToReindexC as $productsToReindexCItem) {
                 Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
 
             }
             unset($productsToReindexCItem);
         } else {
-            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsIdsPullToSolr);
 
         }
 
-        //2. put products to solr queue
+        //3. put products to solr queue
         //catalog_converter_price_update_after
-        Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
         Mage::dispatchEvent(
             "catalog_converter_price_update_after",
             array(
-                "product_ids" => $productsToReindex
+                "product_ids" => $productsIdsPullToSolr
             )
         );
 
-        // Varnish & Turpentine
+        //4. Varnish & Turpentine
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
-        $coll->addFieldToFilter('entity_id', array( 'in' => $productsToReindex));
+        $coll->addFieldToFilter('entity_id', array('in' => $productsIdsPullToSolr));
         $coll->addAttributeToFilter("visibility", array('in' =>
-            array( Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
+            array(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
                 Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
                 Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
 

@@ -1,16 +1,15 @@
 define([
-	"dojo/_base/declare",
-	"put-selector/put",
-	"dojo/on",
-	"dojo/query",
-    "dojo/_base/lang",
-	"dojo/dom-class",
-	"dojo/query",
-	"dojo/dom-style",
-	"dojo/NodeList-traverse",
-	"dojo/Evented",
-	"dojo/Deferred"
-], function(declare, put, on, query, lang, domClass, query, domStyle, nodeList, Evented, Deferred){
+	"dojo/_base/declare",    // declare
+	"put-selector/put",      // put
+	"dojo/on",               // on
+	"dojo/query",            // query
+    "dojo/_base/lang",       // lang
+	"dojo/dom-class",        // domClass
+	"dojo/dom-style",        // domStyle
+	"dojo/NodeList-traverse",// nodeList
+	"dojo/Evented",          // Evented
+	"dojo/Deferred"          // Deferred
+], function(declare, put, on, query, lang, domClass, domStyle, nodeList, Evented, Deferred){
 	
 	var PLACEMENT_SCROLLER = "dgrid-scroller";
 	var EDITOR_CLASS = "dgrid-editors";
@@ -42,18 +41,20 @@ define([
 		 */
 		constructor: function(column, placement){
 			var placementDom,
-				self = this;
+				self = this,
+                parentColumnFieldName;
 			
 			this.column = column;
 			this.grid = column.grid;
 			
 			if(column.parentColumn){
 				this.parentColumn = column.parentColumn;
+                parentColumnFieldName = ".editor-field-" + column.parentColumn.field;
 			}else{
 				this.parentColumn = column;
 			}
 			
-			this.content = put("div.editor.hidden");
+			this.content = put("div.editor.hidden" + parentColumnFieldName);
 			
 			this._close = put("a.close", "×");
 			this._form = this._buildForm();
@@ -82,16 +83,34 @@ define([
 		 */
 		open: function(cellObj){
 			this.cell = cellObj;
-					
+
+            // Show/hide checkbox 'Apply to selection'
 			if(this.canShowUseSelection() && this.grid.isSelected(cellObj.row)){
 				domClass.add(this.content, "use-selection");
 				this._useSelection.checked = true;
 			}else{
 				domClass.remove(this.content, "use-selection");
 			}
-			
-			if(this.parentColumn.type!="multiselect"){
-				this.setValue(cellObj.row.data[this.column.field]);
+
+            // Show/hide checkbox 'Save as rule'
+            if(this.canShowSaveAsRule() 
+				&& this.grid.isSelected(cellObj.row)
+				&& (this.parentColumn.type=="multiselect" 
+					|| this.parentColumn.type=="options")
+				
+			){
+                domClass.add(this.content, "use-save-as-rule");
+            }else{
+                domClass.remove(this.content, "use-save-as-rule");
+            }
+
+
+			if(this.parentColumn.type!="multiselect") {
+                var value = cellObj.row.data[this.column.field];
+                if (this.parentColumn.htmlspecialcharsDecode) {
+                    value = jQuery('<textarea>').html(value).text(); // Trick for htmlspecialchars_decode
+                }
+				this.setValue(value);
 			}else{
 				this.setValue(null);
 			}
@@ -183,6 +202,7 @@ define([
 				value: this.getValue(),
 				mode: this.getMode(),
 				useSelection: this.getUseSelection(),
+                useSaveAsRule: this.getUseSaveAsRule(),
 				field: this.column.field,
 				column: this.column,
 				cell: this.cell,
@@ -212,21 +232,61 @@ define([
 		isOpen: function(){
 			return !domClass.contains(this.content, "hidden");
 		},
+
 		/**
 		 * @returns {Boolean}
 		 */
 		getCheckAll: function(){
 			return !!query("th.dgrid-selector input[aria-checked='true']", this.grid.domNode).length;
 		},
-		/**
-		 * @returns {Bool}
-		 */
+
+        /**
+         * Check if check-all is selected (so ids should be)
+         *
+         * @returns {Boolean|boolean}
+         * @private
+         */
+        _canShowByCheckAllAndSelectedIds: function() {
+            return this.getCheckAll() || (
+            typeof this.grid.getSelectedIds == "function" &&
+            this.grid.getSelectedIds().length > 1
+            );
+        },
+
+        /**
+         * Return array of blocked elements for mass actions
+         * Common use in use-selection or use-save-as-rule
+         *
+         * @returns {Array}
+         */
+        getBlockedFieldForMass: function() {
+            var attr = [];
+            attr.push('name');// Product name attr
+            return attr;
+        },
+
+        /**
+         * Return true if attr is blocked for mass actions
+         * @returns {boolean}
+         */
+        isAttrNotBlockedForMass: function() {
+            return this.getBlockedFieldForMass().indexOf(this.column.parentColumn.field) != -1;
+        },
+
+        /**
+         * @returns {Boolean|boolean}
+         */
 		canShowUseSelection: function(){
-			return this.getCheckAll() || (
-				typeof this.grid.getSelectedIds == "function" &&
-				this.grid.getSelectedIds().length > 1
-			);
+			return this._canShowByCheckAllAndSelectedIds() && !this.isAttrNotBlockedForMass();
 		},
+
+        /**
+         * @returns {Boolean|boolean}
+         */
+        canShowSaveAsRule: function() {
+            return this._canShowByCheckAllAndSelectedIds() && !this.isAttrNotBlockedForMass();
+        },
+
 		/**
 		 * @returns {Bool}
 		 */
@@ -235,6 +295,16 @@ define([
 				domClass.contains(this.content, "use-selection") && 
 				this._useSelection.checked;
 		},
+
+        /**
+         * @returns {Boolean|boolean|*}
+         */
+        getUseSaveAsRule: function() {
+            return this.canShowSaveAsRule() &&
+                domClass.contains(this.content, "use-save-as-rule") &&
+                this._saveAsRule.checked;
+        },
+
 		/**
 		 * @returns {void}
 		 */
@@ -301,9 +371,9 @@ define([
 			put(sectionSelect, select);
 			
 			// Mode
-			put(sectionMode, this._generateMode("Add", "add", parentColumn.field, true))
-			put(sectionMode, this._generateMode("Set", "set", parentColumn.field))
-			put(sectionMode, this._generateMode("Substract", "sub", parentColumn.field))
+			put(sectionMode, this._generateMode("Add", "add", parentColumn.field, true));
+			put(sectionMode, this._generateMode("Set", "set", parentColumn.field));
+			put(sectionMode, this._generateMode("Substract", "sub", parentColumn.field));
 			
 			// Append
 			put(form, sectionSelect);
@@ -350,7 +420,7 @@ define([
 			var id = field + "-" + mode,
 				node = put("label.radio", {
 				"for": id
-			})
+			});
 			label = Translator.translate(label);
 			put(node, put("input", {
 				type: "radio",
@@ -367,11 +437,11 @@ define([
 		 * @returns {undefined}
 		 */
 		_buildForm: function(){
-			var cbId, 
-				selection,
-				label,
-				form = put("form", {action: ""}),
-				self = this;
+			var id,
+                checkboxes = put("div.form-group"), // Checkboxes div
+                labelForSelection,
+                labelForSaveAsRule,
+				form = put("form", {action: ""});
 
 			switch(this.parentColumn.type){
 				case "select":
@@ -388,35 +458,52 @@ define([
 					this._generateText(form, this.column, this.parentColumn);
 			}
 
-			// Selection
-			cbId = this.parentColumn.field + "-selection";
-			selection = put("div.form-group");
-			label = put("label", {
-				"for": cbId,
+
+            // Checkbox for: Apply to selection
+            id = this.parentColumn.field + "-selection";
+			labelForSelection = put("label", {
+				"for": id,
 				className: "checkbox selection",
 				innerHTML: Translator.translate("Apply to selection")
 			});
 			this._useSelection = put("input", {
 				type: "checkbox", 
 				name: "selection", 
-				id: cbId,
+				id: id,
 				value: 1,
 				checked: true
 			});
-			put(label, this._useSelection);
-			put(selection, label);
-			put(form, selection);
-			
+            put(labelForSelection, this._useSelection);
+            put(checkboxes, labelForSelection);
+
+            // Checkbox for: Save as rule
+            id = this.parentColumn.field + "-saveAsRule";
+            labelForSaveAsRule= put("label", {
+                "for": id,
+                className: "checkbox save-as-rule",
+                innerHTML: Translator.translate("Save as rule")
+            });
+            this._saveAsRule = put("input", {
+                type: "checkbox",
+                name: "saveAsRule",
+                id: id,
+                value: 1,
+                checked: false
+            });
+            put(labelForSaveAsRule, this._saveAsRule);
+            put(checkboxes, labelForSaveAsRule);
+
+            // Put checkboxes to this new form
+			put(form, checkboxes);
+
 			// Submit
 			this._formSubmit = put("input", {
 				"type": "submit", 
 				value: Translator.translate("Submit"), 
-				"data-loading-text": "Loading...",
 				className: "btn btn-primary"
 			});
-			
-			put(form, this._formSubmit);	
-			
+            this._formSubmit.setAttribute("data-loading-text", Translator.translate("Processing..."));
+			put(form, this._formSubmit);
 			
 			return form;
 		},

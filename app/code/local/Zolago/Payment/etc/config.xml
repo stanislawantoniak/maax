@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Payment>
-			<version>0.0.13</version>
+			<version>0.1.0</version>
 		</Zolago_Payment>
 	</modules>
 	<global>
@@ -119,7 +119,7 @@
 			<cashondelivery>
 				<visible>1</visible>
 				<p_details>0</p_details>
-                <channel_owner>2</channel_owner>
+                <channel_owner>0</channel_owner>
 			</cashondelivery>
 			<banktransfer>
 				<visible>1</visible>

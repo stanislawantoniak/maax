@@ -9,15 +9,17 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 	const DEFAULT_ORDER = "wishlist_count";
 	const DEFAULT_SEARCH_ORDER = "relevance";
 	
-    const DEFAULT_LIMIT = 24;
+    const DEFAULT_LIMIT = 100;
 
     const DEFAULT_START = 0;
     const DEFAULT_PAGE = 1;
 
-    const DEFAULT_APPEND_WHEN_SCROLL = 28;
-    const DEFAULT_LOAD_MORE_OFFSET = 100;
-    const DEFAULT_PIXELS_BEFORE_APPEND = 2500;
+    const DEFAULT_APPEND_WHEN_SCROLL = 28; //TODO remove
+    const DEFAULT_LOAD_MORE_OFFSET = 100; //TODO remove
+    const DEFAULT_PIXELS_BEFORE_APPEND = 2500; //TODO remove
 
+    protected $_actualMode;
+    
     /**
      * @return string
      */
@@ -32,11 +34,16 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      * @return int
      */
     public function getMode() {
-        $queryText = Mage::helper('solrsearch')->getParam('q');
-        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
-            return self::MODE_CATEGORY;
+        if (is_null($this->_actualMode)) {
+            $queryText = Mage::helper('solrsearch')->getParam('q');
+            if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
+                $mode = self::MODE_CATEGORY;
+            } else {
+                $mode = self::MODE_SEARCH;
+            }
+            $this->_actualMode = $mode;
         }
-        return self::MODE_SEARCH;
+        return $this->_actualMode;
     }
 
     /**
@@ -44,18 +51,17 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getCollection() {
         if(!$this->getData("collection")) {
-            //Mage::log("Prepare collection start");
             $collection = Mage::getModel("zolagosolrsearch/catalog_product_collection");
             /* @var $collection Zolago_Solrsearch_Model_Catalog_Product_Collection */
             $collection->setFlag("store_id", Mage::app()->getStore()->getId());
             $data = $this->getSolrData();
+
             if (is_array($data)) {
                 $collection->setSolrData($this->getSolrData());
             }
             $collection->setCurrentCategory($this->getCurrentCategory());
             $collection->load();
             $this->setData("collection", $collection);
-            //Mage::log("Prepare collection stop");
         }
         return $this->getData("collection");
     }
@@ -150,23 +156,20 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
     /**
      * Query param: start
-     * Get colleciton start row (offset) - ignored if page is set
+     * Get collection start row (offset) - ignored if page is set
      * @return int
      */
-    public function getCurrentStart() {
+    public function getCurrentStart()
+    {
         $request = Mage::app()->getRequest();
 
-        // Page is set so start is callucled by bage
-        if((int)$request->getParam("page")) {
-            return ($this->getCurrentPage()-1) * $this->getCurrentLimit();
+        $start = (int)$request->getParam("start", 0);
+
+        $currentStart = $start - 1;
+
+        if ($currentStart >= 0) {
+            return $currentStart;
         }
-
-        $start = $request->getParam("start");
-
-        if((int)$start>=0) {
-            return (int)$start;
-        }
-
         return self::DEFAULT_START;
     }
 
@@ -183,6 +186,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
                 return $page;
             }
         }
+
         // Normal request by human - only first page served
         return self::DEFAULT_PAGE;
     }
@@ -192,10 +196,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      * @return int
      */
     public function getCurrentLimit() {
-        $queryLimit = (int)Mage::app()->getRequest()->getParam("rows");
-        if($queryLimit>0) {
-            return $queryLimit;
-        }
         return $this->getDefaultLimit();
     }
 
@@ -213,8 +213,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
      */
     public function getDefaultLimit()
     {
-	    $limit = (int)Mage::getStoreConfig("zolagomodago_catalog/zolagomodago_cataloglisting/load_on_start"
-			    , Mage::app()->getStore());
+	    $limit = Mage::helper("zolagocatalog/listing_pagination")->productsCountPerPage() + 8; // 8 more because of listing fadeout
 
 		    if ($limit === 0) {
 			    $limit = self::DEFAULT_LIMIT;
@@ -301,13 +300,24 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
     }
 
     /**
+     * Products count found bu solr search
+     * @return int
+     */
+    public function getProductsFound()
+    {
+        $data = Mage::registry(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
+        $numFound = (empty($data['response']['numFound']) ? 0 : (int)$data['response']['numFound']);
+
+        return $numFound;
+    }
+
+    /**
      * number of pages
      * @return bool
      */
-
-    public function getPageCounter() {
-        $data = $this->getSolrData();
-        $numFound = (empty($data['response']['numFound']) ? 0:$data['response']['numFound']);
-        return ceil($numFound/$this->getDefaultLimit());
+    public function getPageCounter()
+    {
+        $numFound = $this->getProductsFound();
+        return ceil($numFound / $this->getDefaultLimit());
     }
 }

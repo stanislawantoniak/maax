@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.0.1</version>
+            <version>0.1.4</version>
         </GH_Statements>
     </modules>
     <global>
@@ -25,6 +25,24 @@
                     <calendar_item>
                         <table>gh_statements_calendar_item</table>
                     </calendar_item>
+	                <statement>
+		                <table>gh_statements</table>
+	                </statement>
+	                <order>
+		                <table>gh_statements_orders</table>
+	                </order>
+	                <refund>
+		                <table>gh_statements_refunds</table>
+	                </refund>
+	                <track>
+		                <table>gh_statements_tracks</table>
+	                </track>
+                    <rma>
+                        <table>gh_statements_rma</table>
+                    </rma>
+                    <marketing>
+                        <table>gh_statements_marketing</table>
+                    </marketing>
                 </entities>
             </ghstatements_resource>
         </models>
@@ -54,9 +72,9 @@
         </translate>
         <layout>
             <updates>
-                <ghdhl>
+                <ghstatements>
                     <file>ghstatements.xml</file>
-                </ghdhl>
+                </ghstatements>
             </updates>
         </layout>
     </adminhtml>
@@ -78,5 +96,24 @@
             </ghstatementsadmin>
         </routers>
     </admin>
-
+    <default>
+        <ghstatements>
+            <general>
+                <tax_for_commission>1.23</tax_for_commission>
+            </general>
+        </ghstatements>
+    </default>
+    <crontab>
+        <jobs>
+            <ghstatements_callendar>
+                <schedule>
+                    <!-- Run 0:00 everyday  -->
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>ghstatements/observer::processStatements</model>
+                </run>
+            </ghstatements_callendar>
+        </jobs>
+    </crontab>
 </config>

@@ -16,6 +16,22 @@ class Zolago_Campaign_Model_Resource_Campaign_Collection
 		return $this;
 	}
 
+    /**
+     * Add status filter
+     * $statuses can by int or array of integers
+     * For status type @see Zolago_Campaign_Model_Campaign_Status
+     *
+     * @param int|array $statuses
+     * @return $this
+     */
+    public function addStatusFilter($statuses) {
+        if (!is_array($statuses)) {
+            $statuses = array($statuses);
+        }
+        $this->addFieldToFilter("status", array("in" => array($statuses)));
+        return $this;
+    }
+
 	/**
 	 * @param Unirgy_Dropship_Model_Vendor | ini $vendor
 	 * @return Zolago_Campaign_Model_Resource_Campaign_Collection

@@ -11,14 +11,14 @@ $modelPolitics = Mage::getModel("zolagocatalog/product_source_politics");
 <input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
 <p class="alert alert-info">
     <strong><?php echo $this->__("Information");?>:</strong>
-    <?php echo $this->__("This function change politics.");?>
+    <?php echo $this->__('Use this function to change stock policy for selected products. Use &quot;Manual out-of-stock&quot; to make product out of stock in shop no matter what actual stock is. Use &quot;Automatic management&quot; to get back to actual stock based management.');?>
 </p>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <span class="help-block"><?php echo $_helper->__("Politics");?></span>
+            <span class="help-block"><?php echo $_helper->__("Policy");?></span>
             <select id="mass-change-politics-select"  name="politics" type="text" class="form-control mass-change-politics-select">
-                    <option value=""><?php echo $_helper->__('-- Please choose politics --');?></option>
+                    <option value=""><?php echo $_helper->__('-- Please choose policy --');?></option>
                 <?php foreach ($modelPolitics->getAllOptions() as $option):?>
                     <option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
                 <?php endforeach;?>

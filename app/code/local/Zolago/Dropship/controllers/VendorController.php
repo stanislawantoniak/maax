@@ -23,7 +23,59 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 		return parent::indexAction();
 		*/
 	}
-	
+
+
+	public function passwordPostAction()
+	{
+
+		$session = Mage::getSingleton('udropship/session');
+		$hlp = Mage::helper('udropship');
+		try {
+			$r = $this->getRequest();
+			if (($confirm = $r->getParam('confirm'))) {
+				$password = $r->getParam('password');
+				$passwordConfirm = $r->getParam('password_confirm');
+				$vendor = Mage::getModel('udropship/vendor')->load($confirm, 'random_hash');
+
+				if (!$password || !$passwordConfirm || $password!=$passwordConfirm || !$vendor->getId()) {
+					$session->addError('Invalid form data');
+					$this->_redirect('*/*/password', array('confirm'=>$confirm));
+					return;
+				}
+
+				//only active vendor can reset password
+				if($vendor->getStatus() == Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE){
+					$vendor->setPassword($password)->unsRandomHash()->save();
+					$session->loginById($vendor->getId());
+					$session->addSuccess($hlp->__('Your password has been reset.'));
+					$this->_redirect('*/*');
+				} else {
+					$session->addError($hlp->__('Your vendor account is not active.'));
+					$this->_redirect('*/*/login');
+					return;
+				}
+
+			} elseif (($email = $r->getParam('email'))) {
+				$vendor = Mage::getModel('zolagodropship/vendor')->load($email, 'email');
+				//only active vendor can reset password
+				if($vendor->getStatus() == Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE){
+					$hlp->sendPasswordResetEmail($email);
+					$session->addSuccess($hlp->__('Thank you, password reset instructions have been sent to the email you have provided, if a vendor with such email exists.'));
+					$this->_redirect('*/*/login');
+				} else {
+					$session->addError($hlp->__('Your vendor account is not active.'));
+					$this->_redirect('*/*/login');
+					return;
+				}
+			} else {
+				$session->addError($hlp->__('Invalid form data'));
+				$this->_redirect('*/*/password');
+			}
+		} catch (Exception $e) {
+			$session->addError($e->getMessage());
+			$this->_redirect('*/*/password');
+		}
+	}
 	/**
 	 * Dasboard - move index if possible
 	 */

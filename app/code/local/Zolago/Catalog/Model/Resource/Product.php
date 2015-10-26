@@ -384,4 +384,43 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         }
         return $priceType;
     }
+    
+    /**
+     * get child products for configurable products 
+     *
+     * @param array $ids configurable product ids
+     * @return array
+     */
+     public function getRelatedProducts($ids) {
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from (
+            array('product_relation' => $this->getTable("catalog/product_relation")),
+            array(
+                "parent_id" => "product_relation.parent_id",
+                "product_id" => "product_relation.child_id"
+            )
+        );
+        $select->where("parent_id in (?)",$ids);
+        $list = $readConnection->fetchAll($select);
+        return $list;
+
+     }
+
+    /**
+     * Retrieve all category ids in which product is available
+     * @see Mage_Catalog_Model_Resource_Product::getAvailableInCategories()
+     *
+     * @return array
+     */
+    public function getAllAvailableInCategories() {
+        // is_parent=1 ensures that we'll get only category IDs those are direct parents of the product, instead of
+        // fetching all parent IDs, including those are higher on the tree
+        $select = $this->_getReadAdapter()->select()->distinct()
+            ->from($this->getTable('catalog/category_product_index'), array('product_id','category_id'))
+            ->where('is_parent = 1');
+
+        return $this->_getReadAdapter()->fetchAll($select);
+    }
+
 }

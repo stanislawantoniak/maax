@@ -34,6 +34,8 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
             $dhlParams['nonStandard'] = true;
         }
         $dhlParams['deliveryValue'] = (string)$rma->getTotalValue();
+        $dhlParams['content'] = Mage::helper('zolagorma')->__('RMA: %s',$rma->getIncrementId());
+        $dhlParams['comment'] = Mage::helper('zolagorma')->__('RMA number: %s, order number: %s',$rma->getIncrementId(),$rma->getUdpoIncrementId());
         foreach ($dhlParams as $key => $param) {
             $settings[$key] = $param;
         }
