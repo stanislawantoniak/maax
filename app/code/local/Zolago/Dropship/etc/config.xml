@@ -119,16 +119,48 @@
                 <fieldsets>
                     <vendor_preferences>
                         <legend>Addresses</legend>
-                        <position>1</position>
+                        <position>80</position>
                         <hidden>true</hidden>
                     </vendor_preferences>
+                    <company_registration_data>
+                        <legend>Company data</legend>
+                        <position>1</position>
+                        <hidden>true</hidden>
+                    </company_registration_data>
                     <company_contact_data>
                         <legend>Company contact data</legend>
                         <position>2</position>
                         <hidden>true</hidden>
+                        <hidden>true</hidden>
                     </company_contact_data>
+                    <executive_data>
+                        <legend>Main person responsible for cooperation</legend>
+                        <position>3</position>
+                        <hidden>true</hidden>
+                    </executive_data>
+                    <administrator_data>
+                        <legend>Main person responsible for system administration</legend>
+                        <position>4</position>
+                        <hidden>true</hidden>
+                    </administrator_data>
+                    <rma_contact_data>
+                        <legend>RMA contact data</legend>
+                        <position>6</position>
+                        <hidden>true</hidden>
+                    </rma_contact_data>
+                    <rma_executive_data>
+                        <legend>RMA executive</legend>
+                        <position>7</position>
+                        <hidden>true</hidden>
+                    </rma_executive_data>
                 </fieldsets>
                 <fields>
+                    <!--<tax_no>-->
+                        <!--<label>NIP</label>-->
+                        <!--<fieldset>company_registration_data</fieldset>-->
+                        <!--<type>text</type>-->
+                        <!--<position>2</position>-->
+                    <!--</tax_no>-->
 	                <legal_entity>
 		                <label>Legal entity</label>
 		                <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>
