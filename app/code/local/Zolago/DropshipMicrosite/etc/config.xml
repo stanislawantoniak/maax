@@ -25,11 +25,6 @@
 			<zolagodropshipmicrosite>
 				<class>Zolago_DropshipMicrosite_Model</class>
 			</zolagodropshipmicrosite>
-			<!--<umicrosite>-->
-				<!--<rewrite>-->
-					<!--<registration>Zolago_DropshipMicrosite_Model_Registration</registration>-->
-				<!--</rewrite>-->
-			<!--</umicrosite>-->
 		</models>
         <resources>
             <zolagodropshipmicrosite_setup>
