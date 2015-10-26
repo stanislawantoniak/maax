@@ -29,12 +29,12 @@ $hlp = Mage::helper('ghregulation');
                                     <?php $actual = current($document); ?>
                                     <div class="dd">
                                     <ol class="dd-list">
-                                    <li class="dd-item"><div class="dd-handle"><?php echo $hlp->__('is valid from:').' '.$actual['date']; ?>&nbsp;&nbsp;&nbsp;
+                                    <li class="dd-item"><div class="dd-handle" style="cursor:default"><?php echo $hlp->__('is valid from:').' '.$actual['date']; ?>&nbsp;&nbsp;&nbsp;
                                     <a  href="<?php echo $actual['url'];?>"><?php echo $actual['filename'];?></a></div></li>
                                     <ol id="history_<?php echo $id;?>" class="history dd-list">
                                     <?php foreach ($document as $item) :?>
                                             <li class="dd-item">
-                                                <div class="dd-handle">
+                                                <div class="dd-handle" style="cursor:default">
                                                 <?php echo $hlp->__('is valid from:').' '.$item['date']; ?>&nbsp;&nbsp;&nbsp;
                                                 <a href="<?php echo $item['url']; ?>"><?php echo $item['filename']; ?></a>
                                                 </div>
