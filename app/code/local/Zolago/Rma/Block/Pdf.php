@@ -49,7 +49,7 @@ class Zolago_Rma_Block_Pdf extends Zolago_Rma_Block_Abstract {
         $address = $vendor->getRmaAddress();
         $text  = $address['name'] . '<br/>';
         $text .= $address['street'] . '<br/>';
-        $text .= $address['postcode'] . ' '. $address['street'];
+        $text .= $address['postcode'] . ' '. $address['city'];
         return $text;
     }
 }
