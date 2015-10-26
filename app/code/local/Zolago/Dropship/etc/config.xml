@@ -129,13 +129,6 @@
                     </company_contact_data>
                 </fieldsets>
                 <fields>
-                    <!--<rma_company_name>-->
-                        <!--<fieldset>to_vendor</fieldset>-->
-                        <!--<label>rma_company_name</label>-->
-                        <!--<type>text</type>-->
-                        <!--<position>0</position>-->
-                    <!--</rma_company_name>-->
-
 	                <legal_entity>
 		                <label>Legal entity</label>
 		                <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>

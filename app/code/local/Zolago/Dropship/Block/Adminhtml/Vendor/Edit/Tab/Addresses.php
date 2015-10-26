@@ -58,10 +58,10 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Addresses extends Zolago_D
              'name'      => 'rma_company_name',
              'label'     => $hlp->__('Company name'),
          ));
-         $fieldset->addField('tax_no', 'text', array(
-             'name'      => 'tax_no',
-             'label'     => $hlp->__('NIP'),
-         ));
+//         $fieldset->addField('tax_no', 'text', array(
+//             'name'      => 'tax_no',
+//             'label'     => $hlp->__('NIP'),
+//         ));
         $fieldset->addField('vendor_attn', 'text', array(
             'name'      => 'vendor_attn',
             'label'     => $hlp->__('Attention To'),
