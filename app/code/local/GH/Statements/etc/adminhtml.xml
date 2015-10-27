@@ -17,6 +17,11 @@
                             <sort_order>2</sort_order>
                             <action>adminhtml/vendor_statements/index</action>
                         </ghstatements_vendor>
+                        <ghstatements_balance>
+                            <title>Vendors balances</title>
+                            <sort_order>3</sort_order>
+                            <action>adminhtml/vendor_balance/index</action>
+                        </ghstatements_balance>
                         <ghstatements_general_settings translate="title" module="ghstatements">
                             <title>General settings</title>
                             <sort_order>100</sort_order>
@@ -45,6 +50,10 @@
                                         <title>Vendor Statements</title>
                                         <sort_order>2</sort_order>
                                     </ghstatements_vendor>
+                                    <ghstatements_balance>
+                                        <title>Vendors balances</title>
+                                        <sort_order>3</sort_order>
+                                    </ghstatements_balance>
                                 </children>
                             </ghstatements>
                         </children>
