@@ -825,7 +825,8 @@ define([
             this.setSpinner();
             jQuery.ajax({
                 cache: false,
-                url: "/udprod/vendor_product/manageattributes"
+                url: "/udprod/vendor_product/manageattributes",
+                data: {attribute_set_id: this.getAttributeSetId()}
             }).success(function(data, textStatus, jqXHR) {
                 var form = jQuery(data).find("form:eq(0)");
                 jQuery("#showAttributeRules").html(form); // replace only "inside" html of modal
