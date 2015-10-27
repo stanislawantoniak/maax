@@ -86,25 +86,26 @@ define([
     var massEnableProductChanger  = query("#mass-enable-products")[0];
     var massInvalidProductChanger = query("#mass-invalid-products")[0];
     var politicsChanger =query("#mass-change-politics")[0];
-	
 
-			
-	 storeRest = new JsonRest({
-		target:"/udprod/vendor_price/rest",
-		idProperty: "entity_id",
-		query: function(query, options){
-			if(switcher){
-				query['store_id'] = switcher.value;
-			}
-			//updater.setCanProcess(false);
-			
 
-			var ret = JsonRest.prototype.query.call(this, query, options);
-			
-			//ret.then(function(){updater.setCanProcess(true);})
-			
-			return ret;
-		},
+    storeRest = new JsonRest({
+        target: "/udprod/vendor_price/rest",
+        idProperty: "entity_id",
+        // Overwrite querying for:
+        // - filtering by selected store
+        // - getting total numbers of products
+        query: function (query, options) {
+            // Filtering by selected store
+            if (switcher) {
+                query['store_id'] = switcher.value;
+            }
+            // Getting total numbers of products
+            var ret = JsonRest.prototype.query.call(this, query, options);
+            ret.total.then(function (res) {
+                jQuery(".grid-total-number").html(parseInt(res));
+            });
+            return ret;
+        },
 		
 		put: function(obj){
 			obj.changed = states.changed[obj.entity_id];
