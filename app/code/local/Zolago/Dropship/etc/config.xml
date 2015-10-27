@@ -119,11 +119,213 @@
                 <fieldsets>
                     <vendor_preferences>
                         <legend>Addresses</legend>
-                        <position>1</position>
+                        <position>80</position>
                         <hidden>true</hidden>
                     </vendor_preferences>
+                    <company_registration_data>
+                        <legend>Company data</legend>
+                        <position>1</position>
+                        <hidden>true</hidden>
+                    </company_registration_data>
+                    <company_contact_data>
+                        <legend>Company contact data</legend>
+                        <position>2</position>
+                        <hidden>true</hidden>
+                        <hidden>true</hidden>
+                    </company_contact_data>
+                    <executive_data>
+                        <legend>Main person responsible for cooperation</legend>
+                        <position>3</position>
+                        <hidden>true</hidden>
+                    </executive_data>
+                    <administrator_data>
+                        <legend>Main person responsible for system administration</legend>
+                        <position>4</position>
+                        <hidden>true</hidden>
+                    </administrator_data>
+                    <rma_contact_data>
+                        <legend>RMA contact data</legend>
+                        <position>6</position>
+                        <hidden>true</hidden>
+                    </rma_contact_data>
+                    <rma_executive_data>
+                        <legend>RMA executive</legend>
+                        <position>7</position>
+                        <hidden>true</hidden>
+                    </rma_executive_data>
                 </fieldsets>
                 <fields>
+                    <!--Company registration data-->
+                    <company_name>
+                        <label>Company name</label>
+                        <fieldset>company_registration_data</fieldset>
+                        <type>text</type>
+                        <position>1</position>
+                    </company_name>
+                    <tax_no>
+                        <label>NIP</label>
+                        <fieldset>company_registration_data</fieldset>
+                        <type>text</type>
+                        <position>2</position>
+                    </tax_no>
+
+                    <rma_company_name>
+                        <label>Company name</label>
+                        <fieldset>shipping_origin</fieldset>
+                        <type>text</type>
+                        <position>0</position>
+                    </rma_company_name>
+
+                    <!--Company registration data-->
+
+                    <!--Company contact data-->
+                    <www>
+                        <label>Vendor WWW page</label>
+                        <fieldset>company_contact_data</fieldset>
+                        <type>text</type>
+                    </www>
+                    <contact_email>
+                        <label>Contact email</label>
+                        <fieldset>company_contact_data</fieldset>
+                        <type>text</type>
+                        <reg_class>validate-email</reg_class>
+                    </contact_email>
+                    <contact_telephone>
+                        <label>Contact phone</label>
+                        <fieldset>company_contact_data</fieldset>
+                        <type>text</type>
+                    </contact_telephone>
+                    <!--Company contact data-->
+
+
+                    <!--Main person responsible for cooperation-->
+                    <executive_firstname>
+                        <fieldset>executive_data</fieldset>
+                        <label>Executive firstname</label>
+                        <type>text</type>
+                        <position>1</position>
+                    </executive_firstname>
+                    <executive_lastname>
+                        <fieldset>executive_data</fieldset>
+                        <label>Executive lastname</label>
+                        <type>text</type>
+                        <position>2</position>
+                    </executive_lastname>
+                    <executive_telephone>
+                        <fieldset>executive_data</fieldset>
+                        <label>Executive Phone</label>
+                        <type>text</type>
+                        <position>3</position>
+                    </executive_telephone>
+                    <executive_telephone_mobile>
+                        <fieldset>executive_data</fieldset>
+                        <label>Executive Phone Mobile</label>
+                        <type>text</type>
+                        <position>4</position>
+                    </executive_telephone_mobile>
+                    <!--Main person responsible for cooperation-->
+
+                    <!--Main person responsible for system administration-->
+                    <administrator_firstname>
+                        <fieldset>administrator_data</fieldset>
+                        <label>Administrator first name</label>
+                        <type>text</type>
+                        <position>1</position>
+                    </administrator_firstname>
+                    <administrator_lastname>
+                        <fieldset>administrator_data</fieldset>
+                        <label>Administrator last name</label>
+                        <type>text</type>
+                        <position>2</position>
+                    </administrator_lastname>
+                    <administrator_telephone>
+                        <fieldset>administrator_data</fieldset>
+                        <label>Administrator phone</label>
+                        <type>text</type>
+                        <position>3</position>
+                    </administrator_telephone>
+                    <administrator_telephone_mobile>
+                        <fieldset>administrator_data</fieldset>
+                        <label>Administrator phone mobile</label>
+                        <type>text</type>
+                        <position>4</position>
+                    </administrator_telephone_mobile>
+                    <!--Main person responsible for system administration-->
+
+                    <!--RMA-->
+
+                    <!--RMA contact data-->
+                    <rma_email>
+                        <fieldset>rma_contact_data</fieldset>
+                        <label>Email</label>
+                        <type>text</type>
+                        <position>1</position>
+                    </rma_email>
+                    <rma_telephone>
+                        <fieldset>rma_contact_data</fieldset>
+                        <label>Phone</label>
+                        <type>text</type>
+                        <position>2</position>
+                    </rma_telephone>
+                    <!--RMA contact data-->
+
+                    <!--RMA executive-->
+                    <rma_executive_firstname>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Name</label>
+                        <type>text</type>
+                        <position>1</position>
+                    </rma_executive_firstname>
+                    <rma_executive_lastname>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Surname</label>
+                        <type>text</type>
+                        <position>2</position>
+                    </rma_executive_lastname>
+                    <rma_executive_telephone>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Phone</label>
+                        <type>text</type>
+                        <position>3</position>
+                    </rma_executive_telephone>
+                    <rma_executive_telephone_mobile>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Mobile</label>
+                        <type>text</type>
+                        <position>4</position>
+                    </rma_executive_telephone_mobile>
+                    <rma_executive_email>
+                        <fieldset>rma_executive_data</fieldset>
+                        <label>Email</label>
+                        <type>text</type>
+                        <position>5</position>
+                    </rma_executive_email>
+                    <!--RMA executive-->
+
+
+                    <!--RMA-->
+                    <billing_email>
+                        <fieldset>vendor_info</fieldset>
+                        <label>Billing person email</label>
+                        <reg_class>validate-email</reg_class>
+                        <type>text</type>
+                    </billing_email>
+                    <billing_street>
+                        <fieldset>vendor_info</fieldset>
+                        <label>Billing Street Address</label>
+                        <type>text</type>
+                    </billing_street>
+                    <billing_city>
+                        <fieldset>vendor_info</fieldset>
+                        <label>Billing City</label>
+                        <type>text</type>
+                    </billing_city>
+                    <billing_zip>
+                        <fieldset>vendor_info</fieldset>
+                        <label>Billing Zip/Postal Code</label>
+                        <type>text</type>
+                    </billing_zip>
+
 	                <legal_entity>
 		                <label>Legal entity</label>
 		                <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>

@@ -1,5 +1,10 @@
 <?php
+/** @var Zolago_Dropship_Block_Vendor_Preferences $this */
+/** @var Zolago_Dropship_Helper_Data $helper */
+$helper = Mage::helper("zolagodropship");
+/** @var Zolago_Dropship_Model_Session $_session */
 $_session = Mage::getSingleton('udropship/session');
+/** @var Zolago_Dropship_Model_Vendor $_vendor */
 $_vendor = $_session->getVendor();
 $_errorData = $_session->getData('vendorSettings') ? $_session->getData('vendorSettings') : array();
 if(count($_errorData)) {
@@ -10,7 +15,7 @@ if(count($_errorData)) {
     <!--=== Page Header ===-->
     <div class="page-header">
         <div class="page-title">
-            <h3><?php echo Mage::helper("zolagodropship")->__("Company settings");?></h3>
+            <h3><?php echo $helper->__("Company settings");?></h3>
         </div>
     </div>
     <div class="row">
@@ -18,26 +23,26 @@ if(count($_errorData)) {
             <form id="vendor_contact" class="form-horizontal" method="post" action="/udropship/vendor_settings/infoPost">
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Company data"); ?></h4>
+                        <h4><?php echo $helper->__("Company data"); ?></h4>
                     </div>
                     <div class="widget-content">
 
                         <div class="form-group">
-                            <label for="vendor_name" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Company name"); ?>
+                            <label for="company_name" class="col-md-3 control-label">
+                                <?php echo $helper->__("Company name"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-	                            <?php $vendor_name = isset($_errorData['vendor_name']) ? $_errorData['vendor_name'] : $_vendor->getVendorName(); ?>
-                                <input id="vendor_name" name="vendor_name" value="<?php echo $vendor_name; ?>" type="text" required
+	                            <?php $companyName = isset($_errorData['company_name']) ? $_errorData['company_name'] : $_vendor->getCompanyName(); ?>
+                                <input id="company_name" name="company_name" value="<?php echo $companyName; ?>" type="text" required
                                        class="form-control" size="10">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="billing_street" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Street and Number"); ?>
+                                <?php echo $helper->__("Street and Number"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -49,7 +54,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="billing_city" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("City"); ?>
+                                <?php echo $helper->__("City"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -61,7 +66,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="billing_zip" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Zip / Postal code"); ?>
+                                <?php echo $helper->__("Zip / Postal code"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -73,7 +78,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="tax_no" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Tax identification no"); ?>
+                                <?php echo $helper->__("Tax identification no"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -89,13 +94,13 @@ if(count($_errorData)) {
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Company contact data"); ?></h4>
+                        <h4><?php echo $helper->__("Company contact data"); ?></h4>
 
                     </div>
                     <div class="widget-content fiters">
                         <div class="form-group">
                             <label for="www" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("WWW"); ?>
+                                <?php echo $helper->__("WWW"); ?>
                             </label>
 
                             <div class="col-md-9">
@@ -105,7 +110,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="contact_email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email"); ?>
+                                <?php echo $helper->__("Email"); ?>
                             </label>
 
                             <div class="col-md-9">
@@ -115,7 +120,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="contact_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone"); ?>
+                                <?php echo $helper->__("Phone"); ?>
                             </label>
 
                             <div class="col-md-9">
@@ -128,13 +133,13 @@ if(count($_errorData)) {
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Executive contact (business)"); ?></h4>
+                        <h4><?php echo $helper->__("Executive contact (business)"); ?></h4>
 
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
                             <label for="executive_firstname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Name"); ?>
+                                <?php echo $helper->__("Name"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -146,7 +151,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="executive_lastname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Surname"); ?>
+                                <?php echo $helper->__("Surname"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -158,7 +163,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="executive_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone "); ?>
+                                <?php echo $helper->__("Phone "); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -170,7 +175,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="executive_telephone_mobile" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Mobile"); ?>
+                                <?php echo $helper->__("Mobile"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -182,7 +187,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="billing_email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email"); ?>
+                                <?php echo $helper->__("Email"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -197,13 +202,13 @@ if(count($_errorData)) {
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Administrator contact (ITC or business)"); ?></h4>
+                        <h4><?php echo $helper->__("Administrator contact (ITC or business)"); ?></h4>
 
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
                             <label for="administrator_firstname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Name"); ?>
+                                <?php echo $helper->__("Name"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -215,7 +220,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="administrator_lastname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Surname"); ?>
+                                <?php echo $helper->__("Surname"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -227,7 +232,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="administrator_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone "); ?>
+                                <?php echo $helper->__("Phone "); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -239,7 +244,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="administrator_telephone_mobile" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Mobile"); ?>
+                                <?php echo $helper->__("Mobile"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -251,7 +256,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email (default login)"); ?>
+                                <?php echo $helper->__("Email (default login)"); ?>
                                 <span class="required">*</span>
                             </label>
 
@@ -264,7 +269,7 @@ if(count($_errorData)) {
                         </div>
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("New Password"); ?>
+                                <?php echo $helper->__("New Password"); ?>
                             </label>
 
                             <div class="col-md-9">
@@ -272,13 +277,13 @@ if(count($_errorData)) {
                                        size="10">
                                 <p>
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                    <?php echo Mage::helper("zolagodropship")->__("Leave empty for no change"); ?>
+                                    <?php echo $helper->__("Leave empty for no change"); ?>
                                 </p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="password_repeat" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Repeat New Password"); ?>
+                                <?php echo $helper->__("Repeat New Password"); ?>
                             </label>
 
                             <div class="col-md-9">
