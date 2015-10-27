@@ -192,6 +192,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         
         $collection = Mage::getResourceModel('ghregulation/regulation_document_collection');
         $collection->addFieldToFilter('regulation_type_id',array('in'=>$types));
+        $collection->addFieldToFilter('date',array('lteq' => Mage::getModel('core/date')->date('Y-m-d')));
         $collection->addOrder('date','ASC');
         $documents = array();
         foreach ($collection as $document) {
