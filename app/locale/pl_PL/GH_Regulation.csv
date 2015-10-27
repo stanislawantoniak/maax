@@ -60,7 +60,8 @@
 "Internal server error.", "Błąd wewnętrzny serwera."
 "Modago.pl regulation rules", "Obowiązujące warunki współpracy z Modago.pl"
 "Regulation and attachments", "Regulamin i załączniki"
-"is valid from:", "obowiązuje od:"
+"is valid from", "obowiązuje od"
+"was valid from", "obowiązywał od"
 "show history", "pokaż historię"
 "hide history", "ukryj historię"
 

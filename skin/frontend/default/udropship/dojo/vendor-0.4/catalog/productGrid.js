@@ -27,7 +27,7 @@ define([
 	'vendor/catalog/productGrid/mass/attribute',     // attrbiute
 	'vendor/catalog/productGrid/mass/attributeRules',// attributeRules
 	"vendor/misc"//misc
-], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, 
+], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet,
 	Selection, Selector, Keyboard, declare, dom, domConstruct, on, query, 
 	put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid, 
 	PopupEditor, status, attrbiute, attributeRules, misc){
@@ -122,6 +122,16 @@ define([
 		put: function(obj, options){
 			return  RestStore.prototype.put.call(this, obj, options);
 		},
+        // Overwrite request for:
+        // - getting total numbers of products
+        _request: function (kwArgs) {
+            var ret = this.inherited(arguments);
+            // Getting total numbers of products
+            ret.total.then(function(res) {
+                jQuery(".grid-total-number").html(parseInt(res));
+            }, function() {});
+            return ret;
+        },
 		useRangeHeaders: true
 	});
 			
@@ -815,7 +825,8 @@ define([
             this.setSpinner();
             jQuery.ajax({
                 cache: false,
-                url: "/udprod/vendor_product/manageattributes"
+                url: "/udprod/vendor_product/manageattributes",
+                data: {attribute_set_id: this.getAttributeSetId()}
             }).success(function(data, textStatus, jqXHR) {
                 var form = jQuery(data).find("form:eq(0)");
                 jQuery("#showAttributeRules").html(form); // replace only "inside" html of modal

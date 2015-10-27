@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Payment>
-			<version>0.1.0</version>
+			<version>0.1.7</version>
 		</Zolago_Payment>
 	</modules>
 	<global>
@@ -25,6 +25,12 @@
 					<allocation>
 						<table>zolago_payment_allocation</table>
 					</allocation>
+					<vendor_invoice>
+						<table>zolago_vendor_invoice</table>
+					</vendor_invoice>
+					<vendor_payment>
+						<table>zolago_vendor_payment</table>
+					</vendor_payment>
 				</entities>
 			</zolagopayment_resource>
 		</models>
@@ -49,8 +55,6 @@
 					</zolago_payment_allocation_observer>
 				</observers>
 			</zolagopayment_save_transaction_after>
-
-
 		</events>
 		<template>
 			<email>
@@ -88,6 +92,13 @@
 				</Zolago_Payment>
 			</modules>
 		</translate>
+        <layout>
+            <updates>
+                <zolagopayment>
+                    <file>zolagopayment.xml</file>
+                </zolagopayment>
+            </updates>
+        </layout>
 	</adminhtml>
 	<admin>
 		<routers>
@@ -96,7 +107,14 @@
 				<module>Zolago_Payment</module>
 				<frontname>payment</frontname>
 			</zolagopayment>
-		</routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <zolagopayment before="Mage_Adminhtml">Zolago_Payment_Adminhtml</zolagopayment>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
 	</admin>
 	<default>
 		<payment>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<layout>
+    <zolagopayment_update_menu>
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/vendor_payment</menupath></action>
+        </reference>
+    </zolagopayment_update_menu>
+
+    <adminhtml_vendor_invoice_index>
+        <update handle="zolagopayment_update_menu"/>
+        <reference name="content">
+            <block type="zolagopayment/adminhtml_vendor_invoice" name="zolagopayment_vendor_invoice"
+                   template="zolagopayment/vendor/invoice.phtml">
+                <block type="zolagopayment/adminhtml_vendor_invoice_grid" name="zolagopayment_vendor_invoice_grid"/>
+            </block>
+        </reference>
+    </adminhtml_vendor_invoice_index>
+
+    <adminhtml_vendor_invoice_edit>
+        <update handle="zolagopayment_update_menu"/>
+        <reference name="content">
+            <block type="zolagopayment/adminhtml_vendor_invoice_edit" name="zolagopayment_vendor_invoice_edit"
+                   template="zolagopayment/vendor/invoice/edit.phtml">
+                <block type="zolagopayment/adminhtml_vendor_invoice_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_vendor_invoice_edit>
+    <adminhtml_vendor_payment_index>
+        <update handle="zolagopayment_update_menu"/>
+        <reference name="content">
+            <block type="zolagopayment/adminhtml_vendor_payment" name="zolagopayment_vendor_payment"
+                   template="zolagopayment/vendor/payment.phtml">
+                <block type="zolagopayment/adminhtml_vendor_payment_grid" name="zolagopayment_vendor_payment_grid"/>
+            </block>
+        </reference>
+    </adminhtml_vendor_payment_index>
+
+    <adminhtml_vendor_payment_edit>
+        <update handle="zolagopayment_update_menu"/>
+        <reference name="content">
+            <block type="zolagopayment/adminhtml_vendor_payment_edit" name="zolagopayment_vendor_payment_edit"
+                   template="zolagopayment/vendor/payment/edit.phtml">
+                <block type="zolagopayment/adminhtml_vendor_payment_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_vendor_payment_edit>
+</layout>

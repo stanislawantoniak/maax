@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <GH_Wfirma>
+            <active>true</active>
+            <codePool>local</codePool>
+        </GH_Wfirma>
+    </modules>
+</config>

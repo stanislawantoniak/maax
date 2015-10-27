@@ -51,6 +51,12 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tabs extends Mage_Adm
             'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_marketing')
                 ->toHtml(),
         ));
+        $this->addTab('statement_payment_information', array(
+            'label' => Mage::helper('ghstatements')->__('Payment'),
+            'title' => Mage::helper('ghstatements')->__('Payment'),
+            'content' => $this->getLayout()->createBlock('ghstatements/adminhtml_vendor_statements_edit_tab_payment')
+                ->toHtml(),
+        ));
         return parent::_beforeToHtml();
     }
 }

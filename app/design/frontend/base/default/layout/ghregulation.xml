@@ -83,4 +83,11 @@
                    name="ghregulation_dropship_regulation_regulationaccepted"/>
         </reference>
     </udropship_vendor_regulationaccepted>
+    <udropship_vendor_rules>
+        <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <reference name="content">
+            <block type="ghregulation/dropship_rules" template="ghregulation/dropship/rules.phtml"/>
+        </reference>
+    </udropship_vendor_rules>
 </layout>

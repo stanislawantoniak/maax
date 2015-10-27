@@ -80,11 +80,13 @@ class Zolago_Catalog_Vendor_ProductController
                     $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
 					$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 					$this->_processAttributresSave(
-						$ids, 
-						array("description_status" => $this->_getSession()->getVendor()->getData("review_status")),
-						$storeId, 
+						$ids,
+						array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
+						),
+						$storeId,
 						array("check_editable"=>false)
 					);
+					$this->_generateUrlKeys($ids, $storeId);
 				break;
 				default:
 				    Mage::throwException("Invaild mass method");
@@ -112,6 +114,7 @@ class Zolago_Catalog_Vendor_ProductController
                 )
             );
 		} catch (Exception $ex) {
+		    Mage::logException($ex);
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
 			//$response = "Something went wrong. Contact admin.";
@@ -121,6 +124,28 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_prepareRestResponse();
 	}
 
+    /**
+     * re-generate short url for products 
+     *
+     * @param array $ids
+     * @param int $storeId
+     */
+     protected function _generateUrlKeys($ids, $storeId) {
+         /** @var Mage_Catalog_Model_Product_Url $string */
+         $string = Mage::getSingleton('catalog/product_url');
+         /** @var Zolago_Catalog_Model_Url $url */
+         $url = Mage::getSingleton('catalog/url');
+         $url->setShouldSaveRewritesHistory(false);
+         $resource = $url->getResource();
+         foreach ($ids as $id) {
+             /** @var Zolago_Catalog_Model_Product $model */
+             $model = Mage::getModel('catalog/product')->load($id);
+             $model->setData('store_id', $storeId); // Trick
+             $model->setUrlKey($string->formatUrlKey($model->getName()));
+             $resource->saveProductAttribute($model,'url_key');
+             $url->refreshProductRewrite($id);
+         }
+     }
     /**
      * Prepare rest query from params for saving conditions in attributes mapper
      * Remove "from" and "to" (images count),
@@ -247,6 +272,7 @@ class Zolago_Catalog_Vendor_ProductController
 		$collection->setStoreId($storeId);
 		$collection->addIdFilter($productIds);
 		$collection->addAttributeToSelect('name');
+		$collection->addAttributeToSelect('description_status');
 		$collection->addAttributeToFilter("attribute_set_id", $attributeSetId);
 		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendor()->getId());
 		$collection->addAttributeToSelect('image');
@@ -257,6 +283,9 @@ class Zolago_Catalog_Vendor_ProductController
 		    }
 			if ($attributeValidation = $this->_validateRequiredAttributes($product, $storeId)) {
 			    $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Empty required attributes (%s)',$product->getName(),implode(',',$attributeValidation));
+			}
+			if ($this->_validateStatusAccepted($product)) {
+			    $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Product description already accepted', $product->getName());
 			}
 			if ($emptyValidation = $this->_validateEmptyImage($product)) {
 			    $errorProducts[] = sprintf('%s: %s',$product->getName(),implode(',',$emptyValidation));
@@ -317,6 +346,15 @@ class Zolago_Catalog_Vendor_ProductController
 		return $missingAttributes;
 	}
 	
+	
+    /**
+     * 
+     * @param type $product
+     * @return text
+     */
+    protected function _validateStatusAccepted($product) {
+        return ((int)$product->getDescriptionStatus() >= (int)$this->_getSession()->getVendor()->getData("review_status"));
+    }
 	/**
 	 * @param type $product
 	 * @return text
