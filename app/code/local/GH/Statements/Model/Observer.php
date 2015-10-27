@@ -754,6 +754,6 @@ class GH_Statements_Model_Observer
      * @return float
      */
     public static function getTax() {
-        return floatval(str_replace(',','.', Mage::getStoreConfig('ghstatements/general/tax_for_commission')));
+        return Mage::helper('ghstatements')->getTax();
     }
 }
