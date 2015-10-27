@@ -153,6 +153,22 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="marketing_value">
+                                <b><?php echo $_helper->__("Payment: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="marketing_value">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('payment_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

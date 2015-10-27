@@ -118,6 +118,16 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         ));
         /*Marketing*/
 
+        /*Payment*/
+        $this->addColumn("payment_value", array(
+            "index" => "payment_value",
+            "header" => Mage::helper("ghstatements")->__("Payment: Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        /*Payment*/
+
         $this->addColumn('edit',
             array(
                 'header' => Mage::helper('ghstatements')->__('Edit'),

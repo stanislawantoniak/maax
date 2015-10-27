@@ -28,6 +28,9 @@
 					<vendor_invoice>
 						<table>zolago_vendor_invoice</table>
 					</vendor_invoice>
+					<vendor_payment>
+						<table>zolago_vendor_payment</table>
+					</vendor_payment>
 				</entities>
 			</zolagopayment_resource>
 		</models>
