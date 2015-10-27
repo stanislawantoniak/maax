@@ -42,8 +42,8 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
         // Statement month (Miesiąc rozliczeniowy)
         $this->addColumn('date', array(
             'header' => $helper->__("Statement month"),
-            'type'   => 'date',
-            'format' => 'Y-M',
+            //'type'   => 'date',
+            //'format' => 'Y-M',
             'index'  => 'date'
         ));
         // Sprzedawca

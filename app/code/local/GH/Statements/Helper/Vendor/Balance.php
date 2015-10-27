@@ -23,13 +23,24 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             //TODO change value in the old month
         }
 
-        $vendorPaymentSum = $this->getTotalVendorPaymentPerMonth($vendorId, $dateNewFormatted);
+        $valueToUpdate = 0;
+        switch ($fieldToUpdate) {
+            case "vendor_payment_cost":
+                $valueToUpdate = $this->getTotalVendorPaymentPerMonth($vendorId, $dateNewFormatted);
+                break;
+            case "vendor_invoice_cost":
+                $valueToUpdate = $this->getTotalVendorInvoicePerMonth($vendorId, $dateNewFormatted);
+                break;
+        }
+
+        if ($valueToUpdate == 0)
+            return;
+
 
         $vendorBalance = Mage::getModel("ghstatements/vendor_balance");
         $vendorBalanceCollection = $vendorBalance->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId)
             ->addFieldToFilter("date", $dateNewFormatted);
-
 
         $vendorBalanceItem = $vendorBalanceCollection->getFirstItem();
 
@@ -38,7 +49,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             $id = $vendorBalanceItem->getData("id");
             try {
                 $vendorBalance->load($id)
-                    ->setData($fieldToUpdate, $vendorPaymentSum)
+                    ->setData($fieldToUpdate, $valueToUpdate)
                     ->save();
             } catch (Exception $e) {
                 Mage::logException($e);
@@ -50,7 +61,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 array(
                     "vendor_id" => $vendorId,
                     "date" => $dateNewFormatted,
-                    $fieldToUpdate => $vendorPaymentSum
+                    $fieldToUpdate => $valueToUpdate
                 )
             );
             try {
@@ -75,14 +86,39 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             ->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId);
 
-        //krumo($vendorPayments->getSelect()->__toString());
+
         $vendorPayments->getSelect()->reset(Zend_Db_Select::COLUMNS)
             ->columns("SUM(CAST(cost AS DECIMAL(10,4)))  as total, DATE_FORMAT(date,'%Y-%m') AS month")
             ->having("month=?", $dateFormatted)
             ->group("month");
-        //krumo($vendorPayments->getSelect()->__toString());
-        //krumo($vendorPayments->getData());
+
         $vendorPaymentSum = $vendorPayments->getFirstItem()->getTotal();
+        return $vendorPaymentSum;
+    }
+
+    /**
+     * @param $vendorId
+     * @param $date
+     * @return mixed
+     */
+    public function getTotalVendorInvoicePerMonth($vendorId, $date)
+    {
+        $dateFormatted = date("Y-m", strtotime($date));
+        $vendorInvoices = Mage::getModel("zolagopayment/vendor_invoice")
+            ->getCollection()
+            ->addFieldToFilter("vendor_id", $vendorId);
+
+        $vendorInvoices->getSelect()->reset(Zend_Db_Select::COLUMNS)
+            ->columns("SUM(
+                CAST(commission_brutto AS DECIMAL (10, 4))
+                + CAST(transport_brutto AS DECIMAL (10, 4))
+                + CAST(marketing_brutto AS DECIMAL (10, 4))
+                + CAST(other_brutto AS DECIMAL (10, 4))
+            )  as total, DATE_FORMAT(date,'%Y-%m') AS month")
+            ->having("month=?", $dateFormatted)
+            ->group("month");
+
+        $vendorPaymentSum = $vendorInvoices->getFirstItem()->getTotal();
         return $vendorPaymentSum;
     }
 }
