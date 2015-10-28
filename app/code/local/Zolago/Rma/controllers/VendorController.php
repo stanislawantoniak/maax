@@ -423,7 +423,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                              "package_idx"			=> null, // what is this ?
                              "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR,
                              "gallery_shipping_source" => $this->getRequest()->getParam("gallery_shipping_source", 0),
-                             "shipping_source_account" => $this->getRequest()->getParam("shipping_source_account", 0)
+                             "shipping_source_account" => $this->getRequest()->getParam("shipping_source_account", 0),
+	                         "track_type" => GH_Statements_Model_Track::TRACK_TYPE_RMA_VENDOR
                          );
 
 

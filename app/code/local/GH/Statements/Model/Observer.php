@@ -407,6 +407,7 @@ class GH_Statements_Model_Observer
 					    'charge_cod'        => $orderTrack->getChargeCod(),
 					    'charge_subtotal'   => $orderTrack->getChargeTotal(),
 					    'charge_total'      => $chargeTotal,
+					    'track_type'        => $orderTrack->getTrackType()
 				    );
 
 				    $nettoTotal += $orderTrack->getChargeTotal();
@@ -470,6 +471,7 @@ class GH_Statements_Model_Observer
 							'charge_cod'        => $rmaTrack->getChargeCod(),
 							'charge_subtotal'   => $rmaTrack->getChargeTotal(),
 							'charge_total'      => $chargeTotal,
+							'track_type'        => $rmaTrack->getTrackType()
 						);
 
 						$nettoTotal += $rmaTrack->getChargeTotal();
@@ -513,7 +515,7 @@ class GH_Statements_Model_Observer
 				foreach($rmasTracksCollection as $rmaTrack) {
 					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
 					$rmaTrack->setStatementId($statement->getId());
-					$orderTrack->setWebApi(true);
+					$rmaTrack->setWebApi(true);
 					$rmaTrack->save();
 				}
 			}
