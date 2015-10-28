@@ -43,12 +43,11 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorBalanceCollection = $vendorBalance->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId)
             ->addFieldToFilter("date", $dateNewFormatted);
-
         $vendorBalanceItem = $vendorBalanceCollection->getFirstItem();
 
         //UPDATE (if a row with vendor and date already exist in the table)
-        if ($vendorBalanceItem->getData("id")) {
-            $id = $vendorBalanceItem->getData("id");
+        $id = $vendorBalanceItem->getId();
+        if ($id) {
             try {
                 $vendorBalanceLine = $vendorBalance->load($id);
                 if ($fieldToUpdate == "payment_from_client") {
