@@ -54,11 +54,16 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             $id = $vendorBalanceItem->getData("id");
             try {
                 $vendorBalanceLine = $vendorBalance->load($id);
-                $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
-                Mage::log("Total for line: ", null, "importDataFromTransaction.log");
-                Mage::log($paymentFromClient + $valueToUpdate, null, "importDataFromTransaction.log");
+                if($fieldToUpdate == "payment_from_client"){
+                    $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
+                    Mage::log("Total for line: ", null, "importDataFromTransaction.log");
+                    Mage::log($paymentFromClient + $valueToUpdate, null, "importDataFromTransaction.log");
+                    $valueToUpdate = $valueToUpdate + $paymentFromClient;
+                }
+
+
                 $vendorBalanceLine
-                    ->setData($fieldToUpdate, $paymentFromClient + $valueToUpdate)
+                    ->setData($fieldToUpdate, $valueToUpdate)
                     ->save();
             } catch (Exception $e) {
                 Mage::logException($e);
