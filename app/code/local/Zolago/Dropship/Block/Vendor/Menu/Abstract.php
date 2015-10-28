@@ -320,54 +320,52 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
      * @return array|null
      */
     public function getStatementsSection() {
-        if (!$this->isOperatorMode()) {
-            if ($this->isModuleActive('ghstatements')
-                && $this->isAllowed("udropship/statements")
-            ) {
-                /** @var GH_Statements_Helper_Data $helper */
-                $helper = Mage::helper('ghstatements');
-                // Sledzenie salda / Balance tracking
-                $groupOne[] = array(
-                    "active"    => $this->isActive("statements-balance"),
+        if ($this->isModuleActive('ghstatements')
+            && $this->isAllowed("udropship/statements")
+        ) {
+            /** @var GH_Statements_Helper_Data $helper */
+            $helper = Mage::helper('ghstatements');
+            // Sledzenie salda / Balance tracking
+            $groupOne[] = array(
+                "active"    => $this->isActive("statements-balance"),
+                "icon"      => "icon-usd",
+                "label"     => $helper->__("Balance tracking"),
+                "url"       => $this->getUrl('udropship/statements/balance'),
+            );
+            /** @see GH_Statements_Dropship_StatementsController::balanceAction() */
+
+            // Rozliczenia okresowe / Periodic statements
+            $groupOne[] = array(
+                "active"    => $this->isActive("statements-periodic"),
+                "icon"      => "icon-usd",
+                "label"     => $helper->__("Periodic statements"),
+                "url"       => $this->getUrl('udropship/statements/periodic'),
+            );
+            /** @see GH_Statements_Dropship_StatementsController::statementsAction() */
+
+            // Faktury / Invoices
+            $groupOne[] = array(
+                "active"    => $this->isActive("statements-invoices"),
+                "icon"      => "icon-usd",
+                "label"     => $helper->__("Invoices"),
+                "url"       => $this->getUrl('udropship/statements/invoices'),
+            );
+            /** @see GH_Statements_Dropship_StatementsController::invoicesAction() */
+
+            $grouped = $this->_processGroups($groupOne);
+
+            if (count($grouped)) {
+                return array(
+                    "label"     => $helper->__("Billing and statements"),
+                    "active"    => $this->isActive(array(
+                        "statements-balance",
+                        "statements-periodic",
+                        "statements-invoices",
+                    )),
                     "icon"      => "icon-usd",
-                    "label"     => $helper->__("Balance tracking"),
-                    "url"       => $this->getUrl('udropship/statements/balance'),
+                    "url"       => "#",
+                    "children"  => $grouped
                 );
-                /** @see GH_Statements_Dropship_StatementsController::balanceAction() */
-
-                // Rozliczenia okresowe / Periodic statements
-                $groupOne[] = array(
-                    "active"    => $this->isActive("statements-periodic"),
-                    "icon"      => "icon-usd",
-                    "label"     => $helper->__("Periodic statements"),
-                    "url"       => $this->getUrl('udropship/statements/periodic'),
-                );
-                /** @see GH_Statements_Dropship_StatementsController::statementsAction() */
-
-                // Faktury / Invoices
-                $groupOne[] = array(
-                    "active"    => $this->isActive("statements-invoices"),
-                    "icon"      => "icon-usd",
-                    "label"     => $helper->__("Invoices"),
-                    "url"       => $this->getUrl('udropship/statements/invoices'),
-                );
-                /** @see GH_Statements_Dropship_StatementsController::invoicesAction() */
-
-                $grouped = $this->_processGroups($groupOne);
-
-                if (count($grouped)) {
-                    return array(
-                        "label"     => $helper->__("Billing and statements"),
-                        "active"    => $this->isActive(array(
-                            "statements-balance",
-                            "statements-periodic",
-                            "statements-invoices",
-                        )),
-                        "icon"      => "icon-usd",
-                        "url"       => "#",
-                        "children"  => $grouped
-                    );
-                }
             }
         }
         return null;

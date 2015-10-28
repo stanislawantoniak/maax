@@ -74,13 +74,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     // Price management
     const RES_UDPROD_VENDOR_PRICE                   = "udprod/vendor_price";
 
-    // -- Billing and statements --
-    // Sledzenie salda/Balance tracking
-    const RES_BALANCE_TRACKING                      = "statements/balance";
-    // Rozliczenia okresowe/Periodic statements
-    const RES_PERIODIC_STATEMENTS                   = "statements/statements";
-    // Faktury/Invoices
-    const RES_INVOICES                              = "statements/invoices";
+    // Billing and statements
+    const RES_BILLING_AND_STATEMENTS                = "udropship/statements";
 
     // Resources as array
 	protected static $_currentResources = array(
@@ -128,11 +123,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
         // Price management
         self::RES_UDPROD_VENDOR_PRICE               => "Price management",
-
-        // -- Billing and statements --
-        self::RES_BALANCE_TRACKING                  => "Balance tracking",
-        self::RES_PERIODIC_STATEMENTS               => "Periodic statements",
-        self::RES_INVOICES                          => "Invoices",
+        // Billing and statements
+        self::RES_BILLING_AND_STATEMENTS            => "Billing and statements"
 	);
 	
 	// Roles as array
@@ -211,9 +203,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_GH_ATTRIBUTE_RULES);
 
         // Build ACL Rules - Billing and statements
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_BALANCE_TRACKING);
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_PERIODIC_STATEMENTS);
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_INVOICES);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
 	}
 	
 	/**
