@@ -297,6 +297,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			Mage::log($data, null, "makeRefund.log");
 			try {
 				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
+				Mage::log($response, null, "makeRefund.log");
 				if (isset($response['error_code'])) {
 					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
 						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
