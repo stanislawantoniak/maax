@@ -154,9 +154,11 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             return array();
         }
 
-        $acceptDate = strtotime($vendor->getRegulationAcceptDocumentDate());
-        $acceptDate = strtotime(date('Y-m-d',$acceptDate));
-
+        if (!$acceptDate = strtotime($vendor->getRegulationAcceptDocumentDate())) {
+            return array();
+        }
+        
+        $acceptDate = date('Y-m-d',$acceptDate);
         $typeTable = Mage::getSingleton('core/resource')->getTableName('ghregulation/regulation_type');
         $kindTable = Mage::getSingleton('core/resource')->getTableName('ghregulation/regulation_kind');
         $documentTable = Mage::getSingleton('core/resource')->getTableName('ghregulation/regulation_document');
@@ -178,12 +180,14 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
             ->order('main_table.date','DESC')
             ->where('main_table.vendor_id=?',$vendor->getId())
             ->where('main_table.date<=?',Mage::getModel('core/date')->date('Y-m-d'));
-        
         $assign = array();
         $types = array();
         foreach ($collection as $pos) {
             if (!isset($assign[$pos->getKindid()])) {
                 $assign[$pos->getKindid()] = array();
+            }
+            if ($pos->getDate() < $acceptDate) {
+                $pos->setDate($acceptDate);
             }
             $assign[$pos->getKindid()][] = $pos->getData();
             $types[$pos->getRegulationTypeId()] = $pos->getRegulationTypeId();
