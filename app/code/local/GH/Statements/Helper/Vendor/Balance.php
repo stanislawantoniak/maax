@@ -19,11 +19,11 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $dateOldFormatted = date("Y-m", strtotime($dateOld));
 
         if ($dateNewFormatted != $dateOldFormatted) {
-            //TODO change value in the old month
-            $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateOldFormatted);
+            //change value in the old month
+            $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateOld);
         }
 
-        $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateNewFormatted);
+        $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateNew);
 
     }
 
@@ -31,10 +31,12 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      * @param $vendorId
      * @param $fieldToUpdate
      * @param $value
-     * @param $dateFormatted
+     * @param $date
      */
-    public function calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateFormatted)
+    public function calculateMonthLine($vendorId, $fieldToUpdate, $value, $date)
     {
+        $dateFormatted = date("Y-m", strtotime($date));
+
         $valueToUpdate = 0;
         switch ($fieldToUpdate) {
             case "vendor_payment_cost":
