@@ -7,7 +7,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
         parent::__construct();
         $this->setId('vendor_balance_grid_id');
         $this->setDefaultSort('date');
-        $this->setDefaultDir('ASC');
+        $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
     }

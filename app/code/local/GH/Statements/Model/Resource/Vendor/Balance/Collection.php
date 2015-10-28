@@ -11,4 +11,15 @@ class GH_Statements_Model_Resource_Vendor_Balance_Collection extends Mage_Core_M
         $this->_init('ghstatements/vendor_balance');
     }
 
+    /**
+     * @param Unirgy_Dropship_Model_Vendor|int $vendor
+     * @return Zolago_Banner_Model_Resource_Banner_Collection
+     */
+    public function addVendorFilter($vendor) {
+        if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+            $vendor = $vendor->getId();
+        }
+        $this->addFieldToFilter('main_table.vendor_id',(int)$vendor);
+        return $this;
+    }
 }
