@@ -34,9 +34,9 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
         ));
         // Status miesiąca
         $this->addColumn('status', array(
-            'header'  => $helper->__('Status of monthly balance'),
-            'index'   => 'status',
-            'type'    => 'options',
+            'header' => $helper->__('Status of monthly balance'),
+            'index' => 'status',
+            'type' => 'options',
             'options' => array(0 => $helper->__("Open"), 1 => $helper->__("Close"))
         ));
         // Statement month (Miesiąc rozliczeniowy)

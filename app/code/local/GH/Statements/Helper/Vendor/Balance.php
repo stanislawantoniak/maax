@@ -63,7 +63,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 
         //UPDATE (if a row with vendor and date already exist in the table)
         $id = $vendorBalanceItem->getId();
-        if ($id) {
+        if ($id && $vendorBalanceItem->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED) {
             try {
                 $vendorBalanceLine = $vendorBalance->load($id);
                 if ($fieldToUpdate == "payment_from_client") {

@@ -21,6 +21,9 @@
 class GH_Statements_Model_Vendor_Balance extends Mage_Core_Model_Abstract
 {
 
+    const GH_VENDOR_BALANCE_STATUS_OPENED = 0;
+    const GH_VENDOR_BALANCE_STATUS_CLOSED = 1;
+
     protected function _construct()
     {
         $this->_init('ghstatements/vendor_balance');
