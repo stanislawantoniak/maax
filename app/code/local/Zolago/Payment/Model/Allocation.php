@@ -42,6 +42,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 				Mage::log($data, null, "importDataFromTransaction.log");
 
 				foreach ($data as $allocationData) {
+					Mage::log($allocationData, null, "importDataFromTransaction.log");
 					Mage::helper("ghstatements/vendor_balance")
 						->updateVendorBalanceData($allocationData["vendor_id"], "payment_from_client", $allocationData["vendor_id"], "allocation_amount", $allocationData["created_at"]);
 				}
