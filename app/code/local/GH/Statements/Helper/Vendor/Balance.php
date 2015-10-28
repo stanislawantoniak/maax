@@ -57,14 +57,14 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         } else {
             //OR
             //INSERT
-            $vendorBalance->addData(
-                array(
-                    "vendor_id" => $vendorId,
-                    "date" => $dateNewFormatted,
-                    $fieldToUpdate => $valueToUpdate
-                )
-            );
             try {
+                $vendorBalance->addData(
+                    array(
+                        "vendor_id" => $vendorId,
+                        "date" => $dateNewFormatted,
+                        $fieldToUpdate => $valueToUpdate
+                    )
+                );
                 $vendorBalance->save();
             } catch (Exception $e) {
                 Mage::logException($e);
