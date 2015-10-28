@@ -11,16 +11,18 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      * @param $fieldToUpdate
      * @param $value
      * @param $dateNew
-     * @param $dateOld
+     * @param bool|FALSE $dateOld
      */
-    public function updateVendorBalanceData($vendorId, $fieldToUpdate, $value, $dateNew, $dateOld)
+    public function updateVendorBalanceData($vendorId, $fieldToUpdate, $value, $dateNew, $dateOld = FALSE)
     {
         $dateNewFormatted = date("Y-m", strtotime($dateNew));
-        $dateOldFormatted = date("Y-m", strtotime($dateOld));
+        if ($dateOld) {
+            $dateOldFormatted = date("Y-m", strtotime($dateOld));
 
-        if ($dateNewFormatted != $dateOldFormatted) {
-            //change value in the old month
-            $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateOld);
+            if ($dateNewFormatted != $dateOldFormatted) {
+                //change value in the old month
+                $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateOld);
+            }
         }
 
         $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateNew);
@@ -48,6 +50,9 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             case "payment_from_client":
                 $valueToUpdate = $value;
                 break;
+            case "payment_return_to_client":
+                $valueToUpdate = $value;
+                break;
         }
 
         //Nothing to update
@@ -66,9 +71,16 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         if ($id && $vendorBalanceItem->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED) {
             try {
                 $vendorBalanceLine = $vendorBalance->load($id);
-                if ($fieldToUpdate == "payment_from_client") {
-                    $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
-                    $valueToUpdate = $valueToUpdate + $paymentFromClient;
+
+                switch ($fieldToUpdate) {
+                    case "payment_from_client":
+                        $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
+                        $valueToUpdate = $valueToUpdate + $paymentFromClient;
+                        break;
+                    case "payment_return_to_client":
+                        $paymentReturnToClient = $vendorBalanceLine->getData("payment_return_to_client");
+                        $valueToUpdate = $valueToUpdate + $paymentReturnToClient;
+                        break;
                 }
 
                 $vendorBalanceLine
