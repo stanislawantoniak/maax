@@ -15,10 +15,10 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      */
     public function updateVendorBalanceData($vendorId, $fieldToUpdate, $value, $dateNew, $dateOld)
     {
-        //krumo($dateNew, $dateOld);
+
         $dateNewFormatted = date("Y-m", strtotime($dateNew));
         $dateOldFormatted = date("Y-m", strtotime($dateOld));
-        //krumo($dateNewFormatted, $dateOldFormatted);
+
         if ($dateNewFormatted != $dateOldFormatted) {
             //TODO change value in the old month
         }
