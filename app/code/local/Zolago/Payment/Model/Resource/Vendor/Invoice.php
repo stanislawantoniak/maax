@@ -21,13 +21,24 @@ class Zolago_Payment_Model_Resource_Vendor_Invoice extends Mage_Core_Model_Resou
     {
         Mage::log($object->getData(), null, "vendor_invoice.log");
 
+        $isInvoiceCorrection = $object->getData("is_invoice_correction");
+
+        //faktury wg daty sprzedaży (a nie daty wystawienia)
+        $date = $object->getSaleDate();
+        $oldDate = $object->getOrigData("sale_date");
+        if ($isInvoiceCorrection == Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_CORRECTION) {
+            //korekty wg daty wystawienia
+            $date = $object->getDate();
+            $oldDate = $object->getOrigData("date");
+        }
+
         Mage::helper("ghstatements/vendor_balance")
             ->updateVendorBalanceData(
                 $object->getVendorId(),
                 "vendor_invoice_cost",
                 ($object->getCommissionBrutto() + $object->getTransportBrutto() + $object->getMarketingBrutto() + $object->getOtherBrutto()), //TODO ?????? which column
-                $object->getDate(),
-                $object->getOrigData("date")
+                $date,
+                $oldDate
             );
         return parent::_afterSave($object);
     }
