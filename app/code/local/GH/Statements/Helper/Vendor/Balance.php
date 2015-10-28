@@ -16,9 +16,10 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
     public function updateVendorBalanceData($vendorId, $fieldToUpdate, $value, $dateNew, $dateOld)
     {
         Mage::log($value, null, "importDataFromTransaction.log");
+        Mage::log($dateNew, null, "importDataFromTransaction.log");
         $dateNewFormatted = date("Y-m", strtotime($dateNew));
         $dateOldFormatted = date("Y-m", strtotime($dateOld));
-
+        Mage::log($dateNewFormatted, null, "importDataFromTransaction.log");
         if ($dateNewFormatted != $dateOldFormatted) {
             //TODO change value in the old month
         }
