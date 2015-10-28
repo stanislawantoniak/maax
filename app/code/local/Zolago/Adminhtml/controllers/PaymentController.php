@@ -34,6 +34,7 @@
 					$sendEmail = false;
 					switch ($paymentMethod) {
 						case Zolago_Dotpay_Model_Client::PAYMENT_METHOD: //'dotpay'
+							Mage::log($transaction->getData(), null, "makeRefund.log");
 							if ($dotpay->makeRefund($order, $transaction)) {
 								$sendEmail=true;
 								$success++;
