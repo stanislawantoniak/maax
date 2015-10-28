@@ -31,6 +31,10 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             case "vendor_invoice_cost":
                 $valueToUpdate = $this->getTotalVendorInvoicePerMonth($vendorId, $dateNewFormatted);
                 break;
+            case "payment_from_client":
+                Mage::log($value, null, "importDataFromTransaction.log");
+                $valueToUpdate = $value;
+                break;
         }
 
         if ($valueToUpdate == 0)
@@ -48,8 +52,12 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         if ($vendorBalanceItem->getData("id")) {
             $id = $vendorBalanceItem->getData("id");
             try {
-                $vendorBalance->load($id)
-                    ->setData($fieldToUpdate, $valueToUpdate)
+                $vendorBalanceLine = $vendorBalance->load($id);
+                $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
+                Mage::log("Total for line: ", null, "importDataFromTransaction.log");
+                Mage::log($paymentFromClient + $valueToUpdate, null, "importDataFromTransaction.log");
+                $vendorBalanceLine
+                    ->setData($fieldToUpdate, $paymentFromClient + $valueToUpdate)
                     ->save();
             } catch (Exception $e) {
                 Mage::logException($e);
