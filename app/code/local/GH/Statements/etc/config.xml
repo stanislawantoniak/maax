@@ -59,7 +59,40 @@
             </ghstatements_setup>
         </resources>
     </global>
-    
+    <frontend>
+        <routers>
+            <ghstatements>
+                <use>standard</use>
+                <args>
+                    <module>GH_Statements</module>
+                    <frontName>statements</frontName>
+                </args>
+            </ghstatements>
+            <udropship>
+                <args>
+                    <modules>
+                        <GH_Statements before="Unirgy_Dropship">GH_Statements_Dropship</GH_Statements>
+                    </modules>
+                </args>
+            </udropship>
+        </routers>
+        <translate>
+            <modules>
+                <GH_Statements>
+                    <files>
+                        <default>GH_Statements.csv</default>
+                    </files>
+                </GH_Statements>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <ghstatements>
+                    <file>ghstatements.xml</file>
+                </ghstatements>
+            </updates>
+        </layout>
+    </frontend>
     <adminhtml>
         <translate>	
             <modules>

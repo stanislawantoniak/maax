@@ -2,7 +2,7 @@
   
 class Zolago_Operator_Model_Acl extends Zend_Acl
 {
-		
+
 	// Roles definiton
 	const ROLE_ORDER_OPERATOR						= "order_operator";
 	const ROLE_MARKETING_OFFICER					= "marketing_officer";
@@ -12,11 +12,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const ROLE_PRODUCT_OPERATOR						= "product_operator";
 	const ROLE_PAYMENT_OPERATOR						= "payment_operator";
     const ROLE_GHAPI_OPERATOR						= "ghapi_operator";
-
+    const ROLE_BILLING_OPERATOR		                = "billing_operator";
 	
-	// Reousrce definition
+	// Resource definition
 	
-	// Vendro controller for all
+	// Vendor controller for all
 	const RES_UDROPSHIP_VENDOR_SET_LOCALE			= "udropship/vendor/setlocale";
 	const RES_UDROPSHIP_VENDOR_WYSIWYG				= "udropship/vendor/wysiwyg";
 	const RES_UDROPSHIP_VENDOR_DASHBOARD			= "udropship/vendor/dashboard";
@@ -74,7 +74,15 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     // Price management
     const RES_UDPROD_VENDOR_PRICE                   = "udprod/vendor_price";
 
-	// Resources as array
+    // -- Billing and statements --
+    // Sledzenie salda/Balance tracking
+    const RES_BALANCE_TRACKING                      = "statements/balance";
+    // Rozliczenia okresowe/Periodic statements
+    const RES_PERIODIC_STATEMENTS                   = "statements/statements";
+    // Faktury/Invoices
+    const RES_INVOICES                              = "statements/invoices";
+
+    // Resources as array
 	protected static $_currentResources = array(
 		self::RES_UDROPSHIP_VENDOR_SET_LOCALE		=> "Vendor Set locale",	
 		self::RES_UDROPSHIP_VENDOR_WYSIWYG			=> "Vendor wysiwyg",	
@@ -119,7 +127,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         // Attribute preview
         self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
         // Price management
-        self::RES_UDPROD_VENDOR_PRICE               => "Price management"
+        self::RES_UDPROD_VENDOR_PRICE               => "Price management",
+
+        // -- Billing and statements --
+        self::RES_BALANCE_TRACKING                  => "Balance tracking",
+        self::RES_PERIODIC_STATEMENTS               => "Periodic statements",
+        self::RES_INVOICES                          => "Invoices",
 	);
 	
 	// Roles as array
@@ -131,10 +144,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::ROLE_MASS_OPERATOR					=> "Mass Operator",	
 		self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
 		self::ROLE_PAYMENT_OPERATOR                 => "Payment manage",
-        self::ROLE_GHAPI_OPERATOR                   => "GH API Settings"
+        self::ROLE_GHAPI_OPERATOR                   => "GH API Settings",
+        self::ROLE_BILLING_OPERATOR                 => "Billing and statements"
 	);
 	
-	
+
 	public function __construct() {
 		// Set resources
 		foreach(array_keys(self::$_currentResources) as $resourceCode){
@@ -182,7 +196,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);   // zarzadzanie opisami produktow ?
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_ATTRIBUTES); //przeglad atrybutow
 
-        // Build ACL Rules - Overpayments managment
+        // Build ACL Rules - Overpayments management
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PAYMENT_OPERATOR, self::RES_PAYMENT_OPERATOR);
 
         // Build ACL Rules - GH API Access
@@ -193,8 +207,13 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
             $this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
         }
 
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, Zolago_Operator_Model_Acl::RES_GH_ATTRIBUTE_RULES);
+        // Build ACL Rule - autofill attributes by apply rule - masowa zmiana cech produków
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_GH_ATTRIBUTE_RULES);
 
+        // Build ACL Rules - Billing and statements
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_BALANCE_TRACKING);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_PERIODIC_STATEMENTS);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_INVOICES);
 	}
 	
 	/**
