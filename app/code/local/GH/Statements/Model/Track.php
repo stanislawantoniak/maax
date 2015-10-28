@@ -32,6 +32,10 @@
  */
 class GH_Statements_Model_Track extends Mage_Core_Model_Abstract
 {
+	const TRACK_TYPE_ORDER = 0;
+	const TRACK_TYPE_RMA_CLIENT = 1;
+	const TRACK_TYPE_RMA_VENDOR = 2;
+	const TRACK_TYPE_UNDELIVERED = 3;
 
     protected function _construct()
     {
