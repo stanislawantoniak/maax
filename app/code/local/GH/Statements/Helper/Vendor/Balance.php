@@ -20,21 +20,35 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 
         if ($dateNewFormatted != $dateOldFormatted) {
             //TODO change value in the old month
+            $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateOldFormatted);
         }
 
+        $this->calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateNewFormatted);
+
+    }
+
+    /**
+     * @param $vendorId
+     * @param $fieldToUpdate
+     * @param $value
+     * @param $dateFormatted
+     */
+    public function calculateMonthLine($vendorId, $fieldToUpdate, $value, $dateFormatted)
+    {
         $valueToUpdate = 0;
         switch ($fieldToUpdate) {
             case "vendor_payment_cost":
-                $valueToUpdate = $this->getTotalVendorPaymentPerMonth($vendorId, $dateNewFormatted);
+                $valueToUpdate = $this->getTotalVendorPaymentPerMonth($vendorId, $dateFormatted);
                 break;
             case "vendor_invoice_cost":
-                $valueToUpdate = $this->getTotalVendorInvoicePerMonth($vendorId, $dateNewFormatted);
+                $valueToUpdate = $this->getTotalVendorInvoicePerMonth($vendorId, $dateFormatted);
                 break;
             case "payment_from_client":
                 $valueToUpdate = $value;
                 break;
         }
 
+        //Nothing to update
         if ($valueToUpdate == 0)
             return;
 
@@ -42,7 +56,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorBalance = Mage::getModel("ghstatements/vendor_balance");
         $vendorBalanceCollection = $vendorBalance->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId)
-            ->addFieldToFilter("date", $dateNewFormatted);
+            ->addFieldToFilter("date", $dateFormatted);
         $vendorBalanceItem = $vendorBalanceCollection->getFirstItem();
 
         //UPDATE (if a row with vendor and date already exist in the table)
@@ -68,7 +82,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 $vendorBalance->addData(
                     array(
                         "vendor_id" => $vendorId,
-                        "date" => $dateNewFormatted,
+                        "date" => $dateFormatted,
                         $fieldToUpdate => $valueToUpdate
                     )
                 );
@@ -77,7 +91,6 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 Mage::logException($e);
             }
         }
-
     }
 
 
