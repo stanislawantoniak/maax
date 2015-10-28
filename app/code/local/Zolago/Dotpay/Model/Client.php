@@ -294,6 +294,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 				'amount' => abs($transaction->getTxnAmount()),
 				'comment' => 'Modago refund id: '.$transaction->getTxnId()
 			);
+			Mage::log($data, null, "makeRefund.log");
 			try {
 				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
 				if (isset($response['error_code'])) {
