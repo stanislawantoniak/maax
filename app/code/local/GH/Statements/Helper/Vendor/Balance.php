@@ -15,11 +15,9 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      */
     public function updateVendorBalanceData($vendorId, $fieldToUpdate, $value, $dateNew, $dateOld)
     {
-        Mage::log($value, null, "importDataFromTransaction.log");
-        Mage::log($dateNew, null, "importDataFromTransaction.log");
         $dateNewFormatted = date("Y-m", strtotime($dateNew));
         $dateOldFormatted = date("Y-m", strtotime($dateOld));
-        Mage::log($dateNewFormatted, null, "importDataFromTransaction.log");
+
         if ($dateNewFormatted != $dateOldFormatted) {
             //TODO change value in the old month
         }
@@ -33,7 +31,6 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 $valueToUpdate = $this->getTotalVendorInvoicePerMonth($vendorId, $dateNewFormatted);
                 break;
             case "payment_from_client":
-                Mage::log($value, null, "importDataFromTransaction.log");
                 $valueToUpdate = $value;
                 break;
         }
@@ -54,13 +51,10 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             $id = $vendorBalanceItem->getData("id");
             try {
                 $vendorBalanceLine = $vendorBalance->load($id);
-                if($fieldToUpdate == "payment_from_client"){
+                if ($fieldToUpdate == "payment_from_client") {
                     $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
-                    Mage::log("Total for line: ", null, "importDataFromTransaction.log");
-                    Mage::log($paymentFromClient + $valueToUpdate, null, "importDataFromTransaction.log");
                     $valueToUpdate = $valueToUpdate + $paymentFromClient;
                 }
-
 
                 $vendorBalanceLine
                     ->setData($fieldToUpdate, $valueToUpdate)
