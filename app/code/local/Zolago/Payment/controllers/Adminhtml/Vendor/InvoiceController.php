@@ -96,6 +96,9 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             if (!$model->getId()) {
                 throw new Mage_Core_Exception(Mage::helper('zolagopayment')->__("Vendor Invoice not found"));
             }
+            if ($model->getStatementId()) {
+                throw new Mage_Core_Exception(Mage::helper('zolagopayment')->__("Cant delete. Invoice in statement"));
+            }
             $model->delete();
             $this->_getSession()->addSuccess(Mage::helper('zolagopayment')->__("Vendor Invoice Deleted"));
         } catch (Mage_Core_Exception $e) {

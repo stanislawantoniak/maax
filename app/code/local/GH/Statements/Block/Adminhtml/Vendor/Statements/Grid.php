@@ -60,6 +60,20 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("gallery_discount_value", array(
+            "index" => "gallery_discount_value",
+            "header" => Mage::helper("ghstatements")->__("Gallery Discount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("commission_correction", array(
+            "index" => "commission_correction",
+            "header" => Mage::helper("ghstatements")->__("Commission correction"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         $this->addColumn("order_value", array(
             "index" => "order_value",
             "header" => Mage::helper("ghstatements")->__("Order: Amount"),
@@ -106,12 +120,26 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("delivery_correction", array(
+            "index" => "delivery_correction",
+            "header" => Mage::helper("ghstatements")->__("Delivery correction"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         /*Totals*/
 
         /*Marketing*/
         $this->addColumn("marketing_value", array(
             "index" => "marketing_value",
             "header" => Mage::helper("ghstatements")->__("Marketing: Amount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("marketing_correction", array(
+            "index" => "marketing_correction",
+            "header" => Mage::helper("ghstatements")->__("Marketing correction"),
             'type'  => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')

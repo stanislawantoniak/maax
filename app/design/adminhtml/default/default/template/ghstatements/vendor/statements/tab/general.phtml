@@ -54,6 +54,26 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                     </tr>
                     <tr>
+                        <td class="label"><label
+                                for="gallery_discount_value"><b><?php echo $_helper->__("Order: Gallery Discount"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="gallery_discount_value">
+                                <?php echo Mage::helper('core')->formatPrice($statement->getData('gallery_discount_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label
+                                for="commission_correction"><b><?php echo $_helper->__("Order: Commission correction"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="commission_correction">
+                                <?php echo Mage::helper('core')->formatPrice($statement->getData('commission_correction')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="label"><label for="order_value"><b><?php echo $_helper->__("Order: Amount"); ?></b></label>
                         </td>
                         <td class="value">
@@ -138,6 +158,19 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                     </tr>
                     <tr>
+                        <td class="label">
+                            <label for="delivery_correction">
+                                <b><?php echo $_helper->__("Tracking: correction"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="delivery_correction">
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('delivery_correction')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
@@ -150,6 +183,19 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             <span id="marketing_value">
                                 <?php echo Mage::helper('core')
                                         ->formatPrice($statement->getData('marketing_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="marketing_correction">
+                                <b><?php echo $_helper->__("Marketing: Correction"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="marketing_correction">
+                                <?php echo Mage::helper('core')
+                                        ->formatPrice($statement->getData('marketing_correction')); ?>
                             </span>
                         </td>
                     </tr>
