@@ -131,10 +131,10 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'headings_css_class' => ''
         ));
         // Do wypłaty
-        $this->addColumn('to-pay', array(
+        $this->addColumn('to-payout', array(
             "width"		    => "5%",
-            'header'        => $helper->__('To pay'),
-            'index'         => 'to-pay',
+            'header'        => $helper->__('To payout'),
+            'index'         => 'to-payout',
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => ''
