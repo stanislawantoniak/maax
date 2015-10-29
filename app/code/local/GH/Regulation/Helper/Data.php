@@ -155,7 +155,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         if (!$acceptDate = strtotime($vendor->getRegulationAcceptDocumentDate())) {
-            return array();
+            $acceptDate = time();
         }
         
         $acceptDate = date('Y-m-d',$acceptDate);
