@@ -54,10 +54,8 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 $valueToUpdate = $value;
                 break;
         }
-
-        //Nothing to update
-        if ($valueToUpdate == 0)
-            return;
+//
+        //krumo($valueToUpdate);
 
 
         $vendorBalance = Mage::getModel("ghstatements/vendor_balance");
@@ -84,7 +82,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 }
 
                 $vendorBalanceLine
-                    ->setData($fieldToUpdate, $valueToUpdate)
+                    ->setData($fieldToUpdate, (float)$valueToUpdate)
                     ->save();
             } catch (Exception $e) {
                 Mage::logException($e);
@@ -97,7 +95,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                     array(
                         "vendor_id" => $vendorId,
                         "date" => $dateFormatted,
-                        $fieldToUpdate => $valueToUpdate
+                        $fieldToUpdate => (float)$valueToUpdate
                     )
                 );
                 $vendorBalance->save();
