@@ -28,6 +28,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $balancePerMonth = $paymentFromClient - $paymentReturnToClient - $vendorPaymentCost - $vendorInvoiceCost;
 
         $object->setData("balance_per_month", $balancePerMonth);
+        //$object->setData("balance_cumulative", 0);
         //$object->setData("balance_due", 0);
 
         return parent::_beforeSave($object);
@@ -48,20 +49,26 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
             arsort($balancesByVendor[$balance->getVendorId()]);
         }
 
-
-        $balancesByVendorAccumulative = array();
         foreach ($balancesByVendor as $vendor => $data) {
+            $i = 0;
+
+            $dataValues = array_values($balancesByVendor[$vendor]);
+
             foreach ($data as $month => $monthData) {
-                $balancesByVendorAccumulative[$vendor][$month] = $monthData["balance_per_month"] + (isset($balancesByVendorAccumulative[$vendor]) ? array_sum($balancesByVendorAccumulative[$vendor]) : 0);
+                if ($i == 0) {
+                    $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"];
+                } else {
+                    $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"] + $dataValues[$i - 1]["balance_cumulative"];
+                }
+                $i++;
             }
         }
 
-
-        //TODO remake to multiUpdate for better perfomance
+        //TODO remake to multiUpdate for better performance
         foreach ($balances as $balanceItem) {
             if ($balanceItem->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED) {
-                if (isset($balancesByVendorAccumulative[$balanceItem->getVendorId()][$balanceItem->getDate()])) {
-                    $balanceItem->setData("balance_cumulative", $balancesByVendorAccumulative[$balanceItem->getVendorId()][$balanceItem->getDate()]);
+                if (isset($balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"])) {
+                    $balanceItem->setData("balance_cumulative", $balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"]);
                     $balanceItem->save();
                 }
             }
