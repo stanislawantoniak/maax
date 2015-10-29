@@ -126,7 +126,7 @@ $numColumns = sizeof($this->getColumns());
 					<?php if ($this->getHeadersVisibility()): ?>
 						<tr class="headings">
 						<?php foreach ($this->getColumns() as $_column): ?>
-							<th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
+							<th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="<?php echo $_column->hasData('headings_css_class') ? $_column->getHeadingsCssClass(): 'nobr';?>"><?php echo $_column->getHeaderHtml() ?></span></th>
 						<?php endforeach; ?>
 						</tr>
 					<?php endif; ?>

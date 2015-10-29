@@ -8,4 +8,16 @@ class GH_Statements_Model_Resource_Statement_Collection
     protected function _construct() {
         $this->_init('ghstatements/statement');
     }
+
+    /**
+     * @param Zolago_Dropship_Model_Vendor|int $vendor
+     * @return $this
+     */
+    public function addVendorFilter($vendor) {
+        if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+            $vendor = $vendor->getId();
+        }
+        $this->addFieldToFilter('main_table.vendor_id',(int)$vendor);
+        return $this;
+    }
 }
