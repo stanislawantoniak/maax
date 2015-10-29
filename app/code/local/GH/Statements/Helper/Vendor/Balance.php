@@ -54,19 +54,18 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 $valueToUpdate = $value;
                 break;
         }
-//
-        //krumo($valueToUpdate);
-
 
         $vendorBalance = Mage::getModel("ghstatements/vendor_balance");
         $vendorBalanceCollection = $vendorBalance->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId)
-            ->addFieldToFilter("date", $dateFormatted);
+            ->addFieldToFilter("date", $dateFormatted)
+            ->addFieldToFilter("status", GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED);
         $vendorBalanceItem = $vendorBalanceCollection->getFirstItem();
 
         //UPDATE (if a row with vendor and date already exist in the table)
         $id = $vendorBalanceItem->getId();
-        if ($id && $vendorBalanceItem->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED) {
+
+        if ($id) {
             try {
                 $vendorBalanceLine = $vendorBalance->load($id);
 
