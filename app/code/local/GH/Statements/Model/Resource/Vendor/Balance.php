@@ -20,14 +20,17 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
     protected function _beforeSave(Mage_Core_Model_Abstract $object)
     {
         $paymentFromClient = $object->getData("payment_from_client");
+        $paymentFromClientCompleted = $object->getData("payment_from_client_completed");
+
         $paymentReturnToClient = $object->getData("payment_return_to_client");
         $vendorPaymentCost = $object->getData("vendor_payment_cost");
         $vendorInvoiceCost = $object->getData("vendor_invoice_cost");
 
         $balancePerMonth = $paymentFromClient - $paymentReturnToClient - $vendorPaymentCost - $vendorInvoiceCost;
+        $balanceDue = $paymentFromClientCompleted - $paymentReturnToClient - $vendorPaymentCost - $vendorInvoiceCost;
 
         $object->setData("balance_per_month", $balancePerMonth);
-        //$object->setData("balance_due", 0);
+        $object->setData("balance_due", $balanceDue);
 
         return parent::_beforeSave($object);
     }

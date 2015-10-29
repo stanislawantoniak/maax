@@ -799,4 +799,38 @@ class GH_Statements_Model_Observer
     public static function getTax() {
         return Mage::helper('ghstatements')->getTax();
     }
+
+
+	/**
+	 * Status change
+	 * @param Mage_Core_Model_Observer $observer
+	 */
+	public function adjustVendorBalance($observer)
+	{
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		if ($po instanceof Zolago_Po_Model_Po && $po->getId()) {
+			$oldStatus = $observer->getEvent()->getOldStatus();
+			$newStatus = $observer->getEvent()->getNewStatus();
+
+			// Status changed to delivered or shipped
+			if ($oldStatus != $newStatus
+				&&
+				in_array($newStatus, array(
+					Zolago_Po_Model_Po_Status::STATUS_DELIVERED,
+					Zolago_Po_Model_Po_Status::STATUS_SHIPPED
+				))
+			) {
+
+				Mage::helper("ghstatements/vendor_balance")
+					->updateVendorBalanceData(
+						$po->getVendorId(),
+						"payment_from_client_completed",
+						$po->getData("grand_total_incl_tax"),
+						Mage::getSingleton('core/date')->gmtDate()
+					);
+
+			}
+		}
+	}
 }

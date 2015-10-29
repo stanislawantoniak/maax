@@ -331,7 +331,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 						}
 					}
 
-					//TODO vendor balance (payment_return_to_client 1 place)
+					//vendor balance (payment_return_to_client 1 place)
 
 					$allocationCollection = Mage::getModel('zolagopayment/allocation')->getCollection()
 						->addFieldToFilter('refund_transaction_id', $transaction->getId())
@@ -345,7 +345,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 								Mage::getSingleton('core/date')->gmtDate()
 							);
 					}
-					//TODO vendor balance (payment_return_to_client 1 place)
+					//vendor balance (payment_return_to_client 1 place)
 
 					//if dotpay has returned new transaction id then update it in allocations
 					if($newTransactionId) {

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.1.8</version>
+            <version>0.2.0</version>
         </GH_Statements>
     </modules>
     <global>
@@ -25,18 +25,18 @@
                     <calendar_item>
                         <table>gh_statements_calendar_item</table>
                     </calendar_item>
-	                <statement>
-		                <table>gh_statements</table>
-	                </statement>
-	                <order>
-		                <table>gh_statements_orders</table>
-	                </order>
-	                <refund>
-		                <table>gh_statements_refunds</table>
-	                </refund>
-	                <track>
-		                <table>gh_statements_tracks</table>
-	                </track>
+                    <statement>
+                        <table>gh_statements</table>
+                    </statement>
+                    <order>
+                        <table>gh_statements_orders</table>
+                    </order>
+                    <refund>
+                        <table>gh_statements_refunds</table>
+                    </refund>
+                    <track>
+                        <table>gh_statements_tracks</table>
+                    </track>
                     <rma>
                         <table>gh_statements_rma</table>
                     </rma>
@@ -61,6 +61,19 @@
                 </setup>
             </ghstatements_setup>
         </resources>
+        <events>
+            <udpo_po_status_save_after>
+                <observers>
+                    <ghstatements>
+                        <model>ghstatements/observer</model>
+                        <method>adjustVendorBalance</method>
+                    </ghstatements>
+                </observers>
+            </udpo_po_status_save_after>
+            <udpo_po_save_after>
+
+            </udpo_po_save_after>
+        </events>
     </global>
     <frontend>
         <routers>
