@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.1.6</version>
+            <version>0.1.9</version>
         </GH_Statements>
     </modules>
     <global>

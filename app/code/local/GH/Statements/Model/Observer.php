@@ -114,41 +114,54 @@ class GH_Statements_Model_Observer
      */
     public static function populateStatement(GH_Statements_Model_Statement $statement, $statementTotals)
     {
-        $data = array();
+        $data = array(
+            'to_pay' => 0,
+            'total_commission_netto' => 0,
+        );
         // Order
         if (!empty($statementTotals->order)) {
             $data["order_commission_value"]     = $statementTotals->order->commissionAmount;
-            $data["order_value"]                = $statementTotals->order->amount;
+            $data["total_commission_netto"]     += $statementTotals->order->commissionAmount;
+            $data["to_pay"] += $statementTotals->order->amount;
             $data["gallery_discount_value"]		= $statementTotals->order->discountValue;
+            $data['order_value']		 		= $statementTotals->order->galleryPayment;
         }
         // Rma
         if (!empty($statementTotals->rma)) {
             $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
             $data["rma_value"]                  = $statementTotals->rma->amount;
+            $data['total_commission_netto']     -= $statementTotals->rma->commissionAmount;
         }
         // Refund
         if (!empty($statementTotals->refund)) {
             $data["refund_value"]               = $statementTotals->refund->amount;
+            $data['to_pay'] -= $statementTotals->refund->amount;
         }
         // Track
         if (!empty($statementTotals->track)) {
             $data["tracking_charge_subtotal"]   = $statementTotals->track->netto;
             $data["tracking_charge_total"]      = $statementTotals->track->brutto;
+            $data['to_pay'] -= $statementTotals->track->netto;
         }
         // Marketing
         if(!empty($statementTotals->marketing)) {
             $data["marketing_value"]            = $statementTotals->marketing->amount;
-        }
-        // Payment
-        if(!empty($statementTotals->payment)) {
-            $data["payment_value"]              = $statementTotals->payment->amount;
+            $data['to_pay'] -= $statementTotals->marketing->amount;
         }
         // correction
         if (!empty($statementTotals->correction)) {
             $data['commission_correction'] = $statementTotals->correction->commissionCorrection;            
             $data['delivery_correction'] = $statementTotals->correction->deliveryCorrection;            
             $data['marketing_correction'] = $statementTotals->correction->marketingCorrection;            
+            $data['to_pay'] += $statementTotals->correction->commissionCorrection;
+            $data['to_pay'] += $statementTotals->correction->deliveryCorrection;
+            $data['to_pay'] += $statementTotals->correction->marketingCorrection;
         }
+        // Payment
+        if(!empty($statementTotals->payment)) {
+            $data["payment_value"]              = $statementTotals->payment->amount;
+        }
+        $data['total_commission'] = round($data['total_commission_netto']*self::getTax(),2,PHP_ROUND_HALF_UP);
         if (!empty($data)) {
             $statement->addData($data);
             $statement->save();
@@ -178,6 +191,7 @@ class GH_Statements_Model_Observer
         $commissionAmount = 0;
         $amount = 0;
         $discountValue = 0;
+        $orderGalleryValue = 0; // wartość zamówień w kanale płatności modago
 
         $dateModel = Mage::getModel('core/date');
         $today     = $dateModel->date('Y-m-d');
@@ -250,8 +264,10 @@ class GH_Statements_Model_Observer
                         (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
                          * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
                     $data['commission_value'] = round($data['commission_value'], 2, PHP_ROUND_HALF_UP);
-
+                    
                     if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
+                        // kwota zamówień
+                        $orderGalleryValue += $data['final_price'];  // kwota brutto 
                         // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
                         $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value']; // Do wypłaty
                     } else {
@@ -261,7 +277,7 @@ class GH_Statements_Model_Observer
                     $data['value'] = round($data['value'], 2, PHP_ROUND_HALF_UP);
                     $discountValue += $data['gallery_discount_value'];
                     $commissionAmount += $data['commission_value'];
-                    $amount += $data['value'];
+                    $amount += $data['value']; // do wypłaty
 
                     // Save
                     $statementOrder = Mage::getModel('ghstatements/order');
@@ -277,6 +293,8 @@ class GH_Statements_Model_Observer
         $orderStatementTotals->commissionAmount = $commissionAmount;
         $orderStatementTotals->amount = $amount;
         $orderStatementTotals->discountValue = $discountValue;
+        $orderStatementTotals->galleryPayment = $orderGalleryValue;
+        
 
         return $orderStatementTotals;
     }
