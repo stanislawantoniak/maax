@@ -385,6 +385,9 @@ table.foot-empty-cells tfoot td:empty {
 	clear:both;
 }
 /*fix for horizontal scroll for grid*/
+.grid-hscroll-1500w .z-grid{
+    min-width: 1500px!important;
+}
 .grid-hscroll-1400w .z-grid{
     min-width: 1400px!important;
 }
