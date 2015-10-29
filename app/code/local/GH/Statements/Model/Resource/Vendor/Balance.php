@@ -70,10 +70,15 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
             if ($balanceItem->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED) {
                 if (isset($balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"])) {
 
-                    $where = $this->_getWriteAdapter()->quoteInto("id=?", $balanceItem->getId());
-                    $this->_getWriteAdapter()->update($this->getMainTable(),
-                        array("balance_cumulative" => $balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"]),
-                        $where);
+                    try {
+                        $where = $this->_getWriteAdapter()->quoteInto("id=?", $balanceItem->getId());
+                        $this->_getWriteAdapter()
+                            ->update($this->getMainTable(),
+                                array("balance_cumulative" => $balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"]),
+                                $where);
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
                 }
             }
         }
