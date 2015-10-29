@@ -85,7 +85,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
                 array('text' => $helper->__("Payments for completed orders") , 'field' => 'order_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Correction for returned orders"), 'field' => 'order_value', 'css_class' => 'row-2'),
+                array('text' => $helper->__("Correction for returned orders"), 'field' => 'rma_value', 'css_class' => 'row-2'),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -97,9 +97,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'     => 'gallery-commission',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__('Gallery commission') , 'field' => 'order_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Correction for discounts financed by the gallery"), 'field' => 'order_value', 'css_class' => 'row-2'),
-                array('text' => $helper->__("Other corrections"), 'field' => 'order_value', 'css_class' => 'row-3'),
+                array('text' => $helper->__('Gallery commission') , 'field' => 'order_commission_value', 'css_class' => 'row-1'),
+                array('text' => $helper->__("Correction for discounts financed by the gallery"), 'field' => 'gallery_discount_value', 'css_class' => 'row-2'),
+                array('text' => $helper->__("Other corrections"), 'field' => 'commission_correction', 'css_class' => 'row-3'),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -111,8 +111,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'     => 'currier-costs',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__('Currier costs') , 'field' => 'order_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Currier correction costs"), 'field' => 'order_value', 'css_class' => 'row-2'),
+                array('text' => $helper->__('Currier costs') , 'field' => 'tracking_charge_total', 'css_class' => 'row-1'),
+                array('text' => $helper->__("Currier correction costs"), 'field' => 'delivery_correction', 'css_class' => 'row-2'),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -124,8 +124,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'     => 'marketing-costs',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__('Marketing costs') , 'field' => 'order_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Marketing correction costs"), 'field' => 'order_value', 'css_class' => 'row-2'),
+                array('text' => $helper->__('Marketing costs') , 'field' => 'marketing_value', 'css_class' => 'row-1'),
+                array('text' => $helper->__("Marketing correction costs"), 'field' => 'marketing_correction', 'css_class' => 'row-2'),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
