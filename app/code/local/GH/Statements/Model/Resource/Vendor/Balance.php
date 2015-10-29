@@ -19,7 +19,6 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
      */
     protected function _beforeSave(Mage_Core_Model_Abstract $object)
     {
-        //Mage::log($object->getData(), null, "beforeSave.log");
         $paymentFromClient = $object->getData("payment_from_client");
         $paymentReturnToClient = $object->getData("payment_return_to_client");
         $vendorPaymentCost = $object->getData("vendor_payment_cost");
@@ -28,18 +27,22 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $balancePerMonth = $paymentFromClient - $paymentReturnToClient - $vendorPaymentCost - $vendorInvoiceCost;
 
         $object->setData("balance_per_month", $balancePerMonth);
-        //$object->setData("balance_cumulative", 0);
         //$object->setData("balance_due", 0);
 
         return parent::_beforeSave($object);
     }
 
+    public function _afterSave(Mage_Core_Model_Abstract $object)
+    {
+        $this->recalculateBalanceCumulative();
+        return parent::_afterSave($object);
+    }
+
+
     /**
-     * @param Mage_Core_Model_Abstract $object
-     * @return Mage_Core_Model_Resource_Db_Abstract
-     * @throws Exception
+     * balance_cumulative
      */
-    protected function _afterLoad(Mage_Core_Model_Abstract $object)
+    public function recalculateBalanceCumulative()
     {
         $balances = Mage::getModel("ghstatements/vendor_balance")->getCollection();
 
@@ -52,13 +55,11 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         foreach ($balancesByVendor as $vendor => $data) {
             $i = 0;
 
-            $dataValues = array_values($balancesByVendor[$vendor]);
-
             foreach ($data as $month => $monthData) {
                 if ($i == 0) {
                     $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"];
                 } else {
-                    $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"] + $dataValues[$i - 1]["balance_cumulative"];
+                    $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"] + array_values($balancesByVendor[$vendor])[$i - 1]["balance_cumulative"];
                 }
                 $i++;
             }
@@ -68,11 +69,14 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         foreach ($balances as $balanceItem) {
             if ($balanceItem->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED) {
                 if (isset($balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"])) {
-                    $balanceItem->setData("balance_cumulative", $balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"]);
-                    $balanceItem->save();
+
+                    $where = $this->_getWriteAdapter()->quoteInto("id=?", $balanceItem->getId());
+                    $this->_getWriteAdapter()->update($this->getMainTable(),
+                        array("balance_cumulative" => $balancesByVendor[$balanceItem->getVendorId()][$balanceItem->getDate()]["balance_cumulative"]),
+                        $where);
                 }
             }
         }
-        return parent::_afterLoad($object);
+
     }
 }
