@@ -32,6 +32,10 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         return parent::_beforeSave($object);
     }
 
+    /**
+     * @param Mage_Core_Model_Abstract $object
+     * @return Mage_Core_Model_Resource_Db_Abstract
+     */
     public function _afterSave(Mage_Core_Model_Abstract $object)
     {
         $this->recalculateBalanceCumulative();
