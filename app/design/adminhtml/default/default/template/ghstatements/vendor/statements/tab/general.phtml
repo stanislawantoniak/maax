@@ -204,12 +204,54 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                     </tr>
                     <tr>
                         <td class="label">
-                            <label for="marketing_value">
+                            <label for="total_commission_netto">
+                                <b><?php echo $_helper->__("Commission: netto"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="total_commission_netto">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('total_commission_netto')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="total_commission">
+                                <b><?php echo $_helper->__("Commission: brutto"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="total_commission">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('total_commission')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="to_pay">
+                                <b><?php echo $_helper->__("To payout"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="to_pay">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('to_pay')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="payment_value">
                                 <b><?php echo $_helper->__("Payment: Amount"); ?></b>
                             </label>
                         </td>
                         <td class="value">
-                            <span id="marketing_value">
+                            <span id="payment_value">
                                 <?php echo Mage::helper('core')
                                     ->formatPrice($statement->getData('payment_value')); ?>
                             </span>
