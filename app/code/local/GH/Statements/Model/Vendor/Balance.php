@@ -4,7 +4,7 @@
  * Class GH_Statements_Model_Vendor_Balance
  *
  * @method int getStatus()
- * @method string getBalanceMonth()
+ * @method string getDate()
  * @method int getVendorId()
  *
  * @method string getPaymentToClient()
