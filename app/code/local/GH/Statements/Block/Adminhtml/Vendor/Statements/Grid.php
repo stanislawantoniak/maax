@@ -170,6 +170,13 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("last_statement_balance", array(
+            "index" => "last_statement_balance",
+            "header" => Mage::helper("ghstatements")->__("Last balance"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         /*to pay*/
         /*Payment*/
         $this->addColumn("payment_value", array(
