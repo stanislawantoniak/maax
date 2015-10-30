@@ -45,7 +45,7 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 				}
 			}
 			if(count($return)) {
-				asort($return);
+				rsort($return);
 				return $return;
 			}
 		}
@@ -73,24 +73,22 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 * logs GH Integrator events, if no vendorId is provided only file log is created, otherwise db log is also filled
+	 * logs GH Integrator events, in db and file
 	 * @param string $log
 	 * @param null|int $vendorId
+	 * @returns GH_Integrator_Model_Log
 	 */
 	public function log($log,$vendorId=null) {
-		Mage::log("Vendor ID: ".($vendorId ? $vendorId : print_r($vendorId))."\n".$log,null,self::LOG_NAME);
+		Mage::log("Vendor ID: ".(print_r($vendorId))."\n".$log,null,self::LOG_NAME);
 
-		if(!is_null($vendorId) && $vendorId) {
-			try {
-				/** @var GH_Integrator_Model_Log $logModel */
-				$logModel = Mage::getModel('ghintegration/log');
-				$logModel->setVendorId($vendorId)->setLog($log)->save();
-			} catch (GH_Integrator_Exception $exception) {
-				Mage::log($exception->getMessage(), null, self::LOG_NAME);
-			} catch (Exception $exception) {
-				Mage::logException($exception);
-			}
+		/** @var GH_Integrator_Model_Log $logModel */
+		$logModel = Mage::getModel('ghintegration/log');
+		if($vendorId) {
+			$logModel->setVendorId($vendorId);
 		}
+		$logModel->setLog($log)->save();
+
+		return $logModel;
 	}
 
 	/**
