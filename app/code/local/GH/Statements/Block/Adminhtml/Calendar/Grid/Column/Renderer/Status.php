@@ -17,9 +17,9 @@ class GH_Statements_Block_Adminhtml_Calendar_Grid_Column_Renderer_Status
 			$value = $row->getData($this->getColumn()->getIndex());
 
 			if ($value == 1) {
-				$style = "style='background-color: red;color: white;padding: 0 25%;'";
+				$style = "style='background-color: red;color: white;padding: 0 25%;font-weight: bold;'";
 			} else {
-				$style = "style='background-color: green;color: white;padding: 0 25%;'";
+				$style = "style='background-color: green;color: white;padding: 0 25%;font-weight: bold;'";
 			}
 
 			if (is_array($value)) {
