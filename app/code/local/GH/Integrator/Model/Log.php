@@ -2,7 +2,7 @@
 
 /**
  * Class GH_Integrator_Model_Log
- * @method GH_Integrator_Model_Log setVendorId($vendorId)
+ * @method GH_Integrator_Model_Log setVendorId(int $vendorId)
  * @method int getVendorId()
  * @method GH_Integrator_Model_Log setLog(string $log)
  * @method string getLog()
