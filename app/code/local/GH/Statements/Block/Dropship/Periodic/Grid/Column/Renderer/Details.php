@@ -17,17 +17,17 @@ class GH_Statements_Block_Dropship_Periodic_Grid_Column_Renderer_Details
             $text .=
                 '<div class="' . $item['css_class'] . '">' .
                     '<div class="left-detail">' . $item['text'] . '</div>' .
-                    '<div class="right-detail text-right">' . $this->getFormattedValue($row->getData($item['field']), $row) . '</div>'.
+                    '<div class="right-detail text-right">' . $this->getFormattedValue($row->getData($item['index']), $row) . '</div>'.
                 '</div>';
         }
         return $text . $wrapperEnd;
 	}
 
-    protected function getFormattedValue($value, $row, $sign = '') {
+    protected function getFormattedValue($value, $row) {
         $currency_code = $this->_getCurrencyCode($row);
         $data = floatval($value) * $this->_getRate($row);
         $data = sprintf("%f", $data);
         $data = Mage::app()->getLocale()->currency($currency_code)->toCurrency($data);
-        return $sign . $data;
+        return $data;
     }
 }

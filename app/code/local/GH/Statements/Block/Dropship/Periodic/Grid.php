@@ -21,6 +21,11 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         return $this;
     }
 
+    /**
+     * Add custom data to collection
+     *
+     * @return $this
+     */
     protected function _afterLoadCollection() {
         /** @var GH_Statements_Model_Resource_Statement_Collection $collection */
         $collection = $this->getCollection();
@@ -28,6 +33,10 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         if ($collection->count()) {
             // Add from - to
             $this->_addSettlementPeriod();
+            // [B] and [B]+[A]-[C]
+            $this->_calculateBalance();
+            // set corrent sign for corrections
+            $this->_processValuesSignForGrid();
 
         }
         return $this;
@@ -41,13 +50,79 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
     private function _addSettlementPeriod() {
         /** @var GH_Statements_Model_Resource_Statement_Collection $collection */
         $collection = $this->getCollection();
+
+        // Temporary sorting ASC for chronological periods calculating
+        // because user can change sorting manually on event_date column
+        $sortedData = array();
+        /** @var GH_Statements_Model_Statement $statement */
+        foreach ($collection as $statement) {
+            $sortedData[$statement->getEventDate()] = $statement;
+        }
+        sort($sortedData);
+
         $oneDay = strtotime("1 day", Mage::getModel('core/date')->timestamp(time())) - Mage::getModel('core/date')->timestamp(time());
         $from = strtotime(date("Y-m-d", strtotime($this->getVendor()->getRegulationAcceptDocumentDate()) - $oneDay));
         /** @var GH_Statements_Model_Statement $statement */
-        foreach ($collection as $statement) {
+        foreach ($sortedData as $statement) {
             $to = strtotime(date("Y-m-d", strtotime($statement->getEventDate())));
-            $statement->setData('settlement-period', date("Y-m-d", $from+$oneDay ) . ' - ' . date("Y-m-d", $to-$oneDay));
+            $statement->setData('settlement_period', date("Y-m-d", $from+$oneDay ) . ' - ' . date("Y-m-d", $to-$oneDay));
             $from = $to-$oneDay;
+        }
+        return $this;
+    }
+
+    /**
+     * Add to the collection:
+     * - balance of the previous settlement
+     * - current balance of the settlement
+     *
+     * [A] Do wypłaty -> to_pay (to_payout)
+     * [B] Saldo poprzedniego rozliczenia -> balance_of_the_previous_settlement
+     * [C] Wypłaty do sprzedawcy -> payment_value
+     * [BAC] Bieżące saldo rozliczenia [B]+[A]-[C]: -> current_balance_of_the_settlement
+     *
+     * @return $this
+     */
+    private function _calculateBalance() {
+        /** @var GH_Statements_Model_Resource_Statement_Collection $collection */
+        $collection = $this->getCollection();
+
+        // Temporary sorting ASC for chronological periods calculating
+        // because user can change sorting manually on event_date column
+        $sortedData = array();
+        /** @var GH_Statements_Model_Statement $statement */
+        foreach ($collection as $statement) {
+            $sortedData[$statement->getEventDate()] = $statement;
+        }
+        sort($sortedData);
+        $B = 0;
+        /** @var GH_Statements_Model_Statement $statement */
+        foreach ($sortedData as $statement) {
+            // Currency renderer need value like "0.0000" ( 0 is not rendering )
+            $statement->setData('balance_of_the_previous_settlement', sprintf("%.4f", round($B, 2)));
+            $A = $statement->getToPay();
+            $C = $statement->getPaymentValue();
+            $statement->setData('current_balance_of_the_settlement', sprintf("%.4f", round($BAC = $B + $A - $C, 2)));
+            $B = $BAC;
+        }
+        return $this;
+    }
+
+    /*
+     * Set correct sign for correction values
+     * Because statements are calculated for admin point of view
+     * Like in ex: 'pay' needs to be transformed to 'payout'
+     */
+    private function _processValuesSignForGrid() {
+        /** @var GH_Statements_Model_Resource_Statement_Collection $collection */
+        $collection = $this->getCollection();
+
+        /** @var GH_Statements_Model_Statement $statement */
+        foreach ($collection as $statement) {
+            // Korekta za zwrócone zamówienia
+            $statement->setData('rma_value', sprintf("%.4f", -1 * $statement->getData('rma_value')));
+            // Korekta o rabaty finansowane przez Modago
+            $statement->setData('gallery_discount_value', sprintf("%.4f", -1 * $statement->getData('gallery_discount_value')));
         }
         return $this;
     }
@@ -68,24 +143,30 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'format'    => 'Y-MM-d',
             'headings_css_class' => '' //remove .nobr
         ));
-
         // Okres rozliczenia
-        $this->addColumn('settlement-period', array(
+        $this->addColumn('settlement_period', array(
             "width"	    => "5%",
             'header'    => $helper->__("Settlement period"),
-            'index'     => 'settlement-period',
+            'index'              => 'settlement_period',
             'headings_css_class' => ''
         ));
-
         // Rozliczenia płatnośći za zamówienia
-        $this->addColumn('payment-settlement-for-orders', array(
+        $this->addColumn('payment_settlement_for_orders', array(
             "width"	    => "11%",
             'header'    => $helper->__('Payment settlement for orders'),
-            'index'     => 'payment-settlement-for-orders',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__("Payments for completed orders") , 'field' => 'order_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Correction for returned orders"), 'field' => 'rma_value', 'css_class' => 'row-2'),
+                // Zapłaty za zrealizowane zamówienia
+                array(
+                    'text' => $helper->__("Payments for completed orders"),
+                    'index' => 'order_value',
+                    'css_class' => 'row-1'),
+                // Korekta za zwrócone zamówienia
+                array(
+                    'text' => $helper->__("Correction for returned orders"),
+                    'index' => 'rma_value',
+                    'css_class' => 'row-2'
+                ),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -94,12 +175,26 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         $this->addColumn('gallery-commission', array(
             "width"	    => "11%",
             'header'    => $helper->__('Gallery commission'),
-            'index'     => 'gallery-commission',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__('Gallery commission') , 'field' => 'order_commission_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Correction for discounts financed by the gallery"), 'field' => 'gallery_discount_value', 'css_class' => 'row-2'),
-                array('text' => $helper->__("Other corrections"), 'field' => 'commission_correction', 'css_class' => 'row-3'),
+                // Prowizja Modago
+                array(
+                    'text' => $helper->__('Gallery commission'),
+                    'index' => 'order_commission_value',
+                    'css_class' => 'row-1'
+                ),
+                // Korekta o rabaty finansowane przez Modago
+                array(
+                    'text' => $helper->__("Correction for discounts financed by the gallery"),
+                    'index' => 'gallery_discount_value',
+                    'css_class' => 'row-2'
+                ),
+                // Inne korekty
+                array(
+                    'text' => $helper->__("Other corrections"),
+                    'index' => 'commission_correction',
+                    'css_class' => 'row-3'
+                ),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -108,11 +203,19 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         $this->addColumn('currier-costs', array(
             "width"	    => "11%",
             'header'    => $helper->__('Currier costs'),
-            'index'     => 'currier-costs',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__('Currier costs') , 'field' => 'tracking_charge_total', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Currier correction costs"), 'field' => 'delivery_correction', 'css_class' => 'row-2'),
+                // Koszty kurierów
+                array(
+                    'text' => $helper->__('Currier costs'),
+                    'index' => 'tracking_charge_total',
+                    'css_class' => 'row-1'
+                ),
+                // Korekty kosztów kurierów
+                array(
+                    'text' => $helper->__("Currier correction costs"),
+                    'index' => 'delivery_correction',
+                    'css_class' => 'row-2'),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -121,11 +224,20 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         $this->addColumn('marketing-costs', array(
             "width"	    => "11%",
             'header'    => $helper->__('Marketing costs'),
-            'index'     => 'marketing-costs',
             'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
             'renderer_data' => array(
-                array('text' => $helper->__('Marketing costs') , 'field' => 'marketing_value', 'css_class' => 'row-1'),
-                array('text' => $helper->__("Marketing correction costs"), 'field' => 'marketing_correction', 'css_class' => 'row-2'),
+                // Koszty działań marketingowych
+                array(
+                    'text' => $helper->__('Marketing costs'),
+                    'index' => 'marketing_value',
+                    'css_class' => 'row-1'
+                ),
+                // Korekty kosztów marketingowych
+                array(
+                    'text' => $helper->__("Marketing correction costs"),
+                    'index' => 'marketing_correction',
+                    'css_class' => 'row-2'
+                ),
             ),
             'currency_code' => $currency,
             'headings_css_class' => ''
@@ -134,34 +246,34 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         $this->addColumn('to-payout', array(
             "width"		    => "5%",
             'header'        => $helper->__('To payout'),
-            'index'         => 'to-payout',
+            'index'         => 'to_pay',
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
         // [B] Saldo poprzedniego rozliczenia
-        $this->addColumn('balance-of-the-previous-settlement', array(
+        $this->addColumn('balance_of_the_previous_settlement', array(
             "width"		    => "5%",
             'header'        => $helper->__("Balance of the previous settlement"),
-            'index'         => 'balance-of-the-previous-settlement',
+            'index'         => 'balance_of_the_previous_settlement',
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
         // payment to the seller
-        $this->addColumn('payment-to-the-seller', array(
+        $this->addColumn('payment_value', array(
             "width"		    => "5%",
             'header'        => $helper->__("Payment to the seller"),
-            'index'         => 'payment-to-the-seller',
+            'index'         => 'payment_value',
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
         // Current statement
-        $this->addColumn('current-balance-of-the-settlement', array(
+        $this->addColumn('current_balance_of_the_settlement', array(
             "width"		    => "5%",
             'header'        => $helper->__("Current balance of the settlement"),
-            'index'         => 'current-balance-of-the-settlement',
+            'index'         => 'current_balance_of_the_settlement',
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => ''
