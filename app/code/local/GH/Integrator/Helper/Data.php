@@ -15,7 +15,7 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 			$values = explode(',',$value);
 			$return = array();
 			foreach($values as $time) {
-				if($this->isTime($time)) {
+				if($currentTime = $this->isTime($time)) {
 					$return[] = $time;
 				}
 			}
@@ -26,8 +26,13 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 		return array();
 	}
 	private function isTime($time) {
-		if (preg_match("/(2[0-3]|[01][0-9]):([0-5][0-9])/", $time)) {
-			return true;
+		if (preg_match("/(2[0-3]|[01][0-9]|[0-9]):([0-5][0-9])/", $time)) {
+			$timeArr = explode(":",$time);
+			if(strlen($timeArr[0]) == 1) {
+				$timeArr[0] = "0".$timeArr[0];
+				$time = implode(":",$timeArr);
+			}
+			return $time;
 		}
 		return false;
 	}
