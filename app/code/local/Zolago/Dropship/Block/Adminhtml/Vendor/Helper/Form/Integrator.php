@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Regulation
+ * Class Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Integrator
  */
 class Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Integrator
     extends Varien_Data_Form_Element_Abstract
