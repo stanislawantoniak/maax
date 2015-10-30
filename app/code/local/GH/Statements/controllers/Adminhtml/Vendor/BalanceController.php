@@ -36,10 +36,10 @@ class GH_Statements_Adminhtml_Vendor_BalanceController extends Mage_Adminhtml_Co
             $model->setStatus(GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_CLOSED);
             $model->save();
             $this->_getSession()->addSuccess(Mage::helper('ghstatements')->__("Status changed"));
-        } catch (Mage_Core_Exception $e) {
+        } catch (GH_Common_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
-        } catch (GH_Common_Exception $e) {
+        } catch (Exception $e) {
             $this->_getSession()->addError(Mage::helper('ghstatements')->__("Some error occurred!"));
             Mage::logException($e);
         }

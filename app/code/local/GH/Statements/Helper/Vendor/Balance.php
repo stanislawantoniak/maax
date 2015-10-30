@@ -77,7 +77,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 $vendorBalanceLine
                     ->setData($fieldToUpdate, (float)$valueToUpdate)
                     ->save();
-            } catch (GH_Common_Exception $e) {
+            } catch (Exception $e) {
                 Mage::logException($e);
             }
         } else {
@@ -92,7 +92,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                     )
                 );
                 $vendorBalance->save();
-            } catch (GH_Common_Exception $e) {
+            } catch (Exception $e) {
                 Mage::logException($e);
             }
         }
