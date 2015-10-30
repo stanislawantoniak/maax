@@ -145,7 +145,32 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
         /*Marketing*/
-
+        /* commissions */
+        $this->addColumn("total_commssion_netto", array(
+            "index" => "total_commission_netto",
+            "header" => Mage::helper("ghstatements")->__("Commissions netto"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("total_commssion", array(
+            "index" => "total_commission",
+            "header" => Mage::helper("ghstatements")->__("Commissions brutto"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        
+        /* commissions */
+        /*to pay*/
+        $this->addColumn("to_pay", array(
+            "index" => "to_pay",
+            "header" => Mage::helper("ghstatements")->__("To pay"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        /*to pay*/
         /*Payment*/
         $this->addColumn("payment_value", array(
             "index" => "payment_value",
