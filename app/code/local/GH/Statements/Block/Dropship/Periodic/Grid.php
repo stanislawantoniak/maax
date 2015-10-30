@@ -95,15 +95,13 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             $sortedData[$statement->getEventDate()] = $statement;
         }
         sort($sortedData);
-        $B = 0;
         /** @var GH_Statements_Model_Statement $statement */
         foreach ($sortedData as $statement) {
             // Currency renderer need value like "0.0000" ( 0 is not rendering )
-            $statement->setData('balance_of_the_previous_settlement', sprintf("%.4f", round($B, 2)));
+            $B = $statement->getLastStatementBalance();
             $A = $statement->getToPay();
             $C = $statement->getPaymentValue();
-            $statement->setData('current_balance_of_the_settlement', sprintf("%.4f", round($BAC = $B + $A - $C, 2)));
-            $B = $BAC;
+            $statement->setData('current_balance_of_the_settlement', sprintf("%.4f", round($B + $A - $C, 2)));
         }
         return $this;
     }
@@ -252,10 +250,10 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'headings_css_class' => ''
         ));
         // [B] Saldo poprzedniego rozliczenia
-        $this->addColumn('balance_of_the_previous_settlement', array(
+        $this->addColumn('last_statement_balance', array(
             "width"		    => "5%",
             'header'        => $helper->__("Balance of the previous settlement"),
-            'index'         => 'balance_of_the_previous_settlement',
+            'index'         => 'last_statement_balance',
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => ''

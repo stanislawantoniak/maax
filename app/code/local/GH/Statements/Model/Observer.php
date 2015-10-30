@@ -78,7 +78,7 @@ class GH_Statements_Model_Observer
         $collection->setOrder('id','DESC');
                 
         if ($item = $collection->getFirstItem()) {
-            $balance = $item->getData('to_pay');
+            $balance = $item->getData('to_pay') - $item->getData('payment_value');
         }
         $lastBalance = new StdClass();
         $lastBalance->balance = $balance;
