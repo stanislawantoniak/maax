@@ -43,7 +43,8 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
             'options' => array(
                 GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED => $helper->__("Open"),
                 GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_CLOSED => $helper->__("Close")
-            )
+            ),
+            "renderer" => "GH_Statements_Block_Adminhtml_Calendar_Grid_Column_Renderer_Status"
         ));
         // Statement month (Miesiąc rozliczeniowy)
         $this->addColumn('date', array(
