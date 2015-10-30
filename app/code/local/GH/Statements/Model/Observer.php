@@ -54,6 +54,7 @@ class GH_Statements_Model_Observer
                     $statementTotals->marketing = self::processStatementsMarketing($statement);
                     $statementTotals->payment = self::processStatementsPayment($statement);
                     $statementTotals->correction = self::processStatementsInvoice($statement);
+                    $statementTotals->lastBalance = self::processStatementLastBalance($statement);
 
                     self::populateStatement($statement, $statementTotals);
                 } catch(Mage_Core_Exception $e) {
@@ -70,6 +71,19 @@ class GH_Statements_Model_Observer
         }
     }
 
+    public static function processStatementLastBalance($statement) {
+        $balance = 0;
+        $collection = Mage::getModel('ghstatements/statement')->getCollection();
+        $collection->addFieldToFilter('vendor_id',$statement->getVendorId());
+        $collection->setOrder('id','DESC');
+                
+        if ($item = $collection->getFirstItem()) {
+            $balance = $item->getData('to_pay');
+        }
+        $lastBalance = new StdClass();
+        $lastBalance->balance = $balance;
+        return $lastBalance;
+    }
     /**
      * This create row for statement
      * @param Zolago_Dropship_Model_Vendor $vendor
@@ -160,6 +174,9 @@ class GH_Statements_Model_Observer
         // Payment
         if(!empty($statementTotals->payment)) {
             $data["payment_value"]              = $statementTotals->payment->amount;
+        }
+        if(!empty($statementTotals->lastBalance)) {
+            $data["last_statement_balance"]              = $statementTotals->lastBalance->balance;
         }
         $data['total_commission'] = round($data['total_commission_netto']*self::getTax(),2,PHP_ROUND_HALF_UP);
         if (!empty($data)) {
