@@ -13,8 +13,6 @@
 			/** @var Zolago_Dotpay_Model_Client $dotpay */
 			$dotpay = Mage::getModel("zolagodotpay/client");
 
-			//TODO vendor balance (payment_return_to_client 1 place)
-
 			foreach ($transactions as $txnId) {
 				/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 				$transaction = Mage::getModel("sales/order_payment_transaction")->load($txnId);
@@ -34,7 +32,7 @@
 					$sendEmail = false;
 					switch ($paymentMethod) {
 						case Zolago_Dotpay_Model_Client::PAYMENT_METHOD: //'dotpay'
-							Mage::log($transaction->getData(), null, "makeRefund.log");
+
 							if ($dotpay->makeRefund($order, $transaction)) {
 								$sendEmail=true;
 								$success++;

@@ -39,19 +39,13 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
     {
         $dateFormatted = date("Y-m", strtotime($date));
 
-        $valueToUpdate = 0;
+        $valueToUpdate = $value;
         switch ($fieldToUpdate) {
             case "vendor_payment_cost":
                 $valueToUpdate = $this->getTotalVendorPaymentPerMonth($vendorId, $dateFormatted);
                 break;
             case "vendor_invoice_cost":
                 $valueToUpdate = $this->getTotalVendorInvoicePerMonth($vendorId, $dateFormatted);
-                break;
-            case "payment_from_client":
-                $valueToUpdate = $value;
-                break;
-            case "payment_return_to_client":
-                $valueToUpdate = $value;
                 break;
         }
 
@@ -83,7 +77,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 $vendorBalanceLine
                     ->setData($fieldToUpdate, (float)$valueToUpdate)
                     ->save();
-            } catch (Exception $e) {
+            } catch (GH_Common_Exception $e) {
                 Mage::logException($e);
             }
         } else {
@@ -98,7 +92,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                     )
                 );
                 $vendorBalance->save();
-            } catch (Exception $e) {
+            } catch (GH_Common_Exception $e) {
                 Mage::logException($e);
             }
         }
@@ -119,7 +113,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 
 
         $vendorPayments->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("SUM(CAST(cost AS DECIMAL(10,4)))  as total, DATE_FORMAT(date,'%Y-%m') AS month")
+            ->columns("SUM(CAST(cost AS DECIMAL(12,4)))  as total, DATE_FORMAT(date,'%Y-%m') AS month")
             ->having("month=?", $dateFormatted)
             ->group("month");
 
@@ -145,10 +139,10 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorInvoices->getSelect()
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns("SUM(
-                CAST(commission_brutto AS DECIMAL (10, 4))
-                + CAST(transport_brutto AS DECIMAL (10, 4))
-                + CAST(marketing_brutto AS DECIMAL (10, 4))
-                + CAST(other_brutto AS DECIMAL (10, 4))
+                CAST(commission_brutto AS DECIMAL (12, 4))
+                + CAST(transport_brutto AS DECIMAL (12, 4))
+                + CAST(marketing_brutto AS DECIMAL (12, 4))
+                + CAST(other_brutto AS DECIMAL (12, 4))
             )  as total, DATE_FORMAT(sale_date,'%Y-%m') AS month")
             ->where("is_invoice_correction=?", Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_ORIGINAL)
             ->having("month=?", $dateFormatted)
@@ -169,10 +163,10 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorInvoices2->getSelect()
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns("SUM(
-                CAST(commission_brutto AS DECIMAL (10, 4))
-                + CAST(transport_brutto AS DECIMAL (10, 4))
-                + CAST(marketing_brutto AS DECIMAL (10, 4))
-                + CAST(other_brutto AS DECIMAL (10, 4))
+                CAST(commission_brutto AS DECIMAL (12, 4))
+                + CAST(transport_brutto AS DECIMAL (12, 4))
+                + CAST(marketing_brutto AS DECIMAL (12, 4))
+                + CAST(other_brutto AS DECIMAL (12, 4))
             )  as total, DATE_FORMAT(date,'%Y-%m') AS month")
             ->where("is_invoice_correction=?", Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_CORRECTION)
             ->having("month=?", $dateFormatted)

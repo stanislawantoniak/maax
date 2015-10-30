@@ -61,19 +61,6 @@
                 </setup>
             </ghstatements_setup>
         </resources>
-        <events>
-            <udpo_po_status_save_after>
-                <observers>
-                    <ghstatements>
-                        <model>ghstatements/observer</model>
-                        <method>adjustVendorBalance</method>
-                    </ghstatements>
-                </observers>
-            </udpo_po_status_save_after>
-            <udpo_po_save_after>
-
-            </udpo_po_save_after>
-        </events>
     </global>
     <frontend>
         <routers>

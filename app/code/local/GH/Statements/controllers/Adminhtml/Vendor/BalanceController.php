@@ -39,7 +39,7 @@ class GH_Statements_Adminhtml_Vendor_BalanceController extends Mage_Adminhtml_Co
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
-        } catch (Exception $e) {
+        } catch (GH_Common_Exception $e) {
             $this->_getSession()->addError(Mage::helper('ghstatements')->__("Some error occurred!"));
             Mage::logException($e);
         }

@@ -332,7 +332,6 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					}
 
 					//vendor balance (payment_return_to_client 1 place)
-
 					$allocationCollection = Mage::getModel('zolagopayment/allocation')->getCollection()
 						->addFieldToFilter('refund_transaction_id', $transaction->getId())
 						->addFieldToFilter('allocation_type', Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND);
