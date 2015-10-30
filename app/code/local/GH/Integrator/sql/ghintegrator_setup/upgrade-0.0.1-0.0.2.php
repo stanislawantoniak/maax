@@ -5,10 +5,6 @@ $installer = $this;
 
 $installer->startSetup();
 
-
-/**
- * Basic structure of statement
- */
  $table = $installer->getConnection()
     ->newTable($installer->getTable('ghintegrator/log'))
     ->addColumn("id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
