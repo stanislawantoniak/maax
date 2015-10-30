@@ -45,23 +45,6 @@ class GH_Regulation_Block_Adminhtml_Kind_Vendor_Edit_Form extends Mage_Adminhtml
             'time'		=> false,
             'after_element_html' => Mage::helper('ghregulation')->__('<small>Date format (YYYY-MM-DD)</small>'),
         ));
-        /*
-        $yesNo = array (
-            '0' => Mage::helper('zolagodropship')->__('No'),
-            '1' => Mage::helper('zolagodropship')->__('Yes'),
-        );
-         $fieldset->addField('can_ask', 'select', array(
-            'label'     => Mage::helper('zolagodropship')->__('Customer can ask'),
-            'name'      => 'can_ask',
-            'values'    => $yesNo,
-        ));
-
-        $fieldset->addField('can_add_product', 'select', array(
-            'label'     => Mage::helper('zolagodropship')->__('Vendor can add products to brandshop'),
-            'name'      => 'can_add_product',
-            'values' 	=> $yesNo,
-            )
-        );*/
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();

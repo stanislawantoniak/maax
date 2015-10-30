@@ -232,6 +232,10 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
                 }
             }
         }
+        // Sorting chronological by date
+        foreach ($final as $kindname => $arr) {
+            usort($final[$kindname], function($a, $b) { return strtotime($b['date']) - strtotime($a['date']); });
+        }
         if($idsOnly) {
             $ids = array();
             foreach($final as $kind=>$documents) {
