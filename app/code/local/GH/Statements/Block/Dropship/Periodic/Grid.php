@@ -242,7 +242,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
-        // Do wypłaty
+        // [A] Do wypłaty
         $this->addColumn('to-payout', array(
             "width"		    => "5%",
             'header'        => $helper->__('To payout'),
@@ -260,7 +260,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
-        // payment to the seller
+        // [C] Wypłaty do sprzedawcy
         $this->addColumn('payment_value', array(
             "width"		    => "5%",
             'header'        => $helper->__("Payment to the seller"),
@@ -269,7 +269,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
-        // Current statement
+        // Bieżące saldo rozliczenia [B]+[A]-[C]:
         $this->addColumn('current_balance_of_the_settlement', array(
             "width"		    => "5%",
             'header'        => $helper->__("Current balance of the settlement"),
