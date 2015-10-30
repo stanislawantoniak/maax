@@ -33,12 +33,14 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
         // Vendor balance id
         $this->addColumn('id', array(
             'header' => $helper->__('ID #'),
-            'index' => 'id'
+            'index' => 'id',
+            'width' => '5px',
         ));
         // Status miesiąca
         $this->addColumn('status', array(
             'header' => $helper->__('Status of monthly balance'),
             'index' => 'status',
+            'width' => '100px',
             'type' => 'options',
             'options' => array(
                 GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED => $helper->__("Open"),
