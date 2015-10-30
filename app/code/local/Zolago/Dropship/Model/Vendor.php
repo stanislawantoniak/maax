@@ -13,6 +13,7 @@
  * @method string getRegulationAcceptDocumentData()
  * @method int getRegulationAccepted()
  * @method string getRegulationConfirmRequestSentDate()
+ * @method bool getIntegratorEnabled()
  */
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
@@ -418,4 +419,8 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     public function getDecodedRegulationAcceptDocumentData() {
         return (array)json_decode($this->getRegulationAcceptDocumentData());
     }
+
+	public function getIntegratorSecret() {
+		return md5($this->getId()+$this->getCreatedAt());
+	}
 }
