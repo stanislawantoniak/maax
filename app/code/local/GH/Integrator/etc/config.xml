@@ -2,14 +2,23 @@
 <config>
     <modules>
         <GH_Integrator>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </GH_Integrator>
     </modules>
     <global>
         <models>
             <ghintegrator>
                 <class>GH_Integrator_Model</class>
+	            <resourceModel>ghintegrator_resource</resourceModel>
             </ghintegrator>
+	        <ghintegrator_resource>
+		        <class>GH_Integrator_Model_Resource</class>
+		        <entities>
+			        <log>
+				        <table>gh_integrator_log</table>
+			        </log>
+		        </entities>
+	        </ghintegrator_resource>
         </models>
         <helpers>
             <ghintegrator>
