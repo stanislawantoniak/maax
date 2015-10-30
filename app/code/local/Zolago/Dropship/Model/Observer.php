@@ -254,6 +254,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $keys = array (
 	        'integrator_enabled',
 	        'integrator_secret',
+	        'last_integration',
             "regulation_confirm_request_sent_date",
             'regulation_accepted',
             'regulation_accept_document_date',

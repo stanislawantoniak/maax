@@ -17,7 +17,8 @@ $installer->startSetup();
 	    'primary'   => true
     ),'Integrator log ID')
 	 ->addColumn("vendor_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
-		 'nullable'  => false
+		 'nullable'  => true,
+		 'default'  => null
 	 ),'Vendor ID')
 	 ->addColumn("log", Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		 'nullable'  => false

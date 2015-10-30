@@ -825,6 +825,12 @@
 		                <frontend_model>zolagodropship/adminhtml_vendor_helper_form_integrator</frontend_model>
 		                <position>0</position>
 	                </integrator_secret>
+	                <last_integration>
+		                <label>Modago Integrator last integration</label>
+		                <type>label</type>
+		                <fieldset>vendor_form</fieldset>
+		                <position>0</position>
+	                </last_integration>
 
 
                     <!--Regulation-->

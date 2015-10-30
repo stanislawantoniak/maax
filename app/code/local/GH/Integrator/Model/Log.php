@@ -15,12 +15,4 @@ class GH_Integrator_Model_Log extends Mage_Core_Model_Abstract
     {
         $this->_init('ghintegrator/log');
     }
-
-	protected function _beforeSave() {
-		if(!$this->getVendorId()) {
-			throw Mage::exception("GH_Integrator","Cannot add log without Vendor ID");
-		}
-		parent::_beforeSave();
-	}
-
 }

@@ -14,6 +14,8 @@
  * @method int getRegulationAccepted()
  * @method string getRegulationConfirmRequestSentDate()
  * @method bool getIntegratorEnabled()
+ * @method string getLastIntegration()
+ * @method Zolago_Dropship_Model_Vendor setLastIntegration(string $date)
  */
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
