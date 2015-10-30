@@ -75,10 +75,10 @@ class GH_Statements_Model_Observer
         $balance = 0;
         $collection = Mage::getModel('ghstatements/statement')->getCollection();
         $collection->addFieldToFilter('vendor_id',$statement->getVendorId());
-        $collection->setOrder('id','DESC');
-                
+        $collection->addFieldToFilter('id',array('neq'=>$statement->getId()));
+        $collection->getSelect()->order('id DESC');
         if ($item = $collection->getFirstItem()) {
-            $balance = $item->getData('to_pay') - $item->getData('payment_value');
+            $balance = $item->getData('to_pay') - $item->getData('payment_value');            
         }
         $lastBalance = new StdClass();
         $lastBalance->balance = $balance;
