@@ -32,10 +32,8 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
 				$helper->throwException("Provided secret is not valid for this vendor! (" . print_r($secret) . ")", $vendorId);
 			}
 
-			//everything is checked let's continue
-			$lastIntegrationTime = $vendor->getLastIntegration() ? strtotime($vendor->getLastIntegration()) : 0;
-			$currentTime = Mage::getModel('core/date')->timestamp(time());
 
+			//load config values
 			$descriptionTimes = $helper->getDescriptionTimes();
 			if(!count($descriptionTimes)) {
 				$helper->throwException("GH Integrator description hours are incorrect!");
@@ -51,15 +49,33 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
 				$helper->throwException("GH Integrator stock hours are incorrect!");
 			}
 
+			//everything is checked let's continue
+			$filesToUpdate = array();
+			$lastIntegrationTime = $vendor->getLastIntegration() ? strtotime($vendor->getLastIntegration()) : 0;
+			$currentTime = Mage::getModel('core/date')->timestamp(time());
 
+			echo $this->returnResponse($helper::STATUS_OK,$filesToUpdate);
 		} catch(GH_Integrator_Exception $exception) {
 			$helper->log($exception->getMessage(),$vendorId);
-			echo $helper::STATUS_ERROR;
+			echo $this->returnResponse($helper::STATUS_ERROR);
 		} catch(Exception $exception) {
 			$helper->log("Other error occured! See exception.log for details");
 			Mage::logException($exception);
-			echo $helper::STATUS_FATAL_ERROR;
+			echo $this->returnResponse($helper::STATUS_FATAL_ERROR);
 		}
 		return;
+	}
+
+	/**
+	 * @param string $status
+	 * @param array $files
+	 * @return string
+	 */
+	protected function returnResponse($status,$files=null) {
+		$response = array('status' => $status);
+		if(is_array($files) && count($files)) {
+			$response['files'] = $files;
+		}
+		return json_encode($response);
 	}
 }
