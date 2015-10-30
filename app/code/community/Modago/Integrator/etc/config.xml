@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Modago_Integrator>
+            <version>0.0.1</version>
+        </Modago_Integrator>
+    </modules>
+    <global>
+        <models>
+            <modagointegrator>
+                <class>Modago_Integrator_Model</class>
+            </modagointegrator>
+        </models>
+        <helpers>
+            <modagointegrator>
+                <class>Modago_Integrator_Helper</class>
+            </modagointegrator>
+        </helpers>
+    </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Modago_Integrator>
+                    <files>
+                        <default>Modago_Integrator.csv</default>
+                    </files>
+                </Modago_Integrator>
+            </modules>
+        </translate>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <modagointegrator>
+                                            <title>Modago Integrator</title>
+                                        </modagointegrator>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+</config>
