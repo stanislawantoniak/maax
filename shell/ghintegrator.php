@@ -14,13 +14,16 @@ class GH_Integrator_Shell extends Mage_Shell_Abstract
             exit;
         }
 
-        // $this->_test(); echo 'ok'; die();
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
         set_time_limit(36000);
 
         if ($this->getArg('generate')) {
-            echo "HELLO";
+            $secret = $this->getArg('secret');
+            $externalId = $this->getArg('external_id');
+//var_dump($secret);
+//            var_dump($externalId);
+            Mage::getModel("ghintegrator/communication")->connect($secret, $externalId);
         } elseif ($this->getArg('test')) {
             $this->_test();
         } else {
