@@ -19,6 +19,7 @@ abstract class Modago_Integrator_Model_Generator
     abstract protected function _prepareList();
     
     /**
+     * @var array $item
      * preparing xml text block
      */
      abstract protected function _prepareXmlBlock($item);
