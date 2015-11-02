@@ -21,7 +21,7 @@ class GH_Integrator_Model_Communication extends Mage_Core_Model_Abstract
             }
 
             /** @var Zolago_Dropship_Model_Vendor $vendor */
-            $vendor = Mage::getModel('udropship/vendor')->load($vendorId, "external_id");
+            $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
             if (!$vendor->getId()) {
                 $helper->throwException("Provided external id is not valid! ($vendorId)");
             }
