@@ -51,13 +51,8 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
 			$lastIntegrationTime = $vendor->getLastIntegration() ? strtotime($vendor->getLastIntegration()) : 0;
 			$currentTime = Mage::getModel('core/date')->timestamp();
 
-			Mage::log($vendor->getLastIntegration());
-			Mage::log(date('Y-m-d H:i',$lastIntegrationTime));
-			Mage::log(date('Y-m-d H:i',$currentTime));
-
 			//check if descriptions are candidate to update
 			foreach($descriptionTimes as $descriptionTime) { //array is sorted from latest to earliest hour
-				Mage::log('description time: '.date('Y-m-d H:i',$descriptionTime));
 				if($descriptionTime <= $currentTime && $descriptionTime > $lastIntegrationTime) {
 					$filesToUpdate[] = $helper::FILE_DESCRIPTIONS;
 					break;
