@@ -29,7 +29,7 @@ class Modago_Integrator_Model_Generator_Price
      *
      * @return string
      */
-     protected function _prepareXmlBlock() {
+     protected function _prepareXmlBlock($item) {
          
      }
 
