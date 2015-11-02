@@ -19,10 +19,7 @@ class GH_Integrator_Shell extends Mage_Shell_Abstract
         set_time_limit(36000);
 
         if ($this->getArg('generate')) {
-            $secret = $this->getArg('secret');
-            $externalId = $this->getArg('external_id');
-
-            Mage::getModel("ghintegrator/communication")->connect($secret, $externalId);
+            Mage::getModel("modagointegrator/client")->generate($this->getArg('generate'));
         } else {
             echo $this->usageHelp();
         }
