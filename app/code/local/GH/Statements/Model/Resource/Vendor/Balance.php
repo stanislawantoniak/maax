@@ -105,7 +105,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 
 
         $vendorPayments->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("DATE_FORMAT(event_date,'%Y-%m') statement_month, (last_statement_balance+to_pay-payment_value) AS current_balance_of_the_settlement ")
+            ->columns("DATE_FORMAT(event_date,'%Y-%m') statement_month, (last_statement_balance+to_pay-payment_value) AS current_balance_of_the_settlement")
             ->having("statement_month=?", $dateFormatted)
             ->order("event_date DESC");
 
