@@ -4,8 +4,8 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
 	public function indexAction() {
 		$data = $this->getRequest()->getParams();
 
-		$vendorId = 5;//isset($data['external_id']) ? $data['external_id'] : null;
-		$secret = "7b7a53e239400a13bd6be6c91c4f6c4e";//isset($data['secret']) ? $data['secret'] : null;
+        $vendorId = isset($data['external_id']) ? $data['external_id'] : null;
+        $secret = isset($data['secret']) ? $data['secret'] : null;
 
 		/** @var GH_Integrator_Helper_Data $helper */
 		$helper = Mage::helper('ghintegrator');
