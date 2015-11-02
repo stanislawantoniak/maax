@@ -12,7 +12,7 @@ class Modago_Integrator_Model_Generator_Price
      * @return string
      */
      protected function _getPath() {
-         // todo
+ 	     return Mage::getBaseDir('var'). DS . parent::DIRECTORY . DS . $this->getExternalId()."_PRICES_".Mage::getModel('core/date')->date('Y-m-d_H_i_s').".xml";
      }
      
     /**
@@ -22,6 +22,7 @@ class Modago_Integrator_Model_Generator_Price
      */
      protected function _prepareList() {
          /// todo                  
+         return array();
      }
      
     /**
@@ -30,7 +31,7 @@ class Modago_Integrator_Model_Generator_Price
      * @return string
      */
      protected function _prepareXmlBlock($item) {
-         
+         return ''; // todo
      }
      
     /**
@@ -39,6 +40,7 @@ class Modago_Integrator_Model_Generator_Price
      * @return string
      */
      protected function _getHeader() {
+         return ''; // todo
      }
      
     /**
@@ -47,6 +49,7 @@ class Modago_Integrator_Model_Generator_Price
      * @return string
      */
      protected function _getFooter() {
+         return ''; // todo
      }
 
     

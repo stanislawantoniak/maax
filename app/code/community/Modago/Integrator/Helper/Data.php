@@ -26,7 +26,7 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 		$folder = dirname($path);
 		if(!is_dir($folder)) {
 			try {
-				mkdir($folder,0600,true);
+				mkdir($folder,0700,true);
 			} catch(Exception $e) {
 				Mage::logException($e);
 				$this->throwException('Could not create a folder '.$folder);

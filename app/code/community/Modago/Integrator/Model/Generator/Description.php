@@ -12,7 +12,7 @@ class Modago_Integrator_Model_Generator_Description
      * @return string
      */
      protected function _getPath() {
-         // todo
+	     return Mage::getBaseDir('var'). DS . parent::DIRECTORY . DS . $this->getExternalId()."_DESCRIPTION_".Mage::getModel('core/date')->date('Y-m-d_H_i_s').".xml";
      }
      
     /**
@@ -21,6 +21,7 @@ class Modago_Integrator_Model_Generator_Description
      * @return array
      */
      protected function _prepareList() {
+         return array();
          /// todo                  
      }
      
@@ -30,7 +31,8 @@ class Modago_Integrator_Model_Generator_Description
      * @return string
      */
      protected function _prepareXmlBlock($item) {
-         
+         // todo 
+          return '';   
      }
 
     
@@ -40,6 +42,8 @@ class Modago_Integrator_Model_Generator_Description
      * @return string
      */
      protected function _getHeader() {
+         return '';
+         // todo
      }
      
     /**
@@ -48,6 +52,7 @@ class Modago_Integrator_Model_Generator_Description
      * @return string
      */
      protected function _getFooter() {
+         return ''; // todo
      }
 
 }

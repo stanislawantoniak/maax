@@ -46,7 +46,7 @@ abstract class Modago_Integrator_Model_Generator
         try {
             $helper->createFile($this->_getPath());
             $helper->addToFile($this->_getHeader());
-            while ($list = $this->prepareList()) {
+            while ($list = $this->_prepareList()) {
                 foreach ($list as $item) {
                     $block = $this->_prepareXmlBlock($item);
                     $helper->addToFile($block);
