@@ -2,6 +2,7 @@
 
 class Modago_Integrator_Model_Client
 {
+    const MODAGO_INTEGRATOR_URL = "https://modago.pl/ghintegrator/communication";
 
     protected $_conf = array();
 
@@ -32,7 +33,7 @@ class Modago_Integrator_Model_Client
     {
         $return = null;
         try {
-            $process = curl_init($this->getConfig('url'));
+            $process = curl_init(self::MODAGO_INTEGRATOR_URL);
             curl_setopt($process, CURLOPT_POST, true);
             $data = array("secret" => $this->getConfig('secret'), "external_id" => $this->getConfig('external_id'), 'type' => $action);
             curl_setopt($process, CURLOPT_POSTFIELDS, $data);
