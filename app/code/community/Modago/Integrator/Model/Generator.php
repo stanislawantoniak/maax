@@ -25,24 +25,24 @@ abstract class Modago_Integrator_Model_Generator
      * @return bool
      */
     public function generate() {
-        if (!$list = $this->_prepareList()) {
-            return false;
-        }
-
+        $status = false;
+        $helper = Mage::helper('modagointegrator');
         try {
-            $helper = Mage::helper('modagointegrator');
             $helper->createFile($this->_getPath());
-            foreach ($list as $item) {
-                $block = $this->_prepareXmlBlock($item);
-                $helper->addToFile($block);
-            }
+            while ($list = $this->prepareList()) {
+                foreach ($list as $item) {
+                    $block = $this->_prepareXmlBlock($item);
+                    $helper->addToFile($block);
+                }
+            } 
             $helper->closeFile();
+            $status = true;
         } catch (Mage_Core_Exception $ex) {
             Mage::logException($ex);
             $helper->closeFile();
             return false;
         }
-        return true;
+        return $status;
     }
     
     
@@ -52,6 +52,5 @@ abstract class Modago_Integrator_Model_Generator
      */
      public function uploadFile() {
      }
-
 
 }
