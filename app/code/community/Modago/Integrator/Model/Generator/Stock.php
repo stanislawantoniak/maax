@@ -9,14 +9,9 @@ class Modago_Integrator_Model_Generator_Stock
 	protected $_header;
 	protected $_footer;
 
-    /**
-     * file path
-     *
-     * @return string
-     */
-     protected function _getPath() {
-	     return Mage::getBaseDir('var'). DS . parent::DIRECTORY . DS . $this->getExternalId()."_STOCKS_".Mage::getModel('core/date')->date('Y-m-d_H_i_s').".xml";
-     }
+    protected function _construct() {
+        $this->setFileNamePrefix('STOCKS');
+    }
 
 	public function _getHeader() {
 		if(!$this->_header) {

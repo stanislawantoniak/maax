@@ -1,22 +1,42 @@
 <?php
 /**
  * abstract object - generation file
+ * @method string getFtpUrl()
+ * @method Modago_Integrator_Model_Generator setFtpUrl(string $ftpUrl)
  */
 abstract class Modago_Integrator_Model_Generator
     extends Varien_Object {
 
 	protected $_helper;
 	protected $_externalId;
+    protected $_fileName;
+    protected $_status;
 
 	const DIRECTORY = 'modagointegrator';
 
     /**
-     * returns local path to generated file
+     * Returns local path to generated file
+     *
+     * @return string
      */
-    abstract protected function _getPath();
+    protected function _getPath() {
+        return Mage::getBaseDir('var') . DS . self::DIRECTORY . DS . $this->_getFileName();
+    }
+
+    /**
+     * File name for _getPath()
+     *
+     * @return string
+     */
+    protected function _getFileName() {
+        if (!$this->_fileName) {
+            $this->_fileName = $this->getFileNamePrefix().'_'.$this->getExternalId().'_'.Mage::getModel('core/date')->date('Y-m-d_H_i_s').".xml";
+        }
+        return $this->_fileName;
+    }
     
     /**
-     * returns content 
+     * returns content
      */
     abstract protected function _prepareList();
     
@@ -41,7 +61,8 @@ abstract class Modago_Integrator_Model_Generator
      * @return bool
      */
     public function generate() {
-        $status = false;
+        $this->_status = false;
+        $this->_fileName = null;
         $helper = $this->getHelper();
         try {
             $helper->createFile($this->_getPath());
@@ -54,20 +75,24 @@ abstract class Modago_Integrator_Model_Generator
             } 
             $helper->addToFile($this->_getFooter());
             $helper->closeFile();
-            $status = true;
+            $this->_status = true;
         } catch (Modago_Integrator_Exception $ex) {
             Mage::logException($ex);
             $helper->closeFile();
         }
-        return $status;
+        return $this->_status;
     }
     
     
     /**
-     * uploading file
-     *
+     * Uploading file
      */
      public function uploadFile() {
+         if ($this->_status) {
+             $file = $this->_getPath();
+             $fileName = $this->_getFileName();
+             $this->getHelper()->sendToFtp($file, $fileName, $this->getFtpUrl());
+         }
      }
 
 	/**

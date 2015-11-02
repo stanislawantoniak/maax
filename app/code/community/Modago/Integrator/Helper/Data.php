@@ -90,20 +90,16 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * Send one file to Modago ftp server
-     * Data need to contain:
-     * 'file'      -> path to file
-     * 'file_name' -> new/old file name with extension
-     * 'ftp_url'   -> url like: ftp://{$login}:{$passwd}@{$host}/{$filename}
-     * @param $data
+     *
+     * @param string $file path to file
+     * @param string $fileName new/old file name with extension
+     * @param string $ftpUrl url like: ftp://{$login}:{$passwd}@{$host}/{$filename}
      */
-    public function sendToFtp($data) {
-
-        $file     = $data['file'];
-        $fileName = $data['file_name'];
+    public function sendToFtp($file, $fileName, $ftpUrl) {
 
         $ch = curl_init();
         $fp = fopen($file, 'r');
-        curl_setopt($ch, CURLOPT_URL, $data['ftp_url'] . $fileName);
+        curl_setopt($ch, CURLOPT_URL, $ftpUrl . $fileName);
         curl_setopt($ch, CURLOPT_UPLOAD, 1);
         curl_setopt($ch, CURLOPT_INFILE, $fp);
         curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));

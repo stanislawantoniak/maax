@@ -39,7 +39,7 @@ class Modago_Integrator_Model_Connector
 									    break;
 							    }
 							    if ($model->generate()) {
-    							    $model->uploadFile();
+    							    $model->setFtpUrl($response['ftp_url'])->uploadFile();
                                 } 
 						    }
 					    }
