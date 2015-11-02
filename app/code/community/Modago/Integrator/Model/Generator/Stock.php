@@ -64,6 +64,4 @@ class Modago_Integrator_Model_Generator_Stock
 	     $qty = intval($item['qty']);
          return "<product><sku>{$item['sku']}</sku><stock>$qty</stock></product>";
      }
-
-    
 }
