@@ -19,6 +19,16 @@ abstract class Modago_Integrator_Model_Generator
      * preparing xml text block
      */
      abstract protected function _prepareXmlBlock();
+     
+    /**
+     * prepare header
+     */
+     abstract protected function _getHeader();
+     
+    /**
+     * prepare footer
+     */
+     abstract protected function _getFooter();
     /**
      * generation file
      * 
@@ -29,12 +39,14 @@ abstract class Modago_Integrator_Model_Generator
         $helper = Mage::helper('modagointegrator');
         try {
             $helper->createFile($this->_getPath());
+            $helper->addToFile($this->_getHeader());
             while ($list = $this->prepareList()) {
                 foreach ($list as $item) {
                     $block = $this->_prepareXmlBlock($item);
                     $helper->addToFile($block);
                 }
             } 
+            $helper->addToFile($this->_getFooter());
             $helper->closeFile();
             $status = true;
         } catch (Mage_Core_Exception $ex) {

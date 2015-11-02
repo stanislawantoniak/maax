@@ -2,7 +2,7 @@
 
 class Modago_Integrator_Model_Client
 {
-    const MODAGO_INTEGRATOR_URL = "http://127.0.0.1/ghintegrator/communication";
+    const MODAGO_INTEGRATOR_URL = "https://modago.pl/ghintegrator/communication";
 
     protected $_conf = array();
 
