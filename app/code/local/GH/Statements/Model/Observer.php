@@ -64,7 +64,7 @@ class GH_Statements_Model_Observer
                             $vendor->getId(),
                             "balance_due",
                             $statementTotals->lastBalance->balance,
-                            Mage::getSingleton('core/date')->gmtDate()
+                            $yesterday
                         );
 
                 } catch(Mage_Core_Exception $e) {
