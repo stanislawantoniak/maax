@@ -42,6 +42,29 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="order_value"><b><?php echo $_helper->__("Order: Realised orders"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="order_value">
+                                <?php echo Mage::helper('core')->formatPrice($statement->getData('order_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="rma_value">
+                                <b><?php echo $_helper->__("RMA: Correction"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="rma_value">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('rma_value')); ?>
+                            </span>
+                        </td>
                     </tr>
                     <tr>
                         <td class="label"><label
@@ -52,7 +75,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                                 <?php echo Mage::helper('core')->formatPrice($statement->getData('order_commission_value')); ?>
                             </span>
                         </td>
-                    </tr>
+                    </tr>                                                            
                     <tr>
                         <td class="label"><label
                                 for="gallery_discount_value"><b><?php echo $_helper->__("Order: Gallery Discount"); ?></b></label>
@@ -62,7 +85,8 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                                 <?php echo Mage::helper('core')->formatPrice($statement->getData('gallery_discount_value')); ?>
                             </span>
                         </td>
-                    </tr>
+                    </tr>                                        
+                    <?php if ($statement->getData('commission_correction') > 0) : ?>
                     <tr>
                         <td class="label"><label
                                 for="commission_correction"><b><?php echo $_helper->__("Order: Commission correction"); ?></b></label>
@@ -73,77 +97,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="label"><label for="order_value"><b><?php echo $_helper->__("Order: Amount"); ?></b></label>
-                        </td>
-                        <td class="value">
-                            <span id="order_value">
-                                <?php echo Mage::helper('core')->formatPrice($statement->getData('order_value')); ?>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label for="rma_commission_value">
-                                <b><?php echo $_helper->__("RMA: Commission Amount"); ?></b>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <span id="rma_commission_value">
-                                <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('rma_commission_value')); ?>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label for="rma_value">
-                                <b><?php echo $_helper->__("RMA: Amount"); ?></b>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <span id="rma_value">
-                                <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('rma_value')); ?>
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label for="refund_value">
-                                <b><?php echo $_helper->__("Refund: Amount"); ?></b>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <span id="refund_value">
-                                <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('refund_value')); ?>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label for="tracking_charge_subtotal">
-                                <b><?php echo $_helper->__("Tracking: Charge Subtotal"); ?></b>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <span id="tracking_charge_subtotal">
-                                <?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('tracking_charge_subtotal')); ?>
-                            </span>
-                        </td>
-                    </tr>
+                    <?php endif; ?>
                     <tr>
                         <td class="label">
                             <label for="tracking_charge_total">
@@ -157,7 +111,8 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
-                    <tr>
+                    <?php if ($statement->getData('delivery_correction')>0) :?>
+                    <tr>                    
                         <td class="label">
                             <label for="delivery_correction">
                                 <b><?php echo $_helper->__("Tracking: correction"); ?></b>
@@ -170,9 +125,8 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
+                    <?php endif; ?>
+                    <?php if ($statement->getData('marketing_value') > 0) : ?>
                     <tr>
                         <td class="label">
                             <label for="marketing_value">
@@ -186,6 +140,8 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
+                    <?php endif; ?>
+                    <?php if ($statement->getData('marketing_correction') > 0) : ?>
                     <tr>
                         <td class="label">
                             <label for="marketing_correction">
@@ -199,35 +155,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label for="total_commission_netto">
-                                <b><?php echo $_helper->__("Commission: netto"); ?></b>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <span id="total_commission_netto">
-                                <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('total_commission_netto')); ?>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label">
-                            <label for="total_commission">
-                                <b><?php echo $_helper->__("Commission: brutto"); ?></b>
-                            </label>
-                        </td>
-                        <td class="value">
-                            <span id="total_commission">
-                                <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('total_commission')); ?>
-                            </span>
-                        </td>
-                    </tr>
+                    <?php endif; ?>
                     <tr>
                         <td class="label">
                             <label for="to_pay">
@@ -236,13 +164,35 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                         <td class="value">
                             <span id="to_pay">
-                                <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('to_pay')); ?>
+                               <strong><?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('to_pay')); ?></strong>
                             </span>
                         </td>
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td><span>Balance:</span></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="last_statement_balance">
+                                <b><?php echo $_helper->__("Balance: Last balance"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="last_statement_balance">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('last_statement_balance')); ?>
+                            </span>
+                        </td>
                     </tr>
                     <tr>
                         <td class="label">
@@ -257,6 +207,21 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="actual_balance">
+                                <b><?php echo $_helper->__("Balance: Actual balance"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="actual_balance">
+                                <?php echo Mage::helper('core')
+                                    ->formatPrice($statement->getData('last_statement_balance') + 
+                                        $statement->getData('to_pay') -
+                                        $statement->getData('payment_value')); ?>
+                            </span>
+                        </td>
+                    </tr>                                        
                 </table>
             </div>
         </div>
