@@ -89,7 +89,12 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 		if($vendorId) {
 			$logModel->setVendorId($vendorId);
 		}
-		$logModel->setLog($log)->save();
+		/** @var Mage_Core_Model_Date $dateModel */
+		$dateModel = Mage::getModel('core/date');
+		$logModel
+			->setCreatedAt(date('Y-m-d H:i:s',$dateModel->gmtTimestamp()))
+			->setLog($log)
+			->save();
 
 		return $logModel;
 	}
