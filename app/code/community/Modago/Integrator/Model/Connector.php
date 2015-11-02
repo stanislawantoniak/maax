@@ -46,12 +46,17 @@ class Modago_Integrator_Model_Connector
 				    }
 				    break;
 			    case $helper::STATUS_ERROR:
+			        echo 'Error'.PHP_EOL;
 				    //todo: handle error
 				    break;
 			    case $helper::STATUS_FATAL_ERROR:
+			        echo 'Fatal error'.PHP_EOL;
 				    //todo: handle fatal error
 				    break;
 		    }
+	    } else {
+	        var_Dump($response);
+	        echo 'Wrong answer'.PHP_EOL;
 	    }
 
      }
