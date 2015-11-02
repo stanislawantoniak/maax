@@ -1,0 +1,29 @@
+<config>
+    <menu>
+        <vendors>
+            <children>
+                <ghintegrator_log>
+                    <title>GH Integrator Log</title>
+                    <sort_order>200</sort_order>
+                    <action>adminhtml/ghintegrator_log/index</action>
+                </ghintegrator_log>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <ghintegrator_log>
+                                <title>GH Integrator Log</title>
+                                <sort_order>200</sort_order>
+                            </ghintegrator_log>
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

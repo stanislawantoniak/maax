@@ -32,6 +32,11 @@
 			    </setup>
 		    </ghintegrator_setup>
 	    </resources>
+	    <blocks>
+		    <ghintegrator>
+			    <class>GH_Integrator_Block</class>
+		    </ghintegrator>
+	    </blocks>
     </global>
     <frontend>
         <routers>
@@ -85,5 +90,28 @@
                 </admin>
             </resources>
         </acl>
+	    <layout>
+		    <updates>
+			    <ghintegrator>
+				    <file>ghintegrator.xml</file>
+			    </ghintegrator>
+		    </updates>
+	    </layout>
     </adminhtml>
+	<admin>
+		<routers>
+			<adminhtml>
+				<ghintegrator>
+					<use>admin</use>
+					<module>GH_Integrator</module>
+					<frontname>ghintegrator</frontname>
+				</ghintegrator>
+				<args>
+					<modules>
+						<ghintegrator before="Mage_Adminhtml">GH_Integrator_Adminhtml</ghintegrator>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
 </config>
