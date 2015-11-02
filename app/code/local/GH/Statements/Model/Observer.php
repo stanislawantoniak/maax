@@ -23,13 +23,14 @@ class GH_Statements_Model_Observer
         if ($forceCustomDate) {
             $yesterday = $forceCustomDate;
         }
-        
+
         // Collection of active vendors who have statement calendar
         /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
-        $VendorsSollection = Mage::getResourceModel('udropship/vendor_collection');
-        $VendorsSollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
-        $VendorsSollection->addFieldToFilter('statements_calendar', array('neq' => null));
-        foreach($VendorsSollection as $vendor) {
+        $vendorsCollection = Mage::getResourceModel('udropship/vendor_collection');
+        $vendorsCollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+        $vendorsCollection->addFieldToFilter('statements_calendar', array('neq' => null));
+
+        foreach($vendorsCollection as $vendor) {
             /** @var Zolago_Dropship_Model_Vendor $vendor */
             $calendarId = (int)$vendor->getStatementsCalendar();
             
@@ -57,6 +58,15 @@ class GH_Statements_Model_Observer
                     $statementTotals->lastBalance = self::processStatementLastBalance($statement);
 
                     self::populateStatement($statement, $statementTotals);
+
+                    Mage::helper("ghstatements/vendor_balance")
+                        ->updateVendorBalanceData(
+                            $vendor->getId(),
+                            "balance_due",
+                            $statementTotals->lastBalance->balance,
+                            Mage::getSingleton('core/date')->gmtDate()
+                        );
+
                 } catch(Mage_Core_Exception $e) {
                     Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
                     $alreadyExists[] = $e->getMessage();
@@ -435,22 +445,23 @@ class GH_Statements_Model_Observer
                     $chargeTotal = $orderTrack->getChargeTotal() * $tax;
                     $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
-                    //prepare array to insert into gh_statements_track
-                    $trackStatements[] = array(
-                                             'statement_id'      => $statement->getId(),
-                                             'po_id'             => $shipment->getUdpoId(),
-                                             'po_increment_id'   => $shipment->getUdpoIncrementId(),
-                                             'rma_id'            => null,
-                                             'rma_increment_id'  => null,
-                                             'shipped_date'      => $orderTrack->getShippedDate(),
-                                             'track_number'      => $orderTrack->getTrackNumber(),
-                                             'charge_shipment'   => $orderTrack->getChargeShipment(),
-                                             'charge_fuel'       => $orderTrack->getChargeFuel(),
-                                             'charge_insurance'  => $orderTrack->getChargeInsurance(),
-                                             'charge_cod'        => $orderTrack->getChargeCod(),
-                                             'charge_subtotal'   => $orderTrack->getChargeTotal(),
-                                             'charge_total'      => $chargeTotal,
-                                         );
+				    //prepare array to insert into gh_statements_track
+				    $trackStatements[] = array(
+					    'statement_id'      => $statement->getId(),
+					    'po_id'             => $shipment->getUdpoId(),
+					    'po_increment_id'   => $shipment->getUdpoIncrementId(),
+					    'rma_id'            => null,
+					    'rma_increment_id'  => null,
+					    'shipped_date'      => $orderTrack->getShippedDate(),
+					    'track_number'      => $orderTrack->getTrackNumber(),
+					    'charge_shipment'   => $orderTrack->getChargeShipment(),
+					    'charge_fuel'       => $orderTrack->getChargeFuel(),
+					    'charge_insurance'  => $orderTrack->getChargeInsurance(),
+					    'charge_cod'        => $orderTrack->getChargeCod(),
+					    'charge_subtotal'   => $orderTrack->getChargeTotal(),
+					    'charge_total'      => $chargeTotal,
+					    'track_type'        => $orderTrack->getTrackType()
+				    );
 
                     $nettoTotal += $orderTrack->getChargeTotal();
                     $bruttoTotal += $chargeTotal;
@@ -498,22 +509,23 @@ class GH_Statements_Model_Observer
                         /** @var Zolago_Po_Model_Po $po */
                         $po = $rma->getPo();
 
-                        //prepare array to insert into gh_statements_track
-                        $trackStatements[] = array(
-                                                 'statement_id'      => $statement->getId(),
-                                                 'po_id'             => $po->getId(),
-                                                 'po_increment_id'   => $po->getIncrementId(),
-                                                 'rma_id'            => $rma->getId(),
-                                                 'rma_increment_id'  => $rma->getIncrementId(),
-                                                 'shipped_date'      => $rmaTrack->getShippedDate(),
-                                                 'track_number'      => $rmaTrack->getTrackNumber(),
-                                                 'charge_shipment'   => $rmaTrack->getChargeShipment(),
-                                                 'charge_fuel'       => $rmaTrack->getChargeFuel(),
-                                                 'charge_insurance'  => $rmaTrack->getChargeInsurance(),
-                                                 'charge_cod'        => $rmaTrack->getChargeCod(),
-                                                 'charge_subtotal'   => $rmaTrack->getChargeTotal(),
-                                                 'charge_total'      => $chargeTotal,
-                                             );
+						//prepare array to insert into gh_statements_track
+						$trackStatements[] = array(
+							'statement_id'      => $statement->getId(),
+							'po_id'             => $po->getId(),
+							'po_increment_id'   => $po->getIncrementId(),
+							'rma_id'            => $rma->getId(),
+							'rma_increment_id'  => $rma->getIncrementId(),
+							'shipped_date'      => $rmaTrack->getShippedDate(),
+							'track_number'      => $rmaTrack->getTrackNumber(),
+							'charge_shipment'   => $rmaTrack->getChargeShipment(),
+							'charge_fuel'       => $rmaTrack->getChargeFuel(),
+							'charge_insurance'  => $rmaTrack->getChargeInsurance(),
+							'charge_cod'        => $rmaTrack->getChargeCod(),
+							'charge_subtotal'   => $rmaTrack->getChargeTotal(),
+							'charge_total'      => $chargeTotal,
+							'track_type'        => $rmaTrack->getTrackType()
+						);
 
                         $nettoTotal += $rmaTrack->getChargeTotal();
                         $bruttoTotal += $chargeTotal;
@@ -541,26 +553,26 @@ class GH_Statements_Model_Observer
             }
 
 
-            //set tracking statement_id
-            if ($ordersTracksCollection->getSize()) {
-                unset($orderTrack);
-                foreach ($ordersTracksCollection as $orderTrack) {
-                    /** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
-                    $orderTrack->setStatementId($statement->getId());
-                    $orderTrack->setWebApi(true);
-                    $orderTrack->save();
-                }
-            }
-            if($rmasTracksCollection->getSize()) {
-                unset($rmaTrack);
-                foreach($rmasTracksCollection as $rmaTrack) {
-                    /** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
-                    $rmaTrack->setStatementId($statement->getId());
-                    $orderTrack->setWebApi(true);
-                    $rmaTrack->save();
-                }
-            }
-            //--set tracking statement_id
+			//set tracking statement_id
+			if ($ordersTracksCollection->getSize()) {
+				unset($orderTrack);
+				foreach ($ordersTracksCollection as $orderTrack) {
+					/** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
+					$orderTrack->setStatementId($statement->getId());
+					$orderTrack->setWebApi(true);
+					$orderTrack->save();
+				}
+			}
+			if($rmasTracksCollection->getSize()) {
+				unset($rmaTrack);
+				foreach($rmasTracksCollection as $rmaTrack) {
+					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
+					$rmaTrack->setStatementId($statement->getId());
+					$rmaTrack->setWebApi(true);
+					$rmaTrack->save();
+				}
+			}
+			//--set tracking statement_id
 
             $trackStatementTotals->netto = $nettoTotal;
             $trackStatementTotals->brutto = $bruttoTotal;
@@ -886,4 +898,38 @@ class GH_Statements_Model_Observer
     public static function getTax() {
         return Mage::helper('ghstatements')->getTax();
     }
+
+
+	/**
+	 * Status change
+	 * @param Mage_Core_Model_Observer $observer
+	 */
+	public function adjustVendorBalance($observer)
+	{
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		if ($po instanceof Zolago_Po_Model_Po && $po->getId()) {
+			$oldStatus = $observer->getEvent()->getOldStatus();
+			$newStatus = $observer->getEvent()->getNewStatus();
+
+			// Status changed to delivered or shipped
+			if ($oldStatus != $newStatus
+				&&
+				in_array($newStatus, array(
+					Zolago_Po_Model_Po_Status::STATUS_DELIVERED,
+					Zolago_Po_Model_Po_Status::STATUS_SHIPPED
+				))
+			) {
+
+				Mage::helper("ghstatements/vendor_balance")
+					->updateVendorBalanceData(
+						$po->getVendorId(),
+						"payment_from_client_completed",
+						$po->getData("grand_total_incl_tax"),
+						Mage::getSingleton('core/date')->gmtDate()
+					);
+
+			}
+		}
+	}
 }
