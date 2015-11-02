@@ -5,6 +5,9 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 	const STATUS_ERROR = 'ERROR'; //GH_Integrator_Exception error - error that we've been expecting
 	const STATUS_FATAL_ERROR = 'FATAL'; //internal magento error due to not expected event
 	const STATUS_OK = 'OK';
+	const FILE_DESCRIPTIONS = 'DESCRIPTIONS';
+	const FILE_PRICES = 'PRICES';
+	const FILE_STOCKS = 'STOCKS';
 
 	/**
 	 * returns array of timestamps based on description hours set in GH Integrator Settings
@@ -41,7 +44,7 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 			$return = array();
 			foreach($values as $time) {
 				if($currentTime = $this->getTime($time)) {
-					$return[] = $time;
+					$return[] = $currentTime;
 				}
 			}
 			if(count($return)) {
@@ -67,7 +70,7 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 				$timeArr[0] = "0".$timeArr[0];
 				$time = implode(":",$timeArr);
 			}
-			return Mage::getModel('core/date')->timestamp(strtotime($time));
+			return strtotime($time);
 		}
 		return false;
 	}
@@ -79,10 +82,10 @@ class GH_Integrator_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @returns GH_Integrator_Model_Log
 	 */
 	public function log($log,$vendorId=null) {
-		Mage::log("Vendor ID: ".(print_r($vendorId))."\n".$log,null,self::LOG_NAME);
+		Mage::log("Vendor ID: $vendorId | ".$log,null,self::LOG_NAME);
 
 		/** @var GH_Integrator_Model_Log $logModel */
-		$logModel = Mage::getModel('ghintegration/log');
+		$logModel = Mage::getModel('ghintegrator/log');
 		if($vendorId) {
 			$logModel->setVendorId($vendorId);
 		}
