@@ -26,9 +26,10 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $vendorInvoiceCost = $object->getData("vendor_invoice_cost");
 
         $balancePerMonth = $paymentFromClient - $paymentReturnToClient - $vendorPaymentCost - $vendorInvoiceCost;
+        $balanceDue = $this->_getBalanceDuePerMonth($object->getVendorId(), $object->getDate());
 
         $object->setData("balance_per_month", $balancePerMonth);
-        $object->setData("balance_due", 0);
+        $object->setData("balance_due", $balanceDue);
 
         return parent::_beforeSave($object);
     }
@@ -39,7 +40,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
      */
     public function _afterSave(Mage_Core_Model_Abstract $object)
     {
-        $this->recalculateBalanceCumulative();
+        $this->_recalculateBalanceCumulative();
         return parent::_afterSave($object);
     }
 
@@ -47,7 +48,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
     /**
      * balance_cumulative
      */
-    public function recalculateBalanceCumulative()
+    protected function _recalculateBalanceCumulative()
     {
         $balances = Mage::getModel("ghstatements/vendor_balance")->getCollection();
 
@@ -88,5 +89,27 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
             }
         }
 
+    }
+
+    /**
+     * @param $vendorId
+     * @param $month
+     * @return float
+     */
+    protected function _getBalanceDuePerMonth($vendorId, $month)
+    {
+        $dateFormatted = date("Y-m", strtotime($month));
+        $vendorPayments = Mage::getModel("ghstatements/statement")
+            ->getCollection()
+            ->addFieldToFilter("vendor_id", $vendorId);
+
+
+        $vendorPayments->getSelect()->reset(Zend_Db_Select::COLUMNS)
+            ->columns("DATE_FORMAT(event_date,'%Y-%m') statement_month, (last_statement_balance+to_pay-payment_value) AS current_balance_of_the_settlement ")
+            ->having("statement_month=?", $dateFormatted)
+            ->order("event_date DESC");
+
+        $currentBalanceOfTheSettlement = $vendorPayments->getFirstItem()->getCurrentBalanceOfTheSettlement();
+        return (float)$currentBalanceOfTheSettlement;
     }
 }
