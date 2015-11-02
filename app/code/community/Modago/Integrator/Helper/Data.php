@@ -12,8 +12,10 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 	const FILE_PRICES = 'PRICES';
 	const FILE_STOCKS = 'STOCKS';
 
-	private $_file;
-	private $_path;
+	protected $_conf = array();
+
+	protected $_file;
+	protected $_path;
 
 	public function getFileTypes() {
 		return array(self::FILE_DESCRIPTIONS,self::FILE_PRICES,self::FILE_STOCKS);
@@ -52,5 +54,27 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function throwException($msg,$code=0) {
 		throw Mage::exception("Modago_Integrator",$msg,$code);
+	}
+
+	/**
+	 * @return array (
+	 *    'secret'        => 'string',
+	 *    'external_id'    => 'string'
+	 * )
+	 */
+	public function getConfig($field = null)
+	{
+		if (!$this->_conf) {
+			$this->_conf = Mage::getStoreConfig("modagointegrator/authentication");
+		}
+		return $field ? trim($this->_conf[$field]) : $this->_conf;
+	}
+
+	public function getSecret() {
+		return $this->getConfig('secret');
+	}
+
+	public function getExternalId() {
+		return $this->getConfig('external_id');
 	}
 }

@@ -5,6 +5,9 @@
 abstract class Modago_Integrator_Model_Generator
     extends Varien_Object {
 
+	protected $_helper;
+	protected $_externalId;
+
     /**
      * returns local path to generated file
      */
@@ -64,5 +67,22 @@ abstract class Modago_Integrator_Model_Generator
      */
      public function uploadFile() {
      }
+
+	/**
+	 * @return Modago_Integrator_Helper_Data
+	 */
+     public function getHelper() {
+	     if(!$this->_helper) {
+		     $this->_helper = Mage::helper("modagointegrator");
+	     }
+	     return $this->_helper;
+     }
+
+	public function getExternalId() {
+		if(!$this->_externalId) {
+			$this->_externalId = $this->getHelper()->getExternalId();
+		}
+		return $this->_externalId;
+	}
 
 }
