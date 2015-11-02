@@ -4,22 +4,6 @@ class Modago_Integrator_Model_Client
 {
     const MODAGO_INTEGRATOR_URL = "https://modago.pl/ghintegrator/communication";
 
-    protected $_conf = array();
-
-    /**
-     * @return array (
-     *    'secret'        => 'string',
-     *    'external_id'    => 'string'
-     * )
-     */
-    public function getConfig($field = null)
-    {
-        if (!$this->_conf) {
-            $this->_conf = Mage::getStoreConfig("modagointegrator/authentication");
-        }
-        return $field ? trim($this->_conf[$field]) : $this->_conf;
-    }
-
     public function getResponse()
     {
         return $this->_makeConnection();
@@ -32,10 +16,12 @@ class Modago_Integrator_Model_Client
     protected function _makeConnection()
     {
         $return = null;
+	    /** @var Modago_Integrator_Helper_Data $helper */
+	    $helper = Mage::helper('modagointegrator');
         try {
             $process = curl_init(self::MODAGO_INTEGRATOR_URL);
             curl_setopt($process, CURLOPT_POST, true);
-            $data = array("secret" => $this->getConfig('secret'), "external_id" => $this->getConfig('external_id'));
+            $data = array("secret" => $helper->getSecret(), "external_id" => $helper->getExternalId());
             curl_setopt($process, CURLOPT_POSTFIELDS, $data);
 	        curl_setopt($process, CURLOPT_RETURNTRANSFER, 1 );
             $return = curl_exec($process);

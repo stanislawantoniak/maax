@@ -1,11 +1,11 @@
 <?php
 /**
- * Modago_Integrator_Shell
+ * GH_Integrator_Shell
  */
 
 require_once 'abstract.php';
 
-class Modago_Integrator_Shell extends Mage_Shell_Abstract
+class GH_Integrator_Shell extends Mage_Shell_Abstract
 {
     public function run()
     {
