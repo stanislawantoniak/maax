@@ -2,6 +2,10 @@
 
 class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_Action
 {
+    const FTP_LOGIN  = 'upload';
+    const FTP_PASSWD = 'vAb4Pn9JHNmgdwVznGfH';
+    const FTP_HOST   = '85.194.243.53';
+
     public function indexAction()
     {
         $data = $this->getRequest()->getParams();
@@ -83,7 +87,7 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
                 ->setLastIntegration($dateModel->timestamp())
                 ->save();
 
-            echo $this->returnResponse($helper::STATUS_OK, $filesToUpdate);
+            echo $this->returnResponse($helper::STATUS_OK, $vendor, $filesToUpdate);
         } catch (GH_Integrator_Exception $exception) {
             $helper->log($exception->getMessage(), $vendorId);
             echo $this->returnResponse($helper::STATUS_ERROR);
@@ -97,17 +101,71 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
 
 
     /**
+     * Prepare response for vendor
+     * Response contains:
+     * 'status' @see GH_Integrator_Helper_Data
+     * if there is aby file to generate
+     * 'files' and 'ftp_url'
+     *
      * @param string $status
+     * @param Zolago_Dropship_Model_Vendor $vendor
      * @param array $files
      * @return string
      */
-    protected function returnResponse($status, $files = null)
+    protected function returnResponse($status, $vendor = null, $files = null)
     {
         $response = array('status' => $status);
         if (is_array($files) && count($files)) {
             $response['files'] = $files;
+            $response['ftp_url'] = $this->getFtpUrl($vendor);
         }
         return json_encode($response);
     }
 
+    /**
+     * Prepare url for upload file to Modago FTP
+     *
+     * @param $vendor
+     * @return string
+     */
+    protected function getFtpUrl($vendor)
+    {
+        $login = $this->getFtpLogin($vendor);
+        $passwd = $this->getFtpPasswd($vendor);
+        $host = $this->getFtpHost($vendor);
+        return "ftp://{$login}:{$passwd}@{$host}/";
+    }
+
+    /**
+     * Get FTP login
+     *
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @return string
+     */
+    protected function getFtpLogin($vendor)
+    {
+        return self::FTP_LOGIN;
+    }
+
+    /**
+     * Get FTP password
+     *
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @return string
+     */
+    protected function getFtpPasswd($vendor)
+    {
+        return self::FTP_PASSWD;
+    }
+
+    /**
+     * Get FTP host
+     *
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @return string
+     */
+    protected function getFtpHost($vendor)
+    {
+        return self::FTP_HOST;
+    }
 }

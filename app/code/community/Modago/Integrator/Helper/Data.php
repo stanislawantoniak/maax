@@ -87,4 +87,32 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getExternalId() {
 		return $this->getConfig('external_id');
 	}
+
+    /**
+     * Send one file to Modago ftp server
+     * Data need to contain:
+     * 'file'      -> path to file
+     * 'file_name' -> new/old file name with extension
+     * 'ftp_url'   -> url like: ftp://{$login}:{$passwd}@{$host}/{$filename}
+     * @param $data
+     */
+    public function sendToFtp($data) {
+
+        $file     = $data['file'];
+        $fileName = $data['file_name'];
+
+        $ch = curl_init();
+        $fp = fopen($file, 'r');
+        curl_setopt($ch, CURLOPT_URL, $data['ftp_url'] . $fileName);
+        curl_setopt($ch, CURLOPT_UPLOAD, 1);
+        curl_setopt($ch, CURLOPT_INFILE, $fp);
+        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));
+        curl_exec($ch);
+        $error_no = curl_errno($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
+        if ($error_no != 0) {
+            Mage::logException(Mage::exception('Modago_Integrator', "Error occur while sending file ({$error})"));
+        }
+    }
 }

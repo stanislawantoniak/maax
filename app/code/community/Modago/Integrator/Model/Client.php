@@ -10,7 +10,6 @@ class Modago_Integrator_Model_Client
     }
 
     /**
-     * @param $action
      * @return mixed|null
      */
     protected function _makeConnection()

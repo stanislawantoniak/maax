@@ -17,6 +17,7 @@ class Modago_Integrator_Shell extends Mage_Shell_Abstract
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
         set_time_limit(36000);
+        /** @var Modago_Integrator_Model_Connector $connector */
         $connector = Mage::getModel('modagointegrator/connector');
         $connector->run();
     }
