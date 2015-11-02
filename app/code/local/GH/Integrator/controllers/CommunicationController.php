@@ -9,9 +9,6 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
         $vendorId = isset($data['external_id']) ? $data['external_id'] : null;
         $secret = isset($data['secret']) ? $data['secret'] : null;
 
-        $generateType = isset($data['type']) ? $data['type'] : null; // all OR description OR stock OR price
-
-
         /** @var GH_Integrator_Helper_Data $helper */
         $helper = Mage::helper('ghintegrator');
 

@@ -2,7 +2,7 @@
 
 class Modago_Integrator_Model_Client
 {
-    const MODAGO_INTEGRATOR_URL = "https://modago.pl/ghintegrator/communication";
+    const MODAGO_INTEGRATOR_URL = "http://127.0.0.1/ghintegrator/communication";
 
     protected $_conf = array();
 
@@ -20,22 +20,22 @@ class Modago_Integrator_Model_Client
         return $field ? trim($this->_conf[$field]) : $this->_conf;
     }
 
-    public function generate($action)
+    public function getResponse()
     {
-        $this->_makeConnection($action);
+        return $this->_makeConnection();
     }
 
     /**
      * @param $action
      * @return mixed|null
      */
-    protected function _makeConnection($action)
+    protected function _makeConnection()
     {
         $return = null;
         try {
             $process = curl_init(self::MODAGO_INTEGRATOR_URL);
             curl_setopt($process, CURLOPT_POST, true);
-            $data = array("secret" => $this->getConfig('secret'), "external_id" => $this->getConfig('external_id'), 'type' => $action);
+            $data = array("secret" => $this->getConfig('secret'), "external_id" => $this->getConfig('external_id'));
             curl_setopt($process, CURLOPT_POSTFIELDS, $data);
             $return = curl_exec($process);
 
@@ -44,7 +44,7 @@ class Modago_Integrator_Model_Client
             Mage::logException($e);
         }
 
-        return $return;
+        return json_decode($return,1);
     }
 
 }
