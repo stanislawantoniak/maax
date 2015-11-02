@@ -228,7 +228,7 @@ class GH_Regulation_Helper_Data extends Mage_Core_Helper_Abstract
                 $nextDate = isset($typeset[$typeKey+1])? $typeset[$typeKey+1]['date']: '9999-31-12';
                 while (isset($docTmp[$key]) && ($docTmp[$key]['date']<$nextDate)) {
                     $tmp = $docTmp[$key++];
-                    $final[$type['kindname']][$tmp['id']] = $tmp;
+                    $final[$type['kindname']][$tmp['id'].'-'.uniqid()] = $tmp;
                 }
             }
         }
