@@ -8,6 +8,8 @@ abstract class Modago_Integrator_Model_Generator
 	protected $_helper;
 	protected $_externalId;
 
+	const DIRECTORY = 'modagointegrator';
+
     /**
      * returns local path to generated file
      */

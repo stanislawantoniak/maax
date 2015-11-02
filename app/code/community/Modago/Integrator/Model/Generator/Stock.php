@@ -15,7 +15,7 @@ class Modago_Integrator_Model_Generator_Stock
      * @return string
      */
      protected function _getPath() {
-	     //todo:
+	     return Mage::getBaseDir('var'). DS . parent::DIRECTORY . DS . $this->getExternalId()."_STOCK_".Mage::getModel('core/date')->getDate('Y-m-d_H:i:s').".xml";
      }
 
 	public function _getHeader() {
