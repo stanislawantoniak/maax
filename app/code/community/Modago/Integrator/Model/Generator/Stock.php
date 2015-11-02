@@ -18,14 +18,14 @@ class Modago_Integrator_Model_Generator_Stock
 	     //todo:
      }
 
-	public function getHeader() {
+	public function _getHeader() {
 		if(!$this->_header) {
 			$this->_header = "<mall><merchant>".$this->getExternalId()."</merchant><stocksPerPOS><pos id=\"MAGAZYN\">";
 		}
 		return $this->_header;
 	}
 
-	public function getFooter() {
+	public function _getFooter() {
 		if(!$this->_footer) {
 			$this->_footer = "</pos></stocksPerPOS></mall>";
 		}
