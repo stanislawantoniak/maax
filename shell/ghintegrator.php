@@ -21,25 +21,13 @@ class GH_Integrator_Shell extends Mage_Shell_Abstract
         if ($this->getArg('generate')) {
             $secret = $this->getArg('secret');
             $externalId = $this->getArg('external_id');
-//var_dump($secret);
-//            var_dump($externalId);
+
             Mage::getModel("ghintegrator/communication")->connect($secret, $externalId);
-        } elseif ($this->getArg('test')) {
-            $this->_test();
         } else {
             echo $this->usageHelp();
         }
     }
 
-    protected function _test()
-    {
-
-    }
-
-    public function _validate()
-    {
-
-    }
 
     /**
      * Retrieve Usage Help Message
