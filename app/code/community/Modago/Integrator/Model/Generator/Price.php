@@ -32,6 +32,22 @@ class Modago_Integrator_Model_Generator_Price
      protected function _prepareXmlBlock($item) {
          
      }
+     
+    /**
+     * prepare header
+     *
+     * @return string
+     */
+     protected function _getHeader() {
+     }
+     
+    /**
+     * prepare footer
+     *
+     * @return string
+     */
+     protected function _getFooter() {
+     }
 
     
 }

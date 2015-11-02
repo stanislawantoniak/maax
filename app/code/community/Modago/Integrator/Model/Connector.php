@@ -55,7 +55,6 @@ class Modago_Integrator_Model_Connector
 				    break;
 		    }
 	    } else {
-	        var_Dump($response);
 	        echo 'Wrong answer'.PHP_EOL;
 	    }
 
