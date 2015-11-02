@@ -37,6 +37,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      */
     public function calculateMonthLine($vendorId, $fieldToUpdate, $value, $date)
     {
+
         $dateFormatted = date("Y-m", strtotime($date));
 
         $valueToUpdate = $value;
