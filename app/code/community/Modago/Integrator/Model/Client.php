@@ -37,6 +37,7 @@ class Modago_Integrator_Model_Client
             curl_setopt($process, CURLOPT_POST, true);
             $data = array("secret" => $this->getConfig('secret'), "external_id" => $this->getConfig('external_id'));
             curl_setopt($process, CURLOPT_POSTFIELDS, $data);
+	        curl_setopt($process, CURLOPT_RETURNTRANSFER, 1 );
             $return = curl_exec($process);
 
             curl_close($process);
