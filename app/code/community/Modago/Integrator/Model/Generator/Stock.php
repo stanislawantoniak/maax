@@ -57,7 +57,7 @@ class Modago_Integrator_Model_Generator_Stock
      
     /**
      *	prepare xml block 
-     *
+     * @var array $item
      * @return string
      */
      protected function _prepareXmlBlock($item) {
