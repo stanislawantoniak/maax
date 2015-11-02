@@ -8,7 +8,7 @@ abstract class Modago_Integrator_Model_Generator
     /**
      * returns local path to generated file
      */
-    abstrach protected function _getPath();
+    abstract protected function _getPath();
     
     /**
      * returns content 

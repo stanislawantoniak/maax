@@ -17,7 +17,7 @@ class Modago_Integrator_Shell extends Mage_Shell_Abstract
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
         set_time_limit(36000);
-        $connector = Mage::getModel('ghintegrator/connector');
+        $connector = Mage::getModel('modagointegrator/connector');
         $connector->run();
     }
 
@@ -29,7 +29,7 @@ class Modago_Integrator_Shell extends Mage_Shell_Abstract
     public function usageHelp()
     {
         return <<<USAGE
-    Usage:  php -f ghintegrator.php -- [options]
+    Usage:  php -f modagointegrator.php -- [options]
 
         --generate all             Generate all
         --generate stock           Generate stock

@@ -3,7 +3,7 @@
 if [ ! "$1" = "" ] ; then
     CRONSCRIPT=$1
 else
-    CRONSCRIPT=ghintegrator.php
+    CRONSCRIPT=modagointegrator.php
 fi
 
 MODE=""
@@ -14,7 +14,7 @@ fi
 PHP_BIN=`which php`
 
 # absolute path to magento installation
-INSTALLDIR=`echo $0 | sed 's/ghintegrator\.sh//g'`
+INSTALLDIR=`echo $0 | sed 's/modagointegrator\.sh//g'`
 
 #	prepend the intallation path if not given an absolute path
 if [ "$INSTALLDIR" != "" -a "`expr index $CRONSCRIPT /`" != "1" ];then
@@ -22,7 +22,7 @@ if [ "$INSTALLDIR" != "" -a "`expr index $CRONSCRIPT /`" != "1" ];then
     	$PHP_BIN $INSTALLDIR$CRONSCRIPT$MODE &
     fi
 else
-    if  ! ps auxwww | grep "$CRONSCRIPT$MODE" | grep -v grep | grep -v ghintegrator.sh 1>/dev/null 2>/dev/null ; then
+    if  ! ps auxwww | grep "$CRONSCRIPT$MODE" | grep -v grep | grep -v modagointegrator.sh 1>/dev/null 2>/dev/null ; then
         $PHP_BIN $CRONSCRIPT$MODE &
     fi
 fi
