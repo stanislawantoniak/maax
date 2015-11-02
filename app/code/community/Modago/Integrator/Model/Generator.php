@@ -8,6 +8,8 @@ abstract class Modago_Integrator_Model_Generator
 	protected $_helper;
 	protected $_externalId;
 
+	const DIRECTORY = 'modagointegrator';
+
     /**
      * returns local path to generated file
      */
@@ -40,7 +42,7 @@ abstract class Modago_Integrator_Model_Generator
      */
     public function generate() {
         $status = false;
-        $helper = Mage::helper('modagointegrator');
+        $helper = $this->getHelper();
         try {
             $helper->createFile($this->_getPath());
             $helper->addToFile($this->_getHeader());
@@ -53,10 +55,9 @@ abstract class Modago_Integrator_Model_Generator
             $helper->addToFile($this->_getFooter());
             $helper->closeFile();
             $status = true;
-        } catch (Mage_Core_Exception $ex) {
+        } catch (Modago_Integrator_Exception $ex) {
             Mage::logException($ex);
             $helper->closeFile();
-            return false;
         }
         return $status;
     }

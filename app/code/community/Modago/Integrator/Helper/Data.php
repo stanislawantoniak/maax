@@ -23,6 +23,16 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 
 
 	public function createFile($path) {
+		$folder = dirname($path);
+		if(!is_dir($folder)) {
+			try {
+				mkdir($folder,0600,true);
+			} catch(Exception $e) {
+				Mage::logException($e);
+				$this->throwException('Could not create a folder '.$folder);
+			}
+		}
+
 		$this->_file = fopen($path,'w');
 		if($this->_file === false) {
 			$this->throwException('Cannot create file '.$path);
