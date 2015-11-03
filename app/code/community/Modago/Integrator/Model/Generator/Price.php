@@ -6,9 +6,6 @@
 class Modago_Integrator_Model_Generator_Price
     extends Modago_Integrator_Model_Generator
 {
-    const MODAGO_INTEGRATOR_ORIGINAL_PRICE = "A";
-    const MODAGO_INTEGRATOR_SPECIAL_PRICE = "B";
-
     protected $_getList;
     protected $_header;
     protected $_footer;
@@ -31,13 +28,11 @@ class Modago_Integrator_Model_Generator_Price
 
         $res = array();
 
-        $originalPrices = Mage::getModel("modagointegrator/generator_price_product")
-            ->appendOriginalPricesList($res, self::MODAGO_INTEGRATOR_ORIGINAL_PRICE);
-        $res = array_merge($res, $originalPrices);
+        $res = Mage::getModel("modagointegrator/product_price")
+            ->appendOriginalPricesList($res);
 
-        $specialPrices = Mage::getModel("modagointegrator/generator_price_product")
-            ->appendSpecialPricesList($res, self::MODAGO_INTEGRATOR_SPECIAL_PRICE);
-        $res = array_merge($res, $specialPrices);
+        $res = Mage::getModel("modagointegrator/product_price")
+            ->appendSpecialPricesList($res);
 
         $this->_getList = true;
         return $res;
@@ -116,7 +111,7 @@ class Modago_Integrator_Model_Generator_Price
             $helper->createFile($this->_getPath());
             $helper->addToFile($this->_getHeader());
             $list = $this->_prepareList();
-
+            Mage::log($list);
             foreach ($list as $type => $items) {
                 $helper->addToFile($this->_getSectionHeader($type));
                 foreach ($items as $item) {
