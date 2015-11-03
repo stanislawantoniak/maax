@@ -30,7 +30,7 @@ abstract class Modago_Integrator_Model_Generator
      */
     protected function _getFileName() {
         if (!$this->_fileName) {
-            $this->_fileName = $this->getFileNamePrefix().'_'.$this->getExternalId().'_'.Mage::getModel('core/date')->date('Y-m-d_H_i_s').".xml";
+            $this->_fileName = $this->getFileNamePrefix().'_'.$this->getExternalId().".xml";
         }
         return $this->_fileName;
     }
