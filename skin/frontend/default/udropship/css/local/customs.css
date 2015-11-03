@@ -527,3 +527,14 @@ table.foot-empty-cells tfoot td:empty {
 .no-padding-left {
     padding-left: 0;
 }
+
+.udropship-statements-periodic .event-date-big {
+    font-size: 18px;
+    font-weight: bold;
+}
+.udropship-statements-periodic .wrapper-date-from-to-statement_period,
+.udropship-statements-periodic .important-cell
+{
+    font-size: 15px;
+    font-weight: bold;
+}
