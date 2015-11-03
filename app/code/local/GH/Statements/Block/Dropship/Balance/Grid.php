@@ -30,21 +30,21 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
 
         // Status miesiąca
         $this->addColumn('status', array(
-            'header'    => $helper->__('Status of monthly balance'),
+            'header'    => $helper->__("Status"),
             'index'     => 'status',
             'type'      => 'options',
-            'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_balanceStatusIcon"),
+            'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_balance_grid_column_renderer_balanceStatusIcon"),
             "width"	    => "11%",
         ));
-        // Statement month (Miesiąc rozliczeniowy)
+        // Miesiąc rozliczeniowy
         $this->addColumn('date', array(
-            'header'    => $helper->__("Statement month"),
+            'header'    => $helper->__("Month"),
             'index'     => 'date',
             "width"	    => "11%",
         ));
         // Płatności od klientów
         $this->addColumn('payment_from_client', array(
-            'header'        => $helper->__('Payment from client'),
+            'header'        => $helper->__('Customer payments'),
             'index'         => 'payment_from_client',
             'type'          => 'currency',
             'currency_code' => $currency,
@@ -52,7 +52,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Zwroty płatności do klientów
         $this->addColumn('payment_return_to_client', array(
-            'header'        => $helper->__('Payment return to client'),
+            'header'        => $helper->__('Customer refunds'),
             'index'         => 'payment_return_to_client',
             'type'          => 'currency',
             'currency_code' => $currency,
@@ -60,7 +60,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Wypłaty
         $this->addColumn('vendor_payment_cost', array(
-            'header'        => $helper->__("Vendor payment cost"),
+            'header'        => $helper->__("Payouts to vendor"),
             'index'         => 'vendor_payment_cost',
             'type'          => 'currency',
             'currency_code' => $currency,
@@ -68,7 +68,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Faktury i korekty faktur
         $this->addColumn('vendor_invoice_cost', array(
-            'header'        => $helper->__("Vendor invoice cost"),
+            'header'        => $helper->__("Invoices and credit notes"),
             'index'         => 'vendor_invoice_cost',
             'type'          => 'currency',
             'currency_code' => $currency,
@@ -76,7 +76,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Bilans miesiąca
         $this->addColumn('balance_per_month', array(
-            'header'            => $helper->__("Balance per month"),
+            'header'            => $helper->__("Monthly balance"),
             'index'             => 'balance_per_month',
             'type'              => 'currency',
             'currency_code'     => $currency,
@@ -84,7 +84,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Saldo narastająco
         $this->addColumn('balance_cumulative', array(
-            'header'            => $helper->__("Balance cumulative"),
+            'header'            => $helper->__("Cumulative balance"),
             'index'             => 'balance_cumulative',
             'type'              => 'currency',
             'currency_code'     => $currency,
@@ -93,7 +93,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Saldo wymagalne
         $this->addColumn('balance_due', array(
-            'header'            => $helper->__("Balance due"),
+            'header'            => $helper->__("Due balance"),
             'index'             => 'balance_due',
             'type'              => 'currency',
             'currency_code'     => $currency,

@@ -1,6 +1,6 @@
 <?php
 
-class GH_Statements_Block_Adminhtml_Calendar_Grid_Column_Renderer_Status
+class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid_Column_Renderer_Status
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Options
 {
 	/**
