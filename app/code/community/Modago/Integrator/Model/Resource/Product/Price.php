@@ -35,7 +35,7 @@ class Modago_Integrator_Model_Resource_Product_Price
         }
 
         // Child data
-        foreach ($this->getChilds($ids, $storeId) as $child) {
+        foreach ($this->getChildren($ids, $storeId) as $child) {
             // Group products by option
             if (!isset($out[$child['parent_id']]['children'][$child['value_id']])) {
                 $out[$child['parent_id']]['children'][$child['value_id']] = array(
@@ -61,7 +61,7 @@ class Modago_Integrator_Model_Resource_Product_Price
      * @param int $storeId
      * @return type
      */
-    public function getChilds(array $ids, $storeId)
+    public function getChildren(array $ids, $storeId)
     {
         $websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 
