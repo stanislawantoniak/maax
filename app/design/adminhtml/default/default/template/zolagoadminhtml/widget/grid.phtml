@@ -121,7 +121,7 @@ $numColumns = sizeof($this->getColumns());
 	<div class="grid">
 		<div class="hor-scroll">
 		<table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
-			<?php foreach ($this->getColumns() as $_column): ?>
+			<?php foreach ($this->getColumns() as $_column): /** @var $_column Mage_Adminhtml_Block_Widget_Grid_Column */ ?>
 			<col <?php echo $_column->getHtmlProperty() ?> />
 			<?php endforeach; ?>
 			<?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>

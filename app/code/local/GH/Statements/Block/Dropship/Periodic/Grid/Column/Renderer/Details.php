@@ -15,7 +15,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid_Column_Renderer_Details
         $text = $wrapperStart;
         foreach ($column->getRendererData() as $item) {
             $text .=
-                '<div class="' . $item['css_class'] . '">' .
+                '<div class="' . (isset($item['css_class']) ? $item['css_class'] : '') . '">' .
                     '<div class="left-detail">' . $item['text'] . '</div>' .
                     '<div class="right-detail text-right">' . $this->getFormattedValue($row->getData($item['index']), $row) . '</div>'.
                 '</div>';

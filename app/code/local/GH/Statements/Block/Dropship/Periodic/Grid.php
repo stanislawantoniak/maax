@@ -60,12 +60,13 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         }
         sort($sortedData);
 
-        $oneDay = strtotime("1 day", Mage::getModel('core/date')->timestamp(time())) - Mage::getModel('core/date')->timestamp(time());
+        $oneDay = 24 * 60 * 60;
         $from = strtotime(date("Y-m-d", strtotime($this->getVendor()->getRegulationAcceptDocumentDate()) - $oneDay));
         /** @var GH_Statements_Model_Statement $statement */
         foreach ($sortedData as $statement) {
             $to = strtotime(date("Y-m-d", strtotime($statement->getEventDate())));
-            $statement->setData('settlement_period', date("Y-m-d", $from+$oneDay ) . ' - ' . date("Y-m-d", $to-$oneDay));
+            $statement->setData('statement_period_from', date("Y-m-d", $from+$oneDay));
+            $statement->setData('statement_period_to', date("Y-m-d", $to-$oneDay));
             $from = $to-$oneDay;
         }
         return $this;
@@ -139,14 +140,25 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'     => 'event_date',
             'type'      => 'date',
             'format'    => 'Y-MM-d',
-            'headings_css_class' => '' //remove .nobr
+            'headings_css_class' => '', //remove .nobr
+            'column_css_class'   => 'event-date-big'
         ));
         // Okres rozliczenia
-        $this->addColumn('settlement_period', array(
+        $this->addColumn('statement_period', array(
             "width"	    => "5%",
             'header'    => $helper->__("Statement period"),
-            'index'              => 'settlement_period',
-            'headings_css_class' => ''
+            'index'     => 'statement_period',
+            'headings_css_class' => '',
+            'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_dateFromTo"),
+            'renderer_data' => array(
+                'from' => array(
+                    'index' => 'statement_period_from'
+                ),
+                'to' => array(
+                    'index' => 'statement_period_to'
+                )
+            ),
+            'format'    => 'Y-MM-d',
         ));
         // Rozliczenia płatnośći za zamówienia
         $this->addColumn('payment_settlement_for_orders', array(
@@ -249,7 +261,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'         => 'to_pay',
             'type'          => 'currency',
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'column_css_class' => 'important-cell'
         ));
         // [B] Saldo poprzedniego rozliczenia
         $this->addColumn('last_statement_balance', array(
@@ -258,7 +271,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'         => 'last_statement_balance',
             'type'          => 'currency',
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'column_css_class' => 'important-cell'
         ));
         // [C] Wypłaty do sprzedawcy
         $this->addColumn('payment_value', array(
@@ -267,7 +281,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'         => 'payment_value',
             'type'          => 'currency',
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'column_css_class' => 'important-cell'
         ));
         // Bieżące saldo rozliczenia [B]+[A]-[C]:
         $this->addColumn('current_balance_of_the_settlement', array(
@@ -276,7 +291,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'index'         => 'current_balance_of_the_settlement',
             'type'          => 'currency',
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'column_css_class' => 'important-cell'
         ));
 //        // Download statement
 ////        $this->addColumn("actions", array(
