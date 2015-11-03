@@ -2,9 +2,6 @@
 
 class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_Action
 {
-    const FTP_LOGIN  = 'upload';
-    const FTP_PASSWD = 'vAb4Pn9JHNmgdwVznGfH';
-    const FTP_HOST   = '85.194.243.53';
 
     public function indexAction()
     {
