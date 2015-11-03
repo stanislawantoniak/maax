@@ -21,8 +21,10 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $out = $r->getOptions(self::MODAGO_INTEGRATOR_STORE);
 
         foreach ($out as $parent) {
-            foreach ($parent["children"] as $children) {
-                $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $children["sku"], "price" => $children["price"]);
+            if(isset($parent["children"])){
+                foreach ($parent["children"] as $children) {
+                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $children["sku"], "price" => $children["price"]);
+                }
             }
         }
 
