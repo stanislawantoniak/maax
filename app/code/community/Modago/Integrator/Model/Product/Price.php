@@ -17,7 +17,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
     public function appendOriginalPricesList($res)
     {
         /* @var $r Modago_Integrator_Model_Resource_Product_Price */
-        $r = new Modago_Integrator_Model_Resource_Product_Price();
+        $r = Mage::getModel("modagointegrator/resource_product_price");
         $out = $r->getOptions(self::MODAGO_INTEGRATOR_STORE);
 
         foreach ($out as $parent) {
