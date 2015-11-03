@@ -139,7 +139,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'header'    => $helper->__('Statement date'),
             'index'     => 'event_date',
             'type'      => 'date',
-            'format'    => 'Y-MM-d',
+            'format'    => 'Y-MM-dd',
             'headings_css_class' => '', //remove .nobr
             'column_css_class'   => 'event-date-big'
         ));
@@ -158,7 +158,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                     'index' => 'statement_period_to'
                 )
             ),
-            'format'    => 'Y-MM-d',
+            'format'    => 'Y-MM-dd',
         ));
         // Rozliczenia płatnośći za zamówienia
         $this->addColumn('payment_settlement_for_orders', array(
