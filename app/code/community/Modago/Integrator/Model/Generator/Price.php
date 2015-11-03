@@ -111,7 +111,7 @@ class Modago_Integrator_Model_Generator_Price
             $helper->createFile($this->_getPath());
             $helper->addToFile($this->_getHeader());
             $list = $this->_prepareList();
-            Mage::log($list);
+
             foreach ($list as $type => $items) {
                 $helper->addToFile($this->_getSectionHeader($type));
                 foreach ($items as $item) {
