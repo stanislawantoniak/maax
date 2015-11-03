@@ -33,7 +33,7 @@ class GH_Statements_Block_Dropship_Balance_Grid extends Mage_Adminhtml_Block_Wid
             'header'    => $helper->__('Status of monthly balance'),
             'index'     => 'status',
             'type'      => 'options',
-            'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_balanceStatusIcon"),
+            'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_balance_grid_column_renderer_balanceStatusIcon"),
             "width"	    => "11%",
         ));
         // Statement month (Miesiąc rozliczeniowy)
