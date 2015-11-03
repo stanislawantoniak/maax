@@ -218,28 +218,30 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'currency_code' => $currency,
             'headings_css_class' => ''
         ));
-        // Koszty działań marketingowych
-        $this->addColumn('marketing-costs', array(
-            "width"	    => "11%",
-            'header'    => $helper->__('Marketing costs'),
-            'renderer'	=> Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
-            'renderer_data' => array(
-                // Koszty działań marketingowych
-                array(
-                    'text' => $helper->__('Marketing costs'),
-                    'index' => 'marketing_value',
-                    'css_class' => 'row-1'
+        if ($this->getVendor()->getData('marketing_charges_enabled')) {
+            // Koszty działań marketingowych
+            $this->addColumn('marketing-costs', array(
+                "width" => "11%",
+                'header' => $helper->__('Marketing costs'),
+                'renderer' => Mage::getConfig()->getBlockClassName("ghstatements/dropship_periodic_grid_column_renderer_details"),
+                'renderer_data' => array(
+                    // Koszty działań marketingowych
+                    array(
+                        'text' => $helper->__('Marketing costs'),
+                        'index' => 'marketing_value',
+                        'css_class' => 'row-1'
+                    ),
+                    // Korekty kosztów marketingowych
+                    array(
+                        'text' => $helper->__("Marketing correction costs"),
+                        'index' => 'marketing_correction',
+                        'css_class' => 'row-2'
+                    ),
                 ),
-                // Korekty kosztów marketingowych
-                array(
-                    'text' => $helper->__("Marketing correction costs"),
-                    'index' => 'marketing_correction',
-                    'css_class' => 'row-2'
-                ),
-            ),
-            'currency_code' => $currency,
-            'headings_css_class' => ''
-        ));
+                'currency_code' => $currency,
+                'headings_css_class' => ''
+            ));
+        }
         // [A] Do wypłaty
         $this->addColumn('to-payout', array(
             "width"		    => "5%",
