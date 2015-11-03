@@ -27,9 +27,9 @@ $helper = Mage::helper('ghstatements');
         new Zolago.gridIntegrator(gridObj);
     })();
     // Custom hints
-    jQuery('a[name=balance_per_month]').attr('title', '<?php echo $helper->__("Payments - returned payments - payouts - invoices"); ?>');
-    jQuery('a[name=balance_cumulative]').attr('title', '<?php echo $helper->__("Previously balance plus current month balance"); ?>');
-    jQuery('a[name=balance_due]').attr('title', '<?php echo $helper->__("From last statements in month"); ?>');
+    jQuery('a[name=balance_per_month]').attr('title', '<?php echo $helper->__("[customer payments] - [refunds] - [payouts] - [invoices]"); ?>');
+    jQuery('a[name=balance_cumulative]').attr('title', '<?php echo $helper->__("[Previous monthly balance] + [Monthly balance]"); ?>');
+    jQuery('a[name=balance_due]').attr('title', '<?php echo $helper->__("Due balance of the last statement in month"); ?>');
     jQuery(".use-hint a").tooltip({
         container: "body",
         animation: false,
