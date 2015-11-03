@@ -144,7 +144,7 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
      */
     protected function getFtpLogin($vendor)
     {
-        return self::FTP_LOGIN;
+        return Mage::getStoreConfig("ghintegrator/ftp/login");
     }
 
     /**
@@ -155,7 +155,7 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
      */
     protected function getFtpPasswd($vendor)
     {
-        return self::FTP_PASSWD;
+        return Mage::getStoreConfig("ghintegrator/ftp/password");
     }
 
     /**
@@ -166,6 +166,6 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
      */
     protected function getFtpHost($vendor)
     {
-        return self::FTP_HOST;
+        return Mage::getStoreConfig("ghintegrator/ftp/host");
     }
 }
