@@ -1,3 +1,7 @@
+"Integration FTP server","Integracyjny server FTP"
+"Login","Login"
+"Password","Hasło"
+"Host","Host"
 "GH Integrator Options","Ustawienia"
 "Integration Hours","Godziny integracji"
 "Insert hours separated by commas<br />e.g. 10:00,12:00,13:00","Wstaw godziny rozdzielone przecinkami<br />np. 10:00,12:00,13:00"
