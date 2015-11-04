@@ -29,10 +29,13 @@ class Modago_Integrator_Model_Generator_Price
         $res = array();
 
         $res = Mage::getModel("modagointegrator/product_price")
-            ->appendOriginalPricesList($res);
+            ->appendOriginalPricesConfigurableList($res);
 
         $res = Mage::getModel("modagointegrator/product_price")
-            ->appendSpecialPricesList($res);
+            ->appendSpecialPricesConfigurableList($res);
+
+        $res = Mage::getModel("modagointegrator/product_price")
+            ->appendPricesSimpleList($res);
 
         $this->_getList = true;
         return $res;
