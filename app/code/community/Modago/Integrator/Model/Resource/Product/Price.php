@@ -1,12 +1,37 @@
 <?php
 
 class Modago_Integrator_Model_Resource_Product_Price
-    extends Mage_Core_Model_Resource_Db_Abstract
+    extends Mage_Core_Model_Resource_Abstract
 {
 
     protected function _construct()
     {
-        $this->_init("catalog/product", null);
+    }
+
+    protected function _getResource()
+    {
+        return Mage::getSingleton('core/resource');
+    }
+
+    /**
+     * Retrieve connection for read data
+     *
+     * @return Varien_Db_Adapter_Interface
+     */
+    protected function _getReadAdapter()
+    {
+
+        return Mage::getSingleton('core/resource')->getConnection('core_read');
+    }
+
+    /**
+     * Retrieve connection for write data
+     *
+     * @return Varien_Db_Adapter_Interface
+     */
+    protected function _getWriteAdapter()
+    {
+        return Mage::getSingleton('core/resource')->getConnection('core_write');
     }
 
     /*
@@ -17,14 +42,14 @@ class Modago_Integrator_Model_Resource_Product_Price
 
         $out = array();
 
-        $adapter = $this->getReadConnection();
+        $adapter = $this->_getReadAdapter();
 
-        $productSuperAttributeTable = $this->getTable('product_super_attribute');
+        $productSuperAttributeTable = $this->_getResource()->getTableName('catalog/product_super_attribute');
         $query = "SELECT DISTINCT product_id FROM `{$productSuperAttributeTable}`";
         $ids = $adapter->fetchCol($query);
 
         $baseSelect = $adapter->select();
-        $baseSelect->from(array("product" => $this->getMainTable()));
+        $baseSelect->from(array("product" => $this->_getResource()->getTableName('catalog/product')));
         $baseSelect->reset("columns");
         $baseSelect->columns(array("entity_id", "sku", "type_id"));
         $baseSelect->where("product.entity_id IN (?)", $ids);
@@ -65,28 +90,31 @@ class Modago_Integrator_Model_Resource_Product_Price
     {
         $websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 
-        $select = $this->getReadConnection()->select();
+        $resource = $this->_getResource();
+        $read = $this->_getReadAdapter();
+
+        $select = $read->select();
         $select->from(
-            array("link" => $this->getTable("catalog/product_super_link")),
+            array("link" => $resource->getTableName("catalog/product_super_link")),
             array("parent_id", "product_id")
         );
 
         // Add configurable attribute
         $select->join(
-            array("sa" => $this->getTable("catalog/product_super_attribute")),
+            array("sa" => $resource->getTableName("catalog/product_super_attribute")),
             "sa.product_id=link.parent_id",
             array("attribute_id", "product_super_attribute_id")
         );
 
         $select->join(
-            array("product" => $this->getTable("catalog/product")),
+            array("product" => $resource->getTableName("catalog/product")),
             "product.entity_id=link.product_id",
             array("sku")
         );
 
         // Add values of attributes
         $select->join(
-            array("product_int" => $this->getValueTable("catalog/product", "int")),
+            array("product_int" => $resource->getTableName("catalog_product_entity_int")),
             "product_int.entity_id=link.product_id AND product_int.attribute_id=sa.attribute_id",
             array("value", "value_id")
         );
@@ -95,11 +123,11 @@ class Modago_Integrator_Model_Resource_Product_Price
         $conds = array(
             "sa_price.product_super_attribute_id=sa.product_super_attribute_id",
             "sa_price.value_index=product_int.value",
-            $this->getReadConnection()->quoteInto("sa_price.website_id=?", $websiteId)
+            $this->_getReadAdapter()->quoteInto("sa_price.website_id=?", $websiteId)
         );
 
         $select->joinLeft(
-            array("sa_price" => $this->getTable("catalog/product_super_attribute_pricing")),
+            array("sa_price" => $resource->getTableName("catalog/product_super_attribute_pricing")),
             implode(" AND ", $conds),
             array()
         );
@@ -110,6 +138,6 @@ class Modago_Integrator_Model_Resource_Product_Price
         $select->where("link.parent_id IN (?)", $ids);
         $select->order("sa.position");
 
-        return $this->getReadConnection()->fetchAll($select);
+        return $read->fetchAll($select);
     }
 }
