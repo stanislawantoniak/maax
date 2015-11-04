@@ -36,18 +36,6 @@ protected $_getList = true;
 	}
 
 	/**
-	 * file path
-	 *
-	 * @return string
-	 */
-	protected function _getPath()
-	{
-		$helper = $this->getHelper();
-		return Mage::getBaseDir('var') . DS . parent::DIRECTORY . DS .
-		$this->getExternalId() . "_" . $helper::FILE_DESCRIPTIONS . "_" . Mage::getModel('core/date')->getDate('Y-m-d_H:i:s') . ".xml";
-	}
-
-	/**
 	 * prepare content
 	 * should return array similar to this:
 	 *  array(
