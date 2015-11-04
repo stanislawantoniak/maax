@@ -182,7 +182,7 @@ protected $_getList = true;
 								break;
 
 							default:
-								if($value !== "") {
+								if($value !== "" && !is_null($value)) {
 									$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
 								}
 						}
