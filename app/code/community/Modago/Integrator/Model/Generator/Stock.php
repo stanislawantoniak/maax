@@ -57,6 +57,6 @@ class Modago_Integrator_Model_Generator_Stock
      */
      protected function _prepareXmlBlock($item) {
 	     $qty = intval($item['qty']);
-         return "<product><sku>{$item['sku']}</sku><stock>$qty</stock></product>";
+         return "<product><sku>{$item['sku']}</sku><stock>".($qty >= 0 ? $qty : 0)."</stock></product>";
      }
 }
