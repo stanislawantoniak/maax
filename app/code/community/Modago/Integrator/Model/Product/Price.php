@@ -16,18 +16,28 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
      */
     public function appendOriginalPricesList($res)
     {
+        //1. Configurable
         /* @var $r Modago_Integrator_Model_Resource_Product_Price */
         $r = Mage::getModel("modagointegrator/resource_product_price");
         $out = $r->getOptions(self::MODAGO_INTEGRATOR_STORE);
 
         foreach ($out as $parent) {
-            if(isset($parent["children"])){
+            if (isset($parent["children"])) {
                 foreach ($parent["children"] as $children) {
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $children["sku"], "price" => $children["price"]);
                 }
             }
         }
 
+        //2. Simple
+        $collection = Mage::getModel("catalog/product")->getCollection();
+        $collection->setStore(self::MODAGO_INTEGRATOR_STORE);
+        $collection->addAttributeToSelect("price");
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+        $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        foreach ($collection as $collectionItem) {
+            $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $collectionItem->getSku(), "price" => $collectionItem->getPrice());
+        }
         return $res;
     }
 
@@ -37,15 +47,25 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
      */
     public function appendSpecialPricesList($res)
     {
+        //1. Configurable
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore(self::MODAGO_INTEGRATOR_STORE);
         $collection->addAttributeToSelect("price");
         $collection->addAttributeToSelect("special_price");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
 
-
         foreach ($collection as $collectionItem) {
             $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][] = array("sku" => $collectionItem->getSku(), "price" => $collectionItem->getSpecialPrice());
+        }
+
+        //2. Simple
+        $collectionS = Mage::getModel("catalog/product")->getCollection();
+        $collectionS->setStore(self::MODAGO_INTEGRATOR_STORE);
+        $collectionS->addAttributeToSelect("special_price");
+        $collectionS->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+        $collectionS->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        foreach ($collectionS as $collectionSItem) {
+            $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $collectionSItem->getSku(), "price" => $collectionSItem->getSpecialPrice());
         }
 
         return $res;
