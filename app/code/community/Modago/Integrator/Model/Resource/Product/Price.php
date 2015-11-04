@@ -45,7 +45,7 @@ class Modago_Integrator_Model_Resource_Product_Price
         $adapter = $this->_getReadAdapter();
 
         $productSuperAttributeTable = $this->_getResource()->getTableName('catalog/product_super_attribute');
-        $query = "SELECT DISTINCT product_id FROM `{$productSuperAttributeTable}`";
+        $query = "SELECT DISTINCT product_id FROM `{$productSuperAttributeTable}` LIMIT";
         $ids = $adapter->fetchCol($query);
 
         $baseSelect = $adapter->select();
@@ -65,7 +65,7 @@ class Modago_Integrator_Model_Resource_Product_Price
             if (!isset($out[$child['parent_id']]['children'][$child['value_id']])) {
                 $out[$child['parent_id']]['children'][$child['value_id']] = array(
                     'sku' => $child['sku'],
-                    'price' => $child['price']
+                    'price' => ($child['price']+$child["simple_price"])
                 );
             }
 
@@ -110,6 +110,11 @@ class Modago_Integrator_Model_Resource_Product_Price
             array("product" => $resource->getTableName("catalog/product")),
             "product.entity_id=link.product_id",
             array("sku")
+        );
+        $select->join(
+            array("product_price" => $resource->getTableName("catalog_product_entity_decimal")),
+            "product_price.entity_id=link.product_id AND store_id={$storeId}",
+            array("value AS simple_price")
         );
 
         // Add values of attributes
