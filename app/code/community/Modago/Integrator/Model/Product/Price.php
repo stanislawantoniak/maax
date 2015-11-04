@@ -41,7 +41,11 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $productTable = $resource->getTableName('catalog_product_entity');
 
         $readConnection = $resource->getConnection('core_read');
-        $query = "SELECT child_id,parent_id,sku FROM {$productRelationTable} JOIN {$productTable} ON {$productRelationTable}.child_id={$productTable}.entity_id";
+        $query = "SELECT child_id,parent_id,children.sku AS sku FROM {$productRelationTable}
+              JOIN {$productTable} AS children ON {$productRelationTable}.child_id=children.entity_id
+              JOIN {$productTable} AS parents ON {$productRelationTable}.parent_id=parents.entity_id
+              ORDER BY parents.sku ASC
+              ";
         $result = $readConnection->fetchAll($query);
 
 
