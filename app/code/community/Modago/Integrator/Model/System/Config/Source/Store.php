@@ -10,7 +10,10 @@ class Modago_Integrator_Model_System_Config_Source_Store
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $this->_options = array(array("value" => "", "label" => " "));
+            /** @var Modago_Integrator_Helper_Data $helper */
+            $helper = Mage::helper("modagointegrator");
+
+            $this->_options = array(array("value" => 0, "label" => $helper->__("Default Config")));
             $this->_options = array_merge($this->_options, Mage::getResourceModel('core/store_collection')->load()->toOptionArray());
         }
 
