@@ -5,10 +5,27 @@
  */
 class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 {
-    const MODAGO_INTEGRATOR_STORE = 1;
+    protected $_integrationStore;
 
     const MODAGO_INTEGRATOR_ORIGINAL_PRICE = "A";
     const MODAGO_INTEGRATOR_SPECIAL_PRICE = "B";
+
+    /**
+     * Modago_Integrator_Model_Product_Price constructor.
+     * @param $_integrationStore
+     */
+    public function __construct()
+    {
+        $this->_integrationStore = $this->getIntegrationStore();
+    }
+
+
+    protected function getIntegrationStore()
+    {
+        /** @var Modago_Integrator_Helper_Data $helper */
+        $helper = Mage::helper('modagointegrator');
+        return $helper->getIntegrationStore();
+    }
 
     /**
      * @param $res
@@ -19,7 +36,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         //1. Configurable
         /* @var $r Modago_Integrator_Model_Resource_Product_Price */
         $r = Mage::getModel("modagointegrator/resource_product_price");
-        $out = $r->getOptions(self::MODAGO_INTEGRATOR_STORE);
+        $out = $r->getOptions($this->_integrationStore);
 
         foreach ($out as $parent) {
             if (isset($parent["children"])) {
@@ -57,7 +74,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         }
 
         $collection = Mage::getModel("catalog/product")->getCollection();
-        $collection->setStore(self::MODAGO_INTEGRATOR_STORE);
+        $collection->setStore($this->_integrationStore);
         $collection->addAttributeToSelect("special_price");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
 
@@ -85,7 +102,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
     public function appendPricesForSimple($res)
     {
         $collection = Mage::getModel("catalog/product")->getCollection();
-        $collection->setStore(self::MODAGO_INTEGRATOR_STORE);
+        $collection->setStore($this->_integrationStore);
         $collection->addAttributeToSelect("price");
         $collection->addAttributeToSelect("special_price");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);

@@ -80,12 +80,19 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 		return $field ? trim($this->_conf[$field]) : $this->_conf;
 	}
 
-	public function getSecret() {
+	public function getSecret()
+	{
 		return $this->getConfig('secret');
 	}
 
-	public function getExternalId() {
+	public function getExternalId()
+	{
 		return $this->getConfig('external_id');
+	}
+
+	public function getIntegrationStore()
+	{
+		return $this->getConfig('integration_store');
 	}
 
     /**
