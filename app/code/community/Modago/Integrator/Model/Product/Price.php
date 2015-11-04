@@ -27,33 +27,12 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         return $helper->getIntegrationStore();
     }
 
-    /**
-     * @param $res
-     * @return mixed
-     */
-    public function appendOriginalPricesForConfigurable($res)
-    {
-        //1. Configurable
-        /* @var $r Modago_Integrator_Model_Resource_Product_Price */
-        $r = Mage::getModel("modagointegrator/resource_product_price");
-        $out = $r->getOptions($this->_integrationStore);
-
-        foreach ($out as $parent) {
-            if (isset($parent["children"])) {
-                foreach ($parent["children"] as $children) {
-                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $children["sku"], "price" => $children["price"]);
-                }
-            }
-        }
-
-        return $res;
-    }
 
     /**
      * @param $res
      * @return mixed
      */
-    public function appendSpecialPricesForConfigurable($res)
+    public function appendPricesForConfigurable($res)
     {
         //1. Configurable
         /** @var Mage_Core_Model_Resource $resource */
@@ -75,19 +54,29 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore($this->_integrationStore);
+        $collection->addAttributeToSelect("price");
         $collection->addAttributeToSelect("special_price");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
 
         $prices = array();
+        $specialPrices = array();
         foreach ($collection as $collectionItem) {
-            $prices[$collectionItem->getId()] = $collectionItem->getSpecialPrice();
+            $prices[$collectionItem->getId()] = $collectionItem->getPrice();
+            $specialPrices[$collectionItem->getId()] = $collectionItem->getSpecialPrice();
         }
 
-        foreach ($prices as $parentId => $specialPrice) {
-            if (isset($parentChildRelation[$parentId])) {
-                foreach ($parentChildRelation[$parentId] as $childSku) {
-                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][] = array("sku" => $childSku, "price" => $specialPrice);
+
+        foreach ($parentChildRelation as $parentId => $children) {
+
+            foreach ($children as $childId => $childSku) {
+                if (isset($prices[$parentId])) {
+                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $childSku, "price" => $prices[$parentId]);
                 }
+                if (isset($specialPrices[$parentId])) {
+                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][] = array("sku" => $childSku, "price" => $specialPrices[$parentId]);
+                }
+
+
             }
         }
 
