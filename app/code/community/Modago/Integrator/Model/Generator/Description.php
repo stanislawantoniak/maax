@@ -182,7 +182,9 @@ protected $_getList = true;
 								break;
 
 							default:
-								$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
+								if($value !== "") {
+									$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
+								}
 						}
 					}
 				}
@@ -219,7 +221,6 @@ protected $_getList = true;
 						$parentCollection = Mage::getResourceModel('catalog/product_collection');
 						$parentCollection
 							->addFieldToFilter('entity_id', array('in' => $parentIds))
-							->addAttributeToSelect('sku')
 							->setOrder('sku', Zend_Db_Select::SQL_ASC)
 							->setPageSize(1);
 
