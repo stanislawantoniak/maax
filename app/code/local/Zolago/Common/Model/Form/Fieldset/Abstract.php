@@ -52,7 +52,18 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
     public function setModel($model) {  
         $this->_model = $model;
     }
-    
+
+    /**
+     * Retrieve url of skins file
+     *
+     * @param   string $file path to file in skin
+     * @param   array $params
+     * @return  string
+     */
+    public function getSkinUrl($file = null, array $params = array()) {
+        return Mage::getDesign()->getSkinUrl($file, $params);
+    }
+
     /**
      * field phone
      */

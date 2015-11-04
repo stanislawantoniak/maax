@@ -20,7 +20,9 @@ class GH_Statements_Model_Form_Fieldset_Calendar_Item extends Zolago_Common_Mode
             "maxlength" => 32,
             'class' => "form-control",
             'format' => 'yyyy-MM-dd',
-            'note' => $this->_helper->__('Allowed format: yyyy-mm-dd'),
+            'image'  => $this->getSkinUrl('images/grid-cal.gif'),
+            'time'   => false,
+            'after_element_html' => $this->_getHelper()->__('<small>Date format (YYYY-MM-DD)</small>'),
         ));
 
     }
