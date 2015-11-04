@@ -53,7 +53,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $balancesByVendor = array();
         foreach ($balances as $balance) {
             $balancesByVendor[$balance->getVendorId()][$balance->getDate()] = $balance->getData();
-            arsort($balancesByVendor[$balance->getVendorId()]);
+            //arsort($balancesByVendor[$balance->getVendorId()]);
         }
 
         foreach ($balancesByVendor as $vendor => $data) {
