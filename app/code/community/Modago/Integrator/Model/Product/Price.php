@@ -14,7 +14,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
      * @param $res
      * @return mixed
      */
-    public function appendOriginalPricesConfigurableList($res)
+    public function appendOriginalPricesForConfigurable($res)
     {
         //1. Configurable
         /* @var $r Modago_Integrator_Model_Resource_Product_Price */
@@ -36,7 +36,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
      * @param $res
      * @return mixed
      */
-    public function appendSpecialPricesConfigurableList($res)
+    public function appendSpecialPricesForConfigurable($res)
     {
         //1. Configurable
         /** @var Mage_Core_Model_Resource $resource */
@@ -82,7 +82,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
     /**
      * @param $res
      */
-    public function appendPricesSimpleList($res)
+    public function appendPricesForSimple($res)
     {
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore(self::MODAGO_INTEGRATOR_STORE);
