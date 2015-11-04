@@ -1,15 +1,9 @@
 <?xml version="1.0"?>
 <config>
-	<tabs>
-		<ghintegrator translate="label" module="ghintegrator">
-			<label>GH Integrator</label>
-			<sort_order>102</sort_order>
-		</ghintegrator>
-	</tabs>
 	<sections>
 		<ghintegrator translate="label" module="ghintegrator">
 			<label>GH Integrator Options</label>
-			<tab>ghintegrator</tab>
+			<tab>ghapi</tab>
 			<sort_order>10</sort_order>
 			<show_in_default>1</show_in_default>
 			<show_in_website>0</show_in_website>
