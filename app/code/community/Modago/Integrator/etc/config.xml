@@ -50,4 +50,11 @@
             </resources>
         </acl>
     </adminhtml>
+    <default>
+        <modagointegrator>
+            <authentication>
+                <integration_store>0</integration_store>
+            </authentication>
+        </modagointegrator>
+    </default>
 </config>
