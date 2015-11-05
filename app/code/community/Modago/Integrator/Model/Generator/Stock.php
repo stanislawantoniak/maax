@@ -10,7 +10,7 @@ class Modago_Integrator_Model_Generator_Stock
 	protected $_footer;
 
     protected function _construct() {
-        $this->setFileNamePrefix('STOCKS');
+        $this->setFileNamePrefix('stocks');
     }
 
 	public function _getHeader() {

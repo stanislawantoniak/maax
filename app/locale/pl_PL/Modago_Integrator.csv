@@ -2,4 +2,6 @@
 "Vendor ID","ID sklepu"
 "Secret key","Sekretny klucz"
 "Integrator","Integracja"
-"Store","Sklep"
+"Price source","Źródło ceny"
+"Shop/Language whose price is charged","Sklep/Język z którego pobierana jest cena"
+"Default Config","Domyślna konfiguracja"
