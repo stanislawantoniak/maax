@@ -130,12 +130,12 @@ class GH_Statements_Model_Observer
     {
         $data = array(
             'to_pay' => 0,
-            'total_commission_netto' => 0,
+            'total_commission' => 0,
         );
         // Order
         if (!empty($statementTotals->order)) {
             $data["order_commission_value"]     = $statementTotals->order->commissionAmount;
-            $data["total_commission_netto"]     += $statementTotals->order->commissionAmount;
+            $data["total_commission"]     += $statementTotals->order->commissionAmount;
             $data["to_pay"] += $statementTotals->order->amount;
             $data["gallery_discount_value"]		= $statementTotals->order->discountValue;
             $data['order_value']		 		= $statementTotals->order->galleryPayment;
@@ -144,7 +144,8 @@ class GH_Statements_Model_Observer
         if (!empty($statementTotals->rma)) {
             $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
             $data["rma_value"]                  = $statementTotals->rma->amount;
-            $data['total_commission_netto']     -= $statementTotals->rma->commissionAmount;
+            $data['to_pay'] -= $statementTotals->rma->commissionAmount;
+            $data['total_commission']     -= $statementTotals->rma->commissionAmount;
         }
         // Refund
         if (!empty($statementTotals->refund)) {
@@ -178,7 +179,7 @@ class GH_Statements_Model_Observer
         if(!empty($statementTotals->lastBalance)) {
             $data["last_statement_balance"]              = $statementTotals->lastBalance->balance;
         }
-        $data['total_commission'] = round($data['total_commission_netto']*self::getTax(),2,PHP_ROUND_HALF_UP);
+        $data['total_commission_netto'] = round($data['total_commission']/self::getTax(),2,PHP_ROUND_HALF_UP);
         if (!empty($data)) {
             $statement->addData($data);
             $statement->save();
