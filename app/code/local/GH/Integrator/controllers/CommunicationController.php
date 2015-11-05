@@ -89,7 +89,7 @@ class GH_Integrator_CommunicationController extends Mage_Core_Controller_Front_A
             $helper->log($exception->getMessage(), $vendorId);
             echo $this->returnResponse($helper::STATUS_ERROR);
         } catch (Exception $exception) {
-            $helper->log("Other error occured! " . $exception->getMessage() . "\n<br/> See exception.log for more details");
+            $helper->log("Other error occurred! " . $exception->getMessage() . "\n<br/> See exception.log for more details");
             Mage::logException($exception);
             echo $this->returnResponse($helper::STATUS_FATAL_ERROR);
         }
