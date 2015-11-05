@@ -155,7 +155,7 @@ class GH_Statements_Model_Observer
         if (!empty($statementTotals->track)) {
             $data["tracking_charge_subtotal"]   = $statementTotals->track->netto;
             $data["tracking_charge_total"]      = $statementTotals->track->brutto;
-            $data['to_pay'] -= $statementTotals->track->netto;
+            $data['to_pay']                     -= $statementTotals->track->brutto;
         }
         // Marketing
         if(!empty($statementTotals->marketing)) {
