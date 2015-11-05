@@ -52,7 +52,10 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $parentChildRelation = array();
         if (!empty($result)) {
             foreach ($result as $resultItem) {
-                $parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]] = $resultItem["sku"];
+                //if product has more then one parent, then use first order by SKU ASC
+                if (!isset($parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]])) {
+                    $parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]] = $resultItem["sku"];
+                }
             }
         }
 
@@ -74,10 +77,10 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 
             foreach ($children as $childId => $childSku) {
                 if (isset($prices[$parentId])) {
-                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $childSku, "price" => $prices[$parentId]);
+                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $prices[$parentId]);
                 }
                 if (isset($specialPrices[$parentId])) {
-                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][] = array("sku" => $childSku, "price" => $specialPrices[$parentId]);
+                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $specialPrices[$parentId]);
                 }
 
 
@@ -101,8 +104,15 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
         $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         foreach ($collection as $collectionItem) {
-            $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][] = array("sku" => $collectionItem->getSku(), "price" => $collectionItem->getPrice());
-            $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][] = array("sku" => $collectionItem->getSku(), "price" => $collectionItem->getSpecialPrice());
+            $sku = $collectionItem->getSku();
+            //do not override price if already got from configurable
+            if (!isset($res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku])) {
+                $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array("sku" => $sku, "price" => $collectionItem->getPrice());
+            }
+            if (!isset($res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku])) {
+                $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku] = array("sku" => $sku, "price" => $collectionItem->getSpecialPrice());
+            }
+
         }
         return $res;
     }
