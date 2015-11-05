@@ -20,7 +20,8 @@ class Modago_Integrator_Model_Generator_Description
 		'short_description',
 		'description',
 		'vat',
-		'weight'
+		'weight',
+		'sku'
 	);
 	protected $_defaultValues = array(
 		'stockItem' => 0,
