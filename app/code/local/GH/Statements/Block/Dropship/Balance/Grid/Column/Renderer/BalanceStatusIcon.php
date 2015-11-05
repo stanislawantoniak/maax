@@ -9,9 +9,9 @@ class GH_Statements_Block_Dropship_Balance_Grid_Column_Renderer_BalanceStatusIco
         /** @var GH_Statements_Helper_Data $helper */
         $helper = Mage::helper('ghstatements');
         if ($status == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_CLOSED) {
-            return $helper->__("Close") .  " <i class='icon-lock'></i>";
+            return  "<i class='icon-lock'></i> ".$helper->__("Close");
         } else {
-            return $helper->__("Open") .  " <i class='icon-unlock'></i>";
+            return  "<i class='icon-unlock'></i> ".$helper->__("Open");
         }
     }
 }
