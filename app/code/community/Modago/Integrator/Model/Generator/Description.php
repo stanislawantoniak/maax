@@ -1,16 +1,52 @@
 <?php
+
 /**
  * generating description file
  */
 class Modago_Integrator_Model_Generator_Description
-    extends Modago_Integrator_Model_Generator {
+	extends Modago_Integrator_Model_Generator
+{
 
-protected $_getList = true;
-	protected $_getListBatch = 1000;
+	protected $_getList = true;
+	protected $_getListBatch = 300;
 	protected $_getListPage = 1;
 	protected $_getListLastPage;
 
 	protected $_categories = array();
+
+	protected $_valuesToInsertDirectly = array(
+		'name',
+		'color',
+		'short_description',
+		'description',
+		'vat',
+		'weight'
+	);
+	protected $_defaultValues = array(
+		'stockItem' => 0,
+	);
+	protected $_valuesToSkip = array(
+		'entity_id',
+		'entity_type_id',
+		'attribute_set_id',
+		'type_id',
+		'has_options',
+		'required_options',
+		'created_at',
+		'updated_at'
+	);
+	protected $_keysThatHaveOtherNames = array(
+		'short_description' => 'shortDescription',
+	);
+	protected $_cdataKeys = array(
+		'description',
+		'short_description'
+	);
+
+	protected $_resource;
+	protected $_productTable;
+	protected $_mediaGalleryBackend;
+	protected $_collection;
 
 	protected $_header;
 	protected $_footer;
@@ -94,73 +130,36 @@ protected $_getList = true;
 	 */
 	protected function _prepareList()
 	{
-		if($this->_getList) {
-			/** @var Mage_Catalog_Model_Product $model */
-			$model = Mage::getModel('catalog/product');
-
-			/** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
-			$collection = $model->getCollection();
-			$collection
-				->addAttributeToSelect("*")
-				->setPageSize($this->_getListBatch)
-				->setCurPage($this->_getListPage++);
+		if ($this->_getList) {
+			//init collection
+			$this->getCollection();
+			$this->setCollectionPage($this->_getListPage++);
 
 			if (!$this->_getListLastPage) {
-				$this->_getListLastPage = $collection->getLastPageNumber();
+				$this->_getListLastPage = $this->getCollection()->getLastPageNumber();
 			}
 
-			if($this->_getListPage > $this->_getListLastPage) {
+			if ($this->_getListPage > $this->_getListLastPage) {
 				$this->_getList = false;
 			}
 
 			$data = array();
 			$key = 0;
-			$valuesToInsertDirectly = array( //scheme is "xml_key_name"=>"magento_key_name"
-				'sku',
-				'name',
-				'color',
-				'short_description',
-				'description',
-				'vat',
-				'weight'
-			);
-			$valuesToSkip = array(
-				'entity_id',
-				'entity_type_id',
-				'attribute_set_id',
-				'type_id',
-				'has_options',
-				'required_options',
-				'created_at',
-				'updated_at'
-			);
-			$keysThatHaveOtherNames = array(
-				'short_description' => 'shortDescription',
-			);
-			$cdataKeys = array(
-				'description',
-				'short_description'
-			);
-			$defaultValues = array(
-				'stockItem' => 0,
-			);
 
-			//var_dump($collection->getFirstItem()->getData());
-
-			foreach ($collection as $product) {
+			foreach ($this->getCollection() as $product) {
 				/** @var Mage_Catalog_Model_Product $product */
 				//set default values
-				$data[$key] = $defaultValues;
+				$data[$key] = $this->_defaultValues;
 				foreach ($product->getData() as $dataKey => $value) {
-					if (in_array($dataKey, $valuesToInsertDirectly)) {
+					if (in_array($dataKey, $this->_valuesToInsertDirectly)) {
 						$keyToInsert = isset($keysThatHaveOtherNames[$dataKey]) ? $keysThatHaveOtherNames[$dataKey] : $dataKey;
-						if (in_array($dataKey, $cdataKeys)) {
+						if (in_array($dataKey, $this->_cdataKeys)) {
 							$dataValue = "<![CDATA[$value]]>";
 						} else {
 							$dataValue = $this->getAttributeText($product, $dataKey);
 						}
 						$data[$key][$keyToInsert] = $dataValue;
-					} elseif (!in_array($dataKey, $valuesToSkip)) {
+					} elseif (!in_array($dataKey, $this->_valuesToSkip)) {
 						switch ($dataKey) {
 							case "status":
 								$data[$key]['status'] = $value == "1" ? 1 : 0;
@@ -171,6 +170,7 @@ protected $_getList = true;
 								$request = Mage::getSingleton('tax/calculation')->getRateRequest(null, null, null, $store);
 								$percent = Mage::getSingleton('tax/calculation')->getRate($request->setProductClassId($value));
 								$data[$key]['vat'] = $percent;
+								unset($store,$request,$percent);
 								break;
 
 							case "stock_item":
@@ -182,7 +182,7 @@ protected $_getList = true;
 								break;
 
 							default:
-								if($value !== "" && !is_null($value)) {
+								if ($value !== "" && !is_null($value)) {
 									$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
 								}
 						}
@@ -198,11 +198,13 @@ protected $_getList = true;
 						} else {
 							$this->_categories[$categoryId] = false;
 						}
+						unset($category);
 					}
 					if ($this->_categories[$categoryId]) {
 						$data[$key]['categories'][] = "<![CDATA[{$this->_categories[$categoryId]}]]>";
 					}
 				}
+				unset($categoriesIds);
 
 
 				if ($product->getTypeId() == "configurable") {
@@ -213,41 +215,82 @@ protected $_getList = true;
 					foreach ($sizes as $size) {
 						$data[$key]['sizes'][] = $size->getSku();
 					}
+					unset($conf,$sizes);
 				} else {
 					//parentSKU
 					$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
 					if ($parentIds && is_array($parentIds) && count($parentIds)) {
-						/** @var Mage_Catalog_Model_Resource_Product_Collection $parentCollection */
-						$parentCollection = Mage::getResourceModel('catalog/product_collection');
-						$parentCollection
-							->addFieldToFilter('entity_id', array('in' => $parentIds))
-							->setOrder('sku', Zend_Db_Select::SQL_ASC)
-							->setPageSize(1);
 
-						if ($parentCollection->getSize()) {
-							$data[$key]['parentSKU'] = $parentCollection->getFirstItem()->getData('sku');
+						$readConnection = $this->getResource()->getConnection('core_read');
+						$query = "SELECT {$this->getProductTable()}.sku AS sku FROM {$this->getProductTable()}" .
+							" WHERE entity_id IN (" . implode(",", $parentIds) . ") ORDER BY sku ASC LIMIT 1";
+
+						$parentResult = $readConnection->fetchAll($query);
+
+						if (is_array($parentResult) && count($parentResult) && isset($parentResult[0]['sku']) && $parentResult[0]['sku']) {
+							$data[$key]['parentSKU'] = $parentResult[0]['sku'];
 						}
+						unset($readConnection,$query,$parentResult);
 					}
+					unset($parentIds);
 				}
 
-				//images //todo: try to optimize images loading - maybe there is a way to load all images for batch at once
-				$product->load('media_gallery');
-				foreach ($product->getMediaGalleryImages() as $image) {
-					$data[$key]['images'][] = array(
+				//images
+				$lowestPosition = 0;
+				$lowestPositionKey = -1;
+				foreach ($this->getGalleryImages($product) as $k=>&$image) {
+					$imagePosition = $image->getPosition();
+					if($lowestPosition >= $imagePosition) {
+						$lowestPosition = $imagePosition;
+						$lowestPositionKey = $k;
+					}
+					$data[$key]['images'][$k] = array(
 						'sequence' => $image->getPosition(),
-						'default' => $image->getPosition() ? 0 : 1,
 						'value' => $image->getUrl()
 					);
+					unset($image);
+				}
+				if($lowestPositionKey >= 0) {
+					$data[$key]['images'][$lowestPositionKey]['default'] = 1;
 				}
 
+				$this->clearMediaGallery($product);
+				unset($lowestPosition,$lowestPositionKey,$product);
 
 				ksort($data[$key]);
 				$key++;
 			}
-
+			unset($key);
+			$this->clearCollection(); //free the memory
+			$this->clearBackend();
 			return $data;
 		}
 		return false;
+	}
+
+	/**
+	 *
+	 *
+	 * @param Mage_Catalog_Model_Product $product
+	 * @param string $attributeCode
+	 * @returns string
+	 */
+	protected function getAttributeText($product, $attributeCode)
+	{
+		if ($product instanceof Mage_Catalog_Model_Product) {
+			$attributeValue = $product->getData($attributeCode);
+			if (is_numeric($attributeValue)) {
+				$attribute = $product->getResource()->getAttribute($attributeCode);
+				if ($attribute) {
+					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
+					if ($attributeText) {
+						return $attributeText;
+					}
+				}
+			}
+			return $attributeValue;
+		}
+		return '';
 	}
 
 	/**
@@ -263,27 +306,34 @@ protected $_getList = true;
 			$xml .= "<$key>";
 			switch ($key) {
 				case "sizes":
-					foreach($val as $size) {
-						$xml.= "<size>$size</size>";
+					foreach ($val as $size) {
+						$xml .= "<size>$size</size>";
 					}
 					break;
 				case "categories":
-					foreach($val as $category) {
-						$xml.= "<category>$category</category>";
+					foreach ($val as $category) {
+						$xml .= "<category>$category</category>";
 					}
 					break;
 				case "attributes":
-					foreach($val as $attributeName=>$attributeValue) {
-						$xml.= "<$attributeName>$attributeValue</$attributeName>";
+					foreach ($val as $attributeName => $attributeValue) {
+						$xml .= "<$attributeName>$attributeValue</$attributeName>";
 					}
 					break;
 				case "images":
-					foreach($val as $image) {
-						$xml.= "<img sequence=\"{$image['sequence']}\" default=\"{$image['default']}\">{$image['value']}</img>";
+					foreach ($val as $image) {
+						$xml .= "<img";
+						if(isset($image['sequence'])) {
+							$xml .= " sequence=\"{$image['sequence']}\"";
+						}
+						if(isset($image['default'])) {
+							$xml .= " default=\"{$image['default']}\"";
+						}
+						$xml .= ">{$image['value']}</img>";
 					}
 					break;
 				case "cross_selling":
-					foreach($val as $cross_product_sku) {
+					foreach ($val as $cross_product_sku) {
 						$xml .= "<sku>$cross_product_sku</sku>";
 					}
 					break;
@@ -298,28 +348,80 @@ protected $_getList = true;
 	}
 
 	/**
-	 *
-	 *
-	 * @param Mage_Catalog_Model_Product $product
-	 * @param string $attributeCode
-	 * @returns string
+	 * @return string
 	 */
-	protected function getAttributeText($product,$attributeCode) {
-		if($product instanceof Mage_Catalog_Model_Product) {
-			$attributeValue = $product->getData($attributeCode);
-			if(is_numeric($attributeValue)) {
-				$attribute = $product->getResource()->getAttribute($attributeCode);
-				if ($attribute) {
-					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
-					if ($attributeText) {
-						return $attributeText;
-					}
-				}
-			}
-			return $attributeValue;
+	protected function getProductTable() {
+		if(!$this->_productTable) {
+			$this->_productTable = $this->getResource()->getTableName("catalog_product_entity");
 		}
-		return '';
+		return $this->_productTable;
 	}
 
+	/**
+	 * @return Mage_Core_Model_Resource
+	 */
+	protected function getResource() {
+		if(!$this->_resource) {
+			$this->_resource = Mage::getSingleton('core/resource');
+		}
+		return $this->_resource;
+	}
+
+	/**
+	 * @return Mage_Catalog_Model_Product_Attribute_Backend_Media
+	 */
+	protected function getBackend() {
+		if (!$this->_mediaGalleryBackend) {
+
+			$mediaGallery = Mage::getSingleton('eav/config')
+				->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'media_gallery');
+
+			$this->_mediaGalleryBackend = $mediaGallery->getBackend();
+		}
+
+		return $this->_mediaGalleryBackend;
+	}
+
+	protected function clearBackend() {
+		$this->_mediaGalleryBackend = null;
+	}
+
+	/**
+	 * @param Mage_Catalog_Model_Product $product
+	 * @return Varien_Data_Collection
+	 */
+	protected function getGalleryImages(&$product)
+	{
+		$this->getBackend()->afterLoad($product);
+		return $product->getMediaGalleryImages();
+	}
+
+	protected function clearMediaGallery(&$product) {
+		$product->unsData('media_gallery');
+	}
+
+	/**
+	 * @return Mage_Catalog_Model_Resource_Product_Collection
+	 */
+	protected function getCollection() {
+		if(!$this->_collection) {
+			$this->_collection = Mage::getResourceModel('catalog/product_collection')
+				->addAttributeToSelect("*")
+				->setPageSize($this->_getListBatch);
+		}
+		return $this->_collection;
+	}
+
+	protected function clearCollection() {
+		if($this->_collection) {
+			$this->_collection->clear();
+		}
+	}
+
+	protected function setCollectionPage($number) {
+		if($this->_collection) {
+			$this->_collection->setCurPage($number);
+		}
+	}
 
 }
