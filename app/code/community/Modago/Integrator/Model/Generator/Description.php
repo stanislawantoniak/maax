@@ -16,7 +16,7 @@ protected $_getList = true;
 	protected $_footer;
 
 	protected function _construct() {
-		$this->setFileNamePrefix('DESCRIPTION');
+		$this->setFileNamePrefix('description');
 	}
 	
 	public function _getHeader()

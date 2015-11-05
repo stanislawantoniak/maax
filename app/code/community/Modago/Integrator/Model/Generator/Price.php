@@ -12,7 +12,7 @@ class Modago_Integrator_Model_Generator_Price
 
     protected function _construct()
     {
-        $this->setFileNamePrefix('PRICES');
+        $this->setFileNamePrefix('prices');
     }
 
     /**
