@@ -46,7 +46,11 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
               JOIN {$productTable} AS parents ON {$productRelationTable}.parent_id=parents.entity_id
               ORDER BY parents.sku ASC
               ";
-        $result = $readConnection->fetchAll($query);
+        try {
+            $result = $readConnection->fetchAll($query);
+        } catch (Modago_Integrator_Exception $e) {
+            Mage::logException($e);
+        }
 
 
         if (empty($result))
@@ -60,6 +64,8 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             }
         }
 
+        if (empty($parentChildRelation))
+            return $res;
 
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore($this->_integrationStore);
@@ -70,9 +76,11 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $prices = array();
         $specialPrices = array();
         foreach ($collection as $collectionItem) {
-            $prices[$collectionItem->getId()] = $collectionItem->getPrice();
-            $specialPrices[$collectionItem->getId()] = $collectionItem->getSpecialPrice();
+            $parentProductId = $collectionItem->getId();
+            $prices[$parentProductId] = $collectionItem->getPrice();
+            $specialPrices[$parentProductId] = $collectionItem->getSpecialPrice();
         }
+        unset($parentProductId);
 
 
         foreach ($parentChildRelation as $parentId => $children) {
