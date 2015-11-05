@@ -238,12 +238,12 @@ class Modago_Integrator_Model_Generator_Description
 				}
 
 				//images
-				$lowestPosition = 0;
+				$lowestPosition = false;
 				$lowestPositionKey = -1;
 				$galleryCollection = $this->getGalleryImages($product);
 				foreach ($galleryCollection as $k=>&$image) {
 					$imagePosition = $image->getPosition();
-					if($lowestPosition >= $imagePosition) {
+					if($lowestPosition === false || $lowestPosition > $imagePosition) {
 						$lowestPosition = $imagePosition;
 						$lowestPositionKey = $k;
 					}
