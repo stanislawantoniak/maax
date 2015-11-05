@@ -165,7 +165,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         /*to pay*/
         $this->addColumn("to_pay", array(
             "index" => "to_pay",
-            "header" => Mage::helper("ghstatements")->__("To pay"),
+            "header" => Mage::helper("ghstatements")->__("To payout"),
             'type'  => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
