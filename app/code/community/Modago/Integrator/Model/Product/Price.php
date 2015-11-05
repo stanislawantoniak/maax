@@ -49,15 +49,17 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $result = $readConnection->fetchAll($query);
 
 
+        if (empty($result))
+            return $res;
+
         $parentChildRelation = array();
-        if (!empty($result)) {
-            foreach ($result as $resultItem) {
-                //if product has more then one parent, then use first order by SKU ASC
-                if (!isset($parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]])) {
-                    $parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]] = $resultItem["sku"];
-                }
+        foreach ($result as $resultItem) {
+            //if product has more then one parent, then use first order by SKU ASC
+            if (!isset($parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]])) {
+                $parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]] = $resultItem["sku"];
             }
         }
+
 
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore($this->_integrationStore);
@@ -74,7 +76,6 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 
 
         foreach ($parentChildRelation as $parentId => $children) {
-
             foreach ($children as $childId => $childSku) {
                 if (isset($prices[$parentId])) {
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $prices[$parentId]);
@@ -82,8 +83,6 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
                 if (isset($specialPrices[$parentId])) {
                     $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $specialPrices[$parentId]);
                 }
-
-
             }
         }
 
