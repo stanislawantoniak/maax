@@ -47,6 +47,7 @@ class Modago_Integrator_Model_Generator_Description
 	protected $_productTable;
 	protected $_mediaGalleryBackend;
 	protected $_collection;
+	protected $_store;
 
 	protected $_header;
 	protected $_footer;
@@ -117,7 +118,7 @@ class Modago_Integrator_Model_Generator_Description
 	 *                  "value"     => "imageUrl3"
 	 *              ),
 	 *          ),
-	 *          "cross_seling"  => array(
+	 *          "cross_selling"  => array(
 	 *              "cross selling sku",
 	 *              "cross selling sku",
 	 *              "cross selling sku"
@@ -166,7 +167,7 @@ class Modago_Integrator_Model_Generator_Description
 								break;
 
 							case "tax_class_id":
-								$store = Mage::app()->getStore('default');
+								$store = $this->getStore();
 								$request = Mage::getSingleton('tax/calculation')->getRateRequest(null, null, null, $store);
 								$percent = Mage::getSingleton('tax/calculation')->getRate($request->setProductClassId($value));
 								$data[$key]['vat'] = $percent;
@@ -256,7 +257,17 @@ class Modago_Integrator_Model_Generator_Description
 				}
 
 				$this->clearMediaGallery($product);
-				unset($lowestPosition,$lowestPositionKey,$product,$galleryCollection);
+				unset($lowestPosition,$lowestPositionKey,$galleryCollection);
+
+				//cross_selling
+				$crossSellingCollection = $product->getCrossSellProducts();
+				if($crossSellingCollection) {
+					$crossSellingCollection->addStoreFilter($this->getStore());
+					foreach ($crossSellingCollection as $crossProduct) {
+						$data[$key]['cross_selling'][] = $crossProduct->getSku();
+					}
+				}
+				unset($crossSellingCollection,$product);
 
 				ksort($data[$key]);
 				$key++;
@@ -285,7 +296,7 @@ class Modago_Integrator_Model_Generator_Description
 				if ($attribute) {
 					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
 					if ($attributeText) {
-						return $attributeText;
+						return "<![CDATA[$attributeText]]>";
 					}
 				}
 			}
@@ -425,4 +436,10 @@ class Modago_Integrator_Model_Generator_Description
 		}
 	}
 
+	protected function getStore() {
+		if(!$this->_store) {
+			$this->_store = Mage::app()->getStore('default');
+		}
+		return $this->_store;
+	}
 }
