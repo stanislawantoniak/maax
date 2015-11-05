@@ -48,7 +48,9 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
      */
     protected function _recalculateBalanceCumulative()
     {
-        $balances = Mage::getModel("ghstatements/vendor_balance")->getCollection();
+        $balances = Mage::getModel("ghstatements/vendor_balance")
+            ->getCollection()
+            ->setOrder("date", Varien_Data_Collection_Db::SORT_ORDER_ASC);
 
         $balancesByVendor = array();
         foreach ($balances as $balance) {
