@@ -77,12 +77,15 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $specialPrices = array();
         foreach ($collection as $collectionItem) {
             $parentProductId = $collectionItem->getId();
-            if(!empty($collectionItem->getPrice())){
-                $prices[$parentProductId] = $collectionItem->getPrice();
+            $price = $collectionItem->getPrice();
+            if (!empty($price)) {
+                $prices[$parentProductId] = $price;
             }
-            if(!empty($collectionItem->getSpecialPrice())){
-                $specialPrices[$parentProductId] = $collectionItem->getSpecialPrice();
+            $specialPrice = $collectionItem->getSpecialPrice();
+            if (!empty($specialPrice)) {
+                $specialPrices[$parentProductId] = $specialPrice;
             }
+            unset($price);unset($specialPrice);
         }
         unset($parentProductId);
 
@@ -118,13 +121,15 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             $sku = $collectionItem->getSku();
             //do not override price if already got from configurable
             if (!isset($res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku])) {
-                if(!empty($collectionItem->getPrice())){
-                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array("sku" => $sku, "price" => $collectionItem->getPrice());
+                $price = $collectionItem->getPrice();
+                if (!empty($price)) {
+                    $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array("sku" => $sku, "price" => $price);
                 }
             }
             if (!isset($res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku])) {
-                if(!empty($collectionItem->getSpecialPrice())){
-                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku] = array("sku" => $sku, "price" => $collectionItem->getSpecialPrice());
+                $specialPrice = $collectionItem->getSpecialPrice();
+                if (!empty($specialPrice)) {
+                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku] = array("sku" => $sku, "price" => $specialPrice);
                 }
             }
 
