@@ -182,7 +182,9 @@ protected $_getList = true;
 								break;
 
 							default:
-								$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
+								if($value !== "" && !is_null($value)) {
+									$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
+								}
 						}
 					}
 				}
@@ -198,7 +200,7 @@ protected $_getList = true;
 						}
 					}
 					if ($this->_categories[$categoryId]) {
-						$data[$key]['categories'][] = $this->_categories[$categoryId];
+						$data[$key]['categories'][] = "<![CDATA[{$this->_categories[$categoryId]}]]>";
 					}
 				}
 
@@ -219,8 +221,8 @@ protected $_getList = true;
 						$parentCollection = Mage::getResourceModel('catalog/product_collection');
 						$parentCollection
 							->addFieldToFilter('entity_id', array('in' => $parentIds))
-							->addAttributeToSelect('sku')
-							->setOrder('sku', Zend_Db_Select::SQL_ASC);
+							->setOrder('sku', Zend_Db_Select::SQL_ASC)
+							->setPageSize(1);
 
 						if ($parentCollection->getSize()) {
 							$data[$key]['parentSKU'] = $parentCollection->getFirstItem()->getData('sku');
