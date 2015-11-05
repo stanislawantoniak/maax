@@ -260,8 +260,9 @@ class Modago_Integrator_Model_Generator_Description
 				unset($lowestPosition,$lowestPositionKey,$galleryCollection);
 
 				//cross_selling
-				$crossSellingCollection = $product->getCrossSellProducts();
-				if($crossSellingCollection) {
+				/** @var Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Link_Product_Collection $crossSellingCollection */
+				$crossSellingCollection = $product->getCrossSellProductCollection();
+				if($crossSellingCollection instanceof Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Link_Product_Collection) {
 					$crossSellingCollection->addStoreFilter($this->getStore());
 					foreach ($crossSellingCollection as $crossProduct) {
 						$data[$key]['cross_selling'][] = $crossProduct->getSku();
