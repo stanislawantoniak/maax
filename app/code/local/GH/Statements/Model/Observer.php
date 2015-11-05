@@ -144,7 +144,7 @@ class GH_Statements_Model_Observer
         if (!empty($statementTotals->rma)) {
             $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
             $data["rma_value"]                  = $statementTotals->rma->amount;
-            $data['to_pay'] -= $statementTotals->rma->commissionAmount;
+            $data['to_pay']                     -= $statementTotals->rma->amount;
             $data['total_commission']     -= $statementTotals->rma->commissionAmount;
         }
         // Refund
