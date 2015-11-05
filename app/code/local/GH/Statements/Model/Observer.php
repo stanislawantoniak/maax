@@ -284,7 +284,7 @@ class GH_Statements_Model_Observer
                     
                     if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
                         // kwota zamówień
-                        $orderGalleryValue += $data['final_price'];  // kwota brutto 
+                        $orderGalleryValue += $data['final_price']+$data['shipping_cost'];  // kwota brutto 
                         // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
                         $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value']; // Do wypłaty
                     } else {
