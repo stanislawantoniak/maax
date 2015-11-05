@@ -301,7 +301,7 @@ class Modago_Integrator_Model_Generator_Description
 					}
 				}
 			}
-			return $attributeValue;
+			return "<![CDATA[$attributeValue]]>";
 		}
 		return '';
 	}
