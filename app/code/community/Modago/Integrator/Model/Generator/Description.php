@@ -238,7 +238,8 @@ class Modago_Integrator_Model_Generator_Description
 				//images
 				$lowestPosition = 0;
 				$lowestPositionKey = -1;
-				foreach ($this->getGalleryImages($product) as $k=>&$image) {
+				$galleryCollection = $this->getGalleryImages($product);
+				foreach ($galleryCollection as $k=>&$image) {
 					$imagePosition = $image->getPosition();
 					if($lowestPosition >= $imagePosition) {
 						$lowestPosition = $imagePosition;
@@ -255,7 +256,7 @@ class Modago_Integrator_Model_Generator_Description
 				}
 
 				$this->clearMediaGallery($product);
-				unset($lowestPosition,$lowestPositionKey,$product);
+				unset($lowestPosition,$lowestPositionKey,$product,$galleryCollection);
 
 				ksort($data[$key]);
 				$key++;
