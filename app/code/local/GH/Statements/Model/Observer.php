@@ -13,7 +13,7 @@ class GH_Statements_Model_Observer
 
         /* @var $transaction Varien_Db_Adapter_Interface */
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
-	    $alreadyExists = array();
+        $alreadyExists = array();
 
         /* Format our dates */
         /** @var Mage_Core_Model_Date $dateModel */
@@ -23,47 +23,47 @@ class GH_Statements_Model_Observer
         if ($forceCustomDate) {
             $yesterday = $forceCustomDate;
         }
-
+        
         // Collection of active vendors who have statement calendar
         /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
         $VendorsSollection = Mage::getResourceModel('udropship/vendor_collection');
         $VendorsSollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
         $VendorsSollection->addFieldToFilter('statements_calendar', array('neq' => null));
-
         foreach($VendorsSollection as $vendor) {
             /** @var Zolago_Dropship_Model_Vendor $vendor */
             $calendarId = (int)$vendor->getStatementsCalendar();
-
+            
             /* @var GH_Statements_Model_Resource_Calendar_Item_Collection $itemCollection */
             $itemCollection = Mage::getResourceModel('ghstatements/calendar_item_collection');
             $itemCollection->addFieldToFilter('calendar_id', $calendarId);
             $itemCollection->addFieldToFilter('event_date', array('eq' => $yesterday));
-
             if ($itemCollection->getSize() && $itemCollection->getFirstItem()->getId()) {
                 /** @var GH_Statements_Model_Calendar_Item $calendarItem */
                 $calendarItem = $itemCollection->getFirstItem();
 
                 try {
-	                $transaction->beginTransaction();
+                    $transaction->beginTransaction();
 
-	                $statement = self::initStatement($vendor, $calendarItem, $forceCustomDate);
+                    $statement = self::initStatement($vendor, $calendarItem, $forceCustomDate);
 
-	                $statementTotals = new stdClass();
-	                $statementTotals->order = self::processStatementsOrders($statement, $vendor);
-	                $statementTotals->rma = self::processStatementsRma($statement);
-	                $statementTotals->refund = self::processStatementsRefunds($statement);
-	                $statementTotals->track = self::processStatementsTracks($statement);
-	                $statementTotals->marketing = self::processStatementsMarketing($statement);
-	                $statementTotals->payment = self::processStatementsPayment($statement);
+                    $statementTotals = new stdClass();
+                    $statementTotals->order = self::processStatementsOrders($statement, $vendor);
+                    $statementTotals->rma = self::processStatementsRma($statement);
+                    $statementTotals->refund = self::processStatementsRefunds($statement);
+                    $statementTotals->track = self::processStatementsTracks($statement);
+                    $statementTotals->marketing = self::processStatementsMarketing($statement);
+                    $statementTotals->payment = self::processStatementsPayment($statement);
+                    $statementTotals->correction = self::processStatementsInvoice($statement);
+                    $statementTotals->lastBalance = self::processStatementLastBalance($statement);
 
-	                self::populateStatement($statement, $statementTotals);
+                    self::populateStatement($statement, $statementTotals);
                 } catch(Mage_Core_Exception $e) {
                     Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
-	                $alreadyExists[] = $e->getMessage();
-	                $transaction->rollBack();
+                    $alreadyExists[] = $e->getMessage();
+                    $transaction->rollBack();
                 } catch (Exception $ex) {
-	                $transaction->rollBack();
-	                Mage::logException($ex);
+                    $transaction->rollBack();
+                    Mage::logException($ex);
                 }
 
                 $transaction->commit();
@@ -71,6 +71,19 @@ class GH_Statements_Model_Observer
         }
     }
 
+    public static function processStatementLastBalance($statement) {
+        $balance = 0;
+        $collection = Mage::getModel('ghstatements/statement')->getCollection();
+        $collection->addFieldToFilter('vendor_id',$statement->getVendorId());
+        $collection->addFieldToFilter('id',array('neq'=>$statement->getId()));
+        $collection->getSelect()->order('id DESC');
+        if ($item = $collection->getFirstItem()) {
+            $balance = $item->getData('to_pay') - $item->getData('payment_value');            
+        }
+        $lastBalance = new StdClass();
+        $lastBalance->balance = $balance;
+        return $lastBalance;
+    }
     /**
      * This create row for statement
      * @param Zolago_Dropship_Model_Vendor $vendor
@@ -92,12 +105,12 @@ class GH_Statements_Model_Observer
         /** @var GH_Statements_Model_Statement $statement */
         $statement = Mage::getModel('ghstatements/statement');
         $statement->setData(array(
-	        "vendor"            => $vendor,
-            "vendor_id"         => (int)$vendor->getId(),
-            "calendar_id"       => (int)$calendarItem->getCalendarId(),
-            "event_date"        => $calendarItem->getEventDate(),
-            "name"              => $vendor->getVendorName() . ' ' . date("Y-m-d", strtotime($calendarItem->getEventDate())) . ' (' . $calendar->getName()  . ')'
-        ));
+                                "vendor"            => $vendor,
+                                "vendor_id"         => (int)$vendor->getId(),
+                                "calendar_id"       => (int)$calendarItem->getCalendarId(),
+                                "event_date"        => $calendarItem->getEventDate(),
+                                "name"              => $vendor->getVendorName() . ' ' . date("Y-m-d", strtotime($calendarItem->getEventDate())) . ' (' . $calendar->getName()  . ')'
+                            ));
         $statement->save();
         if ($forceCustomDate) {
             $statement->setForceCustomDate($forceCustomDate);
@@ -115,34 +128,58 @@ class GH_Statements_Model_Observer
      */
     public static function populateStatement(GH_Statements_Model_Statement $statement, $statementTotals)
     {
-        $data = array();
+        $data = array(
+            'to_pay' => 0,
+            'total_commission' => 0,
+        );
         // Order
         if (!empty($statementTotals->order)) {
             $data["order_commission_value"]     = $statementTotals->order->commissionAmount;
-            $data["order_value"]                = $statementTotals->order->amount;
+            $data["total_commission"]     += $statementTotals->order->commissionAmount;
+            $data["to_pay"] += $statementTotals->order->amount;
+            $data["gallery_discount_value"]		= $statementTotals->order->discountValue;
+            $data['order_value']		 		= $statementTotals->order->galleryPayment;
         }
         // Rma
         if (!empty($statementTotals->rma)) {
             $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
             $data["rma_value"]                  = $statementTotals->rma->amount;
+            $data['to_pay']                     -= $statementTotals->rma->amount;
+            $data['total_commission']     -= $statementTotals->rma->commissionAmount;
         }
         // Refund
         if (!empty($statementTotals->refund)) {
             $data["refund_value"]               = $statementTotals->refund->amount;
+            $data['to_pay'] -= $statementTotals->refund->amount;
         }
         // Track
         if (!empty($statementTotals->track)) {
             $data["tracking_charge_subtotal"]   = $statementTotals->track->netto;
             $data["tracking_charge_total"]      = $statementTotals->track->brutto;
+            $data['to_pay']                     -= $statementTotals->track->brutto;
         }
-	    // Marketing
-	    if(!empty($statementTotals->marketing)) {
-		    $data["marketing_value"]            = $statementTotals->marketing->amount;
-	    }
-	    // Payment
-	    if(!empty($statementTotals->payment)) {
-		    $data["payment_value"]              = $statementTotals->payment->amount;
-	    }
+        // Marketing
+        if(!empty($statementTotals->marketing)) {
+            $data["marketing_value"]            = $statementTotals->marketing->amount;
+            $data['to_pay'] -= $statementTotals->marketing->amount;
+        }
+        // correction
+        if (!empty($statementTotals->correction)) {
+            $data['commission_correction'] = $statementTotals->correction->commissionCorrection;            
+            $data['delivery_correction'] = $statementTotals->correction->deliveryCorrection;            
+            $data['marketing_correction'] = $statementTotals->correction->marketingCorrection;            
+            $data['to_pay'] += $statementTotals->correction->commissionCorrection;
+            $data['to_pay'] += $statementTotals->correction->deliveryCorrection;
+            $data['to_pay'] += $statementTotals->correction->marketingCorrection;
+        }
+        // Payment
+        if(!empty($statementTotals->payment)) {
+            $data["payment_value"]              = $statementTotals->payment->amount;
+        }
+        if(!empty($statementTotals->lastBalance)) {
+            $data["last_statement_balance"]              = $statementTotals->lastBalance->balance;
+        }
+        $data['total_commission_netto'] = round($data['total_commission']/self::getTax(),2,PHP_ROUND_HALF_UP);
         if (!empty($data)) {
             $statement->addData($data);
             $statement->save();
@@ -164,17 +201,19 @@ class GH_Statements_Model_Observer
         $collection->addVendorFilter($vendor);
         $collection->addFieldToFilter('main_table.statement_id', array('null' => true));
         $collection->addFieldToFilter('main_table.udropship_status', array('in' => array(
-            Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED,    // Wysłano
-            Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED,  // Dostarczono
-            Zolago_Po_Model_Source::UDPO_STATUS_RETURNED    // Zwrocono
-        )));
+                                          Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED,    // Wysłano
+                                          Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED,  // Dostarczono
+                                          Zolago_Po_Model_Source::UDPO_STATUS_RETURNED    // Zwrocono
+                                      )));
 
         $commissionAmount = 0;
         $amount = 0;
+        $discountValue = 0;
+        $orderGalleryValue = 0; // wartość zamówień w kanale płatności modago
 
         $dateModel = Mage::getModel('core/date');
         $today     = $dateModel->date('Y-m-d');
-	    $yesterday = date('Y-m-d',strtotime('yesterday',strtotime($today)));
+        $yesterday = date('Y-m-d',strtotime('yesterday',strtotime($today)));
         if ($statement->getForceCustomDate()) {
             $yesterday = $statement->getForceCustomDate();
         }
@@ -185,66 +224,68 @@ class GH_Statements_Model_Observer
             // Shipping and track
             $currentShipping = $po->getLastNotCanceledShipment();
 
-	        if($currentShipping) {
-		        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
-		        $track = $currentShipping->getTracksCollection()->getFirstItem();
+            if($currentShipping) {
+                /** @var Mage_Sales_Model_Order_Shipment_Track $track */
+                $track = $currentShipping->getTracksCollection()->getFirstItem();
 
                 // Only PO with track shipped, delivered or returned
                 // and shipped date <= yesterday
-		        $shippedDateInt = strtotime($track->getShippedDate());
+                $shippedDateInt = strtotime($track->getShippedDate());
                 if ($shippedDateInt && $shippedDateInt > strtotime($yesterday)) {
                     continue;
                 }
 
-		        $shippingCost = $currentShipping->getShippingAmountIncl();
+                $shippingCost = $currentShipping->getShippingAmountIncl();
 
-		        // Data to save
-		        $data = array();
-		        $data['statement_id'] = $statement->getId();
-		        $data['po_id'] = $po->getId();
-		        $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
-		        $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
-		        $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
-		        $data['carrier'] = $track->getTitle(); // Kurier
-		        $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
-		        $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
+                // Data to save
+                $data = array();
+                $data['statement_id'] = $statement->getId();
+                $data['po_id'] = $po->getId();
+                $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
+                $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
+                $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
+                $data['carrier'] = $track->getTitle(); // Kurier
+                $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
+                $data['payment_method'] = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())); // Metoda płatności
 
-		        /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
-		        $itemsColl = $po->getItemsCollection();
+                /** @var Zolago_Po_Model_Resource_Po_Item_Collection $itemsColl */
+                $itemsColl = $po->getItemsCollection();
 
-		        foreach ($itemsColl as $item) {
-			        /** @var Zolago_Po_Model_Po_Item $item */
-			        if ($item->getParentItemId()) {
-				        continue; // Skip simple from configurable
-			        }
-			        $data['po_item_id'] = $item->getId();
-			        $data['sku'] = $item->getFinalSku();// SKU
-			        $data['qty'] = $item->getQty();
-			        $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
-			        $data['discount_amount'] = $item->getDiscountAmount(); // Zniżka (zł)
-			        $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
-			        $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
+                foreach ($itemsColl as $item) {
+                    /** @var Zolago_Po_Model_Po_Item $item */
+                    if ($item->getParentItemId()) {
+                        continue; // Skip simple from configurable
+                    }
+                    $data['po_item_id'] = $item->getId();
+                    $data['sku'] = $item->getFinalSku();// SKU
+                    $data['qty'] = $item->getQty();
+                    $data['price'] = $item->getPriceInclTax() * $item->getQty(); // Sprzedaż przed zniżką (zł)
+                    $data['discount_amount'] = $item->getDiscountAmount(); // Zniżka (zł)
+                    $data['commission_percent'] = $item->getCommissionPercent(); // Stawka prowizji Modago
+                    $data['final_price'] = $item->getFinalItemPrice() * $item->getQty(); // Sprzedaż w zł
 
-			        $data['gallery_discount_value'] = 0;
-			        foreach ($item->getDiscountInfo() as $relation) {
-				        /** @var Zolago_SalesRule_Model_Relation $relation */
-				        if ($relation->getPayer() == Zolago_SalesRule_Model_Rule_Payer::PAYER_GALLERY) {
-					        $data['gallery_discount_value'] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
-				        }
-			        }
+                    $data['gallery_discount_value'] = 0;
+                    foreach ($item->getDiscountInfo() as $relation) {
+                        /** @var Zolago_SalesRule_Model_Relation $relation */
+                        if ($relation->getPayer() == Zolago_SalesRule_Model_Rule_Payer::PAYER_GALLERY) {
+                            $data['gallery_discount_value'] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
+                        }
+                    }
 
-			        $data['shipping_cost'] = 0;
-			        if ($shippingCost) { // Shipping cost for first item only
-				        $data['shipping_cost'] = $shippingCost; // Transport
-				        $shippingCost = 0;
-			        }
-			        // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
-			        $data['commission_value'] =
-				        (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
-					        * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
+                    $data['shipping_cost'] = 0;
+                    if ($shippingCost) { // Shipping cost for first item only
+                        $data['shipping_cost'] = $shippingCost; // Transport
+                        $shippingCost = 0;
+                    }
+                    // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
+                    $data['commission_value'] =
+                        (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
+                         * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
                     $data['commission_value'] = round($data['commission_value'], 2, PHP_ROUND_HALF_UP);
-
+                    
                     if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
+                        // kwota zamówień
+                        $orderGalleryValue += $data['final_price']+$data['shipping_cost'];  // kwota brutto 
                         // <Sprzedaż w zł> + <Transport> - <Prowizja Modago> + <Zniżka finansowana przez Modago>
                         $data['value'] = $data['final_price'] + $data['shipping_cost'] - $data['commission_value'] + $data['gallery_discount_value']; // Do wypłaty
                     } else {
@@ -252,70 +293,73 @@ class GH_Statements_Model_Observer
                         $data['value'] = $data['gallery_discount_value'] - $data['commission_value']; // Do wypłaty
                     }
                     $data['value'] = round($data['value'], 2, PHP_ROUND_HALF_UP);
+                    $discountValue += $data['gallery_discount_value'];
+                    $commissionAmount += $data['commission_value'];
+                    $amount += $data['value']; // do wypłaty
 
-			        $commissionAmount += $data['commission_value'];
-			        $amount += $data['value'];
+                    // Save
+                    $statementOrder = Mage::getModel('ghstatements/order');
+                    $statementOrder->setData($data);
+                    $statementOrder->save();
+                }
 
-			        // Save
-			        $statementOrder = Mage::getModel('ghstatements/order');
-			        $statementOrder->setData($data);
-			        $statementOrder->save();
-		        }
-
-		        // For each PO save info about statement was processed
-		        $po->setData('statement_id', $statement->getId());
-		        $po->save();
-	        }
+                // For each PO save info about statement was processed
+                $po->setData('statement_id', $statement->getId());
+                $po->save();
+            }
         }
         $orderStatementTotals->commissionAmount = $commissionAmount;
         $orderStatementTotals->amount = $amount;
+        $orderStatementTotals->discountValue = $discountValue;
+        $orderStatementTotals->galleryPayment = $orderGalleryValue;
+        
 
         return $orderStatementTotals;
     }
 
-	/**
-	 * @param GH_Statements_Model_Statement $statement
-	 * @return GH_Statements_Model_Statement
-	 */
+    /**
+     * @param GH_Statements_Model_Statement $statement
+     * @return GH_Statements_Model_Statement
+     */
     public static function processStatementsRefunds($statement) {
         $refundStatementTotals = new stdClass();
 
-	    /** @var GH_Statements_Model_Refund $refundsStatements */
-	    $refundsStatements = Mage::getModel('ghstatements/refund');
+        /** @var GH_Statements_Model_Refund $refundsStatements */
+        $refundsStatements = Mage::getModel('ghstatements/refund');
 
-	    $dateModel = Mage::getModel('core/date');
-	    $today     = $dateModel->date('Y-m-d');
-	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
         if ($statement->getForceCustomDate()) {
             $yesterday = $statement->getForceCustomDate();
         }
 
-	    $collection = $refundsStatements->getCollection();
-	    $collection
-		    ->addFieldToFilter('statement_id',array('null' => true))
-		    ->addFieldToFilter('date',array('lteq' => $yesterday))
-		    ->addFieldToFilter('vendor_id',$statement->getVendorId());
+        $collection = $refundsStatements->getCollection();
+        $collection
+        ->addFieldToFilter('statement_id',array('null' => true))
+        ->addFieldToFilter('date',array('lteq' => $yesterday))
+        ->addFieldToFilter('vendor_id',$statement->getVendorId());
 
-	    $refundValue = 0;
-	    $refundIdsToUpdate = array();
-	    if($collection->getSize()) {
-		    foreach($collection as $refundStatement) {
-			    /** @var GH_Statements_Model_Refund $refundStatement */
-			    $refundValue += $refundStatement->getValue();
-			    $refundIdsToUpdate[] = $refundStatement->getId();
-		    }
-	    }
+        $refundValue = 0;
+        $refundIdsToUpdate = array();
+        if($collection->getSize()) {
+            foreach($collection as $refundStatement) {
+                /** @var GH_Statements_Model_Refund $refundStatement */
+                $refundValue += $refundStatement->getValue();
+                $refundIdsToUpdate[] = $refundStatement->getId();
+            }
+        }
 
-	    if(count($refundIdsToUpdate)) {
-		    /** @var GH_Statements_Model_Resource_Refund $refundStatementsResource */
-		    $refundStatementsResource = $refundsStatements->getResource();
-		    $refundStatementsResource->assignToStatement($statement->getId(), $refundIdsToUpdate);
-	    }
+        if(count($refundIdsToUpdate)) {
+            /** @var GH_Statements_Model_Resource_Refund $refundStatementsResource */
+            $refundStatementsResource = $refundsStatements->getResource();
+            $refundStatementsResource->assignToStatement($statement->getId(), $refundIdsToUpdate);
+        }
 
         $refundStatementTotals->amount = $refundValue;
 
-	    return $refundStatementTotals;
+        return $refundStatementTotals;
     }
 
     /**
@@ -327,69 +371,69 @@ class GH_Statements_Model_Observer
         $nettoTotal = 0;
         $bruttoTotal =0;
 
-	    $dateModel = Mage::getModel('core/date');
-	    $today     = $dateModel->date('Y-m-d');
-	    $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today)));
 
         if ($statement->getForceCustomDate()) {
             $yesterday = $statement->getForceCustomDate();
         }
 
-	    $trackStatements = array();
-	    $tax = self::getTax();
+        $trackStatements = array();
+        $tax = self::getTax();
 
-	    /** @var Mage_Sales_Model_Order_Shipment $ordersShipments */
-		$ordersShipments = Mage::getModel('sales/order_shipment');
+        /** @var Mage_Sales_Model_Order_Shipment $ordersShipments */
+        $ordersShipments = Mage::getModel('sales/order_shipment');
 
-	    //orders tracking start
+        //orders tracking start
 
-	    //load orders shipments
-	    $orderShipmentsCollection = $ordersShipments->getCollection();
-	    $orderShipmentsCollection
-		    ->addFieldToFilter('statement_id',array('null' => true))
-		    ->addFieldToFilter('udropship_vendor',$statement->getVendorId())
-		    ->addFieldToFilter('udropship_status',array('neq'=>Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED));
+        //load orders shipments
+        $orderShipmentsCollection = $ordersShipments->getCollection();
+        $orderShipmentsCollection
+        ->addFieldToFilter('statement_id',array('null' => true))
+        ->addFieldToFilter('udropship_vendor',$statement->getVendorId())
+        ->addFieldToFilter('udropship_status',array('neq'=>Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED));
 
-	    //prepare arrays to load orders shipments trackings
-	    $ordersShipmentsIds = array();
-	    $ordersShipmentsObjects = array();
-	    if($orderShipmentsCollection->getSize()) {
-		    foreach($orderShipmentsCollection as $orderShipment) {
-			    /** @var Mage_Sales_Model_Order_Shipment $orderShipment */
-			    $ordersShipmentsIds[] = $orderShipment->getId();
-			    $ordersShipmentsObjects[$orderShipment->getId()] = $orderShipment;
-		    }
-	    }
+        //prepare arrays to load orders shipments trackings
+        $ordersShipmentsIds = array();
+        $ordersShipmentsObjects = array();
+        if($orderShipmentsCollection->getSize()) {
+            foreach($orderShipmentsCollection as $orderShipment) {
+                /** @var Mage_Sales_Model_Order_Shipment $orderShipment */
+                $ordersShipmentsIds[] = $orderShipment->getId();
+                $ordersShipmentsObjects[$orderShipment->getId()] = $orderShipment;
+            }
+        }
 
-	    if(count($ordersShipmentsIds)) {
+        if(count($ordersShipmentsIds)) {
 
-			//load orders shipments tracks based on shimpents ids gathered in previous loop
-		    /** @var Mage_Sales_Model_Order_Shipment_Track $ordersTracks */
-		    $ordersTracks = Mage::getModel('sales/order_shipment_track');
+            //load orders shipments tracks based on shimpents ids gathered in previous loop
+            /** @var Mage_Sales_Model_Order_Shipment_Track $ordersTracks */
+            $ordersTracks = Mage::getModel('sales/order_shipment_track');
 
-		    $ordersTracksCollection = $ordersTracks->getCollection();
-		    $ordersTracksCollection
-			    ->addFieldToFilter('statement_id', array('null' => true))
-			    ->addFieldToFilter('gallery_shipping_source', 1)
-			    ->addFieldToFilter('shipped_date', array('notnull' => true))
-			    ->addFieldToFilter('shipped_date', array('lteq' => $yesterday))
-			    ->addFieldToFilter('parent_id',array('in'=>$ordersShipmentsIds))
-		        ->addFieldToFilter('udropship_status',array('in'=>array(
-			        Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
-			        Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
-			        Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
-		        )));
+            $ordersTracksCollection = $ordersTracks->getCollection();
+            $ordersTracksCollection
+            ->addFieldToFilter('statement_id', array('null' => true))
+            ->addFieldToFilter('gallery_shipping_source', 1)
+            ->addFieldToFilter('shipped_date', array('notnull' => true))
+            ->addFieldToFilter('shipped_date', array('lteq' => $yesterday))
+            ->addFieldToFilter('parent_id',array('in'=>$ordersShipmentsIds))
+            ->addFieldToFilter('udropship_status',array('in'=>array(
+                                   Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
+                                   Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+                                   Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
+                               )));
 
-		    //not all shipments selected in previous loop will be adequate to update so we have to collect shipments ids once again based on loaded trackings
-		    $ordersShipmentsIdsToUpdate = array();
-		    if($ordersTracksCollection->getSize()) {
-			    foreach($ordersTracksCollection as $orderTrack) {
-				    /** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
-				    $shipmentId = $orderTrack->getParentId();
-				    $shipment = $ordersShipmentsObjects[$shipmentId];
-				    $ordersShipmentsIdsToUpdate[] = $shipmentId;
+            //not all shipments selected in previous loop will be adequate to update so we have to collect shipments ids once again based on loaded trackings
+            $ordersShipmentsIdsToUpdate = array();
+            if($ordersTracksCollection->getSize()) {
+                foreach($ordersTracksCollection as $orderTrack) {
+                    /** @var Mage_Sales_Model_Order_Shipment_Track $orderTrack */
+                    $shipmentId = $orderTrack->getParentId();
+                    $shipment = $ordersShipmentsObjects[$shipmentId];
+                    $ordersShipmentsIdsToUpdate[] = $shipmentId;
 
-				    $chargeTotal = $orderTrack->getChargeTotal() * $tax;
+                    $chargeTotal = $orderTrack->getChargeTotal() * $tax;
                     $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
 				    //prepare array to insert into gh_statements_track
@@ -551,50 +595,50 @@ class GH_Statements_Model_Observer
         $rmaItemsColl = Mage::getResourceModel('urma/rma_item_collection');
         $rmaItemsColl->addFieldToFilter('main_table.statement_id', array('null' => true));
         $rmaItemsColl->getSelect()
-            ->join(
-                'urma_rma',
-                'main_table.parent_id = urma_rma.entity_id',
-                array(
-                    'udropship_vendor', 'rma_status', 'rma_type', 'payment_channel_owner', 'udpo_id',
-                    'udpo_increment_id', 'increment_id', 'created_at')
-            )
-            ->where('urma_rma.udropship_vendor = ' . $statement->getVendorId());
+        ->join(
+            'urma_rma',
+            'main_table.parent_id = urma_rma.entity_id',
+            array(
+                'udropship_vendor', 'rma_status', 'rma_type', 'payment_channel_owner', 'udpo_id',
+                'udpo_increment_id', 'increment_id', 'created_at')
+        )
+        ->where('urma_rma.udropship_vendor = ' . $statement->getVendorId());
         $rmaItemsColl->addFieldToFilter('urma_rma.rma_status',Zolago_Rma_Model_Rma_Status::STATUS_CLOSED_ACCEPTED);
         $rmaItemsColl->addFieldToFilter('urma_rma.updated_at', array('lteq' => $yesterday));
 
-	    //store already loaded rmas in arrays to prevent double loading them on different rma items
-	    $rmas = array();
-	    $pos = array();
+        //store already loaded rmas in arrays to prevent double loading them on different rma items
+        $rmas = array();
+        $pos = array();
 
         foreach ($rmaItemsColl as $rmaItem) {
-	        /** @var Zolago_Rma_Model_Rma_Item $rmaItem */
-	        if (!$rmaItem->getProductId()) {
-		        continue; // Shipping cost
-	        }
+            /** @var Zolago_Rma_Model_Rma_Item $rmaItem */
+            if (!$rmaItem->getProductId()) {
+                continue; // Shipping cost
+            }
 
-	        /** @var Zolago_Rma_Model_Rma $rma */
-	        $rmaId = $rmaItem->getParentId();
-	        if(!isset($rmas[$rmaId])) {
-		        $rma = Mage::getModel('zolagorma/rma')->load($rmaId);
-		        $rmas[$rmaId] = $rma;
-	        } else {
-		        $rma = $rmas[$rmaId];
-	        }
+            /** @var Zolago_Rma_Model_Rma $rma */
+            $rmaId = $rmaItem->getParentId();
+            if(!isset($rmas[$rmaId])) {
+                $rma = Mage::getModel('zolagorma/rma')->load($rmaId);
+                $rmas[$rmaId] = $rma;
+            } else {
+                $rma = $rmas[$rmaId];
+            }
 
-	        /** @var Zolago_Po_Model_Po_Item $poItem */
-	        $poItem = $rmaItem->getPoItem();
+            /** @var Zolago_Po_Model_Po_Item $poItem */
+            $poItem = $rmaItem->getPoItem();
 
-	        /** @var Zolago_Po_Model_Po $po */
-	        $poId = $poItem->getParentId();
-	        if(!isset($pos[$poId])) {
-		        $po = Mage::getModel('zolagopo/po')->load($poId);
-		        $pos[$poId] = $po;
-	        } else {
-		        $po = $pos[$poId];
-	        }
+            /** @var Zolago_Po_Model_Po $po */
+            $poId = $poItem->getParentId();
+            if(!isset($pos[$poId])) {
+                $po = Mage::getModel('zolagopo/po')->load($poId);
+                $pos[$poId] = $po;
+            } else {
+                $po = $pos[$poId];
+            }
 
-	        //undelivered cod order
-	        $packageReturned = $rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $po->isCod();
+            //undelivered cod order
+            $packageReturned = $rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $po->isCod();
 
             if (!floatval($rmaItem->getReturnedValue()) && !$packageReturned) {
                 continue; // No value to return
@@ -614,8 +658,8 @@ class GH_Statements_Model_Observer
             $data["payment_method"]         = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
             $data["payment_channel_owner"]  = $po->getPaymentChannelOwner();
 
-	        //if rma type is returned package and po was shipped using cod then return 100% of provision - assume that return value = sell value
-	        $data["approved_refund_amount"] = !$packageReturned ? $rmaItem->getReturnedValue() : $poItem->getFinalItemPrice();
+            //if rma type is returned package and po was shipped using cod then return 100% of provision - assume that return value = sell value
+            $data["approved_refund_amount"] = !$packageReturned ? $rmaItem->getReturnedValue() : $poItem->getFinalItemPrice();
 
             $data["price"]                  = $poItem->getPriceInclTax();       // Sprzedaż przed zniżką (zł)
             $data["discount_amount"]        = $poItem->getDiscountAmount();     // Zniżka (zł)
@@ -631,7 +675,7 @@ class GH_Statements_Model_Observer
             // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
             $data["commission_value"]       =
                 (($data['price'] - $data["discount_amount"] + $data["gallery_discount_value"])
-                    * (floatval($data["commission_percent"]) / 100)) * self::getTax(); // Prowizja Modago
+                 * (floatval($data["commission_percent"]) / 100)) * self::getTax(); // Prowizja Modago
             $data["commission_value"]       = round($data["commission_value"], 2, PHP_ROUND_HALF_UP);
 
             // (<Prowizja Modago> - <Zniżka finansowana przez Modago>) * procentowy zwrot z calosci
@@ -659,123 +703,167 @@ class GH_Statements_Model_Observer
         return $rmaStatementTotals;
     }
 
-	public static function processStatementsMarketing($statement) {
-		$marketingStatementTotals = new stdClass();
-		$marketingStatementValue = 0;
+    public static function processStatementsMarketing($statement) {
+        $marketingStatementTotals = new stdClass();
+        $marketingStatementValue = 0;
 
-		$dateModel = Mage::getModel('core/date');
-		$today     = $dateModel->date('Y-m-d');
-		$yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
 
-		if ($statement->getForceCustomDate()) {
-			$yesterday = $statement->getForceCustomDate() . ' 23:59:59';
-		}
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate() . ' 23:59:59';
+        }
 
-		/** @var Gh_Marketing_Model_Marketing_Cost $marketingModel */
-		$marketingModel = Mage::getModel('ghmarketing/marketing_cost');
+        /** @var Gh_Marketing_Model_Marketing_Cost $marketingModel */
+        $marketingModel = Mage::getModel('ghmarketing/marketing_cost');
 
-		/** @var Gh_Marketing_Model_Resource_Marketing_Cost_Collection $collection */
-		$collection = $marketingModel->getCollection();
-		$collection
-			->addFieldToFilter('statement_id',array('null' => true))
-			->addFieldToFilter('date',array('lteq' => $yesterday))
-			->addFieldToFilter('vendor_id',$statement->getVendorId())
-			->getSelect()->join(
-				'gh_marketing_cost_type',
-				'main_table.type_id = gh_marketing_cost_type.marketing_cost_type_id',
-				array('gh_marketing_cost_type.name as type_name')
-			);
+        /** @var Gh_Marketing_Model_Resource_Marketing_Cost_Collection $collection */
+        $collection = $marketingModel->getCollection();
+        $collection
+        ->addFieldToFilter('statement_id',array('null' => true))
+        ->addFieldToFilter('date',array('lteq' => $yesterday))
+        ->addFieldToFilter('vendor_id',$statement->getVendorId())
+        ->getSelect()->join(
+            'gh_marketing_cost_type',
+            'main_table.type_id = gh_marketing_cost_type.marketing_cost_type_id',
+            array('gh_marketing_cost_type.name as type_name')
+        );
 
-		$marketingCostStatementData = array();
+        $marketingCostStatementData = array();
 
-		if($collection->getSize()) {
-			$vendorCpcCommision = $statement->getVendor()->getCpcCommission();
-			$products = array();
+        if($collection->getSize()) {
+            $vendorCpcCommision = $statement->getVendor()->getCpcCommission();
+            $products = array();
 
-			foreach($collection as $marketingCost) {
-				/** @var Gh_Marketing_Model_Marketing_Cost $marketingCost */
+            foreach($collection as $marketingCost) {
+                /** @var Gh_Marketing_Model_Marketing_Cost $marketingCost */
 
-				$marketingCost
-					->setBillingCost(
-						round(($marketingCost->getCost() + ($marketingCost->getCost() * ($vendorCpcCommision / 100))), 2, PHP_ROUND_HALF_UP)
-					)
-					->setStatementId($statement->getId())
-					->save();
+                $marketingCost
+                ->setBillingCost(
+                    round(($marketingCost->getCost() + ($marketingCost->getCost() * ($vendorCpcCommision / 100))), 2, PHP_ROUND_HALF_UP)
+                )
+                ->setStatementId($statement->getId())
+                ->save();
 
-				$productId = $marketingCost->getProductId();
-				if(!isset($products[$productId])) {
-					$product = Mage::getModel('catalog/product')->load($productId);
-					$products[$productId] = $product;
-				} else {
-					$product = $products[$productId];
-				}
+                $productId = $marketingCost->getProductId();
+                if(!isset($products[$productId])) {
+                    $product = Mage::getModel('catalog/product')->load($productId);
+                    $products[$productId] = $product;
+                } else {
+                    $product = $products[$productId];
+                }
 
-				$marketingCostStatementData[] = array(
-					'statement_id'              => $statement->getId(),
-					'product_id'                => $marketingCost->getProductId(),
-					'product_sku'               => $product->getSku(),
-					'product_vendor_sku'        => $product->getSkuv(),
-					'product_name'              => $product->getName(),
-					'marketing_cost_type_id'    => $marketingCost->getTypeId(),
-					'marketing_cost_type_name'  => $marketingCost->getTypeName(),
-					'date'                      => $marketingCost->getDate(),
-					'value'                     => $marketingCost->getBillingCost()
-				);
+                $marketingCostStatementData[] = array(
+                                                    'statement_id'              => $statement->getId(),
+                                                    'product_id'                => $marketingCost->getProductId(),
+                                                    'product_sku'               => $product->getSku(),
+                                                    'product_vendor_sku'        => $product->getSkuv(),
+                                                    'product_name'              => $product->getName(),
+                                                    'marketing_cost_type_id'    => $marketingCost->getTypeId(),
+                                                    'marketing_cost_type_name'  => $marketingCost->getTypeName(),
+                                                    'date'                      => $marketingCost->getDate(),
+                                                    'value'                     => $marketingCost->getBillingCost()
+                                                );
 
-				$marketingStatementValue += $marketingCost->getBillingCost();
-			}
-		}
+                $marketingStatementValue += $marketingCost->getBillingCost();
+            }
+        }
 
-		if(count($marketingCostStatementData)) {
-			/** @var Gh_Statements_Model_Marketing $marketingStatementModel */
-			$marketingStatementModel = Mage::getModel('ghstatements/marketing');
-			/** @var GH_Statements_Model_Resource_Marketing $marketingStatementsResource */
-			$marketingStatementsResource = $marketingStatementModel->getResource();
-			$marketingStatementsResource->appendMarketings($marketingCostStatementData);
-		}
+        if(count($marketingCostStatementData)) {
+            /** @var Gh_Statements_Model_Marketing $marketingStatementModel */
+            $marketingStatementModel = Mage::getModel('ghstatements/marketing');
+            /** @var GH_Statements_Model_Resource_Marketing $marketingStatementsResource */
+            $marketingStatementsResource = $marketingStatementModel->getResource();
+            $marketingStatementsResource->appendMarketings($marketingCostStatementData);
+        }
 
-		$marketingStatementTotals->amount = $marketingStatementValue;
+        $marketingStatementTotals->amount = $marketingStatementValue;
 
-		return $marketingStatementTotals;
-	}
+        return $marketingStatementTotals;
+    }
+    
+    /**
+     * calculate invoice correction
+     */
 
-	public static function processStatementsPayment($statement) {
-		$paymentStatementTotals = new stdClass();
-		$paymentStatementValue = 0;
+    public static function processStatementsInvoice($statement) {
+        $invoiceStatementTotals = new stdClass();
+        $invoiceStatementValue = array(
+            'commission_correction' => 0,
+            'delivery_correction' 	=> 0,
+            'marketing_correction' 	=> 0,
+        );
 
-		$dateModel = Mage::getModel('core/date');
-		$today     = $dateModel->date('Y-m-d');
-		$yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
 
-		if ($statement->getForceCustomDate()) {
-			$yesterday = $statement->getForceCustomDate() . ' 23:59:59';
-		}
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate() . ' 23:59:59';
+        }
+        $model = Mage::getModel('zolagopayment/vendor_invoice');
+        $collection = $model->getCollection();
+        $collection
+        ->addFieldToFilter('statement_id',array('null' => true))
+        ->addFieldToFilter('date',array('lteq' => $yesterday))
+        ->addFieldToFilter('vendor_id',$statement->getVendorId())
+        ->addFieldToFilter('is_invoice_correction',1);
+        
+        if($collection->getSize()) {
 
-		/** @var Zolago_Payment_Model_Vendor_Payment $paymentModel */
-		$paymentModel = Mage::getModel('zolagopayment/vendor_payment');
+            foreach($collection as $vendorInvoice) {
+                /** @var Zolago_Payment_Model_Vendor_Payment $vendorPayment */
+                $vendorInvoice->setData('statement_id',$statement->getId());
+                $vendorInvoice->save();
 
-		/** @var Zolago_Payment_Model_Resource_Vendor_Payment_Collection $collection */
-		$collection = $paymentModel->getCollection();
-		$collection
-			->addFieldToFilter('statement_id',array('null' => true))
-			->addFieldToFilter('date',array('lteq' => $yesterday))
-			->addFieldToFilter('vendor_id',$statement->getVendorId());
+                $invoiceStatementValue['commission_correction'] += $vendorInvoice->getCommissionBrutto();
+                $invoiceStatementValue['delivery_correction'] += $vendorInvoice->getTransportBrutto();
+                $invoiceStatementValue['marketing_correction'] += $vendorInvoice->getMarketingBrutto();
+            }
+        }
+        $invoiceStatementTotals->commissionCorrection = $invoiceStatementValue['commission_correction'];
+        $invoiceStatementTotals->deliveryCorrection = $invoiceStatementValue['delivery_correction'];
+        $invoiceStatementTotals->marketingCorrection = $invoiceStatementValue['marketing_correction'];
+        return $invoiceStatementTotals;
 
-		if($collection->getSize()) {
+    }
+    public static function processStatementsPayment($statement) {
+        $paymentStatementTotals = new stdClass();
+        $paymentStatementValue = 0;
 
-			foreach($collection as $vendorPayment) {
-				/** @var Zolago_Payment_Model_Vendor_Payment $vendorPayment */
-				$vendorPayment->setData('statement_id',$statement->getId());
-				$vendorPayment->save();
+        $dateModel = Mage::getModel('core/date');
+        $today     = $dateModel->date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('yesterday',strtotime($today))) . ' 23:59:59';
 
-				$paymentStatementValue += $vendorPayment->getCost();
-			}
-		}
+        if ($statement->getForceCustomDate()) {
+            $yesterday = $statement->getForceCustomDate() . ' 23:59:59';
+        }
 
-		$paymentStatementTotals->amount = $paymentStatementValue;
+        /** @var Zolago_Payment_Model_Vendor_Payment $paymentModel */
+        $paymentModel = Mage::getModel('zolagopayment/vendor_payment');
 
-		return $paymentStatementTotals;
-	}
+        /** @var Zolago_Payment_Model_Resource_Vendor_Payment_Collection $collection */
+        $collection = $paymentModel->getCollection();
+        $collection->addFieldToFilter('statement_id',array('null' => true))
+            ->addFieldToFilter('date',array('lteq' => $yesterday))
+            ->addFieldToFilter('vendor_id',$statement->getVendorId());
+
+        if($collection->getSize()) {
+
+            foreach($collection as $vendorPayment) {
+                /** @var Zolago_Payment_Model_Vendor_Payment $vendorPayment */
+                $vendorPayment->setData('statement_id',$statement->getId());
+                $vendorPayment->save();
+
+                $paymentStatementValue += $vendorPayment->getCost();
+            }
+        }
+
+        $paymentStatementTotals->amount = $paymentStatementValue;
+
+        return $paymentStatementTotals;
+    }
 
     /**
      * This check if statement for vendor and event date is in table

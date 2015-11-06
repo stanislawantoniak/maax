@@ -14,7 +14,7 @@
         <update handle="udropship_vendor"/>
         <update handle="bootstrap" />
         <reference name="content">
-            <!--<block type="" template=""/>-->
+            <block name="statements_periodic" type="ghstatements/dropship_periodic" template="ghstatements/dropship/periodic.phtml"/>
         </reference>
     </udropship_statements_periodic>
 

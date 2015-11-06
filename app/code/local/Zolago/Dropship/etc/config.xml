@@ -352,6 +352,11 @@
                         <position>11</position>
                         <default>0</default>
                     </sale_commission_percent>
+                    <marketing_charges_enabled>
+                        <hide_modules>Unirgy_DropshipTierCommission</hide_modules>
+                        <default>0</default>
+                    </marketing_charges_enabled>
+
                 	<super_vendor_id>
                         <label>Super vendor</label>
                         <type>select</type>
@@ -471,14 +476,6 @@
                         <position>90</position>
 						<only_admin>1</only_admin>
                     </cart_slogan_two>
-                    <cpc_commission>
-                        <label>CPC commission percent</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>100</position>
-                        <only_admin>1</only_admin>
-                    </cpc_commission>
-
 
                     <!--GH API-->
                     <ghapi_vendor_access_allow>

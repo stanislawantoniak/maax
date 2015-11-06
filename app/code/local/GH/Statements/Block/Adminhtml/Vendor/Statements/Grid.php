@@ -60,6 +60,20 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("gallery_discount_value", array(
+            "index" => "gallery_discount_value",
+            "header" => Mage::helper("ghstatements")->__("Gallery Discount"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("commission_correction", array(
+            "index" => "commission_correction",
+            "header" => Mage::helper("ghstatements")->__("Commission correction"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         $this->addColumn("order_value", array(
             "index" => "order_value",
             "header" => Mage::helper("ghstatements")->__("Order: Amount"),
@@ -106,6 +120,13 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("delivery_correction", array(
+            "index" => "delivery_correction",
+            "header" => Mage::helper("ghstatements")->__("Delivery correction"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         /*Totals*/
 
         /*Marketing*/
@@ -116,8 +137,47 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("marketing_correction", array(
+            "index" => "marketing_correction",
+            "header" => Mage::helper("ghstatements")->__("Marketing correction"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         /*Marketing*/
-
+        /* commissions */
+        $this->addColumn("total_commssion_netto", array(
+            "index" => "total_commission_netto",
+            "header" => Mage::helper("ghstatements")->__("Commissions netto"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("total_commssion", array(
+            "index" => "total_commission",
+            "header" => Mage::helper("ghstatements")->__("Commissions brutto"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        
+        /* commissions */
+        /*to pay*/
+        $this->addColumn("to_pay", array(
+            "index" => "to_pay",
+            "header" => Mage::helper("ghstatements")->__("To payout"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("last_statement_balance", array(
+            "index" => "last_statement_balance",
+            "header" => Mage::helper("ghstatements")->__("Last balance"),
+            'type'  => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        /*to pay*/
         /*Payment*/
         $this->addColumn("payment_value", array(
             "index" => "payment_value",

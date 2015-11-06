@@ -22,7 +22,7 @@ class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form 
         $this->setForm($form);
 
         $fieldset = $form->addFieldset('tiercom', array(
-            'legend'=>$hlp->__('Rates Definition')
+            'legend'=>$hlp->__('Basic rates definition')
         ));
 
         $fieldset->addType('tiercom_rates', Mage::getConfig()->getBlockClassName('udtiercom/adminhtml_vendorEditTab_comRates_form_rates'));
@@ -43,6 +43,20 @@ class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form 
             'name'      => 'sale_commission_percent',
             'label'     => $hlp->__('Default Commission Percent for product with flag SALE'),
             'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/sale_commission_percent'))
+        ));
+
+        $fieldsetAdditional = $form->addFieldset('tiercom_additional', array(
+            'legend'    => $hlp->__('Additional rates definition')
+        ));
+        $fieldsetAdditional->addField('marketing_charges_enabled', 'select', array(
+            'name'      => 'marketing_charges_enabled',
+            'label'     => $hlp->__('Marketing charges enabled'),
+            'values'   => Mage::getModel('adminhtml/system_config_source_yesno')->toOptionArray()
+        ));
+        $fieldsetAdditional->addField('cpc_commission', 'text', array(
+            'name'      => 'cpc_commission',
+            'label'     => $hlp->__('CPC commission percent'),
+            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/commission_percent'))
         ));
 
         if ($vendor) {

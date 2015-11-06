@@ -9,9 +9,9 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
      * return array
      */
 
-    protected function _allowSend($mail) { 
-        $out = $mail;
+    protected function _allowSend($mail) {         
         if (((string)Mage::getConfig()->getNode('global/test_server')) == 'true') {
+            $out = array();
             $allowEmails = Mage::getConfig()->getNode('global/allow_emails');
             if (!empty($allowEmails)) {
                 if (!is_array($mail)) {
@@ -22,18 +22,18 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
                         $item = array($item);
                     }
                     foreach ($item as $itemKey=>$address) {
-                        if (!preg_match('/'.$allowEmails.'/',$address)) {
-                            unset($out[$key][$itemKey]);
+                        if (preg_match('/'.$allowEmails.'/',$address)) {
+                            $out[$key][$itemKey] = $address;
+                        } else {
                             Mage::log(sprintf('Email not allowed to send (%s)',$address),null,'email_blocked.log');
                         }
                     }
-                    if (!count($out[$key])) {
-                        unset($out[$key]);
-                    }                    
                 }
             } else {
                 return array();
             }
+        } else {
+            $out = $mail;
         }
         return $out;
     }

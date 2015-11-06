@@ -303,8 +303,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'brandshop_info',
             'cart_slogan_one',
             'cart_slogan_two',
-            'cpc_commission'
-        );        
+        );
         $this->_addFieldsToFieldset($keys,$fieldset);
 
     }
