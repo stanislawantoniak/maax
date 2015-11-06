@@ -5,6 +5,7 @@ class Zolago_Dotpay_Model_Observer {
 	public function updateTransactions() {
 		/** @var Zolago_Dotpay_Model_Client $client */
 		$client = Mage::getModel("zolagodotpay/client");
+
 		$transactions = $client->getDotpayTransactionsToUpdate();
 		foreach($transactions as $transaction) {
 			$transactionUpdate = $client->getDotpayTransactionUpdateFromApi($transaction->getTxnId());

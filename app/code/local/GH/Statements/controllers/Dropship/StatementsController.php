@@ -14,7 +14,8 @@ class GH_Statements_Dropship_StatementsController extends Zolago_Dropship_Contro
      * Sledzenie salda / Balance tracking
      */
     public function balanceAction() {
-        $this->_renderPage(null, 'statements-balance');
+        Mage::register('as_frontend', true);// Tell block class to use regular URL's
+        $this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'statements-balance');
         /** @see app/design/frontend/base/default/template/ghstatements/dropship/balance.phtml */
     }
 

@@ -69,4 +69,8 @@
             </block>
         </reference>
     </adminhtml_vendor_statements_edit>
+
+    <adminhtml_vendor_balance_index>
+        <!--placebo-->
+    </adminhtml_vendor_balance_index>
 </layout>
