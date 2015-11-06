@@ -164,7 +164,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
         $collection->addFieldToFilter("is_system", 0);
         $collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
         $collection->addFieldToFilter("product_id", array('null' => true));
-        $collection->addFieldToFilter("request_path", array('like' => $path.'%'));
+        $collection->addFieldToFilter("request_path", array('like' => $path.''));
         $data = $collection->getFirstItem();
 
         $url_rewrite_id = $data->getData("url_rewrite_id");
