@@ -11,6 +11,9 @@
   header {
 	h4.title_section {
 	  padding-left: 35px;
+	  @media(max-width: 360px) {
+		  padding-left: 30px;
+	  }
 	}
   }
 	.rwdCarousel {
